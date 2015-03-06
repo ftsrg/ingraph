@@ -14,22 +14,22 @@ object main {
     val myActor1 = system.actorOf(Props(new MyActor(helloActor)),name="myActor1")
     val myActor2 = system.actorOf(Props(new MyActor(helloActor)),name="myActor2")
     // send the actor two messages
-    myActor1 ! "hi"
-    myActor2 ! "hy"
+    myActor1 ! Update((1,2))
+    myActor2 ! (2,3)
 
     // shut down the system
     system.terminate
   }
 }
+case class Update(change: (Long,Long))
+
 class MyActor(next: ActorRef) extends Actor{
   override def receive: Receive =  {
-    case "hi" => {
-      println("calling next hello")
-      next ! "hello"
-    }
-    case "hy" => {
-      println("calling next yello")
-      next ! "yello"
+    case Update(change) => {
+      change match{
+       case (a: Long, b: Long) =>
+          next ! "hello"
+      }
     }
   }
 }
