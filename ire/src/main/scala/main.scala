@@ -5,7 +5,7 @@ import akka.actor.Actor.Receive
  * Created by Maginecz on 3/4/2015.
  */
 object main {
-  def main(args: Array[String]) = {
+  def main(args: Array[String]) {
     // an actor needs an ActorSystem
     val system = ActorSystem("HelloSystem")
 
