@@ -3,6 +3,9 @@ import akka.actor.{Actor, ActorRef}
 /**
  * Created by Maginecz on 3/16/2015.
  */
+package object Workers {
+  type nodeType = Vector[Long]
+}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
 
 class Trimmer(val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) extends Actor {
