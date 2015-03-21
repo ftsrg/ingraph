@@ -27,12 +27,3 @@ class Printer() extends Actor {
     }
   }
 }
-
-class TestActor(val expected: ChangeSet) extends Actor {
-  override def receive: Receive = {
-    case ChangeSet(positive, negative) => {
-      assert(positive == expected.positive)
-      assert(negative == expected.negative)
-    }
-  }
-}

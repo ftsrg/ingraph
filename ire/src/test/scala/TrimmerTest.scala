@@ -1,30 +1,38 @@
 import akka.actor.{ActorSystem, Props}
-import org.scalatest.{BeforeAndAfterAll, FlatSpec}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers, WordSpecLike}
 
 /**
  * Created by Maginecz on 3/16/2015.
  */
 
-class SelectTest extends FlatSpec with BeforeAndAfterAll {
-  val system = ActorSystem("TestSystem")
+class TrimmerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+with WordSpecLike with Matchers with BeforeAndAfterAll {
 
-  "A Selector" should "select the values" in {
-    val changes = ChangeSet(
-      positive = Vector(Vector(15, 16, 17, 18), Vector(4, 5, 6, 7)),
-      negative = Vector(Vector(-0, -1, -2, -3), Vector(-10, -11, -12, -13))
-    )
-    val selectionVector = Vector(0, 2)
-    val expectedChanges = ChangeSet(
-      positive = Vector(Vector(15, 17), Vector(4, 6)),
-      negative = Vector(Vector(-0, -2), Vector(-10, -12))
-    )
-    val assertActor = system.actorOf(Props(new TestActor(expectedChanges)), name = "assertActor")
-    val selector = system.actorOf(Props(new Trimmer(assertActor, selectionVector)), name = "testSelector")
+  def this() = this(ActorSystem("MySpec"))
 
-    selector ! changes
+  override def afterAll {
+    TestKit.shutdownActorSystem(system)
   }
 
-  override def afterAll = {
-    system.terminate()
+  "A Trimmer" must {
+    "select the values" in {
+      val changes = ChangeSet(
+        positive = Vector(Vector(15, 16, 17, 18), Vector(4, 5, 6, 7)),
+        negative = Vector(Vector(-0, -1, -2, -3), Vector(-10, -11, -12, -13))
+      )
+      val selectionVector = Vector(0, 2)
+      val expectedChanges = ChangeSet(
+        positive = Vector(Vector(15, 17), Vector(4, 6)),
+        negative = Vector(Vector(-0, -2), Vector(-10, -12))
+      )
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val selector = system.actorOf(Props(new Trimmer(echoActor ! _, selectionVector)), name = "testSelector")
+
+      selector ! changes
+      expectMsg(expectedChanges)
+      selector ! changes
+      expectMsg(expectedChanges)
+    }
   }
 }
