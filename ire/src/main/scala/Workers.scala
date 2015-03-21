@@ -5,12 +5,13 @@ import akka.actor.{Actor, ActorRef}
  */
 case class ChangeSet(positive: Vector[Vector[Long]], negative: Vector[Vector[Long]])
 
-class Trimmer(val next: ActorRef, val selectionVector: Vector[Int]) extends Actor {
+class Trimmer(val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) extends Actor {
   override def receive: Receive = {
     case ChangeSet(positive, negative) => {
-      next ! ChangeSet(
+      next(ChangeSet(
         positive.map(vec => selectionVector.map(i => vec(i))),
         negative.map(vec => selectionVector.map(i => vec(i)))
+      )
       )
     }
   }
