@@ -1,0 +1,1671 @@
+@prefix : <http://www.semanticweb.org/ontologies/2011/1/TrainRequirementOntology.owl#> .
+
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:_1 a :Signal ;
+	:Signal_currentState :SIGNALSTATE_GO .
+
+:_2 a :Signal ;
+	:Signal_currentState :SIGNALSTATE_GO .
+
+:_3 a :Route ;
+	:Route_exit :_2 .
+
+:_4 a :Switch .
+
+:_5 a :Sensor .
+
+:_4 :TrackElement_sensor :_5 .
+
+:_3 :Route_routeDefinition :_5 .
+
+:_6 a :Segment ;
+	:Segment_length "460"^^xsd:int .
+
+:_6 :TrackElement_sensor :_5 .
+
+:_7 a :Sensor .
+
+:_4 :TrackElement_sensor :_7 .
+
+:_3 :Route_routeDefinition :_7 .
+
+:_8 a :Segment ;
+	:Segment_length "828"^^xsd:int .
+
+:_8 :TrackElement_sensor :_7 .
+
+:_9 a :Sensor .
+
+:_4 :TrackElement_sensor :_9 .
+
+:_3 :Route_routeDefinition :_9 .
+
+:_10 a :Segment ;
+	:Segment_length "856"^^xsd:int .
+
+:_10 :TrackElement_sensor :_9 .
+
+:_11 a :Sensor .
+
+:_4 :TrackElement_sensor :_11 .
+
+:_12 a :Segment ;
+	:Segment_length "-136"^^xsd:int .
+
+:_12 :TrackElement_sensor :_11 .
+
+:_13 a :Sensor .
+
+:_4 :TrackElement_sensor :_13 .
+
+:_3 :Route_routeDefinition :_13 .
+
+:_14 a :Segment ;
+	:Segment_length "-978"^^xsd:int .
+
+:_14 :TrackElement_sensor :_13 .
+
+:_15 a :Sensor .
+
+:_4 :TrackElement_sensor :_15 .
+
+:_3 :Route_routeDefinition :_15 .
+
+:_16 a :Segment ;
+	 :Segment_length "812"^^xsd:int .
+
+:_16 :TrackElement_sensor :_15 .
+
+:_17 a :Sensor .
+
+:_4 :TrackElement_sensor :_17 .
+
+:_3 :Route_routeDefinition :_17 .
+
+:_18 a :Segment ;
+	:Segment_length "126"^^xsd:int .
+
+:_18 :TrackElement_sensor :_17 .
+
+:_4 :Switch_currentState :SWITCHSTATE_RIGHT.
+
+:_19 a :SwitchPosition ;
+	:SwitchPosition_switchState "2"^^xsd:int ;
+	:SwitchPosition_switch :_4 .
+
+:_3 :Route_switchPosition :_19 .
+
+:_20 a :Switch .
+
+:_21 a :Sensor .
+
+:_20 :TrackElement_sensor :_21 .
+
+:_3 :Route_routeDefinition :_21 .
+
+:_22 a :Segment ;
+	:Segment_length "995"^^xsd:int .
+
+:_22 :TrackElement_sensor :_21 .
+
+:_23 a :Sensor .
+
+:_20 :TrackElement_sensor :_23 .
+
+:_3 :Route_routeDefinition :_23 .
+
+:_24 a :Segment ;
+	:Segment_length "581"^^xsd:int .
+
+:_24 :TrackElement_sensor :_23 .
+
+:_25 a :Sensor .
+
+:_20 :TrackElement_sensor :_25 .
+
+:_3 :Route_routeDefinition :_25 .
+
+:_26 a :Segment ;
+	:Segment_length "211"^^xsd:int .
+
+:_26 :TrackElement_sensor :_25 .
+
+:_20 :Switch_currentState :SWITCHSTATE_RIGHT.
+
+:_27 a :SwitchPosition ;
+	:SwitchPosition_switchState "2"^^xsd:int ;
+	:SwitchPosition_switch :_20 .
+
+:_3 :Route_switchPosition :_27 .
+
+:_28 a :Switch .
+
+:_29 a :Sensor .
+
+:_28 :TrackElement_sensor :_29 .
+
+:_3 :Route_routeDefinition :_29 .
+
+:_30 a :Segment ;
+	:Segment_length "678"^^xsd:int .
+
+:_30 :TrackElement_sensor :_29 .
+
+:_31 a :Sensor .
+
+:_28 :TrackElement_sensor :_31 .
+
+:_3 :Route_routeDefinition :_31 .
+
+:_32 a :Segment ;
+	:Segment_length "710"^^xsd:int .
+
+:_32 :TrackElement_sensor :_31 .
+
+:_33 a :Sensor .
+
+:_28 :TrackElement_sensor :_33 .
+
+:_3 :Route_routeDefinition :_33 .
+
+:_34 a :Segment ;
+	:Segment_length "448"^^xsd:int .
+
+:_34 :TrackElement_sensor :_33 .
+
+:_28 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_35 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_28 .
+
+:_3 :Route_switchPosition :_35 .
+
+:_36 a :Switch .
+
+:_37 a :Sensor .
+
+:_36 :TrackElement_sensor :_37 .
+
+:_3 :Route_routeDefinition :_37 .
+
+:_38 a :Segment ;
+	:Segment_length "233"^^xsd:int .
+
+:_38 :TrackElement_sensor :_37 .
+
+:_39 a :Sensor .
+
+:_36 :TrackElement_sensor :_39 .
+
+:_3 :Route_routeDefinition :_39 .
+
+:_40 a :Segment ;
+	:Segment_length "420"^^xsd:int .
+
+:_40 :TrackElement_sensor :_39 .
+
+:_41 a :Sensor .
+
+:_36 :TrackElement_sensor :_41 .
+
+:_3 :Route_routeDefinition :_41 .
+
+:_42 a :Segment ;
+	:Segment_length "891"^^xsd:int .
+
+:_42 :TrackElement_sensor :_41 .
+
+:_43 a :Sensor .
+
+:_36 :TrackElement_sensor :_43 .
+
+:_3 :Route_routeDefinition :_43 .
+
+:_44 a :Segment ;
+	:Segment_length "208"^^xsd:int .
+
+:_44 :TrackElement_sensor :_43 .
+
+:_45 a :Sensor .
+
+:_36 :TrackElement_sensor :_45 .
+
+:_3 :Route_routeDefinition :_45 .
+
+:_46 a :Segment ;
+	:Segment_length "435"^^xsd:int .
+
+:_46 :TrackElement_sensor :_45 .
+
+:_47 a :Sensor .
+
+:_36 :TrackElement_sensor :_47 .
+
+:_3 :Route_routeDefinition :_47 .
+
+:_48 a :Segment ;
+	:Segment_length "152"^^xsd:int .
+
+:_48 :TrackElement_sensor :_47 .
+
+:_49 a :Sensor .
+
+:_36 :TrackElement_sensor :_49 .
+
+:_3 :Route_routeDefinition :_49 .
+
+:_50 a :Segment ;
+	:Segment_length "339"^^xsd:int .
+
+:_50 :TrackElement_sensor :_49 .
+
+:_51 a :Sensor .
+
+:_36 :TrackElement_sensor :_51 .
+
+:_3 :Route_routeDefinition :_51 .
+
+:_52 a :Segment ;
+	:Segment_length "192"^^xsd:int .
+
+:_52 :TrackElement_sensor :_51 .
+
+:_36 :Switch_currentState :SWITCHSTATE_FAILURE.
+
+:_53 a :SwitchPosition ;
+	:SwitchPosition_switchState "0"^^xsd:int ;
+	:SwitchPosition_switch :_36 .
+
+:_3 :Route_switchPosition :_53 .
+
+:_54 a :Switch .
+
+:_54 :Switch_currentState :SWITCHSTATE_RIGHT.
+
+:_55 a :SwitchPosition ;
+	:SwitchPosition_switchState "2"^^xsd:int ;
+	:SwitchPosition_switch :_54 .
+
+:_3 :Route_switchPosition :_55 .
+
+:_56 a :Switch .
+
+:_57 a :Sensor .
+
+:_56 :TrackElement_sensor :_57 .
+
+:_3 :Route_routeDefinition :_57 .
+
+:_58 a :Segment ;
+	:Segment_length "932"^^xsd:int .
+
+:_58 :TrackElement_sensor :_57 .
+
+:_59 a :Sensor .
+
+:_56 :TrackElement_sensor :_59 .
+
+:_3 :Route_routeDefinition :_59 .
+
+:_60 a :Segment ;
+	:Segment_length "-589"^^xsd:int .
+
+:_60 :TrackElement_sensor :_59 .
+
+:_61 a :Sensor .
+
+:_56 :TrackElement_sensor :_61 .
+
+:_3 :Route_routeDefinition :_61 .
+
+:_62 a :Segment ;
+	:Segment_length "324"^^xsd:int .
+
+:_62 :TrackElement_sensor :_61 .
+
+:_63 a :Sensor .
+
+:_56 :TrackElement_sensor :_63 .
+
+:_3 :Route_routeDefinition :_63 .
+
+:_64 a :Segment ;
+	:Segment_length "812"^^xsd:int .
+
+:_64 :TrackElement_sensor :_63 .
+
+:_65 a :Sensor .
+
+:_56 :TrackElement_sensor :_65 .
+
+:_3 :Route_routeDefinition :_65 .
+
+:_66 a :Segment ;
+	:Segment_length "385"^^xsd:int .
+
+:_66 :TrackElement_sensor :_65 .
+
+:_67 a :Sensor .
+
+:_56 :TrackElement_sensor :_67 .
+
+:_3 :Route_routeDefinition :_67 .
+
+:_68 a :Segment ;
+	:Segment_length "928"^^xsd:int .
+
+:_68 :TrackElement_sensor :_67 .
+
+:_69 a :Sensor .
+
+:_56 :TrackElement_sensor :_69 .
+
+:_3 :Route_routeDefinition :_69 .
+
+:_70 a :Segment ;
+	:Segment_length "885"^^xsd:int .
+
+:_70 :TrackElement_sensor :_69 .
+
+:_56 :Switch_currentState :SWITCHSTATE_FAILURE.
+
+:_71 a :SwitchPosition ;
+	:SwitchPosition_switchState "0"^^xsd:int ;
+	:SwitchPosition_switch :_56 .
+
+:_3 :Route_switchPosition :_71 .
+
+:_72 a :Switch .
+
+:_73 a :Sensor .
+
+:_72 :TrackElement_sensor :_73 .
+
+:_3 :Route_routeDefinition :_73 .
+
+:_74 a :Segment ;
+	:Segment_length "238"^^xsd:int .
+
+:_74 :TrackElement_sensor :_73 .
+
+:_75 a :Sensor .
+
+:_72 :TrackElement_sensor :_75 .
+
+:_3 :Route_routeDefinition :_75 .
+
+:_76 a :Segment ;
+	:Segment_length "397"^^xsd:int .
+
+:_76 :TrackElement_sensor :_75 .
+
+:_72 :Switch_currentState :SWITCHSTATE_STRAIGHT.
+
+:_77 a :SwitchPosition ;
+	:SwitchPosition_switchState "3"^^xsd:int ;
+	:SwitchPosition_switch :_72 .
+
+:_3 :Route_switchPosition :_77 .
+
+:_78 a :Switch .
+
+:_78 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_79 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_78 .
+
+:_3 :Route_switchPosition :_79 .
+
+:_80 a :Switch .
+
+:_81 a :Sensor .
+
+:_80 :TrackElement_sensor :_81 .
+
+:_82 a :Segment ;
+	:Segment_length "436"^^xsd:int .
+
+:_82 :TrackElement_sensor :_81 .
+
+:_83 a :Sensor .
+
+:_80 :TrackElement_sensor :_83 .
+
+:_3 :Route_routeDefinition :_83 .
+
+:_84 a :Segment ;
+	:Segment_length "624"^^xsd:int .
+
+:_84 :TrackElement_sensor :_83 .
+
+:_85 a :Sensor .
+
+:_80 :TrackElement_sensor :_85 .
+
+:_3 :Route_routeDefinition :_85 .
+
+:_86 a :Segment ;
+	:Segment_length "756"^^xsd:int .
+
+:_86 :TrackElement_sensor :_85 .
+
+:_87 a :Sensor .
+
+:_80 :TrackElement_sensor :_87 .
+
+:_3 :Route_routeDefinition :_87 .
+
+:_88 a :Segment ;
+	:Segment_length "739"^^xsd:int .
+
+:_88 :TrackElement_sensor :_87 .
+
+:_89 a :Sensor .
+
+:_80 :TrackElement_sensor :_89 .
+
+:_3 :Route_routeDefinition :_89 .
+
+:_90 a :Segment ;
+	:Segment_length "839"^^xsd:int .
+
+:_90 :TrackElement_sensor :_89 .
+
+:_91 a :Sensor .
+
+:_80 :TrackElement_sensor :_91 .
+
+:_3 :Route_routeDefinition :_91 .
+
+:_92 a :Segment ;
+	:Segment_length "545"^^xsd:int .
+
+:_92 :TrackElement_sensor :_91 .
+
+:_93 a :Sensor .
+
+:_80 :TrackElement_sensor :_93 .
+
+:_3 :Route_routeDefinition :_93 .
+
+:_94 a :Segment ;
+	:Segment_length "-823"^^xsd:int .
+
+:_94 :TrackElement_sensor :_93 .
+
+:_95 a :Sensor .
+
+:_80 :TrackElement_sensor :_95 .
+
+:_3 :Route_routeDefinition :_95 .
+
+:_96 a :Segment ;
+	:Segment_length "607"^^xsd:int .
+
+:_96 :TrackElement_sensor :_95 .
+
+:_97 a :Sensor .
+
+:_80 :TrackElement_sensor :_97 .
+
+:_3 :Route_routeDefinition :_97 .
+
+:_98 a :Segment ;
+	:Segment_length "618"^^xsd:int .
+
+:_98 :TrackElement_sensor :_97 .
+
+:_80 :Switch_currentState :SWITCHSTATE_RIGHT.
+
+:_99 a :SwitchPosition ;
+	:SwitchPosition_switchState "2"^^xsd:int ;
+	:SwitchPosition_switch :_80 .
+
+:_3 :Route_switchPosition :_99 .
+
+:_100 a :Switch .
+
+:_101 a :Sensor .
+
+:_100 :TrackElement_sensor :_101 .
+
+:_3 :Route_routeDefinition :_101 .
+
+:_102 a :Segment ;
+	:Segment_length "53"^^xsd:int .
+
+:_102 :TrackElement_sensor :_101 .
+
+:_103 a :Sensor .
+
+:_100 :TrackElement_sensor :_103 .
+
+:_3 :Route_routeDefinition :_103 .
+
+:_104 a :Segment ;
+	:Segment_length "-321"^^xsd:int .
+
+:_104 :TrackElement_sensor :_103 .
+
+:_105 a :Sensor .
+
+:_100 :TrackElement_sensor :_105 .
+
+:_3 :Route_routeDefinition :_105 .
+
+:_106 a :Segment ;
+	:Segment_length "590"^^xsd:int .
+
+:_106 :TrackElement_sensor :_105 .
+
+:_107 a :Sensor .
+
+:_100 :TrackElement_sensor :_107 .
+
+:_3 :Route_routeDefinition :_107 .
+
+:_108 a :Segment ;
+	:Segment_length "256"^^xsd:int .
+
+:_108 :TrackElement_sensor :_107 .
+
+:_109 a :Sensor .
+
+:_100 :TrackElement_sensor :_109 .
+
+:_3 :Route_routeDefinition :_109 .
+
+:_110 a :Segment ;
+	:Segment_length "365"^^xsd:int .
+
+:_110 :TrackElement_sensor :_109 .
+
+:_111 a :Sensor .
+
+:_100 :TrackElement_sensor :_111 .
+
+:_3 :Route_routeDefinition :_111 .
+
+:_112 a :Segment ;
+	:Segment_length "101"^^xsd:int .
+
+:_112 :TrackElement_sensor :_111 .
+
+:_113 a :Sensor .
+
+:_100 :TrackElement_sensor :_113 .
+
+:_3 :Route_routeDefinition :_113 .
+
+:_114 a :Segment ;
+	:Segment_length "-784"^^xsd:int .
+
+:_114 :TrackElement_sensor :_113 .
+
+:_115 a :Sensor .
+
+:_100 :TrackElement_sensor :_115 .
+
+:_3 :Route_routeDefinition :_115 .
+
+:_116 a :Segment ;
+	:Segment_length "385"^^xsd:int .
+
+:_116 :TrackElement_sensor :_115 .
+
+:_117 a :Sensor .
+
+:_100 :TrackElement_sensor :_117 .
+
+:_3 :Route_routeDefinition :_117 .
+
+:_118 a :Segment ;
+	:Segment_length "656"^^xsd:int .
+
+:_118 :TrackElement_sensor :_117 .
+
+:_100 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_119 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_100 .
+
+:_3 :Route_switchPosition :_119 .
+
+:_120 a :Switch .
+
+:_120 :Switch_currentState :SWITCHSTATE_FAILURE.
+
+:_121 a :SwitchPosition ;
+	:SwitchPosition_switchState "0"^^xsd:int ;
+	:SwitchPosition_switch :_120 .
+
+:_3 :Route_switchPosition :_121 .
+
+:_122 a :Switch .
+
+:_123 a :Sensor .
+
+:_122 :TrackElement_sensor :_123 .
+
+:_3 :Route_routeDefinition :_123 .
+
+:_124 a :Segment ;
+	:Segment_length "985"^^xsd:int .
+
+:_124 :TrackElement_sensor :_123 .
+
+:_125 a :Sensor .
+
+:_122 :TrackElement_sensor :_125 .
+
+:_3 :Route_routeDefinition :_125 .
+
+:_126 a :Segment ;
+	:Segment_length "479"^^xsd:int .
+
+:_126 :TrackElement_sensor :_125 .
+
+:_127 a :Sensor .
+
+:_122 :TrackElement_sensor :_127 .
+
+:_3 :Route_routeDefinition :_127 .
+
+:_128 a :Segment ;
+	:Segment_length "-616"^^xsd:int .
+
+:_128 :TrackElement_sensor :_127 .
+
+:_129 a :Sensor .
+
+:_122 :TrackElement_sensor :_129 .
+
+:_3 :Route_routeDefinition :_129 .
+
+:_130 a :Segment ;
+	:Segment_length "980"^^xsd:int .
+
+:_130 :TrackElement_sensor :_129 .
+
+:_131 a :Sensor .
+
+:_122 :TrackElement_sensor :_131 .
+
+:_3 :Route_routeDefinition :_131 .
+
+:_132 a :Segment ;
+	:Segment_length "323"^^xsd:int .
+
+:_132 :TrackElement_sensor :_131 .
+
+:_133 a :Sensor .
+
+:_122 :TrackElement_sensor :_133 .
+
+:_3 :Route_routeDefinition :_133 .
+
+:_134 a :Segment ;
+	:Segment_length "739"^^xsd:int .
+
+:_134 :TrackElement_sensor :_133 .
+
+:_135 a :Sensor .
+
+:_122 :TrackElement_sensor :_135 .
+
+:_3 :Route_routeDefinition :_135 .
+
+:_136 a :Segment ;
+	:Segment_length "684"^^xsd:int .
+
+:_136 :TrackElement_sensor :_135 .
+
+:_137 a :Sensor .
+
+:_122 :TrackElement_sensor :_137 .
+
+:_3 :Route_routeDefinition :_137 .
+
+:_138 a :Segment ;
+	:Segment_length "808"^^xsd:int .
+
+:_138 :TrackElement_sensor :_137 .
+
+:_122 :Switch_currentState :SWITCHSTATE_RIGHT.
+
+:_139 a :SwitchPosition ;
+	:SwitchPosition_switchState "2"^^xsd:int ;
+	:SwitchPosition_switch :_122 .
+
+:_3 :Route_switchPosition :_139 .
+
+:_140 a :Switch .
+
+:_141 a :Sensor .
+
+:_140 :TrackElement_sensor :_141 .
+
+:_3 :Route_routeDefinition :_141 .
+
+:_142 a :Segment ;
+	:Segment_length "795"^^xsd:int .
+
+:_142 :TrackElement_sensor :_141 .
+
+:_143 a :Sensor .
+
+:_140 :TrackElement_sensor :_143 .
+
+:_3 :Route_routeDefinition :_143 .
+
+:_144 a :Segment ;
+	:Segment_length "-950"^^xsd:int .
+
+:_144 :TrackElement_sensor :_143 .
+
+:_145 a :Sensor .
+
+:_146 a :Segment ;
+	:Segment_length "336"^^xsd:int .
+
+:_146 :TrackElement_sensor :_145 .
+
+:_147 a :Sensor .
+
+:_140 :TrackElement_sensor :_147 .
+
+:_3 :Route_routeDefinition :_147 .
+
+:_148 a :Segment ;
+	:Segment_length "685"^^xsd:int .
+
+:_148 :TrackElement_sensor :_147 .
+
+:_149 a :Sensor .
+
+:_140 :TrackElement_sensor :_149 .
+
+:_3 :Route_routeDefinition :_149 .
+
+:_150 a :Segment ;
+	:Segment_length "402"^^xsd:int .
+
+:_150 :TrackElement_sensor :_149 .
+
+:_151 a :Sensor .
+
+:_140 :TrackElement_sensor :_151 .
+
+:_3 :Route_routeDefinition :_151 .
+
+:_152 a :Segment ;
+	:Segment_length "869"^^xsd:int .
+
+:_152 :TrackElement_sensor :_151 .
+
+:_140 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_153 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_140 .
+
+:_3 :Route_switchPosition :_153 .
+
+:_154 a :Switch .
+
+:_155 a :Sensor .
+
+:_154 :TrackElement_sensor :_155 .
+
+:_3 :Route_routeDefinition :_155 .
+
+:_156 a :Segment ;
+	:Segment_length "922"^^xsd:int .
+
+:_156 :TrackElement_sensor :_155 .
+
+:_157 a :Sensor .
+
+:_154 :TrackElement_sensor :_157 .
+
+:_3 :Route_routeDefinition :_157 .
+
+:_158 a :Segment ;
+	:Segment_length "698"^^xsd:int .
+
+:_158 :TrackElement_sensor :_157 .
+
+:_159 a :Sensor .
+
+:_154 :TrackElement_sensor :_159 .
+
+:_3 :Route_routeDefinition :_159 .
+
+:_160 a :Segment ;
+	:Segment_length "13"^^xsd:int .
+
+:_160 :TrackElement_sensor :_159 .
+
+:_154 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_161 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_154 .
+
+:_3 :Route_switchPosition :_161 .
+
+:_162 a :Switch .
+
+:_163 a :Sensor .
+
+:_162 :TrackElement_sensor :_163 .
+
+:_164 a :Segment ;
+	:Segment_length "798"^^xsd:int .
+
+:_164 :TrackElement_sensor :_163 .
+
+:_162 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_165 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_162 .
+
+:_3 :Route_switchPosition :_165 .
+
+:_166 a :Switch .
+
+:_167 a :Sensor .
+
+:_166 :TrackElement_sensor :_167 .
+
+:_3 :Route_routeDefinition :_167 .
+
+:_168 a :Segment ;
+	:Segment_length "166"^^xsd:int .
+
+:_168 :TrackElement_sensor :_167 .
+
+:_169 a :Sensor .
+
+:_166 :TrackElement_sensor :_169 .
+
+:_3 :Route_routeDefinition :_169 .
+
+:_170 a :Segment ;
+	:Segment_length "885"^^xsd:int .
+
+:_170 :TrackElement_sensor :_169 .
+
+:_166 :Switch_currentState :SWITCHSTATE_STRAIGHT.
+
+:_171 a :SwitchPosition ;
+	:SwitchPosition_switchState "3"^^xsd:int ;
+	:SwitchPosition_switch :_166 .
+
+:_3 :Route_switchPosition :_171 .
+
+:_172 a :Switch .
+
+:_173 a :Sensor .
+
+:_174 a :Segment ;
+	:Segment_length "110"^^xsd:int .
+
+:_174 :TrackElement_sensor :_173 .
+
+:_175 a :Sensor .
+
+:_172 :TrackElement_sensor :_175 .
+
+:_3 :Route_routeDefinition :_175 .
+
+:_176 a :Segment ;
+	:Segment_length "-35"^^xsd:int .
+
+:_176 :TrackElement_sensor :_175 .
+
+:_177 a :Sensor .
+
+:_172 :TrackElement_sensor :_177 .
+
+:_3 :Route_routeDefinition :_177 .
+
+:_178 a :Segment ;
+	:Segment_length "917"^^xsd:int .
+
+:_178 :TrackElement_sensor :_177 .
+
+:_179 a :Sensor .
+
+:_172 :TrackElement_sensor :_179 .
+
+:_3 :Route_routeDefinition :_179 .
+
+:_180 a :Segment ;
+	:Segment_length "819"^^xsd:int .
+
+:_180 :TrackElement_sensor :_179 .
+
+:_181 a :Sensor .
+
+:_172 :TrackElement_sensor :_181 .
+
+:_3 :Route_routeDefinition :_181 .
+
+:_182 a :Segment ;
+	:Segment_length "713"^^xsd:int .
+
+:_182 :TrackElement_sensor :_181 .
+
+:_183 a :Sensor .
+
+:_184 a :Segment ;
+	:Segment_length "533"^^xsd:int .
+
+:_184 :TrackElement_sensor :_183 .
+
+:_185 a :Sensor .
+
+:_172 :TrackElement_sensor :_185 .
+
+:_3 :Route_routeDefinition :_185 .
+
+:_186 a :Segment ;
+	:Segment_length "368"^^xsd:int .
+
+:_186 :TrackElement_sensor :_185 .
+
+:_172 :Switch_currentState :SWITCHSTATE_FAILURE.
+
+:_187 a :SwitchPosition ;
+	:SwitchPosition_switchState "0"^^xsd:int ;
+	:SwitchPosition_switch :_172 .
+
+:_3 :Route_switchPosition :_187 .
+
+:_188 a :Switch .
+
+:_189 a :Sensor .
+
+:_188 :TrackElement_sensor :_189 .
+
+:_3 :Route_routeDefinition :_189 .
+
+:_190 a :Segment ;
+	:Segment_length "432"^^xsd:int .
+
+:_190 :TrackElement_sensor :_189 .
+
+:_191 a :Sensor .
+
+:_188 :TrackElement_sensor :_191 .
+
+:_3 :Route_routeDefinition :_191 .
+
+:_192 a :Segment ;
+	:Segment_length "772"^^xsd:int .
+
+:_192 :TrackElement_sensor :_191 .
+
+:_193 a :Sensor .
+
+:_188 :TrackElement_sensor :_193 .
+
+:_3 :Route_routeDefinition :_193 .
+
+:_194 a :Segment ;
+	:Segment_length "564"^^xsd:int .
+
+:_194 :TrackElement_sensor :_193 .
+
+:_188 :Switch_currentState :SWITCHSTATE_STRAIGHT.
+
+:_195 a :SwitchPosition ;
+	:SwitchPosition_switchState "3"^^xsd:int ;
+	:SwitchPosition_switch :_188 .
+
+:_3 :Route_switchPosition :_195 .
+
+:_196 a :Switch .
+
+:_197 a :Sensor .
+
+:_196 :TrackElement_sensor :_197 .
+
+:_3 :Route_routeDefinition :_197 .
+
+:_198 a :Segment ;
+	:Segment_length "135"^^xsd:int .
+
+:_198 :TrackElement_sensor :_197 .
+
+:_199 a :Sensor .
+
+:_196 :TrackElement_sensor :_199 .
+
+:_3 :Route_routeDefinition :_199 .
+
+:_200 a :Segment ;
+	:Segment_length "266"^^xsd:int .
+
+:_200 :TrackElement_sensor :_199 .
+
+:_196 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_201 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_196 .
+
+:_3 :Route_switchPosition :_201 .
+
+:_4 :TrackElement_connectsTo :_6 .
+
+:_6 :TrackElement_connectsTo :_8 .
+
+:_8 :TrackElement_connectsTo :_10 .
+
+:_10 :TrackElement_connectsTo :_12 .
+
+:_12 :TrackElement_connectsTo :_14 .
+
+:_14 :TrackElement_connectsTo :_16 .
+
+:_16 :TrackElement_connectsTo :_18 .
+
+:_18 :TrackElement_connectsTo :_20 .
+
+:_20 :TrackElement_connectsTo :_22 .
+
+:_22 :TrackElement_connectsTo :_24 .
+
+:_24 :TrackElement_connectsTo :_26 .
+
+:_26 :TrackElement_connectsTo :_28 .
+
+:_28 :TrackElement_connectsTo :_30 .
+
+:_30 :TrackElement_connectsTo :_32 .
+
+:_32 :TrackElement_connectsTo :_34 .
+
+:_34 :TrackElement_connectsTo :_36 .
+
+:_36 :TrackElement_connectsTo :_38 .
+
+:_38 :TrackElement_connectsTo :_40 .
+
+:_40 :TrackElement_connectsTo :_42 .
+
+:_42 :TrackElement_connectsTo :_44 .
+
+:_44 :TrackElement_connectsTo :_46 .
+
+:_46 :TrackElement_connectsTo :_48 .
+
+:_48 :TrackElement_connectsTo :_50 .
+
+:_50 :TrackElement_connectsTo :_52 .
+
+:_52 :TrackElement_connectsTo :_54 .
+
+:_54 :TrackElement_connectsTo :_56 .
+
+:_56 :TrackElement_connectsTo :_58 .
+
+:_58 :TrackElement_connectsTo :_60 .
+
+:_60 :TrackElement_connectsTo :_62 .
+
+:_62 :TrackElement_connectsTo :_64 .
+
+:_64 :TrackElement_connectsTo :_66 .
+
+:_66 :TrackElement_connectsTo :_68 .
+
+:_68 :TrackElement_connectsTo :_70 .
+
+:_70 :TrackElement_connectsTo :_72 .
+
+:_72 :TrackElement_connectsTo :_74 .
+
+:_74 :TrackElement_connectsTo :_76 .
+
+:_76 :TrackElement_connectsTo :_78 .
+
+:_78 :TrackElement_connectsTo :_80 .
+
+:_80 :TrackElement_connectsTo :_82 .
+
+:_82 :TrackElement_connectsTo :_84 .
+
+:_84 :TrackElement_connectsTo :_86 .
+
+:_86 :TrackElement_connectsTo :_88 .
+
+:_88 :TrackElement_connectsTo :_90 .
+
+:_90 :TrackElement_connectsTo :_92 .
+
+:_92 :TrackElement_connectsTo :_94 .
+
+:_94 :TrackElement_connectsTo :_96 .
+
+:_96 :TrackElement_connectsTo :_98 .
+
+:_98 :TrackElement_connectsTo :_100 .
+
+:_100 :TrackElement_connectsTo :_102 .
+
+:_102 :TrackElement_connectsTo :_104 .
+
+:_104 :TrackElement_connectsTo :_106 .
+
+:_106 :TrackElement_connectsTo :_108 .
+
+:_108 :TrackElement_connectsTo :_110 .
+
+:_110 :TrackElement_connectsTo :_112 .
+
+:_112 :TrackElement_connectsTo :_114 .
+
+:_114 :TrackElement_connectsTo :_116 .
+
+:_116 :TrackElement_connectsTo :_118 .
+
+:_118 :TrackElement_connectsTo :_120 .
+
+:_120 :TrackElement_connectsTo :_122 .
+
+:_122 :TrackElement_connectsTo :_124 .
+
+:_124 :TrackElement_connectsTo :_126 .
+
+:_126 :TrackElement_connectsTo :_128 .
+
+:_128 :TrackElement_connectsTo :_130 .
+
+:_130 :TrackElement_connectsTo :_132 .
+
+:_132 :TrackElement_connectsTo :_134 .
+
+:_134 :TrackElement_connectsTo :_136 .
+
+:_136 :TrackElement_connectsTo :_138 .
+
+:_138 :TrackElement_connectsTo :_140 .
+
+:_140 :TrackElement_connectsTo :_142 .
+
+:_142 :TrackElement_connectsTo :_144 .
+
+:_144 :TrackElement_connectsTo :_146 .
+
+:_146 :TrackElement_connectsTo :_148 .
+
+:_148 :TrackElement_connectsTo :_150 .
+
+:_150 :TrackElement_connectsTo :_152 .
+
+:_152 :TrackElement_connectsTo :_154 .
+
+:_154 :TrackElement_connectsTo :_156 .
+
+:_156 :TrackElement_connectsTo :_158 .
+
+:_158 :TrackElement_connectsTo :_160 .
+
+:_160 :TrackElement_connectsTo :_162 .
+
+:_162 :TrackElement_connectsTo :_164 .
+
+:_164 :TrackElement_connectsTo :_166 .
+
+:_166 :TrackElement_connectsTo :_168 .
+
+:_168 :TrackElement_connectsTo :_170 .
+
+:_170 :TrackElement_connectsTo :_172 .
+
+:_172 :TrackElement_connectsTo :_174 .
+
+:_174 :TrackElement_connectsTo :_176 .
+
+:_176 :TrackElement_connectsTo :_178 .
+
+:_178 :TrackElement_connectsTo :_180 .
+
+:_180 :TrackElement_connectsTo :_182 .
+
+:_182 :TrackElement_connectsTo :_184 .
+
+:_184 :TrackElement_connectsTo :_186 .
+
+:_186 :TrackElement_connectsTo :_188 .
+
+:_188 :TrackElement_connectsTo :_190 .
+
+:_190 :TrackElement_connectsTo :_192 .
+
+:_192 :TrackElement_connectsTo :_194 .
+
+:_194 :TrackElement_connectsTo :_196 .
+
+:_196 :TrackElement_connectsTo :_198 .
+
+:_198 :TrackElement_connectsTo :_200 .
+
+:_202 a :Route ;
+	:Route_exit :_1 ;
+	:Route_entry :_2 .
+
+:_203 a :Switch .
+
+:_204 a :Sensor .
+
+:_203 :TrackElement_sensor :_204 .
+
+:_202 :Route_routeDefinition :_204 .
+
+:_205 a :Segment ;
+	:Segment_length "518"^^xsd:int .
+
+:_205 :TrackElement_sensor :_204 .
+
+:_206 a :Sensor .
+
+:_203 :TrackElement_sensor :_206 .
+
+:_202 :Route_routeDefinition :_206 .
+
+:_207 a :Segment ;
+	:Segment_length "206"^^xsd:int .
+
+:_207 :TrackElement_sensor :_206 .
+
+:_208 a :Sensor .
+
+:_203 :TrackElement_sensor :_208 .
+
+:_202 :Route_routeDefinition :_208 .
+
+:_209 a :Segment ;
+	:Segment_length "619"^^xsd:int .
+
+:_209 :TrackElement_sensor :_208 .
+
+:_210 a :Sensor .
+
+:_203 :TrackElement_sensor :_210 .
+
+:_211 a :Segment ;
+	:Segment_length "452"^^xsd:int .
+
+:_211 :TrackElement_sensor :_210 .
+
+:_212 a :Sensor .
+
+:_203 :TrackElement_sensor :_212 .
+
+:_202 :Route_routeDefinition :_212 .
+
+:_213 a :Segment ;
+	:Segment_length "523"^^xsd:int .
+
+:_213 :TrackElement_sensor :_212 .
+
+:_203 :Switch_currentState :SWITCHSTATE_STRAIGHT.
+
+:_214 a :SwitchPosition ;
+	:SwitchPosition_switchState "3"^^xsd:int ;
+	:SwitchPosition_switch :_203 .
+
+:_202 :Route_switchPosition :_214 .
+
+:_215 a :Switch .
+
+:_216 a :Sensor .
+
+:_215 :TrackElement_sensor :_216 .
+
+:_202 :Route_routeDefinition :_216 .
+
+:_217 a :Segment ;
+	:Segment_length "262"^^xsd:int .
+
+:_217 :TrackElement_sensor :_216 .
+
+:_215 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_218 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_215 .
+
+:_202 :Route_switchPosition :_218 .
+
+:_219 a :Switch .
+
+:_220 a :Sensor .
+
+:_219 :TrackElement_sensor :_220 .
+
+:_202 :Route_routeDefinition :_220 .
+
+:_221 a :Segment ;
+	:Segment_length "82"^^xsd:int .
+
+:_221 :TrackElement_sensor :_220 .
+
+:_222 a :Sensor .
+
+:_219 :TrackElement_sensor :_222 .
+
+:_202 :Route_routeDefinition :_222 .
+
+:_223 a :Segment ;
+	:Segment_length "-452"^^xsd:int .
+
+:_223 :TrackElement_sensor :_222 .
+
+:_224 a :Sensor .
+
+:_219 :TrackElement_sensor :_224 .
+
+:_225 a :Segment ;
+	:Segment_length "370"^^xsd:int .
+
+:_225 :TrackElement_sensor :_224 .
+
+:_226 a :Sensor .
+
+:_219 :TrackElement_sensor :_226 .
+
+:_202 :Route_routeDefinition :_226 .
+
+:_227 a :Segment ;
+	:Segment_length "207"^^xsd:int .
+
+:_227 :TrackElement_sensor :_226 .
+
+:_228 a :Sensor .
+
+:_219 :TrackElement_sensor :_228 .
+
+:_202 :Route_routeDefinition :_228 .
+
+:_229 a :Segment ;
+	:Segment_length "604"^^xsd:int .
+
+:_229 :TrackElement_sensor :_228 .
+
+:_230 a :Sensor .
+
+:_219 :TrackElement_sensor :_230 .
+
+:_202 :Route_routeDefinition :_230 .
+
+:_231 a :Segment ;
+	:Segment_length "780"^^xsd:int .
+
+:_231 :TrackElement_sensor :_230 .
+
+:_232 a :Sensor .
+
+:_219 :TrackElement_sensor :_232 .
+
+:_202 :Route_routeDefinition :_232 .
+
+:_233 a :Segment ;
+	:Segment_length "972"^^xsd:int .
+
+:_233 :TrackElement_sensor :_232 .
+
+:_234 a :Sensor .
+
+:_219 :TrackElement_sensor :_234 .
+
+:_202 :Route_routeDefinition :_234 .
+
+:_235 a :Segment ;
+	:Segment_length "184"^^xsd:int .
+
+:_235 :TrackElement_sensor :_234 .
+
+:_236 a :Sensor .
+
+:_219 :TrackElement_sensor :_236 .
+
+:_202 :Route_routeDefinition :_236 .
+
+:_237 a :Segment ;
+	:Segment_length "-313"^^xsd:int .
+
+:_237 :TrackElement_sensor :_236 .
+
+:_219 :Switch_currentState :SWITCHSTATE_FAILURE.
+
+:_238 a :SwitchPosition ;
+	:SwitchPosition_switchState "0"^^xsd:int ;
+	:SwitchPosition_switch :_219 .
+
+:_202 :Route_switchPosition :_238 .
+
+:_239 a :Switch .
+
+:_240 a :Sensor .
+
+:_239 :TrackElement_sensor :_240 .
+
+:_202 :Route_routeDefinition :_240 .
+
+:_241 a :Segment ;
+	:Segment_length "269"^^xsd:int .
+
+:_241 :TrackElement_sensor :_240 .
+
+:_242 a :Sensor .
+
+:_239 :TrackElement_sensor :_242 .
+
+:_202 :Route_routeDefinition :_242 .
+
+:_243 a :Segment ;
+	:Segment_length "898"^^xsd:int .
+
+:_243 :TrackElement_sensor :_242 .
+
+:_244 a :Sensor .
+
+:_239 :TrackElement_sensor :_244 .
+
+:_202 :Route_routeDefinition :_244 .
+
+:_245 a :Segment ;
+	:Segment_length "422"^^xsd:int .
+
+:_245 :TrackElement_sensor :_244 .
+
+:_246 a :Sensor .
+
+:_239 :TrackElement_sensor :_246 .
+
+:_202 :Route_routeDefinition :_246 .
+
+:_247 a :Segment ;
+	:Segment_length "371"^^xsd:int .
+
+:_247 :TrackElement_sensor :_246 .
+
+:_248 a :Sensor .
+
+:_239 :TrackElement_sensor :_248 .
+
+:_202 :Route_routeDefinition :_248 .
+
+:_249 a :Segment ;
+	:Segment_length "454"^^xsd:int .
+
+:_249 :TrackElement_sensor :_248 .
+
+:_250 a :Sensor .
+
+:_239 :TrackElement_sensor :_250 .
+
+:_202 :Route_routeDefinition :_250 .
+
+:_251 a :Segment ;
+	:Segment_length "535"^^xsd:int .
+
+:_251 :TrackElement_sensor :_250 .
+
+:_252 a :Sensor .
+
+:_239 :TrackElement_sensor :_252 .
+
+:_253 a :Segment ;
+	:Segment_length "175"^^xsd:int .
+
+:_253 :TrackElement_sensor :_252 .
+
+:_254 a :Sensor .
+
+:_239 :TrackElement_sensor :_254 .
+
+:_202 :Route_routeDefinition :_254 .
+
+:_255 a :Segment ;
+	:Segment_length "60"^^xsd:int .
+
+:_255 :TrackElement_sensor :_254 .
+
+:_256 a :Sensor .
+
+:_239 :TrackElement_sensor :_256 .
+
+:_202 :Route_routeDefinition :_256 .
+
+:_257 a :Segment ;
+	:Segment_length "568"^^xsd:int .
+
+:_257 :TrackElement_sensor :_256 .
+
+:_239 :Switch_currentState :SWITCHSTATE_STRAIGHT.
+
+:_258 a :SwitchPosition ;
+	:SwitchPosition_switchState "3"^^xsd:int ;
+	:SwitchPosition_switch :_239 .
+
+:_202 :Route_switchPosition :_258 .
+
+:_259 a :Switch .
+
+:_259 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_260 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_259 .
+
+:_202 :Route_switchPosition :_260 .
+
+:_261 a :Switch .
+
+:_262 a :Sensor .
+
+:_261 :TrackElement_sensor :_262 .
+
+:_202 :Route_routeDefinition :_262 .
+
+:_263 a :Segment ;
+	:Segment_length "672"^^xsd:int .
+
+:_263 :TrackElement_sensor :_262 .
+
+:_264 a :Sensor .
+
+:_261 :TrackElement_sensor :_264 .
+
+:_202 :Route_routeDefinition :_264 .
+
+:_265 a :Segment ;
+	:Segment_length "420"^^xsd:int .
+
+:_265 :TrackElement_sensor :_264 .
+
+:_261 :Switch_currentState :SWITCHSTATE_LEFT.
+
+:_266 a :SwitchPosition ;
+	:SwitchPosition_switchState "1"^^xsd:int ;
+	:SwitchPosition_switch :_261 .
+
+:_202 :Route_switchPosition :_266 .
+
+:_203 :TrackElement_connectsTo :_205 .
+
+:_205 :TrackElement_connectsTo :_207 .
+
+:_207 :TrackElement_connectsTo :_209 .
+
+:_209 :TrackElement_connectsTo :_211 .
+
+:_211 :TrackElement_connectsTo :_213 .
+
+:_213 :TrackElement_connectsTo :_215 .
+
+:_215 :TrackElement_connectsTo :_217 .
+
+:_217 :TrackElement_connectsTo :_219 .
+
+:_219 :TrackElement_connectsTo :_221 .
+
+:_221 :TrackElement_connectsTo :_223 .
+
+:_223 :TrackElement_connectsTo :_225 .
+
+:_225 :TrackElement_connectsTo :_227 .
+
+:_227 :TrackElement_connectsTo :_229 .
+
+:_229 :TrackElement_connectsTo :_231 .
+
+:_231 :TrackElement_connectsTo :_233 .
+
+:_233 :TrackElement_connectsTo :_235 .
+
+:_235 :TrackElement_connectsTo :_237 .
+
+:_237 :TrackElement_connectsTo :_239 .
+
+:_239 :TrackElement_connectsTo :_241 .
+
+:_241 :TrackElement_connectsTo :_243 .
+
+:_243 :TrackElement_connectsTo :_245 .
+
+:_245 :TrackElement_connectsTo :_247 .
+
+:_247 :TrackElement_connectsTo :_249 .
+
+:_249 :TrackElement_connectsTo :_251 .
+
+:_251 :TrackElement_connectsTo :_253 .
+
+:_253 :TrackElement_connectsTo :_255 .
+
+:_255 :TrackElement_connectsTo :_257 .
+
+:_257 :TrackElement_connectsTo :_259 .
+
+:_259 :TrackElement_connectsTo :_261 .
+
+:_261 :TrackElement_connectsTo :_263 .
+
+:_263 :TrackElement_connectsTo :_265 .
+
+:_200 :TrackElement_connectsTo :_203 .
+
+:_265 :TrackElement_connectsTo :_4 .
+
