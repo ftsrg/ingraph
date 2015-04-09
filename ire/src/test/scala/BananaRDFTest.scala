@@ -1,9 +1,8 @@
-import java.io.{InputStream, StringBufferInputStream, StringReader}
+import java.io.StringReader
 
 import org.scalatest.FlatSpec
 
 import scala.collection.immutable.HashMap
-import scala.collection.mutable.Stack
 
 
 class RdfReaderTest extends FlatSpec {

@@ -1,17 +1,8 @@
 
-import java.io.{Reader, InputStream}
+import java.io.{InputStream, Reader}
 
-import com.hp.hpl.jena.Jena
 import com.hp.hpl.jena.graph.Node_Literal
-import com.hp.hpl.jena.rdf.model.RDFReader
-import org.apache.jena.atlas.logging.LogCtl
-import org.w3.banana._
-import org.w3.banana.io.Turtle
 import org.w3.banana.jena.JenaModule
-
-import scala.collection.immutable.HashMap
-import scala.collection.mutable
-import scala.util.Try
 
 /**
  * Created by Maginecz on 3/4/2015.
