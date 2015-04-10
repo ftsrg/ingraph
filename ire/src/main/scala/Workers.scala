@@ -6,7 +6,7 @@ import scala.collection.mutable
  * Created by Maginecz on 3/16/2015.
  */
 package object Workers {
-  type nodeType = Vector[Long]
+  type nodeType = Vector[Any]
 }
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
 
