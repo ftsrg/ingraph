@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers, WordSpecLike}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**
  * Created by Maginecz on 3/16/2015.

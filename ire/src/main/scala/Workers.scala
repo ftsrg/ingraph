@@ -1,5 +1,5 @@
 import Workers.nodeType
-import akka.actor.{Actor, ActorRef}
+import akka.actor.Actor
 
 import scala.collection.mutable
 /**
