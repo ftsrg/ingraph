@@ -15,11 +15,11 @@ object container_performance {
 
   def main(args: Array[String]) {
     val size = 1000000
-    val tuples = Stream.continually((Random.nextLong, Random.nextLong, Random.nextLong, Random.nextLong)).take(size)
+    val tuples = Stream.continually( (Random.nextLong, Random.nextLong, Random.nextLong, Random.nextLong) ).take(size)
     val vectors = Stream.continually(Vector(Random.nextLong, Random.nextLong, Random.nextLong, Random.nextLong)).take(size)
 
     val selectionVector = List(0, 2, 3)
-    val lists = Stream.continually(List(Random.nextLong, Random.nextLong, Random.nextLong, Random.nextLong)).take(size)
+    val lists = Stream.continually( List(Random.nextLong, Random.nextLong, Random.nextLong, Random.nextLong) ).take(size)
 
     def selectTuple = tuples.foreach(tup => (tup._1, tup._3, tup._4))
     def selectVector = vectors.foreach(vec => selectionVector.foreach(i => vec(i)))

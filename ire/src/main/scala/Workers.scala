@@ -22,7 +22,7 @@ class Trimmer(val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) e
   }
 }
 
-import collection.mutable.MultiMap
+import scala.collection.mutable.MultiMap
 
 case class Primary(changeSet: ChangeSet)
 case class Secondary(changeSet: ChangeSet)
@@ -106,7 +106,7 @@ class HashJoiner(val next:(ChangeSet) => Unit,
       positive.foreach(
         vec => {
           val key = primarySelector.map(i => vec(i))
-          secondaryValues.addBinding(key,vec)
+          secondaryValues.addBinding(key,vec) //must be used with multimaps
         }
       )
       negative.foreach(
