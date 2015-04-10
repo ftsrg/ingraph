@@ -119,6 +119,29 @@ class HashJoiner(val next:(ChangeSet) => Unit,
   }
 }
 
+class Checker(val next: (ChangeSet)=> Unit, val condition: (nodeType)=> Boolean) extends Actor{
+  override def receive: Actor.Receive = {
+    case ChangeSet(positive, negative) => {
+      next(ChangeSet(
+        positive.filter(condition),
+        negative.filter(condition)
+      ))
+    }
+  }
+}
+
+class InequalityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
+  next,
+  (node:nodeType)=> { !inequals.map{ i => node(i)}.exists{ value =>value==node(nodeIndex)}}
+)
+
+class EqualityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
+  next,
+  (node:nodeType)=> { inequals.map{ i => node(i)}.exists{ value =>value==node(nodeIndex)}}
+)
+
+
+
 class Printer() extends Actor {
   override def receive: Receive = {
     case ChangeSet(positive, negative) => {
