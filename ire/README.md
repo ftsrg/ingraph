@@ -1,2 +1,2 @@
 # Scala implementation of Rete networks
-![Build Status](https://secure.travis-ci.org/wafle/project-work.png)
+[![Build Status](https://secure.travis-ci.org/wafle/project-work.png)](http://travis-ci.org/wafle/project-work)
