@@ -28,17 +28,17 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   }
   "EqualityChecker" must {
     "check equality properly" in {
-      val changeSet = ChangeSet(Vector(Vector(0,2,1),Vector(0,3,0)))
+      val changeSet = ChangeSet(Vector(Vector(0,2,1),Vector(0,0,0),Vector(0,2,0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val equalityChecker = system.actorOf(Props(new EqualityChecker(echoActor ! _,0,Vector(1,2))))
 
       equalityChecker ! changeSet
-      expectMsg(ChangeSet(Vector(Vector(0,3,0))))
+      expectMsg(ChangeSet(Vector(Vector(0,0,0))))
     }
   }
   "InequalityChecker" must {
     "check inequality properly" in {
-      val changeSet = ChangeSet(Vector(Vector(0,2,1),Vector(0,3,0)))
+      val changeSet = ChangeSet(Vector(Vector(0,2,1),Vector(0,3,0),Vector(0,0,0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val inequalityChecker = system.actorOf(Props(new InequalityChecker(echoActor ! _,0,Vector(1,2))))
 

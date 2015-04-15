@@ -135,9 +135,9 @@ class InequalityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int
   (node:nodeType)=> { !inequals.map{ i => node(i)}.exists{ value =>value==node(nodeIndex)}}
 )
 
-class EqualityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
+class EqualityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int, val equals: Vector[Int]) extends Checker(
   next,
-  (node:nodeType)=> { inequals.map{ i => node(i)}.exists{ value =>value==node(nodeIndex)}}
+  (node:nodeType)=> { equals.map{ i => node(i)}.forall{ value =>value==node(nodeIndex)}}
 )
 
 
