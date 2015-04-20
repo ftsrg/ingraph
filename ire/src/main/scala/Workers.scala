@@ -39,31 +39,24 @@ class HashJoiner(val next:(ChangeSet) => Unit,
 
   override def receive: Actor.Receive = {
     case Primary(ChangeSet(positive, negative)) => {
-      val joinedPositive = positive.filter( primaryVec => {
-        secondaryValues.contains(primarySelector.map(i => primaryVec(i)))
-      }).
-      map{
-        primaryVec => {
-          val key = primarySelector.map(i => primaryVec(i))
-          val rest = inversePrimarySelector.map(i => primaryVec(i))
-          secondaryValues(key).map(
-            secondaryVec => {
-              primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
-            }
-          ).toVector
-        }
+      val joinedPositive = for {
+          primaryVec <- positive
+          key = primarySelector.map(i => primaryVec(i))
+          if secondaryValues.contains(key)
+          secondaryVec <- secondaryValues(key)
+    }
+        yield primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
+
+
+      val joinedNegative = for {
+        primaryVec <- negative
+        key = primarySelector.map(i => primaryVec(i))
+        if secondaryValues.contains(key)
+        secondaryVec <- secondaryValues(key)
       }
-      val joinedNegative = negative.map(
-        primaryVec => {
-          val key = primarySelector.map(i => primaryVec(i))
-          secondaryValues(key).map(
-            secondaryVec => {
-              primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
-            }.toVector
-          )
-        }
-      )
-      next(ChangeSet(joinedPositive.flatten,joinedNegative.flatten))
+        yield primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
+
+      next(ChangeSet(joinedPositive,joinedNegative))
       positive.foreach(
         vec => {
           val key = primarySelector.map(i => vec(i))
@@ -78,30 +71,24 @@ class HashJoiner(val next:(ChangeSet) => Unit,
       )
     }
     case Secondary(ChangeSet(positive, negative)) => {
-      val joinedPositive = positive.map{
-        secondaryVec => {
-          val key = secondarySelector.map(i => secondaryVec(i))
-          val rest = inverseSecondarySelector.map(i => secondaryVec(i))
-          primaryValues(key).map(
-            primaryVec => {
-              primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
-            }
-          ).toVector
-        }
-      }
-      val joinedNegative = negative.map(
-        secondaryVec => {
-          val key = secondarySelector.map(i => secondaryVec(i))
-          val rest = inverseSecondarySelector.map(i => secondaryVec(i))
-          primaryValues(key).map(
-            primaryVec => {
-              primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
-            }.toVector
-          )
-        }
-      )
+      val joinedPositive = for {
+        secondaryVec <- positive
+        key = secondarySelector.map(i => secondaryVec(i))
+        if primaryValues.contains(key)
+        primaryVec <- primaryValues(key)
+    }
+       yield primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
 
-      next(ChangeSet(joinedPositive.flatten,joinedNegative.flatten))
+
+      val joinedNegative = for {
+        secondaryVec <- negative
+        key = secondarySelector.map(i => secondaryVec(i))
+        if primaryValues.contains(key)
+        primaryVec <- primaryValues(key)
+    }
+       yield primaryVec ++ inverseSecondarySelector.map( i=>secondaryVec(i) )
+
+      next(ChangeSet(joinedPositive,joinedNegative))
 
       positive.foreach(
         vec => {
@@ -139,8 +126,6 @@ class EqualityChecker(override val next: (ChangeSet)=> Unit,val nodeIndex: Int, 
   next,
   (node:nodeType)=> { equals.map{ i => node(i)}.forall{ value =>value==node(nodeIndex)}}
 )
-
-
 
 class Printer() extends Actor {
   override def receive: Receive = {
