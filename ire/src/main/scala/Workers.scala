@@ -105,13 +105,13 @@ class HashJoiner(val next:(ChangeSet) => Unit,
 
       positive.foreach(
         vec => {
-          val key = primarySelector.map(i => vec(i))
+          val key = secondarySelector.map(i => vec(i))
           secondaryValues.addBinding(key,vec) //must be used with multimaps
         }
       )
       negative.foreach(
         vec =>{
-          val key = primarySelector.map(i => vec(i))
+          val key = secondarySelector.map(i => vec(i))
           secondaryValues.removeBinding(key,vec)
         }
       )
