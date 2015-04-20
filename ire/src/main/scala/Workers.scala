@@ -137,3 +137,70 @@ class Printer() extends Actor {
     }
   }
 }
+
+class HashAntiJoiner(val next:(ChangeSet) => Unit,
+                     val primarySelector: Vector[Int],
+                     val secondarySelector: Vector[Int])
+  extends Actor {
+  var primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+  var secondaryValues = new mutable.HashSet[nodeType]
+
+  override def receive: Actor.Receive = {
+    case Primary(ChangeSet(positive, negative)) => {
+      val joinedPositive=for {
+        node <- positive
+        if !secondaryValues.contains(primarySelector.map(i => node(i)))
+      }
+        yield node
+      val joinedNegative=for {
+        node: nodeType <- negative
+        if secondaryValues.contains(primarySelector.map(i => node(i)))
+      }
+        yield node
+
+      next(ChangeSet(joinedPositive,joinedNegative))
+
+      positive.foreach(
+        vec => {
+          val key = primarySelector.map(i => vec(i))
+          primaryValues.addBinding(key,vec)
+        }
+      )
+      negative.foreach(
+        vec =>{
+          val key = primarySelector.map(i => vec(i))
+          primaryValues.removeBinding(key,vec)
+        }
+      )
+    }
+    case Secondary(ChangeSet(positive, negative)) => {
+      val joinedNegative=for { //this is switched because antijoin
+        node<- positive; //semicolon really is needed here
+        key= secondarySelector.map(i => node(i))
+        if primaryValues.contains(key)
+      }
+        yield primaryValues(key)
+      val joinedPositive=for{
+        node:nodeType <- negative
+        key= secondarySelector.map(i => node(i))
+        if primaryValues.contains(secondarySelector.map(i => node(i)))
+      }
+        yield primaryValues(node)
+
+      next(ChangeSet(joinedPositive.flatten,joinedNegative.flatten))
+
+      positive.foreach(
+        vec => {
+          val key = secondarySelector.map(i => vec(i))
+          secondaryValues.add(key)//must be used with multimaps
+        }
+      )
+      negative.foreach(
+        vec =>{
+          val key = secondarySelector.map(i => vec(i))
+          secondaryValues.remove(key)
+        }
+      )
+    }
+  }
+}
