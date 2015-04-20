@@ -31,8 +31,8 @@ class HashJoiner(val next:(ChangeSet) => Unit,
                val primaryLength: Int, val primarySelector: Vector[Int],
                val secondaryLength: Int, val secondarySelector: Vector[Int])
   extends Actor {
-  var primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
-  var secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+  val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+  val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
 
   val inversePrimarySelector = Vector.range(0,primaryLength) filter( i=> !primarySelector.contains(i))
   val inverseSecondarySelector = Vector.range(0,secondaryLength) filter( i=> !secondarySelector.contains(i))
@@ -142,8 +142,8 @@ class HashAntiJoiner(val next:(ChangeSet) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int])
   extends Actor {
-  var primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
-  var secondaryValues = new mutable.HashSet[nodeType]
+  val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+  val secondaryValues = new mutable.HashSet[nodeType]
 
   override def receive: Actor.Receive = {
     case Primary(ChangeSet(positive, negative)) => {
