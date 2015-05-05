@@ -205,15 +205,20 @@ class HashAntiJoiner(val next: (ChangeSet) => Unit,
     }
   }
 
-class Production(name: String) extends Actor{
+class Production(name: String) extends Actor {
   val t0 = System.nanoTime()
   val results = new mutable.HashSet[nodeType]
+
   override def receive: Actor.Receive = {
-    case ChangeSet(p,n) => {
+    case ChangeSet(p, n) => {
       val t1 = System.nanoTime()
-      p.foreach {results.add(_)}
-      n.foreach { results.remove(_)}
-      println("Elapsed time: " + (t1 - t0) + "ns",name)
+      p.foreach {
+        results.add(_)
+      }
+      n.foreach {
+        results.remove(_)
+      }
+      println("Elapsed time: " + (t1 - t0) + "ns", name)
     }
   }
 }
