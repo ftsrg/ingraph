@@ -14,4 +14,6 @@ libraryDependencies += "org.w3" % "banana-rdf_2.11" % "0.8.1"
 
 libraryDependencies += "org.w3" % "banana-jena_2.11" % "0.8.1"
 
+libraryDependencies += "com.twitter" % "chill_2.11" % "0.5.2"
+
 resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
