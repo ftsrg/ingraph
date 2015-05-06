@@ -14,7 +14,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  "AntiHasJoin" must {
+  "AntiHashJoiner" must {
     "retain positive nodes" in {
       val primaryVec = Vector(15, 16, 17, 18)
       val prim = ChangeSet(
