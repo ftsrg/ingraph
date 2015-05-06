@@ -1,6 +1,10 @@
+import java.io.{InputStream, FileInputStream}
+
 import Workers.nodeType
 import akka.actor.Actor
+import com.twitter.chill.{Input, ScalaKryoInstantiator}
 
+import scala.collection.immutable.HashMap
 import scala.collection.mutable
 
 /**
@@ -204,6 +208,7 @@ class HashAntiJoiner(val next: (ChangeSet) => Unit,
       )
     }
   }
+}
 
 class Production(name: String) extends Actor {
   val t0 = System.nanoTime()
@@ -223,4 +228,53 @@ class Production(name: String) extends Actor {
   }
 }
 
+class WildcardInput() {
+  val types = new mutable.HashMap[String, mutable.Set[Long]]()
+  val attributes = new mutable.HashMap[String, mutable.Map[Long, mutable.Set[Any]]]
+
+  def addAttribute(strID: String, attribute: String, value: Any): Unit = {
+    val id = utils.idStringToLong(strID)
+    if (attribute == "type") {
+      val valueString = value.toString
+      if (!types.contains(valueString)) //withdefault is not applicable, as it would always return the same set
+        types.put(valueString, new mutable.HashSet[Long]()) //resulting in all ids going to the same set
+      types(valueString).add(id)
+    }
+    else {
+      if (!attributes.contains(attribute))
+        attributes.put(attribute, new mutable.HashMap[Long, mutable.Set[Any]])
+      if (!attributes(attribute).contains(id))
+        attributes(attribute).put(id, new mutable.HashSet[Any])
+      attributes(attribute)(id).add(value)
+    }
+  }
+
+  def sendData(attributeFunc: Map[String, (ChangeSet) => Unit] = new HashMap[String, (ChangeSet) => Unit],
+               typeFunc: Map[String, (ChangeSet) => Unit] = new HashMap[String, (ChangeSet) => Unit],
+               messageSize: Int = 1
+                ) = {
+    for (
+      (attribute, func) <- attributeFunc;
+      (id, values) <- attributes(attribute);
+      output <- values.grouped(messageSize)
+    )
+      func(ChangeSet(positive = output.toVector.map((v) => Vector(id, v))))
+
+    for {
+      (typeOfNode, func) <- typeFunc
+      nodes <- types(typeOfNode).grouped(messageSize)
+    }
+      func(ChangeSet(positive = nodes.toVector.map((v) => Vector(v))))
+
+  }
+}
+
+object WildcardInput {
+  def apply(stream: InputStream): WildcardInput = {
+    val instantiator = new ScalaKryoInstantiator
+    instantiator.setRegistrationRequired(false)
+    val kryo = instantiator.newKryo()
+    val input = new Input(stream)
+    kryo.readObject(input, classOf[WildcardInput])
+  }
 }
