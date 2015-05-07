@@ -133,17 +133,6 @@ class EqualityChecker(override val next: (ChangeSet) => Unit, val nodeIndex: Int
   }
 )
 
-class Printer() extends Actor {
-  override def receive: Receive = {
-    case ChangeSet(positive, negative) => {
-      print("+:")
-      println(positive)
-      print("-:")
-      println(negative)
-    }
-  }
-}
-
 class HashAntiJoiner(val next: (ChangeSet) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int])
