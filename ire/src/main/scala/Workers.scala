@@ -16,16 +16,35 @@ package object Workers {
 
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
 
-class Trimmer(val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) extends Actor {
-  override def receive: Receive = {
-    case ChangeSet(positive, negative) => {
+abstract class AlphaNode(val next: (ChangeSet) => Unit) extends Actor {
+
+  def onChangeSet(changeSet: ChangeSet): Unit
+
+  override def receive: Actor.Receive = {
+    case changeSet:ChangeSet => onChangeSet(changeSet)
+  }
+}
+
+abstract class BetaNode(val next: (ChangeSet) => Unit) extends Actor {
+
+
+  def onPrimary(changeSet: ChangeSet): Unit
+  def onSecondary(changeSet: ChangeSet): Unit
+
+  override def receive: Actor.Receive = {
+    case Primary(changeSet: ChangeSet) => onPrimary(changeSet)
+    case Secondary(changeSet: ChangeSet) => onSecondary(changeSet)
+  }
+}
+
+class Trimmer(override val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) {
+  def onChangeSet(changeSet: ChangeSet): Unit = {
       next(ChangeSet(
-        positive.map(vec => selectionVector.map(i => vec(i))),
-        negative.map(vec => selectionVector.map(i => vec(i)))
+        changeSet.positive.map(vec => selectionVector.map(i => vec(i))),
+        changeSet.negative.map(vec => selectionVector.map(i => vec(i)))
       )
       )
     }
-  }
 }
 
 import scala.collection.mutable.MultiMap
@@ -34,47 +53,54 @@ case class Primary(changeSet: ChangeSet)
 
 case class Secondary(changeSet: ChangeSet)
 
-class HashJoiner(val next: (ChangeSet) => Unit,
+class HashJoiner(override val next: (ChangeSet) => Unit,
                  val primaryLength: Int, val primarySelector: Vector[Int],
                  val secondaryLength: Int, val secondarySelector: Vector[Int])
-  extends Actor {
+  extends BetaNode(next) {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
 
   val inversePrimarySelector = Vector.range(0, primaryLength) filter (i => !primarySelector.contains(i))
   val inverseSecondarySelector = Vector.range(0, secondaryLength) filter (i => !secondarySelector.contains(i))
 
-  override def receive: Actor.Receive = {
-    case Primary(ChangeSet(positive, negative)) => {
-      val joinedPositive = for {
-        primaryVec <- positive
-        key = primarySelector.map(i => primaryVec(i))
-        if secondaryValues.contains(key)
-        secondaryVec <- secondaryValues(key)
-      } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
 
-      val joinedNegative = for {
-        primaryVec <- negative
-        key = primarySelector.map(i => primaryVec(i))
-        if secondaryValues.contains(key)
-        secondaryVec <- secondaryValues(key)
-      } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
+  def onPrimary(changeSet: ChangeSet): Unit = {
+    val positive = changeSet.positive
+    val negative = changeSet.negative
 
-      next(ChangeSet(joinedPositive, joinedNegative))
-      positive.foreach(
-        vec => {
-          val key = primarySelector.map(i => vec(i))
-          primaryValues.addBinding(key, vec)
-        }
-      )
-      negative.foreach(
-        vec => {
-          val key = primarySelector.map(i => vec(i))
-          primaryValues.removeBinding(key, vec)
-        }
-      )
-    }
-    case Secondary(ChangeSet(positive, negative)) => {
+    val joinedPositive = for {
+      primaryVec <- positive
+      key = primarySelector.map(i => primaryVec(i))
+      if secondaryValues.contains(key)
+      secondaryVec <- secondaryValues(key)
+    } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
+
+    val joinedNegative = for {
+      primaryVec <- negative
+      key = primarySelector.map(i => primaryVec(i))
+      if secondaryValues.contains(key)
+      secondaryVec <- secondaryValues(key)
+    } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
+
+    next(ChangeSet(joinedPositive, joinedNegative))
+    positive.foreach(
+      vec => {
+        val key = primarySelector.map(i => vec(i))
+        primaryValues.addBinding(key, vec)
+      }
+    )
+    negative.foreach(
+      vec => {
+        val key = primarySelector.map(i => vec(i))
+        primaryValues.removeBinding(key, vec)
+      }
+    )
+  }
+
+  def onSecondary(changeSet: ChangeSet): Unit = {
+      val positive = changeSet.positive
+      val negative = changeSet.negative
+
       val joinedPositive = for {
         secondaryVec <- positive
         key = secondarySelector.map(i => secondaryVec(i))
@@ -105,17 +131,15 @@ class HashJoiner(val next: (ChangeSet) => Unit,
         }
       )
     }
-  }
 }
 
-class Checker(val next: (ChangeSet) => Unit, val condition: (nodeType) => Boolean) extends Actor {
-  override def receive: Actor.Receive = {
-    case ChangeSet(positive, negative) => {
-      next(ChangeSet(
-        positive.filter(condition),
-        negative.filter(condition)
-      ))
-    }
+class Checker(override val next: (ChangeSet) => Unit, val condition: (nodeType) => Boolean) extends AlphaNode(next) {
+  def onChangeSet(changeSet: ChangeSet): Unit = {
+    next(ChangeSet(
+      changeSet.positive.filter(condition),
+      changeSet.negative.filter(condition)
+    )
+    )
   }
 }
 
@@ -133,69 +157,74 @@ class EqualityChecker(override val next: (ChangeSet) => Unit, val nodeIndex: Int
   }
 )
 
-class HashAntiJoiner(val next: (ChangeSet) => Unit,
+class HashAntiJoiner(override val next: (ChangeSet) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int])
-  extends Actor {
+  extends BetaNode(next) {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashSet[nodeType]
 
-  override def receive: Actor.Receive = {
-    case Primary(ChangeSet(positive, negative)) => {
-      val joinedPositive = for {
-        node <- positive
-        if !secondaryValues.contains(primarySelector.map(i => node(i)))
-      } yield node
+  def onPrimary(changeSet: ChangeSet): Unit = {
+    val positive = changeSet.positive
+    val negative = changeSet.negative
+
+    val joinedPositive = for {
+      node <- positive
+      if !secondaryValues.contains(primarySelector.map(i => node(i)))
+    } yield node
 
 
-      val joinedNegative = for {
-        node: nodeType <- negative
-        if secondaryValues.contains(primarySelector.map(i => node(i)))
-      } yield node
+    val joinedNegative = for {
+      node: nodeType <- negative
+      if secondaryValues.contains(primarySelector.map(i => node(i)))
+    } yield node
 
-      next(ChangeSet(joinedPositive, joinedNegative))
+    next(ChangeSet(joinedPositive, joinedNegative))
 
-      positive.foreach(
-        vec => {
-          val key = primarySelector.map(i => vec(i))
-          primaryValues.addBinding(key, vec)
-        }
-      )
-      negative.foreach(
-        vec => {
-          val key = primarySelector.map(i => vec(i))
-          primaryValues.removeBinding(key, vec)
-        }
-      )
-    }
-    case Secondary(ChangeSet(positive, negative)) => {
-      val joinedNegative = for {//this is switched because antijoin
-        node <- positive
-        key = secondarySelector.map(i => node(i))
-        if primaryValues.contains(key)
-      } yield primaryValues(key)
+    positive.foreach(
+      vec => {
+        val key = primarySelector.map(i => vec(i))
+        primaryValues.addBinding(key, vec)
+      }
+    )
+    negative.foreach(
+      vec => {
+        val key = primarySelector.map(i => vec(i))
+        primaryValues.removeBinding(key, vec)
+      }
+    )
+  }
 
-      val joinedPositive = for {
-        node: nodeType <- negative
-        key = secondarySelector.map(i => node(i))
-        if primaryValues.contains(secondarySelector.map(i => node(i)))
-      } yield primaryValues(node)
+  def onSecondary(changeSet: ChangeSet): Unit = {
+    val positive = changeSet.positive
+    val negative = changeSet.negative
 
-      next(ChangeSet(joinedPositive.flatten, joinedNegative.flatten))
+    val joinedNegative = for {//this is switched because antijoin
+      node <- positive
+      key = secondarySelector.map(i => node(i))
+      if primaryValues.contains(key)
+    } yield primaryValues(key)
 
-      positive.foreach(
-        vec => {
-          val key = secondarySelector.map(i => vec(i))
-          secondaryValues.add(key) //must be used with multimaps
-        }
-      )
-      negative.foreach(
-        vec => {
-          val key = secondarySelector.map(i => vec(i))
-          secondaryValues.remove(key)
-        }
-      )
-    }
+    val joinedPositive = for {
+      node: nodeType <- negative
+      key = secondarySelector.map(i => node(i))
+      if primaryValues.contains(secondarySelector.map(i => node(i)))
+    } yield primaryValues(node)
+
+    next(ChangeSet(joinedPositive.flatten, joinedNegative.flatten))
+
+    positive.foreach(
+      vec => {
+        val key = secondarySelector.map(i => vec(i))
+        secondaryValues.add(key) //must be used with multimaps
+      }
+    )
+    negative.foreach(
+      vec => {
+        val key = secondarySelector.map(i => vec(i))
+        secondaryValues.remove(key)
+      }
+    )
   }
 }
 
