@@ -19,7 +19,7 @@ case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nod
   extends ReteMessage()
 
 case class Terminator(id: Int) extends ReteMessage()
-case class ExpectTerminator(ids: Range, message: String, function: Iterable[nodeType]=> Unit) extends ReteMessage()
+case class ExpectTerminator(ids: Range, message: String, function: Set[nodeType]=> Unit) extends ReteMessage()
 
 object TerminatorInitializer {
   private var nextTerminatorIndex: Int = 0
@@ -33,7 +33,7 @@ object TerminatorInitializer {
     }
   }
 
-  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], message: String, terminationFunction: Iterable[nodeType] => Unit) {
+  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], message: String, terminationFunction: Set[nodeType] => Unit) {
     for (productionNode <- productionNodes) {
       val range = TerminatorInitializer.getUniqueRange(inputs.size)
       productionNode(ExpectTerminator(range, message, terminationFunction))
@@ -117,7 +117,7 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
 
     next(ChangeSet(joinedPositive, joinedNegative))
     positive.foreach(
-      vec => {
+        vec => {
         val key = primarySelector.map(i => vec(i))
         primaryValues.addBinding(key, vec)
       }
@@ -267,7 +267,7 @@ class Production(name: String) extends Actor {
   val results = new mutable.HashSet[nodeType]
   val terminatorSets = new mutable.Queue[mutable.HashSet[Int]]
   val terminatorMessages = new mutable.Queue[String]
-  val terminatorFunctions = new mutable.Queue[Iterable[nodeType]=> Unit]
+  val terminatorFunctions = new mutable.Queue[Set[nodeType]=> Unit]
 
   def getElapsedTime() = System.nanoTime() - t0
   override def receive: Actor.Receive = {
@@ -281,8 +281,8 @@ class Production(name: String) extends Actor {
       for (i <-  0 to terminatorSets.size -1 ) {
         if (terminatorSets(i).remove(id)) //set contained id
           if (terminatorSets(i).isEmpty){
-            print(terminatorMessages(i))
-            terminatorFunctions(i)(results)
+            print(terminatorMessages(i),getElapsedTime())
+            terminatorFunctions(i)(results.toSet)
             toRemove+=i
           }
       }
