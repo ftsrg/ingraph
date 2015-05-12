@@ -18,12 +18,41 @@ class ReteMessage(){}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
   extends ReteMessage()
 
-abstract class AlphaNode(val next: (ChangeSet) => Unit) extends Actor {
+case class Terminator(id: Int) extends ReteMessage()
+case class ExpectTerminator(ids: Range, message: String, function: Iterable[nodeType]=> Unit) extends ReteMessage()
+
+object TerminatorInitializer {
+  private var nextTerminatorIndex: Int = 0
+
+  def getUniqueRange(size: Int): Range = {
+    this.synchronized {
+      //TODO: prettier way in scala?
+      val range = nextTerminatorIndex to nextTerminatorIndex + size
+      nextTerminatorIndex += size +1
+      return range
+    }
+  }
+
+  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], message: String, terminationFunction: Iterable[nodeType] => Unit) {
+    for (productionNode <- productionNodes) {
+      val range = TerminatorInitializer.getUniqueRange(inputs.size)
+      productionNode(ExpectTerminator(range, message, terminationFunction))
+      for (i <- range)
+        inputs(i % inputs.size)(Terminator(i))
+    }
+  }
+}
+trait TerminatorForwarder {
+  val next: (Terminator) => Unit
+  def onTerminator(msg: Terminator) = next(msg)
+}
+abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with TerminatorForwarder{
 
   def onChangeSet(changeSet: ChangeSet): Unit
 
   override def receive: Actor.Receive = {
     case changeSet:ChangeSet => onChangeSet(changeSet)
+    case terminator: Terminator => onTerminator(terminator)
   }
 }
 
@@ -35,6 +64,9 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Term
   override def receive: Actor.Receive = {
     case Primary(changeSet: ChangeSet) => onPrimary(changeSet)
     case Secondary(changeSet: ChangeSet) => onSecondary(changeSet)
+    //terminators
+    case Primary(terminator: Terminator) => onTerminator(terminator)
+    case Secondary(terminator: Terminator) => onTerminator(terminator)
   }
 }
 
@@ -231,18 +263,35 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
 
 class Production(name: String) extends Actor {
   val t0 = System.nanoTime()
-  val results = new mutable.HashSet[nodeType]
 
+  val results = new mutable.HashSet[nodeType]
+  val terminatorSets = new mutable.Queue[mutable.HashSet[Int]]
+  val terminatorMessages = new mutable.Queue[String]
+  val terminatorFunctions = new mutable.Queue[Iterable[nodeType]=> Unit]
+
+  def getElapsedTime() = System.nanoTime() - t0
   override def receive: Actor.Receive = {
     case ChangeSet(p, n) => {
       val t1 = System.nanoTime()
-      p.foreach {
-        results.add(_)
+      p.foreach { results.add(_) }
+      n.foreach { results.remove(_) }
+    }
+    case Terminator(id) => {
+      var toRemove = new mutable.Queue[Int]
+      for (i <-  0 to terminatorSets.size -1 ) {
+        if (terminatorSets(i).remove(id)) //set contained id
+          if (terminatorSets(i).isEmpty){
+            print(terminatorMessages(i))
+            terminatorFunctions(i)(results)
+            toRemove+=i
+          }
       }
-      n.foreach {
-        results.remove(_)
-      }
-      println("Elapsed time: " + (t1 - t0) + "ns", name)
+      toRemove.foreach { i: Int => terminatorSets.drop(i); terminatorMessages.drop(i); terminatorFunctions.drop(i) }
+    }
+    case ExpectTerminator(ids, message, function) => {
+      terminatorSets += (new mutable.HashSet ++ ids) //wtf
+      terminatorMessages += message
+      terminatorFunctions += function
     }
   }
 }
