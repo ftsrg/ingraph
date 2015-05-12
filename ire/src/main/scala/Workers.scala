@@ -14,7 +14,9 @@ package object Workers {
   type nodeType = Vector[Any]
 }
 
+class ReteMessage(){}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
+  extends ReteMessage()
 
 abstract class AlphaNode(val next: (ChangeSet) => Unit) extends Actor {
 
@@ -25,8 +27,7 @@ abstract class AlphaNode(val next: (ChangeSet) => Unit) extends Actor {
   }
 }
 
-abstract class BetaNode(val next: (ChangeSet) => Unit) extends Actor {
-
+abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with TerminatorForwarder{
 
   def onPrimary(changeSet: ChangeSet): Unit
   def onSecondary(changeSet: ChangeSet): Unit
@@ -37,7 +38,7 @@ abstract class BetaNode(val next: (ChangeSet) => Unit) extends Actor {
   }
 }
 
-class Trimmer(override val next: (ChangeSet) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) {
+class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) {
   def onChangeSet(changeSet: ChangeSet): Unit = {
       next(ChangeSet(
         changeSet.positive.map(vec => selectionVector.map(i => vec(i))),
@@ -49,11 +50,11 @@ class Trimmer(override val next: (ChangeSet) => Unit, val selectionVector: Vecto
 
 import scala.collection.mutable.MultiMap
 
-case class Primary(changeSet: ChangeSet)
+case class Primary(value: ReteMessage)
 
-case class Secondary(changeSet: ChangeSet)
+case class Secondary(value: ReteMessage)
 
-class HashJoiner(override val next: (ChangeSet) => Unit,
+class HashJoiner(override val next: (ReteMessage) => Unit,
                  val primaryLength: Int, val primarySelector: Vector[Int],
                  val secondaryLength: Int, val secondarySelector: Vector[Int])
   extends BetaNode(next) {
@@ -133,7 +134,7 @@ class HashJoiner(override val next: (ChangeSet) => Unit,
     }
 }
 
-class Checker(override val next: (ChangeSet) => Unit, val condition: (nodeType) => Boolean) extends AlphaNode(next) {
+class Checker(override val next: (ReteMessage) => Unit, val condition: (nodeType) => Boolean) extends AlphaNode(next) {
   def onChangeSet(changeSet: ChangeSet): Unit = {
     next(ChangeSet(
       changeSet.positive.filter(condition),
@@ -143,21 +144,21 @@ class Checker(override val next: (ChangeSet) => Unit, val condition: (nodeType) 
   }
 }
 
-class InequalityChecker(override val next: (ChangeSet) => Unit, val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
+class InequalityChecker(override val next: (ReteMessage) => Unit, val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
   next,
   (node: nodeType) => {
     !inequals.map { i => node(i) }.exists { value => value == node(nodeIndex) }
   }
 )
 
-class EqualityChecker(override val next: (ChangeSet) => Unit, val nodeIndex: Int, val equals: Vector[Int]) extends Checker(
+class EqualityChecker(override val next: (ReteMessage) => Unit, val nodeIndex: Int, val equals: Vector[Int]) extends Checker(
   next,
   (node: nodeType) => {
     equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
   }
 )
 
-class HashAntiJoiner(override val next: (ChangeSet) => Unit,
+class HashAntiJoiner(override val next: (ReteMessage) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int])
   extends BetaNode(next) {
