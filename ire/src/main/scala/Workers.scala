@@ -1,4 +1,4 @@
-import java.io.{InputStream, FileInputStream}
+import java.io.InputStream
 
 import Workers.nodeType
 import akka.actor.Actor
