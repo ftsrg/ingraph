@@ -4,6 +4,12 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
+javaOptions += "-Xmx6G -Xms6g"
+
+showSuccess := false
+
+logLevel in runMain := Level.Warn
+
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
 
 libraryDependencies +=  "com.typesafe.akka" % "akka-actor_2.11" % "2.4-SNAPSHOT"
