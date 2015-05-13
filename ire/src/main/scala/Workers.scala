@@ -282,7 +282,8 @@ class Production(name: String) extends Actor {
       for (i <-  0 to terminatorSets.size -1 ) {
         if (terminatorSets(i).remove(id)) //set contained id
           if (terminatorSets(i).isEmpty){
-            print(terminatorMessages(i),getElapsedTime())
+            val time = getElapsedTime()
+            println(terminatorMessages(i),time,(time/math.pow(10,9)).toString + " s")
             terminatorFunctions(i)(results.toSet)
             toRemove+=i
           }
