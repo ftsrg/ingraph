@@ -67,6 +67,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Term
     //terminators
     case Primary(terminator: Terminator) => onTerminator(terminator)
     case Secondary(terminator: Terminator) => onTerminator(terminator)
+    case terminator: Terminator => onTerminator(terminator)
   }
 }
 

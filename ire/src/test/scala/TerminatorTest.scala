@@ -48,7 +48,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       assert(values.size == 30)
     }
   }
-  "nodes" must {
+  "alpha nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new Production("")))
@@ -59,6 +59,20 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       TerminatorInitializer(Array(input ! _), Array(production ! _), "", res => echoActor ! res)
 
       expectMsg(Set(Vector(15),Vector(19)))
+    }
+  }
+  "beta nodes" must {
+    "propagate terminator messages" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val production = system.actorOf(Props(new Production("")))
+      val intermediary = system.actorOf(Props(new HashJoiner(production ! _,1,Vector(0),1,Vector(0))))
+      val input = system.actorOf(Props(new HashJoiner(intermediary ! Secondary(_),1,Vector(0), 1,Vector(0))))
+      input ! Primary(ChangeSet(positive = Vector(Vector(15))))
+      input ! Secondary(ChangeSet(positive = Vector(Vector(15))))
+      intermediary ! Primary(ChangeSet(positive = Vector(Vector(15))))
+      TerminatorInitializer(Array(input ! _), Array(production ! _), "", res => echoActor ! res)
+
+      expectMsg(Set(Vector(15)))
     }
   }
 }
