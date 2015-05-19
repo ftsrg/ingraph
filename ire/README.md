@@ -1,4 +1,4 @@
-# Scala implementation of Rete algorithm
+# Scala implementation of the Rete algorithm
 
 [![Build Status](https://secure.travis-ci.org/wafle/project-work.png)](http://travis-ci.org/wafle/project-work)
 
@@ -23,6 +23,6 @@ To run the benchmark for serialized models  with a message size of 1 ```benchmar
 To run the benchmark to test the runtime difference with different message times ```benchmark_messagesize.sh``` can be used:
 
 ```
-./benchmark_messageize.sh ~/trainbenchmark/models/railway-repair-1.bin 1, 4, 8, 16, 32, 64
+./benchmark_messageize.sh ~/trainbenchmark/models/railway-repair-1.bin 1 4 8 16 32 64
 ```
 
