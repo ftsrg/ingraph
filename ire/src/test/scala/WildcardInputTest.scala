@@ -9,32 +9,46 @@ import org.scalatest.{BeforeAndAfterAll, WordSpec}
  */
 class WildcardInputTest extends WordSpec with BeforeAndAfterAll {
   "WildcardInput" must {
-    "store attributes" in {
-      val input = new WildcardInput
-      input.addAttribute("_6", "length", 1L)
-      input.addAttribute("_6", "length", 2L)
-      assert(input.attributes("length")(6) == Set(1L, 2L))
+    "store multi-value attributes" in {
+      val input = new WildcardInput(multiValue = Set("multiWhatever"))
+      input.addAttribute("_6", "multiWhatever", 1L)
+      input.addAttribute("_6", "multiWhatever", 2L)
+      assert(input.mutliValueAttributes("multiWhatever")(6) == Set(1L, 2L))
+    }
+    "store plain attributes" in {
+      val input = new WildcardInput()
+      input.addAttribute("_6", "whatever", 2L)
+      assert(input.attributes("whatever")(6) == 2L)
+    }
+    "do special formatting" in {
+      val input = new WildcardInput(specialFunction = Map("whatever" -> ((v:Any) => v.toString.toLong)))
+      input.addAttribute("_6", "whatever", "2")
+      assert(input.attributes("whatever")(6) == 2L)
     }
     "store types" in {
       val input = new WildcardInput
       input.addAttribute("_6", "type", "train")
       input.addAttribute("_7", "type", "elephant")
       assert(input.types("train") == Set(6L))
-
+    }
+    "throw exception when plain value is set twice"  in intercept[RuntimeException]{
+      val input = new WildcardInput
+      input.addAttribute("_6", "whatever", 1L)
+      input.addAttribute("_6", "whatever", 2L)
     }
     "do grouping" in {
-      val input = new WildcardInput
+      val input = new WildcardInput(multiValue = Set("multiWhatever"))
       for (
         i <- 1 to 3
       ) {
-        input.addAttribute("_6", "length", i)
+        input.addAttribute("_6", "multiWhatever", i)
         input.addAttribute("_" + i.toString, "type", "rain")
       }
       val attributeChangeSetSizes = collection.parallel.mutable.ParHashSet[Long]()
       val typeChangeSetSizes = collection.parallel.mutable.ParHashSet[Long]()
       input.sendData(
         attributeFunc = Map(
-          "length" -> ((a: ChangeSet) => {
+          "multiWhatever" -> ((a: ChangeSet) => {
             attributeChangeSetSizes += a.positive.size
           })
         ),
@@ -52,9 +66,9 @@ class WildcardInputTest extends WordSpec with BeforeAndAfterAll {
       assert(typeChangeSetSizes == Set(1, 2))
     }
     "be able to serialize and deserialize" in {
-      val inputNode = new WildcardInput
-      inputNode.addAttribute("_6", "length", 1L)
-      inputNode.addAttribute("_6", "length", 2L)
+      val inputNode = new WildcardInput(multiValue = Set("multiWhatever"))
+      inputNode.addAttribute("_6", "multiWhatever", 1L)
+      inputNode.addAttribute("_6", "multiWhatever", 2L)
       inputNode.addAttribute("_6", "type", "train")
       val instantiator = new ScalaKryoInstantiator
       instantiator.setRegistrationRequired(false)
@@ -64,7 +78,7 @@ class WildcardInputTest extends WordSpec with BeforeAndAfterAll {
       val output = new Output(baos, 4096)
       kryo.writeObject(output, inputNode)
       val deserialized = kryo.readObject(new Input(baos.toByteArray), classOf[WildcardInput])
-      assert(deserialized.attributes("length")(6L).size == 2)
+      assert(deserialized.mutliValueAttributes("multiWhatever")(6L).size == 2)
       assert(deserialized.types("train").size == 1)
     }
   }

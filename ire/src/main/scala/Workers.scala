@@ -298,24 +298,37 @@ class Production(name: String) extends Actor {
   }
 }
 
-class WildcardInput() {
+class WildcardInput(multiValue: Set[String] = Set(), specialFunction: Map[String, (Any)=>Any] = Map()) {
   val types = new mutable.HashMap[String, mutable.Set[Long]]()
-  val attributes = new mutable.HashMap[String, mutable.Map[Long, mutable.Set[Any]]]
+  val mutliValueAttributes = new mutable.HashMap[String, mutable.Map[Long, mutable.Set[Any]]]
+  val attributes = new mutable.HashMap[String, mutable.Map[Long, Any]]
 
-  def addAttribute(strID: String, attribute: String, value: Any): Unit = {
+  def addAttribute(strID: String, attribute: String, rawValue: Any): Unit = {
     val id = utils.idStringToLong(strID)
+    val value = if (specialFunction.contains(attribute)) {
+      specialFunction(attribute)(rawValue)
+    } else {
+      rawValue
+    }
+
     if (attribute == "type") {
       val valueString = value.toString
       if (!types.contains(valueString)) //withdefault is not applicable, as it would always return the same set
         types.put(valueString, new mutable.HashSet[Long]()) //resulting in all ids going to the same set
       types(valueString).add(id)
     }
-    else {
+    else if (multiValue.contains(attribute)) {
+      if (!mutliValueAttributes.contains(attribute))
+        mutliValueAttributes.put(attribute, new mutable.HashMap[Long, mutable.Set[Any]])
+      if (!mutliValueAttributes(attribute).contains(id))
+        mutliValueAttributes(attribute).put(id, new mutable.HashSet[Any])
+      mutliValueAttributes(attribute)(id).add(value)
+    } else {
       if (!attributes.contains(attribute))
-        attributes.put(attribute, new mutable.HashMap[Long, mutable.Set[Any]])
-      if (!attributes(attribute).contains(id))
-        attributes(attribute).put(id, new mutable.HashSet[Any])
-      attributes(attribute)(id).add(value)
+        attributes.put(attribute, new mutable.HashMap[Long, Any])
+      if (attributes(attribute).contains(id))
+        throw new RuntimeException(s"$attribute already set for $id (maybe this is a multiValue attribute?)")
+      attributes(attribute).put(id, value)
     }
   }
 
@@ -323,13 +336,22 @@ class WildcardInput() {
                typeFunc: Map[String, (ChangeSet) => Unit] = new HashMap[String, (ChangeSet) => Unit],
                messageSize: Int = 1
                 ) = {
-    for (
-      (attribute, func) <- attributeFunc;
-      (id, values) <- attributes(attribute);
-      output <- values.grouped(messageSize)
-    )
-      func(ChangeSet(positive = output.toVector.map((v) => Vector(id, v))))
 
+    for (
+      (attribute, func) <- attributeFunc
+    ){
+      if (multiValue.contains(attribute)) {
+        for (
+          (id, values) <- mutliValueAttributes(attribute);
+          output <- values.grouped(messageSize)
+        )
+          func(ChangeSet(positive = output.toVector.map((v) => Vector(id, v))))
+      } else {
+        for (items <- attributes(attribute).grouped(messageSize))
+          func(ChangeSet(positive = items.toVector.map( (v) => Vector(v._1, v._2))))
+      }
+
+    }
     for {
       (typeOfNode, func) <- typeFunc
       nodes <- types(typeOfNode).grouped(messageSize)
