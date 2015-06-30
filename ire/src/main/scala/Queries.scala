@@ -118,11 +118,97 @@ object Queries {
     waitForReady()
     system.terminate()
   }
+
+  def connectedSegmentsLinearJoin(input: WildcardInput): Unit ={
+    val system = ActorSystem()
+    val production = system.actorOf(Props(new Production("ConnectedSegments")))
+
+    val inequality6 = system.actorOf(Props(new InequalityChecker(production ! _, 6, Vector(5,4,3,2,1))))
+    val join6 = system.actorOf(Props(new HashJoiner(inequality6 ! _, 6, Vector(0), 2, Vector(0))))
+
+    val inequality5 = system.actorOf(Props(new InequalityChecker(join6 ! Primary(_), 5, Vector(4,3,2,1))))
+    val join5 = system.actorOf(Props(new HashJoiner(inequality5 ! _, 5, Vector(0), 2, Vector(0))))
+
+    val inequality4 = system.actorOf(Props(new InequalityChecker(join5 ! Primary(_), 4, Vector(3,2,1))))
+    val join4 = system.actorOf(Props(new HashJoiner(inequality4 ! _, 4, Vector(0), 2, Vector(0))))
+
+    val inequality3 = system.actorOf(Props(new InequalityChecker(join4 ! Primary(_), 3, Vector(2,1))))
+    val join3 = system.actorOf(Props(new HashJoiner(inequality3 ! _, 3, Vector(0), 2, Vector(0))))
+
+    val inequality2 = system.actorOf(Props(new InequalityChecker(join3 ! Primary(_), 2, Vector(1))))
+    val join2 = system.actorOf(Props(new HashJoiner(inequality2 ! _, 2, Vector(0), 2, Vector(0))))
+
+    val attributes = Map(
+      "connectsTo" -> ((cs: ChangeSet) => {
+        join2 ! Primary(cs)
+        join2 ! Secondary(cs)
+        join3 ! Secondary(cs)
+        join4 ! Secondary(cs)
+        join5 ! Secondary(cs)
+        join6 ! Secondary(cs)
+      })
+    )
+    val inputNodes: Array[ReteMessage => Unit] =
+      Array(join2 ! _,join3 ! _,join4 ! _, join5 ! _, join6 ! _)
+    input.sendData(attributeFunc = attributes, messageSize = messageSize)
+
+    val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
+    TerminatorInitializer(inputNodes, productionNodes, "initial linear connectsTo",
+      repair(_, res => Vector(res(0),res(1)), join2 ! Primary(_), inputNodes, productionNodes, messageSize)
+    )
+    waitForReady()
+    system.terminate()
+  }
+  def connectedSegmentsTreeJoin(input: WildcardInput): Unit ={
+    val system = ActorSystem()
+    val production = system.actorOf(Props(new Production("ConnectedSegments")))
+
+    val inequality6_4321 = system.actorOf(Props(new InequalityChecker(production ! _, 6, Vector(4,3,2,1))))
+    val inequality5_4321 = system.actorOf(Props(new InequalityChecker(inequality6_4321 ! _, 5, Vector(4,3,2,1))))
+    val join1234_56 = system.actorOf(Props(new HashJoiner(inequality5_4321 ! _, 5, Vector(0), 2, Vector(0))))
+
+    val inequality2_34 = system.actorOf(Props(new InequalityChecker(join1234_56 ! Primary(_), 2, Vector(3,4))))
+    val inequality1_34 = system.actorOf(Props(new InequalityChecker(inequality2_34 ! _, 1, Vector(3,4))))
+    val join12_34 = system.actorOf(Props(new HashJoiner(inequality1_34 ! _, 3, Vector(0), 3, Vector(0))))
+
+    val inequality5_6 = system.actorOf(Props(new InequalityChecker(join1234_56 ! Secondary(_), 1, Vector(2))))
+    val join5_6 = system.actorOf(Props(new HashJoiner(inequality5_6 ! _, 2, Vector(0), 2, Vector(0))))
+
+    val inequality3_4 = system.actorOf(Props(new InequalityChecker(join12_34 ! Secondary(_), 1, Vector(2))))
+    val join3_4 = system.actorOf(Props(new HashJoiner(inequality3_4 ! _, 2, Vector(0), 2, Vector(0))))
+
+    val inequality1_2 = system.actorOf(Props(new InequalityChecker(join12_34 ! Primary(_), 2, Vector(1))))
+    val join1_2 = system.actorOf(Props(new HashJoiner(inequality1_2 ! _, 2, Vector(0), 2, Vector(0))))
+
+    val attributes = Map(
+      "connectsTo" -> ((cs: ChangeSet) => {
+        join1_2 ! Primary(cs)
+        join1_2 ! Secondary(cs)
+        join3_4 ! Primary(cs)
+        join3_4 ! Secondary(cs)
+        join5_6 ! Primary(cs)
+        join5_6 ! Secondary(cs)
+
+      })
+    )
+    val inputNodes: Array[ReteMessage => Unit] =
+      Array(join1_2 ! _,join3_4 ! _,join5_6 ! _ )
+    input.sendData(attributeFunc = attributes, messageSize = messageSize)
+
+    val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
+    TerminatorInitializer(inputNodes, productionNodes, "initial connectsTo",
+      repair(_, res => Vector(res(0),res(1)), join1_2 ! Primary(_), inputNodes, productionNodes, messageSize)
+    )
+    waitForReady()
+    system.terminate()
+  }
+
   def waitForReady(): Unit ={
     while(!readyFlag)
       Thread.sleep(2000)
     readyFlag = false
   }
+
   def repair(results: Set[nodeType], mapper: nodeType => nodeType, target: ReteMessage => Unit,
              inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
              messageSize: Int): Unit = {
@@ -138,5 +224,7 @@ object Queries {
     SemaphoreNeighbor(input)
     SwitchSensor(input)
     RouteSensor(input)
+    connectedSegmentsLinearJoin(input)
+    connectedSegmentsTreeJoin(input)
   }
 }
