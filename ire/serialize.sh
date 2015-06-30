@@ -3,6 +3,7 @@ for input in $@
 do
     echo "----"
     echo $input
-    out=${input:0:-3}bin
+	len=$((${#input}-3))
+    out=${input:0:$len}bin
     sbt "run-main Serializer $input $out" --warn
 done
