@@ -8,8 +8,6 @@ javaOptions += "-Xmx6G -Xms6g"
 
 showSuccess := false
 
-logLevel in runMain := Level.Warn
-
 resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
 
 val kamonVersion = "0.3.4"
