@@ -1,4 +1,4 @@
-import java.io.{FileInputStream, InputStream}
+import java.io.FileInputStream
 
 import Workers.nodeType
 import akka.actor.{ActorSystem, Props}
@@ -16,7 +16,9 @@ object Queries {
     val system = ActorSystem()
 
     val production = system.actorOf(Props(new Production("PosLength")))
-    val trimmer = system.actorOf(Props(new Trimmer(production ! _, Vector(0))))
+    //trimmer is basically a noop, but the length is only needed for the repair,
+    //so taking out this node would lead to an unintended speedup
+    val trimmer = system.actorOf(Props(new Trimmer(production ! _, Vector(0,1))))
     def condition(n: nodeType) = n match {
       case Vector(a, length: Int) => length <= 0
     }
@@ -30,7 +32,10 @@ object Queries {
     val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
     TerminatorInitializer(
       inputNodes, productionNodes, "intitial poslength",
-      repair(_, res => Vector(res(0),1), first ! _, inputNodes, productionNodes, messageSize)
+      repairPosNeg(_, first ! _, inputNodes, productionNodes, messageSize,
+        positiveMapper = res => Vector(res(0),1),
+        negativeMapper = res => res
+      )
     )
     waitForReady()
     system.terminate()
@@ -38,9 +43,9 @@ object Queries {
 
   def SwitchSensor(input: WildcardInput) = {
     val system = ActorSystem()
-    val production = system.actorOf(Props(new Production("SwitchSensor")))
-    val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))))
-    val trimmer = system.actorOf(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))))
+    val production = system.actorOf(Props(new Production("SwitchSensor")),"sw-production")
+    val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+    val trimmer = system.actorOf(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))),"sw-trimmer")
     val attributes = Map(
       "sensor" -> ((cs:ChangeSet) => trimmer ! cs)
     )
@@ -53,7 +58,9 @@ object Queries {
     input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
     TerminatorInitializer(
       inputNodes, productionNodes, "initial switch",
-      repair(_, res => Vector(res(0),"whatever"), trimmer ! _, inputNodes, productionNodes, messageSize)
+      repairPositive(_, trimmer ! _, inputNodes, productionNodes, messageSize,
+        res => Vector(res(0),"whatever")
+      )
     )
     waitForReady()
     system.terminate()
@@ -78,7 +85,9 @@ object Queries {
     val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
     input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
     TerminatorInitializer(inputNodes, productionNodes, "initial route",
-      repair(_, res => Vector(res(1),res(3)), sensorJoin ! Secondary(_), inputNodes, productionNodes, messageSize)
+      repairNegative(_, sensorJoin ! Secondary(_), inputNodes, productionNodes, messageSize,
+        negativeMapper = res => Vector(res(1),res(3))
+      )
     )
     waitForReady()
     system.terminate()
@@ -113,7 +122,9 @@ object Queries {
       Array(entryDefined ! _,exitDefined ! _,sensorConnects ! _, rightMostJoin ! _, finalJoin ! _)
     val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
     TerminatorInitializer(inputNodes, productionNodes, "initial semaphore",
-      repair(_, res => Vector(res(0),res(2)), exitDefined ! Secondary(_), inputNodes, productionNodes, messageSize)
+      repairNegative(_, exitDefined ! Secondary(_), inputNodes, productionNodes, messageSize,
+        negativeMapper = res => Vector(res(0),res(2))
+      )
     )
     waitForReady()
     system.terminate()
@@ -154,7 +165,9 @@ object Queries {
 
     val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
     TerminatorInitializer(inputNodes, productionNodes, "initial linear connectsTo",
-      repair(_, res => Vector(res(0),res(1)), join2 ! Primary(_), inputNodes, productionNodes, messageSize)
+      repairNegative(_, join2 ! Primary(_), inputNodes, productionNodes, messageSize,
+        negativeMapper = res => Vector(res(0),res(1))
+      )
     )
     waitForReady()
     system.terminate()
@@ -197,7 +210,9 @@ object Queries {
 
     val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
     TerminatorInitializer(inputNodes, productionNodes, "initial connectsTo",
-      repair(_, res => Vector(res(0),res(1)), join1_2 ! Primary(_), inputNodes, productionNodes, messageSize)
+      repairNegative(_, join1_2 ! Primary(_), inputNodes, productionNodes, messageSize,
+        negativeMapper = res => Vector(res(0),res(1))
+      )
     )
     waitForReady()
     system.terminate()
@@ -209,11 +224,30 @@ object Queries {
     readyFlag = false
   }
 
-  def repair(results: Set[nodeType], mapper: nodeType => nodeType, target: ReteMessage => Unit,
+  def repairPosNeg(results: Set[nodeType], target: ReteMessage => Unit,
              inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
-             messageSize: Int): Unit = {
-    val values =results.take(results.size / repairDivide).toVector.map(mapper)
-    values.grouped(messageSize).foreach( vec => target(ChangeSet(negative = vec)))
+             messageSize: Int, negativeMapper: nodeType => nodeType, positiveMapper: nodeType => nodeType): Unit = {
+    val values =results.take(results.size / repairDivide).toVector
+    val positives = values.map(positiveMapper)
+    val negatives = values.map(negativeMapper)
+    negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
+    positives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = positives)))
+    TerminatorInitializer(inputNodes, productionNodes, "repaired", a => { readyFlag = true})
+  }
+  def repairNegative(results: Set[nodeType], target: ReteMessage => Unit,
+             inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
+             messageSize: Int, negativeMapper: nodeType => nodeType): Unit = {
+    val values =results.take(results.size / repairDivide).toVector
+    val negatives = values.map(negativeMapper)
+    negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
+    TerminatorInitializer(inputNodes, productionNodes, "repaired", a => { readyFlag = true})
+  }
+  def repairPositive(results: Set[nodeType], target: ReteMessage => Unit,
+             inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
+             messageSize: Int, positiveMapper: nodeType => nodeType): Unit = {
+    val values =results.take(results.size / repairDivide).toVector
+    val positives = values.map(positiveMapper)
+    positives.grouped(messageSize).foreach( vec => target(ChangeSet(positive = positives)))
     TerminatorInitializer(inputNodes, productionNodes, "repaired", a => { readyFlag = true})
   }
 
