@@ -218,6 +218,49 @@ object Queries {
     system.terminate()
   }
 
+  def SwitchSet(input : WildcardInput): Unit = {
+    val system = ActorSystem()
+    val production = system.actorOf(Props(new Production("SwitchSet")))
+    val finalJoin = system.actorOf(Props(new HashJoiner(production ! _, 3, Vector(2), 2, Vector(0))))
+
+    val rightTrimmer = system.actorOf(Props(new Trimmer(finalJoin ! Secondary(_), Vector(0,1,3))))
+    val inequality = system.actorOf(Props(new InequalityChecker(rightTrimmer ! _,2, Vector(3))))
+    val switchPositionCurrentPositionJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 2, Vector(3), 2, Vector(0))))
+    val switchSwitchPositionJoin = system.actorOf(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
+
+    val followsEntryJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
+    val entrySemaphoreJoin = system.actorOf(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
+    val leftTrimmer = system.actorOf(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))))
+    val signalChecker = system.actorOf(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1)=="SIGNAL_GO"))))
+
+
+    val attributes = Map(
+      "signal" -> ((cs:ChangeSet) => signalChecker ! cs),
+      "entry" -> ((cs:ChangeSet) => entrySemaphoreJoin ! Secondary(cs) ),
+      "follows" -> ((cs:ChangeSet) => followsEntryJoin ! Secondary(cs) ),
+      "currentPosition" -> ((cs:ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs) )
+    )
+    val types = Map(
+      "Switch" -> ((cs:ChangeSet) => switchSwitchPositionJoin ! Primary(cs) ),
+      "SwitchPosition" -> ((cs:ChangeSet) => switchSwitchPositionJoin ! Secondary(cs) ),
+      "SwitchPosition" -> ((cs:ChangeSet) => switchSwitchPositionJoin ! Secondary(cs) )
+    )
+    val inputNodes: Array[ReteMessage => Unit] =
+      Array( signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
+
+    input.sendData(attributeFunc = attributes, typeFunc=types, messageSize = messageSize)
+
+    val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
+    TerminatorInitializer(inputNodes, productionNodes, "initial connectsTo",
+      repairPosNeg(_,production ! _, inputNodes, productionNodes, messageSize,
+        positiveMapper = res => Vector(res(3),res(2)),
+        negativeMapper = res => Vector(res(3),res(4))
+      )
+    )
+    waitForReady()
+    system.terminate()
+  }
+
   def waitForReady(): Unit ={
     while(!readyFlag)
       Thread.sleep(2000)
@@ -254,6 +297,7 @@ object Queries {
   def main(args: Array[String]) {
     messageSize = args(1).toInt
     val input = WildcardInput(new FileInputStream(args(0)))
+    SwitchSet(input)
     PosLength(input)
     SemaphoreNeighbor(input)
     SwitchSensor(input)
