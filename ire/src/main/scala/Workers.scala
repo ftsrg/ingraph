@@ -19,7 +19,7 @@ case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nod
   extends ReteMessage()
 
 case class Terminator(id: Int) extends ReteMessage()
-case class ExpectTerminator(ids: Range, message: String, function: Set[nodeType]=> Unit) extends ReteMessage()
+case class ExpectTerminator(ids: Range, phase: String, function: Set[nodeType]=> Unit) extends ReteMessage()
 
 object TerminatorInitializer {
   private var nextTerminatorIndex: Int = 0
@@ -33,10 +33,10 @@ object TerminatorInitializer {
     }
   }
 
-  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], message: String, terminationFunction: Set[nodeType] => Unit) {
+  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], phase: String, terminationFunction: Set[nodeType] => Unit) {
     for (productionNode <- productionNodes) {
       val range = TerminatorInitializer.getUniqueRange(inputs.size)
-      productionNode(ExpectTerminator(range, message, terminationFunction))
+      productionNode(ExpectTerminator(range, phase, terminationFunction))
       for (i <- range)
         inputs(i % inputs.size)(Terminator(i))
     }
@@ -262,15 +262,22 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
   }
 }
 
-class Production(name: String) extends Actor {
-  val t0 = System.nanoTime()
+class Production(queryName: String) extends Actor with ResultLogger{
 
+  var t0 = System.nanoTime()
   val results = new mutable.HashSet[nodeType]
   val terminatorSets = new mutable.Queue[mutable.HashSet[Int]]
-  val terminatorMessages = new mutable.Queue[String]
+  val terminatorQueries = new mutable.Queue[String]
+  val terminatorPhases = new mutable.Queue[String]
   val terminatorFunctions = new mutable.Queue[Set[nodeType]=> Unit]
 
-  def getElapsedTime() = System.nanoTime() - t0
+
+  def getAndResetElapsedTime(): Long = {
+    val t1 = System.nanoTime()
+    val retVal = t1 - t0
+    t0 = t1
+    return retVal
+  }
   override def receive: Actor.Receive = {
     case ChangeSet(p, n) => {
       val t1 = System.nanoTime()
@@ -282,17 +289,17 @@ class Production(name: String) extends Actor {
       for (i <-  0 to terminatorSets.size -1 ) {
         if (terminatorSets(i).remove(id)) //set contained id
           if (terminatorSets(i).isEmpty){
-            val time = getElapsedTime()
-            println(terminatorMessages(i),time,(time/math.pow(10,9)).toString + " s")
+            val timeNano = getAndResetElapsedTime()
+            logResult(queryName, terminatorPhases(i), timeNano)
             terminatorFunctions(i)(results.toSet)
             toRemove+=i
           }
       }
-      toRemove.foreach { i: Int => terminatorSets.drop(i); terminatorMessages.drop(i); terminatorFunctions.drop(i) }
+      toRemove.foreach { i: Int => terminatorSets.drop(i); terminatorPhases.drop(i); terminatorFunctions.drop(i) }
     }
-    case ExpectTerminator(ids, message, function) => {
+    case ExpectTerminator(ids, phase, function) => {
       terminatorSets += (new mutable.HashSet ++ ids) //wtf
-      terminatorMessages += message
+      terminatorPhases += phase
       terminatorFunctions += function
     }
   }

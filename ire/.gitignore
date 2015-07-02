@@ -22,3 +22,5 @@ build
 target/
 
 testdata/debugger
+models/
+results/
