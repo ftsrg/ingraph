@@ -4,7 +4,10 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
-javaOptions += "-Xmx6G -Xms6g"
+javaOptions += s"-Dcurrent.datetime=${
+  import java.time.format.DateTimeFormatter
+  java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-mm_ss"))
+}"
 
 showSuccess := false
 
