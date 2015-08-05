@@ -1,4 +1,6 @@
-name := "project-work"
+name := "incqueryd-core"
+
+organization := "hu.bme.mit"
 
 version := "1.0"
 
