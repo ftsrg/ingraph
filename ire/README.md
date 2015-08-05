@@ -1,6 +1,6 @@
 # Scala implementation of the Rete algorithm
 
-[![Build Status](https://secure.travis-ci.org/wafle/project-work.png)](http://travis-ci.org/wafle/project-work)
+[![Build Status](https://api.travis-ci.org/FTSRG/incqueryd-core.png)](https://travis-ci.org/FTSRG/incqueryd-core)
 
 The Rete algorithm is a way of doing incremental pattern matching. The point of it being incremental, is
 that small changes to the model don't require full reevaluation, and hence can be done very quickly.
