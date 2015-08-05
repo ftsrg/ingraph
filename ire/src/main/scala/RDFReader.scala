@@ -19,19 +19,14 @@ class JenaRDFReader(func: (String, String, AnyRef) => Unit) extends JenaModule {
 
   def read(stream: Reader) {
   val graph: Rdf#Graph = turtleReader.read(stream, base = "") getOrElse sys.error("couldn't read stream")
-  graph.triples.foreach {
-    case ops.Triple(subj, pred, obj: Node_Literal) => {
-    func(subj.getLocalName, pred.getLocalName, obj.getLiteralValue)
-    }
-    case ops.Triple(subj, pred, obj) => {
-    func(subj.getLocalName, pred.getLocalName, obj.getLocalName)
-    }
+  readGraph(graph)
   }
-  }
-
   def read(stream: InputStream) {
   val graph: Rdf#Graph = turtleReader.read(stream, base = "") getOrElse sys.error("couldn't read stream")
+  readGraph(graph)
+  }
 
+  private def readGraph(graph: Rdf#Graph) {
   graph.triples.foreach {
     case ops.Triple(subj, pred, obj: Node_Literal) => {
     func(subj.getLocalName, pred.getLocalName, obj.getLiteralValue)
