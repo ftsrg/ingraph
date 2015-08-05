@@ -35,5 +35,6 @@ class JenaRDFReader(func: (String, String, AnyRef) => Unit) extends JenaModule {
         func(subj.getLocalName, pred.getLocalName, obj.getLocalName)
       }
     }
+    graph.close()
   }
 }
