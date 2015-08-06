@@ -1,7 +1,8 @@
 import java.io.InputStream
+import java.util.concurrent.atomic.AtomicInteger
 
 import Workers.nodeType
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import com.twitter.chill.{Input, ScalaKryoInstantiator}
 
 import scala.collection.immutable.HashMap
@@ -18,66 +19,79 @@ class ReteMessage(){}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
   extends ReteMessage()
 
-case class Terminator(id: Int) extends ReteMessage()
-case class ExpectTerminator(ids: Range, phase: String, function: Set[nodeType]=> Unit) extends ReteMessage()
-
-object TerminatorInitializer {
-  private var nextTerminatorIndex: Int = 0
-
-  def getUniqueRange(size: Int): Range = {
-    this.synchronized {
-      //TODO: prettier way in scala?
-      val range = nextTerminatorIndex to nextTerminatorIndex + size
-      nextTerminatorIndex += size +1
-      return range
-    }
+class Probe(id: Int, production: ActorRef, route: List[ActorRef]) extends ReteMessage{
+  def forkMessage(count: Int): Unit = {
+   production ! ExpectMoreTerminators(id, count: Int)
   }
-
-  def apply(inputs: Array[ReteMessage => Unit], productionNodes: Iterable[ReteMessage => Unit], phase: String, terminationFunction: Set[nodeType] => Unit) {
-    for (productionNode <- productionNodes) {
-      val range = TerminatorInitializer.getUniqueRange(inputs.size)
-      productionNode(ExpectTerminator(range, phase, terminationFunction))
-      for (i <- range)
-        inputs(i % inputs.size)(Terminator(i))
-    }
+  def exec(current: ActorRef): Probe = {
+    new Probe(id, production, current :: route)
   }
 }
-trait TerminatorForwarder {
-  val next: (Terminator) => Unit
-  def onTerminator(msg: Terminator) = next(msg)
-}
-abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with TerminatorForwarder{
 
-  def onChangeSet(changeSet: ChangeSet): Unit
+case class ExpectMoreTerminators(id: Int, count: Int)
+case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
+case class ExpectTerminator(terminatorID: Int, messageID: Int, phase: String, function: Set[nodeType]=> Unit) extends ReteMessage()
+class Terminator private (terminatorID: Int, val inputs:List[ReteMessage => Unit], production: ActorRef) extends ReteMessage {
+  def send(phase: String, function: Set[nodeType]=>Unit) = {
+    val messageID = Terminator.idCounter.getNext()
+    production ! ExpectTerminator(terminatorID, messageID, phase, function)
+    inputs.foreach(_(TerminatorMessage(terminatorID,messageID)))
+  }
+}
+object Terminator {
+  val idCounter = new AtomicUniqueCounter
+
+  def apply(inputs: List[ReteMessage => Unit], productionNode: ActorRef):Terminator = {
+    val id = idCounter.getNext()
+    productionNode ! ExpectMoreTerminators(id, inputs.size)
+    inputs.foreach(_( new Probe(id, productionNode, List.empty[ActorRef]) ))
+    new Terminator(id, inputs, productionNode)
+  }
+}
+
+trait Forwarder {
+  val next:ReteMessage => Unit
+
+  def forward(cs: ChangeSet) =  next(cs)
+  def forward(terminator: TerminatorMessage) = next(terminator)
+  def forward(probe: Probe) = next(probe)
+}
+
+abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder{
+
+  def onChangeSet(changeSet: ChangeSet)
 
   override def receive: Actor.Receive = {
     case changeSet:ChangeSet => onChangeSet(changeSet)
-    case terminator: Terminator => onTerminator(terminator)
+    case probe:Probe => forward(probe.exec(self))
+    case terminator: TerminatorMessage => forward(terminator)
   }
 }
 
-abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with TerminatorForwarder{
+abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder{
 
-  def onPrimary(changeSet: ChangeSet): Unit
-  def onSecondary(changeSet: ChangeSet): Unit
+  def onPrimary(changeSet: ChangeSet)
+  def onSecondary(changeSet: ChangeSet)
 
   override def receive: Actor.Receive = {
     case Primary(changeSet: ChangeSet) => onPrimary(changeSet)
     case Secondary(changeSet: ChangeSet) => onSecondary(changeSet)
-    //terminators
-    case Primary(terminator: Terminator) => onTerminator(terminator)
-    case Secondary(terminator: Terminator) => onTerminator(terminator)
-    case terminator: Terminator => onTerminator(terminator)
+
+    case probe: Probe => forward(probe.exec(self))
+    case Primary(probe: Probe) => forward(probe.exec(self))
+    case Secondary(probe: Probe) => forward(probe.exec(self))
+    case terminator: TerminatorMessage => forward(terminator)
+    case Primary(terminator: TerminatorMessage) => forward(terminator)
+    case Secondary(terminator: TerminatorMessage) => forward(terminator)
   }
 }
 
-class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) {
-  def onChangeSet(changeSet: ChangeSet): Unit = {
-      next(ChangeSet(
+class Trimmer(override val next: (ReteMessage) => Unit , val selectionVector: Vector[Int]) extends AlphaNode(next) {
+  override def onChangeSet(changeSet: ChangeSet) = {
+       forward(ChangeSet(
         changeSet.positive.map(vec => selectionVector.map(i => vec(i))),
         changeSet.negative.map(vec => selectionVector.map(i => vec(i)))
-      )
-      )
+      ))
     }
 }
 
@@ -87,7 +101,7 @@ case class Primary(value: ReteMessage)
 
 case class Secondary(value: ReteMessage)
 
-class HashJoiner(override val next: (ReteMessage) => Unit,
+class HashJoiner(override val next: (ReteMessage) => Unit ,
                  val primaryLength: Int, val primarySelector: Vector[Int],
                  val secondaryLength: Int, val secondarySelector: Vector[Int])
   extends BetaNode(next) {
@@ -98,7 +112,7 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
   val inverseSecondarySelector = Vector.range(0, secondaryLength) filter (i => !secondarySelector.contains(i))
 
 
-  def onPrimary(changeSet: ChangeSet): Unit = {
+  def onPrimary(changeSet: ChangeSet):Unit = {
     val positive = changeSet.positive
     val negative = changeSet.negative
 
@@ -116,7 +130,7 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
       secondaryVec <- secondaryValues(key)
     } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
 
-    next(ChangeSet(joinedPositive, joinedNegative))
+    forward(ChangeSet(joinedPositive, joinedNegative))
     positive.foreach(
         vec => {
         val key = primarySelector.map(i => vec(i))
@@ -150,7 +164,7 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
         primaryVec <- primaryValues(key)
       } yield primaryVec ++ inverseSecondarySelector.map(i => secondaryVec(i))
 
-      next(ChangeSet(joinedPositive, joinedNegative))
+      forward(ChangeSet(joinedPositive, joinedNegative))
 
       positive.foreach(
         vec => {
@@ -167,31 +181,29 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
     }
 }
 
-class Checker(override val next: (ReteMessage) => Unit, val condition: (nodeType) => Boolean) extends AlphaNode(next) {
+class Checker(override val next: (ReteMessage) => Unit,
+              val condition: (nodeType) => Boolean) extends AlphaNode(next) {
   def onChangeSet(changeSet: ChangeSet): Unit = {
-    next(ChangeSet(
+    forward(ChangeSet(
       changeSet.positive.filter(condition),
       changeSet.negative.filter(condition)
-    )
-    )
+    ))
   }
 }
 
-class InequalityChecker(override val next: (ReteMessage) => Unit, val nodeIndex: Int, val inequals: Vector[Int]) extends Checker(
-  next,
-  (node: nodeType) => {
-    !inequals.map { i => node(i) }.exists { value => value == node(nodeIndex) }
-  }
+class InequalityChecker(override val next: (ReteMessage) => Unit ,
+                        val nodeIndex: Int, val inequals: Vector[Int]) extends
+  Checker(next,  condition=(node: nodeType) =>
+          { !inequals.map { i => node(i) }.exists { value => value == node(nodeIndex) } }
 )
 
-class EqualityChecker(override val next: (ReteMessage) => Unit, val nodeIndex: Int, val equals: Vector[Int]) extends Checker(
-  next,
-  (node: nodeType) => {
-    equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
-  }
+class EqualityChecker(override val next: (ReteMessage) => Unit ,
+                      val nodeIndex: Int, val equals: Vector[Int]) extends
+  Checker(next, condition=(node: nodeType) =>
+        { equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }  }
 )
 
-class HashAntiJoiner(override val next: (ReteMessage) => Unit,
+class HashAntiJoiner(override val next: (ReteMessage) => Unit ,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int])
   extends BetaNode(next) {
@@ -213,7 +225,7 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
       if secondaryValues.contains(primarySelector.map(i => node(i)))
     } yield node
 
-    next(ChangeSet(joinedPositive, joinedNegative))
+    forward(ChangeSet(joinedPositive, joinedNegative))
 
     positive.foreach(
       vec => {
@@ -245,7 +257,7 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
       if primaryValues.contains(secondarySelector.map(i => node(i)))
     } yield primaryValues(node)
 
-    next(ChangeSet(joinedPositive.flatten, joinedNegative.flatten))
+    forward(ChangeSet(joinedPositive.flatten, joinedNegative.flatten))
 
     positive.foreach(
       vec => {
@@ -263,13 +275,14 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
 }
 
 class Production(queryName: String) extends Actor with ResultLogger{
+  var expectedTerminators = mutable.Map.empty[Int,Int]
+  val receivedTerminatorCount = mutable.Map.empty[Int,Int]
 
   var t0 = System.nanoTime()
+
   val results = new mutable.HashSet[nodeType]
-  val terminatorSets = new mutable.Queue[mutable.HashSet[Int]]
-  val terminatorQueries = new mutable.Queue[String]
-  val terminatorPhases = new mutable.Queue[String]
-  val terminatorFunctions = new mutable.Queue[Set[nodeType]=> Unit]
+  val terminatorPhases = mutable.Map.empty[Int, String]
+  val terminatorFunctions = mutable.Map.empty[Int, Set[nodeType]=> Unit]
 
 
   def getAndResetElapsedTime(): Long = {
@@ -284,23 +297,27 @@ class Production(queryName: String) extends Actor with ResultLogger{
       p.foreach { results.add(_) }
       n.foreach { results.remove(_) }
     }
-    case Terminator(id) => {
-      var toRemove = new mutable.Queue[Int]
-      for (i <-  0 to terminatorSets.size -1 ) {
-        if (terminatorSets(i).remove(id)) //set contained id
-          if (terminatorSets(i).isEmpty){
-            val timeNano = getAndResetElapsedTime()
-            logResult(queryName, terminatorPhases(i), timeNano)
-            terminatorFunctions(i)(results.toSet)
-            toRemove+=i
-          }
-      }
-      toRemove.foreach { i: Int => terminatorSets.drop(i); terminatorPhases.drop(i); terminatorFunctions.drop(i) }
+    case ExpectMoreTerminators(id, count) => {
+      val current = expectedTerminators.getOrElse(id,0)
+      expectedTerminators(id) = current + 1
     }
-    case ExpectTerminator(ids, phase, function) => {
-      terminatorSets += (new mutable.HashSet ++ ids) //wtf
-      terminatorPhases += phase
-      terminatorFunctions += function
+    case TerminatorMessage(terminatorID, messageID, route) => {
+      receivedTerminatorCount(messageID) += 1
+      if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)){
+            val timeNano = getAndResetElapsedTime()
+            logResult(queryName, terminatorPhases(messageID), timeNano)
+            terminatorFunctions(messageID)(results.toSet)
+
+            receivedTerminatorCount.drop(messageID)
+            terminatorPhases.drop(messageID)
+            terminatorFunctions.drop(messageID)
+
+          }
+    }
+    case ExpectTerminator(terminatorID, messageID, phase, function) => {
+      receivedTerminatorCount(messageID) = 0
+      terminatorPhases(messageID) = phase
+      terminatorFunctions(messageID) = function
     }
   }
 }

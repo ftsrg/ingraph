@@ -1,3 +1,5 @@
+import java.util.concurrent.atomic.AtomicInteger
+
 import org.apache.log4j.LogManager
 
 /**
@@ -15,4 +17,9 @@ trait ResultLogger {
   def logResult(query:String, phase:String, timeNano: Long): Unit = {
     logger.info(s"fixed\t1\tnaive-rete\t${System.getProperty("inputSize")}\t$query\t$phase\t1\ttime\t$timeNano")
   }
+}
+
+class AtomicUniqueCounter {
+  private val counter: AtomicInteger = new AtomicInteger(0)
+  def getNext() = counter.getAndIncrement()
 }
