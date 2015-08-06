@@ -1,7 +1,7 @@
 import java.io.FileInputStream
 
 import Workers.nodeType
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
 
 import scala.collection.immutable.HashMap
 
@@ -12,6 +12,7 @@ object Queries {
   val repairDivide = 10
   var messageSize = 1
   @volatile var readyFlag = false
+  import utils.wrapWithList
   def PosLength(input: WildcardInput) = {
   val system = ActorSystem()
 
@@ -28,11 +29,11 @@ object Queries {
   )
 
   input.sendData(attributeFunc = lookup, messageSize = messageSize)
-  val inputNodes: Array[ReteMessage => Unit] = Array(first ! _)
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
-  TerminatorInitializer(
-    inputNodes, productionNodes, "check",
-    repairPosNeg(_, first ! _, inputNodes, productionNodes, messageSize,
+  val inputNodes: List[ReteMessage => Unit] = List(first ! _)
+
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairPosNeg(_, first ! _,terminator, messageSize,
     positiveMapper = res => Vector(res(0),1),
     negativeMapper = res => res
     )
@@ -53,12 +54,12 @@ object Queries {
     "Switch" -> ((cs: ChangeSet) => antijoin ! Primary(cs))
   )
 
-  val inputNodes: Array[ReteMessage => Unit] = Array(antijoin ! _, trimmer ! _)
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
+  val inputNodes: List[ReteMessage => Unit] = List(antijoin ! _, trimmer ! _)
+
   input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
-  TerminatorInitializer(
-    inputNodes, productionNodes, "check",
-    repairPositive(_, trimmer ! _, inputNodes, productionNodes, messageSize,
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairPositive(_, trimmer ! _,terminator, messageSize,
     res => Vector(res(0),"whatever")
     )
   )
@@ -81,11 +82,12 @@ object Queries {
     "SwitchPosition" -> ((cs: ChangeSet) => followsJoin ! Primary(cs))
   )
 
-  val inputNodes: Array[ReteMessage => Unit] = Array(antijoin ! _,sensorJoin ! _,followsJoin ! _)
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
+  val inputNodes: List[ReteMessage => Unit] = List(antijoin ! _,sensorJoin ! _,followsJoin ! _)
+
   input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
-  TerminatorInitializer(inputNodes, productionNodes, "check",
-    repairNegative(_, sensorJoin ! Secondary(_), inputNodes, productionNodes, messageSize,
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairNegative(_, sensorJoin ! Secondary(_),terminator, messageSize,
     negativeMapper = res => Vector(res(1),res(3))
     )
   )
@@ -96,14 +98,14 @@ object Queries {
   def SemaphoreNeighbor(input: WildcardInput) = {
   val system = ActorSystem()
   val production = system.actorOf(Props(new Production("SemaphoreNeighbor")))
-  val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))))
-  val inequality = system.actorOf(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))))
-  val finalJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 6, Vector(4), 2, Vector(1))))
-  val secondTolastJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(0))))
-  val rightMostJoin = system.actorOf(Props(new HashJoiner(secondTolastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))))
-  val sensorConnects = system.actorOf(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
-  val exitDefined = system.actorOf(Props(new HashJoiner(secondTolastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
-  val entryDefined = system.actorOf(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))))
+  val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
+  val inequality = system.actorOf(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
+  val finalJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 6, Vector(4), 2, Vector(1))),"c")
+  val secondTolastJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(0))),"d")
+  val rightMostJoin = system.actorOf(Props(new HashJoiner(secondTolastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
+  val sensorConnects = system.actorOf(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"f")
+  val exitDefined = system.actorOf(Props(new HashJoiner(secondTolastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"g")
+  val entryDefined = system.actorOf(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))),"h")
 
   val attributes = Map(
     "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
@@ -118,11 +120,12 @@ object Queries {
     "connectsTo" -> ((cs: ChangeSet) => sensorConnects ! Secondary(cs))
   )
   input.sendData(attributeFunc = attributes, messageSize = messageSize)
-  val inputNodes: Array[ReteMessage => Unit] =
-    Array(entryDefined ! _,exitDefined ! _,sensorConnects ! _, rightMostJoin ! _, finalJoin ! _)
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
-  TerminatorInitializer(inputNodes, productionNodes, "check",
-    repairNegative(_, exitDefined ! Secondary(_), inputNodes, productionNodes, messageSize,
+  val inputNodes: List[ReteMessage => Unit] =
+    List(entryDefined ! _,exitDefined ! _,sensorConnects ! _, rightMostJoin ! _, finalJoin ! _)
+
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairNegative(_, exitDefined ! Secondary(_),terminator, messageSize,
     negativeMapper = res => Vector(res(0),res(2))
     )
   )
@@ -159,13 +162,14 @@ object Queries {
     join6 ! Secondary(cs)
     })
   )
-  val inputNodes: Array[ReteMessage => Unit] =
-    Array(join2 ! _,join3 ! _,join4 ! _, join5 ! _, join6 ! _)
+  val inputNodes: List[ReteMessage => Unit] =
+    List(join2 ! _,join3 ! _,join4 ! _, join5 ! _, join6 ! _)
   input.sendData(attributeFunc = attributes, messageSize = messageSize)
 
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
-  TerminatorInitializer(inputNodes, productionNodes, "check",
-    repairNegative(_, join2 ! Primary(_), inputNodes, productionNodes, messageSize,
+
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairNegative(_, join2 ! Primary(_),terminator, messageSize,
     negativeMapper = res => Vector(res(0),res(1))
     )
   )
@@ -204,13 +208,14 @@ object Queries {
 
     })
   )
-  val inputNodes: Array[ReteMessage => Unit] =
-    Array(join1_2 ! _,join3_4 ! _,join5_6 ! _ )
+  val inputNodes: List[ReteMessage => Unit] =
+    List(join1_2 ! _,join3_4 ! _,join5_6 ! _ )
   input.sendData(attributeFunc = attributes, messageSize = messageSize)
 
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
-  TerminatorInitializer(inputNodes, productionNodes, "check",
-    repairNegative(_, join1_2 ! Primary(_), inputNodes, productionNodes, messageSize,
+
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairNegative(_, join1_2 ! Primary(_),terminator, messageSize,
     negativeMapper = res => Vector(res(0),res(1))
     )
   )
@@ -245,14 +250,15 @@ object Queries {
     "SwitchPosition" -> ((cs:ChangeSet) => switchSwitchPositionJoin ! Secondary(cs) ),
     "SwitchPosition" -> ((cs:ChangeSet) => switchSwitchPositionJoin ! Secondary(cs) )
   )
-  val inputNodes: Array[ReteMessage => Unit] =
-    Array( signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
+  val inputNodes: List[ReteMessage => Unit] =
+    List( signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
 
   input.sendData(attributeFunc = attributes, typeFunc=types, messageSize = messageSize)
 
-  val productionNodes: Array[ReteMessage => Unit] = Array(production ! _)
-  TerminatorInitializer(inputNodes, productionNodes,"check",
-    repairPosNeg(_,production ! _, inputNodes, productionNodes, messageSize,
+
+  val terminator = Terminator(inputNodes, production)
+  terminator.send("check",
+    repairPosNeg(_,production ! _,terminator, messageSize,
     positiveMapper = res => Vector(res(3),res(2)),
     negativeMapper = res => Vector(res(3),res(4))
     )
@@ -268,33 +274,33 @@ object Queries {
   }
 
   def repairPosNeg(results: Set[nodeType], target: ReteMessage => Unit,
-       inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
+           terminator: Terminator,
        messageSize: Int, negativeMapper: nodeType => nodeType, positiveMapper: nodeType => nodeType): Unit = {
   val values =results.take(results.size / repairDivide).toVector
   val positives = values.map(positiveMapper)
   val negatives = values.map(negativeMapper)
   negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
   positives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = positives)))
-  TerminatorInitializer(inputNodes, productionNodes, "repair", a => { readyFlag = true})
+  terminator.send("repair", a => { readyFlag = true})
   }
   def repairNegative(results: Set[nodeType], target: ReteMessage => Unit,
-       inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
+       terminator: Terminator,
        messageSize: Int, negativeMapper: nodeType => nodeType): Unit = {
   val values =results.take(results.size / repairDivide).toVector
   val negatives = values.map(negativeMapper)
   negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
-  TerminatorInitializer(inputNodes, productionNodes, "repair", a => { readyFlag = true})
+  terminator.send("repair", a => { readyFlag = true})
   }
   def repairPositive(results: Set[nodeType], target: ReteMessage => Unit,
-       inputNodes: Array[ReteMessage => Unit], productionNodes: Array[ReteMessage => Unit],
+       terminator: Terminator,
        messageSize: Int, positiveMapper: nodeType => nodeType): Unit = {
   val values =results.take(results.size / repairDivide).toVector
   val positives = values.map(positiveMapper)
   positives.grouped(messageSize).foreach( vec => target(ChangeSet(positive = positives)))
-  TerminatorInitializer(inputNodes, productionNodes, "repair", a => { readyFlag = true})
+  terminator.send("repair", a => { readyFlag = true})
   }
 
-  def main(args: Array[String]) {
+  def main(args: List[String]) {
   messageSize = args(1).toInt
   val filename = args(0)
   """(\d+)""".r.findFirstIn(filename) match {
