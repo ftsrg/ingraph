@@ -1,6 +1,11 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
+import akka.util.Timeout
+import scala.concurrent.duration._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 /**
  * Created by janosmaginecz on 10/05/15.
@@ -20,8 +25,9 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       input ! ChangeSet(positive = Vector(Vector(15)))
       input ! ChangeSet(positive = Vector(Vector(19)))
       val terminator = Terminator(List(input ! _), production)
-      terminator.send("",res => echoActor ! res)
-      expectMsg(Set(Vector(15),Vector(19)))
+      val future = terminator.send
+      val expected = Set(Vector(15),Vector(19))
+      Await.result(future, Duration(1,SECONDS)) == expected
     }
   }
   "beta nodes" must {
@@ -34,8 +40,9 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       input ! Secondary(ChangeSet(positive = Vector(Vector(15))))
       intermediary ! Primary(ChangeSet(positive = Vector(Vector(15))))
       val terminator = Terminator(List(input ! _), production)
-      terminator.send("", res => echoActor ! res)
-      expectMsg(Set(Vector(15)))
+      val expected = Set(Vector(15))
+      val future = terminator.send
+      Await.result(future, Duration(1,SECONDS)) == expected
     }
   }
 }

@@ -7,6 +7,7 @@ import com.twitter.chill.{Input, ScalaKryoInstantiator}
 
 import scala.collection.immutable.HashMap
 import scala.collection.mutable
+import scala.concurrent.{Promise, Future}
 
 /**
  * Created by Maginecz on 3/16/2015.
@@ -30,12 +31,14 @@ class Probe(id: Int, production: ActorRef, route: List[ActorRef]) extends ReteMe
 
 case class ExpectMoreTerminators(id: Int, count: Int)
 case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
-case class ExpectTerminator(terminatorID: Int, messageID: Int, phase: String, function: Set[nodeType]=> Unit) extends ReteMessage()
+case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[Set[nodeType]]) extends ReteMessage()
 class Terminator private (terminatorID: Int, val inputs:List[ReteMessage => Unit], production: ActorRef) extends ReteMessage {
-  def send(phase: String, function: Set[nodeType]=>Unit) = {
+  def send(): Future[Set[nodeType]] = {
     val messageID = Terminator.idCounter.getNext()
-    production ! ExpectTerminator(terminatorID, messageID, phase, function)
+    val promise = Promise[Set[nodeType]]
+    production ! ExpectTerminator(terminatorID, messageID, promise)
     inputs.foreach(_(TerminatorMessage(terminatorID,messageID)))
+    promise.future
   }
 }
 object Terminator {
@@ -274,15 +277,14 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit ,
   }
 }
 
-class Production(queryName: String) extends Actor with ResultLogger{
+class Production(queryName: String) extends Actor {
   var expectedTerminators = mutable.Map.empty[Int,Int]
   val receivedTerminatorCount = mutable.Map.empty[Int,Int]
 
   var t0 = System.nanoTime()
 
   val results = new mutable.HashSet[nodeType]
-  val terminatorPhases = mutable.Map.empty[Int, String]
-  val terminatorFunctions = mutable.Map.empty[Int, Set[nodeType]=> Unit]
+  val terminatorPromises = mutable.Map.empty[Int, Promise[Set[nodeType]]]
 
 
   def getAndResetElapsedTime(): Long = {
@@ -305,19 +307,16 @@ class Production(queryName: String) extends Actor with ResultLogger{
       receivedTerminatorCount(messageID) += 1
       if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)){
             val timeNano = getAndResetElapsedTime()
-            logResult(queryName, terminatorPhases(messageID), timeNano)
-            terminatorFunctions(messageID)(results.toSet)
+            terminatorPromises(messageID).success(results.toSet)
 
             receivedTerminatorCount.drop(messageID)
-            terminatorPhases.drop(messageID)
-            terminatorFunctions.drop(messageID)
+            terminatorPromises.drop(messageID)
 
           }
     }
-    case ExpectTerminator(terminatorID, messageID, phase, function) => {
+    case ExpectTerminator(terminatorID, messageID, promise) => {
       receivedTerminatorCount(messageID) = 0
-      terminatorPhases(messageID) = phase
-      terminatorFunctions(messageID) = function
+      terminatorPromises(messageID) = promise
     }
   }
 }
