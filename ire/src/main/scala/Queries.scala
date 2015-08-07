@@ -4,15 +4,17 @@ import Workers.nodeType
 import akka.actor.{ActorRef, ActorSystem, Props}
 
 import scala.collection.immutable.HashMap
-
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
 /**
  * Created by Maginecz on 4/20/2015.
  */
 object Queries {
   val repairDivide = 10
   var messageSize = 1
-  @volatile var readyFlag = false
-  import utils.wrapWithList
+  val timeout = Duration(5, HOURS)
+
   def PosLength(input: WildcardInput) = {
   val system = ActorSystem()
 
@@ -32,13 +34,13 @@ object Queries {
   val inputNodes: List[ReteMessage => Unit] = List(first ! _)
 
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairPosNeg(_, first ! _,terminator, messageSize,
+  val checkResults = Await.result(terminator.send, timeout)
+  val repairResults = Await.result(
+    repairPosNeg(checkResults, first ! _,terminator, messageSize,
     positiveMapper = res => Vector(res(0),1),
-    negativeMapper = res => res
-    )
-  )
-  waitForReady()
+    negativeMapper = res => res),
+    timeout)
+
   system.terminate()
   }
 
@@ -58,12 +60,12 @@ object Queries {
 
   input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairPositive(_, trimmer ! _,terminator, messageSize,
-    res => Vector(res(0),"whatever")
-    )
-  )
-  waitForReady()
+  val checkResults = Await.result(terminator.send,timeout)
+  val repairResults = Await.result(
+    repairPositive(checkResults, trimmer ! _,terminator, messageSize,
+    res => Vector(res(0),"whatever")),
+    timeout)
+
   system.terminate()
   }
 
@@ -86,12 +88,14 @@ object Queries {
 
   input.sendData(attributeFunc = attributes, typeFunc = types, messageSize = messageSize)
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairNegative(_, sensorJoin ! Secondary(_),terminator, messageSize,
-    negativeMapper = res => Vector(res(1),res(3))
-    )
-  )
-  waitForReady()
+  terminator.send
+  val checkResults = Await.result(terminator.send,timeout)
+  val repairResults = Await.result(
+    repairNegative(
+    checkResults, sensorJoin ! Secondary(_),terminator, messageSize,
+    negativeMapper = res => Vector(res(1),res(3))),
+    timeout)
+
   system.terminate()
   }
 
@@ -124,12 +128,12 @@ object Queries {
     List(entryDefined ! _,exitDefined ! _,sensorConnects ! _, rightMostJoin ! _, finalJoin ! _)
 
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairNegative(_, exitDefined ! Secondary(_),terminator, messageSize,
-    negativeMapper = res => Vector(res(0),res(2))
-    )
-  )
-  waitForReady()
+  val checkResults = Await.result(terminator.send,timeout)
+  val repairResults = Await.result(
+    repairNegative(checkResults, exitDefined ! Secondary(_),terminator, messageSize,
+    negativeMapper = res => Vector(res(0),res(2))),
+    timeout)
+
   system.terminate()
   }
 
@@ -168,12 +172,13 @@ object Queries {
 
 
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairNegative(_, join2 ! Primary(_),terminator, messageSize,
-    negativeMapper = res => Vector(res(0),res(1))
-    )
-  )
-  waitForReady()
+  val checkResults = Await.result(terminator.send, timeout)
+  val repairResults = Await.result(
+    repairNegative(
+    checkResults, join2 ! Primary(_),terminator, messageSize,
+    negativeMapper = res => Vector(res(0),res(1))),
+    timeout)
+
   system.terminate()
   }
   def connectedSegmentsTreeJoin(input: WildcardInput): Unit ={
@@ -214,12 +219,13 @@ object Queries {
 
 
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairNegative(_, join1_2 ! Primary(_),terminator, messageSize,
-    negativeMapper = res => Vector(res(0),res(1))
-    )
-  )
-  waitForReady()
+  val checkResults = Await.result(terminator.send, timeout)
+  val repairResults = Await.result(
+    repairNegative(
+    checkResults, join1_2 ! Primary(_),terminator, messageSize,
+    negativeMapper = res => Vector(res(0),res(1))),
+    timeout)
+
   system.terminate()
   }
 
@@ -257,47 +263,43 @@ object Queries {
 
 
   val terminator = Terminator(inputNodes, production)
-  terminator.send("check",
-    repairPosNeg(_,production ! _,terminator, messageSize,
+  val checkResults = Await.result(terminator.send,Duration(5,MINUTES))
+  val repairResults = Await.result(
+    repairPosNeg(
+    checkResults, production ! _,terminator, messageSize,
     positiveMapper = res => Vector(res(3),res(2)),
-    negativeMapper = res => Vector(res(3),res(4))
-    )
-  )
-  waitForReady()
-  system.terminate()
-  }
+    negativeMapper = res => Vector(res(3),res(4))),
+    timeout)
 
-  def waitForReady(): Unit ={
-  while(!readyFlag)
-    Thread.sleep(2000)
-  readyFlag = false
+
+  system.terminate()
   }
 
   def repairPosNeg(results: Set[nodeType], target: ReteMessage => Unit,
            terminator: Terminator,
-       messageSize: Int, negativeMapper: nodeType => nodeType, positiveMapper: nodeType => nodeType): Unit = {
+       messageSize: Int, negativeMapper: nodeType => nodeType, positiveMapper: nodeType => nodeType): Future[Set[nodeType]] = {
   val values =results.take(results.size / repairDivide).toVector
   val positives = values.map(positiveMapper)
   val negatives = values.map(negativeMapper)
   negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
   positives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = positives)))
-  terminator.send("repair", a => { readyFlag = true})
+  terminator.send
   }
   def repairNegative(results: Set[nodeType], target: ReteMessage => Unit,
        terminator: Terminator,
-       messageSize: Int, negativeMapper: nodeType => nodeType): Unit = {
+       messageSize: Int, negativeMapper: nodeType => nodeType): Future[Set[nodeType]] = {
   val values =results.take(results.size / repairDivide).toVector
   val negatives = values.map(negativeMapper)
   negatives.grouped(messageSize).foreach( vec => target(ChangeSet(negative = negatives)))
-  terminator.send("repair", a => { readyFlag = true})
+  terminator.send
   }
   def repairPositive(results: Set[nodeType], target: ReteMessage => Unit,
        terminator: Terminator,
-       messageSize: Int, positiveMapper: nodeType => nodeType): Unit = {
+       messageSize: Int, positiveMapper: nodeType => nodeType): Future[Set[nodeType]] = {
   val values =results.take(results.size / repairDivide).toVector
   val positives = values.map(positiveMapper)
   positives.grouped(messageSize).foreach( vec => target(ChangeSet(positive = positives)))
-  terminator.send("repair", a => { readyFlag = true})
+  terminator.send
   }
 
   def main(args: List[String]) {
