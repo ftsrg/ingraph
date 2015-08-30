@@ -2,6 +2,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.log4j.LogManager
 
+import scala.collection.mutable
 /**
  * Created by Maginecz on 4/28/2015.
  */
@@ -22,4 +23,17 @@ trait ResultLogger {
 class AtomicUniqueCounter {
   private val counter: AtomicInteger = new AtomicInteger(0)
   def getNext() = counter.getAndIncrement()
+}
+trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B]{
+  def multiUnzip : (Iterable[A], Iterable[B]) = {
+    val b1 = genericBuilder[A]
+    val b2 = genericBuilder[B]
+    this.foreach ( keyValueSet => {
+      keyValueSet._2.foreach(value => {
+        b1 += keyValueSet._1
+        b2 += value
+      })
+    })
+    (b1.result(), b2.result())
+  }
 }
