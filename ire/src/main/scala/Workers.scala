@@ -1,11 +1,13 @@
 import java.io.InputStream
 import java.util.concurrent.atomic.AtomicInteger
 
-import Workers.nodeType
 import akka.actor.{Actor, ActorRef}
 import com.twitter.chill.{Input, ScalaKryoInstantiator}
 
 import scala.collection.immutable.HashMap
+package hu.bme.mit.IQDcore {
+
+import hu.bme.mit.IQDcore.Workers.nodeType
 import scala.collection.mutable
 import scala.concurrent.{Promise, Future}
 
@@ -392,4 +394,6 @@ object WildcardInput {
     val input = new Input(stream)
     kryo.readObject(input, classOf[WildcardInput])
   }
+}
+
 }

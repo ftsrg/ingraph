@@ -1,6 +1,7 @@
 import java.util.concurrent.atomic.AtomicInteger
 
 import org.apache.log4j.LogManager
+package hu.bme.mit.IQDcore {
 
 import scala.collection.mutable
 /**
@@ -36,4 +37,5 @@ trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B]{
     })
     (b1.result(), b2.result())
   }
+
 }

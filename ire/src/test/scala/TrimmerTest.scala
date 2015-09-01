@@ -1,5 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.IQDcore.{Trimmer, ChangeSet}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**

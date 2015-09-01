@@ -1,12 +1,13 @@
 import java.io.FileInputStream
 
-import Workers.nodeType
 import akka.actor.{ActorRef, ActorSystem, Props}
+import hu.bme.mit.IQDcore.Workers.nodeType
 
 import scala.collection.immutable.HashMap
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
+import hu.bme.mit.IQDcore._
 /**
  * Created by Maginecz on 4/20/2015.
  */
@@ -318,4 +319,5 @@ object Queries {
     connectedSegmentsLinearJoin(input)
     connectedSegmentsTreeJoin(input)
   }
+}
 }

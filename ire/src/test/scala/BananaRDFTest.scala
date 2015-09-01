@@ -1,5 +1,6 @@
 import java.io.StringReader
 
+import hu.bme.mit.IQDcore.JenaRDFReader
 import org.scalatest.FlatSpec
 
 import scala.collection.immutable.HashMap

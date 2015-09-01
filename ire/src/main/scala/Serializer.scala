@@ -1,6 +1,9 @@
 import java.io.{FileInputStream, FileOutputStream}
 
 import com.twitter.chill.{Output, ScalaKryoInstantiator}
+import hu.bme.mit.IQDcore.trainbenchmark.TrainbenchmarkReader
+import hu.bme.mit.IQDcore.{utils, JenaRDFReader, WildcardInput}
+package hu.bme.mit.IQDcore {
 
 /**
  * Created by Maginecz on 5/4/2015.
@@ -29,4 +32,6 @@ object Serializer {
     kryo.writeObject(output, inputNode)
     output.close()
   }
+}
+
 }
