@@ -1,4 +1,6 @@
-import Workers.nodeType
+import hu.bme.mit.IQDcore.Workers.nodeType
+import hu.bme.mit.IQDcore._
+
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}

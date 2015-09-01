@@ -1,3 +1,4 @@
+import hu.bme.mit.IQDcore.IterableMultiMap
 import org.scalatest.WordSpec
 
 import scala.collection.mutable

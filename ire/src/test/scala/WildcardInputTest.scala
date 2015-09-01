@@ -3,6 +3,7 @@ import java.io.{ByteArrayOutputStream, FileOutputStream}
 import com.esotericsoftware.kryo.io.Output
 import com.twitter.chill.{Input, ScalaKryoInstantiator}
 import org.scalatest.{BeforeAndAfterAll, WordSpec}
+import hu.bme.mit.IQDcore.{ChangeSet, WildcardInput}
 
 /**
  * Created by janosmaginecz on 05/05/15.

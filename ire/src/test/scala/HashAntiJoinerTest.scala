@@ -1,5 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
+import hu.bme.mit.IQDcore.{Secondary, Primary, HashAntiJoiner, ChangeSet}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**
