@@ -1,4 +1,4 @@
-import java.io.{FileInputStream, FileOutputStream}
+import java.io.{FileOutputStream, FileInputStream}
 
 import com.twitter.chill.{Output, ScalaKryoInstantiator}
 import hu.bme.mit.IQDcore.trainbenchmark.TrainbenchmarkReader
@@ -11,17 +11,19 @@ package hu.bme.mit.IQDcore {
 object Serializer {
   def main(args: Array[String]) {
     val specialValues = Map(
-      "connectsTo" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "definedBy" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "follows" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "exit" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "entry" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "switch" -> ((v:Any) => utils.idStringToLong(v.toString)),
-      "sensor" -> ((v:Any) => utils.idStringToLong(v.toString))
-      )
-    val inputNode = new WildcardInput(specialFunction = specialValues, multiValue = Set("connectsTo","definedBy", "follows"))
-    val reader = new JenaRDFReader(inputNode.addAttribute _)
-    reader.read(new FileInputStream(args(0)))
+      "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+    )
+    val inputNode = new WildcardInput
+    val reader = new TrainbenchmarkReader(args(0), inputNode)
+    reader.read()
+    val runtime = Runtime.getRuntime
+
 
     val instantiator = new ScalaKryoInstantiator
     instantiator.setRegistrationRequired(false)
