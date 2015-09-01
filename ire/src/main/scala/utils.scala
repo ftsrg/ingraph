@@ -16,6 +16,20 @@ object utils {
     in.drop(1).toLong
   }
 
+  implicit class ReteNode(base: ActorRef) {
+    def apply(): ReteMessage => Unit = {
+      return base ! _
+    }
+
+    def primary(reteMessage: ReteMessage) = {
+      base ! Primary(reteMessage)
+    }
+
+    def secondary(reteMessage: ReteMessage) = {
+      base ! Secondary(reteMessage)
+    }
+  }
+
 }
 
 trait ResultLogger {
