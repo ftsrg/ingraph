@@ -125,14 +125,19 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     "follows" -> ((cs: ChangeSet) => followsEntryJoin ! Secondary(cs)),
     "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs)),
     "type" -> ((cs: ChangeSet) => {
-
-    if (cs.positive(0)(1) == "Switch")
+    if (cs.positive.size > 0) {
+      if (cs.positive(0)(1) == "Switch") {
       switchSwitchPositionJoin ! Primary(cs)
-    } )
-  )
-  val types = Map(
-    "Switch" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
-    "SwitchPosition" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs))
+      }
+      if (cs.positive(0)(1) == "SwitchPosition")
+      switchSwitchPositionJoin ! Secondary(cs)
+    } else if (cs.negative.size > 0) {
+      if (cs.positive(0)(1) == "Switch")
+      switchSwitchPositionJoin ! Primary(cs)
+      if (cs.positive(0)(1) == "SwitchPosition")
+      switchSwitchPositionJoin ! Secondary(cs)
+    }
+    })
   )
   val inputNodes: List[ReteMessage => Unit] =
     List(signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
@@ -170,13 +175,14 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   override val terminator = Terminator(inputNodes, production)
 
   }
+
   class RouteSensor extends TrainbenchmarkQuery{
   val system = ActorSystem()
   val production = system.actorOf(Props(new Production("RouteSensor")))
   val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
   val sensorJoin = system.actorOf(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
   val followsJoin = system.actorOf(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
-  val attributes = HashMap(
+  val inputLookup = HashMap(
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
@@ -196,11 +202,19 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
   val trimmer = system.actorOf(Props(new Trimmer(antijoin.secondary, Vector(0))), "sw-trimmer")
   val inputLookup = Map(
-    "sensor" -> ((cs: ChangeSet) => trimmer ! cs)
+    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "type" -> ((cs: ChangeSet) => {
+    if (cs.positive.size > 0) {
+      if (cs.positive(0)(1) == "Switch") {
+      antijoin ! Primary(cs)
+      }
+    } else if (cs.negative.size > 0) {
+      if (cs.positive(0)(1) == "Switch")
+      antijoin ! Primary(cs)
+    }
+    })
   )
-  val types = Map(
-    "Switch" -> ((cs: ChangeSet) => antijoin ! Primary(cs))
-  )
+
 
   val inputNodes: List[ReteMessage => Unit] = List(antijoin ! _, trimmer ! _)
   override val terminator = Terminator(inputNodes, production)
