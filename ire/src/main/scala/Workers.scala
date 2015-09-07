@@ -441,6 +441,16 @@ class WildcardInput(val messageSize:Int = 16) {
     }
   }
 
+  val idGenerator = new scala.util.Random
+
+  def newKey(): Long = {
+    var newId: Long = 0L
+    do {
+      newId = idGenerator.nextLong()
+    } while (multiValueAttributes.forall(kv => kv._2.contains(newId)))
+    return newId
+  }
+
 }
 
 object WildcardInput {
