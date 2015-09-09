@@ -1,8 +1,7 @@
-import java.io.{FileOutputStream, FileInputStream}
+import java.io.FileOutputStream
 
 import com.twitter.chill.{Output, ScalaKryoInstantiator}
 import hu.bme.mit.IQDcore.trainbenchmark.TrainbenchmarkReader
-import hu.bme.mit.IQDcore.{utils, JenaRDFReader, WildcardInput}
 package hu.bme.mit.IQDcore {
 
 /**
@@ -20,8 +19,8 @@ object Serializer {
       "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
     )
     val inputNode = new WildcardInput
-    val reader = new TrainbenchmarkReader(args(0), inputNode)
-    reader.read()
+    val reader = new TrainbenchmarkReader(inputNode)
+    reader.read(args(0))
     val runtime = Runtime.getRuntime
 
 

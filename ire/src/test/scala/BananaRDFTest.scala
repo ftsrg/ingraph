@@ -1,9 +1,7 @@
 import java.io.StringReader
 
-import hu.bme.mit.IQDcore.{utils, JenaRDFReader}
+import hu.bme.mit.IQDcore.{JenaRDFReader, utils}
 import org.scalatest.FlatSpec
-
-import scala.collection.immutable.HashMap
 
 
 class RdfReaderTest extends FlatSpec {
@@ -28,18 +26,13 @@ class RdfReaderTest extends FlatSpec {
           fail("invalid type")
     }
     val noop = (a: Any) => ()
-    def lookup(id: Long, pred: String, obj: AnyRef): Unit = {
+    def lookup(id: Long, pred: String, obj: Any): Unit = {
       if (pred == "Signal_currentState") signalStateChecker(id, obj)
       if (pred == "Route_exit") routeExitChecker(id,obj)
       if (pred == "type") typeChecker(id,obj)
     }
-    val reader = new JenaRDFReader(lookup, subjectPreprocessor =
-      Map(
-        "Signal_currentState" -> ((v: Any) => utils.idStringToLong(v.toString)),
-        "Route_exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
-        "type" -> ((v: Any) => utils.idStringToLong(v.toString))
-      )
-    )
+    val reader = new JenaRDFReader(lookup, subjectPreprocessor = (v: AnyRef) => utils.idStringToLong(v.toString) )
+
     reader.read(values)
   }
 }

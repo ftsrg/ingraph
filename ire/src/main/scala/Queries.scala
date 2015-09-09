@@ -13,23 +13,27 @@ import hu.bme.mit.IQDcore._
  */
 package hu.bme.mit.IQDcore.trainbenchmark {
 
-class TrainbenchmarkReader(path: String, input: WildcardInput) {
-  val specialFunction = Map(
-    "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+class TrainbenchmarkReader(input: WildcardInput) {
+
+  def idFunction(v: Any) = utils.idStringToLong(v.toString)
+
+  val valueFunctions = Map[String, (AnyRef)=>(Any)](
+    "connectsTo" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "definedBy" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "follows" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "exit" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "entry" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "switch" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
+    "sensor" -> ((v: AnyRef) => utils.idStringToLong(v.toString))
   )
 
-  def read() {
+  def read(path: String) {
     val fs = new FileInputStream(path)
     try {
       val tran = input.newTransaction()
-      val reader = new JenaRDFReader(tran.add(_, _, _), specialFunction)
+      val reader = new JenaRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
       reader.read(fs)
+      input.processTransaction(tran)
     }
     finally {
       fs.close()

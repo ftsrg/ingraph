@@ -9,8 +9,9 @@ package hu.bme.mit.IQDcore {
  * Created by Maginecz on 3/4/2015.
  */
 
-class JenaRDFReader(func: (Long, String, AnyRef) => Unit,
-                    subjectPreprocessor: Map[String, (String)=>Long] = Map.empty[String, (String)=>Long]
+class JenaRDFReader(func: (Long, String, Any) => Unit,
+                    subjectPreprocessor: (String)=>Long,
+                    objectPreprocessor: Map[String, (AnyRef)=>(Any)] = Map.empty[String, (AnyRef)=>AnyVal]
                      ) extends JenaModule {
   import ops._
 
@@ -26,17 +27,19 @@ class JenaRDFReader(func: (Long, String, AnyRef) => Unit,
 
   private def readGraph(graph: Rdf#Graph) {
     graph.triples.foreach {
-      case ops.Triple(rawSubj, pred, obj: Node_Literal) => {
-        val subject = if (subjectPreprocessor.contains(pred.getLocalName))
-                      subjectPreprocessor(pred.getLocalName)(rawSubj.getLocalName)
-                      else rawSubj.getLocalName.toLong
-        func(subject, pred.getLocalName, obj.getLiteralValue)
+      case ops.Triple(rawSubj, pred, rawObj: Node_Literal) => {
+        val subject = subjectPreprocessor(rawSubj.getLocalName)
+        val obj = if (objectPreprocessor.contains(pred.getLocalName))
+                      objectPreprocessor(pred.getLocalName)(rawObj.getLiteralValue)
+                      else rawObj.getLiteralValue
+        func(subject, pred.getLocalName, obj)
       }
-      case ops.Triple(rawSubj, pred, obj) => {
-        val subject = if (subjectPreprocessor.contains(pred.getLocalName))
-          subjectPreprocessor(pred.getLocalName)(rawSubj.getLocalName)
-        else rawSubj.getLocalName.toLong
-        func(subject, pred.getLocalName, obj.getLocalName)
+      case ops.Triple(rawSubj, pred, rawObj) => {
+        val subject = subjectPreprocessor(rawSubj.getLocalName)
+        val obj = if (objectPreprocessor.contains(pred.getLocalName))
+          objectPreprocessor(pred.getLocalName)(rawObj.getLocalName)
+        else rawObj.getLocalName
+        func(subject, pred.getLocalName, obj)
       }
     }
     graph.close()
