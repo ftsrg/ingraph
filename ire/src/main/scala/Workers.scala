@@ -236,7 +236,7 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
 
 
     val joinedNegative = for {
-      node: nodeType <- negative
+      node <- negative
       if secondaryValues.contains(primarySelector.map(i => node(i)))
     } yield node
 
@@ -264,15 +264,17 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
       node <- positive
       key = secondarySelector.map(i => node(i))
       if primaryValues.contains(key)
-    } yield primaryValues(key)
+      value <- primaryValues(key)
+    } yield value
 
     val joinedPositive = for {
-      node: nodeType <- negative
+      node <- negative
       key = secondarySelector.map(i => node(i))
-      if primaryValues.contains(secondarySelector.map(i => node(i)))
-    } yield primaryValues(node)
+      if primaryValues.contains(key)
+      value <- primaryValues(key)
+    } yield value
 
-    forward(ChangeSet(joinedPositive.flatten, joinedNegative.flatten))
+    forward(ChangeSet(joinedPositive, joinedNegative))
 
     positive.foreach(
       vec => {

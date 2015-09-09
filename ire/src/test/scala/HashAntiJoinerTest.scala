@@ -77,4 +77,90 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       positive = Vector(Vector(4, 5, 6, 7))
     ))
   }
+  //based on https://github.com/FTSRG/incqueryd/tree/master/hu.bme.mit.incqueryd.client/hu.bme.mit.incqueryd.rete.nodes/src/test/resources/test-cases
+  "do antijoin 1" in {
+    val prim = ChangeSet(
+      positive = Vector(Vector(5,6,7), Vector(10,11,7))
+    )
+    val sec = ChangeSet(
+      positive = Vector(Vector(7,8))
+    )
+    val primarySel = Vector(2)
+    val secondarySel = Vector(0)
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+
+    joiner ! Primary(prim)
+    expectMsg(ChangeSet(positive = Vector(Vector(5,6,7), Vector(10,11,7))))
+
+    joiner ! Secondary(sec)
+//    val values =for (
+//      perm <- Vector(Vector(5,6,7), Vector(10,11,7)).permutations
+//    ) yield ChangeSet(negative = perm)
+    expectMsgAnyOf(
+      (for (
+            perm <- Vector(Vector(5,6,7), Vector(10,11,7)).permutations
+          ) yield ChangeSet(negative = perm)).toSeq:_*
+    )
+  }
+  "do antijoin 2" in {
+    val prim = ChangeSet(
+      positive = Vector(Vector(1,5), Vector(2, 6))
+    )
+    val sec = ChangeSet(
+      positive = Vector(Vector(5, 10))
+    )
+    val primarySel = Vector(1)
+    val secondarySel = Vector(0)
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+
+    joiner ! Primary(prim)
+    expectMsgAnyOf(
+      (for (
+        perm <- Vector(Vector(1, 5), Vector(2, 6)).permutations
+      ) yield ChangeSet(positive = perm)).toSeq:_*
+    )
+
+    joiner ! Secondary(sec)
+    expectMsg(ChangeSet(
+      negative = Vector(Vector(1, 5))
+    )
+    )
+  }
+  "do antijoin new 3" in {
+    val prim = ChangeSet(
+      positive = Vector(Vector(1,2,3,4), Vector(1,5,6,7),Vector(3,2,5,4))
+    )
+
+    val primarySel = Vector(1, 3)
+    val secondarySel = Vector(0, 2)
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+
+    joiner ! Primary(prim)
+    expectMsg(ChangeSet(Vector(Vector(1, 2, 3, 4), Vector(1, 5, 6, 7), Vector(3, 2, 5, 4))))
+
+    joiner ! Primary(ChangeSet(positive = Vector(Vector(8,2,6,4))))
+    expectMsg(ChangeSet(positive = Vector(Vector(8,2,6,4))))
+
+    joiner ! Secondary(ChangeSet(positive = Vector(Vector(2,5,4,3))))
+    expectMsgAnyOf(
+      (for (
+        perm <- Vector(Vector(1,2,3,4),Vector(3,2,5,4),Vector(8,2,6,4)).permutations
+      ) yield ChangeSet(negative = perm)).toSeq:_*
+    )
+
+    joiner ! Secondary(ChangeSet(
+      positive = Vector(Vector(5,5,7,3))
+    ))
+    expectMsg(ChangeSet(negative = Vector(Vector(1,5,6,7))))
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(2,5,4,3))))
+    expectMsgAnyOf(
+      (for (
+        perm <- Vector(Vector(1,2,3,4),Vector(3,2,5,4), Vector(8,2,6,4)).permutations
+      ) yield ChangeSet(positive = perm)).toSeq:_*
+    )
+  }
 }
