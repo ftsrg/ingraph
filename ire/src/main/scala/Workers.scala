@@ -373,17 +373,17 @@ class WildcardInput(val messageSize:Int = 16) {
   }
 
   def processTransaction(transaction: Transaction): Unit = {
+    transaction.negative.foreach{ case(pred, map) =>{
+      val (obj, subj) = map.multiUnzip
+      remove(obj,pred,subj)
+      }
+    }
     transaction.positive.foreach { case (pred, map) => {
       val (obj, subj) = map.multiUnzip
       add(obj, pred, subj)
       }
     }
-    transaction.negative.foreach{ case(pred, map) =>{
-      val (obj, subj) = map.multiUnzip
-      remove(obj,pred,subj)
-    }
     transaction.close()
-    }
   }
 
   def addSingleAttribute(subj: Long, pred: String, obj: Any): Unit = {
