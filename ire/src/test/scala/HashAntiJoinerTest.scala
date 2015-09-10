@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import hu.bme.mit.IQDcore.{Secondary, Primary, HashAntiJoiner, ChangeSet}
+import hu.bme.mit.IQDcore._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**
@@ -117,9 +117,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
     joiner ! Primary(prim)
     expectMsgAnyOf(
-      (for (
-        perm <- Vector(Vector(1, 5), Vector(2, 6)).permutations
-      ) yield ChangeSet(positive = perm)).toSeq:_*
+      utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(1, 5), Vector(2, 6)))):_*
     )
 
     joiner ! Secondary(sec)
@@ -127,6 +125,94 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       negative = Vector(Vector(1, 5))
     )
     )
+  }
+  "do antijoin new 1" in {
+    val prim = ChangeSet(
+      positive = Vector(Vector(1,2), Vector(3,4))
+    )
+    val secondary = ChangeSet(
+      positive = Vector(Vector(2, 3), Vector(2, 4), Vector(4, 5))
+    )
+    val primarySel = Vector(1)
+    val secondarySel = Vector(0)
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+
+    joiner ! Primary(prim)
+    expectMsg(ChangeSet(positive = Vector(Vector(1, 2), Vector(3, 4))))
+
+    joiner ! Secondary(secondary)
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(1, 2), Vector(3, 4)))):_*)
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(4, 5))))
+    expectMsg(ChangeSet(positive = Vector(Vector(3, 4))))
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(2, 3))))
+    expectMsg(ChangeSet())
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(2, 4))))
+    expectMsg(ChangeSet(positive = Vector(Vector(1, 2))))
+
+    joiner ! Secondary(ChangeSet(positive = Vector(Vector(3, 4))))
+    expectMsg(ChangeSet())
+
+    joiner ! Secondary(ChangeSet(positive = Vector(Vector(4, 3))))
+    expectMsg(ChangeSet(negative = Vector(Vector(3, 4))))
+
+    joiner ! Primary(ChangeSet(positive = Vector(Vector(1, 4))))
+    expectMsg(ChangeSet())
+
+    joiner ! Primary(ChangeSet(positive = Vector(Vector(1, 5))))
+    expectMsg(ChangeSet(positive = Vector(Vector(1, 5))))
+
+    joiner ! Primary(ChangeSet(negative = Vector(Vector(1, 5))))
+    expectMsg(ChangeSet(negative = Vector(Vector(1, 5))))
+  }
+  "do antijoin new 2" in {
+    val prim = ChangeSet(
+      positive = Vector(Vector(2,4), Vector(3,4), Vector(5, 4), Vector(6, 4), Vector(1,3 ), Vector(2, 3))
+    )
+    val secondary = ChangeSet(
+      positive = Vector(Vector(4, 8), Vector(4, 9), Vector(3, 4))
+    )
+    val primarySel = Vector(1)
+    val secondarySel = Vector(0)
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+
+    joiner ! Primary(prim)
+    expectMsg(ChangeSet(positive = Vector(Vector(2,4), Vector(3,4), Vector(5, 4), Vector(6, 4), Vector(1,3 ), Vector(2, 3))))
+
+    joiner ! Secondary(secondary)
+    expectMsgAnyOf(
+      utils.changeSetPermutations(
+        ChangeSet(negative = Vector(Vector(2, 4), Vector(3, 4), Vector(5, 4), Vector(6, 4), Vector(1, 3), Vector(2, 3)))
+      ):_*
+    )
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(4, 7))))
+    expectMsg(ChangeSet())
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(4, 8))))
+    expectMsg(ChangeSet())
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(4, 9))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(2, 4), Vector(3, 4), Vector(5, 4), Vector(6, 4)))):_*)
+
+    joiner ! Secondary(ChangeSet(positive = Vector(Vector(4, 5))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(2, 4), Vector(3, 4), Vector(5, 4), Vector(6, 4)))):_*)
+
+    joiner ! Secondary(ChangeSet(negative = Vector(Vector(3, 4))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(1, 3), Vector(2, 3)))):_*)
+
+    joiner ! Primary(ChangeSet(positive = Vector(Vector(4, 3))))
+    expectMsg(ChangeSet(positive = Vector(Vector(4, 3))))
+
+    joiner ! Secondary(ChangeSet(positive = Vector(Vector(3, 5))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(1, 3), Vector(2, 3), Vector(4, 3)))):_*)
+
+    joiner ! Primary(ChangeSet(positive = Vector(Vector(7, 4))))
+    expectMsg(ChangeSet())
   }
   "do antijoin new 3" in {
     val prim = ChangeSet(
@@ -146,9 +232,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
     joiner ! Secondary(ChangeSet(positive = Vector(Vector(2,5,4,3))))
     expectMsgAnyOf(
-      (for (
-        perm <- Vector(Vector(1,2,3,4),Vector(3,2,5,4),Vector(8,2,6,4)).permutations
-      ) yield ChangeSet(negative = perm)).toSeq:_*
+      utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(1,2,3,4),Vector(3,2,5,4),Vector(8,2,6,4)))):_*
     )
 
     joiner ! Secondary(ChangeSet(
@@ -158,9 +242,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
     joiner ! Secondary(ChangeSet(negative = Vector(Vector(2,5,4,3))))
     expectMsgAnyOf(
-      (for (
-        perm <- Vector(Vector(1,2,3,4),Vector(3,2,5,4), Vector(8,2,6,4)).permutations
-      ) yield ChangeSet(positive = perm)).toSeq:_*
+        utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(1,2,3,4),Vector(3,2,5,4), Vector(8,2,6,4)))):_*
     )
   }
 }

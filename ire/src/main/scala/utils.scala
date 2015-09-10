@@ -16,6 +16,14 @@ object utils {
     in.drop(1).toLong
   }
 
+  def changeSetPermutations(cs: ChangeSet) = {
+    val values = for (
+      pos <- cs.positive.permutations;
+      neg <- cs.negative.permutations
+    ) yield ChangeSet(pos, neg)
+     values.toSeq
+  }
+
   implicit class ReteNode(base: ActorRef) {
     def apply(): ReteMessage => Unit = {
       return base ! _
