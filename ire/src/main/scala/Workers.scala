@@ -223,7 +223,8 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
                      val secondarySelector: Vector[Int])
   extends BetaNode(next) {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
-  val secondaryValues = new mutable.HashSet[nodeType]
+  val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive
@@ -260,34 +261,36 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
     val positive = changeSet.positive
     val negative = changeSet.negative
 
-    val joinedNegative = for {//this is switched because antijoin
-      node <- positive
-      key = secondarySelector.map(i => node(i))
-      if primaryValues.contains(key)
-      value <- primaryValues(key)
-    } yield value
-
-    val joinedPositive = for {
-      node <- negative
-      key = secondarySelector.map(i => node(i))
-      if primaryValues.contains(key)
-      value <- primaryValues(key)
-    } yield value
-
-    forward(ChangeSet(joinedPositive, joinedNegative))
-
     positive.foreach(
       vec => {
         val key = secondarySelector.map(i => vec(i))
-        secondaryValues.add(key) //must be used with multimaps
+        secondaryValues.addBinding(key, vec)
       }
     )
     negative.foreach(
       vec => {
         val key = secondarySelector.map(i => vec(i))
-        secondaryValues.remove(key)
+        secondaryValues.removeBinding(key, vec)
       }
     )
+
+    val joinedNegative = (for {//this is switched because antijoin
+      node <- positive
+      key = secondarySelector.map(i => node(i))
+      if secondaryValues.contains(key)
+      if primaryValues.contains(key)
+      value <- primaryValues(key)
+    } yield value).distinct
+
+    val joinedPositive = (for {
+      node <- negative
+      key = secondarySelector.map(i => node(i))
+      if !secondaryValues.contains(key)
+      if primaryValues.contains(key)
+      value <- primaryValues(key)
+    } yield value).distinct
+
+    forward(ChangeSet(joinedPositive, joinedNegative))
   }
 }
 
