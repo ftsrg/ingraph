@@ -238,7 +238,6 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
 
     val joinedNegative = for {
       node <- negative
-      if secondaryValues.contains(primarySelector.map(i => node(i)))
     } yield node
 
     forward(ChangeSet(joinedPositive, joinedNegative))
