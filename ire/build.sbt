@@ -6,11 +6,6 @@ version := "1.0"
 
 scalaVersion := "2.11.6"
 
-javaOptions += s"-Dcurrent.datetime=${
-  import java.time.format.DateTimeFormatter
-  java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-mm_ss"))
-}"
-
 showSuccess := false
 
 resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
