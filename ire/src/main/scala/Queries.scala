@@ -127,21 +127,9 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "signal" -> ((cs: ChangeSet) => signalChecker ! cs),
       "entry" -> ((cs: ChangeSet) => entrySemaphoreJoin ! Secondary(cs)),
       "follows" -> ((cs: ChangeSet) => followsEntryJoin ! Secondary(cs)),
-      "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs)),
-      "type" -> ((cs: ChangeSet) => {
-        if (cs.positive.size > 0) {
-          if (cs.positive(0)(1) == "Switch") {
-            switchSwitchPositionJoin ! Primary(cs)
-          }
-          if (cs.positive(0)(1) == "SwitchPosition")
-            switchSwitchPositionJoin ! Secondary(cs)
-        } else if (cs.negative.size > 0) {
-          if (cs.positive(0)(1) == "Switch")
-            switchSwitchPositionJoin ! Primary(cs)
-          if (cs.positive(0)(1) == "SwitchPosition")
-            switchSwitchPositionJoin ! Secondary(cs)
-        }
-      })
+      "switch" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
+      "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
+      "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
     )
     val inputNodes: List[ReteMessage => Unit] =
       List(signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
