@@ -110,11 +110,10 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   class SwitchSet extends TrainbenchmarkQuery {
   val system = ActorSystem()
   val production = system.actorOf(Props(new Production("SwitchSet")))
-  val finalJoin = system.actorOf(Props(new HashJoiner(production ! _, 3, Vector(2), 2, Vector(0))))
+  val finalJoin = system.actorOf(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
 
-  val rightTrimmer = system.actorOf(Props(new Trimmer(finalJoin ! Secondary(_), Vector(0, 1, 3))))
-  val inequality = system.actorOf(Props(new InequalityChecker(rightTrimmer ! _, 2, Vector(3))))
-  val switchPositionCurrentPositionJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 2, Vector(3), 2, Vector(0))))
+  val inequality = system.actorOf(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))))
+  val switchPositionCurrentPositionJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))))
   val switchSwitchPositionJoin = system.actorOf(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
 
   val followsEntryJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
