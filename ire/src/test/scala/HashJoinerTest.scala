@@ -4,8 +4,12 @@
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import hu.bme.mit.IQDcore._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import hu.bme.mit.incquerydcore.utils
+import hu.bme.mit.incquerydcore.ChangeSet
+import hu.bme.mit.incquerydcore.HashJoiner
+import hu.bme.mit.incquerydcore.Secondary
+import hu.bme.mit.incquerydcore.Primary
 
 class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {

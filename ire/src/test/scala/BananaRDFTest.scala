@@ -1,7 +1,7 @@
 import java.io.StringReader
-
-import hu.bme.mit.IQDcore.{JenaRDFReader, utils}
 import org.scalatest.FlatSpec
+import hu.bme.mit.incquerydcore.JenaRDFReader
+import hu.bme.mit.incquerydcore.utils
 
 
 class RdfReaderTest extends FlatSpec {

@@ -1,7 +1,8 @@
-import hu.bme.mit.IQDcore.IterableMultiMap
+import scala.collection.mutable
+
 import org.scalatest.WordSpec
 
-import scala.collection.mutable
+import hu.bme.mit.incquerydcore.IterableMultiMap
 
 /**
  * Created by wafle on 8/30/2015.

@@ -1,9 +1,8 @@
-
+package hu.bme.mit.incquerydcore
 import java.io.{InputStream, Reader}
 
 import com.hp.hpl.jena.graph.Node_Literal
 import org.w3.banana.jena.JenaModule
-package hu.bme.mit.IQDcore {
 
 /**
  * Created by Maginecz on 3/4/2015.
@@ -44,6 +43,4 @@ class JenaRDFReader(func: (Long, String, Any) => Unit,
   }
   graph.close()
   }
-}
-
 }
