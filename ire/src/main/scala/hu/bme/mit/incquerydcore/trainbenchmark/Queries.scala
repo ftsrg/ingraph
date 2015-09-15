@@ -212,19 +212,15 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val trimmer = system.actorOf(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
     val inputLookup = Map(
       "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
-      "type" -> ((cs: ChangeSet) => {
-        val pureCS = ChangeSet(
-          cs.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
-          cs.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
+      "type" -> ((rawCS: ChangeSet) => {
+        val cs = ChangeSet(
+          rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
+          rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
         )
         if (cs.positive.size > 0) {
-
-          if (cs.positive(0)(1) == "Switch") {
-            antijoin ! Primary(pureCS)
-          }
+            antijoin ! Primary(cs)
         } else if (cs.negative.size > 0) {
-          if (cs.negative(0)(1) == "Switch")
-            antijoin ! Primary(pureCS)
+            antijoin ! Primary(cs)
         }
       })
     )
