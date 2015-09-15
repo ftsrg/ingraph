@@ -1,11 +1,22 @@
 import java.io.ByteArrayOutputStream
 
-import akka.actor.ActorSystem
-import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import scala.Vector
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Matchers
+import org.scalatest.WordSpecLike
+
 import com.esotericsoftware.kryo.io.Output
-import com.twitter.chill.{Input, ScalaKryoInstantiator}
-import hu.bme.mit.IQDcore.{ChangeSet, WildcardInput}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import com.twitter.chill.Input
+import com.twitter.chill.ScalaKryoInstantiator
+
+import akka.actor.ActorSystem
+import akka.actor.actorRef2Scala
+import akka.testkit.ImplicitSender
+import akka.testkit.TestActors
+import akka.testkit.TestKit
+import hu.bme.mit.incquerydcore.ChangeSet
+import hu.bme.mit.incquerydcore.WildcardInput
 
 /**
  * Created by janosmaginecz on 05/05/15.

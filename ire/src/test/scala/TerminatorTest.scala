@@ -1,12 +1,15 @@
 import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import akka.util.Timeout
-import hu.bme.mit.IQDcore._
-import scala.concurrent.duration._
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-
 import scala.concurrent.Await
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.{Duration, _}
+import hu.bme.mit.incquerydcore.Production
+import hu.bme.mit.incquerydcore.HashJoiner
+import hu.bme.mit.incquerydcore.Terminator
+import hu.bme.mit.incquerydcore.Checker
+import hu.bme.mit.incquerydcore.Secondary
+import hu.bme.mit.incquerydcore.Primary
+import hu.bme.mit.incquerydcore.ChangeSet
 
 /**
  * Created by janosmaginecz on 10/05/15.

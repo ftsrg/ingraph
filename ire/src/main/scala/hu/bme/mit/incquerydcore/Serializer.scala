@@ -1,8 +1,7 @@
+package hu.bme.mit.incquerydcore
 import java.io.FileOutputStream
-
 import com.twitter.chill.{Output, ScalaKryoInstantiator}
-import hu.bme.mit.IQDcore.trainbenchmark.TrainbenchmarkReader
-package hu.bme.mit.IQDcore {
+import hu.bme.mit.incquerydcore.trainbenchmark.TrainbenchmarkReader
 
 /**
  * Created by Maginecz on 5/4/2015.
@@ -33,6 +32,4 @@ object Serializer {
     kryo.writeObject(output, inputNode)
     output.close()
   }
-}
-
 }

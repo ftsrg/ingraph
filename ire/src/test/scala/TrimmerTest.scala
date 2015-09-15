@@ -1,7 +1,17 @@
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.IQDcore.{Trimmer, ChangeSet}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import scala.Vector
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Matchers
+import org.scalatest.WordSpecLike
+
+import akka.actor.ActorSystem
+import akka.actor.Props
+import akka.actor.actorRef2Scala
+import akka.testkit.ImplicitSender
+import akka.testkit.TestActors
+import akka.testkit.TestKit
+import hu.bme.mit.incquerydcore.ChangeSet
+import hu.bme.mit.incquerydcore.Trimmer
 
 /**
  * Created by Maginecz on 3/16/2015.

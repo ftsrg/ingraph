@@ -1,9 +1,7 @@
+package hu.bme.mit.incquerydcore
 import java.util.concurrent.atomic.AtomicInteger
-
 import akka.actor.ActorRef
 import org.apache.log4j.LogManager
-package hu.bme.mit.IQDcore {
-
 import scala.collection.mutable
 
 /**
@@ -34,7 +32,7 @@ object utils {
     }
 
     def secondary(reteMessage: ReteMessage) = {
-      base ! Secondary(reteMessage)
+    		base ! Secondary(reteMessage)
     }
   }
 
@@ -66,6 +64,4 @@ trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B]{
     })
     (b1.result(), b2.result())
   }
-}
-
 }

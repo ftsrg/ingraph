@@ -1,9 +1,13 @@
-import hu.bme.mit.IQDcore.Workers.nodeType
-import hu.bme.mit.IQDcore._
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import hu.bme.mit.incquerydcore.InequalityChecker
+import hu.bme.mit.incquerydcore.EqualityChecker
+import hu.bme.mit.incquerydcore.ChangeSet
+import hu.bme.mit.incquerydcore.Checker
+import hu.bme.mit.incquerydcore.nodeType
+
 
 /**
  * Created by Maginecz on 4/10/2015.

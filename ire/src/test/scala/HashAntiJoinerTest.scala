@@ -1,7 +1,11 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import hu.bme.mit.IQDcore._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import hu.bme.mit.incquerydcore.utils
+import hu.bme.mit.incquerydcore.ChangeSet
+import hu.bme.mit.incquerydcore.HashAntiJoiner
+import hu.bme.mit.incquerydcore.Secondary
+import hu.bme.mit.incquerydcore.Primary
 
 /**
  * Created by Maginecz on 4/19/2015.

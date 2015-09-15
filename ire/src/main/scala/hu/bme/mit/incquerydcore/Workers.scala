@@ -1,21 +1,22 @@
+package hu.bme.mit.incquerydcore
+
 import java.io.InputStream
 
-import akka.actor.{Actor, ActorRef}
-import com.twitter.chill.{Input, ScalaKryoInstantiator}
-
-import scala.concurrent.{Future, Promise}
-package hu.bme.mit.IQDcore {
-
-import hu.bme.mit.IQDcore.Workers.nodeType
-
 import scala.collection.mutable
+import scala.collection.mutable.MultiMap
+import scala.concurrent.Future
+import scala.concurrent.Promise
+import scala.concurrent.Promise
 
+import com.twitter.chill.Input
+import com.twitter.chill.ScalaKryoInstantiator
+
+import akka.actor.Actor
+import akka.actor.ActorRef
+import akka.actor.ActorRef
 /**
  * Created by Maginecz on 3/16/2015.
  */
-package object Workers {
-  type nodeType = Vector[Any]
-}
 
 class ReteMessage() {}
 
@@ -56,6 +57,27 @@ object Terminator {
     productionNode ! ExpectMoreTerminators(id, inputs.size)
     inputs.foreach(_(new Probe(id, productionNode, List.empty[ActorRef])))
     new Terminator(id, inputs, productionNode)
+  }
+}
+
+trait ForkingForwarder {
+  val children: Vector[ReteMessage => Unit]
+
+  if (children.size < 2)
+    throw new IllegalArgumentException("use base class for 1 child node")
+
+  def forwardHashFunction(n: nodeType): Int
+
+  def forward(cs: ChangeSet) = {
+    cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(positive = kv._2.toVector)))
+    cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(negative = kv._2.toVector)))
+  }
+
+  def forward(t: Terminator) = children.foreach(_(t))
+
+  def forward(p: Probe) = {
+    p.forkMessage(children.size - 1)
+    children.foreach(_(p))
   }
 }
 
@@ -107,8 +129,6 @@ class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vec
     ))
   }
 }
-
-import scala.collection.mutable.MultiMap
 
 case class Primary(value: ReteMessage)
 
@@ -312,7 +332,6 @@ class Production(queryName: String) extends Actor {
 
   override def receive: Actor.Receive = {
     case ChangeSet(p, n) => {
-      val t1 = System.nanoTime()
       p.foreach {
         results.add(_)
       }
@@ -359,8 +378,8 @@ class WildcardInput(val messageSize:Int = 16) {
       negative.empty
     }
 
-    val positive =  createWildcardMap()
-    val negative= createWildcardMap()
+    val positive = createWildcardMap()
+    val negative = createWildcardMap()
 
     def add(subj: Long, pred: String, obj: Any) = {
       val map = positive.getOrElseUpdate(pred, createInnerMap())
@@ -399,7 +418,7 @@ class WildcardInput(val messageSize:Int = 16) {
   }
 
   def add(subj: Iterable[Long], pred: String, obj:Iterable[Any]) = {
-    val iterator =(subj zip obj)
+    val iterator = (subj zip obj)
     iterator.toVector.grouped(messageSize).foreach(
       msgGroup => subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
         sub => sub(ChangeSet(positive = msgGroup.map( msg => Vector(msg._1,msg._2))))
@@ -465,6 +484,4 @@ object WildcardInput {
     val input = new Input(stream)
     kryo.readObject(input, classOf[WildcardInput])
   }
-}
-
 }
