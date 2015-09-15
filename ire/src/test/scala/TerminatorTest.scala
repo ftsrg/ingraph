@@ -27,6 +27,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       input ! ChangeSet(positive = Vector(Vector(19)))
       val terminator = Terminator(List(input ! _), production)
       val future = terminator.send
+      input ! ChangeSet(positive = Vector(Vector(16)))
+      input ! ChangeSet(positive = Vector(Vector(17)))
       val expected = Set(Vector(15),Vector(19))
       Await.result(future, Duration(1,SECONDS)) == expected
     }
@@ -43,6 +45,9 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val terminator = Terminator(List(input ! _), production)
       val expected = Set(Vector(15))
       val future = terminator.send
+      input ! Primary(ChangeSet(positive = Vector(Vector(16))))
+      input ! Secondary(ChangeSet(positive = Vector(Vector(16))))
+      intermediary ! Primary(ChangeSet(positive = Vector(Vector(16))))
       Await.result(future, Duration(1,SECONDS)) == expected
     }
   }
