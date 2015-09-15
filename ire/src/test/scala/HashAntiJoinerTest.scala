@@ -58,6 +58,16 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       assert(node.secondaryValues.contains(Vector(1, 2)))
     }
   }
+  "send primary messages through when empty" in {
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, Vector(0, 1), Vector(0, 1))))
+    val msg = ChangeSet(
+      positive = Vector(Vector(5, 6, 7)),
+      negative = Vector(Vector(8, 9, 10))
+    )
+    joiner ! Primary(msg)
+    expectMsg(msg)
+  }
   "do simple antijoins" in {
     val prim = ChangeSet(
       positive = Vector(Vector(15, 16, 17, 18), Vector(4, 5, 6, 7))
