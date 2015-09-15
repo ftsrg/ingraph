@@ -1,13 +1,11 @@
 package hu.bme.mit.incquerydcore.trainbenchmark
 
 import java.io.FileInputStream
-
 import scala.Vector
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration.HOURS
-
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.actor.Props
@@ -27,6 +25,7 @@ import hu.bme.mit.incquerydcore.Trimmer
 import hu.bme.mit.incquerydcore.WildcardInput
 import hu.bme.mit.incquerydcore.nodeType
 import hu.bme.mit.incquerydcore.utils
+import hu.bme.mit.incquerydcore.KamonInitializer
 
 class TrainbenchmarkReader(input: WildcardInput) {
 
@@ -56,6 +55,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
   }
 }
 abstract class TrainbenchmarkQuery {
+  KamonInitializer.ping
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]

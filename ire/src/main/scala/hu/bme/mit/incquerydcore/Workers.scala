@@ -92,7 +92,7 @@ trait Forwarder {
 }
 
 abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder {
-
+  KamonInitializer.ping
   def onChangeSet(changeSet: ChangeSet)
 
   override def receive: Actor.Receive = {

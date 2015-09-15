@@ -3,6 +3,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.ActorRef
 import org.apache.log4j.LogManager
 import scala.collection.mutable
+import kamon.Kamon
 
 /**
  * Created by Maginecz on 4/28/2015.
@@ -45,7 +46,10 @@ trait ResultLogger {
     logger.info(s"fixed\t1\tnaive-rete\t${System.getProperty("inputSize")}\t$query\t$phase\t1\ttime\t$timeNano")
   }
 }
-
+object KamonInitializer {
+  Kamon.start();
+  def ping = true
+}
 class AtomicUniqueCounter {
   private val counter: AtomicInteger = new AtomicInteger(0)
 
