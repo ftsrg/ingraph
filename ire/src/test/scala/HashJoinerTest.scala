@@ -79,8 +79,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, 4, primarySel, 3, secondarySel)), name = "testSelector")
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet())
-      joiner ! Secondary(sec)
+            joiner ! Secondary(sec)
       expectMsg(ChangeSet(
         positive = Vector(Vector(15, 16, 17, 18, 13))
       ))
@@ -95,7 +94,6 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
           positive = Vector(Vector(5,6,7),Vector(10,11,7))
         )
       )
-      expectMsg(ChangeSet())
 
       joiner ! Secondary(ChangeSet(positive = Vector(Vector(7, 8))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(
@@ -114,7 +112,6 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
         positive = Vector(Vector(1, 5),Vector(2, 6))
         )
       )
-      expectMsg(ChangeSet())
 
       joiner ! Secondary(ChangeSet(
         positive = Vector(Vector(5, 10))
@@ -132,7 +129,6 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
         positive = Vector(Vector(2, 4),Vector(3, 4))
       )
       )
-      expectMsg(ChangeSet())
 
       joiner ! Secondary(ChangeSet(
         positive = Vector(Vector(4, 5))

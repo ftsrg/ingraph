@@ -69,8 +69,11 @@ trait ForkingForwarder {
   def forwardHashFunction(n: nodeType): Int
 
   def forward(cs: ChangeSet) = {
-    cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(positive = kv._2.toVector)))
-    cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(negative = kv._2.toVector)))
+    if (cs.positive.size > 0 || cs.negative.size > 0) {
+      cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(positive = kv._2.toVector)))
+      cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(negative = kv._2.toVector)))
+    }
+
   }
 
   def forward(t: Terminator) = children.foreach(_(t))
@@ -84,7 +87,7 @@ trait ForkingForwarder {
 trait Forwarder {
   val next: ReteMessage => Unit
 
-  def forward(cs: ChangeSet) = next(cs)
+  def forward(cs: ChangeSet) = if (cs.positive.size > 0 || cs.negative.size > 0) next(cs)
 
   def forward(terminator: TerminatorMessage) = next(terminator)
 
