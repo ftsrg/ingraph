@@ -1,6 +1,8 @@
 package hu.bme.mit.incquerydcore.trainbenchmark
 
 import java.io.FileInputStream
+import hu.bme.mit.incquerydcore
+
 import scala.Vector
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
@@ -146,8 +148,12 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
       "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
     )
+    import utils.ReteNode
     val inputNodes: List[ReteMessage => Unit] =
-      List(signalChecker ! _, entrySemaphoreJoin ! _, followsEntryJoin ! _, switchSwitchPositionJoin ! _, switchPositionCurrentPositionJoin ! _)
+      List(signalChecker ! _, entrySemaphoreJoin.secondary, followsEntryJoin.secondary,
+        switchSwitchPositionJoin.primary, switchSwitchPositionJoin.secondary,
+        switchPositionCurrentPositionJoin.secondary
+      )
     override val terminator = Terminator(inputNodes, production)
 
 
@@ -180,9 +186,13 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       }),
       "connectsTo" -> ((cs: ChangeSet) => sensorConnects ! Secondary(cs))
     )
-
+    import utils.ReteNode
     val inputNodes: List[ReteMessage => Unit] =
-      List(entryDefined ! _,exitDefined ! _,sensorConnects ! _, rightMostJoin ! _, finalJoin ! _)
+      List(
+        entryDefined.primary, entryDefined.secondary,
+        exitDefined.primary, exitDefined.secondary,
+        sensorConnects.primary, sensorConnects.secondary,
+        rightMostJoin.primary, finalJoin.secondary)
     override val terminator = Terminator(inputNodes, production)
 
   }
@@ -200,7 +210,12 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
       "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
     )
-    val inputNodes: List[ReteMessage => Unit] = List(antijoin ! _,sensorJoin ! _,followsJoin ! _)
+    import utils.ReteNode
+    val inputNodes: List[ReteMessage => Unit] =
+      List(
+        antijoin.secondary, sensorJoin.secondary,
+        followsJoin.primary, followsJoin.secondary
+      )
     override val terminator = Terminator(inputNodes, production)
   }
   class SwitchSensor extends TrainbenchmarkQuery {
@@ -225,7 +240,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       })
     )
 
-
-    val inputNodes: List[ReteMessage => Unit] = List(antijoin ! _, trimmer ! _)
+    import utils.ReteNode
+    val inputNodes: List[ReteMessage => Unit] = List(antijoin.primary, trimmer ! _)
     override val terminator = Terminator(inputNodes, production)
   }
