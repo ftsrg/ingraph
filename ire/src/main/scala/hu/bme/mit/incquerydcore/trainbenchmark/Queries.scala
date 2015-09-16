@@ -165,8 +165,8 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   val production = system.actorOf(Props(new Production("SemaphoreNeighbor")))
   val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
   val inequality = system.actorOf(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
-  val finalJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 6, Vector(4), 2, Vector(1))),"c")
-  val secondToLastJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(0))),"d")
+  val finalJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
+  val secondToLastJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
   val rightMostJoin = system.actorOf(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
   val sensorConnects = system.actorOf(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"f")
   val exitDefined = system.actorOf(Props(new HashJoiner(secondToLastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"g")
@@ -192,7 +192,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     entryDefined.primary, entryDefined.secondary,
     exitDefined.primary, exitDefined.secondary,
     sensorConnects.primary, sensorConnects.secondary,
-    rightMostJoin.primary, finalJoin.secondary)
+    rightMostJoin.secondary, finalJoin.secondary)
   override val terminator = Terminator(inputNodes, production)
 
   }
