@@ -349,7 +349,7 @@ class Production(queryName: String) extends Actor {
     case TerminatorMessage(terminatorID, messageID, route) => {
       receivedTerminatorCount(messageID) += 1
       if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)) {
-        val timeNano = getAndResetElapsedTime()
+
         terminatorPromises(messageID).success(results.toSet)
 
         receivedTerminatorCount.drop(messageID)
@@ -412,14 +412,6 @@ class WildcardInput(val messageSize:Int = 16) {
     transaction.close()
   }
 
-  def addSingleAttribute(subj: Long, pred: String, obj: Any): Unit = {
-    val map = multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
-    map.addBinding(subj,obj)
-    subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
-      sub => sub(ChangeSet(positive = Vector(Vector(subj,obj))))
-    )
-  }
-
   def add(subj: Iterable[Long], pred: String, obj:Iterable[Any]) = {
     val iterator = (subj zip obj)
     iterator.toVector.grouped(messageSize).foreach(
@@ -433,12 +425,6 @@ class WildcardInput(val messageSize:Int = 16) {
     }  )
   }
 
-  def removeSingleAttribute(subj: Long, pred: String, obj: Any): Unit = {
-    multiValueAttributes(pred).removeBinding(subj,obj)
-    subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
-      sub => sub(ChangeSet(negative = Vector(Vector(subj,obj))))
-    )
-  }
   def remove(subj: Iterable[Long], pred: String, obj:Iterable[Any]): Unit = {
     val iterator =(subj zip obj)
     iterator.toVector.grouped(messageSize).foreach(
