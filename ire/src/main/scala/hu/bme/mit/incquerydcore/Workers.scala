@@ -37,9 +37,9 @@ case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[Acto
 
 case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[Set[nodeType]]) extends ReteMessage()
 
-case class Pause() extends ReteMessage()
+case class Pause(messageID: Int) extends ReteMessage()
 
-case class Resume() extends ReteMessage()
+case class Resume(messageID: Int) extends ReteMessage()
 
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage {
   def send(): Future[Set[nodeType]] = {
@@ -48,7 +48,7 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
   production ! ExpectTerminator(terminatorID, messageID, promise)
   val future = promise.future
   inputs.foreach(input => {
-    input(Pause())
+    input(Pause(messageID))
     input(TerminatorMessage(terminatorID, messageID))
   })
   future
@@ -105,7 +105,12 @@ abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with For
 
   override def receive: Actor.Receive = {
   case pause: Pause => context.become({
-    case resume: Resume => context.unbecome(); unstashAll()
+    case resume: Resume => {
+    if (resume.messageID == pause.messageID) {
+      context.unbecome()
+      unstashAll()
+    } else stash()
+    }
     case terminator: TerminatorMessage => forward(terminator)
     case _ => stash()
   })
@@ -122,23 +127,62 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
 
   def onSecondary(changeSet: ChangeSet)
 
+  var primaryPause: Option[Pause] = None
+  var secondaryPause: Option[Pause] = None
   override def receive: Actor.Receive = {
-  case Primary(changeSet: ChangeSet) => onPrimary(changeSet)
-  case Secondary(changeSet: ChangeSet) => onSecondary(changeSet)
+  case Primary(reteMessage: ReteMessage) => {
+    primaryPause match {
+    case Some(pause) => {
+      reteMessage match {
+      case resume: Resume =>{
+        if (resume.messageID == pause.messageID)
+        primaryPause = None
+        if (secondaryPause.isEmpty)
+        unstashAll()
+      }
+      case terminator: TerminatorMessage => {
+        if (terminator.messageID == pause.messageID)
+        forward(terminator)
+        else
+        stash()
+      }
+      case other => stash()
+      }
+    }
+    case None => reteMessage match {
+      case pause: Pause => primaryPause = Some(pause)
+      case cs: ChangeSet => onPrimary(cs)
+      case t: TerminatorMessage => forward(t)
+    }
+    }
+  }
+  case Secondary(reteMessage: ReteMessage) => {
+    secondaryPause match  {
+    case Some(pause) => {
+      reteMessage match {
+      case resume: Resume =>{
+        if (resume.messageID == pause.messageID)
+        secondaryPause = None
+        if (primaryPause.isEmpty)
+        unstashAll()
+      }
+      case terminator: TerminatorMessage => {
+        if (terminator.messageID == pause.messageID)
+        forward(terminator)
+        else
+        stash()
+      }
+      case other => stash()
+      }
+    }
+    case None => reteMessage match {
+      case pause: Pause => secondaryPause = Some(pause)
+      case cs: ChangeSet => onSecondary(cs)
+      case t: TerminatorMessage => forward(t)
+    }
 
-  case probe: Probe => forward(probe.exec(self))
-  case Primary(probe: Probe) => forward(probe.exec(self))
-  case Secondary(probe: Probe) => forward(probe.exec(self))
-  case terminator: TerminatorMessage => forward(terminator)
-  case Primary(terminator: TerminatorMessage) => forward(terminator)
-  case Secondary(terminator: TerminatorMessage) => forward(terminator)
-  case pause: Pause => context.become({
-    case resume: Resume => context.unbecome(); unstashAll()
-    case terminator: TerminatorMessage => forward(terminator)
-    case Primary(terminator: TerminatorMessage) => forward(terminator)
-    case Secondary(terminator: TerminatorMessage) => forward(terminator)
-    case _ => stash()
-  })
+    }
+  }
   case other => throw new UnsupportedOperationException(s"beta received unsupported msg $other")
   }
 }
@@ -363,7 +407,6 @@ class Production(queryName: String) extends Actor {
     }
   }
   case ExpectMoreTerminators(terminatorID, count, inputs) => {
-
     val current = expectedTerminators.getOrElseUpdate(terminatorID, 0)
     expectedTerminators(terminatorID) = current + count
     if (inputs.nonEmpty)
@@ -372,8 +415,7 @@ class Production(queryName: String) extends Actor {
   case TerminatorMessage(terminatorID, messageID, route) => {
     receivedTerminatorCount(messageID) += 1
     if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)) {
-
-    inputsToResume(terminatorID).foreach( input => input(Resume()))
+    inputsToResume(terminatorID).foreach( input => input(Resume(messageID)))
     terminatorPromises(messageID).success(results.toSet)
     receivedTerminatorCount.drop(messageID)
     terminatorPromises.drop(messageID)
