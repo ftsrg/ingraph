@@ -91,37 +91,49 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   println("connected-segments")
   val system = ActorSystem()
   val production = system.actorOf(Props(new Production("ConnectedSegments")))
+  val sensorJoinSecond = system.actorOf(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
+  val sensorJoinFirst = system.actorOf(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))))
+  val join1234_5 = system.actorOf(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))))
 
-  val inequality6_4321 = system.actorOf(Props(new InequalityChecker(production ! _, 6, Vector(5, 4, 3, 2, 1, 0))))
-  val inequality5_4321 = system.actorOf(Props(new InequalityChecker(inequality6_4321 ! _, 5, Vector(6, 4, 3, 2, 1, 0))))
-  val join1234_56 = system.actorOf(Props(new HashJoiner(inequality5_4321 ! _, 5, Vector(0), 2, Vector(0))))
+  val join12_34 = system.actorOf(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))))
 
-  val inequality2_34 = system.actorOf(Props(new InequalityChecker(join1234_56 ! Primary(_), 2, Vector(0, 1, 3, 4))))
-  val inequality1_34 = system.actorOf(Props(new InequalityChecker(inequality2_34 ! _, 1, Vector(0, 23, 4))))
-  val join12_34 = system.actorOf(Props(new HashJoiner(inequality1_34 ! _, 3, Vector(0), 3, Vector(0))))
-
-  val inequality5_6 = system.actorOf(Props(new InequalityChecker(join1234_56 ! Secondary(_), 1, Vector(2, 0))))
-  val join5_6 = system.actorOf(Props(new HashJoiner(inequality5_6 ! _, 2, Vector(0), 2, Vector(0))))
-
-  val inequality3_4 = system.actorOf(Props(new InequalityChecker(join12_34 ! Secondary(_), 1, Vector(2, 0))))
-  val join3_4 = system.actorOf(Props(new HashJoiner(inequality3_4 ! _, 2, Vector(0), 2, Vector(0))))
-
-  val inequality1_2 = system.actorOf(Props(new InequalityChecker(join12_34 ! Primary(_), 2, Vector(1, 0))))
-  val join1_2 = system.actorOf(Props(new HashJoiner(inequality1_2 ! _, 2, Vector(0), 2, Vector(0))))
-
+  val join3_4 = system.actorOf(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))))
+  val join1_2 = system.actorOf(Props(new HashJoiner(join12_34 ! Primary(_), 2, Vector(1), 2, Vector(0))))
+  val joinSegment1 = system.actorOf(Props(new HashJoiner(join1_2 ! Primary(_), 2, Vector(0), 1, Vector(0))))
   override val inputLookup = Map(
     "connectsTo" -> ((cs: ChangeSet) => {
-      join1_2 ! Primary(cs)
+      joinSegment1 ! Primary(cs)
       join1_2 ! Secondary(cs)
       join3_4 ! Primary(cs)
       join3_4 ! Secondary(cs)
-      join5_6 ! Primary(cs)
-      join5_6 ! Secondary(cs)
-
+      join1234_5 ! Secondary(cs)
+    }),
+    "sensor" -> ((cs: ChangeSet) => {
+      sensorJoinFirst ! Secondary(cs)
+      sensorJoinSecond ! Secondary(cs)
+    }),
+    "type" -> ((rawCS: ChangeSet) => {
+      val cs = ChangeSet(
+        rawCS.positive.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0))),
+        rawCS.negative.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0)))
+      )
+      if (cs.positive.size > 0) {
+        joinSegment1 ! Secondary(cs)
+      } else if (cs.negative.size > 0) {
+        joinSegment1 ! Secondary(cs)
+      }
     })
   )
+  import utils.ReteNode
   val inputNodes: List[ReteMessage => Unit] =
-    List(join1_2 ! _, join3_4 ! _, join5_6 ! _)
+    List(
+      joinSegment1.primary, joinSegment1.secondary,
+      join1_2.secondary,
+      join3_4.primary, join3_4.secondary,
+      join1234_5.secondary,
+      sensorJoinFirst.secondary,
+      sensorJoinSecond.secondary
+    )
   override val terminator = Terminator(inputNodes, production)
 }
   class SwitchSet extends TrainbenchmarkQuery {
