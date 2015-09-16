@@ -4,16 +4,13 @@ import java.io.InputStream
 
 import scala.collection.mutable
 import scala.collection.mutable.MultiMap
-import scala.concurrent.Future
-import scala.concurrent.Promise
-import scala.concurrent.Promise
+import scala.concurrent.duration.{Duration, _}
+import scala.concurrent.{ExecutionContext, Await, Future, Promise}
 
 import com.twitter.chill.Input
 import com.twitter.chill.ScalaKryoInstantiator
 
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.ActorRef
+import akka.actor.{Stash, Actor, ActorRef}
 /**
  * Created by Maginecz on 3/16/2015.
  */
@@ -33,19 +30,28 @@ class Probe(id: Int, production: ActorRef, route: List[ActorRef]) extends ReteMe
   }
 }
 
-case class ExpectMoreTerminators(id: Int, count: Int)
+case class ExpectMoreTerminators(id: Int, count: Int,
+                 val inputs:Iterable[ReteMessage => Unit] = Iterable.empty[ReteMessage => Unit])
 
 case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
 
 case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[Set[nodeType]]) extends ReteMessage()
+
+case class Pause() extends ReteMessage()
+
+case class Resume() extends ReteMessage()
 
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage {
   def send(): Future[Set[nodeType]] = {
   val messageID = Terminator.idCounter.getNext()
   val promise = Promise[Set[nodeType]]
   production ! ExpectTerminator(terminatorID, messageID, promise)
-  inputs.foreach(_(TerminatorMessage(terminatorID, messageID)))
-  promise.future
+  val future = promise.future
+  inputs.foreach(input => {
+    input(Pause())
+    input(TerminatorMessage(terminatorID, messageID))
+  })
+  future
   }
 }
 
@@ -54,8 +60,7 @@ object Terminator {
 
   def apply(inputs: Iterable[ReteMessage => Unit], productionNode: ActorRef): Terminator = {
   val id = idCounter.getNext()
-  productionNode ! ExpectMoreTerminators(id, inputs.size)
-  inputs.foreach(_(new Probe(id, productionNode, List.empty[ActorRef])))
+  productionNode ! ExpectMoreTerminators(id, inputs.size, inputs)
   new Terminator(id, inputs, productionNode)
   }
 }
@@ -94,18 +99,24 @@ trait Forwarder {
   def forward(probe: Probe) = next(probe)
 }
 
-abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder {
+abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder with Stash {
   KamonInitializer.ping
   def onChangeSet(changeSet: ChangeSet)
 
   override def receive: Actor.Receive = {
+  case pause: Pause => context.become({
+    case resume: Resume => context.unbecome(); unstashAll()
+    case terminator: TerminatorMessage => forward(terminator)
+    case _ => stash()
+  })
   case changeSet: ChangeSet => onChangeSet(changeSet)
   case probe: Probe => forward(probe.exec(self))
   case terminator: TerminatorMessage => forward(terminator)
+  case other => throw new UnsupportedOperationException(s"alpha received unsupported msg $other")
   }
 }
 
-abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder {
+abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder with Stash {
 
   def onPrimary(changeSet: ChangeSet)
 
@@ -121,6 +132,14 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
   case terminator: TerminatorMessage => forward(terminator)
   case Primary(terminator: TerminatorMessage) => forward(terminator)
   case Secondary(terminator: TerminatorMessage) => forward(terminator)
+  case pause: Pause => context.become({
+    case resume: Resume => context.unbecome(); unstashAll()
+    case terminator: TerminatorMessage => forward(terminator)
+    case Primary(terminator: TerminatorMessage) => forward(terminator)
+    case Secondary(terminator: TerminatorMessage) => forward(terminator)
+    case _ => stash()
+  })
+  case other => throw new UnsupportedOperationException(s"beta received unsupported msg $other")
   }
 }
 
@@ -324,6 +343,7 @@ class Production(queryName: String) extends Actor {
 
   val results = new mutable.HashSet[nodeType]
   val terminatorPromises = mutable.Map.empty[Int, Promise[Set[nodeType]]]
+  val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
 
 
   def getAndResetElapsedTime(): Long = {
@@ -342,16 +362,19 @@ class Production(queryName: String) extends Actor {
     results.remove(_)
     }
   }
-  case ExpectMoreTerminators(id, count) => {
-    val current = expectedTerminators.getOrElseUpdate(id, 0)
-    expectedTerminators(id) = current + 1
+  case ExpectMoreTerminators(terminatorID, count, inputs) => {
+
+    val current = expectedTerminators.getOrElseUpdate(terminatorID, 0)
+    expectedTerminators(terminatorID) = current + count
+    if (inputs.nonEmpty)
+    inputsToResume(terminatorID) = inputs
   }
   case TerminatorMessage(terminatorID, messageID, route) => {
     receivedTerminatorCount(messageID) += 1
     if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)) {
 
+    inputsToResume(terminatorID).foreach( input => input(Resume()))
     terminatorPromises(messageID).success(results.toSet)
-
     receivedTerminatorCount.drop(messageID)
     terminatorPromises.drop(messageID)
 
