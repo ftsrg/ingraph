@@ -61,12 +61,13 @@ abstract class TrainbenchmarkQuery {
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]
-
+  val system: ActorSystem
   val terminator: Terminator
 
   def getResults(): Set[nodeType] = {
     Await.result(terminator.send, timeout)
   }
+  def shutdown() = system.terminate()
 }
 class PosLength extends TrainbenchmarkQuery {
   println("poslength")
