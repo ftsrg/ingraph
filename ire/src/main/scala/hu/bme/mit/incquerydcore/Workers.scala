@@ -442,8 +442,8 @@ class WildcardInput(val messageSize:Int = 16) {
 
   class Transaction {
     def close(): Unit = {
-      positive.empty
-      negative.empty
+      positive.clear()
+      negative.clear()
     }
 
     val positive = createWildcardMap()
