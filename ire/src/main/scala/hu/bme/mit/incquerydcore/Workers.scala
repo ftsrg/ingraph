@@ -464,12 +464,12 @@ class WildcardInput(val messageSize:Int = 16) {
   }
 
   def processTransaction(transaction: Transaction): Unit = {
-    transaction.negative.foreach{ case(pred, map) =>{
+    transaction.negative.par.foreach{ case(pred, map) =>{
       val (obj, subj) = map.multiUnzip
       remove(obj,pred,subj)
       }
     }
-    transaction.positive.foreach { case (pred, map) => {
+    transaction.positive.par.foreach { case (pred, map) => {
       val (obj, subj) = map.multiUnzip
       add(obj, pred, subj)
       }
@@ -484,10 +484,10 @@ class WildcardInput(val messageSize:Int = 16) {
         sub => sub(ChangeSet(positive = msgGroup.map( msg => Vector(msg._1,msg._2))))
       )
     )
-    iterator.foreach( tup =>{
-      val map = multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
-      map.addBinding(tup._1, tup._2)
-    }  )
+    val map = multiValueAttributes.synchronized {
+      multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
+    }
+    iterator.foreach( tup => map.addBinding(tup._1, tup._2) )
   }
 
   def remove(subj: Iterable[Long], pred: String, obj:Iterable[Any]): Unit = {
@@ -497,11 +497,10 @@ class WildcardInput(val messageSize:Int = 16) {
         sub => sub(ChangeSet(negative = msgGroup.map( msg => Vector(msg._1,msg._2))))
       )
     )
-    iterator.foreach( tup => {
-      val map = multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
-      map.removeBinding(tup._1, tup._2)
+    val map = multiValueAttributes.synchronized {
+      multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
     }
-  )
+    iterator.foreach( tup => map.removeBinding(tup._1, tup._2) )
   }
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
