@@ -1,33 +1,14 @@
 package hu.bme.mit.incquerydcore.trainbenchmark
 
 import java.io.FileInputStream
-import hu.bme.mit.incquerydcore
 
-import scala.Vector
+import akka.actor._
+import akka.remote.RemoteScope
+import hu.bme.mit.incquerydcore.{ChangeSet, Checker, HashAntiJoiner, HashJoiner, InequalityChecker, JenaRDFReader, KamonInitializer, Primary, Production, ReteMessage, Secondary, Terminator, Trimmer, WildcardInput, nodeType, utils}
+
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import scala.concurrent.duration.HOURS
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.actorRef2Scala
-import hu.bme.mit.incquerydcore.ChangeSet
-import hu.bme.mit.incquerydcore.Checker
-import hu.bme.mit.incquerydcore.HashAntiJoiner
-import hu.bme.mit.incquerydcore.HashJoiner
-import hu.bme.mit.incquerydcore.InequalityChecker
-import hu.bme.mit.incquerydcore.JenaRDFReader
-import hu.bme.mit.incquerydcore.Primary
-import hu.bme.mit.incquerydcore.Production
-import hu.bme.mit.incquerydcore.ReteMessage
-import hu.bme.mit.incquerydcore.Secondary
-import hu.bme.mit.incquerydcore.Terminator
-import hu.bme.mit.incquerydcore.Trimmer
-import hu.bme.mit.incquerydcore.WildcardInput
-import hu.bme.mit.incquerydcore.nodeType
-import hu.bme.mit.incquerydcore.utils
-import hu.bme.mit.incquerydcore.KamonInitializer
+import scala.concurrent.duration.{Duration, HOURS}
 
 class TrainbenchmarkReader(input: WildcardInput) {
 
@@ -63,14 +44,32 @@ abstract class TrainbenchmarkQuery {
   val inputLookup: Map[String, ChangeSet => Unit]
   val system: ActorSystem
   val terminator: Terminator
-
+  lazy val log = system.log
   def getResults(): Set[nodeType] = {
-    Await.result(terminator.send, timeout)
+    log.info("termination started")
+    val res = Await.result(terminator.send, timeout)
+    log.info("termination finished")
+    res
   }
-  def shutdown() = system.terminate()
+  def shutdown(): Unit = Await.result(system.terminate(), timeout)
 }
+
+abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery{
+
+  val remoteActors = new collection.mutable.MutableList[ActorRef]()
+  def newRemote(props: Props, address: Address): ActorRef = {
+    val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(address))))
+    remoteActors += actor
+    actor
+  }
+  override def shutdown: Unit = {
+    remoteActors.foreach( actor => actor ! PoisonPill)
+    super.shutdown()
+  }
+}
+
 class PosLength extends TrainbenchmarkQuery {
-  println("poslength")
+
   val system = ActorSystem()
   override val production: ActorRef = system.actorOf(Props(new Production("PosLength")))
   val trimmer = system.actorOf(Props(new Trimmer(production ! _, Vector(0, 1))))
