@@ -2,15 +2,14 @@ package hu.bme.mit.incquerydcore
 
 import java.io.InputStream
 
+import akka.actor.{Actor, ActorRef, Stash}
+import akka.dispatch.Dispatchers
+import com.twitter.chill.{Input, ScalaKryoInstantiator}
+
 import scala.collection.mutable
 import scala.collection.mutable.MultiMap
-import scala.concurrent.duration.{Duration, _}
-import scala.concurrent.{ExecutionContext, Await, Future, Promise}
+import scala.concurrent.{Future, Promise}
 
-import com.twitter.chill.Input
-import com.twitter.chill.ScalaKryoInstantiator
-
-import akka.actor.{Stash, Actor, ActorRef}
 /**
  * Created by Maginecz on 3/16/2015.
  */
@@ -20,18 +19,7 @@ class ReteMessage() {}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
   extends ReteMessage()
 
-class Probe(id: Int, production: ActorRef, route: List[ActorRef]) extends ReteMessage {
-  def forkMessage(count: Int): Unit = {
-  production ! ExpectMoreTerminators(id, count: Int)
-  }
-
-  def exec(current: ActorRef): Probe = {
-  new Probe(id, production, current :: route)
-  }
-}
-
-case class ExpectMoreTerminators(id: Int, count: Int,
-                 val inputs:Iterable[ReteMessage => Unit] = Iterable.empty[ReteMessage => Unit])
+case class ExpectMoreTerminators(val id: Int, val inputs: Iterable[ReteMessage => Unit])
 
 case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
 
@@ -60,7 +48,7 @@ object Terminator {
 
   def apply(inputs: Iterable[ReteMessage => Unit], productionNode: ActorRef): Terminator = {
   val id = idCounter.getNext()
-  productionNode ! ExpectMoreTerminators(id, inputs.size, inputs)
+  productionNode ! ExpectMoreTerminators(id, inputs)
   new Terminator(id, inputs, productionNode)
   }
 }
@@ -74,19 +62,12 @@ trait ForkingForwarder {
   def forwardHashFunction(n: nodeType): Int
 
   def forward(cs: ChangeSet) = {
-  if (cs.positive.size > 0 || cs.negative.size > 0) {
-    cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(positive = kv._2.toVector)))
-    cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => children(kv._1)(ChangeSet(negative = kv._2.toVector)))
+    cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1)(ChangeSet(positive = kv._2.toVector)))
+    cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1)(ChangeSet(negative = kv._2.toVector)))
   }
 
-  }
+  def forward(t: TerminatorMessage) = children.foreach(_ (t))
 
-  def forward(t: Terminator) = children.foreach(_(t))
-
-  def forward(p: Probe) = {
-  p.forkMessage(children.size - 1)
-  children.foreach(_(p))
-  }
 }
 
 trait Forwarder {
@@ -95,12 +76,25 @@ trait Forwarder {
   def forward(cs: ChangeSet) = if (cs.positive.size > 0 || cs.negative.size > 0) next(cs)
 
   def forward(terminator: TerminatorMessage) = next(terminator)
-
-  def forward(probe: Probe) = next(probe)
 }
 
-abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder with Stash {
+trait TerminatorHandler {
+  val expectedTerminatorCount: Int
+  val terminatorCount = new mutable.HashMap[Int, Int]
+  def forward(terminator: TerminatorMessage)
+  def handleTerminator(terminator: TerminatorMessage): Unit = {
+  val count = terminatorCount.getOrElse(terminator.messageID, 0) + 1
+  println("Terminator received: ", count)
+  if ( count == expectedTerminatorCount) {
+    println("terminator sent")
+    forward(terminator)
+  }
+  terminatorCount(terminator.messageID) = count
+  }
+}
+abstract class AlphaNode(val next: (ReteMessage) => Unit, val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
   KamonInitializer.ping
+  val log = context.system.log
   def onChangeSet(changeSet: ChangeSet)
 
   override def receive: Actor.Receive = {
@@ -111,17 +105,16 @@ abstract class AlphaNode(val next: (ReteMessage) => Unit) extends Actor with For
       unstashAll()
     } else stash()
     }
-    case terminator: TerminatorMessage => forward(terminator)
+    case terminator: TerminatorMessage => handleTerminator(terminator)
     case _ => stash()
   })
   case changeSet: ChangeSet => onChangeSet(changeSet)
-  case probe: Probe => forward(probe.exec(self))
-  case terminator: TerminatorMessage => forward(terminator)
+  case terminator: TerminatorMessage => handleTerminator(terminator)
   case other => throw new UnsupportedOperationException(s"alpha received unsupported msg $other")
   }
 }
 
-abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forwarder with Stash {
+abstract class BetaNode(val next: (ReteMessage) => Unit, val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
 
   def onPrimary(changeSet: ChangeSet)
 
@@ -142,7 +135,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
       }
       case terminator: TerminatorMessage => {
         if (terminator.messageID == pause.messageID)
-        forward(terminator)
+        handleTerminator(terminator)
         else
         stash()
       }
@@ -152,7 +145,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
     case None => reteMessage match {
       case pause: Pause => primaryPause = Some(pause)
       case cs: ChangeSet => onPrimary(cs)
-      case t: TerminatorMessage => forward(t)
+      case t: TerminatorMessage => handleTerminator(t)
     }
     }
   }
@@ -168,7 +161,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
       }
       case terminator: TerminatorMessage => {
         if (terminator.messageID == pause.messageID)
-        forward(terminator)
+        handleTerminator(terminator)
         else
         stash()
       }
@@ -178,7 +171,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit) extends Actor with Forw
     case None => reteMessage match {
       case pause: Pause => secondaryPause = Some(pause)
       case cs: ChangeSet => onSecondary(cs)
-      case t: TerminatorMessage => forward(t)
+      case t: TerminatorMessage => handleTerminator(t)
     }
 
     }
@@ -202,7 +195,8 @@ case class Secondary(value: ReteMessage)
 
 class HashJoiner(override val next: (ReteMessage) => Unit,
          val primaryLength: Int, val primarySelector: Vector[Int],
-         val secondaryLength: Int, val secondarySelector: Vector[Int])
+         val secondaryLength: Int, val secondarySelector: Vector[Int],
+         override val expectedTerminatorCount:Int = 2)
   extends BetaNode(next) {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with mutable.MultiMap[nodeType, nodeType]
@@ -281,7 +275,8 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
 }
 
 class Checker(override val next: (ReteMessage) => Unit,
-        val condition: (nodeType) => Boolean) extends AlphaNode(next) {
+        val condition: (nodeType) => Boolean,
+        override val expectedTerminatorCount:Int = 1) extends AlphaNode(next) {
   def onChangeSet(changeSet: ChangeSet): Unit = {
   forward(ChangeSet(
     changeSet.positive.filter(condition),
@@ -291,14 +286,16 @@ class Checker(override val next: (ReteMessage) => Unit,
 }
 
 class InequalityChecker(override val next: (ReteMessage) => Unit,
-            val nodeIndex: Int, val inequals: Vector[Int]) extends
+            val nodeIndex: Int, val inequals: Vector[Int],
+            override val expectedTerminatorCount:Int = 1) extends
 Checker(next, condition = (node: nodeType) => {
   !inequals.map { i => node(i) }.exists { value => value == node(nodeIndex) }
 }
 )
 
 class EqualityChecker(override val next: (ReteMessage) => Unit,
-            val nodeIndex: Int, val equals: Vector[Int]) extends
+            val nodeIndex: Int, val equals: Vector[Int],
+            override val expectedTerminatorCount:Int = 1) extends
 Checker(next, condition = (node: nodeType) => {
   equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
 }
@@ -306,7 +303,8 @@ Checker(next, condition = (node: nodeType) => {
 
 class HashAntiJoiner(override val next: (ReteMessage) => Unit,
            val primarySelector: Vector[Int],
-           val secondarySelector: Vector[Int])
+           val secondarySelector: Vector[Int],
+           override val expectedTerminatorCount:Int = 2)
   extends BetaNode(next) {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
@@ -379,8 +377,9 @@ class HashAntiJoiner(override val next: (ReteMessage) => Unit,
   }
 }
 
-class Production(queryName: String) extends Actor {
-  var expectedTerminators = mutable.Map.empty[Int, Int]
+class Production(queryName: String, val expectedTerminatorCount:Int = 1) extends Actor {
+  val log = context.system.log
+
   val receivedTerminatorCount = mutable.Map.empty[Int, Int]
 
   var t0 = System.nanoTime()
@@ -406,16 +405,14 @@ class Production(queryName: String) extends Actor {
     results.remove(_)
     }
   }
-  case ExpectMoreTerminators(terminatorID, count, inputs) => {
-    val current = expectedTerminators.getOrElseUpdate(terminatorID, 0)
-    expectedTerminators(terminatorID) = current + count
-    if (inputs.nonEmpty)
-    inputsToResume(terminatorID) = inputs
-  }
+
+  case ExpectMoreTerminators(terminatorID, inputs) => inputsToResume(terminatorID) = inputs
+
   case TerminatorMessage(terminatorID, messageID, route) => {
+    log.info(s"terminator$messageID received")
     receivedTerminatorCount(messageID) += 1
-    if (receivedTerminatorCount(messageID) == expectedTerminators(terminatorID)) {
-    inputsToResume(terminatorID).foreach( input => input(Resume(messageID)))
+    if (receivedTerminatorCount(messageID) == expectedTerminatorCount) {
+    inputsToResume(terminatorID).foreach(input => input(Resume(messageID)))
     terminatorPromises(messageID).success(results.toSet)
     receivedTerminatorCount.drop(messageID)
     terminatorPromises.drop(messageID)
@@ -429,15 +426,16 @@ class Production(queryName: String) extends Actor {
   }
 }
 
-class WildcardInput(val messageSize:Int = 16) {
-//  val types = new mutable.HashMap[String, mutable.Set[Long]]()
+class WildcardInput(val messageSize: Int = 16) {
+  //  val types = new mutable.HashMap[String, mutable.Set[Long]]()
   val multiValueAttributes = createWildcardMap
-//  val attributes = new mutable.HashMap[String, mutable.Map[Long, Any]]
+  //  val attributes = new mutable.HashMap[String, mutable.Map[Long, Any]]
 
   @transient val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
 
-  private def createWildcardMap() =  new mutable.HashMap[String, mutable.HashMap[Long,mutable.Set[Any]] with IterableMultiMap[Long,Any]]
-  private def createInnerMap() = new mutable.HashMap[Long,mutable.Set[Any]] with IterableMultiMap[Long, Any]
+  private def createWildcardMap() = new mutable.HashMap[String, mutable.HashMap[Long, mutable.Set[Any]] with IterableMultiMap[Long, Any]]
+
+  private def createInnerMap() = new mutable.HashMap[Long, mutable.Set[Any]] with IterableMultiMap[Long, Any]
 
 
   class Transaction {
@@ -453,6 +451,7 @@ class WildcardInput(val messageSize:Int = 16) {
     val map = positive.getOrElseUpdate(pred, createInnerMap())
     map.addBinding(subj, obj)
   }
+
   def remove(subj: Long, pred: String, obj: Any) = {
     val map = negative.getOrElseUpdate(pred, createInnerMap())
     map.addBinding(subj, obj)
@@ -464,55 +463,55 @@ class WildcardInput(val messageSize:Int = 16) {
   }
 
   def processTransaction(transaction: Transaction): Unit = {
-  transaction.negative.par.foreach{ case(pred, map) =>{
+  transaction.negative.par.foreach { case (pred, map) => {
     val (obj, subj) = map.multiUnzip
-    remove(obj,pred,subj)
-    }
+    remove(obj, pred, subj)
+  }
   }
   transaction.positive.par.foreach { case (pred, map) => {
     val (obj, subj) = map.multiUnzip
     add(obj, pred, subj)
-    }
+  }
   }
   transaction.close()
   }
 
-  def add(subj: Iterable[Long], pred: String, obj:Iterable[Any]) = {
+  def add(subj: Iterable[Long], pred: String, obj: Iterable[Any]) = {
   val iterator = (subj zip obj)
   iterator.toVector.grouped(messageSize).foreach(
     msgGroup => subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
-    sub => sub(ChangeSet(positive = msgGroup.map( msg => Vector(msg._1,msg._2))))
+    sub => sub(ChangeSet(positive = msgGroup.map(msg => Vector(msg._1, msg._2))))
     )
   )
   val map = multiValueAttributes.synchronized {
     multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
   }
-  iterator.foreach( tup => map.addBinding(tup._1, tup._2) )
+  iterator.foreach(tup => map.addBinding(tup._1, tup._2))
   }
 
-  def remove(subj: Iterable[Long], pred: String, obj:Iterable[Any]): Unit = {
-  val iterator =(subj zip obj)
+  def remove(subj: Iterable[Long], pred: String, obj: Iterable[Any]): Unit = {
+  val iterator = (subj zip obj)
   iterator.toVector.grouped(messageSize).foreach(
     msgGroup => subscribers(pred).foreach(
-    sub => sub(ChangeSet(negative = msgGroup.map( msg => Vector(msg._1,msg._2))))
+    sub => sub(ChangeSet(negative = msgGroup.map(msg => Vector(msg._1, msg._2))))
     )
   )
   val map = multiValueAttributes.synchronized {
     multiValueAttributes.getOrElseUpdate(pred, createInnerMap())
   }
-  iterator.foreach( tup => map.removeBinding(tup._1, tup._2) )
+  iterator.foreach(tup => map.removeBinding(tup._1, tup._2))
   }
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
   sendAll(recipient = subscriber)
-  for ( (attribute, func) <- subscriber )
+  for ((attribute, func) <- subscriber)
     subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
 
   def sendAll(recipient: Map[String, (ChangeSet) => Unit]) = {
-  for ( (attribute, func) <- recipient ) {
+  for ((attribute, func) <- recipient) {
     for ((id, values) <- multiValueAttributes.getOrElseUpdate(attribute, createInnerMap);
-       output <- values.grouped(messageSize) )
+       output <- values.grouped(messageSize))
     func(ChangeSet(positive = output.toVector.map((v) => Vector(id, v))))
   }
   }
