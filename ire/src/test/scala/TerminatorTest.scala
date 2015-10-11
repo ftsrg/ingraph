@@ -18,8 +18,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "propagate terminator messages" in {
       import hu.bme.mit.incquerydcore.utils
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val production = system.actorOf(Props(new Production("")))
-      val intermediary = system.actorOf(Props(new Checker(production ! _, c => true)))
+      val production = system.actorOf(Props(new Production("alpha test", 2)))
+      val intermediary = system.actorOf(Props(new Checker(production ! _, c => true, expectedTerminatorCount = 2)))
       val input1 = system.actorOf(Props(new Checker(production ! _, c => true)))
       input1 ! ChangeSet(positive = Vector(Vector(15)))
       input1 ! ChangeSet(positive = Vector(Vector(19)))
@@ -43,10 +43,10 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "beta nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val production = system.actorOf(Props(new Production("")))
-      val checker = system.actorOf(Props(new Checker(production ! _, c => true)))
-      val intermediary = system.actorOf(Props(new HashJoiner(checker ! _,1,Vector(0),1,Vector(0))))
-      val input1 = system.actorOf(Props(new HashJoiner(intermediary ! Primary(_),1,Vector(0), 1,Vector(0))))
+      val production = system.actorOf(Props(new Production("")), "Production")
+      val checker = system.actorOf(Props(new Checker(production ! _, c => true)), "checker")
+      val intermediary = system.actorOf(Props(new HashJoiner(checker ! _,1,Vector(0),1,Vector(0))), "intermediary")
+      val input1 = system.actorOf(Props(new HashJoiner(intermediary ! Primary(_),1,Vector(0), 1,Vector(0))), "inputBeta")
       val msg15 = ChangeSet(positive = Vector(Vector(15)))
       input1 ! Primary(msg15)
       input1 ! Secondary(msg15)
@@ -73,6 +73,11 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
         intermediary ! Secondary(ChangeSet(positive = Vector(Vector(15))))
         assert(Await.result(terminator.send, Duration(1,HOURS)) == Set(Vector(15), Vector(25), Vector(16)))
       })
+    }
+  }
+  "node splitting" should {
+    "work" in {
+
     }
   }
 }
