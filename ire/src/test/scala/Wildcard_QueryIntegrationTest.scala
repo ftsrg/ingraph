@@ -1,24 +1,9 @@
-import java.util.concurrent.Semaphore
-
-import org.scalatest.concurrent.Timeouts
-
-import scala.Vector
-import org.scalatest.FlatSpec
-import org.scalatest.time.SpanSugar._
-import org.scalatest
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.actorRef2Scala
-import hu.bme.mit.incquerydcore.ChangeSet
-import hu.bme.mit.incquerydcore.Checker
-import hu.bme.mit.incquerydcore.Production
-import hu.bme.mit.incquerydcore.Terminator
-import hu.bme.mit.incquerydcore.WildcardInput
+import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
+import hu.bme.mit.incquerydcore.{ChangeSet, Checker, Production, Terminator, WildcardInput}
 import hu.bme.mit.incquerydcore.trainbenchmark._
-
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
+import org.scalatest.FlatSpec
+import org.scalatest.concurrent.Timeouts
+import org.scalatest.time.SpanSugar._
 
 /**
  * Created by wafle on 12/09/15.
@@ -52,16 +37,24 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
     input.processTransaction(tran1)
     val res1 = query.getResults()
     assert(res1 == Set(Vector(5,7), Vector(5,8)))
+    val beginTime : Long = System.nanoTime()
     (1 to 500).foreach( i => {
-      val tranR = input.newTransaction()
-      tranR.remove(5, "testval", 7)
-      input.processTransaction(tranR)
+      val tranRemove7 = input.newTransaction()
+      tranRemove7.remove(5, "testval", 7)
+      input.processTransaction(tranRemove7)
       assert(query.getResults() == Set(Vector(5,8)))
-      val tranA = input.newTransaction()
-      tranA.add(5, "testval", 7)
-      input.processTransaction(tranA)
-      assert(query.getResults() == Set(Vector(5,7), Vector(5,8)))
+      val tranRemove8 = input.newTransaction()
+      tranRemove8.remove(5, "testval", 8)
+      input.processTransaction(tranRemove8)
+      assert(query.getResults() == Set())
+      val tranAdd78 = input.newTransaction()
+      tranAdd78.add(5, "testval", 7)
+      tranAdd78.add(5, "testval", 8)
+      input.processTransaction(tranAdd78)
     } )
+    val endTime : Long = System.nanoTime() - beginTime
+    val avg = endTime/500/3
+    println(s"integration avg: $avg")
   }
   val queries = List(
     new RouteSensor(),
@@ -73,7 +66,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
   )
   queries.foreach(
     query => query.getClass.getName should "finish" in {
-      failAfter(500 milliseconds) {
+        failAfter(500 milliseconds) {
         query.getResults()
       }
     }
