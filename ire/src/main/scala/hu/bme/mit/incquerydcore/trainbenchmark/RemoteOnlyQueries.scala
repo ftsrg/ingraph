@@ -14,7 +14,7 @@ abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery{
   val system = ActorSystem("Master", ConfigFactory.load("master"))
   val remoteAdress = Address("akka.tcp", "Slave1System", System.getenv("SLAVE1IP"), 2552)
   val remoteActors = new collection.mutable.MutableList[ActorRef]()
-  def newRemote(props: Props, name: String = ""): ActorRef = {
+  def newRemote(props: Props, name: String): ActorRef = {
     val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remoteAdress))), name)
     remoteActors += actor
     actor
@@ -26,13 +26,12 @@ abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery{
 }
 
 class RemoteOnlyPosLength extends RemoteOnlyTrainbenchmarkQuery {
-  override val production: ActorRef = system.actorOf(Props(new Production("PosLength")))
-  val trimmer = newRemote(Props(new Trimmer(production ! _, Vector(0, 1))))
+  override val production: ActorRef = system.actorOf(Props(new Production("PosLength")), "PosLength-production")
 
   def condition(n: nodeType) = n match {
     case Vector(a, length: Int) => length <= 0
   }
-  val first = newRemote(Props(new Checker(trimmer ! _, condition)))
+  val first = newRemote(Props(new Checker(production ! _, condition)), "PosLength-checker")
 
   val inputNodes: List[(ReteMessage) => Unit] = List(first ! _)
   override val terminator = Terminator(inputNodes, production)
@@ -43,16 +42,16 @@ class RemoteOnlyPosLength extends RemoteOnlyTrainbenchmarkQuery {
 }
 
 class RemoteOnlyConnectedSegments extends RemoteOnlyTrainbenchmarkQuery {
-  val production = system.actorOf(Props(new Production("ConnectedSegments")))
-  val sensorJoinSecond = newRemote(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
-  val sensorJoinFirst = newRemote(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))))
-  val join1234_5 = newRemote(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))))
+  val production = system.actorOf(Props(new Production("ConnectedSegments")), "ConnectedSegments-production")
+  val sensorJoinSecond = newRemote(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))), "PosLength-SecondSensor")
+  val sensorJoinFirst = newRemote(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))), "PosLength-FirstSensor")
+  val join1234_5 = newRemote(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))), "PosLength-1234-5-Join")
 
-  val join12_34 = newRemote(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))))
+  val join12_34 = newRemote(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))), "PosLength-12-34-Join")
 
-  val join3_4 = newRemote(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))))
-  val join1_2 = newRemote(Props(new HashJoiner(join12_34 ! Primary(_), 2, Vector(1), 2, Vector(0))))
-  val joinSegment1 = newRemote(Props(new HashJoiner(join1_2 ! Primary(_), 2, Vector(0), 1, Vector(0))))
+  val join3_4 = newRemote(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))), "PosLength-3-4-Join")
+  val join1_2 = newRemote(Props(new HashJoiner(join12_34 ! Primary(_), 2, Vector(1), 2, Vector(0))), "PosLength-1-2-Join")
+  val joinSegment1 = newRemote(Props(new HashJoiner(join1_2 ! Primary(_), 2, Vector(0), 1, Vector(0))), "PosLength-Segment1-Join")
   override val inputLookup = Map(
     "connectsTo" -> ((cs: ChangeSet) => {
       joinSegment1 ! Primary(cs)
@@ -90,17 +89,17 @@ class RemoteOnlyConnectedSegments extends RemoteOnlyTrainbenchmarkQuery {
   override val terminator = Terminator(inputNodes, production)
 }
 class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
-  val production = system.actorOf(Props(new Production("SwitchSet")))
-  val finalJoin = newRemote(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
+  val production = system.actorOf(Props(new Production("SwitchSet")), "SwitchSet-production")
+  val finalJoin = newRemote(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))), "SwitchSet-final-join")
 
-  val inequality = newRemote(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))))
-  val switchPositionCurrentPositionJoin = newRemote(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))))
-  val switchSwitchPositionJoin = newRemote(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
+  val inequality = newRemote(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))),"SwitchSet-inequality")
+  val switchPositionCurrentPositionJoin = newRemote(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))), "SwitchSet-pos-currentpos-join")
+  val switchSwitchPositionJoin = newRemote(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))), "SwitchSet-switch-switchp-join")
 
-  val followsEntryJoin = newRemote(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
-  val entrySemaphoreJoin = newRemote(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
-  val leftTrimmer = newRemote(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))))
-  val signalChecker = newRemote(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))))
+  val followsEntryJoin = newRemote(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))), "SwitchSet-follows-entry-join")
+  val entrySemaphoreJoin = newRemote(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "SwitchSet-entry-semaphore-join")
+  val leftTrimmer = newRemote(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))), "SwitchSet-left-trimmer")
+  val signalChecker = newRemote(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))), "SwitchSet-signal-checker")
 
 
   val inputLookup = Map(
@@ -122,16 +121,16 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
 
 }
 
-class RemoteOnlyNeighbor extends RemoteOnlyTrainbenchmarkQuery {
-  val production = system.actorOf(Props(new Production("SemaphoreNeighbor")))
-  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
-  val inequality = newRemote(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
-  val finalJoin = newRemote(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
-  val secondToLastJoin = newRemote(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
-  val rightMostJoin = newRemote(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
-  val sensorConnects = newRemote(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"f")
-  val exitDefined = newRemote(Props(new HashJoiner(secondToLastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"g")
-  val entryDefined = newRemote(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))),"h")
+class RemoteOnlySemaphoreNeighbor extends RemoteOnlyTrainbenchmarkQuery {
+  val production = system.actorOf(Props(new Production("SemaphoreNeighbor")), "SemaphoreNeighbor-production")
+  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"SemaphoreNeighbor-antijoin")
+  val inequality = newRemote(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"SemaphoreNeighbor-inequality")
+  val finalJoin = newRemote(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"SemaphoreNeighbor-final-join")
+  val secondToLastJoin = newRemote(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"SemaphoreNeighbor-secondtolast-join")
+  val rightMostJoin = newRemote(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"SemaphoreNeighbor-rightmost-join")
+  val sensorConnects = newRemote(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"SemaphoreNeighbor-sensor-connects-join")
+  val exitDefined = newRemote(Props(new HashJoiner(secondToLastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"SemaphoreNeighbor-exit-defined-join")
+  val entryDefined = newRemote(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))),"SemaphoreNeighbor-entry-defined-join")
 
   val inputLookup = Map(
     "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
@@ -159,10 +158,10 @@ class RemoteOnlyNeighbor extends RemoteOnlyTrainbenchmarkQuery {
 }
 
 class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
-  val production = system.actorOf(Props(new Production("RouteSensor")))
-  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
-  val sensorJoin = newRemote(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
-  val followsJoin = newRemote(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
+  val production = system.actorOf(Props(new Production("RouteSensor")), "RouteSensor-production")
+  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
+  val sensorJoin = newRemote(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join")
+  val followsJoin = newRemote(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "RouteSensor-follows-join")
   val inputLookup = HashMap(
     "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
@@ -179,10 +178,10 @@ class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
 }
 
 class RemoteOnlySwitchSensor extends RemoteOnlyTrainbenchmarkQuery {
-  val production = system.actorOf(Props(new Production("SwitchSensor")), "sw-production")
-  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+  val production = system.actorOf(Props(new Production("SwitchSensor")), "SwitchSensor-production")
+  val antijoin = newRemote(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "SwitchSensor-antijoin")
 
-  val trimmer = newRemote(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
+  val trimmer = newRemote(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "SwitchSensor-trimmer")
   val inputLookup = Map(
     "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
     "type" -> ((rawCS: ChangeSet) => {
