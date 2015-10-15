@@ -84,9 +84,7 @@ trait TerminatorHandler {
   def forward(terminator: TerminatorMessage)
   def handleTerminator(terminator: TerminatorMessage): Unit = {
     val count = terminatorCount.getOrElse(terminator.messageID, 0) + 1
-    println("Terminator received: ", count)
     if ( count == expectedTerminatorCount) {
-      println("terminator sent")
       forward(terminator)
     }
     terminatorCount(terminator.messageID) = count

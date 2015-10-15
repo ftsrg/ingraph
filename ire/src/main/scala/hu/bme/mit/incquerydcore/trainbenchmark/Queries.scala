@@ -88,7 +88,6 @@ class PosLength extends TrainbenchmarkQuery {
 }
 
 class ConnectedSegments extends TrainbenchmarkQuery {
-  println("connected-segments")
   val system = ActorSystem()
   val production = system.actorOf(Props(new Production("ConnectedSegments")))
   val sensorJoinSecond = system.actorOf(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
@@ -137,7 +136,6 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   override val terminator = Terminator(inputNodes, production)
 }
   class SwitchSet extends TrainbenchmarkQuery {
-    println("switch-set")
     val system = ActorSystem()
     val production = system.actorOf(Props(new Production("SwitchSet")))
     val finalJoin = system.actorOf(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
@@ -172,7 +170,6 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   }
 
   class SemaphoreNeighbor extends TrainbenchmarkQuery {
-    println("semaphore-neighbor")
     val system = ActorSystem()
     val production = system.actorOf(Props(new Production("SemaphoreNeighbor")))
     val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
@@ -210,7 +207,6 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   }
 
   class RouteSensor extends TrainbenchmarkQuery{
-    println("route-sensor")
     val system = ActorSystem()
     val production = system.actorOf(Props(new Production("RouteSensor")))
     val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
@@ -231,7 +227,6 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     override val terminator = Terminator(inputNodes, production)
   }
   class SwitchSensor extends TrainbenchmarkQuery {
-    println("switch-sensor")
     val system = ActorSystem()
     val production = system.actorOf(Props(new Production("SwitchSensor")), "sw-production")
     val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
