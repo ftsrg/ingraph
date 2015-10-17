@@ -20,20 +20,20 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" % "akka-actor_2.11" % "2.4-SNAPSHOT",
   "com.typesafe.akka" %% "akka-remote" % "2.4.0",
   "com.typesafe.akka" % "akka-testkit_2.11" % "2.4-SNAPSHOT" % "test",
-  "io.kamon" %% "kamon-core" % kamonVersion,
-  "io.kamon" %% "kamon-akka" % kamonVersion,
-  "io.kamon" %% "kamon-statsd" % kamonVersion,
-  "io.kamon" %% "kamon-log-reporter" % kamonVersion,
-  "io.kamon" %% "kamon-system-metrics" % kamonVersion
   "com.google.protobuf" % "protobuf-java" % "2.4.1",
+  "io.kamon" %% "kamon-core" % kamonVersion % "compile",
+  "io.kamon" %% "kamon-akka" % kamonVersion % "compile",
+  "io.kamon" %% "kamon-statsd" % kamonVersion % "compile",
+  "io.kamon" %% "kamon-log-reporter" % kamonVersion % "compile",
+  "io.kamon" %% "kamon-system-metrics" % kamonVersion % "compile"
 //  "org.aspectj" % "aspectjweaver" % "1.8.6"
 )
 
 aspectjSettings
 
-javaOptions <++= AspectjKeys.weaverOptions in Aspectj
+javaOptions in test <++= AspectjKeys.weaverOptions in Aspectj
 
-javaOptions ++= Seq("-Dkamon.auto-start=true")
+javaOptions in test ++= Seq("-Dkamon.auto-start=true")
 
 fork := true
 
