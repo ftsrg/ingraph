@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
   "io.kamon" %% "kamon-statsd" % kamonVersion,
   "io.kamon" %% "kamon-log-reporter" % kamonVersion,
   "io.kamon" %% "kamon-system-metrics" % kamonVersion
+  "com.google.protobuf" % "protobuf-java" % "2.4.1",
 //  "org.aspectj" % "aspectjweaver" % "1.8.6"
 )
 

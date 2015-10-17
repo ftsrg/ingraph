@@ -1,5 +1,7 @@
 package hu.bme.mit.incquerydcore.trainbenchmark
 
+import java.io.{ObjectInputStream, IOException, ObjectOutputStream}
+
 import akka.actor._
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
@@ -10,7 +12,7 @@ import scala.collection.immutable.HashMap
 /**
  * Created by wafle on 10/11/2015.
  */
-abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery{
+abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery with Serializable{
   val system = ActorSystem("Master", ConfigFactory.load("master"))
   val remoteAdress = Address("akka.tcp", "Slave1System", System.getenv("SLAVE1IP"), 2552)
   val remoteActors = new collection.mutable.MutableList[ActorRef]()
@@ -19,6 +21,12 @@ abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery{
     remoteActors += actor
     actor
   }
+  @throws(classOf[IOException])
+  private def writeObject(out: ObjectOutputStream): Unit = {}
+
+  @throws(classOf[IOException])
+  private def readObject(in: ObjectInputStream): Unit = {}
+
   override def shutdown: Unit = {
     remoteActors.foreach( actor => actor ! PoisonPill)
     super.shutdown()

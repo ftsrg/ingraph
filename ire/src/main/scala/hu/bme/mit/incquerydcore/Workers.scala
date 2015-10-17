@@ -1,9 +1,8 @@
 package hu.bme.mit.incquerydcore
 
-import java.io.InputStream
+import java.io.{ObjectInputStream, ObjectOutputStream, IOException, InputStream}
 
 import akka.actor.{Actor, ActorRef, Stash}
-import akka.dispatch.Dispatchers
 import com.twitter.chill.{Input, ScalaKryoInstantiator}
 
 import scala.collection.mutable
@@ -29,7 +28,7 @@ case class Pause(messageID: Int) extends ReteMessage()
 
 case class Resume(messageID: Int) extends ReteMessage()
 
-class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage {
+class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage with Serializable {
   def send(): Future[Set[nodeType]] = {
     val messageID = Terminator.idCounter.getNext()
     val promise = Promise[Set[nodeType]]
@@ -41,6 +40,12 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
     })
     future
   }
+
+  @throws(classOf[IOException])
+  private def writeObject(out: ObjectOutputStream): Unit = {}
+
+  @throws(classOf[IOException])
+  private def readObject(in: ObjectInputStream): Unit = {}
 }
 
 object Terminator {
@@ -86,6 +91,7 @@ trait TerminatorHandler {
     val count = terminatorCount.getOrElse(terminator.messageID, 0) + 1
     if ( count == expectedTerminatorCount) {
       forward(terminator)
+      terminatorCount -= terminator.messageID
     }
     terminatorCount(terminator.messageID) = count
   }

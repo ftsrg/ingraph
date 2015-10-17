@@ -23,7 +23,7 @@ object utils {
      values.toSeq
   }
 
-  implicit class ReteNode(base: ActorRef) {
+  implicit class ReteNode(base: ActorRef) extends Serializable{
     def apply(): ReteMessage => Unit = {
       return base ! _
     }
