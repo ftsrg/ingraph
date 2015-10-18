@@ -1,6 +1,6 @@
 import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
-import hu.bme.mit.incquerydcore.{ChangeSet, Checker, Production, Terminator, WildcardInput}
 import hu.bme.mit.incquerydcore.trainbenchmark._
+import hu.bme.mit.incquerydcore._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.Timeouts
 import org.scalatest.time.SpanSugar._
@@ -10,7 +10,6 @@ import org.scalatest.time.SpanSugar._
  */
 class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
   class TestQuery extends TrainbenchmarkQuery {
-    val system = ActorSystem()
     override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
     val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
