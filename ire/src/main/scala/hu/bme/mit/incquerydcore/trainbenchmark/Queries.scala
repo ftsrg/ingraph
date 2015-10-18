@@ -5,13 +5,14 @@ import java.io.FileInputStream
 import akka.actor._
 import akka.remote.RemoteScope
 import hu.bme.mit.incquerydcore.{ChangeSet, Checker, HashAntiJoiner, HashJoiner, InequalityChecker, JenaRDFReader, KamonInitializer, Primary, Production, ReteMessage, Secondary, Terminator, Trimmer, WildcardInput, nodeType, utils}
+import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, HOURS}
 
 class TrainbenchmarkReader(input: WildcardInput) {
-
+  val log = Logger.getRootLogger
   def idFunction(v: Any) = utils.idStringToLong(v.toString)
 
   val valueFunctions = Map[String, (AnyRef)=>(Any)](
@@ -29,21 +30,29 @@ class TrainbenchmarkReader(input: WildcardInput) {
   try {
     val tran = input.newTransaction()
     val reader = new JenaRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
+    log.info("read started")
     reader.read(fs)
+    log.info("read finished")
     input.processTransaction(tran)
+    log.info("read transaction processed")
   }
   finally {
     fs.close()
   }
   }
 }
+object TrainbenchmarkQuery {
+  val system = ActorSystem()
+}
+
 abstract class TrainbenchmarkQuery {
   KamonInitializer.ping
+  val system = TrainbenchmarkQuery.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]
-  val system: ActorSystem
   val terminator: Terminator
+  val actors = new collection.mutable.MutableList[ActorRef]()
   lazy val log = system.log
   def getResults(): Set[nodeType] = {
   log.info("termination started")
@@ -51,14 +60,29 @@ abstract class TrainbenchmarkQuery {
   log.info("termination finished")
   res
   }
-  def shutdown(): Unit = Await.result(system.terminate(), timeout)
+
+  def newLocal(props: Props): ActorRef = {
+  val actor = TrainbenchmarkQuery.system.actorOf(props)
+  actors += actor
+  actor
+  }
+
+  def newLocal(props: Props, name: String): ActorRef = {
+  val actor = TrainbenchmarkQuery.system.actorOf(props, name)
+  actors += actor
+  actor
+  }
+  def shutdown(): Unit = {
+  actors.foreach( actor => actor ! PoisonPill)
+  }
+
 }
 
 abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery{
 
   val remoteActors = new collection.mutable.MutableList[ActorRef]()
   def newRemote(props: Props, address: Address): ActorRef = {
-  val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(address))))
+  val actor = newLocal(props.withDeploy(Deploy(scope = RemoteScope(address))))
   remoteActors += actor
   actor
   }
@@ -69,15 +93,13 @@ abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery{
 }
 
 class PosLength extends TrainbenchmarkQuery {
-
-  val system = ActorSystem()
-  override val production: ActorRef = system.actorOf(Props(new Production("PosLength")))
-  val trimmer = system.actorOf(Props(new Trimmer(production ! _, Vector(0, 1))))
+  override val production: ActorRef = newLocal(Props(new Production("PosLength")))
+  val trimmer = newLocal(Props(new Trimmer(production ! _, Vector(0, 1))))
 
   def condition(n: nodeType) = n match {
   case Vector(a, length: Int) => length <= 0
   }
-  val first = system.actorOf(Props(new Checker(trimmer ! _, condition)))
+  val first = newLocal(Props(new Checker(trimmer ! _, condition)))
 
   val inputNodes: List[(ReteMessage) => Unit] = List(first ! _)
   override val terminator = Terminator(inputNodes, production)
@@ -88,17 +110,16 @@ class PosLength extends TrainbenchmarkQuery {
 }
 
 class ConnectedSegments extends TrainbenchmarkQuery {
-  val system = ActorSystem()
-  val production = system.actorOf(Props(new Production("ConnectedSegments")))
-  val sensorJoinSecond = system.actorOf(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
-  val sensorJoinFirst = system.actorOf(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))))
-  val join1234_5 = system.actorOf(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))))
+  val production = newLocal(Props(new Production("ConnectedSegments")))
+  val sensorJoinSecond = newLocal(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
+  val sensorJoinFirst = newLocal(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))))
+  val join1234_5 = newLocal(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))))
 
-  val join12_34 = system.actorOf(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))))
+  val join12_34 = newLocal(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))))
 
-  val join3_4 = system.actorOf(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))))
-  val join1_2 = system.actorOf(Props(new HashJoiner(join12_34 ! Primary(_), 2, Vector(1), 2, Vector(0))))
-  val joinSegment1 = system.actorOf(Props(new HashJoiner(join1_2 ! Primary(_), 2, Vector(0), 1, Vector(0))))
+  val join3_4 = newLocal(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))))
+  val join1_2 = newLocal(Props(new HashJoiner(join12_34 ! Primary(_), 2, Vector(1), 2, Vector(0))))
+  val joinSegment1 = newLocal(Props(new HashJoiner(join1_2 ! Primary(_), 2, Vector(0), 1, Vector(0))))
   override val inputLookup = Map(
   "connectsTo" -> ((cs: ChangeSet) => {
     joinSegment1 ! Primary(cs)
@@ -136,18 +157,17 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   override val terminator = Terminator(inputNodes, production)
 }
   class SwitchSet extends TrainbenchmarkQuery {
-  val system = ActorSystem()
-  val production = system.actorOf(Props(new Production("SwitchSet")))
-  val finalJoin = system.actorOf(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
+  val production = newLocal(Props(new Production("SwitchSet")))
+  val finalJoin = newLocal(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
 
-  val inequality = system.actorOf(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))))
-  val switchPositionCurrentPositionJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))))
-  val switchSwitchPositionJoin = system.actorOf(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
+  val inequality = newLocal(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))))
+  val switchPositionCurrentPositionJoin = newLocal(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))))
+  val switchSwitchPositionJoin = newLocal(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
 
-  val followsEntryJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
-  val entrySemaphoreJoin = system.actorOf(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
-  val leftTrimmer = system.actorOf(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))))
-  val signalChecker = system.actorOf(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))))
+  val followsEntryJoin = newLocal(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
+  val entrySemaphoreJoin = newLocal(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
+  val leftTrimmer = newLocal(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))))
+  val signalChecker = newLocal(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))))
 
 
   val inputLookup = Map(
@@ -170,16 +190,15 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   }
 
   class SemaphoreNeighbor extends TrainbenchmarkQuery {
-  val system = ActorSystem()
-  val production = system.actorOf(Props(new Production("SemaphoreNeighbor")))
-  val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
-  val inequality = system.actorOf(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
-  val finalJoin = system.actorOf(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
-  val secondToLastJoin = system.actorOf(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
-  val rightMostJoin = system.actorOf(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
-  val sensorConnects = system.actorOf(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"f")
-  val exitDefined = system.actorOf(Props(new HashJoiner(secondToLastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"g")
-  val entryDefined = system.actorOf(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))),"h")
+  val production = newLocal(Props(new Production("SemaphoreNeighbor")))
+  val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
+  val inequality = newLocal(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
+  val finalJoin = newLocal(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
+  val secondToLastJoin = newLocal(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
+  val rightMostJoin = newLocal(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
+  val sensorConnects = newLocal(Props(new HashJoiner(rightMostJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"f")
+  val exitDefined = newLocal(Props(new HashJoiner(secondToLastJoin ! Primary(_), 2, Vector(0), 2, Vector(0))),"g")
+  val entryDefined = newLocal(Props(new HashJoiner(antijoin ! Secondary(_), 2, Vector(0), 2, Vector(0))),"h")
 
   val inputLookup = Map(
     "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
@@ -207,11 +226,10 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   }
 
   class RouteSensor extends TrainbenchmarkQuery{
-  val system = ActorSystem()
-  val production = system.actorOf(Props(new Production("RouteSensor")))
-  val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
-  val sensorJoin = system.actorOf(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
-  val followsJoin = system.actorOf(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
+  val production = newLocal(Props(new Production("RouteSensor")))
+  val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
+  val sensorJoin = newLocal(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
+  val followsJoin = newLocal(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
   val inputLookup = HashMap(
     "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
@@ -227,11 +245,10 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   override val terminator = Terminator(inputNodes, production)
   }
   class SwitchSensor extends TrainbenchmarkQuery {
-  val system = ActorSystem()
-  val production = system.actorOf(Props(new Production("SwitchSensor")), "sw-production")
-  val antijoin = system.actorOf(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+  val production = newLocal(Props(new Production("SwitchSensor")), "sw-production")
+  val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
 
-  val trimmer = system.actorOf(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
+  val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
   val inputLookup = Map(
     "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
     "type" -> ((rawCS: ChangeSet) => {
