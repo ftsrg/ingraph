@@ -20,13 +20,13 @@ abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery with Se
   override val system = RemoteOnlyTrainbenchmarkQuery.system
   val remoteAdress = Address("akka.tcp", "Slave1System", System.getenv("SLAVE1IP"), 2552)
   def newRemote(props: Props, name: String): ActorRef = {
-    val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remoteAdress))), name)
+    val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remoteAdress))), name + System.currentTimeMillis().toString)
     actors += actor
     actor
   }
 
   override def newLocal(props: Props, name: String):ActorRef = {
-    val actor = system.actorOf(props.withDeploy(Deploy(scope = LocalScope)), name)
+    val actor = system.actorOf(props.withDeploy(Deploy(scope = LocalScope)), name + System.currentTimeMillis().toString)
     actors += actor
     actor
   }
