@@ -62,13 +62,13 @@ abstract class TrainbenchmarkQuery {
   }
 
   def newLocal(props: Props): ActorRef = {
-    val actor = TrainbenchmarkQuery.system.actorOf(props)
+    val actor = system.actorOf(props)
     actors += actor
     actor
   }
 
   def newLocal(props: Props, name: String): ActorRef = {
-    val actor = TrainbenchmarkQuery.system.actorOf(props, name)
+    val actor = system.actorOf(props, name + System.currentTimeMillis().toString)
     actors += actor
     actor
   }
