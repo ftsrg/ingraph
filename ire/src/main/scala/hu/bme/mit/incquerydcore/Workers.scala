@@ -442,7 +442,7 @@ class WildcardInput(val messageSize: Int = 16) {
   private def createInnerMap() = new mutable.HashMap[Long, mutable.Set[Any]] with IterableMultiMap[Long, Any]
 
 
-  class Transaction {
+  class Transaction(val attributes: scala.collection.Set[String]) {
     def close(): Unit = {
       positive.clear()
       negative.clear()
@@ -452,18 +452,22 @@ class WildcardInput(val messageSize: Int = 16) {
     val negative = createWildcardMap()
 
     def add(subj: Long, pred: String, obj: Any) = {
-      val map = positive.getOrElseUpdate(pred, createInnerMap())
-      map.addBinding(subj, obj)
+      if (attributes.contains(pred)) {
+        val map = positive.getOrElseUpdate(pred, createInnerMap())
+        map.addBinding(subj, obj)
+      }
     }
 
     def remove(subj: Long, pred: String, obj: Any) = {
-      val map = negative.getOrElseUpdate(pred, createInnerMap())
-      map.addBinding(subj, obj)
+      if (attributes.contains(pred)) {
+        val map = negative.getOrElseUpdate(pred, createInnerMap())
+        map.addBinding(subj, obj)
+      }
     }
   }
 
   def newTransaction(): Transaction = {
-    return new Transaction
+    return new Transaction(subscribers.keySet)
   }
   def initFromTransaction(transaction: Transaction): Unit = {
     transaction.positive.par.foreach { case (pred, map) => {

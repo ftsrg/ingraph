@@ -20,12 +20,12 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
   "integartion" should "work" in {
     val input = new WildcardInput(10)
     val query = new TestQuery
+    input.subscribe(query.inputLookup)
     val tran0 = input.newTransaction()
     tran0.add(5, "testval", 5)
     tran0.add(5, "testval", 6)
     tran0.add(5, "testval", 7)
     input.processTransaction(tran0)
-    input.subscribe(query.inputLookup)
     val res0 = query.getResults()
     assert(res0 == Set(Vector(5,5), Vector(5,6), Vector(5,7)))
     val tran1 = input.newTransaction()
