@@ -24,6 +24,13 @@ abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery with Se
     actors += actor
     actor
   }
+
+  override def newLocal(props: Props, name: String):ActorRef = {
+    val actor = system.actorOf(props.withDeploy(Deploy(scope = LocalScope)), name)
+    actors += actor
+    actor
+  }
+
   @throws(classOf[IOException])
   private def writeObject(out: ObjectOutputStream): Unit = {}
 
