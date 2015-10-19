@@ -432,7 +432,7 @@ class Production(queryName: String, val expectedTerminatorCount:Int = 1) extends
 
 class WildcardInput(val messageSize: Int = 16) {
   //  val types = new mutable.HashMap[String, mutable.Set[Long]]()
-  val multiValueAttributes = createWildcardMap
+  var multiValueAttributes = createWildcardMap
   //  val attributes = new mutable.HashMap[String, mutable.Map[Long, Any]]
 
   @transient val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
@@ -464,6 +464,19 @@ class WildcardInput(val messageSize: Int = 16) {
 
   def newTransaction(): Transaction = {
     return new Transaction
+  }
+  def initFromTransaction(transaction: Transaction): Unit = {
+    transaction.positive.par.foreach { case (pred, map) => {
+      val (obj, subj) = map.multiUnzip
+      val iterator = (subj zip obj)
+      iterator.toVector.grouped(messageSize).foreach(
+        msgGroup => subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
+          sub => sub(ChangeSet(positive = msgGroup.map(msg => Vector(msg._1, msg._2))))
+        )
+      )
+    }
+    }
+    multiValueAttributes = transaction.positive
   }
 
   def processTransaction(transaction: Transaction): Unit = {

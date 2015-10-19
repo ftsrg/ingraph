@@ -33,7 +33,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
       log.info("read started")
       reader.read(scala.io.Source.fromFile(path))
       log.info("read finished")
-      input.processTransaction(tran)
+      input.initFromTransaction(tran)
       log.info("read transaction processed")
     }
     finally {
