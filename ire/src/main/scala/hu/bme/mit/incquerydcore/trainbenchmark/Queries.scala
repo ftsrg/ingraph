@@ -4,34 +4,34 @@ import java.io.FileInputStream
 
 import akka.actor._
 import akka.remote.RemoteScope
-import hu.bme.mit.incquerydcore.{ChangeSet, Checker, HashAntiJoiner, HashJoiner, InequalityChecker, JenaRDFReader, KamonInitializer, Primary, Production, ReteMessage, Secondary, Terminator, Trimmer, WildcardInput, nodeType, utils}
+import hu.bme.mit.incquerydcore._
 import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
-import scala.concurrent.Await
-import scala.concurrent.duration.{Duration, HOURS}
+import scala.concurrent.duration._
+import scala.concurrent.{Await, TimeoutException}
 
 class TrainbenchmarkReader(input: WildcardInput) {
   val log = Logger.getRootLogger
   def idFunction(v: Any) = utils.idStringToLong(v.toString)
 
-  val valueFunctions = Map[String, (AnyRef)=>(Any)](
-    "connectsTo" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "definedBy" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "follows" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "exit" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "entry" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "switch" -> ((v: AnyRef) => utils.idStringToLong(v.toString)),
-    "sensor" -> ((v: AnyRef) => utils.idStringToLong(v.toString))
+  val valueFunctions = Map[String, (Any)=>(Any)](
+    "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
   )
 
   def read(path: String) {
     val fs = new FileInputStream(path)
     try {
       val tran = input.newTransaction()
-      val reader = new JenaRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
+      val reader = new WorkingTBRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
       log.info("read started")
-      reader.read(fs)
+      reader.read(scala.io.Source.fromFile(path))
       log.info("read finished")
       input.processTransaction(tran)
       log.info("read transaction processed")
