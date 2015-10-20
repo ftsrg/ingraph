@@ -465,45 +465,40 @@ class WildcardInput(val messageSize: Int = 16) {
   private def createInnerMap() = new mutable.HashMap[Long, mutable.Set[Any]] with IterableMultiMap[Long, Any]
 
 
-  class Transaction(val attributes: scala.collection.Set[String]) {
+  class Transaction(subsribers: mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]) {
     def close(): Unit = {
-      positive.clear()
-      negative.clear()
     }
 
     val positive = createWildcardMap()
     val negative = createWildcardMap()
 
     def add(subj: Long, pred: String, obj: Any) = {
-      if (attributes.contains(pred)) {
-        val map = positive.getOrElseUpdate(pred, createInnerMap())
-        map.addBinding(subj, obj)
+      if (subsribers.contains(pred)) {
+        subscribers(pred).foreach(sub => sub(ChangeSet(positive = Vector(Vector(subj, obj)))))
       }
     }
 
     def remove(subj: Long, pred: String, obj: Any) = {
-      if (attributes.contains(pred)) {
-        val map = negative.getOrElseUpdate(pred, createInnerMap())
-        map.addBinding(subj, obj)
-      }
+      if (subsribers.contains(pred)) {
+      subscribers(pred).foreach(sub => sub(ChangeSet(negative = Vector(Vector(subj, obj)))))
+        }
     }
   }
-
   def newTransaction(): Transaction = {
-    return new Transaction(subscribers.keySet)
+    return new Transaction(subscribers)
   }
   def initFromTransaction(transaction: Transaction): Unit = {
-    transaction.positive.par.foreach { case (pred, map) => {
-      val (obj, subj) = map.multiUnzip
-      val iterator = (subj zip obj)
-      iterator.toVector.grouped(messageSize).foreach(
-        msgGroup => subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
-          sub => sub(ChangeSet(positive = msgGroup.map(msg => Vector(msg._1, msg._2))))
-        )
-      )
-    }
-    }
-    multiValueAttributes = transaction.positive
+//    transaction.positive.par.foreach { case (pred, map) => {
+//      val (obj, subj) = map.multiUnzip
+//      val iterator = (subj zip obj)
+//      iterator.toVector.grouped(messageSize).foreach(
+//        msgGroup => subscribers.getOrElse(pred, mutable.MutableList.empty[(ChangeSet) => Unit]).foreach(
+//          sub => sub(ChangeSet(positive = msgGroup.map(msg => Vector(msg._1, msg._2))))
+//        )
+//      )
+//    }
+//    }
+//    multiValueAttributes = transaction.positive
   }
 
   def processTransaction(transaction: Transaction): Unit = {
