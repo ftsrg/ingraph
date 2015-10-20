@@ -5,11 +5,7 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import hu.bme.mit.incquerydcore.utils
-import hu.bme.mit.incquerydcore.ChangeSet
-import hu.bme.mit.incquerydcore.HashJoiner
-import hu.bme.mit.incquerydcore.Secondary
-import hu.bme.mit.incquerydcore.Primary
+import hu.bme.mit.incquerydcore._
 
 class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -144,6 +140,28 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(2, 4, 5), Vector(3, 4, 5)))):_*)
       joiner ! Secondary(ChangeSet(positive = Vector(Vector(4, 5))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(2, 4, 5), Vector(3, 4, 5)))):_*)
+    }
+
+    "do parallel joins" in {
+      val primarySel = Vector(0)
+      val secondarySel = Vector(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joinerA = system.actorOf(Props(new HashJoiner(echoActor ! _, 3, primarySel, 2, secondarySel)))
+      val joinerB = system.actorOf(Props(new HashJoiner(echoActor ! _, 3, primarySel, 2, secondarySel)))
+      val forward: Vector[(ReteMessage)=>Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
+      val forkingJoiner = system.actorOf(Props(new ParallelHashJoiner(forward, 2, primarySel, 2, secondarySel,
+        hashFunction = (n:nodeType) => n(0).hashCode())))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(Vector(0, 2))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(Vector(1, 3))))
+
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(Vector(0, 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(Vector(1, 2))))
+
+      joinerB ! Secondary(ChangeSet(positive = Vector(Vector(1, 3))))
+      expectMsg(ChangeSet(positive = Vector(Vector(1, 2, 3, 3))))
+      joinerA ! Secondary(ChangeSet(positive = Vector(Vector(0, 3))))
+      expectMsg(ChangeSet(positive = Vector(Vector(0, 2, 2, 3))))
+
     }
   }
 }

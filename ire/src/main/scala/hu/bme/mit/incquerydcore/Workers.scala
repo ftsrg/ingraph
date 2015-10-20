@@ -67,20 +67,26 @@ trait ForkingForwarder {
   def forwardHashFunction(n: nodeType): Int
 
   def forward(cs: ChangeSet) = {
-      cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1)(ChangeSet(positive = kv._2.toVector)))
-      cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1)(ChangeSet(negative = kv._2.toVector)))
+      cs.positive.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1 % children.size)(ChangeSet(positive = kv._2.toVector)))
+      cs.negative.groupBy(forwardHashFunction(_)).foreach(kv => if (kv._2.size > 0) children(kv._1 % children.size)(ChangeSet(negative = kv._2.toVector)))
   }
 
   def forward(t: TerminatorMessage) = children.foreach(_ (t))
 
 }
 
-trait Forwarder {
+trait SingleForwarder {
   val next: ReteMessage => Unit
 
   def forward(cs: ChangeSet) = if (cs.positive.size > 0 || cs.negative.size > 0) next(cs)
 
   def forward(terminator: TerminatorMessage) = next(terminator)
+}
+
+abstract trait Forwarder {
+  def forward(cs: ChangeSet)
+
+  def forward(terminator: TerminatorMessage)
 }
 
 trait TerminatorHandler {
@@ -118,7 +124,7 @@ abstract class AlphaNode(val next: (ReteMessage) => Unit, val expectedTerminator
   }
 }
 
-abstract class BetaNode(val next: (ReteMessage) => Unit, val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
+abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
 
   def onPrimary(changeSet: ChangeSet)
 
@@ -184,7 +190,7 @@ abstract class BetaNode(val next: (ReteMessage) => Unit, val expectedTerminatorC
   }
 }
 
-class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) {
+class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) with SingleForwarder {
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
       changeSet.positive.map(vec => selectionVector.map(i => vec(i))),
@@ -198,10 +204,25 @@ case class Primary(value: ReteMessage)
 case class Secondary(value: ReteMessage)
 
 class HashJoiner(override val next: (ReteMessage) => Unit,
-                 val primaryLength: Int, val primarySelector: Vector[Int],
-                 val secondaryLength: Int, val secondarySelector: Vector[Int],
-                 override val expectedTerminatorCount:Int = 2)
-  extends BetaNode(next) {
+                 override val primaryLength: Int, override val primarySelector: Vector[Int],
+                 override val secondaryLength: Int, override val secondarySelector: Vector[Int]
+                  ) extends HashJoinerImpl(primaryLength, primarySelector, secondaryLength, secondarySelector) with SingleForwarder {
+}
+
+class ParallelHashJoiner(override val children: Vector[(ReteMessage) => Unit],
+                         override val primaryLength: Int, override val primarySelector: Vector[Int],
+                         override val secondaryLength: Int, override val secondarySelector: Vector[Int],
+                         hashFunction: (nodeType) => Int = n => n.hashCode()
+                          ) extends HashJoinerImpl(primaryLength, primarySelector, secondaryLength, secondarySelector) with ForkingForwarder {
+  override def forwardHashFunction(n: nodeType): Int = hashFunction(n)
+
+  override def forward(cs: ChangeSet) = super[ForkingForwarder].forward(cs)
+  override def forward(t: TerminatorMessage) = super[ForkingForwarder].forward(t)
+}
+
+abstract class HashJoinerImpl(val primaryLength: Int, val primarySelector: Vector[Int],
+                 val secondaryLength: Int, val secondarySelector: Vector[Int])
+  extends BetaNode {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with mutable.MultiMap[nodeType, nodeType]
 
@@ -278,9 +299,11 @@ class HashJoiner(override val next: (ReteMessage) => Unit,
   }
 }
 
+
+
 class Checker(override val next: (ReteMessage) => Unit,
               val condition: (nodeType) => Boolean,
-              override val expectedTerminatorCount:Int = 1) extends AlphaNode(next) {
+              override val expectedTerminatorCount:Int = 1) extends AlphaNode(next) with SingleForwarder  {
   def onChangeSet(changeSet: ChangeSet): Unit = {
     forward(ChangeSet(
       changeSet.positive.filter(condition),
@@ -295,7 +318,7 @@ class InequalityChecker(override val next: (ReteMessage) => Unit,
 Checker(next, condition = (node: nodeType) => {
   !inequals.map { i => node(i) }.exists { value => value == node(nodeIndex) }
 }
-)
+)  with SingleForwarder
 
 class EqualityChecker(override val next: (ReteMessage) => Unit,
                       val nodeIndex: Int, val equals: Vector[Int],
@@ -303,13 +326,13 @@ class EqualityChecker(override val next: (ReteMessage) => Unit,
 Checker(next, condition = (node: nodeType) => {
   equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
 }
-)
+)  with SingleForwarder
 
 class HashAntiJoiner(override val next: (ReteMessage) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int],
                      override val expectedTerminatorCount:Int = 2)
-  extends BetaNode(next) {
+  extends BetaNode with SingleForwarder  {
   val primaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
   val secondaryValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
 
