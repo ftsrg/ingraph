@@ -35,6 +35,7 @@ abstract class DistributedQuery extends RemoteOnlyTrainbenchmarkQuery with Seria
   private def readObject(in: ObjectInputStream): Unit = {}
 
 }
+
 class DistributedRouteSensor extends  DistributedQuery {
   val production = newLocal(Props(new Production("RouteSensor")))
   val antijoin = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
@@ -87,5 +88,63 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
       sensorJoinA.secondary, sensorJoinB.secondary,
       followsJoin.primary, followsJoin.secondary
     )
+  override val terminator = Terminator(inputNodes, production)
+}
+
+class DistributedSwitchSensor extends DistributedQuery {
+  val production = newLocal(Props(new Production("SwitchSensor")), "sw-production")
+  val antijoin = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+
+  val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
+  val inputLookup = Map(
+    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "type" -> ((rawCS: ChangeSet) => {
+      val cs = ChangeSet(
+        rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
+        rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
+      )
+      if (cs.positive.size > 0) {
+        antijoin ! Primary(cs)
+      } else if (cs.negative.size > 0) {
+        antijoin ! Primary(cs)
+      }
+    })
+  )
+
+  import utils.ReteNode
+  val inputNodes: List[ReteMessage => Unit] = List(antijoin.primary, trimmer ! _)
+  override val terminator = Terminator(inputNodes, production)
+}
+
+class DistributedSplitSwitchSensor extends DistributedQuery {
+  val production = newLocal(Props(new Production("SwitchSensor", expectedTerminatorCount = 4)), "sw-production")
+  val antijoinA = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-A")
+  val antijoinB = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-B")
+  val antijoinC = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-C")
+  val antijoinD = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
+  import utils.ReteNode
+
+  val secondaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.secondary, antijoinB.secondary, antijoinC.secondary, antijoinD.secondary)
+  val primaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.primary, antijoinB.primary, antijoinC.primary, antijoinD.primary)
+
+  val trimmer = newLocal(Props(new ParallelTrimmer(secondaryChildren, Vector(0))), "sw-trimmer")
+
+  val inputLookup = Map(
+    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "type" -> ((rawCS: ChangeSet) => {
+      val cs = ChangeSet(
+        rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
+        rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
+      )
+      if (cs.positive.size > 0) {
+        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.size > 0) primaryChildren(kv._1)(ChangeSet(positive = kv._2.toVector)))
+      }
+      if (cs.negative.size > 0) {
+        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.size > 0) primaryChildren(kv._1)(ChangeSet(negative = kv._2.toVector)))
+      }
+    })
+  )
+
+  val inputNodes: List[ReteMessage => Unit] = List(antijoinA.primary, antijoinB.primary, antijoinC.primary, trimmer ! _)
   override val terminator = Terminator(inputNodes, production)
 }
