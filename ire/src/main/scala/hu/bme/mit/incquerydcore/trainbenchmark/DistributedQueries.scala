@@ -121,7 +121,7 @@ class DistributedSplitSwitchSensor extends DistributedQuery {
   val antijoinA = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-A")
   val antijoinB = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-B")
   val antijoinC = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-C")
-  val antijoinD = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
+  val antijoinD = newLocal(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
   import utils.ReteNode
 
   val secondaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.secondary, antijoinB.secondary, antijoinC.secondary, antijoinD.secondary)
