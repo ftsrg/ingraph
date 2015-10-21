@@ -465,27 +465,45 @@ class WildcardInput(val messageSize: Int = 16) {
   private def createInnerMap() = new mutable.HashMap[Long, mutable.Set[Any]] with IterableMultiMap[Long, Any]
 
 
-  class Transaction(subsribers: mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]) {
+  class Transaction(subsribers: mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]], messageSize:Int) {
     def close(): Unit = {
+      positiveChangeSets.foreach( kv=> subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
+      negativeChangeSets.foreach( kv=> subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
+
     }
 
     val positive = createWildcardMap()
     val negative = createWildcardMap()
 
+    val positiveChangeSets = mutable.HashMap.empty[String, Vector[nodeType]]
+    val negativeChangeSets = mutable.HashMap.empty[String, Vector[nodeType]]
+
     def add(subj: Long, pred: String, obj: Any) = {
       if (subsribers.contains(pred)) {
-        subscribers(pred).foreach(sub => sub(ChangeSet(positive = Vector(Vector(subj, obj)))))
+        if (!positiveChangeSets.contains(pred))
+          positiveChangeSets(pred) = Vector.empty[nodeType]
+        positiveChangeSets(pred) +:= Vector(subj, obj)
+        if (positiveChangeSets(pred).size > messageSize) {
+          subsribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
+          positiveChangeSets(pred) = Vector.empty[nodeType]
+        }
       }
     }
 
     def remove(subj: Long, pred: String, obj: Any) = {
       if (subsribers.contains(pred)) {
-      subscribers(pred).foreach(sub => sub(ChangeSet(negative = Vector(Vector(subj, obj)))))
+        if (!negativeChangeSets.contains(pred))
+          negativeChangeSets(pred) = Vector.empty[nodeType]
+        negativeChangeSets(pred) +:= Vector(subj, obj)
+        if (negativeChangeSets(pred).size > messageSize) {
+          subsribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
+          negativeChangeSets(pred) = Vector.empty[nodeType]
         }
+      }
     }
   }
   def newTransaction(): Transaction = {
-    return new Transaction(subscribers)
+    return new Transaction(subscribers, messageSize)
   }
   def initFromTransaction(transaction: Transaction): Unit = {
 //    transaction.positive.par.foreach { case (pred, map) => {
@@ -499,6 +517,7 @@ class WildcardInput(val messageSize: Int = 16) {
 //    }
 //    }
 //    multiValueAttributes = transaction.positive
+    transaction.close()
   }
 
   def processTransaction(transaction: Transaction): Unit = {
