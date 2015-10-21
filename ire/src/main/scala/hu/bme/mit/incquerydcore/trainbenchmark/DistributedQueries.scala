@@ -57,8 +57,8 @@ class DistributedRouteSensor extends  DistributedQuery {
 
 class DistributedSplitRouteSensor extends  DistributedQuery {
   import utils.ReteNode
-  val production = newLocal(Props(new Production("RouteSensor", expectedTerminatorCount = 2)))
-  val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
+  val production = newLocal(Props(new Production("RouteSensor")))
+  val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 2)), "RouteSensor-antijoin")
   val sensorJoinA = newRemote2(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-A")
   val sensorJoinB = newRemote3(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-B")
 
