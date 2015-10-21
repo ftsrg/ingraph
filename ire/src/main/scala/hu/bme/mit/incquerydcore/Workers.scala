@@ -102,8 +102,7 @@ trait TerminatorHandler {
     terminatorCount(terminator.messageID) = count
   }
 }
-abstract class AlphaNode(val next: (ReteMessage) => Unit, val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
-  KamonInitializer.ping
+abstract class AlphaNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
   val log = context.system.log
   def onChangeSet(changeSet: ChangeSet)
 
