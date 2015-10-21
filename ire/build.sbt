@@ -6,6 +6,10 @@ version := "1.0"
 
 scalaVersion := "2.11.7"
 
+javaOptions += "-Xmx4G"
+
+javaOptions += "-Xms4G"
+
 showSuccess := false
 
 resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
