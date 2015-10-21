@@ -145,6 +145,6 @@ class DistributedSplitSwitchSensor extends DistributedQuery {
     })
   )
 
-  val inputNodes: List[ReteMessage => Unit] = List(antijoinA.primary, antijoinB.primary, antijoinC.primary, trimmer ! _)
+  val inputNodes: List[ReteMessage => Unit] = List(antijoinA.primary, antijoinB.primary, antijoinC.primary, antijoinD.primary, trimmer ! _)
   override val terminator = Terminator(inputNodes, production)
 }
