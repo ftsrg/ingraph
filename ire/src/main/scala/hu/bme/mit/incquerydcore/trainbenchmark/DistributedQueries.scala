@@ -23,7 +23,7 @@ abstract class DistributedQuery extends RemoteOnlyTrainbenchmarkQuery with Seria
   }
 
   def newRemote3(props: Props, name: String): ActorRef = {
-    val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remote2Adress))), name + System.currentTimeMillis().toString)
+    val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remote3Adress))), name + System.currentTimeMillis().toString)
     actors += actor
     actor
   }
