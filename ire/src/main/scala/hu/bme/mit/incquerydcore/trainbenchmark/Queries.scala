@@ -46,7 +46,6 @@ object TrainbenchmarkQuery {
 }
 
 abstract class TrainbenchmarkQuery {
-  KamonInitializer.ping
   val system = TrainbenchmarkQuery.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
