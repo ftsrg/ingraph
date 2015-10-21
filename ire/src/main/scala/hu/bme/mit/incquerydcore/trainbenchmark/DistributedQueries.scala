@@ -57,32 +57,35 @@ class DistributedRouteSensor extends  DistributedQuery {
 
 class DistributedSplitRouteSensor extends  DistributedQuery {
   import utils.ReteNode
-  val antijoinB = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin-A")
-  val antijoinA = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin-B")
-  val sensorJoin = newRemote1(Props(
-    new ParallelHashJoiner(Vector(antijoinA.primary, antijoinB.primary), 3, Vector(1), 2, Vector(0),
-      hashFunction = n => (n(2),n(3)).hashCode()
-    )), "RouteSensor-sensor=join"
-  )
-  val followsJoin = newRemote1(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "RouteSensor-follows-join")
+  val production = newLocal(Props(new Production("RouteSensor", expectedTerminatorCount = 2)))
+  val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
+  val sensorJoinA = newRemote2(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-A")
+  val sensorJoinB = newRemote3(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-B")
+
+  val followsJoin = newRemote1(Props(
+    new ParallelHashJoiner(
+      Vector(sensorJoinA.primary,sensorJoinB.primary)
+      , 2, Vector(0), 2, Vector(1),
+      hashFunction = n => n(1).hashCode()
+    )), "RouteSensor-follows-join")
 
   val inputLookup = HashMap(
     "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-    "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
-    "definedBy" -> ((cs: ChangeSet) => {
-      val children = Array(antijoinA, antijoinB)
-      cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
-      cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
-    })
+    "sensor" -> ((cs: ChangeSet) =>
+      {
+        val children = Array(sensorJoinA, sensorJoinB)
+        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
+        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
+      }),
+    "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
 
   val inputNodes: List[ReteMessage => Unit] =
     List(
-      antijoinA.secondary, antijoinB.secondary,
-      sensorJoin.secondary,
+      antijoin.secondary,
+      sensorJoinA.secondary, sensorJoinB.secondary,
       followsJoin.primary, followsJoin.secondary
     )
   override val terminator = Terminator(inputNodes, production)
 }
-
