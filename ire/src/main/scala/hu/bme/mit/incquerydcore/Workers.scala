@@ -189,7 +189,17 @@ abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with
   }
 }
 
-class Trimmer(override val next: (ReteMessage) => Unit, val selectionVector: Vector[Int]) extends AlphaNode(next) with SingleForwarder {
+class ParallelTrimmer(override val children: Vector[(ReteMessage) => Unit],
+                      override val selectionVector: Vector[Int],
+                      hashFunction: (nodeType) => Int = n => n.hashCode()) extends TrimmerImpl(selectionVector) with ForkingForwarder {
+  override def forwardHashFunction(n: nodeType): Int = hashFunction(n)
+}
+class Trimmer(override val next: (ReteMessage) => Unit,
+              override val selectionVector: Vector[Int])
+  extends TrimmerImpl(selectionVector) with SingleForwarder {
+
+  }
+abstract class TrimmerImpl(val selectionVector: Vector[Int]) extends AlphaNode {
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
       changeSet.positive.map(vec => selectionVector.map(i => vec(i))),
@@ -302,7 +312,7 @@ abstract class HashJoinerImpl(val primaryLength: Int, val primarySelector: Vecto
 
 class Checker(override val next: (ReteMessage) => Unit,
               val condition: (nodeType) => Boolean,
-              override val expectedTerminatorCount:Int = 1) extends AlphaNode(next) with SingleForwarder  {
+              override val expectedTerminatorCount:Int = 1) extends AlphaNode with SingleForwarder  {
   def onChangeSet(changeSet: ChangeSet): Unit = {
     forward(ChangeSet(
       changeSet.positive.filter(condition),
