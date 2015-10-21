@@ -492,7 +492,7 @@ class WildcardInput(val messageSize: Int = 16) {
         if (!positiveChangeSets.contains(pred))
           positiveChangeSets(pred) = Vector.empty[nodeType]
         positiveChangeSets(pred) +:= Vector(subj, obj)
-        if (positiveChangeSets(pred).size > messageSize) {
+        if (positiveChangeSets(pred).size >= messageSize) {
           subsribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
           positiveChangeSets(pred) = Vector.empty[nodeType]
         }
@@ -504,7 +504,7 @@ class WildcardInput(val messageSize: Int = 16) {
         if (!negativeChangeSets.contains(pred))
           negativeChangeSets(pred) = Vector.empty[nodeType]
         negativeChangeSets(pred) +:= Vector(subj, obj)
-        if (negativeChangeSets(pred).size > messageSize) {
+        if (negativeChangeSets(pred).size >= messageSize) {
           subsribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
           negativeChangeSets(pred) = Vector.empty[nodeType]
         }
