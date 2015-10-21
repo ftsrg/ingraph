@@ -57,7 +57,6 @@ class DistributedRouteSensor extends  DistributedQuery {
 
 class DistributedSplitRouteSensor extends  DistributedQuery {
   import utils.ReteNode
-  val production = newLocal(Props(new Production("RouteSensor")))
   val antijoinB = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin-A")
   val antijoinA = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin-B")
   val sensorJoin = newRemote1(Props(
@@ -73,8 +72,8 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "definedBy" -> ((cs: ChangeSet) => {
       val children = Array(antijoinA, antijoinB)
-      cs.positive.groupBy( tup => tup.hashCode() % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
-      cs.negative.groupBy( tup => tup.hashCode() % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
+      cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
+      cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
     })
   )
 
