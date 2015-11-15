@@ -59,13 +59,14 @@ class DistributedRouteSensor extends  DistributedQuery {
 class DistributedSplitRouteSensor extends  DistributedQuery {
   import utils.ReteNode
   val production = newLocal(Props(new Production("RouteSensor")))
-  val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 2)), "RouteSensor-antijoin")
+  val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 4)), "RouteSensor-antijoin")
   val sensorJoinA = newRemote2(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-A")
   val sensorJoinB = newRemote3(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-B")
+  val sensorJoinC = newLocal(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-C")
 
   val followsJoin = newRemote1(Props(
     new ParallelHashJoiner(
-      Vector(sensorJoinA.primary,sensorJoinB.primary)
+      Vector(sensorJoinA.primary, sensorJoinB.primary, sensorJoinC.primary)
       , 2, Vector(0), 2, Vector(1),
       hashFunction = n => n(1).hashCode()
     )), "RouteSensor-follows-join")
@@ -75,7 +76,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) =>
       {
-        val children = Array(sensorJoinA, sensorJoinB)
+        val children = Array(sensorJoinA, sensorJoinB, sensorJoinC)
         cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
         cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
       }),
@@ -85,7 +86,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
   val inputNodes: List[ReteMessage => Unit] =
     List(
       antijoin.secondary,
-      sensorJoinA.secondary, sensorJoinB.secondary,
+      sensorJoinA.secondary, sensorJoinB.secondary, sensorJoinC.secondary,
       followsJoin.primary, followsJoin.secondary
     )
   override val terminator = Terminator(inputNodes, production)
