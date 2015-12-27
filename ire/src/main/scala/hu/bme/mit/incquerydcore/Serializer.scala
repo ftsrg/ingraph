@@ -1,5 +1,6 @@
 package hu.bme.mit.incquerydcore
 import java.io.FileOutputStream
+
 import com.twitter.chill.{Output, ScalaKryoInstantiator}
 import hu.bme.mit.incquerydcore.trainbenchmark.TrainbenchmarkReader
 

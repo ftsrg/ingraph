@@ -1,6 +1,6 @@
-import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
-import hu.bme.mit.incquerydcore.trainbenchmark._
+import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.incquerydcore._
+import hu.bme.mit.incquerydcore.trainbenchmark._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.Timeouts
 import org.scalatest.time.SpanSugar._
