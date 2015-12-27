@@ -2,8 +2,8 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import hu.bme.mit.incquerydcore.InequalityChecker
-import hu.bme.mit.incquerydcore.EqualityChecker
+import hu.bme.mit.incquerydcore.Inequality
+import hu.bme.mit.incquerydcore.Equality
 import hu.bme.mit.incquerydcore.ChangeSet
 import hu.bme.mit.incquerydcore.Checker
 import hu.bme.mit.incquerydcore.nodeType
@@ -38,7 +38,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "check equality properly" in {
       val changeSet = ChangeSet(Vector(Vector(0, 2, 1), Vector(0, 0, 0), Vector(0, 2, 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val equalityChecker = system.actorOf(Props(new EqualityChecker(echoActor ! _, 0, Vector(1, 2))))
+      val equalityChecker = system.actorOf(Props(new Equality(echoActor ! _, 0, Vector(1, 2))))
 
       equalityChecker ! changeSet
       expectMsg(ChangeSet(Vector(Vector(0, 0, 0))))
@@ -48,7 +48,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "check inequality properly" in {
       val changeSet = ChangeSet(Vector(Vector(0, 2, 1), Vector(0, 3, 0), Vector(0, 0, 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val inequalityChecker = system.actorOf(Props(new InequalityChecker(echoActor ! _, 0, Vector(1, 2))))
+      val inequalityChecker = system.actorOf(Props(new Inequality(echoActor ! _, 0, Vector(1, 2))))
 
       inequalityChecker ! changeSet
       expectMsg(ChangeSet(Vector(Vector(0, 2, 1))))

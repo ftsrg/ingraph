@@ -1,6 +1,6 @@
 package hu.bme.mit.incquerydcore.trainbenchmark
 
-import java.io.{ObjectInputStream, IOException, ObjectOutputStream}
+import java.io.{IOException, ObjectInputStream, ObjectOutputStream}
 
 import akka.actor._
 import akka.remote.RemoteScope
@@ -106,7 +106,7 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
   val production = newLocal(Props(new Production("SwitchSet")), "SwitchSet-production")
   val finalJoin = newRemote1(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))), "SwitchSet-final-join")
 
-  val inequality = newRemote1(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))),"SwitchSet-inequality")
+  val inequality = newRemote1(Props(new Inequality(finalJoin ! Secondary(_), 2, Vector(3))),"SwitchSet-inequality")
   val switchPositionCurrentPositionJoin = newRemote1(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))), "SwitchSet-pos-currentpos-join")
   val switchSwitchPositionJoin = newRemote1(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))), "SwitchSet-switch-switchp-join")
 
@@ -138,7 +138,7 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
 class RemoteOnlySemaphoreNeighbor extends RemoteOnlyTrainbenchmarkQuery {
   val production = newLocal(Props(new Production("SemaphoreNeighbor")), "SemaphoreNeighbor-production")
   val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"SemaphoreNeighbor-antijoin")
-  val inequality = newRemote1(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"SemaphoreNeighbor-inequality")
+  val inequality = newRemote1(Props(new Inequality(antijoin ! Primary(_), 0, Vector(6))),"SemaphoreNeighbor-inequality")
   val finalJoin = newRemote1(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"SemaphoreNeighbor-final-join")
   val secondToLastJoin = newRemote1(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"SemaphoreNeighbor-secondtolast-join")
   val rightMostJoin = newRemote1(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"SemaphoreNeighbor-rightmost-join")

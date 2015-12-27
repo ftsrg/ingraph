@@ -8,8 +8,8 @@ import hu.bme.mit.incquerydcore._
 import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap
+import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.concurrent.{Await, TimeoutException}
 
 class TrainbenchmarkReader(input: WildcardInput) {
   val log = Logger.getRootLogger
@@ -159,7 +159,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val production = newLocal(Props(new Production("SwitchSet")))
     val finalJoin = newLocal(Props(new HashJoiner(production ! _, 3, Vector(2), 4, Vector(0))))
 
-    val inequality = newLocal(Props(new InequalityChecker(finalJoin ! Secondary(_), 2, Vector(3))))
+    val inequality = newLocal(Props(new Inequality(finalJoin ! Secondary(_), 2, Vector(3))))
     val switchPositionCurrentPositionJoin = newLocal(Props(new HashJoiner(inequality ! _, 2, Vector(1), 2, Vector(0))))
     val switchSwitchPositionJoin = newLocal(Props(new HashJoiner(switchPositionCurrentPositionJoin ! Primary(_), 2, Vector(0), 2, Vector(0))))
 
@@ -191,7 +191,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   class SemaphoreNeighbor extends TrainbenchmarkQuery {
     val production = newLocal(Props(new Production("SemaphoreNeighbor")))
     val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
-    val inequality = newLocal(Props(new InequalityChecker(antijoin ! Primary(_), 0, Vector(6))),"b")
+    val inequality = newLocal(Props(new Inequality(antijoin ! Primary(_), 0, Vector(6))),"b")
     val finalJoin = newLocal(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
     val secondToLastJoin = newLocal(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
     val rightMostJoin = newLocal(Props(new HashJoiner(secondToLastJoin ! Secondary(_), 3, Vector(2), 2, Vector(0))),"e")
