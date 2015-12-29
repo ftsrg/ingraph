@@ -1,11 +1,11 @@
-package hu.bme.mit.incquerydcore.trainbenchmark
+package hu.bme.mit.incqueryds.trainbenchmark
 
 import java.io.{IOException, ObjectInputStream, ObjectOutputStream}
 
 import akka.actor._
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
-import hu.bme.mit.incquerydcore._
+import hu.bme.mit.incqueryds._
 
 import scala.collection.immutable.HashMap
 
@@ -18,7 +18,7 @@ object RemoteOnlyTrainbenchmarkQuery {
 
 abstract class RemoteOnlyTrainbenchmarkQuery extends TrainbenchmarkQuery with Serializable{
   override val system = RemoteOnlyTrainbenchmarkQuery.system
-  val remote1Adress = Address("akka.tcp", "Slave1System", System.getenv("SLAVE1IP"), 2552)
+  val remote1Adress = Address("akka.tcp", "Slave1System", "127.0.0.1", 2552)
   def newRemote1(props: Props, name: String): ActorRef = {
     val actor = system.actorOf(props.withDeploy(Deploy(scope = RemoteScope(remote1Adress))), name + System.currentTimeMillis().toString)
     actors += actor

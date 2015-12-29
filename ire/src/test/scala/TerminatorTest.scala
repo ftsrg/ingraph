@@ -3,7 +3,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, _}
-import hu.bme.mit.incquerydcore._
+import hu.bme.mit.incqueryds._
 import utils.ReteNode
 /**
  * Created by janosmaginecz on 10/05/15.
@@ -16,7 +16,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   }
   "alpha nodes" must {
     "propagate terminator messages" in {
-      import hu.bme.mit.incquerydcore.utils
+      import hu.bme.mit.incqueryds.utils
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new Production("alpha test", 2)))
       val intermediary = system.actorOf(Props(new Checker(production ! _, c => true, expectedTerminatorCount = 2)))

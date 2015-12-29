@@ -2,11 +2,11 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import hu.bme.mit.incquerydcore.Inequality
-import hu.bme.mit.incquerydcore.Equality
-import hu.bme.mit.incquerydcore.ChangeSet
-import hu.bme.mit.incquerydcore.Checker
-import hu.bme.mit.incquerydcore.nodeType
+import hu.bme.mit.incqueryds.Inequality
+import hu.bme.mit.incqueryds.Equality
+import hu.bme.mit.incqueryds.ChangeSet
+import hu.bme.mit.incqueryds.Checker
+import hu.bme.mit.incqueryds.nodeType
 
 
 /**

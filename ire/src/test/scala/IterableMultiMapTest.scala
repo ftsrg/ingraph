@@ -2,7 +2,7 @@ import scala.collection.mutable
 
 import org.scalatest.WordSpec
 
-import hu.bme.mit.incquerydcore.IterableMultiMap
+import hu.bme.mit.incqueryds.IterableMultiMap
 
 /**
  * Created by wafle on 8/30/2015.

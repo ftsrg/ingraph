@@ -1,4 +1,4 @@
-package hu.bme.mit.incquerydcore
+package hu.bme.mit.incqueryds
 import java.io.{InputStream, Reader}
 
 import com.hp.hpl.jena.graph.Node_Literal

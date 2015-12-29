@@ -1,7 +1,9 @@
-package hu.bme.mit.incquerydcore
+package hu.bme.mit.incqueryds
 import java.util.concurrent.atomic.AtomicInteger
+
 import akka.actor.ActorRef
 import org.apache.log4j.LogManager
+
 import scala.collection.mutable
 
 /**
