@@ -10,8 +10,8 @@ import akka.actor.actorRef2Scala
 import akka.testkit.ImplicitSender
 import akka.testkit.TestActors
 import akka.testkit.TestKit
-import hu.bme.mit.incquerydcore.ChangeSet
-import hu.bme.mit.incquerydcore.Trimmer
+import hu.bme.mit.incqueryds.ChangeSet
+import hu.bme.mit.incqueryds.Trimmer
 
 /**
  * Created by Maginecz on 3/16/2015.

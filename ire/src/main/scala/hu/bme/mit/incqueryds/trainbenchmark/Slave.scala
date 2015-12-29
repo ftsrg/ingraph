@@ -1,4 +1,4 @@
-package hu.bme.mit.incquerydcore.trainbenchmark
+package hu.bme.mit.incqueryds.trainbenchmark
 
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory

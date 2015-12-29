@@ -1,10 +1,10 @@
-package hu.bme.mit.incquerydcore.trainbenchmark
+package hu.bme.mit.incqueryds.trainbenchmark
 
 import java.io.FileInputStream
 
 import akka.actor._
 import akka.remote.RemoteScope
-import hu.bme.mit.incquerydcore._
+import hu.bme.mit.incqueryds._
 import org.apache.log4j.Logger
 
 import scala.collection.immutable.HashMap

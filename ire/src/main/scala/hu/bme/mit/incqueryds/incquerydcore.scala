@@ -1,4 +1,5 @@
 package hu.bme.mit
-package object incquerydcore {
+package object incqueryds {
   type nodeType = Vector[Any]
+
 }
