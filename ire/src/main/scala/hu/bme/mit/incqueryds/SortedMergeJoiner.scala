@@ -11,10 +11,10 @@ import scala.collection.mutable
   */
 class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
                         comparator: Comparator[nodeType],
-                         val primaryLength: Int, val primarySelector: Vector[Int],
-                         val secondaryLength: Int, val secondarySelector: Vector[Int],
-                         override val expectedTerminatorCount:Int = 2)
-    extends BetaNode with SingleForwarder {
+                        val primaryLength: Int, val primarySelector: Vector[Int],
+                        val secondaryLength: Int, val secondarySelector: Vector[Int],
+                        override val expectedTerminatorCount: Int = 2)
+  extends BetaNode with SingleForwarder {
   val inversePrimarySelector = Vector.range(0, primaryLength) filter (i => !primarySelector.contains(i))
   val inverseSecondarySelector = Vector.range(0, secondaryLength) filter (i => !secondarySelector.contains(i))
 
@@ -24,7 +24,7 @@ class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
   override def onPrimary(changeSet: ChangeSet): Unit = {
     val incoming = changeSet.positive.sortWith((a, b) => comparator.compare(a, b) < 0).iterator
     val secondary = secondaryValues.keySet().iterator
-    println("primary")
+
     val matches = new mutable.HashSet[nodeType]
 
     breakable {
@@ -35,7 +35,10 @@ class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
       while (true) {
         val cmp = comparator.compare(nextIn, nextSec)
         if (cmp == 0) {
-          secondaryValues.get(nextSec).foreach(matches += nextIn ++ inverseSecondarySelector.map(i => nextSec(i)))
+          secondaryValues.get(nextSec).foreach(m => matches += nextIn ++ inverseSecondarySelector.map(i => m(i)))
+          if (!incoming.hasNext || !secondary.hasNext) {
+            break
+          }
           nextIn = incoming.next()
           nextSec = secondary.next()
         } else if (cmp > 0) {
@@ -44,7 +47,7 @@ class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
           }
           nextSec = secondary.next()
         } else if (cmp < 0) {
-          if (!incoming.hasNext) {
+          if (!incoming.hasNext) { //nextIn is smaller
             break
           }
           nextIn = incoming.next()
@@ -79,20 +82,20 @@ class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
       var nextIn = incoming.next()
       var nextPrim = primary.next()
       while (true) {
-        val cmp = comparator.compare(nextIn, nextPrim)
+        val cmp = comparator.compare(nextPrim, nextIn)
         if (cmp == 0) {
-          primaryValues.get(nextPrim).foreach(matches += nextIn ++ inversePrimarySelector.map(i => nextPrim(i)))
+          primaryValues.get(nextPrim).foreach(m => matches += nextIn ++ inversePrimarySelector.map(i => m(i)))
           if (!(incoming.hasNext && primary.hasNext)) {
             break
           }
           nextIn = incoming.next()
           nextPrim = primary.next()
-        } else if (cmp > 0) {
+        } else if (cmp < 0) {
           if (!primary.hasNext) {
             break
           }
           nextPrim = primary.next()
-        } else if (cmp < 0) {
+        } else if (cmp > 0) {
           if (!incoming.hasNext) {
             break
           }
@@ -103,9 +106,9 @@ class SortedMergeJoiner(override val next: (ReteMessage) => Unit,
 
     forward(ChangeSet(positive = matches.toVector))
 
-    incoming.foreach(
+    changeSet.positive.foreach(
       vec => {
-        val key = primarySelector.map(i => vec(i))
+        val key = secondarySelector.map(i => vec(i))
         val value = secondaryValues.get(key)
         if (value == null) {
           secondaryValues.put(key, mutable.HashSet(vec))
