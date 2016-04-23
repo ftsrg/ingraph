@@ -1,0 +1,5 @@
+{"id":0,"label":"vertex","outE":{"sensors":[{"id":8,"inV":4}],"elements":[{"id":9,"inV":6}]},"properties":{"type":[{"id":1,"value":"Region"}]}}
+{"id":2,"label":"vertex","outE":{"follows":[{"id":13,"inV":10}]},"properties":{"type":[{"id":3,"value":"Route"}]}}
+{"id":4,"label":"vertex","inE":{"sensors":[{"id":8,"outV":0}],"monitoredBy":[{"id":14,"outV":6}]},"properties":{"type":[{"id":5,"value":"Sensor"}]}}
+{"id":6,"label":"vertex","inE":{"elements":[{"id":9,"outV":0}],"target":[{"id":12,"outV":10}]},"outE":{"monitoredBy":[{"id":14,"inV":4}]},"properties":{"type":[{"id":7,"value":"Switch"}]}}
+{"id":10,"label":"vertex","inE":{"follows":[{"id":13,"outV":2}]},"outE":{"target":[{"id":12,"inV":6}]},"properties":{"type":[{"id":11,"value":"SwitchPosition"}]}}
