@@ -19,13 +19,11 @@ public class TinkerPopSandboxMain {
 		graph.createIndex(TYPE, Vertex.class);
 		graph.io(IoCore.graphson()).readGraph(graphFile);
 	
-		final TinkerGraphProcessor processor = new TinkerGraphProcessor(graph);
-		
+		final TinkerGraphProcessor processor = new TinkerGraphProcessor(graph);		
 		final List<Edge> followss = processor.getEdges("follows");
-		final List<Edge> targets = processor.getEdges("target");
-		final List<Edge> monitoredBys = processor.getEdges("monitoredBy");
 
 		final MutableMultimap<Vertex, Vertex> followsMM = processor.edgesToMultimap(followss);
+		System.out.println(followsMM);
 
 		graph.close();
 	}

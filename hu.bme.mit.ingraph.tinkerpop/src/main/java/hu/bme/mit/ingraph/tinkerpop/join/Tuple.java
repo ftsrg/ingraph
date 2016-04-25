@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.list.mutable.FastList;
 
 public class Tuple {
 
@@ -22,7 +23,7 @@ public class Tuple {
 		this.list = list;
 	}
 
-	Tuple(final MutableList<Long> list) {
+	Tuple(final List<Long> list) {
 		this.list = Lists.immutable.ofAll(list);
 	}
 
@@ -30,7 +31,7 @@ public class Tuple {
 		return new Tuple(elements);
 	}
 
-	public static Tuple createTuple(final MutableList<Long> tuple) {
+	public static Tuple createTuple(final List<Long> tuple) {
 		return new Tuple(tuple);
 	}
 
@@ -66,9 +67,8 @@ public class Tuple {
 
 	public static Tuple join(final Tuple primaryTuple, final Tuple secondaryTuple, final List<Integer> primaryMask,
 			final List<Integer> secondaryMask) {
-		// final int size = primaryTuple.size() + secondaryTuple.size() -
-		// primaryMask.size();
-		final MutableList<Long> joinedList = Lists.mutable.ofAll(primaryTuple.list);
+		final int size = primaryTuple.size() + secondaryTuple.size() - primaryMask.size();
+		final List<Long> joinedList = FastList.newList(size);
 		for (int i = 0; i < secondaryTuple.list.size(); i++) {
 			if (!secondaryMask.contains(i)) {
 				joinedList.add(secondaryTuple.list.get(i));
