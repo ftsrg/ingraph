@@ -1,4 +1,4 @@
-package hu.bme.mit.ingraph.algebra.visitor;
+package hu.bme.mit.ingraph.algebra.operations.visitors;
 
 public interface Visitable {
 

@@ -1,18 +1,18 @@
-package hu.bme.mit.ingraph.algebra;
+package hu.bme.mit.ingraph.algebra.operations;
 
 import java.util.List;
 
-import hu.bme.mit.ingraph.algebra.visitor.Visitor;
+import hu.bme.mit.ingraph.algebra.operations.visitors.Visitor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 
 @Builder
-public class JoinNode extends WorkerNode {
+public class JoinOperation extends WorkerOperation {
 
-	@Getter protected AbstractNode leftParent;
-	@Getter protected AbstractNode rightParent;
+	@Getter protected AbstractOperation leftParent;
+	@Getter protected AbstractOperation rightParent;
 
 	@Getter @Singular protected List<Integer> lms;
 	@Getter @Singular protected List<Integer> rms;

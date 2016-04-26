@@ -1,4 +1,4 @@
-package hu.bme.mit.ingraph.tinkerpop.join;
+package hu.bme.mit.ingraph.rete;
 
 import java.util.List;
 

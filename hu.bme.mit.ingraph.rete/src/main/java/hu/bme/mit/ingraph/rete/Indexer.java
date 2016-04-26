@@ -1,3 +1,4 @@
+package hu.bme.mit.ingraph.rete;
 //package hu.bme.mit.ingraph.tinkerpop.join;
 //
 //import java.io.File;

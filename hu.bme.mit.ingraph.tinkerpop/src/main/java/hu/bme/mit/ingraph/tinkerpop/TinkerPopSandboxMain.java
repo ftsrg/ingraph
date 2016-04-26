@@ -23,7 +23,6 @@ public class TinkerPopSandboxMain {
 		final List<Edge> followss = processor.getEdges("follows");
 
 		final MutableMultimap<Vertex, Vertex> followsMM = processor.edgesToMultimap(followss);
-		System.out.println(followsMM);
 
 		graph.close();
 	}
