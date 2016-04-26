@@ -1,6 +1,6 @@
 package hu.bme.mit.ingraph.algebra.operations;
 
-import hu.bme.mit.ingraph.algebra.operations.visitors.Visitor;
+import hu.bme.mit.ingraph.algebra.operations.visitors.AlgebraTreeVisitor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ public class ProductionOperation extends AbstractOperation {
 
 	@Getter protected WorkerOperation parent;
 
-	public long accept(Visitor visitor) {
+	public long accept(AlgebraTreeVisitor visitor) {
 		return visitor.visit(this);
 	}
 

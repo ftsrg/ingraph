@@ -4,23 +4,23 @@ import hu.bme.mit.ingraph.algebra.operations.InputOperation;
 import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
 import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
 
-public class PrinterVisitor implements Visitor {
+public class PrinterVisitor implements AlgebraTreeVisitor {
 
-	public long visit(final ProductionOperation node) {
-		System.out.println("Production node");
-		node.getParent().accept(this);
+	public long visit(final ProductionOperation operation) {
+		System.out.println("Production operation");
+		operation.getParent().accept(this);
 		return 0;
 	}
 
-	public long visit(final JoinOperation node) {
-		System.out.println("Join node: " + node.getLms() + " " + node.getRms());
-		node.getLeftParent().accept(this);
-		node.getRightParent().accept(this);
+	public long visit(final JoinOperation operation) {
+		System.out.println("Join operation: " + operation.getLms() + " " + operation.getRms());
+		operation.getLeftParent().accept(this);
+		operation.getRightParent().accept(this);
 		return 0;
 	}
 
-	public long visit(InputOperation node) {
-		System.out.println("Input node: " + node.getName());
+	public long visit(final InputOperation operation) {
+		System.out.println("Input node: " + operation.getName());
 		return 0;
 	}
 

@@ -6,5 +6,9 @@ import lombok.Getter;
 public abstract class AbstractNode<TOperation extends AbstractOperation> {
 
 	@Getter protected TOperation operation;
+
+	public AbstractNode(TOperation operation) {
+		this.operation = operation;
+	}
 	
 }

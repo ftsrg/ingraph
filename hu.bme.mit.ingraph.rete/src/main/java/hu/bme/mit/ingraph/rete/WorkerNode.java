@@ -4,4 +4,8 @@ import hu.bme.mit.ingraph.algebra.operations.WorkerOperation;
 
 public abstract class WorkerNode<TWorkerOperation extends WorkerOperation> extends AbstractNode<TWorkerOperation> {
 
+	public WorkerNode(TWorkerOperation operation) {
+		super(operation);
+	}
+
 }

@@ -2,7 +2,7 @@ package hu.bme.mit.ingraph.algebra.operations;
 
 import java.util.List;
 
-import hu.bme.mit.ingraph.algebra.operations.visitors.Visitor;
+import hu.bme.mit.ingraph.algebra.operations.visitors.AlgebraTreeVisitor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class JoinOperation extends WorkerOperation {
 
 	@Getter @Setter protected double density;
 
-	public long accept(Visitor visitor) {
+	public long accept(AlgebraTreeVisitor visitor) {
 		return visitor.visit(this);
 	}
 

@@ -8,7 +8,7 @@ import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
 import hu.bme.mit.ingraph.algebra.operations.visitors.PrinterVisitor;
 import hu.bme.mit.ingraph.algebra.operations.visitors.StatisticsVisitor;
 
-public class BuilderTest {
+public class VisitorTest {
 
 	@Test
 	public void test() {
