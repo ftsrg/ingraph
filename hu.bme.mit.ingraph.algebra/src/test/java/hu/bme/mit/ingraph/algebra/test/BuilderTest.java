@@ -5,6 +5,7 @@ import org.junit.Test;
 import hu.bme.mit.ingraph.algebra.InputNode;
 import hu.bme.mit.ingraph.algebra.JoinNode;
 import hu.bme.mit.ingraph.algebra.ProductionNode;
+import hu.bme.mit.ingraph.algebra.visitor.PrinterVisitor;
 import hu.bme.mit.ingraph.algebra.visitor.StatisticsVisitor;
 
 public class BuilderTest {
@@ -28,6 +29,9 @@ public class BuilderTest {
 		final StatisticsVisitor statisticsVisitor = new StatisticsVisitor();
 		final long tuples = statisticsVisitor.visit(production);
 		System.out.println(tuples);
+		
+		final PrinterVisitor printerVisitor = new PrinterVisitor();
+		printerVisitor.visit(production);
 	}
 	
 }

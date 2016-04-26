@@ -14,8 +14,8 @@ public class JoinNode extends WorkerNode {
 	@Getter protected AbstractNode leftParent;
 	@Getter protected AbstractNode rightParent;
 
-	@Singular protected List<Integer> lms;
-	@Singular protected List<Integer> rms;
+	@Getter @Singular protected List<Integer> lms;
+	@Getter @Singular protected List<Integer> rms;
 
 	@Getter @Setter protected double density;
 

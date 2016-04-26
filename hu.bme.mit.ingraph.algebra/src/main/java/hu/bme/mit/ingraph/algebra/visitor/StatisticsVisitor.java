@@ -14,13 +14,12 @@ public class StatisticsVisitor implements Visitor {
 		final long leftTuples = node.getLeftParent().accept(this);
 		final long rightTuples = node.getRightParent().accept(this);
 		final long tuples = Math.round(leftTuples * rightTuples * node.getDensity());
-		
+
 		return tuples;
 	}
 
 	public long visit(InputNode node) {
-		return node.getTuples();		
+		return node.getTuples();
 	}
-
 
 }
