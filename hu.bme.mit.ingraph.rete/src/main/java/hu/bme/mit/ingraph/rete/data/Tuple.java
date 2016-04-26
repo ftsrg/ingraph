@@ -1,4 +1,4 @@
-package hu.bme.mit.ingraph.rete;
+package hu.bme.mit.ingraph.rete.data;
 
 import java.util.List;
 
