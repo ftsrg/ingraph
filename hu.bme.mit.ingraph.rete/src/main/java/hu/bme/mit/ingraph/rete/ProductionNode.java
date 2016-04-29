@@ -1,11 +1,19 @@
 package hu.bme.mit.ingraph.rete;
 
-import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
+import hu.bme.mit.ingraph.algebra.operators.AbstractOperator;
+import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
+import lombok.Getter;
 
-public class ProductionNode extends AbstractNode<ProductionOperation> {
+public class ProductionNode extends AbstractNode<ProductionOperator> {
 
-	public ProductionNode(ProductionOperation operation) {
-		super(operation);
+	@Getter private AbstractNode<? extends AbstractOperator> parentNode;
+
+	public ProductionNode(ProductionOperator operator) {
+		super(operator);
+	}
+
+	public void subscribe(AbstractNode<? extends AbstractOperator> parentNode) {
+		this.parentNode = parentNode; 
 	}
 	
 }

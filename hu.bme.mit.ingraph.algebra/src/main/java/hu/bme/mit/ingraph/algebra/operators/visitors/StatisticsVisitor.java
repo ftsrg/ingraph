@@ -1,16 +1,16 @@
-package hu.bme.mit.ingraph.algebra.operations.visitors;
+package hu.bme.mit.ingraph.algebra.operators.visitors;
 
-import hu.bme.mit.ingraph.algebra.operations.InputOperation;
-import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
-import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
+import hu.bme.mit.ingraph.algebra.operators.InputOperator;
+import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
+import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 
 public class StatisticsVisitor implements TreeVisitor<Long> {
 
-	public Long visit(final ProductionOperation operation) {
+	public Long visit(final ProductionOperator operation) {
 		return operation.getParent().accept(this);
 	}
 
-	public Long visit(final JoinOperation operation) {
+	public Long visit(final JoinOperator operation) {
 		final long leftTuples = operation.getLeftParent().accept(this);
 		final long rightTuples = operation.getRightParent().accept(this);
 		final long tuples = Math.round(leftTuples * rightTuples * operation.getDensity());
@@ -18,7 +18,7 @@ public class StatisticsVisitor implements TreeVisitor<Long> {
 		return tuples;
 	}
 
-	public Long visit(InputOperation operation) {
+	public Long visit(InputOperator operation) {
 		return Long.valueOf(operation.getTuples());
 	}
 

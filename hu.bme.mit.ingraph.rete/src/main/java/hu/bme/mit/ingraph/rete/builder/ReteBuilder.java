@@ -1,29 +1,40 @@
 package hu.bme.mit.ingraph.rete.builder;
 
-import hu.bme.mit.ingraph.algebra.operations.InputOperation;
-import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
-import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
-import hu.bme.mit.ingraph.algebra.operations.visitors.TreeVisitor;
+import hu.bme.mit.ingraph.algebra.operators.AbstractOperator;
+import hu.bme.mit.ingraph.algebra.operators.InputOperator;
+import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
+import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
+import hu.bme.mit.ingraph.algebra.operators.visitors.TreeVisitor;
+import hu.bme.mit.ingraph.rete.AbstractNode;
 import hu.bme.mit.ingraph.rete.InputNode;
 import hu.bme.mit.ingraph.rete.JoinNode;
 import hu.bme.mit.ingraph.rete.ProductionNode;
 
-public class ReteBuilder implements TreeVisitor<Void> {
+public class ReteBuilder implements TreeVisitor<AbstractNode<? extends AbstractOperator>> {
 
-	public Void visit(final InputOperation operation) {
-		final InputNode inputNode = new InputNode(operation);
-		return null;
+	public AbstractNode<? extends AbstractOperator> visit(final InputOperator operator) {
+		final InputNode inputNode = new InputNode(operator);
+		
+		return inputNode;
 	}
 
-	public Void visit(final JoinOperation operation) {
-		final JoinNode joinNode = new JoinNode(operation);
-		return null;
+	public AbstractNode<? extends AbstractOperator> visit(final JoinOperator operator) {
+		final JoinNode joinNode = new JoinNode(operator);
+		
+		final AbstractNode<? extends AbstractOperator> leftParentNode = operator.getLeftParent().accept(this);
+		final AbstractNode<? extends AbstractOperator> rightParentNode = operator.getRightParent().accept(this);
+		joinNode.subscribe(leftParentNode, rightParentNode);
+		
+		return joinNode;
 	}
 
-	public Void visit(final ProductionOperation operation) {
-		final ProductionNode productionNode = new ProductionNode(operation);
-		operation.getParent().accept(this);
-		return null;
+	public AbstractNode<? extends AbstractOperator> visit(final ProductionOperator operator) {
+		final ProductionNode productionNode = new ProductionNode(operator);
+		
+		final AbstractNode<? extends AbstractOperator> parentNode = operator.getParent().accept(this);
+		productionNode.subscribe(parentNode);
+		
+		return productionNode;
 	}
-	
+
 }

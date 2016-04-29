@@ -16,7 +16,8 @@
 	</properties>
 
 	<modules>
-		<module>hu.bme.mit.ingraph.algebra</module>
+    <module>hu.bme.mit.ingraph.algebra</module>
+    <module>hu.bme.mit.ingraph.graph</module>
 		<module>hu.bme.mit.ingraph.rete</module>
 		<module>hu.bme.mit.ingraph.tinkerpop</module>
 	</modules>

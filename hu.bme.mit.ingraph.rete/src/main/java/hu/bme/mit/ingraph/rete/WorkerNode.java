@@ -1,11 +1,11 @@
 package hu.bme.mit.ingraph.rete;
 
-import hu.bme.mit.ingraph.algebra.operations.WorkerOperation;
+import hu.bme.mit.ingraph.algebra.operators.WorkerOperator;
 
-public abstract class WorkerNode<TWorkerOperation extends WorkerOperation> extends AbstractNode<TWorkerOperation> {
+public abstract class WorkerNode<TWorkerOperator extends WorkerOperator> extends AbstractNode<TWorkerOperator> {
 
-	public WorkerNode(TWorkerOperation operation) {
-		super(operation);
+	public WorkerNode(final TWorkerOperator operator) {
+		super(operator);
 	}
 
 }

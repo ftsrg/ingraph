@@ -1,11 +1,11 @@
-package hu.bme.mit.ingraph.algebra.operations;
+package hu.bme.mit.ingraph.algebra.operators;
 
-import hu.bme.mit.ingraph.algebra.operations.visitors.TreeVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.TreeVisitor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class InputOperation extends AbstractOperation {
+public class InputOperator extends AbstractOperator {
 
 	@Getter protected String name;
 	

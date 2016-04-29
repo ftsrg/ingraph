@@ -1,37 +1,39 @@
 package hu.bme.mit.ingraph.algebra.test;
 
+import static hu.bme.mit.ingraph.algebra.operators.util.AlgebraUtil.L;
+
 import org.junit.Test;
 
-import hu.bme.mit.ingraph.algebra.operations.InputOperation;
-import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
-import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
-import hu.bme.mit.ingraph.algebra.operations.visitors.PrinterVisitor;
-import hu.bme.mit.ingraph.algebra.operations.visitors.StatisticsVisitor;
+import hu.bme.mit.ingraph.algebra.operators.InputOperator;
+import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
+import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
+import hu.bme.mit.ingraph.algebra.operators.visitors.PrinterVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.StatisticsVisitor;
 
 public class VisitorTest {
 
 	@Test
 	public void test() {
-		final InputOperation sw = InputOperation.builder().name("switch").build();
-		final InputOperation follows = InputOperation.builder().name("follows").build();
-		final InputOperation sensor = InputOperation.builder().name("sensor").build();
-		
-		final JoinOperation join1 = JoinOperation.builder().leftParent(sw).rightParent(follows).lm(0).rm(1).build();
-		final JoinOperation join2 = JoinOperation.builder().leftParent(join1).rightParent(sensor).lm(1).rm(0).build();
-		final ProductionOperation production = ProductionOperation.builder().parent(join2).build();
-		
+		final InputOperator sw = InputOperator.builder().name("switch").build();
+		final InputOperator follows = InputOperator.builder().name("follows").build();
+		final InputOperator sensor = InputOperator.builder().name("sensor").build();
+
+		final JoinOperator join1 = JoinOperator.builder().leftParent(sw).rightParent(follows).lms(L(0)).rms(L(1)).build();
+		final JoinOperator join2 = JoinOperator.builder().leftParent(join1).rightParent(sensor).lms(L(1)).rms(L(0)).build();
+		final ProductionOperator production = ProductionOperator.builder().parent(join2).build();
+
 		sw.setTuples(100);
 		follows.setTuples(200);
 		sensor.setTuples(300);
 		join1.setDensity(0.1);
 		join2.setDensity(0.2);
-		
+
 		final StatisticsVisitor statisticsVisitor = new StatisticsVisitor();
 		final long tuples = statisticsVisitor.visit(production);
 		System.out.println(tuples);
-		
+
 		final PrinterVisitor printerVisitor = new PrinterVisitor();
 		printerVisitor.visit(production);
 	}
-	
+
 }
