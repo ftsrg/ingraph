@@ -4,10 +4,10 @@ import hu.bme.mit.ingraph.algebra.operations.InputOperation;
 import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
 import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
 
-public interface AlgebraTreeVisitor {
+public interface TreeVisitor<R> {
 	
-	public long visit(InputOperation operation);
-	public long visit(JoinOperation operation);
-	public long visit(ProductionOperation operation);
+	public R visit(final InputOperation operation);
+	public R visit(final JoinOperation operation);
+	public R visit(final ProductionOperation operation);
 	
 }

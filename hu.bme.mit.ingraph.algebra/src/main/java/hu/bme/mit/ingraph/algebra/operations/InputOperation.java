@@ -1,6 +1,6 @@
 package hu.bme.mit.ingraph.algebra.operations;
 
-import hu.bme.mit.ingraph.algebra.operations.visitors.AlgebraTreeVisitor;
+import hu.bme.mit.ingraph.algebra.operations.visitors.TreeVisitor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,9 +8,10 @@ import lombok.Getter;
 public class InputOperation extends AbstractOperation {
 
 	@Getter protected String name;
-
-	public long accept(AlgebraTreeVisitor visitor) {
+	
+	@Override
+	public <R> R accept(TreeVisitor<? extends R> visitor) {
 		return visitor.visit(this);
 	}
-
+	
 }

@@ -2,6 +2,6 @@ package hu.bme.mit.ingraph.algebra.operations.visitors;
 
 public interface Visitable {
 
-	public long accept(final AlgebraTreeVisitor visitor);
+	public <R> R accept(final TreeVisitor<? extends R> visitor);
 	
 }

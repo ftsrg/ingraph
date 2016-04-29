@@ -7,5 +7,5 @@ import lombok.Setter;
 public abstract class AbstractOperation implements Visitable {
 
 	@Getter	@Setter	protected int tuples;
-
+	
 }

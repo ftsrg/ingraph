@@ -4,13 +4,13 @@ import hu.bme.mit.ingraph.algebra.operations.InputOperation;
 import hu.bme.mit.ingraph.algebra.operations.JoinOperation;
 import hu.bme.mit.ingraph.algebra.operations.ProductionOperation;
 
-public class StatisticsVisitor implements AlgebraTreeVisitor {
+public class StatisticsVisitor implements TreeVisitor<Long> {
 
-	public long visit(final ProductionOperation operation) {
+	public Long visit(final ProductionOperation operation) {
 		return operation.getParent().accept(this);
 	}
 
-	public long visit(final JoinOperation operation) {
+	public Long visit(final JoinOperation operation) {
 		final long leftTuples = operation.getLeftParent().accept(this);
 		final long rightTuples = operation.getRightParent().accept(this);
 		final long tuples = Math.round(leftTuples * rightTuples * operation.getDensity());
@@ -18,8 +18,8 @@ public class StatisticsVisitor implements AlgebraTreeVisitor {
 		return tuples;
 	}
 
-	public long visit(InputOperation operation) {
-		return operation.getTuples();
+	public Long visit(InputOperation operation) {
+		return Long.valueOf(operation.getTuples());
 	}
 
 }
