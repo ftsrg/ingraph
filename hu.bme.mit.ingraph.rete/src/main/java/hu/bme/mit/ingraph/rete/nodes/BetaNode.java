@@ -4,7 +4,7 @@ import hu.bme.mit.ingraph.algebra.operators.AbstractOperator;
 import hu.bme.mit.ingraph.algebra.operators.BetaOperator;
 import lombok.Getter;
 
-public class BetaNode<TBetaOperator extends BetaOperator> extends WorkerNode<TBetaOperator> {
+public abstract class BetaNode<TBetaOperator extends BetaOperator> extends WorkerNode<TBetaOperator> {
 
 	@Getter AbstractNode<? extends AbstractOperator> leftParent;
 	@Getter AbstractNode<? extends AbstractOperator> rightParent;

@@ -1,16 +1,17 @@
 package hu.bme.mit.ingraph.rete.nodes;
 
 import hu.bme.mit.ingraph.algebra.operators.InputOperator;
+import hu.bme.mit.ingraph.rete.visitors.ReteVisitor;
 
 public class InputNode extends AbstractNode<InputOperator> {
 
 	public InputNode(InputOperator operator) {
 		super(operator);
 	}
-	
+
 	@Override
-	public String prettyPrint(int indentation, int indentationStep) {
-		return indent(indentation) + "Input node [" + operator.getName() + "]";
+	public <R> R accept(ReteVisitor<? extends R> visitor) {
+		return visitor.visit(this);
 	}
 
 }

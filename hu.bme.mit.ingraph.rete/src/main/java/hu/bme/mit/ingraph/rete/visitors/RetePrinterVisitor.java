@@ -1,45 +1,46 @@
 package hu.bme.mit.ingraph.rete.visitors;
 
-import org.apache.commons.lang3.StringUtils;
-
+import hu.bme.mit.ingraph.algebra.operators.visitors.Printer;
 import hu.bme.mit.ingraph.rete.nodes.InputNode;
 import hu.bme.mit.ingraph.rete.nodes.JoinNode;
 import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
-public class RetePrinterVisitor implements ReteVisitor<String> {
+public class RetePrinterVisitor extends Printer implements ReteVisitor<String> {
 	
-	protected final int indentation;
-	protected final int indentationStep;	
-	
-	public static RetePrinterVisitor create(final int indentation, final int indentationStep) {
-		return new RetePrinterVisitor(indentation, indentationStep);
-	}
-	
-	protected String indent(int indentation) {
-		return StringUtils.repeat(" ", indentation);
+	protected RetePrinterVisitor(int indentationStep) {
+		super(indentationStep);
 	}
 
-	@Override
-	public String visit(JoinNode node) {
-		return indent(indentation) + "Join node, left mask: " + operator.getLms() + ", right mask: " + operator.getRms() + "\n" + 
-				indent(indentation) + "- Left parent:\n" +
-				leftParent.prettyPrint(indentation + indentationStep, indentationStep) + "\n" +
-				indent(indentation) + "- Right parent:\n" +
-				rightParent.prettyPrint(indentation + indentationStep, indentationStep);
+	public static RetePrinterVisitor create(final int indentationStep) {
+		return new RetePrinterVisitor(indentationStep);
 	}
 
 	@Override
 	public String visit(InputNode node) {
-		// TODO Auto-generated method stub
-		return null;
+		return "Input node [" + node.getOperator().getName() + "]\n";
+	}
+
+	@Override
+	public String visit(JoinNode node) {
+		String joinString = "Join node " + node.getOperator().getLms() + " " + node.getOperator().getRms() + "\n";
+		
+		increaseIndentation();
+		joinString = joinString + indent("(L) " + node.getLeftParent().accept(this)); 
+		joinString = joinString + indent("(R) " + node.getRightParent().accept(this));
+		decreaseIndentation();
+		
+		return joinString;
 	}
 
 	@Override
 	public String visit(ProductionNode node) {
-		// TODO Auto-generated method stub
-		return null;
+		String productionString = "Production node\n";
+		
+		increaseIndentation();
+		productionString = productionString + indent(node.getParent().accept(this));
+		decreaseIndentation();
+		
+		return productionString;
 	}
 	
 
