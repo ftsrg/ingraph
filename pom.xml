@@ -16,8 +16,8 @@
 	</properties>
 
 	<modules>
-    <module>hu.bme.mit.ingraph.algebra</module>
-    <module>hu.bme.mit.ingraph.graph</module>
+		<module>hu.bme.mit.ingraph.algebra</module>
+		<module>hu.bme.mit.ingraph.graph</module>
 		<module>hu.bme.mit.ingraph.rete</module>
 		<module>hu.bme.mit.ingraph.tinkerpop</module>
 	</modules>
@@ -33,6 +33,12 @@
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections</artifactId>
 			<version>7.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.8</version>
 		</dependency>
 
 		<dependency>

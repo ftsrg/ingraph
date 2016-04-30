@@ -1,4 +1,4 @@
-package hu.bme.mit.ingraph.rete;
+package hu.bme.mit.ingraph.rete.nodes;
 
 import org.eclipse.collections.api.multimap.MutableMultimap;
 import org.eclipse.collections.impl.factory.Multimaps;

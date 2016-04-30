@@ -5,10 +5,10 @@ import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 import hu.bme.mit.ingraph.algebra.operators.visitors.TreeVisitor;
-import hu.bme.mit.ingraph.rete.AbstractNode;
-import hu.bme.mit.ingraph.rete.InputNode;
-import hu.bme.mit.ingraph.rete.JoinNode;
-import hu.bme.mit.ingraph.rete.ProductionNode;
+import hu.bme.mit.ingraph.rete.nodes.AbstractNode;
+import hu.bme.mit.ingraph.rete.nodes.InputNode;
+import hu.bme.mit.ingraph.rete.nodes.JoinNode;
+import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
 
 public class ReteBuilder implements TreeVisitor<AbstractNode<? extends AbstractOperator>> {
 

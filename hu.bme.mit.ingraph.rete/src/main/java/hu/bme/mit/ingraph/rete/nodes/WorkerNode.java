@@ -1,4 +1,4 @@
-package hu.bme.mit.ingraph.rete;
+package hu.bme.mit.ingraph.rete.nodes;
 
 import hu.bme.mit.ingraph.algebra.operators.WorkerOperator;
 
