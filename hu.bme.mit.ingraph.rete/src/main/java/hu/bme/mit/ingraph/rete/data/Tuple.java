@@ -7,35 +7,32 @@ import org.eclipse.collections.api.list.MutableList;
 import org.eclipse.collections.impl.factory.Lists;
 import org.eclipse.collections.impl.list.mutable.FastList;
 
-public class Tuple {
+public class Tuple<TElement> {
 
-	protected final ImmutableList<Long> list;
+	protected final ImmutableList<TElement> list;
 
-	public Tuple() {
-		this.list = null;
-	}
-
-	public Tuple(final Long... elements) {
+	protected Tuple(final TElement[] elements) {
 		this.list = Lists.immutable.of(elements);
 	}
 
-	Tuple(final ImmutableList<Long> list) {
+	protected Tuple(final ImmutableList<TElement> list) {
 		this.list = list;
 	}
 
-	Tuple(final List<Long> list) {
+	protected Tuple(final List<TElement> list) {
 		this.list = Lists.immutable.ofAll(list);
 	}
 
-	public static Tuple createTuple(final Long... elements) {
-		return new Tuple(elements);
+	@SafeVarargs
+	public static <TElement> Tuple<TElement> of(final TElement... elements) {
+		return new Tuple<>(elements);
 	}
 
-	public static Tuple createTuple(final List<Long> tuple) {
-		return new Tuple(tuple);
+	public static <TElement> Tuple<TElement> of(final List<TElement> elements) {
+		return new Tuple<>(elements);
 	}
 
-	public Long get(final int i) {
+	public TElement get(final int i) {
 		return list.get(i);
 	}
 
@@ -57,23 +54,25 @@ public class Tuple {
 		return builder.toString();
 	}
 
-	public Tuple extract(final List<Integer> mask) {
-		final MutableList<Long> extractedList = Lists.mutable.of();
+	public Tuple<TElement> extract(final List<Integer> mask) {
+		final MutableList<TElement> extractedList = Lists.mutable.of();
 		for (final Integer m : mask) {
 			extractedList.add(list.get(m));
 		}
-		return new Tuple(extractedList);
+		return new Tuple<>(extractedList);
 	}
 
-	public static Tuple join(final Tuple primaryTuple, final Tuple secondaryTuple, final List<Integer> primaryMask,
-			final List<Integer> secondaryMask) {
-		final int size = primaryTuple.size() + secondaryTuple.size() - primaryMask.size();
-		final List<Long> joinedList = FastList.newList(size);
-		for (int i = 0; i < secondaryTuple.list.size(); i++) {
-			if (!secondaryMask.contains(i)) {
-				joinedList.add(secondaryTuple.list.get(i));
+	public static <TElement> Tuple<TElement> join(final Tuple<TElement> leftTuple, final Tuple<TElement> rightTuple,
+			final List<Integer> leftMask, final List<Integer> rightMask) {
+		final int size = leftTuple.size() + rightTuple.size() - leftMask.size();
+		final List<TElement> joinedList = FastList.newList(size);
+
+		for (int i = 0; i < rightTuple.list.size(); i++) {
+			if (!rightMask.contains(i)) {
+				joinedList.add(rightTuple.list.get(i));
 			}
 		}
-		return new Tuple(joinedList);
+		return new Tuple<>(joinedList);
 	}
+	
 }

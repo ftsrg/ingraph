@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class ChangeSet {
+public class ChangeSet<TElement> {
 
-	@Getter protected Collection<Tuple> positive;
-	@Getter protected Collection<Tuple> negative;
+	@Getter protected Collection<Tuple<TElement>> positive;
+	@Getter protected Collection<Tuple<TElement>> negative;
 	
 }
