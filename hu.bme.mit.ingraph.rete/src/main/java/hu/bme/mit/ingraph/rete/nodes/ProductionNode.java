@@ -17,8 +17,11 @@ public class ProductionNode extends AbstractNode<ProductionOperator> {
 	}
 	
 	@Override
-	public String prettyPrint(int indentation) {
-		return "Production node\n" + parentNode.prettyPrint(indentation);
+	public String prettyPrint(int indentation, int indentationStep) {
+		return "Production node\n" + parentNode.prettyPrint(indentation, indentationStep);
 	}
 	
+	public String prettyPrint(int indentation) {
+		return prettyPrint(indentation, indentation);
+	}
 }

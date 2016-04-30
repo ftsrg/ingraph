@@ -30,9 +30,7 @@ public class ReteBuilderTest {
 
 		final ReteBuilderVisitor reteBuilderVisitor = ReteBuilderVisitor.create();
 		final ProductionNode productionNode = (ProductionNode) production.accept(reteBuilderVisitor);
-		
-		
-		
+
 		System.out.println(productionNode.prettyPrint(2));
 	}
 

@@ -2,7 +2,7 @@ package hu.bme.mit.ingraph.algebra.operators;
 
 import java.util.List;
 
-import hu.bme.mit.ingraph.algebra.operators.visitors.TreeVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.OperatorTreeVisitor;
 import lombok.Builder;
 
 public class JoinOperator extends BetaOperator {
@@ -13,7 +13,7 @@ public class JoinOperator extends BetaOperator {
 	}
 
 	@Override
-	public <R> R accept(TreeVisitor<? extends R> visitor) {
+	public <R> R accept(OperatorTreeVisitor<? extends R> visitor) {
 		return visitor.visit(this);
 	}
 

@@ -12,9 +12,10 @@ public abstract class AbstractNode<TOperator extends AbstractOperator> {
 	public AbstractNode(TOperator operator) {
 		this.operator = operator;
 	}
-
-	public abstract String prettyPrint(final int indentation);
 	
+	// TODO convert these to a visitor
+	public abstract String prettyPrint(final int indentation, int indentationStep);
+
 	protected String indent(int indentation) {
 		return StringUtils.repeat(" ", indentation);
 	}

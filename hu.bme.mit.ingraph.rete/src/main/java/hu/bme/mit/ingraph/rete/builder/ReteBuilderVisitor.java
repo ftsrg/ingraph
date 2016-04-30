@@ -4,13 +4,13 @@ import hu.bme.mit.ingraph.algebra.operators.AbstractOperator;
 import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
-import hu.bme.mit.ingraph.algebra.operators.visitors.TreeVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.OperatorTreeVisitor;
 import hu.bme.mit.ingraph.rete.nodes.AbstractNode;
 import hu.bme.mit.ingraph.rete.nodes.InputNode;
 import hu.bme.mit.ingraph.rete.nodes.JoinNode;
 import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
 
-public class ReteBuilderVisitor implements TreeVisitor<AbstractNode<? extends AbstractOperator>> {
+public class ReteBuilderVisitor implements OperatorTreeVisitor<AbstractNode<? extends AbstractOperator>> {
 
 	protected ReteBuilderVisitor() {
 		

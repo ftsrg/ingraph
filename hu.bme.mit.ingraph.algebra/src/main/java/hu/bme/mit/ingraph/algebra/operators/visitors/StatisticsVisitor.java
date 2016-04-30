@@ -4,7 +4,7 @@ import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 
-public class StatisticsVisitor implements TreeVisitor<Long> {
+public class StatisticsVisitor implements OperatorTreeVisitor<Long> {
 
 	protected StatisticsVisitor() {
 
