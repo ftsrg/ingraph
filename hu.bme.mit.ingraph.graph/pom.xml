@@ -11,8 +11,11 @@
 	<artifactId>hu.bme.mit.ingraph.graph</artifactId>
 
 	<dependencies>
-	
-	
+		<dependency>
+			<groupId>hu.bme.mit.ingraph</groupId>
+			<artifactId>hu.bme.mit.ingraph.rete</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

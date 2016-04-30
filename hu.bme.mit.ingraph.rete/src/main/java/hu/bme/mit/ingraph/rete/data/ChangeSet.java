@@ -1,14 +1,18 @@
 package hu.bme.mit.ingraph.rete.data;
 
-import java.util.Collection;
-
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
-@Builder
+@AllArgsConstructor
+@ToString
 public class ChangeSet<TElement> {
 
-	@Getter protected Collection<Tuple<TElement>> positive;
-	@Getter protected Collection<Tuple<TElement>> negative;
+	@Getter protected Iterable<Tuple<TElement>> positive;
+	@Getter protected Iterable<Tuple<TElement>> negative;
+	
+	public static <TElement> ChangeSet<TElement> of(Iterable<Tuple<TElement>> positive, Iterable<Tuple<TElement>> negative) {
+		return new ChangeSet<>(positive, negative);
+	}
 	
 }
