@@ -3,7 +3,7 @@ package hu.bme.mit.ingraph.algebra.operators.visitors;
 import org.apache.commons.lang.StringUtils;
 
 public class Printer {
-	
+
 	protected int indentation = 0;
 	protected final int indentationStep;
 
@@ -20,7 +20,7 @@ public class Printer {
 	}
 
 	protected void increaseIndentation() {
-		indentation += indentationStep;	
+		indentation += indentationStep;
 	}
-	
+
 }

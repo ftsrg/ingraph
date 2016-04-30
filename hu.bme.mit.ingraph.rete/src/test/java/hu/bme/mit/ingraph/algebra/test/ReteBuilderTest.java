@@ -9,6 +9,7 @@ import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 import hu.bme.mit.ingraph.rete.builder.ReteBuilderVisitor;
 import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
+import hu.bme.mit.ingraph.rete.visitors.InputCollectorVisitor;
 import hu.bme.mit.ingraph.rete.visitors.RetePrinterVisitor;
 
 public class ReteBuilderTest {
@@ -34,6 +35,10 @@ public class ReteBuilderTest {
 
 		final RetePrinterVisitor printerVisitor = RetePrinterVisitor.create(2);
 		System.out.println(printerVisitor.visit(productionNode));
+		
+		final InputCollectorVisitor inputCollectorVisitor = InputCollectorVisitor.create();
+		inputCollectorVisitor.visit(productionNode);
+		System.out.println(inputCollectorVisitor.getInputNodes());
 	}
 
 }

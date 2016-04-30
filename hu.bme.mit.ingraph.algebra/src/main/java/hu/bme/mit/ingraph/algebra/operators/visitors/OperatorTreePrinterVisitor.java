@@ -22,23 +22,23 @@ public class OperatorTreePrinterVisitor extends Printer implements OperatorTreeV
 	@Override
 	public String visit(final JoinOperator operator) {
 		String joinString = "Join operation " + operator.getLms() + " " + operator.getRms() + "\n";
-		
+
 		increaseIndentation();
-		joinString = joinString + indent("(L) " + operator.getLeftParent().accept(this)); 
+		joinString = joinString + indent("(L) " + operator.getLeftParent().accept(this));
 		joinString = joinString + indent("(R) " + operator.getRightParent().accept(this));
 		decreaseIndentation();
-		
+
 		return joinString;
 	}
 
 	@Override
 	public String visit(final ProductionOperator operator) {
 		String productionString = "Production operation\n";
-		
+
 		increaseIndentation();
 		productionString = productionString + indent(operator.getParent().accept(this));
 		decreaseIndentation();
-		
+
 		return productionString;
 	}
 

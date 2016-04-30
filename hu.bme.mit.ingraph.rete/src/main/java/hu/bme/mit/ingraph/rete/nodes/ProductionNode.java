@@ -14,12 +14,12 @@ public class ProductionNode extends AbstractNode<ProductionOperator> {
 	}
 
 	public void subscribe(AbstractNode<? extends AbstractOperator> parent) {
-		this.parent = parent; 
+		this.parent = parent;
 	}
 
 	@Override
 	public <R> R accept(ReteVisitor<? extends R> visitor) {
 		return visitor.visit(this);
 	}
-	
+
 }
