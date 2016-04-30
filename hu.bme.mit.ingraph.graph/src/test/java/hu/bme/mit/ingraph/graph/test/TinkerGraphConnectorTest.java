@@ -2,10 +2,10 @@ package hu.bme.mit.ingraph.graph.test;
 
 import java.util.Collection;
 
-import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerFactory;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
+import org.eclipse.collections.api.multimap.Multimap;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,8 +23,8 @@ public class TinkerGraphConnectorTest {
 		final Collection<Vertex> persons = connector.collectVertices("person");
 		final Collection<Vertex> softwares = connector.collectVertices("software");
 
-		final Collection<Edge> createds = connector.collectEdges("created");
-		final Collection<Edge> knowss = connector.collectEdges("knows");
+		final Multimap<Vertex, Vertex> createds = connector.collectEdges("created");
+		final Multimap<Vertex, Vertex> knowss = connector.collectEdges("knows");
 		
 		// Assert
 		Assert.assertEquals(4, persons.size());

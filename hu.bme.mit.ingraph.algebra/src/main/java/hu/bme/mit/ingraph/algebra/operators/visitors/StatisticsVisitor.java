@@ -6,6 +6,14 @@ import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 
 public class StatisticsVisitor implements TreeVisitor<Long> {
 
+	protected StatisticsVisitor() {
+
+	}
+
+	public static StatisticsVisitor create() {
+		return new StatisticsVisitor();
+	}
+
 	public Long visit(final ProductionOperator operation) {
 		return operation.getParent().accept(this);
 	}

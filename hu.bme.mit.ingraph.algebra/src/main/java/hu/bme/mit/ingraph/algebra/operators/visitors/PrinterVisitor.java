@@ -5,7 +5,15 @@ import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 
 public class PrinterVisitor implements TreeVisitor<Void> {
-
+	
+	protected PrinterVisitor() {
+		
+	}
+	
+	public static PrinterVisitor create() {
+		return new PrinterVisitor();
+	}
+	
 	public Void visit(final ProductionOperator operator) {
 		System.out.println("Production operation");
 		operator.getParent().accept(this);

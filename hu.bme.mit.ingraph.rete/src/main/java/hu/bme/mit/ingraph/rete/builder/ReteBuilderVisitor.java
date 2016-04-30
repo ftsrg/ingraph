@@ -10,8 +10,16 @@ import hu.bme.mit.ingraph.rete.nodes.InputNode;
 import hu.bme.mit.ingraph.rete.nodes.JoinNode;
 import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
 
-public class ReteBuilder implements TreeVisitor<AbstractNode<? extends AbstractOperator>> {
+public class ReteBuilderVisitor implements TreeVisitor<AbstractNode<? extends AbstractOperator>> {
 
+	protected ReteBuilderVisitor() {
+		
+	}
+	
+	public static ReteBuilderVisitor create() {
+		return new ReteBuilderVisitor();
+	}
+	
 	public AbstractNode<? extends AbstractOperator> visit(final InputOperator operator) {
 		final InputNode inputNode = new InputNode(operator);
 		

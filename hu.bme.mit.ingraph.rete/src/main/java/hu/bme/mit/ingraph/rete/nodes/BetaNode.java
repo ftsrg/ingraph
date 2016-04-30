@@ -18,4 +18,13 @@ public class BetaNode<TBetaOperator extends BetaOperator> extends WorkerNode<TBe
 		this.rightParent = rightParent;
 	}
 
+	@Override
+	public String prettyPrint(final int indentation) {
+		return indent(indentation) + "Beta node, left mask: " + operator.getLms() + ", right mask: " + operator.getRms() + "\n" + 
+				indent(indentation) + "- Left parent:\n" +
+				leftParent.prettyPrint(indentation + 2) + "\n" +
+				indent(indentation) + "- Right parent:\n" +
+				rightParent.prettyPrint(indentation + 2);
+	}
+	
 }

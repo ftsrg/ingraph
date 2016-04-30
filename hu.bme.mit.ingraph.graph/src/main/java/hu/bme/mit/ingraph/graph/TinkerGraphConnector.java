@@ -5,7 +5,10 @@ import java.util.Collection;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph;
+import org.eclipse.collections.api.multimap.Multimap;
+import org.eclipse.collections.api.multimap.MutableMultimap;
 import org.eclipse.collections.impl.factory.Lists;
+import org.eclipse.collections.impl.factory.Multimaps;
 
 public class TinkerGraphConnector {
 	
@@ -32,13 +35,13 @@ public class TinkerGraphConnector {
 		return vertices;
 	}
 	
-	public Collection<Edge> collectEdges(final String edgeType) {
-		final Collection<Edge> edges = Lists.mutable.of();
+	public Multimap<Vertex, Vertex> collectEdges(final String edgeType) {
+		final MutableMultimap<Vertex, Vertex> edges = Multimaps.mutable.set.with();
 
 		final Iterable<Edge> graphEdges = () -> graph.edges();
 		for (final Edge edge : graphEdges) {
 			if (edge.label().equals(edgeType)) {
-				edges.add(edge);
+				edges.put(edge.outVertex(), edge.inVertex());
 			}
 		}
 

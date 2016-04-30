@@ -7,7 +7,8 @@ import org.junit.Test;
 import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
-import hu.bme.mit.ingraph.rete.builder.ReteBuilder;
+import hu.bme.mit.ingraph.rete.builder.ReteBuilderVisitor;
+import hu.bme.mit.ingraph.rete.nodes.ProductionNode;
 
 public class ReteBuilderTest {
 
@@ -27,8 +28,12 @@ public class ReteBuilderTest {
 		join1.setDensity(0.1);
 		join2.setDensity(0.2);
 
-		final ReteBuilder reteBuilder = new ReteBuilder();
-		production.accept(reteBuilder);
+		final ReteBuilderVisitor reteBuilderVisitor = ReteBuilderVisitor.create();
+		final ProductionNode productionNode = (ProductionNode) production.accept(reteBuilderVisitor);
+		
+		
+		
+		System.out.println(productionNode.prettyPrint(2));
 	}
 
 }

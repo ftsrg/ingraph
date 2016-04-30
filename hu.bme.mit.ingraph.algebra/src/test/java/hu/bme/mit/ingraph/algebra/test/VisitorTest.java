@@ -28,11 +28,11 @@ public class VisitorTest {
 		join1.setDensity(0.1);
 		join2.setDensity(0.2);
 
-		final StatisticsVisitor statisticsVisitor = new StatisticsVisitor();
+		final StatisticsVisitor statisticsVisitor = StatisticsVisitor.create();
 		final long tuples = statisticsVisitor.visit(production);
 		System.out.println(tuples);
 
-		final PrinterVisitor printerVisitor = new PrinterVisitor();
+		final PrinterVisitor printerVisitor = PrinterVisitor.create();
 		printerVisitor.visit(production);
 	}
 

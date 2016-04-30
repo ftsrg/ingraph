@@ -7,5 +7,10 @@ public class InputNode extends AbstractNode<InputOperator> {
 	public InputNode(InputOperator operator) {
 		super(operator);
 	}
+	
+	@Override
+	public String prettyPrint(int indentation) {
+		return indent(indentation) + "Input node [" + operator.getName() + "]";
+	}
 
 }
