@@ -2,13 +2,14 @@ package hu.bme.mit.ingraph.algebra.test;
 
 import static hu.bme.mit.ingraph.algebra.operators.util.AlgebraUtil.L;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
-import hu.bme.mit.ingraph.algebra.operators.visitors.PrinterVisitor;
-import hu.bme.mit.ingraph.algebra.operators.visitors.StatisticsVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.OperatorTreePrinterVisitor;
+import hu.bme.mit.ingraph.algebra.operators.visitors.OperatorTreeStatisticsVisitor;
 
 public class VisitorTest {
 
@@ -28,12 +29,12 @@ public class VisitorTest {
 		join1.setDensity(0.1);
 		join2.setDensity(0.2);
 
-		final StatisticsVisitor statisticsVisitor = StatisticsVisitor.create();
+		final OperatorTreeStatisticsVisitor statisticsVisitor = OperatorTreeStatisticsVisitor.create();
 		final long tuples = statisticsVisitor.visit(production);
-		System.out.println(tuples);
+		Assert.assertEquals(120000, tuples);
 
-		final PrinterVisitor printerVisitor = PrinterVisitor.create();
-		printerVisitor.visit(production);
+		final OperatorTreePrinterVisitor printerVisitor = OperatorTreePrinterVisitor.create(2);
+		System.out.println(printerVisitor.visit(production));
 	}
 
 }

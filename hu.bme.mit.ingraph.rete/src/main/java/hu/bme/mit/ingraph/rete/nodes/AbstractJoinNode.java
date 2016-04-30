@@ -7,8 +7,7 @@ import hu.bme.mit.ingraph.rete.data.Tuple;
 
 public abstract class AbstractJoinNode {
 
-	protected MutableMultimap<Tuple, Tuple> leftIndexer = Multimaps.mutable.bag.empty();
-	protected MutableMultimap<Tuple, Tuple> rightIndexer = Multimaps.mutable.bag.empty();
-	
+	protected MutableMultimap<Tuple<?>, Tuple<?>> leftIndexer = Multimaps.mutable.set.empty();
+	protected MutableMultimap<Tuple<?>, Tuple<?>> rightIndexer = Multimaps.mutable.set.empty();
 	
 }

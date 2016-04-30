@@ -4,14 +4,14 @@ import hu.bme.mit.ingraph.algebra.operators.InputOperator;
 import hu.bme.mit.ingraph.algebra.operators.JoinOperator;
 import hu.bme.mit.ingraph.algebra.operators.ProductionOperator;
 
-public class StatisticsVisitor implements OperatorTreeVisitor<Long> {
+public class OperatorTreeStatisticsVisitor implements OperatorTreeVisitor<Long> {
 
-	protected StatisticsVisitor() {
+	protected OperatorTreeStatisticsVisitor() {
 
 	}
 
-	public static StatisticsVisitor create() {
-		return new StatisticsVisitor();
+	public static OperatorTreeStatisticsVisitor create() {
+		return new OperatorTreeStatisticsVisitor();
 	}
 
 	public Long visit(final ProductionOperator operation) {
