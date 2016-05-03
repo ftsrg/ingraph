@@ -14,3 +14,6 @@ The project uses lombok. To install its Eclipse plug-in, follow these steps.
     ```
   1. Start Eclipse.
   1. Right click on any Maven project and choose **Update Maven projects...**
+
+In IntelliJ, go to **File** | **Settings**, search for `lombok`, click search in repositories and install the lombok plug-in.
+
