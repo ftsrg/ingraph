@@ -17,7 +17,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
 
   val valueFunctions = Map[String, (Any)=>(Any)](
     "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "gathers" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
@@ -201,7 +201,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
     val inputLookup = Map(
       "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
-      "definedBy" -> ((cs: ChangeSet) => {
+      "gathers" -> ((cs: ChangeSet) => {
         entryDefined ! Secondary(cs)
         finalJoin ! Secondary(cs)
         exitDefined ! Primary(cs)
@@ -233,7 +233,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
       "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
       "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
-      "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
+      "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
     )
     import utils.ReteNode
     val inputNodes: List[ReteMessage => Unit] =

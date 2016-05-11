@@ -148,7 +148,7 @@ class RemoteOnlySemaphoreNeighbor extends RemoteOnlyTrainbenchmarkQuery {
 
   val inputLookup = Map(
     "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
-    "definedBy" -> ((cs: ChangeSet) => {
+    "gathers" -> ((cs: ChangeSet) => {
       entryDefined ! Secondary(cs)
       finalJoin ! Secondary(cs)
       exitDefined ! Primary(cs)
@@ -180,7 +180,7 @@ class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
     "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
-    "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
+    "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
   import utils.ReteNode
   val inputNodes: List[ReteMessage => Unit] =

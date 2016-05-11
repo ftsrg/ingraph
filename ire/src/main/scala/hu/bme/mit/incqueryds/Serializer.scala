@@ -11,7 +11,7 @@ object Serializer {
   def main(args: Array[String]) {
     val specialValues = Map(
       "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "gathers" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),

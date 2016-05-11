@@ -45,7 +45,7 @@ class DistributedRouteSensor extends  DistributedQuery {
     "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
-    "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
+    "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
   import utils.ReteNode
   val inputNodes: List[ReteMessage => Unit] =
@@ -80,7 +80,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
         cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
         cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
       }),
-    "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
+    "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
 
   val inputNodes: List[ReteMessage => Unit] =
