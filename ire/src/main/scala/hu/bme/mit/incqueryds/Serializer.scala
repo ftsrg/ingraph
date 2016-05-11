@@ -15,7 +15,7 @@ object Serializer {
       "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
     )
     val inputNode = new WildcardInput

@@ -42,7 +42,7 @@ class DistributedRouteSensor extends  DistributedQuery {
   val sensorJoin = newRemote2(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join")
   val followsJoin = newRemote1(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "RouteSensor-follows-join")
   val inputLookup = HashMap(
-    "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
+    "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
@@ -72,7 +72,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
     )), "RouteSensor-follows-join")
 
   val inputLookup = HashMap(
-    "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
+    "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) =>
       {

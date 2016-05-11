@@ -21,7 +21,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
     "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
   )
 
@@ -173,7 +173,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "signal" -> ((cs: ChangeSet) => signalChecker ! cs),
       "entry" -> ((cs: ChangeSet) => entrySemaphoreJoin ! Secondary(cs)),
       "follows" -> ((cs: ChangeSet) => followsEntryJoin ! Secondary(cs)),
-      "switch" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
+      "target" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
       "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
       "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
     )
@@ -230,7 +230,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val sensorJoin = newLocal(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
     val followsJoin = newLocal(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
     val inputLookup = HashMap(
-      "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
+      "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
       "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
       "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
       "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))

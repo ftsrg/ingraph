@@ -120,7 +120,7 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
     "signal" -> ((cs: ChangeSet) => signalChecker ! cs),
     "entry" -> ((cs: ChangeSet) => entrySemaphoreJoin ! Secondary(cs)),
     "follows" -> ((cs: ChangeSet) => followsEntryJoin ! Secondary(cs)),
-    "switch" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
+    "target" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
     "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
     "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
   )
@@ -177,7 +177,7 @@ class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
   val sensorJoin = newRemote1(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join")
   val followsJoin = newRemote1(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "RouteSensor-follows-join")
   val inputLookup = HashMap(
-    "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
+    "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
