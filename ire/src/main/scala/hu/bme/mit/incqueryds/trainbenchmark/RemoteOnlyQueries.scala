@@ -74,7 +74,7 @@ class RemoteOnlyConnectedSegments extends RemoteOnlyTrainbenchmarkQuery {
       join3_4 ! Secondary(cs)
       join1234_5 ! Secondary(cs)
     }),
-    "sensor" -> ((cs: ChangeSet) => {
+    "monitoredBy" -> ((cs: ChangeSet) => {
       sensorJoinFirst ! Secondary(cs)
       sensorJoinSecond ! Secondary(cs)
     }),
@@ -154,7 +154,7 @@ class RemoteOnlySemaphoreNeighbor extends RemoteOnlyTrainbenchmarkQuery {
       exitDefined ! Primary(cs)
     }),
     "exit" -> ((cs: ChangeSet) => exitDefined ! Secondary(cs)),
-    "sensor" -> ((cs: ChangeSet) => {
+    "monitoredBy" -> ((cs: ChangeSet) => {
       sensorConnects ! Primary(cs)
       rightMostJoin ! Secondary(cs)
     }),
@@ -179,7 +179,7 @@ class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
   val inputLookup = HashMap(
     "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-    "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
+    "monitoredBy" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
   import utils.ReteNode
@@ -197,7 +197,7 @@ class RemoteOnlySwitchSensor extends RemoteOnlyTrainbenchmarkQuery {
 
   val trimmer = newRemote1(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "SwitchSensor-trimmer")
   val inputLookup = Map(
-    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "monitoredBy" -> ((cs: ChangeSet) => trimmer ! cs),
     "type" -> ((rawCS: ChangeSet) => {
       val cs = ChangeSet(
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),

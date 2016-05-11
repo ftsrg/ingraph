@@ -22,7 +22,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
     "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+    "monitoredBy" -> ((v: Any) => utils.idStringToLong(v.toString))
   )
 
   def read(path: String) {
@@ -127,7 +127,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       join3_4 ! Secondary(cs)
       join1234_5 ! Secondary(cs)
     }),
-    "sensor" -> ((cs: ChangeSet) => {
+    "monitoredBy" -> ((cs: ChangeSet) => {
       sensorJoinFirst ! Secondary(cs)
       sensorJoinSecond ! Secondary(cs)
     }),
@@ -207,7 +207,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
         exitDefined ! Primary(cs)
       }),
       "exit" -> ((cs: ChangeSet) => exitDefined ! Secondary(cs)),
-      "sensor" -> ((cs: ChangeSet) => {
+      "monitoredBy" -> ((cs: ChangeSet) => {
         sensorConnects ! Primary(cs)
         rightMostJoin ! Secondary(cs)
       }),
@@ -232,7 +232,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val inputLookup = HashMap(
       "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
       "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-      "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
+      "monitoredBy" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
       "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
     )
     import utils.ReteNode
@@ -249,7 +249,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
     val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
     val inputLookup = Map(
-      "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+      "monitoredBy" -> ((cs: ChangeSet) => trimmer ! cs),
       "type" -> ((rawCS: ChangeSet) => {
         val cs = ChangeSet(
           rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),

@@ -16,7 +16,7 @@ object Serializer {
       "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+      "monitoredBy" -> ((v: Any) => utils.idStringToLong(v.toString))
     )
     val inputNode = new WildcardInput
     val reader = new TrainbenchmarkReader(inputNode)

@@ -44,7 +44,7 @@ class DistributedRouteSensor extends  DistributedQuery {
   val inputLookup = HashMap(
     "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-    "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
+    "monitoredBy" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
   import utils.ReteNode
@@ -74,7 +74,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
   val inputLookup = HashMap(
     "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
     "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-    "sensor" -> ((cs: ChangeSet) =>
+    "monitoredBy" -> ((cs: ChangeSet) =>
       {
         val children = Array(sensorJoinA, sensorJoinB, sensorJoinC)
         cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
@@ -98,7 +98,7 @@ class DistributedSwitchSensor extends DistributedQuery {
 
   val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
   val inputLookup = Map(
-    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "monitoredBy" -> ((cs: ChangeSet) => trimmer ! cs),
     "type" -> ((rawCS: ChangeSet) => {
       val cs = ChangeSet(
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
@@ -131,7 +131,7 @@ class DistributedSplitSwitchSensor extends DistributedQuery {
   val trimmer = newLocal(Props(new ParallelTrimmer(secondaryChildren, Vector(0))), "sw-trimmer")
 
   val inputLookup = Map(
-    "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+    "monitoredBy" -> ((cs: ChangeSet) => trimmer ! cs),
     "type" -> ((rawCS: ChangeSet) => {
       val cs = ChangeSet(
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
