@@ -4,7 +4,7 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, _}
 import hu.bme.mit.incqueryds._
-import utils.ReteNode
+import utils.conversions._
 /**
  * Created by janosmaginecz on 10/05/15.
  */
