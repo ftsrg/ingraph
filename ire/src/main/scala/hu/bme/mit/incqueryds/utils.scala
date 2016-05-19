@@ -23,18 +23,19 @@ object utils {
     ) yield ChangeSet(pos, neg)
      values.toSeq
   }
-
-  implicit class ReteNode(base: ActorRef) extends Serializable{
-    def apply(): ReteMessage => Unit = {
+  object conversions {
+    implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = {
       return base ! _
     }
 
-    def primary(reteMessage: ReteMessage) = {
-      base ! Primary(reteMessage)
-    }
+    implicit class ReteNode(base: ActorRef) extends Serializable {
+      def primary(reteMessage: ReteMessage) = {
+        base ! Primary(reteMessage)
+      }
 
-    def secondary(reteMessage: ReteMessage) = {
-    		base ! Secondary(reteMessage)
+      def secondary(reteMessage: ReteMessage) = {
+        base ! Secondary(reteMessage)
+      }
     }
   }
 

@@ -7,6 +7,7 @@ import akka.remote.RemoteScope
 import hu.bme.mit.incqueryds._
 
 import scala.collection.immutable.HashMap
+import utils.conversions._
 
 /**
  * Created by wafle on 10/20/2015.
@@ -47,7 +48,7 @@ class DistributedRouteSensor extends  DistributedQuery {
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
-  import utils.ReteNode
+
   val inputNodes: List[ReteMessage => Unit] =
     List(
       antijoin.secondary, sensorJoin.secondary,
@@ -57,7 +58,6 @@ class DistributedRouteSensor extends  DistributedQuery {
 }
 
 class DistributedSplitRouteSensor extends  DistributedQuery {
-  import utils.ReteNode
   val production = newLocal(Props(new Production("RouteSensor")))
   val antijoin = newRemote1(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 4)), "RouteSensor-antijoin")
   val sensorJoinA = newRemote2(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-A")
@@ -112,7 +112,6 @@ class DistributedSwitchSensor extends DistributedQuery {
     })
   )
 
-  import utils.ReteNode
   val inputNodes: List[ReteMessage => Unit] = List(antijoin.primary, trimmer ! _)
   override val terminator = Terminator(inputNodes, production)
 }
@@ -123,7 +122,6 @@ class DistributedSplitSwitchSensor extends DistributedQuery {
   val antijoinB = newRemote2(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-B")
   val antijoinC = newRemote3(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-C")
   val antijoinD = newLocal(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
-  import utils.ReteNode
 
   val secondaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.secondary, antijoinB.secondary, antijoinC.secondary, antijoinD.secondary)
   val primaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.primary, antijoinB.primary, antijoinC.primary, antijoinD.primary)

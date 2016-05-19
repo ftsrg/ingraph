@@ -8,6 +8,7 @@ import com.typesafe.config.ConfigFactory
 import hu.bme.mit.incqueryds._
 
 import scala.collection.immutable.HashMap
+import utils.conversions._
 
 /**
  * Created by wafle on 10/11/2015.
@@ -90,7 +91,7 @@ class RemoteOnlyConnectedSegments extends RemoteOnlyTrainbenchmarkQuery {
       }
     })
   )
-  import utils.ReteNode
+
   val inputNodes: List[ReteMessage => Unit] =
     List(
       joinSegment1.primary, joinSegment1.secondary,
@@ -124,7 +125,7 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
     "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
     "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
   )
-  import utils.ReteNode
+
   val inputNodes: List[ReteMessage => Unit] =
     List(signalChecker ! _, entrySemaphoreJoin.secondary, followsEntryJoin.secondary,
       switchSwitchPositionJoin.primary, switchSwitchPositionJoin.secondary,
@@ -160,7 +161,7 @@ class RemoteOnlySemaphoreNeighbor extends RemoteOnlyTrainbenchmarkQuery {
     }),
     "connectsTo" -> ((cs: ChangeSet) => sensorConnects ! Secondary(cs))
   )
-  import utils.ReteNode
+
   val inputNodes: List[ReteMessage => Unit] =
     List(
       entryDefined.primary, entryDefined.secondary,
@@ -182,7 +183,7 @@ class RemoteOnlyRouteSensor extends RemoteOnlyTrainbenchmarkQuery {
     "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
     "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
-  import utils.ReteNode
+
   val inputNodes: List[ReteMessage => Unit] =
     List(
       antijoin.secondary, sensorJoin.secondary,
@@ -211,7 +212,6 @@ class RemoteOnlySwitchSensor extends RemoteOnlyTrainbenchmarkQuery {
     })
   )
 
-  import utils.ReteNode
   val inputNodes: List[ReteMessage => Unit] = List(antijoin.primary, trimmer ! _)
   override val terminator = Terminator(inputNodes, production)
 }
