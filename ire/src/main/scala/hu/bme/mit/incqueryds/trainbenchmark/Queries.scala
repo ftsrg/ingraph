@@ -18,12 +18,12 @@ class TrainbenchmarkReader(input: WildcardInput) {
 
   val valueFunctions = Map[String, (Any)=>(Any)](
     "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "gathers" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
     "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
-    "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+    "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
+    "monitoredBy" -> ((v: Any) => utils.idStringToLong(v.toString))
   )
 
   def read(path: String) {
@@ -128,7 +128,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       join3_4 ! Secondary(cs)
       join1234_5 ! Secondary(cs)
     }),
-    "sensor" -> ((cs: ChangeSet) => {
+    "monitoredBy" -> ((cs: ChangeSet) => {
       sensorJoinFirst ! Secondary(cs)
       sensorJoinSecond ! Secondary(cs)
     }),
@@ -174,7 +174,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
       "signal" -> ((cs: ChangeSet) => signalChecker ! cs),
       "entry" -> ((cs: ChangeSet) => entrySemaphoreJoin ! Secondary(cs)),
       "follows" -> ((cs: ChangeSet) => followsEntryJoin ! Secondary(cs)),
-      "switch" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
+      "target" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Primary(cs)),
       "position" -> ((cs: ChangeSet) => switchSwitchPositionJoin ! Secondary(cs)),
       "currentPosition" -> ((cs: ChangeSet) => switchPositionCurrentPositionJoin ! Secondary(cs))
     )
@@ -202,13 +202,13 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
     val inputLookup = Map(
       "entry" -> ((cs: ChangeSet) => entryDefined ! Primary(cs)),
-      "definedBy" -> ((cs: ChangeSet) => {
+      "gathers" -> ((cs: ChangeSet) => {
         entryDefined ! Secondary(cs)
         finalJoin ! Secondary(cs)
         exitDefined ! Primary(cs)
       }),
       "exit" -> ((cs: ChangeSet) => exitDefined ! Secondary(cs)),
-      "sensor" -> ((cs: ChangeSet) => {
+      "monitoredBy" -> ((cs: ChangeSet) => {
         sensorConnects ! Primary(cs)
         rightMostJoin ! Secondary(cs)
       }),
@@ -231,10 +231,10 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val sensorJoin = newLocal(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
     val followsJoin = newLocal(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
     val inputLookup = HashMap(
-      "switch" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
+      "target" -> ((cs: ChangeSet) => followsJoin ! Primary(cs)),
       "follows" -> ((cs:ChangeSet) => followsJoin ! Secondary(cs)),
-      "sensor" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
-      "definedBy" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
+      "monitoredBy" -> ((cs: ChangeSet) => sensorJoin ! Secondary(cs)),
+      "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
     )
 
     val inputNodes: List[ReteMessage => Unit] =
@@ -250,7 +250,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
     val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
     val inputLookup = Map(
-      "sensor" -> ((cs: ChangeSet) => trimmer ! cs),
+      "monitoredBy" -> ((cs: ChangeSet) => trimmer ! cs),
       "type" -> ((rawCS: ChangeSet) => {
         val cs = ChangeSet(
           rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),

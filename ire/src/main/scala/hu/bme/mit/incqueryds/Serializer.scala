@@ -11,12 +11,12 @@ object Serializer {
   def main(args: Array[String]) {
     val specialValues = Map(
       "connectsTo" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "definedBy" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "gathers" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "follows" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "exit" -> ((v: Any) => utils.idStringToLong(v.toString)),
       "entry" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "switch" -> ((v: Any) => utils.idStringToLong(v.toString)),
-      "sensor" -> ((v: Any) => utils.idStringToLong(v.toString))
+      "target" -> ((v: Any) => utils.idStringToLong(v.toString)),
+      "monitoredBy" -> ((v: Any) => utils.idStringToLong(v.toString))
     )
     val inputNode = new WildcardInput
     val reader = new TrainbenchmarkReader(inputNode)
