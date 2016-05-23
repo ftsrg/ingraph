@@ -24,7 +24,9 @@ libraryDependencies ++= Seq(
   "com.goldmansachs" % "gs-collections" % "7.0.1",
   "com.goldmansachs" % "gs-collections-api" % "7.0.1",
   "com.goldmansachs" % "gs-collections-forkjoin" % "7.0.1",
-  "com.goldmansachs" % "gs-collections-testutils" % "7.0.1"
+  "com.goldmansachs" % "gs-collections-testutils" % "7.0.1",
+  "org.yaml" % "snakeyaml" % "1.17",
+  "com.twitter" % "util-eval_2.11" % "6.34.0"
 )
 
 fork := true
