@@ -17,13 +17,17 @@ object ConfigReader {
     val all = yaml.load(configStream).asInstanceOf[java.util.Map[String, Object]]
     import collection.JavaConversions._
     val queryInput = all("input").asInstanceOf[java.util.Map[String, java.util.ArrayList[String]]].map(kv => kv._1 -> kv._2.toList).toMap
-    val network = (all - "input").asInstanceOf[scala.collection.mutable.Map[String, java.util.Map[String, String]]]
-    val queryString = generatePreamble(name) +
-      (for ((nodeName, params) <- network)
-            yield generateNode(nodeName, params.toMap)).mkString("\n") +
-       generateInputLookup(queryInput) +
-       generateInputNodes(queryInput) +
-       generateEnding()
+    val network = all("nodes").asInstanceOf[java.util.List[java.util.Map[String, java.util.Map[String, String]]]]
+    val queryString =
+      s"""${generatePreamble(name)}
+        |${(for (node <- network.reverse;
+                  (nodeName, params) <- node)
+                    yield generateNode(nodeName, params.toMap)).mkString("")}
+        |${generateInputLookup(queryInput)}
+        |${generateInputNodes(queryInput)}
+        |${generateEnding()}
+      """.stripMargin
+
     print(queryString)
     return compile(name, queryString)
   }
@@ -68,7 +72,7 @@ object ConfigReader {
   }
 
   def generateEnding(): String = {
-    """  override val terminator = Terminator(inputNodes, production)
+    """override val terminator = Terminator(inputNodes, production)
       |}
     """.stripMargin
   }

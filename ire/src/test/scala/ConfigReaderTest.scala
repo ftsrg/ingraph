@@ -10,10 +10,11 @@ import scala.io.Source
   */
 class ConfigReaderTest  extends FlatSpec {
   "alpha nodes configs should work" should "work" in {
-    val config = """f1:
-      |  type: Checker
-      |  condition: "(n) => { n(0) == 5L }"
-      |  next: production
+    val config = """nodes:
+      |  - f1:
+      |      type: Checker
+      |      condition: "(n) => { n(0) == 5L }"
+      |      next: production
       |input:
       |  test: [f1]
     """.stripMargin
@@ -24,13 +25,14 @@ class ConfigReaderTest  extends FlatSpec {
   }
 
   "beta nodes configs" should "work" in {
-    val config = """j1:
-                   |  type: HashJoiner
-                   |  primaryLength: 1
-                   |  primarySelector: Vector(0)
-                   |  secondaryLength: 1
-                   |  secondarySelector: Vector(0)
-                   |  next: production
+    val config = """nodes:
+                   |  - j1:
+                   |      type: HashJoiner
+                   |      primaryLength: 1
+                   |      primarySelector: Vector(0)
+                   |      secondaryLength: 1
+                   |      secondarySelector: Vector(0)
+                   |      next: production
                    |input:
                    |  pri: [j1.primary]
                    |  sec: [j1.secondary]
@@ -43,20 +45,22 @@ class ConfigReaderTest  extends FlatSpec {
     assert(engine.getResults() == Set(Vector(5L)))
   }
   "multi node configs" should "work" in {
-    val config = """j1:
-                   |  type: HashJoiner
-                   |  primaryLength: 1
-                   |  primarySelector: Vector(0)
-                   |  secondaryLength: 1
-                   |  secondarySelector: Vector(0)
-                   |  next: production
-                   |f1:
-                   |  type: Checker
-                   |  condition: "(n) => { n(0) == 5L }"
-                   |  next: j1.primary
-                   |input:
+    val config = """input:
                    |  fIn: [f1]
                    |  sec: [j1.secondary]
+                   |
+                   |nodes:
+                   |  - f1:
+                   |      type: Checker
+                   |      condition: "(n) => { n(0) == 5L }"
+                   |      next: j1.primary
+                   |  - j1:
+                   |      type: HashJoiner
+                   |      primaryLength: 1
+                   |      primarySelector: Vector(0)
+                   |      secondaryLength: 1
+                   |      secondarySelector: Vector(0)
+                   |      next: production
                  """.stripMargin
     val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")));
     val primaryInput = engine.inputLookup("fIn")
