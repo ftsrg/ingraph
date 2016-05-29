@@ -44,6 +44,21 @@ class TrainbenchmarkReader(input: WildcardInput) {
 }
 object TrainbenchmarkQuery {
   val system = ActorSystem()
+
+  def generateTypeHandler(types: Map[String, (ChangeSet => Unit)]): ChangeSet => Unit = {
+    cs: ChangeSet => {
+      cs.positive.groupBy(v => v(1)).foreach(
+        kv => kv._1 match {
+          case t: String => if (types.contains(t)) types(t)(ChangeSet(positive = kv._2.map(vec => Vector(vec(0)))))
+        }
+      )
+      cs.negative.groupBy(v => v(1)).foreach(
+        kv => kv._1 match {
+          case t: String => if (types.contains(t)) types(t)(ChangeSet(negative = kv._2.map(vec => Vector(vec(0)))))
+        }
+      )
+    }
+  }
 }
 
 abstract class TrainbenchmarkQuery {

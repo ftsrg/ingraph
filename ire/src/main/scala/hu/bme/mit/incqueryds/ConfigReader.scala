@@ -16,7 +16,8 @@ object ConfigReader {
     val yaml = new Yaml()
     val all = yaml.load(configStream).asInstanceOf[java.util.Map[String, Object]]
     import collection.JavaConversions._
-    val queryInput = all("input").asInstanceOf[java.util.Map[String, java.util.ArrayList[String]]].map(kv => kv._1 -> kv._2.toList).toMap
+    val queryInputJava = all("input").asInstanceOf[java.util.Map[String, java.util.Map[String, java.util.List[String]]]]
+    val queryInput = queryInputJava.map(kv => kv._1 -> kv._2.map(kv => kv._1 -> kv._2.toList).toMap).toMap
     val network = all("nodes").asInstanceOf[java.util.List[java.util.Map[String, java.util.Map[String, String]]]]
     val queryString =
       s"""${generatePreamble(name)}
@@ -46,19 +47,31 @@ object ConfigReader {
     s"  val $name = newLocal(Props(new ${params("type")}($functionParams)))\n"
   }
 
-  def generateInputLookup(input: Map[String, List[String]]): String = {
+  def generateInputLookup(input: Map[String, Map[String, List[String]]]): String = {
     "  override val inputLookup = Map(" +
-    (for ((name, nodes) <- input)
+    (for ((_, values) <- input - "types";
+          (name, nodes) <- values)
       yield s""""$name" -> ((cs: ChangeSet) => {""" +
         (for (node <- nodes)
           yield s"$node(cs)").mkString("\n") +
         "})"
       ).mkString(",\n") +
+      (if (input.contains("types"))
+        s""""type" -> TrainbenchmarkQuery.generateTypeHandler(Map[String, ChangeSet => Unit](""" +
+          (for ((name, nodes) <- input("types"))
+            yield s""""$name" -> ((cs: ChangeSet) => {""" +
+              (for (node <- nodes)
+                yield s"$node(cs)").mkString("\n") +
+              "}))"
+          ).mkString(",\n") +
+        ")"
+
+       else  "") +
     ")\n"
   }
 
-  def generateInputNodes(input: Map[String, List[String]]): String = {
-    s"  val inputNodes: List[ReteMessage => Unit] = ${input.flatMap(kv => kv._2)}\n"
+  def generateInputNodes(input: Map[String, Map[String, List[String]]]): String = {
+    s"  val inputNodes: List[ReteMessage => Unit] = ${input.flatMap(kv => kv._2.flatMap(kv => kv._2))}\n"
   }
   def generatePreamble(name: String): String = {
     s"""import hu.bme.mit.incqueryds._
