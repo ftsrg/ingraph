@@ -3,14 +3,14 @@ import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import hu.bme.mit.incqueryds.utils
 import hu.bme.mit.incqueryds.ChangeSet
-import hu.bme.mit.incqueryds.HashAntiJoiner
+import hu.bme.mit.incqueryds.HashAntijoiner
 import hu.bme.mit.incqueryds.Secondary
 import hu.bme.mit.incqueryds.Primary
 
 /**
  * Created by Maginecz on 4/19/2015.
  */
-class HashAntiJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class HashAntijoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -28,7 +28,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val sec = ChangeSet(
         positive = Vector(Vector(13, 15, 16))
       )
-      val actor = TestActorRef(new HashAntiJoiner(nop => (), Vector(1, 2), Vector(0, 1)))
+      val actor = TestActorRef(new HashAntijoiner(nop => (), Vector(1, 2), Vector(0, 1)))
       val node = actor.underlyingActor
       node.receive(Primary(prim))
       assert(node.primaryValues.get(Vector(16, 17)).get.contains(primaryVec))
@@ -50,7 +50,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
         positive = Vector(sec1, sec2)
       )
 
-      val actor = TestActorRef(new HashAntiJoiner(nop => (), Vector(1, 2), Vector(0, 1)))
+      val actor = TestActorRef(new HashAntijoiner(nop => (), Vector(1, 2), Vector(0, 1)))
       val node = actor.underlyingActor
       node.receive(Primary(prim))
       node.receive(Secondary(sec))
@@ -64,7 +64,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   }
   "send primary messages through when empty" in {
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, Vector(0, 1), Vector(0, 1))))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, Vector(0, 1), Vector(0, 1))))
     val msg = ChangeSet(
       positive = Vector(Vector(5, 6, 7)),
       negative = Vector(Vector(8, 9, 10))
@@ -82,7 +82,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(0, 1)
     val secondarySel = Vector(1, 2)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Secondary(sec)
 
@@ -102,7 +102,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(2)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(prim)
     expectMsg(ChangeSet(positive = Vector(Vector(5,6,7), Vector(10,11,7))))
@@ -127,7 +127,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(1)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(prim)
     expectMsgAnyOf(
@@ -150,7 +150,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(1)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(prim)
     expectMsg(ChangeSet(positive = Vector(Vector(1, 2), Vector(3, 4))))
@@ -189,7 +189,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(1)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(prim)
     expectMsg(ChangeSet(positive = Vector(Vector(2,4), Vector(3,4), Vector(5, 4), Vector(6, 4), Vector(1,3 ), Vector(2, 3))))
@@ -230,7 +230,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     val primarySel = Vector(1, 3)
     val secondarySel = Vector(0, 2)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashAntiJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(prim)
     expectMsg(ChangeSet(Vector(Vector(1, 2, 3, 4), Vector(1, 5, 6, 7), Vector(3, 2, 5, 4))))

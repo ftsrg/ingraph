@@ -206,7 +206,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
   class SemaphoreNeighbor extends TrainbenchmarkQuery {
     val production = newLocal(Props(new Production("SemaphoreNeighbor")))
-    val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
+    val antijoin = newLocal(Props(new HashAntijoiner(production ! _, Vector(2, 5), Vector(1, 2))),"a")
     val inequality = newLocal(Props(new Inequality(antijoin ! Primary(_), 0, Vector(6))),"b")
     val finalJoin = newLocal(Props(new HashJoiner(inequality ! _, 6, Vector(5), 2, Vector(1))),"c")
     val secondToLastJoin = newLocal(Props(new HashJoiner(finalJoin ! Primary(_), 3, Vector(1), 4, Vector(1))),"d")
@@ -242,7 +242,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
 
   class RouteSensor extends TrainbenchmarkQuery{
     val production = newLocal(Props(new Production("RouteSensor")))
-    val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(2, 3), Vector(0, 1))))
+    val antijoin = newLocal(Props(new HashAntijoiner(production ! _, Vector(2, 3), Vector(0, 1))))
     val sensorJoin = newLocal(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))))
     val followsJoin = newLocal(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
     val inputLookup = HashMap(
@@ -261,7 +261,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   }
   class SwitchSensor extends TrainbenchmarkQuery {
     val production = newLocal(Props(new Production("SwitchSensor")), "sw-production")
-    val antijoin = newLocal(Props(new HashAntiJoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+    val antijoin = newLocal(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
 
     val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
     val inputLookup = Map(

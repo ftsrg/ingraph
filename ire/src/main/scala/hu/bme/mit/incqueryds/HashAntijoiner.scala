@@ -6,7 +6,7 @@ import scala.collection.mutable.MultiMap
 /**
   * Created by wafle on 12/25/2015.
   */
-class HashAntiJoiner(override val next: (ReteMessage) => Unit,
+class HashAntijoiner(override val next: (ReteMessage) => Unit,
                      val primarySelector: Vector[Int],
                      val secondarySelector: Vector[Int],
                      override val expectedTerminatorCount:Int = 2)
