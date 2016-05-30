@@ -49,24 +49,24 @@ object ConfigReader {
 
   def generateInputLookup(input: Map[String, Map[String, List[String]]]): String = {
     "  override val inputLookup = Map(" +
-    (for ((_, values) <- input - "types";
+      ((for ((_, values) <- input - "types";
           (name, nodes) <- values)
       yield s""""$name" -> ((cs: ChangeSet) => {""" +
         (for (node <- nodes)
           yield s"$node(cs)").mkString("\n") +
         "})"
-      ).mkString(",\n") +
-      (if (input.contains("types"))
+      ) ++
+      (input.filter(kv => kv._1 == "types").map(a =>
         s""""type" -> TrainbenchmarkQuery.generateTypeHandler(Map[String, ChangeSet => Unit](""" +
           (for ((name, nodes) <- input("types"))
-            yield s""""$name" -> ((cs: ChangeSet) => {""" +
-              (for (node <- nodes)
-                yield s"$node(cs)").mkString("\n") +
-              "}))"
-          ).mkString(",\n") +
-        ")"
-
-       else  "") +
+            yield
+              s""""$name" -> ((cs: ChangeSet) => {""" +
+                (for (node <- nodes)
+                  yield s"$node(cs)").mkString("\n") +
+                "}))"
+            ).mkString(",\n") +
+          ")"
+      ))).mkString(",\n") +
     ")\n"
   }
 
