@@ -12,7 +12,7 @@ class ReteMessage() {}
 case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
   extends ReteMessage()
 
-case class ExpectMoreTerminators(val id: Int, val inputs: Iterable[ReteMessage => Unit])
+case class ExpectMoreTerminators(id: Int, inputs: Iterable[ReteMessage => Unit])
 
 case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
 
