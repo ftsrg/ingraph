@@ -3,7 +3,7 @@ package hu.bme.mit.incqueryds
 /**
   * Created by wafle on 12/25/2015.
   */
-trait ForkingForwarder {
+trait ForkingForwarder extends Forwarder {
   val children: Vector[ReteMessage => Unit]
 
   if (children.size < 2)
@@ -20,16 +20,23 @@ trait ForkingForwarder {
 
 }
 
-trait SingleForwarder {
+trait SingleForwarder extends Forwarder {
   val next: ReteMessage => Unit
 
-  def forward(cs: ChangeSet) = if (cs.positive.size > 0 || cs.negative.size > 0) next(cs)
+  def forward(cs: ChangeSet) = {
+    if (cs.positive.size > 0 || cs.negative.size > 0)
+      next(cs)
+    printForwarding(cs)
+  }
 
   def forward(terminator: TerminatorMessage) = next(terminator)
 }
 
 abstract trait Forwarder {
+  val name: String
   def forward(cs: ChangeSet)
 
   def forward(terminator: TerminatorMessage)
+
+  def printForwarding(cs: ChangeSet) = println(s"${name} sends [${cs.positive.size + cs.negative.size}]")
 }
