@@ -20,21 +20,32 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val input = new WildcardInput(messageSize = 4)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
-      val tran = input.newTransaction()
+      val tran = input.newBatchTransaction()
       tran.add(6L, "test", 1L)
       tran.add(6L, "test", 2L)
-      input.processTransaction(tran)
+      tran.close()
       expectMsg(ChangeSet(positive = Vector(Vector(6, 2), Vector(6, 1))))
     }
-    "do grouping" in {
+    "do no splitting in batch" in {
       val input = new WildcardInput(messageSize = 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
-      val tran = input.newTransaction()
+      val tran = input.newBatchTransaction()
       for (i <- 1 to 3) {
         tran.add(6L, "test", i)
       }
-      input.processTransaction(tran)
+      tran.close()
+      expectMsg(ChangeSet(positive = Vector(Vector(6, 3), Vector(6, 2), Vector(6, 1))))
+    }
+    "send messageSize sized messages when using continuous transactions" in {
+      val input = new WildcardInput(messageSize = 2)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      input.subscribe(Map("test" -> (echoActor ! _)))
+      val tran = input.newContinousTransaction()
+      for (i <- 1 to 3) {
+        tran.add(6L, "test", i)
+      }
+      tran.close()
       expectMsg(ChangeSet(positive = Vector(Vector(6, 2), Vector(6, 1))))
       expectMsg(ChangeSet(positive = Vector(Vector(6, 3))))
     }

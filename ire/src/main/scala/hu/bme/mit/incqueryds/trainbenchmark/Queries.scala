@@ -29,12 +29,12 @@ class TrainbenchmarkReader(input: WildcardInput) {
   def read(path: String) {
     val fs = new FileInputStream(path)
     try {
-      val tran = input.newTransaction()
+      val tran = input.newBatchTransaction()
       val reader = new WorkingTBRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
       log.info("read started")
       reader.read(scala.io.Source.fromFile(path))
       log.info("read finished")
-      input.initFromTransaction(tran)
+      tran.close()
       log.info("read transaction processed")
     }
     finally {
@@ -93,8 +93,7 @@ abstract class TrainbenchmarkQuery {
 
 }
 
-abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery{
-
+abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery {
   val remoteActors = new collection.mutable.MutableList[ActorRef]()
   def newRemote(props: Props, address: Address): ActorRef = {
     val actor = newLocal(props.withDeploy(Deploy(scope = RemoteScope(address))))
@@ -129,7 +128,6 @@ class ConnectedSegments extends TrainbenchmarkQuery {
   val sensorJoinSecond = newLocal(Props(new HashJoiner(production ! _, 7, Vector(5, 6), 2, Vector(0, 1))))
   val sensorJoinFirst = newLocal(Props(new HashJoiner(sensorJoinSecond ! Primary(_), 6, Vector(0),  2, Vector(0))))
   val join1234_5 = newLocal(Props(new HashJoiner(sensorJoinFirst ! Primary(_), 5, Vector(4), 2, Vector(0))))
-
   val join12_34 = newLocal(Props(new HashJoiner(join1234_5 ! Primary(_), 3, Vector(2), 3, Vector(0))))
 
   val join3_4 = newLocal(Props(new HashJoiner(join12_34 ! Secondary(_), 2, Vector(1), 2, Vector(0))))
