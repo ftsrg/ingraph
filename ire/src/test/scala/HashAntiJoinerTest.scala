@@ -55,7 +55,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       node.receive(Primary(prim))
       node.receive(Secondary(sec))
       node.receive(Primary(ChangeSet(negative = Vector(prim1))))
-      assert(node.primaryValues.get(Vector(16, 17)) == None)
+      assert(node.primaryValues.get(Vector(16, 17)).isEmpty)
       assert(node.primaryValues.get(Vector(8, 7)).get.contains(prim2))
       node.receive(Secondary(ChangeSet(negative = Vector(sec1))))
       assert(!node.secondaryValues.contains(Vector(13, 15)))

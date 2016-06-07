@@ -30,10 +30,10 @@ class Production(queryName: String, val expectedTerminatorCount:Int = 1) extends
   override def receive: Actor.Receive = {
     case ChangeSet(p, n) => {
       p.foreach {
-        results.add(_)
+        results.add
       }
       n.foreach {
-        results.remove(_)
+        results.remove
       }
     }
 

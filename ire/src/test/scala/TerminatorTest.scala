@@ -31,7 +31,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val terminator = Terminator(List(
         input1 ! _, input2 ! _, input3 ! _
       ), production)
-      val future = terminator.send
+      val future = terminator.send()
       input1 ! ChangeSet(positive = Vector(Vector(16)))
       input1 ! ChangeSet(positive = Vector(Vector(17)))
       input2 ! ChangeSet(positive = Vector(Vector(26)))
@@ -57,21 +57,21 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       intermediary ! Secondary(msg25)
 
       val terminator = Terminator(List(input1.primary, input1.secondary, intermediary.secondary), production)
-      val future = terminator.send
+      val future = terminator.send()
       input1 ! Primary(ChangeSet(positive = Vector(Vector(16))))
       input1 ! Secondary(ChangeSet(positive = Vector(Vector(16))))
       intermediary ! Secondary(ChangeSet(positive = Vector(Vector(16))))
 
       assert(Await.result(future, Duration(1,HOURS)) == Set(Vector(15), Vector(25)))
-      assert(Await.result(terminator.send, Duration(1,HOURS)) == Set(Vector(15), Vector(25), Vector(16)))
+      assert(Await.result(terminator.send(), Duration(1,HOURS)) == Set(Vector(15), Vector(25), Vector(16)))
       (1 to 500).foreach( i => {
         input1 ! Secondary(ChangeSet(negative = Vector(Vector(16))))
-        assert(Await.result(terminator.send, Duration(1,HOURS)) == Set(Vector(15), Vector(25)))
+        assert(Await.result(terminator.send(), Duration(1,HOURS)) == Set(Vector(15), Vector(25)))
         input1 ! Secondary(ChangeSet(positive = Vector(Vector(16))))
         intermediary ! Secondary(ChangeSet(negative = Vector(Vector(15))))
-        assert(Await.result(terminator.send, Duration(1,HOURS)) == Set(Vector(25), Vector(16)))
+        assert(Await.result(terminator.send(), Duration(1,HOURS)) == Set(Vector(25), Vector(16)))
         intermediary ! Secondary(ChangeSet(positive = Vector(Vector(15))))
-        assert(Await.result(terminator.send, Duration(1,HOURS)) == Set(Vector(15), Vector(25), Vector(16)))
+        assert(Await.result(terminator.send(), Duration(1,HOURS)) == Set(Vector(15), Vector(25), Vector(16)))
       })
     }
   }

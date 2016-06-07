@@ -30,7 +30,7 @@ class TrainbenchmarkReader(input: WildcardInput) {
     val fs = new FileInputStream(path)
     try {
       val tran = input.newBatchTransaction()
-      val reader = new WorkingTBRDFReader(tran.add(_, _, _), idFunction(_), valueFunctions)
+      val reader = new WorkingTBRDFReader(tran.add, idFunction(_), valueFunctions)
       log.info("read started")
       reader.read(scala.io.Source.fromFile(path))
       log.info("read finished")
@@ -71,7 +71,7 @@ abstract class TrainbenchmarkQuery {
   lazy val log = system.log
   def getResults(): Set[nodeType] = {
     log.info("termination started")
-    val res = Await.result(terminator.send, timeout)
+    val res = Await.result(terminator.send(), timeout)
     log.info("termination finished")
     res
   }
@@ -150,9 +150,9 @@ class ConnectedSegments extends TrainbenchmarkQuery {
         rawCS.positive.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0))),
         rawCS.negative.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0)))
       )
-      if (cs.positive.size > 0) {
+      if (cs.positive.nonEmpty) {
         joinSegment1 ! Secondary(cs)
-      } else if (cs.negative.size > 0) {
+      } else if (cs.negative.nonEmpty) {
         joinSegment1 ! Secondary(cs)
       }
     })
@@ -180,7 +180,7 @@ class ConnectedSegments extends TrainbenchmarkQuery {
     val followsEntryJoin = newLocal(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))))
     val entrySemaphoreJoin = newLocal(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))))
     val leftTrimmer = newLocal(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))))
-    val signalChecker = newLocal(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))))
+    val signalChecker = newLocal(Props(new Checker(leftTrimmer ! _, (cs) => cs(1) == "SIGNAL_GO")))
 
 
     val inputLookup = Map(
@@ -269,9 +269,9 @@ class ConnectedSegments extends TrainbenchmarkQuery {
           rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
           rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
         )
-        if (cs.positive.size > 0) {
+        if (cs.positive.nonEmpty) {
             antijoin ! Primary(cs)
-        } else if (cs.negative.size > 0) {
+        } else if (cs.negative.nonEmpty) {
             antijoin ! Primary(cs)
         }
       })

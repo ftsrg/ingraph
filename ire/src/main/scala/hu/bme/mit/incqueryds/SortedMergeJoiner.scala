@@ -3,10 +3,7 @@ package hu.bme.mit.incqueryds
 import java.util
 import java.util.Comparator
 
-import com.gs.collections.api.multimap.MutableMultimap
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap
-import com.gs.collections.impl.multimap.bag.sorted.mutable.TreeBagMultimap
-import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap
 import com.gs.collections.impl.set.mutable.UnifiedSet
 
 import scala.collection.mutable
@@ -241,7 +238,7 @@ class GSSortedMergeJoiner(override val next: (ReteMessage) => Unit,
         if (cmp == 0) {
           //scala cannot handle java lambdas, so we convert the closures implicitly:
           import Helper._
-          secondaryValues.get(nextSec).each { (m: nodeType) => (matches += nextIn ++ inverseSecondarySelector.map(i => m(i))): Unit }
+          secondaryValues.get(nextSec).each { (m: nodeType) => matches += nextIn ++ inverseSecondarySelector.map(i => m(i)): Unit }
           if (!incoming.hasNext || !secondary.hasNext) {
             break
           }
@@ -293,7 +290,7 @@ class GSSortedMergeJoiner(override val next: (ReteMessage) => Unit,
         val cmp = comparator.compare(nextPrim, nextIn)
         if (cmp == 0) {
           import Helper._
-          primaryValues.get(nextPrim).forEach((m: nodeType) => (matches += nextIn ++ inversePrimarySelector.map(i => m(i))): Unit)
+          primaryValues.get(nextPrim).forEach((m: nodeType) => matches += nextIn ++ inversePrimarySelector.map(i => m(i)): Unit)
           if (!(incoming.hasNext && primary.hasNext)) {
             break
           }

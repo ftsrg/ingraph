@@ -11,7 +11,8 @@ import scala.concurrent.{Future, Promise}
   * Created by wafle on 27/12/15.
   */
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage with Serializable {
-  var lastMessageID = -1;
+  var lastMessageID = -1
+
   def send(): Future[Set[nodeType]] = {
     val messageID = Terminator.idCounter.getNext()
     lastMessageID = messageID

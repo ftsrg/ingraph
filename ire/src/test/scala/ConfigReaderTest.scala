@@ -3,8 +3,6 @@ import java.io.ByteArrayInputStream
 import hu.bme.mit.incqueryds.{ChangeSet, ConfigReader}
 import org.scalatest.FlatSpec
 
-import scala.io.Source
-
 /**
   * Created by wafle on 5/23/2016.
   */
@@ -19,7 +17,7 @@ class ConfigReaderTest  extends FlatSpec {
       |  edge:
       |    test: [f1]
     """.stripMargin
-    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")));
+    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val testInput = engine.inputLookup("test")
     testInput(ChangeSet(positive = Vector(Vector(0L), Vector(5L))))
     assert(engine.getResults() == Set(Vector(5L)))
@@ -39,7 +37,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |    pri: [j1.primary]
                    |    sec: [j1.secondary]
                  """.stripMargin
-    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")));
+    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val primaryInput = engine.inputLookup("pri")
     val secondaryInput = engine.inputLookup("sec")
     primaryInput(ChangeSet(positive = Vector(Vector(0L), Vector(5L))))
@@ -58,7 +56,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |      condition: "(n) => { true }"
                    |      next: production
                  """.stripMargin
-    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")));
+    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val input = engine.inputLookup("type")
     input(ChangeSet(positive = Vector(Vector(1L, "fIn"), Vector(2L, "fIn"), Vector(3L, "fNotIn"))))
     assert(engine.getResults() == Set(Vector(1L), Vector(2L)))
@@ -83,7 +81,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |      secondarySelector: Vector(0)
                    |      next: production
                  """.stripMargin
-    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")));
+    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val primaryInput = engine.inputLookup("fIn")
     val secondaryInput = engine.inputLookup("sec")
     primaryInput(ChangeSet(positive = Vector(Vector(1L), Vector(5L))))

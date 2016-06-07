@@ -84,9 +84,9 @@ class RemoteOnlyConnectedSegments extends RemoteOnlyTrainbenchmarkQuery {
         rawCS.positive.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0))),
         rawCS.negative.filter( vec=> vec(1) == "Segment").map( vec => Vector(vec(0)))
       )
-      if (cs.positive.size > 0) {
+      if (cs.positive.nonEmpty) {
         joinSegment1 ! Secondary(cs)
-      } else if (cs.negative.size > 0) {
+      } else if (cs.negative.nonEmpty) {
         joinSegment1 ! Secondary(cs)
       }
     })
@@ -114,7 +114,7 @@ class RemoteOnlySwitchSet extends RemoteOnlyTrainbenchmarkQuery {
   val followsEntryJoin = newRemote1(Props(new HashJoiner(finalJoin ! Primary(_), 2, Vector(1), 2, Vector(0))), "SwitchSet-follows-entry-join")
   val entrySemaphoreJoin = newRemote1(Props(new HashJoiner(followsEntryJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "SwitchSet-entry-semaphore-join")
   val leftTrimmer = newRemote1(Props(new Trimmer(entrySemaphoreJoin ! Primary(_), Vector(0))), "SwitchSet-left-trimmer")
-  val signalChecker = newRemote1(Props(new Checker(leftTrimmer ! _, ((cs) => cs(1) == "SIGNAL_GO"))), "SwitchSet-signal-checker")
+  val signalChecker = newRemote1(Props(new Checker(leftTrimmer ! _, (cs) => cs(1) == "SIGNAL_GO")), "SwitchSet-signal-checker")
 
 
   val inputLookup = Map(
@@ -204,9 +204,9 @@ class RemoteOnlySwitchSensor extends RemoteOnlyTrainbenchmarkQuery {
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
         rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
       )
-      if (cs.positive.size > 0) {
+      if (cs.positive.nonEmpty) {
         antijoin ! Primary(cs)
-      } else if (cs.negative.size > 0) {
+      } else if (cs.negative.nonEmpty) {
         antijoin ! Primary(cs)
       }
     })

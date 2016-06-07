@@ -77,8 +77,8 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
     "monitoredBy" -> ((cs: ChangeSet) =>
       {
         val children = Array(sensorJoinA, sensorJoinB, sensorJoinC)
-        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
-        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.size > 0) children(kv._1) ! Secondary(ChangeSet(positive = kv._2.toVector)))
+        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.nonEmpty) children(kv._1) ! Secondary(ChangeSet(positive = kv._2)))
+        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % 2).foreach(kv => if (kv._2.nonEmpty) children(kv._1) ! Secondary(ChangeSet(positive = kv._2)))
       }),
     "gathers" -> ((cs: ChangeSet) => antijoin ! Secondary(cs))
   )
@@ -104,9 +104,9 @@ class DistributedSwitchSensor extends DistributedQuery {
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
         rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
       )
-      if (cs.positive.size > 0) {
+      if (cs.positive.nonEmpty) {
         antijoin ! Primary(cs)
-      } else if (cs.negative.size > 0) {
+      } else if (cs.negative.nonEmpty) {
         antijoin ! Primary(cs)
       }
     })
@@ -135,11 +135,11 @@ class DistributedSplitSwitchSensor extends DistributedQuery {
         rawCS.positive.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0))),
         rawCS.negative.filter( vec=> vec(1) == "Switch").map( vec => Vector(vec(0)))
       )
-      if (cs.positive.size > 0) {
-        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.size > 0) primaryChildren(kv._1)(ChangeSet(positive = kv._2.toVector)))
+      if (cs.positive.nonEmpty) {
+        cs.positive.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.nonEmpty) primaryChildren(kv._1)(ChangeSet(positive = kv._2)))
       }
-      if (cs.negative.size > 0) {
-        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.size > 0) primaryChildren(kv._1)(ChangeSet(negative = kv._2.toVector)))
+      if (cs.negative.nonEmpty) {
+        cs.negative.groupBy( tup => Math.abs(tup.hashCode()) % primaryChildren.size).foreach(kv => if (kv._2.nonEmpty) primaryChildren(kv._1)(ChangeSet(negative = kv._2)))
       }
     })
   )
