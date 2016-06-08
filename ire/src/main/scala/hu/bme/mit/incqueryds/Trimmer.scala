@@ -10,9 +10,12 @@ class ParallelTrimmer(override val children: Vector[(ReteMessage) => Unit],
 }
 class Trimmer(override val next: (ReteMessage) => Unit,
               override val selectionVector: Vector[Int])
-  extends TrimmerImpl(selectionVector) with SingleForwarder {
+  extends TrimmerImpl(selectionVector) with SingleForwarder {}
 
-}
+class Projection(override val next: (ReteMessage) => Unit,
+                 override val selectionVector: Vector[Int]
+                ) extends Trimmer(next, selectionVector) {}
+
 abstract class TrimmerImpl(val selectionVector: Vector[Int]) extends AlphaNode {
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
