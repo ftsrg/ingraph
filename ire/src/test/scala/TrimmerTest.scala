@@ -1,17 +1,12 @@
 import scala.Vector
-
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.Matchers
 import org.scalatest.WordSpecLike
-
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.actorRef2Scala
+import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.ImplicitSender
 import akka.testkit.TestActors
 import akka.testkit.TestKit
-import hu.bme.mit.incqueryds.ChangeSet
-import hu.bme.mit.incqueryds.Trimmer
+import hu.bme.mit.incqueryds.{ChangeSet, Projection, Trimmer}
 
 /**
  * Created by Maginecz on 3/16/2015.
@@ -44,6 +39,21 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(expectedChanges)
       selector ! changes
       expectMsg(expectedChanges)
+    }
+    val changeSet = ChangeSet(positive = Vector(Vector(0, "something")), negative = Vector(Vector(0, "something else")))
+    "do projection with equal length" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1, 0))))
+
+      checker ! changeSet
+      expectMsg(ChangeSet(positive = Vector(Vector("something", 0)), negative = Vector(Vector("something else", 0))))
+    }
+    "do projection with lesser length" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1))))
+
+      checker ! changeSet
+      expectMsg(ChangeSet(positive = Vector(Vector("something")), negative = Vector(Vector("something else"))))
     }
   }
 }
