@@ -9,7 +9,7 @@ import org.scalatest.time.SpanSugar._
  * Created by wafle on 12/09/15.
  */
 class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
-  class TestQuery extends TrainbenchmarkQuery {
+  class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
     val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
@@ -17,9 +17,38 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
     )
     override val terminator: Terminator = Terminator( Vector(forwarder ! _), production)
   }
+
+  class TestQuery2 extends TrainbenchmarkQuery {
+    override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
+    val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
+    val forwarder2 = system.actorOf(Props(new Checker(production ! _, a => true)))
+    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
+      "testval" -> ((cs:ChangeSet) => forwarder ! (cs)),
+      "testval2" -> ((cs:ChangeSet) => forwarder2 ! (cs))
+    )
+    override val terminator: Terminator = Terminator( Vector(forwarder ! _, forwarder2 ! _), production)
+  }
+
+  "multiple queries" should "work" in {
+    val input = new WildcardInput(10)
+    val query = new TestQuery1
+    val query2 = new TestQuery2
+    input.subscribe(query.inputLookup)
+    input.subscribe(query2.inputLookup)
+    val tran0 = input.newBatchTransaction()
+    tran0.add(5, "testval", 5)
+    tran0.add(5, "testval", 6)
+    tran0.add(5, "testval2", 7)
+    tran0.close()
+    val res1 = query.getResults()
+    assert(res1 == Set(Vector(5,5), Vector(5,6)))
+    val res2 = query2.getResults()
+    assert(res2 == Set(Vector(5,5), Vector(5,6), Vector(5,7)))
+  }
+
   "integartion" should "work" in {
     val input = new WildcardInput(10)
-    val query = new TestQuery
+    val query = new TestQuery1
     input.subscribe(query.inputLookup)
     val tran0 = input.newBatchTransaction()
     tran0.add(5, "testval", 5)
