@@ -98,7 +98,7 @@ object ConfigReader {
         |import akka.actor.Props
         |
         |new TrainbenchmarkQuery {
-        |  val production = newLocal(Props(new Production("$name")))
+        |  val production = newLocal(Props(new Production("$name")), "$name")
         |""".stripMargin
   }
 
