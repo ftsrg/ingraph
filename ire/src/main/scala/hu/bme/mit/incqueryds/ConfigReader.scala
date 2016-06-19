@@ -1,24 +1,26 @@
 package hu.bme.mit.incqueryds
 
 import java.io.{FileInputStream, InputStream}
+import java.util
 
-import akka.actor.Props
 import com.twitter.util.Eval
 import hu.bme.mit.incqueryds.trainbenchmark.TrainbenchmarkQuery
 import org.yaml.snakeyaml.Yaml
-
-import scala.io.Source
 /**
   * Created by wafle on 5/14/2016.
   */
 object ConfigReader {
   def parse(name: String, configStream: InputStream): TrainbenchmarkQuery = {
     val yaml = new Yaml()
-    val all = yaml.load(configStream).asInstanceOf[java.util.Map[String, Object]]
+    val all = yaml.load(configStream).asInstanceOf[util.Map[String, Object]]
     import collection.JavaConversions._
-    val queryInputJava = all("input").asInstanceOf[java.util.Map[String, java.util.Map[String, java.util.List[String]]]]
+    val queryInputJava = all("input").asInstanceOf[util.Map[String, util.Map[String, util.List[String]]]]
     val queryInput = queryInputJava.map(kv => kv._1 -> kv._2.map(kv => kv._1 -> kv._2.toList).toMap).toMap
-    val network = all("nodes").asInstanceOf[java.util.List[java.util.Map[String, java.util.Map[String, String]]]]
+    val network = all("nodes").asInstanceOf[util.List[util.Map[String, util.Map[String, String]]]]
+    val inputStrings = queryInput.foldLeft(Set[String]()){ (a, b) => a ++ b._2.values.flatten}
+    val nodeUsages = network.foldLeft(inputStrings) { (a, b) => a + b.head._2.get("next")}
+    val nodes = network.flatMap(l => l.keySet()).toSet
+    findUnusedNodes(nodeUsages, nodes)
     val queryString =
       s"""${generatePreamble(name)}
         |${(for (node <- network.reverse;
@@ -31,6 +33,22 @@ object ConfigReader {
 
     print(queryString)
     return compile(name, queryString)
+  }
+
+  def findUnusedNodes(nodeUsages: Set[String], nodes: Set[String]): Unit = {
+    for (node <- nodes) {
+      val simple = nodeUsages.contains(node)
+      val primary = nodeUsages.contains(s"$node.primary")
+      val secondary = nodeUsages.contains(s"$node.secondary")
+      if (!simple) {
+        if (!(primary || secondary)) {
+          throw new RuntimeException(s"$node never used")
+        }
+        if (primary ^ secondary) {
+          throw new RuntimeException(s"""$node only has ${if (primary) "primary" else "secondary"} input""")
+        }
+      }
+    }
   }
 
   def main(args: Array[String]) {

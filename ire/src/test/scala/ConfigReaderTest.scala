@@ -88,4 +88,50 @@ class ConfigReaderTest  extends FlatSpec {
     secondaryInput(ChangeSet(positive = Vector(Vector(1L), Vector(5L))))
     assert(engine.getResults() == Set(Vector(5L)))
   }
+  "unused nodes" should "throw runtime exception when never used" in {
+    val config = """input:
+                   |  edges:
+                   |    fIn: []
+                   |    sec: [j1.secondary]
+                   |
+                   |nodes:
+                   |  - f1:
+                   |      type: Checker
+                   |      condition: "(n) => { n(0) == 5L }"
+                   |      next: j1.primary
+                   |  - j1:
+                   |      type: HashJoiner
+                   |      primaryLength: 1
+                   |      primarySelector: Vector(0)
+                   |      secondaryLength: 1
+                   |      secondarySelector: Vector(0)
+                   |      next: production
+                 """.stripMargin
+    intercept[RuntimeException] {
+      val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
+    }
+  }
+  they should "throw runtime exception when a (primary xor secondary) input is used" in {
+    val config = """input:
+                   |  edges:
+                   |    fIn: [f1]
+                   |    sec: [j1.secondary]
+                   |
+                   |nodes:
+                   |  - f1:
+                   |      type: Checker
+                   |      condition: "(n) => { n(0) == 5L }"
+                   |      next: f1
+                   |  - j1:
+                   |      type: HashJoiner
+                   |      primaryLength: 1
+                   |      primarySelector: Vector(0)
+                   |      secondaryLength: 1
+                   |      secondarySelector: Vector(0)
+                   |      next: production
+                 """.stripMargin
+    intercept[RuntimeException] {
+      val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
+    }
+  }
 }
