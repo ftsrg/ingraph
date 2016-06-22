@@ -63,7 +63,7 @@ object ConfigReader {
 
   def generateNode(name: String, params: Map[String, String]): String = {
     val functionParams = params - "type" map (kv => s"${kv._1}=${kv._2}") mkString ", "
-    s"""  val $name = newLocal(Props(new ${params("type")}($functionParams)), "$name")\n"""
+    s"""  val $name = newLocal(Props(new ${params("type")}($functionParams)), "$name-")\n"""
   }
 
   def generateInputLookup(input: Map[String, Map[String, List[String]]]): String = {
