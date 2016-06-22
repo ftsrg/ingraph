@@ -10,7 +10,7 @@ import org.yaml.snakeyaml.Yaml
   * Created by wafle on 5/14/2016.
   */
 object ConfigReader {
-  def parse(name: String, configStream: InputStream): TrainbenchmarkQuery = {
+  def parse(name: String, configStream: InputStream, verbose: Boolean = false): TrainbenchmarkQuery = {
     val yaml = new Yaml()
     val all = yaml.load(configStream).asInstanceOf[util.Map[String, Object]]
     import collection.JavaConversions._
@@ -30,8 +30,9 @@ object ConfigReader {
         |${generateInputNodes(queryInput)}
         |${generateEnding()}
       """.stripMargin
-
-    print(queryString)
+    if (verbose) {
+      println(queryString)
+    }
     return compile(name, queryString)
   }
 
