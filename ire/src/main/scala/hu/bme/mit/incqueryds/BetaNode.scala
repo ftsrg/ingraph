@@ -40,7 +40,7 @@ abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with
         }
         case None => reteMessage match {
           case pause: Pause => primaryPause = Some(pause)
-          case cs: ChangeSet => onPrimary(cs); printForwarding(cs)
+          case cs: ChangeSet => onPrimary(cs); // printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
       }
@@ -66,7 +66,7 @@ abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with
         }
         case None => reteMessage match {
           case pause: Pause => secondaryPause = Some(pause)
-          case cs: ChangeSet => onSecondary(cs); printForwarding(cs)
+          case cs: ChangeSet => onSecondary(cs); //printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
 

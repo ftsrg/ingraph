@@ -26,7 +26,7 @@ trait SingleForwarder extends Forwarder {
   def forward(cs: ChangeSet) = {
     if (cs.positive.nonEmpty || cs.negative.nonEmpty)
       next(cs)
-    printForwarding(cs)
+    //printForwarding(cs)
   }
 
   def forward(terminator: TerminatorMessage) = next(terminator)
