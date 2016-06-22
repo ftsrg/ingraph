@@ -8,15 +8,7 @@
             <param name="ConversionPattern" value="%-5p %c{1} - %m%n"/>
         </layout>
     </appender>
-    <appender name="results" class="org.apache.log4j.FileAppender">
-        <param name="file" value="results/${current.datetime}.tsv"/>
-        <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%m%n"/>
-        </layout>
-    </appender>
     <root>
         <appender-ref ref="console" />
-        <appender-ref ref="results" />
     </root>
-
 </log4j:configuration>
