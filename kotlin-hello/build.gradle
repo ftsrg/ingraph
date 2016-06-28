@@ -1,29 +1,44 @@
 group 'hello'
 version '1.0-SNAPSHOT'
 
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = "pkg.MainKt"
+
 buildscript {
+    ext.kotlin_version = '1.0.1'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
-
-sourceCompatibility = 1.5
+defaultTasks 'run'
 
 repositories {
     mavenCentral()
 }
 
+configurations {
+    quasar
+}
+
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.1'
-    compile 'org.apache.tinkerpop:tinkergraph-gremlin:3.2.0-incubating'
     compile 'co.paralleluniverse:quasar-core:0.7.5'
     compile 'co.paralleluniverse:quasar-actors:0.7.5'
     compile 'co.paralleluniverse:quasar-kotlin:0.7.5'
     compile 'junit:junit:4.12'
+    quasar 'co.paralleluniverse:quasar-core:0.7.5@jar'
+}
+
+applicationDefaultJvmArgs = [
+        "-javaagent:${configurations.quasar.singleFile}" // =v, =d
+]
+
+tasks.withType(Test) {
+    jvmArgs "-javaagent:${configurations.quasar.singleFile}" // =v, =d
 }
