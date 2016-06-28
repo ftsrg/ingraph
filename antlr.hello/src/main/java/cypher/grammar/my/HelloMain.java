@@ -1,4 +1,4 @@
-package cypher.grammar;
+package cypher.grammar.my;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import cypher.grammar.CypherLexer;
+import cypher.grammar.CypherParser;
 import cypher.grammar.CypherParser.CypherContext;
 
 public class HelloMain {
