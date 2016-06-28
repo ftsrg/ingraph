@@ -3,7 +3,7 @@ package pkg
 import cypher.grammar.CypherBaseListener
 import cypher.grammar.CypherParser
 
-class MyCypherListener : CypherBaseListener {
+class MyCypherListener : CypherBaseListener() {
 
     override fun enterMatch(ctx: CypherParser.MatchContext) {
         println("Enter: " + ctx.text)
