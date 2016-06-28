@@ -16,8 +16,6 @@ buildscript {
     }
 }
 
-defaultTasks 'run'
-
 repositories {
     mavenCentral()
 }
