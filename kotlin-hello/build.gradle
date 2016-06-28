@@ -42,3 +42,5 @@ applicationDefaultJvmArgs = [
 tasks.withType(Test) {
     jvmArgs "-javaagent:${configurations.quasar.singleFile}" // =v, =d
 }
+
+defaultTasks 'run'
