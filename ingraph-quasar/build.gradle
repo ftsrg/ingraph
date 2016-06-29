@@ -1,6 +1,6 @@
 apply plugin: 'application'
 
-mainClassName = "pkg.MainKt"
+mainClassName = "pkg.QuasarMainKt"
 
 configurations {
     quasar
@@ -22,5 +22,3 @@ applicationDefaultJvmArgs = [
 tasks.withType(Test) {
     jvmArgs "-javaagent:${configurations.quasar.singleFile}" // =v, =d
 }
-
-defaultTasks 'run'

@@ -1,11 +1,9 @@
 apply plugin: 'application'
 
-mainClassName = "pkg.MainKt"
+mainClassName = "pkg.CypherMainKt"
 
 dependencies {
     compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.1'
     compile 'org.antlr:antlr4-runtime:4.5.3'
     compile 'junit:junit:4.12'
 }
-
-defaultTasks 'run'
