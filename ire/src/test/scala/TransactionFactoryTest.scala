@@ -1,12 +1,12 @@
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.incqueryds.{ChangeSet, WildcardInput}
+import hu.bme.mit.incqueryds.{ChangeSet, TransactionFactory}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**
  * Created by janosmaginecz on 05/05/15.
  */
-class WildcardInputTest (_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class TransactionFactoryTest (_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
   def this() = this(ActorSystem("MySpec"))
 
@@ -14,10 +14,10 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  "WildcardInput" must {
+  "TransactionFactory" must {
 
     "send incoming data after subscription" in {
-      val input = new WildcardInput(messageSize = 4)
+      val input = new TransactionFactory(messageSize = 4)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()
@@ -27,7 +27,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(ChangeSet(positive = Vector(Vector(6, 2), Vector(6, 1))))
     }
     "do no splitting in batch" in {
-      val input = new WildcardInput(messageSize = 2)
+      val input = new TransactionFactory(messageSize = 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()
@@ -38,7 +38,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(ChangeSet(positive = Vector(Vector(6, 3), Vector(6, 2), Vector(6, 1))))
     }
     "send messageSize sized messages when using continuous transactions" in {
-      val input = new WildcardInput(messageSize = 2)
+      val input = new TransactionFactory(messageSize = 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newContinousTransaction()

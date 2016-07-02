@@ -12,7 +12,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import utils.conversions._
 
-class TrainbenchmarkReader(input: WildcardInput) {
+class TrainbenchmarkReader() {
   val log = Logger.getRootLogger
   def idFunction(v: Any) = utils.idStringToLong(v.toString)
 
@@ -26,16 +26,11 @@ class TrainbenchmarkReader(input: WildcardInput) {
     "monitoredBy" -> ((v: Any) => utils.idStringToLong(v.toString))
   )
 
-  def read(path: String) {
+  def read(path: String, transaction: Transaction) {
     val fs = new FileInputStream(path)
     try {
-      val tran = input.newBatchTransaction()
-      val reader = new WorkingTBRDFReader(tran.add, idFunction(_), valueFunctions)
-      log.info("read started")
+      val reader = new WorkingTBRDFReader(transaction.add, idFunction, valueFunctions)
       reader.read(scala.io.Source.fromFile(path))
-      log.info("read finished")
-      tran.close()
-      log.info("read transaction processed")
     }
     finally {
       fs.close()

@@ -30,7 +30,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
   }
 
   "multiple queries" should "work" in {
-    val input = new WildcardInput(10)
+    val input = new TransactionFactory(10)
     val query = new TestQuery1
     val query2 = new TestQuery2
     input.subscribe(query.inputLookup)
@@ -47,7 +47,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
   }
 
   "integartion" should "work" in {
-    val input = new WildcardInput(10)
+    val input = new TransactionFactory(10)
     val query = new TestQuery1
     input.subscribe(query.inputLookup)
     val tran0 = input.newBatchTransaction()
