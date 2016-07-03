@@ -1,22 +1,11 @@
 import java.io.StringReader
+
+import hu.bme.mit.incqueryds.{RDFReader, utils}
 import org.scalatest.FlatSpec
-import hu.bme.mit.incqueryds.{WorkingTBRDFReader, JenaRDFReader, utils}
 
 
 class RdfReaderTest extends FlatSpec {
-  "JenaRailwayReader" should "read simple values" in {
-    val values = new StringReader("" +
-      "@prefix : <http://www.semanticweb.org/ontologies/2011/1/TrainRequirementOntology.owl#> ." +
-      "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> ." +
-      ":_1 a :Signal ;\n\t:Signal_currentState :SIGNALSTATE_GO ." +
-      ":_3 a :Route ;\n\t:Route_exit :_2 .")
-
-
-    val reader = new JenaRDFReader(lookup, subjectPreprocessor = (v: AnyRef) => utils.idStringToLong(v.toString) )
-
-    reader.read(values)
-  }
-  "Tbreader" should "read simple values" in {
+  "RDFReader" should "read simple values" in {
     val values = "" +
       "@prefix : <http://www.semanticweb.org/ontologies/2011/1/TrainRequirementOntology.owl#> .\n" +
       "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n" +
@@ -25,7 +14,7 @@ class RdfReaderTest extends FlatSpec {
       ":_3 a :Route ;\n\t:Route_exit :_2 .\n" +
       ":_3 length \"358\"^^xsd:int ."
 
-    val reader = new WorkingTBRDFReader(lookup, subjectPreprocessor = (v: AnyRef) => utils.idStringToLong(v.toString))
+    val reader = new RDFReader(lookup, subjectPreprocessor = (v: AnyRef) => utils.idStringToLong(v.toString))
     reader.read(scala.io.Source.fromString(values))
 
 

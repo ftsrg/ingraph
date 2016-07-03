@@ -5,15 +5,13 @@ import java.io.FileInputStream
 import akka.actor._
 import akka.remote.RemoteScope
 import hu.bme.mit.incqueryds._
-import org.apache.log4j.Logger
+import hu.bme.mit.incqueryds.utils.conversions._
 
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import utils.conversions._
 
 class TrainbenchmarkReader() {
-  val log = Logger.getRootLogger
   def idFunction(v: Any) = utils.idStringToLong(v.toString)
 
   val valueFunctions = Map[String, (Any)=>(Any)](
@@ -29,7 +27,7 @@ class TrainbenchmarkReader() {
   def read(path: String, transaction: Transaction) {
     val fs = new FileInputStream(path)
     try {
-      val reader = new WorkingTBRDFReader(transaction.add, idFunction, valueFunctions)
+      val reader = new RDFReader(transaction.add, idFunction, valueFunctions)
       reader.read(scala.io.Source.fromFile(path))
     }
     finally {
@@ -37,6 +35,7 @@ class TrainbenchmarkReader() {
     }
   }
 }
+
 object TrainbenchmarkQuery {
   val system = ActorSystem()
 

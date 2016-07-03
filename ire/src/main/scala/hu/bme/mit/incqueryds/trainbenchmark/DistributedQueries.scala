@@ -1,13 +1,13 @@
 package hu.bme.mit.incqueryds.trainbenchmark
 
-import java.io.{ObjectInputStream, ObjectOutputStream, IOException}
+import java.io.{IOException, ObjectInputStream, ObjectOutputStream}
 
 import akka.actor._
 import akka.remote.RemoteScope
 import hu.bme.mit.incqueryds._
+import hu.bme.mit.incqueryds.utils.conversions._
 
 import scala.collection.immutable.HashMap
-import utils.conversions._
 
 /**
  * Created by wafle on 10/20/2015.

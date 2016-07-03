@@ -2,7 +2,6 @@ package hu.bme.mit.incqueryds
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.ActorRef
-import org.apache.log4j.LogManager
 
 import scala.collection.mutable
 
@@ -39,14 +38,6 @@ object utils {
     }
   }
 
-}
-
-trait ResultLogger {
-  private def logger = LogManager.getLogger(this.getClass)
-
-  def logResult(query: String, phase: String, timeNano: Long): Unit = {
-    logger.info(s"fixed\t1\tnaive-rete\t${System.getProperty("inputSize")}\t$query\t$phase\t1\ttime\t$timeNano")
-  }
 }
 
 class AtomicUniqueCounter {

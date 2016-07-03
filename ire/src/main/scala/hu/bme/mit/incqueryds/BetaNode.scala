@@ -1,6 +1,6 @@
 package hu.bme.mit.incqueryds
 
-import akka.actor.{Stash, Actor}
+import akka.actor.{Actor, Stash}
 
 /**
   * Created by wafle on 12/25/2015.
