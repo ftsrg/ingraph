@@ -1,7 +1,6 @@
 package hu.bme.mit.incqueryds
 
 import com.gs.collections.api.multimap.MutableMultimap
-import com.gs.collections.impl.multimap.AbstractMutableMultimap
 import com.gs.collections.impl.multimap.bag.HashBagMultimap
 import com.gs.collections.impl.multimap.list.FastListMultimap
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap

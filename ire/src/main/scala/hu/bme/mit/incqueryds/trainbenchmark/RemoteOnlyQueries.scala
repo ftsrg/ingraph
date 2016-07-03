@@ -6,9 +6,9 @@ import akka.actor._
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
 import hu.bme.mit.incqueryds._
+import hu.bme.mit.incqueryds.utils.conversions._
 
 import scala.collection.immutable.HashMap
-import utils.conversions._
 
 /**
  * Created by wafle on 10/11/2015.

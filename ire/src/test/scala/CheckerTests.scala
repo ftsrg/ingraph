@@ -1,12 +1,8 @@
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.incqueryds._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import hu.bme.mit.incqueryds.Inequality
-import hu.bme.mit.incqueryds.Equality
-import hu.bme.mit.incqueryds.ChangeSet
-import hu.bme.mit.incqueryds.Checker
-import hu.bme.mit.incqueryds.nodeType
 
 
 /**

@@ -1,7 +1,7 @@
 import java.util.Comparator
 
-import akka.actor.{Props, ActorSystem}
-import akka.testkit.{TestActors, ImplicitSender, TestKit}
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.incqueryds._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 

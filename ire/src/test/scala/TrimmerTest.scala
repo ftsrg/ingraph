@@ -1,12 +1,7 @@
-import scala.Vector
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.Matchers
-import org.scalatest.WordSpecLike
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
-import akka.testkit.ImplicitSender
-import akka.testkit.TestActors
-import akka.testkit.TestKit
-import hu.bme.mit.incqueryds.{ChangeSet, Projection, Trimmer}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.incqueryds.{ChangeSet, Trimmer}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**
  * Created by Maginecz on 3/16/2015.
