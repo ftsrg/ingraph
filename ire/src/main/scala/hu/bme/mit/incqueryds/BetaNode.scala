@@ -72,6 +72,8 @@ abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with
 
       }
     }
-    case other => throw new UnsupportedOperationException(s"beta received unsupported msg $other")
+    case other: ReteMessage =>
+      throw new UnsupportedOperationException(
+        s"$name received raw message, needs to be wrapped as Primary or Secondary")
   }
 }

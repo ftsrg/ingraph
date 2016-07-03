@@ -23,6 +23,7 @@ abstract class AlphaNode(val expectedTerminatorCount: Int = 1) extends Actor wit
     })
     case changeSet: ChangeSet => onChangeSet(changeSet)
     case terminator: TerminatorMessage => handleTerminator(terminator)
-    case other => throw new UnsupportedOperationException(s"alpha received unsupported msg $other")
+    case Primary | Secondary =>
+      throw new UnsupportedOperationException(s"$name received Beta-wrapped message")
   }
 }
