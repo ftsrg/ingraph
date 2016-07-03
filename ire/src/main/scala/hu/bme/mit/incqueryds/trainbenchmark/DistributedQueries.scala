@@ -39,7 +39,7 @@ abstract class DistributedQuery extends RemoteOnlyTrainbenchmarkQuery with Seria
 
 class DistributedRouteSensor extends  DistributedQuery {
   val production = newLocal(Props(new Production("RouteSensor")))
-  val antijoin = newRemote3(Props(new HashAntijoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
+  val antijoin = newRemote3(Props(new HashLeftAntijoiner(production ! _, Vector(2, 3), Vector(0, 1))), "RouteSensor-antijoin")
   val sensorJoin = newRemote2(Props(new HashJoiner(antijoin ! Primary(_), 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join")
   val followsJoin = newRemote1(Props(new HashJoiner(sensorJoin ! Primary(_), 2, Vector(0), 2, Vector(1))), "RouteSensor-follows-join")
   val inputLookup = HashMap(
@@ -59,7 +59,7 @@ class DistributedRouteSensor extends  DistributedQuery {
 
 class DistributedSplitRouteSensor extends  DistributedQuery {
   val production = newLocal(Props(new Production("RouteSensor")))
-  val antijoin = newRemote1(Props(new HashAntijoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 4)), "RouteSensor-antijoin")
+  val antijoin = newRemote1(Props(new HashLeftAntijoiner(production ! _, Vector(2, 3), Vector(0, 1), expectedTerminatorCount = 4)), "RouteSensor-antijoin")
   val sensorJoinA = newRemote2(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-A")
   val sensorJoinB = newRemote3(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-B")
   val sensorJoinC = newLocal(Props(new HashJoiner(antijoin.primary, 3, Vector(1), 2, Vector(0))), "RouteSensor-sensor=join-C")
@@ -94,7 +94,7 @@ class DistributedSplitRouteSensor extends  DistributedQuery {
 
 class DistributedSwitchSensor extends DistributedQuery {
   val production = newLocal(Props(new Production("SwitchSensor")), "sw-production")
-  val antijoin = newRemote2(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
+  val antijoin = newRemote2(Props(new HashLeftAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin")
 
   val trimmer = newLocal(Props(new Trimmer(antijoin ! Secondary(_), Vector(0))), "sw-trimmer")
   val inputLookup = Map(
@@ -118,10 +118,10 @@ class DistributedSwitchSensor extends DistributedQuery {
 
 class DistributedSplitSwitchSensor extends DistributedQuery {
   val production = newLocal(Props(new Production("SwitchSensor", expectedTerminatorCount = 4)), "sw-production")
-  val antijoinA = newRemote1(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-A")
-  val antijoinB = newRemote2(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-B")
-  val antijoinC = newRemote3(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-C")
-  val antijoinD = newLocal(Props(new HashAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
+  val antijoinA = newRemote1(Props(new HashLeftAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-A")
+  val antijoinB = newRemote2(Props(new HashLeftAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-B")
+  val antijoinC = newRemote3(Props(new HashLeftAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-C")
+  val antijoinD = newLocal(Props(new HashLeftAntijoiner(production ! _, Vector(0), Vector(0))), "sw-antijoin-D")
 
   val secondaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.secondary, antijoinB.secondary, antijoinC.secondary, antijoinD.secondary)
   val primaryChildren: Vector[ReteMessage => Unit] = Vector(antijoinA.primary, antijoinB.primary, antijoinC.primary, antijoinD.primary)

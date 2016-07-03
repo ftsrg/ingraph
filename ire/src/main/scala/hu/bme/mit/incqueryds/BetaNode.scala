@@ -6,9 +6,9 @@ import akka.actor.{Stash, Actor}
   * Created by wafle on 12/25/2015.
   */
 
-case class Primary(value: ReteMessage)
+case class Primary(value: ReteMessage) extends ReteMessage
 
-case class Secondary(value: ReteMessage)
+case class Secondary(value: ReteMessage) extends ReteMessage
 
 abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
