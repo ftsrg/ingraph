@@ -23,6 +23,22 @@ class ConfigReaderTest  extends FlatSpec {
     assert(engine.getResults() == Set(Vector(5L)))
   }
 
+  "nodes should accept multiple next values" should "work" in {
+    val config = """nodes:
+                   |  - f1:
+                   |      type: Checker
+                   |      condition: "(n) => { n(0) == 5L }"
+                   |      next: [production, production]
+                   |input:
+                   |  edges:
+                   |    test: [f1]
+                 """.stripMargin
+    val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
+    val testInput = engine.inputLookup("test")
+    testInput(ChangeSet(positive = Vector(Vector(0L), Vector(5L))))
+    assert(engine.getResults() == Set(Vector(5L)))
+  }
+
   "beta nodes configs" should "work" in {
     val config = """nodes:
                    |  - j1:
