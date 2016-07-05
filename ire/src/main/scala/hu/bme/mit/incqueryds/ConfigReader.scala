@@ -2,10 +2,12 @@ package hu.bme.mit.incqueryds
 
 import java.io.{FileInputStream, InputStream}
 import java.util
+import java.util.StringJoiner
 
 import com.twitter.util.Eval
 import hu.bme.mit.incqueryds.trainbenchmark.TrainbenchmarkQuery
 import org.yaml.snakeyaml.Yaml
+import scala.collection.JavaConversions._
 /**
   * Created by wafle on 5/14/2016.
   */
@@ -18,7 +20,7 @@ object ConfigReader {
     val queryInput = queryInputJava.map(kv => kv._1 -> kv._2.map(kv => kv._1 -> kv._2.toList).toMap).toMap
     val network = all("nodes").asInstanceOf[util.List[util.Map[String, util.Map[String, String]]]]
     val inputStrings = queryInput.foldLeft(Set[String]()){ (a, b) => a ++ b._2.values.flatten}
-    val nodeUsages = network.foldLeft(inputStrings) { (a, b) => a + b.head._2.get("next")}
+    val nodeUsages = network.foldLeft(inputStrings) { (a, b) => a + b.head._2.get("next").asInstanceOf[util.List[String]].get(0)} // TODO check/update this
     val nodes = network.flatMap(l => l.keySet()).toSet
     findUnusedNodes(nodeUsages, nodes)
     val queryString =
@@ -61,8 +63,17 @@ object ConfigReader {
 
   }
 
-  def generateNode(name: String, params: Map[String, String]): String = {
-    val functionParams = params - "type" map (kv => s"${kv._1}=${kv._2}") mkString ", "
+  def generateNode(name: String, params: Map[String, Object]): String = {
+    val functionParams = params - "type" map (kv => {
+      if (kv._1 == "next") {
+        val nodes = kv._2.asInstanceOf[util.List[String]]
+        val nodesMessages = nodes.map(s => s"${s}(message)")
+        val nodesString = nodesMessages.mkString("{", "; ", "}")
+        s"${kv._1} = message => ${nodesString}"
+      } else {
+        s"${kv._1} = ${kv._2}"
+      }
+    }) mkString ", "
     s"""  val $name = newLocal(Props(new ${params("type")}($functionParams)), "$name-")\n"""
   }
 

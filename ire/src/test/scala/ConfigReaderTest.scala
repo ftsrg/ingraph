@@ -12,7 +12,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |  - f1:
                    |      type: Checker
                    |      condition: "(n) => { n(0) == 5L }"
-                   |      next: production
+                   |      next: [production]
                    |input:
                    |  edges:
                    |    test: [f1]
@@ -31,7 +31,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |      primarySelector: Vector(0)
                    |      secondaryLength: 1
                    |      secondarySelector: Vector(0)
-                   |      next: production
+                   |      next: [production]
                    |input:
                    |  edges:
                    |    pri: [j1.primary]
@@ -54,7 +54,7 @@ class ConfigReaderTest  extends FlatSpec {
                    |  - f1:
                    |      type: Checker
                    |      condition: "(n) => { true }"
-                   |      next: production
+                   |      next: [production]
                  """.stripMargin
     val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val input = engine.inputLookup("type")
@@ -72,14 +72,14 @@ class ConfigReaderTest  extends FlatSpec {
                    |  - f1:
                    |      type: Checker
                    |      condition: "(n) => { n(0) == 5L }"
-                   |      next: j1.primary
+                   |      next: [j1.primary]
                    |  - j1:
                    |      type: HashJoiner
                    |      primaryLength: 1
                    |      primarySelector: Vector(0)
                    |      secondaryLength: 1
                    |      secondarySelector: Vector(0)
-                   |      next: production
+                   |      next: [production]
                  """.stripMargin
     val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
     val primaryInput = engine.inputLookup("fIn")
@@ -98,14 +98,14 @@ class ConfigReaderTest  extends FlatSpec {
                    |  - f1:
                    |      type: Checker
                    |      condition: "(n) => { n(0) == 5L }"
-                   |      next: j1.primary
+                   |      next: [j1.primary]
                    |  - j1:
                    |      type: HashJoiner
                    |      primaryLength: 1
                    |      primarySelector: Vector(0)
                    |      secondaryLength: 1
                    |      secondarySelector: Vector(0)
-                   |      next: production
+                   |      next: [production]
                  """.stripMargin
     intercept[RuntimeException] {
       val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
@@ -121,14 +121,14 @@ class ConfigReaderTest  extends FlatSpec {
                    |  - f1:
                    |      type: Checker
                    |      condition: "(n) => { n(0) == 5L }"
-                   |      next: f1
+                   |      next: [f1]
                    |  - j1:
                    |      type: HashJoiner
                    |      primaryLength: 1
                    |      primarySelector: Vector(0)
                    |      secondaryLength: 1
                    |      secondarySelector: Vector(0)
-                   |      next: production
+                   |      next: [production]
                  """.stripMargin
     intercept[RuntimeException] {
       val engine = ConfigReader.parse("testQuery", new ByteArrayInputStream(config.getBytes("UTF-8")))
