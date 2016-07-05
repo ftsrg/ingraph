@@ -20,7 +20,7 @@ object ConfigReader {
     val queryInput = queryInputJava.map(kv => kv._1 -> kv._2.map(kv => kv._1 -> kv._2.toList).toMap).toMap
     val network = all("nodes").asInstanceOf[util.List[util.Map[String, util.Map[String, String]]]]
     val inputStrings = queryInput.foldLeft(Set[String]()){ (a, b) => a ++ b._2.values.flatten}
-    val nodeUsages = network.foldLeft(inputStrings) { (a, b) => a + b.head._2.get("next").asInstanceOf[util.List[String]].get(0)} // TODO check/update this
+    val nodeUsages = network.foldLeft(inputStrings) { (a, b) => a ++ b.head._2.get("next").asInstanceOf[util.List[String]]}
     val nodes = network.flatMap(l => l.keySet()).toSet
     findUnusedNodes(nodeUsages, nodes)
     val queryString =
