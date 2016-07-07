@@ -1,0 +1,4 @@
+rootProject.name = 'ingraph'
+include ':ingraph-grammar'
+include ':ingraph-quasar'
+include ':ingraph-sandbox'

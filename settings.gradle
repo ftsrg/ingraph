@@ -1,4 +1,10 @@
-rootProject.name = 'ingraph'
-include ':ingraph-grammar'
-include ':ingraph-quasar'
-include ':ingraph-sandbox'
+rootProject.name = 'hu.bme.mit.ingraph'
+include ':hu.bme.mit.ingraph.algebra'
+include ':hu.bme.mit.ingraph.graph'
+include ':hu.bme.mit.ingraph.rete'
+include ':hu.bme.mit.ingraph.tinkerpop'
+
+project(':hu.bme.mit.ingraph.algebra').projectDir = "$rootDir/hu.bme.mit.ingraph.algebra" as File
+project(':hu.bme.mit.ingraph.graph').projectDir = "$rootDir/hu.bme.mit.ingraph.graph" as File
+project(':hu.bme.mit.ingraph.rete').projectDir = "$rootDir/hu.bme.mit.ingraph.rete" as File
+project(':hu.bme.mit.ingraph.tinkerpop').projectDir = "$rootDir/hu.bme.mit.ingraph.tinkerpop" as File

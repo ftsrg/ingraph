@@ -1,34 +1,29 @@
 allprojects  {
-	apply plugin: 'maven'
+  apply plugin: 'maven'
 
-	group = 'hu.bme.mit.trainbenchmark'
-	version = '1.0.0-SNAPSHOT'
+  group = 'hu.bme.mit.ingraph'
+version = '0.0.1-SNAPSHOT'
 }
 
 subprojects {
   apply plugin: 'java'
-  apply plugin: 'kotlin'
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+  repositories {
+    mavenLocal()
 
-	task packageSources(type: Jar) {
-		classifier = 'sources'
-		from sourceSets.main.allSource
-	}
+    maven { url "http://repo.maven.apache.org/maven2" }
+  }
 
-	artifacts.archives packageSources
-	repositories {
-		mavenCentral()
-	}
+
+  dependencies {
+    compile group: 'org.eclipse.collections', name: 'eclipse-collections-api', version:'7.1.0'
+    compile group: 'org.eclipse.collections', name: 'eclipse-collections', version:'7.1.0'
+    compile group: 'org.projectlombok', name: 'lombok', version:'1.16.8'
+    compile group: 'org.apache.tinkerpop', name: 'tinkergraph-gremlin', version:'3.2.0-incubating'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
 }
 
-buildscript {
-    ext.kotlin_version = '1.0.1'
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+
 }

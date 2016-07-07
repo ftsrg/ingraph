@@ -1,0 +1,5 @@
+
+description = ''
+dependencies {
+  compile project(':hu.bme.mit.ingraph.rete')
+}
