@@ -1,5 +1,5 @@
 allprojects {
-    group = 'hu.bme.mit.ingraph'
+    group = 'ingraph'
     version = '0.0.1-SNAPSHOT'
 }
 
