@@ -1,5 +1,6 @@
-package cypher.grammar;
+package cypher.main;
 
+import cypher.grammar.CypherBaseListener;
 import cypher.grammar.CypherParser.MatchContext;
 import cypher.grammar.CypherParser.ReturnContext;
 import cypher.grammar.CypherParser.VariableContext;
