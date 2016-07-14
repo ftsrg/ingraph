@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.InputNode;
+import relalg.AntiJoinOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Input Node</b></em>'.
+ * An implementation of the model object '<em><b>Anti Join Operator</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class InputNodeImpl extends ReteNodeImpl implements InputNode {
+public class AntiJoinOperatorImpl extends BetaOperatorImpl implements AntiJoinOperator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected InputNodeImpl() {
+	protected AntiJoinOperatorImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class InputNodeImpl extends ReteNodeImpl implements InputNode {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.INPUT_NODE;
+		return RelalgPackage.Literals.ANTI_JOIN_OPERATOR;
 	}
 
-} //InputNodeImpl
+} //AntiJoinOperatorImpl

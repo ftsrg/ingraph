@@ -56,10 +56,14 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case RelalgPackage.INPUT_NODE: return createInputNode();
-			case RelalgPackage.TRIMMER_NODE: return createTrimmerNode();
-			case RelalgPackage.JOIN_NODE: return createJoinNode();
-			case RelalgPackage.RETE_NETWORK: return createReteNetwork();
+			case RelalgPackage.INPUT_RELATION: return createInputRelation();
+			case RelalgPackage.TRIMMER_OPERATOR: return createTrimmerOperator();
+			case RelalgPackage.JOIN_OPERATOR: return createJoinOperator();
+			case RelalgPackage.ALGEBRA_EXPRESSION: return createAlgebraExpression();
+			case RelalgPackage.ANTI_JOIN_OPERATOR: return createAntiJoinOperator();
+			case RelalgPackage.PRODUCTION_OPERATOR: return createProductionOperator();
+			case RelalgPackage.ATTRIBUTE: return createAttribute();
+			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -70,9 +74,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public InputNode createInputNode() {
-		InputNodeImpl inputNode = new InputNodeImpl();
-		return inputNode;
+	public InputRelation createInputRelation() {
+		InputRelationImpl inputRelation = new InputRelationImpl();
+		return inputRelation;
 	}
 
 	/**
@@ -80,9 +84,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public TrimmerNode createTrimmerNode() {
-		TrimmerNodeImpl trimmerNode = new TrimmerNodeImpl();
-		return trimmerNode;
+	public TrimmerOperator createTrimmerOperator() {
+		TrimmerOperatorImpl trimmerOperator = new TrimmerOperatorImpl();
+		return trimmerOperator;
 	}
 
 	/**
@@ -90,9 +94,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public JoinNode createJoinNode() {
-		JoinNodeImpl joinNode = new JoinNodeImpl();
-		return joinNode;
+	public JoinOperator createJoinOperator() {
+		JoinOperatorImpl joinOperator = new JoinOperatorImpl();
+		return joinOperator;
 	}
 
 	/**
@@ -100,9 +104,49 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReteNetwork createReteNetwork() {
-		ReteNetworkImpl reteNetwork = new ReteNetworkImpl();
-		return reteNetwork;
+	public AlgebraExpression createAlgebraExpression() {
+		AlgebraExpressionImpl algebraExpression = new AlgebraExpressionImpl();
+		return algebraExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AntiJoinOperator createAntiJoinOperator() {
+		AntiJoinOperatorImpl antiJoinOperator = new AntiJoinOperatorImpl();
+		return antiJoinOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProductionOperator createProductionOperator() {
+		ProductionOperatorImpl productionOperator = new ProductionOperatorImpl();
+		return productionOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Attribute createAttribute() {
+		AttributeImpl attribute = new AttributeImpl();
+		return attribute;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AttributeSet createAttributeSet() {
+		AttributeSetImpl attributeSet = new AttributeSetImpl();
+		return attributeSet;
 	}
 
 	/**

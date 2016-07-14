@@ -5,44 +5,53 @@ package relalg.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import relalg.AlgebraNode;
 import relalg.RelalgPackage;
-import relalg.ReteNode;
-import relalg.TrimmerNode;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Trimmer Node</b></em>'.
+ * An implementation of the model object '<em><b>Algebra Node</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.TrimmerNodeImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.impl.AlgebraNodeImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
+public abstract class AlgebraNodeImpl extends MinimalEObjectImpl.Container implements AlgebraNode {
 	/**
-	 * The cached value of the '{@link #getParent() <em>Parent</em>}' reference.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getParent()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected ReteNode parent;
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TrimmerNodeImpl() {
+	protected AlgebraNodeImpl() {
 		super();
 	}
 
@@ -53,7 +62,7 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.TRIMMER_NODE;
+		return RelalgPackage.Literals.ALGEBRA_NODE;
 	}
 
 	/**
@@ -61,16 +70,8 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReteNode getParent() {
-		if (parent != null && parent.eIsProxy()) {
-			InternalEObject oldParent = (InternalEObject)parent;
-			parent = (ReteNode)eResolveProxy(oldParent);
-			if (parent != oldParent) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.TRIMMER_NODE__PARENT, oldParent, parent));
-			}
-		}
-		return parent;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -78,20 +79,11 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ReteNode basicGetParent() {
-		return parent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParent(ReteNode newParent) {
-		ReteNode oldParent = parent;
-		parent = newParent;
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.TRIMMER_NODE__PARENT, oldParent, parent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ALGEBRA_NODE__NAME, oldName, name));
 	}
 
 	/**
@@ -102,9 +94,8 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_NODE__PARENT:
-				if (resolve) return getParent();
-				return basicGetParent();
+			case RelalgPackage.ALGEBRA_NODE__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -117,8 +108,8 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_NODE__PARENT:
-				setParent((ReteNode)newValue);
+			case RelalgPackage.ALGEBRA_NODE__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -132,8 +123,8 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_NODE__PARENT:
-				setParent((ReteNode)null);
+			case RelalgPackage.ALGEBRA_NODE__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -147,10 +138,26 @@ public class TrimmerNodeImpl extends ReteNodeImpl implements TrimmerNode {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_NODE__PARENT:
-				return parent != null;
+			case RelalgPackage.ALGEBRA_NODE__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //TrimmerNodeImpl
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
+	}
+
+} //AlgebraNodeImpl

@@ -3,28 +3,29 @@
 package relalg.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import relalg.Attribute;
 import relalg.RelalgPackage;
-import relalg.ReteNode;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Rete Node</b></em>'.
+ * An implementation of the model object '<em><b>Attribute</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.ReteNodeImpl#getName <em>Name</em>}</li>
+ *   <li>{@link relalg.impl.AttributeImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implements ReteNode {
+public class AttributeImpl extends MinimalEObjectImpl.Container implements Attribute {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -50,7 +51,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ReteNodeImpl() {
+	protected AttributeImpl() {
 		super();
 	}
 
@@ -61,7 +62,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.RETE_NODE;
+		return RelalgPackage.Literals.ATTRIBUTE;
 	}
 
 	/**
@@ -82,7 +83,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.RETE_NODE__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE__NAME, oldName, name));
 	}
 
 	/**
@@ -93,7 +94,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NODE__NAME:
+			case RelalgPackage.ATTRIBUTE__NAME:
 				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -107,7 +108,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NODE__NAME:
+			case RelalgPackage.ATTRIBUTE__NAME:
 				setName((String)newValue);
 				return;
 		}
@@ -122,7 +123,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NODE__NAME:
+			case RelalgPackage.ATTRIBUTE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
 		}
@@ -137,7 +138,7 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NODE__NAME:
+			case RelalgPackage.ATTRIBUTE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
@@ -159,4 +160,4 @@ public abstract class ReteNodeImpl extends MinimalEObjectImpl.Container implemen
 		return result.toString();
 	}
 
-} //ReteNodeImpl
+} //AttributeImpl

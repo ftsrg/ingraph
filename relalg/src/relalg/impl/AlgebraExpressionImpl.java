@@ -16,24 +16,24 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import relalg.AlgebraExpression;
+import relalg.AlgebraNode;
 import relalg.RelalgPackage;
-import relalg.ReteNetwork;
-import relalg.ReteNode;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Rete Network</b></em>'.
+ * An implementation of the model object '<em><b>Algebra Expression</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.ReteNetworkImpl#getNodes <em>Nodes</em>}</li>
+ *   <li>{@link relalg.impl.AlgebraExpressionImpl#getNodes <em>Nodes</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements ReteNetwork {
+public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implements AlgebraExpression {
 	/**
 	 * The cached value of the '{@link #getNodes() <em>Nodes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -42,14 +42,14 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<ReteNode> nodes;
+	protected EList<AlgebraNode> nodes;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ReteNetworkImpl() {
+	protected AlgebraExpressionImpl() {
 		super();
 	}
 
@@ -60,7 +60,7 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.RETE_NETWORK;
+		return RelalgPackage.Literals.ALGEBRA_EXPRESSION;
 	}
 
 	/**
@@ -68,9 +68,9 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<ReteNode> getNodes() {
+	public EList<AlgebraNode> getNodes() {
 		if (nodes == null) {
-			nodes = new EObjectContainmentEList<ReteNode>(ReteNode.class, this, RelalgPackage.RETE_NETWORK__NODES);
+			nodes = new EObjectContainmentEList<AlgebraNode>(AlgebraNode.class, this, RelalgPackage.ALGEBRA_EXPRESSION__NODES);
 		}
 		return nodes;
 	}
@@ -83,7 +83,7 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NETWORK__NODES:
+			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
 				return ((InternalEList<?>)getNodes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -97,7 +97,7 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NETWORK__NODES:
+			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
 				return getNodes();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -112,9 +112,9 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NETWORK__NODES:
+			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
 				getNodes().clear();
-				getNodes().addAll((Collection<? extends ReteNode>)newValue);
+				getNodes().addAll((Collection<? extends AlgebraNode>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -128,7 +128,7 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NETWORK__NODES:
+			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
 				getNodes().clear();
 				return;
 		}
@@ -143,10 +143,10 @@ public class ReteNetworkImpl extends MinimalEObjectImpl.Container implements Ret
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.RETE_NETWORK__NODES:
+			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
 				return nodes != null && !nodes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ReteNetworkImpl
+} //AlgebraExpressionImpl

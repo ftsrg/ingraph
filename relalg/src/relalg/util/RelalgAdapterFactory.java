@@ -68,24 +68,48 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	protected RelalgSwitch<Adapter> modelSwitch =
 		new RelalgSwitch<Adapter>() {
 			@Override
-			public Adapter caseReteNode(ReteNode object) {
-				return createReteNodeAdapter();
+			public Adapter caseAlgebraNode(AlgebraNode object) {
+				return createAlgebraNodeAdapter();
 			}
 			@Override
-			public Adapter caseInputNode(InputNode object) {
-				return createInputNodeAdapter();
+			public Adapter caseInputRelation(InputRelation object) {
+				return createInputRelationAdapter();
 			}
 			@Override
-			public Adapter caseTrimmerNode(TrimmerNode object) {
-				return createTrimmerNodeAdapter();
+			public Adapter caseTrimmerOperator(TrimmerOperator object) {
+				return createTrimmerOperatorAdapter();
 			}
 			@Override
-			public Adapter caseJoinNode(JoinNode object) {
-				return createJoinNodeAdapter();
+			public Adapter caseJoinOperator(JoinOperator object) {
+				return createJoinOperatorAdapter();
 			}
 			@Override
-			public Adapter caseReteNetwork(ReteNetwork object) {
-				return createReteNetworkAdapter();
+			public Adapter caseAlgebraExpression(AlgebraExpression object) {
+				return createAlgebraExpressionAdapter();
+			}
+			@Override
+			public Adapter caseAlphaOperator(AlphaOperator object) {
+				return createAlphaOperatorAdapter();
+			}
+			@Override
+			public Adapter caseBetaOperator(BetaOperator object) {
+				return createBetaOperatorAdapter();
+			}
+			@Override
+			public Adapter caseAntiJoinOperator(AntiJoinOperator object) {
+				return createAntiJoinOperatorAdapter();
+			}
+			@Override
+			public Adapter caseProductionOperator(ProductionOperator object) {
+				return createProductionOperatorAdapter();
+			}
+			@Override
+			public Adapter caseAttribute(Attribute object) {
+				return createAttributeAdapter();
+			}
+			@Override
+			public Adapter caseAttributeSet(AttributeSet object) {
+				return createAttributeSetAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -108,72 +132,156 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.ReteNode <em>Rete Node</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.AlgebraNode <em>Algebra Node</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.ReteNode
+	 * @see relalg.AlgebraNode
 	 * @generated
 	 */
-	public Adapter createReteNodeAdapter() {
+	public Adapter createAlgebraNodeAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.InputNode <em>Input Node</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.InputRelation <em>Input Relation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.InputNode
+	 * @see relalg.InputRelation
 	 * @generated
 	 */
-	public Adapter createInputNodeAdapter() {
+	public Adapter createInputRelationAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.TrimmerNode <em>Trimmer Node</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.TrimmerOperator <em>Trimmer Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.TrimmerNode
+	 * @see relalg.TrimmerOperator
 	 * @generated
 	 */
-	public Adapter createTrimmerNodeAdapter() {
+	public Adapter createTrimmerOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.JoinNode <em>Join Node</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.JoinOperator <em>Join Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.JoinNode
+	 * @see relalg.JoinOperator
 	 * @generated
 	 */
-	public Adapter createJoinNodeAdapter() {
+	public Adapter createJoinOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.ReteNetwork <em>Rete Network</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.ReteNetwork
+	 * @see relalg.AlgebraExpression
 	 * @generated
 	 */
-	public Adapter createReteNetworkAdapter() {
+	public Adapter createAlgebraExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.AlphaOperator <em>Alpha Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.AlphaOperator
+	 * @generated
+	 */
+	public Adapter createAlphaOperatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.BetaOperator <em>Beta Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.BetaOperator
+	 * @generated
+	 */
+	public Adapter createBetaOperatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.AntiJoinOperator <em>Anti Join Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.AntiJoinOperator
+	 * @generated
+	 */
+	public Adapter createAntiJoinOperatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.ProductionOperator <em>Production Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.ProductionOperator
+	 * @generated
+	 */
+	public Adapter createProductionOperatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Attribute <em>Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Attribute
+	 * @generated
+	 */
+	public Adapter createAttributeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.AttributeSet <em>Attribute Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.AttributeSet
+	 * @generated
+	 */
+	public Adapter createAttributeSetAdapter() {
 		return null;
 	}
 

@@ -22,40 +22,76 @@ public interface RelalgFactory extends EFactory {
 	RelalgFactory eINSTANCE = relalg.impl.RelalgFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Input Node</em>'.
+	 * Returns a new object of class '<em>Input Relation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Input Node</em>'.
+	 * @return a new object of class '<em>Input Relation</em>'.
 	 * @generated
 	 */
-	InputNode createInputNode();
+	InputRelation createInputRelation();
 
 	/**
-	 * Returns a new object of class '<em>Trimmer Node</em>'.
+	 * Returns a new object of class '<em>Trimmer Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Trimmer Node</em>'.
+	 * @return a new object of class '<em>Trimmer Operator</em>'.
 	 * @generated
 	 */
-	TrimmerNode createTrimmerNode();
+	TrimmerOperator createTrimmerOperator();
 
 	/**
-	 * Returns a new object of class '<em>Join Node</em>'.
+	 * Returns a new object of class '<em>Join Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Join Node</em>'.
+	 * @return a new object of class '<em>Join Operator</em>'.
 	 * @generated
 	 */
-	JoinNode createJoinNode();
+	JoinOperator createJoinOperator();
 
 	/**
-	 * Returns a new object of class '<em>Rete Network</em>'.
+	 * Returns a new object of class '<em>Algebra Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rete Network</em>'.
+	 * @return a new object of class '<em>Algebra Expression</em>'.
 	 * @generated
 	 */
-	ReteNetwork createReteNetwork();
+	AlgebraExpression createAlgebraExpression();
+
+	/**
+	 * Returns a new object of class '<em>Anti Join Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Anti Join Operator</em>'.
+	 * @generated
+	 */
+	AntiJoinOperator createAntiJoinOperator();
+
+	/**
+	 * Returns a new object of class '<em>Production Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Production Operator</em>'.
+	 * @generated
+	 */
+	ProductionOperator createProductionOperator();
+
+	/**
+	 * Returns a new object of class '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute</em>'.
+	 * @generated
+	 */
+	Attribute createAttribute();
+
+	/**
+	 * Returns a new object of class '<em>Attribute Set</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Set</em>'.
+	 * @generated
+	 */
+	AttributeSet createAttributeSet();
 
 	/**
 	 * Returns the package supported by this factory.

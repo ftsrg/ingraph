@@ -6,21 +6,21 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Rete Node</b></em>'.
+ * A representation of the model object '<em><b>Attribute</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.ReteNode#getName <em>Name</em>}</li>
+ *   <li>{@link relalg.Attribute#getName <em>Name</em>}</li>
  * </ul>
  *
- * @see relalg.RelalgPackage#getReteNode()
- * @model abstract="true"
+ * @see relalg.RelalgPackage#getAttribute()
+ * @model
  * @generated
  */
-public interface ReteNode extends EObject {
+public interface Attribute extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -31,14 +31,14 @@ public interface ReteNode extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Name</em>' attribute.
 	 * @see #setName(String)
-	 * @see relalg.RelalgPackage#getReteNode_Name()
-	 * @model id="true"
+	 * @see relalg.RelalgPackage#getAttribute_Name()
+	 * @model
 	 * @generated
 	 */
 	String getName();
 
 	/**
-	 * Sets the value of the '{@link relalg.ReteNode#getName <em>Name</em>}' attribute.
+	 * Sets the value of the '{@link relalg.Attribute#getName <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Name</em>' attribute.
@@ -47,4 +47,4 @@ public interface ReteNode extends EObject {
 	 */
 	void setName(String value);
 
-} // ReteNode
+} // Attribute

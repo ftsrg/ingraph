@@ -9,13 +9,19 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import relalg.InputNode;
-import relalg.JoinNode;
+import relalg.AlgebraExpression;
+import relalg.AlgebraNode;
+import relalg.AlphaOperator;
+import relalg.AntiJoinOperator;
+import relalg.Attribute;
+import relalg.AttributeSet;
+import relalg.BetaOperator;
+import relalg.InputRelation;
+import relalg.JoinOperator;
+import relalg.ProductionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
-import relalg.ReteNetwork;
-import relalg.ReteNode;
-import relalg.TrimmerNode;
+import relalg.TrimmerOperator;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,35 +35,77 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass reteNodeEClass = null;
+	private EClass algebraNodeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass inputNodeEClass = null;
+	private EClass inputRelationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass trimmerNodeEClass = null;
+	private EClass trimmerOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass joinNodeEClass = null;
+	private EClass joinOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass reteNetworkEClass = null;
+	private EClass algebraExpressionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass alphaOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass betaOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass antiJoinOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass productionOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass attributeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass attributeSetEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -125,8 +173,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getReteNode() {
-		return reteNodeEClass;
+	public EClass getAlgebraNode() {
+		return algebraNodeEClass;
 	}
 
 	/**
@@ -134,8 +182,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getReteNode_Name() {
-		return (EAttribute)reteNodeEClass.getEStructuralFeatures().get(0);
+	public EAttribute getAlgebraNode_Name() {
+		return (EAttribute)algebraNodeEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -143,8 +191,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getInputNode() {
-		return inputNodeEClass;
+	public EClass getInputRelation() {
+		return inputRelationEClass;
 	}
 
 	/**
@@ -152,8 +200,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTrimmerNode() {
-		return trimmerNodeEClass;
+	public EReference getInputRelation_Attributes() {
+		return (EReference)inputRelationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -161,8 +209,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTrimmerNode_Parent() {
-		return (EReference)trimmerNodeEClass.getEStructuralFeatures().get(0);
+	public EClass getTrimmerOperator() {
+		return trimmerOperatorEClass;
 	}
 
 	/**
@@ -170,8 +218,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getJoinNode() {
-		return joinNodeEClass;
+	public EReference getTrimmerOperator_Attributes() {
+		return (EReference)trimmerOperatorEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -179,8 +227,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getJoinNode_LeftParent() {
-		return (EReference)joinNodeEClass.getEStructuralFeatures().get(0);
+	public EClass getJoinOperator() {
+		return joinOperatorEClass;
 	}
 
 	/**
@@ -188,8 +236,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getJoinNode_RightParent() {
-		return (EReference)joinNodeEClass.getEStructuralFeatures().get(1);
+	public EClass getAlgebraExpression() {
+		return algebraExpressionEClass;
 	}
 
 	/**
@@ -197,8 +245,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getReteNetwork() {
-		return reteNetworkEClass;
+	public EReference getAlgebraExpression_Nodes() {
+		return (EReference)algebraExpressionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -206,8 +254,116 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getReteNetwork_Nodes() {
-		return (EReference)reteNetworkEClass.getEStructuralFeatures().get(0);
+	public EClass getAlphaOperator() {
+		return alphaOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAlphaOperator_Parent() {
+		return (EReference)alphaOperatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBetaOperator() {
+		return betaOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBetaOperator_LeftParent() {
+		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBetaOperator_RightParent() {
+		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBetaOperator_LeftMask() {
+		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBetaOperator_RightMask() {
+		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAntiJoinOperator() {
+		return antiJoinOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getProductionOperator() {
+		return productionOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAttribute() {
+		return attributeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAttribute_Name() {
+		return (EAttribute)attributeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAttributeSet() {
+		return attributeSetEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAttributeSet_Attributes() {
+		return (EReference)attributeSetEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -238,20 +394,38 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		reteNodeEClass = createEClass(RETE_NODE);
-		createEAttribute(reteNodeEClass, RETE_NODE__NAME);
+		algebraNodeEClass = createEClass(ALGEBRA_NODE);
+		createEAttribute(algebraNodeEClass, ALGEBRA_NODE__NAME);
 
-		inputNodeEClass = createEClass(INPUT_NODE);
+		inputRelationEClass = createEClass(INPUT_RELATION);
+		createEReference(inputRelationEClass, INPUT_RELATION__ATTRIBUTES);
 
-		trimmerNodeEClass = createEClass(TRIMMER_NODE);
-		createEReference(trimmerNodeEClass, TRIMMER_NODE__PARENT);
+		trimmerOperatorEClass = createEClass(TRIMMER_OPERATOR);
+		createEReference(trimmerOperatorEClass, TRIMMER_OPERATOR__ATTRIBUTES);
 
-		joinNodeEClass = createEClass(JOIN_NODE);
-		createEReference(joinNodeEClass, JOIN_NODE__LEFT_PARENT);
-		createEReference(joinNodeEClass, JOIN_NODE__RIGHT_PARENT);
+		joinOperatorEClass = createEClass(JOIN_OPERATOR);
 
-		reteNetworkEClass = createEClass(RETE_NETWORK);
-		createEReference(reteNetworkEClass, RETE_NETWORK__NODES);
+		algebraExpressionEClass = createEClass(ALGEBRA_EXPRESSION);
+		createEReference(algebraExpressionEClass, ALGEBRA_EXPRESSION__NODES);
+
+		alphaOperatorEClass = createEClass(ALPHA_OPERATOR);
+		createEReference(alphaOperatorEClass, ALPHA_OPERATOR__PARENT);
+
+		betaOperatorEClass = createEClass(BETA_OPERATOR);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_PARENT);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_PARENT);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_MASK);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_MASK);
+
+		antiJoinOperatorEClass = createEClass(ANTI_JOIN_OPERATOR);
+
+		productionOperatorEClass = createEClass(PRODUCTION_OPERATOR);
+
+		attributeEClass = createEClass(ATTRIBUTE);
+		createEAttribute(attributeEClass, ATTRIBUTE__NAME);
+
+		attributeSetEClass = createEClass(ATTRIBUTE_SET);
+		createEReference(attributeSetEClass, ATTRIBUTE_SET__ATTRIBUTES);
 	}
 
 	/**
@@ -282,25 +456,45 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		inputNodeEClass.getESuperTypes().add(this.getReteNode());
-		trimmerNodeEClass.getESuperTypes().add(this.getReteNode());
-		joinNodeEClass.getESuperTypes().add(this.getReteNode());
+		inputRelationEClass.getESuperTypes().add(this.getAlgebraNode());
+		trimmerOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
+		joinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
+		antiJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
+		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(reteNodeEClass, ReteNode.class, "ReteNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getReteNode_Name(), ecorePackage.getEString(), "name", null, 0, 1, ReteNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(algebraNodeEClass, AlgebraNode.class, "AlgebraNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAlgebraNode_Name(), ecorePackage.getEString(), "name", null, 0, 1, AlgebraNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(inputNodeEClass, InputNode.class, "InputNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(inputRelationEClass, InputRelation.class, "InputRelation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getInputRelation_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(trimmerNodeEClass, TrimmerNode.class, "TrimmerNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTrimmerNode_Parent(), this.getReteNode(), null, "parent", null, 0, 1, TrimmerNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(trimmerOperatorEClass, TrimmerOperator.class, "TrimmerOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTrimmerOperator_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, TrimmerOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(joinNodeEClass, JoinNode.class, "JoinNode", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJoinNode_LeftParent(), this.getReteNode(), null, "leftParent", null, 0, 1, JoinNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getJoinNode_RightParent(), this.getReteNode(), null, "rightParent", null, 0, 1, JoinNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(joinOperatorEClass, JoinOperator.class, "JoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(reteNetworkEClass, ReteNetwork.class, "ReteNetwork", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getReteNetwork_Nodes(), this.getReteNode(), null, "nodes", null, 0, -1, ReteNetwork.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAlgebraExpression_Nodes(), this.getAlgebraNode(), null, "nodes", null, 0, -1, AlgebraExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(alphaOperatorEClass, AlphaOperator.class, "AlphaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAlphaOperator_Parent(), this.getAlgebraNode(), null, "parent", null, 0, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(betaOperatorEClass, BetaOperator.class, "BetaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBetaOperator_LeftParent(), this.getAlgebraNode(), null, "leftParent", null, 0, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_RightParent(), this.getAlgebraNode(), null, "rightParent", null, 0, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_LeftMask(), this.getAttributeSet(), null, "leftMask", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_RightMask(), this.getAttributeSet(), null, "rightMask", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(antiJoinOperatorEClass, AntiJoinOperator.class, "AntiJoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(productionOperatorEClass, ProductionOperator.class, "ProductionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAttribute_Name(), ecorePackage.getEString(), "name", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(attributeSetEClass, AttributeSet.class, "AttributeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAttributeSet_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, AttributeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
