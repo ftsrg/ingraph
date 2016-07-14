@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="relalg" nsURI="http://www.example.org/relalg" nsPrefix="relalg">
+  <eClassifiers xsi:type="ecore:EClass" name="ReteNode" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputNode" eSuperTypes="#//ReteNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrimmerNode" eSuperTypes="#//ReteNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ReteNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//ReteNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" eType="#//ReteNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" eType="#//ReteNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReteNetwork">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//ReteNode" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
