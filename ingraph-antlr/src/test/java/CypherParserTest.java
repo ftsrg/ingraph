@@ -6,6 +6,11 @@ import java.io.IOException;
 public class CypherParserTest {
 
     @Test
+    public void testExample() throws IOException {
+        MyParser.parse("Example");
+    }
+
+    @Test
     public void testConnectedSegments() throws IOException {
         MyParser.parse("ConnectedSegments");
     }
