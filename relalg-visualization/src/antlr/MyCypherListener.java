@@ -1,4 +1,4 @@
-package cypher.main;
+package antlr;
 
 import cypher.grammar.CypherBaseListener;
 import cypher.grammar.CypherParser;
@@ -8,7 +8,6 @@ import cypher.grammar.CypherParser.VariableContext;
 import relalg.InputRelation;
 import relalg.RelalgFactory;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

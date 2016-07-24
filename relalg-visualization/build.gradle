@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.xtext:xtext-gradle-plugin:1.0.2'
+    }
+}
+
+plugins {
+    id "org.xtext.xtend" version "1.0.0"
+}
+apply plugin: 'org.xtext.xtend'
+
+dependencies {
+    compile project(':ingraph-relalg')
+    compile project(':ingraph-antlr')
+    compile 'junit:junit:4.12'
+    compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.10.0'
+    compile 'org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.10.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}

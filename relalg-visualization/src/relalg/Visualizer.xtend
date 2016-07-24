@@ -2,8 +2,8 @@ package relalg
 
 class Visualizer {
 
-	val extension static Serializer s = new Serializer(false)
-	val extension static RelalgFactory factory = RelalgFactory.eINSTANCE
+	val extension Serializer s = new Serializer(false)
+	val extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	
 	def visualize() {
 		val r = createInputRelation => [type = "r"]
