@@ -1,5 +1,4 @@
-package cypher.grammar;
-// Generated from /home/szarnyasg/git/openCypher/grammar/generated/Cypher.g4 by ANTLR 4.5.1
+package cypher.grammar;// Generated from /home/szarnyasg/git/ingraph/openCypher/Cypher.g4 by ANTLR 4.5.3
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -17,76 +16,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCypher(CypherParser.CypherContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#queryOptions}.
-	 * @param ctx the parse tree
-	 */
-	void enterQueryOptions(CypherParser.QueryOptionsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#queryOptions}.
-	 * @param ctx the parse tree
-	 */
-	void exitQueryOptions(CypherParser.QueryOptionsContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#anyCypherOption}.
-	 * @param ctx the parse tree
-	 */
-	void enterAnyCypherOption(CypherParser.AnyCypherOptionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#anyCypherOption}.
-	 * @param ctx the parse tree
-	 */
-	void exitAnyCypherOption(CypherParser.AnyCypherOptionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#cypherOption}.
-	 * @param ctx the parse tree
-	 */
-	void enterCypherOption(CypherParser.CypherOptionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#cypherOption}.
-	 * @param ctx the parse tree
-	 */
-	void exitCypherOption(CypherParser.CypherOptionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#versionNumber}.
-	 * @param ctx the parse tree
-	 */
-	void enterVersionNumber(CypherParser.VersionNumberContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#versionNumber}.
-	 * @param ctx the parse tree
-	 */
-	void exitVersionNumber(CypherParser.VersionNumberContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#explain}.
-	 * @param ctx the parse tree
-	 */
-	void enterExplain(CypherParser.ExplainContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#explain}.
-	 * @param ctx the parse tree
-	 */
-	void exitExplain(CypherParser.ExplainContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#profile}.
-	 * @param ctx the parse tree
-	 */
-	void enterProfile(CypherParser.ProfileContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#profile}.
-	 * @param ctx the parse tree
-	 */
-	void exitProfile(CypherParser.ProfileContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#configurationOption}.
-	 * @param ctx the parse tree
-	 */
-	void enterConfigurationOption(CypherParser.ConfigurationOptionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#configurationOption}.
-	 * @param ctx the parse tree
-	 */
-	void exitConfigurationOption(CypherParser.ConfigurationOptionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#statement}.
 	 * @param ctx the parse tree
@@ -118,16 +47,6 @@ public interface CypherListener extends ParseTreeListener {
 	 */
 	void exitRegularQuery(CypherParser.RegularQueryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CypherParser#bulkImportQuery}.
-	 * @param ctx the parse tree
-	 */
-	void enterBulkImportQuery(CypherParser.BulkImportQueryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#bulkImportQuery}.
-	 * @param ctx the parse tree
-	 */
-	void exitBulkImportQuery(CypherParser.BulkImportQueryContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CypherParser#singleQuery}.
 	 * @param ctx the parse tree
 	 */
@@ -137,26 +56,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSingleQuery(CypherParser.SingleQueryContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#periodicCommitHint}.
-	 * @param ctx the parse tree
-	 */
-	void enterPeriodicCommitHint(CypherParser.PeriodicCommitHintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#periodicCommitHint}.
-	 * @param ctx the parse tree
-	 */
-	void exitPeriodicCommitHint(CypherParser.PeriodicCommitHintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#loadCSVQuery}.
-	 * @param ctx the parse tree
-	 */
-	void enterLoadCSVQuery(CypherParser.LoadCSVQueryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#loadCSVQuery}.
-	 * @param ctx the parse tree
-	 */
-	void exitLoadCSVQuery(CypherParser.LoadCSVQueryContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#union}.
 	 * @param ctx the parse tree
@@ -177,156 +76,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitClause(CypherParser.ClauseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#command}.
-	 * @param ctx the parse tree
-	 */
-	void enterCommand(CypherParser.CommandContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#command}.
-	 * @param ctx the parse tree
-	 */
-	void exitCommand(CypherParser.CommandContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#createUniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterCreateUniqueConstraint(CypherParser.CreateUniqueConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#createUniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitCreateUniqueConstraint(CypherParser.CreateUniqueConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#createNodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterCreateNodePropertyExistenceConstraint(CypherParser.CreateNodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#createNodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitCreateNodePropertyExistenceConstraint(CypherParser.CreateNodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#createRelationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterCreateRelationshipPropertyExistenceConstraint(CypherParser.CreateRelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#createRelationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitCreateRelationshipPropertyExistenceConstraint(CypherParser.CreateRelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#createIndex}.
-	 * @param ctx the parse tree
-	 */
-	void enterCreateIndex(CypherParser.CreateIndexContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#createIndex}.
-	 * @param ctx the parse tree
-	 */
-	void exitCreateIndex(CypherParser.CreateIndexContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#dropUniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterDropUniqueConstraint(CypherParser.DropUniqueConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#dropUniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitDropUniqueConstraint(CypherParser.DropUniqueConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#dropNodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterDropNodePropertyExistenceConstraint(CypherParser.DropNodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#dropNodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitDropNodePropertyExistenceConstraint(CypherParser.DropNodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#dropRelationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterDropRelationshipPropertyExistenceConstraint(CypherParser.DropRelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#dropRelationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitDropRelationshipPropertyExistenceConstraint(CypherParser.DropRelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#dropIndex}.
-	 * @param ctx the parse tree
-	 */
-	void enterDropIndex(CypherParser.DropIndexContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#dropIndex}.
-	 * @param ctx the parse tree
-	 */
-	void exitDropIndex(CypherParser.DropIndexContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#index}.
-	 * @param ctx the parse tree
-	 */
-	void enterIndex(CypherParser.IndexContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#index}.
-	 * @param ctx the parse tree
-	 */
-	void exitIndex(CypherParser.IndexContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#uniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterUniqueConstraint(CypherParser.UniqueConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#uniqueConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitUniqueConstraint(CypherParser.UniqueConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#nodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterNodePropertyExistenceConstraint(CypherParser.NodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#nodePropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitNodePropertyExistenceConstraint(CypherParser.NodePropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#relationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationshipPropertyExistenceConstraint(CypherParser.RelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#relationshipPropertyExistenceConstraint}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationshipPropertyExistenceConstraint(CypherParser.RelationshipPropertyExistenceConstraintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#relationshipPatternSyntax}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationshipPatternSyntax(CypherParser.RelationshipPatternSyntaxContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#relationshipPatternSyntax}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationshipPatternSyntax(CypherParser.RelationshipPatternSyntaxContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#loadCSV}.
-	 * @param ctx the parse tree
-	 */
-	void enterLoadCSV(CypherParser.LoadCSVContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#loadCSV}.
-	 * @param ctx the parse tree
-	 */
-	void exitLoadCSV(CypherParser.LoadCSVContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#match}.
 	 * @param ctx the parse tree
@@ -428,16 +177,6 @@ public interface CypherListener extends ParseTreeListener {
 	 */
 	void exitRemoveItem(CypherParser.RemoveItemContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CypherParser#foreach}.
-	 * @param ctx the parse tree
-	 */
-	void enterForeach(CypherParser.ForeachContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#foreach}.
-	 * @param ctx the parse tree
-	 */
-	void exitForeach(CypherParser.ForeachContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CypherParser#with}.
 	 * @param ctx the parse tree
 	 */
@@ -528,106 +267,6 @@ public interface CypherListener extends ParseTreeListener {
 	 */
 	void exitSortItem(CypherParser.SortItemContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CypherParser#hint}.
-	 * @param ctx the parse tree
-	 */
-	void enterHint(CypherParser.HintContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#hint}.
-	 * @param ctx the parse tree
-	 */
-	void exitHint(CypherParser.HintContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#start}.
-	 * @param ctx the parse tree
-	 */
-	void enterStart(CypherParser.StartContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#start}.
-	 * @param ctx the parse tree
-	 */
-	void exitStart(CypherParser.StartContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#startPoint}.
-	 * @param ctx the parse tree
-	 */
-	void enterStartPoint(CypherParser.StartPointContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#startPoint}.
-	 * @param ctx the parse tree
-	 */
-	void exitStartPoint(CypherParser.StartPointContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#lookup}.
-	 * @param ctx the parse tree
-	 */
-	void enterLookup(CypherParser.LookupContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#lookup}.
-	 * @param ctx the parse tree
-	 */
-	void exitLookup(CypherParser.LookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#nodeLookup}.
-	 * @param ctx the parse tree
-	 */
-	void enterNodeLookup(CypherParser.NodeLookupContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#nodeLookup}.
-	 * @param ctx the parse tree
-	 */
-	void exitNodeLookup(CypherParser.NodeLookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#relationshipLookup}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationshipLookup(CypherParser.RelationshipLookupContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#relationshipLookup}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationshipLookup(CypherParser.RelationshipLookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#identifiedIndexLookup}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdentifiedIndexLookup(CypherParser.IdentifiedIndexLookupContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#identifiedIndexLookup}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdentifiedIndexLookup(CypherParser.IdentifiedIndexLookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#indexQuery}.
-	 * @param ctx the parse tree
-	 */
-	void enterIndexQuery(CypherParser.IndexQueryContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#indexQuery}.
-	 * @param ctx the parse tree
-	 */
-	void exitIndexQuery(CypherParser.IndexQueryContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#idLookup}.
-	 * @param ctx the parse tree
-	 */
-	void enterIdLookup(CypherParser.IdLookupContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#idLookup}.
-	 * @param ctx the parse tree
-	 */
-	void exitIdLookup(CypherParser.IdLookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#literalIds}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteralIds(CypherParser.LiteralIdsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#literalIds}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteralIds(CypherParser.LiteralIdsContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CypherParser#where}.
 	 * @param ctx the parse tree
 	 */
@@ -667,16 +306,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAnonymousPatternPart(CypherParser.AnonymousPatternPartContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#shortestPathPattern}.
-	 * @param ctx the parse tree
-	 */
-	void enterShortestPathPattern(CypherParser.ShortestPathPatternContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#shortestPathPattern}.
-	 * @param ctx the parse tree
-	 */
-	void exitShortestPathPattern(CypherParser.ShortestPathPatternContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#patternElement}.
 	 * @param ctx the parse tree
@@ -737,16 +366,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProperties(CypherParser.PropertiesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#relType}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelType(CypherParser.RelTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#relType}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelType(CypherParser.RelTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#relationshipTypes}.
 	 * @param ctx the parse tree
@@ -938,16 +557,6 @@ public interface CypherListener extends ParseTreeListener {
 	 */
 	void exitAtom(CypherParser.AtomContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CypherParser#reduce}.
-	 * @param ctx the parse tree
-	 */
-	void enterReduce(CypherParser.ReduceContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#reduce}.
-	 * @param ctx the parse tree
-	 */
-	void exitReduce(CypherParser.ReduceContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CypherParser#partialComparisonExpression}.
 	 * @param ctx the parse tree
 	 */
@@ -1037,26 +646,6 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitPropertyLookup(CypherParser.PropertyLookupContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#caseExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaseExpression(CypherParser.CaseExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#caseExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaseExpression(CypherParser.CaseExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#caseAlternatives}.
-	 * @param ctx the parse tree
-	 */
-	void enterCaseAlternatives(CypherParser.CaseAlternativesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#caseAlternatives}.
-	 * @param ctx the parse tree
-	 */
-	void exitCaseAlternatives(CypherParser.CaseAlternativesContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#variable}.
 	 * @param ctx the parse tree

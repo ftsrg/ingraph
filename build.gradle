@@ -23,16 +23,3 @@ subprojects {
     }
 
 }
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'org.xtext:xtext-gradle-plugin:1.0.2'
-    }
-}
-apply plugin: 'org.xtext.xtend'
-dependencies {
-    compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.10.0'
-}
