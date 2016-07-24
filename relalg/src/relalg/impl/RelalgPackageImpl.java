@@ -209,6 +209,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getInputRelation_Type() {
+		return (EAttribute)inputRelationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getTrimmerOperation() {
 		return trimmerOperationEClass;
 	}
@@ -399,6 +408,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		inputRelationEClass = createEClass(INPUT_RELATION);
 		createEReference(inputRelationEClass, INPUT_RELATION__ATTRIBUTES);
+		createEAttribute(inputRelationEClass, INPUT_RELATION__TYPE);
 
 		trimmerOperationEClass = createEClass(TRIMMER_OPERATION);
 		createEReference(trimmerOperationEClass, TRIMMER_OPERATION__ATTRIBUTES);
@@ -470,6 +480,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(inputRelationEClass, InputRelation.class, "InputRelation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInputRelation_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInputRelation_Type(), ecorePackage.getEString(), "type", null, 0, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(trimmerOperationEClass, TrimmerOperation.class, "TrimmerOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTrimmerOperation_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, TrimmerOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

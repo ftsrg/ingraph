@@ -122,13 +122,22 @@ public interface RelalgPackage extends EPackage {
 	int INPUT_RELATION__ATTRIBUTES = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_RELATION__TYPE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Input Relation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_RELATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int INPUT_RELATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Input Relation</em>' class.
@@ -642,6 +651,17 @@ public interface RelalgPackage extends EPackage {
 	EReference getInputRelation_Attributes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link relalg.InputRelation#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see relalg.InputRelation#getType()
+	 * @see #getInputRelation()
+	 * @generated
+	 */
+	EAttribute getInputRelation_Type();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.TrimmerOperation <em>Trimmer Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -888,6 +908,14 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference INPUT_RELATION__ATTRIBUTES = eINSTANCE.getInputRelation_Attributes();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INPUT_RELATION__TYPE = eINSTANCE.getInputRelation_Type();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.TrimmerOperationImpl <em>Trimmer Operation</em>}' class.

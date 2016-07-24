@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Relalg-visualization
 Bundle-SymbolicName: relalg-visualization
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: relalg_visualization.Activator
+Bundle-Activator: relalg.Activator
 Require-Bundle: org.eclipse.core.runtime,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,

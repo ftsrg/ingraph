@@ -10,6 +10,7 @@
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//InputRelation">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//InputRelation/attributes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//InputRelation/type"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//TrimmerOperation">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//TrimmerOperation/attributes"/>
