@@ -17,6 +17,11 @@ import java.util.Map;
 
 public class RelalgParser {
 
+    public static <K,V> V lookup(K key, Map<? super K, V> map) {
+        if(map.containsKey(key)) return map.get(key);
+        else throw new UnsupportedOperationException(key + " is not available in this map.");
+    }
+
     public static void parse(final String filename) throws IOException {
         final String filepath = "../queries/" + filename + ".cyp";
         final String query = FileUtils.readFileToString(new File(filepath), "UTF-8");
@@ -34,14 +39,17 @@ public class RelalgParser {
 
         System.out.println();
         System.out.println("relations:");
+
+        // xtend it.getValue().lookup(listener.relationSource)
+
         listener.relations.entrySet().forEach(
-            it -> System.out.println(it.getKey())
+            it -> System.out.println(it.getKey() + ", source: " + lookup(it.getValue(), listener.relationSource).getName() + ", target: " + lookup(it.getValue(), listener.relationTarget).getName())
         );
 
         System.out.println();
         System.out.println("attributes:");
         listener.attributes.entrySet().forEach(
-                it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
+            it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
         );
     }
 }
