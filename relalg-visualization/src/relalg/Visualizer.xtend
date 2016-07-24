@@ -10,7 +10,7 @@ class Visualizer {
 		val s = createInputRelation => [type = "s"]
 		val t = createInputRelation => [type = "t"]
 		val join1 = createJoinOperation => [name = "Join1"; leftParent = r; rightParent = s]
-		val join2 = createJoinOperation => [name = "Join1"; leftParent = join1; rightParent = t]
+		val join2 = createJoinOperation => [name = "Join2"; leftParent = join1; rightParent = t]
 		
 		val expression = join2
 		print(expression.convertToLateX)
