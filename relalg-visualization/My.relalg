@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<relalg:ReteNetwork
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:relalg="http://www.example.org/relalg">
+  <nodes xsi:type="relalg:InputNode"
+      name="r"/>
+  <nodes xsi:type="relalg:InputNode"
+      name="s"/>
+  <nodes xsi:type="relalg:TrimmerNode"
+      name="trimmer"
+      parent="join"/>
+  <nodes xsi:type="relalg:JoinNode"
+      name="join"
+      leftParent="r"
+      rightParent="s"/>
+</relalg:ReteNetwork>

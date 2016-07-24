@@ -151,7 +151,7 @@
             <styles xmi:type="notation:FontStyle" xmi:id="_tbNKwkmgEeakXMJSCJFeYQ" fontName="Noto Sans" fontHeight="8"/>
             <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_tbNKw0mgEeakXMJSCJFeYQ" points="[0, -3, 10, 105]$[0, -62, 10, 46]$[3, -62, 13, 46]$[3, -96, 13, 12]"/>
             <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tbQ1IEmgEeakXMJSCJFeYQ" id="(0.5,0.04)"/>
-            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tbRcMEmgEeakXMJSCJFeYQ" id="(0.4166666666666667,0.88)"/>
+            <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tbRcMEmgEeakXMJSCJFeYQ" id="(0.4166666666666667,0.8799999999999999)"/>
           </edges>
           <edges xmi:type="notation:Edge" xmi:id="_pMLwIEmhEeakXMJSCJFeYQ" type="4001" element="_pL9GoEmhEeakXMJSCJFeYQ" source="_mXFLQEmhEeakXMJSCJFeYQ" target="_pXgEwEmgEeakXMJSCJFeYQ">
             <children xmi:type="notation:Node" xmi:id="_pMLwJEmhEeakXMJSCJFeYQ" type="6001">

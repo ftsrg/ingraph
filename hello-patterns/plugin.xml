@@ -1,7 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?><plugin>
-  <extension id="relalg.My" point="org.eclipse.viatra.query.runtime.queryspecification">
-    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:relalg.My" id="relalg.My">
-      <query-specification fqn="relalg.trimmerUp"/>
-    </group>
-  </extension>
-</plugin>
+<?xml version="1.0" encoding="UTF-8"?><plugin/>

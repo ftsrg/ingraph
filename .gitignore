@@ -38,4 +38,5 @@ gradle/
 gradlew
 gradlew.bat
 
+xtend-gen
 
