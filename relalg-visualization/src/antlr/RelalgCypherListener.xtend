@@ -29,6 +29,8 @@ class RelalgCypherListener extends CypherBaseListener {
     public Map<String, InputRelation> relations = new HashMap
     public Map<String, Attribute> attributes = new HashMap
     public Multimap<Attribute, String> nodeLabels = HashMultimap.create()
+    public Map<InputRelation, Attribute> relationSource = new HashMap
+    public Map<InputRelation, Attribute> relationTarget = new HashMap
 
     MainState mainState
     ParserState parserState
@@ -43,12 +45,16 @@ class RelalgCypherListener extends CypherBaseListener {
                 case RELATIONSHIP: {
                     getRelation(name)
                     println(name + "'s source " + currentVariable)
+                    relationSource.put(getRelation(name), getAttribute(currentVariable))
                     currentRelationship = name
-
                 }
                 case VARIABLE: {
                     getAttribute(name)
                     println(currentRelationship + "'s target " + name)
+
+                    if (currentRelationship != null) {
+                        relationTarget.put(getRelation(currentRelationship), getAttribute(name))
+                    }
                     currentVariable = name
                 }
                 case NODELABEL: {
