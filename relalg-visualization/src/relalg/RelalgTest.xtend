@@ -4,7 +4,7 @@ import org.junit.Test
 
 class RelalgTest {
 
-	val extension static Serializer s = new Serializer
+	val extension static Serializer s = new Serializer(false)
 	val extension static RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	@Test

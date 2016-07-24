@@ -1,6 +1,22 @@
 package relalg
 
+import org.eclipse.xtext.xbase.lib.Functions.Function1
+
 class Serializer {
+	
+	boolean parentheses
+	
+	new(boolean parentheses) {
+		this.parentheses = parentheses
+	}
+	
+	def <Source> ite(Source s, Function1<Source, Boolean> pred, String s1, String s2){
+		if (pred.apply(s)) {
+			return s1
+		} else {
+			return s2
+		}
+	}
 
 	def convert(AlgebraExpression expression) {
 		'''$$«convertToLateX(expression)»$$'''
@@ -11,7 +27,7 @@ class Serializer {
 	}
 
 	def dispatch String convertToLateX(BetaOperation operation) {
-		'''\left(«operation.leftParent.convertToLateX» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convertToLateX »\right)'''
+		'''«IF parentheses» \left( «ENDIF»«operation.leftParent.convertToLateX» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convertToLateX »«IF parentheses» \right) «ENDIF»'''
 	}
 	
 	def mask(BetaOperation operation) {

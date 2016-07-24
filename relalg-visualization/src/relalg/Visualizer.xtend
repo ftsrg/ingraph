@@ -2,7 +2,7 @@ package relalg
 
 class Visualizer {
 
-	val extension static Serializer s = new Serializer
+	val extension static Serializer s = new Serializer(false)
 	val extension static RelalgFactory factory = RelalgFactory.eINSTANCE
 	
 	def visualize() {
