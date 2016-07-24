@@ -2,8 +2,8 @@ package relalg
 
 class Serializer {
 
-	def dispatch String convertToLateX(AlphaOperation expression) {
-		""
+	def dispatch String convertToLateX(TrimmerOperation expression) {
+		'''\projection_{...} («expression.parent.convertToLateX»)'''
 	}
 
 	def dispatch String convertToLateX(BetaOperation expression) {
@@ -14,7 +14,6 @@ class Serializer {
 		expression.type
 	}
 
-
 	def dispatch betaOperator(JoinOperation operation) {
 		'''\join'''
 	}
@@ -22,7 +21,5 @@ class Serializer {
 	def dispatch betaOperator(AntiJoinOperation operation) {
 		'''\antijoin'''
 	}
-
-
 
 }

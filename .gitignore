@@ -37,6 +37,3 @@ gradle-app.setting
 gradle/
 gradlew
 gradlew.bat
-
-xtend-gen
-
