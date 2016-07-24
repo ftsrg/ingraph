@@ -57,13 +57,13 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case RelalgPackage.INPUT_RELATION: return createInputRelation();
-			case RelalgPackage.TRIMMER_OPERATOR: return createTrimmerOperator();
-			case RelalgPackage.JOIN_OPERATOR: return createJoinOperator();
-			case RelalgPackage.ALGEBRA_EXPRESSION: return createAlgebraExpression();
-			case RelalgPackage.ANTI_JOIN_OPERATOR: return createAntiJoinOperator();
-			case RelalgPackage.PRODUCTION_OPERATOR: return createProductionOperator();
+			case RelalgPackage.TRIMMER_OPERATION: return createTrimmerOperation();
+			case RelalgPackage.JOIN_OPERATION: return createJoinOperation();
+			case RelalgPackage.ANTI_JOIN_OPERATION: return createAntiJoinOperation();
+			case RelalgPackage.PRODUCTION_OPERATION: return createProductionOperation();
 			case RelalgPackage.ATTRIBUTE: return createAttribute();
 			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
+			case RelalgPackage.JOIN_BINDING: return createJoinBinding();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -84,9 +84,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public TrimmerOperator createTrimmerOperator() {
-		TrimmerOperatorImpl trimmerOperator = new TrimmerOperatorImpl();
-		return trimmerOperator;
+	public TrimmerOperation createTrimmerOperation() {
+		TrimmerOperationImpl trimmerOperation = new TrimmerOperationImpl();
+		return trimmerOperation;
 	}
 
 	/**
@@ -94,9 +94,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public JoinOperator createJoinOperator() {
-		JoinOperatorImpl joinOperator = new JoinOperatorImpl();
-		return joinOperator;
+	public JoinOperation createJoinOperation() {
+		JoinOperationImpl joinOperation = new JoinOperationImpl();
+		return joinOperation;
 	}
 
 	/**
@@ -104,9 +104,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression createAlgebraExpression() {
-		AlgebraExpressionImpl algebraExpression = new AlgebraExpressionImpl();
-		return algebraExpression;
+	public AntiJoinOperation createAntiJoinOperation() {
+		AntiJoinOperationImpl antiJoinOperation = new AntiJoinOperationImpl();
+		return antiJoinOperation;
 	}
 
 	/**
@@ -114,19 +114,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AntiJoinOperator createAntiJoinOperator() {
-		AntiJoinOperatorImpl antiJoinOperator = new AntiJoinOperatorImpl();
-		return antiJoinOperator;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ProductionOperator createProductionOperator() {
-		ProductionOperatorImpl productionOperator = new ProductionOperatorImpl();
-		return productionOperator;
+	public ProductionOperation createProductionOperation() {
+		ProductionOperationImpl productionOperation = new ProductionOperationImpl();
+		return productionOperation;
 	}
 
 	/**
@@ -147,6 +137,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public AttributeSet createAttributeSet() {
 		AttributeSetImpl attributeSet = new AttributeSetImpl();
 		return attributeSet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public JoinBinding createJoinBinding() {
+		JoinBindingImpl joinBinding = new JoinBindingImpl();
+		return joinBinding;
 	}
 
 	/**

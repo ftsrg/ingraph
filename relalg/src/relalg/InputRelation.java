@@ -19,7 +19,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface InputRelation extends AlgebraNode {
+public interface InputRelation extends AlgebraExpression {
 	/**
 	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

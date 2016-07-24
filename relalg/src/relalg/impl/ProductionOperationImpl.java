@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.JoinOperator;
+import relalg.ProductionOperation;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Join Operator</b></em>'.
+ * An implementation of the model object '<em><b>Production Operation</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class JoinOperatorImpl extends BetaOperatorImpl implements JoinOperator {
+public class ProductionOperationImpl extends AlphaOperationImpl implements ProductionOperation {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected JoinOperatorImpl() {
+	protected ProductionOperationImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class JoinOperatorImpl extends BetaOperatorImpl implements JoinOperator {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.JOIN_OPERATOR;
+		return RelalgPackage.Literals.PRODUCTION_OPERATION;
 	}
 
-} //JoinOperatorImpl
+} //ProductionOperationImpl

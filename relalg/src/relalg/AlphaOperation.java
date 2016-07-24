@@ -2,25 +2,24 @@
  */
 package relalg;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Alpha Operator</b></em>'.
+ * A representation of the model object '<em><b>Alpha Operation</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.AlphaOperator#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.AlphaOperation#getParent <em>Parent</em>}</li>
  * </ul>
  *
- * @see relalg.RelalgPackage#getAlphaOperator()
+ * @see relalg.RelalgPackage#getAlphaOperation()
  * @model abstract="true"
  * @generated
  */
-public interface AlphaOperator extends EObject {
+public interface AlphaOperation extends AlgebraExpression {
 	/**
 	 * Returns the value of the '<em><b>Parent</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -30,21 +29,21 @@ public interface AlphaOperator extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' reference.
-	 * @see #setParent(AlgebraNode)
-	 * @see relalg.RelalgPackage#getAlphaOperator_Parent()
-	 * @model
+	 * @see #setParent(AlgebraExpression)
+	 * @see relalg.RelalgPackage#getAlphaOperation_Parent()
+	 * @model required="true"
 	 * @generated
 	 */
-	AlgebraNode getParent();
+	AlgebraExpression getParent();
 
 	/**
-	 * Sets the value of the '{@link relalg.AlphaOperator#getParent <em>Parent</em>}' reference.
+	 * Sets the value of the '{@link relalg.AlphaOperation#getParent <em>Parent</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Parent</em>' reference.
 	 * @see #getParent()
 	 * @generated
 	 */
-	void setParent(AlgebraNode value);
+	void setParent(AlgebraExpression value);
 
-} // AlphaOperator
+} // AlphaOperation

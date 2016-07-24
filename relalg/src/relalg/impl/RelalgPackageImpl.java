@@ -10,18 +10,18 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import relalg.AlgebraExpression;
-import relalg.AlgebraNode;
-import relalg.AlphaOperator;
-import relalg.AntiJoinOperator;
+import relalg.AlphaOperation;
+import relalg.AntiJoinOperation;
 import relalg.Attribute;
 import relalg.AttributeSet;
-import relalg.BetaOperator;
+import relalg.BetaOperation;
 import relalg.InputRelation;
-import relalg.JoinOperator;
-import relalg.ProductionOperator;
+import relalg.JoinBinding;
+import relalg.JoinOperation;
+import relalg.ProductionOperation;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
-import relalg.TrimmerOperator;
+import relalg.TrimmerOperation;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +35,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass algebraNodeEClass = null;
+	private EClass algebraExpressionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -49,49 +49,42 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass trimmerOperatorEClass = null;
+	private EClass trimmerOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass joinOperatorEClass = null;
+	private EClass joinOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass algebraExpressionEClass = null;
+	private EClass alphaOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass alphaOperatorEClass = null;
+	private EClass betaOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass betaOperatorEClass = null;
+	private EClass antiJoinOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass antiJoinOperatorEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass productionOperatorEClass = null;
+	private EClass productionOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -106,6 +99,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass attributeSetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass joinBindingEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -173,8 +173,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAlgebraNode() {
-		return algebraNodeEClass;
+	public EClass getAlgebraExpression() {
+		return algebraExpressionEClass;
 	}
 
 	/**
@@ -182,8 +182,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getAlgebraNode_Name() {
-		return (EAttribute)algebraNodeEClass.getEStructuralFeatures().get(0);
+	public EAttribute getAlgebraExpression_Name() {
+		return (EAttribute)algebraExpressionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -209,8 +209,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTrimmerOperator() {
-		return trimmerOperatorEClass;
+	public EClass getTrimmerOperation() {
+		return trimmerOperationEClass;
 	}
 
 	/**
@@ -218,8 +218,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTrimmerOperator_Attributes() {
-		return (EReference)trimmerOperatorEClass.getEStructuralFeatures().get(0);
+	public EReference getTrimmerOperation_Attributes() {
+		return (EReference)trimmerOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -227,8 +227,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getJoinOperator() {
-		return joinOperatorEClass;
+	public EClass getJoinOperation() {
+		return joinOperationEClass;
 	}
 
 	/**
@@ -236,8 +236,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAlgebraExpression() {
-		return algebraExpressionEClass;
+	public EClass getAlphaOperation() {
+		return alphaOperationEClass;
 	}
 
 	/**
@@ -245,8 +245,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAlgebraExpression_Nodes() {
-		return (EReference)algebraExpressionEClass.getEStructuralFeatures().get(0);
+	public EReference getAlphaOperation_Parent() {
+		return (EReference)alphaOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -254,8 +254,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAlphaOperator() {
-		return alphaOperatorEClass;
+	public EClass getBetaOperation() {
+		return betaOperationEClass;
 	}
 
 	/**
@@ -263,8 +263,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAlphaOperator_Parent() {
-		return (EReference)alphaOperatorEClass.getEStructuralFeatures().get(0);
+	public EReference getBetaOperation_LeftParent() {
+		return (EReference)betaOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -272,8 +272,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getBetaOperator() {
-		return betaOperatorEClass;
+	public EReference getBetaOperation_RightParent() {
+		return (EReference)betaOperationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -281,8 +281,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_LeftParent() {
-		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(0);
+	public EReference getBetaOperation_Bindings() {
+		return (EReference)betaOperationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -290,8 +290,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_RightParent() {
-		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(1);
+	public EClass getAntiJoinOperation() {
+		return antiJoinOperationEClass;
 	}
 
 	/**
@@ -299,35 +299,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_LeftMask() {
-		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getBetaOperator_RightMask() {
-		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getAntiJoinOperator() {
-		return antiJoinOperatorEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getProductionOperator() {
-		return productionOperatorEClass;
+	public EClass getProductionOperation() {
+		return productionOperationEClass;
 	}
 
 	/**
@@ -371,6 +344,33 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getJoinBinding() {
+		return joinBindingEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getJoinBinding_LeftAttribute() {
+		return (EReference)joinBindingEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getJoinBinding_RightAttribute() {
+		return (EReference)joinBindingEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public RelalgFactory getRelalgFactory() {
 		return (RelalgFactory)getEFactoryInstance();
 	}
@@ -394,38 +394,38 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		algebraNodeEClass = createEClass(ALGEBRA_NODE);
-		createEAttribute(algebraNodeEClass, ALGEBRA_NODE__NAME);
+		algebraExpressionEClass = createEClass(ALGEBRA_EXPRESSION);
+		createEAttribute(algebraExpressionEClass, ALGEBRA_EXPRESSION__NAME);
 
 		inputRelationEClass = createEClass(INPUT_RELATION);
 		createEReference(inputRelationEClass, INPUT_RELATION__ATTRIBUTES);
 
-		trimmerOperatorEClass = createEClass(TRIMMER_OPERATOR);
-		createEReference(trimmerOperatorEClass, TRIMMER_OPERATOR__ATTRIBUTES);
+		trimmerOperationEClass = createEClass(TRIMMER_OPERATION);
+		createEReference(trimmerOperationEClass, TRIMMER_OPERATION__ATTRIBUTES);
 
-		joinOperatorEClass = createEClass(JOIN_OPERATOR);
+		joinOperationEClass = createEClass(JOIN_OPERATION);
 
-		algebraExpressionEClass = createEClass(ALGEBRA_EXPRESSION);
-		createEReference(algebraExpressionEClass, ALGEBRA_EXPRESSION__NODES);
+		alphaOperationEClass = createEClass(ALPHA_OPERATION);
+		createEReference(alphaOperationEClass, ALPHA_OPERATION__PARENT);
 
-		alphaOperatorEClass = createEClass(ALPHA_OPERATOR);
-		createEReference(alphaOperatorEClass, ALPHA_OPERATOR__PARENT);
+		betaOperationEClass = createEClass(BETA_OPERATION);
+		createEReference(betaOperationEClass, BETA_OPERATION__LEFT_PARENT);
+		createEReference(betaOperationEClass, BETA_OPERATION__RIGHT_PARENT);
+		createEReference(betaOperationEClass, BETA_OPERATION__BINDINGS);
 
-		betaOperatorEClass = createEClass(BETA_OPERATOR);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_PARENT);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_PARENT);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_MASK);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_MASK);
+		antiJoinOperationEClass = createEClass(ANTI_JOIN_OPERATION);
 
-		antiJoinOperatorEClass = createEClass(ANTI_JOIN_OPERATOR);
-
-		productionOperatorEClass = createEClass(PRODUCTION_OPERATOR);
+		productionOperationEClass = createEClass(PRODUCTION_OPERATION);
 
 		attributeEClass = createEClass(ATTRIBUTE);
 		createEAttribute(attributeEClass, ATTRIBUTE__NAME);
 
 		attributeSetEClass = createEClass(ATTRIBUTE_SET);
 		createEReference(attributeSetEClass, ATTRIBUTE_SET__ATTRIBUTES);
+
+		joinBindingEClass = createEClass(JOIN_BINDING);
+		createEReference(joinBindingEClass, JOIN_BINDING__LEFT_ATTRIBUTE);
+		createEReference(joinBindingEClass, JOIN_BINDING__RIGHT_ATTRIBUTE);
 	}
 
 	/**
@@ -456,45 +456,47 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		inputRelationEClass.getESuperTypes().add(this.getAlgebraNode());
-		trimmerOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		joinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
-		antiJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
-		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
+		inputRelationEClass.getESuperTypes().add(this.getAlgebraExpression());
+		trimmerOperationEClass.getESuperTypes().add(this.getAlphaOperation());
+		joinOperationEClass.getESuperTypes().add(this.getBetaOperation());
+		alphaOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
+		betaOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
+		antiJoinOperationEClass.getESuperTypes().add(this.getBetaOperation());
+		productionOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(algebraNodeEClass, AlgebraNode.class, "AlgebraNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAlgebraNode_Name(), ecorePackage.getEString(), "name", null, 0, 1, AlgebraNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAlgebraExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, AlgebraExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(inputRelationEClass, InputRelation.class, "InputRelation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getInputRelation_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(trimmerOperatorEClass, TrimmerOperator.class, "TrimmerOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTrimmerOperator_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, TrimmerOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(trimmerOperationEClass, TrimmerOperation.class, "TrimmerOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTrimmerOperation_Attributes(), this.getAttributeSet(), null, "attributes", null, 1, 1, TrimmerOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(joinOperatorEClass, JoinOperator.class, "JoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(joinOperationEClass, JoinOperation.class, "JoinOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAlgebraExpression_Nodes(), this.getAlgebraNode(), null, "nodes", null, 0, -1, AlgebraExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(alphaOperationEClass, AlphaOperation.class, "AlphaOperation", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAlphaOperation_Parent(), this.getAlgebraExpression(), null, "parent", null, 1, 1, AlphaOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(alphaOperatorEClass, AlphaOperator.class, "AlphaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAlphaOperator_Parent(), this.getAlgebraNode(), null, "parent", null, 0, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(betaOperationEClass, BetaOperation.class, "BetaOperation", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBetaOperation_LeftParent(), this.getAlgebraExpression(), null, "leftParent", null, 1, 1, BetaOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperation_RightParent(), this.getAlgebraExpression(), null, "rightParent", null, 1, 1, BetaOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperation_Bindings(), this.getJoinBinding(), null, "bindings", null, 0, -1, BetaOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(betaOperatorEClass, BetaOperator.class, "BetaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBetaOperator_LeftParent(), this.getAlgebraNode(), null, "leftParent", null, 0, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_RightParent(), this.getAlgebraNode(), null, "rightParent", null, 0, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_LeftMask(), this.getAttributeSet(), null, "leftMask", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_RightMask(), this.getAttributeSet(), null, "rightMask", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(antiJoinOperationEClass, AntiJoinOperation.class, "AntiJoinOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(antiJoinOperatorEClass, AntiJoinOperator.class, "AntiJoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(productionOperatorEClass, ProductionOperator.class, "ProductionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(productionOperationEClass, ProductionOperation.class, "ProductionOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAttribute_Name(), ecorePackage.getEString(), "name", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(attributeSetEClass, AttributeSet.class, "AttributeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAttributeSet_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, AttributeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(joinBindingEClass, JoinBinding.class, "JoinBinding", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getJoinBinding_LeftAttribute(), this.getAttribute(), null, "leftAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getJoinBinding_RightAttribute(), this.getAttribute(), null, "rightAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

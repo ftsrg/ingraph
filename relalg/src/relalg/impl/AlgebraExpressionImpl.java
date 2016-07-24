@@ -2,22 +2,14 @@
  */
 package relalg.impl;
 
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import relalg.AlgebraExpression;
-import relalg.AlgebraNode;
 import relalg.RelalgPackage;
 
 /**
@@ -28,21 +20,31 @@ import relalg.RelalgPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.AlgebraExpressionImpl#getNodes <em>Nodes</em>}</li>
+ *   <li>{@link relalg.impl.AlgebraExpressionImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implements AlgebraExpression {
+public abstract class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implements AlgebraExpression {
 	/**
-	 * The cached value of the '{@link #getNodes() <em>Nodes</em>}' containment reference list.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getNodes()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<AlgebraNode> nodes;
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -68,11 +70,8 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AlgebraNode> getNodes() {
-		if (nodes == null) {
-			nodes = new EObjectContainmentEList<AlgebraNode>(AlgebraNode.class, this, RelalgPackage.ALGEBRA_EXPRESSION__NODES);
-		}
-		return nodes;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -80,13 +79,11 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
-				return ((InternalEList<?>)getNodes()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ALGEBRA_EXPRESSION__NAME, oldName, name));
 	}
 
 	/**
@@ -97,8 +94,8 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
-				return getNodes();
+			case RelalgPackage.ALGEBRA_EXPRESSION__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -108,13 +105,11 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
-				getNodes().clear();
-				getNodes().addAll((Collection<? extends AlgebraNode>)newValue);
+			case RelalgPackage.ALGEBRA_EXPRESSION__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -128,8 +123,8 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
-				getNodes().clear();
+			case RelalgPackage.ALGEBRA_EXPRESSION__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -143,10 +138,26 @@ public class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION__NODES:
-				return nodes != null && !nodes.isEmpty();
+			case RelalgPackage.ALGEBRA_EXPRESSION__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //AlgebraExpressionImpl

@@ -27,7 +27,7 @@ import relalg.RelalgPackage;
  *
  * @generated
  */
-public class InputRelationImpl extends AlgebraNodeImpl implements InputRelation {
+public class InputRelationImpl extends AlgebraExpressionImpl implements InputRelation {
 	/**
 	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference.
 	 * <!-- begin-user-doc -->

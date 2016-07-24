@@ -5,35 +5,35 @@
     complianceLevel="8.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
   <foreignModel>relalg.ecore</foreignModel>
   <genPackages prefix="Relalg" disposableProviderFactory="true" ecorePackage="relalg.ecore#/">
-    <genClasses ecoreClass="relalg.ecore#//AlgebraNode">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//AlgebraNode/name"/>
+    <genClasses ecoreClass="relalg.ecore#//AlgebraExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//AlgebraExpression/name"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//InputRelation">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//InputRelation/attributes"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//TrimmerOperator">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//TrimmerOperator/attributes"/>
+    <genClasses ecoreClass="relalg.ecore#//TrimmerOperation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//TrimmerOperation/attributes"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//JoinOperator"/>
-    <genClasses ecoreClass="relalg.ecore#//AlgebraExpression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//AlgebraExpression/nodes"/>
+    <genClasses ecoreClass="relalg.ecore#//JoinOperation"/>
+    <genClasses ecoreClass="relalg.ecore#//AlphaOperation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//AlphaOperation/parent"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//AlphaOperator">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//AlphaOperator/parent"/>
+    <genClasses ecoreClass="relalg.ecore#//BetaOperation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/leftParent"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/rightParent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/bindings"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//BetaOperator">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperator/rightParent"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperator/leftParent"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperator/leftMask"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperator/rightMask"/>
-    </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//AntiJoinOperator"/>
-    <genClasses ecoreClass="relalg.ecore#//ProductionOperator"/>
+    <genClasses ecoreClass="relalg.ecore#//AntiJoinOperation"/>
+    <genClasses ecoreClass="relalg.ecore#//ProductionOperation"/>
     <genClasses ecoreClass="relalg.ecore#//Attribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//Attribute/name"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//AttributeSet">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//AttributeSet/attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//JoinBinding">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//JoinBinding/leftAttribute"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//JoinBinding/rightAttribute"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

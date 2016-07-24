@@ -31,49 +31,40 @@ public interface RelalgFactory extends EFactory {
 	InputRelation createInputRelation();
 
 	/**
-	 * Returns a new object of class '<em>Trimmer Operator</em>'.
+	 * Returns a new object of class '<em>Trimmer Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Trimmer Operator</em>'.
+	 * @return a new object of class '<em>Trimmer Operation</em>'.
 	 * @generated
 	 */
-	TrimmerOperator createTrimmerOperator();
+	TrimmerOperation createTrimmerOperation();
 
 	/**
-	 * Returns a new object of class '<em>Join Operator</em>'.
+	 * Returns a new object of class '<em>Join Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Join Operator</em>'.
+	 * @return a new object of class '<em>Join Operation</em>'.
 	 * @generated
 	 */
-	JoinOperator createJoinOperator();
+	JoinOperation createJoinOperation();
 
 	/**
-	 * Returns a new object of class '<em>Algebra Expression</em>'.
+	 * Returns a new object of class '<em>Anti Join Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Algebra Expression</em>'.
+	 * @return a new object of class '<em>Anti Join Operation</em>'.
 	 * @generated
 	 */
-	AlgebraExpression createAlgebraExpression();
+	AntiJoinOperation createAntiJoinOperation();
 
 	/**
-	 * Returns a new object of class '<em>Anti Join Operator</em>'.
+	 * Returns a new object of class '<em>Production Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Anti Join Operator</em>'.
+	 * @return a new object of class '<em>Production Operation</em>'.
 	 * @generated
 	 */
-	AntiJoinOperator createAntiJoinOperator();
-
-	/**
-	 * Returns a new object of class '<em>Production Operator</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Production Operator</em>'.
-	 * @generated
-	 */
-	ProductionOperator createProductionOperator();
+	ProductionOperation createProductionOperation();
 
 	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
@@ -92,6 +83,15 @@ public interface RelalgFactory extends EFactory {
 	 * @generated
 	 */
 	AttributeSet createAttributeSet();
+
+	/**
+	 * Returns a new object of class '<em>Join Binding</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Join Binding</em>'.
+	 * @generated
+	 */
+	JoinBinding createJoinBinding();
 
 	/**
 	 * Returns the package supported by this factory.

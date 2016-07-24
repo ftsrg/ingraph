@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="relalg" nsURI="http://www.example.org/relalg" nsPrefix="relalg">
-  <eClassifiers xsi:type="ecore:EClass" name="AlgebraNode" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="AlgebraExpression" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         iD="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InputRelation" eSuperTypes="#//AlgebraNode">
+  <eClassifiers xsi:type="ecore:EClass" name="InputRelation" eSuperTypes="#//AlgebraExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" lowerBound="1"
         eType="#//AttributeSet" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TrimmerOperator" eSuperTypes="#//AlphaOperator">
+  <eClassifiers xsi:type="ecore:EClass" name="TrimmerOperation" eSuperTypes="#//AlphaOperation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" lowerBound="1"
         eType="#//AttributeSet" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
-        eType="#//AlgebraNode" containment="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinOperation" eSuperTypes="#//BetaOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperation" abstract="true" eSuperTypes="#//AlgebraExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//AlgebraExpression"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AlgebraNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BetaOperation" abstract="true" eSuperTypes="#//AlgebraExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" lowerBound="1"
+        eType="#//AlgebraExpression"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" lowerBound="1"
+        eType="#//AlgebraExpression"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//JoinBinding" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BetaOperator" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" eType="#//AlgebraNode"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" eType="#//AlgebraNode"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftMask" lowerBound="1"
-        eType="#//AttributeSet" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightMask" lowerBound="1"
-        eType="#//AttributeSet" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ProductionOperator" eSuperTypes="#//AlphaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperation" eSuperTypes="#//BetaOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProductionOperation" eSuperTypes="#//AlphaOperation"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeSet">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinBinding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftAttribute" lowerBound="1"
+        eType="#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightAttribute" lowerBound="1"
+        eType="#//Attribute"/>
   </eClassifiers>
 </ecore:EPackage>

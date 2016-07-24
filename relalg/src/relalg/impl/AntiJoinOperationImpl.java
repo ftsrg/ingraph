@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.AntiJoinOperator;
+import relalg.AntiJoinOperation;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Anti Join Operator</b></em>'.
+ * An implementation of the model object '<em><b>Anti Join Operation</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class AntiJoinOperatorImpl extends BetaOperatorImpl implements AntiJoinOperator {
+public class AntiJoinOperationImpl extends BetaOperationImpl implements AntiJoinOperation {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AntiJoinOperatorImpl() {
+	protected AntiJoinOperationImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class AntiJoinOperatorImpl extends BetaOperatorImpl implements AntiJoinOp
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.ANTI_JOIN_OPERATOR;
+		return RelalgPackage.Literals.ANTI_JOIN_OPERATION;
 	}
 
-} //AntiJoinOperatorImpl
+} //AntiJoinOperationImpl

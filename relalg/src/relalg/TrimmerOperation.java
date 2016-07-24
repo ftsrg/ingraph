@@ -5,21 +5,21 @@ package relalg;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Trimmer Operator</b></em>'.
+ * A representation of the model object '<em><b>Trimmer Operation</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.TrimmerOperator#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link relalg.TrimmerOperation#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
- * @see relalg.RelalgPackage#getTrimmerOperator()
+ * @see relalg.RelalgPackage#getTrimmerOperation()
  * @model
  * @generated
  */
-public interface TrimmerOperator extends AlphaOperator {
+public interface TrimmerOperation extends AlphaOperation {
 	/**
 	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -30,14 +30,14 @@ public interface TrimmerOperator extends AlphaOperator {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Attributes</em>' containment reference.
 	 * @see #setAttributes(AttributeSet)
-	 * @see relalg.RelalgPackage#getTrimmerOperator_Attributes()
+	 * @see relalg.RelalgPackage#getTrimmerOperation_Attributes()
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	AttributeSet getAttributes();
 
 	/**
-	 * Sets the value of the '{@link relalg.TrimmerOperator#getAttributes <em>Attributes</em>}' containment reference.
+	 * Sets the value of the '{@link relalg.TrimmerOperation#getAttributes <em>Attributes</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Attributes</em>' containment reference.
@@ -46,4 +46,4 @@ public interface TrimmerOperator extends AlphaOperator {
 	 */
 	void setAttributes(AttributeSet value);
 
-} // TrimmerOperator
+} // TrimmerOperation
