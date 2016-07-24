@@ -1,43 +1,44 @@
-import cypher.main.MyParser;
+package antlr;
+
 import org.junit.Test;
 
 import java.io.IOException;
 
-public class CypherParserTest {
+public class RelalgParserTest {
 
     @Test
     public void testExample() throws IOException {
-        MyParser.parse("Example");
+        RelalgParser.parse("Example");
     }
 
     @Test
     public void testConnectedSegments() throws IOException {
-        MyParser.parse("ConnectedSegments");
+        RelalgParser.parse("ConnectedSegments");
     }
 
     @Test
     public void testPosLength() throws IOException {
-        MyParser.parse("PosLength");
+        RelalgParser.parse("PosLength");
     }
 
     @Test
     public void testRouteSensor() throws IOException {
-        MyParser.parse("RouteSensor");
+        RelalgParser.parse("RouteSensor");
     }
 
     @Test
     public void testSwitchMonitored() throws IOException {
-        MyParser.parse("SwitchMonitored");
+        RelalgParser.parse("SwitchMonitored");
     }
 
     @Test
     public void testSwitchSet() throws IOException {
-        MyParser.parse("SwitchSet");
+        RelalgParser.parse("SwitchSet");
     }
 
     @Test
     public void testSemaphoreNeighbor() throws IOException {
-        MyParser.parse("SemaphoreNeighbor");
+        RelalgParser.parse("SemaphoreNeighbor");
     }
 
 }

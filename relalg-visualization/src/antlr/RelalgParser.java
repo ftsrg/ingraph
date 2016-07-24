@@ -1,4 +1,4 @@
-package cypher.main;
+package antlr;
 
 import cypher.grammar.CypherLexer;
 import cypher.grammar.CypherParser;
@@ -9,11 +9,13 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
+import org.apache.tinkerpop.gremlin.process.computer.Memory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-public class MyParser {
+public class RelalgParser {
 
     public static void parse(final String filename) throws IOException {
         final String filepath = "../queries/" + filename + ".cyp";
@@ -27,7 +29,19 @@ public class MyParser {
         final CypherParser.CypherContext cypher = parser.cypher();
         System.out.println("context: " + cypher);
 
-        final ParseTreeListener listener = new MyCypherListener();
+        final antlr.RelalgCypherListener listener = new antlr.RelalgCypherListener();
         ParseTreeWalker.DEFAULT.walk(listener, cypher);
+
+        System.out.println();
+        System.out.println("relations:");
+        listener.relations.entrySet().forEach(
+            it -> System.out.println(it.getKey())
+        );
+
+        System.out.println();
+        System.out.println("attributes:");
+        listener.attributes.entrySet().forEach(
+                it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
+        );
     }
 }

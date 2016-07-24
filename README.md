@@ -2,18 +2,12 @@
 
 ## Contributor's Guide
 
-Use any Eclipse version with Maven support (e.g. Eclipse for Java Developers). Go to **Import..** | **Existing Maven Projects** and import the projects.
+### Eclipse
 
-The project uses lombok. To install its Eclipse plug-in, follow these steps.
+Start with Eclipse Modeling and install Xtend or start with Eclipse DSL.
 
-  1. Stop Eclipse.
-  1. Download [lombok](https://projectlombok.org/) and install to the Eclipse instance:
-  
-    ```bash
-    java -jar lombok.jar
-    ```
-  1. Start Eclipse.
-  1. Right click on any Maven project and choose **Update Maven projects...**
+For the Gradle projects, go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**.
 
-In IntelliJ, go to **File** | **Settings**, search for `lombok`, click search in repositories and install the lombok plug-in.
+### IntelliJ IDEA
 
+In IntelliJ, go to **File** | **Settings** | **Plug-ins**, search for `Xtend`, click **Search in repositories** and install the plug-in.
