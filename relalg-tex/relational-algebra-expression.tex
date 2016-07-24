@@ -1,0 +1,37 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{ifxetex}
+\ifxetex
+	\usepackage{fontspec}
+\else
+	\usepackage[T1]{fontenc}
+	\usepackage[utf8]{inputenc}
+	\usepackage[lighttt]{lmodern}
+\fi
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+
+\newcommand{\joinsymbol}{\bowtie}
+\newcommand{\antijoinsymbol}{\, \triangleright \,}
+\newcommand{\join}[2]{\!\underset{\tuple{\mathsf{#1}} \tuple{\mathsf{#2}}}{\joinsymbol}\!}
+\newcommand{\antijoin}[2]{\!\underset{\tuple{\mathsf{#1}} \tuple{\mathsf{#2}}}{\antijoinsymbol}\!}
+
+\newcommand{\concatenation}{\Vert}
+\newcommand{\union}{\cup}
+\newcommand{\bigunion}{\bigcup}
+\newcommand{\intersection}{\cap}
+
+\newcommand{\relation}[1]{\mathsf{#1}}
+
+\begin{document}
+
+%$$\sigma_{\relation{r1} \neq \relation{r2}} \Bigg( \relation{exit} \join{r}{r} \relation{gathers} \join{sns1}{sns1} \Big(\relation{connectsTo} \join{te1}{te} \relation{monitoredBy} \join{te1}{te} \relation{monitoredBy}\Big) \Bigg) \join{sns2}{sns} \relation{gathers} \antijoin{r2,sph}{r,sph} \relation{entry}$$
+
+$$\Big(\relation{follows} \join{r}{swP} \relation{target}\Big) \join{sw}{te} \relation{monitoredBy} \antijoin{\relation{r,sns}}{\relation{r,sns}} \relation{gathers}$$
+
+$$\left(\left(\left(\relation{follows} \join{swP}{swP} \relation{target}\right) \join{sw}{te} \relation{monitoredBy}\right) \antijoin{r,sen}{r,sen} \relation{gathers}\right)$$
+
+\end{document}

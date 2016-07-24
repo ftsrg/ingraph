@@ -2,15 +2,22 @@
  */
 package relalg.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import relalg.AttributeSet;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import relalg.Attribute;
 import relalg.InputRelation;
 import relalg.RelalgPackage;
 
@@ -30,14 +37,14 @@ import relalg.RelalgPackage;
  */
 public class InputRelationImpl extends AlgebraExpressionImpl implements InputRelation {
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference.
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAttributes()
 	 * @generated
 	 * @ordered
 	 */
-	protected AttributeSet attributes;
+	protected EList<Attribute> attributes;
 
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
@@ -48,6 +55,7 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	 * @ordered
 	 */
 	protected static final String TYPE_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -82,42 +90,11 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AttributeSet getAttributes() {
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.INPUT_RELATION__ATTRIBUTES);
+		}
 		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetAttributes(AttributeSet newAttributes, NotificationChain msgs) {
-		AttributeSet oldAttributes = attributes;
-		attributes = newAttributes;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.INPUT_RELATION__ATTRIBUTES, oldAttributes, newAttributes);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAttributes(AttributeSet newAttributes) {
-		if (newAttributes != attributes) {
-			NotificationChain msgs = null;
-			if (attributes != null)
-				msgs = ((InternalEObject)attributes).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.INPUT_RELATION__ATTRIBUTES, null, msgs);
-			if (newAttributes != null)
-				msgs = ((InternalEObject)newAttributes).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.INPUT_RELATION__ATTRIBUTES, null, msgs);
-			msgs = basicSetAttributes(newAttributes, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.INPUT_RELATION__ATTRIBUTES, newAttributes, newAttributes));
 	}
 
 	/**
@@ -150,7 +127,7 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case RelalgPackage.INPUT_RELATION__ATTRIBUTES:
-				return basicSetAttributes(null, msgs);
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -176,11 +153,13 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case RelalgPackage.INPUT_RELATION__ATTRIBUTES:
-				setAttributes((AttributeSet)newValue);
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
 			case RelalgPackage.INPUT_RELATION__TYPE:
 				setType((String)newValue);
@@ -198,7 +177,7 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case RelalgPackage.INPUT_RELATION__ATTRIBUTES:
-				setAttributes((AttributeSet)null);
+				getAttributes().clear();
 				return;
 			case RelalgPackage.INPUT_RELATION__TYPE:
 				setType(TYPE_EDEFAULT);
@@ -216,7 +195,7 @@ public class InputRelationImpl extends AlgebraExpressionImpl implements InputRel
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case RelalgPackage.INPUT_RELATION__ATTRIBUTES:
-				return attributes != null;
+				return attributes != null && !attributes.isEmpty();
 			case RelalgPackage.INPUT_RELATION__TYPE:
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 		}

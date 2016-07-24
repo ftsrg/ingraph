@@ -12,7 +12,6 @@ subprojects {
         mavenCentral()
     }
 
-
     dependencies {
         compile group: 'org.eclipse.collections', name: 'eclipse-collections-api', version: '7.1.0'
         compile group: 'org.eclipse.collections', name: 'eclipse-collections', version: '7.1.0'

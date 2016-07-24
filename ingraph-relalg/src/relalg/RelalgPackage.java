@@ -113,7 +113,7 @@ public interface RelalgPackage extends EPackage {
 	int INPUT_RELATION__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference.
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -223,7 +223,7 @@ public interface RelalgPackage extends EPackage {
 	int TRIMMER_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
 
 	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference.
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -640,10 +640,10 @@ public interface RelalgPackage extends EPackage {
 	EClass getInputRelation();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link relalg.InputRelation#getAttributes <em>Attributes</em>}'.
+	 * Returns the meta object for the containment reference list '{@link relalg.InputRelation#getAttributes <em>Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Attributes</em>'.
+	 * @return the meta object for the containment reference list '<em>Attributes</em>'.
 	 * @see relalg.InputRelation#getAttributes()
 	 * @see #getInputRelation()
 	 * @generated
@@ -672,10 +672,10 @@ public interface RelalgPackage extends EPackage {
 	EClass getTrimmerOperation();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link relalg.TrimmerOperation#getAttributes <em>Attributes</em>}'.
+	 * Returns the meta object for the containment reference list '{@link relalg.TrimmerOperation#getAttributes <em>Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Attributes</em>'.
+	 * @return the meta object for the containment reference list '<em>Attributes</em>'.
 	 * @see relalg.TrimmerOperation#getAttributes()
 	 * @see #getTrimmerOperation()
 	 * @generated
@@ -902,7 +902,7 @@ public interface RelalgPackage extends EPackage {
 		EClass INPUT_RELATION = eINSTANCE.getInputRelation();
 
 		/**
-		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -928,7 +928,7 @@ public interface RelalgPackage extends EPackage {
 		EClass TRIMMER_OPERATION = eINSTANCE.getTrimmerOperation();
 
 		/**
-		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

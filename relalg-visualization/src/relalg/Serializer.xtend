@@ -2,24 +2,34 @@ package relalg
 
 class Serializer {
 
-	def dispatch String convertToLateX(TrimmerOperation expression) {
-		'''\projection_{...} («expression.parent.convertToLateX»)'''
-	}
-
-	def dispatch String convertToLateX(BetaOperation expression) {
-		'''(«expression.leftParent.convertToLateX» «betaOperator(expression)» «expression.rightParent.convertToLateX »)'''
+	def convert(AlgebraExpression expression) {
+		'''$$«convertToLateX(expression)»$$'''
 	}
 	
-	def dispatch String convertToLateX(InputRelation expression) {
-		expression.type
+	def dispatch String convertToLateX(TrimmerOperation operation) {
+		'''\projection_{...} («operation.parent.convertToLateX»)'''
+	}
+
+	def dispatch String convertToLateX(BetaOperation operation) {
+		'''\left(«operation.leftParent.convertToLateX» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convertToLateX »\right)'''
+	}
+	
+	def mask(BetaOperation operation) {
+		val b = operation.bindings
+		
+		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
+	}
+	
+	def dispatch String convertToLateX(InputRelation relation) {
+		'''\relation{«relation.type»}'''
 	}
 
 	def dispatch betaOperator(JoinOperation operation) {
-		'''\join'''
+		'''join'''
 	}
 
 	def dispatch betaOperator(AntiJoinOperation operation) {
-		'''\antijoin'''
+		'''antijoin'''
 	}
 
 }

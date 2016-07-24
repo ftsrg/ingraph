@@ -13,6 +13,7 @@ class Visualizer {
 		val join2 = createJoinOperation => [name = "Join2"; leftParent = join1; rightParent = t]
 		
 		val expression = join2
-		print(expression.convertToLateX)
+		print(expression.convert)
 	}
+	
 }

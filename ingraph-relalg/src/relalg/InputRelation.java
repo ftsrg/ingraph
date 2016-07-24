@@ -2,6 +2,7 @@
  */
 package relalg;
 
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,30 +23,20 @@ package relalg;
  */
 public interface InputRelation extends AlgebraExpression {
 	/**
-	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Attributes</b></em>' containment reference list.
+	 * The list contents are of type {@link relalg.Attribute}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Attributes</em>' containment reference isn't clear,
+	 * If the meaning of the '<em>Attributes</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attributes</em>' containment reference.
-	 * @see #setAttributes(AttributeSet)
+	 * @return the value of the '<em>Attributes</em>' containment reference list.
 	 * @see relalg.RelalgPackage#getInputRelation_Attributes()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	AttributeSet getAttributes();
-
-	/**
-	 * Sets the value of the '{@link relalg.InputRelation#getAttributes <em>Attributes</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Attributes</em>' containment reference.
-	 * @see #getAttributes()
-	 * @generated
-	 */
-	void setAttributes(AttributeSet value);
+	EList<Attribute> getAttributes();
 
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
