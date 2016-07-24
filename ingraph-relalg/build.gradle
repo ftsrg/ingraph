@@ -9,3 +9,11 @@ dependencies {
 repositories {
     maven { url "https://repo.eclipse.org/content/groups/acceleo" }
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+    }
+}

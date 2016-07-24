@@ -4,12 +4,14 @@ import cypher.grammar.CypherBaseListener;
 import cypher.grammar.CypherParser.MatchContext;
 import cypher.grammar.CypherParser.ReturnContext;
 import cypher.grammar.CypherParser.VariableContext;
+import relalg.AlgebraExpression;
 
 public class MyCypherListener extends CypherBaseListener {
 
 	@Override
 	public void enterMatch(MatchContext ctx) {
 		System.out.println("Enter: " + ctx.getText());
+		AlgebraExpression a;
 	}
 
 	@Override

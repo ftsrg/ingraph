@@ -1,7 +1,4 @@
 rootProject.name = 'ingraph'
-//include ':ingraph-algebra'
 include ':ingraph-antlr'
-//include ':ingraph-graph'
 include ':ingraph-relalg'
-//include ':ingraph-rete'
 include ':ingraph-tinkerpop'
