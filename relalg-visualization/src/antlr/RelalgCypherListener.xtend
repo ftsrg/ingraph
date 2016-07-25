@@ -40,6 +40,8 @@ class RelalgCypherListener extends CypherBaseListener {
     override enterSymbolicName(SymbolicNameContext ctx) {
         val name = ctx.getText
 
+        //println(ctx.getParent.getParent.getParent.getText)
+
         if (mainState == MainState::MATCH) {
             switch (parserState) {
                 case RELATIONSHIP: {

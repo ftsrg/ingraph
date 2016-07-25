@@ -51,5 +51,8 @@ public class RelalgParser {
         listener.attributes.entrySet().forEach(
             it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
         );
+
+        final antlr.RelalgBuilder builder  = new antlr.RelalgBuilder();
+        builder.buildEMF(listener);
     }
 }
