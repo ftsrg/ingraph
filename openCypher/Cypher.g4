@@ -101,7 +101,7 @@ sortItem : ( expression ( DESCENDING | DESC ) )
 
 where : WHERE sp expression ;
 
-pattern : patternPart ( ',' patternPart )* ;
+pattern : patternPart ( ws ',' ws patternPart )* ;
 
 patternPart : ( variable ws '=' ws anonymousPatternPart )
             | anonymousPatternPart
@@ -135,7 +135,7 @@ nodeLabels : nodeLabel ( ws nodeLabel )* ;
 
 nodeLabel : ':' labelName ;
 
-rangeLiteral : ws ( unsignedIntegerLiteral ws )? ( '..' ws ( unsignedIntegerLiteral ws )? )? ;
+rangeLiteral : ws ( integerLiteral ws )? ( '..' ws ( integerLiteral ws )? )? ;
 
 labelName : symbolicName ;
 
@@ -221,43 +221,35 @@ StringLiteral : ( '"' ( StringLiteral_0 | EscapedChar )* '"' )
 EscapedChar : '\\' ( '\\' | '\'' | '"' | ( 'B' | 'b' ) | ( 'F' | 'f' ) | ( 'N' | 'n' ) | ( 'R' | 'r' ) | ( 'T' | 't' ) | '_' | '%' | ( ( 'U' | 'u' ) ( HexDigit HexDigit HexDigit HexDigit ) ) | ( ( 'U' | 'u' ) ( HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit ) ) ) ;
 
 numberLiteral : doubleLiteral
-              | signedIntegerLiteral
+              | integerLiteral
               ;
 
 mapLiteral : '{' ws ( propertyKeyName ws ':' ws expression ws ( ',' ws propertyKeyName ws ':' ws expression ws )* )? '}' ;
 
-parameter : '{' ws ( symbolicName | unsignedDecimalInteger ) ws '}' ;
+parameter : '$' ( symbolicName | DecimalInteger ) ;
 
 propertyExpression : atom ( ws propertyLookup )+ ;
 
 propertyKeyName : symbolicName ;
 
-signedIntegerLiteral : hexInteger
-                     | octalInteger
-                     | decimalInteger
-                     ;
+integerLiteral : HexInteger
+               | OctalInteger
+               | DecimalInteger
+               ;
 
-unsignedIntegerLiteral : unsignedDecimalInteger ;
+HexInteger : L_0X HexString ;
 
-hexInteger : '-'? unsignedHexInteger ;
+DecimalInteger : ( ( '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ) DigitString? )
+               | '0'
+               ;
 
-decimalInteger : '-'? unsignedDecimalInteger ;
+OctalInteger : '0' OctalString ;
 
-octalInteger : '-'? unsignedOctalInteger ;
+HexString : ( HexDigit )+ ;
 
-unsignedHexInteger : L_0X hexString ;
+DigitString : ( Digit )+ ;
 
-unsignedDecimalInteger : ( ( '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ) digitString? )
-                       | '0'
-                       ;
-
-unsignedOctalInteger : '0' octalString ;
-
-hexString : ( HexDigit )+ ;
-
-digitString : ( digit )+ ;
-
-octalString : ( octDigit )+ ;
+OctalString : ( OctDigit )+ ;
 
 HexDigit : '0'
          | '1'
@@ -277,7 +269,7 @@ HexDigit : '0'
          | ( 'F' | 'f' )
          ;
 
-digit : '0'
+Digit : '0'
       | '1'
       | '2'
       | '3'
@@ -289,7 +281,7 @@ digit : '0'
       | '9'
       ;
 
-octDigit : '0'
+OctDigit : '0'
          | '1'
          | '2'
          | '3'
@@ -303,56 +295,56 @@ doubleLiteral : exponentDecimalReal
               | regularDecimalReal
               ;
 
-exponentDecimalReal : '-'? ( digit | '.' )+ ( ( 'E' | 'e' ) | ( 'E' | 'e' ) ) '-'? digitString ;
+exponentDecimalReal : ( ( Digit | '.' )+ | DecimalInteger ) ( ( 'E' | 'e' ) | ( 'E' | 'e' ) ) ( DigitString | DecimalInteger ) ;
 
-regularDecimalReal : '-'? ( digit )* '.' digitString ;
+regularDecimalReal : ( ( Digit )* | DecimalInteger ) '.' ( DigitString | DecimalInteger ) ;
 
 symbolicName : UnescapedSymbolicName
              | EscapedSymbolicName
-                   | UNION
-                   | ALL
-                   | OPTIONAL
-                   | MATCH
-                   | UNWIND
-                   | AS
-                   | MERGE
-                   | ON
-                   | CREATE
-                   | SET
-                   | DELETE
-                   | DETACH
-                   | REMOVE
-                   | WITH
-                   | DISTINCT
-                   | RETURN
-                   | ORDER
-                   | BY
-                   | L_SKIP
-                   | LIMIT
-                   | DESCENDING
-                   | DESC
-                   | ASCENDING
-                   | ASC
-                   | WHERE
-                   | OR
-                   | XOR
-                   | AND
-                   | NOT
-                   | IN
-                   | STARTS
-                   | ENDS
-                   | CONTAINS
-                   | IS
-                   | NULL
-                   | TRUE
-                   | FALSE
-                   | COUNT
-                   | FILTER
-                   | EXTRACT
-                   | ANY
-                   | NONE
-                   | SINGLE
-                   | L_0X
+             | UNION
+             | ALL
+             | OPTIONAL
+             | MATCH
+             | UNWIND
+             | AS
+             | MERGE
+             | ON
+             | CREATE
+             | SET
+             | DELETE
+             | DETACH
+             | REMOVE
+             | WITH
+             | DISTINCT
+             | RETURN
+             | ORDER
+             | BY
+             | L_SKIP
+             | LIMIT
+             | DESCENDING
+             | DESC
+             | ASCENDING
+             | ASC
+             | WHERE
+             | OR
+             | XOR
+             | AND
+             | NOT
+             | IN
+             | STARTS
+             | ENDS
+             | CONTAINS
+             | IS
+             | NULL
+             | TRUE
+             | FALSE
+             | COUNT
+             | FILTER
+             | EXTRACT
+             | ANY
+             | NONE
+             | SINGLE
+             | HexString
              ;
 
 UNION : ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'I' | 'i' ) ( 'O' | 'o' ) ( 'N' | 'n' )  ;
@@ -441,8 +433,6 @@ NONE : ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'E' | 'e' )  ;
 
 SINGLE : ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) ( 'L' | 'l' ) ( 'E' | 'e' )  ;
 
-L_0X : ( '0' | '0' ) ( 'X' | 'x' )  ;
-
 UnescapedSymbolicName : IdentifierStart ( IdentifierPart )* ;
 
 /**
@@ -451,7 +441,6 @@ UnescapedSymbolicName : IdentifierStart ( IdentifierPart )* ;
  * And extended with a few characters.
  */
 IdentifierStart : ID_Start
-                | Sc
                 | '_'
                 | '‿'
                 | '⁀'
@@ -544,6 +533,10 @@ dash : '-'
      | '﹣'
      | '－'
      ;
+
+
+digit : Digit;
+L_0X : ( '0' | '0' ) ( 'X' | 'x' )  ;
 
 fragment FF : [\f] ;
 

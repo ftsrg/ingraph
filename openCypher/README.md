@@ -2,6 +2,12 @@
 
 Go to <https://github.com/opencypher/openCypher/> and clone the latest version.
 
+(Re)build openCypher spec:
+
+```bash
+mvn clean install
+```
+
 Create the `grammar/generated` directory:
 
 ```bash
