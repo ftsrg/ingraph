@@ -1,4 +1,5 @@
-package cypher.grammar;// Generated from /home/szarnyasg/git/ingraph/openCypher/Cypher.g4 by ANTLR 4.5.3
+// Generated from Cypher.g4 by ANTLR 4.5.3
+package cypher.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -430,83 +431,11 @@ public interface CypherVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPropertyKeyName(CypherParser.PropertyKeyNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CypherParser#signedIntegerLiteral}.
+	 * Visit a parse tree produced by {@link CypherParser#integerLiteral}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSignedIntegerLiteral(CypherParser.SignedIntegerLiteralContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#unsignedIntegerLiteral}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnsignedIntegerLiteral(CypherParser.UnsignedIntegerLiteralContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#hexInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHexInteger(CypherParser.HexIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#decimalInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDecimalInteger(CypherParser.DecimalIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#octalInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOctalInteger(CypherParser.OctalIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#unsignedHexInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnsignedHexInteger(CypherParser.UnsignedHexIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#unsignedDecimalInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnsignedDecimalInteger(CypherParser.UnsignedDecimalIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#unsignedOctalInteger}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnsignedOctalInteger(CypherParser.UnsignedOctalIntegerContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#hexString}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHexString(CypherParser.HexStringContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#digitString}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDigitString(CypherParser.DigitStringContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#octalString}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOctalString(CypherParser.OctalStringContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#digit}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDigit(CypherParser.DigitContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CypherParser#octDigit}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOctDigit(CypherParser.OctDigitContext ctx);
+	T visitIntegerLiteral(CypherParser.IntegerLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CypherParser#doubleLiteral}.
 	 * @param ctx the parse tree
@@ -561,4 +490,10 @@ public interface CypherVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDash(CypherParser.DashContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CypherParser#digit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDigit(CypherParser.DigitContext ctx);
 }

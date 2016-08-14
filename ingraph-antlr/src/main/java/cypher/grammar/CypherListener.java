@@ -1,4 +1,5 @@
-package cypher.grammar;// Generated from /home/szarnyasg/git/ingraph/openCypher/Cypher.g4 by ANTLR 4.5.3
+// Generated from Cypher.g4 by ANTLR 4.5.3
+package cypher.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -707,135 +708,15 @@ public interface CypherListener extends ParseTreeListener {
 	 */
 	void exitPropertyKeyName(CypherParser.PropertyKeyNameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CypherParser#signedIntegerLiteral}.
+	 * Enter a parse tree produced by {@link CypherParser#integerLiteral}.
 	 * @param ctx the parse tree
 	 */
-	void enterSignedIntegerLiteral(CypherParser.SignedIntegerLiteralContext ctx);
+	void enterIntegerLiteral(CypherParser.IntegerLiteralContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link CypherParser#signedIntegerLiteral}.
+	 * Exit a parse tree produced by {@link CypherParser#integerLiteral}.
 	 * @param ctx the parse tree
 	 */
-	void exitSignedIntegerLiteral(CypherParser.SignedIntegerLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#unsignedIntegerLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnsignedIntegerLiteral(CypherParser.UnsignedIntegerLiteralContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#unsignedIntegerLiteral}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnsignedIntegerLiteral(CypherParser.UnsignedIntegerLiteralContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#hexInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterHexInteger(CypherParser.HexIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#hexInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitHexInteger(CypherParser.HexIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#decimalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterDecimalInteger(CypherParser.DecimalIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#decimalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitDecimalInteger(CypherParser.DecimalIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#octalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterOctalInteger(CypherParser.OctalIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#octalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitOctalInteger(CypherParser.OctalIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#unsignedHexInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnsignedHexInteger(CypherParser.UnsignedHexIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#unsignedHexInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnsignedHexInteger(CypherParser.UnsignedHexIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#unsignedDecimalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnsignedDecimalInteger(CypherParser.UnsignedDecimalIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#unsignedDecimalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnsignedDecimalInteger(CypherParser.UnsignedDecimalIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#unsignedOctalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnsignedOctalInteger(CypherParser.UnsignedOctalIntegerContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#unsignedOctalInteger}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnsignedOctalInteger(CypherParser.UnsignedOctalIntegerContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#hexString}.
-	 * @param ctx the parse tree
-	 */
-	void enterHexString(CypherParser.HexStringContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#hexString}.
-	 * @param ctx the parse tree
-	 */
-	void exitHexString(CypherParser.HexStringContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#digitString}.
-	 * @param ctx the parse tree
-	 */
-	void enterDigitString(CypherParser.DigitStringContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#digitString}.
-	 * @param ctx the parse tree
-	 */
-	void exitDigitString(CypherParser.DigitStringContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#octalString}.
-	 * @param ctx the parse tree
-	 */
-	void enterOctalString(CypherParser.OctalStringContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#octalString}.
-	 * @param ctx the parse tree
-	 */
-	void exitOctalString(CypherParser.OctalStringContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#digit}.
-	 * @param ctx the parse tree
-	 */
-	void enterDigit(CypherParser.DigitContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#digit}.
-	 * @param ctx the parse tree
-	 */
-	void exitDigit(CypherParser.DigitContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CypherParser#octDigit}.
-	 * @param ctx the parse tree
-	 */
-	void enterOctDigit(CypherParser.OctDigitContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CypherParser#octDigit}.
-	 * @param ctx the parse tree
-	 */
-	void exitOctDigit(CypherParser.OctDigitContext ctx);
+	void exitIntegerLiteral(CypherParser.IntegerLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CypherParser#doubleLiteral}.
 	 * @param ctx the parse tree
@@ -926,4 +807,14 @@ public interface CypherListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDash(CypherParser.DashContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CypherParser#digit}.
+	 * @param ctx the parse tree
+	 */
+	void enterDigit(CypherParser.DigitContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CypherParser#digit}.
+	 * @param ctx the parse tree
+	 */
+	void exitDigit(CypherParser.DigitContext ctx);
 }
