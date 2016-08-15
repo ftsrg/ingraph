@@ -1,5 +1,7 @@
 # ingraph
 
+[![Build Status](https://travis-ci.com/bme-db-lab/ingraph.svg?token=dduaCwDzExdmU27AvBiK&branch=master)](https://travis-ci.com/bme-db-lab/ingraph)
+
 ## Contributor's Guide
 
 ### Eclipse
