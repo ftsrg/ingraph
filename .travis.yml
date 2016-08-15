@@ -1,10 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
-install: true
-script:
-  - gradle -version
-  - gradle build --stacktrace
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
