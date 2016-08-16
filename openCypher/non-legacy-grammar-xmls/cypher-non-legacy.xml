@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2015-2016 "Neo Technology,"
+    Network Engine for Objects in Lund AB [http://neotechnology.com]
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE grammar [
+  <!ENTITY WS "<non-terminal ref='WS'/>">
+  <!ENTITY SP "<non-terminal ref='SP'/>">
+  <!ENTITY expr "<non-terminal ref='Expression'/>">
+  <!ENTITY var "<non-terminal ref='Variable'/>">
+]>
+<grammar language="Cypher"
+  xmlns="http://opencypher.org/grammar"
+  xmlns:rr="http://opencypher.org/railroad"
+  xmlns:oc="http://opencypher.org/opencypher"
+  xmlns:scope="http://opencypher.org/scope">
+
+  <production name="Cypher">
+    &WS;
+    <non-terminal ref="QueryOptions"/>
+    <non-terminal ref="Statement"/>
+    <opt>&WS; ;</opt>
+    &WS;
+  </production>
+
+
+  <vocabulary file="pre-parser.xml"/>
+
+
+  <!-- / STATEMENTS \ -->
+
+  <production name="Statement" rr:inline="true">
+    <alt>
+      <non-terminal ref="Command"/>
+      <non-terminal ref="Query"/>
+    </alt>
+  </production>
+
+  <production name="Query" rr:inline="true">
+    <alt>
+      <non-terminal ref="RegularQuery"/>
+      <non-terminal ref="BulkImportQuery"/>
+    </alt>
+  </production>
+
+  <production name="RegularQuery" rr:inline="true">
+    <non-terminal ref="SingleQuery"/>
+    <repeat>&WS;<non-terminal ref="Union"/></repeat>
+  </production>
+
+  <production name="Union" rr:inline="true">
+    <alt>
+      <seq>UNION &SP; ALL <non-terminal ref="SingleQuery"/></seq>
+      <seq>UNION <non-terminal ref="SingleQuery"/></seq>
+    </alt>
+  </production>
+
+  <production name="Clause" rr:inline="true">
+    <alt>
+      <non-terminal ref="LoadCSV"/>
+      <non-terminal ref="Start"/>
+      <non-terminal ref="Match"/>
+      <non-terminal ref="Unwind"/>
+      <non-terminal ref="Merge"/>
+      <non-terminal ref="Create"/>
+      <non-terminal ref="CreateUnique"/>
+      <non-terminal ref="Set"/>
+      <non-terminal ref="Delete"/>
+      <non-terminal ref="Remove"/>
+      <non-terminal ref="Foreach"/>
+      <non-terminal ref="With"/>
+      <non-terminal ref="Return"/>
+    </alt>
+  </production>
+
+  <!-- \ STATEMENTS / -->
+
+
+  <vocabulary file="commands.xml"/>
+
+
+  <!-- / CLAUSES \ -->
+
+  <production name="Match" scope:rule="new">
+    <opt>OPTIONAL &SP;</opt>MATCH &WS;
+    <non-terminal ref="Pattern"/>
+    <repeat><non-terminal ref="Hint"/></repeat>
+    <opt>&WS; <non-terminal ref="Where"/></opt>
+  </production>
+
+  <production name="Unwind">
+    UNWIND &WS; &expr; &SP; AS &SP; &var;
+  </production>
+
+  <production name="Merge">
+    MERGE &WS; <non-terminal ref="PatternPart"/>
+    <repeat>
+      &SP; <non-terminal ref="MergeAction"/>
+    </repeat>
+  </production>
+
+  <production name="MergeAction" rr:inline="true">
+    <alt>
+      <seq>ON &SP; MATCH &SP; <non-terminal ref="Set"/></seq>
+      <seq>ON &SP; CREATE &SP; <non-terminal ref="Set"/></seq>
+    </alt>
+  </production>
+
+  <production name="Create">
+    <seq>CREATE &WS; <non-terminal ref="Pattern"/></seq>
+  </production>
+
+  <production name="Set">
+    SET <non-terminal ref="SetItem"/>
+    <repeat>
+      , <non-terminal ref="SetItem"/>
+    </repeat>
+  </production>
+
+  <production name="SetItem" rr:inline="true">
+    <alt>
+      <seq><non-terminal ref="PropertyExpression"/> = &expr;</seq>
+      <seq>&var; = &expr;</seq>
+      <seq>&var; += &expr;</seq>
+      <seq>&var;<non-terminal ref="NodeLabels"/></seq>
+    </alt>
+  </production>
+
+  <production name="Delete">
+    <alt>
+      <seq>DELETE &expr;<repeat>, &expr;</repeat></seq>
+      <seq>DETACH &SP; DELETE &expr;<repeat>, &expr;</repeat></seq>
+    </alt>
+  </production>
+
+  <production name="Remove">
+    REMOVE &SP; <non-terminal ref="RemoveItem"/>
+    <repeat>&WS;,&WS;<non-terminal ref="RemoveItem"/></repeat>
+  </production>
+
+  <production name="RemoveItem" rr:inline="true">
+    <alt>
+      <seq>&var;<non-terminal ref="NodeLabels"/></seq>
+      <non-terminal ref="PropertyExpression"/>
+    </alt>
+  </production>
+
+  <production name="With" scope:rule="new">
+    <alt>
+      <seq>WITH DISTINCT &SP;
+        <non-terminal ref="ReturnBody"/>
+        <opt><non-terminal ref="Where"/></opt>
+      </seq>
+      <seq>WITH &SP;
+        <non-terminal ref="ReturnBody"/>
+        <opt><non-terminal ref="Where"/></opt>
+      </seq>
+    </alt>
+  </production>
+
+  <production name="Return">
+    <alt>
+      <seq>RETURN &SP; DISTINCT &SP;<non-terminal ref="ReturnBody"/></seq>
+      <seq>RETURN &SP;<non-terminal ref="ReturnBody"/></seq>
+    </alt>
+  </production>
+
+  <production name="ReturnBody">
+    <non-terminal ref="ReturnItems"/>
+    <opt>&SP;<non-terminal ref="Order"/></opt>
+    <opt>&SP;<non-terminal ref="Skip"/></opt>
+    <opt>&SP;<non-terminal ref="Limit"/></opt>
+  </production>
+
+  <production name="ReturnItems" rr:inline="true">
+    <alt>
+      <seq>*<repeat>&WS; , &WS;<non-terminal ref="ReturnItem"/></repeat></seq>
+      <seq>
+        <non-terminal ref="ReturnItem"/>
+        <repeat>&WS; , &WS;<non-terminal ref="ReturnItem"/></repeat>
+      </seq>
+    </alt>
+  </production>
+
+  <production name="ReturnItem" rr:inline="true">
+    <alt> <seq>&expr; &SP; AS &SP; &var;</seq> &expr; </alt>
+  </production>
+
+  <production name="Order" rr:inline="true">
+    ORDER &SP; BY &SP; <non-terminal ref="SortItem"/>
+    <repeat> , &WS; <non-terminal ref="SortItem"/></repeat>
+  </production>
+
+  <production name="Skip" rr:inline="true">
+    SKIP &SP; &expr;
+  </production>
+
+  <production name="Limit" rr:inline="true">
+    LIMIT &SP; &expr;
+  </production>
+
+  <production name="SortItem" rr:inline="true">
+    <alt>
+      <seq>&expr;<alt>DESCENDING DESC</alt></seq>
+      <seq>&expr;<opt><alt>ASCENDING ASC</alt></opt></seq>
+    </alt>
+  </production>
+
+  <vocabulary file="start.xml"/>
+
+  <!-- \ CLAUSES / -->
+
+
+  <vocabulary file="basic-grammar.xml"/>
+
+</grammar>
