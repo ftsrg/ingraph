@@ -1,4 +1,6 @@
-# openCypher
+# ingraph-antlr
+
+To generate the ANTLR recognizer according to the latest specification, perform the following steps.
 
 Go to <https://github.com/opencypher/openCypher/> and clone the latest version.
 
@@ -27,6 +29,6 @@ Generate Java parser from the ANTLR4 grammar (currently using antlr4 4.5.3-1 fro
 
 ```bash
 antlr4 -package cypher.grammar -visitor Cypher.g4
-patch -p1 <CypherParser.patch
-cp -t ../ingraph-antlr/src/main/java/cypher/grammar/ *.java
+patch -p1 < CypherParser.patch
+cp -t src/main/java/cypher/grammar/ *.java
 ```
