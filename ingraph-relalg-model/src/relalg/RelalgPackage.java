@@ -4,6 +4,7 @@ package relalg;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -655,6 +656,72 @@ public interface RelalgPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.ExpandImpl <em>Expand</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ExpandImpl
+	 * @see relalg.impl.RelalgPackageImpl#getExpand()
+	 * @generated
+	 */
+	int EXPAND = 12;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND__NAME = ALPHA_OPERATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND__PARENT = ALPHA_OPERATION__PARENT;
+
+	/**
+	 * The feature id for the '<em><b>Direction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND__DIRECTION = ALPHA_OPERATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Expand</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Expand</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.Direction
+	 * @see relalg.impl.RelalgPackageImpl#getDirection()
+	 * @generated
+	 */
+	int DIRECTION = 13;
+
+
+	/**
 	 * Returns the meta object for class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -907,6 +974,37 @@ public interface RelalgPackage extends EPackage {
 	EClass getFilterOperation();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.Expand <em>Expand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Expand</em>'.
+	 * @see relalg.Expand
+	 * @generated
+	 */
+	EClass getExpand();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.Expand#getDirection <em>Direction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Direction</em>'.
+	 * @see relalg.Expand#getDirection()
+	 * @see #getExpand()
+	 * @generated
+	 */
+	EAttribute getExpand_Direction();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Direction</em>'.
+	 * @see relalg.Direction
+	 * @generated
+	 */
+	EEnum getDirection();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1144,6 +1242,34 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass FILTER_OPERATION = eINSTANCE.getFilterOperation();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ExpandImpl <em>Expand</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ExpandImpl
+		 * @see relalg.impl.RelalgPackageImpl#getExpand()
+		 * @generated
+		 */
+		EClass EXPAND = eINSTANCE.getExpand();
+
+		/**
+		 * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPAND__DIRECTION = eINSTANCE.getExpand_Direction();
+
+		/**
+		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.Direction
+		 * @see relalg.impl.RelalgPackageImpl#getDirection()
+		 * @generated
+		 */
+		EEnum DIRECTION = eINSTANCE.getDirection();
 
 	}
 

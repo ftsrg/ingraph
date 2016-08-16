@@ -116,6 +116,10 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createFilterOperationAdapter();
 			}
 			@Override
+			public Adapter caseExpand(Expand object) {
+				return createExpandAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -300,6 +304,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFilterOperationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Expand <em>Expand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Expand
+	 * @generated
+	 */
+	public Adapter createExpandAdapter() {
 		return null;
 	}
 

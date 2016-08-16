@@ -3,6 +3,7 @@
 package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -65,8 +66,39 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
 			case RelalgPackage.JOIN_BINDING: return createJoinBinding();
 			case RelalgPackage.FILTER_OPERATION: return createFilterOperation();
+			case RelalgPackage.EXPAND: return createExpand();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case RelalgPackage.DIRECTION:
+				return createDirectionFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case RelalgPackage.DIRECTION:
+				return convertDirectionToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -158,6 +190,36 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public FilterOperation createFilterOperation() {
 		FilterOperationImpl filterOperation = new FilterOperationImpl();
 		return filterOperation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Expand createExpand() {
+		ExpandImpl expand = new ExpandImpl();
+		return expand;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Direction createDirectionFromString(EDataType eDataType, String initialValue) {
+		Direction result = Direction.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertDirectionToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

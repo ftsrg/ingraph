@@ -103,6 +103,15 @@ public interface RelalgFactory extends EFactory {
 	FilterOperation createFilterOperation();
 
 	/**
+	 * Returns a new object of class '<em>Expand</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Expand</em>'.
+	 * @generated
+	 */
+	Expand createExpand();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

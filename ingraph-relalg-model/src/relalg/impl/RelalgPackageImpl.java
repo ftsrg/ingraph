@@ -4,6 +4,7 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -15,6 +16,8 @@ import relalg.AntiJoinOperation;
 import relalg.Attribute;
 import relalg.AttributeSet;
 import relalg.BetaOperation;
+import relalg.Direction;
+import relalg.Expand;
 import relalg.FilterOperation;
 import relalg.InputRelation;
 import relalg.JoinBinding;
@@ -114,6 +117,20 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass filterOperationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass expandEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum directionEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -397,6 +414,33 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getExpand() {
+		return expandEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExpand_Direction() {
+		return (EAttribute)expandEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getDirection() {
+		return directionEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public RelalgFactory getRelalgFactory() {
 		return (RelalgFactory)getEFactoryInstance();
 	}
@@ -455,6 +499,12 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(joinBindingEClass, JOIN_BINDING__RIGHT_ATTRIBUTE);
 
 		filterOperationEClass = createEClass(FILTER_OPERATION);
+
+		expandEClass = createEClass(EXPAND);
+		createEAttribute(expandEClass, EXPAND__DIRECTION);
+
+		// Create enums
+		directionEEnum = createEEnum(DIRECTION);
 	}
 
 	/**
@@ -493,6 +543,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		antiJoinOperationEClass.getESuperTypes().add(this.getBetaOperation());
 		productionOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 		filterOperationEClass.getESuperTypes().add(this.getAlphaOperation());
+		expandEClass.getESuperTypes().add(this.getAlphaOperation());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -530,6 +581,14 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getJoinBinding_RightAttribute(), this.getAttribute(), null, "rightAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(filterOperationEClass, FilterOperation.class, "FilterOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(expandEClass, Expand.class, "Expand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getExpand_Direction(), this.getDirection(), "direction", "IN", 0, 1, Expand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(directionEEnum, Direction.class, "Direction");
+		addEEnumLiteral(directionEEnum, Direction.IN);
+		addEEnumLiteral(directionEEnum, Direction.OUT);
 
 		// Create resource
 		createResource(eNS_URI);

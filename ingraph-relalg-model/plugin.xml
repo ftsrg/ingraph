@@ -10,8 +10,7 @@
       <!-- @generated relalg -->
       <package
             uri="http://www.example.org/relalg"
-            class="relalg.RelalgPackage"
-            genModel="model/relalg.genmodel"/>
+            class="relalg.RelalgPackage"/>
    </extension>
 
 </plugin>

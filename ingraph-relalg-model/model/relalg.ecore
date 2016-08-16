@@ -43,4 +43,12 @@
         eType="#//Attribute"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FilterOperation" eSuperTypes="#//AlphaOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expand" eSuperTypes="#//AlphaOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"
+        defaultValueLiteral="IN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eLiterals name="IN"/>
+    <eLiterals name="OUT" value="1"/>
+  </eClassifiers>
 </ecore:EPackage>
