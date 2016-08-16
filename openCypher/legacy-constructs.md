@@ -1,17 +1,15 @@
 # Legacy constructs in openCypher
 
-The openCypher documentation defines [legacy grammars](
+The openCypher documentation defines [legacy grammar rules](
 https://github.com/opencypher/openCypher/tree/master/grammar#legacy-grammar) as:
 
 > Legacy grammar
 >
 > Not all grammar rules of Cypher the language will be standardised in their current form, meaning that they will not be part of openCypher as-is. Therefore, the openCypher grammar will not include some well-known Cypher constructs; these are called 'legacy'. To still enable tool authors or others interested in developing support for Cypher in its full current shape, these legacy rules are still present in the grammar specification. The artifacts that can be generated from the specification will by default ignore all legacy rules, but may optionally be instructed to include them.
 
-The grammar is divided to 5 categories. The **basic grammar** and the **cypher** categories both have some legacy constructs.
+The grammar rules are divided to 5 categories. The **basic grammar** and the **cypher** categories both have some legacy rules. The **commands**, **pre-parser** and **start** categories are considered completely legacy.
 
-The **commands**, **pre-parser** and **start** categories are considered completely legacy.
-
-In this document, we collected the legacy constructs from all categories.
+In this document, we collected the legacy grammar rules from all categories.
 
 ## Normal categories
 
@@ -103,6 +101,8 @@ In this document, we collected the legacy constructs from all categories.
 
 ## Completely legacy categories
 
+All grammar rules in these categories are considered legacy.
+
 ### Commands
 
 All commands are considered as legacy.
@@ -188,7 +188,7 @@ All commands are considered as legacy.
 
 ## Pre-parser
 
-These are all considered legacy command as they are not strictly required for query processing (e.g. `EXPLAIN`, `PROFILE`).
+Pre-parse rules are all considered legacy as they are not strictly required for query processing (e.g. `EXPLAIN`, `PROFILE`).
 
 ```xml
 <production name="QueryOptions" oc:legacy="true">
@@ -225,7 +225,7 @@ These are all considered legacy command as they are not strictly required for qu
 
 ## Start
 
-These all all legacy constructs as they were used in Neo4j 1.x.
+Start rules are all considered legacy as they were used in Neo4j 1.x.
 
 ```xml
 <production name="Start" oc:legacy="true">
