@@ -17,8 +17,9 @@ import relalg.Attribute;
 import relalg.AttributeSet;
 import relalg.BetaOperation;
 import relalg.Direction;
-import relalg.Expand;
+import relalg.ExpandOperation;
 import relalg.FilterOperation;
+import relalg.GetNodesOperation;
 import relalg.InputRelation;
 import relalg.JoinBinding;
 import relalg.JoinOperation;
@@ -123,7 +124,14 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass expandEClass = null;
+	private EClass expandOperationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass getNodesOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -414,8 +422,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getExpand() {
-		return expandEClass;
+	public EClass getExpandOperation() {
+		return expandOperationEClass;
 	}
 
 	/**
@@ -423,8 +431,26 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getExpand_Direction() {
-		return (EAttribute)expandEClass.getEStructuralFeatures().get(0);
+	public EAttribute getExpandOperation_Direction() {
+		return (EAttribute)expandOperationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGetNodesOperation() {
+		return getNodesOperationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getGetNodesOperation_Attribute() {
+		return (EReference)getNodesOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -500,8 +526,11 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		filterOperationEClass = createEClass(FILTER_OPERATION);
 
-		expandEClass = createEClass(EXPAND);
-		createEAttribute(expandEClass, EXPAND__DIRECTION);
+		expandOperationEClass = createEClass(EXPAND_OPERATION);
+		createEAttribute(expandOperationEClass, EXPAND_OPERATION__DIRECTION);
+
+		getNodesOperationEClass = createEClass(GET_NODES_OPERATION);
+		createEReference(getNodesOperationEClass, GET_NODES_OPERATION__ATTRIBUTE);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -543,7 +572,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		antiJoinOperationEClass.getESuperTypes().add(this.getBetaOperation());
 		productionOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 		filterOperationEClass.getESuperTypes().add(this.getAlphaOperation());
-		expandEClass.getESuperTypes().add(this.getAlphaOperation());
+		expandOperationEClass.getESuperTypes().add(this.getAlphaOperation());
+		getNodesOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -582,8 +612,11 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(filterOperationEClass, FilterOperation.class, "FilterOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(expandEClass, Expand.class, "Expand", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getExpand_Direction(), this.getDirection(), "direction", "IN", 0, 1, Expand.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(expandOperationEClass, ExpandOperation.class, "ExpandOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getExpandOperation_Direction(), this.getDirection(), "direction", "IN", 0, 1, ExpandOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(getNodesOperationEClass, GetNodesOperation.class, "GetNodesOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getGetNodesOperation_Attribute(), this.getAttribute(), null, "attribute", null, 1, 1, GetNodesOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

@@ -151,11 +151,18 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.EXPAND: {
-				Expand expand = (Expand)theEObject;
-				T result = caseExpand(expand);
-				if (result == null) result = caseAlphaOperation(expand);
-				if (result == null) result = caseAlgebraExpression(expand);
+			case RelalgPackage.EXPAND_OPERATION: {
+				ExpandOperation expandOperation = (ExpandOperation)theEObject;
+				T result = caseExpandOperation(expandOperation);
+				if (result == null) result = caseAlphaOperation(expandOperation);
+				if (result == null) result = caseAlgebraExpression(expandOperation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.GET_NODES_OPERATION: {
+				GetNodesOperation getNodesOperation = (GetNodesOperation)theEObject;
+				T result = caseGetNodesOperation(getNodesOperation);
+				if (result == null) result = caseAlgebraExpression(getNodesOperation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -344,17 +351,32 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Expand</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Expand Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Expand</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Expand Operation</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExpand(Expand object) {
+	public T caseExpandOperation(ExpandOperation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Get Nodes Operation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Get Nodes Operation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGetNodesOperation(GetNodesOperation object) {
 		return null;
 	}
 

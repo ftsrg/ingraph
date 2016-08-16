@@ -654,16 +654,15 @@ public interface RelalgPackage extends EPackage {
 	 */
 	int FILTER_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
 
-
 	/**
-	 * The meta object id for the '{@link relalg.impl.ExpandImpl <em>Expand</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.ExpandOperationImpl <em>Expand Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.ExpandImpl
-	 * @see relalg.impl.RelalgPackageImpl#getExpand()
+	 * @see relalg.impl.ExpandOperationImpl
+	 * @see relalg.impl.RelalgPackageImpl#getExpandOperation()
 	 * @generated
 	 */
-	int EXPAND = 12;
+	int EXPAND_OPERATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -672,7 +671,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND__NAME = ALPHA_OPERATION__NAME;
+	int EXPAND_OPERATION__NAME = ALPHA_OPERATION__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -681,7 +680,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND__PARENT = ALPHA_OPERATION__PARENT;
+	int EXPAND_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Direction</b></em>' attribute.
@@ -690,25 +689,71 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND__DIRECTION = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int EXPAND_OPERATION__DIRECTION = ALPHA_OPERATION_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Expand</em>' class.
+	 * The number of structural features of the '<em>Expand Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
+	int EXPAND_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Expand</em>' class.
+	 * The number of operations of the '<em>Expand Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int EXPAND_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.GetNodesOperationImpl <em>Get Nodes Operation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.GetNodesOperationImpl
+	 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperation()
+	 * @generated
+	 */
+	int GET_NODES_OPERATION = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_NODES_OPERATION__NAME = ALGEBRA_EXPRESSION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Attribute</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_NODES_OPERATION__ATTRIBUTE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Get Nodes Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_NODES_OPERATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Get Nodes Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_NODES_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
@@ -718,7 +763,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 13;
+	int DIRECTION = 14;
 
 
 	/**
@@ -974,25 +1019,46 @@ public interface RelalgPackage extends EPackage {
 	EClass getFilterOperation();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.Expand <em>Expand</em>}'.
+	 * Returns the meta object for class '{@link relalg.ExpandOperation <em>Expand Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Expand</em>'.
-	 * @see relalg.Expand
+	 * @return the meta object for class '<em>Expand Operation</em>'.
+	 * @see relalg.ExpandOperation
 	 * @generated
 	 */
-	EClass getExpand();
+	EClass getExpandOperation();
 
 	/**
-	 * Returns the meta object for the attribute '{@link relalg.Expand#getDirection <em>Direction</em>}'.
+	 * Returns the meta object for the attribute '{@link relalg.ExpandOperation#getDirection <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Direction</em>'.
-	 * @see relalg.Expand#getDirection()
-	 * @see #getExpand()
+	 * @see relalg.ExpandOperation#getDirection()
+	 * @see #getExpandOperation()
 	 * @generated
 	 */
-	EAttribute getExpand_Direction();
+	EAttribute getExpandOperation_Direction();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.GetNodesOperation <em>Get Nodes Operation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Get Nodes Operation</em>'.
+	 * @see relalg.GetNodesOperation
+	 * @generated
+	 */
+	EClass getGetNodesOperation();
+
+	/**
+	 * Returns the meta object for the reference '{@link relalg.GetNodesOperation#getAttribute <em>Attribute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Attribute</em>'.
+	 * @see relalg.GetNodesOperation#getAttribute()
+	 * @see #getGetNodesOperation()
+	 * @generated
+	 */
+	EReference getGetNodesOperation_Attribute();
 
 	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
@@ -1244,14 +1310,14 @@ public interface RelalgPackage extends EPackage {
 		EClass FILTER_OPERATION = eINSTANCE.getFilterOperation();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.ExpandImpl <em>Expand</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.ExpandOperationImpl <em>Expand Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ExpandImpl
-		 * @see relalg.impl.RelalgPackageImpl#getExpand()
+		 * @see relalg.impl.ExpandOperationImpl
+		 * @see relalg.impl.RelalgPackageImpl#getExpandOperation()
 		 * @generated
 		 */
-		EClass EXPAND = eINSTANCE.getExpand();
+		EClass EXPAND_OPERATION = eINSTANCE.getExpandOperation();
 
 		/**
 		 * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.
@@ -1259,7 +1325,25 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXPAND__DIRECTION = eINSTANCE.getExpand_Direction();
+		EAttribute EXPAND_OPERATION__DIRECTION = eINSTANCE.getExpandOperation_Direction();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.GetNodesOperationImpl <em>Get Nodes Operation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.GetNodesOperationImpl
+		 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperation()
+		 * @generated
+		 */
+		EClass GET_NODES_OPERATION = eINSTANCE.getGetNodesOperation();
+
+		/**
+		 * The meta object literal for the '<em><b>Attribute</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GET_NODES_OPERATION__ATTRIBUTE = eINSTANCE.getGetNodesOperation_Attribute();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

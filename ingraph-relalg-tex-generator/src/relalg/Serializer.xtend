@@ -1,43 +1,57 @@
 package relalg
 
-import org.eclipse.xtext.xbase.lib.Functions.Function1
-
 class Serializer {
 	
+	/***
+	 * Whether to use parentheses in the TeX expressions
+	 */
 	boolean parentheses
 	
 	new(boolean parentheses) {
 		this.parentheses = parentheses
 	}
-	
-	def <Source> ite(Source s, Function1<Source, Boolean> pred, String s1, String s2){
-		if (pred.apply(s)) {
-			return s1
-		} else {
-			return s2
-		}
+
+	def serialize(AlgebraExpression expression) {
+		'''$$«convert(expression)»$$'''
 	}
 
-	def convert(AlgebraExpression expression) {
-		'''$$«convertToLateX(expression)»$$'''
-	}
-	
-	def dispatch String convertToLateX(TrimmerOperation operation) {
-		'''\projection_{...} («operation.parent.convertToLateX»)'''
+	/***
+	 * 
+	 */	
+	def dispatch String convert(GetNodesOperation operation) {
+		'''\getnodes{«operation.attribute.name»}'''
 	}
 
-	def dispatch String convertToLateX(BetaOperation operation) {
-		'''«IF parentheses» \left( «ENDIF»«operation.leftParent.convertToLateX» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convertToLateX »«IF parentheses» \right) «ENDIF»'''
+	def dispatch String convert(InputRelation relation) {
+		'''\relation{«relation.type»}'''
+	}
+	
+	
+	def dispatch String convert(ExpandOperation operation) {
+		'''\expand«operation.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
+	}
+	
+	def dispatch String convert(TrimmerOperation operation) {
+		'''\projection_{...} \left(«operation.parent.convert»\right)'''
+	}
+
+	/***
+	 * Beta operations are treated uniformly
+	 */
+	def dispatch String convert(BetaOperation operation) {
+		'''
+		«IF parentheses» \left( «ENDIF»
+		«operation.leftParent.convert»
+		\«betaOperator(operation)»«mask(operation)»
+		«operation.rightParent.convert »
+		«IF parentheses» \right) «ENDIF»
+		'''
 	}
 	
 	def mask(BetaOperation operation) {
 		val b = operation.bindings
 		
 		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
-	}
-	
-	def dispatch String convertToLateX(InputRelation relation) {
-		'''\relation{«relation.type»}'''
 	}
 
 	def dispatch betaOperator(JoinOperation operation) {

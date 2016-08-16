@@ -66,7 +66,8 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
 			case RelalgPackage.JOIN_BINDING: return createJoinBinding();
 			case RelalgPackage.FILTER_OPERATION: return createFilterOperation();
-			case RelalgPackage.EXPAND: return createExpand();
+			case RelalgPackage.EXPAND_OPERATION: return createExpandOperation();
+			case RelalgPackage.GET_NODES_OPERATION: return createGetNodesOperation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -197,9 +198,19 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Expand createExpand() {
-		ExpandImpl expand = new ExpandImpl();
-		return expand;
+	public ExpandOperation createExpandOperation() {
+		ExpandOperationImpl expandOperation = new ExpandOperationImpl();
+		return expandOperation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GetNodesOperation createGetNodesOperation() {
+		GetNodesOperationImpl getNodesOperation = new GetNodesOperationImpl();
+		return getNodesOperation;
 	}
 
 	/**

@@ -16,7 +16,7 @@ class RelalgTest {
 		val join2 = createJoinOperation => [name = "Join2"; leftParent = join1; rightParent = t]
 
 		val expression = join2
-		print(expression.convert)
+		print(expression.serialize)
 	}
 
 	@Test
@@ -58,7 +58,20 @@ class RelalgTest {
 		]
 
 		val expression = antijoin
-		print(expression.convert)
+		print(expression.serialize)
+	}
+	
+	@Test
+	def void test3() {
+		val r = createGetNodesOperation => [attribute = createAttribute => [name = "r"]]
+		val expand = createExpandOperation => [direction = Direction.IN; parent = r]
+		val s = createInputRelation => [type = "s"]
+		val t = createInputRelation => [type = "t"]
+		val join1 = createJoinOperation => [name = "Join1"; leftParent = expand; rightParent = s]
+		val join2 = createJoinOperation => [name = "Join2"; leftParent = join1; rightParent = t]
+
+		val expression = join2
+		print(expression.serialize)
 	}
 
 }
