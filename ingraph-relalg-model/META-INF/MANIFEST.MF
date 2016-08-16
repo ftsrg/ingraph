@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: relalg-ingraph;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-SymbolicName: ingraph-relalg-model;singleton:=true
+Bundle-Version: 0.0.1.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

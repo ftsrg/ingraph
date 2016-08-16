@@ -15,6 +15,7 @@ import relalg.AntiJoinOperation;
 import relalg.Attribute;
 import relalg.AttributeSet;
 import relalg.BetaOperation;
+import relalg.FilterOperation;
 import relalg.InputRelation;
 import relalg.JoinBinding;
 import relalg.JoinOperation;
@@ -106,6 +107,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass joinBindingEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass filterOperationEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -380,6 +388,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getFilterOperation() {
+		return filterOperationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public RelalgFactory getRelalgFactory() {
 		return (RelalgFactory)getEFactoryInstance();
 	}
@@ -436,6 +453,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		joinBindingEClass = createEClass(JOIN_BINDING);
 		createEReference(joinBindingEClass, JOIN_BINDING__LEFT_ATTRIBUTE);
 		createEReference(joinBindingEClass, JOIN_BINDING__RIGHT_ATTRIBUTE);
+
+		filterOperationEClass = createEClass(FILTER_OPERATION);
 	}
 
 	/**
@@ -473,6 +492,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		betaOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
 		antiJoinOperationEClass.getESuperTypes().add(this.getBetaOperation());
 		productionOperationEClass.getESuperTypes().add(this.getAlphaOperation());
+		filterOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -508,6 +528,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(joinBindingEClass, JoinBinding.class, "JoinBinding", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJoinBinding_LeftAttribute(), this.getAttribute(), null, "leftAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJoinBinding_RightAttribute(), this.getAttribute(), null, "rightAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(filterOperationEClass, FilterOperation.class, "FilterOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

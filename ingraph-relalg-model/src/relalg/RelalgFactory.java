@@ -94,6 +94,15 @@ public interface RelalgFactory extends EFactory {
 	JoinBinding createJoinBinding();
 
 	/**
+	 * Returns a new object of class '<em>Filter Operation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Filter Operation</em>'.
+	 * @generated
+	 */
+	FilterOperation createFilterOperation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

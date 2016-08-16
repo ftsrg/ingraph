@@ -607,6 +607,52 @@ public interface RelalgPackage extends EPackage {
 	 */
 	int JOIN_BINDING_OPERATION_COUNT = 0;
 
+	/**
+	 * The meta object id for the '{@link relalg.impl.FilterOperationImpl <em>Filter Operation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.FilterOperationImpl
+	 * @see relalg.impl.RelalgPackageImpl#getFilterOperation()
+	 * @generated
+	 */
+	int FILTER_OPERATION = 11;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION__NAME = ALPHA_OPERATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+
+	/**
+	 * The number of structural features of the '<em>Filter Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Filter Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+
 
 	/**
 	 * Returns the meta object for class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
@@ -851,6 +897,16 @@ public interface RelalgPackage extends EPackage {
 	EReference getJoinBinding_RightAttribute();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.FilterOperation <em>Filter Operation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Filter Operation</em>'.
+	 * @see relalg.FilterOperation
+	 * @generated
+	 */
+	EClass getFilterOperation();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1078,6 +1134,16 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference JOIN_BINDING__RIGHT_ATTRIBUTE = eINSTANCE.getJoinBinding_RightAttribute();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.FilterOperationImpl <em>Filter Operation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.FilterOperationImpl
+		 * @see relalg.impl.RelalgPackageImpl#getFilterOperation()
+		 * @generated
+		 */
+		EClass FILTER_OPERATION = eINSTANCE.getFilterOperation();
 
 	}
 

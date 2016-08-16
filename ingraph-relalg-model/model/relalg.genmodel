@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/relalg-ingraph/src" modelPluginID="relalg" redirection=""
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/ingraph-relalg-model/src" modelPluginID="ingraph-relalg-model"
     modelName="Relalg" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
-    operationReflection="true" importOrganizing="true" pluginKey="relalg-ingraph">
+    operationReflection="true" importOrganizing="true">
   <foreignModel>relalg.ecore</foreignModel>
   <genPackages prefix="Relalg" disposableProviderFactory="true" ecorePackage="relalg.ecore#/">
-    <genClasses ecoreClass="relalg.ecore#//AlgebraExpression">
+    <genClasses image="false" ecoreClass="relalg.ecore#//AlgebraExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//AlgebraExpression/name"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//InputRelation">
@@ -17,10 +17,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//TrimmerOperation/attributes"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//JoinOperation"/>
-    <genClasses ecoreClass="relalg.ecore#//AlphaOperation">
+    <genClasses image="false" ecoreClass="relalg.ecore#//AlphaOperation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//AlphaOperation/parent"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//BetaOperation">
+    <genClasses image="false" ecoreClass="relalg.ecore#//BetaOperation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/leftParent"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/rightParent"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//BetaOperation/bindings"/>
@@ -37,5 +37,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//JoinBinding/leftAttribute"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//JoinBinding/rightAttribute"/>
     </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//FilterOperation"/>
   </genPackages>
 </genmodel:GenModel>

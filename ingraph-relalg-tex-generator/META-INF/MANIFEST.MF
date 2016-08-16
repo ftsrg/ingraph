@@ -1,9 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Relalg-visualization
-Bundle-SymbolicName: relalg-visualization
-Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: relalg.Activator
+Bundle-SymbolicName: ingraph-relalg-tex-visualization
+Bundle-Version: 0.0.1.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  com.google.guava,
  org.eclipse.xtext.xbase.lib,
@@ -12,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.xmi,
  org.junit;bundle-version="4.12.0",
- relalg-ingraph;bundle-version="0.1.0"
+ ingraph-relalg-model;bundle-version="0.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 

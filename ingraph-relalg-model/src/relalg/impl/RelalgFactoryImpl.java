@@ -64,6 +64,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ATTRIBUTE: return createAttribute();
 			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
 			case RelalgPackage.JOIN_BINDING: return createJoinBinding();
+			case RelalgPackage.FILTER_OPERATION: return createFilterOperation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -147,6 +148,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public JoinBinding createJoinBinding() {
 		JoinBindingImpl joinBinding = new JoinBindingImpl();
 		return joinBinding;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FilterOperation createFilterOperation() {
+		FilterOperationImpl filterOperation = new FilterOperationImpl();
+		return filterOperation;
 	}
 
 	/**

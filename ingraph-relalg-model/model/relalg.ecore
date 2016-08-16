@@ -42,4 +42,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightAttribute" lowerBound="1"
         eType="#//Attribute"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterOperation" eSuperTypes="#//AlphaOperation"/>
 </ecore:EPackage>

@@ -1,19 +1,18 @@
 package antlr;
 
-import cypher.grammar.CypherLexer;
-import cypher.grammar.CypherParser;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
-import org.apache.tinkerpop.gremlin.process.computer.Memory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
+import cypher.grammar.CypherLexer;
+import cypher.grammar.CypherParser;
 
 public class RelalgParser {
 
@@ -34,7 +33,7 @@ public class RelalgParser {
         final CypherParser.CypherContext cypher = parser.cypher();
         System.out.println("context: " + cypher);
 
-        final antlr.RelalgCypherListener listener = new antlr.RelalgCypherListener();
+        final RelalgCypherListener listener = new RelalgCypherListener();
         ParseTreeWalker.DEFAULT.walk(listener, cypher);
 
         System.out.println();
@@ -52,7 +51,7 @@ public class RelalgParser {
             it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
         );
 
-        final antlr.RelalgBuilder builder  = new antlr.RelalgBuilder();
+        final RelalgBuilder builder  = new RelalgBuilder();
         builder.buildEMF(listener);
     }
 }
