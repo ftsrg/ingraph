@@ -1,9 +1,0 @@
-package relalg
-
-import "http://www.example.org/relalg"
-
-pattern trimmerUp(join, trimmer, rn1, rn2) {
-	JoinNode.leftParent(join, rn1);
-	JoinNode.rightParent(join, rn2);
-	TrimmerNode.parent(trimmer, join);
-}

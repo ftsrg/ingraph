@@ -24,6 +24,10 @@
 \newcommand{\bigunion}{\bigcup}
 \newcommand{\intersection}{\cap}
 
+\newcommand{\expandout}[2]{\uparrow_{#1}^{#2}}
+\newcommand{\expandin}[2]{\downarrow_{#1}^{#2}}
+\newcommand{\getnodes}[1]{\bigcirc_{#1}}
+
 \newcommand{\relation}[1]{\mathsf{#1}}
 
 \begin{document}
@@ -33,5 +37,7 @@
 $$\Big(\relation{follows} \join{r}{swP} \relation{target}\Big) \join{sw}{te} \relation{monitoredBy} \antijoin{\relation{r,sns}}{\relation{r,sns}} \relation{gathers}$$
 
 $$\relation{follows} \join{swP}{swP} \relation{target} \join{sw}{te} \relation{monitoredBy} \antijoin{r,sen}{r,sen} \relation{gathers}$$
+
+$$\expandout{x}{y}, \expandin{y}{z}, \getnodes{x}$$
 
 \end{document}
