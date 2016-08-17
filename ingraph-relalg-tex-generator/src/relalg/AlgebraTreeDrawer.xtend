@@ -1,23 +1,42 @@
 package relalg
 
-class Serializer {
-	
-	/***
-	 * Whether to use parentheses in the TeX expressions
-	 */
-	boolean parentheses
-	
-	new(boolean parentheses) {
-		this.parentheses = parentheses
+class AlgebraTreeDrawer extends TexSerializer {
+
+	new(boolean full) {
+		super(full)
 	}
 
-	def serialize(AlgebraExpression expression) {
-		'''$$«convert(expression)»$$'''
+	override serializeBody(AlgebraExpression expression) {
+		'''
+		\begin{tikzpicture}[]
+		\«node(expression)»
+		;
+		\end{tikzpicture}
+		'''
+	}
+	
+	def CharSequence node(AlgebraExpression expression) {
+		'''node {$«expression.convert»$} «children(expression)»'''
+	}
+	
+	
+	
+	def dispatch children(GetNodesOperation operation) {
+		''''''
+	}
+	
+	def dispatch children(AlphaOperation operation) {
+		'''child{«operation.parent.node»}'''
 	}
 
-	/***
-	 * 
-	 */	
+	def dispatch children(BetaOperation operation) {
+		'''
+		child{«operation.leftParent.node»}
+		child{«operation.rightParent.node»}
+		'''
+	}
+	
+
 	def dispatch String convert(GetNodesOperation operation) {
 		'''\getnodes{«operation.attribute.name»}'''
 	}
@@ -25,12 +44,11 @@ class Serializer {
 	def dispatch String convert(InputRelation relation) {
 		'''\relation{«relation.type»}'''
 	}
-	
-	
+
 	def dispatch String convert(ExpandOperation operation) {
-		'''\expand«operation.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
+		'''\expand«operation.direction.toString.toLowerCase»{}{}'''
 	}
-	
+
 	def dispatch String convert(TrimmerOperation operation) {
 		'''\projection_{...} \left(«operation.parent.convert»\right)'''
 	}
@@ -39,18 +57,12 @@ class Serializer {
 	 * Beta operations are treated uniformly
 	 */
 	def dispatch String convert(BetaOperation operation) {
-		'''
-		«IF parentheses» \left( «ENDIF»
-		«operation.leftParent.convert»
-		\«betaOperator(operation)»«mask(operation)»
-		«operation.rightParent.convert »
-		«IF parentheses» \right) «ENDIF»
-		'''
+		'''\«betaOperator(operation)»«mask(operation)»'''
 	}
-	
+
 	def mask(BetaOperation operation) {
 		val b = operation.bindings
-		
+
 		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
 	}
 

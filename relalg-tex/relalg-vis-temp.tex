@@ -5,12 +5,9 @@
 
 \begin{document}
 	\begin{tikzpicture}[]
-	\node {$\getnodes{x}$}
-		child{
-			node {$\expandout{x}{y}$}
-			child {node {$\projection{x}$}}
-			child {node {B1}}
-		}
+	\node {$\join{}{}$} 
+		child{\expandin{}{}}
+		child{\getnodes{s}}
 	;
 	\end{tikzpicture}
 \end{document}
