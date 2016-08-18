@@ -1,4 +1,4 @@
-package ingraph.relalg2tex.tests
+package ingraph.relalg2tex
 
 import ingraph.relalg2tex.AlgebraTreeDrawer
 import ingraph.relalg2tex.ExpressionSerializer
@@ -81,10 +81,10 @@ class RelalgTest {
 	def void test3() {
 		val getNodesR = createGetNodesOperation => [attribute = createAttribute => [name = "r"]]
 		val expandIn = createExpandOperation => [direction = Direction.IN; parent = getNodesR]
-		
-		val getNodesS = createGetNodesOperation => [attribute = createAttribute => [name = "s"]]		
+
+		val getNodesS = createGetNodesOperation => [attribute = createAttribute => [name = "s"]]
 		val join = createJoinOperation => [name = "Join1"; leftParent = expandIn; rightParent = getNodesS]
-		
+
 		val expression = join
 //		print(serializer.serialize(expression))
 		print(drawer.serialize(expression))

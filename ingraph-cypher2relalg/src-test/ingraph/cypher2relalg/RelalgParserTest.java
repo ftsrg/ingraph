@@ -1,4 +1,5 @@
-import ingraph.cypher2relalg.RelalgParser;
+package ingraph.cypher2relalg;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
