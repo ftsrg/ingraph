@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ingraph-antlr</name>
-	<comment>Project ingraph-antlr created by Buildship.</comment>
+	<name>ingraph-antlr-parser</name>
+	<comment>Project ingraph-antlr-parser created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>

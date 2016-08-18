@@ -8,7 +8,7 @@
 
 Start with Eclipse Modeling and install Xtend or start with Eclipse DSL.
 
-For the Gradle projects, go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**.
+For the Gradle projects, go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
 ### IntelliJ IDEA
 

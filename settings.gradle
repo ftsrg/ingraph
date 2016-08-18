@@ -1,5 +1,5 @@
 rootProject.name = 'ingraph'
 include ':ingraph-antlr-parser'
-include ':ingraph-cypher-to-relalg'
+include ':ingraph-cypher2relalg'
 include ':ingraph-relalg-model'
-include ':ingraph-relalg-tex-generator'
+include ':ingraph-relalg2tex'
