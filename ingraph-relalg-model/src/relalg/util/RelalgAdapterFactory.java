@@ -76,8 +76,8 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createInputRelationAdapter();
 			}
 			@Override
-			public Adapter caseTrimmerOperation(TrimmerOperation object) {
-				return createTrimmerOperationAdapter();
+			public Adapter caseProjectionOperation(ProjectionOperation object) {
+				return createProjectionOperationAdapter();
 			}
 			@Override
 			public Adapter caseJoinOperation(JoinOperation object) {
@@ -122,6 +122,10 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseGetNodesOperation(GetNodesOperation object) {
 				return createGetNodesOperationAdapter();
+			}
+			@Override
+			public Adapter caseDuplicateEliminationOperation(DuplicateEliminationOperation object) {
+				return createDuplicateEliminationOperationAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -172,16 +176,16 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.TrimmerOperation <em>Trimmer Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.ProjectionOperation <em>Projection Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.TrimmerOperation
+	 * @see relalg.ProjectionOperation
 	 * @generated
 	 */
-	public Adapter createTrimmerOperationAdapter() {
+	public Adapter createProjectionOperationAdapter() {
 		return null;
 	}
 
@@ -336,6 +340,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGetNodesOperationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.DuplicateEliminationOperation <em>Duplicate Elimination Operation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.DuplicateEliminationOperation
+	 * @generated
+	 */
+	public Adapter createDuplicateEliminationOperationAdapter() {
 		return null;
 	}
 

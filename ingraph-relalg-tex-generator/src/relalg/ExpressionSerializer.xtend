@@ -31,7 +31,7 @@ class ExpressionSerializer extends TexSerializer {
 		'''\expand«operation.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
 	}
 
-	def dispatch String convert(TrimmerOperation operation) {
+	def dispatch String convert(ProjectionOperation operation) {
 		'''\projection{...} \left(«operation.parent.convert»\right)'''
 	}
 

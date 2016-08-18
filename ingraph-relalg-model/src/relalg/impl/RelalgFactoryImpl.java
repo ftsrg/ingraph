@@ -58,7 +58,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case RelalgPackage.INPUT_RELATION: return createInputRelation();
-			case RelalgPackage.TRIMMER_OPERATION: return createTrimmerOperation();
+			case RelalgPackage.PROJECTION_OPERATION: return createProjectionOperation();
 			case RelalgPackage.JOIN_OPERATION: return createJoinOperation();
 			case RelalgPackage.ANTI_JOIN_OPERATION: return createAntiJoinOperation();
 			case RelalgPackage.PRODUCTION_OPERATION: return createProductionOperation();
@@ -68,6 +68,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.FILTER_OPERATION: return createFilterOperation();
 			case RelalgPackage.EXPAND_OPERATION: return createExpandOperation();
 			case RelalgPackage.GET_NODES_OPERATION: return createGetNodesOperation();
+			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATION: return createDuplicateEliminationOperation();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -118,9 +119,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public TrimmerOperation createTrimmerOperation() {
-		TrimmerOperationImpl trimmerOperation = new TrimmerOperationImpl();
-		return trimmerOperation;
+	public ProjectionOperation createProjectionOperation() {
+		ProjectionOperationImpl projectionOperation = new ProjectionOperationImpl();
+		return projectionOperation;
 	}
 
 	/**
@@ -211,6 +212,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public GetNodesOperation createGetNodesOperation() {
 		GetNodesOperationImpl getNodesOperation = new GetNodesOperationImpl();
 		return getNodesOperation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DuplicateEliminationOperation createDuplicateEliminationOperation() {
+		DuplicateEliminationOperationImpl duplicateEliminationOperation = new DuplicateEliminationOperationImpl();
+		return duplicateEliminationOperation;
 	}
 
 	/**

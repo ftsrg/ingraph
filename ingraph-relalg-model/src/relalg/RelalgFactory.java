@@ -31,13 +31,13 @@ public interface RelalgFactory extends EFactory {
 	InputRelation createInputRelation();
 
 	/**
-	 * Returns a new object of class '<em>Trimmer Operation</em>'.
+	 * Returns a new object of class '<em>Projection Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Trimmer Operation</em>'.
+	 * @return a new object of class '<em>Projection Operation</em>'.
 	 * @generated
 	 */
-	TrimmerOperation createTrimmerOperation();
+	ProjectionOperation createProjectionOperation();
 
 	/**
 	 * Returns a new object of class '<em>Join Operation</em>'.
@@ -119,6 +119,15 @@ public interface RelalgFactory extends EFactory {
 	 * @generated
 	 */
 	GetNodesOperation createGetNodesOperation();
+
+	/**
+	 * Returns a new object of class '<em>Duplicate Elimination Operation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Duplicate Elimination Operation</em>'.
+	 * @generated
+	 */
+	DuplicateEliminationOperation createDuplicateEliminationOperation();
 
 	/**
 	 * Returns the package supported by this factory.

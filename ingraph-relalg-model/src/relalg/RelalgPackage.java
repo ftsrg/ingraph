@@ -196,14 +196,14 @@ public interface RelalgPackage extends EPackage {
 	int ALPHA_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.TrimmerOperationImpl <em>Trimmer Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.ProjectionOperationImpl <em>Projection Operation</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.TrimmerOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getTrimmerOperation()
+	 * @see relalg.impl.ProjectionOperationImpl
+	 * @see relalg.impl.RelalgPackageImpl#getProjectionOperation()
 	 * @generated
 	 */
-	int TRIMMER_OPERATION = 2;
+	int PROJECTION_OPERATION = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -212,7 +212,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRIMMER_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int PROJECTION_OPERATION__NAME = ALPHA_OPERATION__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -221,7 +221,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRIMMER_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int PROJECTION_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -230,25 +230,25 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRIMMER_OPERATION__ATTRIBUTES = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int PROJECTION_OPERATION__ATTRIBUTES = ALPHA_OPERATION_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Trimmer Operation</em>' class.
+	 * The number of structural features of the '<em>Projection Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRIMMER_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
+	int PROJECTION_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Trimmer Operation</em>' class.
+	 * The number of operations of the '<em>Projection Operation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRIMMER_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int PROJECTION_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.BetaOperationImpl <em>Beta Operation</em>}' class.
@@ -756,6 +756,52 @@ public interface RelalgPackage extends EPackage {
 	int GET_NODES_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.DuplicateEliminationOperationImpl <em>Duplicate Elimination Operation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.DuplicateEliminationOperationImpl
+	 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperation()
+	 * @generated
+	 */
+	int DUPLICATE_ELIMINATION_OPERATION = 14;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUPLICATE_ELIMINATION_OPERATION__NAME = ALPHA_OPERATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUPLICATE_ELIMINATION_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+
+	/**
+	 * The number of structural features of the '<em>Duplicate Elimination Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUPLICATE_ELIMINATION_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Duplicate Elimination Operation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUPLICATE_ELIMINATION_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -763,7 +809,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 14;
+	int DIRECTION = 15;
 
 
 	/**
@@ -820,25 +866,25 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getInputRelation_Type();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.TrimmerOperation <em>Trimmer Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.ProjectionOperation <em>Projection Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Trimmer Operation</em>'.
-	 * @see relalg.TrimmerOperation
+	 * @return the meta object for class '<em>Projection Operation</em>'.
+	 * @see relalg.ProjectionOperation
 	 * @generated
 	 */
-	EClass getTrimmerOperation();
+	EClass getProjectionOperation();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link relalg.TrimmerOperation#getAttributes <em>Attributes</em>}'.
+	 * Returns the meta object for the containment reference list '{@link relalg.ProjectionOperation#getAttributes <em>Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Attributes</em>'.
-	 * @see relalg.TrimmerOperation#getAttributes()
-	 * @see #getTrimmerOperation()
+	 * @see relalg.ProjectionOperation#getAttributes()
+	 * @see #getProjectionOperation()
 	 * @generated
 	 */
-	EReference getTrimmerOperation_Attributes();
+	EReference getProjectionOperation_Attributes();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.JoinOperation <em>Join Operation</em>}'.
@@ -1061,6 +1107,16 @@ public interface RelalgPackage extends EPackage {
 	EReference getGetNodesOperation_Attribute();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.DuplicateEliminationOperation <em>Duplicate Elimination Operation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Duplicate Elimination Operation</em>'.
+	 * @see relalg.DuplicateEliminationOperation
+	 * @generated
+	 */
+	EClass getDuplicateEliminationOperation();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1138,14 +1194,14 @@ public interface RelalgPackage extends EPackage {
 		EAttribute INPUT_RELATION__TYPE = eINSTANCE.getInputRelation_Type();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.TrimmerOperationImpl <em>Trimmer Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.ProjectionOperationImpl <em>Projection Operation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.TrimmerOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getTrimmerOperation()
+		 * @see relalg.impl.ProjectionOperationImpl
+		 * @see relalg.impl.RelalgPackageImpl#getProjectionOperation()
 		 * @generated
 		 */
-		EClass TRIMMER_OPERATION = eINSTANCE.getTrimmerOperation();
+		EClass PROJECTION_OPERATION = eINSTANCE.getProjectionOperation();
 
 		/**
 		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference list feature.
@@ -1153,7 +1209,7 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference TRIMMER_OPERATION__ATTRIBUTES = eINSTANCE.getTrimmerOperation_Attributes();
+		EReference PROJECTION_OPERATION__ATTRIBUTES = eINSTANCE.getProjectionOperation_Attributes();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.JoinOperationImpl <em>Join Operation</em>}' class.
@@ -1344,6 +1400,16 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference GET_NODES_OPERATION__ATTRIBUTE = eINSTANCE.getGetNodesOperation_Attribute();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.DuplicateEliminationOperationImpl <em>Duplicate Elimination Operation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.DuplicateEliminationOperationImpl
+		 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperation()
+		 * @generated
+		 */
+		EClass DUPLICATE_ELIMINATION_OPERATION = eINSTANCE.getDuplicateEliminationOperation();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

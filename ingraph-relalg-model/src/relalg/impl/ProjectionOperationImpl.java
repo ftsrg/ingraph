@@ -15,23 +15,23 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import relalg.Attribute;
+import relalg.ProjectionOperation;
 import relalg.RelalgPackage;
-import relalg.TrimmerOperation;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Trimmer Operation</b></em>'.
+ * An implementation of the model object '<em><b>Projection Operation</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.TrimmerOperationImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link relalg.impl.ProjectionOperationImpl#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerOperation {
+public class ProjectionOperationImpl extends AlphaOperationImpl implements ProjectionOperation {
 	/**
 	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -47,7 +47,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TrimmerOperationImpl() {
+	protected ProjectionOperationImpl() {
 		super();
 	}
 
@@ -58,7 +58,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.TRIMMER_OPERATION;
+		return RelalgPackage.Literals.PROJECTION_OPERATION;
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	 */
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -81,7 +81,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
 				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -95,7 +95,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
 				return getAttributes();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -110,7 +110,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
 				getAttributes().clear();
 				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
@@ -126,7 +126,7 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
 				getAttributes().clear();
 				return;
 		}
@@ -141,10 +141,10 @@ public class TrimmerOperationImpl extends AlphaOperationImpl implements TrimmerO
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.TRIMMER_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
 				return attributes != null && !attributes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //TrimmerOperationImpl
+} //ProjectionOperationImpl

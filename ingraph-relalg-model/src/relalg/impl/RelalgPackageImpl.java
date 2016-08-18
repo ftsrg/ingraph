@@ -17,6 +17,7 @@ import relalg.Attribute;
 import relalg.AttributeSet;
 import relalg.BetaOperation;
 import relalg.Direction;
+import relalg.DuplicateEliminationOperation;
 import relalg.ExpandOperation;
 import relalg.FilterOperation;
 import relalg.GetNodesOperation;
@@ -24,9 +25,9 @@ import relalg.InputRelation;
 import relalg.JoinBinding;
 import relalg.JoinOperation;
 import relalg.ProductionOperation;
+import relalg.ProjectionOperation;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
-import relalg.TrimmerOperation;
 
 /**
  * <!-- begin-user-doc -->
@@ -54,7 +55,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass trimmerOperationEClass = null;
+	private EClass projectionOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -132,6 +133,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass getNodesOperationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass duplicateEliminationOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -251,8 +259,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getTrimmerOperation() {
-		return trimmerOperationEClass;
+	public EClass getProjectionOperation() {
+		return projectionOperationEClass;
 	}
 
 	/**
@@ -260,8 +268,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getTrimmerOperation_Attributes() {
-		return (EReference)trimmerOperationEClass.getEStructuralFeatures().get(0);
+	public EReference getProjectionOperation_Attributes() {
+		return (EReference)projectionOperationEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -458,6 +466,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDuplicateEliminationOperation() {
+		return duplicateEliminationOperationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -497,8 +514,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(inputRelationEClass, INPUT_RELATION__ATTRIBUTES);
 		createEAttribute(inputRelationEClass, INPUT_RELATION__TYPE);
 
-		trimmerOperationEClass = createEClass(TRIMMER_OPERATION);
-		createEReference(trimmerOperationEClass, TRIMMER_OPERATION__ATTRIBUTES);
+		projectionOperationEClass = createEClass(PROJECTION_OPERATION);
+		createEReference(projectionOperationEClass, PROJECTION_OPERATION__ATTRIBUTES);
 
 		joinOperationEClass = createEClass(JOIN_OPERATION);
 
@@ -531,6 +548,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		getNodesOperationEClass = createEClass(GET_NODES_OPERATION);
 		createEReference(getNodesOperationEClass, GET_NODES_OPERATION__ATTRIBUTE);
+
+		duplicateEliminationOperationEClass = createEClass(DUPLICATE_ELIMINATION_OPERATION);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -565,7 +584,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		// Add supertypes to classes
 		inputRelationEClass.getESuperTypes().add(this.getAlgebraExpression());
-		trimmerOperationEClass.getESuperTypes().add(this.getAlphaOperation());
+		projectionOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 		joinOperationEClass.getESuperTypes().add(this.getBetaOperation());
 		alphaOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
 		betaOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
@@ -574,6 +593,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		filterOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 		expandOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 		getNodesOperationEClass.getESuperTypes().add(this.getAlgebraExpression());
+		duplicateEliminationOperationEClass.getESuperTypes().add(this.getAlphaOperation());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -583,8 +603,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getInputRelation_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getInputRelation_Type(), ecorePackage.getEString(), "type", null, 0, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(trimmerOperationEClass, TrimmerOperation.class, "TrimmerOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTrimmerOperation_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, TrimmerOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(projectionOperationEClass, ProjectionOperation.class, "ProjectionOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProjectionOperation_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, ProjectionOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(joinOperationEClass, JoinOperation.class, "JoinOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -617,6 +637,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(getNodesOperationEClass, GetNodesOperation.class, "GetNodesOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getGetNodesOperation_Attribute(), this.getAttribute(), null, "attribute", null, 1, 1, GetNodesOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(duplicateEliminationOperationEClass, DuplicateEliminationOperation.class, "DuplicateEliminationOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

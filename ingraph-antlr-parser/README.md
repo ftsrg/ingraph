@@ -1,6 +1,8 @@
-# ingraph-antlr
+# ANTLR parser
 
-To generate the ANTLR recognizer according to the latest specification, perform the following steps.
+This project contains the generated ANTLR parser classes.
+
+To regenerate the ANTLR recognizer according to the latest specification, perform the following steps.
 
 Go to <https://github.com/opencypher/openCypher/> and clone the latest version.
 

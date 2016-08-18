@@ -10,7 +10,7 @@
         eType="#//Attribute" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TrimmerOperation" eSuperTypes="#//AlphaOperation">
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectionOperation" eSuperTypes="#//AlphaOperation">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
@@ -55,4 +55,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
         eType="#//Attribute"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperation" eSuperTypes="#//AlphaOperation"/>
 </ecore:EPackage>

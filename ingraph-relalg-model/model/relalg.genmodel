@@ -6,6 +6,10 @@
     operationReflection="true" importOrganizing="true">
   <foreignModel>relalg.ecore</foreignModel>
   <genPackages prefix="Relalg" disposableProviderFactory="true" ecorePackage="relalg.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="relalg.ecore#//Direction">
+      <genEnumLiterals ecoreEnumLiteral="relalg.ecore#//Direction/IN"/>
+      <genEnumLiterals ecoreEnumLiteral="relalg.ecore#//Direction/OUT"/>
+    </genEnums>
     <genClasses image="false" ecoreClass="relalg.ecore#//AlgebraExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//AlgebraExpression/name"/>
     </genClasses>
@@ -13,8 +17,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//InputRelation/attributes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//InputRelation/type"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//TrimmerOperation">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//TrimmerOperation/attributes"/>
+    <genClasses ecoreClass="relalg.ecore#//ProjectionOperation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ProjectionOperation/attributes"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//JoinOperation"/>
     <genClasses image="false" ecoreClass="relalg.ecore#//AlphaOperation">
@@ -38,5 +42,12 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//JoinBinding/rightAttribute"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//FilterOperation"/>
+    <genClasses ecoreClass="relalg.ecore#//ExpandOperation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//ExpandOperation/direction"/>
+    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//GetNodesOperation">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetNodesOperation/attribute"/>
+    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//DuplicateEliminationOperation"/>
   </genPackages>
 </genmodel:GenModel>

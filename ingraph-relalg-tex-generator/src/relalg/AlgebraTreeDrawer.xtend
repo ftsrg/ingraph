@@ -49,7 +49,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 		'''\expand«operation.direction.toString.toLowerCase»{}{}'''
 	}
 
-	def dispatch String convert(TrimmerOperation operation) {
+	def dispatch String convert(ProjectionOperation operation) {
 		'''\projection_{...} \left(«operation.parent.convert»\right)'''
 	}
 

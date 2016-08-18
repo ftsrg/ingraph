@@ -79,11 +79,11 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.TRIMMER_OPERATION: {
-				TrimmerOperation trimmerOperation = (TrimmerOperation)theEObject;
-				T result = caseTrimmerOperation(trimmerOperation);
-				if (result == null) result = caseAlphaOperation(trimmerOperation);
-				if (result == null) result = caseAlgebraExpression(trimmerOperation);
+			case RelalgPackage.PROJECTION_OPERATION: {
+				ProjectionOperation projectionOperation = (ProjectionOperation)theEObject;
+				T result = caseProjectionOperation(projectionOperation);
+				if (result == null) result = caseAlphaOperation(projectionOperation);
+				if (result == null) result = caseAlgebraExpression(projectionOperation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -166,6 +166,14 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATION: {
+				DuplicateEliminationOperation duplicateEliminationOperation = (DuplicateEliminationOperation)theEObject;
+				T result = caseDuplicateEliminationOperation(duplicateEliminationOperation);
+				if (result == null) result = caseAlphaOperation(duplicateEliminationOperation);
+				if (result == null) result = caseAlgebraExpression(duplicateEliminationOperation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -201,17 +209,17 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Trimmer Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Projection Operation</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Trimmer Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Projection Operation</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTrimmerOperation(TrimmerOperation object) {
+	public T caseProjectionOperation(ProjectionOperation object) {
 		return null;
 	}
 
@@ -377,6 +385,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGetNodesOperation(GetNodesOperation object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Duplicate Elimination Operation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Duplicate Elimination Operation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDuplicateEliminationOperation(DuplicateEliminationOperation object) {
 		return null;
 	}
 
