@@ -26,7 +26,6 @@ public class RelalgParserTest {
         RelalgParser.parse("RouteSensor");
     }
 
-    @Ignore
     @Test
     public void testSwitchMonitored() throws IOException {
         RelalgParser.parse("SwitchMonitored");
