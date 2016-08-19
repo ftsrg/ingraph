@@ -8,6 +8,7 @@ import relalg.GetNodesOperation
 import relalg.InputRelation
 import relalg.JoinOperation
 import relalg.ProjectionOperation
+import relalg.DuplicateEliminationOperation
 
 class ExpressionSerializer extends TexSerializer {
 
@@ -34,6 +35,10 @@ class ExpressionSerializer extends TexSerializer {
 
 	def dispatch String convert(InputRelation relation) {
 		'''\relation{«relation.type»}'''
+	}
+
+	def dispatch String convert(DuplicateEliminationOperation operation) {
+		'''\duplicateelimination \left(«operation.parent.convert»\right)'''
 	}
 
 	def dispatch String convert(ExpandOperation operation) {
