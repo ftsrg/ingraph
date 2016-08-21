@@ -1,0 +1,26 @@
+apply plugin: "scala"
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+ext.scalaVersion = "2.11.8"
+ext.akkaVersion = "2.4.9"
+ext.gsCollectionsVersion = "7.0.1"
+
+dependencies {
+    compile "org.scala-lang:scala-library:$scalaVersion"
+    compile "com.twitter:chill_2.11:0.5.2"
+    compile "com.twitter:util-eval_2.11:6.35.0"
+    compile "com.typesafe.akka:akka-actor_2.11:$akkaVersion"
+    compile "com.typesafe.akka:akka-remote_2.11:$akkaVersion"
+    compile "com.goldmansachs:gs-collections:$gsCollectionsVersion"
+    compile "com.goldmansachs:gs-collections-api:$gsCollectionsVersion"
+    compile "com.goldmansachs:gs-collections-forkjoin:$gsCollectionsVersion"
+    compile "com.goldmansachs:gs-collections-testutils:$gsCollectionsVersion"
+    compile "org.yaml:snakeyaml:1.17"
+
+    testCompile "com.typesafe.akka:akka-testkit_2.11:$akkaVersion"
+    testCompile "org.scalatest:scalatest_2.11:2.2.6"
+}
