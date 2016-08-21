@@ -1,6 +1,6 @@
 # Neo4j Cypher operators
 
-This snippet downloads the latest Cypher documentation, greps all ` +Operator` strings and creates a unique list from the `Operator` strings.
+This snippet downloads the [latest Cypher documentation](https://neo4j.com/docs/developer-manual/current/cypher/), greps all ` +Operator` strings and creates a unique list from the `Operator` strings.
 
 ```bash
 curl -s https://neo4j.com/docs/developer-manual/current/cypher/ | grep -oP " \\+\K\w+" | sort -u
