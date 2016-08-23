@@ -1,0 +1,35 @@
+# smart transformation
+
+Production([activeRoute])
+ |
+AntiJoin(activeRoute=inactiveRoute)
+ | |
+ | +-------------------------------------+
+ |                                       |
+ |                                      Filter(swP.position != sw.currentPosition)
+ |                                       |
+ |                                      ExpandOut(edgeVar=_:target, nodeVar=sw:Switch)
+ |                                       |
+ |                                      Expand(edgeVar=_:follows, nodeVar=swP:SwitchPosition)
+ |                                       |
+GetNodes(label=Route, var=activeRoute)  GetNodes(label=Route, var=inactiveRoute)
+
+# plain version:
+
+
+Production([activeRoute])
+ |
+NotIn(activeRoute) # variable not appear in 2nd input
+ | |
+ | +-------------------------------------+
+ |                                       |
+ |                                      NamedInnerProduction([inactiveRoute], name=inactiveRoutes)
+ |                                       |
+ |                                      Filter(swP.position != sw.currentPosition)
+ |                                       |
+ |                                      ExpandOut(edgeVar=_:target, nodeVar=sw:Switch)
+ |                                       |
+ |                                      Expand(edgeVar=_:follows, nodeVar=swP:SwitchPosition)
+ |                                       |
+GetNodes(label=Route, var=activeRoute)  GetNodes(label=Route, var=inactiveRoute)
+
