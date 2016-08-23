@@ -1,0 +1,13 @@
+Distinct([semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position]) # TODO: what does it mean to return a complete node/edge?
+ |
+Filter(sw.currentPosition != swP.position)
+ |
+Filter(semaphore.signal='GO')
+ |
+ExpandOut(edgeVar=_:target, nodeVar=sw:Switch)
+ |
+ExpandOut(edgeVar=_:follows, nodeVar=swP:SwitchPosition)
+ |
+ExpandIn(edgeVar=_:entry, nodeVar=route:Route)  # as edge is not referenced, no edgeVar is unnamed, but has label constraint
+ |
+GetNodes(label=Semaphore, var=semaphore)
