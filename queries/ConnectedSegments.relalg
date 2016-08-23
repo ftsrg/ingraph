@@ -1,0 +1,54 @@
+NaturalJoin-LeftDeepTree
+ |   |   |   |   |   |   |
+ex1 ex2 ex3 ex4 ex5 ex6 ex7
+
+NamedSubExpr(ex7)
+ |
+ExpandOut(edgeVar=_:monitoredBy, nodeVar=sensor:Sensor)
+ |
+GetNodes(label=Segment, var=segment6)
+
+NamedSubExpr(ex6)
+ |
+ExpandOut(edgeVar=_:monitoredBy, nodeVar=sensor:Sensor)
+ |
+GetNodes(label=Segment, var=segment5)
+
+NamedSubExpr(ex5)
+ |
+ExpandOut(edgeVar=_:monitoredBy, nodeVar=sensor:Sensor)
+ |
+GetNodes(label=Segment, var=segment4)
+
+NamedSubExpr(ex4)
+ |
+ExpandOut(edgeVar=_:monitoredBy, nodeVar=sensor:Sensor)
+ |
+GetNodes(label=Segment, var=segment3)
+
+
+NamedSubExpr(ex3)
+ |
+ExpandOut(edgeVar=_:monitoredBy, nodeVar=sensor:Sensor)
+ |
+GetNodes(label=Segment, var=segment2)
+
+NamedSubExpr(ex2)
+ |
+ExpandOut(edgeVar=_:connectsTo, nodeVar=segment6:Segment)
+ |
+ExpandOut(edgeVar=_:connectsTo, nodeVar=segment5:Segment)
+ |
+ExpandOut(edgeVar=_:connectsTo, nodeVar=segment4:Segment)
+ |
+ExpandOut(edgeVar=_:connectsTo, nodeVar=segment3:Segment)
+ |
+ExpandOut(edgeVar=_:connectsTo, nodeVar=segment2:Segment)
+ |
+getNodes(label=Segment, var=segment1)
+
+NamedSubExpr(ex1)
+ |
+ExpandIn(edgeVar=_:monitoredBy, nodeVar=segment1:Segment)
+ |
+GetNodes(label=Sensor, var=sensor)
