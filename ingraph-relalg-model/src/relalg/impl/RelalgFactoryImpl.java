@@ -58,17 +58,17 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case RelalgPackage.INPUT_RELATION: return createInputRelation();
-			case RelalgPackage.PROJECTION_OPERATION: return createProjectionOperation();
-			case RelalgPackage.JOIN_OPERATION: return createJoinOperation();
-			case RelalgPackage.ANTI_JOIN_OPERATION: return createAntiJoinOperation();
-			case RelalgPackage.PRODUCTION_OPERATION: return createProductionOperation();
+			case RelalgPackage.PROJECTION_OPERATOR: return createProjectionOperator();
+			case RelalgPackage.JOIN_OPERATOR: return createJoinOperator();
+			case RelalgPackage.ANTI_JOIN_OPERATOR: return createAntiJoinOperator();
+			case RelalgPackage.PRODUCTION_OPERATOR: return createProductionOperator();
 			case RelalgPackage.ATTRIBUTE: return createAttribute();
 			case RelalgPackage.ATTRIBUTE_SET: return createAttributeSet();
 			case RelalgPackage.JOIN_BINDING: return createJoinBinding();
-			case RelalgPackage.FILTER_OPERATION: return createFilterOperation();
-			case RelalgPackage.EXPAND_OPERATION: return createExpandOperation();
-			case RelalgPackage.GET_NODES_OPERATION: return createGetNodesOperation();
-			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATION: return createDuplicateEliminationOperation();
+			case RelalgPackage.FILTER_OPERATOR: return createFilterOperator();
+			case RelalgPackage.EXPAND_OPERATOR: return createExpandOperator();
+			case RelalgPackage.GET_NODES_OPERATOR: return createGetNodesOperator();
+			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATOR: return createDuplicateEliminationOperator();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -119,9 +119,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProjectionOperation createProjectionOperation() {
-		ProjectionOperationImpl projectionOperation = new ProjectionOperationImpl();
-		return projectionOperation;
+	public ProjectionOperator createProjectionOperator() {
+		ProjectionOperatorImpl projectionOperator = new ProjectionOperatorImpl();
+		return projectionOperator;
 	}
 
 	/**
@@ -129,9 +129,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public JoinOperation createJoinOperation() {
-		JoinOperationImpl joinOperation = new JoinOperationImpl();
-		return joinOperation;
+	public JoinOperator createJoinOperator() {
+		JoinOperatorImpl joinOperator = new JoinOperatorImpl();
+		return joinOperator;
 	}
 
 	/**
@@ -139,9 +139,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AntiJoinOperation createAntiJoinOperation() {
-		AntiJoinOperationImpl antiJoinOperation = new AntiJoinOperationImpl();
-		return antiJoinOperation;
+	public AntiJoinOperator createAntiJoinOperator() {
+		AntiJoinOperatorImpl antiJoinOperator = new AntiJoinOperatorImpl();
+		return antiJoinOperator;
 	}
 
 	/**
@@ -149,9 +149,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProductionOperation createProductionOperation() {
-		ProductionOperationImpl productionOperation = new ProductionOperationImpl();
-		return productionOperation;
+	public ProductionOperator createProductionOperator() {
+		ProductionOperatorImpl productionOperator = new ProductionOperatorImpl();
+		return productionOperator;
 	}
 
 	/**
@@ -189,9 +189,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FilterOperation createFilterOperation() {
-		FilterOperationImpl filterOperation = new FilterOperationImpl();
-		return filterOperation;
+	public FilterOperator createFilterOperator() {
+		FilterOperatorImpl filterOperator = new FilterOperatorImpl();
+		return filterOperator;
 	}
 
 	/**
@@ -199,9 +199,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExpandOperation createExpandOperation() {
-		ExpandOperationImpl expandOperation = new ExpandOperationImpl();
-		return expandOperation;
+	public ExpandOperator createExpandOperator() {
+		ExpandOperatorImpl expandOperator = new ExpandOperatorImpl();
+		return expandOperator;
 	}
 
 	/**
@@ -209,9 +209,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public GetNodesOperation createGetNodesOperation() {
-		GetNodesOperationImpl getNodesOperation = new GetNodesOperationImpl();
-		return getNodesOperation;
+	public GetNodesOperator createGetNodesOperator() {
+		GetNodesOperatorImpl getNodesOperator = new GetNodesOperatorImpl();
+		return getNodesOperator;
 	}
 
 	/**
@@ -219,9 +219,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DuplicateEliminationOperation createDuplicateEliminationOperation() {
-		DuplicateEliminationOperationImpl duplicateEliminationOperation = new DuplicateEliminationOperationImpl();
-		return duplicateEliminationOperation;
+	public DuplicateEliminationOperator createDuplicateEliminationOperator() {
+		DuplicateEliminationOperatorImpl duplicateEliminationOperator = new DuplicateEliminationOperatorImpl();
+		return duplicateEliminationOperator;
 	}
 
 	/**

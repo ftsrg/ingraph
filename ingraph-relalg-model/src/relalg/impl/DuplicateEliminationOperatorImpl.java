@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.FilterOperation;
+import relalg.DuplicateEliminationOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Filter Operation</b></em>'.
+ * An implementation of the model object '<em><b>Duplicate Elimination Operator</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class FilterOperationImpl extends AlphaOperationImpl implements FilterOperation {
+public class DuplicateEliminationOperatorImpl extends AlphaOperatorImpl implements DuplicateEliminationOperator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FilterOperationImpl() {
+	protected DuplicateEliminationOperatorImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class FilterOperationImpl extends AlphaOperationImpl implements FilterOpe
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.FILTER_OPERATION;
+		return RelalgPackage.Literals.DUPLICATE_ELIMINATION_OPERATOR;
 	}
 
-} //FilterOperationImpl
+} //DuplicateEliminationOperatorImpl

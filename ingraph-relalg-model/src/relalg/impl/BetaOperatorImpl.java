@@ -18,26 +18,26 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import relalg.AlgebraExpression;
-import relalg.BetaOperation;
+import relalg.BetaOperator;
 import relalg.JoinBinding;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Beta Operation</b></em>'.
+ * An implementation of the model object '<em><b>Beta Operator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.BetaOperationImpl#getLeftParent <em>Left Parent</em>}</li>
- *   <li>{@link relalg.impl.BetaOperationImpl#getRightParent <em>Right Parent</em>}</li>
- *   <li>{@link relalg.impl.BetaOperationImpl#getBindings <em>Bindings</em>}</li>
+ *   <li>{@link relalg.impl.BetaOperatorImpl#getLeftParent <em>Left Parent</em>}</li>
+ *   <li>{@link relalg.impl.BetaOperatorImpl#getRightParent <em>Right Parent</em>}</li>
+ *   <li>{@link relalg.impl.BetaOperatorImpl#getBindings <em>Bindings</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements BetaOperation {
+public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements BetaOperator {
 	/**
 	 * The cached value of the '{@link #getLeftParent() <em>Left Parent</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -73,7 +73,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected BetaOperationImpl() {
+	protected BetaOperatorImpl() {
 		super();
 	}
 
@@ -84,7 +84,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.BETA_OPERATION;
+		return RelalgPackage.Literals.BETA_OPERATOR;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 			leftParent = (AlgebraExpression)eResolveProxy(oldLeftParent);
 			if (leftParent != oldLeftParent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATION__LEFT_PARENT, oldLeftParent, leftParent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__LEFT_PARENT, oldLeftParent, leftParent));
 			}
 		}
 		return leftParent;
@@ -122,7 +122,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 		AlgebraExpression oldLeftParent = leftParent;
 		leftParent = newLeftParent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATION__LEFT_PARENT, oldLeftParent, leftParent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_PARENT, oldLeftParent, leftParent));
 	}
 
 	/**
@@ -136,7 +136,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 			rightParent = (AlgebraExpression)eResolveProxy(oldRightParent);
 			if (rightParent != oldRightParent) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATION__RIGHT_PARENT, oldRightParent, rightParent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__RIGHT_PARENT, oldRightParent, rightParent));
 			}
 		}
 		return rightParent;
@@ -160,7 +160,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 		AlgebraExpression oldRightParent = rightParent;
 		rightParent = newRightParent;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATION__RIGHT_PARENT, oldRightParent, rightParent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_PARENT, oldRightParent, rightParent));
 	}
 
 	/**
@@ -170,7 +170,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	 */
 	public EList<JoinBinding> getBindings() {
 		if (bindings == null) {
-			bindings = new EObjectContainmentEList<JoinBinding>(JoinBinding.class, this, RelalgPackage.BETA_OPERATION__BINDINGS);
+			bindings = new EObjectContainmentEList<JoinBinding>(JoinBinding.class, this, RelalgPackage.BETA_OPERATOR__BINDINGS);
 		}
 		return bindings;
 	}
@@ -183,7 +183,7 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATION__BINDINGS:
+			case RelalgPackage.BETA_OPERATOR__BINDINGS:
 				return ((InternalEList<?>)getBindings()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -197,13 +197,13 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATION__LEFT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
 				if (resolve) return getLeftParent();
 				return basicGetLeftParent();
-			case RelalgPackage.BETA_OPERATION__RIGHT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				if (resolve) return getRightParent();
 				return basicGetRightParent();
-			case RelalgPackage.BETA_OPERATION__BINDINGS:
+			case RelalgPackage.BETA_OPERATOR__BINDINGS:
 				return getBindings();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -218,13 +218,13 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATION__LEFT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
 				setLeftParent((AlgebraExpression)newValue);
 				return;
-			case RelalgPackage.BETA_OPERATION__RIGHT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				setRightParent((AlgebraExpression)newValue);
 				return;
-			case RelalgPackage.BETA_OPERATION__BINDINGS:
+			case RelalgPackage.BETA_OPERATOR__BINDINGS:
 				getBindings().clear();
 				getBindings().addAll((Collection<? extends JoinBinding>)newValue);
 				return;
@@ -240,13 +240,13 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATION__LEFT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
 				setLeftParent((AlgebraExpression)null);
 				return;
-			case RelalgPackage.BETA_OPERATION__RIGHT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				setRightParent((AlgebraExpression)null);
 				return;
-			case RelalgPackage.BETA_OPERATION__BINDINGS:
+			case RelalgPackage.BETA_OPERATOR__BINDINGS:
 				getBindings().clear();
 				return;
 		}
@@ -261,14 +261,14 @@ public abstract class BetaOperationImpl extends AlgebraExpressionImpl implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATION__LEFT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
 				return leftParent != null;
-			case RelalgPackage.BETA_OPERATION__RIGHT_PARENT:
+			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				return rightParent != null;
-			case RelalgPackage.BETA_OPERATION__BINDINGS:
+			case RelalgPackage.BETA_OPERATOR__BINDINGS:
 				return bindings != null && !bindings.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //BetaOperationImpl
+} //BetaOperatorImpl

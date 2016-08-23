@@ -79,49 +79,49 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.PROJECTION_OPERATION: {
-				ProjectionOperation projectionOperation = (ProjectionOperation)theEObject;
-				T result = caseProjectionOperation(projectionOperation);
-				if (result == null) result = caseAlphaOperation(projectionOperation);
-				if (result == null) result = caseAlgebraExpression(projectionOperation);
+			case RelalgPackage.PROJECTION_OPERATOR: {
+				ProjectionOperator projectionOperator = (ProjectionOperator)theEObject;
+				T result = caseProjectionOperator(projectionOperator);
+				if (result == null) result = caseAlphaOperator(projectionOperator);
+				if (result == null) result = caseAlgebraExpression(projectionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.JOIN_OPERATION: {
-				JoinOperation joinOperation = (JoinOperation)theEObject;
-				T result = caseJoinOperation(joinOperation);
-				if (result == null) result = caseBetaOperation(joinOperation);
-				if (result == null) result = caseAlgebraExpression(joinOperation);
+			case RelalgPackage.JOIN_OPERATOR: {
+				JoinOperator joinOperator = (JoinOperator)theEObject;
+				T result = caseJoinOperator(joinOperator);
+				if (result == null) result = caseBetaOperator(joinOperator);
+				if (result == null) result = caseAlgebraExpression(joinOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.ALPHA_OPERATION: {
-				AlphaOperation alphaOperation = (AlphaOperation)theEObject;
-				T result = caseAlphaOperation(alphaOperation);
-				if (result == null) result = caseAlgebraExpression(alphaOperation);
+			case RelalgPackage.ALPHA_OPERATOR: {
+				AlphaOperator alphaOperator = (AlphaOperator)theEObject;
+				T result = caseAlphaOperator(alphaOperator);
+				if (result == null) result = caseAlgebraExpression(alphaOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.BETA_OPERATION: {
-				BetaOperation betaOperation = (BetaOperation)theEObject;
-				T result = caseBetaOperation(betaOperation);
-				if (result == null) result = caseAlgebraExpression(betaOperation);
+			case RelalgPackage.BETA_OPERATOR: {
+				BetaOperator betaOperator = (BetaOperator)theEObject;
+				T result = caseBetaOperator(betaOperator);
+				if (result == null) result = caseAlgebraExpression(betaOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.ANTI_JOIN_OPERATION: {
-				AntiJoinOperation antiJoinOperation = (AntiJoinOperation)theEObject;
-				T result = caseAntiJoinOperation(antiJoinOperation);
-				if (result == null) result = caseBetaOperation(antiJoinOperation);
-				if (result == null) result = caseAlgebraExpression(antiJoinOperation);
+			case RelalgPackage.ANTI_JOIN_OPERATOR: {
+				AntiJoinOperator antiJoinOperator = (AntiJoinOperator)theEObject;
+				T result = caseAntiJoinOperator(antiJoinOperator);
+				if (result == null) result = caseBetaOperator(antiJoinOperator);
+				if (result == null) result = caseAlgebraExpression(antiJoinOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.PRODUCTION_OPERATION: {
-				ProductionOperation productionOperation = (ProductionOperation)theEObject;
-				T result = caseProductionOperation(productionOperation);
-				if (result == null) result = caseAlphaOperation(productionOperation);
-				if (result == null) result = caseAlgebraExpression(productionOperation);
+			case RelalgPackage.PRODUCTION_OPERATOR: {
+				ProductionOperator productionOperator = (ProductionOperator)theEObject;
+				T result = caseProductionOperator(productionOperator);
+				if (result == null) result = caseAlphaOperator(productionOperator);
+				if (result == null) result = caseAlgebraExpression(productionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -143,34 +143,34 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.FILTER_OPERATION: {
-				FilterOperation filterOperation = (FilterOperation)theEObject;
-				T result = caseFilterOperation(filterOperation);
-				if (result == null) result = caseAlphaOperation(filterOperation);
-				if (result == null) result = caseAlgebraExpression(filterOperation);
+			case RelalgPackage.FILTER_OPERATOR: {
+				FilterOperator filterOperator = (FilterOperator)theEObject;
+				T result = caseFilterOperator(filterOperator);
+				if (result == null) result = caseAlphaOperator(filterOperator);
+				if (result == null) result = caseAlgebraExpression(filterOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.EXPAND_OPERATION: {
-				ExpandOperation expandOperation = (ExpandOperation)theEObject;
-				T result = caseExpandOperation(expandOperation);
-				if (result == null) result = caseAlphaOperation(expandOperation);
-				if (result == null) result = caseAlgebraExpression(expandOperation);
+			case RelalgPackage.EXPAND_OPERATOR: {
+				ExpandOperator expandOperator = (ExpandOperator)theEObject;
+				T result = caseExpandOperator(expandOperator);
+				if (result == null) result = caseAlphaOperator(expandOperator);
+				if (result == null) result = caseAlgebraExpression(expandOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.GET_NODES_OPERATION: {
-				GetNodesOperation getNodesOperation = (GetNodesOperation)theEObject;
-				T result = caseGetNodesOperation(getNodesOperation);
-				if (result == null) result = caseAlgebraExpression(getNodesOperation);
+			case RelalgPackage.GET_NODES_OPERATOR: {
+				GetNodesOperator getNodesOperator = (GetNodesOperator)theEObject;
+				T result = caseGetNodesOperator(getNodesOperator);
+				if (result == null) result = caseAlgebraExpression(getNodesOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATION: {
-				DuplicateEliminationOperation duplicateEliminationOperation = (DuplicateEliminationOperation)theEObject;
-				T result = caseDuplicateEliminationOperation(duplicateEliminationOperation);
-				if (result == null) result = caseAlphaOperation(duplicateEliminationOperation);
-				if (result == null) result = caseAlgebraExpression(duplicateEliminationOperation);
+			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATOR: {
+				DuplicateEliminationOperator duplicateEliminationOperator = (DuplicateEliminationOperator)theEObject;
+				T result = caseDuplicateEliminationOperator(duplicateEliminationOperator);
+				if (result == null) result = caseAlphaOperator(duplicateEliminationOperator);
+				if (result == null) result = caseAlgebraExpression(duplicateEliminationOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -209,92 +209,92 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Projection Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Projection Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Projection Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Projection Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProjectionOperation(ProjectionOperation object) {
+	public T caseProjectionOperator(ProjectionOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Join Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Join Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Join Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Join Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseJoinOperation(JoinOperation object) {
+	public T caseJoinOperator(JoinOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Alpha Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Alpha Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Alpha Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Alpha Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAlphaOperation(AlphaOperation object) {
+	public T caseAlphaOperator(AlphaOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Beta Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Beta Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Beta Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Beta Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseBetaOperation(BetaOperation object) {
+	public T caseBetaOperator(BetaOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Anti Join Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Anti Join Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Anti Join Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Anti Join Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAntiJoinOperation(AntiJoinOperation object) {
+	public T caseAntiJoinOperator(AntiJoinOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Production Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Production Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Production Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Production Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProductionOperation(ProductionOperation object) {
+	public T caseProductionOperator(ProductionOperator object) {
 		return null;
 	}
 
@@ -344,62 +344,62 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Filter Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Filter Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Filter Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Filter Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFilterOperation(FilterOperation object) {
+	public T caseFilterOperator(FilterOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Expand Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Expand Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Expand Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Expand Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExpandOperation(ExpandOperation object) {
+	public T caseExpandOperator(ExpandOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Get Nodes Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Get Nodes Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Get Nodes Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Get Nodes Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseGetNodesOperation(GetNodesOperation object) {
+	public T caseGetNodesOperator(GetNodesOperator object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Duplicate Elimination Operation</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Duplicate Elimination Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Duplicate Elimination Operation</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Duplicate Elimination Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDuplicateEliminationOperation(DuplicateEliminationOperation object) {
+	public T caseDuplicateEliminationOperator(DuplicateEliminationOperator object) {
 		return null;
 	}
 

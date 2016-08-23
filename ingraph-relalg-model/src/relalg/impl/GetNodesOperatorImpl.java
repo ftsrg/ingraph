@@ -9,40 +9,40 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import relalg.AlgebraExpression;
-import relalg.AlphaOperation;
+import relalg.Attribute;
+import relalg.GetNodesOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Alpha Operation</b></em>'.
+ * An implementation of the model object '<em><b>Get Nodes Operator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.AlphaOperationImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.impl.GetNodesOperatorImpl#getAttribute <em>Attribute</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implements AlphaOperation {
+public class GetNodesOperatorImpl extends AlgebraExpressionImpl implements GetNodesOperator {
 	/**
-	 * The cached value of the '{@link #getParent() <em>Parent</em>}' reference.
+	 * The cached value of the '{@link #getAttribute() <em>Attribute</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getParent()
+	 * @see #getAttribute()
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression parent;
+	protected Attribute attribute;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AlphaOperationImpl() {
+	protected GetNodesOperatorImpl() {
 		super();
 	}
 
@@ -53,7 +53,7 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.ALPHA_OPERATION;
+		return RelalgPackage.Literals.GET_NODES_OPERATOR;
 	}
 
 	/**
@@ -61,16 +61,16 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getParent() {
-		if (parent != null && parent.eIsProxy()) {
-			InternalEObject oldParent = (InternalEObject)parent;
-			parent = (AlgebraExpression)eResolveProxy(oldParent);
-			if (parent != oldParent) {
+	public Attribute getAttribute() {
+		if (attribute != null && attribute.eIsProxy()) {
+			InternalEObject oldAttribute = (InternalEObject)attribute;
+			attribute = (Attribute)eResolveProxy(oldAttribute);
+			if (attribute != oldAttribute) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ALPHA_OPERATION__PARENT, oldParent, parent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE, oldAttribute, attribute));
 			}
 		}
-		return parent;
+		return attribute;
 	}
 
 	/**
@@ -78,8 +78,8 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetParent() {
-		return parent;
+	public Attribute basicGetAttribute() {
+		return attribute;
 	}
 
 	/**
@@ -87,11 +87,11 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParent(AlgebraExpression newParent) {
-		AlgebraExpression oldParent = parent;
-		parent = newParent;
+	public void setAttribute(Attribute newAttribute) {
+		Attribute oldAttribute = attribute;
+		attribute = newAttribute;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ALPHA_OPERATION__PARENT, oldParent, parent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE, oldAttribute, attribute));
 	}
 
 	/**
@@ -102,9 +102,9 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATION__PARENT:
-				if (resolve) return getParent();
-				return basicGetParent();
+			case RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE:
+				if (resolve) return getAttribute();
+				return basicGetAttribute();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -117,8 +117,8 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATION__PARENT:
-				setParent((AlgebraExpression)newValue);
+			case RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE:
+				setAttribute((Attribute)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -132,8 +132,8 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATION__PARENT:
-				setParent((AlgebraExpression)null);
+			case RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE:
+				setAttribute((Attribute)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -147,10 +147,10 @@ public abstract class AlphaOperationImpl extends AlgebraExpressionImpl implement
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATION__PARENT:
-				return parent != null;
+			case RelalgPackage.GET_NODES_OPERATOR__ATTRIBUTE:
+				return attribute != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AlphaOperationImpl
+} //GetNodesOperatorImpl

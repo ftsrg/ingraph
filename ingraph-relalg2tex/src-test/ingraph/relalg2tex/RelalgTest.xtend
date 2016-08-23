@@ -17,8 +17,8 @@ class RelalgTest {
 		val r = createInputRelation => [type = "r"]
 		val s = createInputRelation => [type = "s"]
 		val t = createInputRelation => [type = "t"]
-		val join1 = createJoinOperation => [name = "Join1"; leftParent = r; rightParent = s]
-		val join2 = createJoinOperation => [name = "Join2"; leftParent = join1; rightParent = t]
+		val join1 = createJoinOperator => [name = "Join1"; leftParent = r; rightParent = s]
+		val join2 = createJoinOperator => [name = "Join2"; leftParent = join1; rightParent = t]
 
 		val expression = join2
 		print(serializer.serialize(expression))
@@ -47,7 +47,7 @@ class RelalgTest {
 		val gathers = createInputRelation => [type = "gathers"; attributes += #[gathers_r, gathers_sen]]
 
 		// joins
-		val join1 = createJoinOperation => [
+		val join1 = createJoinOperator => [
 			name = "Join1";
 			leftParent = follows;
 			rightParent = target;
@@ -55,7 +55,7 @@ class RelalgTest {
 				createJoinBinding => [leftAttribute = follows_swP; rightAttribute = target_swP]
 			]
 		]
-		val join2 = createJoinOperation => [
+		val join2 = createJoinOperator => [
 			name = "Join2";
 			leftParent = join1;
 			rightParent = monitoredBy;
@@ -63,7 +63,7 @@ class RelalgTest {
 				createJoinBinding => [leftAttribute = target_sw; rightAttribute = monitoredBy_te]
 			]
 		]
-		val antijoin = createAntiJoinOperation => [
+		val antijoin = createAntiJoinOperator => [
 			name = "Antijoin";
 			leftParent = join2;
 			rightParent = gathers;
@@ -79,11 +79,11 @@ class RelalgTest {
 
 	@Test
 	def void test3() {
-		val getNodesR = createGetNodesOperation => [attribute = createAttribute => [name = "r"]]
-		val expandIn = createExpandOperation => [direction = Direction.IN; parent = getNodesR]
+		val getNodesR = createGetNodesOperator => [attribute = createAttribute => [name = "r"]]
+		val expandIn = createExpandOperator => [direction = Direction.IN; parent = getNodesR]
 
-		val getNodesS = createGetNodesOperation => [attribute = createAttribute => [name = "s"]]
-		val join = createJoinOperation => [name = "Join1"; leftParent = expandIn; rightParent = getNodesS]
+		val getNodesS = createGetNodesOperator => [attribute = createAttribute => [name = "s"]]
+		val join = createJoinOperator => [name = "Join1"; leftParent = expandIn; rightParent = getNodesS]
 
 		val expression = join
 //		print(serializer.serialize(expression))

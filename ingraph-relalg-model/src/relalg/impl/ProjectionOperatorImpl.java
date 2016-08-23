@@ -15,23 +15,23 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import relalg.Attribute;
-import relalg.ProjectionOperation;
+import relalg.ProjectionOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Projection Operation</b></em>'.
+ * An implementation of the model object '<em><b>Projection Operator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.ProjectionOperationImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link relalg.impl.ProjectionOperatorImpl#getAttributes <em>Attributes</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ProjectionOperationImpl extends AlphaOperationImpl implements ProjectionOperation {
+public class ProjectionOperatorImpl extends AlphaOperatorImpl implements ProjectionOperator {
 	/**
 	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -47,7 +47,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProjectionOperationImpl() {
+	protected ProjectionOperatorImpl() {
 		super();
 	}
 
@@ -58,7 +58,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.PROJECTION_OPERATION;
+		return RelalgPackage.Literals.PROJECTION_OPERATOR;
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	 */
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -81,7 +81,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
 				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -95,7 +95,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
 				return getAttributes();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -110,7 +110,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
 				getAttributes().clear();
 				getAttributes().addAll((Collection<? extends Attribute>)newValue);
 				return;
@@ -126,7 +126,7 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
 				getAttributes().clear();
 				return;
 		}
@@ -141,10 +141,10 @@ public class ProjectionOperationImpl extends AlphaOperationImpl implements Proje
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATION__ATTRIBUTES:
+			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
 				return attributes != null && !attributes.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ProjectionOperationImpl
+} //ProjectionOperatorImpl

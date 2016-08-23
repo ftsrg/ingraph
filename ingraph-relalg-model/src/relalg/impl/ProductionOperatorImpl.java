@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.ProductionOperation;
+import relalg.ProductionOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Production Operation</b></em>'.
+ * An implementation of the model object '<em><b>Production Operator</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class ProductionOperationImpl extends AlphaOperationImpl implements ProductionOperation {
+public class ProductionOperatorImpl extends AlphaOperatorImpl implements ProductionOperator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProductionOperationImpl() {
+	protected ProductionOperatorImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class ProductionOperationImpl extends AlphaOperationImpl implements Produ
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.PRODUCTION_OPERATION;
+		return RelalgPackage.Literals.PRODUCTION_OPERATOR;
 	}
 
-} //ProductionOperationImpl
+} //ProductionOperatorImpl

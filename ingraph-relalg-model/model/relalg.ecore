@@ -10,16 +10,16 @@
         eType="#//Attribute" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProjectionOperation" eSuperTypes="#//AlphaOperation">
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectionOperator" eSuperTypes="#//AlphaOperator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//Attribute" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinOperation" eSuperTypes="#//BetaOperation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperation" abstract="true" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
         eType="#//AlgebraExpression"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BetaOperation" abstract="true" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="BetaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" lowerBound="1"
         eType="#//AlgebraExpression"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" lowerBound="1"
@@ -27,8 +27,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
         eType="#//JoinBinding" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperation" eSuperTypes="#//BetaOperation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ProductionOperation" eSuperTypes="#//AlphaOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProductionOperator" eSuperTypes="#//AlphaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -42,8 +42,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightAttribute" lowerBound="1"
         eType="#//Attribute"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FilterOperation" eSuperTypes="#//AlphaOperation"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ExpandOperation" eSuperTypes="#//AlphaOperation">
+  <eClassifiers xsi:type="ecore:EClass" name="FilterOperator" eSuperTypes="#//AlphaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpandOperator" eSuperTypes="#//AlphaOperator">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"
         defaultValueLiteral="IN"/>
   </eClassifiers>
@@ -51,9 +51,9 @@
     <eLiterals name="IN"/>
     <eLiterals name="OUT" value="1"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetNodesOperation" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="GetNodesOperator" eSuperTypes="#//AlgebraExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
         eType="#//Attribute"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperation" eSuperTypes="#//AlphaOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperator" eSuperTypes="#//AlphaOperator"/>
 </ecore:EPackage>

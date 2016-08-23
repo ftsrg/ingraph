@@ -31,40 +31,40 @@ public interface RelalgFactory extends EFactory {
 	InputRelation createInputRelation();
 
 	/**
-	 * Returns a new object of class '<em>Projection Operation</em>'.
+	 * Returns a new object of class '<em>Projection Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Projection Operation</em>'.
+	 * @return a new object of class '<em>Projection Operator</em>'.
 	 * @generated
 	 */
-	ProjectionOperation createProjectionOperation();
+	ProjectionOperator createProjectionOperator();
 
 	/**
-	 * Returns a new object of class '<em>Join Operation</em>'.
+	 * Returns a new object of class '<em>Join Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Join Operation</em>'.
+	 * @return a new object of class '<em>Join Operator</em>'.
 	 * @generated
 	 */
-	JoinOperation createJoinOperation();
+	JoinOperator createJoinOperator();
 
 	/**
-	 * Returns a new object of class '<em>Anti Join Operation</em>'.
+	 * Returns a new object of class '<em>Anti Join Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Anti Join Operation</em>'.
+	 * @return a new object of class '<em>Anti Join Operator</em>'.
 	 * @generated
 	 */
-	AntiJoinOperation createAntiJoinOperation();
+	AntiJoinOperator createAntiJoinOperator();
 
 	/**
-	 * Returns a new object of class '<em>Production Operation</em>'.
+	 * Returns a new object of class '<em>Production Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Production Operation</em>'.
+	 * @return a new object of class '<em>Production Operator</em>'.
 	 * @generated
 	 */
-	ProductionOperation createProductionOperation();
+	ProductionOperator createProductionOperator();
 
 	/**
 	 * Returns a new object of class '<em>Attribute</em>'.
@@ -94,40 +94,40 @@ public interface RelalgFactory extends EFactory {
 	JoinBinding createJoinBinding();
 
 	/**
-	 * Returns a new object of class '<em>Filter Operation</em>'.
+	 * Returns a new object of class '<em>Filter Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Filter Operation</em>'.
+	 * @return a new object of class '<em>Filter Operator</em>'.
 	 * @generated
 	 */
-	FilterOperation createFilterOperation();
+	FilterOperator createFilterOperator();
 
 	/**
-	 * Returns a new object of class '<em>Expand Operation</em>'.
+	 * Returns a new object of class '<em>Expand Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Expand Operation</em>'.
+	 * @return a new object of class '<em>Expand Operator</em>'.
 	 * @generated
 	 */
-	ExpandOperation createExpandOperation();
+	ExpandOperator createExpandOperator();
 
 	/**
-	 * Returns a new object of class '<em>Get Nodes Operation</em>'.
+	 * Returns a new object of class '<em>Get Nodes Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Get Nodes Operation</em>'.
+	 * @return a new object of class '<em>Get Nodes Operator</em>'.
 	 * @generated
 	 */
-	GetNodesOperation createGetNodesOperation();
+	GetNodesOperator createGetNodesOperator();
 
 	/**
-	 * Returns a new object of class '<em>Duplicate Elimination Operation</em>'.
+	 * Returns a new object of class '<em>Duplicate Elimination Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Duplicate Elimination Operation</em>'.
+	 * @return a new object of class '<em>Duplicate Elimination Operator</em>'.
 	 * @generated
 	 */
-	DuplicateEliminationOperation createDuplicateEliminationOperation();
+	DuplicateEliminationOperator createDuplicateEliminationOperator();
 
 	/**
 	 * Returns the package supported by this factory.

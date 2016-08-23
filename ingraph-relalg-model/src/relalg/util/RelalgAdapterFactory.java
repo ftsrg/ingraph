@@ -76,28 +76,28 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createInputRelationAdapter();
 			}
 			@Override
-			public Adapter caseProjectionOperation(ProjectionOperation object) {
-				return createProjectionOperationAdapter();
+			public Adapter caseProjectionOperator(ProjectionOperator object) {
+				return createProjectionOperatorAdapter();
 			}
 			@Override
-			public Adapter caseJoinOperation(JoinOperation object) {
-				return createJoinOperationAdapter();
+			public Adapter caseJoinOperator(JoinOperator object) {
+				return createJoinOperatorAdapter();
 			}
 			@Override
-			public Adapter caseAlphaOperation(AlphaOperation object) {
-				return createAlphaOperationAdapter();
+			public Adapter caseAlphaOperator(AlphaOperator object) {
+				return createAlphaOperatorAdapter();
 			}
 			@Override
-			public Adapter caseBetaOperation(BetaOperation object) {
-				return createBetaOperationAdapter();
+			public Adapter caseBetaOperator(BetaOperator object) {
+				return createBetaOperatorAdapter();
 			}
 			@Override
-			public Adapter caseAntiJoinOperation(AntiJoinOperation object) {
-				return createAntiJoinOperationAdapter();
+			public Adapter caseAntiJoinOperator(AntiJoinOperator object) {
+				return createAntiJoinOperatorAdapter();
 			}
 			@Override
-			public Adapter caseProductionOperation(ProductionOperation object) {
-				return createProductionOperationAdapter();
+			public Adapter caseProductionOperator(ProductionOperator object) {
+				return createProductionOperatorAdapter();
 			}
 			@Override
 			public Adapter caseAttribute(Attribute object) {
@@ -112,20 +112,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createJoinBindingAdapter();
 			}
 			@Override
-			public Adapter caseFilterOperation(FilterOperation object) {
-				return createFilterOperationAdapter();
+			public Adapter caseFilterOperator(FilterOperator object) {
+				return createFilterOperatorAdapter();
 			}
 			@Override
-			public Adapter caseExpandOperation(ExpandOperation object) {
-				return createExpandOperationAdapter();
+			public Adapter caseExpandOperator(ExpandOperator object) {
+				return createExpandOperatorAdapter();
 			}
 			@Override
-			public Adapter caseGetNodesOperation(GetNodesOperation object) {
-				return createGetNodesOperationAdapter();
+			public Adapter caseGetNodesOperator(GetNodesOperator object) {
+				return createGetNodesOperatorAdapter();
 			}
 			@Override
-			public Adapter caseDuplicateEliminationOperation(DuplicateEliminationOperation object) {
-				return createDuplicateEliminationOperationAdapter();
+			public Adapter caseDuplicateEliminationOperator(DuplicateEliminationOperator object) {
+				return createDuplicateEliminationOperatorAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -176,86 +176,86 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.ProjectionOperation <em>Projection Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.ProjectionOperator <em>Projection Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.ProjectionOperation
+	 * @see relalg.ProjectionOperator
 	 * @generated
 	 */
-	public Adapter createProjectionOperationAdapter() {
+	public Adapter createProjectionOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.JoinOperation <em>Join Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.JoinOperator <em>Join Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.JoinOperation
+	 * @see relalg.JoinOperator
 	 * @generated
 	 */
-	public Adapter createJoinOperationAdapter() {
+	public Adapter createJoinOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.AlphaOperation <em>Alpha Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.AlphaOperator <em>Alpha Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.AlphaOperation
+	 * @see relalg.AlphaOperator
 	 * @generated
 	 */
-	public Adapter createAlphaOperationAdapter() {
+	public Adapter createAlphaOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.BetaOperation <em>Beta Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.BetaOperator <em>Beta Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.BetaOperation
+	 * @see relalg.BetaOperator
 	 * @generated
 	 */
-	public Adapter createBetaOperationAdapter() {
+	public Adapter createBetaOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.AntiJoinOperation <em>Anti Join Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.AntiJoinOperator <em>Anti Join Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.AntiJoinOperation
+	 * @see relalg.AntiJoinOperator
 	 * @generated
 	 */
-	public Adapter createAntiJoinOperationAdapter() {
+	public Adapter createAntiJoinOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.ProductionOperation <em>Production Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.ProductionOperator <em>Production Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.ProductionOperation
+	 * @see relalg.ProductionOperator
 	 * @generated
 	 */
-	public Adapter createProductionOperationAdapter() {
+	public Adapter createProductionOperatorAdapter() {
 		return null;
 	}
 
@@ -302,58 +302,58 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.FilterOperation <em>Filter Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.FilterOperator <em>Filter Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.FilterOperation
+	 * @see relalg.FilterOperator
 	 * @generated
 	 */
-	public Adapter createFilterOperationAdapter() {
+	public Adapter createFilterOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.ExpandOperation <em>Expand Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.ExpandOperator <em>Expand Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.ExpandOperation
+	 * @see relalg.ExpandOperator
 	 * @generated
 	 */
-	public Adapter createExpandOperationAdapter() {
+	public Adapter createExpandOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.GetNodesOperation <em>Get Nodes Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.GetNodesOperator <em>Get Nodes Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.GetNodesOperation
+	 * @see relalg.GetNodesOperator
 	 * @generated
 	 */
-	public Adapter createGetNodesOperationAdapter() {
+	public Adapter createGetNodesOperatorAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.DuplicateEliminationOperation <em>Duplicate Elimination Operation</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.DuplicateEliminationOperator <em>Duplicate Elimination Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.DuplicateEliminationOperation
+	 * @see relalg.DuplicateEliminationOperator
 	 * @generated
 	 */
-	public Adapter createDuplicateEliminationOperationAdapter() {
+	public Adapter createDuplicateEliminationOperatorAdapter() {
 		return null;
 	}
 

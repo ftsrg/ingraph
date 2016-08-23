@@ -5,21 +5,21 @@ package relalg;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Alpha Operation</b></em>'.
+ * A representation of the model object '<em><b>Alpha Operator</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.AlphaOperation#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.AlphaOperator#getParent <em>Parent</em>}</li>
  * </ul>
  *
- * @see relalg.RelalgPackage#getAlphaOperation()
+ * @see relalg.RelalgPackage#getAlphaOperator()
  * @model abstract="true"
  * @generated
  */
-public interface AlphaOperation extends AlgebraExpression {
+public interface AlphaOperator extends AlgebraExpression {
 	/**
 	 * Returns the value of the '<em><b>Parent</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -30,14 +30,14 @@ public interface AlphaOperation extends AlgebraExpression {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Parent</em>' reference.
 	 * @see #setParent(AlgebraExpression)
-	 * @see relalg.RelalgPackage#getAlphaOperation_Parent()
+	 * @see relalg.RelalgPackage#getAlphaOperator_Parent()
 	 * @model required="true"
 	 * @generated
 	 */
 	AlgebraExpression getParent();
 
 	/**
-	 * Sets the value of the '{@link relalg.AlphaOperation#getParent <em>Parent</em>}' reference.
+	 * Sets the value of the '{@link relalg.AlphaOperator#getParent <em>Parent</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Parent</em>' reference.
@@ -46,4 +46,4 @@ public interface AlphaOperation extends AlgebraExpression {
 	 */
 	void setParent(AlgebraExpression value);
 
-} // AlphaOperation
+} // AlphaOperator

@@ -9,23 +9,23 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import relalg.Direction;
-import relalg.ExpandOperation;
+import relalg.ExpandOperator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Expand Operation</b></em>'.
+ * An implementation of the model object '<em><b>Expand Operator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.ExpandOperationImpl#getDirection <em>Direction</em>}</li>
+ *   <li>{@link relalg.impl.ExpandOperatorImpl#getDirection <em>Direction</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOperation {
+public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOperator {
 	/**
 	 * The default value of the '{@link #getDirection() <em>Direction</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -51,7 +51,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ExpandOperationImpl() {
+	protected ExpandOperatorImpl() {
 		super();
 	}
 
@@ -62,7 +62,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.EXPAND_OPERATION;
+		return RelalgPackage.Literals.EXPAND_OPERATOR;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 		Direction oldDirection = direction;
 		direction = newDirection == null ? DIRECTION_EDEFAULT : newDirection;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EXPAND_OPERATION__DIRECTION, oldDirection, direction));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EXPAND_OPERATOR__DIRECTION, oldDirection, direction));
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.EXPAND_OPERATION__DIRECTION:
+			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				return getDirection();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -108,7 +108,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.EXPAND_OPERATION__DIRECTION:
+			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				setDirection((Direction)newValue);
 				return;
 		}
@@ -123,7 +123,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.EXPAND_OPERATION__DIRECTION:
+			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				setDirection(DIRECTION_EDEFAULT);
 				return;
 		}
@@ -138,7 +138,7 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.EXPAND_OPERATION__DIRECTION:
+			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				return direction != DIRECTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -160,4 +160,4 @@ public class ExpandOperationImpl extends AlphaOperationImpl implements ExpandOpe
 		return result.toString();
 	}
 
-} //ExpandOperationImpl
+} //ExpandOperatorImpl

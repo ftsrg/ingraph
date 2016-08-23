@@ -1,14 +1,14 @@
 package ingraph.relalg2tex
 
 import relalg.AlgebraExpression
-import relalg.AntiJoinOperation
-import relalg.BetaOperation
-import relalg.ExpandOperation
-import relalg.GetNodesOperation
+import relalg.AntiJoinOperator
+import relalg.BetaOperator
+import relalg.ExpandOperator
+import relalg.GetNodesOperator
 import relalg.InputRelation
-import relalg.JoinOperation
-import relalg.ProjectionOperation
-import relalg.DuplicateEliminationOperation
+import relalg.JoinOperator
+import relalg.ProjectionOperator
+import relalg.DuplicateEliminationOperator
 
 class ExpressionSerializer extends TexSerializer {
 
@@ -29,46 +29,46 @@ class ExpressionSerializer extends TexSerializer {
 	/***
 	 * 
 	 */
-	def dispatch String convert(GetNodesOperation operation) {
-		'''\getnodes{«operation.attribute.name»}'''
+	def dispatch String convert(GetNodesOperator operation) {
+		'''\getnodes{«operator.attribute.name»}'''
 	}
 
 	def dispatch String convert(InputRelation relation) {
 		'''\relation{«relation.type»}'''
 	}
 
-	def dispatch String convert(DuplicateEliminationOperation operation) {
-		'''\duplicateelimination \left(«operation.parent.convert»\right)'''
+	def dispatch String convert(DuplicateEliminationOperator operation) {
+		'''\duplicateelimination \left(«operator.parent.convert»\right)'''
 	}
 
-	def dispatch String convert(ExpandOperation operation) {
-		'''\expand«operation.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
+	def dispatch String convert(ExpandOperator operation) {
+		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
 	}
 
-	def dispatch String convert(ProjectionOperation operation) {
-		'''\projection{...} \left(«operation.parent.convert»\right)'''
+	def dispatch String convert(ProjectionOperator operation) {
+		'''\projection{...} \left(«operator.parent.convert»\right)'''
 	}
 
 	/***
-	 * Beta operations are treated uniformly
+	 * Beta operators are treated uniformly
 	 */
-	def dispatch String convert(BetaOperation operation) {
+	def dispatch String convert(BetaOperator operation) {
 		'''
 		«IF parentheses» \left( «ENDIF»
-		«operation.leftParent.convert» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
+		«operator.leftParent.convert» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
 	}
 
-	def mask(BetaOperation operation) {
-		val b = operation.bindings
+	def mask(BetaOperator operation) {
+		val b = operator.bindings
 
 		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
 	}
 
-	def dispatch betaOperator(JoinOperation operation) {
+	def dispatch betaOperator(JoinOperator operation) {
 		'''join'''
 	}
 
-	def dispatch betaOperator(AntiJoinOperation operation) {
+	def dispatch betaOperator(AntiJoinOperator operation) {
 		'''antijoin'''
 	}
 

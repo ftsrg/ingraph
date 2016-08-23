@@ -150,14 +150,14 @@ public interface RelalgPackage extends EPackage {
 	int INPUT_RELATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.AlphaOperationImpl <em>Alpha Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.AlphaOperatorImpl <em>Alpha Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.AlphaOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getAlphaOperation()
+	 * @see relalg.impl.AlphaOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getAlphaOperator()
 	 * @generated
 	 */
-	int ALPHA_OPERATION = 4;
+	int ALPHA_OPERATOR = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -166,7 +166,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATION__NAME = ALGEBRA_EXPRESSION__NAME;
+	int ALPHA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -175,35 +175,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATION__PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int ALPHA_OPERATOR__PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Alpha Operation</em>' class.
+	 * The number of structural features of the '<em>Alpha Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int ALPHA_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Alpha Operation</em>' class.
+	 * The number of operations of the '<em>Alpha Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int ALPHA_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.ProjectionOperationImpl <em>Projection Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.ProjectionOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getProjectionOperation()
+	 * @see relalg.impl.ProjectionOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getProjectionOperator()
 	 * @generated
 	 */
-	int PROJECTION_OPERATION = 2;
+	int PROJECTION_OPERATOR = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -212,7 +212,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int PROJECTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -221,7 +221,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int PROJECTION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -230,35 +230,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATION__ATTRIBUTES = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int PROJECTION_OPERATOR__ATTRIBUTES = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Projection Operation</em>' class.
+	 * The number of structural features of the '<em>Projection Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
+	int PROJECTION_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Projection Operation</em>' class.
+	 * The number of operations of the '<em>Projection Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int PROJECTION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.BetaOperationImpl <em>Beta Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.BetaOperatorImpl <em>Beta Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.BetaOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getBetaOperation()
+	 * @see relalg.impl.BetaOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getBetaOperator()
 	 * @generated
 	 */
-	int BETA_OPERATION = 5;
+	int BETA_OPERATOR = 5;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -267,7 +267,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION__NAME = ALGEBRA_EXPRESSION__NAME;
+	int BETA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
@@ -276,7 +276,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION__LEFT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int BETA_OPERATOR__LEFT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
@@ -285,7 +285,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION__RIGHT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int BETA_OPERATOR__RIGHT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
@@ -294,35 +294,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION__BINDINGS = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
+	int BETA_OPERATOR__BINDINGS = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of structural features of the '<em>Beta Operation</em>' class.
+	 * The number of structural features of the '<em>Beta Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 3;
+	int BETA_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
-	 * The number of operations of the '<em>Beta Operation</em>' class.
+	 * The number of operations of the '<em>Beta Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int BETA_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.JoinOperationImpl <em>Join Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.JoinOperatorImpl <em>Join Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.JoinOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getJoinOperation()
+	 * @see relalg.impl.JoinOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getJoinOperator()
 	 * @generated
 	 */
-	int JOIN_OPERATION = 3;
+	int JOIN_OPERATOR = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -331,7 +331,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION__NAME = BETA_OPERATION__NAME;
+	int JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
@@ -340,7 +340,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION__LEFT_PARENT = BETA_OPERATION__LEFT_PARENT;
+	int JOIN_OPERATOR__LEFT_PARENT = BETA_OPERATOR__LEFT_PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
@@ -349,7 +349,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION__RIGHT_PARENT = BETA_OPERATION__RIGHT_PARENT;
+	int JOIN_OPERATOR__RIGHT_PARENT = BETA_OPERATOR__RIGHT_PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
@@ -358,35 +358,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION__BINDINGS = BETA_OPERATION__BINDINGS;
+	int JOIN_OPERATOR__BINDINGS = BETA_OPERATOR__BINDINGS;
 
 	/**
-	 * The number of structural features of the '<em>Join Operation</em>' class.
+	 * The number of structural features of the '<em>Join Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION_FEATURE_COUNT = BETA_OPERATION_FEATURE_COUNT + 0;
+	int JOIN_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Join Operation</em>' class.
+	 * The number of operations of the '<em>Join Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATION_OPERATION_COUNT = BETA_OPERATION_OPERATION_COUNT + 0;
+	int JOIN_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.AntiJoinOperationImpl <em>Anti Join Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.AntiJoinOperatorImpl <em>Anti Join Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.AntiJoinOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getAntiJoinOperation()
+	 * @see relalg.impl.AntiJoinOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getAntiJoinOperator()
 	 * @generated
 	 */
-	int ANTI_JOIN_OPERATION = 6;
+	int ANTI_JOIN_OPERATOR = 6;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -395,7 +395,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION__NAME = BETA_OPERATION__NAME;
+	int ANTI_JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
@@ -404,7 +404,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION__LEFT_PARENT = BETA_OPERATION__LEFT_PARENT;
+	int ANTI_JOIN_OPERATOR__LEFT_PARENT = BETA_OPERATOR__LEFT_PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
@@ -413,7 +413,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION__RIGHT_PARENT = BETA_OPERATION__RIGHT_PARENT;
+	int ANTI_JOIN_OPERATOR__RIGHT_PARENT = BETA_OPERATOR__RIGHT_PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
@@ -422,35 +422,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION__BINDINGS = BETA_OPERATION__BINDINGS;
+	int ANTI_JOIN_OPERATOR__BINDINGS = BETA_OPERATOR__BINDINGS;
 
 	/**
-	 * The number of structural features of the '<em>Anti Join Operation</em>' class.
+	 * The number of structural features of the '<em>Anti Join Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION_FEATURE_COUNT = BETA_OPERATION_FEATURE_COUNT + 0;
+	int ANTI_JOIN_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Anti Join Operation</em>' class.
+	 * The number of operations of the '<em>Anti Join Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATION_OPERATION_COUNT = BETA_OPERATION_OPERATION_COUNT + 0;
+	int ANTI_JOIN_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.ProductionOperationImpl <em>Production Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.ProductionOperatorImpl <em>Production Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.ProductionOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getProductionOperation()
+	 * @see relalg.impl.ProductionOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getProductionOperator()
 	 * @generated
 	 */
-	int PRODUCTION_OPERATION = 7;
+	int PRODUCTION_OPERATOR = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -459,7 +459,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCTION_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int PRODUCTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -468,25 +468,25 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCTION_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int PRODUCTION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
 
 	/**
-	 * The number of structural features of the '<em>Production Operation</em>' class.
+	 * The number of structural features of the '<em>Production Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCTION_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int PRODUCTION_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Production Operation</em>' class.
+	 * The number of operations of the '<em>Production Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCTION_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int PRODUCTION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.AttributeImpl <em>Attribute</em>}' class.
@@ -609,14 +609,14 @@ public interface RelalgPackage extends EPackage {
 	int JOIN_BINDING_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.FilterOperationImpl <em>Filter Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.FilterOperatorImpl <em>Filter Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.FilterOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getFilterOperation()
+	 * @see relalg.impl.FilterOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getFilterOperator()
 	 * @generated
 	 */
-	int FILTER_OPERATION = 11;
+	int FILTER_OPERATOR = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -625,7 +625,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int FILTER_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -634,35 +634,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int FILTER_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
 
 	/**
-	 * The number of structural features of the '<em>Filter Operation</em>' class.
+	 * The number of structural features of the '<em>Filter Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int FILTER_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Filter Operation</em>' class.
+	 * The number of operations of the '<em>Filter Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int FILTER_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.ExpandOperationImpl <em>Expand Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.ExpandOperatorImpl <em>Expand Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.ExpandOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getExpandOperation()
+	 * @see relalg.impl.ExpandOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getExpandOperator()
 	 * @generated
 	 */
-	int EXPAND_OPERATION = 12;
+	int EXPAND_OPERATOR = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -671,7 +671,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int EXPAND_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -680,7 +680,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int EXPAND_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
 
 	/**
 	 * The feature id for the '<em><b>Direction</b></em>' attribute.
@@ -689,35 +689,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION__DIRECTION = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int EXPAND_OPERATOR__DIRECTION = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Expand Operation</em>' class.
+	 * The number of structural features of the '<em>Expand Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 1;
+	int EXPAND_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Expand Operation</em>' class.
+	 * The number of operations of the '<em>Expand Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int EXPAND_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.GetNodesOperationImpl <em>Get Nodes Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.GetNodesOperatorImpl <em>Get Nodes Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.GetNodesOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperation()
+	 * @see relalg.impl.GetNodesOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperator()
 	 * @generated
 	 */
-	int GET_NODES_OPERATION = 13;
+	int GET_NODES_OPERATOR = 13;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -726,7 +726,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_NODES_OPERATION__NAME = ALGEBRA_EXPRESSION__NAME;
+	int GET_NODES_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Attribute</b></em>' reference.
@@ -735,35 +735,35 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_NODES_OPERATION__ATTRIBUTE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int GET_NODES_OPERATOR__ATTRIBUTE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Get Nodes Operation</em>' class.
+	 * The number of structural features of the '<em>Get Nodes Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GET_NODES_OPERATION_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int GET_NODES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Get Nodes Operation</em>' class.
+	 * The number of operations of the '<em>Get Nodes Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GET_NODES_OPERATION_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int GET_NODES_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.DuplicateEliminationOperationImpl <em>Duplicate Elimination Operation</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.DuplicateEliminationOperatorImpl <em>Duplicate Elimination Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.DuplicateEliminationOperationImpl
-	 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperation()
+	 * @see relalg.impl.DuplicateEliminationOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperator()
 	 * @generated
 	 */
-	int DUPLICATE_ELIMINATION_OPERATION = 14;
+	int DUPLICATE_ELIMINATION_OPERATOR = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -772,7 +772,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DUPLICATE_ELIMINATION_OPERATION__NAME = ALPHA_OPERATION__NAME;
+	int DUPLICATE_ELIMINATION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Parent</b></em>' reference.
@@ -781,25 +781,25 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DUPLICATE_ELIMINATION_OPERATION__PARENT = ALPHA_OPERATION__PARENT;
+	int DUPLICATE_ELIMINATION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
 
 	/**
-	 * The number of structural features of the '<em>Duplicate Elimination Operation</em>' class.
+	 * The number of structural features of the '<em>Duplicate Elimination Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DUPLICATE_ELIMINATION_OPERATION_FEATURE_COUNT = ALPHA_OPERATION_FEATURE_COUNT + 0;
+	int DUPLICATE_ELIMINATION_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Duplicate Elimination Operation</em>' class.
+	 * The number of operations of the '<em>Duplicate Elimination Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DUPLICATE_ELIMINATION_OPERATION_OPERATION_COUNT = ALPHA_OPERATION_OPERATION_COUNT + 0;
+	int DUPLICATE_ELIMINATION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
@@ -866,119 +866,119 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getInputRelation_Type();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.ProjectionOperation <em>Projection Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.ProjectionOperator <em>Projection Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Projection Operation</em>'.
-	 * @see relalg.ProjectionOperation
+	 * @return the meta object for class '<em>Projection Operator</em>'.
+	 * @see relalg.ProjectionOperator
 	 * @generated
 	 */
-	EClass getProjectionOperation();
+	EClass getProjectionOperator();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link relalg.ProjectionOperation#getAttributes <em>Attributes</em>}'.
+	 * Returns the meta object for the containment reference list '{@link relalg.ProjectionOperator#getAttributes <em>Attributes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Attributes</em>'.
-	 * @see relalg.ProjectionOperation#getAttributes()
-	 * @see #getProjectionOperation()
+	 * @see relalg.ProjectionOperator#getAttributes()
+	 * @see #getProjectionOperator()
 	 * @generated
 	 */
-	EReference getProjectionOperation_Attributes();
+	EReference getProjectionOperator_Attributes();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.JoinOperation <em>Join Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.JoinOperator <em>Join Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Join Operation</em>'.
-	 * @see relalg.JoinOperation
+	 * @return the meta object for class '<em>Join Operator</em>'.
+	 * @see relalg.JoinOperator
 	 * @generated
 	 */
-	EClass getJoinOperation();
+	EClass getJoinOperator();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.AlphaOperation <em>Alpha Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.AlphaOperator <em>Alpha Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Alpha Operation</em>'.
-	 * @see relalg.AlphaOperation
+	 * @return the meta object for class '<em>Alpha Operator</em>'.
+	 * @see relalg.AlphaOperator
 	 * @generated
 	 */
-	EClass getAlphaOperation();
+	EClass getAlphaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.AlphaOperation#getParent <em>Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.AlphaOperator#getParent <em>Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Parent</em>'.
-	 * @see relalg.AlphaOperation#getParent()
-	 * @see #getAlphaOperation()
+	 * @see relalg.AlphaOperator#getParent()
+	 * @see #getAlphaOperator()
 	 * @generated
 	 */
-	EReference getAlphaOperation_Parent();
+	EReference getAlphaOperator_Parent();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.BetaOperation <em>Beta Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.BetaOperator <em>Beta Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Beta Operation</em>'.
-	 * @see relalg.BetaOperation
+	 * @return the meta object for class '<em>Beta Operator</em>'.
+	 * @see relalg.BetaOperator
 	 * @generated
 	 */
-	EClass getBetaOperation();
+	EClass getBetaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperation#getLeftParent <em>Left Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getLeftParent <em>Left Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Left Parent</em>'.
-	 * @see relalg.BetaOperation#getLeftParent()
-	 * @see #getBetaOperation()
+	 * @see relalg.BetaOperator#getLeftParent()
+	 * @see #getBetaOperator()
 	 * @generated
 	 */
-	EReference getBetaOperation_LeftParent();
+	EReference getBetaOperator_LeftParent();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperation#getRightParent <em>Right Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getRightParent <em>Right Parent</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Right Parent</em>'.
-	 * @see relalg.BetaOperation#getRightParent()
-	 * @see #getBetaOperation()
+	 * @see relalg.BetaOperator#getRightParent()
+	 * @see #getBetaOperator()
 	 * @generated
 	 */
-	EReference getBetaOperation_RightParent();
+	EReference getBetaOperator_RightParent();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link relalg.BetaOperation#getBindings <em>Bindings</em>}'.
+	 * Returns the meta object for the containment reference list '{@link relalg.BetaOperator#getBindings <em>Bindings</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Bindings</em>'.
-	 * @see relalg.BetaOperation#getBindings()
-	 * @see #getBetaOperation()
+	 * @see relalg.BetaOperator#getBindings()
+	 * @see #getBetaOperator()
 	 * @generated
 	 */
-	EReference getBetaOperation_Bindings();
+	EReference getBetaOperator_Bindings();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.AntiJoinOperation <em>Anti Join Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.AntiJoinOperator <em>Anti Join Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Anti Join Operation</em>'.
-	 * @see relalg.AntiJoinOperation
+	 * @return the meta object for class '<em>Anti Join Operator</em>'.
+	 * @see relalg.AntiJoinOperator
 	 * @generated
 	 */
-	EClass getAntiJoinOperation();
+	EClass getAntiJoinOperator();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.ProductionOperation <em>Production Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.ProductionOperator <em>Production Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Production Operation</em>'.
-	 * @see relalg.ProductionOperation
+	 * @return the meta object for class '<em>Production Operator</em>'.
+	 * @see relalg.ProductionOperator
 	 * @generated
 	 */
-	EClass getProductionOperation();
+	EClass getProductionOperator();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.Attribute <em>Attribute</em>}'.
@@ -1055,66 +1055,66 @@ public interface RelalgPackage extends EPackage {
 	EReference getJoinBinding_RightAttribute();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.FilterOperation <em>Filter Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.FilterOperator <em>Filter Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Filter Operation</em>'.
-	 * @see relalg.FilterOperation
+	 * @return the meta object for class '<em>Filter Operator</em>'.
+	 * @see relalg.FilterOperator
 	 * @generated
 	 */
-	EClass getFilterOperation();
+	EClass getFilterOperator();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.ExpandOperation <em>Expand Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.ExpandOperator <em>Expand Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Expand Operation</em>'.
-	 * @see relalg.ExpandOperation
+	 * @return the meta object for class '<em>Expand Operator</em>'.
+	 * @see relalg.ExpandOperator
 	 * @generated
 	 */
-	EClass getExpandOperation();
+	EClass getExpandOperator();
 
 	/**
-	 * Returns the meta object for the attribute '{@link relalg.ExpandOperation#getDirection <em>Direction</em>}'.
+	 * Returns the meta object for the attribute '{@link relalg.ExpandOperator#getDirection <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Direction</em>'.
-	 * @see relalg.ExpandOperation#getDirection()
-	 * @see #getExpandOperation()
+	 * @see relalg.ExpandOperator#getDirection()
+	 * @see #getExpandOperator()
 	 * @generated
 	 */
-	EAttribute getExpandOperation_Direction();
+	EAttribute getExpandOperator_Direction();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.GetNodesOperation <em>Get Nodes Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.GetNodesOperator <em>Get Nodes Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Get Nodes Operation</em>'.
-	 * @see relalg.GetNodesOperation
+	 * @return the meta object for class '<em>Get Nodes Operator</em>'.
+	 * @see relalg.GetNodesOperator
 	 * @generated
 	 */
-	EClass getGetNodesOperation();
+	EClass getGetNodesOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.GetNodesOperation#getAttribute <em>Attribute</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.GetNodesOperator#getAttribute <em>Attribute</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Attribute</em>'.
-	 * @see relalg.GetNodesOperation#getAttribute()
-	 * @see #getGetNodesOperation()
+	 * @see relalg.GetNodesOperator#getAttribute()
+	 * @see #getGetNodesOperator()
 	 * @generated
 	 */
-	EReference getGetNodesOperation_Attribute();
+	EReference getGetNodesOperator_Attribute();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.DuplicateEliminationOperation <em>Duplicate Elimination Operation</em>}'.
+	 * Returns the meta object for class '{@link relalg.DuplicateEliminationOperator <em>Duplicate Elimination Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Duplicate Elimination Operation</em>'.
-	 * @see relalg.DuplicateEliminationOperation
+	 * @return the meta object for class '<em>Duplicate Elimination Operator</em>'.
+	 * @see relalg.DuplicateEliminationOperator
 	 * @generated
 	 */
-	EClass getDuplicateEliminationOperation();
+	EClass getDuplicateEliminationOperator();
 
 	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
@@ -1194,14 +1194,14 @@ public interface RelalgPackage extends EPackage {
 		EAttribute INPUT_RELATION__TYPE = eINSTANCE.getInputRelation_Type();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.ProjectionOperationImpl <em>Projection Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ProjectionOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getProjectionOperation()
+		 * @see relalg.impl.ProjectionOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getProjectionOperator()
 		 * @generated
 		 */
-		EClass PROJECTION_OPERATION = eINSTANCE.getProjectionOperation();
+		EClass PROJECTION_OPERATOR = eINSTANCE.getProjectionOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Attributes</b></em>' containment reference list feature.
@@ -1209,27 +1209,27 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PROJECTION_OPERATION__ATTRIBUTES = eINSTANCE.getProjectionOperation_Attributes();
+		EReference PROJECTION_OPERATOR__ATTRIBUTES = eINSTANCE.getProjectionOperator_Attributes();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.JoinOperationImpl <em>Join Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.JoinOperatorImpl <em>Join Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.JoinOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getJoinOperation()
+		 * @see relalg.impl.JoinOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getJoinOperator()
 		 * @generated
 		 */
-		EClass JOIN_OPERATION = eINSTANCE.getJoinOperation();
+		EClass JOIN_OPERATOR = eINSTANCE.getJoinOperator();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.AlphaOperationImpl <em>Alpha Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.AlphaOperatorImpl <em>Alpha Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.AlphaOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getAlphaOperation()
+		 * @see relalg.impl.AlphaOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAlphaOperator()
 		 * @generated
 		 */
-		EClass ALPHA_OPERATION = eINSTANCE.getAlphaOperation();
+		EClass ALPHA_OPERATOR = eINSTANCE.getAlphaOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Parent</b></em>' reference feature.
@@ -1237,17 +1237,17 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ALPHA_OPERATION__PARENT = eINSTANCE.getAlphaOperation_Parent();
+		EReference ALPHA_OPERATOR__PARENT = eINSTANCE.getAlphaOperator_Parent();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.BetaOperationImpl <em>Beta Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.BetaOperatorImpl <em>Beta Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.BetaOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getBetaOperation()
+		 * @see relalg.impl.BetaOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getBetaOperator()
 		 * @generated
 		 */
-		EClass BETA_OPERATION = eINSTANCE.getBetaOperation();
+		EClass BETA_OPERATOR = eINSTANCE.getBetaOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Left Parent</b></em>' reference feature.
@@ -1255,7 +1255,7 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BETA_OPERATION__LEFT_PARENT = eINSTANCE.getBetaOperation_LeftParent();
+		EReference BETA_OPERATOR__LEFT_PARENT = eINSTANCE.getBetaOperator_LeftParent();
 
 		/**
 		 * The meta object literal for the '<em><b>Right Parent</b></em>' reference feature.
@@ -1263,7 +1263,7 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BETA_OPERATION__RIGHT_PARENT = eINSTANCE.getBetaOperation_RightParent();
+		EReference BETA_OPERATOR__RIGHT_PARENT = eINSTANCE.getBetaOperator_RightParent();
 
 		/**
 		 * The meta object literal for the '<em><b>Bindings</b></em>' containment reference list feature.
@@ -1271,27 +1271,27 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BETA_OPERATION__BINDINGS = eINSTANCE.getBetaOperation_Bindings();
+		EReference BETA_OPERATOR__BINDINGS = eINSTANCE.getBetaOperator_Bindings();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.AntiJoinOperationImpl <em>Anti Join Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.AntiJoinOperatorImpl <em>Anti Join Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.AntiJoinOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getAntiJoinOperation()
+		 * @see relalg.impl.AntiJoinOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAntiJoinOperator()
 		 * @generated
 		 */
-		EClass ANTI_JOIN_OPERATION = eINSTANCE.getAntiJoinOperation();
+		EClass ANTI_JOIN_OPERATOR = eINSTANCE.getAntiJoinOperator();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.ProductionOperationImpl <em>Production Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.ProductionOperatorImpl <em>Production Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ProductionOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getProductionOperation()
+		 * @see relalg.impl.ProductionOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getProductionOperator()
 		 * @generated
 		 */
-		EClass PRODUCTION_OPERATION = eINSTANCE.getProductionOperation();
+		EClass PRODUCTION_OPERATOR = eINSTANCE.getProductionOperator();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.AttributeImpl <em>Attribute</em>}' class.
@@ -1356,24 +1356,24 @@ public interface RelalgPackage extends EPackage {
 		EReference JOIN_BINDING__RIGHT_ATTRIBUTE = eINSTANCE.getJoinBinding_RightAttribute();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.FilterOperationImpl <em>Filter Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.FilterOperatorImpl <em>Filter Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.FilterOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getFilterOperation()
+		 * @see relalg.impl.FilterOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getFilterOperator()
 		 * @generated
 		 */
-		EClass FILTER_OPERATION = eINSTANCE.getFilterOperation();
+		EClass FILTER_OPERATOR = eINSTANCE.getFilterOperator();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.ExpandOperationImpl <em>Expand Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.ExpandOperatorImpl <em>Expand Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ExpandOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getExpandOperation()
+		 * @see relalg.impl.ExpandOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getExpandOperator()
 		 * @generated
 		 */
-		EClass EXPAND_OPERATION = eINSTANCE.getExpandOperation();
+		EClass EXPAND_OPERATOR = eINSTANCE.getExpandOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Direction</b></em>' attribute feature.
@@ -1381,17 +1381,17 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXPAND_OPERATION__DIRECTION = eINSTANCE.getExpandOperation_Direction();
+		EAttribute EXPAND_OPERATOR__DIRECTION = eINSTANCE.getExpandOperator_Direction();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.GetNodesOperationImpl <em>Get Nodes Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.GetNodesOperatorImpl <em>Get Nodes Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.GetNodesOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperation()
+		 * @see relalg.impl.GetNodesOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getGetNodesOperator()
 		 * @generated
 		 */
-		EClass GET_NODES_OPERATION = eINSTANCE.getGetNodesOperation();
+		EClass GET_NODES_OPERATOR = eINSTANCE.getGetNodesOperator();
 
 		/**
 		 * The meta object literal for the '<em><b>Attribute</b></em>' reference feature.
@@ -1399,17 +1399,17 @@ public interface RelalgPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference GET_NODES_OPERATION__ATTRIBUTE = eINSTANCE.getGetNodesOperation_Attribute();
+		EReference GET_NODES_OPERATOR__ATTRIBUTE = eINSTANCE.getGetNodesOperator_Attribute();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.DuplicateEliminationOperationImpl <em>Duplicate Elimination Operation</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.DuplicateEliminationOperatorImpl <em>Duplicate Elimination Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.DuplicateEliminationOperationImpl
-		 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperation()
+		 * @see relalg.impl.DuplicateEliminationOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getDuplicateEliminationOperator()
 		 * @generated
 		 */
-		EClass DUPLICATE_ELIMINATION_OPERATION = eINSTANCE.getDuplicateEliminationOperation();
+		EClass DUPLICATE_ELIMINATION_OPERATOR = eINSTANCE.getDuplicateEliminationOperator();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.
