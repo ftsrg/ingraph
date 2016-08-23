@@ -1,3 +1,5 @@
+Production([sensor, segment1, segment2, segment3, segment4, segment5, segment6])
+ |
 NaturalJoin-LeftDeepTree
  |   |   |   |   |   |   |
 ex1 ex2 ex3 ex4 ex5 ex6 ex7
