@@ -29,7 +29,7 @@ class ExpressionSerializer extends TexSerializer {
 	/***
 	 * 
 	 */
-	def dispatch String convert(GetNodesOperator operation) {
+	def dispatch String convert(GetNodesOperator operator) {
 		'''\getnodes{«operator.attribute.name»}'''
 	}
 
@@ -37,38 +37,38 @@ class ExpressionSerializer extends TexSerializer {
 		'''\relation{«relation.type»}'''
 	}
 
-	def dispatch String convert(DuplicateEliminationOperator operation) {
+	def dispatch String convert(DuplicateEliminationOperator operator) {
 		'''\duplicateelimination \left(«operator.parent.convert»\right)'''
 	}
 
-	def dispatch String convert(ExpandOperator operation) {
-		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operation.parent.convert»\right)'''
+	def dispatch String convert(ExpandOperator operator) {
+		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operator.parent.convert»\right)'''
 	}
 
-	def dispatch String convert(ProjectionOperator operation) {
+	def dispatch String convert(ProjectionOperator operator) {
 		'''\projection{...} \left(«operator.parent.convert»\right)'''
 	}
 
 	/***
 	 * Beta operators are treated uniformly
 	 */
-	def dispatch String convert(BetaOperator operation) {
+	def dispatch String convert(BetaOperator operator) {
 		'''
 		«IF parentheses» \left( «ENDIF»
-		«operator.leftParent.convert» \«betaOperator(operation)»«mask(operation)» «operation.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
+		«operator.leftParent.convert» \«betaOperator(operator)»«mask(operator)» «operator.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
 	}
 
-	def mask(BetaOperator operation) {
+	def mask(BetaOperator operator) {
 		val b = operator.bindings
 
 		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
 	}
 
-	def dispatch betaOperator(JoinOperator operation) {
+	def dispatch betaOperator(JoinOperator operator) {
 		'''join'''
 	}
 
-	def dispatch betaOperator(AntiJoinOperator operation) {
+	def dispatch betaOperator(AntiJoinOperator operator) {
 		'''antijoin'''
 	}
 

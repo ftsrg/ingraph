@@ -31,15 +31,15 @@ class AlgebraTreeDrawer extends TexSerializer {
 	
 	
 	
-	def dispatch children(GetNodesOperator operation) {
+	def dispatch children(GetNodesOperator operator) {
 		''''''
 	}
 	
-	def dispatch children(AlphaOperator operation) {
+	def dispatch children(AlphaOperator operator) {
 		'''child{«operator.parent.node»}'''
 	}
 
-	def dispatch children(BetaOperator operation) {
+	def dispatch children(BetaOperator operator) {
 		'''
 		child{«operator.leftParent.node»}
 		child{«operator.rightParent.node»}
@@ -47,7 +47,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 	}
 	
 
-	def dispatch String convert(GetNodesOperator operation) {
+	def dispatch String convert(GetNodesOperator operator) {
 		'''\getnodes{«operator.attribute.name»}'''
 	}
 
@@ -55,32 +55,32 @@ class AlgebraTreeDrawer extends TexSerializer {
 		'''\relation{«relation.type»}'''
 	}
 
-	def dispatch String convert(ExpandOperator operation) {
+	def dispatch String convert(ExpandOperator operator) {
 		'''\expand«operator.direction.toString.toLowerCase»{}{}'''
 	}
 
-	def dispatch String convert(ProjectionOperator operation) {
+	def dispatch String convert(ProjectionOperator operator) {
 		'''\projection_{...} \left(«operator.parent.convert»\right)'''
 	}
 
 	/***
 	 * Beta operators are treated uniformly
 	 */
-	def dispatch String convert(BetaOperator operation) {
-		'''\«betaOperator(operator)»«mask(operation)»'''
+	def dispatch String convert(BetaOperator operator) {
+		'''\«betaOperator(operator)»«mask(operator)»'''
 	}
 
-	def mask(BetaOperator operation) {
+	def mask(BetaOperator operator) {
 		val b = operator.bindings
 
 		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
 	}
 
-	def dispatch betaOperator(JoinOperator operation) {
+	def dispatch betaOperator(JoinOperator operator) {
 		'''join'''
 	}
 
-	def dispatch betaOperator(AntiJoinOperator operation) {
+	def dispatch betaOperator(AntiJoinOperator operator) {
 		'''antijoin'''
 	}
 
