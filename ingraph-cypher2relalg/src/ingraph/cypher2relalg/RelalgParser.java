@@ -1,9 +1,7 @@
 package ingraph.cypher2relalg;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
+import ingraph.antlr.CypherLexer;
+import ingraph.antlr.CypherParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,8 +9,9 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
-import ingraph.antlr.CypherLexer;
-import ingraph.antlr.CypherParser;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class RelalgParser {
 
@@ -33,7 +32,7 @@ public class RelalgParser {
         final CypherParser.CypherContext cypher = parser.cypher();
         System.out.println("context: " + cypher);
 
-        final RelalgCypherListener listener = new RelalgCypherListener();
+        final ingraph.cypher2relalg.RelalgCypherListener listener = new ingraph.cypher2relalg.RelalgCypherListener();
         ParseTreeWalker.DEFAULT.walk(listener, cypher);
 
         System.out.println();
@@ -50,8 +49,5 @@ public class RelalgParser {
         listener.attributes.entrySet().forEach(
             it -> System.out.println(it.getKey() + ", labels: " + listener.nodeLabels.get(it.getValue()))
         );
-
-        final RelalgBuilder builder  = new RelalgBuilder();
-        builder.buildEMF(listener);
     }
 }
