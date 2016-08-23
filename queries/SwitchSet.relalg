@@ -4,10 +4,12 @@ Filter(sw.currentPosition != swP.position)
  |
 Filter(semaphore.signal='GO')
  |
-ExpandOut(edgeVar=_:target, nodeVar=sw:Switch)
+AllDifferent([_e1, _e2, _e3])
  |
-ExpandOut(edgeVar=_:follows, nodeVar=swP:SwitchPosition)
+ExpandOut(edgeVar=_e3:target, nodeVar=sw:Switch)
  |
-ExpandIn(edgeVar=_:entry, nodeVar=route:Route)  # as edge is not referenced, no edgeVar is unnamed, but has label constraint
+ExpandOut(edgeVar=_e2:follows, nodeVar=swP:SwitchPosition)
+ |
+ExpandIn(edgeVar=_e1:entry, nodeVar=route:Route)  # as edge is not referenced, no edgeVar is unnamed, but has label constraint
  |
 GetNodes(label=Semaphore, var=semaphore)
