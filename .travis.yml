@@ -8,3 +8,5 @@ script:
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
+  on_success: change
+  on_failure: change #should be always, once build has been set up to work
