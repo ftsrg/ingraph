@@ -7,7 +7,10 @@ object MyScalaMain extends App {
 
   val factory = RelalgFactory.eINSTANCE
   
+  val getNodesOperator = factory.createGetNodesOperator()
+  getNodesOperator.setName("getnodes1")
+  
   val filterOperator = factory.createFilterOperator()
-  filterOperator.setName("filter1")
-  filterOperator.setParent(null)
+  filterOperator.setName("filter")
+  filterOperator.setParent(getNodesOperator)  
 }
