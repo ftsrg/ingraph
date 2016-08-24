@@ -10,6 +10,19 @@
 1. Install the **Xtend IDE** from the Mars/Neon update site.
 1. Go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
+#### How to update the EMF model
+
+1. Go to the **ingraph-relalg-model** project.
+1. Open the **Modeling** perspective (`Ctrl`+`3`, Modeling).
+1. Open the `model/relalg.aird` file with the small black triangle. Open **Representations per category**, **Design**, **Entities**, **relalg**.
+
+#### How to regenerate the code
+
+1. Go to the **ingraph-relalg-model** project.
+1. Open the `model/relalg.genmodel` file.
+1. Right click the root node of the tree and choose **Reload...**. Select **Ecore model**, click **Next** and click **Load**. Click **Next** and **Finish**.
+1. Right click the root node of the tree and choose **Generate Model Code**.
+
 #### Troubleshooting for Eclipse
 
 If you have compile errors in the imported Xtend projects, remove the `build/` directories from the projects.

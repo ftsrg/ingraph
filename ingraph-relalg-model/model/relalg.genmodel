@@ -49,5 +49,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetNodesOperator/attribute"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//DuplicateEliminationOperator"/>
+    <genClasses image="false" ecoreClass="relalg.ecore#//Variable"/>
+    <genClasses ecoreClass="relalg.ecore#//NodeVariable"/>
+    <genClasses ecoreClass="relalg.ecore#//EdgeVariable"/>
   </genPackages>
 </genmodel:GenModel>

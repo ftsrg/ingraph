@@ -130,6 +130,24 @@ public interface RelalgFactory extends EFactory {
 	DuplicateEliminationOperator createDuplicateEliminationOperator();
 
 	/**
+	 * Returns a new object of class '<em>Node Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Node Variable</em>'.
+	 * @generated
+	 */
+	NodeVariable createNodeVariable();
+
+	/**
+	 * Returns a new object of class '<em>Edge Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Edge Variable</em>'.
+	 * @generated
+	 */
+	EdgeVariable createEdgeVariable();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

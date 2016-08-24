@@ -69,6 +69,8 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.EXPAND_OPERATOR: return createExpandOperator();
 			case RelalgPackage.GET_NODES_OPERATOR: return createGetNodesOperator();
 			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATOR: return createDuplicateEliminationOperator();
+			case RelalgPackage.NODE_VARIABLE: return createNodeVariable();
+			case RelalgPackage.EDGE_VARIABLE: return createEdgeVariable();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -222,6 +224,26 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public DuplicateEliminationOperator createDuplicateEliminationOperator() {
 		DuplicateEliminationOperatorImpl duplicateEliminationOperator = new DuplicateEliminationOperatorImpl();
 		return duplicateEliminationOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NodeVariable createNodeVariable() {
+		NodeVariableImpl nodeVariable = new NodeVariableImpl();
+		return nodeVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EdgeVariable createEdgeVariable() {
+		EdgeVariableImpl edgeVariable = new EdgeVariableImpl();
+		return edgeVariable;
 	}
 
 	/**

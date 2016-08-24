@@ -18,16 +18,19 @@ import relalg.AttributeSet;
 import relalg.BetaOperator;
 import relalg.Direction;
 import relalg.DuplicateEliminationOperator;
+import relalg.EdgeVariable;
 import relalg.ExpandOperator;
 import relalg.FilterOperator;
 import relalg.GetNodesOperator;
 import relalg.InputRelation;
 import relalg.JoinBinding;
 import relalg.JoinOperator;
+import relalg.NodeVariable;
 import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
+import relalg.Variable;
 
 /**
  * <!-- begin-user-doc -->
@@ -140,6 +143,27 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass duplicateEliminationOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass variableEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass nodeVariableEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass edgeVariableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -475,6 +499,33 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getVariable() {
+		return variableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNodeVariable() {
+		return nodeVariableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEdgeVariable() {
+		return edgeVariableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -551,6 +602,12 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		duplicateEliminationOperatorEClass = createEClass(DUPLICATE_ELIMINATION_OPERATOR);
 
+		variableEClass = createEClass(VARIABLE);
+
+		nodeVariableEClass = createEClass(NODE_VARIABLE);
+
+		edgeVariableEClass = createEClass(EDGE_VARIABLE);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 	}
@@ -594,6 +651,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		expandOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		getNodesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		duplicateEliminationOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
+		nodeVariableEClass.getESuperTypes().add(this.getVariable());
+		edgeVariableEClass.getESuperTypes().add(this.getVariable());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -639,6 +698,12 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getGetNodesOperator_Attribute(), this.getAttribute(), null, "attribute", null, 1, 1, GetNodesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(duplicateEliminationOperatorEClass, DuplicateEliminationOperator.class, "DuplicateEliminationOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(variableEClass, Variable.class, "Variable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(nodeVariableEClass, NodeVariable.class, "NodeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(edgeVariableEClass, EdgeVariable.class, "EdgeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

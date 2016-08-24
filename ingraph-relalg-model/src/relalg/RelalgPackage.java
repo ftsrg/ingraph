@@ -802,6 +802,90 @@ public interface RelalgPackage extends EPackage {
 	int DUPLICATE_ELIMINATION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.VariableImpl <em>Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.VariableImpl
+	 * @see relalg.impl.RelalgPackageImpl#getVariable()
+	 * @generated
+	 */
+	int VARIABLE = 15;
+
+	/**
+	 * The number of structural features of the '<em>Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VARIABLE_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VARIABLE_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.NodeVariableImpl <em>Node Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.NodeVariableImpl
+	 * @see relalg.impl.RelalgPackageImpl#getNodeVariable()
+	 * @generated
+	 */
+	int NODE_VARIABLE = 16;
+
+	/**
+	 * The number of structural features of the '<em>Node Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Node Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE_VARIABLE_OPERATION_COUNT = VARIABLE_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.EdgeVariableImpl <em>Edge Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.EdgeVariableImpl
+	 * @see relalg.impl.RelalgPackageImpl#getEdgeVariable()
+	 * @generated
+	 */
+	int EDGE_VARIABLE = 17;
+
+	/**
+	 * The number of structural features of the '<em>Edge Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDGE_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Edge Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDGE_VARIABLE_OPERATION_COUNT = VARIABLE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -809,7 +893,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 15;
+	int DIRECTION = 18;
 
 
 	/**
@@ -1117,6 +1201,36 @@ public interface RelalgPackage extends EPackage {
 	EClass getDuplicateEliminationOperator();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.Variable <em>Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Variable</em>'.
+	 * @see relalg.Variable
+	 * @generated
+	 */
+	EClass getVariable();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.NodeVariable <em>Node Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Node Variable</em>'.
+	 * @see relalg.NodeVariable
+	 * @generated
+	 */
+	EClass getNodeVariable();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.EdgeVariable <em>Edge Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Edge Variable</em>'.
+	 * @see relalg.EdgeVariable
+	 * @generated
+	 */
+	EClass getEdgeVariable();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1410,6 +1524,36 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DUPLICATE_ELIMINATION_OPERATOR = eINSTANCE.getDuplicateEliminationOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.VariableImpl <em>Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.VariableImpl
+		 * @see relalg.impl.RelalgPackageImpl#getVariable()
+		 * @generated
+		 */
+		EClass VARIABLE = eINSTANCE.getVariable();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.NodeVariableImpl <em>Node Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.NodeVariableImpl
+		 * @see relalg.impl.RelalgPackageImpl#getNodeVariable()
+		 * @generated
+		 */
+		EClass NODE_VARIABLE = eINSTANCE.getNodeVariable();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.EdgeVariableImpl <em>Edge Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.EdgeVariableImpl
+		 * @see relalg.impl.RelalgPackageImpl#getEdgeVariable()
+		 * @generated
+		 */
+		EClass EDGE_VARIABLE = eINSTANCE.getEdgeVariable();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.
