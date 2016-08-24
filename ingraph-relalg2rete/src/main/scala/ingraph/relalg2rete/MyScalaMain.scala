@@ -7,7 +7,7 @@ object MyScalaMain extends App {
 
   val factory = RelalgFactory.eINSTANCE
   
-  def filterOperator = factory.createFilterOperator()
+  val filterOperator = factory.createFilterOperator()
   filterOperator.setName("filter1")
   filterOperator.setParent(null)
 }
