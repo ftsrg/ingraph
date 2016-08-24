@@ -56,4 +56,7 @@
         eType="#//Attribute"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperator" eSuperTypes="#//AlphaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable"/>
 </ecore:EPackage>
