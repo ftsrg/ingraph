@@ -719,13 +719,22 @@ public interface RelalgPackage extends EPackage {
 	int VERTEX_VARIABLE__VERTEX_LABEL = VARIABLE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERTEX_VARIABLE__ATTRIBUTE_VARIABLES = VARIABLE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Vertex Variable</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VERTEX_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 1;
+	int VERTEX_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Vertex Variable</em>' class.
@@ -774,13 +783,22 @@ public interface RelalgPackage extends EPackage {
 	int EDGE_VARIABLE__EDGE_LABEL = VARIABLE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDGE_VARIABLE__ATTRIBUTE_VARIABLES = VARIABLE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Edge Variable</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EDGE_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 1;
+	int EDGE_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Edge Variable</em>' class.
@@ -958,6 +976,52 @@ public interface RelalgPackage extends EPackage {
 	int ALL_DIFFERENT_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.AttributeVariableImpl <em>Attribute Variable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.AttributeVariableImpl
+	 * @see relalg.impl.RelalgPackageImpl#getAttributeVariable()
+	 * @generated
+	 */
+	int ATTRIBUTE_VARIABLE = 18;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_VARIABLE__NAME = VARIABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_VARIABLE__DONT_CARE = VARIABLE__DONT_CARE;
+
+	/**
+	 * The number of structural features of the '<em>Attribute Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_VARIABLE_FEATURE_COUNT = VARIABLE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Attribute Variable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_VARIABLE_OPERATION_COUNT = VARIABLE_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -965,7 +1029,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 18;
+	int DIRECTION = 19;
 
 
 	/**
@@ -1253,6 +1317,17 @@ public interface RelalgPackage extends EPackage {
 	EReference getVertexVariable_VertexLabel();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link relalg.VertexVariable#getAttributeVariables <em>Attribute Variables</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Attribute Variables</em>'.
+	 * @see relalg.VertexVariable#getAttributeVariables()
+	 * @see #getVertexVariable()
+	 * @generated
+	 */
+	EReference getVertexVariable_AttributeVariables();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.EdgeVariable <em>Edge Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1272,6 +1347,17 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEdgeVariable_EdgeLabel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link relalg.EdgeVariable#getAttributeVariables <em>Attribute Variables</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Attribute Variables</em>'.
+	 * @see relalg.EdgeVariable#getAttributeVariables()
+	 * @see #getEdgeVariable()
+	 * @generated
+	 */
+	EReference getEdgeVariable_AttributeVariables();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.Label <em>Label</em>}'.
@@ -1334,6 +1420,16 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAllDifferentOperator_EdgeVariables();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.AttributeVariable <em>Attribute Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Attribute Variable</em>'.
+	 * @see relalg.AttributeVariable
+	 * @generated
+	 */
+	EClass getAttributeVariable();
 
 	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
@@ -1611,6 +1707,14 @@ public interface RelalgPackage extends EPackage {
 		EReference VERTEX_VARIABLE__VERTEX_LABEL = eINSTANCE.getVertexVariable_VertexLabel();
 
 		/**
+		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VERTEX_VARIABLE__ATTRIBUTE_VARIABLES = eINSTANCE.getVertexVariable_AttributeVariables();
+
+		/**
 		 * The meta object literal for the '{@link relalg.impl.EdgeVariableImpl <em>Edge Variable</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1627,6 +1731,14 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EDGE_VARIABLE__EDGE_LABEL = eINSTANCE.getEdgeVariable_EdgeLabel();
+
+		/**
+		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EDGE_VARIABLE__ATTRIBUTE_VARIABLES = eINSTANCE.getEdgeVariable_AttributeVariables();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.LabelImpl <em>Label</em>}' class.
@@ -1683,6 +1795,16 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ALL_DIFFERENT_OPERATOR__EDGE_VARIABLES = eINSTANCE.getAllDifferentOperator_EdgeVariables();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.AttributeVariableImpl <em>Attribute Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.AttributeVariableImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAttributeVariable()
+		 * @generated
+		 */
+		EClass ATTRIBUTE_VARIABLE = eINSTANCE.getAttributeVariable();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

@@ -139,6 +139,15 @@ public interface RelalgFactory extends EFactory {
 	AllDifferentOperator createAllDifferentOperator();
 
 	/**
+	 * Returns a new object of class '<em>Attribute Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Variable</em>'.
+	 * @generated
+	 */
+	AttributeVariable createAttributeVariable();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

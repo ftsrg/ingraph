@@ -2,6 +2,8 @@
  */
 package relalg;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -13,6 +15,7 @@ package relalg;
  * </p>
  * <ul>
  *   <li>{@link relalg.VertexVariable#getVertexLabel <em>Vertex Label</em>}</li>
+ *   <li>{@link relalg.VertexVariable#getAttributeVariables <em>Attribute Variables</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getVertexVariable()
@@ -45,5 +48,21 @@ public interface VertexVariable extends Variable {
 	 * @generated
 	 */
 	void setVertexLabel(VertexLabel value);
+
+	/**
+	 * Returns the value of the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * The list contents are of type {@link relalg.AttributeVariable}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Attribute Variables</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Attribute Variables</em>' containment reference list.
+	 * @see relalg.RelalgPackage#getVertexVariable_AttributeVariables()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<AttributeVariable> getAttributeVariables();
 
 } // VertexVariable

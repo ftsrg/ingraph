@@ -53,10 +53,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//Variable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vertexLabel" lowerBound="1"
         eType="#//VertexLabel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeVariables" upperBound="-1"
+        eType="#//AttributeVariable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="edgeLabel" lowerBound="1"
         eType="#//EdgeLabel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeVariables" upperBound="-1"
+        eType="#//AttributeVariable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -67,4 +71,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariables" upperBound="-1"
         eType="#//EdgeVariable"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeVariable" eSuperTypes="#//Variable"/>
 </ecore:EPackage>
