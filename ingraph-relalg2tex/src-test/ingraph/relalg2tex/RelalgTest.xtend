@@ -1,7 +1,6 @@
 package ingraph.relalg2tex
 
-import ingraph.relalg2tex.AlgebraTreeDrawer
-import ingraph.relalg2tex.ExpressionSerializer
+import java.util.Arrays
 import org.junit.Test
 import relalg.Direction
 import relalg.RelalgFactory
@@ -12,82 +11,45 @@ class RelalgTest {
 	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
 	val extension static RelalgFactory factory = RelalgFactory.eINSTANCE
 
+	val routeLabel = createVertexLabel => [name = "Route"]
+	val switchLabel = createVertexLabel => [name = "Switch"]
+	val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"]
+	val sensorLabel = createVertexLabel => [name = "Sensor"]
+
+	val followsLabel = createEdgeLabel => [name = "follows"]
+	val targetLabel = createEdgeLabel => [name = "target"]
+	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"]
+	val gathersLabel = createEdgeLabel => [name = "gathers"]
+
+	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel]
+	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel]
+	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel]
+	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel]
+	
+	val _e1 = createEdgeVariable => [name = "_e1"; edgeLabel = followsLabel; dontCare = true]
+	val _e2 = createEdgeVariable => [name = "_e2"; edgeLabel = targetLabel; dontCare = true]
+	val _e3 = createEdgeVariable => [name = "_e3"; edgeLabel = monitoredByLabel; dontCare = true]
+	val _e4 = createEdgeVariable => [name = "_e4"; edgeLabel = gathersLabel; dontCare = true]
+
 	@Test
 	def void test1() {
-		val r = createInputRelation => [type = "r"]
-		val s = createInputRelation => [type = "s"]
-		val t = createInputRelation => [type = "t"]
-		val join1 = createJoinOperator => [name = "Join1"; leftParent = r; rightParent = s]
-		val join2 = createJoinOperator => [name = "Join2"; leftParent = join1; rightParent = t]
+		val getVertices = createGetVerticesOperator => [vertexVariable = route; vertexLabel = routeLabel];
 
-		val expression = join2
-		print(serializer.serialize(expression))
-//		print(drawer.serialize(expression))
-	}
+		val expand1 = createExpandOperator => [parent = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = swP; edgeVariable = _e1]
+		val expand2 = createExpandOperator => [parent = expand1; direction = Direction.OUT; sourceVertexVariable = swP; targetVertexVariable = sw; edgeVariable = _e2]
+		val expand3 = createExpandOperator => [parent = expand2; direction = Direction.OUT; sourceVertexVariable = sw; targetVertexVariable = sensor; edgeVariable = _e3]
+		
+		val allDifferent = createAllDifferentOperator => [parent = expand3; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))]
+		
+		val expand4 = createExpandOperator => [parent = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = sensor; edgeVariable = _e4]
 
-	@Test
-	def void test2() {
-		val follows_r = createAttribute => [name = "r"]
-		val follows_swP = createAttribute => [name = "swP"]
+		val antiJoin = createAntiJoinOperator => [leftParent = allDifferent; rightParent = expand4]
 
-		val target_swP = createAttribute => [name = "swP"]
-		val target_sw = createAttribute => [name = "sw"]
+		val de = createDuplicateEliminationOperator => [parent = antiJoin]
+		val trimmer = createProjectionOperator => [parent = de; variables.addAll(Arrays.asList(route, sensor, swP, sw))]
+		val production = createProductionOperator => [parent = trimmer]
 
-		val monitoredBy_te = createAttribute => [name = "te"]
-		val monitoredBy_sen = createAttribute => [name = "sen"]
-
-		val gathers_r = createAttribute => [name = "r"]
-		val gathers_sen = createAttribute => [name = "sen"]
-
-		// input relations
-		val follows = createInputRelation => [type = "follows"; attributes += #[follows_r, follows_swP]]
-		val target = createInputRelation => [type = "target"; attributes += #[target_swP, target_sw]]
-		val monitoredBy = createInputRelation =>
-			[type = "monitoredBy"; attributes += #[monitoredBy_te, monitoredBy_sen]]
-		val gathers = createInputRelation => [type = "gathers"; attributes += #[gathers_r, gathers_sen]]
-
-		// joins
-		val join1 = createJoinOperator => [
-			name = "Join1";
-			leftParent = follows;
-			rightParent = target;
-			bindings += #[
-				createJoinBinding => [leftAttribute = follows_swP; rightAttribute = target_swP]
-			]
-		]
-		val join2 = createJoinOperator => [
-			name = "Join2";
-			leftParent = join1;
-			rightParent = monitoredBy;
-			bindings += #[
-				createJoinBinding => [leftAttribute = target_sw; rightAttribute = monitoredBy_te]
-			]
-		]
-		val antijoin = createAntiJoinOperator => [
-			name = "Antijoin";
-			leftParent = join2;
-			rightParent = gathers;
-			bindings += #[
-				createJoinBinding => [leftAttribute = follows_r; rightAttribute = gathers_r],
-				createJoinBinding => [leftAttribute = monitoredBy_sen; rightAttribute = gathers_sen]
-			]
-		]
-
-		val expression = antijoin
-		print(serializer.serialize(expression))
-	}
-
-	@Test
-	def void test3() {
-		val getNodesR = createGetNodesOperator => [attribute = createAttribute => [name = "r"]]
-		val expandIn = createExpandOperator => [direction = Direction.IN; parent = getNodesR]
-
-		val getNodesS = createGetNodesOperator => [attribute = createAttribute => [name = "s"]]
-		val join = createJoinOperator => [name = "Join1"; leftParent = expandIn; rightParent = getNodesS]
-
-		val expression = join
-//		print(serializer.serialize(expression))
-		print(drawer.serialize(expression))
+		print(drawer.serialize(production))
 	}
 
 }

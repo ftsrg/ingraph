@@ -5,8 +5,7 @@ import relalg.AlphaOperator
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
 import relalg.ExpandOperator
-import relalg.GetNodesOperator
-import relalg.InputRelation
+import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProjectionOperator
 
@@ -31,7 +30,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 	
 	
 	
-	def dispatch children(GetNodesOperator operator) {
+	def dispatch children(GetVerticesOperator operator) {
 		''''''
 	}
 	

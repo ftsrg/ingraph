@@ -21,6 +21,7 @@ import relalg.Variable;
  * </p>
  * <ul>
  *   <li>{@link relalg.impl.VariableImpl#getName <em>Name</em>}</li>
+ *   <li>{@link relalg.impl.VariableImpl#isDontCare <em>Dont Care</em>}</li>
  * </ul>
  *
  * @generated
@@ -45,6 +46,26 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDontCare() <em>Dont Care</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDontCare()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DONT_CARE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDontCare() <em>Dont Care</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDontCare()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dontCare = DONT_CARE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,11 +112,34 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isDontCare() {
+		return dontCare;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDontCare(boolean newDontCare) {
+		boolean oldDontCare = dontCare;
+		dontCare = newDontCare;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.VARIABLE__DONT_CARE, oldDontCare, dontCare));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case RelalgPackage.VARIABLE__NAME:
 				return getName();
+			case RelalgPackage.VARIABLE__DONT_CARE:
+				return isDontCare();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,6 +154,9 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case RelalgPackage.VARIABLE__NAME:
 				setName((String)newValue);
+				return;
+			case RelalgPackage.VARIABLE__DONT_CARE:
+				setDontCare((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,6 +173,9 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 			case RelalgPackage.VARIABLE__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case RelalgPackage.VARIABLE__DONT_CARE:
+				setDontCare(DONT_CARE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -140,6 +190,8 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 		switch (featureID) {
 			case RelalgPackage.VARIABLE__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case RelalgPackage.VARIABLE__DONT_CARE:
+				return dontCare != DONT_CARE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -156,6 +208,8 @@ public abstract class VariableImpl extends MinimalEObjectImpl.Container implemen
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", dontCare: ");
+		result.append(dontCare);
 		result.append(')');
 		return result.toString();
 	}

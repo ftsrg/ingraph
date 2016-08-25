@@ -34,3 +34,5 @@ gradle-app.setting
 gen/
 
 .cache-main
+xtend-gen
+

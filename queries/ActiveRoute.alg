@@ -12,7 +12,7 @@ AntiJoin(activeRoute=inactiveRoute)
  |                                         |
  |                                        ExpandOut(edgeVar=_e2:target, vertexVar=sw:Switch)
  |                                         |
- |                                        Expand(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)
+ |                                        ExpandOut(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)
  |                                         |
 GetVertices(vertexVar=activeRoute:Route)  GetVertices(vertexVar=inactiveRoute:Route)
 
@@ -33,7 +33,6 @@ NotIn(activeRoute) # variable not appear in 2nd input
  |                                         |
  |                                        ExpandOut(edgeVar=_e2:target, vertexVar=sw:Switch)
  |                                         |
- |                                        Expand(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)
+ |                                        ExpandOut(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)
  |                                         |
 GetVertices(vertexVar=activeRoute:Route)  GetVertices(vertexVar=inactiveRoute:Route)
-

@@ -47,13 +47,24 @@
   <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperator" eSuperTypes="#//AlphaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Variable" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dontCare" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//Variable"/>
-  <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexLabel" lowerBound="1"
+        eType="#//VertexLabel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeLabel" lowerBound="1"
+        eType="#//EdgeLabel"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VertexLabel" eSuperTypes="#//Label"/>
   <eClassifiers xsi:type="ecore:EClass" name="EdgeLabel" eSuperTypes="#//Label"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AllDifferentOperator" eSuperTypes="#//AlphaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AllDifferentOperator" eSuperTypes="#//AlphaOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariables" upperBound="-1"
+        eType="#//EdgeVariable"/>
+  </eClassifiers>
 </ecore:EPackage>
