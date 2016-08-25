@@ -19,6 +19,16 @@ import org.eclipse.emf.common.util.Enumerator;
  */
 public enum Direction implements Enumerator {
 	/**
+	 * The '<em><b>BOTH</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #BOTH_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	BOTH(0, "BOTH", "BOTH"),
+
+	/**
 	 * The '<em><b>IN</b></em>' literal object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -26,7 +36,7 @@ public enum Direction implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	IN(0, "IN", "IN"),
+	IN(1, "IN", "IN"),
 
 	/**
 	 * The '<em><b>OUT</b></em>' literal object.
@@ -36,7 +46,22 @@ public enum Direction implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	OUT(1, "OUT", "OUT");
+	OUT(2, "OUT", "OUT");
+
+	/**
+	 * The '<em><b>BOTH</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>BOTH</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @see #BOTH
+	 * @model
+	 * @generated
+	 * @ordered
+	 */
+	public static final int BOTH_VALUE = 0;
 
 	/**
 	 * The '<em><b>IN</b></em>' literal value.
@@ -51,7 +76,7 @@ public enum Direction implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int IN_VALUE = 0;
+	public static final int IN_VALUE = 1;
 
 	/**
 	 * The '<em><b>OUT</b></em>' literal value.
@@ -66,7 +91,7 @@ public enum Direction implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int OUT_VALUE = 1;
+	public static final int OUT_VALUE = 2;
 
 	/**
 	 * An array of all the '<em><b>Direction</b></em>' enumerators.
@@ -76,6 +101,7 @@ public enum Direction implements Enumerator {
 	 */
 	private static final Direction[] VALUES_ARRAY =
 		new Direction[] {
+			BOTH,
 			IN,
 			OUT,
 		};
@@ -134,6 +160,7 @@ public enum Direction implements Enumerator {
 	 */
 	public static Direction get(int value) {
 		switch (value) {
+			case BOTH_VALUE: return BOTH;
 			case IN_VALUE: return IN;
 			case OUT_VALUE: return OUT;
 		}

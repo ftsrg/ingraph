@@ -2,24 +2,15 @@
  */
 package relalg.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import relalg.AlgebraExpression;
 import relalg.BetaOperator;
-import relalg.JoinBinding;
 import relalg.RelalgPackage;
 
 /**
@@ -32,7 +23,6 @@ import relalg.RelalgPackage;
  * <ul>
  *   <li>{@link relalg.impl.BetaOperatorImpl#getLeftParent <em>Left Parent</em>}</li>
  *   <li>{@link relalg.impl.BetaOperatorImpl#getRightParent <em>Right Parent</em>}</li>
- *   <li>{@link relalg.impl.BetaOperatorImpl#getBindings <em>Bindings</em>}</li>
  * </ul>
  *
  * @generated
@@ -57,16 +47,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * @ordered
 	 */
 	protected AlgebraExpression rightParent;
-
-	/**
-	 * The cached value of the '{@link #getBindings() <em>Bindings</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBindings()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<JoinBinding> bindings;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -168,32 +148,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<JoinBinding> getBindings() {
-		if (bindings == null) {
-			bindings = new EObjectContainmentEList<JoinBinding>(JoinBinding.class, this, RelalgPackage.BETA_OPERATOR__BINDINGS);
-		}
-		return bindings;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case RelalgPackage.BETA_OPERATOR__BINDINGS:
-				return ((InternalEList<?>)getBindings()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -203,8 +157,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				if (resolve) return getRightParent();
 				return basicGetRightParent();
-			case RelalgPackage.BETA_OPERATOR__BINDINGS:
-				return getBindings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -214,7 +166,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -223,10 +174,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 				return;
 			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				setRightParent((AlgebraExpression)newValue);
-				return;
-			case RelalgPackage.BETA_OPERATOR__BINDINGS:
-				getBindings().clear();
-				getBindings().addAll((Collection<? extends JoinBinding>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -246,9 +193,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				setRightParent((AlgebraExpression)null);
 				return;
-			case RelalgPackage.BETA_OPERATOR__BINDINGS:
-				getBindings().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -265,8 +209,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 				return leftParent != null;
 			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
 				return rightParent != null;
-			case RelalgPackage.BETA_OPERATOR__BINDINGS:
-				return bindings != null && !bindings.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

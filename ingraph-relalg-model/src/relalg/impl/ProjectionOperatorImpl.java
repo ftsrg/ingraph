@@ -4,19 +4,15 @@ package relalg.impl;
 
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
-import relalg.Attribute;
 import relalg.ProjectionOperator;
 import relalg.RelalgPackage;
+import relalg.Variable;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,21 +22,21 @@ import relalg.RelalgPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.ProjectionOperatorImpl#getAttributes <em>Attributes</em>}</li>
+ *   <li>{@link relalg.impl.ProjectionOperatorImpl#getVariables <em>Variables</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ProjectionOperatorImpl extends AlphaOperatorImpl implements ProjectionOperator {
 	/**
-	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * The cached value of the '{@link #getVariables() <em>Variables</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAttributes()
+	 * @see #getVariables()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Attribute> attributes;
+	protected EList<Variable> variables;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -66,25 +62,11 @@ public class ProjectionOperatorImpl extends AlphaOperatorImpl implements Project
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<Attribute> getAttributes() {
-		if (attributes == null) {
-			attributes = new EObjectContainmentEList<Attribute>(Attribute.class, this, RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES);
+	public EList<Variable> getVariables() {
+		if (variables == null) {
+			variables = new EObjectResolvingEList<Variable>(Variable.class, this, RelalgPackage.PROJECTION_OPERATOR__VARIABLES);
 		}
-		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
-				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+		return variables;
 	}
 
 	/**
@@ -95,8 +77,8 @@ public class ProjectionOperatorImpl extends AlphaOperatorImpl implements Project
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
-				return getAttributes();
+			case RelalgPackage.PROJECTION_OPERATOR__VARIABLES:
+				return getVariables();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,9 +92,9 @@ public class ProjectionOperatorImpl extends AlphaOperatorImpl implements Project
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
-				getAttributes().clear();
-				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+			case RelalgPackage.PROJECTION_OPERATOR__VARIABLES:
+				getVariables().clear();
+				getVariables().addAll((Collection<? extends Variable>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,8 +108,8 @@ public class ProjectionOperatorImpl extends AlphaOperatorImpl implements Project
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
-				getAttributes().clear();
+			case RelalgPackage.PROJECTION_OPERATOR__VARIABLES:
+				getVariables().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -141,8 +123,8 @@ public class ProjectionOperatorImpl extends AlphaOperatorImpl implements Project
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.PROJECTION_OPERATOR__ATTRIBUTES:
-				return attributes != null && !attributes.isEmpty();
+			case RelalgPackage.PROJECTION_OPERATOR__VARIABLES:
+				return variables != null && !variables.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

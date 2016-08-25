@@ -72,13 +72,6 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.INPUT_RELATION: {
-				InputRelation inputRelation = (InputRelation)theEObject;
-				T result = caseInputRelation(inputRelation);
-				if (result == null) result = caseAlgebraExpression(inputRelation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case RelalgPackage.PROJECTION_OPERATOR: {
 				ProjectionOperator projectionOperator = (ProjectionOperator)theEObject;
 				T result = caseProjectionOperator(projectionOperator);
@@ -125,24 +118,6 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.ATTRIBUTE: {
-				Attribute attribute = (Attribute)theEObject;
-				T result = caseAttribute(attribute);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case RelalgPackage.ATTRIBUTE_SET: {
-				AttributeSet attributeSet = (AttributeSet)theEObject;
-				T result = caseAttributeSet(attributeSet);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case RelalgPackage.JOIN_BINDING: {
-				JoinBinding joinBinding = (JoinBinding)theEObject;
-				T result = caseJoinBinding(joinBinding);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case RelalgPackage.FILTER_OPERATOR: {
 				FilterOperator filterOperator = (FilterOperator)theEObject;
 				T result = caseFilterOperator(filterOperator);
@@ -159,10 +134,10 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.GET_NODES_OPERATOR: {
-				GetNodesOperator getNodesOperator = (GetNodesOperator)theEObject;
-				T result = caseGetNodesOperator(getNodesOperator);
-				if (result == null) result = caseAlgebraExpression(getNodesOperator);
+			case RelalgPackage.GET_VERTICES_OPERATOR: {
+				GetVerticesOperator getVerticesOperator = (GetVerticesOperator)theEObject;
+				T result = caseGetVerticesOperator(getVerticesOperator);
+				if (result == null) result = caseAlgebraExpression(getVerticesOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -180,10 +155,10 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.NODE_VARIABLE: {
-				NodeVariable nodeVariable = (NodeVariable)theEObject;
-				T result = caseNodeVariable(nodeVariable);
-				if (result == null) result = caseVariable(nodeVariable);
+			case RelalgPackage.VERTEX_VARIABLE: {
+				VertexVariable vertexVariable = (VertexVariable)theEObject;
+				T result = caseVertexVariable(vertexVariable);
+				if (result == null) result = caseVariable(vertexVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -191,6 +166,34 @@ public class RelalgSwitch<T> extends Switch<T> {
 				EdgeVariable edgeVariable = (EdgeVariable)theEObject;
 				T result = caseEdgeVariable(edgeVariable);
 				if (result == null) result = caseVariable(edgeVariable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.LABEL: {
+				Label label = (Label)theEObject;
+				T result = caseLabel(label);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.VERTEX_LABEL: {
+				VertexLabel vertexLabel = (VertexLabel)theEObject;
+				T result = caseVertexLabel(vertexLabel);
+				if (result == null) result = caseLabel(vertexLabel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.EDGE_LABEL: {
+				EdgeLabel edgeLabel = (EdgeLabel)theEObject;
+				T result = caseEdgeLabel(edgeLabel);
+				if (result == null) result = caseLabel(edgeLabel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ALL_DIFFERENT_OPERATOR: {
+				AllDifferentOperator allDifferentOperator = (AllDifferentOperator)theEObject;
+				T result = caseAllDifferentOperator(allDifferentOperator);
+				if (result == null) result = caseAlphaOperator(allDifferentOperator);
+				if (result == null) result = caseAlgebraExpression(allDifferentOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -210,21 +213,6 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAlgebraExpression(AlgebraExpression object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Input Relation</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Input Relation</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseInputRelation(InputRelation object) {
 		return null;
 	}
 
@@ -319,51 +307,6 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Attribute</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAttribute(Attribute object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Attribute Set</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Attribute Set</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAttributeSet(AttributeSet object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Join Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Join Binding</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseJoinBinding(JoinBinding object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Filter Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -394,17 +337,17 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Get Nodes Operator</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Get Vertices Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Get Nodes Operator</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Get Vertices Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseGetNodesOperator(GetNodesOperator object) {
+	public T caseGetVerticesOperator(GetVerticesOperator object) {
 		return null;
 	}
 
@@ -439,17 +382,17 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Node Variable</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Vertex Variable</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Node Variable</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Vertex Variable</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNodeVariable(NodeVariable object) {
+	public T caseVertexVariable(VertexVariable object) {
 		return null;
 	}
 
@@ -465,6 +408,66 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEdgeVariable(EdgeVariable object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Label</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Label</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLabel(Label object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vertex Label</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vertex Label</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVertexLabel(VertexLabel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Edge Label</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Edge Label</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEdgeLabel(EdgeLabel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>All Different Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>All Different Operator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAllDifferentOperator(AllDifferentOperator object) {
 		return null;
 	}
 

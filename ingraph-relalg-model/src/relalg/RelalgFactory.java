@@ -22,15 +22,6 @@ public interface RelalgFactory extends EFactory {
 	RelalgFactory eINSTANCE = relalg.impl.RelalgFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Input Relation</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Input Relation</em>'.
-	 * @generated
-	 */
-	InputRelation createInputRelation();
-
-	/**
 	 * Returns a new object of class '<em>Projection Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,33 +58,6 @@ public interface RelalgFactory extends EFactory {
 	ProductionOperator createProductionOperator();
 
 	/**
-	 * Returns a new object of class '<em>Attribute</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Attribute</em>'.
-	 * @generated
-	 */
-	Attribute createAttribute();
-
-	/**
-	 * Returns a new object of class '<em>Attribute Set</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Attribute Set</em>'.
-	 * @generated
-	 */
-	AttributeSet createAttributeSet();
-
-	/**
-	 * Returns a new object of class '<em>Join Binding</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Join Binding</em>'.
-	 * @generated
-	 */
-	JoinBinding createJoinBinding();
-
-	/**
 	 * Returns a new object of class '<em>Filter Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -112,13 +76,13 @@ public interface RelalgFactory extends EFactory {
 	ExpandOperator createExpandOperator();
 
 	/**
-	 * Returns a new object of class '<em>Get Nodes Operator</em>'.
+	 * Returns a new object of class '<em>Get Vertices Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Get Nodes Operator</em>'.
+	 * @return a new object of class '<em>Get Vertices Operator</em>'.
 	 * @generated
 	 */
-	GetNodesOperator createGetNodesOperator();
+	GetVerticesOperator createGetVerticesOperator();
 
 	/**
 	 * Returns a new object of class '<em>Duplicate Elimination Operator</em>'.
@@ -130,13 +94,13 @@ public interface RelalgFactory extends EFactory {
 	DuplicateEliminationOperator createDuplicateEliminationOperator();
 
 	/**
-	 * Returns a new object of class '<em>Node Variable</em>'.
+	 * Returns a new object of class '<em>Vertex Variable</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Node Variable</em>'.
+	 * @return a new object of class '<em>Vertex Variable</em>'.
 	 * @generated
 	 */
-	NodeVariable createNodeVariable();
+	VertexVariable createVertexVariable();
 
 	/**
 	 * Returns a new object of class '<em>Edge Variable</em>'.
@@ -146,6 +110,33 @@ public interface RelalgFactory extends EFactory {
 	 * @generated
 	 */
 	EdgeVariable createEdgeVariable();
+
+	/**
+	 * Returns a new object of class '<em>Vertex Label</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vertex Label</em>'.
+	 * @generated
+	 */
+	VertexLabel createVertexLabel();
+
+	/**
+	 * Returns a new object of class '<em>Edge Label</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Edge Label</em>'.
+	 * @generated
+	 */
+	EdgeLabel createEdgeLabel();
+
+	/**
+	 * Returns a new object of class '<em>All Different Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>All Different Operator</em>'.
+	 * @generated
+	 */
+	AllDifferentOperator createAllDifferentOperator();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -11,26 +11,26 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import relalg.AlgebraExpression;
+import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
-import relalg.Attribute;
-import relalg.AttributeSet;
 import relalg.BetaOperator;
 import relalg.Direction;
 import relalg.DuplicateEliminationOperator;
+import relalg.EdgeLabel;
 import relalg.EdgeVariable;
 import relalg.ExpandOperator;
 import relalg.FilterOperator;
-import relalg.GetNodesOperator;
-import relalg.InputRelation;
-import relalg.JoinBinding;
+import relalg.GetVerticesOperator;
 import relalg.JoinOperator;
-import relalg.NodeVariable;
+import relalg.Label;
 import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
 import relalg.Variable;
+import relalg.VertexLabel;
+import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -45,13 +45,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass algebraExpressionEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass inputRelationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -100,27 +93,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass attributeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass attributeSetEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass joinBindingEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass filterOperatorEClass = null;
 
 	/**
@@ -135,7 +107,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass getNodesOperatorEClass = null;
+	private EClass getVerticesOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -156,7 +128,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass nodeVariableEClass = null;
+	private EClass vertexVariableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,6 +136,34 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass edgeVariableEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass labelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vertexLabelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass edgeLabelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass allDifferentOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -256,33 +256,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getInputRelation() {
-		return inputRelationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getInputRelation_Attributes() {
-		return (EReference)inputRelationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getInputRelation_Type() {
-		return (EAttribute)inputRelationEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getProjectionOperator() {
 		return projectionOperatorEClass;
 	}
@@ -292,7 +265,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getProjectionOperator_Attributes() {
+	public EReference getProjectionOperator_Variables() {
 		return (EReference)projectionOperatorEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -355,15 +328,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_Bindings() {
-		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getAntiJoinOperator() {
 		return antiJoinOperatorEClass;
 	}
@@ -375,69 +339,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EClass getProductionOperator() {
 		return productionOperatorEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getAttribute() {
-		return attributeEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getAttribute_Name() {
-		return (EAttribute)attributeEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getAttributeSet() {
-		return attributeSetEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAttributeSet_Attributes() {
-		return (EReference)attributeSetEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getJoinBinding() {
-		return joinBindingEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getJoinBinding_LeftAttribute() {
-		return (EReference)joinBindingEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getJoinBinding_RightAttribute() {
-		return (EReference)joinBindingEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -472,8 +373,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getGetNodesOperator() {
-		return getNodesOperatorEClass;
+	public EReference getExpandOperator_EdgeVariable() {
+		return (EReference)expandOperatorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -481,8 +382,44 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getGetNodesOperator_Attribute() {
-		return (EReference)getNodesOperatorEClass.getEStructuralFeatures().get(0);
+	public EReference getExpandOperator_SourceVertexVariable() {
+		return (EReference)expandOperatorEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getExpandOperator_TargetVertexVariable() {
+		return (EReference)expandOperatorEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGetVerticesOperator() {
+		return getVerticesOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getGetVerticesOperator_VertexVariable() {
+		return (EReference)getVerticesOperatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getGetVerticesOperator_VertexLabel() {
+		return (EReference)getVerticesOperatorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -508,8 +445,17 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getNodeVariable() {
-		return nodeVariableEClass;
+	public EAttribute getVariable_Name() {
+		return (EAttribute)variableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVertexVariable() {
+		return vertexVariableEClass;
 	}
 
 	/**
@@ -519,6 +465,51 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EClass getEdgeVariable() {
 		return edgeVariableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLabel() {
+		return labelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLabel_Name() {
+		return (EAttribute)labelEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVertexLabel() {
+		return vertexLabelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEdgeLabel() {
+		return edgeLabelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAllDifferentOperator() {
+		return allDifferentOperatorEClass;
 	}
 
 	/**
@@ -561,12 +552,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		algebraExpressionEClass = createEClass(ALGEBRA_EXPRESSION);
 		createEAttribute(algebraExpressionEClass, ALGEBRA_EXPRESSION__NAME);
 
-		inputRelationEClass = createEClass(INPUT_RELATION);
-		createEReference(inputRelationEClass, INPUT_RELATION__ATTRIBUTES);
-		createEAttribute(inputRelationEClass, INPUT_RELATION__TYPE);
-
 		projectionOperatorEClass = createEClass(PROJECTION_OPERATOR);
-		createEReference(projectionOperatorEClass, PROJECTION_OPERATOR__ATTRIBUTES);
+		createEReference(projectionOperatorEClass, PROJECTION_OPERATOR__VARIABLES);
 
 		joinOperatorEClass = createEClass(JOIN_OPERATOR);
 
@@ -576,37 +563,40 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		betaOperatorEClass = createEClass(BETA_OPERATOR);
 		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_PARENT);
 		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_PARENT);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__BINDINGS);
 
 		antiJoinOperatorEClass = createEClass(ANTI_JOIN_OPERATOR);
 
 		productionOperatorEClass = createEClass(PRODUCTION_OPERATOR);
 
-		attributeEClass = createEClass(ATTRIBUTE);
-		createEAttribute(attributeEClass, ATTRIBUTE__NAME);
-
-		attributeSetEClass = createEClass(ATTRIBUTE_SET);
-		createEReference(attributeSetEClass, ATTRIBUTE_SET__ATTRIBUTES);
-
-		joinBindingEClass = createEClass(JOIN_BINDING);
-		createEReference(joinBindingEClass, JOIN_BINDING__LEFT_ATTRIBUTE);
-		createEReference(joinBindingEClass, JOIN_BINDING__RIGHT_ATTRIBUTE);
-
 		filterOperatorEClass = createEClass(FILTER_OPERATOR);
 
 		expandOperatorEClass = createEClass(EXPAND_OPERATOR);
 		createEAttribute(expandOperatorEClass, EXPAND_OPERATOR__DIRECTION);
+		createEReference(expandOperatorEClass, EXPAND_OPERATOR__EDGE_VARIABLE);
+		createEReference(expandOperatorEClass, EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE);
+		createEReference(expandOperatorEClass, EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE);
 
-		getNodesOperatorEClass = createEClass(GET_NODES_OPERATOR);
-		createEReference(getNodesOperatorEClass, GET_NODES_OPERATOR__ATTRIBUTE);
+		getVerticesOperatorEClass = createEClass(GET_VERTICES_OPERATOR);
+		createEReference(getVerticesOperatorEClass, GET_VERTICES_OPERATOR__VERTEX_VARIABLE);
+		createEReference(getVerticesOperatorEClass, GET_VERTICES_OPERATOR__VERTEX_LABEL);
 
 		duplicateEliminationOperatorEClass = createEClass(DUPLICATE_ELIMINATION_OPERATOR);
 
 		variableEClass = createEClass(VARIABLE);
+		createEAttribute(variableEClass, VARIABLE__NAME);
 
-		nodeVariableEClass = createEClass(NODE_VARIABLE);
+		vertexVariableEClass = createEClass(VERTEX_VARIABLE);
 
 		edgeVariableEClass = createEClass(EDGE_VARIABLE);
+
+		labelEClass = createEClass(LABEL);
+		createEAttribute(labelEClass, LABEL__NAME);
+
+		vertexLabelEClass = createEClass(VERTEX_LABEL);
+
+		edgeLabelEClass = createEClass(EDGE_LABEL);
+
+		allDifferentOperatorEClass = createEClass(ALL_DIFFERENT_OPERATOR);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -640,7 +630,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		inputRelationEClass.getESuperTypes().add(this.getAlgebraExpression());
 		projectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		joinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
 		alphaOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
@@ -649,21 +638,20 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		filterOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		expandOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		getNodesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
+		getVerticesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		duplicateEliminationOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		nodeVariableEClass.getESuperTypes().add(this.getVariable());
+		vertexVariableEClass.getESuperTypes().add(this.getVariable());
 		edgeVariableEClass.getESuperTypes().add(this.getVariable());
+		vertexLabelEClass.getESuperTypes().add(this.getLabel());
+		edgeLabelEClass.getESuperTypes().add(this.getLabel());
+		allDifferentOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAlgebraExpression_Name(), ecorePackage.getEString(), "name", null, 0, 1, AlgebraExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(inputRelationEClass, InputRelation.class, "InputRelation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getInputRelation_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getInputRelation_Type(), ecorePackage.getEString(), "type", null, 0, 1, InputRelation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(projectionOperatorEClass, ProjectionOperator.class, "ProjectionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getProjectionOperator_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, ProjectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProjectionOperator_Variables(), this.getVariable(), null, "variables", null, 0, -1, ProjectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(joinOperatorEClass, JoinOperator.class, "JoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -673,40 +661,44 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(betaOperatorEClass, BetaOperator.class, "BetaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBetaOperator_LeftParent(), this.getAlgebraExpression(), null, "leftParent", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBetaOperator_RightParent(), this.getAlgebraExpression(), null, "rightParent", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_Bindings(), this.getJoinBinding(), null, "bindings", null, 0, -1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(antiJoinOperatorEClass, AntiJoinOperator.class, "AntiJoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(productionOperatorEClass, ProductionOperator.class, "ProductionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(attributeEClass, Attribute.class, "Attribute", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAttribute_Name(), ecorePackage.getEString(), "name", null, 0, 1, Attribute.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(attributeSetEClass, AttributeSet.class, "AttributeSet", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAttributeSet_Attributes(), this.getAttribute(), null, "attributes", null, 0, -1, AttributeSet.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(joinBindingEClass, JoinBinding.class, "JoinBinding", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getJoinBinding_LeftAttribute(), this.getAttribute(), null, "leftAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getJoinBinding_RightAttribute(), this.getAttribute(), null, "rightAttribute", null, 1, 1, JoinBinding.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(filterOperatorEClass, FilterOperator.class, "FilterOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(expandOperatorEClass, ExpandOperator.class, "ExpandOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpandOperator_Direction(), this.getDirection(), "direction", "IN", 0, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExpandOperator_EdgeVariable(), this.getEdgeVariable(), null, "edgeVariable", null, 1, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExpandOperator_SourceVertexVariable(), this.getVertexVariable(), null, "sourceVertexVariable", null, 1, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getExpandOperator_TargetVertexVariable(), this.getVertexVariable(), null, "targetVertexVariable", null, 1, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(getNodesOperatorEClass, GetNodesOperator.class, "GetNodesOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getGetNodesOperator_Attribute(), this.getAttribute(), null, "attribute", null, 1, 1, GetNodesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(getVerticesOperatorEClass, GetVerticesOperator.class, "GetVerticesOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getGetVerticesOperator_VertexVariable(), this.getVertexVariable(), null, "vertexVariable", null, 1, 1, GetVerticesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGetVerticesOperator_VertexLabel(), this.getVertexLabel(), null, "vertexLabel", null, 1, 1, GetVerticesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(duplicateEliminationOperatorEClass, DuplicateEliminationOperator.class, "DuplicateEliminationOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(variableEClass, Variable.class, "Variable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getVariable_Name(), ecorePackage.getEString(), "name", null, 0, 1, Variable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(nodeVariableEClass, NodeVariable.class, "NodeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(vertexVariableEClass, VertexVariable.class, "VertexVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(edgeVariableEClass, EdgeVariable.class, "EdgeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(labelEClass, Label.class, "Label", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLabel_Name(), ecorePackage.getEString(), "name", null, 0, 1, Label.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(vertexLabelEClass, VertexLabel.class, "VertexLabel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(edgeLabelEClass, EdgeLabel.class, "EdgeLabel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(allDifferentOperatorEClass, AllDifferentOperator.class, "AllDifferentOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");
+		addEEnumLiteral(directionEEnum, Direction.BOTH);
 		addEEnumLiteral(directionEEnum, Direction.IN);
 		addEEnumLiteral(directionEEnum, Direction.OUT);
 

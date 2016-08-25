@@ -5,14 +5,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         iD="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="InputRelation" eSuperTypes="#//AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
-        eType="#//Attribute" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectionOperator" eSuperTypes="#//AlphaOperator">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
-        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
@@ -24,39 +19,41 @@
         eType="#//AlgebraExpression"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" lowerBound="1"
         eType="#//AlgebraExpression"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
-        eType="#//JoinBinding" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProductionOperator" eSuperTypes="#//AlphaOperator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Attribute">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttributeSet">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
-        eType="#//Attribute" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinBinding">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftAttribute" lowerBound="1"
-        eType="#//Attribute"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightAttribute" lowerBound="1"
-        eType="#//Attribute"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FilterOperator" eSuperTypes="#//AlphaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ExpandOperator" eSuperTypes="#//AlphaOperator">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"
         defaultValueLiteral="IN"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariable" lowerBound="1"
+        eType="#//EdgeVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceVertexVariable" lowerBound="1"
+        eType="#//VertexVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetVertexVariable" lowerBound="1"
+        eType="#//VertexVariable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="Direction">
-    <eLiterals name="IN"/>
-    <eLiterals name="OUT" value="1"/>
+    <eLiterals name="BOTH"/>
+    <eLiterals name="IN" value="1"/>
+    <eLiterals name="OUT" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetNodesOperator" eSuperTypes="#//AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
-        eType="#//Attribute"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GetVerticesOperator" eSuperTypes="#//AlgebraExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexVariable" lowerBound="1"
+        eType="#//VertexVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexLabel" lowerBound="1"
+        eType="#//VertexLabel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperator" eSuperTypes="#//AlphaOperator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Variable" abstract="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="NodeVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//Variable"/>
   <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VertexLabel" eSuperTypes="#//Label"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EdgeLabel" eSuperTypes="#//Label"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AllDifferentOperator" eSuperTypes="#//AlphaOperator"/>
 </ecore:EPackage>

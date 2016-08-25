@@ -9,23 +9,23 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import relalg.Attribute;
+import relalg.Label;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Attribute</b></em>'.
+ * An implementation of the model object '<em><b>Label</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.AttributeImpl#getName <em>Name</em>}</li>
+ *   <li>{@link relalg.impl.LabelImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class AttributeImpl extends MinimalEObjectImpl.Container implements Attribute {
+public abstract class LabelImpl extends MinimalEObjectImpl.Container implements Label {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -51,7 +51,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AttributeImpl() {
+	protected LabelImpl() {
 		super();
 	}
 
@@ -62,7 +62,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.ATTRIBUTE;
+		return RelalgPackage.Literals.LABEL;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.LABEL__NAME, oldName, name));
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE__NAME:
+			case RelalgPackage.LABEL__NAME:
 				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -108,7 +108,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE__NAME:
+			case RelalgPackage.LABEL__NAME:
 				setName((String)newValue);
 				return;
 		}
@@ -123,7 +123,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE__NAME:
+			case RelalgPackage.LABEL__NAME:
 				setName(NAME_EDEFAULT);
 				return;
 		}
@@ -138,7 +138,7 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE__NAME:
+			case RelalgPackage.LABEL__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
@@ -160,4 +160,4 @@ public class AttributeImpl extends MinimalEObjectImpl.Container implements Attri
 		return result.toString();
 	}
 
-} //AttributeImpl
+} //LabelImpl

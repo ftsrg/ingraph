@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.NodeVariable;
 import relalg.RelalgPackage;
+import relalg.VertexLabel;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Node Variable</b></em>'.
+ * An implementation of the model object '<em><b>Vertex Label</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class NodeVariableImpl extends VariableImpl implements NodeVariable {
+public class VertexLabelImpl extends LabelImpl implements VertexLabel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NodeVariableImpl() {
+	protected VertexLabelImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class NodeVariableImpl extends VariableImpl implements NodeVariable {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.NODE_VARIABLE;
+		return RelalgPackage.Literals.VERTEX_LABEL;
 	}
 
-} //NodeVariableImpl
+} //VertexLabelImpl

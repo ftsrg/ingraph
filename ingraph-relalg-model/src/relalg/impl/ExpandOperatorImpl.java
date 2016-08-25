@@ -5,12 +5,15 @@ package relalg.impl;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import relalg.Direction;
+import relalg.EdgeVariable;
 import relalg.ExpandOperator;
 import relalg.RelalgPackage;
+import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +24,9 @@ import relalg.RelalgPackage;
  * </p>
  * <ul>
  *   <li>{@link relalg.impl.ExpandOperatorImpl#getDirection <em>Direction</em>}</li>
+ *   <li>{@link relalg.impl.ExpandOperatorImpl#getEdgeVariable <em>Edge Variable</em>}</li>
+ *   <li>{@link relalg.impl.ExpandOperatorImpl#getSourceVertexVariable <em>Source Vertex Variable</em>}</li>
+ *   <li>{@link relalg.impl.ExpandOperatorImpl#getTargetVertexVariable <em>Target Vertex Variable</em>}</li>
  * </ul>
  *
  * @generated
@@ -45,6 +51,36 @@ public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOpera
 	 * @ordered
 	 */
 	protected Direction direction = DIRECTION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getEdgeVariable() <em>Edge Variable</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEdgeVariable()
+	 * @generated
+	 * @ordered
+	 */
+	protected EdgeVariable edgeVariable;
+
+	/**
+	 * The cached value of the '{@link #getSourceVertexVariable() <em>Source Vertex Variable</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSourceVertexVariable()
+	 * @generated
+	 * @ordered
+	 */
+	protected VertexVariable sourceVertexVariable;
+
+	/**
+	 * The cached value of the '{@link #getTargetVertexVariable() <em>Target Vertex Variable</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTargetVertexVariable()
+	 * @generated
+	 * @ordered
+	 */
+	protected VertexVariable targetVertexVariable;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,11 +127,134 @@ public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOpera
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EdgeVariable getEdgeVariable() {
+		if (edgeVariable != null && edgeVariable.eIsProxy()) {
+			InternalEObject oldEdgeVariable = (InternalEObject)edgeVariable;
+			edgeVariable = (EdgeVariable)eResolveProxy(oldEdgeVariable);
+			if (edgeVariable != oldEdgeVariable) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE, oldEdgeVariable, edgeVariable));
+			}
+		}
+		return edgeVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EdgeVariable basicGetEdgeVariable() {
+		return edgeVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEdgeVariable(EdgeVariable newEdgeVariable) {
+		EdgeVariable oldEdgeVariable = edgeVariable;
+		edgeVariable = newEdgeVariable;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE, oldEdgeVariable, edgeVariable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VertexVariable getSourceVertexVariable() {
+		if (sourceVertexVariable != null && sourceVertexVariable.eIsProxy()) {
+			InternalEObject oldSourceVertexVariable = (InternalEObject)sourceVertexVariable;
+			sourceVertexVariable = (VertexVariable)eResolveProxy(oldSourceVertexVariable);
+			if (sourceVertexVariable != oldSourceVertexVariable) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE, oldSourceVertexVariable, sourceVertexVariable));
+			}
+		}
+		return sourceVertexVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VertexVariable basicGetSourceVertexVariable() {
+		return sourceVertexVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSourceVertexVariable(VertexVariable newSourceVertexVariable) {
+		VertexVariable oldSourceVertexVariable = sourceVertexVariable;
+		sourceVertexVariable = newSourceVertexVariable;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE, oldSourceVertexVariable, sourceVertexVariable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VertexVariable getTargetVertexVariable() {
+		if (targetVertexVariable != null && targetVertexVariable.eIsProxy()) {
+			InternalEObject oldTargetVertexVariable = (InternalEObject)targetVertexVariable;
+			targetVertexVariable = (VertexVariable)eResolveProxy(oldTargetVertexVariable);
+			if (targetVertexVariable != oldTargetVertexVariable) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE, oldTargetVertexVariable, targetVertexVariable));
+			}
+		}
+		return targetVertexVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VertexVariable basicGetTargetVertexVariable() {
+		return targetVertexVariable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTargetVertexVariable(VertexVariable newTargetVertexVariable) {
+		VertexVariable oldTargetVertexVariable = targetVertexVariable;
+		targetVertexVariable = newTargetVertexVariable;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE, oldTargetVertexVariable, targetVertexVariable));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				return getDirection();
+			case RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE:
+				if (resolve) return getEdgeVariable();
+				return basicGetEdgeVariable();
+			case RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE:
+				if (resolve) return getSourceVertexVariable();
+				return basicGetSourceVertexVariable();
+			case RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE:
+				if (resolve) return getTargetVertexVariable();
+				return basicGetTargetVertexVariable();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,6 +269,15 @@ public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOpera
 		switch (featureID) {
 			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				setDirection((Direction)newValue);
+				return;
+			case RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE:
+				setEdgeVariable((EdgeVariable)newValue);
+				return;
+			case RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE:
+				setSourceVertexVariable((VertexVariable)newValue);
+				return;
+			case RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE:
+				setTargetVertexVariable((VertexVariable)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -126,6 +294,15 @@ public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOpera
 			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				setDirection(DIRECTION_EDEFAULT);
 				return;
+			case RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE:
+				setEdgeVariable((EdgeVariable)null);
+				return;
+			case RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE:
+				setSourceVertexVariable((VertexVariable)null);
+				return;
+			case RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE:
+				setTargetVertexVariable((VertexVariable)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -140,6 +317,12 @@ public class ExpandOperatorImpl extends AlphaOperatorImpl implements ExpandOpera
 		switch (featureID) {
 			case RelalgPackage.EXPAND_OPERATOR__DIRECTION:
 				return direction != DIRECTION_EDEFAULT;
+			case RelalgPackage.EXPAND_OPERATOR__EDGE_VARIABLE:
+				return edgeVariable != null;
+			case RelalgPackage.EXPAND_OPERATOR__SOURCE_VERTEX_VARIABLE:
+				return sourceVertexVariable != null;
+			case RelalgPackage.EXPAND_OPERATOR__TARGET_VERTEX_VARIABLE:
+				return targetVertexVariable != null;
 		}
 		return super.eIsSet(featureID);
 	}

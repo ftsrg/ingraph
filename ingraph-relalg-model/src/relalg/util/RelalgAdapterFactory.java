@@ -72,10 +72,6 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createAlgebraExpressionAdapter();
 			}
 			@Override
-			public Adapter caseInputRelation(InputRelation object) {
-				return createInputRelationAdapter();
-			}
-			@Override
 			public Adapter caseProjectionOperator(ProjectionOperator object) {
 				return createProjectionOperatorAdapter();
 			}
@@ -100,18 +96,6 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createProductionOperatorAdapter();
 			}
 			@Override
-			public Adapter caseAttribute(Attribute object) {
-				return createAttributeAdapter();
-			}
-			@Override
-			public Adapter caseAttributeSet(AttributeSet object) {
-				return createAttributeSetAdapter();
-			}
-			@Override
-			public Adapter caseJoinBinding(JoinBinding object) {
-				return createJoinBindingAdapter();
-			}
-			@Override
 			public Adapter caseFilterOperator(FilterOperator object) {
 				return createFilterOperatorAdapter();
 			}
@@ -120,8 +104,8 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createExpandOperatorAdapter();
 			}
 			@Override
-			public Adapter caseGetNodesOperator(GetNodesOperator object) {
-				return createGetNodesOperatorAdapter();
+			public Adapter caseGetVerticesOperator(GetVerticesOperator object) {
+				return createGetVerticesOperatorAdapter();
 			}
 			@Override
 			public Adapter caseDuplicateEliminationOperator(DuplicateEliminationOperator object) {
@@ -132,12 +116,28 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createVariableAdapter();
 			}
 			@Override
-			public Adapter caseNodeVariable(NodeVariable object) {
-				return createNodeVariableAdapter();
+			public Adapter caseVertexVariable(VertexVariable object) {
+				return createVertexVariableAdapter();
 			}
 			@Override
 			public Adapter caseEdgeVariable(EdgeVariable object) {
 				return createEdgeVariableAdapter();
+			}
+			@Override
+			public Adapter caseLabel(Label object) {
+				return createLabelAdapter();
+			}
+			@Override
+			public Adapter caseVertexLabel(VertexLabel object) {
+				return createVertexLabelAdapter();
+			}
+			@Override
+			public Adapter caseEdgeLabel(EdgeLabel object) {
+				return createEdgeLabelAdapter();
+			}
+			@Override
+			public Adapter caseAllDifferentOperator(AllDifferentOperator object) {
+				return createAllDifferentOperatorAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -170,20 +170,6 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAlgebraExpressionAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link relalg.InputRelation <em>Input Relation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see relalg.InputRelation
-	 * @generated
-	 */
-	public Adapter createInputRelationAdapter() {
 		return null;
 	}
 
@@ -272,48 +258,6 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.Attribute <em>Attribute</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see relalg.Attribute
-	 * @generated
-	 */
-	public Adapter createAttributeAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link relalg.AttributeSet <em>Attribute Set</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see relalg.AttributeSet
-	 * @generated
-	 */
-	public Adapter createAttributeSetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link relalg.JoinBinding <em>Join Binding</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see relalg.JoinBinding
-	 * @generated
-	 */
-	public Adapter createJoinBindingAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link relalg.FilterOperator <em>Filter Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -342,16 +286,16 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.GetNodesOperator <em>Get Nodes Operator</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.GetVerticesOperator <em>Get Vertices Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.GetNodesOperator
+	 * @see relalg.GetVerticesOperator
 	 * @generated
 	 */
-	public Adapter createGetNodesOperatorAdapter() {
+	public Adapter createGetVerticesOperatorAdapter() {
 		return null;
 	}
 
@@ -384,16 +328,16 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.NodeVariable <em>Node Variable</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.VertexVariable <em>Vertex Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.NodeVariable
+	 * @see relalg.VertexVariable
 	 * @generated
 	 */
-	public Adapter createNodeVariableAdapter() {
+	public Adapter createVertexVariableAdapter() {
 		return null;
 	}
 
@@ -408,6 +352,62 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEdgeVariableAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Label <em>Label</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Label
+	 * @generated
+	 */
+	public Adapter createLabelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.VertexLabel <em>Vertex Label</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.VertexLabel
+	 * @generated
+	 */
+	public Adapter createVertexLabelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.EdgeLabel <em>Edge Label</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.EdgeLabel
+	 * @generated
+	 */
+	public Adapter createEdgeLabelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.AllDifferentOperator <em>All Different Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.AllDifferentOperator
+	 * @generated
+	 */
+	public Adapter createAllDifferentOperatorAdapter() {
 		return null;
 	}
 

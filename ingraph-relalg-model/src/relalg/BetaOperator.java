@@ -2,7 +2,6 @@
  */
 package relalg;
 
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link relalg.BetaOperator#getLeftParent <em>Left Parent</em>}</li>
  *   <li>{@link relalg.BetaOperator#getRightParent <em>Right Parent</em>}</li>
- *   <li>{@link relalg.BetaOperator#getBindings <em>Bindings</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getBetaOperator()
@@ -74,21 +72,5 @@ public interface BetaOperator extends AlgebraExpression {
 	 * @generated
 	 */
 	void setRightParent(AlgebraExpression value);
-
-	/**
-	 * Returns the value of the '<em><b>Bindings</b></em>' containment reference list.
-	 * The list contents are of type {@link relalg.JoinBinding}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Bindings</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Bindings</em>' containment reference list.
-	 * @see relalg.RelalgPackage#getBetaOperator_Bindings()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<JoinBinding> getBindings();
 
 } // BetaOperator
