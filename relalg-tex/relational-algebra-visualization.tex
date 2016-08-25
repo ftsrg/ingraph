@@ -5,12 +5,20 @@
 
 \begin{document}
 	\begin{tikzpicture}[]
-	\node {$\getnodes{x}$}
-		child{
-			node {$\expandout{x}{y}$}
-			child {node {$\projection{x}$}}
-			child {node {B1}}
-		}
+	\node {$prod$} child{node {$\duplicateelimination$} child{node {$\projection{...}$} child{node {$\selection{...}$} child{node {$\selection{...}$} child{node {$\alldifferent{...}$} child{node {$\expandout{\_e3}{target}{swP}{sw}{Switch}$} child{node {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$} child{node {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$} child{node {$\getvertices{semaphore}{Semaphsore}$} }}}}}}}}}
 	;
 	\end{tikzpicture}
 \end{document}
+\documentclass{minimal}
+
+\input{relalg-packages}
+\input{relalg-commands}
+
+\begin{document}
+	\begin{tikzpicture}[]
+	\node {$prod$} child{node {$\duplicateelimination$} child{node {$\projection{...}$} child{node {$\antijoin$} child{node {$\alldifferent{...}$} child{node {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$} child{node {$\expandout{\_e2}{target}{swP}{sw}{Switch}$} child{node {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$} child{node {$\getvertices{route}{Route}$} }}}}}
+				child{node {$\expandout{\_e4}{gathers}{route}{sensor}{Sensor}$} child{node {$\getvertices{route}{Route}$} }}
+			}}}
+			;
+			\end{tikzpicture}
+		\end{document}

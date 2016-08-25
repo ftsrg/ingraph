@@ -3,12 +3,11 @@ package ingraph.relalg2tex
 import relalg.AlgebraExpression
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
+import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
-import relalg.GetNodesOperator
-import relalg.InputRelation
+import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProjectionOperator
-import relalg.DuplicateEliminationOperator
 
 class ExpressionSerializer extends TexSerializer {
 
@@ -29,12 +28,8 @@ class ExpressionSerializer extends TexSerializer {
 	/***
 	 * 
 	 */
-	def dispatch String convert(GetNodesOperator operator) {
-		'''\getnodes{«operator.attribute.name»}'''
-	}
-
-	def dispatch String convert(InputRelation relation) {
-		'''\relation{«relation.type»}'''
+	def dispatch String convert(GetVerticesOperator operator) {
+		'''\getvertices{«operator.name»}'''
 	}
 
 	def dispatch String convert(DuplicateEliminationOperator operator) {
@@ -55,13 +50,7 @@ class ExpressionSerializer extends TexSerializer {
 	def dispatch String convert(BetaOperator operator) {
 		'''
 		«IF parentheses» \left( «ENDIF»
-		«operator.leftParent.convert» \«betaOperator(operator)»«mask(operator)» «operator.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
-	}
-
-	def mask(BetaOperator operator) {
-		val b = operator.bindings
-
-		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
+		«operator.leftParent.convert» \«betaOperator(operator)» «operator.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
 	}
 
 	def dispatch betaOperator(JoinOperator operator) {

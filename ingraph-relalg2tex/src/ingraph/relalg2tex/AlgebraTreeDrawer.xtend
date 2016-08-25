@@ -4,10 +4,14 @@ import relalg.AlgebraExpression
 import relalg.AlphaOperator
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
+import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
+import relalg.FilterOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProjectionOperator
+import relalg.ProductionOperator
+import relalg.AllDifferentOperator
 
 class AlgebraTreeDrawer extends TexSerializer {
 
@@ -17,64 +21,69 @@ class AlgebraTreeDrawer extends TexSerializer {
 
 	override serializeBody(AlgebraExpression expression) {
 		'''
-		\begin{tikzpicture}[]
-		\«node(expression)»
-		;
-		\end{tikzpicture}
+			\begin{tikzpicture}[]
+			\«toNode(expression)»
+			;
+			\end{tikzpicture}
 		'''
 	}
-	
-	def CharSequence node(AlgebraExpression expression) {
+
+	// toNode
+	def CharSequence toNode(AlgebraExpression expression) {
 		'''node {$«expression.convert»$} «children(expression)»'''
 	}
-	
-	
-	
-	def dispatch children(GetVerticesOperator operator) {
+
+	// children
+	def dispatch children(GetVerticesOperator op) {
 		''''''
 	}
-	
-	def dispatch children(AlphaOperator operator) {
-		'''child{«operator.parent.node»}'''
+
+	def dispatch children(AlphaOperator op) {
+		'''child{«op.parent.toNode»}'''
 	}
 
-	def dispatch children(BetaOperator operator) {
+	def dispatch children(BetaOperator op) {
 		'''
-		child{«operator.leftParent.node»}
-		child{«operator.rightParent.node»}
+			child{«op.leftParent.toNode»}
+			child{«op.rightParent.toNode»}
 		'''
 	}
+
+	// convert
+	def dispatch String convert(AllDifferentOperator op) {
+		'''\alldifferent{...}'''
+	}
 	
-
-	def dispatch String convert(GetNodesOperator operator) {
-		'''\getnodes{«operator.attribute.name»}'''
+	def dispatch String convert(BetaOperator op) {
+		'''\«betaOperator(op)»'''
+	}
+	
+	def dispatch convert(DuplicateEliminationOperator op) {
+		'''\duplicateelimination'''
 	}
 
-	def dispatch String convert(InputRelation relation) {
-		'''\relation{«relation.type»}'''
+	def dispatch convert(ExpandOperator op) {
+		'''\expand«op.direction.toString.toLowerCase»{«op.edgeVariable.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}''' +
+			'''{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.name.escape»}{«op.targetVertexVariable.vertexLabel.name.escape»}'''
 	}
 
-	def dispatch String convert(ExpandOperator operator) {
-		'''\expand«operator.direction.toString.toLowerCase»{}{}'''
+	def dispatch convert(FilterOperator op) {
+		'''\selection{...}'''
 	}
 
-	def dispatch String convert(ProjectionOperator operator) {
-		'''\projection_{...} \left(«operator.parent.convert»\right)'''
+	def dispatch convert(GetVerticesOperator op) {
+		'''\getvertices{«op.vertexVariable.name.escape»}{«op.vertexVariable.vertexLabel.name.escape»}'''
 	}
 
-	/***
-	 * Beta operators are treated uniformly
-	 */
-	def dispatch String convert(BetaOperator operator) {
-		'''\«betaOperator(operator)»«mask(operator)»'''
+	def dispatch convert(ProductionOperator op) {
+		'''prod'''
 	}
 
-	def mask(BetaOperator operator) {
-		val b = operator.bindings
-
-		'''{«b.map[leftAttribute.name].join(",")»}{«b.map[rightAttribute.name].join(",")»}'''
+	def dispatch convert(ProjectionOperator op) {
+		'''\projection{...}'''
 	}
 
+	// betaOperator
 	def dispatch betaOperator(JoinOperator operator) {
 		'''join'''
 	}
@@ -82,5 +91,11 @@ class AlgebraTreeDrawer extends TexSerializer {
 	def dispatch betaOperator(AntiJoinOperator operator) {
 		'''antijoin'''
 	}
+
+	// escape
+	def escape(String s) {
+		s.replace("_", "\\_")
+	}
+	
 
 }

@@ -3,17 +3,21 @@
 \newcommand{\joinsymbol}{\bowtie}
 \newcommand{\antijoinsymbol}{\, \triangleright \,}
 
-\newcommand{\join}[2]{\!\underset{\tuple{\mathsf{#1}} \tuple{\mathsf{#2}}}{\joinsymbol}\!}
-\newcommand{\antijoin}[2]{\!\underset{\tuple{\mathsf{#1}} \tuple{\mathsf{#2}}}{\antijoinsymbol}\!}
+\newcommand{\join}{\joinsymbol}
+\newcommand{\antijoin}{\antijoinsymbol}
 
 \newcommand{\concatenation}{\Vert}
 \newcommand{\union}{\cup}
 \newcommand{\bigunion}{\bigcup}
 \newcommand{\intersection}{\cap}
 
-\newcommand{\expandout}[2]{\uparrow_{#1}^{#2}}
-\newcommand{\expandin}[2]{\downarrow_{#1}^{#2}}
-\newcommand{\getnodes}[1]{\bigcirc_{#1}}
+\newcommand{\expandout}[5]{\mathrm{#1}:\mathrm{#2} \uparrow_{\mathrm{#3}}^{\mathrm{#4}:\mathrm{#5}}}
+\newcommand{\expandin}[5]{\mathrm{#1}:\mathrm{#2} \downarrow_{\mathrm{#3}}^{\mathrm{#4}:\mathrm{#5}}}
+\newcommand{\getvertices}[2]{\bigcirc_{\mathrm{#1}:\mathrm{#2}}}
 
+\newcommand{\production}{\mathrm{prod}}
+\newcommand{\alldifferent}[1]{\neq}
+\newcommand{\duplicateelimination}{\delta}
 \newcommand{\projection}[1]{\pi_{#1}}
 \newcommand{\selection}[1]{\sigma_{#1}}
+
