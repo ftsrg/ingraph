@@ -11,13 +11,15 @@
 \newcommand{\bigunion}{\bigcup}
 \newcommand{\intersection}{\cap}
 
-\newcommand{\expandout}[5]{\mathrm{#1}:\mathrm{#2} \uparrow_{\mathrm{#3}}^{\mathrm{#4}:\mathrm{#5}}}
-\newcommand{\expandin}[5]{\mathrm{#1}:\mathrm{#2} \downarrow_{\mathrm{#3}}^{\mathrm{#4}:\mathrm{#5}}}
-\newcommand{\getvertices}[2]{\bigcirc_{\mathrm{#1}:\mathrm{#2}}}
+\newcommand{\atom}[1]{\mathsf{#1}}
 
-\newcommand{\production}{\mathrm{prod}}
-\newcommand{\alldifferent}[1]{\neq}
+\newcommand{\expandout}[5]{\atom{#1}:\atom{#2} \uparrow_{\atom{#3}}^{\atom{#4}:\atom{#5}}}
+\newcommand{\expandin}[5]{\atom{#1}:\atom{#2} \downarrow_{\atom{#3}}^{\atom{#4}:\atom{#5}}}
+\newcommand{\getvertices}[2]{\bigcirc_{\atom{#1}:\atom{#2}}}
+
+\newcommand{\production}{\atom{prod}}
+\newcommand{\alldifferent}[1]{\neq \atom{#1}}
 \newcommand{\duplicateelimination}{\delta}
-\newcommand{\projection}[1]{\pi_{#1}}
-\newcommand{\selection}[1]{\sigma_{#1}}
+\newcommand{\projection}[1]{\pi_\atom{#1}}
+\newcommand{\selection}[1]{\sigma_\atom{#1}}
 

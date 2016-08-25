@@ -1,6 +1,8 @@
 package ingraph.relalg2tex
 
+import org.eclipse.emf.common.util.EList
 import relalg.AlgebraExpression
+import relalg.AllDifferentOperator
 import relalg.AlphaOperator
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
@@ -9,9 +11,10 @@ import relalg.ExpandOperator
 import relalg.FilterOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
-import relalg.ProjectionOperator
 import relalg.ProductionOperator
-import relalg.AllDifferentOperator
+import relalg.ProjectionOperator
+import relalg.Variable
+import relalg.EdgeVariable
 
 class AlgebraTreeDrawer extends TexSerializer {
 
@@ -30,7 +33,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 
 	// toNode
 	def CharSequence toNode(AlgebraExpression expression) {
-		'''node {$«expression.convert»$} «children(expression)»'''
+		'''node {$«expression.convert»$}«children(expression)»'''
 	}
 
 	// children
@@ -39,22 +42,26 @@ class AlgebraTreeDrawer extends TexSerializer {
 	}
 
 	def dispatch children(AlphaOperator op) {
-		'''child{«op.parent.toNode»}'''
+		'''
+		
+			child{«op.parent.toNode»}
+		'''
 	}
 
 	def dispatch children(BetaOperator op) {
 		'''
+		
 			child{«op.leftParent.toNode»}
 			child{«op.rightParent.toNode»}
 		'''
 	}
 
 	// convert
-	def dispatch String convert(AllDifferentOperator op) {
-		'''\alldifferent{...}'''
+	def dispatch convert(AllDifferentOperator op) {
+		'''\alldifferent{«op.edgeVariables.edgeVariableList»}'''
 	}
 	
-	def dispatch String convert(BetaOperator op) {
+	def dispatch convert(BetaOperator op) {
 		'''\«betaOperator(op)»'''
 	}
 	
@@ -80,7 +87,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 	}
 
 	def dispatch convert(ProjectionOperator op) {
-		'''\projection{...}'''
+		'''\projection{«op.variables.variableList»}'''
 	}
 
 	// betaOperator
@@ -96,6 +103,14 @@ class AlgebraTreeDrawer extends TexSerializer {
 	def escape(String s) {
 		s.replace("_", "\\_")
 	}
-	
+
+	// list
+	def variableList(EList<Variable> variables) {
+		'''«variables.map[name].join(", ")»'''
+	}	
+
+	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
+		'''«edgeVariables.map[name.escape].join(", ")»'''
+	}	
 
 }
