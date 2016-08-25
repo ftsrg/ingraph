@@ -1,4 +1,4 @@
-MATCH (inactiveRoute:Route)-[:follows]-(swP:SwitchPosition)-[:target]->(sw:Switch)
+MATCH (inactiveRoute:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)
 WHERE swP.position <> sw.currentPosition
 WITH collect(inactiveRoute) AS inactiveRoutes
 
