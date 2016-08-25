@@ -2,4 +2,4 @@ Distinct([segment, segment.length AS length]) # TODO: what does it mean to retur
  |
 Filter(segment.length <= 0)
  |
-GetNodes(label=Segment, var=segment)
+GetVertices(vertexVar=segment:Segment)

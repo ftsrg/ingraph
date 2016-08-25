@@ -4,6 +4,6 @@ AntiJoin([sw]) # antijoin on the listed variables that appear on both sides
  | |
  | +----------------------------------------------------+
  |                                                      |
- |                                                     ExpandOut(edgeVar=:monitoredBy, nodeVar=:Sensor)
+ |                                                     ExpandOut(edgeVar=:monitoredBy, vertexVar=:Sensor)
  |                                                      |
-GetNodes(label=Switch, var=sw)                         GetNodes(label=Switch, var=sw)
+GetVertices(vertexVar=sw:Switch)                       GetVertices(vertexVar=sw:Switch)

@@ -8,51 +8,51 @@ ex1 ex2 ex3 ex4 ex5 ex6 ex7
 
 NamedSubExpr(ex7)
  |
-ExpandOut(edgeVar=_e11:monitoredBy, nodeVar=sensor:Sensor)
+ExpandOut(edgeVar=_e11:monitoredBy, vertexVar=sensor:Sensor)
  |
-GetNodes(label=Segment, var=segment6)
+GetVertices(vertexVar=segment6:Segment)
 
 NamedSubExpr(ex6)
  |
-ExpandOut(edgeVar=_e10:monitoredBy, nodeVar=sensor:Sensor)
+ExpandOut(edgeVar=_e10:monitoredBy, vertexVar=sensor:Sensor)
  |
-GetNodes(label=Segment, var=segment5)
+GetVertices(vertexVar=segment5:Segment)
 
 NamedSubExpr(ex5)
  |
-ExpandOut(edgeVar=_e9:monitoredBy, nodeVar=sensor:Sensor)
+ExpandOut(edgeVar=_e9:monitoredBy, vertexVar=sensor:Sensor)
  |
-GetNodes(label=Segment, var=segment4)
+GetVertices(vertexVar=segment4:Segment)
 
 NamedSubExpr(ex4)
  |
-ExpandOut(edgeVar=_e8:monitoredBy, nodeVar=sensor:Sensor)
+ExpandOut(edgeVar=_e8:monitoredBy, vertexVar=sensor:Sensor)
  |
-GetNodes(label=Segment, var=segment3)
+GetVertices(vertexVar=segment3:Segment)
 
 
 NamedSubExpr(ex3)
  |
-ExpandOut(edgeVar=_e7:monitoredBy, nodeVar=sensor:Sensor)
+ExpandOut(edgeVar=_e7:monitoredBy, vertexVar=sensor:Sensor)
  |
-GetNodes(label=Segment, var=segment2)
+GetVertices(vertexVar=segment2:Segment)
 
 NamedSubExpr(ex2)
  |
-ExpandOut(edgeVar=_e6:connectsTo, nodeVar=segment6:Segment)
+ExpandOut(edgeVar=_e6:connectsTo, vertexVar=segment6:Segment)
  |
-ExpandOut(edgeVar=_e5:connectsTo, nodeVar=segment5:Segment)
+ExpandOut(edgeVar=_e5:connectsTo, vertexVar=segment5:Segment)
  |
-ExpandOut(edgeVar=_e4:connectsTo, nodeVar=segment4:Segment)
+ExpandOut(edgeVar=_e4:connectsTo, vertexVar=segment4:Segment)
  |
-ExpandOut(edgeVar=_e3:connectsTo, nodeVar=segment3:Segment)
+ExpandOut(edgeVar=_e3:connectsTo, vertexVar=segment3:Segment)
  |
-ExpandOut(edgeVar=_e2:connectsTo, nodeVar=segment2:Segment)
+ExpandOut(edgeVar=_e2:connectsTo, vertexVar=segment2:Segment)
  |
-getNodes(label=Segment, var=segment1)
+GetVertices(vertexVar=segment1:Segment)
 
 NamedSubExpr(ex1)
  |
-ExpandIn(edgeVar=_e1:monitoredBy, nodeVar=segment1:Segment)
+ExpandIn(edgeVar=_e1:monitoredBy, vertexVar=segment1:Segment)
  |
-GetNodes(label=Sensor, var=sensor)
+GetVertices(vertexVar=sensor:Sensor)
