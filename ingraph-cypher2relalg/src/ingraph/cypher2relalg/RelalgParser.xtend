@@ -14,18 +14,18 @@ class RelalgParser {
 		println("Parsing query: " + queryName)
 		println("=================================")
 		
-		val filepath = "../queries/" + queryName + ".cyp";
-		val query = FileUtils.readFileToString(new File(filepath), "UTF-8");
+		val filepath = "../queries/" + queryName + ".cyp"
+		val query = FileUtils.readFileToString(new File(filepath), "UTF-8")
 
-		val input = new ANTLRInputStream(query);
-		val lexer = new CypherLexer(input);
-		val tokenStream = new CommonTokenStream(lexer);
-		val parser = new CypherParser(tokenStream);
+		val input = new ANTLRInputStream(query)
+		val lexer = new CypherLexer(input)
+		val tokenStream = new CommonTokenStream(lexer)
+		val parser = new CypherParser(tokenStream)
 
-		val cypher = parser.cypher();
-		val listener = new RelalgCypherListener();
+		val cypher = parser.cypher()
+		val listener = new RelalgCypherListener()
 
-		ParseTreeWalker.DEFAULT.walk(listener, cypher);
+		ParseTreeWalker.DEFAULT.walk(listener, cypher)
 
 		println("Vertex labels:    " + listener.vertexLabels.entrySet.map[key.toString].join(", "))
 		println("Vertex variables: " + listener.vertexVariables.entrySet.map[key.toString].join(", "))

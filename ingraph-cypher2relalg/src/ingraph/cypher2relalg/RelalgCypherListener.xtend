@@ -41,7 +41,7 @@ class RelalgCypherListener extends CypherBaseListener {
 
 		if (nodeLabelsCtx != null) {
 			val vertexLabelName = nodeLabelsCtx.getChild(NodeLabelContext, 0)?.getChild(LabelNameContext, 0)?.getChild(
-				SymbolicNameContext, 0)?.text;
+				SymbolicNameContext, 0)?.text
 
 			val vertexLabel = createVertexLabel => [name = vertexLabelName]
 			vertexLabels.putIfAbsent(vertexLabelName, vertexLabel)
@@ -61,7 +61,7 @@ class RelalgCypherListener extends CypherBaseListener {
 
 		if (relationshipTypesCtx != null) {
 			val edgeLabelName = relationshipTypesCtx.getChild(RelTypeNameContext, 0)?.getChild(SymbolicNameContext, 0)?.
-				text;
+				text
 
 			val edgeLabel = createEdgeLabel => [name = edgeLabelName]
 			edgeLabels.putIfAbsent(edgeLabelName, edgeLabel)
