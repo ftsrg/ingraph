@@ -12,8 +12,8 @@ package relalg;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.BetaOperator#getLeftParent <em>Left Parent</em>}</li>
- *   <li>{@link relalg.BetaOperator#getRightParent <em>Right Parent</em>}</li>
+ *   <li>{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}</li>
+ *   <li>{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getBetaOperator()
@@ -22,55 +22,55 @@ package relalg;
  */
 public interface BetaOperator extends AlgebraExpression {
 	/**
-	 * Returns the value of the '<em><b>Left Parent</b></em>' reference.
+	 * Returns the value of the '<em><b>Left Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Left Parent</em>' reference isn't clear,
+	 * If the meaning of the '<em>Left Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Left Parent</em>' reference.
-	 * @see #setLeftParent(AlgebraExpression)
-	 * @see relalg.RelalgPackage#getBetaOperator_LeftParent()
+	 * @return the value of the '<em>Left Input</em>' reference.
+	 * @see #setLeftInput(AlgebraExpression)
+	 * @see relalg.RelalgPackage#getBetaOperator_LeftInput()
 	 * @model required="true"
 	 * @generated
 	 */
-	AlgebraExpression getLeftParent();
+	AlgebraExpression getLeftInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.BetaOperator#getLeftParent <em>Left Parent</em>}' reference.
+	 * Sets the value of the '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Left Parent</em>' reference.
-	 * @see #getLeftParent()
+	 * @param value the new value of the '<em>Left Input</em>' reference.
+	 * @see #getLeftInput()
 	 * @generated
 	 */
-	void setLeftParent(AlgebraExpression value);
+	void setLeftInput(AlgebraExpression value);
 
 	/**
-	 * Returns the value of the '<em><b>Right Parent</b></em>' reference.
+	 * Returns the value of the '<em><b>Right Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Right Parent</em>' reference isn't clear,
+	 * If the meaning of the '<em>Right Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Right Parent</em>' reference.
-	 * @see #setRightParent(AlgebraExpression)
-	 * @see relalg.RelalgPackage#getBetaOperator_RightParent()
+	 * @return the value of the '<em>Right Input</em>' reference.
+	 * @see #setRightInput(AlgebraExpression)
+	 * @see relalg.RelalgPackage#getBetaOperator_RightInput()
 	 * @model required="true"
 	 * @generated
 	 */
-	AlgebraExpression getRightParent();
+	AlgebraExpression getRightInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.BetaOperator#getRightParent <em>Right Parent</em>}' reference.
+	 * Sets the value of the '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Right Parent</em>' reference.
-	 * @see #getRightParent()
+	 * @param value the new value of the '<em>Right Input</em>' reference.
+	 * @see #getRightInput()
 	 * @generated
 	 */
-	void setRightParent(AlgebraExpression value);
+	void setRightInput(AlgebraExpression value);
 
 } // BetaOperator

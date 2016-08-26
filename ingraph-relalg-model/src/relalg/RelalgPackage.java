@@ -114,13 +114,13 @@ public interface RelalgPackage extends EPackage {
 	int ALPHA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATOR__PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int ALPHA_OPERATOR__INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Alpha Operator</em>' class.
@@ -160,13 +160,13 @@ public interface RelalgPackage extends EPackage {
 	int PROJECTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROJECTION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int PROJECTION_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Variables</b></em>' reference list.
@@ -215,22 +215,22 @@ public interface RelalgPackage extends EPackage {
 	int BETA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR__LEFT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int BETA_OPERATOR__LEFT_INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR__RIGHT_PARENT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int BETA_OPERATOR__RIGHT_INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Beta Operator</em>' class.
@@ -270,22 +270,22 @@ public interface RelalgPackage extends EPackage {
 	int JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR__LEFT_PARENT = BETA_OPERATOR__LEFT_PARENT;
+	int JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
 
 	/**
-	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR__RIGHT_PARENT = BETA_OPERATOR__RIGHT_PARENT;
+	int JOIN_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
 
 	/**
 	 * The number of structural features of the '<em>Join Operator</em>' class.
@@ -325,22 +325,22 @@ public interface RelalgPackage extends EPackage {
 	int ANTI_JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Left Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR__LEFT_PARENT = BETA_OPERATOR__LEFT_PARENT;
+	int ANTI_JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
 
 	/**
-	 * The feature id for the '<em><b>Right Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR__RIGHT_PARENT = BETA_OPERATOR__RIGHT_PARENT;
+	int ANTI_JOIN_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
 
 	/**
 	 * The number of structural features of the '<em>Anti Join Operator</em>' class.
@@ -380,13 +380,13 @@ public interface RelalgPackage extends EPackage {
 	int PRODUCTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRODUCTION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int PRODUCTION_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The number of structural features of the '<em>Production Operator</em>' class.
@@ -426,13 +426,13 @@ public interface RelalgPackage extends EPackage {
 	int FILTER_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int FILTER_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The number of structural features of the '<em>Filter Operator</em>' class.
@@ -472,13 +472,13 @@ public interface RelalgPackage extends EPackage {
 	int EXPAND_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPAND_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int EXPAND_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Direction</b></em>' attribute.
@@ -609,13 +609,13 @@ public interface RelalgPackage extends EPackage {
 	int DUPLICATE_ELIMINATION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DUPLICATE_ELIMINATION_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int DUPLICATE_ELIMINATION_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The number of structural features of the '<em>Duplicate Elimination Operator</em>' class.
@@ -940,13 +940,13 @@ public interface RelalgPackage extends EPackage {
 	int ALL_DIFFERENT_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parent</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALL_DIFFERENT_OPERATOR__PARENT = ALPHA_OPERATOR__PARENT;
+	int ALL_DIFFERENT_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Edge Variables</b></em>' reference list.
@@ -1095,15 +1095,15 @@ public interface RelalgPackage extends EPackage {
 	EClass getAlphaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.AlphaOperator#getParent <em>Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.AlphaOperator#getInput <em>Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Parent</em>'.
-	 * @see relalg.AlphaOperator#getParent()
+	 * @return the meta object for the reference '<em>Input</em>'.
+	 * @see relalg.AlphaOperator#getInput()
 	 * @see #getAlphaOperator()
 	 * @generated
 	 */
-	EReference getAlphaOperator_Parent();
+	EReference getAlphaOperator_Input();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.BetaOperator <em>Beta Operator</em>}'.
@@ -1116,26 +1116,26 @@ public interface RelalgPackage extends EPackage {
 	EClass getBetaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getLeftParent <em>Left Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Left Parent</em>'.
-	 * @see relalg.BetaOperator#getLeftParent()
+	 * @return the meta object for the reference '<em>Left Input</em>'.
+	 * @see relalg.BetaOperator#getLeftInput()
 	 * @see #getBetaOperator()
 	 * @generated
 	 */
-	EReference getBetaOperator_LeftParent();
+	EReference getBetaOperator_LeftInput();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getRightParent <em>Right Parent</em>}'.
+	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Right Parent</em>'.
-	 * @see relalg.BetaOperator#getRightParent()
+	 * @return the meta object for the reference '<em>Right Input</em>'.
+	 * @see relalg.BetaOperator#getRightInput()
 	 * @see #getBetaOperator()
 	 * @generated
 	 */
-	EReference getBetaOperator_RightParent();
+	EReference getBetaOperator_RightInput();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.AntiJoinOperator <em>Anti Join Operator</em>}'.
@@ -1521,12 +1521,12 @@ public interface RelalgPackage extends EPackage {
 		EClass ALPHA_OPERATOR = eINSTANCE.getAlphaOperator();
 
 		/**
-		 * The meta object literal for the '<em><b>Parent</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Input</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ALPHA_OPERATOR__PARENT = eINSTANCE.getAlphaOperator_Parent();
+		EReference ALPHA_OPERATOR__INPUT = eINSTANCE.getAlphaOperator_Input();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.BetaOperatorImpl <em>Beta Operator</em>}' class.
@@ -1539,20 +1539,20 @@ public interface RelalgPackage extends EPackage {
 		EClass BETA_OPERATOR = eINSTANCE.getBetaOperator();
 
 		/**
-		 * The meta object literal for the '<em><b>Left Parent</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Left Input</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BETA_OPERATOR__LEFT_PARENT = eINSTANCE.getBetaOperator_LeftParent();
+		EReference BETA_OPERATOR__LEFT_INPUT = eINSTANCE.getBetaOperator_LeftInput();
 
 		/**
-		 * The meta object literal for the '<em><b>Right Parent</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Right Input</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BETA_OPERATOR__RIGHT_PARENT = eINSTANCE.getBetaOperator_RightParent();
+		EReference BETA_OPERATOR__RIGHT_INPUT = eINSTANCE.getBetaOperator_RightInput();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.AntiJoinOperatorImpl <em>Anti Join Operator</em>}' class.

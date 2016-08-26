@@ -300,7 +300,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAlphaOperator_Parent() {
+	public EReference getAlphaOperator_Input() {
 		return (EReference)alphaOperatorEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -318,7 +318,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_LeftParent() {
+	public EReference getBetaOperator_LeftInput() {
 		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -327,7 +327,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBetaOperator_RightParent() {
+	public EReference getBetaOperator_RightInput() {
 		return (EReference)betaOperatorEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -629,11 +629,11 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		joinOperatorEClass = createEClass(JOIN_OPERATOR);
 
 		alphaOperatorEClass = createEClass(ALPHA_OPERATOR);
-		createEReference(alphaOperatorEClass, ALPHA_OPERATOR__PARENT);
+		createEReference(alphaOperatorEClass, ALPHA_OPERATOR__INPUT);
 
 		betaOperatorEClass = createEClass(BETA_OPERATOR);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_PARENT);
-		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_PARENT);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__LEFT_INPUT);
+		createEReference(betaOperatorEClass, BETA_OPERATOR__RIGHT_INPUT);
 
 		antiJoinOperatorEClass = createEClass(ANTI_JOIN_OPERATOR);
 
@@ -736,11 +736,11 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(joinOperatorEClass, JoinOperator.class, "JoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(alphaOperatorEClass, AlphaOperator.class, "AlphaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAlphaOperator_Parent(), this.getAlgebraExpression(), null, "parent", null, 1, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAlphaOperator_Input(), this.getAlgebraExpression(), null, "input", null, 1, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(betaOperatorEClass, BetaOperator.class, "BetaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBetaOperator_LeftParent(), this.getAlgebraExpression(), null, "leftParent", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_RightParent(), this.getAlgebraExpression(), null, "rightParent", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_LeftInput(), this.getAlgebraExpression(), null, "leftInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_RightInput(), this.getAlgebraExpression(), null, "rightInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(antiJoinOperatorEClass, AntiJoinOperator.class, "AntiJoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

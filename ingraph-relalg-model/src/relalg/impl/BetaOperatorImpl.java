@@ -21,32 +21,32 @@ import relalg.RelalgPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.BetaOperatorImpl#getLeftParent <em>Left Parent</em>}</li>
- *   <li>{@link relalg.impl.BetaOperatorImpl#getRightParent <em>Right Parent</em>}</li>
+ *   <li>{@link relalg.impl.BetaOperatorImpl#getLeftInput <em>Left Input</em>}</li>
+ *   <li>{@link relalg.impl.BetaOperatorImpl#getRightInput <em>Right Input</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements BetaOperator {
 	/**
-	 * The cached value of the '{@link #getLeftParent() <em>Left Parent</em>}' reference.
+	 * The cached value of the '{@link #getLeftInput() <em>Left Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLeftParent()
+	 * @see #getLeftInput()
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression leftParent;
+	protected AlgebraExpression leftInput;
 
 	/**
-	 * The cached value of the '{@link #getRightParent() <em>Right Parent</em>}' reference.
+	 * The cached value of the '{@link #getRightInput() <em>Right Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRightParent()
+	 * @see #getRightInput()
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression rightParent;
+	protected AlgebraExpression rightInput;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -72,16 +72,16 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getLeftParent() {
-		if (leftParent != null && leftParent.eIsProxy()) {
-			InternalEObject oldLeftParent = (InternalEObject)leftParent;
-			leftParent = (AlgebraExpression)eResolveProxy(oldLeftParent);
-			if (leftParent != oldLeftParent) {
+	public AlgebraExpression getLeftInput() {
+		if (leftInput != null && leftInput.eIsProxy()) {
+			InternalEObject oldLeftInput = (InternalEObject)leftInput;
+			leftInput = (AlgebraExpression)eResolveProxy(oldLeftInput);
+			if (leftInput != oldLeftInput) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__LEFT_PARENT, oldLeftParent, leftParent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, oldLeftInput, leftInput));
 			}
 		}
-		return leftParent;
+		return leftInput;
 	}
 
 	/**
@@ -89,8 +89,8 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetLeftParent() {
-		return leftParent;
+	public AlgebraExpression basicGetLeftInput() {
+		return leftInput;
 	}
 
 	/**
@@ -98,11 +98,11 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLeftParent(AlgebraExpression newLeftParent) {
-		AlgebraExpression oldLeftParent = leftParent;
-		leftParent = newLeftParent;
+	public void setLeftInput(AlgebraExpression newLeftInput) {
+		AlgebraExpression oldLeftInput = leftInput;
+		leftInput = newLeftInput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_PARENT, oldLeftParent, leftParent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, oldLeftInput, leftInput));
 	}
 
 	/**
@@ -110,16 +110,16 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getRightParent() {
-		if (rightParent != null && rightParent.eIsProxy()) {
-			InternalEObject oldRightParent = (InternalEObject)rightParent;
-			rightParent = (AlgebraExpression)eResolveProxy(oldRightParent);
-			if (rightParent != oldRightParent) {
+	public AlgebraExpression getRightInput() {
+		if (rightInput != null && rightInput.eIsProxy()) {
+			InternalEObject oldRightInput = (InternalEObject)rightInput;
+			rightInput = (AlgebraExpression)eResolveProxy(oldRightInput);
+			if (rightInput != oldRightInput) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__RIGHT_PARENT, oldRightParent, rightParent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, oldRightInput, rightInput));
 			}
 		}
-		return rightParent;
+		return rightInput;
 	}
 
 	/**
@@ -127,8 +127,8 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetRightParent() {
-		return rightParent;
+	public AlgebraExpression basicGetRightInput() {
+		return rightInput;
 	}
 
 	/**
@@ -136,11 +136,11 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRightParent(AlgebraExpression newRightParent) {
-		AlgebraExpression oldRightParent = rightParent;
-		rightParent = newRightParent;
+	public void setRightInput(AlgebraExpression newRightInput) {
+		AlgebraExpression oldRightInput = rightInput;
+		rightInput = newRightInput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_PARENT, oldRightParent, rightParent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, oldRightInput, rightInput));
 	}
 
 	/**
@@ -151,12 +151,12 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
-				if (resolve) return getLeftParent();
-				return basicGetLeftParent();
-			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
-				if (resolve) return getRightParent();
-				return basicGetRightParent();
+			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
+				if (resolve) return getLeftInput();
+				return basicGetLeftInput();
+			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
+				if (resolve) return getRightInput();
+				return basicGetRightInput();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,11 +169,11 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
-				setLeftParent((AlgebraExpression)newValue);
+			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
+				setLeftInput((AlgebraExpression)newValue);
 				return;
-			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
-				setRightParent((AlgebraExpression)newValue);
+			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
+				setRightInput((AlgebraExpression)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -187,11 +187,11 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
-				setLeftParent((AlgebraExpression)null);
+			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
+				setLeftInput((AlgebraExpression)null);
 				return;
-			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
-				setRightParent((AlgebraExpression)null);
+			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
+				setRightInput((AlgebraExpression)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -205,10 +205,10 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.BETA_OPERATOR__LEFT_PARENT:
-				return leftParent != null;
-			case RelalgPackage.BETA_OPERATOR__RIGHT_PARENT:
-				return rightParent != null;
+			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
+				return leftInput != null;
+			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
+				return rightInput != null;
 		}
 		return super.eIsSet(featureID);
 	}

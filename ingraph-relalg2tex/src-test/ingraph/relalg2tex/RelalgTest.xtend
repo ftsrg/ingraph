@@ -34,11 +34,11 @@ class RelalgTest {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment];
 
-		val filter1 = createFilterOperator => [parent = getVertices]	//FIXME: segment.length <= 0
+		val filter1 = createFilterOperator => [input = getVertices]	//FIXME: segment.length <= 0
 
-		val trimmer = createProjectionOperator => [parent = filter1; variables.addAll(Arrays.asList(segment, segment_length))]	//FIXME: renaming
-		val de = createDuplicateEliminationOperator => [parent = trimmer]
-		val production = createProductionOperator => [parent = de]
+		val trimmer = createProjectionOperator => [input = filter1; variables.addAll(Arrays.asList(segment, segment_length))]	//FIXME: renaming
+		val de = createDuplicateEliminationOperator => [input = trimmer]
+		val production = createProductionOperator => [input = de]
 
 		print(drawer.serialize(production))
 	}
@@ -57,19 +57,19 @@ class RelalgTest {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = route];
 
-		val expand1 = createExpandOperator => [parent = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = swP; edgeVariable = _e1]
-		val expand2 = createExpandOperator => [parent = expand1; direction = Direction.OUT; sourceVertexVariable = swP; targetVertexVariable = sw; edgeVariable = _e2]
-		val expand3 = createExpandOperator => [parent = expand2; direction = Direction.OUT; sourceVertexVariable = sw; targetVertexVariable = sensor; edgeVariable = _e3]
+		val expand1 = createExpandOperator => [input = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = swP; edgeVariable = _e1]
+		val expand2 = createExpandOperator => [input = expand1; direction = Direction.OUT; sourceVertexVariable = swP; targetVertexVariable = sw; edgeVariable = _e2]
+		val expand3 = createExpandOperator => [input = expand2; direction = Direction.OUT; sourceVertexVariable = sw; targetVertexVariable = sensor; edgeVariable = _e3]
 		
-		val allDifferent = createAllDifferentOperator => [parent = expand3; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))]
+		val allDifferent = createAllDifferentOperator => [input = expand3; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))]
 		
-		val expand4 = createExpandOperator => [parent = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = sensor; edgeVariable = _e4]
+		val expand4 = createExpandOperator => [input = getVertices; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = sensor; edgeVariable = _e4]
 
-		val antiJoin = createAntiJoinOperator => [leftParent = allDifferent; rightParent = expand4]	//FIXME: [route, sensor]
+		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand4]	//FIXME: [route, sensor]
 
-		val trimmer = createProjectionOperator => [parent = antiJoin; variables.addAll(Arrays.asList(route, sensor, swP, sw))]
-		val de = createDuplicateEliminationOperator => [parent = trimmer]
-		val production = createProductionOperator => [parent = de]
+		val trimmer = createProjectionOperator => [input = antiJoin; variables.addAll(Arrays.asList(route, sensor, swP, sw))]
+		val de = createDuplicateEliminationOperator => [input = trimmer]
+		val production = createProductionOperator => [input = de]
 
 		print(drawer.serialize(production))
 	}
@@ -94,24 +94,24 @@ class RelalgTest {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore];
 
-		val expand1 = createExpandOperator => [parent = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route1; edgeVariable = _e1]
-		val expand2 = createExpandOperator => [parent = expand1; direction = Direction.OUT; sourceVertexVariable = route1; targetVertexVariable = sensor1; edgeVariable = _e2]
-		val expand3 = createExpandOperator => [parent = expand2; direction = Direction.IN; sourceVertexVariable = sensor1; targetVertexVariable = te1; edgeVariable = _e3]
-		val expand4 = createExpandOperator => [parent = expand3; direction = Direction.OUT; sourceVertexVariable = te1; targetVertexVariable = te2; edgeVariable = _e4]
-		val expand5 = createExpandOperator => [parent = expand4; direction = Direction.OUT; sourceVertexVariable = te2; targetVertexVariable = sensor2; edgeVariable = _e5]
-		val expand6 = createExpandOperator => [parent = expand5; direction = Direction.IN; sourceVertexVariable = sensor2; targetVertexVariable = route2; edgeVariable = _e6]
+		val expand1 = createExpandOperator => [input = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route1; edgeVariable = _e1]
+		val expand2 = createExpandOperator => [input = expand1; direction = Direction.OUT; sourceVertexVariable = route1; targetVertexVariable = sensor1; edgeVariable = _e2]
+		val expand3 = createExpandOperator => [input = expand2; direction = Direction.IN; sourceVertexVariable = sensor1; targetVertexVariable = te1; edgeVariable = _e3]
+		val expand4 = createExpandOperator => [input = expand3; direction = Direction.OUT; sourceVertexVariable = te1; targetVertexVariable = te2; edgeVariable = _e4]
+		val expand5 = createExpandOperator => [input = expand4; direction = Direction.OUT; sourceVertexVariable = te2; targetVertexVariable = sensor2; edgeVariable = _e5]
+		val expand6 = createExpandOperator => [input = expand5; direction = Direction.IN; sourceVertexVariable = sensor2; targetVertexVariable = route2; edgeVariable = _e6]
 
-		val allDifferent = createAllDifferentOperator => [parent = expand6; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3, _e4, _e5, _e6))]
+		val allDifferent = createAllDifferentOperator => [input = expand6; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3, _e4, _e5, _e6))]
 
-		val expand7 = createExpandOperator => [parent = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route2; edgeVariable = _e7]
+		val expand7 = createExpandOperator => [input = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route2; edgeVariable = _e7]
 
-		val antiJoin = createAntiJoinOperator => [leftParent = allDifferent; rightParent = expand7]	//FIXME: [semaphore, route2]
+		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7]	//FIXME: [semaphore, route2]
 
-		val filter = createFilterOperator => [parent = antiJoin]	//FIXME: route1 != route2
+		val filter = createFilterOperator => [input = antiJoin]	//FIXME: route1 != route2
 
-		val trimmer = createProjectionOperator => [parent = filter; variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))]
-		val de = createDuplicateEliminationOperator => [parent = trimmer]
-		val production = createProductionOperator => [parent = de]
+		val trimmer = createProjectionOperator => [input = filter; variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))]
+		val de = createDuplicateEliminationOperator => [input = trimmer]
+		val production = createProductionOperator => [input = de]
 
 		print(drawer.serialize(production))
 	}
@@ -125,12 +125,12 @@ class RelalgTest {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = sw];
 
-		val expand1 = createExpandOperator => [parent = getVertices; direction = Direction.OUT; sourceVertexVariable = sw; targetVertexVariable = _sensor; edgeVariable = _e1]
+		val expand1 = createExpandOperator => [input = getVertices; direction = Direction.OUT; sourceVertexVariable = sw; targetVertexVariable = _sensor; edgeVariable = _e1]
 
-		val antiJoin = createAntiJoinOperator => [leftParent = getVertices; rightParent = expand1]	//FIXME: [semaphore, route2]
+		val antiJoin = createAntiJoinOperator => [leftInput = getVertices; rightInput = expand1]	//FIXME: [semaphore, route2]
 
-		val de = createDuplicateEliminationOperator => [parent = antiJoin]
-		val production = createProductionOperator => [parent = de]
+		val de = createDuplicateEliminationOperator => [input = antiJoin]
+		val production = createProductionOperator => [input = de]
 
 		print(drawer.serialize(production))
 	}
@@ -151,18 +151,18 @@ class RelalgTest {
 		
 		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore];
 
-		val expand1 = createExpandOperator => [parent = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route; edgeVariable = _e1]
-		val expand2 = createExpandOperator => [parent = expand1; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = swP; edgeVariable = _e2]
-		val expand3 = createExpandOperator => [parent = expand2; direction = Direction.OUT; sourceVertexVariable = swP; targetVertexVariable = sw; edgeVariable = _e3]
+		val expand1 = createExpandOperator => [input = getVertices; direction = Direction.IN; sourceVertexVariable = semaphore; targetVertexVariable = route; edgeVariable = _e1]
+		val expand2 = createExpandOperator => [input = expand1; direction = Direction.OUT; sourceVertexVariable = route; targetVertexVariable = swP; edgeVariable = _e2]
+		val expand3 = createExpandOperator => [input = expand2; direction = Direction.OUT; sourceVertexVariable = swP; targetVertexVariable = sw; edgeVariable = _e3]
 		
-		val allDifferent = createAllDifferentOperator => [parent = expand3; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))]
+		val allDifferent = createAllDifferentOperator => [input = expand3; edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))]
 		
-		val filter1 = createFilterOperator => [parent = allDifferent]	//FIXME: semaphore.signal='GO'
-		val filter2 = createFilterOperator => [parent = filter1 ]		//FIXME: sw.currentPosition != swP.position
+		val filter1 = createFilterOperator => [input = allDifferent]	//FIXME: semaphore.signal='GO'
+		val filter2 = createFilterOperator => [input = filter1 ]		//FIXME: sw.currentPosition != swP.position
 		
-		val trimmer = createProjectionOperator => [parent = filter2; variables.addAll(Arrays.asList(semaphore, route, swP, sw, sw_currentPosition, swP_position))]	//FIXME: renaming
-		val de = createDuplicateEliminationOperator => [parent = trimmer]
-		val production = createProductionOperator => [parent = de]
+		val trimmer = createProjectionOperator => [input = filter2; variables.addAll(Arrays.asList(semaphore, route, swP, sw, sw_currentPosition, swP_position))]	//FIXME: renaming
+		val de = createDuplicateEliminationOperator => [input = trimmer]
+		val production = createProductionOperator => [input = de]
 
 		print(drawer.serialize(production))
 	}

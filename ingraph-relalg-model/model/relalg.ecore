@@ -11,13 +11,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
-        eType="#//AlgebraExpression"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//AlgebraExpression"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BetaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftInput" lowerBound="1"
         eType="#//AlgebraExpression"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightInput" lowerBound="1"
         eType="#//AlgebraExpression"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>

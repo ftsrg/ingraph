@@ -14,7 +14,7 @@
 
 1. Go to the **ingraph-relalg-model** project.
 1. Open the **Modeling** perspective (`Ctrl`+`3`, Modeling).
-1. Open the `model/relalg.aird` file with the small black triangle. Open **Representations per category**, **Design**, **Entities**, **relalg**.
+1. Open the `model/relalg.aird` file by double clicking on it, then clicking the small black triangle (left to the file name). Open **Representations per category**, **Design**, **Entities**, **relalg**.
 
 #### How to regenerate the code
 

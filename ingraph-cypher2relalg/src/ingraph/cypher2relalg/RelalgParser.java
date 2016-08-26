@@ -1,7 +1,9 @@
 package ingraph.cypher2relalg;
 
-import ingraph.antlr.CypherLexer;
-import ingraph.antlr.CypherParser;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -9,9 +11,8 @@ import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
+import ingraph.antlr.CypherLexer;
+import ingraph.antlr.CypherParser;
 
 public class RelalgParser {
 

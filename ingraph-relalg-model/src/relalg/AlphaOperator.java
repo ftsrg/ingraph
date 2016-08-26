@@ -12,7 +12,7 @@ package relalg;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link relalg.AlphaOperator#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.AlphaOperator#getInput <em>Input</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getAlphaOperator()
@@ -21,29 +21,29 @@ package relalg;
  */
 public interface AlphaOperator extends AlgebraExpression {
 	/**
-	 * Returns the value of the '<em><b>Parent</b></em>' reference.
+	 * Returns the value of the '<em><b>Input</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Parent</em>' reference isn't clear,
+	 * If the meaning of the '<em>Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Parent</em>' reference.
-	 * @see #setParent(AlgebraExpression)
-	 * @see relalg.RelalgPackage#getAlphaOperator_Parent()
+	 * @return the value of the '<em>Input</em>' reference.
+	 * @see #setInput(AlgebraExpression)
+	 * @see relalg.RelalgPackage#getAlphaOperator_Input()
 	 * @model required="true"
 	 * @generated
 	 */
-	AlgebraExpression getParent();
+	AlgebraExpression getInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.AlphaOperator#getParent <em>Parent</em>}' reference.
+	 * Sets the value of the '{@link relalg.AlphaOperator#getInput <em>Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Parent</em>' reference.
-	 * @see #getParent()
+	 * @param value the new value of the '<em>Input</em>' reference.
+	 * @see #getInput()
 	 * @generated
 	 */
-	void setParent(AlgebraExpression value);
+	void setInput(AlgebraExpression value);
 
 } // AlphaOperator

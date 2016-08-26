@@ -4,7 +4,6 @@ package relalg;
 
 import org.eclipse.emf.common.util.EList;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>All Different Operator</b></em>'.
@@ -22,7 +21,6 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface AllDifferentOperator extends AlphaOperator {
-
 	/**
 	 * Returns the value of the '<em><b>Edge Variables</b></em>' reference list.
 	 * The list contents are of type {@link relalg.EdgeVariable}.
@@ -38,4 +36,5 @@ public interface AllDifferentOperator extends AlphaOperator {
 	 * @generated
 	 */
 	EList<EdgeVariable> getEdgeVariables();
+
 } // AllDifferentOperator

@@ -21,21 +21,21 @@ import relalg.RelalgPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.AlphaOperatorImpl#getParent <em>Parent</em>}</li>
+ *   <li>{@link relalg.impl.AlphaOperatorImpl#getInput <em>Input</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements AlphaOperator {
 	/**
-	 * The cached value of the '{@link #getParent() <em>Parent</em>}' reference.
+	 * The cached value of the '{@link #getInput() <em>Input</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getParent()
+	 * @see #getInput()
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression parent;
+	protected AlgebraExpression input;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -61,16 +61,16 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getParent() {
-		if (parent != null && parent.eIsProxy()) {
-			InternalEObject oldParent = (InternalEObject)parent;
-			parent = (AlgebraExpression)eResolveProxy(oldParent);
-			if (parent != oldParent) {
+	public AlgebraExpression getInput() {
+		if (input != null && input.eIsProxy()) {
+			InternalEObject oldInput = (InternalEObject)input;
+			input = (AlgebraExpression)eResolveProxy(oldInput);
+			if (input != oldInput) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ALPHA_OPERATOR__PARENT, oldParent, parent));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ALPHA_OPERATOR__INPUT, oldInput, input));
 			}
 		}
-		return parent;
+		return input;
 	}
 
 	/**
@@ -78,8 +78,8 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetParent() {
-		return parent;
+	public AlgebraExpression basicGetInput() {
+		return input;
 	}
 
 	/**
@@ -87,11 +87,11 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParent(AlgebraExpression newParent) {
-		AlgebraExpression oldParent = parent;
-		parent = newParent;
+	public void setInput(AlgebraExpression newInput) {
+		AlgebraExpression oldInput = input;
+		input = newInput;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ALPHA_OPERATOR__PARENT, oldParent, parent));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ALPHA_OPERATOR__INPUT, oldInput, input));
 	}
 
 	/**
@@ -102,9 +102,9 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATOR__PARENT:
-				if (resolve) return getParent();
-				return basicGetParent();
+			case RelalgPackage.ALPHA_OPERATOR__INPUT:
+				if (resolve) return getInput();
+				return basicGetInput();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -117,8 +117,8 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATOR__PARENT:
-				setParent((AlgebraExpression)newValue);
+			case RelalgPackage.ALPHA_OPERATOR__INPUT:
+				setInput((AlgebraExpression)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -132,8 +132,8 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATOR__PARENT:
-				setParent((AlgebraExpression)null);
+			case RelalgPackage.ALPHA_OPERATOR__INPUT:
+				setInput((AlgebraExpression)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -147,8 +147,8 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ALPHA_OPERATOR__PARENT:
-				return parent != null;
+			case RelalgPackage.ALPHA_OPERATOR__INPUT:
+				return input != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -4,7 +4,6 @@ package relalg;
 
 import org.eclipse.emf.common.util.EList;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Vertex Variable</b></em>'.

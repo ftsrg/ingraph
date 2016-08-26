@@ -11,8 +11,8 @@ import relalg.ProjectionOperator
 
 class ExpressionSerializer extends TexSerializer {
 
-	/***
-	 * Whether to use parentheses in the TeX expressions
+	/**
+	 * whether to use parentheses in the TeX expressions
 	 */
 	boolean parentheses
 
@@ -24,41 +24,33 @@ class ExpressionSerializer extends TexSerializer {
 	override serializeBody(AlgebraExpression expression) {
 		'''$$«convert(expression)»$$'''
 	}
-	
-	/***
-	 * 
+
+	/**
+	 * alpha operators
 	 */
 	def dispatch String convert(GetVerticesOperator operator) {
 		'''\getvertices{«operator.name»}'''
 	}
 
 	def dispatch String convert(DuplicateEliminationOperator operator) {
-		'''\duplicateelimination \left(«operator.parent.convert»\right)'''
+		'''\duplicateelimination \left(«operator.input.convert»\right)'''
 	}
 
 	def dispatch String convert(ExpandOperator operator) {
-		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operator.parent.convert»\right)'''
+		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operator.input.convert»\right)'''
 	}
 
 	def dispatch String convert(ProjectionOperator operator) {
-		'''\projection{...} \left(«operator.parent.convert»\right)'''
+		'''\projection{...} \left(«operator.input.convert»\right)'''
 	}
 
-	/***
-	 * Beta operators are treated uniformly
+	/**
+	 * beta operators
 	 */
 	def dispatch String convert(BetaOperator operator) {
 		'''
 		«IF parentheses» \left( «ENDIF»
-		«operator.leftParent.convert» \«betaOperator(operator)» «operator.rightParent.convert»«IF parentheses» \right) «ENDIF»'''
-	}
-
-	def dispatch betaOperator(JoinOperator operator) {
-		'''join'''
-	}
-
-	def dispatch betaOperator(AntiJoinOperator operator) {
-		'''antijoin'''
+		«operator.leftInput.convert» \«betaOperator(operator)» «operator.rightInput.convert»«IF parentheses» \right) «ENDIF»'''
 	}
 
 }
