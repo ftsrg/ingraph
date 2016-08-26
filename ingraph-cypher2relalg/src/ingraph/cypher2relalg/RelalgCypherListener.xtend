@@ -14,7 +14,8 @@ import ingraph.antlr.CypherParser.SymbolicNameContext
 import ingraph.antlr.CypherParser.VariableContext
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
-import java.util.HashMap
+import ingraph.cypher2relalg.factories.VertexLabelFactory
+import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.EdgeLabel
@@ -30,8 +31,8 @@ class RelalgCypherListener extends CypherBaseListener {
 	@Accessors val vertexVariableFactory = new VertexVariableFactory
 	@Accessors val edgeVariableFactory = new EdgeVariableFactory
 
-	@Accessors val vertexLabels = new HashMap<String, VertexLabel>
-	@Accessors val edgeLabels = new HashMap<String, EdgeLabel>
+	@Accessors val vertexLabelFactory = new VertexLabelFactory
+	@Accessors val edgeLabelFactory = new EdgeLabelFactory
 
 	override enterNodePattern(NodePatternContext ctx) {
 		val variableCtx = ctx.getChild(VariableContext, 0)
@@ -44,8 +45,7 @@ class RelalgCypherListener extends CypherBaseListener {
 			val vertexLabelName = nodeLabelsCtx.getChild(NodeLabelContext, 0)?.getChild(LabelNameContext, 0)?.getChild(
 				SymbolicNameContext, 0)?.text
 
-			val vertexLabel = createVertexLabel => [name = vertexLabelName]
-			vertexLabels.putIfAbsent(vertexLabelName, vertexLabel)
+			val vertexLabel = vertexLabelFactory.createElement(vertexLabelName)
 			vertexVariable.ensureLabel(vertexLabel)
 		}
 	}
@@ -61,8 +61,7 @@ class RelalgCypherListener extends CypherBaseListener {
 			val edgeLabelName = relationshipTypesCtx.getChild(RelTypeNameContext, 0)?.getChild(SymbolicNameContext, 0)?.
 				text
 
-			val edgeLabel = createEdgeLabel => [name = edgeLabelName]
-			edgeLabels.putIfAbsent(edgeLabelName, edgeLabel)
+			val edgeLabel = edgeLabelFactory.createElement(edgeLabelName)
 			edgeVariable.ensureLabel(edgeLabel)
 		}
 	}

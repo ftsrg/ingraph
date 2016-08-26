@@ -28,10 +28,10 @@ class RelalgParser {
 		val listener = new RelalgCypherListener()
 		ParseTreeWalker.DEFAULT.walk(listener, cypher)
 
-		println("Vertex labels:    " + listener.vertexLabels.entrySet.map[key.toString].join(", "))
+		println("Vertex labels:    " + listener.vertexLabelFactory.elements.entrySet.map[key.toString].join(", "))
 		println("Vertex variables: " + listener.vertexVariableFactory.vertexVariables.entrySet.map[key.toString].join(", "))
 		println()
-		println("Edge labels:    " + listener.edgeLabels.entrySet.map[key.toString].join(", "))
+		println("Edge labels:    " + listener.edgeLabelFactory.elements.entrySet.map[key.toString].join(", "))
 		println("Edge variables: " + listener.edgeVariableFactory.edgeVariables.entrySet.map[key.toString].join(", "))
 		println()
 	}

@@ -1,27 +1,19 @@
 package ingraph.cypher2relalg.factories
 
-import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.EdgeVariable
 
-class EdgeVariableFactory extends ElementFactory {
+class EdgeVariableFactory extends ElementFactory<EdgeVariable> {
 
-	var n = 1;
-	@Accessors val edgeVariables = new HashMap<String, EdgeVariable>
+	@Deprecated
+	@Accessors val edgeVariables = elements
 
+	@Deprecated
 	def createEdgeVariable(String edgeVariableName) {
-		val variableName = edgeVariableName ?: generateEdgeName
-
-		if (edgeVariables.get(variableName) == null) {
-			val variable = createEdgeVariable => [name = variableName]
-			edgeVariables.put(variableName, variable)
-		}
-
-		edgeVariables.get(variableName)
+		createElement(edgeVariableName)
 	}
 
-	def generateEdgeName() {
-		'_e' + n++;
+	override createSpecificNamedElement() {
+		createEdgeVariable
 	}
-
 }

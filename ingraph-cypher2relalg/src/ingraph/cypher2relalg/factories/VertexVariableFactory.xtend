@@ -1,27 +1,19 @@
 package ingraph.cypher2relalg.factories
 
-import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.VertexVariable
 
-class VertexVariableFactory extends ElementFactory {
+class VertexVariableFactory extends ElementFactory<VertexVariable> {
 
-	var n = 1;
-	@Accessors val vertexVariables = new HashMap<String, VertexVariable>
+	@Deprecated
+	@Accessors val vertexVariables = elements
 
+	@Deprecated
 	def createVertexVariable(String vertexVariableName) {
-		val variableName = vertexVariableName ?: generateVertexName
-
-		if (vertexVariables.get(variableName) == null) {
-			val variable = createVertexVariable => [name = variableName]
-			vertexVariables.put(variableName, variable)
-		}
-
-		vertexVariables.get(variableName)
+		createElement(vertexVariableName)
 	}
 
-	def generateVertexName() {
-		'_v' + n++;
+	override createSpecificNamedElement() {
+		createVertexVariable
 	}
-
 }
