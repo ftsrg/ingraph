@@ -1,12 +1,10 @@
 package ingraph.relalg2tex
 
 import relalg.AlgebraExpression
-import relalg.AntiJoinOperator
 import relalg.BetaOperator
 import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
-import relalg.JoinOperator
 import relalg.ProjectionOperator
 
 class ExpressionSerializer extends TexSerializer {

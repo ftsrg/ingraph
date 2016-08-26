@@ -5,7 +5,7 @@ import org.junit.Test
 import relalg.Direction
 import relalg.RelalgFactory
 
-class RelalgTest {
+class RelalgVisualizationTest {
 
 	val static ExpressionSerializer serializer = new ExpressionSerializer(false, false)
 	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)

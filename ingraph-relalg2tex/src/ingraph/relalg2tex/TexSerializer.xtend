@@ -21,8 +21,8 @@ import java.io.File
 
 abstract class TexSerializer {
 
-	/***
-	 * Whether to generate a full TeX document
+	/**
+	 * whether to generate a full TeX document
 	 */
 	protected boolean full
 
@@ -32,30 +32,33 @@ abstract class TexSerializer {
 
 	def serialize(AlgebraExpression expression, String filename) {
 		val tex = convertExpression(expression)
-		val file = new File("../visualization/" + filename + ".tex") 
+		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		tex
 	}
 
-	def CharSequence convertExpression(AlgebraExpression expression) {
-		if (expression instanceof ProductionOperator) {
-			convertExpression((expression as ProductionOperator).input)
-		} else {
-			'''
-				«IF full»
-					\documentclass{minimal}
-					
-					\input{relalg-packages}
-					\input{relalg-commands}
-					
-					\begin{document}
-				«ENDIF»
-				«serializeBody(expression)»
-				«IF full»
-					\end{document}
-				«ENDIF»
-			'''
-		}
+	/**
+	 * convertExpression
+	 */
+	def dispatch CharSequence convertExpression(ProductionOperator op) {
+		convertExpression(op.input)
+	}
+
+	def dispatch CharSequence convertExpression(AlgebraExpression expression) {
+		'''
+			«IF full»
+				\documentclass{minimal}
+				
+				\input{relalg-packages}
+				\input{relalg-commands}
+				
+				\begin{document}
+			«ENDIF»
+			«serializeBody(expression)»
+			«IF full»
+				\end{document}
+			«ENDIF»
+		'''
 	}
 
 	def abstract CharSequence serializeBody(AlgebraExpression expression)
@@ -122,7 +125,7 @@ abstract class TexSerializer {
 			}
 		}
 	}
-	
+
 	/**
 	 * escape
 	 */
