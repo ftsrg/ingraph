@@ -636,6 +636,43 @@ public interface RelalgPackage extends EPackage {
 	int DUPLICATE_ELIMINATION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.NamedElementImpl <em>Named Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.NamedElementImpl
+	 * @see relalg.impl.RelalgPackageImpl#getNamedElement()
+	 * @generated
+	 */
+	int NAMED_ELEMENT = 19;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Named Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Named Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.impl.VariableImpl <em>Variable</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -652,7 +689,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE__NAME = 0;
+	int VARIABLE__NAME = NAMED_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
@@ -661,7 +698,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE__DONT_CARE = 1;
+	int VARIABLE__DONT_CARE = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Variable</em>' class.
@@ -670,7 +707,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE_FEATURE_COUNT = 2;
+	int VARIABLE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Variable</em>' class.
@@ -679,7 +716,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VARIABLE_OPERATION_COUNT = 0;
+	int VARIABLE_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.VertexVariableImpl <em>Vertex Variable</em>}' class.
@@ -826,7 +863,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LABEL__NAME = 0;
+	int LABEL__NAME = NAMED_ELEMENT__NAME;
 
 	/**
 	 * The number of structural features of the '<em>Label</em>' class.
@@ -835,7 +872,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LABEL_FEATURE_COUNT = 1;
+	int LABEL_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Label</em>' class.
@@ -844,7 +881,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LABEL_OPERATION_COUNT = 0;
+	int LABEL_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.VertexLabelImpl <em>Vertex Label</em>}' class.
@@ -1029,7 +1066,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 19;
+	int DIRECTION = 20;
 
 
 	/**
@@ -1274,17 +1311,6 @@ public interface RelalgPackage extends EPackage {
 	EClass getVariable();
 
 	/**
-	 * Returns the meta object for the attribute '{@link relalg.Variable#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see relalg.Variable#getName()
-	 * @see #getVariable()
-	 * @generated
-	 */
-	EAttribute getVariable_Name();
-
-	/**
 	 * Returns the meta object for the attribute '{@link relalg.Variable#isDontCare <em>Dont Care</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1370,17 +1396,6 @@ public interface RelalgPackage extends EPackage {
 	EClass getLabel();
 
 	/**
-	 * Returns the meta object for the attribute '{@link relalg.Label#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see relalg.Label#getName()
-	 * @see #getLabel()
-	 * @generated
-	 */
-	EAttribute getLabel_Name();
-
-	/**
 	 * Returns the meta object for class '{@link relalg.VertexLabel <em>Vertex Label</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1430,6 +1445,27 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAttributeVariable();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.NamedElement <em>Named Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Named Element</em>'.
+	 * @see relalg.NamedElement
+	 * @generated
+	 */
+	EClass getNamedElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.NamedElement#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see relalg.NamedElement#getName()
+	 * @see #getNamedElement()
+	 * @generated
+	 */
+	EAttribute getNamedElement_Name();
 
 	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
@@ -1673,14 +1709,6 @@ public interface RelalgPackage extends EPackage {
 		EClass VARIABLE = eINSTANCE.getVariable();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute VARIABLE__NAME = eINSTANCE.getVariable_Name();
-
-		/**
 		 * The meta object literal for the '<em><b>Dont Care</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1751,14 +1779,6 @@ public interface RelalgPackage extends EPackage {
 		EClass LABEL = eINSTANCE.getLabel();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LABEL__NAME = eINSTANCE.getLabel_Name();
-
-		/**
 		 * The meta object literal for the '{@link relalg.impl.VertexLabelImpl <em>Vertex Label</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1805,6 +1825,24 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ATTRIBUTE_VARIABLE = eINSTANCE.getAttributeVariable();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.NamedElementImpl <em>Named Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.NamedElementImpl
+		 * @see relalg.impl.RelalgPackageImpl#getNamedElement()
+		 * @generated
+		 */
+		EClass NAMED_ELEMENT = eINSTANCE.getNamedElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_ELEMENT__NAME = eINSTANCE.getNamedElement_Name();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

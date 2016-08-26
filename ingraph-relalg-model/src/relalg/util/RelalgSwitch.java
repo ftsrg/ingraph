@@ -152,6 +152,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.VARIABLE: {
 				Variable variable = (Variable)theEObject;
 				T result = caseVariable(variable);
+				if (result == null) result = caseNamedElement(variable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -159,6 +160,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				VertexVariable vertexVariable = (VertexVariable)theEObject;
 				T result = caseVertexVariable(vertexVariable);
 				if (result == null) result = caseVariable(vertexVariable);
+				if (result == null) result = caseNamedElement(vertexVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -166,12 +168,14 @@ public class RelalgSwitch<T> extends Switch<T> {
 				EdgeVariable edgeVariable = (EdgeVariable)theEObject;
 				T result = caseEdgeVariable(edgeVariable);
 				if (result == null) result = caseVariable(edgeVariable);
+				if (result == null) result = caseNamedElement(edgeVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case RelalgPackage.LABEL: {
 				Label label = (Label)theEObject;
 				T result = caseLabel(label);
+				if (result == null) result = caseNamedElement(label);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -179,6 +183,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				VertexLabel vertexLabel = (VertexLabel)theEObject;
 				T result = caseVertexLabel(vertexLabel);
 				if (result == null) result = caseLabel(vertexLabel);
+				if (result == null) result = caseNamedElement(vertexLabel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -186,6 +191,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				EdgeLabel edgeLabel = (EdgeLabel)theEObject;
 				T result = caseEdgeLabel(edgeLabel);
 				if (result == null) result = caseLabel(edgeLabel);
+				if (result == null) result = caseNamedElement(edgeLabel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -201,6 +207,13 @@ public class RelalgSwitch<T> extends Switch<T> {
 				AttributeVariable attributeVariable = (AttributeVariable)theEObject;
 				T result = caseAttributeVariable(attributeVariable);
 				if (result == null) result = caseVariable(attributeVariable);
+				if (result == null) result = caseNamedElement(attributeVariable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.NAMED_ELEMENT: {
+				NamedElement namedElement = (NamedElement)theEObject;
+				T result = caseNamedElement(namedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -490,6 +503,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAttributeVariable(AttributeVariable object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNamedElement(NamedElement object) {
 		return null;
 	}
 
