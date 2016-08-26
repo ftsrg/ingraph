@@ -1,34 +1,36 @@
+# Relational algebra operators
+
 List of graph relational operators with example
 
-Alfa nodes
-==========
-AllDifferent([_e1, _e2])
+## Alfa nodes
 
-Distinct([segment, segment.length AS length])
+* `AllDifferent([_e1, _e2])`
 
-Expand(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)
-ExpandIn(edgeVar=_e1:monitoredBy, vertexVar=segment1:Segment)
-ExpandOut(edgeVar=_e2:target, vertexVar=sw:Switch)
+* `Distinct([segment, segment.length AS length])`
 
-Filter(segment.length <= 0)
-Filter(swP.position != sw.currentPosition)
+* `Expand(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition)`
+* `ExpandIn(edgeVar=_e1:monitoredBy, vertexVar=segment1:Segment)`
+* `ExpandOut(edgeVar=_e2:target, vertexVar=sw:Switch)`
 
-NamedInnerProduction([inactiveRoute], name=inactiveRoutes)
-NamedSubExpr(ex7)
+* `Filter(segment.length <= 0)`
+* `Filter(swP.position != sw.currentPosition)`
 
-Production([activeRoute])
+* `NamedInnerProduction([inactiveRoute], name=inactiveRoutes)`
+* `NamedSubExpr(ex7)`
 
-Trimmer
+* `Production([activeRoute])`
 
-Beta nodes
-==========
-AntiJoin([route, sensor])
-AntiJoin(activeRoute=inactiveRoute)
+* `Trimmer`
 
-NaturalJoin
+## Beta nodes
 
-NotIn(activeRoute) # variable not appear in 2nd input
+* `AntiJoin([route, sensor])`
+* `AntiJoin(activeRoute=inactiveRoute)`
 
-Etc.
-====
-GetVertices(vertexVar=inactiveRoute:Route)
+* `NaturalJoin`
+
+* `NotIn(activeRoute)` (variable not appear in 2nd input)
+
+## Misc
+
+* `GetVertices(vertexVar=inactiveRoute:Route)`
