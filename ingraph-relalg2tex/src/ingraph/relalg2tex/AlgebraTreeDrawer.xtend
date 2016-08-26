@@ -1,18 +1,9 @@
 package ingraph.relalg2tex
 
 import relalg.AlgebraExpression
-import relalg.AllDifferentOperator
 import relalg.AlphaOperator
-import relalg.AntiJoinOperator
 import relalg.BetaOperator
-import relalg.Direction
-import relalg.DuplicateEliminationOperator
-import relalg.ExpandOperator
-import relalg.FilterOperator
 import relalg.GetVerticesOperator
-import relalg.JoinOperator
-import relalg.ProductionOperator
-import relalg.ProjectionOperator
 
 class AlgebraTreeDrawer extends TexSerializer {
 

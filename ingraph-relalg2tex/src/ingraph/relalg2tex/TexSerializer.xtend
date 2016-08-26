@@ -15,6 +15,9 @@ import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.Variable
+import org.apache.commons.io.FileUtils
+import java.nio.charset.Charset
+import java.io.File
 
 abstract class TexSerializer {
 
@@ -27,9 +30,16 @@ abstract class TexSerializer {
 		this.full = full
 	}
 
-	def CharSequence serialize(AlgebraExpression expression) {
+	def serialize(AlgebraExpression expression, String filename) {
+		val tex = convertExpression(expression)
+		val file = new File("../visualization/" + filename + ".tex") 
+		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
+		tex
+	}
+
+	def CharSequence convertExpression(AlgebraExpression expression) {
 		if (expression instanceof ProductionOperator) {
-			serialize((expression as ProductionOperator).input)
+			convertExpression((expression as ProductionOperator).input)
 		} else {
 			'''
 				«IF full»
@@ -66,7 +76,7 @@ abstract class TexSerializer {
 	}
 
 	def dispatch operatorSymbol(ExpandOperator op) {
-		'''\expand«op.direction.directionToTeX»''' +
+		'''\expand«op.direction.directionToTex»''' +
 			'''{«op.edgeVariable.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}''' +
 			'''{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.name.escape»}''' +
 			'''{«op.targetVertexVariable.vertexLabel?.name?.escape»}'''
@@ -99,7 +109,7 @@ abstract class TexSerializer {
 		'''antijoin'''
 	}
 
-	def directionToTeX(Direction direction) {
+	def directionToTex(Direction direction) {
 		switch direction {
 			case BOTH: {
 				""
@@ -108,7 +118,7 @@ abstract class TexSerializer {
 				"in"
 			}
 			case OUT: {
-				"in"
+				"out"
 			}
 		}
 	}

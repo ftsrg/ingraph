@@ -1,0 +1,26 @@
+\documentclass{minimal}
+
+\input{relalg-packages}
+\input{relalg-commands}
+
+\begin{document}
+\begin{tikzpicture}[]
+\node {$\duplicateelimination$}
+	child{node {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$}
+		child{node {$\selection{...}$}
+			child{node {$\selection{...}$}
+				child{node {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
+					child{node {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
+						child{node {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
+							child{node {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}
+								child{node {$\getvertices{semaphore}{Semaphore}$}}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+;
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,16 @@
+\documentclass{minimal}
+
+\input{relalg-packages}
+\input{relalg-commands}
+
+\begin{document}
+\begin{tikzpicture}[]
+\node {$\duplicateelimination$}
+	child{node {$\projection{\var{segment},~\var{length}}$}
+		child{node {$\selection{...}$}
+			child{node {$\getvertices{segment}{Segment}$}}
+		}
+	}
+;
+\end{tikzpicture}
+\end{document}

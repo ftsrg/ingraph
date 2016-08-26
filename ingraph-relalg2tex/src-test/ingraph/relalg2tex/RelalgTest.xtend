@@ -40,7 +40,7 @@ class RelalgTest {
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
 
-		print(drawer.serialize(production))
+		print(drawer.serialize(production, "poslength"))
 	}
 
 	@Test
@@ -71,7 +71,7 @@ class RelalgTest {
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
 
-		print(drawer.serialize(production))
+		print(drawer.serialize(production, "routesensor"))
 	}
 
 	@Test
@@ -113,7 +113,7 @@ class RelalgTest {
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
 
-		print(drawer.serialize(production))
+		print(drawer.serialize(production, "semaphoreneighbor"))
 	}
 
 	@Test
@@ -132,7 +132,7 @@ class RelalgTest {
 		val de = createDuplicateEliminationOperator => [input = antiJoin]
 		val production = createProductionOperator => [input = de]
 
-		print(drawer.serialize(production))
+		print(drawer.serialize(production, "switchmonitored"))
 	}
 
 	@Test
@@ -164,7 +164,7 @@ class RelalgTest {
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
 
-		print(drawer.serialize(production))
+		print(drawer.serialize(production, "switchset"))
 	}
 
 }
