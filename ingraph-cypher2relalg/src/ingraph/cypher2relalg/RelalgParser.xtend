@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
 import org.apache.commons.io.FileUtils
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import ingraph.antlr.CypherParser.CypherContext
 
 class RelalgParser {
 
@@ -22,9 +23,9 @@ class RelalgParser {
 		val tokenStream = new CommonTokenStream(lexer)
 		val parser = new CypherParser(tokenStream)
 
-		val cypher = parser.cypher()
-		val listener = new RelalgCypherListener()
+		val CypherContext cypher = parser.cypher()
 
+		val listener = new RelalgCypherListener()
 		ParseTreeWalker.DEFAULT.walk(listener, cypher)
 
 		println("Vertex labels:    " + listener.vertexLabels.entrySet.map[key.toString].join(", "))

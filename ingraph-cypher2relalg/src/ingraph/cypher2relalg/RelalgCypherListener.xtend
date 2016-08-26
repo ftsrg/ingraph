@@ -1,24 +1,27 @@
 package ingraph.cypher2relalg
 
 import ingraph.antlr.CypherBaseListener
+import ingraph.antlr.CypherParser.CypherContext
 import ingraph.antlr.CypherParser.LabelNameContext
 import ingraph.antlr.CypherParser.NodeLabelContext
 import ingraph.antlr.CypherParser.NodeLabelsContext
 import ingraph.antlr.CypherParser.NodePatternContext
+import ingraph.antlr.CypherParser.PatternContext
 import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
 import ingraph.antlr.CypherParser.SymbolicNameContext
 import ingraph.antlr.CypherParser.VariableContext
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
+import ingraph.cypher2relalg.factories.VertexVariableFactory
 import java.util.HashMap
+import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.RelalgFactory
 import relalg.VertexLabel
 import relalg.VertexVariable
-import ingraph.cypher2relalg.factories.VertexVariableFactory
 
 class RelalgCypherListener extends CypherBaseListener {
 
@@ -62,6 +65,11 @@ class RelalgCypherListener extends CypherBaseListener {
 			edgeLabels.putIfAbsent(edgeLabelName, edgeLabel)
 			edgeVariable.ensureLabel(edgeLabel)
 		}
+	}
+	
+	override enterPattern(PatternContext ctx) { 
+		val listener = new PatternListener()
+		ParseTreeWalker.DEFAULT.walk(listener, ctx)		
 	}
 
 	def ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
