@@ -10,8 +10,11 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker
 
 class RelalgParser {
 
-	def static parse(String filename) {
-		val filepath = "../queries/" + filename + ".cyp";
+	def static parse(String queryName) {
+		println("Parsing query: " + queryName)
+		println("=================================")
+		
+		val filepath = "../queries/" + queryName + ".cyp";
 		val query = FileUtils.readFileToString(new File(filepath), "UTF-8");
 
 		val input = new ANTLRInputStream(query);
@@ -23,9 +26,13 @@ class RelalgParser {
 		val listener = new RelalgCypherListener();
 
 		ParseTreeWalker.DEFAULT.walk(listener, cypher);
-		
-		println(listener.vertexLabels)
-		println(listener.vertexVariables)
+
+		println("Vertex labels:    " + listener.vertexLabels.entrySet.map[key.toString].join(", "))
+		println("Vertex variables: " + listener.vertexVariables.entrySet.map[key.toString].join(", "))
+		println()
+		println("Edge labels:    " + listener.edgeLabels.entrySet.map[key.toString].join(", "))
+		println("Edge variables: " + listener.edgeVariables.entrySet.map[key.toString].join(", "))
+		println()
 	}
 
 }
