@@ -3,7 +3,6 @@ bin/
 target/
 tmp/
 .settings/
-MANIFEST.MF_gen
 .DS_Store*
 .metadata
 runtimeInfo
