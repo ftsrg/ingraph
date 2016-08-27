@@ -1,6 +1,5 @@
 package ingraph.cypher2relalg.cypherlisteners
 
-import ingraph.antlr.CypherBaseListener
 import ingraph.antlr.CypherParser.CypherContext
 import ingraph.antlr.CypherParser.LabelNameContext
 import ingraph.antlr.CypherParser.NodeLabelContext
@@ -24,9 +23,9 @@ import relalg.RelalgFactory
 import relalg.VertexLabel
 import relalg.VertexVariable
 
-class RelalgCypherListener extends CypherBaseListener {
+class RelalgCypherListener extends RelalgBaseCypherListener {
 
-	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	//protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	@Accessors val vertexVariableFactory = new VertexVariableFactory
 	@Accessors val edgeVariableFactory = new EdgeVariableFactory
@@ -70,13 +69,4 @@ class RelalgCypherListener extends CypherBaseListener {
 		val listener = new PatternListener()
 		ParseTreeWalker.DEFAULT.walk(listener, ctx)		
 	}
-
-	def ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
-		vertexVariable.vertexLabel = label
-	}
-
-	def ensureLabel(EdgeVariable edgeVariable, EdgeLabel label) {
-		edgeVariable.edgeLabel = label
-	}
-
 }
