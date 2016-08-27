@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.apache.commons.io.FileUtils
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import ingraph.antlr.CypherParser.CypherContext
+import ingraph.cypher2relalg.cypherlisteners.RelalgCypherListener
 
 class RelalgParser {
 

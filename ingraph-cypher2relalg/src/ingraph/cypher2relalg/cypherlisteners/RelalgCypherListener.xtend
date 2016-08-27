@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg
+package ingraph.cypher2relalg.cypherlisteners
 
 import ingraph.antlr.CypherBaseListener
 import ingraph.antlr.CypherParser.CypherContext
