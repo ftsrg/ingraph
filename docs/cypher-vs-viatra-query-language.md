@@ -9,4 +9,4 @@ Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [
 | multiple edges                  | [allowed](multiple-edges.md)     | not allowed              |
 | edges in matches                | [edges are required to be different](CITATION NEEDED) | edges are not required to be different |
 | subpatterns                     | partially suppored using the [`WITH` keyword](https://neo4j.com/docs/developer-manual/current/cypher/#query-with) | supported with the [`find` keyword](https://wiki.eclipse.org/VIATRA/Query/UserDocumentation/QueryLanguage#Advanced_Pattern_Constraints) |
-| results                         | may return edges and 
+| results                         | vertices, edges and attributes | objects and attributes |
