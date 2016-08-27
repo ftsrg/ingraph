@@ -8,7 +8,7 @@ Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [
 | unique identifiers              | required for vertices            | not required             |
 | collection type for the result of a query/operation | list         | set                      |
 | multiple edges                  | [allowed](multiple-edges.md)     | not allowed              |
-| edges in matches                | [edges are required to be different](CITATION NEEDED) | edges are not required to be different |
+| edges in matches                | [edges are required to be different](http://neo4j.com/docs/developer-manual/current/cypher/#cypherdoc-uniqueness) in a single `MATCH` clause | edges are not required to be different |
 | subpatterns                     | partially supported using the [`WITH` keyword](https://neo4j.com/docs/developer-manual/current/cypher/#query-with) | supported with the [`find` keyword](https://wiki.eclipse.org/VIATRA/Query/UserDocumentation/QueryLanguage#Advanced_Pattern_Constraints) |
 | negative subpatterns            | `WHERE NOT ... IN ...`, `WHERE NOT ... <pattern>` | [`neg find`](https://wiki.eclipse.org/VIATRA/Query/UserDocumentation/QueryLanguage#Advanced_Pattern_Constraints) |
 | results                         | vertices, edges and attributes | objects and attributes |
