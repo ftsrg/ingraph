@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-SymbolicName: ingraph-relalg2tex
+Bundle-SymbolicName: ingraph-relalg-tex-visualization
 Bundle-Version: 0.0.1.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  com.google.guava,
