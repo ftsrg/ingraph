@@ -16,6 +16,7 @@ ext.xtendVersion = '2.10.0'
 
 dependencies {
     compile project(':ingraph-relalg-model')
+    compile project(':ingraph-cypher2relalg')
     compile project(':ingraph-trainbenchmark')
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion

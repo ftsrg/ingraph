@@ -2,6 +2,7 @@ package ingraph.relalg2tex
 
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
+import ingraph.cypher2relalg.RelalgParser
 
 class RelalgVisualizationTest {
 
@@ -10,7 +11,9 @@ class RelalgVisualizationTest {
 
 	@Test
 	def void testPosLength() {
-		val expression = TrainBenchmarkUtil.posLength
+//		val expression = TrainBenchmarkUtil.posLength
+		
+		val expression = RelalgParser.parse("PosLength")
 		print(drawer.serialize(expression, "poslength"))
 	}
 

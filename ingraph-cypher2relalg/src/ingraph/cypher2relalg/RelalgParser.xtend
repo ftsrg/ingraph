@@ -35,6 +35,8 @@ class RelalgParser {
 		println("Edge labels:    " + listener.edgeLabelFactory.elements.entrySet.map[key.toString].join(", "))
 		println("Edge variables: " + listener.edgeVariableFactory.elements.entrySet.map[key.toString].join(", "))
 		println()
+		
+		listener.rootExpression
 	}
 
 }
