@@ -13,6 +13,7 @@ import ingraph.antlr.CypherParser.PatternPartContext
 import ingraph.antlr.CypherParser.QueryContext
 import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
+import ingraph.antlr.CypherParser.RelationshipPatternContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
 import ingraph.antlr.CypherParser.RightArrowHeadContext
 import ingraph.antlr.CypherParser.SingleQueryContext
@@ -140,9 +141,9 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 				lastVertexVariable = op.targetVertexVariable
 				lastAlgebraExpression = op
 			}
-		}
 
-	// FIXME "return"
+			patternPart_AlgebraExpression=lastAlgebraExpression
+		}
 	}
 
 	var EdgeVariable patternElementChain_EdgeVariable
@@ -157,8 +158,8 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		if (patternElementChain_EdgeVariable == null) { // variable was omitted: we create a dontCare variable
 			patternElementChain_EdgeVariable = edgeVariableFactory.createElement(null)
 		}
-		val isLeftArrow = ctx.getChild(LeftArrowHeadContext, 0) != null
-		val isRightArrow = ctx.getChild(RightArrowHeadContext, 0) != null
+		val isLeftArrow = ctx.getChild(RelationshipPatternContext, 0)?.getChild(LeftArrowHeadContext, 0) != null
+		val isRightArrow = ctx.getChild(RelationshipPatternContext, 0)?.getChild(RightArrowHeadContext, 0) != null
 
 		val expandOperator = createExpandOperator() =>
 			[
