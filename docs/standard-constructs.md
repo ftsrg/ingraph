@@ -1,7 +1,8 @@
-# Legacy constructs in openCypher
+# Standardisation scope of openCypher
 
-The openCypher documentation defines [legacy grammar rules](
-https://github.com/opencypher/openCypher/tree/master/grammar#legacy-grammar) as:
+The [Standardisation scope of Cypher](https://github.com/opencypher/openCypher/blob/master/docs/standardisation-scope.adoc) document discusses the language features selected to be included to openCypher.
+
+The openCypher documentation defines [legacy grammar rules](https://github.com/opencypher/openCypher/tree/master/grammar#legacy-grammar) as:
 
 > Legacy grammar
 >
