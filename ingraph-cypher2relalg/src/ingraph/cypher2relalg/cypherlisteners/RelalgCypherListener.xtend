@@ -15,6 +15,9 @@ import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
 import ingraph.antlr.CypherParser.RelationshipPatternContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
+import ingraph.antlr.CypherParser.ReturnBodyContext
+import ingraph.antlr.CypherParser.ReturnContext
+import ingraph.antlr.CypherParser.ReturnItemContext
 import ingraph.antlr.CypherParser.RightArrowHeadContext
 import ingraph.antlr.CypherParser.SingleQueryContext
 import ingraph.antlr.CypherParser.SymbolicNameContext
@@ -25,6 +28,7 @@ import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
 import java.util.ArrayList
 import java.util.List
+import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.AlgebraExpression
 import relalg.Direction
@@ -33,6 +37,7 @@ import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProductionOperator
+import relalg.Variable
 import relalg.VertexVariable
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
@@ -64,6 +69,63 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		}
 	}
 
+	var List<Variable> return_VariableList = null
+	var boolean return_InsideReturn = false
+	var boolean return_IsDistinct = false
+
+	override enterReturn(ReturnContext ctx) {
+		return_InsideReturn = true
+
+		if (return_VariableList == null) {
+			return_VariableList = new ArrayList<Variable>
+		} else {
+			throw new RuntimeException("Multiple return clauses found")
+		}
+
+		return_IsDistinct = "DISTINCT".equalsIgnoreCase(ctx.getChild(TerminalNode, 1)?.text)
+	}
+
+	override exitReturn(ReturnContext ctx) {
+		return_InsideReturn = false
+	}
+
+	var List<Variable> returnBody_VariableList = null
+	var boolean returnBody_InsideReturnBody = false
+
+	override enterReturnBody(ReturnBodyContext ctx) {
+		returnBody_VariableList = new ArrayList<Variable>
+		returnBody_InsideReturnBody = true
+
+		if ("*".equalsIgnoreCase(ctx.returnItems.getChild(TerminalNode, 0)?.text)) {
+			returnBody_VariableList.add(vertexVariableFactory.createElement("*"))
+		}
+	}
+
+	override exitReturnBody(ReturnBodyContext ctx) {
+		if (return_InsideReturn) {
+			return_VariableList = returnBody_VariableList
+		}
+		returnBody_InsideReturnBody = false
+	}
+
+	override enterReturnItem(ReturnItemContext ctx) {
+		// TODO: process renaming commands
+		//val renamedVariableCtx = ctx.variable
+
+		// dirty hack to traverse down to the single variable
+		val returnItemName = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)
+		?.expression8?.expression7?.expression6(0).expression5(0)?.expression4(0)?.expression3?.expression2(0)
+		?.atom?.variable.symbolicName.text
+
+		if (vertexVariableFactory.elements.containsKey(returnItemName)) {
+			returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
+		} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
+			returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
+		} else {
+			println("WARNING: return variable type not handled: "+returnItemName)
+		}
+	}
+
 	/*
 	 * List of relalg subtrees for each MATCH clause.
 	 * 
@@ -76,7 +138,24 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	}
 
 	override exitSingleQuery(SingleQueryContext ctx) {
-		query_SingleQueryList.add(buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator))
+		val content=buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
+		// add trimmer node if return was specified
+		var AlgebraExpression trimmer=null
+		if (return_VariableList!=null) {
+			trimmer=createProjectionOperator => [input=content; variables.addAll(return_VariableList)]
+		} else {
+			trimmer=content
+		}
+		// add distinct node if return DISTINCT was specified
+		var AlgebraExpression distinct=null
+		if (return_IsDistinct) {
+			val myDistinct=createDuplicateEliminationOperator
+			myDistinct.input=trimmer
+			distinct=myDistinct
+		} else {
+			distinct=trimmer
+		}
+		query_SingleQueryList.add(distinct)
 	}
 
 	var AlgebraExpression match_AlgebraExpression
@@ -142,7 +221,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 				lastAlgebraExpression = op
 			}
 
-			patternPart_AlgebraExpression=lastAlgebraExpression
+			patternPart_AlgebraExpression = lastAlgebraExpression
 		}
 	}
 
@@ -161,13 +240,13 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		val isLeftArrow = ctx.getChild(RelationshipPatternContext, 0)?.getChild(LeftArrowHeadContext, 0) != null
 		val isRightArrow = ctx.getChild(RelationshipPatternContext, 0)?.getChild(RightArrowHeadContext, 0) != null
 
-		val expandOperator = createExpandOperator() =>
-			[
-				edgeVariable = patternElementChain_EdgeVariable;
-				direction = if(isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow)) Direction.
-					BOTH else if(isLeftArrow) Direction.IN else Direction.OUT;
-				targetVertexVariable = patternElementChain_VertexVariable
-			]
+		val expandOperator = createExpandOperator() => [
+			edgeVariable = patternElementChain_EdgeVariable;
+			direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
+				Direction.BOTH
+			else if(isLeftArrow) Direction.IN else Direction.OUT;
+			targetVertexVariable = patternElementChain_VertexVariable
+		]
 
 		if (ctx.parent instanceof PatternElementContext) {
 			patternElement_ExpandList.add(expandOperator)
