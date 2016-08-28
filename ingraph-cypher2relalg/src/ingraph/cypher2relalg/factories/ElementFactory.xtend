@@ -17,7 +17,7 @@ abstract class ElementFactory<TNamedElement extends NamedElement> {
 
 		if (elements.get(variableName) == null) {
 			val variable = createSpecificNamedElement => [name = variableName]
-			elements.put(variableName, variable as TNamedElement)
+			elements.put(variableName, variable)
 		}
 
 		elements.get(variableName)
