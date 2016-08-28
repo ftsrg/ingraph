@@ -10,6 +10,9 @@ import relalg.JoinOperator
 import relalg.RelalgFactory
 import relalg.VertexLabel
 import relalg.VertexVariable
+import relalg.GetVerticesOperator
+import relalg.ExpandOperator
+import java.util.List
 
 class RelalgBaseCypherListener extends CypherBaseListener {
 
@@ -42,5 +45,23 @@ class RelalgBaseCypherListener extends CypherBaseListener {
 		}
 
 		return retVal
+	}
+
+	/**
+	 * Chain expand operators together and add sourceVertexVariables
+	 */
+	def chainExpandOperators(GetVerticesOperator gvo, List<ExpandOperator> expandList) {
+		var lastVertexVariable = gvo.vertexVariable
+		var AlgebraExpression lastAlgebraExpression = gvo
+
+		for (ExpandOperator op : expandList) {
+			op.sourceVertexVariable = lastVertexVariable
+			op.input = lastAlgebraExpression
+
+			lastVertexVariable = op.targetVertexVariable
+			lastAlgebraExpression = op
+		}
+
+		lastAlgebraExpression
 	}
 }

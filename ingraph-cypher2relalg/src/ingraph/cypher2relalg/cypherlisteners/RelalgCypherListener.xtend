@@ -39,6 +39,11 @@ import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import ingraph.antlr.CypherParser.WhereContext
+import ingraph.antlr.CypherParser.FunctionInvocationContext
+import ingraph.antlr.CypherParser.RelationshipsPatternContext
+import ingraph.antlr.CypherParser.ExpressionContext
+import relalg.BetaOperator
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
 
@@ -110,19 +115,18 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterReturnItem(ReturnItemContext ctx) {
 		// TODO: process renaming commands
-		//val renamedVariableCtx = ctx.variable
-
+		// val renamedVariableCtx = ctx.variable
 		// dirty hack to traverse down to the single variable
-		val returnItemName = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)
-		?.expression8?.expression7?.expression6(0).expression5(0)?.expression4(0)?.expression3?.expression2(0)
-		?.atom?.variable.symbolicName.text
+		val returnItemName = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)?.
+			expression8?.expression7?.expression6(0).expression5(0)?.expression4(0)?.expression3?.expression2(0)?.atom?.
+			variable.symbolicName.text
 
 		if (vertexVariableFactory.elements.containsKey(returnItemName)) {
 			returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
 		} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
 			returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
 		} else {
-			println("WARNING: return variable type not handled: "+returnItemName)
+			println("WARNING: return variable type not handled: " + returnItemName)
 		}
 	}
 
@@ -138,36 +142,47 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	}
 
 	override exitSingleQuery(SingleQueryContext ctx) {
-		val content=buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
+		val content = buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
 		// add trimmer node if return was specified
-		var AlgebraExpression trimmer=null
-		if (return_VariableList!=null) {
-			trimmer=createProjectionOperator => [input=content; variables.addAll(return_VariableList)]
+		var AlgebraExpression trimmer = null
+		if (return_VariableList != null) {
+			trimmer = createProjectionOperator => [input = content; variables.addAll(return_VariableList)]
 		} else {
-			trimmer=content
+			trimmer = content
 		}
 		// add distinct node if return DISTINCT was specified
-		var AlgebraExpression distinct=null
+		var AlgebraExpression distinct = null
 		if (return_IsDistinct) {
-			val myDistinct=createDuplicateEliminationOperator
-			myDistinct.input=trimmer
-			distinct=myDistinct
+			val myDistinct = createDuplicateEliminationOperator
+			myDistinct.input = trimmer
+			distinct = myDistinct
 		} else {
-			distinct=trimmer
+			distinct = trimmer
 		}
 		query_SingleQueryList.add(distinct)
 	}
 
 	var AlgebraExpression match_AlgebraExpression
+	var AlgebraExpression match_WhereJoinExpression
+	var boolean match_WhereJoinModeIsAntijoin=false
 
 	// TODO: where
 	override enterMatch(MatchContext ctx) {
 		match_AlgebraExpression = null
+		match_WhereJoinExpression=null
+		match_WhereJoinModeIsAntijoin=false
 	}
 
 	override exitMatch(MatchContext ctx) {
 		if (match_AlgebraExpression != null) {
-			singleQuery_MatchList.add(match_AlgebraExpression)
+			var myAlgebraExpression = match_AlgebraExpression
+			if (match_WhereJoinExpression != null) {
+				var BetaOperator joinNode = if (match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
+				joinNode.leftInput = myAlgebraExpression
+				joinNode.rightInput = match_WhereJoinExpression
+				myAlgebraExpression=joinNode
+			}
+			singleQuery_MatchList.add(myAlgebraExpression)
 		}
 	}
 
@@ -208,20 +223,8 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override exitPatternElement(PatternElementContext ctx) {
 		if (ctx.getChild(PatternElementContext, 0) == null) {
-			// this is the most inner non-parenthesized patternElement, so we assemble the relalg model part
-			// chain expand operators together and add sourceVertexVariables
-			var lastVertexVariable = patternElement_GetVerticesOperator.vertexVariable
-			var AlgebraExpression lastAlgebraExpression = patternElement_GetVerticesOperator
-
-			for (ExpandOperator op : patternElement_ExpandList) {
-				op.sourceVertexVariable = lastVertexVariable
-				op.input = lastAlgebraExpression
-
-				lastVertexVariable = op.targetVertexVariable
-				lastAlgebraExpression = op
-			}
-
-			patternPart_AlgebraExpression = lastAlgebraExpression
+			patternPart_AlgebraExpression = chainExpandOperators(patternElement_GetVerticesOperator,
+				patternElement_ExpandList)
 		}
 	}
 
@@ -248,8 +251,9 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 			targetVertexVariable = patternElementChain_VertexVariable
 		]
 
-		if (ctx.parent instanceof PatternElementContext) {
-			patternElement_ExpandList.add(expandOperator)
+		switch ctx.parent {
+			PatternElementContext: patternElement_ExpandList.add(expandOperator)
+			RelationshipsPatternContext: relationshipsPattern_ExpandList.add(expandOperator)
 		}
 	}
 
@@ -286,11 +290,67 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 			vertexVariable.ensureLabel(vertexLabel)
 		}
 
-		if (ctx.parent instanceof PatternElementChainContext) {
-			patternElementChain_VertexVariable = vertexVariable
-		} else if (ctx.parent instanceof PatternElementContext) {
-			patternElement_GetVerticesOperator = createGetVerticesOperator
-			patternElement_GetVerticesOperator.vertexVariable = vertexVariable
+		switch ctx.parent {
+			PatternElementChainContext:
+				patternElementChain_VertexVariable = vertexVariable
+			PatternElementContext: {
+				patternElement_GetVerticesOperator = createGetVerticesOperator
+				patternElement_GetVerticesOperator.vertexVariable = vertexVariable
+			}
+			RelationshipsPatternContext: {
+				relationshipsPattern_GetVerticesOperator = createGetVerticesOperator
+				relationshipsPattern_GetVerticesOperator.vertexVariable = vertexVariable
+			}
 		}
+	}
+
+	var boolean where_InsideWhere = false
+	var AlgebraExpression where_JoinExpression
+	var boolean where_JoinModeIsAntijoin=false
+
+	override enterWhere(WhereContext ctx) {
+		where_InsideWhere = true
+		functionInvocation_FunctionName = null
+		where_JoinExpression=null
+	}
+
+	override exitWhere(WhereContext ctx) {
+		where_JoinModeIsAntijoin="NOT".equalsIgnoreCase(functionInvocation_FunctionName)
+		where_InsideWhere = false
+
+		switch ctx.parent {
+			MatchContext: {
+				match_WhereJoinModeIsAntijoin=where_JoinModeIsAntijoin
+				match_WhereJoinExpression=where_JoinExpression
+			}
+		}
+	}
+
+	override enterExpression(ExpressionContext ctx) {
+		super.enterExpression(ctx)
+	}
+
+	var boolean functionInvocation_InsideFunctionInvocation = false
+	var String functionInvocation_FunctionName
+
+	override enterFunctionInvocation(FunctionInvocationContext ctx) {
+		functionInvocation_InsideFunctionInvocation = true
+		functionInvocation_FunctionName = ctx.functionName.symbolicName.text
+	}
+
+	override exitFunctionInvocation(FunctionInvocationContext ctx) {
+		functionInvocation_InsideFunctionInvocation = false
+	}
+
+	var List<ExpandOperator> relationshipsPattern_ExpandList
+	var GetVerticesOperator relationshipsPattern_GetVerticesOperator
+
+	override enterRelationshipsPattern(RelationshipsPatternContext ctx) {
+		relationshipsPattern_ExpandList = new ArrayList<ExpandOperator>
+	}
+
+	override exitRelationshipsPattern(RelationshipsPatternContext ctx) {
+		where_JoinExpression = chainExpandOperators(relationshipsPattern_GetVerticesOperator,
+				relationshipsPattern_ExpandList)
 	}
 }
