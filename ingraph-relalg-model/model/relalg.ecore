@@ -40,8 +40,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="GetVerticesOperator" eSuperTypes="#//AlgebraExpression">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vertexVariable" lowerBound="1"
         eType="#//VertexVariable"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexLabel" lowerBound="1"
-        eType="#//VertexLabel"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DuplicateEliminationOperator" eSuperTypes="#//AlphaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Variable" abstract="true" eSuperTypes="#//NamedElement">

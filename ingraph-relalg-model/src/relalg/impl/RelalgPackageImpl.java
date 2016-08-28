@@ -434,15 +434,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getGetVerticesOperator_VertexLabel() {
-		return (EReference)getVerticesOperatorEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getDuplicateEliminationOperator() {
 		return duplicateEliminationOperatorEClass;
 	}
@@ -657,7 +648,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		getVerticesOperatorEClass = createEClass(GET_VERTICES_OPERATOR);
 		createEReference(getVerticesOperatorEClass, GET_VERTICES_OPERATOR__VERTEX_VARIABLE);
-		createEReference(getVerticesOperatorEClass, GET_VERTICES_OPERATOR__VERTEX_LABEL);
 
 		duplicateEliminationOperatorEClass = createEClass(DUPLICATE_ELIMINATION_OPERATOR);
 
@@ -767,7 +757,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(getVerticesOperatorEClass, GetVerticesOperator.class, "GetVerticesOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getGetVerticesOperator_VertexVariable(), this.getVertexVariable(), null, "vertexVariable", null, 1, 1, GetVerticesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getGetVerticesOperator_VertexLabel(), this.getVertexLabel(), null, "vertexLabel", null, 1, 1, GetVerticesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(duplicateEliminationOperatorEClass, DuplicateEliminationOperator.class, "DuplicateEliminationOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

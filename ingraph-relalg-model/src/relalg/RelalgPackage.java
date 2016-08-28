@@ -563,22 +563,13 @@ public interface RelalgPackage extends EPackage {
 	int GET_VERTICES_OPERATOR__VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Vertex Label</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GET_VERTICES_OPERATOR__VERTEX_LABEL = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Get Vertices Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GET_VERTICES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
+	int GET_VERTICES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Get Vertices Operator</em>' class.
@@ -1280,17 +1271,6 @@ public interface RelalgPackage extends EPackage {
 	EReference getGetVerticesOperator_VertexVariable();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.GetVerticesOperator#getVertexLabel <em>Vertex Label</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vertex Label</em>'.
-	 * @see relalg.GetVerticesOperator#getVertexLabel()
-	 * @see #getGetVerticesOperator()
-	 * @generated
-	 */
-	EReference getGetVerticesOperator_VertexLabel();
-
-	/**
 	 * Returns the meta object for class '{@link relalg.DuplicateEliminationOperator <em>Duplicate Elimination Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1679,14 +1659,6 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference GET_VERTICES_OPERATOR__VERTEX_VARIABLE = eINSTANCE.getGetVerticesOperator_VertexVariable();
-
-		/**
-		 * The meta object literal for the '<em><b>Vertex Label</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference GET_VERTICES_OPERATOR__VERTEX_LABEL = eINSTANCE.getGetVerticesOperator_VertexLabel();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.DuplicateEliminationOperatorImpl <em>Duplicate Elimination Operator</em>}' class.

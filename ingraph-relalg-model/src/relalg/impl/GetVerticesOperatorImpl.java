@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import relalg.GetVerticesOperator;
 import relalg.RelalgPackage;
-import relalg.VertexLabel;
 import relalg.VertexVariable;
 
 /**
@@ -23,7 +22,6 @@ import relalg.VertexVariable;
  * </p>
  * <ul>
  *   <li>{@link relalg.impl.GetVerticesOperatorImpl#getVertexVariable <em>Vertex Variable</em>}</li>
- *   <li>{@link relalg.impl.GetVerticesOperatorImpl#getVertexLabel <em>Vertex Label</em>}</li>
  * </ul>
  *
  * @generated
@@ -38,16 +36,6 @@ public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements Ge
 	 * @ordered
 	 */
 	protected VertexVariable vertexVariable;
-
-	/**
-	 * The cached value of the '{@link #getVertexLabel() <em>Vertex Label</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVertexLabel()
-	 * @generated
-	 * @ordered
-	 */
-	protected VertexLabel vertexLabel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -111,53 +99,12 @@ public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements Ge
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VertexLabel getVertexLabel() {
-		if (vertexLabel != null && vertexLabel.eIsProxy()) {
-			InternalEObject oldVertexLabel = (InternalEObject)vertexLabel;
-			vertexLabel = (VertexLabel)eResolveProxy(oldVertexLabel);
-			if (vertexLabel != oldVertexLabel) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL, oldVertexLabel, vertexLabel));
-			}
-		}
-		return vertexLabel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VertexLabel basicGetVertexLabel() {
-		return vertexLabel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVertexLabel(VertexLabel newVertexLabel) {
-		VertexLabel oldVertexLabel = vertexLabel;
-		vertexLabel = newVertexLabel;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL, oldVertexLabel, vertexLabel));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_VARIABLE:
 				if (resolve) return getVertexVariable();
 				return basicGetVertexVariable();
-			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL:
-				if (resolve) return getVertexLabel();
-				return basicGetVertexLabel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,9 +119,6 @@ public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements Ge
 		switch (featureID) {
 			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_VARIABLE:
 				setVertexVariable((VertexVariable)newValue);
-				return;
-			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL:
-				setVertexLabel((VertexLabel)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -191,9 +135,6 @@ public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements Ge
 			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_VARIABLE:
 				setVertexVariable((VertexVariable)null);
 				return;
-			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL:
-				setVertexLabel((VertexLabel)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -208,8 +149,6 @@ public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements Ge
 		switch (featureID) {
 			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_VARIABLE:
 				return vertexVariable != null;
-			case RelalgPackage.GET_VERTICES_OPERATOR__VERTEX_LABEL:
-				return vertexLabel != null;
 		}
 		return super.eIsSet(featureID);
 	}
