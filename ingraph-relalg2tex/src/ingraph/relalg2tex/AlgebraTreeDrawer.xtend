@@ -24,7 +24,7 @@ class AlgebraTreeDrawer extends TexSerializer {
 	 * toNode
 	 */
 	def CharSequence toNode(AlgebraExpression expression) {
-		'''node {$«expression.operatorSymbol»$}«children(expression)»'''
+		'''node {$«expression?.operatorSymbol»$}«expression?.children»'''
 	}
 
 	/**
