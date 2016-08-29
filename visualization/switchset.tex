@@ -4,19 +4,16 @@
 \input{relalg-commands}
 
 \begin{document}
-\begin{tikzpicture}[]
+\begin{preview}
+\begin{tikzpicture}
 \Tree
 [. {$\duplicateelimination$}
-	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$}
-		[. {$\selection{...}$}
-			[. {$\selection{...}$}
-				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
-						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
-							[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}
-								[. {$\getvertices{semaphore}{Semaphore}$}
-								]
-							]
+	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw}}$}
+		[. {$\alldifferent{}$}
+			[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
+				[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
+					[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}
+						[. {$\getvertices{semaphore}{Semaphore}$}
 						]
 					]
 				]
@@ -26,4 +23,5 @@
 ]
 ;
 \end{tikzpicture}
+\end{preview}
 \end{document}

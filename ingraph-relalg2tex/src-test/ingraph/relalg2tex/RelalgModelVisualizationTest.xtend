@@ -1,19 +1,18 @@
 package ingraph.relalg2tex
 
 import ingraph.trainbenchmark.TrainBenchmarkUtil
+import org.junit.Ignore
 import org.junit.Test
-import ingraph.cypher2relalg.RelalgParser
 
-class RelalgVisualizationTest {
+@Ignore
+class RelalgModelVisualizationTest {
 
 	val static ExpressionSerializer serializer = new ExpressionSerializer(false, false)
 	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
 
 	@Test
 	def void testPosLength() {
-//		val expression = TrainBenchmarkUtil.posLength
-		
-		val expression = RelalgParser.parse("PosLength")
+		val expression = TrainBenchmarkUtil.posLength
 		print(drawer.serialize(expression, "poslength"))
 	}
 

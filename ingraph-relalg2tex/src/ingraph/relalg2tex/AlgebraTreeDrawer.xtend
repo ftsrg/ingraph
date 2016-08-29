@@ -13,11 +13,13 @@ class AlgebraTreeDrawer extends TexSerializer {
 
 	override serializeBody(AlgebraExpression expression) {
 		'''
-			\begin{tikzpicture}[]
+			\begin{preview}
+			\begin{tikzpicture}
 			\Tree
 			«toNode(expression)»
 			;
 			\end{tikzpicture}
+			\end{preview}
 		'''
 	}
 

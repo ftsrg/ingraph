@@ -4,18 +4,24 @@
 \input{relalg-commands}
 
 \begin{document}
-\begin{tikzpicture}[]
+\begin{preview}
+\begin{tikzpicture}
 \Tree
 [. {$\duplicateelimination$}
-	[. {$\antijoin$}
-		[. {$\getvertices{sw}{Switch}$}
-		]
-		[. {$\expandout{\_e1}{monitoredBy}{sw}{\_sensor}{Sensor}$}
-			[. {$\getvertices{sw}{Switch}$}
+	[. {$\projection{\var{sw}}$}
+		[. {$\antijoin$}
+			[. {$\alldifferent{}$}
+				[. {$\getvertices{sw}{Switch}$}
+				]
+			]
+			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$}
+				[. {$\getvertices{sw}{Switch}$}
+				]
 			]
 		]
 	]
 ]
 ;
 \end{tikzpicture}
+\end{preview}
 \end{document}
