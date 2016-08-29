@@ -2,7 +2,6 @@
 <viewpoint:DAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style" xmi:id="_gOX9EEmgEeakXMJSCJFeYQ" selectedViews="_gZ20UEmgEeakXMJSCJFeYQ" version="11.0.0.201604141600">
   <semanticResources>relalg.ecore</semanticResources>
   <ownedViews xmi:type="viewpoint:DView" xmi:id="_gZ20UEmgEeakXMJSCJFeYQ">
-    <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
     <ownedRepresentations xmi:type="diagram:DSemanticDiagram" xmi:id="_gdjBgEmgEeakXMJSCJFeYQ" name="relalg">
       <ownedAnnotationEntries xmi:type="description:AnnotationEntry" xmi:id="_gdjBgUmgEeakXMJSCJFeYQ" source="DANNOTATION_CUSTOMIZATION_KEY">
         <data xmi:type="diagram:ComputedStyleDescriptionRegistry" xmi:id="_gdjBgkmgEeakXMJSCJFeYQ">
@@ -329,17 +328,17 @@
           </edges>
           <edges xmi:type="notation:Edge" xmi:id="_XOQTsEndEea2bPzQhul4iA" type="4001" element="_XOAcEEndEea2bPzQhul4iA" source="_PB4IIEndEea2bPzQhul4iA" target="_jITgUEncEea2bPzQhul4iA">
             <children xmi:type="notation:Node" xmi:id="_XOQTtEndEea2bPzQhul4iA" type="6001">
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTtUndEea2bPzQhul4iA" x="-27" y="-10"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTtUndEea2bPzQhul4iA" x="-30" y="-10"/>
             </children>
             <children xmi:type="notation:Node" xmi:id="_XOQTtkndEea2bPzQhul4iA" type="6002">
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTt0ndEea2bPzQhul4iA" x="-17" y="1"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTt0ndEea2bPzQhul4iA" x="-21" y="1"/>
             </children>
             <children xmi:type="notation:Node" xmi:id="_XOQTuEndEea2bPzQhul4iA" type="6003">
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTuUndEea2bPzQhul4iA" x="-29" y="-7"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_XOQTuUndEea2bPzQhul4iA" x="-32" y="-7"/>
             </children>
             <styles xmi:type="notation:ConnectorStyle" xmi:id="_XOQTsUndEea2bPzQhul4iA" routing="Tree"/>
             <styles xmi:type="notation:FontStyle" xmi:id="_XOQTskndEea2bPzQhul4iA" fontName="Noto Sans" fontHeight="8"/>
-            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XOQTs0ndEea2bPzQhul4iA" points="[-1, 0, -398, 45]$[-1, -23, -398, 22]$[407, -23, 10, 22]$[407, -45, 10, 0]"/>
+            <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_XOQTs0ndEea2bPzQhul4iA" points="[-1, 0, -430, 45]$[-1, -23, -430, 22]$[438, -23, 9, 22]$[438, -45, 9, 0]"/>
             <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_XOQ6wEndEea2bPzQhul4iA" id="(0.6551724137931034,0.0)"/>
             <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_XOQ6wUndEea2bPzQhul4iA" id="(0.4067796610169492,1.0)"/>
           </edges>
@@ -1412,5 +1411,6 @@
       <activatedLayers xmi:type="description_1:AdditionalLayer" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@additionalLayers[name='Validation']"/>
       <target xmi:type="ecore:EPackage" href="relalg.ecore#/"/>
     </ownedRepresentations>
+    <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
   </ownedViews>
 </viewpoint:DAnalysis>
