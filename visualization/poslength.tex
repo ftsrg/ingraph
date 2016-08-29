@@ -5,8 +5,15 @@
 
 \begin{document}
 \begin{tikzpicture}[]
-\node {$\alldifferent{}$}
-	child{node {$$}}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{segment}}$}
+		[. {$\alldifferent{}$}
+			[. {$\getvertices{segment}{Segment}$}
+			]
+		]
+	]
+]
 ;
 \end{tikzpicture}
 \end{document}

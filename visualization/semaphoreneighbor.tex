@@ -5,31 +5,35 @@
 
 \begin{document}
 \begin{tikzpicture}[]
-\node {$\duplicateelimination$}
-	child{node {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$}
-		child{node {$\selection{...}$}
-			child{node {$\antijoin$}
-				child{node {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
-					child{node {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$}
-						child{node {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$}
-							child{node {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
-								child{node {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
-									child{node {$\expand{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
-										child{node {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
-											child{node {$\getvertices{semaphore}{Semaphore}$}}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				child{node {$\expandin{\_e7}{entry}{semaphore}{route2}{Route}$}
-					child{node {$\getvertices{semaphore}{Semaphore}$}}
-				}
-			}
-		}
-	}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$}
+		[. {$\selection{...}$}
+			[. {$\antijoin$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
+					[. {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$}
+						[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$}
+							[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
+								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
+									[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
+										[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
+											[. {$\getvertices{semaphore}{Semaphore}$}
+											]
+										]
+									]
+								]
+							]
+						]
+					]
+				]
+				[. {$\expandin{\_e7}{entry}{semaphore}{route2}{Route}$}
+					[. {$\getvertices{semaphore}{Semaphore}$}
+					]
+				]
+			]
+		]
+	]
+]
 ;
 \end{tikzpicture}
 \end{document}

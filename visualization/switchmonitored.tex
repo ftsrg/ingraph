@@ -5,13 +5,17 @@
 
 \begin{document}
 \begin{tikzpicture}[]
-\node {$\duplicateelimination$}
-	child{node {$\antijoin$}
-		child{node {$\getvertices{sw}{Switch}$}}
-		child{node {$\expandout{\_e1}{monitoredBy}{sw}{\_sensor}{Sensor}$}
-			child{node {$\getvertices{sw}{Switch}$}}
-		}
-	}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\antijoin$}
+		[. {$\getvertices{sw}{Switch}$}
+		]
+		[. {$\expandout{\_e1}{monitoredBy}{sw}{\_sensor}{Sensor}$}
+			[. {$\getvertices{sw}{Switch}$}
+			]
+		]
+	]
+]
 ;
 \end{tikzpicture}
 \end{document}

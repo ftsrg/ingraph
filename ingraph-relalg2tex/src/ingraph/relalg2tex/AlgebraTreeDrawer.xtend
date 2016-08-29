@@ -14,7 +14,8 @@ class AlgebraTreeDrawer extends TexSerializer {
 	override serializeBody(AlgebraExpression expression) {
 		'''
 			\begin{tikzpicture}[]
-			\«toNode(expression)»
+			\Tree
+			«toNode(expression)»
 			;
 			\end{tikzpicture}
 		'''
@@ -24,7 +25,9 @@ class AlgebraTreeDrawer extends TexSerializer {
 	 * toNode
 	 */
 	def CharSequence toNode(AlgebraExpression expression) {
-		'''node {$«expression?.operatorSymbol»$}«expression?.children»'''
+		'''
+		[. {$«expression?.operatorSymbol»$}«expression?.children»
+		]'''
 	}
 
 	/**
@@ -37,15 +40,15 @@ class AlgebraTreeDrawer extends TexSerializer {
 	def dispatch children(AlphaOperator op) {
 		'''
 			
-				child{«op.input.toNode»}
+				«op.input.toNode»
 		'''
 	}
 
 	def dispatch children(BetaOperator op) {
 		'''
 			
-				child{«op.leftInput.toNode»}
-				child{«op.rightInput.toNode»}
+				«op.leftInput.toNode»
+				«op.rightInput.toNode»
 		'''
 	}
 
