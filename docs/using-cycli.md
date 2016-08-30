@@ -14,3 +14,5 @@
   ```
   cycli --username neo4j --password admin
   ```
+
+1. Have fun!
