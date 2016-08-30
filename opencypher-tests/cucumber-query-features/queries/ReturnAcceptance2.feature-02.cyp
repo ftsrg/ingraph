@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      DELETE n
-      RETURN labels(n)
+MATCH (n)
+DELETE n
+RETURN labels(n)

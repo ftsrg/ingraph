@@ -1,3 +1,2 @@
-
-      MATCH p = (a:Start)-->(b)
-      RETURN *
+MATCH p = (a:Start)-->(b)
+RETURN *

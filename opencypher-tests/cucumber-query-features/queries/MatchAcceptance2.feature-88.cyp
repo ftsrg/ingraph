@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN a.prop2 + a.prop1 AS foo
+MATCH (a)
+RETURN a.prop2 + a.prop1 AS foo

@@ -1,3 +1,2 @@
-
-      MATCH p = (b)<--(a)
-      RETURN p
+MATCH p = (b)<--(a)
+RETURN p

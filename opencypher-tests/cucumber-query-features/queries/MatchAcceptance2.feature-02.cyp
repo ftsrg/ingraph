@@ -1,3 +1,2 @@
-
-      MATCH ()-[r]->()
-      RETURN r
+MATCH ()-[r]->()
+RETURN r

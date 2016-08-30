@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN a AS ColumnName
+MATCH (a)
+RETURN a AS ColumnName

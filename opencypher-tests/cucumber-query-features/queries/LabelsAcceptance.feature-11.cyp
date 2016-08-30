@@ -1,3 +1,2 @@
-
-      CREATE ()<-[:T2]-(n:Foo),
-             (n:Bar)<-[:T1]-()
+CREATE ()<-[:T2]-(n:Foo),
+(n:Bar)<-[:T1]-()

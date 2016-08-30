@@ -1,3 +1,2 @@
-
-      MATCH p = (n)-->(b)
-      RETURN aVg(    n.aGe     )
+MATCH p = (n)-->(b)
+RETURN aVg(    n.aGe     )

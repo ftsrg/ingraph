@@ -1,3 +1,2 @@
-
-      MATCH (p:Label)
-      RETURN p.id
+MATCH (p:Label)
+RETURN p.id

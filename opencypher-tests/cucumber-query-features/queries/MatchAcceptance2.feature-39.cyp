@@ -1,3 +1,2 @@
-
-      MATCH (a:A:B:C)
-      RETURN a
+MATCH (a:A:B:C)
+RETURN a

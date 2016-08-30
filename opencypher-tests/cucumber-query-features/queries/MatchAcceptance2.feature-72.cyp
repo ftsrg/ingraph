@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN count(a) > 0
+MATCH (a)
+RETURN count(a) > 0

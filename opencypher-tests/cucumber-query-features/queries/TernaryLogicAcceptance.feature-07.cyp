@@ -1,2 +1,1 @@
-
-      RETURN $lhs OR $rhs AS result
+RETURN $lhs OR $rhs AS result

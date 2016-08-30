@@ -1,2 +1,1 @@
-
-      RETURN reverse('raksO')
+RETURN reverse('raksO')

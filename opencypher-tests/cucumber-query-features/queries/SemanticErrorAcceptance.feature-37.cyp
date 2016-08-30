@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      RETURN n
-        SKIP -1
+MATCH (n)
+RETURN n
+SKIP -1

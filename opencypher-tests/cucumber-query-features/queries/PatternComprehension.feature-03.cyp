@@ -1,3 +1,2 @@
-
-      MATCH (n:A)
-      RETURN [p = (n)-->(:B) | p]
+MATCH (n:A)
+RETURN [p = (n)-->(:B) | p]

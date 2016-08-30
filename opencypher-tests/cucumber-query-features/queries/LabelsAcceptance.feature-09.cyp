@@ -1,3 +1,2 @@
-
-      CREATE (n:Person)-[:OWNS]->(:Dog)
-      RETURN labels(n)
+CREATE (n:Person)-[:OWNS]->(:Dog)
+RETURN labels(n)

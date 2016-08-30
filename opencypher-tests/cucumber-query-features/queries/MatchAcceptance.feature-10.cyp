@@ -1,3 +1,2 @@
-
-      MATCH ()-[rel:KNOWS]->(x)
-      RETURN x
+MATCH ()-[rel:KNOWS]->(x)
+RETURN x

@@ -1,3 +1,2 @@
-
-      MATCH path = (n)-->(m)--(o)--(p)
-      RETURN path
+MATCH path = (n)-->(m)--(o)--(p)
+RETURN path

@@ -1,3 +1,2 @@
-
-      MATCH ()-[r]->()
-      RETURN r.bar
+MATCH ()-[r]->()
+RETURN r.bar

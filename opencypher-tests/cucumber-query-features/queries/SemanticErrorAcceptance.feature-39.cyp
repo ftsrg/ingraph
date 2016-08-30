@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      RETURN n
-        LIMIT -1
+MATCH (n)
+RETURN n
+LIMIT -1

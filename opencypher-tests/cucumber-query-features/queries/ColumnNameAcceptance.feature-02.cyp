@@ -1,3 +1,2 @@
-
-      MATCH p = (n)-->(b)
-      RETURN nOdEs( p )
+MATCH p = (n)-->(b)
+RETURN nOdEs( p )

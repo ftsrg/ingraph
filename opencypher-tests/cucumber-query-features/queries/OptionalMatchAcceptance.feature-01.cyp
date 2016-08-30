@@ -1,4 +1,3 @@
-
-      MATCH (n:Single)
-      OPTIONAL MATCH (n)-[r]-(m:NonExistent)
-      RETURN r
+MATCH (n:Single)
+OPTIONAL MATCH (n)-[r]-(m:NonExistent)
+RETURN r

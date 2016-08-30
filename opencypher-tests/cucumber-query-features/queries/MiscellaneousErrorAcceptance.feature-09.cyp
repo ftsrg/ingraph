@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      SET a.name = missing
-      RETURN a
+MATCH (a)
+SET a.name = missing
+RETURN a

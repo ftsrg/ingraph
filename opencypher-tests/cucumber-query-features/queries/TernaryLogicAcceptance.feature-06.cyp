@@ -1,2 +1,1 @@
-
-      RETURN $lhs AND $rhs AS result
+RETURN $lhs AND $rhs AS result

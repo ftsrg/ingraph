@@ -1,3 +1,2 @@
-
-      MERGE (n {param})
-      RETURN n
+MERGE (n {param})
+RETURN n

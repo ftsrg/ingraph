@@ -1,5 +1,4 @@
-
-      MATCH (a:A)
-      WITH a
-      MATCH (a)-->(b)
-      RETURN *
+MATCH (a:A)
+WITH a
+MATCH (a)-->(b)
+RETURN *

@@ -1,3 +1,2 @@
-
-      CREATE (node)
-      RETURN labels(node)
+CREATE (node)
+RETURN labels(node)

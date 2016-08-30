@@ -1,2 +1,1 @@
-
-      RETURN $lhs XOR $rhs AS result
+RETURN $lhs XOR $rhs AS result

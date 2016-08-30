@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN (n:Foo)
+MATCH (n)
+RETURN (n:Foo)

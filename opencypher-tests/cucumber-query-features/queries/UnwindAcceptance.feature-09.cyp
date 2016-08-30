@@ -1,3 +1,2 @@
-
-      UNWIND null AS nil
-      RETURN nil
+UNWIND null AS nil
+RETURN nil

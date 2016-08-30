@@ -1,3 +1,2 @@
-
-      MATCH (a:Blue)-[r*]->(b:Green)
-      RETURN count(r)
+MATCH (a:Blue)-[r*]->(b:Green)
+RETURN count(r)

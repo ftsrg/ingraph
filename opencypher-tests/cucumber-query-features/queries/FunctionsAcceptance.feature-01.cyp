@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN coalesce(a.title, a.name)
+MATCH (a)
+RETURN coalesce(a.title, a.name)

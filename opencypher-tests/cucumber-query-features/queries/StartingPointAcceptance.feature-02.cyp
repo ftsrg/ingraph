@@ -1,3 +1,2 @@
-
-      MATCH (n:Animal)
-      RETURN n
+MATCH (n:Animal)
+RETURN n

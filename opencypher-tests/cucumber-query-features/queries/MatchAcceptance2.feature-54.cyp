@@ -1,3 +1,2 @@
-
-      MATCH p = ()-[*0..]->()
-      RETURN p
+MATCH p = ()-[*0..]->()
+RETURN p

@@ -1,3 +1,2 @@
-
-      MATCH ()
-      RETURN count(*)
+MATCH ()
+RETURN count(*)

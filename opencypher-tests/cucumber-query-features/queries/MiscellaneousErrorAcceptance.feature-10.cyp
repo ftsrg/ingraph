@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      DELETE x
+MATCH (a)
+DELETE x

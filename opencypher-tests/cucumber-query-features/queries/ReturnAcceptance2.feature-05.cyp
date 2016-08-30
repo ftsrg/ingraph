@@ -1,2 +1,1 @@
-
-      RETURN '\u01FF' AS a
+RETURN '\u01FF' AS a

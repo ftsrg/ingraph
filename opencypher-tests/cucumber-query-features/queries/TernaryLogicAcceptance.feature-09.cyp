@@ -1,2 +1,1 @@
-
-      RETURN $elt IN $coll AS result
+RETURN $elt IN $coll AS result

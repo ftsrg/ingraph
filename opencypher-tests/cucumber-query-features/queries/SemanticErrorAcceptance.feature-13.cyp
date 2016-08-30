@@ -1,2 +1,1 @@
-
-      CREATE ()-[:FOO*2]->()
+CREATE ()-[:FOO*2]->()

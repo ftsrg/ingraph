@@ -1,3 +1,2 @@
-
-      MATCH (a)-[r {name: 'r'}]-(b)
-      RETURN a, b
+MATCH (a)-[r {name: 'r'}]-(b)
+RETURN a, b

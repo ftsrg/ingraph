@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN count(n), collect(n)
+MATCH (n)
+RETURN count(n), collect(n)

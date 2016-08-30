@@ -1,4 +1,3 @@
-
-      OPTIONAL MATCH ()-[r:DoesNotExist]-()
-      DELETE r
-      RETURN r
+OPTIONAL MATCH ()-[r:DoesNotExist]-()
+DELETE r
+RETURN r

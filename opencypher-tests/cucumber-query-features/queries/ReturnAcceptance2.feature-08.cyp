@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      RETURN n
-        ORDER BY n
+MATCH (n)
+RETURN n
+ORDER BY n

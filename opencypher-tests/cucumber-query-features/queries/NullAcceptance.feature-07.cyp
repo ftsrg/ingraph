@@ -1,4 +1,3 @@
-
-      OPTIONAL MATCH (a:DoesNotExist)
-      DELETE a
-      RETURN a
+OPTIONAL MATCH (a:DoesNotExist)
+DELETE a
+RETURN a

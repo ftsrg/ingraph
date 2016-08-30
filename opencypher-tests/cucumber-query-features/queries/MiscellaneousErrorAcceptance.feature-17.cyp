@@ -1,2 +1,1 @@
-
-      CREATE (a)-[:FOO]-(b)
+CREATE (a)-[:FOO]-(b)

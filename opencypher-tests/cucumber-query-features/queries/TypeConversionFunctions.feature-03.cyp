@@ -1,3 +1,2 @@
-
-      UNWIND ['true', 'false'] AS s
-      RETURN toBoolean(s) AS b
+UNWIND ['true', 'false'] AS s
+RETURN toBoolean(s) AS b

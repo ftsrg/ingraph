@@ -1,4 +1,3 @@
-
-      MATCH ()-[r]->()
-      DELETE r
-      RETURN type(r)
+MATCH ()-[r]->()
+DELETE r
+RETURN type(r)

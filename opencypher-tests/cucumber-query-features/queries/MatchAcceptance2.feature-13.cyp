@@ -1,4 +1,3 @@
-
-      MATCH (a {name: 'A'}), (b {name: 'B'})
-      MATCH (a)-->(x)<-->(b)
-      RETURN x
+MATCH (a {name: 'A'}), (b {name: 'B'})
+MATCH (a)-->(x)<-->(b)
+RETURN x

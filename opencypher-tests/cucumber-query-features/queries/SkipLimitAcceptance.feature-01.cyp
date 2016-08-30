@@ -1,2 +1,1 @@
-
-      MATCH (n) RETURN n SKIP n.count
+MATCH (n) RETURN n SKIP n.count

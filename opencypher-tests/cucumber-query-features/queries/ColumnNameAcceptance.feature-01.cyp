@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN cOuNt( * )
+MATCH (n)
+RETURN cOuNt( * )

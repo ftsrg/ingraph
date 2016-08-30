@@ -1,3 +1,2 @@
-
-      MATCH (a)-->(b:Foo)
-      RETURN b
+MATCH (a)-->(b:Foo)
+RETURN b

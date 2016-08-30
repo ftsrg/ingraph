@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN a.prop
+MATCH (a)
+RETURN a.prop

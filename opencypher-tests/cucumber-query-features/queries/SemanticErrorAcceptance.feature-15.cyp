@@ -1,3 +1,2 @@
-
-      MATCH (n {param})
-      RETURN n
+MATCH (n {param})
+RETURN n

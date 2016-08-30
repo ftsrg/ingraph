@@ -1,3 +1,2 @@
-
-      MATCH p = (a)
-      RETURN labels(p) AS l
+MATCH p = (a)
+RETURN labels(p) AS l

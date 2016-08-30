@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      DELETE n:Person
+MATCH (n)
+DELETE n:Person

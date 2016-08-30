@@ -1,3 +1,2 @@
-
-      MATCH (a:L)-[rel]->(b)
-      RETURN a, count(*)
+MATCH (a:L)-[rel]->(b)
+RETURN a, count(*)

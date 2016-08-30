@@ -1,2 +1,1 @@
-
-      RETURN count(count(*))
+RETURN count(count(*))

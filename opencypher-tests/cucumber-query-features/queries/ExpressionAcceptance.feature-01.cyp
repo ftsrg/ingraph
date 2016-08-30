@@ -1,2 +1,1 @@
-
-      RETURN [1, 2, 3][0] AS value
+RETURN [1, 2, 3][0] AS value

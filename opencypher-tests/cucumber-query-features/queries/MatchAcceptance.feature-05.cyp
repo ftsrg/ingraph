@@ -1,4 +1,3 @@
-
-      MATCH ()-[rel:X]-(a)
-      WHERE a.name = 'Andres'
-      RETURN a
+MATCH ()-[rel:X]-(a)
+WHERE a.name = 'Andres'
+RETURN a

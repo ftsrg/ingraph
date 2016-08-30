@@ -1,3 +1,2 @@
-
-      MATCH ()-[r:R]->()
-      RETURN properties(r) AS m
+MATCH ()-[r:R]->()
+RETURN properties(r) AS m

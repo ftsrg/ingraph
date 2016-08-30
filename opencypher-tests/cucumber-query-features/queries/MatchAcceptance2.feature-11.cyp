@@ -1,3 +1,2 @@
-
-      MATCH p = ({name: 'A'})-[:KNOWS*..]->()
-      RETURN p
+MATCH p = ({name: 'A'})-[:KNOWS*..]->()
+RETURN p

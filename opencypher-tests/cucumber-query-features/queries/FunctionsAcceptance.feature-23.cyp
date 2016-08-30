@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      OPTIONAL MATCH (a)-[r:T]->()
-      RETURN type(r)
+MATCH (a)
+OPTIONAL MATCH (a)-[r:T]->()
+RETURN type(r)

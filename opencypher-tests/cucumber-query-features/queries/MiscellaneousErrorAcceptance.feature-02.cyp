@@ -1,3 +1,2 @@
-
-      CREATE (a), (b)
-      MERGE (a)-[r:X {p: null}]->(b)
+CREATE (a), (b)
+MERGE (a)-[r:X {p: null}]->(b)

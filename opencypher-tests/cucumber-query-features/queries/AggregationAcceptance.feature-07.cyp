@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN n.x, count(*)
+MATCH (n)
+RETURN n.x, count(*)

@@ -1,4 +1,3 @@
-
-      MATCH (a:Single)
-      OPTIONAL MATCH (a)-[*]->(b)
-      RETURN b
+MATCH (a:Single)
+OPTIONAL MATCH (a)-[*]->(b)
+RETURN b

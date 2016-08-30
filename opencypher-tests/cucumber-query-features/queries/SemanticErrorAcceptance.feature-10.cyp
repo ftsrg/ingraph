@@ -1,3 +1,2 @@
-
-      MATCH (r)
-      RETURN length(r)
+MATCH (r)
+RETURN length(r)

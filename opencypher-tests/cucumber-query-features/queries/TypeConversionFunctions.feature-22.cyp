@@ -1,2 +1,1 @@
-
-      RETURN toString(true) AS bool
+RETURN toString(true) AS bool

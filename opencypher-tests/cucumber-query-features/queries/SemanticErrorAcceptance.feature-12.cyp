@@ -1,2 +1,1 @@
-
-      RETURN NOT 'foo'
+RETURN NOT 'foo'

@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN DISTINCT n.name
+MATCH (n)
+RETURN DISTINCT n.name

@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN percentileCont(n.prop, $param)
+MATCH (n)
+RETURN percentileCont(n.prop, $param)

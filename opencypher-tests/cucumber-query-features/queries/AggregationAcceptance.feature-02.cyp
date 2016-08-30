@@ -1,3 +1,2 @@
-
-      MATCH ()
-      RETURN count(*) AS columnName
+MATCH ()
+RETURN count(*) AS columnName

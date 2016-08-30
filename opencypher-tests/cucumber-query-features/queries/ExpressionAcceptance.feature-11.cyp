@@ -1,3 +1,2 @@
-
-      WITH $expr AS expr, $idx AS idx
-      RETURN expr[idx]
+WITH $expr AS expr, $idx AS idx
+RETURN expr[idx]

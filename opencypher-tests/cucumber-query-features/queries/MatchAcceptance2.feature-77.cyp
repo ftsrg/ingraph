@@ -1,4 +1,3 @@
-
-      MATCH p = (a)
-      WITH p
-      RETURN p
+MATCH p = (a)
+WITH p
+RETURN p

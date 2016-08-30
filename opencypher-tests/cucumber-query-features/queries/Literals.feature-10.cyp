@@ -1,2 +1,1 @@
-
-      RETURN {} AS literal
+RETURN {} AS literal

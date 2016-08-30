@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WHERE a.name STARTS WITH 'ABCDEF'
-      RETURN a
+MATCH (a)
+WHERE a.name STARTS WITH 'ABCDEF'
+RETURN a

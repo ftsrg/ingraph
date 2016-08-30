@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      RETURN n.name, count(*) AS foo
-        ORDER BY n.name
+MATCH (n)
+RETURN n.name, count(*) AS foo
+ORDER BY n.name

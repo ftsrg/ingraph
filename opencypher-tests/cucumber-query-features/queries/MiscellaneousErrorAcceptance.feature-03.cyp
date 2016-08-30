@@ -1,2 +1,1 @@
-
-      MERGE ({p: null})
+MERGE ({p: null})

@@ -1,4 +1,3 @@
-
-      MATCH (a)<--()<--(b)-->()-->(c)
-      WHERE a:A
-      RETURN c
+MATCH (a)<--()<--(b)-->()-->(c)
+WHERE a:A
+RETURN c

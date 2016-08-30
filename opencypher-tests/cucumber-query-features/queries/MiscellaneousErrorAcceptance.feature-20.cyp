@@ -1,3 +1,2 @@
-
-      CREATE (a)
-      SET a.foo = [{x: 1}]
+CREATE (a)
+SET a.foo = [{x: 1}]

@@ -1,3 +1,2 @@
-
-      MATCH ()
-      DELETE 1 + 1
+MATCH ()
+DELETE 1 + 1

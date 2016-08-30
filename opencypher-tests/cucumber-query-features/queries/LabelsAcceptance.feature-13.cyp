@@ -1,3 +1,2 @@
-
-      CREATE (n {})
-      CREATE (n:Bar)-[:OWNS]->(:Dog)
+CREATE (n {})
+CREATE (n:Bar)-[:OWNS]->(:Dog)

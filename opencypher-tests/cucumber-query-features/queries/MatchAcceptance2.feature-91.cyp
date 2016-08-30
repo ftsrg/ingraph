@@ -1,3 +1,2 @@
-
-      MATCH (n)-[r]->(m)
-      RETURN [n, r, m] AS r
+MATCH (n)-[r]->(m)
+RETURN [n, r, m] AS r

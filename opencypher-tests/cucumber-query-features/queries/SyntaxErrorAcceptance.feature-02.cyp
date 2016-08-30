@@ -1,2 +1,1 @@
-
-      RETURN count(rand())
+RETURN count(rand())

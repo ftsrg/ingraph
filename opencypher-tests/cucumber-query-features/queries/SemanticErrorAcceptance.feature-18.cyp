@@ -1,5 +1,4 @@
-
-      MERGE (a)
-      MERGE (b)
-      MERGE (a)-[r:FOO {param}]->(b)
-      RETURN r
+MERGE (a)
+MERGE (b)
+MERGE (a)-[r:FOO {param}]->(b)
+RETURN r

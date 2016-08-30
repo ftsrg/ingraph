@@ -1,3 +1,2 @@
-
-      MATCH (a)-[:A]->(b), (b)-[:B]->(a)
-      RETURN a.name
+MATCH (a)-[:A]->(b), (b)-[:B]->(a)
+RETURN a.name

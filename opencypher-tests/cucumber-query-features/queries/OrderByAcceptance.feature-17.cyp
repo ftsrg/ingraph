@@ -1,5 +1,4 @@
-
-      MATCH (p:Person)
-      RETURN p.name AS name
-      ORDER BY p.name
-      LIMIT -1
+MATCH (p:Person)
+RETURN p.name AS name
+ORDER BY p.name
+LIMIT -1

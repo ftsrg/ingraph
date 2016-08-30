@@ -1,2 +1,1 @@
-
-      RETURN keys($param) AS k
+RETURN keys($param) AS k

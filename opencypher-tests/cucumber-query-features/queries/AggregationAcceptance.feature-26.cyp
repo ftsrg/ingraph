@@ -1,3 +1,2 @@
-
-      MATCH ()-[r]-()
-      RETURN count(r)
+MATCH ()-[r]-()
+RETURN count(r)

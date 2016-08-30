@@ -1,2 +1,1 @@
-
-      RETURN NOT null AS value
+RETURN NOT null AS value

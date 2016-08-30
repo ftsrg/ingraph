@@ -1,4 +1,3 @@
-
-      MATCH (a:A), (c:C)
-      OPTIONAL MATCH (a)-->(b)-->(c)
-      RETURN b
+MATCH (a:A), (c:C)
+OPTIONAL MATCH (a)-->(b)-->(c)
+RETURN b

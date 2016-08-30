@@ -1,3 +1,2 @@
-
-      OPTIONAL MATCH (n)
-      RETURN n
+OPTIONAL MATCH (n)
+RETURN n

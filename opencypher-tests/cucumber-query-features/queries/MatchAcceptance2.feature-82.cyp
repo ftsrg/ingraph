@@ -1,3 +1,2 @@
-
-      MATCH ()-[r]->()
-      RETURN r.prop
+MATCH ()-[r]->()
+RETURN r.prop

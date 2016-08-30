@@ -1,4 +1,3 @@
-
-      MATCH (:Root {name: 'x'})-->(i:Child)
-      WHERE i.id > 'te'
-      RETURN i
+MATCH (:Root {name: 'x'})-->(i:Child)
+WHERE i.id > 'te'
+RETURN i

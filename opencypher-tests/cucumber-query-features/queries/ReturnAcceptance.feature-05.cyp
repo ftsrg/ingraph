@@ -1,6 +1,5 @@
-
-      MATCH (n)
-      RETURN n
-      ORDER BY n.name ASC
-      SKIP 2
-      LIMIT 2
+MATCH (n)
+RETURN n
+ORDER BY n.name ASC
+SKIP 2
+LIMIT 2

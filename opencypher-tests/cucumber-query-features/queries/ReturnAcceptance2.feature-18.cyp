@@ -1,2 +1,1 @@
-
-      RETURN {a: 1, b: 'foo'}
+RETURN {a: 1, b: 'foo'}

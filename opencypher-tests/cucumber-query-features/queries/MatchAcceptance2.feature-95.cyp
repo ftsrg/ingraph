@@ -1,3 +1,2 @@
-
-      MATCH p = (n)-->(k)<--(n)
-      RETURN p
+MATCH p = (n)-->(k)<--(n)
+RETURN p

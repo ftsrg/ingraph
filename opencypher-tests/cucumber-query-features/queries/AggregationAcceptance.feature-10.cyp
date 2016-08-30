@@ -1,3 +1,2 @@
-
-      MATCH p=(a:L)-[*]->(b)
-      RETURN b, avg(length(p))
+MATCH p=(a:L)-[*]->(b)
+RETURN b, avg(length(p))

@@ -1,3 +1,2 @@
-
-      MATCH p = (n)-->(b)
-      RETURN coUnt( dIstInct p )
+MATCH p = (n)-->(b)
+RETURN coUnt( dIstInct p )

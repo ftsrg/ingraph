@@ -1,3 +1,2 @@
-
-      MATCH (a), (b)
-      MERGE (a)-[NO_COLON]->(b)
+MATCH (a), (b)
+MERGE (a)-[NO_COLON]->(b)

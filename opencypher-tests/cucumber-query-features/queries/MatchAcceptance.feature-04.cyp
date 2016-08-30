@@ -1,4 +1,3 @@
-
-      MATCH (a)-[r]->(b)
-      WHERE r.foo = $param
-      RETURN b
+MATCH (a)-[r]->(b)
+WHERE r.foo = $param
+RETURN b

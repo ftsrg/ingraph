@@ -1,3 +1,2 @@
-
-      MATCH (a {name: 'A'})-[*]->(x)
-      RETURN x
+MATCH (a {name: 'A'})-[*]->(x)
+RETURN x

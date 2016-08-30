@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN n.y, count(n.x)
+MATCH (n)
+RETURN n.y, count(n.x)

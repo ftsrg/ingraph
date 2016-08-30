@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WITH a.name AS a
-      RETURN a
+MATCH (a)
+WITH a.name AS a
+RETURN a

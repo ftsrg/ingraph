@@ -1,5 +1,4 @@
-
-      MATCH (a)
-      WITH a
-      MATCH (b)
-      RETURN a, b
+MATCH (a)
+WITH a
+MATCH (b)
+RETURN a, b

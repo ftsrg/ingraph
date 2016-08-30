@@ -1,3 +1,2 @@
-
-      MATCH (a)-[r*1..1]->(b)
-      RETURN r
+MATCH (a)-[r*1..1]->(b)
+RETURN r

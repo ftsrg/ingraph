@@ -1,2 +1,1 @@
-
-      RETURN range(2, 8, 0)
+RETURN range(2, 8, 0)

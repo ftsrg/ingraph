@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      WHERE n.foo = 'bar'
-      RETURN n
+MATCH (n)
+WHERE n.foo = 'bar'
+RETURN n

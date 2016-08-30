@@ -1,3 +1,2 @@
-
-      MATCH ()-[r:FOO {param}]->()
-      RETURN r
+MATCH ()-[r:FOO {param}]->()
+RETURN r

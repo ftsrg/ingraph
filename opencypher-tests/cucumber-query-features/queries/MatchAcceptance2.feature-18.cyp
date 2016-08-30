@@ -1,4 +1,3 @@
-
-      MATCH (a {name: 'A'})
-      OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
-      RETURN p
+MATCH (a {name: 'A'})
+OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
+RETURN p

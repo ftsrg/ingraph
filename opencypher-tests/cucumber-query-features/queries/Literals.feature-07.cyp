@@ -1,2 +1,1 @@
-
-      RETURN null AS literal
+RETURN null AS literal

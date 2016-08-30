@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WHERE a.name STARTS WITH null
-      RETURN a
+MATCH (a)
+WHERE a.name STARTS WITH null
+RETURN a

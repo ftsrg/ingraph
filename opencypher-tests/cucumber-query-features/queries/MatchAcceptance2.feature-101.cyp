@@ -1,3 +1,2 @@
-
-      MATCH ()-[r]-()
-      RETURN type(r) AS r
+MATCH ()-[r]-()
+RETURN type(r) AS r

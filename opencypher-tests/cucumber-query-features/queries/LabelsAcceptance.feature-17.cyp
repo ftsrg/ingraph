@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      REMOVE n:Bar
-      RETURN labels(n)
+MATCH (n)
+REMOVE n:Bar
+RETURN labels(n)

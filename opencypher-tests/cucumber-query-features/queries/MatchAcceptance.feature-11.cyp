@@ -1,3 +1,2 @@
-
-      MATCH (n)-->(a)-->(b)
-      RETURN b
+MATCH (n)-->(a)-->(b)
+RETURN b

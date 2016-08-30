@@ -1,2 +1,1 @@
-
-      RETURN abs(-1)
+RETURN abs(-1)

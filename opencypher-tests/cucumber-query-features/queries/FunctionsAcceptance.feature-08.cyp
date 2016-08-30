@@ -1,2 +1,1 @@
-
-      RETURN properties('Cypher')
+RETURN properties('Cypher')

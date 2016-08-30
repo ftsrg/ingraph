@@ -1,2 +1,1 @@
-
-      RETURN -1e-9 AS literal
+RETURN -1e-9 AS literal

@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      WHERE 1 = 0
-      RETURN n SKIP 0
+MATCH (n)
+WHERE 1 = 0
+RETURN n SKIP 0

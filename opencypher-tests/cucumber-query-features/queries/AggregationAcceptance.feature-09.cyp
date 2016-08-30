@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN n.y, sum(n.x)
+MATCH (n)
+RETURN n.y, sum(n.x)

@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN labels(n)
+MATCH (n)
+RETURN labels(n)

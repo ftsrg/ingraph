@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN exists(n.prop + 1)
+MATCH (n)
+RETURN exists(n.prop + 1)

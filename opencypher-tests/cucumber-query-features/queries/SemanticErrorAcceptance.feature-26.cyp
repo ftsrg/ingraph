@@ -1,4 +1,3 @@
-
-      OPTIONAL MATCH ()-->()
-      MATCH ()-->(d)
-      RETURN d
+OPTIONAL MATCH ()-->()
+MATCH ()-->(d)
+RETURN d

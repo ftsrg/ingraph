@@ -1,3 +1,2 @@
-
-      WITH ['Apa'] AS expr
-      RETURN expr[$idx] AS value
+WITH ['Apa'] AS expr
+RETURN expr[$idx] AS value

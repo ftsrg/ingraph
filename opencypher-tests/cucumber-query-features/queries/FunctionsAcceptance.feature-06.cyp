@@ -1,2 +1,1 @@
-
-      RETURN properties({name: 'Popeye', level: 9001}) AS m
+RETURN properties({name: 'Popeye', level: 9001}) AS m

@@ -1,3 +1,2 @@
-
-      MATCH (m:Movie)
-      RETURN toString(m.watched)
+MATCH (m:Movie)
+RETURN toString(m.watched)

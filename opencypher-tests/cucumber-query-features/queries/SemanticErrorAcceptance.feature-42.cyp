@@ -1,3 +1,2 @@
-
-      CREATE (a), (b)
-      MERGE (a)-->(b)
+CREATE (a), (b)
+MERGE (a)-->(b)

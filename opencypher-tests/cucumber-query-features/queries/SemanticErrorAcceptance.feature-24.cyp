@@ -1,3 +1,2 @@
-
-      MERGE (n)
-        ON CREATE SET x.foo = 1
+MERGE (n)
+ON CREATE SET x.foo = 1

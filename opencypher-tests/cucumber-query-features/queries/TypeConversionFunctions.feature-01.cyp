@@ -1,2 +1,1 @@
-
-      RETURN toBoolean('true') AS b
+RETURN toBoolean('true') AS b

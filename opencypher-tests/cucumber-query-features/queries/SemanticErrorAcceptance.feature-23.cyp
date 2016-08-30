@@ -1,3 +1,2 @@
-
-      MATCH (a)-[r]->(b)
-      MERGE (a)-[r]->(b)
+MATCH (a)-[r]->(b)
+MERGE (a)-[r]->(b)

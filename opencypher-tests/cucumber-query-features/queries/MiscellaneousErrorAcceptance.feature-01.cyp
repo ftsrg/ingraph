@@ -1,2 +1,1 @@
-
-      RETURN '\uH'
+RETURN '\uH'

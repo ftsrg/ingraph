@@ -1,4 +1,3 @@
-
-      MATCH (a:A)
-      MATCH (a)-[r*2]->()
-      RETURN r
+MATCH (a:A)
+MATCH (a)-[r*2]->()
+RETURN r

@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      REMOVE n:Foo
-      RETURN labels(n)
+MATCH (n)
+REMOVE n:Foo
+RETURN labels(n)

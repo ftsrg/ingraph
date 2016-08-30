@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WHERE count(a) > 10
-      RETURN a
+MATCH (a)
+WHERE count(a) > 10
+RETURN a

@@ -1,4 +1,3 @@
-
-      OPTIONAL MATCH (a:DoesNotExist)
-      REMOVE a.prop
-      RETURN a
+OPTIONAL MATCH (a:DoesNotExist)
+REMOVE a.prop
+RETURN a

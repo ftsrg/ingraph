@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN size(collect(a))
+MATCH (a)
+RETURN size(collect(a))

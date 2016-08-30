@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      RETURN n.prop AS n
-      ORDER BY n + 2
+MATCH (n)
+RETURN n.prop AS n
+ORDER BY n + 2

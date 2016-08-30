@@ -1,3 +1,2 @@
-
-      MATCH p = (n)-->(m)--(o)
-      RETURN p
+MATCH p = (n)-->(m)--(o)
+RETURN p

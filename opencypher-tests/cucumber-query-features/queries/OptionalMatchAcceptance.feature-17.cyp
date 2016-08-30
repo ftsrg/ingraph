@@ -1,4 +1,3 @@
-
-      MATCH (a:Single), (c:C)
-      OPTIONAL MATCH (a)-->(b)-->(c)
-      RETURN b
+MATCH (a:Single), (c:C)
+OPTIONAL MATCH (a)-->(b)-->(c)
+RETURN b

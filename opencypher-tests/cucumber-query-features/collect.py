@@ -12,12 +12,13 @@ for filename in filenames:
     with open(filename, 'r') as file:
         content = file.read()
 
-    regex = re.compile('When executing query:$\s*"""(.*?)\s*"""', re.MULTILINE | re.DOTALL)
-    matches = re.findall(regex, content)
+    query_pattern = re.compile('When executing query:$\s*"""(.*?)\s*"""', re.MULTILINE | re.DOTALL)
+    matches = re.findall(query_pattern, content)
     i = 0
     for match in matches:
         i += 1
-        print(match)
+        indentation_pattern = re.compile('^\s*', re.MULTILINE)
+        match_without_indentation = indentation_pattern.sub("", match)
         match_file = open("queries/%s-%02d.cyp" % (filename, i), "w")
-        match_file.write(match)
+        match_file.write(match_without_indentation)
         match_file.close()

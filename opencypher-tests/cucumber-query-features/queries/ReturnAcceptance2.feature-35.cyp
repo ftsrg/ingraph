@@ -1,2 +1,1 @@
-
-      RETURN [false, true] + false AS foo
+RETURN [false, true] + false AS foo

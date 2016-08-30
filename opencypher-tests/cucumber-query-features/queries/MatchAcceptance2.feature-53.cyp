@@ -1,3 +1,2 @@
-
-      MATCH p = (a)
-      RETURN p
+MATCH p = (a)
+RETURN p

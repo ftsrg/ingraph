@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN a.bar
+MATCH (a)
+RETURN a.bar

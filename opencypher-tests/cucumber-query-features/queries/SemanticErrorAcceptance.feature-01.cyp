@@ -1,3 +1,2 @@
-
-      MATCH ()
-      RETURN foo
+MATCH ()
+RETURN foo

@@ -1,2 +1,1 @@
-
-      RETURN sqrt(12.96)
+RETURN sqrt(12.96)

@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      CREATE (a {name: 'foo'})
-      RETURN a
+MATCH (a)
+CREATE (a {name: 'foo'})
+RETURN a

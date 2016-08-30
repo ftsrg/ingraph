@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN DISTINCT a.color, count(*)
+MATCH (a)
+RETURN DISTINCT a.color, count(*)

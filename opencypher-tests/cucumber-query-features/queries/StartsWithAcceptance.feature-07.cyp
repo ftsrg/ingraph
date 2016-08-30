@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WHERE a.name CONTAINS 'CD'
-      RETURN a
+MATCH (a)
+WHERE a.name CONTAINS 'CD'
+RETURN a

@@ -1,4 +1,3 @@
-
-      MATCH (a)
-      WITH a, count(*)
-      RETURN a
+MATCH (a)
+WITH a, count(*)
+RETURN a

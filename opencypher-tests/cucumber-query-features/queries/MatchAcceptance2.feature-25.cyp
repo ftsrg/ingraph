@@ -1,3 +1,2 @@
-
-      MATCH (n)
-      RETURN n
+MATCH (n)
+RETURN n

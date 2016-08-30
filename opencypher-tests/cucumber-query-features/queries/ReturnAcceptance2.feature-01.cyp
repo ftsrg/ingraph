@@ -1,4 +1,3 @@
-
-      MATCH (n)
-      DELETE n
-      RETURN n.p
+MATCH (n)
+DELETE n
+RETURN n.p

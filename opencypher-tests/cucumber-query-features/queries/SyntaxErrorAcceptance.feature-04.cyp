@@ -1,2 +1,1 @@
-
-      RETURN 0x23j
+RETURN 0x23j

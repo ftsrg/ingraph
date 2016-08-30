@@ -1,3 +1,2 @@
-
-      UNWIND [] AS empty
-      RETURN empty
+UNWIND [] AS empty
+RETURN empty

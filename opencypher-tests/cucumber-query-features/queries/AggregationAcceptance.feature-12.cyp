@@ -1,3 +1,2 @@
-
-      MATCH (a)
-      RETURN count(DISTINCT a.foo)
+MATCH (a)
+RETURN count(DISTINCT a.foo)

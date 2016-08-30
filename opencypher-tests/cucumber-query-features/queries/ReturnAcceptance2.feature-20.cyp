@@ -1,2 +1,1 @@
-
-      RETURN size([[], []] + [[]]) AS l
+RETURN size([[], []] + [[]]) AS l
