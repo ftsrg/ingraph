@@ -1,0 +1,2 @@
+
+      RETURN null AS literal

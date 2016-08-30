@@ -1,0 +1,2 @@
+
+      CREATE (a)-[:FOO]-(b)

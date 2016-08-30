@@ -1,0 +1,2 @@
+
+      RETURN [] AS literal

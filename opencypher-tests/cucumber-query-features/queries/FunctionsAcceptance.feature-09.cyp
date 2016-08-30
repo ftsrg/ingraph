@@ -1,0 +1,2 @@
+
+      RETURN properties([true, false])

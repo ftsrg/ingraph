@@ -1,0 +1,2 @@
+
+      RETURN true AS literal

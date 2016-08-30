@@ -1,0 +1,2 @@
+
+      RETURN properties(1)

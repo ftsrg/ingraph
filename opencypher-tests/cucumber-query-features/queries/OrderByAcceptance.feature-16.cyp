@@ -1,0 +1,5 @@
+
+      MATCH (p:Person)
+      RETURN p.name AS name
+      ORDER BY p.name
+      LIMIT $limit
