@@ -1050,6 +1050,61 @@ public interface RelalgPackage extends EPackage {
 	int ATTRIBUTE_VARIABLE_OPERATION_COUNT = VARIABLE_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.UnionOperatorImpl <em>Union Operator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.UnionOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getUnionOperator()
+	 * @generated
+	 */
+	int UNION_OPERATOR = 20;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR__NAME = BETA_OPERATOR__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Left Input</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Right Input</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
+
+	/**
+	 * The number of structural features of the '<em>Union Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Union Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1057,7 +1112,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 20;
+	int DIRECTION = 21;
 
 
 	/**
@@ -1448,6 +1503,16 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getNamedElement_Name();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.UnionOperator <em>Union Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Union Operator</em>'.
+	 * @see relalg.UnionOperator
+	 * @generated
+	 */
+	EClass getUnionOperator();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1815,6 +1880,16 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NAMED_ELEMENT__NAME = eINSTANCE.getNamedElement_Name();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.UnionOperatorImpl <em>Union Operator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.UnionOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getUnionOperator()
+		 * @generated
+		 */
+		EClass UNION_OPERATOR = eINSTANCE.getUnionOperator();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

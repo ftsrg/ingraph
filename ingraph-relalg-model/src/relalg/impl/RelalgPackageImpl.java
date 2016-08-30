@@ -30,6 +30,7 @@ import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
+import relalg.UnionOperator;
 import relalg.Variable;
 import relalg.VertexLabel;
 import relalg.VertexVariable;
@@ -180,6 +181,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass namedElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass unionOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -587,6 +595,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getUnionOperator() {
+		return unionOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -676,6 +693,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		namedElementEClass = createEClass(NAMED_ELEMENT);
 		createEAttribute(namedElementEClass, NAMED_ELEMENT__NAME);
 
+		unionOperatorEClass = createEClass(UNION_OPERATOR);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 	}
@@ -726,6 +745,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		edgeLabelEClass.getESuperTypes().add(this.getLabel());
 		allDifferentOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		attributeVariableEClass.getESuperTypes().add(this.getVariable());
+		unionOperatorEClass.getESuperTypes().add(this.getBetaOperator());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -784,6 +804,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(unionOperatorEClass, UnionOperator.class, "UnionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");
