@@ -14,7 +14,6 @@ class RelalgParser {
 
 	def static parse(String queryName) {
 		println("Parsing query: " + queryName)
-		println("=================================")
 		
 		val filepath = "../queries/" + queryName + ".cyp"
 		val query = FileUtils.readFileToString(new File(filepath), "UTF-8")
