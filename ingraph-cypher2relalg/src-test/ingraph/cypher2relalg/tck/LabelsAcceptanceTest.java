@@ -1,95 +1,94 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class LabelsAcceptanceTest {
     
     @Test
-    public void testLabelsAcceptance01() {
-        RelalgParser.parse("tck/LabelsAcceptance01");
+    public void testLabelsAcceptance_01() {
+        RelalgParser.parse("tck/LabelsAcceptance_01");
     }
     
     @Test
-    public void testLabelsAcceptance02() {
-        RelalgParser.parse("tck/LabelsAcceptance02");
+    public void testLabelsAcceptance_02() {
+        RelalgParser.parse("tck/LabelsAcceptance_02");
     }
     
     @Test
-    public void testLabelsAcceptance03() {
-        RelalgParser.parse("tck/LabelsAcceptance03");
+    public void testLabelsAcceptance_03() {
+        RelalgParser.parse("tck/LabelsAcceptance_03");
     }
     
     @Test
-    public void testLabelsAcceptance04() {
-        RelalgParser.parse("tck/LabelsAcceptance04");
+    public void testLabelsAcceptance_04() {
+        RelalgParser.parse("tck/LabelsAcceptance_04");
     }
     
     @Test
-    public void testLabelsAcceptance05() {
-        RelalgParser.parse("tck/LabelsAcceptance05");
+    public void testLabelsAcceptance_05() {
+        RelalgParser.parse("tck/LabelsAcceptance_05");
     }
     
     @Test
-    public void testLabelsAcceptance06() {
-        RelalgParser.parse("tck/LabelsAcceptance06");
+    public void testLabelsAcceptance_06() {
+        RelalgParser.parse("tck/LabelsAcceptance_06");
     }
     
     @Test
-    public void testLabelsAcceptance07() {
-        RelalgParser.parse("tck/LabelsAcceptance07");
+    public void testLabelsAcceptance_07() {
+        RelalgParser.parse("tck/LabelsAcceptance_07");
     }
     
     @Test
-    public void testLabelsAcceptance08() {
-        RelalgParser.parse("tck/LabelsAcceptance08");
+    public void testLabelsAcceptance_08() {
+        RelalgParser.parse("tck/LabelsAcceptance_08");
     }
     
     @Test
-    public void testLabelsAcceptance09() {
-        RelalgParser.parse("tck/LabelsAcceptance09");
+    public void testLabelsAcceptance_09() {
+        RelalgParser.parse("tck/LabelsAcceptance_09");
     }
     
     @Test
-    public void testLabelsAcceptance10() {
-        RelalgParser.parse("tck/LabelsAcceptance10");
+    public void testLabelsAcceptance_10() {
+        RelalgParser.parse("tck/LabelsAcceptance_10");
     }
     
     @Test
-    public void testLabelsAcceptance11() {
-        RelalgParser.parse("tck/LabelsAcceptance11");
+    public void testLabelsAcceptance_11() {
+        RelalgParser.parse("tck/LabelsAcceptance_11");
     }
     
     @Test
-    public void testLabelsAcceptance12() {
-        RelalgParser.parse("tck/LabelsAcceptance12");
+    public void testLabelsAcceptance_12() {
+        RelalgParser.parse("tck/LabelsAcceptance_12");
     }
     
     @Test
-    public void testLabelsAcceptance13() {
-        RelalgParser.parse("tck/LabelsAcceptance13");
+    public void testLabelsAcceptance_13() {
+        RelalgParser.parse("tck/LabelsAcceptance_13");
     }
     
     @Test
-    public void testLabelsAcceptance14() {
-        RelalgParser.parse("tck/LabelsAcceptance14");
+    public void testLabelsAcceptance_14() {
+        RelalgParser.parse("tck/LabelsAcceptance_14");
     }
     
     @Test
-    public void testLabelsAcceptance15() {
-        RelalgParser.parse("tck/LabelsAcceptance15");
+    public void testLabelsAcceptance_15() {
+        RelalgParser.parse("tck/LabelsAcceptance_15");
     }
     
     @Test
-    public void testLabelsAcceptance16() {
-        RelalgParser.parse("tck/LabelsAcceptance16");
+    public void testLabelsAcceptance_16() {
+        RelalgParser.parse("tck/LabelsAcceptance_16");
     }
     
     @Test
-    public void testLabelsAcceptance17() {
-        RelalgParser.parse("tck/LabelsAcceptance17");
+    public void testLabelsAcceptance_17() {
+        RelalgParser.parse("tck/LabelsAcceptance_17");
     }
     
 }

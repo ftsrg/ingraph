@@ -1,25 +1,24 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class OptionalMatchTest {
     
     @Test
-    public void testOptionalMatch01() {
-        RelalgParser.parse("tck/OptionalMatch01");
+    public void testOptionalMatch_01() {
+        RelalgParser.parse("tck/OptionalMatch_01");
     }
     
     @Test
-    public void testOptionalMatch02() {
-        RelalgParser.parse("tck/OptionalMatch02");
+    public void testOptionalMatch_02() {
+        RelalgParser.parse("tck/OptionalMatch_02");
     }
     
     @Test
-    public void testOptionalMatch03() {
-        RelalgParser.parse("tck/OptionalMatch03");
+    public void testOptionalMatch_03() {
+        RelalgParser.parse("tck/OptionalMatch_03");
     }
     
 }

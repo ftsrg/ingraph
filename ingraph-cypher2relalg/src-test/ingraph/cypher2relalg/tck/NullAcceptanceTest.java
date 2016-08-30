@@ -1,50 +1,49 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class NullAcceptanceTest {
     
     @Test
-    public void testNullAcceptance01() {
-        RelalgParser.parse("tck/NullAcceptance01");
+    public void testNullAcceptance_01() {
+        RelalgParser.parse("tck/NullAcceptance_01");
     }
     
     @Test
-    public void testNullAcceptance02() {
-        RelalgParser.parse("tck/NullAcceptance02");
+    public void testNullAcceptance_02() {
+        RelalgParser.parse("tck/NullAcceptance_02");
     }
     
     @Test
-    public void testNullAcceptance03() {
-        RelalgParser.parse("tck/NullAcceptance03");
+    public void testNullAcceptance_03() {
+        RelalgParser.parse("tck/NullAcceptance_03");
     }
     
     @Test
-    public void testNullAcceptance04() {
-        RelalgParser.parse("tck/NullAcceptance04");
+    public void testNullAcceptance_04() {
+        RelalgParser.parse("tck/NullAcceptance_04");
     }
     
     @Test
-    public void testNullAcceptance05() {
-        RelalgParser.parse("tck/NullAcceptance05");
+    public void testNullAcceptance_05() {
+        RelalgParser.parse("tck/NullAcceptance_05");
     }
     
     @Test
-    public void testNullAcceptance06() {
-        RelalgParser.parse("tck/NullAcceptance06");
+    public void testNullAcceptance_06() {
+        RelalgParser.parse("tck/NullAcceptance_06");
     }
     
     @Test
-    public void testNullAcceptance07() {
-        RelalgParser.parse("tck/NullAcceptance07");
+    public void testNullAcceptance_07() {
+        RelalgParser.parse("tck/NullAcceptance_07");
     }
     
     @Test
-    public void testNullAcceptance08() {
-        RelalgParser.parse("tck/NullAcceptance08");
+    public void testNullAcceptance_08() {
+        RelalgParser.parse("tck/NullAcceptance_08");
     }
     
 }

@@ -1,35 +1,34 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class UnionAcceptanceTest {
     
     @Test
-    public void testUnionAcceptance01() {
-        RelalgParser.parse("tck/UnionAcceptance01");
+    public void testUnionAcceptance_01() {
+        RelalgParser.parse("tck/UnionAcceptance_01");
     }
     
     @Test
-    public void testUnionAcceptance02() {
-        RelalgParser.parse("tck/UnionAcceptance02");
+    public void testUnionAcceptance_02() {
+        RelalgParser.parse("tck/UnionAcceptance_02");
     }
     
     @Test
-    public void testUnionAcceptance03() {
-        RelalgParser.parse("tck/UnionAcceptance03");
+    public void testUnionAcceptance_03() {
+        RelalgParser.parse("tck/UnionAcceptance_03");
     }
     
     @Test
-    public void testUnionAcceptance04() {
-        RelalgParser.parse("tck/UnionAcceptance04");
+    public void testUnionAcceptance_04() {
+        RelalgParser.parse("tck/UnionAcceptance_04");
     }
     
     @Test
-    public void testUnionAcceptance05() {
-        RelalgParser.parse("tck/UnionAcceptance05");
+    public void testUnionAcceptance_05() {
+        RelalgParser.parse("tck/UnionAcceptance_05");
     }
     
 }

@@ -1,30 +1,29 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class SyntaxErrorAcceptanceTest {
     
     @Test
-    public void testSyntaxErrorAcceptance01() {
-        RelalgParser.parse("tck/SyntaxErrorAcceptance01");
+    public void testSyntaxErrorAcceptance_01() {
+        RelalgParser.parse("tck/SyntaxErrorAcceptance_01");
     }
     
     @Test
-    public void testSyntaxErrorAcceptance02() {
-        RelalgParser.parse("tck/SyntaxErrorAcceptance02");
+    public void testSyntaxErrorAcceptance_02() {
+        RelalgParser.parse("tck/SyntaxErrorAcceptance_02");
     }
     
     @Test
-    public void testSyntaxErrorAcceptance03() {
-        RelalgParser.parse("tck/SyntaxErrorAcceptance03");
+    public void testSyntaxErrorAcceptance_03() {
+        RelalgParser.parse("tck/SyntaxErrorAcceptance_03");
     }
     
     @Test
-    public void testSyntaxErrorAcceptance04() {
-        RelalgParser.parse("tck/SyntaxErrorAcceptance04");
+    public void testSyntaxErrorAcceptance_04() {
+        RelalgParser.parse("tck/SyntaxErrorAcceptance_04");
     }
     
 }

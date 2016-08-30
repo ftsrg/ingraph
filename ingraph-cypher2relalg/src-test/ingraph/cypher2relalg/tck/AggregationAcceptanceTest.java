@@ -1,150 +1,149 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class AggregationAcceptanceTest {
     
     @Test
-    public void testAggregationAcceptance01() {
-        RelalgParser.parse("tck/AggregationAcceptance01");
+    public void testAggregationAcceptance_01() {
+        RelalgParser.parse("tck/AggregationAcceptance_01");
     }
     
     @Test
-    public void testAggregationAcceptance02() {
-        RelalgParser.parse("tck/AggregationAcceptance02");
+    public void testAggregationAcceptance_02() {
+        RelalgParser.parse("tck/AggregationAcceptance_02");
     }
     
     @Test
-    public void testAggregationAcceptance03() {
-        RelalgParser.parse("tck/AggregationAcceptance03");
+    public void testAggregationAcceptance_03() {
+        RelalgParser.parse("tck/AggregationAcceptance_03");
     }
     
     @Test
-    public void testAggregationAcceptance04() {
-        RelalgParser.parse("tck/AggregationAcceptance04");
+    public void testAggregationAcceptance_04() {
+        RelalgParser.parse("tck/AggregationAcceptance_04");
     }
     
     @Test
-    public void testAggregationAcceptance05() {
-        RelalgParser.parse("tck/AggregationAcceptance05");
+    public void testAggregationAcceptance_05() {
+        RelalgParser.parse("tck/AggregationAcceptance_05");
     }
     
     @Test
-    public void testAggregationAcceptance06() {
-        RelalgParser.parse("tck/AggregationAcceptance06");
+    public void testAggregationAcceptance_06() {
+        RelalgParser.parse("tck/AggregationAcceptance_06");
     }
     
     @Test
-    public void testAggregationAcceptance07() {
-        RelalgParser.parse("tck/AggregationAcceptance07");
+    public void testAggregationAcceptance_07() {
+        RelalgParser.parse("tck/AggregationAcceptance_07");
     }
     
     @Test
-    public void testAggregationAcceptance08() {
-        RelalgParser.parse("tck/AggregationAcceptance08");
+    public void testAggregationAcceptance_08() {
+        RelalgParser.parse("tck/AggregationAcceptance_08");
     }
     
     @Test
-    public void testAggregationAcceptance09() {
-        RelalgParser.parse("tck/AggregationAcceptance09");
+    public void testAggregationAcceptance_09() {
+        RelalgParser.parse("tck/AggregationAcceptance_09");
     }
     
     @Test
-    public void testAggregationAcceptance10() {
-        RelalgParser.parse("tck/AggregationAcceptance10");
+    public void testAggregationAcceptance_10() {
+        RelalgParser.parse("tck/AggregationAcceptance_10");
     }
     
     @Test
-    public void testAggregationAcceptance11() {
-        RelalgParser.parse("tck/AggregationAcceptance11");
+    public void testAggregationAcceptance_11() {
+        RelalgParser.parse("tck/AggregationAcceptance_11");
     }
     
     @Test
-    public void testAggregationAcceptance12() {
-        RelalgParser.parse("tck/AggregationAcceptance12");
+    public void testAggregationAcceptance_12() {
+        RelalgParser.parse("tck/AggregationAcceptance_12");
     }
     
     @Test
-    public void testAggregationAcceptance13() {
-        RelalgParser.parse("tck/AggregationAcceptance13");
+    public void testAggregationAcceptance_13() {
+        RelalgParser.parse("tck/AggregationAcceptance_13");
     }
     
     @Test
-    public void testAggregationAcceptance14() {
-        RelalgParser.parse("tck/AggregationAcceptance14");
+    public void testAggregationAcceptance_14() {
+        RelalgParser.parse("tck/AggregationAcceptance_14");
     }
     
     @Test
-    public void testAggregationAcceptance15() {
-        RelalgParser.parse("tck/AggregationAcceptance15");
+    public void testAggregationAcceptance_15() {
+        RelalgParser.parse("tck/AggregationAcceptance_15");
     }
     
     @Test
-    public void testAggregationAcceptance16() {
-        RelalgParser.parse("tck/AggregationAcceptance16");
+    public void testAggregationAcceptance_16() {
+        RelalgParser.parse("tck/AggregationAcceptance_16");
     }
     
     @Test
-    public void testAggregationAcceptance17() {
-        RelalgParser.parse("tck/AggregationAcceptance17");
+    public void testAggregationAcceptance_17() {
+        RelalgParser.parse("tck/AggregationAcceptance_17");
     }
     
     @Test
-    public void testAggregationAcceptance18() {
-        RelalgParser.parse("tck/AggregationAcceptance18");
+    public void testAggregationAcceptance_18() {
+        RelalgParser.parse("tck/AggregationAcceptance_18");
     }
     
     @Test
-    public void testAggregationAcceptance19() {
-        RelalgParser.parse("tck/AggregationAcceptance19");
+    public void testAggregationAcceptance_19() {
+        RelalgParser.parse("tck/AggregationAcceptance_19");
     }
     
     @Test
-    public void testAggregationAcceptance20() {
-        RelalgParser.parse("tck/AggregationAcceptance20");
+    public void testAggregationAcceptance_20() {
+        RelalgParser.parse("tck/AggregationAcceptance_20");
     }
     
     @Test
-    public void testAggregationAcceptance21() {
-        RelalgParser.parse("tck/AggregationAcceptance21");
+    public void testAggregationAcceptance_21() {
+        RelalgParser.parse("tck/AggregationAcceptance_21");
     }
     
     @Test
-    public void testAggregationAcceptance22() {
-        RelalgParser.parse("tck/AggregationAcceptance22");
+    public void testAggregationAcceptance_22() {
+        RelalgParser.parse("tck/AggregationAcceptance_22");
     }
     
     @Test
-    public void testAggregationAcceptance23() {
-        RelalgParser.parse("tck/AggregationAcceptance23");
+    public void testAggregationAcceptance_23() {
+        RelalgParser.parse("tck/AggregationAcceptance_23");
     }
     
     @Test
-    public void testAggregationAcceptance24() {
-        RelalgParser.parse("tck/AggregationAcceptance24");
+    public void testAggregationAcceptance_24() {
+        RelalgParser.parse("tck/AggregationAcceptance_24");
     }
     
     @Test
-    public void testAggregationAcceptance25() {
-        RelalgParser.parse("tck/AggregationAcceptance25");
+    public void testAggregationAcceptance_25() {
+        RelalgParser.parse("tck/AggregationAcceptance_25");
     }
     
     @Test
-    public void testAggregationAcceptance26() {
-        RelalgParser.parse("tck/AggregationAcceptance26");
+    public void testAggregationAcceptance_26() {
+        RelalgParser.parse("tck/AggregationAcceptance_26");
     }
     
     @Test
-    public void testAggregationAcceptance27() {
-        RelalgParser.parse("tck/AggregationAcceptance27");
+    public void testAggregationAcceptance_27() {
+        RelalgParser.parse("tck/AggregationAcceptance_27");
     }
     
     @Test
-    public void testAggregationAcceptance28() {
-        RelalgParser.parse("tck/AggregationAcceptance28");
+    public void testAggregationAcceptance_28() {
+        RelalgParser.parse("tck/AggregationAcceptance_28");
     }
     
 }

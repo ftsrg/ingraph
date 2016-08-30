@@ -1,235 +1,234 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class SemanticErrorAcceptanceTest {
     
     @Test
-    public void testSemanticErrorAcceptance01() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance01");
+    public void testSemanticErrorAcceptance_01() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_01");
     }
     
     @Test
-    public void testSemanticErrorAcceptance02() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance02");
+    public void testSemanticErrorAcceptance_02() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_02");
     }
     
     @Test
-    public void testSemanticErrorAcceptance03() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance03");
+    public void testSemanticErrorAcceptance_03() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_03");
     }
     
     @Test
-    public void testSemanticErrorAcceptance04() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance04");
+    public void testSemanticErrorAcceptance_04() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_04");
     }
     
     @Test
-    public void testSemanticErrorAcceptance05() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance05");
+    public void testSemanticErrorAcceptance_05() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_05");
     }
     
     @Test
-    public void testSemanticErrorAcceptance06() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance06");
+    public void testSemanticErrorAcceptance_06() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_06");
     }
     
     @Test
-    public void testSemanticErrorAcceptance07() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance07");
+    public void testSemanticErrorAcceptance_07() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_07");
     }
     
     @Test
-    public void testSemanticErrorAcceptance08() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance08");
+    public void testSemanticErrorAcceptance_08() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_08");
     }
     
     @Test
-    public void testSemanticErrorAcceptance09() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance09");
+    public void testSemanticErrorAcceptance_09() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_09");
     }
     
     @Test
-    public void testSemanticErrorAcceptance10() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance10");
+    public void testSemanticErrorAcceptance_10() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_10");
     }
     
     @Test
-    public void testSemanticErrorAcceptance11() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance11");
+    public void testSemanticErrorAcceptance_11() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_11");
     }
     
     @Test
-    public void testSemanticErrorAcceptance12() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance12");
+    public void testSemanticErrorAcceptance_12() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_12");
     }
     
     @Test
-    public void testSemanticErrorAcceptance13() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance13");
+    public void testSemanticErrorAcceptance_13() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_13");
     }
     
     @Test
-    public void testSemanticErrorAcceptance14() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance14");
+    public void testSemanticErrorAcceptance_14() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_14");
     }
     
     @Test
-    public void testSemanticErrorAcceptance15() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance15");
+    public void testSemanticErrorAcceptance_15() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_15");
     }
     
     @Test
-    public void testSemanticErrorAcceptance16() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance16");
+    public void testSemanticErrorAcceptance_16() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_16");
     }
     
     @Test
-    public void testSemanticErrorAcceptance17() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance17");
+    public void testSemanticErrorAcceptance_17() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_17");
     }
     
     @Test
-    public void testSemanticErrorAcceptance18() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance18");
+    public void testSemanticErrorAcceptance_18() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_18");
     }
     
     @Test
-    public void testSemanticErrorAcceptance19() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance19");
+    public void testSemanticErrorAcceptance_19() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_19");
     }
     
     @Test
-    public void testSemanticErrorAcceptance20() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance20");
+    public void testSemanticErrorAcceptance_20() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_20");
     }
     
     @Test
-    public void testSemanticErrorAcceptance21() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance21");
+    public void testSemanticErrorAcceptance_21() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_21");
     }
     
     @Test
-    public void testSemanticErrorAcceptance22() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance22");
+    public void testSemanticErrorAcceptance_22() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_22");
     }
     
     @Test
-    public void testSemanticErrorAcceptance23() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance23");
+    public void testSemanticErrorAcceptance_23() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_23");
     }
     
     @Test
-    public void testSemanticErrorAcceptance24() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance24");
+    public void testSemanticErrorAcceptance_24() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_24");
     }
     
     @Test
-    public void testSemanticErrorAcceptance25() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance25");
+    public void testSemanticErrorAcceptance_25() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_25");
     }
     
     @Test
-    public void testSemanticErrorAcceptance26() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance26");
+    public void testSemanticErrorAcceptance_26() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_26");
     }
     
     @Test
-    public void testSemanticErrorAcceptance27() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance27");
+    public void testSemanticErrorAcceptance_27() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_27");
     }
     
     @Test
-    public void testSemanticErrorAcceptance28() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance28");
+    public void testSemanticErrorAcceptance_28() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_28");
     }
     
     @Test
-    public void testSemanticErrorAcceptance29() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance29");
+    public void testSemanticErrorAcceptance_29() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_29");
     }
     
     @Test
-    public void testSemanticErrorAcceptance30() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance30");
+    public void testSemanticErrorAcceptance_30() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_30");
     }
     
     @Test
-    public void testSemanticErrorAcceptance31() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance31");
+    public void testSemanticErrorAcceptance_31() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_31");
     }
     
     @Test
-    public void testSemanticErrorAcceptance32() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance32");
+    public void testSemanticErrorAcceptance_32() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_32");
     }
     
     @Test
-    public void testSemanticErrorAcceptance33() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance33");
+    public void testSemanticErrorAcceptance_33() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_33");
     }
     
     @Test
-    public void testSemanticErrorAcceptance34() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance34");
+    public void testSemanticErrorAcceptance_34() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_34");
     }
     
     @Test
-    public void testSemanticErrorAcceptance35() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance35");
+    public void testSemanticErrorAcceptance_35() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_35");
     }
     
     @Test
-    public void testSemanticErrorAcceptance36() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance36");
+    public void testSemanticErrorAcceptance_36() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_36");
     }
     
     @Test
-    public void testSemanticErrorAcceptance37() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance37");
+    public void testSemanticErrorAcceptance_37() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_37");
     }
     
     @Test
-    public void testSemanticErrorAcceptance38() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance38");
+    public void testSemanticErrorAcceptance_38() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_38");
     }
     
     @Test
-    public void testSemanticErrorAcceptance39() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance39");
+    public void testSemanticErrorAcceptance_39() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_39");
     }
     
     @Test
-    public void testSemanticErrorAcceptance40() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance40");
+    public void testSemanticErrorAcceptance_40() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_40");
     }
     
     @Test
-    public void testSemanticErrorAcceptance41() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance41");
+    public void testSemanticErrorAcceptance_41() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_41");
     }
     
     @Test
-    public void testSemanticErrorAcceptance42() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance42");
+    public void testSemanticErrorAcceptance_42() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_42");
     }
     
     @Test
-    public void testSemanticErrorAcceptance43() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance43");
+    public void testSemanticErrorAcceptance_43() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_43");
     }
     
     @Test
-    public void testSemanticErrorAcceptance44() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance44");
+    public void testSemanticErrorAcceptance_44() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_44");
     }
     
     @Test
-    public void testSemanticErrorAcceptance45() {
-        RelalgParser.parse("tck/SemanticErrorAcceptance45");
+    public void testSemanticErrorAcceptance_45() {
+        RelalgParser.parse("tck/SemanticErrorAcceptance_45");
     }
     
 }

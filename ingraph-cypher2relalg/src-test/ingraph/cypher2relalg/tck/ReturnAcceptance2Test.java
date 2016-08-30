@@ -1,205 +1,204 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class ReturnAcceptance2Test {
     
     @Test
-    public void testReturnAcceptance201() {
-        RelalgParser.parse("tck/ReturnAcceptance201");
+    public void testReturnAcceptance2_01() {
+        RelalgParser.parse("tck/ReturnAcceptance2_01");
     }
     
     @Test
-    public void testReturnAcceptance202() {
-        RelalgParser.parse("tck/ReturnAcceptance202");
+    public void testReturnAcceptance2_02() {
+        RelalgParser.parse("tck/ReturnAcceptance2_02");
     }
     
     @Test
-    public void testReturnAcceptance203() {
-        RelalgParser.parse("tck/ReturnAcceptance203");
+    public void testReturnAcceptance2_03() {
+        RelalgParser.parse("tck/ReturnAcceptance2_03");
     }
     
     @Test
-    public void testReturnAcceptance204() {
-        RelalgParser.parse("tck/ReturnAcceptance204");
+    public void testReturnAcceptance2_04() {
+        RelalgParser.parse("tck/ReturnAcceptance2_04");
     }
     
     @Test
-    public void testReturnAcceptance205() {
-        RelalgParser.parse("tck/ReturnAcceptance205");
+    public void testReturnAcceptance2_05() {
+        RelalgParser.parse("tck/ReturnAcceptance2_05");
     }
     
     @Test
-    public void testReturnAcceptance206() {
-        RelalgParser.parse("tck/ReturnAcceptance206");
+    public void testReturnAcceptance2_06() {
+        RelalgParser.parse("tck/ReturnAcceptance2_06");
     }
     
     @Test
-    public void testReturnAcceptance207() {
-        RelalgParser.parse("tck/ReturnAcceptance207");
+    public void testReturnAcceptance2_07() {
+        RelalgParser.parse("tck/ReturnAcceptance2_07");
     }
     
     @Test
-    public void testReturnAcceptance208() {
-        RelalgParser.parse("tck/ReturnAcceptance208");
+    public void testReturnAcceptance2_08() {
+        RelalgParser.parse("tck/ReturnAcceptance2_08");
     }
     
     @Test
-    public void testReturnAcceptance209() {
-        RelalgParser.parse("tck/ReturnAcceptance209");
+    public void testReturnAcceptance2_09() {
+        RelalgParser.parse("tck/ReturnAcceptance2_09");
     }
     
     @Test
-    public void testReturnAcceptance210() {
-        RelalgParser.parse("tck/ReturnAcceptance210");
+    public void testReturnAcceptance2_10() {
+        RelalgParser.parse("tck/ReturnAcceptance2_10");
     }
     
     @Test
-    public void testReturnAcceptance211() {
-        RelalgParser.parse("tck/ReturnAcceptance211");
+    public void testReturnAcceptance2_11() {
+        RelalgParser.parse("tck/ReturnAcceptance2_11");
     }
     
     @Test
-    public void testReturnAcceptance212() {
-        RelalgParser.parse("tck/ReturnAcceptance212");
+    public void testReturnAcceptance2_12() {
+        RelalgParser.parse("tck/ReturnAcceptance2_12");
     }
     
     @Test
-    public void testReturnAcceptance213() {
-        RelalgParser.parse("tck/ReturnAcceptance213");
+    public void testReturnAcceptance2_13() {
+        RelalgParser.parse("tck/ReturnAcceptance2_13");
     }
     
     @Test
-    public void testReturnAcceptance214() {
-        RelalgParser.parse("tck/ReturnAcceptance214");
+    public void testReturnAcceptance2_14() {
+        RelalgParser.parse("tck/ReturnAcceptance2_14");
     }
     
     @Test
-    public void testReturnAcceptance215() {
-        RelalgParser.parse("tck/ReturnAcceptance215");
+    public void testReturnAcceptance2_15() {
+        RelalgParser.parse("tck/ReturnAcceptance2_15");
     }
     
     @Test
-    public void testReturnAcceptance216() {
-        RelalgParser.parse("tck/ReturnAcceptance216");
+    public void testReturnAcceptance2_16() {
+        RelalgParser.parse("tck/ReturnAcceptance2_16");
     }
     
     @Test
-    public void testReturnAcceptance217() {
-        RelalgParser.parse("tck/ReturnAcceptance217");
+    public void testReturnAcceptance2_17() {
+        RelalgParser.parse("tck/ReturnAcceptance2_17");
     }
     
     @Test
-    public void testReturnAcceptance218() {
-        RelalgParser.parse("tck/ReturnAcceptance218");
+    public void testReturnAcceptance2_18() {
+        RelalgParser.parse("tck/ReturnAcceptance2_18");
     }
     
     @Test
-    public void testReturnAcceptance219() {
-        RelalgParser.parse("tck/ReturnAcceptance219");
+    public void testReturnAcceptance2_19() {
+        RelalgParser.parse("tck/ReturnAcceptance2_19");
     }
     
     @Test
-    public void testReturnAcceptance220() {
-        RelalgParser.parse("tck/ReturnAcceptance220");
+    public void testReturnAcceptance2_20() {
+        RelalgParser.parse("tck/ReturnAcceptance2_20");
     }
     
     @Test
-    public void testReturnAcceptance221() {
-        RelalgParser.parse("tck/ReturnAcceptance221");
+    public void testReturnAcceptance2_21() {
+        RelalgParser.parse("tck/ReturnAcceptance2_21");
     }
     
     @Test
-    public void testReturnAcceptance222() {
-        RelalgParser.parse("tck/ReturnAcceptance222");
+    public void testReturnAcceptance2_22() {
+        RelalgParser.parse("tck/ReturnAcceptance2_22");
     }
     
     @Test
-    public void testReturnAcceptance223() {
-        RelalgParser.parse("tck/ReturnAcceptance223");
+    public void testReturnAcceptance2_23() {
+        RelalgParser.parse("tck/ReturnAcceptance2_23");
     }
     
     @Test
-    public void testReturnAcceptance224() {
-        RelalgParser.parse("tck/ReturnAcceptance224");
+    public void testReturnAcceptance2_24() {
+        RelalgParser.parse("tck/ReturnAcceptance2_24");
     }
     
     @Test
-    public void testReturnAcceptance225() {
-        RelalgParser.parse("tck/ReturnAcceptance225");
+    public void testReturnAcceptance2_25() {
+        RelalgParser.parse("tck/ReturnAcceptance2_25");
     }
     
     @Test
-    public void testReturnAcceptance226() {
-        RelalgParser.parse("tck/ReturnAcceptance226");
+    public void testReturnAcceptance2_26() {
+        RelalgParser.parse("tck/ReturnAcceptance2_26");
     }
     
     @Test
-    public void testReturnAcceptance227() {
-        RelalgParser.parse("tck/ReturnAcceptance227");
+    public void testReturnAcceptance2_27() {
+        RelalgParser.parse("tck/ReturnAcceptance2_27");
     }
     
     @Test
-    public void testReturnAcceptance228() {
-        RelalgParser.parse("tck/ReturnAcceptance228");
+    public void testReturnAcceptance2_28() {
+        RelalgParser.parse("tck/ReturnAcceptance2_28");
     }
     
     @Test
-    public void testReturnAcceptance229() {
-        RelalgParser.parse("tck/ReturnAcceptance229");
+    public void testReturnAcceptance2_29() {
+        RelalgParser.parse("tck/ReturnAcceptance2_29");
     }
     
     @Test
-    public void testReturnAcceptance230() {
-        RelalgParser.parse("tck/ReturnAcceptance230");
+    public void testReturnAcceptance2_30() {
+        RelalgParser.parse("tck/ReturnAcceptance2_30");
     }
     
     @Test
-    public void testReturnAcceptance231() {
-        RelalgParser.parse("tck/ReturnAcceptance231");
+    public void testReturnAcceptance2_31() {
+        RelalgParser.parse("tck/ReturnAcceptance2_31");
     }
     
     @Test
-    public void testReturnAcceptance232() {
-        RelalgParser.parse("tck/ReturnAcceptance232");
+    public void testReturnAcceptance2_32() {
+        RelalgParser.parse("tck/ReturnAcceptance2_32");
     }
     
     @Test
-    public void testReturnAcceptance233() {
-        RelalgParser.parse("tck/ReturnAcceptance233");
+    public void testReturnAcceptance2_33() {
+        RelalgParser.parse("tck/ReturnAcceptance2_33");
     }
     
     @Test
-    public void testReturnAcceptance234() {
-        RelalgParser.parse("tck/ReturnAcceptance234");
+    public void testReturnAcceptance2_34() {
+        RelalgParser.parse("tck/ReturnAcceptance2_34");
     }
     
     @Test
-    public void testReturnAcceptance235() {
-        RelalgParser.parse("tck/ReturnAcceptance235");
+    public void testReturnAcceptance2_35() {
+        RelalgParser.parse("tck/ReturnAcceptance2_35");
     }
     
     @Test
-    public void testReturnAcceptance236() {
-        RelalgParser.parse("tck/ReturnAcceptance236");
+    public void testReturnAcceptance2_36() {
+        RelalgParser.parse("tck/ReturnAcceptance2_36");
     }
     
     @Test
-    public void testReturnAcceptance237() {
-        RelalgParser.parse("tck/ReturnAcceptance237");
+    public void testReturnAcceptance2_37() {
+        RelalgParser.parse("tck/ReturnAcceptance2_37");
     }
     
     @Test
-    public void testReturnAcceptance238() {
-        RelalgParser.parse("tck/ReturnAcceptance238");
+    public void testReturnAcceptance2_38() {
+        RelalgParser.parse("tck/ReturnAcceptance2_38");
     }
     
     @Test
-    public void testReturnAcceptance239() {
-        RelalgParser.parse("tck/ReturnAcceptance239");
+    public void testReturnAcceptance2_39() {
+        RelalgParser.parse("tck/ReturnAcceptance2_39");
     }
     
 }

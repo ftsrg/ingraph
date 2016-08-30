@@ -1,65 +1,64 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class LiteralsTest {
     
     @Test
-    public void testLiterals01() {
-        RelalgParser.parse("tck/Literals01");
+    public void testLiterals_01() {
+        RelalgParser.parse("tck/Literals_01");
     }
     
     @Test
-    public void testLiterals02() {
-        RelalgParser.parse("tck/Literals02");
+    public void testLiterals_02() {
+        RelalgParser.parse("tck/Literals_02");
     }
     
     @Test
-    public void testLiterals03() {
-        RelalgParser.parse("tck/Literals03");
+    public void testLiterals_03() {
+        RelalgParser.parse("tck/Literals_03");
     }
     
     @Test
-    public void testLiterals04() {
-        RelalgParser.parse("tck/Literals04");
+    public void testLiterals_04() {
+        RelalgParser.parse("tck/Literals_04");
     }
     
     @Test
-    public void testLiterals05() {
-        RelalgParser.parse("tck/Literals05");
+    public void testLiterals_05() {
+        RelalgParser.parse("tck/Literals_05");
     }
     
     @Test
-    public void testLiterals06() {
-        RelalgParser.parse("tck/Literals06");
+    public void testLiterals_06() {
+        RelalgParser.parse("tck/Literals_06");
     }
     
     @Test
-    public void testLiterals07() {
-        RelalgParser.parse("tck/Literals07");
+    public void testLiterals_07() {
+        RelalgParser.parse("tck/Literals_07");
     }
     
     @Test
-    public void testLiterals08() {
-        RelalgParser.parse("tck/Literals08");
+    public void testLiterals_08() {
+        RelalgParser.parse("tck/Literals_08");
     }
     
     @Test
-    public void testLiterals09() {
-        RelalgParser.parse("tck/Literals09");
+    public void testLiterals_09() {
+        RelalgParser.parse("tck/Literals_09");
     }
     
     @Test
-    public void testLiterals10() {
-        RelalgParser.parse("tck/Literals10");
+    public void testLiterals_10() {
+        RelalgParser.parse("tck/Literals_10");
     }
     
     @Test
-    public void testLiterals11() {
-        RelalgParser.parse("tck/Literals11");
+    public void testLiterals_11() {
+        RelalgParser.parse("tck/Literals_11");
     }
     
 }

@@ -1,55 +1,54 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class TernaryLogicAcceptanceTest {
     
     @Test
-    public void testTernaryLogicAcceptance01() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance01");
+    public void testTernaryLogicAcceptance_01() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_01");
     }
     
     @Test
-    public void testTernaryLogicAcceptance02() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance02");
+    public void testTernaryLogicAcceptance_02() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_02");
     }
     
     @Test
-    public void testTernaryLogicAcceptance03() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance03");
+    public void testTernaryLogicAcceptance_03() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_03");
     }
     
     @Test
-    public void testTernaryLogicAcceptance04() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance04");
+    public void testTernaryLogicAcceptance_04() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_04");
     }
     
     @Test
-    public void testTernaryLogicAcceptance05() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance05");
+    public void testTernaryLogicAcceptance_05() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_05");
     }
     
     @Test
-    public void testTernaryLogicAcceptance06() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance06");
+    public void testTernaryLogicAcceptance_06() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_06");
     }
     
     @Test
-    public void testTernaryLogicAcceptance07() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance07");
+    public void testTernaryLogicAcceptance_07() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_07");
     }
     
     @Test
-    public void testTernaryLogicAcceptance08() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance08");
+    public void testTernaryLogicAcceptance_08() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_08");
     }
     
     @Test
-    public void testTernaryLogicAcceptance09() {
-        RelalgParser.parse("tck/TernaryLogicAcceptance09");
+    public void testTernaryLogicAcceptance_09() {
+        RelalgParser.parse("tck/TernaryLogicAcceptance_09");
     }
     
 }

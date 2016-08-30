@@ -1,165 +1,164 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class VarLengthAcceptanceTest {
     
     @Test
-    public void testVarLengthAcceptance01() {
-        RelalgParser.parse("tck/VarLengthAcceptance01");
+    public void testVarLengthAcceptance_01() {
+        RelalgParser.parse("tck/VarLengthAcceptance_01");
     }
     
     @Test
-    public void testVarLengthAcceptance02() {
-        RelalgParser.parse("tck/VarLengthAcceptance02");
+    public void testVarLengthAcceptance_02() {
+        RelalgParser.parse("tck/VarLengthAcceptance_02");
     }
     
     @Test
-    public void testVarLengthAcceptance03() {
-        RelalgParser.parse("tck/VarLengthAcceptance03");
+    public void testVarLengthAcceptance_03() {
+        RelalgParser.parse("tck/VarLengthAcceptance_03");
     }
     
     @Test
-    public void testVarLengthAcceptance04() {
-        RelalgParser.parse("tck/VarLengthAcceptance04");
+    public void testVarLengthAcceptance_04() {
+        RelalgParser.parse("tck/VarLengthAcceptance_04");
     }
     
     @Test
-    public void testVarLengthAcceptance05() {
-        RelalgParser.parse("tck/VarLengthAcceptance05");
+    public void testVarLengthAcceptance_05() {
+        RelalgParser.parse("tck/VarLengthAcceptance_05");
     }
     
     @Test
-    public void testVarLengthAcceptance06() {
-        RelalgParser.parse("tck/VarLengthAcceptance06");
+    public void testVarLengthAcceptance_06() {
+        RelalgParser.parse("tck/VarLengthAcceptance_06");
     }
     
     @Test
-    public void testVarLengthAcceptance07() {
-        RelalgParser.parse("tck/VarLengthAcceptance07");
+    public void testVarLengthAcceptance_07() {
+        RelalgParser.parse("tck/VarLengthAcceptance_07");
     }
     
     @Test
-    public void testVarLengthAcceptance08() {
-        RelalgParser.parse("tck/VarLengthAcceptance08");
+    public void testVarLengthAcceptance_08() {
+        RelalgParser.parse("tck/VarLengthAcceptance_08");
     }
     
     @Test
-    public void testVarLengthAcceptance09() {
-        RelalgParser.parse("tck/VarLengthAcceptance09");
+    public void testVarLengthAcceptance_09() {
+        RelalgParser.parse("tck/VarLengthAcceptance_09");
     }
     
     @Test
-    public void testVarLengthAcceptance10() {
-        RelalgParser.parse("tck/VarLengthAcceptance10");
+    public void testVarLengthAcceptance_10() {
+        RelalgParser.parse("tck/VarLengthAcceptance_10");
     }
     
     @Test
-    public void testVarLengthAcceptance11() {
-        RelalgParser.parse("tck/VarLengthAcceptance11");
+    public void testVarLengthAcceptance_11() {
+        RelalgParser.parse("tck/VarLengthAcceptance_11");
     }
     
     @Test
-    public void testVarLengthAcceptance12() {
-        RelalgParser.parse("tck/VarLengthAcceptance12");
+    public void testVarLengthAcceptance_12() {
+        RelalgParser.parse("tck/VarLengthAcceptance_12");
     }
     
     @Test
-    public void testVarLengthAcceptance13() {
-        RelalgParser.parse("tck/VarLengthAcceptance13");
+    public void testVarLengthAcceptance_13() {
+        RelalgParser.parse("tck/VarLengthAcceptance_13");
     }
     
     @Test
-    public void testVarLengthAcceptance14() {
-        RelalgParser.parse("tck/VarLengthAcceptance14");
+    public void testVarLengthAcceptance_14() {
+        RelalgParser.parse("tck/VarLengthAcceptance_14");
     }
     
     @Test
-    public void testVarLengthAcceptance15() {
-        RelalgParser.parse("tck/VarLengthAcceptance15");
+    public void testVarLengthAcceptance_15() {
+        RelalgParser.parse("tck/VarLengthAcceptance_15");
     }
     
     @Test
-    public void testVarLengthAcceptance16() {
-        RelalgParser.parse("tck/VarLengthAcceptance16");
+    public void testVarLengthAcceptance_16() {
+        RelalgParser.parse("tck/VarLengthAcceptance_16");
     }
     
     @Test
-    public void testVarLengthAcceptance17() {
-        RelalgParser.parse("tck/VarLengthAcceptance17");
+    public void testVarLengthAcceptance_17() {
+        RelalgParser.parse("tck/VarLengthAcceptance_17");
     }
     
     @Test
-    public void testVarLengthAcceptance18() {
-        RelalgParser.parse("tck/VarLengthAcceptance18");
+    public void testVarLengthAcceptance_18() {
+        RelalgParser.parse("tck/VarLengthAcceptance_18");
     }
     
     @Test
-    public void testVarLengthAcceptance19() {
-        RelalgParser.parse("tck/VarLengthAcceptance19");
+    public void testVarLengthAcceptance_19() {
+        RelalgParser.parse("tck/VarLengthAcceptance_19");
     }
     
     @Test
-    public void testVarLengthAcceptance20() {
-        RelalgParser.parse("tck/VarLengthAcceptance20");
+    public void testVarLengthAcceptance_20() {
+        RelalgParser.parse("tck/VarLengthAcceptance_20");
     }
     
     @Test
-    public void testVarLengthAcceptance21() {
-        RelalgParser.parse("tck/VarLengthAcceptance21");
+    public void testVarLengthAcceptance_21() {
+        RelalgParser.parse("tck/VarLengthAcceptance_21");
     }
     
     @Test
-    public void testVarLengthAcceptance22() {
-        RelalgParser.parse("tck/VarLengthAcceptance22");
+    public void testVarLengthAcceptance_22() {
+        RelalgParser.parse("tck/VarLengthAcceptance_22");
     }
     
     @Test
-    public void testVarLengthAcceptance23() {
-        RelalgParser.parse("tck/VarLengthAcceptance23");
+    public void testVarLengthAcceptance_23() {
+        RelalgParser.parse("tck/VarLengthAcceptance_23");
     }
     
     @Test
-    public void testVarLengthAcceptance24() {
-        RelalgParser.parse("tck/VarLengthAcceptance24");
+    public void testVarLengthAcceptance_24() {
+        RelalgParser.parse("tck/VarLengthAcceptance_24");
     }
     
     @Test
-    public void testVarLengthAcceptance25() {
-        RelalgParser.parse("tck/VarLengthAcceptance25");
+    public void testVarLengthAcceptance_25() {
+        RelalgParser.parse("tck/VarLengthAcceptance_25");
     }
     
     @Test
-    public void testVarLengthAcceptance26() {
-        RelalgParser.parse("tck/VarLengthAcceptance26");
+    public void testVarLengthAcceptance_26() {
+        RelalgParser.parse("tck/VarLengthAcceptance_26");
     }
     
     @Test
-    public void testVarLengthAcceptance27() {
-        RelalgParser.parse("tck/VarLengthAcceptance27");
+    public void testVarLengthAcceptance_27() {
+        RelalgParser.parse("tck/VarLengthAcceptance_27");
     }
     
     @Test
-    public void testVarLengthAcceptance28() {
-        RelalgParser.parse("tck/VarLengthAcceptance28");
+    public void testVarLengthAcceptance_28() {
+        RelalgParser.parse("tck/VarLengthAcceptance_28");
     }
     
     @Test
-    public void testVarLengthAcceptance29() {
-        RelalgParser.parse("tck/VarLengthAcceptance29");
+    public void testVarLengthAcceptance_29() {
+        RelalgParser.parse("tck/VarLengthAcceptance_29");
     }
     
     @Test
-    public void testVarLengthAcceptance30() {
-        RelalgParser.parse("tck/VarLengthAcceptance30");
+    public void testVarLengthAcceptance_30() {
+        RelalgParser.parse("tck/VarLengthAcceptance_30");
     }
     
     @Test
-    public void testVarLengthAcceptance31() {
-        RelalgParser.parse("tck/VarLengthAcceptance31");
+    public void testVarLengthAcceptance_31() {
+        RelalgParser.parse("tck/VarLengthAcceptance_31");
     }
     
 }

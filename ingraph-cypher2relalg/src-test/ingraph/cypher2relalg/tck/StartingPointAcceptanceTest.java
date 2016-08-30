@@ -1,25 +1,24 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class StartingPointAcceptanceTest {
     
     @Test
-    public void testStartingPointAcceptance01() {
-        RelalgParser.parse("tck/StartingPointAcceptance01");
+    public void testStartingPointAcceptance_01() {
+        RelalgParser.parse("tck/StartingPointAcceptance_01");
     }
     
     @Test
-    public void testStartingPointAcceptance02() {
-        RelalgParser.parse("tck/StartingPointAcceptance02");
+    public void testStartingPointAcceptance_02() {
+        RelalgParser.parse("tck/StartingPointAcceptance_02");
     }
     
     @Test
-    public void testStartingPointAcceptance03() {
-        RelalgParser.parse("tck/StartingPointAcceptance03");
+    public void testStartingPointAcceptance_03() {
+        RelalgParser.parse("tck/StartingPointAcceptance_03");
     }
     
 }

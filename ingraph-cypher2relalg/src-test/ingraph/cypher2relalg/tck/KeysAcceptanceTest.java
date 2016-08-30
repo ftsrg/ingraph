@@ -1,55 +1,54 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class KeysAcceptanceTest {
     
     @Test
-    public void testKeysAcceptance01() {
-        RelalgParser.parse("tck/KeysAcceptance01");
+    public void testKeysAcceptance_01() {
+        RelalgParser.parse("tck/KeysAcceptance_01");
     }
     
     @Test
-    public void testKeysAcceptance02() {
-        RelalgParser.parse("tck/KeysAcceptance02");
+    public void testKeysAcceptance_02() {
+        RelalgParser.parse("tck/KeysAcceptance_02");
     }
     
     @Test
-    public void testKeysAcceptance03() {
-        RelalgParser.parse("tck/KeysAcceptance03");
+    public void testKeysAcceptance_03() {
+        RelalgParser.parse("tck/KeysAcceptance_03");
     }
     
     @Test
-    public void testKeysAcceptance04() {
-        RelalgParser.parse("tck/KeysAcceptance04");
+    public void testKeysAcceptance_04() {
+        RelalgParser.parse("tck/KeysAcceptance_04");
     }
     
     @Test
-    public void testKeysAcceptance05() {
-        RelalgParser.parse("tck/KeysAcceptance05");
+    public void testKeysAcceptance_05() {
+        RelalgParser.parse("tck/KeysAcceptance_05");
     }
     
     @Test
-    public void testKeysAcceptance06() {
-        RelalgParser.parse("tck/KeysAcceptance06");
+    public void testKeysAcceptance_06() {
+        RelalgParser.parse("tck/KeysAcceptance_06");
     }
     
     @Test
-    public void testKeysAcceptance07() {
-        RelalgParser.parse("tck/KeysAcceptance07");
+    public void testKeysAcceptance_07() {
+        RelalgParser.parse("tck/KeysAcceptance_07");
     }
     
     @Test
-    public void testKeysAcceptance08() {
-        RelalgParser.parse("tck/KeysAcceptance08");
+    public void testKeysAcceptance_08() {
+        RelalgParser.parse("tck/KeysAcceptance_08");
     }
     
     @Test
-    public void testKeysAcceptance09() {
-        RelalgParser.parse("tck/KeysAcceptance09");
+    public void testKeysAcceptance_09() {
+        RelalgParser.parse("tck/KeysAcceptance_09");
     }
     
 }

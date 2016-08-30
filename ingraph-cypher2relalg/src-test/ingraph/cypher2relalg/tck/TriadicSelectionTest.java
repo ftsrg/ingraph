@@ -1,105 +1,104 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class TriadicSelectionTest {
     
     @Test
-    public void testTriadicSelection01() {
-        RelalgParser.parse("tck/TriadicSelection01");
+    public void testTriadicSelection_01() {
+        RelalgParser.parse("tck/TriadicSelection_01");
     }
     
     @Test
-    public void testTriadicSelection02() {
-        RelalgParser.parse("tck/TriadicSelection02");
+    public void testTriadicSelection_02() {
+        RelalgParser.parse("tck/TriadicSelection_02");
     }
     
     @Test
-    public void testTriadicSelection03() {
-        RelalgParser.parse("tck/TriadicSelection03");
+    public void testTriadicSelection_03() {
+        RelalgParser.parse("tck/TriadicSelection_03");
     }
     
     @Test
-    public void testTriadicSelection04() {
-        RelalgParser.parse("tck/TriadicSelection04");
+    public void testTriadicSelection_04() {
+        RelalgParser.parse("tck/TriadicSelection_04");
     }
     
     @Test
-    public void testTriadicSelection05() {
-        RelalgParser.parse("tck/TriadicSelection05");
+    public void testTriadicSelection_05() {
+        RelalgParser.parse("tck/TriadicSelection_05");
     }
     
     @Test
-    public void testTriadicSelection06() {
-        RelalgParser.parse("tck/TriadicSelection06");
+    public void testTriadicSelection_06() {
+        RelalgParser.parse("tck/TriadicSelection_06");
     }
     
     @Test
-    public void testTriadicSelection07() {
-        RelalgParser.parse("tck/TriadicSelection07");
+    public void testTriadicSelection_07() {
+        RelalgParser.parse("tck/TriadicSelection_07");
     }
     
     @Test
-    public void testTriadicSelection08() {
-        RelalgParser.parse("tck/TriadicSelection08");
+    public void testTriadicSelection_08() {
+        RelalgParser.parse("tck/TriadicSelection_08");
     }
     
     @Test
-    public void testTriadicSelection09() {
-        RelalgParser.parse("tck/TriadicSelection09");
+    public void testTriadicSelection_09() {
+        RelalgParser.parse("tck/TriadicSelection_09");
     }
     
     @Test
-    public void testTriadicSelection10() {
-        RelalgParser.parse("tck/TriadicSelection10");
+    public void testTriadicSelection_10() {
+        RelalgParser.parse("tck/TriadicSelection_10");
     }
     
     @Test
-    public void testTriadicSelection11() {
-        RelalgParser.parse("tck/TriadicSelection11");
+    public void testTriadicSelection_11() {
+        RelalgParser.parse("tck/TriadicSelection_11");
     }
     
     @Test
-    public void testTriadicSelection12() {
-        RelalgParser.parse("tck/TriadicSelection12");
+    public void testTriadicSelection_12() {
+        RelalgParser.parse("tck/TriadicSelection_12");
     }
     
     @Test
-    public void testTriadicSelection13() {
-        RelalgParser.parse("tck/TriadicSelection13");
+    public void testTriadicSelection_13() {
+        RelalgParser.parse("tck/TriadicSelection_13");
     }
     
     @Test
-    public void testTriadicSelection14() {
-        RelalgParser.parse("tck/TriadicSelection14");
+    public void testTriadicSelection_14() {
+        RelalgParser.parse("tck/TriadicSelection_14");
     }
     
     @Test
-    public void testTriadicSelection15() {
-        RelalgParser.parse("tck/TriadicSelection15");
+    public void testTriadicSelection_15() {
+        RelalgParser.parse("tck/TriadicSelection_15");
     }
     
     @Test
-    public void testTriadicSelection16() {
-        RelalgParser.parse("tck/TriadicSelection16");
+    public void testTriadicSelection_16() {
+        RelalgParser.parse("tck/TriadicSelection_16");
     }
     
     @Test
-    public void testTriadicSelection17() {
-        RelalgParser.parse("tck/TriadicSelection17");
+    public void testTriadicSelection_17() {
+        RelalgParser.parse("tck/TriadicSelection_17");
     }
     
     @Test
-    public void testTriadicSelection18() {
-        RelalgParser.parse("tck/TriadicSelection18");
+    public void testTriadicSelection_18() {
+        RelalgParser.parse("tck/TriadicSelection_18");
     }
     
     @Test
-    public void testTriadicSelection19() {
-        RelalgParser.parse("tck/TriadicSelection19");
+    public void testTriadicSelection_19() {
+        RelalgParser.parse("tck/TriadicSelection_19");
     }
     
 }

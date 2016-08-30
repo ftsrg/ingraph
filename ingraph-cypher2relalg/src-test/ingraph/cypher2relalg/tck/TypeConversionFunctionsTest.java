@@ -1,135 +1,134 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class TypeConversionFunctionsTest {
     
     @Test
-    public void testTypeConversionFunctions01() {
-        RelalgParser.parse("tck/TypeConversionFunctions01");
+    public void testTypeConversionFunctions_01() {
+        RelalgParser.parse("tck/TypeConversionFunctions_01");
     }
     
     @Test
-    public void testTypeConversionFunctions02() {
-        RelalgParser.parse("tck/TypeConversionFunctions02");
+    public void testTypeConversionFunctions_02() {
+        RelalgParser.parse("tck/TypeConversionFunctions_02");
     }
     
     @Test
-    public void testTypeConversionFunctions03() {
-        RelalgParser.parse("tck/TypeConversionFunctions03");
+    public void testTypeConversionFunctions_03() {
+        RelalgParser.parse("tck/TypeConversionFunctions_03");
     }
     
     @Test
-    public void testTypeConversionFunctions04() {
-        RelalgParser.parse("tck/TypeConversionFunctions04");
+    public void testTypeConversionFunctions_04() {
+        RelalgParser.parse("tck/TypeConversionFunctions_04");
     }
     
     @Test
-    public void testTypeConversionFunctions05() {
-        RelalgParser.parse("tck/TypeConversionFunctions05");
+    public void testTypeConversionFunctions_05() {
+        RelalgParser.parse("tck/TypeConversionFunctions_05");
     }
     
     @Test
-    public void testTypeConversionFunctions06() {
-        RelalgParser.parse("tck/TypeConversionFunctions06");
+    public void testTypeConversionFunctions_06() {
+        RelalgParser.parse("tck/TypeConversionFunctions_06");
     }
     
     @Test
-    public void testTypeConversionFunctions07() {
-        RelalgParser.parse("tck/TypeConversionFunctions07");
+    public void testTypeConversionFunctions_07() {
+        RelalgParser.parse("tck/TypeConversionFunctions_07");
     }
     
     @Test
-    public void testTypeConversionFunctions08() {
-        RelalgParser.parse("tck/TypeConversionFunctions08");
+    public void testTypeConversionFunctions_08() {
+        RelalgParser.parse("tck/TypeConversionFunctions_08");
     }
     
     @Test
-    public void testTypeConversionFunctions09() {
-        RelalgParser.parse("tck/TypeConversionFunctions09");
+    public void testTypeConversionFunctions_09() {
+        RelalgParser.parse("tck/TypeConversionFunctions_09");
     }
     
     @Test
-    public void testTypeConversionFunctions10() {
-        RelalgParser.parse("tck/TypeConversionFunctions10");
+    public void testTypeConversionFunctions_10() {
+        RelalgParser.parse("tck/TypeConversionFunctions_10");
     }
     
     @Test
-    public void testTypeConversionFunctions11() {
-        RelalgParser.parse("tck/TypeConversionFunctions11");
+    public void testTypeConversionFunctions_11() {
+        RelalgParser.parse("tck/TypeConversionFunctions_11");
     }
     
     @Test
-    public void testTypeConversionFunctions12() {
-        RelalgParser.parse("tck/TypeConversionFunctions12");
+    public void testTypeConversionFunctions_12() {
+        RelalgParser.parse("tck/TypeConversionFunctions_12");
     }
     
     @Test
-    public void testTypeConversionFunctions13() {
-        RelalgParser.parse("tck/TypeConversionFunctions13");
+    public void testTypeConversionFunctions_13() {
+        RelalgParser.parse("tck/TypeConversionFunctions_13");
     }
     
     @Test
-    public void testTypeConversionFunctions14() {
-        RelalgParser.parse("tck/TypeConversionFunctions14");
+    public void testTypeConversionFunctions_14() {
+        RelalgParser.parse("tck/TypeConversionFunctions_14");
     }
     
     @Test
-    public void testTypeConversionFunctions15() {
-        RelalgParser.parse("tck/TypeConversionFunctions15");
+    public void testTypeConversionFunctions_15() {
+        RelalgParser.parse("tck/TypeConversionFunctions_15");
     }
     
     @Test
-    public void testTypeConversionFunctions16() {
-        RelalgParser.parse("tck/TypeConversionFunctions16");
+    public void testTypeConversionFunctions_16() {
+        RelalgParser.parse("tck/TypeConversionFunctions_16");
     }
     
     @Test
-    public void testTypeConversionFunctions17() {
-        RelalgParser.parse("tck/TypeConversionFunctions17");
+    public void testTypeConversionFunctions_17() {
+        RelalgParser.parse("tck/TypeConversionFunctions_17");
     }
     
     @Test
-    public void testTypeConversionFunctions18() {
-        RelalgParser.parse("tck/TypeConversionFunctions18");
+    public void testTypeConversionFunctions_18() {
+        RelalgParser.parse("tck/TypeConversionFunctions_18");
     }
     
     @Test
-    public void testTypeConversionFunctions19() {
-        RelalgParser.parse("tck/TypeConversionFunctions19");
+    public void testTypeConversionFunctions_19() {
+        RelalgParser.parse("tck/TypeConversionFunctions_19");
     }
     
     @Test
-    public void testTypeConversionFunctions20() {
-        RelalgParser.parse("tck/TypeConversionFunctions20");
+    public void testTypeConversionFunctions_20() {
+        RelalgParser.parse("tck/TypeConversionFunctions_20");
     }
     
     @Test
-    public void testTypeConversionFunctions21() {
-        RelalgParser.parse("tck/TypeConversionFunctions21");
+    public void testTypeConversionFunctions_21() {
+        RelalgParser.parse("tck/TypeConversionFunctions_21");
     }
     
     @Test
-    public void testTypeConversionFunctions22() {
-        RelalgParser.parse("tck/TypeConversionFunctions22");
+    public void testTypeConversionFunctions_22() {
+        RelalgParser.parse("tck/TypeConversionFunctions_22");
     }
     
     @Test
-    public void testTypeConversionFunctions23() {
-        RelalgParser.parse("tck/TypeConversionFunctions23");
+    public void testTypeConversionFunctions_23() {
+        RelalgParser.parse("tck/TypeConversionFunctions_23");
     }
     
     @Test
-    public void testTypeConversionFunctions24() {
-        RelalgParser.parse("tck/TypeConversionFunctions24");
+    public void testTypeConversionFunctions_24() {
+        RelalgParser.parse("tck/TypeConversionFunctions_24");
     }
     
     @Test
-    public void testTypeConversionFunctions25() {
-        RelalgParser.parse("tck/TypeConversionFunctions25");
+    public void testTypeConversionFunctions_25() {
+        RelalgParser.parse("tck/TypeConversionFunctions_25");
     }
     
 }

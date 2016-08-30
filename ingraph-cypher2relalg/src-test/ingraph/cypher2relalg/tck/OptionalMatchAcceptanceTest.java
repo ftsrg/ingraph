@@ -1,120 +1,119 @@
-
 package ingraph.cypher2relalg.tck;
 
-import ingraph.cypher2relalg.RelalgParser;
-
 import org.junit.Test;
+
+import ingraph.cypher2relalg.RelalgParser;
 
 public class OptionalMatchAcceptanceTest {
     
     @Test
-    public void testOptionalMatchAcceptance01() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance01");
+    public void testOptionalMatchAcceptance_01() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_01");
     }
     
     @Test
-    public void testOptionalMatchAcceptance02() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance02");
+    public void testOptionalMatchAcceptance_02() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_02");
     }
     
     @Test
-    public void testOptionalMatchAcceptance03() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance03");
+    public void testOptionalMatchAcceptance_03() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_03");
     }
     
     @Test
-    public void testOptionalMatchAcceptance04() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance04");
+    public void testOptionalMatchAcceptance_04() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_04");
     }
     
     @Test
-    public void testOptionalMatchAcceptance05() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance05");
+    public void testOptionalMatchAcceptance_05() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_05");
     }
     
     @Test
-    public void testOptionalMatchAcceptance06() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance06");
+    public void testOptionalMatchAcceptance_06() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_06");
     }
     
     @Test
-    public void testOptionalMatchAcceptance07() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance07");
+    public void testOptionalMatchAcceptance_07() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_07");
     }
     
     @Test
-    public void testOptionalMatchAcceptance08() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance08");
+    public void testOptionalMatchAcceptance_08() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_08");
     }
     
     @Test
-    public void testOptionalMatchAcceptance09() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance09");
+    public void testOptionalMatchAcceptance_09() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_09");
     }
     
     @Test
-    public void testOptionalMatchAcceptance10() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance10");
+    public void testOptionalMatchAcceptance_10() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_10");
     }
     
     @Test
-    public void testOptionalMatchAcceptance11() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance11");
+    public void testOptionalMatchAcceptance_11() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_11");
     }
     
     @Test
-    public void testOptionalMatchAcceptance12() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance12");
+    public void testOptionalMatchAcceptance_12() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_12");
     }
     
     @Test
-    public void testOptionalMatchAcceptance13() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance13");
+    public void testOptionalMatchAcceptance_13() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_13");
     }
     
     @Test
-    public void testOptionalMatchAcceptance14() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance14");
+    public void testOptionalMatchAcceptance_14() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_14");
     }
     
     @Test
-    public void testOptionalMatchAcceptance15() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance15");
+    public void testOptionalMatchAcceptance_15() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_15");
     }
     
     @Test
-    public void testOptionalMatchAcceptance16() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance16");
+    public void testOptionalMatchAcceptance_16() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_16");
     }
     
     @Test
-    public void testOptionalMatchAcceptance17() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance17");
+    public void testOptionalMatchAcceptance_17() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_17");
     }
     
     @Test
-    public void testOptionalMatchAcceptance18() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance18");
+    public void testOptionalMatchAcceptance_18() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_18");
     }
     
     @Test
-    public void testOptionalMatchAcceptance19() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance19");
+    public void testOptionalMatchAcceptance_19() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_19");
     }
     
     @Test
-    public void testOptionalMatchAcceptance20() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance20");
+    public void testOptionalMatchAcceptance_20() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_20");
     }
     
     @Test
-    public void testOptionalMatchAcceptance21() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance21");
+    public void testOptionalMatchAcceptance_21() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_21");
     }
     
     @Test
-    public void testOptionalMatchAcceptance22() {
-        RelalgParser.parse("tck/OptionalMatchAcceptance22");
+    public void testOptionalMatchAcceptance_22() {
+        RelalgParser.parse("tck/OptionalMatchAcceptance_22");
     }
     
 }
