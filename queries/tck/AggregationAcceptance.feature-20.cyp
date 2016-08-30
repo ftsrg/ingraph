@@ -1,2 +1,0 @@
-MATCH ()
-RETURN count(*)

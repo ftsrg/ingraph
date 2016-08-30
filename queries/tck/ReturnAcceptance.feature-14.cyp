@@ -1,1 +1,0 @@
-RETURN abs(-1)

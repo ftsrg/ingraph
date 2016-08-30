@@ -1,1 +1,0 @@
-RETURN properties('Cypher')
