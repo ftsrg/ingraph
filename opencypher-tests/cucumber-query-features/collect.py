@@ -20,5 +20,5 @@ for filename in filenames:
         indentation_pattern = re.compile('^\s*', re.MULTILINE)
         match_without_indentation = indentation_pattern.sub("", match)
         match_file = open("queries/%s-%02d.cyp" % (filename, i), "w")
-        match_file.write(match_without_indentation)
+        match_file.write(match_without_indentation + "\n")
         match_file.close()
