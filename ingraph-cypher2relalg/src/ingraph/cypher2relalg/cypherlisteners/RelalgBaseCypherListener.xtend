@@ -1,20 +1,19 @@
 package ingraph.cypher2relalg.cypherlisteners
 
-import ingraph.antlr.CypherBaseListener
 import java.util.Iterator
+import java.util.List
 import relalg.AlgebraExpression
 import relalg.BetaOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
+import relalg.ExpandOperator
+import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.RelalgFactory
 import relalg.VertexLabel
 import relalg.VertexVariable
-import relalg.GetVerticesOperator
-import relalg.ExpandOperator
-import java.util.List
 
-class RelalgBaseCypherListener extends CypherBaseListener {
+class RelalgBaseCypherListener extends RelalgBaseUnsupportedCypherListener {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
 

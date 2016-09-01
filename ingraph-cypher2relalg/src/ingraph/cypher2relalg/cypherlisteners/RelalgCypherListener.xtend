@@ -204,6 +204,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterPatternPart(PatternPartContext ctx) {
 		patternPart_AlgebraExpression = null
+		// FIXME: handle grammar rule: variable ws '=' ws anonymousPatternPart
 	}
 
 	override exitPatternPart(PatternPartContext ctx) {
