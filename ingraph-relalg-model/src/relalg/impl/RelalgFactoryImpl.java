@@ -72,6 +72,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ALL_DIFFERENT_OPERATOR: return createAllDifferentOperator();
 			case RelalgPackage.ATTRIBUTE_VARIABLE: return createAttributeVariable();
 			case RelalgPackage.UNION_OPERATOR: return createUnionOperator();
+			case RelalgPackage.CONTAINER: return createContainer();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -255,6 +256,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public UnionOperator createUnionOperator() {
 		UnionOperatorImpl unionOperator = new UnionOperatorImpl();
 		return unionOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public relalg.Container createContainer() {
+		ContainerImpl container = new ContainerImpl();
+		return container;
 	}
 
 	/**

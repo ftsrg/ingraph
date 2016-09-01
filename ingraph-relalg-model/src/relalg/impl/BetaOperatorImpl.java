@@ -4,6 +4,7 @@ package relalg.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
@@ -29,7 +30,7 @@ import relalg.RelalgPackage;
  */
 public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements BetaOperator {
 	/**
-	 * The cached value of the '{@link #getLeftInput() <em>Left Input</em>}' reference.
+	 * The cached value of the '{@link #getLeftInput() <em>Left Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getLeftInput()
@@ -39,7 +40,7 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	protected AlgebraExpression leftInput;
 
 	/**
-	 * The cached value of the '{@link #getRightInput() <em>Right Input</em>}' reference.
+	 * The cached value of the '{@link #getRightInput() <em>Right Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRightInput()
@@ -73,14 +74,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * @generated
 	 */
 	public AlgebraExpression getLeftInput() {
-		if (leftInput != null && leftInput.eIsProxy()) {
-			InternalEObject oldLeftInput = (InternalEObject)leftInput;
-			leftInput = (AlgebraExpression)eResolveProxy(oldLeftInput);
-			if (leftInput != oldLeftInput) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, oldLeftInput, leftInput));
-			}
-		}
 		return leftInput;
 	}
 
@@ -89,8 +82,14 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetLeftInput() {
-		return leftInput;
+	public NotificationChain basicSetLeftInput(AlgebraExpression newLeftInput, NotificationChain msgs) {
+		AlgebraExpression oldLeftInput = leftInput;
+		leftInput = newLeftInput;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, oldLeftInput, newLeftInput);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -99,10 +98,17 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * @generated
 	 */
 	public void setLeftInput(AlgebraExpression newLeftInput) {
-		AlgebraExpression oldLeftInput = leftInput;
-		leftInput = newLeftInput;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, oldLeftInput, leftInput));
+		if (newLeftInput != leftInput) {
+			NotificationChain msgs = null;
+			if (leftInput != null)
+				msgs = ((InternalEObject)leftInput).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BETA_OPERATOR__LEFT_INPUT, null, msgs);
+			if (newLeftInput != null)
+				msgs = ((InternalEObject)newLeftInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BETA_OPERATOR__LEFT_INPUT, null, msgs);
+			msgs = basicSetLeftInput(newLeftInput, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__LEFT_INPUT, newLeftInput, newLeftInput));
 	}
 
 	/**
@@ -111,14 +117,6 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * @generated
 	 */
 	public AlgebraExpression getRightInput() {
-		if (rightInput != null && rightInput.eIsProxy()) {
-			InternalEObject oldRightInput = (InternalEObject)rightInput;
-			rightInput = (AlgebraExpression)eResolveProxy(oldRightInput);
-			if (rightInput != oldRightInput) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, oldRightInput, rightInput));
-			}
-		}
 		return rightInput;
 	}
 
@@ -127,8 +125,14 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression basicGetRightInput() {
-		return rightInput;
+	public NotificationChain basicSetRightInput(AlgebraExpression newRightInput, NotificationChain msgs) {
+		AlgebraExpression oldRightInput = rightInput;
+		rightInput = newRightInput;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, oldRightInput, newRightInput);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -137,10 +141,33 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	 * @generated
 	 */
 	public void setRightInput(AlgebraExpression newRightInput) {
-		AlgebraExpression oldRightInput = rightInput;
-		rightInput = newRightInput;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, oldRightInput, rightInput));
+		if (newRightInput != rightInput) {
+			NotificationChain msgs = null;
+			if (rightInput != null)
+				msgs = ((InternalEObject)rightInput).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, null, msgs);
+			if (newRightInput != null)
+				msgs = ((InternalEObject)newRightInput).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, null, msgs);
+			msgs = basicSetRightInput(newRightInput, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BETA_OPERATOR__RIGHT_INPUT, newRightInput, newRightInput));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
+				return basicSetLeftInput(null, msgs);
+			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
+				return basicSetRightInput(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -152,11 +179,9 @@ public abstract class BetaOperatorImpl extends AlgebraExpressionImpl implements 
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case RelalgPackage.BETA_OPERATOR__LEFT_INPUT:
-				if (resolve) return getLeftInput();
-				return basicGetLeftInput();
+				return getLeftInput();
 			case RelalgPackage.BETA_OPERATOR__RIGHT_INPUT:
-				if (resolve) return getRightInput();
-				return basicGetRightInput();
+				return getRightInput();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}

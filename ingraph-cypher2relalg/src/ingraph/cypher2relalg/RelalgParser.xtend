@@ -2,19 +2,24 @@ package ingraph.cypher2relalg
 
 import ingraph.antlr.CypherLexer
 import ingraph.antlr.CypherParser
-import java.io.File
-import org.antlr.v4.runtime.ANTLRInputStream
-import org.antlr.v4.runtime.CommonTokenStream
-import org.apache.commons.io.FileUtils
-import org.antlr.v4.runtime.tree.ParseTreeWalker
 import ingraph.antlr.CypherParser.CypherContext
 import ingraph.cypher2relalg.cypherlisteners.RelalgCypherListener
+import java.io.File
+import java.util.Collections
+import org.antlr.v4.runtime.ANTLRInputStream
+import org.antlr.v4.runtime.CommonTokenStream
+import org.antlr.v4.runtime.tree.ParseTreeWalker
+import org.apache.commons.io.FileUtils
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 
 class RelalgParser {
 
 	def static parse(String queryName) {
 		println("Parsing query: " + queryName)
-		
+
 		val filepath = "../queries/" + queryName + ".cyp"
 		val query = FileUtils.readFileToString(new File(filepath), "UTF-8")
 
@@ -34,8 +39,22 @@ class RelalgParser {
 		println("Edge labels:    " + listener.edgeLabelFactory.elements.entrySet.map[key.toString].join(", "))
 		println("Edge variables: " + listener.edgeVariableFactory.elements.entrySet.map[key.toString].join(", "))
 		println()
+
+		return listener.container
+	}
+
+	def static save(String queryName) {
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+
+		val container = parse(queryName)
+
+		val resourceSet = new ResourceSetImpl
+		val uri = URI.createFileURI("/tmp/vmi.xmi")
+		val resource = resourceSet.createResource(uri)
+		resource.contents.add(container)
+		resource.save(Collections.emptyMap)
 		
-		listener.rootExpression
+		return container
 	}
 
 }

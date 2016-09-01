@@ -18,6 +18,7 @@ import relalg.Variable
 import org.apache.commons.io.FileUtils
 import java.nio.charset.Charset
 import java.io.File
+import relalg.Container
 
 abstract class TexSerializer {
 
@@ -30,8 +31,8 @@ abstract class TexSerializer {
 		this.full = full
 	}
 
-	def serialize(AlgebraExpression expression, String filename) {
-		val tex = convertExpression(expression)
+	def serialize(Container container, String filename) {
+		val tex = convertExpression(container.rootExpression)
 		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		tex

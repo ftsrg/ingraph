@@ -21,26 +21,26 @@ package relalg;
  */
 public interface AlphaOperator extends AlgebraExpression {
 	/**
-	 * Returns the value of the '<em><b>Input</b></em>' reference.
+	 * Returns the value of the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Input</em>' reference.
+	 * @return the value of the '<em>Input</em>' containment reference.
 	 * @see #setInput(AlgebraExpression)
 	 * @see relalg.RelalgPackage#getAlphaOperator_Input()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	AlgebraExpression getInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.AlphaOperator#getInput <em>Input</em>}' reference.
+	 * Sets the value of the '{@link relalg.AlphaOperator#getInput <em>Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Input</em>' reference.
+	 * @param value the new value of the '<em>Input</em>' containment reference.
 	 * @see #getInput()
 	 * @generated
 	 */

@@ -68,22 +68,13 @@ public interface RelalgPackage extends EPackage {
 	int ALGEBRA_EXPRESSION = 0;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALGEBRA_EXPRESSION__NAME = 0;
-
-	/**
 	 * The number of structural features of the '<em>Algebra Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALGEBRA_EXPRESSION_FEATURE_COUNT = 1;
+	int ALGEBRA_EXPRESSION_FEATURE_COUNT = 0;
 
 	/**
 	 * The number of operations of the '<em>Algebra Expression</em>' class.
@@ -105,16 +96,7 @@ public interface RelalgPackage extends EPackage {
 	int ALPHA_OPERATOR = 3;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALPHA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -151,16 +133,7 @@ public interface RelalgPackage extends EPackage {
 	int PROJECTION_OPERATOR = 1;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROJECTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -206,16 +179,7 @@ public interface RelalgPackage extends EPackage {
 	int BETA_OPERATOR = 4;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BETA_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Left Input</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -224,7 +188,7 @@ public interface RelalgPackage extends EPackage {
 	int BETA_OPERATOR__LEFT_INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Right Input</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -261,16 +225,7 @@ public interface RelalgPackage extends EPackage {
 	int JOIN_OPERATOR = 2;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Left Input</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -279,7 +234,7 @@ public interface RelalgPackage extends EPackage {
 	int JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
 
 	/**
-	 * The feature id for the '<em><b>Right Input</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -316,16 +271,7 @@ public interface RelalgPackage extends EPackage {
 	int ANTI_JOIN_OPERATOR = 5;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ANTI_JOIN_OPERATOR__NAME = BETA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Left Input</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -334,7 +280,7 @@ public interface RelalgPackage extends EPackage {
 	int ANTI_JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
 
 	/**
-	 * The feature id for the '<em><b>Right Input</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -371,16 +317,7 @@ public interface RelalgPackage extends EPackage {
 	int PRODUCTION_OPERATOR = 6;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PRODUCTION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -417,16 +354,7 @@ public interface RelalgPackage extends EPackage {
 	int FILTER_OPERATOR = 7;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -463,16 +391,7 @@ public interface RelalgPackage extends EPackage {
 	int EXPAND_OPERATOR = 8;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPAND_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -545,15 +464,6 @@ public interface RelalgPackage extends EPackage {
 	int GET_VERTICES_OPERATOR = 9;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GET_VERTICES_OPERATOR__NAME = ALGEBRA_EXPRESSION__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Vertex Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -591,16 +501,7 @@ public interface RelalgPackage extends EPackage {
 	int DUPLICATE_ELIMINATION_OPERATOR = 10;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DUPLICATE_ELIMINATION_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -747,7 +648,7 @@ public interface RelalgPackage extends EPackage {
 	int VERTEX_VARIABLE__VERTEX_LABEL = VARIABLE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Attribute Variables</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -811,7 +712,7 @@ public interface RelalgPackage extends EPackage {
 	int EDGE_VARIABLE__EDGE_LABEL = VARIABLE_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Attribute Variables</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -959,16 +860,7 @@ public interface RelalgPackage extends EPackage {
 	int ALL_DIFFERENT_OPERATOR = 17;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALL_DIFFERENT_OPERATOR__NAME = ALPHA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Input</b></em>' reference.
+	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1060,16 +952,7 @@ public interface RelalgPackage extends EPackage {
 	int UNION_OPERATOR = 20;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNION_OPERATOR__NAME = BETA_OPERATOR__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Left Input</b></em>' reference.
+	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1078,7 +961,7 @@ public interface RelalgPackage extends EPackage {
 	int UNION_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
 
 	/**
-	 * The feature id for the '<em><b>Right Input</b></em>' reference.
+	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1105,6 +988,52 @@ public interface RelalgPackage extends EPackage {
 	int UNION_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.ContainerImpl <em>Container</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ContainerImpl
+	 * @see relalg.impl.RelalgPackageImpl#getContainer()
+	 * @generated
+	 */
+	int CONTAINER = 21;
+
+	/**
+	 * The feature id for the '<em><b>Root Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ROOT_EXPRESSION = 0;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ELEMENTS = 1;
+
+	/**
+	 * The number of structural features of the '<em>Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Container</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1112,7 +1041,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 21;
+	int DIRECTION = 22;
 
 
 	/**
@@ -1124,17 +1053,6 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAlgebraExpression();
-
-	/**
-	 * Returns the meta object for the attribute '{@link relalg.AlgebraExpression#getName <em>Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see relalg.AlgebraExpression#getName()
-	 * @see #getAlgebraExpression()
-	 * @generated
-	 */
-	EAttribute getAlgebraExpression_Name();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.ProjectionOperator <em>Projection Operator</em>}'.
@@ -1178,10 +1096,10 @@ public interface RelalgPackage extends EPackage {
 	EClass getAlphaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.AlphaOperator#getInput <em>Input</em>}'.
+	 * Returns the meta object for the containment reference '{@link relalg.AlphaOperator#getInput <em>Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Input</em>'.
+	 * @return the meta object for the containment reference '<em>Input</em>'.
 	 * @see relalg.AlphaOperator#getInput()
 	 * @see #getAlphaOperator()
 	 * @generated
@@ -1199,10 +1117,10 @@ public interface RelalgPackage extends EPackage {
 	EClass getBetaOperator();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}'.
+	 * Returns the meta object for the containment reference '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Left Input</em>'.
+	 * @return the meta object for the containment reference '<em>Left Input</em>'.
 	 * @see relalg.BetaOperator#getLeftInput()
 	 * @see #getBetaOperator()
 	 * @generated
@@ -1210,10 +1128,10 @@ public interface RelalgPackage extends EPackage {
 	EReference getBetaOperator_LeftInput();
 
 	/**
-	 * Returns the meta object for the reference '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}'.
+	 * Returns the meta object for the containment reference '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Right Input</em>'.
+	 * @return the meta object for the containment reference '<em>Right Input</em>'.
 	 * @see relalg.BetaOperator#getRightInput()
 	 * @see #getBetaOperator()
 	 * @generated
@@ -1378,10 +1296,10 @@ public interface RelalgPackage extends EPackage {
 	EReference getVertexVariable_VertexLabel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link relalg.VertexVariable#getAttributeVariables <em>Attribute Variables</em>}'.
+	 * Returns the meta object for the reference list '{@link relalg.VertexVariable#getAttributeVariables <em>Attribute Variables</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Attribute Variables</em>'.
+	 * @return the meta object for the reference list '<em>Attribute Variables</em>'.
 	 * @see relalg.VertexVariable#getAttributeVariables()
 	 * @see #getVertexVariable()
 	 * @generated
@@ -1410,10 +1328,10 @@ public interface RelalgPackage extends EPackage {
 	EReference getEdgeVariable_EdgeLabel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link relalg.EdgeVariable#getAttributeVariables <em>Attribute Variables</em>}'.
+	 * Returns the meta object for the reference list '{@link relalg.EdgeVariable#getAttributeVariables <em>Attribute Variables</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Attribute Variables</em>'.
+	 * @return the meta object for the reference list '<em>Attribute Variables</em>'.
 	 * @see relalg.EdgeVariable#getAttributeVariables()
 	 * @see #getEdgeVariable()
 	 * @generated
@@ -1513,6 +1431,38 @@ public interface RelalgPackage extends EPackage {
 	EClass getUnionOperator();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.Container <em>Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Container</em>'.
+	 * @see relalg.Container
+	 * @generated
+	 */
+	EClass getContainer();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.Container#getRootExpression <em>Root Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Root Expression</em>'.
+	 * @see relalg.Container#getRootExpression()
+	 * @see #getContainer()
+	 * @generated
+	 */
+	EReference getContainer_RootExpression();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link relalg.Container#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see relalg.Container#getElements()
+	 * @see #getContainer()
+	 * @generated
+	 */
+	EReference getContainer_Elements();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1556,14 +1506,6 @@ public interface RelalgPackage extends EPackage {
 		EClass ALGEBRA_EXPRESSION = eINSTANCE.getAlgebraExpression();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ALGEBRA_EXPRESSION__NAME = eINSTANCE.getAlgebraExpression_Name();
-
-		/**
 		 * The meta object literal for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1602,7 +1544,7 @@ public interface RelalgPackage extends EPackage {
 		EClass ALPHA_OPERATOR = eINSTANCE.getAlphaOperator();
 
 		/**
-		 * The meta object literal for the '<em><b>Input</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Input</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1620,7 +1562,7 @@ public interface RelalgPackage extends EPackage {
 		EClass BETA_OPERATOR = eINSTANCE.getBetaOperator();
 
 		/**
-		 * The meta object literal for the '<em><b>Left Input</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Left Input</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1628,7 +1570,7 @@ public interface RelalgPackage extends EPackage {
 		EReference BETA_OPERATOR__LEFT_INPUT = eINSTANCE.getBetaOperator_LeftInput();
 
 		/**
-		 * The meta object literal for the '<em><b>Right Input</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Right Input</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1772,7 +1714,7 @@ public interface RelalgPackage extends EPackage {
 		EReference VERTEX_VARIABLE__VERTEX_LABEL = eINSTANCE.getVertexVariable_VertexLabel();
 
 		/**
-		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1798,7 +1740,7 @@ public interface RelalgPackage extends EPackage {
 		EReference EDGE_VARIABLE__EDGE_LABEL = eINSTANCE.getEdgeVariable_EdgeLabel();
 
 		/**
-		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Attribute Variables</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1890,6 +1832,32 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass UNION_OPERATOR = eINSTANCE.getUnionOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ContainerImpl <em>Container</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ContainerImpl
+		 * @see relalg.impl.RelalgPackageImpl#getContainer()
+		 * @generated
+		 */
+		EClass CONTAINER = eINSTANCE.getContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Root Expression</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTAINER__ROOT_EXPRESSION = eINSTANCE.getContainer_RootExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTAINER__ELEMENTS = eINSTANCE.getContainer_Elements();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

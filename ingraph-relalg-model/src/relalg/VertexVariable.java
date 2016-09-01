@@ -49,7 +49,7 @@ public interface VertexVariable extends Variable {
 	void setVertexLabel(VertexLabel value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute Variables</b></em>' containment reference list.
+	 * Returns the value of the '<em><b>Attribute Variables</b></em>' reference list.
 	 * The list contents are of type {@link relalg.AttributeVariable}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -57,9 +57,9 @@ public interface VertexVariable extends Variable {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute Variables</em>' containment reference list.
+	 * @return the value of the '<em>Attribute Variables</em>' reference list.
 	 * @see relalg.RelalgPackage#getVertexVariable_AttributeVariables()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
 	EList<AttributeVariable> getAttributeVariables();

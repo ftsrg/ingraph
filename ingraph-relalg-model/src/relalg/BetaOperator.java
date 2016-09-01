@@ -22,52 +22,52 @@ package relalg;
  */
 public interface BetaOperator extends AlgebraExpression {
 	/**
-	 * Returns the value of the '<em><b>Left Input</b></em>' reference.
+	 * Returns the value of the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Left Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Left Input</em>' reference.
+	 * @return the value of the '<em>Left Input</em>' containment reference.
 	 * @see #setLeftInput(AlgebraExpression)
 	 * @see relalg.RelalgPackage#getBetaOperator_LeftInput()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	AlgebraExpression getLeftInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}' reference.
+	 * Sets the value of the '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Left Input</em>' reference.
+	 * @param value the new value of the '<em>Left Input</em>' containment reference.
 	 * @see #getLeftInput()
 	 * @generated
 	 */
 	void setLeftInput(AlgebraExpression value);
 
 	/**
-	 * Returns the value of the '<em><b>Right Input</b></em>' reference.
+	 * Returns the value of the '<em><b>Right Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Right Input</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Right Input</em>' reference.
+	 * @return the value of the '<em>Right Input</em>' containment reference.
 	 * @see #setRightInput(AlgebraExpression)
 	 * @see relalg.RelalgPackage#getBetaOperator_RightInput()
-	 * @model required="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	AlgebraExpression getRightInput();
 
 	/**
-	 * Sets the value of the '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}' reference.
+	 * Sets the value of the '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Right Input</em>' reference.
+	 * @param value the new value of the '<em>Right Input</em>' containment reference.
 	 * @see #getRightInput()
 	 * @generated
 	 */

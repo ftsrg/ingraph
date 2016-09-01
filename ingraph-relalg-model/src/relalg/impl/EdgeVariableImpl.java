@@ -5,18 +5,13 @@ package relalg.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import relalg.AttributeVariable;
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
@@ -48,7 +43,7 @@ public class EdgeVariableImpl extends VariableImpl implements EdgeVariable {
 	protected EdgeLabel edgeLabel;
 
 	/**
-	 * The cached value of the '{@link #getAttributeVariables() <em>Attribute Variables</em>}' containment reference list.
+	 * The cached value of the '{@link #getAttributeVariables() <em>Attribute Variables</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAttributeVariables()
@@ -121,23 +116,9 @@ public class EdgeVariableImpl extends VariableImpl implements EdgeVariable {
 	 */
 	public EList<AttributeVariable> getAttributeVariables() {
 		if (attributeVariables == null) {
-			attributeVariables = new EObjectContainmentEList<AttributeVariable>(AttributeVariable.class, this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES);
+			attributeVariables = new EObjectResolvingEList<AttributeVariable>(AttributeVariable.class, this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES);
 		}
 		return attributeVariables;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES:
-				return ((InternalEList<?>)getAttributeVariables()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

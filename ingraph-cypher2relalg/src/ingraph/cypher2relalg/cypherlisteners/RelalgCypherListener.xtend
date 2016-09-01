@@ -1,5 +1,7 @@
 package ingraph.cypher2relalg.cypherlisteners
 
+import ingraph.antlr.CypherParser.ExpressionContext
+import ingraph.antlr.CypherParser.FunctionInvocationContext
 import ingraph.antlr.CypherParser.LabelNameContext
 import ingraph.antlr.CypherParser.LeftArrowHeadContext
 import ingraph.antlr.CypherParser.MatchContext
@@ -15,6 +17,7 @@ import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
 import ingraph.antlr.CypherParser.RelationshipPatternContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
+import ingraph.antlr.CypherParser.RelationshipsPatternContext
 import ingraph.antlr.CypherParser.ReturnBodyContext
 import ingraph.antlr.CypherParser.ReturnContext
 import ingraph.antlr.CypherParser.ReturnItemContext
@@ -22,6 +25,7 @@ import ingraph.antlr.CypherParser.RightArrowHeadContext
 import ingraph.antlr.CypherParser.SingleQueryContext
 import ingraph.antlr.CypherParser.SymbolicNameContext
 import ingraph.antlr.CypherParser.VariableContext
+import ingraph.antlr.CypherParser.WhereContext
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
@@ -31,29 +35,25 @@ import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.AlgebraExpression
+import relalg.BetaOperator
+import relalg.Container
 import relalg.Direction
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
-import relalg.ProductionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import ingraph.antlr.CypherParser.WhereContext
-import ingraph.antlr.CypherParser.FunctionInvocationContext
-import ingraph.antlr.CypherParser.RelationshipsPatternContext
-import ingraph.antlr.CypherParser.ExpressionContext
-import relalg.BetaOperator
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
 
-	@Accessors val vertexVariableFactory = new VertexVariableFactory
-	@Accessors val edgeVariableFactory = new EdgeVariableFactory
+	@Accessors(value=PUBLIC_GETTER) val Container container = createContainer
 
-	@Accessors val vertexLabelFactory = new VertexLabelFactory
-	@Accessors val edgeLabelFactory = new EdgeLabelFactory
+	@Accessors val vertexVariableFactory = new VertexVariableFactory(container)
+	@Accessors val edgeVariableFactory = new EdgeVariableFactory(container)
 
-	@Accessors(value=PUBLIC_GETTER) var ProductionOperator rootExpression
+	@Accessors val vertexLabelFactory = new VertexLabelFactory(container)
+	@Accessors val edgeLabelFactory = new EdgeLabelFactory(container)
 
 	/*
 	 * List of single queries.
@@ -69,8 +69,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	override exitQuery(QueryContext ctx) {
 		val i = query_SingleQueryList.iterator
 		if (i.hasNext) { // FIXME: union of multiple singleQuery's
-			rootExpression = createProductionOperator
+			val rootExpression = createProductionOperator
 			rootExpression.input = i.next
+			
+			container.rootExpression = rootExpression
 		}
 	}
 
