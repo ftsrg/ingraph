@@ -547,13 +547,22 @@ public interface RelalgPackage extends EPackage {
 	int NAMED_ELEMENT__NAME = 0;
 
 	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__CONTAINER = 1;
+
+	/**
 	 * The number of structural features of the '<em>Named Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_ELEMENT_FEATURE_COUNT = 1;
+	int NAMED_ELEMENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Named Element</em>' class.
@@ -582,6 +591,15 @@ public interface RelalgPackage extends EPackage {
 	 * @ordered
 	 */
 	int VARIABLE__NAME = NAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VARIABLE__CONTAINER = NAMED_ELEMENT__CONTAINER;
 
 	/**
 	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
@@ -628,6 +646,15 @@ public interface RelalgPackage extends EPackage {
 	 * @ordered
 	 */
 	int VERTEX_VARIABLE__NAME = VARIABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERTEX_VARIABLE__CONTAINER = VARIABLE__CONTAINER;
 
 	/**
 	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
@@ -694,6 +721,15 @@ public interface RelalgPackage extends EPackage {
 	int EDGE_VARIABLE__NAME = VARIABLE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDGE_VARIABLE__CONTAINER = VARIABLE__CONTAINER;
+
+	/**
 	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -758,6 +794,15 @@ public interface RelalgPackage extends EPackage {
 	int LABEL__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LABEL__CONTAINER = NAMED_ELEMENT__CONTAINER;
+
+	/**
 	 * The number of structural features of the '<em>Label</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -795,6 +840,15 @@ public interface RelalgPackage extends EPackage {
 	int VERTEX_LABEL__NAME = LABEL__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VERTEX_LABEL__CONTAINER = LABEL__CONTAINER;
+
+	/**
 	 * The number of structural features of the '<em>Vertex Label</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -830,6 +884,15 @@ public interface RelalgPackage extends EPackage {
 	 * @ordered
 	 */
 	int EDGE_LABEL__NAME = LABEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDGE_LABEL__CONTAINER = LABEL__CONTAINER;
 
 	/**
 	 * The number of structural features of the '<em>Edge Label</em>' class.
@@ -913,6 +976,15 @@ public interface RelalgPackage extends EPackage {
 	 * @ordered
 	 */
 	int ATTRIBUTE_VARIABLE__NAME = VARIABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Container</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATTRIBUTE_VARIABLE__CONTAINER = VARIABLE__CONTAINER;
 
 	/**
 	 * The feature id for the '<em><b>Dont Care</b></em>' attribute.
@@ -1421,6 +1493,17 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getNamedElement_Name();
 
 	/**
+	 * Returns the meta object for the container reference '{@link relalg.NamedElement#getContainer <em>Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Container</em>'.
+	 * @see relalg.NamedElement#getContainer()
+	 * @see #getNamedElement()
+	 * @generated
+	 */
+	EReference getNamedElement_Container();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.UnionOperator <em>Union Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1822,6 +1905,14 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NAMED_ELEMENT__NAME = eINSTANCE.getNamedElement_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Container</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NAMED_ELEMENT__CONTAINER = eINSTANCE.getNamedElement_Container();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.UnionOperatorImpl <em>Union Operator</em>}' class.

@@ -15,7 +15,7 @@ public class RelalgParserTrainBencharkTest {
 
 	@Test
 	public void testPosLength() throws IOException {
-		RelalgParser.save("trainbenchmark/PosLength");
+		RelalgParser.parse("trainbenchmark/PosLength");
 	}
 
 	@Test

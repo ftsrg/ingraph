@@ -7,7 +7,6 @@ import org.junit.Test
 
 class QueryVisualizationTest {
 
-	val static ExpressionSerializer serializer = new ExpressionSerializer(false, false)
 	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
 
 	@Test
@@ -24,7 +23,7 @@ class QueryVisualizationTest {
 
 	@Test
 	def void testRouteSensor() {
-		val expression = RelalgParser.save("trainbenchmark/RouteSensor")
+		val expression = RelalgParser.parse("trainbenchmark/RouteSensor")
 		print(drawer.serialize(expression, "routesensor"))
 	}
 

@@ -66,12 +66,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="AttributeVariable" eSuperTypes="#//Variable"/>
   <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//Container" eOpposite="#//Container/elements"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnionOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Container">
     <eStructuralFeatures xsi:type="ecore:EReference" name="rootExpression" eType="#//AlgebraExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        eType="#//NamedElement" containment="true"/>
+        eType="#//NamedElement" containment="true" eOpposite="#//NamedElement/container"/>
   </eClassifiers>
 </ecore:EPackage>

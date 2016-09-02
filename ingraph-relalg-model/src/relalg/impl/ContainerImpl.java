@@ -12,8 +12,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import relalg.AlgebraExpression;
 import relalg.NamedElement;
@@ -123,9 +122,24 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	 */
 	public EList<NamedElement> getElements() {
 		if (elements == null) {
-			elements = new EObjectContainmentEList<NamedElement>(NamedElement.class, this, RelalgPackage.CONTAINER__ELEMENTS);
+			elements = new EObjectContainmentWithInverseEList<NamedElement>(NamedElement.class, this, RelalgPackage.CONTAINER__ELEMENTS, RelalgPackage.NAMED_ELEMENT__CONTAINER);
 		}
 		return elements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case RelalgPackage.CONTAINER__ELEMENTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getElements()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

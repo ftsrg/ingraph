@@ -52,6 +52,7 @@ public interface Container extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link relalg.NamedElement}.
+	 * It is bidirectional and its opposite is '{@link relalg.NamedElement#getContainer <em>Container</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
@@ -60,7 +61,8 @@ public interface Container extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see relalg.RelalgPackage#getContainer_Elements()
-	 * @model containment="true"
+	 * @see relalg.NamedElement#getContainer
+	 * @model opposite="container" containment="true"
 	 * @generated
 	 */
 	EList<NamedElement> getElements();
