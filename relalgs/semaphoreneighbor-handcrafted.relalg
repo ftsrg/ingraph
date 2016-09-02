@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ASCII"?>
+<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+  <rootExpression xsi:type="relalg:ProductionOperator">
+    <input xsi:type="relalg:DuplicateEliminationOperator">
+      <input xsi:type="relalg:ProjectionOperator" variables="//@elements.10 //@elements.8 //@elements.9 //@elements.11 //@elements.12 //@elements.13 //@elements.14">
+        <input xsi:type="relalg:FilterOperator">
+          <input xsi:type="relalg:AntiJoinOperator">
+            <leftInput xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.15 //@elements.16 //@elements.17 //@elements.18 //@elements.19 //@elements.20">
+              <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.20" sourceVertexVariable="//@elements.12" targetVertexVariable="//@elements.9">
+                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.19" sourceVertexVariable="//@elements.14" targetVertexVariable="//@elements.12">
+                  <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.18" sourceVertexVariable="//@elements.13" targetVertexVariable="//@elements.14">
+                    <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.17" sourceVertexVariable="//@elements.11" targetVertexVariable="//@elements.13">
+                      <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.16" sourceVertexVariable="//@elements.8" targetVertexVariable="//@elements.11">
+                        <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.15" sourceVertexVariable="//@elements.10" targetVertexVariable="//@elements.8"/>
+                      </input>
+                    </input>
+                  </input>
+                </input>
+              </input>
+            </leftInput>
+            <rightInput xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.21" sourceVertexVariable="//@elements.10" targetVertexVariable="//@elements.9">
+              <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.10"/>
+            </rightInput>
+          </input>
+        </input>
+      </input>
+    </input>
+  </rootExpression>
+  <elements xsi:type="relalg:VertexLabel" name="Route"/>
+  <elements xsi:type="relalg:VertexLabel" name="Semaphore"/>
+  <elements xsi:type="relalg:VertexLabel" name="Sensor"/>
+  <elements xsi:type="relalg:EdgeLabel" name="connectsTo"/>
+  <elements xsi:type="relalg:EdgeLabel" name="entry"/>
+  <elements xsi:type="relalg:EdgeLabel" name="exit"/>
+  <elements xsi:type="relalg:EdgeLabel" name="gathers"/>
+  <elements xsi:type="relalg:EdgeLabel" name="monitoredBy"/>
+  <elements xsi:type="relalg:VertexVariable" name="route1" vertexLabel="//@elements.0"/>
+  <elements xsi:type="relalg:VertexVariable" name="route2" vertexLabel="//@elements.0"/>
+  <elements xsi:type="relalg:VertexVariable" name="semaphore" vertexLabel="//@elements.1"/>
+  <elements xsi:type="relalg:VertexVariable" name="sensor1" vertexLabel="//@elements.2"/>
+  <elements xsi:type="relalg:VertexVariable" name="sensor" vertexLabel="//@elements.2"/>
+  <elements xsi:type="relalg:VertexVariable" name="te1"/>
+  <elements xsi:type="relalg:VertexVariable" name="te2"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e1" dontCare="true" edgeLabel="//@elements.5"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e2" dontCare="true" edgeLabel="//@elements.6"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e3" dontCare="true" edgeLabel="//@elements.7"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e4" dontCare="true" edgeLabel="//@elements.3"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e5" dontCare="true" edgeLabel="//@elements.7"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e6" dontCare="true" edgeLabel="//@elements.6"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e7" dontCare="true" edgeLabel="//@elements.4"/>
+</relalg:Container>

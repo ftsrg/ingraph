@@ -48,7 +48,7 @@ abstract class TexSerializer {
 	def dispatch CharSequence convertExpression(AlgebraExpression expression) {
 		'''
 			«IF full»
-				\documentclass{minimal}
+				\documentclass[varwidth,convert={density=120}]{standalone}
 				
 				\input{inputs/relalg-packages}
 				\input{inputs/relalg-commands}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+  <rootExpression xsi:type="relalg:ProductionOperator">
+    <input xsi:type="relalg:DuplicateEliminationOperator">
+      <input xsi:type="relalg:ProjectionOperator" variables="//@elements.2 //@elements.0">
+        <input xsi:type="relalg:FilterOperator">
+          <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.2"/>
+        </input>
+      </input>
+    </input>
+  </rootExpression>
+  <elements xsi:type="relalg:AttributeVariable" name="length"/>
+  <elements xsi:type="relalg:VertexLabel" name="Segment"/>
+  <elements xsi:type="relalg:VertexVariable" name="segment" vertexLabel="//@elements.1" attributeVariables="//@elements.0"/>
+</relalg:Container>

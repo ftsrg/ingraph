@@ -12,36 +12,36 @@ class RelalgModelVisualizationTest {
 	@Test
 	def void testPosLength() {
 		val container = TrainBenchmarkUtil.posLength
-		RelalgParser.save(container, "/tmp/poslength-handcrafted")
-		print(drawer.serialize(container, "poslength-handcrafted"))
+		RelalgParser.save(container, "../relalgs/poslength-handcrafted")
+		drawer.serialize(container, "poslength-handcrafted")
 	}
 
 	@Test
 	def void testRouteSensor() {
 		val container = TrainBenchmarkUtil.routeSensor
-		RelalgParser.save(container, "/tmp/routesensor-handcrafted")
-		print(drawer.serialize(container, "routesensor-handcrafted"))
+		RelalgParser.save(container, "../relalgs/routesensor-handcrafted")
+		drawer.serialize(container, "routesensor-handcrafted")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() {
 		val container = TrainBenchmarkUtil.semaphoreNeighbor
-		RelalgParser.save(container, "/tmp/semaphoreneighbor-handcrafted")
-		print(drawer.serialize(container, "semaphoreneighbor-handcrafted"))
+		RelalgParser.save(container, "../relalgs/semaphoreneighbor-handcrafted")
+		drawer.serialize(container, "semaphoreneighbor-handcrafted")
 	}
 
 	@Test
 	def void testSwitchMonitored() {
 		val container = TrainBenchmarkUtil.switchMonitored
-		RelalgParser.save(container, "/tmp/switchmonitored-handcrafted")
-		print(drawer.serialize(container, "switchmonitored-handcrafted"))
+		RelalgParser.save(container, "../relalgs/switchmonitored-handcrafted")
+		drawer.serialize(container, "switchmonitored-handcrafted")
 	}
 
 	@Test
 	def void testSwitchSet() {
 		val container = TrainBenchmarkUtil.switchSet
-		RelalgParser.save(container, "/tmp/switchset-handcrafted")
-		print(drawer.serialize(container, "switchset-handcrafted"))
+		RelalgParser.save(container, "../relalgs/switchset-handcrafted")
+		drawer.serialize(container, "switchset-handcrafted")
 	}
 
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ASCII"?>
+<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+  <rootExpression xsi:type="relalg:ProductionOperator">
+    <input xsi:type="relalg:DuplicateEliminationOperator">
+      <input xsi:type="relalg:ProjectionOperator" variables="//@elements.12 //@elements.9 //@elements.11 //@elements.10 //@elements.7 //@elements.8">
+        <input xsi:type="relalg:FilterOperator">
+          <input xsi:type="relalg:FilterOperator">
+            <input xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.13 //@elements.14 //@elements.15">
+              <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.15" sourceVertexVariable="//@elements.11" targetVertexVariable="//@elements.10">
+                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.14" sourceVertexVariable="//@elements.9" targetVertexVariable="//@elements.11">
+                  <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.12" targetVertexVariable="//@elements.9">
+                    <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.12"/>
+                  </input>
+                </input>
+              </input>
+            </input>
+          </input>
+        </input>
+      </input>
+    </input>
+  </rootExpression>
+  <elements xsi:type="relalg:VertexLabel" name="Route"/>
+  <elements xsi:type="relalg:VertexLabel" name="Semaphore"/>
+  <elements xsi:type="relalg:VertexLabel" name="Switch"/>
+  <elements xsi:type="relalg:VertexLabel" name="SwitchPosition"/>
+  <elements xsi:type="relalg:EdgeLabel" name="entry"/>
+  <elements xsi:type="relalg:EdgeLabel" name="follows"/>
+  <elements xsi:type="relalg:EdgeLabel" name="target"/>
+  <elements xsi:type="relalg:AttributeVariable" name="currentPosition"/>
+  <elements xsi:type="relalg:AttributeVariable" name="position"/>
+  <elements xsi:type="relalg:VertexVariable" name="route" vertexLabel="//@elements.0"/>
+  <elements xsi:type="relalg:VertexVariable" name="sw" vertexLabel="//@elements.2" attributeVariables="//@elements.7"/>
+  <elements xsi:type="relalg:VertexVariable" name="swP" vertexLabel="//@elements.3" attributeVariables="//@elements.8"/>
+  <elements xsi:type="relalg:VertexVariable" name="semaphore" vertexLabel="//@elements.1"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e1" dontCare="true" edgeLabel="//@elements.4"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e2" dontCare="true" edgeLabel="//@elements.5"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e3" dontCare="true" edgeLabel="//@elements.6"/>
+</relalg:Container>
