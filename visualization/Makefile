@@ -1,12 +1,6 @@
 COMPILER=xelatex -interaction=batchmode
 
-DOCUMENTS = \
-  connectedsegments \
-	poslength \
-	routesensor \
-	semaphoreneighbor \
-	switchmonitored \
-	switchset
+DOCUMENTS := $(shell find $(SOURCEDIR) -name '*.tex')
 
 all:
 	@$(foreach DOCUMENT, $(DOCUMENTS),\

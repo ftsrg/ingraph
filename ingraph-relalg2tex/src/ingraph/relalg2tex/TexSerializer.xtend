@@ -50,8 +50,8 @@ abstract class TexSerializer {
 			«IF full»
 				\documentclass{minimal}
 				
-				\input{relalg-packages}
-				\input{relalg-commands}
+				\input{inputs/relalg-packages}
+				\input{inputs/relalg-commands}
 				
 				\begin{document}
 			«ENDIF»
