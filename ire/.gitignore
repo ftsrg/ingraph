@@ -27,4 +27,6 @@ results/
 benchmarkresults/
 
 .gradle/
-
+gradle/
+gradlew
+gradlew.bat
