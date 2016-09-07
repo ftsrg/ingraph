@@ -171,7 +171,7 @@ atom : numberLiteral
      | TRUE
      | FALSE
      | NULL
-     | ( COUNT '(' '*' ')' )
+     | ( COUNT ws '(' ws '*' ws ')' )
      | mapLiteral
      | listComprehension
      | ( '[' ws expression ws ( ',' ws expression ws )* ']' )
