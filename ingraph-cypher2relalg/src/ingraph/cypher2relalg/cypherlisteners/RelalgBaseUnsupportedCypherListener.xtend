@@ -79,7 +79,7 @@ class RelalgBaseUnsupportedCypherListener extends CypherBaseListener {
 	override enterFilterExpression(CypherParser.FilterExpressionContext ctx) { i_am_unsupported(ctx); }
 	override enterIdInColl(CypherParser.IdInCollContext ctx) { i_am_unsupported(ctx); }
 	override enterFunctionInvocation(CypherParser.FunctionInvocationContext ctx) { i_am_unsupported(ctx); }
-	override enterFunctionName(CypherParser.FunctionNameContext ctx) { i_am_unsupported(ctx); }
+	override enterFunctionName(CypherParser.FunctionNameContext ctx) { } // handled in enterFunctionInvocation
 	override enterListComprehension(CypherParser.ListComprehensionContext ctx) { i_am_unsupported(ctx); }
 	override enterPropertyLookup(CypherParser.PropertyLookupContext ctx) { } // expr
 	override enterVariable(CypherParser.VariableContext ctx) { }
