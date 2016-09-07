@@ -262,16 +262,6 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_31() {
-        RelalgParser.parse('''
-        CREATE (m {id: 0})
-        WITH {first: m.id} AS m
-        WITH {second: m.first} AS m
-        RETURN m.second
-        ''')
-    }
-        
-    @Test
     def void testReturnAcceptance2_32() {
         RelalgParser.parse('''
         MATCH (a)

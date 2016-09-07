@@ -22,26 +22,10 @@ class ExpressionAcceptanceTest {
     }
         
     @Test
-    def void testExpressionAcceptance_03() {
-        RelalgParser.parse('''
-        CREATE (n {name: 'Apa'})
-        RETURN n['nam' + 'e'] AS value
-        ''')
-    }
-        
-    @Test
     def void testExpressionAcceptance_04() {
         RelalgParser.parse('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
-        ''')
-    }
-        
-    @Test
-    def void testExpressionAcceptance_05() {
-        RelalgParser.parse('''
-        CREATE (n {name: 'Apa'})
-        RETURN n[$idx] AS value
         ''')
     }
         

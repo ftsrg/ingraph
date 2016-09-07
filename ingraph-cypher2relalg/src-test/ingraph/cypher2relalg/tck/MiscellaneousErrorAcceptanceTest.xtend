@@ -14,14 +14,6 @@ class MiscellaneousErrorAcceptanceTest {
     }
         
     @Test
-    def void testMiscellaneousErrorAcceptance_02() {
-        RelalgParser.parse('''
-        CREATE (a), (b)
-        MERGE (a)-[r:X {p: null}]->(b)
-        ''')
-    }
-        
-    @Test
     def void testMiscellaneousErrorAcceptance_03() {
         RelalgParser.parse('''
         MERGE ({p: null})
@@ -66,15 +58,6 @@ class MiscellaneousErrorAcceptanceTest {
     }
         
     @Test
-    def void testMiscellaneousErrorAcceptance_08() {
-        RelalgParser.parse('''
-        MATCH (a)
-        CREATE (a)-[:KNOWS]->(b {name: missing})
-        RETURN b
-        ''')
-    }
-        
-    @Test
     def void testMiscellaneousErrorAcceptance_09() {
         RelalgParser.parse('''
         MATCH (a)
@@ -88,15 +71,6 @@ class MiscellaneousErrorAcceptanceTest {
         RelalgParser.parse('''
         MATCH (a)
         DELETE x
-        ''')
-    }
-        
-    @Test
-    def void testMiscellaneousErrorAcceptance_11() {
-        RelalgParser.parse('''
-        MATCH (a)
-        CREATE (a {name: 'foo'})
-        RETURN a
         ''')
     }
         
@@ -151,32 +125,10 @@ class MiscellaneousErrorAcceptanceTest {
     }
         
     @Test
-    def void testMiscellaneousErrorAcceptance_17() {
-        RelalgParser.parse('''
-        CREATE (a)-[:FOO]-(b)
-        ''')
-    }
-        
-    @Test
-    def void testMiscellaneousErrorAcceptance_18() {
-        RelalgParser.parse('''
-        CREATE (a)<-[:FOO]->(b)
-        ''')
-    }
-        
-    @Test
     def void testMiscellaneousErrorAcceptance_19() {
         RelalgParser.parse('''
         MATCH (n)
         DELETE n:Person
-        ''')
-    }
-        
-    @Test
-    def void testMiscellaneousErrorAcceptance_20() {
-        RelalgParser.parse('''
-        CREATE (a)
-        SET a.foo = [{x: 1}]
         ''')
     }
         

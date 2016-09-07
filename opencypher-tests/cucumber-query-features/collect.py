@@ -9,7 +9,7 @@ import sys
 
 def indent(lines):
     padding = '        '
-    return padding + ('\n' + padding).join(lines.split('\n'))
+    return ('\n' + padding).join(lines.split('\n'))
 
 filenames = glob.glob('*.feature')
 for filename in filenames:
@@ -37,6 +37,10 @@ class %sTest {
         i += 1
         indentation_pattern = re.compile('^\s*', re.MULTILINE)
         query = indentation_pattern.sub("", match)
+
+        if "CREATE " in query:
+            continue
+
         with open("../../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
             query_file.write(query + "\n")
 
@@ -44,7 +48,7 @@ class %sTest {
     @Test
     def void test%s_%02d() {
         RelalgParser.parse('''
-%s
+        %s
         ''')
     }
         """ % (filename_without_extension, i, indent(query))

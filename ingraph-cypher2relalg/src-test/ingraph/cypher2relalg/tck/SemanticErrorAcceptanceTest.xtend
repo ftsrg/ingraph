@@ -109,13 +109,6 @@ class SemanticErrorAcceptanceTest {
     }
         
     @Test
-    def void testSemanticErrorAcceptance_13() {
-        RelalgParser.parse('''
-        CREATE ()-[:FOO*2]->()
-        ''')
-    }
-        
-    @Test
     def void testSemanticErrorAcceptance_14() {
         RelalgParser.parse('''
         MERGE (a)
@@ -167,42 +160,10 @@ class SemanticErrorAcceptanceTest {
     }
         
     @Test
-    def void testSemanticErrorAcceptance_20() {
-        RelalgParser.parse('''
-        MATCH (a)
-        CREATE (a)
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_21() {
-        RelalgParser.parse('''
-        MATCH (a)
-        CREATE (a)
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_22() {
-        RelalgParser.parse('''
-        MATCH ()-[r]->()
-        CREATE ()-[r]->()
-        ''')
-    }
-        
-    @Test
     def void testSemanticErrorAcceptance_23() {
         RelalgParser.parse('''
         MATCH (a)-[r]->(b)
         MERGE (a)-[r]->(b)
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_24() {
-        RelalgParser.parse('''
-        MERGE (n)
-        ON CREATE SET x.foo = 1
         ''')
     }
         
@@ -243,15 +204,6 @@ class SemanticErrorAcceptanceTest {
         RelalgParser.parse('''
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_30() {
-        RelalgParser.parse('''
-        CREATE (n {prop: 'foo'})
-        WITH n.prop AS n2
-        RETURN n2.prop
         ''')
     }
         
@@ -339,40 +291,10 @@ class SemanticErrorAcceptanceTest {
     }
         
     @Test
-    def void testSemanticErrorAcceptance_41() {
-        RelalgParser.parse('''
-        CREATE ()-->()
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_42() {
-        RelalgParser.parse('''
-        CREATE (a), (b)
-        MERGE (a)-->(b)
-        ''')
-    }
-        
-    @Test
     def void testSemanticErrorAcceptance_43() {
         RelalgParser.parse('''
         MATCH (a), (b)
         MERGE (a)-[NO_COLON]->(b)
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_44() {
-        RelalgParser.parse('''
-        CREATE ()-[:A|:B]->()
-        ''')
-    }
-        
-    @Test
-    def void testSemanticErrorAcceptance_45() {
-        RelalgParser.parse('''
-        CREATE (a), (b)
-        MERGE (a)-[:A|:B]->(b)
         ''')
     }
         
