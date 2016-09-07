@@ -280,7 +280,7 @@ atom : numberLiteral
      | FALSE
      | NULL
      | caseExpression
-     | ( COUNT ws '(' ws '*' ws ')' )
+     | ( COUNT '(' '*' ')' )
      | mapLiteral
      | listComprehension
      | ( '[' ws expression ws ( ',' ws expression ws )* ']' )
