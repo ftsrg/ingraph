@@ -42,7 +42,7 @@ class %sTest {
         indentation_pattern = re.compile('^\s*', re.MULTILINE)
         query = indentation_pattern.sub("", match[0])
 
-        if "CREATE " in query:
+        if ("CREATE " in query) or ("DELETE " in query) or ("SET " in query):
             continue
 
         with open("../../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
