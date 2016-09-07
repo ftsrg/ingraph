@@ -24,6 +24,7 @@ target/
 testdata/debugger
 models/
 results/
+benchmarkresults/
 
 .gradle/
 
