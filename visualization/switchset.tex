@@ -1,0 +1,27 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw}}$}
+		[. {$\alldifferent{}$}
+			[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
+				[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
+					[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}
+						[. {$\getvertices{semaphore}{Semaphore}$}
+						]
+					]
+				]
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

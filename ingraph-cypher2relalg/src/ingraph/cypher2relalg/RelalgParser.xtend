@@ -18,12 +18,13 @@ import relalg.Container
 
 class RelalgParser {
 
-	def static parse(String queryName) {
-		println("Parsing query: " + queryName)
-
+	def static parseFile(String queryName) {
 		val filepath = "../queries/" + queryName + ".cyp"
 		val query = FileUtils.readFileToString(new File(filepath), "UTF-8")
-
+		parse(query)
+	}	
+	
+	def static parse(String query) {
 		val input = new ANTLRInputStream(query)
 		val lexer = new CypherLexer(input)
 		val tokenStream = new CommonTokenStream(lexer)
