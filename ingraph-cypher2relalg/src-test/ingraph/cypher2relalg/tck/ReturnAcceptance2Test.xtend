@@ -7,42 +7,6 @@ import ingraph.cypher2relalg.RelalgParser
 class ReturnAcceptance2Test {
     
     @Test
-    def void testReturnAcceptance2_01() {
-        RelalgParser.parse('''
-        MATCH (n)
-        DELETE n
-        RETURN n.p
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_02() {
-        RelalgParser.parse('''
-        MATCH (n)
-        DELETE n
-        RETURN labels(n)
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_03() {
-        RelalgParser.parse('''
-        MATCH ()-[r]->()
-        DELETE r
-        RETURN r.p
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_04() {
-        RelalgParser.parse('''
-        MATCH ()-[r]->()
-        DELETE r
-        RETURN type(r)
-        ''')
-    }
-        
-    @Test
     def void testReturnAcceptance2_05() {
         RelalgParser.parse('''
         RETURN '\u01FF' AS a
@@ -89,24 +53,6 @@ class ReturnAcceptance2Test {
         RelalgParser.parse('''
         MATCH p = (a:Start)-->(b)
         RETURN *
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_11() {
-        RelalgParser.parse('''
-        MATCH (n)
-        SET n.x = [1, 2, 3]
-        RETURN size(n.x)
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_12() {
-        RelalgParser.parse('''
-        MATCH (n)
-        SET n.x = [1, 2, 3]
-        RETURN size(n.x)
         ''')
     }
         
@@ -165,15 +111,6 @@ class ReturnAcceptance2Test {
     def void testReturnAcceptance2_19() {
         RelalgParser.parse('''
         RETURN size([[], []] + [[]]) AS l
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_20() {
-        RelalgParser.parse('''
-        MATCH (n)
-        SET n.array = [1, 2, 3, 4, 5]
-        RETURN tail(tail(n.array))
         ''')
     }
         

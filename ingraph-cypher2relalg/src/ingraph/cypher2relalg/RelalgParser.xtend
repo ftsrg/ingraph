@@ -25,6 +25,9 @@ class RelalgParser {
 	}	
 	
 	def static parse(String query) {
+		println(query)
+		println
+		
 		val input = new ANTLRInputStream(query)
 		val lexer = new CypherLexer(input)
 		val tokenStream = new CommonTokenStream(lexer)
