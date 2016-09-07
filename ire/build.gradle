@@ -11,8 +11,6 @@ ext.gsCollectionsVersion = "7.0.1"
 
 dependencies {
     compile "org.scala-lang:scala-library:$scalaVersion"
-    compile "com.twitter:chill_2.11:0.5.2"
-    compile "com.twitter:util-eval_2.11:6.35.0"
     compile "com.typesafe.akka:akka-actor_2.11:$akkaVersion"
     compile "com.typesafe.akka:akka-remote_2.11:$akkaVersion"
     compile "com.goldmansachs:gs-collections:$gsCollectionsVersion"
