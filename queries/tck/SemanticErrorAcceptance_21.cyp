@@ -1,2 +1,0 @@
-MATCH (a)
-CREATE (a)

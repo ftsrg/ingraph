@@ -61,15 +61,6 @@ class ReturnAcceptance2Test {
     @Test
     def void testReturnAcceptance2_07() {
         RelalgParser.parse('''
-        MATCH (a)
-        RETURN DISTINCT a.name
-        ORDER BY a.age
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_08() {
-        RelalgParser.parse('''
         MATCH (n)
         RETURN n
         ORDER BY n
@@ -77,7 +68,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_09() {
+    def void testReturnAcceptance2_08() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN n.name, count(*) AS foo
@@ -86,7 +77,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_10() {
+    def void testReturnAcceptance2_09() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN DISTINCT n.name
@@ -94,10 +85,19 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_11() {
+    def void testReturnAcceptance2_10() {
         RelalgParser.parse('''
         MATCH p = (a:Start)-->(b)
         RETURN *
+        ''')
+    }
+        
+    @Test
+    def void testReturnAcceptance2_11() {
+        RelalgParser.parse('''
+        MATCH (n)
+        SET n.x = [1, 2, 3]
+        RETURN size(n.x)
         ''')
     }
         
@@ -113,21 +113,12 @@ class ReturnAcceptance2Test {
     @Test
     def void testReturnAcceptance2_13() {
         RelalgParser.parse('''
-        MATCH (n)
-        SET n.x = [1, 2, 3]
-        RETURN size(n.x)
-        ''')
-    }
-        
-    @Test
-    def void testReturnAcceptance2_14() {
-        RelalgParser.parse('''
         RETURN sqrt(12.96)
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_15() {
+    def void testReturnAcceptance2_14() {
         RelalgParser.parse('''
         MATCH (me)-[r1:ATE]->()<-[r2:ATE]-(you)
         WHERE me.name = 'Michael'
@@ -138,7 +129,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_16() {
+    def void testReturnAcceptance2_15() {
         RelalgParser.parse('''
         MATCH ()-->()
         WITH 1 AS x
@@ -148,7 +139,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_17() {
+    def void testReturnAcceptance2_16() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN n
@@ -156,14 +147,14 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_18() {
+    def void testReturnAcceptance2_17() {
         RelalgParser.parse('''
         RETURN {a: 1, b: 'foo'}
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_19() {
+    def void testReturnAcceptance2_18() {
         RelalgParser.parse('''
         MATCH (a)
         RETURN exists(a.id), a IS NOT NULL
@@ -171,14 +162,14 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_20() {
+    def void testReturnAcceptance2_19() {
         RelalgParser.parse('''
         RETURN size([[], []] + [[]]) AS l
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_21() {
+    def void testReturnAcceptance2_20() {
         RelalgParser.parse('''
         MATCH (n)
         SET n.array = [1, 2, 3, 4, 5]
@@ -187,7 +178,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_22() {
+    def void testReturnAcceptance2_21() {
         RelalgParser.parse('''
         MATCH (a)
         RETURN a.count
@@ -198,14 +189,14 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_23() {
+    def void testReturnAcceptance2_22() {
         RelalgParser.parse('''
         RETURN substring('0123456789', 1) AS s
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_24() {
+    def void testReturnAcceptance2_23() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN *
@@ -214,7 +205,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_25() {
+    def void testReturnAcceptance2_24() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN DISTINCT n.id AS id
@@ -223,7 +214,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_26() {
+    def void testReturnAcceptance2_25() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN DISTINCT n
@@ -232,21 +223,21 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_27() {
+    def void testReturnAcceptance2_26() {
         RelalgParser.parse('''
         RETURN 1 + (2 - (3 * (4 / (5 ^ (6 % null))))) AS a
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_28() {
+    def void testReturnAcceptance2_27() {
         RelalgParser.parse('''
         RETURN [[1]][0][0]
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_29() {
+    def void testReturnAcceptance2_28() {
         RelalgParser.parse('''
         MATCH (a)
         RETURN a.id AS a, a.id
@@ -254,7 +245,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_30() {
+    def void testReturnAcceptance2_29() {
         RelalgParser.parse('''
         MATCH (a)
         RETURN a, count(a) + 3
@@ -262,7 +253,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_32() {
+    def void testReturnAcceptance2_31() {
         RelalgParser.parse('''
         MATCH (a)
         WITH a.a AS a, count(*) AS count
@@ -271,7 +262,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_33() {
+    def void testReturnAcceptance2_32() {
         RelalgParser.parse('''
         MATCH (person:Person)<--(message)<-[like]-(:Person)
         WITH like.creationDate AS likeTime, person AS person
@@ -283,21 +274,21 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_34() {
+    def void testReturnAcceptance2_33() {
         RelalgParser.parse('''
         RETURN [1, 10, 100] + [4, 5] AS foo
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_35() {
+    def void testReturnAcceptance2_34() {
         RelalgParser.parse('''
         RETURN [false, true] + false AS foo
         ''')
     }
         
     @Test
-    def void testReturnAcceptance2_36() {
+    def void testReturnAcceptance2_35() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN count(DISTINCT {foo: n.list}) AS count
@@ -305,7 +296,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_37() {
+    def void testReturnAcceptance2_36() {
         RelalgParser.parse('''
         MATCH (n)
         WITH DISTINCT {foo: n.list} AS map
@@ -314,7 +305,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_38() {
+    def void testReturnAcceptance2_37() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN count(DISTINCT {foo: [[n.list, n.list], [n.list, n.list]]}) AS count
@@ -322,7 +313,7 @@ class ReturnAcceptance2Test {
     }
         
     @Test
-    def void testReturnAcceptance2_39() {
+    def void testReturnAcceptance2_38() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN count(DISTINCT {foo: [{bar: n.list}, {baz: {apa: n.list}}]}) AS count

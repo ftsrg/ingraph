@@ -1,1 +1,2 @@
-RETURN [[1]][0][0]
+MATCH (a)
+RETURN a.id AS a, a.id

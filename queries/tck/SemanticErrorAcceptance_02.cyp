@@ -1,4 +1,2 @@
-MATCH (s)
-WHERE s.name = undefinedVariable
-AND s.age = 10
-RETURN s
+WITH [{prop: 0}, 1] AS list
+RETURN (list[1]).prop

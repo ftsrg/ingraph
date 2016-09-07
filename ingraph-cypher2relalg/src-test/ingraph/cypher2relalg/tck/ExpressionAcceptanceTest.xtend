@@ -96,14 +96,6 @@ class ExpressionAcceptanceTest {
     @Test
     def void testExpressionAcceptance_14() {
         RelalgParser.parse('''
-        WITH [1, 2, 3, 4, 5] AS list, 3.14 AS idx
-        RETURN list[idx]
-        ''')
-    }
-        
-    @Test
-    def void testExpressionAcceptance_15() {
-        RelalgParser.parse('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')

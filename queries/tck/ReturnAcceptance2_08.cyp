@@ -1,3 +1,3 @@
 MATCH (n)
-RETURN n
-ORDER BY n
+RETURN n.name, count(*) AS foo
+ORDER BY n.name

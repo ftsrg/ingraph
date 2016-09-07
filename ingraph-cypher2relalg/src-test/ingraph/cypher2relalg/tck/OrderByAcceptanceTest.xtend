@@ -157,15 +157,5 @@ class OrderByAcceptanceTest {
         ''')
     }
         
-    @Test
-    def void testOrderByAcceptance_17() {
-        RelalgParser.parse('''
-        MATCH (p:Person)
-        RETURN p.name AS name
-        ORDER BY p.name
-        LIMIT -1
-        ''')
-    }
-        
 }
     

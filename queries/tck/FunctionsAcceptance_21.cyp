@@ -1,2 +1,3 @@
-MATCH ()-[r1]->()-[r2]->()
-RETURN type(r1), type(r2)
+MATCH (a)-[r]->()
+WITH [r, 1] AS list
+RETURN type(list[0])

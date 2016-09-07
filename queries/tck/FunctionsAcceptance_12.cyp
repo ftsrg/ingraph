@@ -1,3 +1,2 @@
-MATCH (n:Person)
-WHERE exists(n['prop'])
-RETURN n
+MATCH (n)
+RETURN percentileDisc(n.prop, $percentile) AS p

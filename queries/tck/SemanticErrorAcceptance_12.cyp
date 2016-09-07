@@ -1,1 +1,0 @@
-RETURN NOT 'foo'

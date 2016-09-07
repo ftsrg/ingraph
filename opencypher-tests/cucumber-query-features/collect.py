@@ -30,13 +30,17 @@ class %sTest {
     with open(filename, 'r') as file:
         content = file.read()
 
-    query_pattern = re.compile('When executing query:$\s*"""(.*?)\s*"""', re.MULTILINE | re.DOTALL)
+    query_pattern = re.compile('When executing query:$\s*"""(.*?)\s*"""$\s*Then (.*?)$', re.MULTILINE | re.DOTALL)
     matches = re.findall(query_pattern, content)
     i = 0
     for match in matches:
+        then = match[1]
+        if "SyntaxError" in then:
+            continue
+
         i += 1
         indentation_pattern = re.compile('^\s*', re.MULTILINE)
-        query = indentation_pattern.sub("", match)
+        query = indentation_pattern.sub("", match[0])
 
         if "CREATE " in query:
             continue

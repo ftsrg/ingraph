@@ -1,2 +1,3 @@
-CREATE ()<-[:T2]-(n:Foo),
-(n:Bar)<-[:T1]-()
+MATCH (n)
+REMOVE n:Foo
+RETURN labels(n)

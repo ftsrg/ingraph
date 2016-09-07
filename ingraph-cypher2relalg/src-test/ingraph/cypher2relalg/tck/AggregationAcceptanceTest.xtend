@@ -130,20 +130,13 @@ class AggregationAcceptanceTest {
     @Test
     def void testAggregationAcceptance_16() {
         RelalgParser.parse('''
-        RETURN count(count(*))
-        ''')
-    }
-        
-    @Test
-    def void testAggregationAcceptance_17() {
-        RelalgParser.parse('''
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
     }
         
     @Test
-    def void testAggregationAcceptance_18() {
+    def void testAggregationAcceptance_17() {
         RelalgParser.parse('''
         MATCH (a:A), (b:X)
         RETURN count(a) * 10 + count(b) * 5 AS x
@@ -152,7 +145,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_19() {
+    def void testAggregationAcceptance_18() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN count(n), collect(n)
@@ -160,7 +153,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_20() {
+    def void testAggregationAcceptance_19() {
         RelalgParser.parse('''
         MATCH ()
         RETURN count(*)
@@ -168,7 +161,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_21() {
+    def void testAggregationAcceptance_20() {
         RelalgParser.parse('''
         MATCH p = (a)-[*]->(b)
         RETURN collect(nodes(p)) AS paths, length(p) AS l
@@ -177,7 +170,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_22() {
+    def void testAggregationAcceptance_21() {
         RelalgParser.parse('''
         MATCH p = (a:T {name: 'a'})-[:R*]->(other:T)
         WHERE other <> a
@@ -187,7 +180,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_23() {
+    def void testAggregationAcceptance_22() {
         RelalgParser.parse('''
         MATCH (a:A), (b:B)
         RETURN coalesce(a.prop, b.prop) AS foo,
@@ -197,7 +190,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_24() {
+    def void testAggregationAcceptance_23() {
         RelalgParser.parse('''
         UNWIND [42] AS props
         WITH props WHERE props > 32
@@ -208,7 +201,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_25() {
+    def void testAggregationAcceptance_24() {
         RelalgParser.parse('''
         UNWIND range(1000000, 2000000) AS i
         WITH i
@@ -218,7 +211,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_26() {
+    def void testAggregationAcceptance_25() {
         RelalgParser.parse('''
         MATCH ()-[r]-()
         RETURN count(r)
@@ -226,7 +219,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_27() {
+    def void testAggregationAcceptance_26() {
         RelalgParser.parse('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
@@ -234,7 +227,7 @@ class AggregationAcceptanceTest {
     }
         
     @Test
-    def void testAggregationAcceptance_28() {
+    def void testAggregationAcceptance_27() {
         RelalgParser.parse('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)

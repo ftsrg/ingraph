@@ -1,3 +1,2 @@
-MATCH (a:A), (b:X)
-RETURN count(a) * 10 + count(b) * 5 AS x
-ORDER BY x
+MATCH (n)
+RETURN count(n), collect(n)

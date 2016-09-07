@@ -1,2 +1,2 @@
 MATCH (n)
-RETURN percentileDisc(n.prop, $percentile) AS p
+RETURN percentileDisc(n.prop, $param)

@@ -52,7 +52,7 @@ class LabelsAcceptanceTest {
     }
         
     @Test
-    def void testLabelsAcceptance_15() {
+    def void testLabelsAcceptance_10() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN labels(n)
@@ -60,7 +60,7 @@ class LabelsAcceptanceTest {
     }
         
     @Test
-    def void testLabelsAcceptance_16() {
+    def void testLabelsAcceptance_11() {
         RelalgParser.parse('''
         MATCH (n)
         REMOVE n:Foo
@@ -69,7 +69,7 @@ class LabelsAcceptanceTest {
     }
         
     @Test
-    def void testLabelsAcceptance_17() {
+    def void testLabelsAcceptance_12() {
         RelalgParser.parse('''
         MATCH (n)
         REMOVE n:Bar

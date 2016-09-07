@@ -1,3 +1,2 @@
-MATCH (a)
-OPTIONAL MATCH (a)-[r:NOT_THERE]->()
-RETURN type(r)
+MATCH p = (n)-[r:T]->()
+RETURN [x IN [r, <invalid>] | type(x) ] AS list

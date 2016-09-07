@@ -1,1 +1,2 @@
-RETURN reverse('raksO')
+WITH <map> AS map
+RETURN map.name IS NOT NULL

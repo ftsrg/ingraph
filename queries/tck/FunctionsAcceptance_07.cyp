@@ -1,1 +1,1 @@
-RETURN properties(1)
+RETURN properties(null)

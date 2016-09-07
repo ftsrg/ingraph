@@ -1,2 +1,2 @@
-WITH <map> AS map
-RETURN exists(map.name) AS exists
+MATCH (n)
+RETURN percentileCont(n.prop, $percentile) AS p

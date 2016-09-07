@@ -57,40 +57,19 @@ class FunctionsAcceptanceTest {
     @Test
     def void testFunctionsAcceptance_07() {
         RelalgParser.parse('''
-        RETURN properties(1)
+        RETURN properties(null)
         ''')
     }
         
     @Test
     def void testFunctionsAcceptance_08() {
         RelalgParser.parse('''
-        RETURN properties('Cypher')
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_09() {
-        RelalgParser.parse('''
-        RETURN properties([true, false])
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_10() {
-        RelalgParser.parse('''
-        RETURN properties(null)
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_11() {
-        RelalgParser.parse('''
         RETURN reverse('raksO')
         ''')
     }
         
     @Test
-    def void testFunctionsAcceptance_12() {
+    def void testFunctionsAcceptance_09() {
         RelalgParser.parse('''
         MATCH (n:Person)
         WHERE exists(n['prop'])
@@ -99,7 +78,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_13() {
+    def void testFunctionsAcceptance_10() {
         RelalgParser.parse('''
         WITH <map> AS map
         RETURN exists(map.name) AS exists
@@ -107,7 +86,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_14() {
+    def void testFunctionsAcceptance_11() {
         RelalgParser.parse('''
         WITH <map> AS map
         RETURN map.name IS NOT NULL
@@ -115,7 +94,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_15() {
+    def void testFunctionsAcceptance_12() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN percentileDisc(n.prop, $percentile) AS p
@@ -123,7 +102,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_16() {
+    def void testFunctionsAcceptance_13() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN percentileCont(n.prop, $percentile) AS p
@@ -131,7 +110,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_17() {
+    def void testFunctionsAcceptance_14() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN percentileCont(n.prop, $param)
@@ -139,7 +118,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_18() {
+    def void testFunctionsAcceptance_15() {
         RelalgParser.parse('''
         MATCH (n)
         RETURN percentileDisc(n.prop, $param)
@@ -147,7 +126,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_19() {
+    def void testFunctionsAcceptance_16() {
         RelalgParser.parse('''
         MATCH (n:S)
         WITH n, size([(n)-->() | 1]) AS deg
@@ -159,7 +138,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_20() {
+    def void testFunctionsAcceptance_17() {
         RelalgParser.parse('''
         MATCH ()-[r]->()
         RETURN type(r)
@@ -167,7 +146,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_21() {
+    def void testFunctionsAcceptance_18() {
         RelalgParser.parse('''
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
@@ -175,7 +154,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_22() {
+    def void testFunctionsAcceptance_19() {
         RelalgParser.parse('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
@@ -184,7 +163,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_23() {
+    def void testFunctionsAcceptance_20() {
         RelalgParser.parse('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:T]->()
@@ -193,7 +172,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_24() {
+    def void testFunctionsAcceptance_21() {
         RelalgParser.parse('''
         MATCH (a)-[r]->()
         WITH [r, 1] AS list
@@ -202,7 +181,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_25() {
+    def void testFunctionsAcceptance_22() {
         RelalgParser.parse('''
         MATCH p = (n)-[r:T]->()
         RETURN [x IN [r, <invalid>] | type(x) ] AS list
@@ -210,7 +189,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_26() {
+    def void testFunctionsAcceptance_23() {
         RelalgParser.parse('''
         MATCH (a)
         WITH [a, 1] AS list
@@ -219,15 +198,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_27() {
-        RelalgParser.parse('''
-        MATCH p = (a)
-        RETURN labels(p) AS l
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_28() {
+    def void testFunctionsAcceptance_24() {
         RelalgParser.parse('''
         MATCH (a)
         WITH [a, 1] AS list
@@ -236,7 +207,7 @@ class FunctionsAcceptanceTest {
     }
         
     @Test
-    def void testFunctionsAcceptance_29() {
+    def void testFunctionsAcceptance_25() {
         RelalgParser.parse('''
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b

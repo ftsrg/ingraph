@@ -1,5 +1,1 @@
-MATCH (a)
-RETURN a.count
-ORDER BY a.count
-SKIP 10
-LIMIT 10
+RETURN substring('0123456789', 1) AS s

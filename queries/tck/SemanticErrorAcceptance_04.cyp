@@ -1,3 +1,1 @@
-MATCH (n)
-WHERE n.id IN 1
-RETURN 1
+RETURN range(2, 8, 0)

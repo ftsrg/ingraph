@@ -1,3 +1,3 @@
-MATCH (a)
-RETURN DISTINCT a.name
-ORDER BY a.age
+MATCH (n)
+RETURN n
+ORDER BY n

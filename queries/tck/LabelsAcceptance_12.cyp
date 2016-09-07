@@ -1,2 +1,3 @@
-CREATE (n:Foo)
-CREATE (n:Bar)-[:OWNS]->(:Dog)
+MATCH (n)
+REMOVE n:Bar
+RETURN labels(n)

@@ -1,2 +1,2 @@
-WITH <map> AS map
-RETURN map.name IS NOT NULL
+MATCH (n)
+RETURN percentileCont(n.prop, $param)
