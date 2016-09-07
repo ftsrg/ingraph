@@ -48,15 +48,15 @@ class RelalgBaseUnsupportedCypherListener extends CypherBaseListener {
 	override enterPatternElement(CypherParser.PatternElementContext ctx) { i_am_unsupported(ctx); }
 	override enterNodePattern(CypherParser.NodePatternContext ctx) { i_am_unsupported(ctx); }
 	override enterPatternElementChain(CypherParser.PatternElementChainContext ctx) { i_am_unsupported(ctx); }
-	override enterRelationshipPattern(CypherParser.RelationshipPatternContext ctx) { i_am_unsupported(ctx); }
+	override enterRelationshipPattern(CypherParser.RelationshipPatternContext ctx) { } // processed directly in patternElementChain
 	override enterRelationshipDetail(CypherParser.RelationshipDetailContext ctx) { i_am_unsupported(ctx); }
 	override enterProperties(CypherParser.PropertiesContext ctx) { i_am_unsupported(ctx); }
-	override enterRelationshipTypes(CypherParser.RelationshipTypesContext ctx) { i_am_unsupported(ctx); }
+	override enterRelationshipTypes(CypherParser.RelationshipTypesContext ctx) { } // processed directly in relationshipDetail (has TODO to handle multiple types)
 	override enterNodeLabels(CypherParser.NodeLabelsContext ctx) { } // list of nodeLabel
 	override enterNodeLabel(CypherParser.NodeLabelContext ctx) { } // text node, prepended with :
 	override enterRangeLiteral(CypherParser.RangeLiteralContext ctx) { i_am_unsupported(ctx); }
 	override enterLabelName(CypherParser.LabelNameContext ctx) { } // text node
-	override enterRelTypeName(CypherParser.RelTypeNameContext ctx) { i_am_unsupported(ctx); }
+	override enterRelTypeName(CypherParser.RelTypeNameContext ctx) { }  // processed directly in relationshipDetail (has TODO to handle multiple type)
 
 	// expression...
 	override enterExpression(CypherParser.ExpressionContext ctx) { }

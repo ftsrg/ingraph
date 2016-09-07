@@ -262,6 +262,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterRelationshipDetail(RelationshipDetailContext ctx) {
 		val variableCtx = ctx.getChild(VariableContext, 0)
+		//TODO: process possible multiple relationshipTypes
 		val relationshipTypesCtx = ctx.getChild(RelationshipTypesContext, 0)
 
 		val edgeVariableName = variableCtx?.getChild(SymbolicNameContext, 0)?.text
