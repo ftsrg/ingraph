@@ -118,17 +118,25 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	override enterReturnItem(ReturnItemContext ctx) {
 		// TODO: process renaming commands
 		// val renamedVariableCtx = ctx.variable
-		// dirty hack to traverse down to the single variable
-		val returnItemName = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)?.
+		// dirty hack to traverse down to the single variable/fuctionInvocation etc.
+		val returnAtomFirstChild = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)?.
 			expression8?.expression7?.expression6(0).expression5(0)?.expression4(0)?.expression3?.expression2(0)?.atom?.
-			variable.symbolicName.text
+			getChild(0)
 
-		if (vertexVariableFactory.elements.containsKey(returnItemName)) {
-			returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
-		} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
-			returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
-		} else {
-			println("WARNING: return variable type not handled: " + returnItemName)
+		switch (returnAtomFirstChild) {
+			VariableContext: {
+				val returnItemName = (returnAtomFirstChild as VariableContext).symbolicName.text
+
+				if (vertexVariableFactory.elements.containsKey(returnItemName)) {
+					returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
+				} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
+					returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
+				} else {
+					i_am_unsupported("WARNING: return variable type not handled: " + returnItemName)
+				}
+			}
+			// TODO: various atom types to be handled
+			default: i_am_unsupported(returnAtomFirstChild)
 		}
 	}
 

@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.cypherlisteners
 
 import ingraph.antlr.CypherBaseListener
 import ingraph.antlr.CypherParser
-import org.antlr.v4.runtime.RuleContext
+import org.antlr.v4.runtime.tree.ParseTree
 
 /**
  * Overrides all enter* methods of the CyherListener to throw
@@ -11,8 +11,11 @@ import org.antlr.v4.runtime.RuleContext
  * Some methods are defined not to throw
  */
 class RelalgBaseUnsupportedCypherListener extends CypherBaseListener {
-	def i_am_unsupported(RuleContext ctx) {
+	def i_am_unsupported(ParseTree ctx) {
 		throw new UnsupportedOperationException(ctx.text)
+	}
+	def i_am_unsupported(String s) {
+		throw new UnsupportedOperationException(s)
 	}
 	override enterCypher(CypherParser.CypherContext ctx) { } // top-level rule
 	override enterStatement(CypherParser.StatementContext ctx) { } // just a passthrough to query
