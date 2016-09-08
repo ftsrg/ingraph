@@ -18,7 +18,7 @@ package relalg;
  * @model abstract="true"
  * @generated
  */
-public interface Variable extends NamedElement {
+public interface Variable extends NamedElement, ReturnableElement {
 	/**
 	 * Returns the value of the '<em><b>Dont Care</b></em>' attribute.
 	 * The default value is <code>"false"</code>.

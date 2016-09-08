@@ -73,6 +73,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ATTRIBUTE_VARIABLE: return createAttributeVariable();
 			case RelalgPackage.UNION_OPERATOR: return createUnionOperator();
 			case RelalgPackage.CONTAINER: return createContainer();
+			case RelalgPackage.EXPRESSION: return createExpression();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -88,6 +89,8 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 		switch (eDataType.getClassifierID()) {
 			case RelalgPackage.DIRECTION:
 				return createDirectionFromString(eDataType, initialValue);
+			case RelalgPackage.COMPARISON_OPERATOR:
+				return createComparisonOperatorFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -103,6 +106,8 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 		switch (eDataType.getClassifierID()) {
 			case RelalgPackage.DIRECTION:
 				return convertDirectionToString(eDataType, instanceValue);
+			case RelalgPackage.COMPARISON_OPERATOR:
+				return convertComparisonOperatorToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -273,6 +278,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Expression createExpression() {
+		ExpressionImpl expression = new ExpressionImpl();
+		return expression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Direction createDirectionFromString(EDataType eDataType, String initialValue) {
 		Direction result = Direction.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -285,6 +300,26 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * @generated
 	 */
 	public String convertDirectionToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ComparisonOperator createComparisonOperatorFromString(EDataType eDataType, String initialValue) {
+		ComparisonOperator result = ComparisonOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertComparisonOperatorToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

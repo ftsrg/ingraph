@@ -1106,6 +1106,71 @@ public interface RelalgPackage extends EPackage {
 	int CONTAINER_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.ReturnableElementImpl <em>Returnable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ReturnableElementImpl
+	 * @see relalg.impl.RelalgPackageImpl#getReturnableElement()
+	 * @generated
+	 */
+	int RETURNABLE_ELEMENT = 23;
+
+	/**
+	 * The number of structural features of the '<em>Returnable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURNABLE_ELEMENT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Returnable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURNABLE_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.ExpressionImpl <em>Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getExpression()
+	 * @generated
+	 */
+	int EXPRESSION = 22;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION__TEXT = RETURNABLE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_FEATURE_COUNT = RETURNABLE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_OPERATION_COUNT = RETURNABLE_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1113,7 +1178,18 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 22;
+	int DIRECTION = 24;
+
+
+	/**
+	 * The meta object id for the '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.ComparisonOperator
+	 * @see relalg.impl.RelalgPackageImpl#getComparisonOperator()
+	 * @generated
+	 */
+	int COMPARISON_OPERATOR = 25;
 
 
 	/**
@@ -1546,6 +1622,37 @@ public interface RelalgPackage extends EPackage {
 	EReference getContainer_Elements();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.Expression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Expression</em>'.
+	 * @see relalg.Expression
+	 * @generated
+	 */
+	EClass getExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.Expression#getText <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Text</em>'.
+	 * @see relalg.Expression#getText()
+	 * @see #getExpression()
+	 * @generated
+	 */
+	EAttribute getExpression_Text();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ReturnableElement <em>Returnable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Returnable Element</em>'.
+	 * @see relalg.ReturnableElement
+	 * @generated
+	 */
+	EClass getReturnableElement();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1554,6 +1661,16 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getDirection();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Comparison Operator</em>'.
+	 * @see relalg.ComparisonOperator
+	 * @generated
+	 */
+	EEnum getComparisonOperator();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1951,6 +2068,34 @@ public interface RelalgPackage extends EPackage {
 		EReference CONTAINER__ELEMENTS = eINSTANCE.getContainer_Elements();
 
 		/**
+		 * The meta object literal for the '{@link relalg.impl.ExpressionImpl <em>Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getExpression()
+		 * @generated
+		 */
+		EClass EXPRESSION = eINSTANCE.getExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPRESSION__TEXT = eINSTANCE.getExpression_Text();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ReturnableElementImpl <em>Returnable Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ReturnableElementImpl
+		 * @see relalg.impl.RelalgPackageImpl#getReturnableElement()
+		 * @generated
+		 */
+		EClass RETURNABLE_ELEMENT = eINSTANCE.getReturnableElement();
+
+		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1959,6 +2104,16 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum DIRECTION = eINSTANCE.getDirection();
+
+		/**
+		 * The meta object literal for the '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.ComparisonOperator
+		 * @see relalg.impl.RelalgPackageImpl#getComparisonOperator()
+		 * @generated
+		 */
+		EEnum COMPARISON_OPERATOR = eINSTANCE.getComparisonOperator();
 
 	}
 

@@ -16,11 +16,13 @@ import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
 import relalg.AttributeVariable;
 import relalg.BetaOperator;
+import relalg.ComparisonOperator;
 import relalg.Direction;
 import relalg.DuplicateEliminationOperator;
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
 import relalg.ExpandOperator;
+import relalg.Expression;
 import relalg.FilterOperator;
 import relalg.GetVerticesOperator;
 import relalg.JoinOperator;
@@ -30,6 +32,7 @@ import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
+import relalg.ReturnableElement;
 import relalg.UnionOperator;
 import relalg.Variable;
 import relalg.VertexLabel;
@@ -201,7 +204,28 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass expressionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass returnableElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum directionEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum comparisonOperatorEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -638,8 +662,44 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getExpression() {
+		return expressionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExpression_Text() {
+		return (EAttribute)expressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getReturnableElement() {
+		return returnableElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getComparisonOperator() {
+		return comparisonOperatorEEnum;
 	}
 
 	/**
@@ -733,8 +793,14 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(containerEClass, CONTAINER__ROOT_EXPRESSION);
 		createEReference(containerEClass, CONTAINER__ELEMENTS);
 
+		expressionEClass = createEClass(EXPRESSION);
+		createEAttribute(expressionEClass, EXPRESSION__TEXT);
+
+		returnableElementEClass = createEClass(RETURNABLE_ELEMENT);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
+		comparisonOperatorEEnum = createEEnum(COMPARISON_OPERATOR);
 	}
 
 	/**
@@ -776,6 +842,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		getVerticesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		duplicateEliminationOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		variableEClass.getESuperTypes().add(this.getNamedElement());
+		variableEClass.getESuperTypes().add(this.getReturnableElement());
 		vertexVariableEClass.getESuperTypes().add(this.getVariable());
 		edgeVariableEClass.getESuperTypes().add(this.getVariable());
 		labelEClass.getESuperTypes().add(this.getNamedElement());
@@ -784,6 +851,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		allDifferentOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		attributeVariableEClass.getESuperTypes().add(this.getVariable());
 		unionOperatorEClass.getESuperTypes().add(this.getBetaOperator());
+		expressionEClass.getESuperTypes().add(this.getReturnableElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -849,11 +917,24 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getContainer_RootExpression(), this.getAlgebraExpression(), null, "rootExpression", null, 0, 1, relalg.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContainer_Elements(), this.getNamedElement(), this.getNamedElement_Container(), "elements", null, 0, -1, relalg.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getExpression_Text(), ecorePackage.getEString(), "text", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(returnableElementEClass, ReturnableElement.class, "ReturnableElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");
 		addEEnumLiteral(directionEEnum, Direction.BOTH);
 		addEEnumLiteral(directionEEnum, Direction.IN);
 		addEEnumLiteral(directionEEnum, Direction.OUT);
+
+		initEEnum(comparisonOperatorEEnum, ComparisonOperator.class, "ComparisonOperator");
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.EQUAL_TO);
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.NOT_EQUAL_TO);
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.GREATER_THAN);
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.GREATER_THAN_OR_EQUAL);
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.LESS_THAN);
+		addEEnumLiteral(comparisonOperatorEEnum, ComparisonOperator.LESS_THAN_OR_EQUAL);
 
 		// Create resource
 		createResource(eNS_URI);
