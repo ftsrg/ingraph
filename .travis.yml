@@ -4,7 +4,7 @@ jdk:
 install: false
 script:
   - ./gradlew assemble
-  - ./gradlew check --continue
+  - ./gradlew check -x test --continue
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
