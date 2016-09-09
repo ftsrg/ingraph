@@ -2,7 +2,6 @@ package ingraph.cypher2relalg
 
 import ingraph.antlr.CypherLexer
 import ingraph.antlr.CypherParser
-import ingraph.antlr.CypherParser.CypherContext
 import ingraph.cypher2relalg.cypherlisteners.RelalgCypherListener
 import java.io.File
 import java.util.Collections
@@ -33,10 +32,9 @@ class RelalgParser {
 		val tokenStream = new CommonTokenStream(lexer)
 		val parser = new CypherParser(tokenStream)
 
-		val CypherContext cypher = parser.cypher()
-
+		val context = parser.cypher()
 		val listener = new RelalgCypherListener()
-		ParseTreeWalker.DEFAULT.walk(listener, cypher)
+		ParseTreeWalker.DEFAULT.walk(listener, context)
 
 		println("Vertex labels:    " + listener.vertexLabelFactory.elements.entrySet.map[key.toString].join(", "))
 		println("Vertex variables: " + listener.vertexVariableFactory.elements.entrySet.map[key.toString].join(", "))

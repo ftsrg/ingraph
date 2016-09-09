@@ -2,6 +2,7 @@ package ingraph.cypher2relalg.cypherlisteners
 
 import ingraph.antlr.CypherParser.ExpressionContext
 import ingraph.antlr.CypherParser.FunctionInvocationContext
+import ingraph.antlr.CypherParser.IntegerLiteralContext
 import ingraph.antlr.CypherParser.LabelNameContext
 import ingraph.antlr.CypherParser.LeftArrowHeadContext
 import ingraph.antlr.CypherParser.MatchContext
@@ -44,6 +45,8 @@ import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.Variable
 import relalg.VertexVariable
+import ingraph.antlr.CypherParser.DoubleLiteralContext
+import ingraph.antlr.CypherParser.NumberLiteralContext
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
 
@@ -365,4 +368,21 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		where_JoinExpression = chainExpandOperators(relationshipsPattern_GetVerticesOperator,
 				relationshipsPattern_ExpandList)
 	}
+
+	override enterNumberLiteral(NumberLiteralContext ctx) {
+		//println("number")
+	}
+
+	override enterIntegerLiteral(IntegerLiteralContext ctx) {
+		print("integer ") 
+		val intValue = Integer.decode(ctx.text)
+		println(intValue)
+	}
+
+	override enterDoubleLiteral(DoubleLiteralContext ctx) {
+		print("double ")
+		val doubleValue = Double.parseDouble(ctx.text)
+		println(doubleValue)
+	}
+
 }
