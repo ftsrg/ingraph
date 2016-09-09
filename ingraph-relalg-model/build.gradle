@@ -1,19 +1,15 @@
 ext.emfVersion = '2.10.0-v20140514-1158'
 
 dependencies {
-    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.common', version: emfVersion
-    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xmi', version: emfVersion
-    compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore', version: emfVersion
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.common', version: emfVersion
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xmi', version: emfVersion
+	compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore', version: emfVersion
 }
 
-repositories {
-    maven { url "https://repo.eclipse.org/content/groups/acceleo" }
-}
+repositories { maven { url "https://repo.eclipse.org/content/groups/acceleo" } }
 
 sourceSets {
-    main {
-        java {
-            srcDir 'src'
-        }
-    }
+	main {
+		java { srcDir 'src' }
+	}
 }
