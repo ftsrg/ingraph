@@ -84,19 +84,4 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
     val avg = endTime / 500 / 3
     println(s"integration avg: $avg")
   }
-  val queries = List(
-    new RouteSensor(),
-    new PosLength(),
-    new SemaphoreNeighbor(),
-    new ConnectedSegments(),
-    new SwitchSet(),
-    new SwitchSensor()
-  )
-  queries.foreach(
-    query => query.getClass.getName should "finish" in {
-        failAfter(500 milliseconds) {
-        query.getResults()
-      }
-    }
-  )
 }
