@@ -145,4 +145,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="IntegerLiteral" eSuperTypes="#//NumberLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GetEdgesOperator" eSuperTypes="#//AlgebraExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceVertexVariable" lowerBound="1"
+        eType="#//VertexVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetVertexVariable" lowerBound="1"
+        eType="#//VertexVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariable" lowerBound="1"
+        eType="#//EdgeVariable"/>
+  </eClassifiers>
 </ecore:EPackage>

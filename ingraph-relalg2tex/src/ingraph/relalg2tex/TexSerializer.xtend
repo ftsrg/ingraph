@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils
 import java.nio.charset.Charset
 import java.io.File
 import relalg.Container
+import relalg.GetEdgesOperator
 
 abstract class TexSerializer {
 
@@ -88,6 +89,11 @@ abstract class TexSerializer {
 
 	def dispatch operatorSymbol(FilterOperator op) {
 		'''\selection{...}'''
+	}
+
+	def dispatch operatorSymbol(
+		GetEdgesOperator op) {
+		'''\getedges{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.vertexLabel.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}'''
 	}
 
 	def dispatch operatorSymbol(GetVerticesOperator op) {

@@ -4,6 +4,7 @@ import relalg.AlgebraExpression
 import relalg.AlphaOperator
 import relalg.BetaOperator
 import relalg.GetVerticesOperator
+import relalg.GetEdgesOperator
 
 class AlgebraTreeDrawer extends TexSerializer {
 
@@ -33,10 +34,17 @@ class AlgebraTreeDrawer extends TexSerializer {
 	}
 
 	/**
-	 * childrent
+	 * children
 	 */
 	def dispatch children(GetVerticesOperator op) {
 		''''''
+	}
+
+	def dispatch children(GetEdgesOperator op) {
+		''''''
+	/**
+	 * children
+	 */
 	}
 
 	def dispatch children(AlphaOperator op) {

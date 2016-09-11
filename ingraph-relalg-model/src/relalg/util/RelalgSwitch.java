@@ -248,6 +248,111 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case RelalgPackage.BINARY_EXPRESSION: {
+				BinaryExpression binaryExpression = (BinaryExpression)theEObject;
+				T result = caseBinaryExpression(binaryExpression);
+				if (result == null) result = caseExpression(binaryExpression);
+				if (result == null) result = caseReturnableElement(binaryExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ARITHMETIC_OPERATION_EXPRESSION: {
+				ArithmeticOperationExpression arithmeticOperationExpression = (ArithmeticOperationExpression)theEObject;
+				T result = caseArithmeticOperationExpression(arithmeticOperationExpression);
+				if (result == null) result = caseBinaryExpression(arithmeticOperationExpression);
+				if (result == null) result = caseExpression(arithmeticOperationExpression);
+				if (result == null) result = caseReturnableElement(arithmeticOperationExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION: {
+				BinaryLogicalExpression binaryLogicalExpression = (BinaryLogicalExpression)theEObject;
+				T result = caseBinaryLogicalExpression(binaryLogicalExpression);
+				if (result == null) result = caseBinaryExpression(binaryLogicalExpression);
+				if (result == null) result = caseExpression(binaryLogicalExpression);
+				if (result == null) result = caseReturnableElement(binaryLogicalExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ARITHMETIC_COMPARISON_EXPRESSION: {
+				ArithmeticComparisonExpression arithmeticComparisonExpression = (ArithmeticComparisonExpression)theEObject;
+				T result = caseArithmeticComparisonExpression(arithmeticComparisonExpression);
+				if (result == null) result = caseBinaryExpression(arithmeticComparisonExpression);
+				if (result == null) result = caseExpression(arithmeticComparisonExpression);
+				if (result == null) result = caseReturnableElement(arithmeticComparisonExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.UNARY_EXPRESSION: {
+				UnaryExpression unaryExpression = (UnaryExpression)theEObject;
+				T result = caseUnaryExpression(unaryExpression);
+				if (result == null) result = caseExpression(unaryExpression);
+				if (result == null) result = caseReturnableElement(unaryExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.STRING_COMPARISON_EXPRESSION: {
+				StringComparisonExpression stringComparisonExpression = (StringComparisonExpression)theEObject;
+				T result = caseStringComparisonExpression(stringComparisonExpression);
+				if (result == null) result = caseBinaryExpression(stringComparisonExpression);
+				if (result == null) result = caseExpression(stringComparisonExpression);
+				if (result == null) result = caseReturnableElement(stringComparisonExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ATOM: {
+				Atom atom = (Atom)theEObject;
+				T result = caseAtom(atom);
+				if (result == null) result = caseExpression(atom);
+				if (result == null) result = caseReturnableElement(atom);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.NUMBER_LITERAL: {
+				NumberLiteral numberLiteral = (NumberLiteral)theEObject;
+				T result = caseNumberLiteral(numberLiteral);
+				if (result == null) result = caseAtom(numberLiteral);
+				if (result == null) result = caseExpression(numberLiteral);
+				if (result == null) result = caseReturnableElement(numberLiteral);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.STRING_LITERAL: {
+				StringLiteral stringLiteral = (StringLiteral)theEObject;
+				T result = caseStringLiteral(stringLiteral);
+				if (result == null) result = caseAtom(stringLiteral);
+				if (result == null) result = caseExpression(stringLiteral);
+				if (result == null) result = caseReturnableElement(stringLiteral);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.DOUBLE_LITERAL: {
+				DoubleLiteral doubleLiteral = (DoubleLiteral)theEObject;
+				T result = caseDoubleLiteral(doubleLiteral);
+				if (result == null) result = caseNumberLiteral(doubleLiteral);
+				if (result == null) result = caseAtom(doubleLiteral);
+				if (result == null) result = caseExpression(doubleLiteral);
+				if (result == null) result = caseReturnableElement(doubleLiteral);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.INTEGER_LITERAL: {
+				IntegerLiteral integerLiteral = (IntegerLiteral)theEObject;
+				T result = caseIntegerLiteral(integerLiteral);
+				if (result == null) result = caseNumberLiteral(integerLiteral);
+				if (result == null) result = caseAtom(integerLiteral);
+				if (result == null) result = caseExpression(integerLiteral);
+				if (result == null) result = caseReturnableElement(integerLiteral);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.GET_EDGES_OPERATOR: {
+				GetEdgesOperator getEdgesOperator = (GetEdgesOperator)theEObject;
+				T result = caseGetEdgesOperator(getEdgesOperator);
+				if (result == null) result = caseAlgebraExpression(getEdgesOperator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -609,6 +714,186 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseReturnableElement(ReturnableElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Binary Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Binary Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBinaryExpression(BinaryExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Arithmetic Operation Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Arithmetic Operation Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseArithmeticOperationExpression(ArithmeticOperationExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Binary Logical Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Binary Logical Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBinaryLogicalExpression(BinaryLogicalExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Arithmetic Comparison Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Arithmetic Comparison Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseArithmeticComparisonExpression(ArithmeticComparisonExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Unary Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Unary Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseUnaryExpression(UnaryExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String Comparison Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String Comparison Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringComparisonExpression(StringComparisonExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Atom</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Atom</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAtom(Atom object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Number Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Number Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNumberLiteral(NumberLiteral object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringLiteral(StringLiteral object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Double Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Double Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDoubleLiteral(DoubleLiteral object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Integer Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Integer Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIntegerLiteral(IntegerLiteral object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Get Edges Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Get Edges Operator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGetEdgesOperator(GetEdgesOperator object) {
 		return null;
 	}
 

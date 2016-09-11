@@ -74,6 +74,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.UNION_OPERATOR: return createUnionOperator();
 			case RelalgPackage.CONTAINER: return createContainer();
 			case RelalgPackage.EXPRESSION: return createExpression();
+			case RelalgPackage.ARITHMETIC_OPERATION_EXPRESSION: return createArithmeticOperationExpression();
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION: return createBinaryLogicalExpression();
+			case RelalgPackage.ARITHMETIC_COMPARISON_EXPRESSION: return createArithmeticComparisonExpression();
+			case RelalgPackage.UNARY_EXPRESSION: return createUnaryExpression();
+			case RelalgPackage.STRING_COMPARISON_EXPRESSION: return createStringComparisonExpression();
+			case RelalgPackage.ATOM: return createAtom();
+			case RelalgPackage.STRING_LITERAL: return createStringLiteral();
+			case RelalgPackage.DOUBLE_LITERAL: return createDoubleLiteral();
+			case RelalgPackage.INTEGER_LITERAL: return createIntegerLiteral();
+			case RelalgPackage.GET_EDGES_OPERATOR: return createGetEdgesOperator();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -89,8 +99,18 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 		switch (eDataType.getClassifierID()) {
 			case RelalgPackage.DIRECTION:
 				return createDirectionFromString(eDataType, initialValue);
-			case RelalgPackage.COMPARISON_OPERATOR:
-				return createComparisonOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.ARITHMETIC_COMPARISON_OPERATOR:
+				return createArithmeticComparisonOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.STRING_COMPARISON_OPERATOR:
+				return createStringComparisonOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.BINARY_LOGICAL_OPERATOR:
+				return createBinaryLogicalOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.BINARY_ARITHMETIC_OPERATOR:
+				return createBinaryArithmeticOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.UNARY_ARITHMETIC_OPERATOR:
+				return createUnaryArithmeticOperatorFromString(eDataType, initialValue);
+			case RelalgPackage.ORDER:
+				return createOrderFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -106,8 +126,18 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 		switch (eDataType.getClassifierID()) {
 			case RelalgPackage.DIRECTION:
 				return convertDirectionToString(eDataType, instanceValue);
-			case RelalgPackage.COMPARISON_OPERATOR:
-				return convertComparisonOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.ARITHMETIC_COMPARISON_OPERATOR:
+				return convertArithmeticComparisonOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.STRING_COMPARISON_OPERATOR:
+				return convertStringComparisonOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.BINARY_LOGICAL_OPERATOR:
+				return convertBinaryLogicalOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.BINARY_ARITHMETIC_OPERATOR:
+				return convertBinaryArithmeticOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.UNARY_ARITHMETIC_OPERATOR:
+				return convertUnaryArithmeticOperatorToString(eDataType, instanceValue);
+			case RelalgPackage.ORDER:
+				return convertOrderToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -288,6 +318,106 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ArithmeticOperationExpression createArithmeticOperationExpression() {
+		ArithmeticOperationExpressionImpl arithmeticOperationExpression = new ArithmeticOperationExpressionImpl();
+		return arithmeticOperationExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BinaryLogicalExpression createBinaryLogicalExpression() {
+		BinaryLogicalExpressionImpl binaryLogicalExpression = new BinaryLogicalExpressionImpl();
+		return binaryLogicalExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ArithmeticComparisonExpression createArithmeticComparisonExpression() {
+		ArithmeticComparisonExpressionImpl arithmeticComparisonExpression = new ArithmeticComparisonExpressionImpl();
+		return arithmeticComparisonExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UnaryExpression createUnaryExpression() {
+		UnaryExpressionImpl unaryExpression = new UnaryExpressionImpl();
+		return unaryExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StringComparisonExpression createStringComparisonExpression() {
+		StringComparisonExpressionImpl stringComparisonExpression = new StringComparisonExpressionImpl();
+		return stringComparisonExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Atom createAtom() {
+		AtomImpl atom = new AtomImpl();
+		return atom;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StringLiteral createStringLiteral() {
+		StringLiteralImpl stringLiteral = new StringLiteralImpl();
+		return stringLiteral;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DoubleLiteral createDoubleLiteral() {
+		DoubleLiteralImpl doubleLiteral = new DoubleLiteralImpl();
+		return doubleLiteral;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IntegerLiteral createIntegerLiteral() {
+		IntegerLiteralImpl integerLiteral = new IntegerLiteralImpl();
+		return integerLiteral;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GetEdgesOperator createGetEdgesOperator() {
+		GetEdgesOperatorImpl getEdgesOperator = new GetEdgesOperatorImpl();
+		return getEdgesOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Direction createDirectionFromString(EDataType eDataType, String initialValue) {
 		Direction result = Direction.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -308,8 +438,8 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComparisonOperator createComparisonOperatorFromString(EDataType eDataType, String initialValue) {
-		ComparisonOperator result = ComparisonOperator.get(initialValue);
+	public ArithmeticComparisonOperator createArithmeticComparisonOperatorFromString(EDataType eDataType, String initialValue) {
+		ArithmeticComparisonOperator result = ArithmeticComparisonOperator.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
@@ -319,7 +449,107 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertComparisonOperatorToString(EDataType eDataType, Object instanceValue) {
+	public String convertArithmeticComparisonOperatorToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StringComparisonOperator createStringComparisonOperatorFromString(EDataType eDataType, String initialValue) {
+		StringComparisonOperator result = StringComparisonOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertStringComparisonOperatorToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BinaryLogicalOperator createBinaryLogicalOperatorFromString(EDataType eDataType, String initialValue) {
+		BinaryLogicalOperator result = BinaryLogicalOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertBinaryLogicalOperatorToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BinaryArithmeticOperator createBinaryArithmeticOperatorFromString(EDataType eDataType, String initialValue) {
+		BinaryArithmeticOperator result = BinaryArithmeticOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertBinaryArithmeticOperatorToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UnaryArithmeticOperator createUnaryArithmeticOperatorFromString(EDataType eDataType, String initialValue) {
+		UnaryArithmeticOperator result = UnaryArithmeticOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertUnaryArithmeticOperatorToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Order createOrderFromString(EDataType eDataType, String initialValue) {
+		Order result = Order.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertOrderToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

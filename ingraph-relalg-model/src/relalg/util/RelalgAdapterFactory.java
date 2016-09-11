@@ -164,6 +164,54 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createReturnableElementAdapter();
 			}
 			@Override
+			public Adapter caseBinaryExpression(BinaryExpression object) {
+				return createBinaryExpressionAdapter();
+			}
+			@Override
+			public Adapter caseArithmeticOperationExpression(ArithmeticOperationExpression object) {
+				return createArithmeticOperationExpressionAdapter();
+			}
+			@Override
+			public Adapter caseBinaryLogicalExpression(BinaryLogicalExpression object) {
+				return createBinaryLogicalExpressionAdapter();
+			}
+			@Override
+			public Adapter caseArithmeticComparisonExpression(ArithmeticComparisonExpression object) {
+				return createArithmeticComparisonExpressionAdapter();
+			}
+			@Override
+			public Adapter caseUnaryExpression(UnaryExpression object) {
+				return createUnaryExpressionAdapter();
+			}
+			@Override
+			public Adapter caseStringComparisonExpression(StringComparisonExpression object) {
+				return createStringComparisonExpressionAdapter();
+			}
+			@Override
+			public Adapter caseAtom(Atom object) {
+				return createAtomAdapter();
+			}
+			@Override
+			public Adapter caseNumberLiteral(NumberLiteral object) {
+				return createNumberLiteralAdapter();
+			}
+			@Override
+			public Adapter caseStringLiteral(StringLiteral object) {
+				return createStringLiteralAdapter();
+			}
+			@Override
+			public Adapter caseDoubleLiteral(DoubleLiteral object) {
+				return createDoubleLiteralAdapter();
+			}
+			@Override
+			public Adapter caseIntegerLiteral(IntegerLiteral object) {
+				return createIntegerLiteralAdapter();
+			}
+			@Override
+			public Adapter caseGetEdgesOperator(GetEdgesOperator object) {
+				return createGetEdgesOperatorAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -516,6 +564,174 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createReturnableElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.BinaryExpression <em>Binary Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.BinaryExpression
+	 * @generated
+	 */
+	public Adapter createBinaryExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.ArithmeticOperationExpression <em>Arithmetic Operation Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.ArithmeticOperationExpression
+	 * @generated
+	 */
+	public Adapter createArithmeticOperationExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.BinaryLogicalExpression <em>Binary Logical Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.BinaryLogicalExpression
+	 * @generated
+	 */
+	public Adapter createBinaryLogicalExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.ArithmeticComparisonExpression <em>Arithmetic Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.ArithmeticComparisonExpression
+	 * @generated
+	 */
+	public Adapter createArithmeticComparisonExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.UnaryExpression <em>Unary Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.UnaryExpression
+	 * @generated
+	 */
+	public Adapter createUnaryExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.StringComparisonExpression <em>String Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.StringComparisonExpression
+	 * @generated
+	 */
+	public Adapter createStringComparisonExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Atom <em>Atom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Atom
+	 * @generated
+	 */
+	public Adapter createAtomAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.NumberLiteral <em>Number Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.NumberLiteral
+	 * @generated
+	 */
+	public Adapter createNumberLiteralAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.StringLiteral <em>String Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.StringLiteral
+	 * @generated
+	 */
+	public Adapter createStringLiteralAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.DoubleLiteral <em>Double Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.DoubleLiteral
+	 * @generated
+	 */
+	public Adapter createDoubleLiteralAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.IntegerLiteral <em>Integer Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.IntegerLiteral
+	 * @generated
+	 */
+	public Adapter createIntegerLiteralAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.GetEdgesOperator <em>Get Edges Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.GetEdgesOperator
+	 * @generated
+	 */
+	public Adapter createGetEdgesOperatorAdapter() {
 		return null;
 	}
 

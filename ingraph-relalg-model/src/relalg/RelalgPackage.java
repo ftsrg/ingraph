@@ -1171,6 +1171,549 @@ public interface RelalgPackage extends EPackage {
 	int EXPRESSION_OPERATION_COUNT = RETURNABLE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.BinaryExpressionImpl <em>Binary Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.BinaryExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getBinaryExpression()
+	 * @generated
+	 */
+	int BINARY_EXPRESSION = 24;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_EXPRESSION__TEXT = EXPRESSION__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>Binary Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Binary Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_EXPRESSION_OPERATION_COUNT = EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.ArithmeticOperationExpressionImpl <em>Arithmetic Operation Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ArithmeticOperationExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getArithmeticOperationExpression()
+	 * @generated
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION = 25;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Operator</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Arithmetic Operation Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Arithmetic Operation Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.BinaryLogicalExpressionImpl <em>Binary Logical Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.BinaryLogicalExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalExpression()
+	 * @generated
+	 */
+	int BINARY_LOGICAL_EXPRESSION = 26;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Operator</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Right Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Left Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION = BINARY_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Binary Logical Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Binary Logical Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BINARY_LOGICAL_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.ArithmeticComparisonExpressionImpl <em>Arithmetic Comparison Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ArithmeticComparisonExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonExpression()
+	 * @generated
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION = 27;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Operator</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Arithmetic Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Arithmetic Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.UnaryExpressionImpl <em>Unary Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.UnaryExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getUnaryExpression()
+	 * @generated
+	 */
+	int UNARY_EXPRESSION = 28;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNARY_EXPRESSION__TEXT = EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Negated</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNARY_EXPRESSION__NEGATED = EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Unary Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNARY_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Unary Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNARY_EXPRESSION_OPERATION_COUNT = EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.StringComparisonExpressionImpl <em>String Comparison Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.StringComparisonExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getStringComparisonExpression()
+	 * @generated
+	 */
+	int STRING_COMPARISON_EXPRESSION = 29;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Operator</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>String Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>String Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.AtomImpl <em>Atom</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.AtomImpl
+	 * @see relalg.impl.RelalgPackageImpl#getAtom()
+	 * @generated
+	 */
+	int ATOM = 30;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOM__TEXT = EXPRESSION__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>Atom</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOM_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Atom</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ATOM_OPERATION_COUNT = EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.NumberLiteralImpl <em>Number Literal</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.NumberLiteralImpl
+	 * @see relalg.impl.RelalgPackageImpl#getNumberLiteral()
+	 * @generated
+	 */
+	int NUMBER_LITERAL = 31;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NUMBER_LITERAL__TEXT = ATOM__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>Number Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NUMBER_LITERAL_FEATURE_COUNT = ATOM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Number Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NUMBER_LITERAL_OPERATION_COUNT = ATOM_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.StringLiteralImpl <em>String Literal</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.StringLiteralImpl
+	 * @see relalg.impl.RelalgPackageImpl#getStringLiteral()
+	 * @generated
+	 */
+	int STRING_LITERAL = 32;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_LITERAL__TEXT = ATOM__TEXT;
+
+	/**
+	 * The number of structural features of the '<em>String Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_LITERAL_FEATURE_COUNT = ATOM_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>String Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_LITERAL_OPERATION_COUNT = ATOM_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.DoubleLiteralImpl <em>Double Literal</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.DoubleLiteralImpl
+	 * @see relalg.impl.RelalgPackageImpl#getDoubleLiteral()
+	 * @generated
+	 */
+	int DOUBLE_LITERAL = 33;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_LITERAL__TEXT = NUMBER_LITERAL__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_LITERAL__VALUE = NUMBER_LITERAL_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Double Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_LITERAL_FEATURE_COUNT = NUMBER_LITERAL_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Double Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_LITERAL_OPERATION_COUNT = NUMBER_LITERAL_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.IntegerLiteralImpl <em>Integer Literal</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.IntegerLiteralImpl
+	 * @see relalg.impl.RelalgPackageImpl#getIntegerLiteral()
+	 * @generated
+	 */
+	int INTEGER_LITERAL = 34;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_LITERAL__TEXT = NUMBER_LITERAL__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_LITERAL__VALUE = NUMBER_LITERAL_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Integer Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_LITERAL_FEATURE_COUNT = NUMBER_LITERAL_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Integer Literal</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_LITERAL_OPERATION_COUNT = NUMBER_LITERAL_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link relalg.impl.GetEdgesOperatorImpl <em>Get Edges Operator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.GetEdgesOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getGetEdgesOperator()
+	 * @generated
+	 */
+	int GET_EDGES_OPERATOR = 35;
+
+	/**
+	 * The feature id for the '<em><b>Source Vertex Variable</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR__SOURCE_VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Target Vertex Variable</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR__TARGET_VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Edge Variable</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR__EDGE_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Get Edges Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Get Edges Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.Direction <em>Direction</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1178,19 +1721,68 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 24;
+	int DIRECTION = 36;
 
 
 	/**
-	 * The meta object id for the '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}' enum.
+	 * The meta object id for the '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.ComparisonOperator
-	 * @see relalg.impl.RelalgPackageImpl#getComparisonOperator()
+	 * @see relalg.ArithmeticComparisonOperator
+	 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonOperator()
 	 * @generated
 	 */
-	int COMPARISON_OPERATOR = 25;
+	int ARITHMETIC_COMPARISON_OPERATOR = 37;
 
+	/**
+	 * The meta object id for the '{@link relalg.StringComparisonOperator <em>String Comparison Operator</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.StringComparisonOperator
+	 * @see relalg.impl.RelalgPackageImpl#getStringComparisonOperator()
+	 * @generated
+	 */
+	int STRING_COMPARISON_OPERATOR = 38;
+
+	/**
+	 * The meta object id for the '{@link relalg.BinaryLogicalOperator <em>Binary Logical Operator</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.BinaryLogicalOperator
+	 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalOperator()
+	 * @generated
+	 */
+	int BINARY_LOGICAL_OPERATOR = 39;
+
+	/**
+	 * The meta object id for the '{@link relalg.BinaryArithmeticOperator <em>Binary Arithmetic Operator</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.BinaryArithmeticOperator
+	 * @see relalg.impl.RelalgPackageImpl#getBinaryArithmeticOperator()
+	 * @generated
+	 */
+	int BINARY_ARITHMETIC_OPERATOR = 40;
+
+	/**
+	 * The meta object id for the '{@link relalg.UnaryArithmeticOperator <em>Unary Arithmetic Operator</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.UnaryArithmeticOperator
+	 * @see relalg.impl.RelalgPackageImpl#getUnaryArithmeticOperator()
+	 * @generated
+	 */
+	int UNARY_ARITHMETIC_OPERATOR = 41;
+
+	/**
+	 * The meta object id for the '{@link relalg.Order <em>Order</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.Order
+	 * @see relalg.impl.RelalgPackageImpl#getOrder()
+	 * @generated
+	 */
+	int ORDER = 42;
 
 	/**
 	 * Returns the meta object for class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
@@ -1653,6 +2245,258 @@ public interface RelalgPackage extends EPackage {
 	EClass getReturnableElement();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.BinaryExpression <em>Binary Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Binary Expression</em>'.
+	 * @see relalg.BinaryExpression
+	 * @generated
+	 */
+	EClass getBinaryExpression();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ArithmeticOperationExpression <em>Arithmetic Operation Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Arithmetic Operation Expression</em>'.
+	 * @see relalg.ArithmeticOperationExpression
+	 * @generated
+	 */
+	EClass getArithmeticOperationExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.ArithmeticOperationExpression#getOperator <em>Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Operator</em>'.
+	 * @see relalg.ArithmeticOperationExpression#getOperator()
+	 * @see #getArithmeticOperationExpression()
+	 * @generated
+	 */
+	EAttribute getArithmeticOperationExpression_Operator();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.BinaryLogicalExpression <em>Binary Logical Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Binary Logical Expression</em>'.
+	 * @see relalg.BinaryLogicalExpression
+	 * @generated
+	 */
+	EClass getBinaryLogicalExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.BinaryLogicalExpression#getOperator <em>Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Operator</em>'.
+	 * @see relalg.BinaryLogicalExpression#getOperator()
+	 * @see #getBinaryLogicalExpression()
+	 * @generated
+	 */
+	EAttribute getBinaryLogicalExpression_Operator();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.BinaryLogicalExpression#getRightExpression <em>Right Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Right Expression</em>'.
+	 * @see relalg.BinaryLogicalExpression#getRightExpression()
+	 * @see #getBinaryLogicalExpression()
+	 * @generated
+	 */
+	EReference getBinaryLogicalExpression_RightExpression();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.BinaryLogicalExpression#getLeftExpression <em>Left Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Left Expression</em>'.
+	 * @see relalg.BinaryLogicalExpression#getLeftExpression()
+	 * @see #getBinaryLogicalExpression()
+	 * @generated
+	 */
+	EReference getBinaryLogicalExpression_LeftExpression();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ArithmeticComparisonExpression <em>Arithmetic Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Arithmetic Comparison Expression</em>'.
+	 * @see relalg.ArithmeticComparisonExpression
+	 * @generated
+	 */
+	EClass getArithmeticComparisonExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.ArithmeticComparisonExpression#getOperator <em>Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Operator</em>'.
+	 * @see relalg.ArithmeticComparisonExpression#getOperator()
+	 * @see #getArithmeticComparisonExpression()
+	 * @generated
+	 */
+	EAttribute getArithmeticComparisonExpression_Operator();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.UnaryExpression <em>Unary Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Unary Expression</em>'.
+	 * @see relalg.UnaryExpression
+	 * @generated
+	 */
+	EClass getUnaryExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.UnaryExpression#isNegated <em>Negated</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Negated</em>'.
+	 * @see relalg.UnaryExpression#isNegated()
+	 * @see #getUnaryExpression()
+	 * @generated
+	 */
+	EAttribute getUnaryExpression_Negated();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.StringComparisonExpression <em>String Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>String Comparison Expression</em>'.
+	 * @see relalg.StringComparisonExpression
+	 * @generated
+	 */
+	EClass getStringComparisonExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.StringComparisonExpression#getOperator <em>Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Operator</em>'.
+	 * @see relalg.StringComparisonExpression#getOperator()
+	 * @see #getStringComparisonExpression()
+	 * @generated
+	 */
+	EAttribute getStringComparisonExpression_Operator();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.Atom <em>Atom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Atom</em>'.
+	 * @see relalg.Atom
+	 * @generated
+	 */
+	EClass getAtom();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.NumberLiteral <em>Number Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Number Literal</em>'.
+	 * @see relalg.NumberLiteral
+	 * @generated
+	 */
+	EClass getNumberLiteral();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.StringLiteral <em>String Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>String Literal</em>'.
+	 * @see relalg.StringLiteral
+	 * @generated
+	 */
+	EClass getStringLiteral();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.DoubleLiteral <em>Double Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Double Literal</em>'.
+	 * @see relalg.DoubleLiteral
+	 * @generated
+	 */
+	EClass getDoubleLiteral();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.DoubleLiteral#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see relalg.DoubleLiteral#getValue()
+	 * @see #getDoubleLiteral()
+	 * @generated
+	 */
+	EAttribute getDoubleLiteral_Value();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.IntegerLiteral <em>Integer Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Integer Literal</em>'.
+	 * @see relalg.IntegerLiteral
+	 * @generated
+	 */
+	EClass getIntegerLiteral();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.IntegerLiteral#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see relalg.IntegerLiteral#getValue()
+	 * @see #getIntegerLiteral()
+	 * @generated
+	 */
+	EAttribute getIntegerLiteral_Value();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.GetEdgesOperator <em>Get Edges Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Get Edges Operator</em>'.
+	 * @see relalg.GetEdgesOperator
+	 * @generated
+	 */
+	EClass getGetEdgesOperator();
+
+	/**
+	 * Returns the meta object for the reference '{@link relalg.GetEdgesOperator#getSourceVertexVariable <em>Source Vertex Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Source Vertex Variable</em>'.
+	 * @see relalg.GetEdgesOperator#getSourceVertexVariable()
+	 * @see #getGetEdgesOperator()
+	 * @generated
+	 */
+	EReference getGetEdgesOperator_SourceVertexVariable();
+
+	/**
+	 * Returns the meta object for the reference '{@link relalg.GetEdgesOperator#getTargetVertexVariable <em>Target Vertex Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target Vertex Variable</em>'.
+	 * @see relalg.GetEdgesOperator#getTargetVertexVariable()
+	 * @see #getGetEdgesOperator()
+	 * @generated
+	 */
+	EReference getGetEdgesOperator_TargetVertexVariable();
+
+	/**
+	 * Returns the meta object for the reference '{@link relalg.GetEdgesOperator#getEdgeVariable <em>Edge Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Edge Variable</em>'.
+	 * @see relalg.GetEdgesOperator#getEdgeVariable()
+	 * @see #getGetEdgesOperator()
+	 * @generated
+	 */
+	EReference getGetEdgesOperator_EdgeVariable();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1663,14 +2507,64 @@ public interface RelalgPackage extends EPackage {
 	EEnum getDirection();
 
 	/**
-	 * Returns the meta object for enum '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}'.
+	 * Returns the meta object for enum '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for enum '<em>Comparison Operator</em>'.
-	 * @see relalg.ComparisonOperator
+	 * @return the meta object for enum '<em>Arithmetic Comparison Operator</em>'.
+	 * @see relalg.ArithmeticComparisonOperator
 	 * @generated
 	 */
-	EEnum getComparisonOperator();
+	EEnum getArithmeticComparisonOperator();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.StringComparisonOperator <em>String Comparison Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>String Comparison Operator</em>'.
+	 * @see relalg.StringComparisonOperator
+	 * @generated
+	 */
+	EEnum getStringComparisonOperator();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.BinaryLogicalOperator <em>Binary Logical Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Binary Logical Operator</em>'.
+	 * @see relalg.BinaryLogicalOperator
+	 * @generated
+	 */
+	EEnum getBinaryLogicalOperator();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.BinaryArithmeticOperator <em>Binary Arithmetic Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Binary Arithmetic Operator</em>'.
+	 * @see relalg.BinaryArithmeticOperator
+	 * @generated
+	 */
+	EEnum getBinaryArithmeticOperator();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.UnaryArithmeticOperator <em>Unary Arithmetic Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Unary Arithmetic Operator</em>'.
+	 * @see relalg.UnaryArithmeticOperator
+	 * @generated
+	 */
+	EEnum getUnaryArithmeticOperator();
+
+	/**
+	 * Returns the meta object for enum '{@link relalg.Order <em>Order</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Order</em>'.
+	 * @see relalg.Order
+	 * @generated
+	 */
+	EEnum getOrder();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -2096,6 +2990,222 @@ public interface RelalgPackage extends EPackage {
 		EClass RETURNABLE_ELEMENT = eINSTANCE.getReturnableElement();
 
 		/**
+		 * The meta object literal for the '{@link relalg.impl.BinaryExpressionImpl <em>Binary Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.BinaryExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getBinaryExpression()
+		 * @generated
+		 */
+		EClass BINARY_EXPRESSION = eINSTANCE.getBinaryExpression();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ArithmeticOperationExpressionImpl <em>Arithmetic Operation Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ArithmeticOperationExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getArithmeticOperationExpression()
+		 * @generated
+		 */
+		EClass ARITHMETIC_OPERATION_EXPRESSION = eINSTANCE.getArithmeticOperationExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARITHMETIC_OPERATION_EXPRESSION__OPERATOR = eINSTANCE.getArithmeticOperationExpression_Operator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.BinaryLogicalExpressionImpl <em>Binary Logical Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.BinaryLogicalExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalExpression()
+		 * @generated
+		 */
+		EClass BINARY_LOGICAL_EXPRESSION = eINSTANCE.getBinaryLogicalExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BINARY_LOGICAL_EXPRESSION__OPERATOR = eINSTANCE.getBinaryLogicalExpression_Operator();
+
+		/**
+		 * The meta object literal for the '<em><b>Right Expression</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION = eINSTANCE.getBinaryLogicalExpression_RightExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Left Expression</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION = eINSTANCE.getBinaryLogicalExpression_LeftExpression();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ArithmeticComparisonExpressionImpl <em>Arithmetic Comparison Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ArithmeticComparisonExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonExpression()
+		 * @generated
+		 */
+		EClass ARITHMETIC_COMPARISON_EXPRESSION = eINSTANCE.getArithmeticComparisonExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR = eINSTANCE.getArithmeticComparisonExpression_Operator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.UnaryExpressionImpl <em>Unary Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.UnaryExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getUnaryExpression()
+		 * @generated
+		 */
+		EClass UNARY_EXPRESSION = eINSTANCE.getUnaryExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Negated</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNARY_EXPRESSION__NEGATED = eINSTANCE.getUnaryExpression_Negated();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.StringComparisonExpressionImpl <em>String Comparison Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.StringComparisonExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getStringComparisonExpression()
+		 * @generated
+		 */
+		EClass STRING_COMPARISON_EXPRESSION = eINSTANCE.getStringComparisonExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Operator</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STRING_COMPARISON_EXPRESSION__OPERATOR = eINSTANCE.getStringComparisonExpression_Operator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.AtomImpl <em>Atom</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.AtomImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAtom()
+		 * @generated
+		 */
+		EClass ATOM = eINSTANCE.getAtom();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.NumberLiteralImpl <em>Number Literal</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.NumberLiteralImpl
+		 * @see relalg.impl.RelalgPackageImpl#getNumberLiteral()
+		 * @generated
+		 */
+		EClass NUMBER_LITERAL = eINSTANCE.getNumberLiteral();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.StringLiteralImpl <em>String Literal</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.StringLiteralImpl
+		 * @see relalg.impl.RelalgPackageImpl#getStringLiteral()
+		 * @generated
+		 */
+		EClass STRING_LITERAL = eINSTANCE.getStringLiteral();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.DoubleLiteralImpl <em>Double Literal</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.DoubleLiteralImpl
+		 * @see relalg.impl.RelalgPackageImpl#getDoubleLiteral()
+		 * @generated
+		 */
+		EClass DOUBLE_LITERAL = eINSTANCE.getDoubleLiteral();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DOUBLE_LITERAL__VALUE = eINSTANCE.getDoubleLiteral_Value();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.IntegerLiteralImpl <em>Integer Literal</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.IntegerLiteralImpl
+		 * @see relalg.impl.RelalgPackageImpl#getIntegerLiteral()
+		 * @generated
+		 */
+		EClass INTEGER_LITERAL = eINSTANCE.getIntegerLiteral();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTEGER_LITERAL__VALUE = eINSTANCE.getIntegerLiteral_Value();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.GetEdgesOperatorImpl <em>Get Edges Operator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.GetEdgesOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getGetEdgesOperator()
+		 * @generated
+		 */
+		EClass GET_EDGES_OPERATOR = eINSTANCE.getGetEdgesOperator();
+
+		/**
+		 * The meta object literal for the '<em><b>Source Vertex Variable</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GET_EDGES_OPERATOR__SOURCE_VERTEX_VARIABLE = eINSTANCE.getGetEdgesOperator_SourceVertexVariable();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Vertex Variable</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GET_EDGES_OPERATOR__TARGET_VERTEX_VARIABLE = eINSTANCE.getGetEdgesOperator_TargetVertexVariable();
+
+		/**
+		 * The meta object literal for the '<em><b>Edge Variable</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference GET_EDGES_OPERATOR__EDGE_VARIABLE = eINSTANCE.getGetEdgesOperator_EdgeVariable();
+
+		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2106,14 +3216,64 @@ public interface RelalgPackage extends EPackage {
 		EEnum DIRECTION = eINSTANCE.getDirection();
 
 		/**
-		 * The meta object literal for the '{@link relalg.ComparisonOperator <em>Comparison Operator</em>}' enum.
+		 * The meta object literal for the '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.ComparisonOperator
-		 * @see relalg.impl.RelalgPackageImpl#getComparisonOperator()
+		 * @see relalg.ArithmeticComparisonOperator
+		 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonOperator()
 		 * @generated
 		 */
-		EEnum COMPARISON_OPERATOR = eINSTANCE.getComparisonOperator();
+		EEnum ARITHMETIC_COMPARISON_OPERATOR = eINSTANCE.getArithmeticComparisonOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.StringComparisonOperator <em>String Comparison Operator</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.StringComparisonOperator
+		 * @see relalg.impl.RelalgPackageImpl#getStringComparisonOperator()
+		 * @generated
+		 */
+		EEnum STRING_COMPARISON_OPERATOR = eINSTANCE.getStringComparisonOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.BinaryLogicalOperator <em>Binary Logical Operator</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.BinaryLogicalOperator
+		 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalOperator()
+		 * @generated
+		 */
+		EEnum BINARY_LOGICAL_OPERATOR = eINSTANCE.getBinaryLogicalOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.BinaryArithmeticOperator <em>Binary Arithmetic Operator</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.BinaryArithmeticOperator
+		 * @see relalg.impl.RelalgPackageImpl#getBinaryArithmeticOperator()
+		 * @generated
+		 */
+		EEnum BINARY_ARITHMETIC_OPERATOR = eINSTANCE.getBinaryArithmeticOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.UnaryArithmeticOperator <em>Unary Arithmetic Operator</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.UnaryArithmeticOperator
+		 * @see relalg.impl.RelalgPackageImpl#getUnaryArithmeticOperator()
+		 * @generated
+		 */
+		EEnum UNARY_ARITHMETIC_OPERATOR = eINSTANCE.getUnaryArithmeticOperator();
+
+		/**
+		 * The meta object literal for the '{@link relalg.Order <em>Order</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.Order
+		 * @see relalg.impl.RelalgPackageImpl#getOrder()
+		 * @generated
+		 */
+		EEnum ORDER = eINSTANCE.getOrder();
 
 	}
 

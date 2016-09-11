@@ -175,6 +175,96 @@ public interface RelalgFactory extends EFactory {
 	Expression createExpression();
 
 	/**
+	 * Returns a new object of class '<em>Arithmetic Operation Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Arithmetic Operation Expression</em>'.
+	 * @generated
+	 */
+	ArithmeticOperationExpression createArithmeticOperationExpression();
+
+	/**
+	 * Returns a new object of class '<em>Binary Logical Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Binary Logical Expression</em>'.
+	 * @generated
+	 */
+	BinaryLogicalExpression createBinaryLogicalExpression();
+
+	/**
+	 * Returns a new object of class '<em>Arithmetic Comparison Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Arithmetic Comparison Expression</em>'.
+	 * @generated
+	 */
+	ArithmeticComparisonExpression createArithmeticComparisonExpression();
+
+	/**
+	 * Returns a new object of class '<em>Unary Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Unary Expression</em>'.
+	 * @generated
+	 */
+	UnaryExpression createUnaryExpression();
+
+	/**
+	 * Returns a new object of class '<em>String Comparison Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>String Comparison Expression</em>'.
+	 * @generated
+	 */
+	StringComparisonExpression createStringComparisonExpression();
+
+	/**
+	 * Returns a new object of class '<em>Atom</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Atom</em>'.
+	 * @generated
+	 */
+	Atom createAtom();
+
+	/**
+	 * Returns a new object of class '<em>String Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>String Literal</em>'.
+	 * @generated
+	 */
+	StringLiteral createStringLiteral();
+
+	/**
+	 * Returns a new object of class '<em>Double Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Double Literal</em>'.
+	 * @generated
+	 */
+	DoubleLiteral createDoubleLiteral();
+
+	/**
+	 * Returns a new object of class '<em>Integer Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Integer Literal</em>'.
+	 * @generated
+	 */
+	IntegerLiteral createIntegerLiteral();
+
+	/**
+	 * Returns a new object of class '<em>Get Edges Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Get Edges Operator</em>'.
+	 * @generated
+	 */
+	GetEdgesOperator createGetEdgesOperator();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
