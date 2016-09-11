@@ -21,21 +21,22 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()
-      tran.add(6L, "test", 1L)
-      tran.add(6L, "test", 2L)
+      tran.add("test", Map(0 -> 6, 1 -> 1L))
+      tran.add("test", Map(0 -> 6, 1 -> 2L))
       tran.close()
-      expectMsg(ChangeSet(positive = Vector(Vector(6, 2), Vector(6, 1))))
+      expectMsg(ChangeSet(positive = Vector(Map(0 -> 6, 1 -> 2), Map(0 -> 6, 1 -> 1))))
     }
+
     "do no splitting in batch" in {
       val input = new TransactionFactory(messageSize = 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newBatchTransaction()
       for (i <- 1 to 3) {
-        tran.add(6L, "test", i)
+        tran.add("test", Map(0 -> 6, 1 -> i))
       }
       tran.close()
-      expectMsg(ChangeSet(positive = Vector(Vector(6, 3), Vector(6, 2), Vector(6, 1))))
+      expectMsg(ChangeSet(positive = Vector(Map(0 -> 6, 1 -> 3), Map(0 -> 6, 1 -> 2), Map(0 -> 6, 1 -> 1))))
     }
     "send messageSize sized messages when using continuous transactions" in {
       val input = new TransactionFactory(messageSize = 2)
@@ -43,11 +44,11 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       input.subscribe(Map("test" -> (echoActor ! _)))
       val tran = input.newContinousTransaction()
       for (i <- 1 to 3) {
-        tran.add(6L, "test", i)
+        tran.add("test", Map(0 -> 6, 1 -> i))
       }
       tran.close()
-      expectMsg(ChangeSet(positive = Vector(Vector(6, 2), Vector(6, 1))))
-      expectMsg(ChangeSet(positive = Vector(Vector(6, 3))))
+      expectMsg(ChangeSet(positive = Vector(Map(0 -> 6, 1 -> 2), Map(0 -> 6, 1 -> 1))))
+      expectMsg(ChangeSet(positive = Vector(Map(0 -> 6, 1 -> 3))))
     }
   }
 }

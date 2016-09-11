@@ -4,11 +4,11 @@ import scala.collection.mutable
 import scala.collection.mutable.MultiMap
 
 abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
-  val primarySelector: Vector[Int]
-  val secondarySelector: Vector[Int]
+  val primarySelector: Vector[Any]
+  val secondarySelector: Vector[Any]
 
-  val forwardValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
-  val antiValues = new mutable.HashMap[nodeType, mutable.Set[nodeType]] with MultiMap[nodeType, nodeType]
+  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with MultiMap[Vector[Any], nodeType]
+  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with MultiMap[Vector[Any], nodeType]
 
   def onForwardingSide(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive
@@ -27,15 +27,15 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
     forward(ChangeSet(joinedPositive, joinedNegative))
 
     positive.foreach(
-      vec => {
-        val key = primarySelector.map(i => vec(i))
-        forwardValues.addBinding(key, vec)
+      m => {
+        val key = primarySelector.map(i => m(i))
+        forwardValues.addBinding(key, m)
       }
     )
     negative.foreach(
-      vec => {
-        val key = primarySelector.map(i => vec(i))
-        forwardValues.removeBinding(key, vec)
+      m => {
+        val key = primarySelector.map(i => m(i))
+        forwardValues.removeBinding(key, m)
       }
     )
   }
@@ -45,15 +45,15 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
     val negative = changeSet.negative
 
     positive.foreach(
-      vec => {
-        val key = secondarySelector.map(i => vec(i))
-        antiValues.addBinding(key, vec)
+      m => {
+        val key = secondarySelector.map(i => m(i))
+        antiValues.addBinding(key, m)
       }
     )
     negative.foreach(
-      vec => {
-        val key = secondarySelector.map(i => vec(i))
-        antiValues.removeBinding(key, vec)
+      m => {
+        val key = secondarySelector.map(i => m(i))
+        antiValues.removeBinding(key, m)
       }
     )
 
@@ -78,8 +78,8 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
 }
 
 class HashLeftAntijoiner(override val next: (ReteMessage) => Unit,
-                         override val primarySelector: Vector[Int],
-                         override val secondarySelector: Vector[Int],
+                         override val primarySelector: Vector[Any],
+                         override val secondarySelector: Vector[Any],
                          override val expectedTerminatorCount:Int = 2) extends HashAntijoiner {
 
   override def onPrimary(changeSet: ChangeSet): Unit = onForwardingSide(changeSet)
@@ -88,8 +88,8 @@ class HashLeftAntijoiner(override val next: (ReteMessage) => Unit,
 }
 
 class HashRightAntijoiner(override val next: (ReteMessage) => Unit,
-                         override val primarySelector: Vector[Int],
-                         override val secondarySelector: Vector[Int],
+                         override val primarySelector: Vector[Any],
+                         override val secondarySelector: Vector[Any],
                          override val expectedTerminatorCount:Int = 2) extends HashAntijoiner {
 
   override def onPrimary(changeSet: ChangeSet): Unit = onAntiSide(changeSet)

@@ -19,7 +19,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   "Checker" must {
     "check the condition properly" in {
-      val changeSet = ChangeSet(Vector(Vector(0, "something"), Vector(0, "something else")))
+      val changeSet = ChangeSet(Vector(Map(0 -> 0, 1 -> "something"), Map(0 -> 0, 1 -> "something else")))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val condition = (n: nodeType) => {
         n(1) == "something"
@@ -27,27 +27,27 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val checker = system.actorOf(Props(new Checker(echoActor ! _, condition)))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = Vector(Vector(0, "something"))))
+      expectMsg(ChangeSet(positive = Vector(Map(0 -> 0, 1 -> "something"))))
     }
   }
   "EqualityChecker" must {
     "check equality properly" in {
-      val changeSet = ChangeSet(Vector(Vector(0, 2, 1), Vector(0, 0, 0), Vector(0, 2, 0)))
+      val changeSet = ChangeSet(Vector(Map(0 -> 0, 1 -> 2, 2 -> 1), Map(0 -> 0, 1 -> 0, 2 -> 0), Map(0 -> 0, 1 -> 2, 2 -> 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val equalityChecker = system.actorOf(Props(new Equality(echoActor ! _, 0, Vector(1, 2))))
 
       equalityChecker ! changeSet
-      expectMsg(ChangeSet(Vector(Vector(0, 0, 0))))
+      expectMsg(ChangeSet(Vector(Map(0 -> 0, 1 -> 0, 2 -> 0))))
     }
   }
   "InequalityChecker" must {
     "check inequality properly" in {
-      val changeSet = ChangeSet(Vector(Vector(0, 2, 1), Vector(0, 3, 0), Vector(0, 0, 0)))
+      val changeSet = ChangeSet(Vector(Map(0 -> 0, 1 -> 2, 2 -> 1), Map(0 -> 0, 1 -> 3, 2 -> 0), Map(0 -> 0, 1 -> 0, 2 -> 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val inequalityChecker = system.actorOf(Props(new Inequality(echoActor ! _, 0, Vector(1, 2))))
 
       inequalityChecker ! changeSet
-      expectMsg(ChangeSet(Vector(Vector(0, 2, 1))))
+      expectMsg(ChangeSet(Vector(Map(0 -> 0, 1 -> 2, 2 -> 1))))
     }
   }
 }

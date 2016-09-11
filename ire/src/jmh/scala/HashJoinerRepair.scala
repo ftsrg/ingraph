@@ -28,8 +28,8 @@ class HashJoinerRepair {
   @Setup(Level.Trial)
   def generateData(): Unit = {
     val rnd = new Random(256)
-    primary = ChangeSet(positive = Vector.fill(size)(Vector(rnd.nextInt(size / 2), rnd.nextDouble())))
-    secondary = ChangeSet(positive = Vector.fill(size)(Vector(rnd.nextInt(size / 2), rnd.nextDouble())))
+    primary = ChangeSet(positive = Vector.fill(size)(Map(0 -> rnd.nextInt(size / 2), 1 -> rnd.nextDouble())))
+    secondary = ChangeSet(positive = Vector.fill(size)(Map(0 -> rnd.nextInt(size / 2), 1 -> rnd.nextDouble())))
     val secondaryKeys = secondary.positive.map( s => s(0)).toSet
     repairSet = ChangeSet(negative = rnd.shuffle(primary.positive.filter( p => secondaryKeys.contains(p(0)))).take(100))
   }
@@ -39,7 +39,7 @@ class HashJoinerRepair {
     system = ActorSystem()
     val production = system.actorOf(Props(new Production("")))
     joiner = system.actorOf(Props(
-      new HashJoiner(production, 2, Vector(0), 2, Vector(0))))
+      new NaturalJoiner(production, Vector(0))))
     terminator = Terminator(Seq(joiner.primary, joiner.secondary), production)
     joiner ! Primary(primary)
     joiner ! Secondary(secondary)

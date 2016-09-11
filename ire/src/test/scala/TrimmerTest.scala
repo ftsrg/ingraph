@@ -19,13 +19,13 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "A Trimmer" must {
     "select the values" in {
       val changes = ChangeSet(
-        positive = Vector(Vector(15, 16, 17, 18), Vector(4, 5, 6, 7)),
-        negative = Vector(Vector(-0, -1, -2, -3), Vector(-10, -11, -12, -13))
+        positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18), Map(0 -> 4, 1 -> 5, 2 -> 6, 3 -> 7)),
+        negative = Vector(Map(0 -> -0, 1 -> -1, 2 -> -2, 3 -> -3), Map(0 -> -10, 1 -> -11, 2 -> -12, 3 -> -13))
       )
       val selectionVector = Vector(0, 2)
       val expectedChanges = ChangeSet(
-        positive = Vector(Vector(15, 17), Vector(4, 6)),
-        negative = Vector(Vector(-0, -2), Vector(-10, -12))
+        positive = Vector(Map(0 -> 15, 2 -> 17), Map(0 -> 4, 2 -> 6)),
+        negative = Vector(Map(0 -> -0, 2 -> -2), Map(0 -> -10, 2 -> -12))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val selector = system.actorOf(Props(new Trimmer(echoActor ! _, selectionVector)), name = "testSelector")
@@ -35,20 +35,25 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       selector ! changes
       expectMsg(expectedChanges)
     }
-    val changeSet = ChangeSet(positive = Vector(Vector(0, "something")), negative = Vector(Vector(0, "something else")))
+
+    val changeSet = ChangeSet(positive = Vector(Map(0 -> 0, 1 -> "something")),
+      negative = Vector(Map(0 -> 0, 1 -> "something else")))
+
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1, 0))))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = Vector(Vector("something", 0)), negative = Vector(Vector("something else", 0))))
+      expectMsg(ChangeSet(positive = Vector(Map(1 -> "something", 0  -> 0)),
+        negative = Vector(Map(1 -> "something else", 0 -> 0))))
     }
+
     "do projection with lesser length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1))))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = Vector(Vector("something")), negative = Vector(Vector("something else"))))
+      expectMsg(ChangeSet(positive = Vector(Map(1 -> "something")), negative = Vector(Map(1 -> "something else"))))
     }
   }
 }

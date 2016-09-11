@@ -28,8 +28,8 @@ class HashJoinerBatch {
   @Setup(Level.Trial)
   def generateData(): Unit = {
     val rnd = new Random(256)
-    primary = ChangeSet(positive = Vector.fill(size)(Vector(rnd.nextInt(size / 2), rnd.nextDouble())))
-    secondary = ChangeSet(positive = Vector.fill(size)(Vector(rnd.nextInt(size / 2), rnd.nextDouble())))
+    primary = ChangeSet(positive = Vector.fill(size)(Map(0 -> rnd.nextInt(size / 2), 1 -> rnd.nextDouble())))
+    secondary = ChangeSet(positive = Vector.fill(size)(Map(0 -> rnd.nextInt(size / 2), 1 -> rnd.nextDouble())))
   }
 
   @Setup(Level.Iteration)
@@ -37,7 +37,7 @@ class HashJoinerBatch {
     system = ActorSystem()
     val production = system.actorOf(Props(new Production("")))
     joiner = system.actorOf(Props(
-      new HashJoiner(production, 2, Vector(0), 2, Vector(0))))
+      new NaturalJoiner(production, Vector(0))))
     terminator = Terminator(Seq(joiner.primary, joiner.secondary), production)
     Await.result(terminator.send(), Duration(1, DAYS))
   }
