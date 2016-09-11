@@ -2,10 +2,9 @@ package ingraph.relalg2tex.trainbenchmark
 
 import ingraph.cypher2relalg.RelalgParser
 import ingraph.relalg2tex.AlgebraTreeDrawer
-import ingraph.relalg2tex.ExpressionSerializer
 import org.junit.Test
 
-class QueryVisualizationTest {
+class TrainBenchmarkQueryPlanVisualizationTest {
 
 	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
 
