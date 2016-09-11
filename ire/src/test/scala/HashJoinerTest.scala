@@ -1,6 +1,6 @@
 /**
- * Created by Maginecz on 3/21/2015.
- */
+  * Created by Maginecz on 3/21/2015.
+  */
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
@@ -8,7 +8,7 @@ import hu.bme.mit.incqueryds._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
-with WordSpecLike with Matchers with BeforeAndAfterAll {
+  with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
 
@@ -16,152 +16,102 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   TestKit.shutdownActorSystem(system)
   }
 
-  "A HasJoin" must {
-  "retain positive nodes" in {
-    val primaryVec = Vector(15, 16, 17, 18)
-    val prim = ChangeSet(
-    positive = Vector(primaryVec)
-    )
-    val sec = ChangeSet(
-    positive = Vector(Vector(13, 15, 16))
-    )
-    val primarySel = Vector(1, 2)
-    val secondarySel = Vector(0, 1)
-    val actor = TestActorRef(new HashJoiner(nop => (), 4, primarySel, 3, secondarySel))
-    val node = actor.underlyingActor
-    node.receive(Primary(prim))
-    assert(node.primaryValues.get(Vector(16, 17)).get.contains(primaryVec))
-    node.receive(Secondary(sec))
-    assert(node.secondaryValues.get(Vector(13, 15)).get.contains(Vector(13, 15, 16)))
-  }
-  "remove negative nodes" in {
-    val prim1 = Vector(15, 16, 17, 18)
-    val prim2 = Vector(9, 8, 7, 6)
-    val prim = ChangeSet(
-    positive = Vector(prim1, prim2)
-    )
-    val primRemove = ChangeSet(
-    negative = Vector(prim1)
-    )
-    val sec1 = Vector(13, 15, 16, 17)
-    val sec2 = Vector(1, 2, 3, 4)
-    val sec = ChangeSet(
-    positive = Vector(sec1, sec2)
-    )
-
-    val primarySel = Vector(1, 2)
-    val secondarySel = Vector(0, 1)
-    val actor = TestActorRef(new HashJoiner(nop => (), 4, primarySel, 3, secondarySel))
-    val node = actor.underlyingActor
-    node.receive(Primary(prim))
-    node.receive(Secondary(sec))
-    node.receive(Primary(ChangeSet(negative = Vector(prim1))))
-    assert(node.primaryValues.get(Vector(16, 17)).isEmpty)
-    assert(node.primaryValues.get(Vector(8, 7)).get.contains(prim2))
-    node.receive(Secondary(ChangeSet(negative = Vector(sec1))))
-    assert(!node.secondaryValues.contains(Vector(13, 15)))
-    assert(node.secondaryValues.get(Vector(1, 2)).get.contains(sec2))
-  }
+  "A HashJoin" must {
   "join the values" in {
     val prim = ChangeSet(
-    positive = Vector(Vector(15, 16, 17, 18), Vector(4, 5, 6, 7))
+    positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18), Map(0 -> 4, 1 -> 5, 2 -> 6, 3 -> 7))
     )
     val sec = ChangeSet(
-    positive = Vector(Vector(13, 15, 16))
+    positive = Vector(Map(1 -> 15, 2 -> 16, 4 -> 13))
     )
     val primarySel = Vector(0, 1)
     val secondarySel = Vector(1, 2)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, 4, primarySel, 3, secondarySel)), name = "testSelector")
+    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)), name = "testSelector")
 
     joiner ! Primary(prim)
-      joiner ! Secondary(sec)
+    joiner ! Secondary(sec)
     expectMsg(ChangeSet(
-    positive = Vector(Vector(15, 16, 17, 18, 13))
+    positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18, 4 -> 13))
     ))
   }
+
   "do join 1" in {
     val primarySel = Vector(2)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, 3, primarySel, 2, secondarySel)))
+    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _,primarySel, secondarySel)))
 
     joiner ! Primary(ChangeSet(
-      positive = Vector(Vector(5,6,7),Vector(10,11,7))
+    positive = Vector(Map(0 -> 5, 1 -> 6, 2 -> 7), Map(0 -> 10, 1 -> 11, 2 -> 7))
     )
     )
 
-    joiner ! Secondary(ChangeSet(positive = Vector(Vector(7, 8))))
+    joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 7, 3 -> 8))))
     expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(
-    positive = Vector(Vector(10,11,7,8),Vector(5,6,7,8))
-      )
-    ):_*
+    positive = Vector(Map(0 -> 10, 1 -> 11, 2 -> 7, 3 -> 8), Map(0 -> 5, 1 -> 6, 2 -> 7, 3 -> 8))
+    )
+    ): _*
     )
   }
   "do join 2" in {
     val primarySel = Vector(1)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, 2, primarySel, 2, secondarySel)))
+    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
 
     joiner ! Primary(ChangeSet(
-    positive = Vector(Vector(1, 5),Vector(2, 6))
+    positive = Vector(Map(0 -> 1, 1 -> 5), Map(0 -> 2, 1 -> 6))
     )
     )
 
     joiner ! Secondary(ChangeSet(
-    positive = Vector(Vector(5, 10))
+    positive = Vector(Map(0 -> 5, 2 -> 10))
     )
     )
-    expectMsg(ChangeSet(positive = Vector(Vector(1, 5, 10))))
+    expectMsg(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 5, 2 -> 10))))
   }
   "do join new 1" in {
     val primarySel = Vector(1)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, 2, primarySel, 2, secondarySel)))
+    val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
 
-    joiner ! Primary(ChangeSet(
-    positive = Vector(Vector(2, 4),Vector(3, 4))
-    )
-    )
+    joiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4), Map(0 -> 3, 1 -> 4))))
 
-    joiner ! Secondary(ChangeSet(
-    positive = Vector(Vector(4, 5))
-    )
-    )
-    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(2, 4, 5), Vector(3, 4, 5)))):_*)
+    joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
+    expectMsgAnyOf(utils.changeSetPermutations(
+    ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
 
-    joiner ! Primary(ChangeSet(negative = Vector(Vector(3, 4))))
-    expectMsg(ChangeSet(negative = Vector(Vector(3, 4, 5))))
-    joiner ! Primary(ChangeSet(positive = Vector(Vector(3, 4))))
-    expectMsg(ChangeSet(positive = Vector(Vector(3, 4, 5))))
-    joiner ! Secondary(ChangeSet(negative = Vector(Vector(4, 5))))
-    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Vector(2, 4, 5), Vector(3, 4, 5)))):_*)
-    joiner ! Secondary(ChangeSet(positive = Vector(Vector(4, 5))))
-    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Vector(2, 4, 5), Vector(3, 4, 5)))):_*)
+    joiner ! Primary(ChangeSet(negative = Vector(Map(0 -> 3, 1 -> 4))))
+    expectMsg(ChangeSet(negative = Vector(Map(0 -> 3, 1 -> 4, 2 -> 5))))
+    joiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 3, 1 -> 4))))
+    expectMsg(ChangeSet(positive = Vector(Map(0 -> 3, 1 -> 4, 2 -> 5))))
+    joiner ! Secondary(ChangeSet(negative = Vector(Map(0 -> 4, 2 -> 5))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
+    joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
+    expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
   }
 
   "do parallel joins" in {
     val primarySel = Vector(0)
     val secondarySel = Vector(0)
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val joinerA = system.actorOf(Props(new HashJoiner(echoActor ! _, 3, primarySel, 2, secondarySel)))
-    val joinerB = system.actorOf(Props(new HashJoiner(echoActor ! _, 3, primarySel, 2, secondarySel)))
-    val forward: Vector[(ReteMessage)=>Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
-    val forkingJoiner = system.actorOf(Props(new ParallelHashJoiner(forward, 2, primarySel, 2, secondarySel,
-    hashFunction = (n:nodeType) => n(0).hashCode())))
-    forkingJoiner ! Secondary(ChangeSet(positive = Vector(Vector(0, 2))))
-    forkingJoiner ! Secondary(ChangeSet(positive = Vector(Vector(1, 3))))
+    val joinerA = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
+    val joinerB = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
+    val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
+    val forkingJoiner = system.actorOf(Props(new ParallelHashJoiner(forward, primarySel, secondarySel,
+    hashFunction = (n: nodeType) => n(0).hashCode())))
+    forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 2 -> 2))))
+    forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 2 -> 3))))
 
-    forkingJoiner ! Primary(ChangeSet(positive = Vector(Vector(0, 2))))
-    forkingJoiner ! Primary(ChangeSet(positive = Vector(Vector(1, 2))))
+    forkingJoiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 0, 1 -> 2))))
+    forkingJoiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 2))))
 
-    joinerB ! Secondary(ChangeSet(positive = Vector(Vector(1, 3))))
-    expectMsg(ChangeSet(positive = Vector(Vector(1, 2, 3, 3))))
-    joinerA ! Secondary(ChangeSet(positive = Vector(Vector(0, 3))))
-    expectMsg(ChangeSet(positive = Vector(Vector(0, 2, 2, 3))))
-
+    joinerB ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 3 -> 3))))
+    expectMsg(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 2, 2 -> 3, 3 -> 3))))
+    joinerA ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 3 -> 3))))
+    expectMsg(ChangeSet(positive = Vector(Map(0 -> 0, 1 -> 2, 2 -> 2, 3 -> 3))))
   }
   }
 }
