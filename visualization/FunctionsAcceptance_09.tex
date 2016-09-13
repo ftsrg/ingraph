@@ -8,7 +8,9 @@
 \begin{tikzpicture}
 \Tree
 [. {$\projection{\var{n}}$}
-	[. {$\getvertices{n}{Person}$}
+	[. {$\selection{exists(n['prop'])}$}
+		[. {$\getvertices{n}{Person}$}
+		]
 	]
 ]
 ;

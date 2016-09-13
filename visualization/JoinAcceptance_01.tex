@@ -8,10 +8,12 @@
 \begin{tikzpicture}
 \Tree
 [. {$\projection{\var{a},~\var{b}}$}
-	[. {$\join$}
-		[. {$\getvertices{a}{A}$}
-		]
-		[. {$\getvertices{b}{B}$}
+	[. {$\selection{a.id = b.id}$}
+		[. {$\join$}
+			[. {$\getvertices{a}{A}$}
+			]
+			[. {$\getvertices{b}{B}$}
+			]
 		]
 	]
 ]

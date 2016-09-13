@@ -61,7 +61,7 @@ class RelAlgTreeDrawer extends TexSerializer {
 	def dispatch children(AlphaOperator op) {
 		'''
 			
-				«op.input.toNode»
+				«op.input?.toNode»
 		'''
 	}
 

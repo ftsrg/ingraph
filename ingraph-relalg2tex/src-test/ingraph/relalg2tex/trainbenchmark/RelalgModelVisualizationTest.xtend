@@ -1,9 +1,8 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.relalg2tex.RelAlgTreeDrawer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
-import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class RelalgModelVisualizationTest {
 

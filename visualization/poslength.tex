@@ -9,7 +9,9 @@
 \Tree
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{segment}}$}
-		[. {$\getvertices{segment}{Segment}$}
+		[. {$\selection{segment.length~<=~0}$}
+			[. {$\getvertices{segment}{Segment}$}
+			]
 		]
 	]
 ]

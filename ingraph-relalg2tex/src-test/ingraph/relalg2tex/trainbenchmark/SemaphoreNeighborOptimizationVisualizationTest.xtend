@@ -17,32 +17,32 @@ class SemaphoreNeighborOptimizationVisualizationTest {
 
 	@Test
 	def void testRouteSensorA() {
-		print(drawer.serialize(f.semaphoreNeighborA, "SemaphoreNeighborA"))
+		drawer.serialize(f.semaphoreNeighborA, "SemaphoreNeighborA")
 	}
 
 	@Test
 	def void testRouteSensorB() {
-		print(drawer.serialize(f.semaphoreNeighborB, "SemaphoreNeighborB"))
+		drawer.serialize(f.semaphoreNeighborB, "SemaphoreNeighborB")
 	}
 
 	@Test
 	def void testRouteSensorC() {
-		print(drawer.serialize(f.semaphoreNeighborC, "SemaphoreNeighborC"))
+		drawer.serialize(f.semaphoreNeighborC, "SemaphoreNeighborC")
 	}
 
 	@Test
 	def void testRouteSensorD() {
-		print(drawer.serialize(f.semaphoreNeighborD, "SemaphoreNeighborD"))
+		drawer.serialize(f.semaphoreNeighborD, "SemaphoreNeighborD")
 	}
 
 	@Test
 	def void testRouteSensorE() {
-		print(drawer.serialize(f.semaphoreNeighborE, "SemaphoreNeighborE"))
+		drawer.serialize(f.semaphoreNeighborE, "SemaphoreNeighborE")
 	}
 
 	@Test
 	def void testRouteSensorF() {
-		print(drawer.serialize(f.semaphoreNeighborF, "SemaphoreNeighborF"))
+		drawer.serialize(f.semaphoreNeighborF, "SemaphoreNeighborF")
 	}
 
 }

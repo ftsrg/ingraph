@@ -8,7 +8,9 @@
 \begin{tikzpicture}
 \Tree
 [. {$\projection{\var{n}}$}
-	[. {$\getvertices{n}{Label}$}
+	[. {$\selection{n.prop < 10}$}
+		[. {$\getvertices{n}{Label}$}
+		]
 	]
 ]
 ;

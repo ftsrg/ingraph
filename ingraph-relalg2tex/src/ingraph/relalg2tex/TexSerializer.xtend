@@ -88,7 +88,7 @@ abstract class TexSerializer {
 	}
 
 	def dispatch operatorSymbol(SelectionOperator op) {
-		'''\selection{...}'''
+		'''\selection{«op.condition?.replaceAll(" ", "~")»}'''
 	}
 
 	def dispatch operatorSymbol(

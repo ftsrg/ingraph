@@ -10,7 +10,9 @@
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{sw}}$}
 		[. {$\antijoin$}
-			[. {$\getvertices{sw}{Switch}$}
+			[. {$\selection{NOT~((sw)-[:monitoredBy]->(:Sensor))}$}
+				[. {$\getvertices{sw}{Switch}$}
+				]
 			]
 			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$}
 				[. {$\getvertices{sw}{Switch}$}

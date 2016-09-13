@@ -17,17 +17,17 @@ class RouteSensorOptimizationVisualizationTest {
 
 	@Test
 	def void testRouteSensorA() {
-		print(drawer.serialize(f.routeSensorA, "RouteSensorA"))
+		drawer.serialize(f.routeSensorA, "RouteSensorA")
 	}
 
 	@Test
 	def void testRouteSensorB() {
-		print(drawer.serialize(f.routeSensorB, "RouteSensorB"))
+		drawer.serialize(f.routeSensorB, "RouteSensorB")
 	}
 
 	@Test
 	def void testRouteSensorC() {
-		print(drawer.serialize(f.routeSensorC, "RouteSensorC"))
+		drawer.serialize(f.routeSensorC, "RouteSensorC")
 	}
 
 }
