@@ -9,7 +9,7 @@
 \Tree
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$}
-		[. {$\selection{...}$}
+		[. {$\selection{}$}
 			[. {$\antijoin$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
 					[. {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$}
@@ -18,8 +18,6 @@
 								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
 									[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
 										[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
-											[. {$$}
-											]
 										]
 									]
 								]

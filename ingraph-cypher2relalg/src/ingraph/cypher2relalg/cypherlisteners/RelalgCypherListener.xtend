@@ -338,9 +338,14 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 			MatchContext: {
 				match_WhereJoinModeIsAntijoin = where_JoinModeIsAntijoin
 				match_WhereJoinExpression = where_JoinExpression
-				
-				val selectionOperator = createSelectionOperator => [condition = ctx.expression.text; input = match_AlgebraExpression ]
-				match_AlgebraExpression = selectionOperator
+
+				if (!where_JoinModeIsAntijoin) {
+					val selectionOperator = createSelectionOperator => [
+						condition = ctx.expression.text;
+						input = match_AlgebraExpression
+					]
+					match_AlgebraExpression = selectionOperator
+				}
 			}
 		}
 	}
