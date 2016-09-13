@@ -19,5 +19,6 @@
 \tikzset{
 	level distance=1.5cm,
 	sibling distance=1cm,
-	every node/.style={draw},
+	edge from parent path={(\tikzparentnode.south) -- (\tikzchildnode.north)},
+	every node/.style={draw}
 }
