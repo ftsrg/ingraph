@@ -15,15 +15,18 @@ def indent(lines):
 filenames = glob.glob('*.feature')
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
-    test_file = open("../../ingraph-cypher2relalg/src-test/ingraph/cypher2relalg/tck/%sParserTest.xtend" % filename_without_extension, "w")
+    test_file = open("../../ingraph-relalg2tex/src-test/ingraph/relalg2tex/tck/%sVisualizationTest.xtend" % filename_without_extension, "w")
 
-    test_header = """package ingraph.cypher2relalg.tck
+    test_header = """package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.relalg2tex.AlgebraTreeDrawer
 
-class %sParserTest {
+class %sVisualizationTest {
+
+    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
     """ % filename_without_extension
 
     test_file.write(test_header)
@@ -56,11 +59,12 @@ class %sParserTest {
     %s*/
     @Test
     def void test%s_%02d() {
-        RelalgParser.parse('''
+        val container = RelalgParser.parse('''
         %s
         ''')
+        drawer.serialize(container, "%s")
     }
-""" % (scenario, filename_without_extension, i, indent(query))
+""" % (scenario, filename_without_extension, i, indent(query), filename_without_extension)
         test_file.write(test_case)
 
     test_footer = """

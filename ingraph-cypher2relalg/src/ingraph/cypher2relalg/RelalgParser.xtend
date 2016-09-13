@@ -24,9 +24,6 @@ class RelalgParser {
 	}	
 	
 	def static parse(String query) {
-		println(query)
-		println
-		
 		val input = new ANTLRInputStream(query)
 		val lexer = new CypherLexer(input)
 		val tokenStream = new CommonTokenStream(lexer)
@@ -35,13 +32,6 @@ class RelalgParser {
 		val context = parser.cypher()
 		val listener = new RelalgCypherListener()
 		ParseTreeWalker.DEFAULT.walk(listener, context)
-
-		println("Vertex labels:    " + listener.vertexLabelFactory.elements.entrySet.map[key.toString].join(", "))
-		println("Vertex variables: " + listener.vertexVariableFactory.elements.entrySet.map[key.toString].join(", "))
-		println()
-		println("Edge labels:    " + listener.edgeLabelFactory.elements.entrySet.map[key.toString].join(", "))
-		println("Edge variables: " + listener.edgeVariableFactory.elements.entrySet.map[key.toString].join(", "))
-		println()
 
 		return listener.container
 	}
