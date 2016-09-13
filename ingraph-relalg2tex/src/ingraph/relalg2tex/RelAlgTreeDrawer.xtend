@@ -5,8 +5,9 @@ import relalg.AlphaOperator
 import relalg.BetaOperator
 import relalg.GetVerticesOperator
 import relalg.GetEdgesOperator
+import relalg.AllDifferentOperator
 
-class AlgebraTreeDrawer extends TexSerializer {
+class RelAlgTreeDrawer extends TexSerializer {
 
 	new(boolean full) {
 		super(full)
@@ -27,7 +28,17 @@ class AlgebraTreeDrawer extends TexSerializer {
 	/**
 	 * toNode
 	 */
-	def CharSequence toNode(AlgebraExpression expression) {
+	def dispatch CharSequence toNode(AllDifferentOperator expression) {
+		'''
+		«IF expression.edgeVariables.empty»
+		«toNode(expression.input)»
+		«ELSE»
+		[. {$«expression?.operatorSymbol»$}«expression?.children»
+		]
+		«ENDIF»'''
+	}
+	 
+	def dispatch CharSequence toNode(AlgebraExpression expression) {
 		'''
 		[. {$«expression?.operatorSymbol»$}«expression?.children»
 		]'''
