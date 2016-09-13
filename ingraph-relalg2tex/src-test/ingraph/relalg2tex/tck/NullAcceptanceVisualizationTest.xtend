@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class NullAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Ignore null when removing property
@@ -20,7 +20,7 @@ class NullAcceptanceVisualizationTest {
         REMOVE a.prop
         RETURN a
         ''')
-        drawer.serialize(container, "NullAcceptance")
+        drawer.serialize(container, "NullAcceptance_02")
     }
 
     /*
@@ -34,7 +34,7 @@ class NullAcceptanceVisualizationTest {
         REMOVE a:L
         RETURN a
         ''')
-        drawer.serialize(container, "NullAcceptance")
+        drawer.serialize(container, "NullAcceptance_06")
     }
 
 }

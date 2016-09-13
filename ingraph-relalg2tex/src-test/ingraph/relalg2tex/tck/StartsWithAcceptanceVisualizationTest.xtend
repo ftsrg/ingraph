@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class StartsWithAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Finding exact matches
@@ -19,7 +19,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_01")
     }
 
     /*
@@ -32,7 +32,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_02")
     }
 
     /*
@@ -45,7 +45,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_03")
     }
 
     /*
@@ -58,7 +58,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH 'AB'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_04")
     }
 
     /*
@@ -72,7 +72,7 @@ class StartsWithAcceptanceVisualizationTest {
         AND a.name ENDS WITH 'f'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_05")
     }
 
     /*
@@ -85,7 +85,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH ''
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_06")
     }
 
     /*
@@ -98,7 +98,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS 'CD'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_07")
     }
 
     /*
@@ -117,7 +117,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_08")
     }
 
     /*
@@ -136,7 +136,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_09")
     }
 
     /*
@@ -155,7 +155,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_10")
     }
 
     /*
@@ -174,7 +174,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_11")
     }
 
     /*
@@ -193,7 +193,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_12")
     }
 
     /*
@@ -212,7 +212,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_13")
     }
 
     /*
@@ -225,7 +225,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_14")
     }
 
     /*
@@ -238,7 +238,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name STARTS WITH null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_15")
     }
 
     /*
@@ -251,7 +251,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_16")
     }
 
     /*
@@ -264,7 +264,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name ENDS WITH null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_17")
     }
 
     /*
@@ -277,7 +277,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_18")
     }
 
     /*
@@ -290,7 +290,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name CONTAINS null
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_19")
     }
 
     /*
@@ -305,7 +305,7 @@ class StartsWithAcceptanceVisualizationTest {
         AND a.name ENDS WITH 'EF'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_20")
     }
 
     /*
@@ -318,7 +318,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name CONTAINS 'b'
         RETURN a
         ''')
-        drawer.serialize(container, "StartsWithAcceptance")
+        drawer.serialize(container, "StartsWithAcceptance_21")
     }
 
 }

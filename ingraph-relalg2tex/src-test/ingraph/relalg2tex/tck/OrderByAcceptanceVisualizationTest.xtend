@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class OrderByAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: ORDER BY should return results in ascending order
@@ -25,7 +25,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS prop
         ORDER BY n.prop
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_01")
     }
 
     /*
@@ -44,7 +44,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS prop
         ORDER BY n.prop DESC
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_02")
     }
 
     /*
@@ -60,7 +60,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN p
         ORDER BY rng
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_03")
     }
 
     /*
@@ -79,7 +79,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS n
         ORDER BY n + 2
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_04")
     }
 
     /*
@@ -101,7 +101,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN c.rank AS rank
         ORDER BY relevance, c.rank
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_05")
     }
 
     /*
@@ -114,7 +114,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN bools
         ORDER BY bools
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_06")
     }
 
     /*
@@ -127,7 +127,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN bools
         ORDER BY bools DESC
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_07")
     }
 
     /*
@@ -140,7 +140,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN strings
         ORDER BY strings
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_08")
     }
 
     /*
@@ -153,7 +153,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN strings
         ORDER BY strings DESC
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_09")
     }
 
     /*
@@ -166,7 +166,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN ints
         ORDER BY ints
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_10")
     }
 
     /*
@@ -179,7 +179,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN ints
         ORDER BY ints DESC
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_11")
     }
 
     /*
@@ -192,7 +192,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN floats
         ORDER BY floats
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_12")
     }
 
     /*
@@ -205,7 +205,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN floats
         ORDER BY floats DESC
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_13")
     }
 
     /*
@@ -224,7 +224,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT 1
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_14")
     }
 
     /*
@@ -238,7 +238,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT 0
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_15")
     }
 
     /*
@@ -254,7 +254,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT $limit
         ''')
-        drawer.serialize(container, "OrderByAcceptance")
+        drawer.serialize(container, "OrderByAcceptance_16")
     }
 
 }

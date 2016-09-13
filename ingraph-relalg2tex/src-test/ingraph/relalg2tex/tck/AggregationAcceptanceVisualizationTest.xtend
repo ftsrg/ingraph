@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class AggregationAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Support multiple divisions in aggregate function
@@ -24,7 +24,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN count(n) / 60 / 60 AS count
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_01")
     }
 
     /*
@@ -42,7 +42,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*) AS columnName
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_02")
     }
 
     /*
@@ -60,7 +60,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN size(collect(a))
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_03")
     }
 
     /*
@@ -73,7 +73,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a {name: 'Andres'})<-[:FATHER]-(child)
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_04")
     }
 
     /*
@@ -91,7 +91,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a:L)-[rel]->(b)
         RETURN a, count(*)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_05")
     }
 
     /*
@@ -112,7 +112,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN n.division, count(*)
         ORDER BY count(*) DESC, n.division ASC
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_06")
     }
 
     /*
@@ -131,7 +131,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.x, count(*)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_07")
     }
 
     /*
@@ -150,7 +150,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.y, count(n.x)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_08")
     }
 
     /*
@@ -169,7 +169,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.y, sum(n.x)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_09")
     }
 
     /*
@@ -187,7 +187,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH p=(a:L)-[*]->(b)
         RETURN b, avg(length(p))
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_10")
     }
 
     /*
@@ -200,7 +200,7 @@ class AggregationAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)
         RETURN count(DISTINCT a)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_11")
     }
 
     /*
@@ -217,7 +217,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN count(DISTINCT a.foo)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_12")
     }
 
     /*
@@ -230,7 +230,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND [null, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_13")
     }
 
     /*
@@ -243,7 +243,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND [null, 1, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_14")
     }
 
     /*
@@ -262,7 +262,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN DISTINCT a.color, count(*)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_15")
     }
 
     /*
@@ -279,7 +279,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_16")
     }
 
     /*
@@ -297,7 +297,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(a) * 10 + count(b) * 5 AS x
         ORDER BY x
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_17")
     }
 
     /*
@@ -314,7 +314,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN count(n), collect(n)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_18")
     }
 
     /*
@@ -332,7 +332,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_19")
     }
 
     /*
@@ -354,7 +354,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN collect(nodes(p)) AS paths, length(p) AS l
         ORDER BY l
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_20")
     }
 
     /*
@@ -376,7 +376,7 @@ class AggregationAcceptanceVisualizationTest {
         WITH a, other, min(length(p)) AS len
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_21")
     }
 
     /*
@@ -395,7 +395,7 @@ class AggregationAcceptanceVisualizationTest {
         b.prop AS bar,
         {y: count(b)} AS baz
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_22")
     }
 
     /*
@@ -415,7 +415,7 @@ class AggregationAcceptanceVisualizationTest {
         MERGE (a:A {prop: p})
         RETURN a.prop AS prop
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_23")
     }
 
     /*
@@ -430,7 +430,7 @@ class AggregationAcceptanceVisualizationTest {
         LIMIT 3000
         RETURN sum(i)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_24")
     }
 
     /*
@@ -447,7 +447,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()-[r]-()
         RETURN count(r)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_25")
     }
 
     /*
@@ -460,7 +460,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_26")
     }
 
     /*
@@ -473,7 +473,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)
         ''')
-        drawer.serialize(container, "AggregationAcceptance")
+        drawer.serialize(container, "AggregationAcceptance_27")
     }
 
 }

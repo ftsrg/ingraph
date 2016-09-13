@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class StartingPointAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Find all nodes
@@ -25,7 +25,7 @@ class StartingPointAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n
         ''')
-        drawer.serialize(container, "StartingPointAcceptance")
+        drawer.serialize(container, "StartingPointAcceptance_01")
     }
 
     /*
@@ -45,7 +45,7 @@ class StartingPointAcceptanceVisualizationTest {
         MATCH (n:Animal)
         RETURN n
         ''')
-        drawer.serialize(container, "StartingPointAcceptance")
+        drawer.serialize(container, "StartingPointAcceptance_02")
     }
 
     /*
@@ -64,7 +64,7 @@ class StartingPointAcceptanceVisualizationTest {
         WHERE n.prop = 2
         RETURN n
         ''')
-        drawer.serialize(container, "StartingPointAcceptance")
+        drawer.serialize(container, "StartingPointAcceptance_03")
     }
 
 }

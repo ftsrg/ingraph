@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class VarLengthAcceptance2VisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Handling relationships that are already bound in variable length paths
@@ -30,7 +30,7 @@ class VarLengthAcceptance2VisualizationTest {
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
-        drawer.serialize(container, "VarLengthAcceptance2")
+        drawer.serialize(container, "VarLengthAcceptance2_01")
     }
 
 }

@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class SkipLimitAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: SKIP with an expression that does not depend on variables
@@ -25,7 +25,7 @@ class SkipLimitAcceptanceVisualizationTest {
         WITH count(*) AS count
         RETURN count > 0 AS nonEmpty
         ''')
-        drawer.serialize(container, "SkipLimitAcceptance")
+        drawer.serialize(container, "SkipLimitAcceptance_01")
     }
 
     /*
@@ -43,7 +43,7 @@ class SkipLimitAcceptanceVisualizationTest {
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count
         ''')
-        drawer.serialize(container, "SkipLimitAcceptance")
+        drawer.serialize(container, "SkipLimitAcceptance_02")
     }
 
 }

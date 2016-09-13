@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class TriadicSelectionVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Handling triadic friend of a friend
@@ -19,7 +19,7 @@ class TriadicSelectionVisualizationTest {
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_01")
     }
 
     /*
@@ -34,7 +34,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_02")
     }
 
     /*
@@ -49,7 +49,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_03")
     }
 
     /*
@@ -64,7 +64,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_04")
     }
 
     /*
@@ -79,7 +79,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_05")
     }
 
     /*
@@ -94,7 +94,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_06")
     }
 
     /*
@@ -109,7 +109,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_07")
     }
 
     /*
@@ -124,7 +124,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_08")
     }
 
     /*
@@ -139,7 +139,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_09")
     }
 
     /*
@@ -154,7 +154,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_10")
     }
 
     /*
@@ -169,7 +169,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_11")
     }
 
     /*
@@ -184,7 +184,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_12")
     }
 
     /*
@@ -199,7 +199,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_13")
     }
 
     /*
@@ -214,7 +214,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_14")
     }
 
     /*
@@ -229,7 +229,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_15")
     }
 
     /*
@@ -244,7 +244,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_16")
     }
 
     /*
@@ -259,7 +259,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_17")
     }
 
     /*
@@ -274,7 +274,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_18")
     }
 
     /*
@@ -289,7 +289,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        drawer.serialize(container, "TriadicSelection")
+        drawer.serialize(container, "TriadicSelection_19")
     }
 
 }

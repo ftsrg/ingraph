@@ -1,13 +1,13 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.relalg2tex.AlgebraTreeDrawer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import org.junit.Test
 import org.junit.Before
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class RouteSensorOptimizationVisualizationTest {
 
-	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
 	var RouteSensorQueryPlanFactory f
 	
 	@Before

@@ -7,14 +7,12 @@
 \begin{preview}
 \begin{tikzpicture}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{sw}}$}
-		[. {$\antijoin$}
-			[. {$\getvertices{sw}{Switch}$}
+[. {$\projection{\var{a},~\var{b}}$}
+	[. {$\alldifferent{}$}
+		[. {$\join$}
+			[. {$\getvertices{a}{A}$}
 			]
-			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$}
-				[. {$\getvertices{sw}{Switch}$}
-				]
+			[. {$\getvertices{b}{B}$}
 			]
 		]
 	]

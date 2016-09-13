@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class ComparisonOperatorAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Handling numerical ranges 1
@@ -25,7 +25,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_01")
     }
 
     /*
@@ -44,7 +44,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_02")
     }
 
     /*
@@ -63,7 +63,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_03")
     }
 
     /*
@@ -82,7 +82,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_04")
     }
 
     /*
@@ -101,7 +101,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_05")
     }
 
     /*
@@ -120,7 +120,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_06")
     }
 
     /*
@@ -139,7 +139,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_07")
     }
 
     /*
@@ -158,7 +158,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_08")
     }
 
     /*
@@ -176,7 +176,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_09")
     }
 
     /*
@@ -199,7 +199,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
-        drawer.serialize(container, "ComparisonOperatorAcceptance")
+        drawer.serialize(container, "ComparisonOperatorAcceptance_10")
     }
 
 }

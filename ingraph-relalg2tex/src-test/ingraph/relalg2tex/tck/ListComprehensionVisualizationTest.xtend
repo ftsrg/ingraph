@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class ListComprehensionVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Returning a list comprehension
@@ -25,7 +25,7 @@ class ListComprehensionVisualizationTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        drawer.serialize(container, "ListComprehension")
+        drawer.serialize(container, "ListComprehension_01")
     }
 
     /*
@@ -45,7 +45,7 @@ class ListComprehensionVisualizationTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        drawer.serialize(container, "ListComprehension")
+        drawer.serialize(container, "ListComprehension_02")
     }
 
     /*
@@ -65,7 +65,7 @@ class ListComprehensionVisualizationTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        drawer.serialize(container, "ListComprehension")
+        drawer.serialize(container, "ListComprehension_03")
     }
 
 }

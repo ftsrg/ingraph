@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class LargeIntegerEqualityVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Does not lose precision
@@ -18,7 +18,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label)
         RETURN p.id
         ''')
-        drawer.serialize(container, "LargeIntegerEquality")
+        drawer.serialize(container, "LargeIntegerEquality_01")
     }
 
     /*
@@ -30,7 +30,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
-        drawer.serialize(container, "LargeIntegerEquality")
+        drawer.serialize(container, "LargeIntegerEquality_02")
     }
 
     /*
@@ -43,7 +43,7 @@ class LargeIntegerEqualityVisualizationTest {
         WHERE p.id = 4611686018427387905
         RETURN p.id
         ''')
-        drawer.serialize(container, "LargeIntegerEquality")
+        drawer.serialize(container, "LargeIntegerEquality_03")
     }
 
     /*
@@ -55,7 +55,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
-        drawer.serialize(container, "LargeIntegerEquality")
+        drawer.serialize(container, "LargeIntegerEquality_04")
     }
 
     /*
@@ -68,7 +68,7 @@ class LargeIntegerEqualityVisualizationTest {
         WHERE p.id = 4611686018427387900
         RETURN p.id
         ''')
-        drawer.serialize(container, "LargeIntegerEquality")
+        drawer.serialize(container, "LargeIntegerEquality_05")
     }
 
 }

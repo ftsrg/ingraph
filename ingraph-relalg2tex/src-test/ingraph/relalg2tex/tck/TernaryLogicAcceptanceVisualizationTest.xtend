@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class TernaryLogicAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: The inverse of a null is a null
@@ -17,7 +17,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN NOT null AS value
         ''')
-        drawer.serialize(container, "TernaryLogicAcceptance")
+        drawer.serialize(container, "TernaryLogicAcceptance_01")
     }
 
     /*
@@ -28,7 +28,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN null IS NULL AS value
         ''')
-        drawer.serialize(container, "TernaryLogicAcceptance")
+        drawer.serialize(container, "TernaryLogicAcceptance_02")
     }
 
     /*
@@ -39,7 +39,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN null IS NOT NULL AS value
         ''')
-        drawer.serialize(container, "TernaryLogicAcceptance")
+        drawer.serialize(container, "TernaryLogicAcceptance_03")
     }
 
     /*
@@ -50,7 +50,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN null = null AS value
         ''')
-        drawer.serialize(container, "TernaryLogicAcceptance")
+        drawer.serialize(container, "TernaryLogicAcceptance_04")
     }
 
     /*
@@ -61,7 +61,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN null <> null AS value
         ''')
-        drawer.serialize(container, "TernaryLogicAcceptance")
+        drawer.serialize(container, "TernaryLogicAcceptance_05")
     }
 
 }

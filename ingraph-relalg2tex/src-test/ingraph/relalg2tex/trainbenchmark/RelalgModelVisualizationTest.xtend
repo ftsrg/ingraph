@@ -1,13 +1,13 @@
 package ingraph.relalg2tex.trainbenchmark
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class RelalgModelVisualizationTest {
 
-	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
 
 	@Test
 	def void testPosLength() {

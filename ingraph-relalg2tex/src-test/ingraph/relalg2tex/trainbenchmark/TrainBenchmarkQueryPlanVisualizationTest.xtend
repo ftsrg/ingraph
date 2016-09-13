@@ -1,12 +1,12 @@
 package ingraph.relalg2tex.trainbenchmark
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
 import org.junit.Test
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class TrainBenchmarkQueryPlanVisualizationTest {
 
-	val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
 
 	@Test
 	def void testConnectedSegments() {

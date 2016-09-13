@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class EqualsAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Number-typed integer comparison
@@ -26,7 +26,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        drawer.serialize(container, "EqualsAcceptance")
+        drawer.serialize(container, "EqualsAcceptance_01")
     }
 
     /*
@@ -46,7 +46,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        drawer.serialize(container, "EqualsAcceptance")
+        drawer.serialize(container, "EqualsAcceptance_02")
     }
 
     /*
@@ -66,7 +66,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        drawer.serialize(container, "EqualsAcceptance")
+        drawer.serialize(container, "EqualsAcceptance_03")
     }
 
     /*
@@ -86,7 +86,7 @@ class EqualsAcceptanceVisualizationTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        drawer.serialize(container, "EqualsAcceptance")
+        drawer.serialize(container, "EqualsAcceptance_04")
     }
 
     /*
@@ -106,7 +106,7 @@ class EqualsAcceptanceVisualizationTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        drawer.serialize(container, "EqualsAcceptance")
+        drawer.serialize(container, "EqualsAcceptance_05")
     }
 
 }

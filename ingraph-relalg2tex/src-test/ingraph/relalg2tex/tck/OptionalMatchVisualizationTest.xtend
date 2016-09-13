@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class OptionalMatchVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: Satisfies the open world assumption, relationships between same nodes
@@ -26,7 +26,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        drawer.serialize(container, "OptionalMatch")
+        drawer.serialize(container, "OptionalMatch_01")
     }
 
     /*
@@ -45,7 +45,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        drawer.serialize(container, "OptionalMatch")
+        drawer.serialize(container, "OptionalMatch_02")
     }
 
     /*
@@ -65,7 +65,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        drawer.serialize(container, "OptionalMatch")
+        drawer.serialize(container, "OptionalMatch_03")
     }
 
 }

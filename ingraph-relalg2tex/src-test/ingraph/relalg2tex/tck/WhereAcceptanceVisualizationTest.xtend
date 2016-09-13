@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.AlgebraTreeDrawer
+import ingraph.relalg2tex.RelAlgTreeDrawer
 
 class WhereAcceptanceVisualizationTest {
 
-    val static AlgebraTreeDrawer drawer = new AlgebraTreeDrawer(true)
+    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
     
     /*
     Scenario: NOT and false
@@ -24,7 +24,7 @@ class WhereAcceptanceVisualizationTest {
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
         ''')
-        drawer.serialize(container, "WhereAcceptance")
+        drawer.serialize(container, "WhereAcceptance_01")
     }
 
     /*
@@ -42,7 +42,7 @@ class WhereAcceptanceVisualizationTest {
         WHERE n.prop < 10
         RETURN n.prop AS prop
         ''')
-        drawer.serialize(container, "WhereAcceptance")
+        drawer.serialize(container, "WhereAcceptance_02")
     }
 
 }
