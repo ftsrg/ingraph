@@ -23,7 +23,7 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
-		val filter1 = createFilterOperator => [input = getVertices] // FIXME: segment.length <= 0
+		val filter1 = createSelectionOperator => [input = getVertices] // FIXME: segment.length <= 0
 		val trimmer = createProjectionOperator => [
 			input = filter1
 			variables.addAll(Arrays.asList(segment, segment_length))
@@ -243,7 +243,7 @@ class TrainBenchmarkUtil {
 		]
 
 		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7] // FIXME: [semaphore, route2]
-		val filter = createFilterOperator => [input = antiJoin] // FIXME: route1 != route2
+		val filter = createSelectionOperator => [input = antiJoin] // FIXME: route1 != route2
 		val trimmer = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))
@@ -374,8 +374,8 @@ class TrainBenchmarkUtil {
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
 		]
 
-		val filter1 = createFilterOperator => [input = allDifferent] // FIXME: semaphore.signal='GO'
-		val filter2 = createFilterOperator => [input = filter1] // FIXME: sw.currentPosition != swP.position
+		val filter1 = createSelectionOperator => [input = allDifferent] // FIXME: semaphore.signal='GO'
+		val filter2 = createSelectionOperator => [input = filter1] // FIXME: sw.currentPosition != swP.position
 		val trimmer = createProjectionOperator => [
 			input = filter2
 			variables.addAll(Arrays.asList(semaphore, route, swP, sw, sw_currentPosition, swP_position))

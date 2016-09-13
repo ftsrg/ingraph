@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.FilterOperator;
+import relalg.Label;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Filter Operator</b></em>'.
+ * An implementation of the model object '<em><b>Label</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class FilterOperatorImpl extends AlphaOperatorImpl implements FilterOperator {
+public abstract class LabelImpl extends NamedElementImpl implements Label {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FilterOperatorImpl() {
+	protected LabelImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class FilterOperatorImpl extends AlphaOperatorImpl implements FilterOpera
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.FILTER_OPERATOR;
+		return RelalgPackage.Literals.LABEL;
 	}
 
-} //FilterOperatorImpl
+} //LabelImpl

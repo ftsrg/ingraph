@@ -118,11 +118,11 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.FILTER_OPERATOR: {
-				FilterOperator filterOperator = (FilterOperator)theEObject;
-				T result = caseFilterOperator(filterOperator);
-				if (result == null) result = caseAlphaOperator(filterOperator);
-				if (result == null) result = caseAlgebraExpression(filterOperator);
+			case RelalgPackage.SELECTION_OPERATOR: {
+				SelectionOperator selectionOperator = (SelectionOperator)theEObject;
+				T result = caseSelectionOperator(selectionOperator);
+				if (result == null) result = caseAlphaOperator(selectionOperator);
+				if (result == null) result = caseAlgebraExpression(selectionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -463,17 +463,17 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Filter Operator</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Selection Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Filter Operator</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Selection Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFilterOperator(FilterOperator object) {
+	public T caseSelectionOperator(SelectionOperator object) {
 		return null;
 	}
 

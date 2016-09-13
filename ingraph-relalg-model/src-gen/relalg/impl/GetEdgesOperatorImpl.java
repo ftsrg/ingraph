@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import relalg.EdgeVariable;
 import relalg.GetEdgesOperator;
 import relalg.RelalgPackage;

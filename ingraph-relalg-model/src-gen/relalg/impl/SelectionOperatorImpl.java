@@ -7,49 +7,50 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import relalg.RelalgPackage;
-import relalg.Variable;
+import relalg.SelectionOperator;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Variable</b></em>'.
+ * An implementation of the model object '<em><b>Selection Operator</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.VariableImpl#isDontCare <em>Dont Care</em>}</li>
+ *   <li>{@link relalg.impl.SelectionOperatorImpl#getCondition <em>Condition</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class VariableImpl extends NamedElementImpl implements Variable {
+public class SelectionOperatorImpl extends AlphaOperatorImpl implements SelectionOperator {
 	/**
-	 * The default value of the '{@link #isDontCare() <em>Dont Care</em>}' attribute.
+	 * The default value of the '{@link #getCondition() <em>Condition</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDontCare()
+	 * @see #getCondition()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean DONT_CARE_EDEFAULT = false;
+	protected static final String CONDITION_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #isDontCare() <em>Dont Care</em>}' attribute.
+	 * The cached value of the '{@link #getCondition() <em>Condition</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDontCare()
+	 * @see #getCondition()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean dontCare = DONT_CARE_EDEFAULT;
+	protected String condition = CONDITION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VariableImpl() {
+	protected SelectionOperatorImpl() {
 		super();
 	}
 
@@ -60,7 +61,7 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.VARIABLE;
+		return RelalgPackage.Literals.SELECTION_OPERATOR;
 	}
 
 	/**
@@ -68,8 +69,8 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isDontCare() {
-		return dontCare;
+	public String getCondition() {
+		return condition;
 	}
 
 	/**
@@ -77,11 +78,11 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setDontCare(boolean newDontCare) {
-		boolean oldDontCare = dontCare;
-		dontCare = newDontCare;
+	public void setCondition(String newCondition) {
+		String oldCondition = condition;
+		condition = newCondition;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.VARIABLE__DONT_CARE, oldDontCare, dontCare));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.SELECTION_OPERATOR__CONDITION, oldCondition, condition));
 	}
 
 	/**
@@ -92,8 +93,8 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.VARIABLE__DONT_CARE:
-				return isDontCare();
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
+				return getCondition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -106,8 +107,8 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.VARIABLE__DONT_CARE:
-				setDontCare((Boolean)newValue);
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
+				setCondition((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -121,8 +122,8 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.VARIABLE__DONT_CARE:
-				setDontCare(DONT_CARE_EDEFAULT);
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
+				setCondition(CONDITION_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,8 +137,8 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.VARIABLE__DONT_CARE:
-				return dontCare != DONT_CARE_EDEFAULT;
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
+				return CONDITION_EDEFAULT == null ? condition != null : !CONDITION_EDEFAULT.equals(condition);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -152,10 +153,10 @@ public abstract class VariableImpl extends NamedElementImpl implements Variable 
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (dontCare: ");
-		result.append(dontCare);
+		result.append(" (condition: ");
+		result.append(condition);
 		result.append(')');
 		return result.toString();
 	}
 
-} //VariableImpl
+} //SelectionOperatorImpl

@@ -58,13 +58,13 @@ public interface RelalgFactory extends EFactory {
 	ProductionOperator createProductionOperator();
 
 	/**
-	 * Returns a new object of class '<em>Filter Operator</em>'.
+	 * Returns a new object of class '<em>Selection Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Filter Operator</em>'.
+	 * @return a new object of class '<em>Selection Operator</em>'.
 	 * @generated
 	 */
-	FilterOperator createFilterOperator();
+	SelectionOperator createSelectionOperator();
 
 	/**
 	 * Returns a new object of class '<em>Expand Operator</em>'.

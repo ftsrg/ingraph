@@ -121,7 +121,7 @@ class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 		]
 
 		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7] // FIXME: [semaphore, route2]
-		val filter = createFilterOperator => [input = antiJoin] // FIXME: route1 != route2
+		val filter = createSelectionOperator => [input = antiJoin] // FIXME: route1 != route2
 		val trimmer = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))

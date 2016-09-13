@@ -96,8 +96,8 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createProductionOperatorAdapter();
 			}
 			@Override
-			public Adapter caseFilterOperator(FilterOperator object) {
-				return createFilterOperatorAdapter();
+			public Adapter caseSelectionOperator(SelectionOperator object) {
+				return createSelectionOperatorAdapter();
 			}
 			@Override
 			public Adapter caseExpandOperator(ExpandOperator object) {
@@ -330,16 +330,16 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.FilterOperator <em>Filter Operator</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.SelectionOperator <em>Selection Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.FilterOperator
+	 * @see relalg.SelectionOperator
 	 * @generated
 	 */
-	public Adapter createFilterOperatorAdapter() {
+	public Adapter createSelectionOperatorAdapter() {
 		return null;
 	}
 

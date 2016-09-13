@@ -2,6 +2,7 @@
  */
 package relalg;
 
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Label</b></em>'.
@@ -13,5 +14,4 @@ package relalg;
  * @generated
  */
 public interface Label extends NamedElement {
-
 } // Label

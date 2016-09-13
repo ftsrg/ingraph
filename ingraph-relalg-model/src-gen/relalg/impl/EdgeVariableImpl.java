@@ -5,42 +5,45 @@ package relalg.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
 import relalg.AttributeVariable;
+import relalg.EdgeLabel;
+import relalg.EdgeVariable;
 import relalg.RelalgPackage;
-import relalg.VertexLabel;
-import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Vertex Variable</b></em>'.
+ * An implementation of the model object '<em><b>Edge Variable</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.VertexVariableImpl#getVertexLabel <em>Vertex Label</em>}</li>
- *   <li>{@link relalg.impl.VertexVariableImpl#getAttributeVariables <em>Attribute Variables</em>}</li>
+ *   <li>{@link relalg.impl.EdgeVariableImpl#getEdgeLabel <em>Edge Label</em>}</li>
+ *   <li>{@link relalg.impl.EdgeVariableImpl#getAttributeVariables <em>Attribute Variables</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class VertexVariableImpl extends VariableImpl implements VertexVariable {
+public class EdgeVariableImpl extends VariableImpl implements EdgeVariable {
 	/**
-	 * The cached value of the '{@link #getVertexLabel() <em>Vertex Label</em>}' reference.
+	 * The cached value of the '{@link #getEdgeLabel() <em>Edge Label</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getVertexLabel()
+	 * @see #getEdgeLabel()
 	 * @generated
 	 * @ordered
 	 */
-	protected VertexLabel vertexLabel;
+	protected EdgeLabel edgeLabel;
 
 	/**
 	 * The cached value of the '{@link #getAttributeVariables() <em>Attribute Variables</em>}' reference list.
@@ -57,7 +60,7 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected VertexVariableImpl() {
+	protected EdgeVariableImpl() {
 		super();
 	}
 
@@ -68,7 +71,7 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.VERTEX_VARIABLE;
+		return RelalgPackage.Literals.EDGE_VARIABLE;
 	}
 
 	/**
@@ -76,16 +79,16 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VertexLabel getVertexLabel() {
-		if (vertexLabel != null && vertexLabel.eIsProxy()) {
-			InternalEObject oldVertexLabel = (InternalEObject)vertexLabel;
-			vertexLabel = (VertexLabel)eResolveProxy(oldVertexLabel);
-			if (vertexLabel != oldVertexLabel) {
+	public EdgeLabel getEdgeLabel() {
+		if (edgeLabel != null && edgeLabel.eIsProxy()) {
+			InternalEObject oldEdgeLabel = (InternalEObject)edgeLabel;
+			edgeLabel = (EdgeLabel)eResolveProxy(oldEdgeLabel);
+			if (edgeLabel != oldEdgeLabel) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL, oldVertexLabel, vertexLabel));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.EDGE_VARIABLE__EDGE_LABEL, oldEdgeLabel, edgeLabel));
 			}
 		}
-		return vertexLabel;
+		return edgeLabel;
 	}
 
 	/**
@@ -93,8 +96,8 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VertexLabel basicGetVertexLabel() {
-		return vertexLabel;
+	public EdgeLabel basicGetEdgeLabel() {
+		return edgeLabel;
 	}
 
 	/**
@@ -102,11 +105,11 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVertexLabel(VertexLabel newVertexLabel) {
-		VertexLabel oldVertexLabel = vertexLabel;
-		vertexLabel = newVertexLabel;
+	public void setEdgeLabel(EdgeLabel newEdgeLabel) {
+		EdgeLabel oldEdgeLabel = edgeLabel;
+		edgeLabel = newEdgeLabel;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL, oldVertexLabel, vertexLabel));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.EDGE_VARIABLE__EDGE_LABEL, oldEdgeLabel, edgeLabel));
 	}
 
 	/**
@@ -116,7 +119,7 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	 */
 	public EList<AttributeVariable> getAttributeVariables() {
 		if (attributeVariables == null) {
-			attributeVariables = new EObjectResolvingEList<AttributeVariable>(AttributeVariable.class, this, RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLES);
+			attributeVariables = new EObjectResolvingEList<AttributeVariable>(AttributeVariable.class, this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES);
 		}
 		return attributeVariables;
 	}
@@ -129,10 +132,10 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL:
-				if (resolve) return getVertexLabel();
-				return basicGetVertexLabel();
-			case RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLES:
+			case RelalgPackage.EDGE_VARIABLE__EDGE_LABEL:
+				if (resolve) return getEdgeLabel();
+				return basicGetEdgeLabel();
+			case RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES:
 				return getAttributeVariables();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -147,10 +150,10 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL:
-				setVertexLabel((VertexLabel)newValue);
+			case RelalgPackage.EDGE_VARIABLE__EDGE_LABEL:
+				setEdgeLabel((EdgeLabel)newValue);
 				return;
-			case RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLES:
+			case RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES:
 				getAttributeVariables().clear();
 				getAttributeVariables().addAll((Collection<? extends AttributeVariable>)newValue);
 				return;
@@ -166,10 +169,10 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL:
-				setVertexLabel((VertexLabel)null);
+			case RelalgPackage.EDGE_VARIABLE__EDGE_LABEL:
+				setEdgeLabel((EdgeLabel)null);
 				return;
-			case RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLES:
+			case RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES:
 				getAttributeVariables().clear();
 				return;
 		}
@@ -184,12 +187,12 @@ public class VertexVariableImpl extends VariableImpl implements VertexVariable {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.VERTEX_VARIABLE__VERTEX_LABEL:
-				return vertexLabel != null;
-			case RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLES:
+			case RelalgPackage.EDGE_VARIABLE__EDGE_LABEL:
+				return edgeLabel != null;
+			case RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLES:
 				return attributeVariables != null && !attributeVariables.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //VertexVariableImpl
+} //EdgeVariableImpl

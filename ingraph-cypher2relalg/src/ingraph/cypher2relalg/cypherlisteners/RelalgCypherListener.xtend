@@ -318,7 +318,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 			}
 		}
 	}
-
+	
 	var boolean where_InsideWhere = false
 	var AlgebraExpression where_JoinExpression
 	var boolean where_JoinModeIsAntijoin=false
@@ -329,7 +329,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		where_JoinExpression=null
 	}
 
-	override exitWhere(WhereContext ctx) {
+	override exitWhere(WhereContext ctx) {	
 		where_JoinModeIsAntijoin="NOT".equalsIgnoreCase(functionInvocation_FunctionName)
 		where_InsideWhere = false
 
@@ -369,20 +369,14 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 				relationshipsPattern_ExpandList)
 	}
 
-	override enterNumberLiteral(NumberLiteralContext ctx) {
-		//println("number")
-	}
-
 	override enterIntegerLiteral(IntegerLiteralContext ctx) {
-		print("integer ") 
 		val intValue = Integer.decode(ctx.text)
-		println(intValue)
+//		println(intValue)
 	}
 
 	override enterDoubleLiteral(DoubleLiteralContext ctx) {
-		print("double ")
 		val doubleValue = Double.parseDouble(ctx.text)
-		println(doubleValue)
+//		println(doubleValue)
 	}
 
 }

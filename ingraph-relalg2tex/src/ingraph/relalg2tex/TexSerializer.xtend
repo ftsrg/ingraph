@@ -1,25 +1,25 @@
 package ingraph.relalg2tex
 
+import java.io.File
+import java.nio.charset.Charset
+import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.EList
 import relalg.AlgebraExpression
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
+import relalg.Container
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ExpandOperator
-import relalg.FilterOperator
+import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
+import relalg.SelectionOperator
 import relalg.Variable
-import org.apache.commons.io.FileUtils
-import java.nio.charset.Charset
-import java.io.File
-import relalg.Container
-import relalg.GetEdgesOperator
 
 abstract class TexSerializer {
 
@@ -87,7 +87,7 @@ abstract class TexSerializer {
 			'''{«op.targetVertexVariable.vertexLabel?.name?.escape»}'''
 	}
 
-	def dispatch operatorSymbol(FilterOperator op) {
+	def dispatch operatorSymbol(SelectionOperator op) {
 		'''\selection{...}'''
 	}
 

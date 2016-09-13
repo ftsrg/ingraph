@@ -344,14 +344,14 @@ public interface RelalgPackage extends EPackage {
 	int PRODUCTION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.FilterOperatorImpl <em>Filter Operator</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.SelectionOperatorImpl <em>Selection Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.FilterOperatorImpl
-	 * @see relalg.impl.RelalgPackageImpl#getFilterOperator()
+	 * @see relalg.impl.SelectionOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getSelectionOperator()
 	 * @generated
 	 */
-	int FILTER_OPERATOR = 7;
+	int SELECTION_OPERATOR = 7;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -360,25 +360,34 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
+	int SELECTION_OPERATOR__INPUT = ALPHA_OPERATOR__INPUT;
 
 	/**
-	 * The number of structural features of the '<em>Filter Operator</em>' class.
+	 * The feature id for the '<em><b>Condition</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 0;
+	int SELECTION_OPERATOR__CONDITION = ALPHA_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>Filter Operator</em>' class.
+	 * The number of structural features of the '<em>Selection Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
+	int SELECTION_OPERATOR_FEATURE_COUNT = ALPHA_OPERATOR_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Selection Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELECTION_OPERATOR_OPERATION_COUNT = ALPHA_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.ExpandOperatorImpl <em>Expand Operator</em>}' class.
@@ -1723,7 +1732,6 @@ public interface RelalgPackage extends EPackage {
 	 */
 	int DIRECTION = 36;
 
-
 	/**
 	 * The meta object id for the '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
@@ -1783,6 +1791,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int ORDER = 42;
+
 
 	/**
 	 * Returns the meta object for class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
@@ -1899,14 +1908,25 @@ public interface RelalgPackage extends EPackage {
 	EClass getProductionOperator();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.FilterOperator <em>Filter Operator</em>}'.
+	 * Returns the meta object for class '{@link relalg.SelectionOperator <em>Selection Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Filter Operator</em>'.
-	 * @see relalg.FilterOperator
+	 * @return the meta object for class '<em>Selection Operator</em>'.
+	 * @see relalg.SelectionOperator
 	 * @generated
 	 */
-	EClass getFilterOperator();
+	EClass getSelectionOperator();
+
+	/**
+	 * Returns the meta object for the attribute '{@link relalg.SelectionOperator#getCondition <em>Condition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Condition</em>'.
+	 * @see relalg.SelectionOperator#getCondition()
+	 * @see #getSelectionOperator()
+	 * @generated
+	 */
+	EAttribute getSelectionOperator_Condition();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.ExpandOperator <em>Expand Operator</em>}'.
@@ -2692,14 +2712,22 @@ public interface RelalgPackage extends EPackage {
 		EClass PRODUCTION_OPERATOR = eINSTANCE.getProductionOperator();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.FilterOperatorImpl <em>Filter Operator</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.SelectionOperatorImpl <em>Selection Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.FilterOperatorImpl
-		 * @see relalg.impl.RelalgPackageImpl#getFilterOperator()
+		 * @see relalg.impl.SelectionOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getSelectionOperator()
 		 * @generated
 		 */
-		EClass FILTER_OPERATOR = eINSTANCE.getFilterOperator();
+		EClass SELECTION_OPERATOR = eINSTANCE.getSelectionOperator();
+
+		/**
+		 * The meta object literal for the '<em><b>Condition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SELECTION_OPERATOR__CONDITION = eINSTANCE.getSelectionOperator_Condition();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.ExpandOperatorImpl <em>Expand Operator</em>}' class.

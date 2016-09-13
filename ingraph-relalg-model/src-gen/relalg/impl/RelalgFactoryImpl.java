@@ -61,7 +61,7 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.JOIN_OPERATOR: return createJoinOperator();
 			case RelalgPackage.ANTI_JOIN_OPERATOR: return createAntiJoinOperator();
 			case RelalgPackage.PRODUCTION_OPERATOR: return createProductionOperator();
-			case RelalgPackage.FILTER_OPERATOR: return createFilterOperator();
+			case RelalgPackage.SELECTION_OPERATOR: return createSelectionOperator();
 			case RelalgPackage.EXPAND_OPERATOR: return createExpandOperator();
 			case RelalgPackage.GET_VERTICES_OPERATOR: return createGetVerticesOperator();
 			case RelalgPackage.DUPLICATE_ELIMINATION_OPERATOR: return createDuplicateEliminationOperator();
@@ -188,9 +188,9 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FilterOperator createFilterOperator() {
-		FilterOperatorImpl filterOperator = new FilterOperatorImpl();
-		return filterOperator;
+	public SelectionOperator createSelectionOperator() {
+		SelectionOperatorImpl selectionOperator = new SelectionOperatorImpl();
+		return selectionOperator;
 	}
 
 	/**

@@ -31,7 +31,6 @@ import relalg.EdgeLabel;
 import relalg.EdgeVariable;
 import relalg.ExpandOperator;
 import relalg.Expression;
-import relalg.FilterOperator;
 import relalg.GetEdgesOperator;
 import relalg.GetVerticesOperator;
 import relalg.IntegerLiteral;
@@ -45,6 +44,7 @@ import relalg.ProjectionOperator;
 import relalg.RelalgFactory;
 import relalg.RelalgPackage;
 import relalg.ReturnableElement;
+import relalg.SelectionOperator;
 import relalg.StringComparisonExpression;
 import relalg.StringComparisonOperator;
 import relalg.StringLiteral;
@@ -116,7 +116,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass filterOperatorEClass = null;
+	private EClass selectionOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -528,8 +528,17 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getFilterOperator() {
-		return filterOperatorEClass;
+	public EClass getSelectionOperator() {
+		return selectionOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSelectionOperator_Condition() {
+		return (EAttribute)selectionOperatorEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1145,7 +1154,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		productionOperatorEClass = createEClass(PRODUCTION_OPERATOR);
 
-		filterOperatorEClass = createEClass(FILTER_OPERATOR);
+		selectionOperatorEClass = createEClass(SELECTION_OPERATOR);
+		createEAttribute(selectionOperatorEClass, SELECTION_OPERATOR__CONDITION);
 
 		expandOperatorEClass = createEClass(EXPAND_OPERATOR);
 		createEAttribute(expandOperatorEClass, EXPAND_OPERATOR__DIRECTION);
@@ -1275,7 +1285,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		betaOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		antiJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
 		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		filterOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
+		selectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		expandOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		getVerticesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		duplicateEliminationOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
@@ -1322,7 +1332,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(productionOperatorEClass, ProductionOperator.class, "ProductionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(filterOperatorEClass, FilterOperator.class, "FilterOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(selectionOperatorEClass, SelectionOperator.class, "SelectionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSelectionOperator_Condition(), ecorePackage.getEString(), "condition", null, 0, 1, SelectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(expandOperatorEClass, ExpandOperator.class, "ExpandOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpandOperator_Direction(), this.getDirection(), "direction", "IN", 0, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
