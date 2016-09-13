@@ -17,7 +17,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding beginning of string
     */
@@ -29,7 +29,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding end of string 1
     */
@@ -41,7 +41,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding end of string 2
     */
@@ -53,7 +53,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding middle of string
     */
@@ -66,7 +66,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding the empty string
     */
@@ -78,7 +78,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding when the middle is known
     */
@@ -90,7 +90,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Finding strings starting with whitespace
     And having executed:
@@ -108,7 +108,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: Finding strings starting with newline
     And having executed:
@@ -126,7 +126,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: Finding strings ending with newline
     And having executed:
@@ -144,7 +144,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: Finding strings ending with whitespace
     And having executed:
@@ -162,7 +162,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: Finding strings containing whitespace
     And having executed:
@@ -180,7 +180,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: Finding strings containing newline
     And having executed:
@@ -198,7 +198,7 @@ class StartsWithAcceptanceTest {
         RETURN a.name AS name
         ''')
     }
-        
+
     /*
     Scenario: No string starts with null
     */
@@ -210,7 +210,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No string does not start with null
     */
@@ -222,7 +222,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No string ends with null
     */
@@ -234,7 +234,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No string does not end with null
     */
@@ -246,7 +246,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No string contains null
     */
@@ -258,7 +258,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No string does not contain null
     */
@@ -270,7 +270,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Combining string operators
     */
@@ -284,7 +284,7 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: NOT with CONTAINS
     */
@@ -296,6 +296,5 @@ class StartsWithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
 }
-    

@@ -16,7 +16,7 @@ class LargeIntegerEqualityTest {
         RETURN p.id
         ''')
     }
-        
+
     /*
     Scenario: Handling inlined equality of large integer
     */
@@ -27,7 +27,7 @@ class LargeIntegerEqualityTest {
         RETURN p.id
         ''')
     }
-        
+
     /*
     Scenario: Handling explicit equality of large integer
     */
@@ -39,7 +39,7 @@ class LargeIntegerEqualityTest {
         RETURN p.id
         ''')
     }
-        
+
     /*
     Scenario: Handling inlined equality of large integer, non-equal values
     */
@@ -50,7 +50,7 @@ class LargeIntegerEqualityTest {
         RETURN p.id
         ''')
     }
-        
+
     /*
     Scenario: Handling explicit equality of large integer, non-equal values
     */
@@ -62,6 +62,5 @@ class LargeIntegerEqualityTest {
         RETURN p.id
         ''')
     }
-        
+
 }
-    

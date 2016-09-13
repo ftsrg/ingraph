@@ -15,7 +15,7 @@ class TernaryLogicAcceptanceTest {
         RETURN NOT null AS value
         ''')
     }
-        
+
     /*
     Scenario: A literal null IS null
     */
@@ -25,7 +25,7 @@ class TernaryLogicAcceptanceTest {
         RETURN null IS NULL AS value
         ''')
     }
-        
+
     /*
     Scenario: A literal null is not IS NOT null
     */
@@ -35,7 +35,7 @@ class TernaryLogicAcceptanceTest {
         RETURN null IS NOT NULL AS value
         ''')
     }
-        
+
     /*
     Scenario: It is unknown - i.e. null - if a null is equal to a null
     */
@@ -45,7 +45,7 @@ class TernaryLogicAcceptanceTest {
         RETURN null = null AS value
         ''')
     }
-        
+
     /*
     Scenario: It is unknown - i.e. null - if a null is not equal to a null
     */
@@ -55,6 +55,5 @@ class TernaryLogicAcceptanceTest {
         RETURN null <> null AS value
         ''')
     }
-        
+
 }
-    

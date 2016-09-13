@@ -22,7 +22,7 @@ class ReturnAcceptanceTest {
         RETURN a.version + 5
         ''')
     }
-        
+
     /*
     Scenario: Limit to two hits
     Given an empty graph
@@ -43,7 +43,7 @@ class ReturnAcceptanceTest {
         LIMIT 2
         ''')
     }
-        
+
     /*
     Scenario: Start the result from the second row
     Given an empty graph
@@ -65,7 +65,7 @@ class ReturnAcceptanceTest {
         SKIP 2
         ''')
     }
-        
+
     /*
     Scenario: Start the result from the second row by param
     Given an empty graph
@@ -89,7 +89,7 @@ class ReturnAcceptanceTest {
         SKIP $skipAmount
         ''')
     }
-        
+
     /*
     Scenario: Get rows in the middle
     Given an empty graph
@@ -112,7 +112,7 @@ class ReturnAcceptanceTest {
         LIMIT 2
         ''')
     }
-        
+
     /*
     Scenario: Get rows in the middle by param
     Given an empty graph
@@ -138,7 +138,7 @@ class ReturnAcceptanceTest {
         LIMIT $l
         ''')
     }
-        
+
     /*
     Scenario: Sort on aggregated function
     Given an empty graph
@@ -158,7 +158,7 @@ class ReturnAcceptanceTest {
         ORDER BY max(n.age)
         ''')
     }
-        
+
     /*
     Scenario: Support sort and distinct
     Given an empty graph
@@ -177,7 +177,7 @@ class ReturnAcceptanceTest {
         ORDER BY a.name
         ''')
     }
-        
+
     /*
     Scenario: Support column renaming
     Given an empty graph
@@ -193,7 +193,7 @@ class ReturnAcceptanceTest {
         RETURN a AS ColumnName
         ''')
     }
-        
+
     /*
     Scenario: Support ordering by a property after being distinct-ified
     Given an empty graph
@@ -210,7 +210,7 @@ class ReturnAcceptanceTest {
         ORDER BY b.name
         ''')
     }
-        
+
     /*
     Scenario: Arithmetic precedence test
     Given any graph
@@ -221,7 +221,7 @@ class ReturnAcceptanceTest {
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
     }
-        
+
     /*
     Scenario: Arithmetic precedence with parenthesis test
     Given any graph
@@ -232,7 +232,7 @@ class ReturnAcceptanceTest {
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
     }
-        
+
     /*
     Scenario: Count star should count everything in scope
     Given an empty graph
@@ -249,7 +249,7 @@ class ReturnAcceptanceTest {
         ORDER BY count(*)
         ''')
     }
-        
+
     /*
     Scenario: Absolute function
     Given any graph
@@ -260,7 +260,7 @@ class ReturnAcceptanceTest {
         RETURN abs(-1)
         ''')
     }
-        
+
     /*
     Scenario: Return collection size
     Given any graph
@@ -271,6 +271,5 @@ class ReturnAcceptanceTest {
         RETURN size([1, 2, 3]) AS n
         ''')
     }
-        
+
 }
-    

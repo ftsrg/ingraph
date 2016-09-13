@@ -23,7 +23,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling numerical ranges 2
     Given an empty graph
@@ -41,7 +41,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling numerical ranges 3
     Given an empty graph
@@ -59,7 +59,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling numerical ranges 4
     Given an empty graph
@@ -77,7 +77,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling string ranges 1
     Given an empty graph
@@ -95,7 +95,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling string ranges 2
     Given an empty graph
@@ -113,7 +113,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling string ranges 3
     Given an empty graph
@@ -131,7 +131,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling string ranges 4
     Given an empty graph
@@ -149,7 +149,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling empty range
     Given an empty graph
@@ -166,7 +166,7 @@ class ComparisonOperatorAcceptanceTest {
         RETURN n.value
         ''')
     }
-        
+
     /*
     Scenario: Handling long chains of operators
     Given an empty graph
@@ -188,6 +188,5 @@ class ComparisonOperatorAcceptanceTest {
         RETURN labels(m)
         ''')
     }
-        
+
 }
-    

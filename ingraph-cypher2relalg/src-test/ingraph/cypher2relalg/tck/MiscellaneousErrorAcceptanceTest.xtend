@@ -15,6 +15,5 @@ class MiscellaneousErrorAcceptanceTest {
         MERGE ({p: null})
         ''')
     }
-        
+
 }
-    

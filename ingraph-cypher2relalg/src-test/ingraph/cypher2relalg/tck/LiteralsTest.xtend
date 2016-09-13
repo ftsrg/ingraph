@@ -15,7 +15,7 @@ class LiteralsTest {
         RETURN 1 AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a float
     */
@@ -25,7 +25,7 @@ class LiteralsTest {
         RETURN 1.0 AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a float in exponent form
     */
@@ -35,7 +35,7 @@ class LiteralsTest {
         RETURN -1e-9 AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a boolean
     */
@@ -45,7 +45,7 @@ class LiteralsTest {
         RETURN true AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a single-quoted string
     */
@@ -55,7 +55,7 @@ class LiteralsTest {
         RETURN '' AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a double-quoted string
     */
@@ -65,7 +65,7 @@ class LiteralsTest {
         RETURN "" AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return null
     */
@@ -75,7 +75,7 @@ class LiteralsTest {
         RETURN null AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return an empty list
     */
@@ -85,7 +85,7 @@ class LiteralsTest {
         RETURN [] AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a nonempty list
     */
@@ -95,7 +95,7 @@ class LiteralsTest {
         RETURN [0, 1, 2] AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return an empty map
     */
@@ -105,7 +105,7 @@ class LiteralsTest {
         RETURN {} AS literal
         ''')
     }
-        
+
     /*
     Scenario: Return a nonempty map
     */
@@ -115,6 +115,5 @@ class LiteralsTest {
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
     }
-        
+
 }
-    

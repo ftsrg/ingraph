@@ -25,7 +25,7 @@ class JoinAcceptanceTest {
         RETURN a, b
         ''')
     }
-        
+
     /*
     Scenario: Should only join when matching
     Given an empty graph
@@ -44,6 +44,5 @@ class JoinAcceptanceTest {
         RETURN a, b
         ''')
     }
-        
+
 }
-    

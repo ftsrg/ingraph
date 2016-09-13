@@ -23,7 +23,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY and LIMIT can be used
     Given an empty graph
@@ -44,7 +44,7 @@ class WithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: No dependencies between the query parts
     Given an empty graph
@@ -62,7 +62,7 @@ class WithAcceptanceTest {
         RETURN a, b
         ''')
     }
-        
+
     /*
     Scenario: Aliasing
     Given an empty graph
@@ -83,7 +83,7 @@ class WithAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Handle dependencies across WITH
     Given an empty graph
@@ -105,7 +105,7 @@ class WithAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Handle dependencies across WITH with SKIP
     Given an empty graph
@@ -128,7 +128,7 @@ class WithAcceptanceTest {
         RETURN DISTINCT b
         ''')
     }
-        
+
     /*
     Scenario: WHERE after WITH should filter results
     Given an empty graph
@@ -148,7 +148,7 @@ class WithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: WHERE after WITH can filter on top of an aggregation
     Given an empty graph
@@ -171,7 +171,7 @@ class WithAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY on an aggregating key
     Given an empty graph
@@ -191,7 +191,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY a DISTINCT column
     Given an empty graph
@@ -211,7 +211,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: WHERE on a DISTINCT column
     Given an empty graph
@@ -231,7 +231,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: A simple pattern with one bound endpoint
     Given an empty graph
@@ -251,7 +251,7 @@ class WithAcceptanceTest {
         RETURN a, r, b
         ''')
     }
-        
+
     /*
     Scenario: Null handling
     Given an empty graph
@@ -265,7 +265,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: Nested maps
     Given an empty graph
@@ -277,7 +277,7 @@ class WithAcceptanceTest {
         RETURN nestedMap.foo.bar
         ''')
     }
-        
+
     /*
     Scenario: Connected components succeeding WITH
     Given an empty graph
@@ -297,7 +297,7 @@ class WithAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: Single WITH using a predicate and aggregation
     Given an empty graph
@@ -315,7 +315,7 @@ class WithAcceptanceTest {
         RETURN count(*)
         ''')
     }
-        
+
     /*
     Scenario: Multiple WITHs using a predicate and aggregation
     Given an empty graph
@@ -346,6 +346,5 @@ class WithAcceptanceTest {
         RETURN count(*)
         ''')
     }
-        
+
 }
-    

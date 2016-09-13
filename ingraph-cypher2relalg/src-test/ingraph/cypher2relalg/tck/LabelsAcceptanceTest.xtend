@@ -20,7 +20,7 @@ class LabelsAcceptanceTest {
         RETURN labels(n)
         ''')
     }
-        
+
     /*
     Scenario: Removing a label
     And having executed:
@@ -36,7 +36,7 @@ class LabelsAcceptanceTest {
         RETURN labels(n)
         ''')
     }
-        
+
     /*
     Scenario: Removing a non-existent label
     And having executed:
@@ -52,6 +52,5 @@ class LabelsAcceptanceTest {
         RETURN labels(n)
         ''')
     }
-        
+
 }
-    

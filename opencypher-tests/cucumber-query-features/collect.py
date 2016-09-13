@@ -59,11 +59,11 @@ class %sTest {
         %s
         ''')
     }
-        """ % (scenario, filename_without_extension, i, indent(query))
+""" % (scenario, filename_without_extension, i, indent(query))
         test_file.write(test_case)
 
     test_footer = """
 }
-    """
+"""
     test_file.write(test_footer)
     test_file.close()

@@ -24,7 +24,7 @@ class OptionalMatchTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
     }
-        
+
     /*
     Scenario: Satisfies the open world assumption, single relationship
     Given an empty graph
@@ -42,7 +42,7 @@ class OptionalMatchTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
     }
-        
+
     /*
     Scenario: Satisfies the open world assumption, relationships between different nodes
     Given an empty graph
@@ -61,6 +61,5 @@ class OptionalMatchTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
     }
-        
+
 }
-    

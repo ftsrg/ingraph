@@ -7,4 +7,3 @@ import ingraph.cypher2relalg.RelalgParser
 class SyntaxErrorAcceptanceTest {
     
 }
-    

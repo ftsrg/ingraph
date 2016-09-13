@@ -16,7 +16,7 @@ class TypeConversionFunctionsTest {
         RETURN toBoolean('true') AS b
         ''')
     }
-        
+
     /*
     Scenario: `toBoolean()` on booleans
     Given any graph
@@ -28,7 +28,7 @@ class TypeConversionFunctionsTest {
         RETURN toBoolean(b) AS b
         ''')
     }
-        
+
     /*
     Scenario: `toBoolean()` on variables with valid string values
     Given any graph
@@ -40,7 +40,7 @@ class TypeConversionFunctionsTest {
         RETURN toBoolean(s) AS b
         ''')
     }
-        
+
     /*
     Scenario: `toBoolean()` on invalid strings
     Given any graph
@@ -52,7 +52,7 @@ class TypeConversionFunctionsTest {
         RETURN toBoolean(things) AS b
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()`
     Given an empty graph
@@ -70,7 +70,7 @@ class TypeConversionFunctionsTest {
         RETURN toInteger(n.age) AS age
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()` on float
     Given any graph
@@ -82,7 +82,7 @@ class TypeConversionFunctionsTest {
         RETURN toInteger(weight)
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()` returning null on non-numerical string
     Given any graph
@@ -94,7 +94,7 @@ class TypeConversionFunctionsTest {
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()` handling mixed number types
     Given any graph
@@ -106,7 +106,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()` handling Any type
     Given any graph
@@ -118,7 +118,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toInteger()` on a list of strings
     Given any graph
@@ -130,7 +130,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toFloat()`
     Given an empty graph
@@ -148,7 +148,7 @@ class TypeConversionFunctionsTest {
         RETURN toFloat(n.rating) AS float
         ''')
     }
-        
+
     /*
     Scenario: `toFloat()` on mixed number types
     Given any graph
@@ -160,7 +160,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toFloat()` returning null on non-numerical string
     Given any graph
@@ -172,7 +172,7 @@ class TypeConversionFunctionsTest {
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
     }
-        
+
     /*
     Scenario: `toFloat()` handling Any type
     Given any graph
@@ -184,7 +184,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toFloat()` on a list of strings
     Given any graph
@@ -196,7 +196,7 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
     }
-        
+
     /*
     Scenario: `toString()`
     Given an empty graph
@@ -214,7 +214,7 @@ class TypeConversionFunctionsTest {
         RETURN toString(n.rating)
         ''')
     }
-        
+
     /*
     Scenario: `toString()` handling boolean properties
     Given an empty graph
@@ -230,7 +230,7 @@ class TypeConversionFunctionsTest {
         RETURN toString(m.watched)
         ''')
     }
-        
+
     /*
     Scenario: `toString()` handling inlined boolean
     Given any graph
@@ -241,7 +241,7 @@ class TypeConversionFunctionsTest {
         RETURN toString(1 < 0) AS bool
         ''')
     }
-        
+
     /*
     Scenario: `toString()` handling boolean literal
     Given any graph
@@ -252,7 +252,7 @@ class TypeConversionFunctionsTest {
         RETURN toString(true) AS bool
         ''')
     }
-        
+
     /*
     Scenario: `toString()` should work on Any type
     Given any graph
@@ -263,7 +263,7 @@ class TypeConversionFunctionsTest {
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
     }
-        
+
     /*
     Scenario: `toString()` on a list of integers
     Given any graph
@@ -275,6 +275,5 @@ class TypeConversionFunctionsTest {
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
     }
-        
+
 }
-    

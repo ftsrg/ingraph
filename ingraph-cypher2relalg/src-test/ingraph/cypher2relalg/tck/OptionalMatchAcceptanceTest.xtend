@@ -17,7 +17,7 @@ class OptionalMatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Return null when no matches due to label predicate in WHERE
     */
@@ -30,7 +30,7 @@ class OptionalMatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Respect predicates on the OPTIONAL MATCH
     */
@@ -43,7 +43,7 @@ class OptionalMatchAcceptanceTest {
         RETURN m
         ''')
     }
-        
+
     /*
     Scenario: Returning label predicate on null node
     */
@@ -55,7 +55,7 @@ class OptionalMatchAcceptanceTest {
         RETURN m:TYPE
         ''')
     }
-        
+
     /*
     Scenario: MATCH after OPTIONAL MATCH
     */
@@ -70,7 +70,7 @@ class OptionalMatchAcceptanceTest {
         RETURN d
         ''')
     }
-        
+
     /*
     Scenario: WITH after OPTIONAL MATCH
     */
@@ -83,7 +83,7 @@ class OptionalMatchAcceptanceTest {
         RETURN a, b
         ''')
     }
-        
+
     /*
     Scenario: Named paths in optional matches
     */
@@ -95,7 +95,7 @@ class OptionalMatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: OPTIONAL MATCH and bound nodes
     */
@@ -107,7 +107,7 @@ class OptionalMatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: OPTIONAL MATCH with labels on the optional end node
     And having executed:
@@ -125,7 +125,7 @@ class OptionalMatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Named paths inside optional matches with node predicates
     */
@@ -137,7 +137,7 @@ class OptionalMatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Variable length optional relationships
     */
@@ -149,7 +149,7 @@ class OptionalMatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Variable length optional relationships with length predicates
     */
@@ -161,7 +161,7 @@ class OptionalMatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching self-loops
     */
@@ -173,7 +173,7 @@ class OptionalMatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching self-loops without matches
     */
@@ -186,7 +186,7 @@ class OptionalMatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Variable length optional relationships with bound nodes
     */
@@ -198,7 +198,7 @@ class OptionalMatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Variable length optional relationships with bound nodes, no matches
     */
@@ -210,7 +210,7 @@ class OptionalMatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Longer pattern with bound nodes
     */
@@ -222,7 +222,7 @@ class OptionalMatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Longer pattern with bound nodes without matches
     */
@@ -234,7 +234,7 @@ class OptionalMatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Handling correlated optional matches; first does not match implies second does not match
     */
@@ -247,7 +247,7 @@ class OptionalMatchAcceptanceTest {
         RETURN x, r
         ''')
     }
-        
+
     /*
     Scenario: Handling optional matches between optionally matched entities
     */
@@ -262,7 +262,7 @@ class OptionalMatchAcceptanceTest {
         RETURN a, b, r
         ''')
     }
-        
+
     /*
     Scenario: Handling optional matches between nulls
     */
@@ -276,7 +276,7 @@ class OptionalMatchAcceptanceTest {
         RETURN a, b, r
         ''')
     }
-        
+
     /*
     Scenario: OPTIONAL MATCH and `collect()`
     And having executed:
@@ -294,6 +294,5 @@ class OptionalMatchAcceptanceTest {
         RETURN collect(DISTINCT n.property) AS a, collect(DISTINCT f.property) AS b
         ''')
     }
-        
+
 }
-    

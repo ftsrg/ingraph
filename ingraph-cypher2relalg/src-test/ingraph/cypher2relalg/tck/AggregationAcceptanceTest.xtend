@@ -22,7 +22,7 @@ class AggregationAcceptanceTest {
         RETURN count(n) / 60 / 60 AS count
         ''')
     }
-        
+
     /*
     Scenario: Support column renaming for aggregates as well
     Given an empty graph
@@ -39,7 +39,7 @@ class AggregationAcceptanceTest {
         RETURN count(*) AS columnName
         ''')
     }
-        
+
     /*
     Scenario: Aggregates inside normal functions
     Given an empty graph
@@ -56,7 +56,7 @@ class AggregationAcceptanceTest {
         RETURN size(collect(a))
         ''')
     }
-        
+
     /*
     Scenario: Handle aggregates inside non-aggregate expressions
     Given an empty graph
@@ -68,7 +68,7 @@ class AggregationAcceptanceTest {
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
     }
-        
+
     /*
     Scenario: Count nodes
     Given an empty graph
@@ -85,7 +85,7 @@ class AggregationAcceptanceTest {
         RETURN a, count(*)
         ''')
     }
-        
+
     /*
     Scenario: Sort on aggregate function and normal property
     Given an empty graph
@@ -105,7 +105,7 @@ class AggregationAcceptanceTest {
         ORDER BY count(*) DESC, n.division ASC
         ''')
     }
-        
+
     /*
     Scenario: Aggregate on property
     Given an empty graph
@@ -123,7 +123,7 @@ class AggregationAcceptanceTest {
         RETURN n.x, count(*)
         ''')
     }
-        
+
     /*
     Scenario: Count non-null values
     Given an empty graph
@@ -141,7 +141,7 @@ class AggregationAcceptanceTest {
         RETURN n.y, count(n.x)
         ''')
     }
-        
+
     /*
     Scenario: Sum non-null values
     Given an empty graph
@@ -159,7 +159,7 @@ class AggregationAcceptanceTest {
         RETURN n.y, sum(n.x)
         ''')
     }
-        
+
     /*
     Scenario: Handle aggregation on functions
     Given an empty graph
@@ -176,7 +176,7 @@ class AggregationAcceptanceTest {
         RETURN b, avg(length(p))
         ''')
     }
-        
+
     /*
     Scenario: Distinct on unbound node
     Given an empty graph
@@ -188,7 +188,7 @@ class AggregationAcceptanceTest {
         RETURN count(DISTINCT a)
         ''')
     }
-        
+
     /*
     Scenario: Distinct on null
     Given an empty graph
@@ -204,7 +204,7 @@ class AggregationAcceptanceTest {
         RETURN count(DISTINCT a.foo)
         ''')
     }
-        
+
     /*
     Scenario: Collect distinct nulls
     Given any graph
@@ -216,7 +216,7 @@ class AggregationAcceptanceTest {
         RETURN collect(DISTINCT x) AS c
         ''')
     }
-        
+
     /*
     Scenario: Collect distinct values mixed with nulls
     Given any graph
@@ -228,7 +228,7 @@ class AggregationAcceptanceTest {
         RETURN collect(DISTINCT x) AS c
         ''')
     }
-        
+
     /*
     Scenario: Aggregate on list values
     Given an empty graph
@@ -246,7 +246,7 @@ class AggregationAcceptanceTest {
         RETURN DISTINCT a.color, count(*)
         ''')
     }
-        
+
     /*
     Scenario: Aggregates with arithmetics
     Given an empty graph
@@ -262,7 +262,7 @@ class AggregationAcceptanceTest {
         RETURN count(*) * 10 AS c
         ''')
     }
-        
+
     /*
     Scenario: Aggregates ordered by arithmetics
     Given an empty graph
@@ -279,7 +279,7 @@ class AggregationAcceptanceTest {
         ORDER BY x
         ''')
     }
-        
+
     /*
     Scenario: Multiple aggregates on same variable
     Given an empty graph
@@ -295,7 +295,7 @@ class AggregationAcceptanceTest {
         RETURN count(n), collect(n)
         ''')
     }
-        
+
     /*
     Scenario: Simple counting of nodes
     Given an empty graph
@@ -312,7 +312,7 @@ class AggregationAcceptanceTest {
         RETURN count(*)
         ''')
     }
-        
+
     /*
     Scenario: Aggregation of named paths
     Given an empty graph
@@ -333,7 +333,7 @@ class AggregationAcceptanceTest {
         ORDER BY l
         ''')
     }
-        
+
     /*
     Scenario: Aggregation with `min()`
     Given an empty graph
@@ -354,7 +354,7 @@ class AggregationAcceptanceTest {
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
     }
-        
+
     /*
     Scenario: Handle subexpression in aggregation also occurring as standalone expression with nested aggregation in a literal map
     Given an empty graph
@@ -372,7 +372,7 @@ class AggregationAcceptanceTest {
         {y: count(b)} AS baz
         ''')
     }
-        
+
     /*
     Scenario: Projection during aggregation in WITH before MERGE and after WITH with predicate
     Given an empty graph
@@ -391,7 +391,7 @@ class AggregationAcceptanceTest {
         RETURN a.prop AS prop
         ''')
     }
-        
+
     /*
     Scenario: No overflow during summation
     Given any graph
@@ -405,7 +405,7 @@ class AggregationAcceptanceTest {
         RETURN sum(i)
         ''')
     }
-        
+
     /*
     Scenario: Counting with loops
     Given an empty graph
@@ -421,7 +421,7 @@ class AggregationAcceptanceTest {
         RETURN count(r)
         ''')
     }
-        
+
     /*
     Scenario: `max()` should aggregate strings
     Given any graph
@@ -433,7 +433,7 @@ class AggregationAcceptanceTest {
         RETURN max(i)
         ''')
     }
-        
+
     /*
     Scenario: `min()` should aggregate strings
     Given any graph
@@ -445,6 +445,5 @@ class AggregationAcceptanceTest {
         RETURN min(i)
         ''')
     }
-        
+
 }
-    

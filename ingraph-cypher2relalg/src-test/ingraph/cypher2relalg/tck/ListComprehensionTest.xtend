@@ -23,7 +23,7 @@ class ListComprehensionTest {
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
     }
-        
+
     /*
     Scenario: Using a list comprehension in a WITH
     Given an empty graph
@@ -42,7 +42,7 @@ class ListComprehensionTest {
         RETURN p, c
         ''')
     }
-        
+
     /*
     Scenario: Using a list comprehension in a WHERE
     Given an empty graph
@@ -61,6 +61,5 @@ class ListComprehensionTest {
         RETURN b
         ''')
     }
-        
+
 }
-    

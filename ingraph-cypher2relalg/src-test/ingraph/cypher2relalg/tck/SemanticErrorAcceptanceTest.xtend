@@ -16,7 +16,7 @@ class SemanticErrorAcceptanceTest {
         RETURN (list[0]).prop
         ''')
     }
-        
+
     /*
     Scenario: Failing when performing property access on a non-map 1
     */
@@ -27,7 +27,7 @@ class SemanticErrorAcceptanceTest {
         RETURN (list[1]).prop
         ''')
     }
-        
+
     /*
     Scenario: Bad arguments for `range()`
     */
@@ -37,6 +37,5 @@ class SemanticErrorAcceptanceTest {
         RETURN range(2, 8, 0)
         ''')
     }
-        
+
 }
-    

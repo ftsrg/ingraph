@@ -28,6 +28,5 @@ class VarLengthAcceptance2Test {
         RETURN count(p) AS c
         ''')
     }
-        
+
 }
-    

@@ -22,7 +22,7 @@ class WhereAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Fail when trying to compare strings and numbers
     Given an empty graph
@@ -39,6 +39,5 @@ class WhereAcceptanceTest {
         RETURN n.prop AS prop
         ''')
     }
-        
+
 }
-    

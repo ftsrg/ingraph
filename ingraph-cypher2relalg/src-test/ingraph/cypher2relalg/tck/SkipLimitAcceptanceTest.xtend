@@ -23,7 +23,7 @@ class SkipLimitAcceptanceTest {
         RETURN count > 0 AS nonEmpty
         ''')
     }
-        
+
     /*
     Scenario: LIMIT with an expression that does not depend on variables
     And having executed:
@@ -40,6 +40,5 @@ class SkipLimitAcceptanceTest {
         RETURN count(*) AS count
         ''')
     }
-        
+
 }
-    

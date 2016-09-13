@@ -17,7 +17,7 @@ class MatchAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Do not return non-existent relationships
     Given an empty graph
@@ -29,7 +29,7 @@ class MatchAcceptance2Test {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Do not fail when evaluating predicates with illegal operations if the AND'ed predicate evaluates to false
     Given an empty graph
@@ -50,7 +50,7 @@ class MatchAcceptance2Test {
         RETURN i
         ''')
     }
-        
+
     /*
     Scenario: Do not fail when evaluating predicates with illegal operations if the OR'd predicate evaluates to true
     Given an empty graph
@@ -71,7 +71,7 @@ class MatchAcceptance2Test {
         RETURN i
         ''')
     }
-        
+
     /*
     Scenario: Fail when comparing strings and integers using > in an AND'd predicate
     Given an empty graph
@@ -88,7 +88,7 @@ class MatchAcceptance2Test {
         RETURN i
         ''')
     }
-        
+
     /*
     Scenario: Fail when comparing strings and integers using > in a OR'd predicate
     Given an empty graph
@@ -105,7 +105,7 @@ class MatchAcceptance2Test {
         RETURN i
         ''')
     }
-        
+
     /*
     Scenario: Aggregation with named paths
     Given an empty graph
@@ -126,7 +126,7 @@ class MatchAcceptance2Test {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: Zero-length variable length pattern in the middle of the pattern
     Given an empty graph
@@ -146,7 +146,7 @@ class MatchAcceptance2Test {
         RETURN a, b, c
         ''')
     }
-        
+
     /*
     Scenario: Simple variable length pattern
     Given an empty graph
@@ -166,7 +166,7 @@ class MatchAcceptance2Test {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Variable length relationship without lower bound
     Given an empty graph
@@ -185,7 +185,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Variable length relationship without bounds
     Given an empty graph
@@ -204,7 +204,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Returning bound nodes that are not part of the pattern
     Given an empty graph
@@ -223,7 +223,7 @@ class MatchAcceptance2Test {
         RETURN a, b, c
         ''')
     }
-        
+
     /*
     Scenario: Two bound nodes pointing to the same node
     Given an empty graph
@@ -245,7 +245,7 @@ class MatchAcceptance2Test {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Three bound nodes pointing to the same node
     Given an empty graph
@@ -269,7 +269,7 @@ class MatchAcceptance2Test {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Three bound nodes pointing to the same node with extra connections
     Given an empty graph
@@ -304,7 +304,7 @@ class MatchAcceptance2Test {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: MATCH with OPTIONAL MATCH in longer pattern
     Given an empty graph
@@ -323,7 +323,7 @@ class MatchAcceptance2Test {
         RETURN foo
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching named paths
     Given an empty graph
@@ -342,7 +342,7 @@ class MatchAcceptance2Test {
         RETURN x, p
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching named paths with single and variable length patterns
     Given an empty graph
@@ -360,7 +360,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching named paths with variable length patterns
     Given an empty graph
@@ -379,7 +379,7 @@ class MatchAcceptance2Test {
         RETURN r, x, p
         ''')
     }
-        
+
     /*
     Scenario: Matching variable length patterns from a bound node
     Given an empty graph
@@ -398,7 +398,7 @@ class MatchAcceptance2Test {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Excluding connected nodes
     Given an empty graph
@@ -417,7 +417,7 @@ class MatchAcceptance2Test {
         RETURN other
         ''')
     }
-        
+
     /*
     Scenario: Do not fail when predicates on optionally matched and missed nodes are invalid
     Given an empty graph
@@ -436,7 +436,7 @@ class MatchAcceptance2Test {
         RETURN x0.name
         ''')
     }
-        
+
     /*
     Scenario: MATCH and OPTIONAL MATCH on same pattern
     Given an empty graph
@@ -457,7 +457,7 @@ class MatchAcceptance2Test {
         RETURN a.name
         ''')
     }
-        
+
     /*
     Scenario: Matching using an undirected pattern
     Given an empty graph
@@ -474,7 +474,7 @@ class MatchAcceptance2Test {
         RETURN a.id, b.id
         ''')
     }
-        
+
     /*
     Scenario: Matching all nodes
     Given an empty graph
@@ -490,7 +490,7 @@ class MatchAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Comparing nodes for equality
     Given an empty graph
@@ -507,7 +507,7 @@ class MatchAcceptance2Test {
         RETURN a, b
         ''')
     }
-        
+
     /*
     Scenario: Matching using self-referencing pattern returns no result
     Given an empty graph
@@ -525,7 +525,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Variable length relationship in OPTIONAL MATCH
     Given an empty graph
@@ -544,7 +544,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Matching using relationship predicate with multiples of the same type
     Given an empty graph
@@ -561,7 +561,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY with LIMIT
     Given an empty graph
@@ -584,7 +584,7 @@ class MatchAcceptance2Test {
         LIMIT 1000
         ''')
     }
-        
+
     /*
     Scenario: Simple node property predicate
     Given an empty graph
@@ -601,7 +601,7 @@ class MatchAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Handling direction of named paths
     Given an empty graph
@@ -617,7 +617,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Simple OPTIONAL MATCH on empty graph
     Given an empty graph
@@ -629,7 +629,7 @@ class MatchAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: OPTIONAL MATCH with previously bound nodes
     Given an empty graph
@@ -646,7 +646,7 @@ class MatchAcceptance2Test {
         RETURN n, x
         ''')
     }
-        
+
     /*
     Scenario: `collect()` filtering nulls
     Given an empty graph
@@ -663,7 +663,7 @@ class MatchAcceptance2Test {
         RETURN n, collect(x)
         ''')
     }
-        
+
     /*
     Scenario: Multiple anonymous nodes in a pattern
     Given an empty graph
@@ -680,7 +680,7 @@ class MatchAcceptance2Test {
         RETURN c
         ''')
     }
-        
+
     /*
     Scenario: Matching a relationship pattern using a label predicate
     Given an empty graph
@@ -698,7 +698,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Matching a relationship pattern using a label predicate on both sides
     Given an empty graph
@@ -717,7 +717,7 @@ class MatchAcceptance2Test {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Matching nodes using multiple labels
     Given an empty graph
@@ -734,7 +734,7 @@ class MatchAcceptance2Test {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Returning label predicate expression
     Given an empty graph
@@ -750,7 +750,7 @@ class MatchAcceptance2Test {
         RETURN (n:Foo)
         ''')
     }
-        
+
     /*
     Scenario: Matching with many predicates and larger pattern
     Given an empty graph
@@ -782,7 +782,7 @@ class MatchAcceptance2Test {
         RETURN out.name
         ''')
     }
-        
+
     /*
     Scenario: Returning label predicate expression
     Given an empty graph
@@ -798,7 +798,7 @@ class MatchAcceptance2Test {
         RETURN (n:Foo)
         ''')
     }
-        
+
     /*
     Scenario: Matching using a simple pattern with label predicate
     Given an empty graph
@@ -818,7 +818,7 @@ class MatchAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Matching disconnected patterns
     Given an empty graph
@@ -837,7 +837,7 @@ class MatchAcceptance2Test {
         RETURN a, b, c, d
         ''')
     }
-        
+
     /*
     Scenario: Non-optional matches should not return nulls
     Given an empty graph
@@ -861,7 +861,7 @@ class MatchAcceptance2Test {
         RETURN d
         ''')
     }
-        
+
     /*
     Scenario: Handling cyclic patterns
     Given an empty graph
@@ -880,7 +880,7 @@ class MatchAcceptance2Test {
         RETURN a.name
         ''')
     }
-        
+
     /*
     Scenario: Handling cyclic patterns when separated into two parts
     Given an empty graph
@@ -899,7 +899,7 @@ class MatchAcceptance2Test {
         RETURN a.name
         ''')
     }
-        
+
     /*
     Scenario: Handling fixed-length variable length pattern
     Given an empty graph
@@ -915,7 +915,7 @@ class MatchAcceptance2Test {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Matching from null nodes should return no results owing to finding no matches
     Given an empty graph
@@ -929,7 +929,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Matching from null nodes should return no results owing to matches being filtered out
     Given an empty graph
@@ -947,7 +947,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Optionally matching from null nodes should return null
     Given an empty graph
@@ -961,7 +961,7 @@ class MatchAcceptance2Test {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: OPTIONAL MATCH returns null
     Given an empty graph
@@ -973,7 +973,7 @@ class MatchAcceptance2Test {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Zero-length named path
     Given an empty graph
@@ -989,7 +989,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Variable-length named path
     Given an empty graph
@@ -1005,7 +1005,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Matching with aggregation
     Given an empty graph
@@ -1021,7 +1021,7 @@ class MatchAcceptance2Test {
         RETURN n.prop AS n, count(n) AS count
         ''')
     }
-        
+
     /*
     Scenario: Matching using a relationship that is already bound
     Given an empty graph
@@ -1040,7 +1040,7 @@ class MatchAcceptance2Test {
         RETURN r2 AS rel
         ''')
     }
-        
+
     /*
     Scenario: Matching using a relationship that is already bound, in conjunction with aggregation
     Given an empty graph
@@ -1060,7 +1060,7 @@ class MatchAcceptance2Test {
         RETURN r2 AS rel
         ''')
     }
-        
+
     /*
     Scenario: Matching using a relationship that is already bound, in conjunction with aggregation and ORDER BY
     Given an empty graph
@@ -1081,7 +1081,7 @@ class MatchAcceptance2Test {
         ORDER BY rel.id
         ''')
     }
-        
+
     /*
     Scenario: Matching with LIMIT and optionally matching using a relationship that is already bound
     Given an empty graph
@@ -1100,7 +1100,7 @@ class MatchAcceptance2Test {
         RETURN a2, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching with LIMIT and optionally matching using a relationship and node that are both already bound
     Given an empty graph
@@ -1119,7 +1119,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching with LIMIT, then matching again using a relationship and node that are both already bound along with an additional predicate
     Given an empty graph
@@ -1138,7 +1138,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching with LIMIT and predicates, then matching again using a relationship and node that are both already bound along with a duplicate predicate
     Given an empty graph
@@ -1157,7 +1157,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching twice with conflicting relationship types on same relationship
     Given an empty graph
@@ -1176,7 +1176,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching twice with duplicate relationship types on same relationship
     Given an empty graph
@@ -1194,7 +1194,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching relationships into a list and matching variable length using the list
     Given an empty graph
@@ -1215,7 +1215,7 @@ class MatchAcceptance2Test {
         RETURN first, second
         ''')
     }
-        
+
     /*
     Scenario: Matching relationships into a list and matching variable length using the list, with bound nodes
     Given an empty graph
@@ -1236,7 +1236,7 @@ class MatchAcceptance2Test {
         RETURN first, second
         ''')
     }
-        
+
     /*
     Scenario: Matching relationships into a list and matching variable length using the list, with bound nodes, wrong direction
     Given an empty graph
@@ -1257,7 +1257,7 @@ class MatchAcceptance2Test {
         RETURN first, second
         ''')
     }
-        
+
     /*
     Scenario: Matching and optionally matching with bound nodes in reverse direction
     Given an empty graph
@@ -1276,7 +1276,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2
         ''')
     }
-        
+
     /*
     Scenario: Matching and optionally matching with unbound nodes and equality predicate in reverse direction
     Given an empty graph
@@ -1296,7 +1296,7 @@ class MatchAcceptance2Test {
         RETURN a1, r, b2, a2
         ''')
     }
-        
+
     /*
     Scenario: Fail when using property access on primitive type
     Given an empty graph
@@ -1313,7 +1313,7 @@ class MatchAcceptance2Test {
         RETURN n2.prop
         ''')
     }
-        
+
     /*
     Scenario: Matching and returning ordered results, with LIMIT
     Given an empty graph
@@ -1331,7 +1331,7 @@ class MatchAcceptance2Test {
         LIMIT 4
         ''')
     }
-        
+
     /*
     Scenario: Counting an empty graph
     Given an empty graph
@@ -1343,7 +1343,7 @@ class MatchAcceptance2Test {
         RETURN count(a) > 0
         ''')
     }
-        
+
     /*
     Scenario: Matching variable length pattern with property predicate
     Given an empty graph
@@ -1361,7 +1361,7 @@ class MatchAcceptance2Test {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: Variable length pattern checking labels on endnodes
     Given an empty graph
@@ -1382,7 +1382,7 @@ class MatchAcceptance2Test {
         RETURN DISTINCT b
         ''')
     }
-        
+
     /*
     Scenario: Variable length pattern with label predicate on both sides
     Given an empty graph
@@ -1401,7 +1401,7 @@ class MatchAcceptance2Test {
         RETURN count(r)
         ''')
     }
-        
+
     /*
     Scenario: Undirected named path
     Given an empty graph
@@ -1419,7 +1419,7 @@ class MatchAcceptance2Test {
         LIMIT 1
         ''')
     }
-        
+
     /*
     Scenario: Named path with WITH
     Given an empty graph
@@ -1436,7 +1436,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Named path with alternating directed/undirected relationships
     Given an empty graph
@@ -1454,7 +1454,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Named path with multiple alternating directed/undirected relationships
     Given an empty graph
@@ -1473,7 +1473,7 @@ class MatchAcceptance2Test {
         RETURN path
         ''')
     }
-        
+
     /*
     Scenario: Named path with undirected fixed variable length pattern
     Given an empty graph
@@ -1494,7 +1494,7 @@ class MatchAcceptance2Test {
         RETURN topRoute
         ''')
     }
-        
+
     /*
     Scenario: Returning a node property value
     Given an empty graph
@@ -1510,7 +1510,7 @@ class MatchAcceptance2Test {
         RETURN a.prop
         ''')
     }
-        
+
     /*
     Scenario: Returning a relationship property value
     Given an empty graph
@@ -1526,7 +1526,7 @@ class MatchAcceptance2Test {
         RETURN r.prop
         ''')
     }
-        
+
     /*
     Scenario: Projecting nodes and relationships
     Given an empty graph
@@ -1543,7 +1543,7 @@ class MatchAcceptance2Test {
         RETURN a AS foo, r AS bar
         ''')
     }
-        
+
     /*
     Scenario: Missing node property should become null
     Given an empty graph
@@ -1559,7 +1559,7 @@ class MatchAcceptance2Test {
         RETURN a.bar
         ''')
     }
-        
+
     /*
     Scenario: Missing relationship property should become null
     Given an empty graph
@@ -1575,7 +1575,7 @@ class MatchAcceptance2Test {
         RETURN r.bar
         ''')
     }
-        
+
     /*
     Scenario: Returning multiple node property values
     Given an empty graph
@@ -1591,7 +1591,7 @@ class MatchAcceptance2Test {
         RETURN a.name, a.age, a.seasons
         ''')
     }
-        
+
     /*
     Scenario: Adding a property and a literal in projection
     Given an empty graph
@@ -1607,7 +1607,7 @@ class MatchAcceptance2Test {
         RETURN a.prop + 1 AS foo
         ''')
     }
-        
+
     /*
     Scenario: Adding list properties in projection
     Given an empty graph
@@ -1623,7 +1623,7 @@ class MatchAcceptance2Test {
         RETURN a.prop2 + a.prop1 AS foo
         ''')
     }
-        
+
     /*
     Scenario: Variable length relationship variables are lists of relationships
     Given an empty graph
@@ -1640,7 +1640,7 @@ class MatchAcceptance2Test {
         RETURN last(r) AS l
         ''')
     }
-        
+
     /*
     Scenario: Variable length patterns and nulls
     Given an empty graph
@@ -1658,7 +1658,7 @@ class MatchAcceptance2Test {
         RETURN a, b, c
         ''')
     }
-        
+
     /*
     Scenario: Projecting a list of nodes and relationships
     Given an empty graph
@@ -1675,7 +1675,7 @@ class MatchAcceptance2Test {
         RETURN [n, r, m] AS r
         ''')
     }
-        
+
     /*
     Scenario: Projecting a map of nodes and relationships
     Given an empty graph
@@ -1692,7 +1692,7 @@ class MatchAcceptance2Test {
         RETURN {node1: n, rel: r, node2: m} AS m
         ''')
     }
-        
+
     /*
     Scenario: Respecting direction when matching existing path
     Given an empty graph
@@ -1709,7 +1709,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Respecting direction when matching non-existent path
     Given an empty graph
@@ -1726,7 +1726,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Respecting direction when matching non-existent path with multiple directions
     Given an empty graph
@@ -1744,7 +1744,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Matching path with both directions should respect other directions
     Given an empty graph
@@ -1762,7 +1762,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Matching path with multiple bidirectional relationships
     Given an empty graph
@@ -1780,7 +1780,7 @@ class MatchAcceptance2Test {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Matching nodes with many labels
     Given an empty graph
@@ -1798,7 +1798,7 @@ class MatchAcceptance2Test {
         RETURN n, m
         ''')
     }
-        
+
     /*
     Scenario: Matching longer variable length paths
     Given an empty graph
@@ -1821,7 +1821,7 @@ class MatchAcceptance2Test {
         RETURN m
         ''')
     }
-        
+
     /*
     Scenario: Counting rows after MATCH, MERGE, OPTIONAL MATCH
     Given an empty graph
@@ -1842,7 +1842,7 @@ class MatchAcceptance2Test {
         RETURN count(*)
         ''')
     }
-        
+
     /*
     Scenario: Matching a self-loop
     Given an empty graph
@@ -1859,6 +1859,5 @@ class MatchAcceptance2Test {
         RETURN type(r) AS r
         ''')
     }
-        
+
 }
-    

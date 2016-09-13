@@ -16,7 +16,7 @@ class ReturnAcceptance2Test {
         RETURN '\u01FF' AS a
         ''')
     }
-        
+
     /*
     Scenario: LIMIT 0 should return an empty result
     Given an empty graph
@@ -33,7 +33,7 @@ class ReturnAcceptance2Test {
         LIMIT 0
         ''')
     }
-        
+
     /*
     Scenario: Fail when ordering nodes
     Given an empty graph
@@ -50,7 +50,7 @@ class ReturnAcceptance2Test {
         ORDER BY n
         ''')
     }
-        
+
     /*
     Scenario: Ordering with aggregation
     Given an empty graph
@@ -67,7 +67,7 @@ class ReturnAcceptance2Test {
         ORDER BY n.name
         ''')
     }
-        
+
     /*
     Scenario: DISTINCT on nullable values
     Given an empty graph
@@ -83,7 +83,7 @@ class ReturnAcceptance2Test {
         RETURN DISTINCT n.name
         ''')
     }
-        
+
     /*
     Scenario: Return all variables
     Given an empty graph
@@ -99,7 +99,7 @@ class ReturnAcceptance2Test {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: `sqrt()` returning float values
     Given any graph
@@ -110,7 +110,7 @@ class ReturnAcceptance2Test {
         RETURN sqrt(12.96)
         ''')
     }
-        
+
     /*
     Scenario: Arithmetic expressions inside aggregation
     Given an empty graph
@@ -142,7 +142,7 @@ class ReturnAcceptance2Test {
         RETURN me, you, sum((1 - abs(r1.times / H1 - r2.times / H2)) * (r1.times + r2.times) / (H1 + H2)) AS sum
         ''')
     }
-        
+
     /*
     Scenario: Matching and disregarding output, then matching again
     Given an empty graph
@@ -173,7 +173,7 @@ class ReturnAcceptance2Test {
         RETURN sum(r1.times)
         ''')
     }
-        
+
     /*
     Scenario: Returning a list property
     Given an empty graph
@@ -189,7 +189,7 @@ class ReturnAcceptance2Test {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Returning a projected map
     Given an empty graph
@@ -204,7 +204,7 @@ class ReturnAcceptance2Test {
         RETURN {a: 1, b: 'foo'}
         ''')
     }
-        
+
     /*
     Scenario: Returning an expression
     Given an empty graph
@@ -220,7 +220,7 @@ class ReturnAcceptance2Test {
         RETURN exists(a.id), a IS NOT NULL
         ''')
     }
-        
+
     /*
     Scenario: Concatenating and returning the size of literal lists
     Given any graph
@@ -231,7 +231,7 @@ class ReturnAcceptance2Test {
         RETURN size([[], []] + [[]]) AS l
         ''')
     }
-        
+
     /*
     Scenario: Limiting amount of rows when there are fewer left than the LIMIT argument
     Given an empty graph
@@ -251,7 +251,7 @@ class ReturnAcceptance2Test {
         LIMIT 10
         ''')
     }
-        
+
     /*
     Scenario: `substring()` with default second argument
     Given any graph
@@ -262,7 +262,7 @@ class ReturnAcceptance2Test {
         RETURN substring('0123456789', 1) AS s
         ''')
     }
-        
+
     /*
     Scenario: Returning all variables with ordering
     Given an empty graph
@@ -279,7 +279,7 @@ class ReturnAcceptance2Test {
         ORDER BY n.id
         ''')
     }
-        
+
     /*
     Scenario: Using aliased DISTINCT expression in ORDER BY
     Given an empty graph
@@ -296,7 +296,7 @@ class ReturnAcceptance2Test {
         ORDER BY id DESC
         ''')
     }
-        
+
     /*
     Scenario: Returned columns do not change from using ORDER BY
     Given an empty graph
@@ -313,7 +313,7 @@ class ReturnAcceptance2Test {
         ORDER BY n.id
         ''')
     }
-        
+
     /*
     Scenario: Arithmetic expressions should propagate null values
     Given any graph
@@ -324,7 +324,7 @@ class ReturnAcceptance2Test {
         RETURN 1 + (2 - (3 * (4 / (5 ^ (6 % null))))) AS a
         ''')
     }
-        
+
     /*
     Scenario: Indexing into nested literal lists
     Given any graph
@@ -335,7 +335,7 @@ class ReturnAcceptance2Test {
         RETURN [[1]][0][0]
         ''')
     }
-        
+
     /*
     Scenario: Aliasing expressions
     Given an empty graph
@@ -351,7 +351,7 @@ class ReturnAcceptance2Test {
         RETURN a.id AS a, a.id
         ''')
     }
-        
+
     /*
     Scenario: Projecting an arithmetic expression with aggregation
     Given an empty graph
@@ -367,7 +367,7 @@ class ReturnAcceptance2Test {
         RETURN a, count(a) + 3
         ''')
     }
-        
+
     /*
     Scenario: Aggregating by a list property has a correct definition of equality
     Given an empty graph
@@ -384,7 +384,7 @@ class ReturnAcceptance2Test {
         RETURN count
         ''')
     }
-        
+
     /*
     Scenario: Reusing variable names
     Given an empty graph
@@ -405,7 +405,7 @@ class ReturnAcceptance2Test {
         ORDER BY likeTime
         ''')
     }
-        
+
     /*
     Scenario: Concatenating lists of same type
     Given any graph
@@ -416,7 +416,7 @@ class ReturnAcceptance2Test {
         RETURN [1, 10, 100] + [4, 5] AS foo
         ''')
     }
-        
+
     /*
     Scenario: Appending lists of same type
     Given any graph
@@ -427,7 +427,7 @@ class ReturnAcceptance2Test {
         RETURN [false, true] + false AS foo
         ''')
     }
-        
+
     /*
     Scenario: DISTINCT inside aggregation should work with lists in maps
     Given an empty graph
@@ -443,7 +443,7 @@ class ReturnAcceptance2Test {
         RETURN count(DISTINCT {foo: n.list}) AS count
         ''')
     }
-        
+
     /*
     Scenario: Handling DISTINCT with lists in maps
     Given an empty graph
@@ -460,7 +460,7 @@ class ReturnAcceptance2Test {
         RETURN count(*)
         ''')
     }
-        
+
     /*
     Scenario: DISTINCT inside aggregation should work with nested lists in maps
     Given an empty graph
@@ -476,7 +476,7 @@ class ReturnAcceptance2Test {
         RETURN count(DISTINCT {foo: [[n.list, n.list], [n.list, n.list]]}) AS count
         ''')
     }
-        
+
     /*
     Scenario: DISTINCT inside aggregation should work with nested lists of maps in maps
     Given an empty graph
@@ -492,6 +492,5 @@ class ReturnAcceptance2Test {
         RETURN count(DISTINCT {foo: [{bar: n.list}, {baz: {apa: n.list}}]}) AS count
         ''')
     }
-        
+
 }
-    

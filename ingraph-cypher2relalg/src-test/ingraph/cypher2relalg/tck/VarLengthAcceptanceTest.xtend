@@ -17,7 +17,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling explicitly unbounded variable length match
     */
@@ -29,7 +29,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling single bounded variable length match 1
     */
@@ -41,7 +41,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling single bounded variable length match 2
     */
@@ -53,7 +53,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling single bounded variable length match 3
     */
@@ -65,7 +65,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper and lower bounded variable length match 1
     */
@@ -77,7 +77,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper and lower bounded variable length match 2
     */
@@ -89,7 +89,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling symmetrically bounded variable length match, bounds are zero
     */
@@ -101,7 +101,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling symmetrically bounded variable length match, bounds are one
     */
@@ -113,7 +113,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling symmetrically bounded variable length match, bounds are two
     */
@@ -125,7 +125,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper and lower bounded variable length match, empty interval 1
     */
@@ -137,7 +137,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper and lower bounded variable length match, empty interval 2
     */
@@ -149,7 +149,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper bounded variable length match, empty interval
     */
@@ -161,7 +161,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper bounded variable length match 1
     */
@@ -173,7 +173,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling upper bounded variable length match 2
     */
@@ -185,7 +185,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling lower bounded variable length match 1
     */
@@ -197,7 +197,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling lower bounded variable length match 2
     */
@@ -209,7 +209,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling lower bounded variable length match 3
     */
@@ -221,7 +221,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, zero length 1
     */
@@ -233,7 +233,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, zero length 2
     */
@@ -245,7 +245,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, single length 1
     */
@@ -257,7 +257,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, single length 2
     */
@@ -269,7 +269,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, longer 1
     */
@@ -281,7 +281,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, longer 2
     */
@@ -293,7 +293,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling a variable length relationship and a standard relationship in chain, longer 3
     And having executed:
@@ -313,7 +313,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling mixed relationship patterns and directions 1
     And having executed:
@@ -339,7 +339,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling mixed relationship patterns and directions 2
     # This gets hard to follow for a human mind. The answer is named graphs, but it's not crucial to fix.
@@ -367,7 +367,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling mixed relationship patterns 1
     And having executed:
@@ -387,7 +387,7 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling mixed relationship patterns 2
     And having executed:
@@ -407,6 +407,5 @@ class VarLengthAcceptanceTest {
         RETURN c.name
         ''')
     }
-        
+
 }
-    

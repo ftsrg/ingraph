@@ -23,7 +23,7 @@ class StartingPointAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Find labelled nodes
     Given an empty graph
@@ -42,7 +42,7 @@ class StartingPointAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Find nodes by property
     Given an empty graph
@@ -60,6 +60,5 @@ class StartingPointAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
 }
-    

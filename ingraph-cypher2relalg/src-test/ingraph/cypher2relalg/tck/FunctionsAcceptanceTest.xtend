@@ -21,7 +21,7 @@ class FunctionsAcceptanceTest {
         RETURN coalesce(a.title, a.name)
         ''')
     }
-        
+
     /*
     Scenario: Functions should return null if they get path containing unbound
     Given any graph
@@ -34,7 +34,7 @@ class FunctionsAcceptanceTest {
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
     }
-        
+
     /*
     Scenario: `split()`
     Given any graph
@@ -46,7 +46,7 @@ class FunctionsAcceptanceTest {
         RETURN count(item) AS item
         ''')
     }
-        
+
     /*
     Scenario: `properties()` on a node
     Given an empty graph
@@ -62,7 +62,7 @@ class FunctionsAcceptanceTest {
         RETURN properties(p) AS m
         ''')
     }
-        
+
     /*
     Scenario: `properties()` on a relationship
     Given an empty graph
@@ -78,7 +78,7 @@ class FunctionsAcceptanceTest {
         RETURN properties(r) AS m
         ''')
     }
-        
+
     /*
     Scenario: `properties()` on a map
     Given any graph
@@ -89,7 +89,7 @@ class FunctionsAcceptanceTest {
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
     }
-        
+
     /*
     Scenario: `properties()` on null
     Given any graph
@@ -100,7 +100,7 @@ class FunctionsAcceptanceTest {
         RETURN properties(null)
         ''')
     }
-        
+
     /*
     Scenario: `reverse()`
     Given any graph
@@ -111,7 +111,7 @@ class FunctionsAcceptanceTest {
         RETURN reverse('raksO')
         ''')
     }
-        
+
     /*
     Scenario: `exists()` with dynamic property lookup
     Given an empty graph
@@ -129,7 +129,7 @@ class FunctionsAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: `percentileDisc()` failing in more involved query
     Given an empty graph
@@ -153,7 +153,7 @@ class FunctionsAcceptanceTest {
         RETURN percentileDisc(0.90, deg), deg
         ''')
     }
-        
+
     /*
     Scenario: `type()`
     Given an empty graph
@@ -169,7 +169,7 @@ class FunctionsAcceptanceTest {
         RETURN type(r)
         ''')
     }
-        
+
     /*
     Scenario: `type()` on two relationships
     Given an empty graph
@@ -185,7 +185,7 @@ class FunctionsAcceptanceTest {
         RETURN type(r1), type(r2)
         ''')
     }
-        
+
     /*
     Scenario: `type()` on null relationship
     Given an empty graph
@@ -202,7 +202,7 @@ class FunctionsAcceptanceTest {
         RETURN type(r)
         ''')
     }
-        
+
     /*
     Scenario: `type()` on mixed null and non-null relationships
     Given an empty graph
@@ -219,7 +219,7 @@ class FunctionsAcceptanceTest {
         RETURN type(r)
         ''')
     }
-        
+
     /*
     Scenario: `type()` handling Any type
     Given an empty graph
@@ -236,7 +236,7 @@ class FunctionsAcceptanceTest {
         RETURN type(list[0])
         ''')
     }
-        
+
     /*
     Scenario: `labels()` should accept type Any
     Given an empty graph
@@ -253,7 +253,7 @@ class FunctionsAcceptanceTest {
         RETURN labels(list[0]) AS l
         ''')
     }
-        
+
     /*
     Scenario: `labels()` should accept type Any
     Given an empty graph
@@ -270,7 +270,7 @@ class FunctionsAcceptanceTest {
         RETURN labels(list[1]) AS l
         ''')
     }
-        
+
     /*
     Scenario: `exists()` is case insensitive
     Given an empty graph
@@ -286,6 +286,5 @@ class FunctionsAcceptanceTest {
         RETURN n, EXIsTS(n.prop) AS b
         ''')
     }
-        
+
 }
-    

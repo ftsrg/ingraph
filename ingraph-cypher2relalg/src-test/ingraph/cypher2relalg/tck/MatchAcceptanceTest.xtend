@@ -21,7 +21,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Longer path query should return results in written order
     Given an empty graph
@@ -37,7 +37,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Use multiple MATCH clauses to do a Cartesian product
     Given an empty graph
@@ -55,7 +55,7 @@ class MatchAcceptanceTest {
         RETURN n.value AS n, m.value AS m
         ''')
     }
-        
+
     /*
     Scenario: Use params in pattern matching predicates
     Given an empty graph
@@ -74,7 +74,7 @@ class MatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Filter out based on node prop name
     Given an empty graph
@@ -91,7 +91,7 @@ class MatchAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Honour the column name for RETURN items
     Given an empty graph
@@ -108,7 +108,7 @@ class MatchAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Filter based on rel prop name
     Given an empty graph
@@ -125,7 +125,7 @@ class MatchAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Cope with shadowed variables
     Given an empty graph
@@ -143,7 +143,7 @@ class MatchAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Get neighbours
     Given an empty graph
@@ -159,7 +159,7 @@ class MatchAcceptanceTest {
         RETURN n1, n2
         ''')
     }
-        
+
     /*
     Scenario: Get two related nodes
     Given an empty graph
@@ -177,7 +177,7 @@ class MatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Get related to related to
     Given an empty graph
@@ -193,7 +193,7 @@ class MatchAcceptanceTest {
         RETURN b
         ''')
     }
-        
+
     /*
     Scenario: Handle comparison between node properties
     Given an empty graph
@@ -217,7 +217,7 @@ class MatchAcceptanceTest {
         RETURN n, x
         ''')
     }
-        
+
     /*
     Scenario: Return two subgraphs with bound undirected relationship
     Given an empty graph
@@ -233,7 +233,7 @@ class MatchAcceptanceTest {
         RETURN a, b
         ''')
     }
-        
+
     /*
     Scenario: Return two subgraphs with bound undirected relationship and optional relationship
     Given an empty graph
@@ -251,7 +251,7 @@ class MatchAcceptanceTest {
         RETURN a, b, c
         ''')
     }
-        
+
     /*
     Scenario: Rel type function works as expected
     Given an empty graph
@@ -272,7 +272,7 @@ class MatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Walk alternative relationships
     Given an empty graph
@@ -294,7 +294,7 @@ class MatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Handle OR in the WHERE clause
     Given an empty graph
@@ -313,7 +313,7 @@ class MatchAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Return a simple path
     Given an empty graph
@@ -329,7 +329,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Return a three node path
     Given an empty graph
@@ -345,7 +345,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Do not return anything because path length does not match
     Given an empty graph
@@ -362,7 +362,7 @@ class MatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Pass the path length test
     Given an empty graph
@@ -379,7 +379,7 @@ class MatchAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Return relationships by fetching them from the path - starting from the end
     Given an empty graph
@@ -395,7 +395,7 @@ class MatchAcceptanceTest {
         RETURN relationships(p)
         ''')
     }
-        
+
     /*
     Scenario: Return relationships by fetching them from the path
     Given an empty graph
@@ -411,7 +411,7 @@ class MatchAcceptanceTest {
         RETURN relationships(p)
         ''')
     }
-        
+
     /*
     Scenario: Return relationships by collecting them as a list - wrong way
     Given an empty graph
@@ -427,7 +427,7 @@ class MatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Return relationships by collecting them as a list - undirected
     Given an empty graph
@@ -443,7 +443,7 @@ class MatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Return relationships by collecting them as a list
     Given an empty graph
@@ -459,7 +459,7 @@ class MatchAcceptanceTest {
         RETURN r
         ''')
     }
-        
+
     /*
     Scenario: Return a var length path
     Given an empty graph
@@ -475,7 +475,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Return a var length path of length zero
     Given an empty graph
@@ -491,7 +491,7 @@ class MatchAcceptanceTest {
         RETURN a, b, length(p) AS l
         ''')
     }
-        
+
     /*
     Scenario: Return a named var length path of length zero
     Given an empty graph
@@ -507,7 +507,7 @@ class MatchAcceptanceTest {
         RETURN p
         ''')
     }
-        
+
     /*
     Scenario: Accept skip zero
     Given any graph
@@ -520,6 +520,5 @@ class MatchAcceptanceTest {
         RETURN n SKIP 0
         ''')
     }
-        
+
 }
-    

@@ -22,7 +22,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on multiple nodes, non-empty result
     Given an empty graph
@@ -40,7 +40,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on a single node, empty result
     Given an empty graph
@@ -57,7 +57,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on an optionally matched node
     Given an empty graph
@@ -74,7 +74,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on a relationship, non-empty result
     Given an empty graph
@@ -91,7 +91,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on a relationship, empty result
     Given an empty graph
@@ -108,7 +108,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on an optionally matched relationship
     Given an empty graph
@@ -125,7 +125,7 @@ class KeysAcceptanceTest {
         RETURN DISTINCT x AS theProps
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on a literal map
     Given any graph
@@ -136,7 +136,7 @@ class KeysAcceptanceTest {
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
     }
-        
+
     /*
     Scenario: Using `keys()` on a parameter map
     Given any graph
@@ -149,6 +149,5 @@ class KeysAcceptanceTest {
         RETURN keys($param) AS k
         ''')
     }
-        
+
 }
-    

@@ -15,7 +15,7 @@ class ExpressionAcceptanceTest {
         RETURN [1, 2, 3][0] AS value
         ''')
     }
-        
+
     /*
     Scenario: Execute n['name'] in read queries
     And having executed:
@@ -30,7 +30,7 @@ class ExpressionAcceptanceTest {
         RETURN n['nam' + 'e'] AS value
         ''')
     }
-        
+
     /*
     Scenario: Use dynamic property lookup based on parameters when there is no type information
     And parameters are:
@@ -44,7 +44,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx] AS value
         ''')
     }
-        
+
     /*
     Scenario: Use dynamic property lookup based on parameters when there is rhs type information
     And parameters are:
@@ -58,7 +58,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[toString(idx)] AS value
         ''')
     }
-        
+
     /*
     Scenario: Use collection lookup based on parameters when there is no type information
     And parameters are:
@@ -72,7 +72,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx] AS value
         ''')
     }
-        
+
     /*
     Scenario: Use collection lookup based on parameters when there is lhs type information
     And parameters are:
@@ -85,7 +85,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[$idx] AS value
         ''')
     }
-        
+
     /*
     Scenario: Use collection lookup based on parameters when there is rhs type information
     And parameters are:
@@ -99,7 +99,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[toInteger(idx)] AS value
         ''')
     }
-        
+
     /*
     Scenario: Fail at runtime when attempting to index with an Int into a Map
     And parameters are:
@@ -113,7 +113,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx]
         ''')
     }
-        
+
     /*
     Scenario: Fail at runtime when trying to index into a map with a non-string
     And parameters are:
@@ -127,7 +127,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx]
         ''')
     }
-        
+
     /*
     Scenario: Fail at runtime when attempting to index with a String into a Collection
     And parameters are:
@@ -141,7 +141,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx]
         ''')
     }
-        
+
     /*
     Scenario: Fail at runtime when trying to index into a list with a list
     And parameters are:
@@ -155,7 +155,7 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx]
         ''')
     }
-        
+
     /*
     Scenario: Fail at runtime when trying to index something which is not a map or collection
     And parameters are:
@@ -169,6 +169,5 @@ class ExpressionAcceptanceTest {
         RETURN expr[idx]
         ''')
     }
-        
+
 }
-    

@@ -16,7 +16,7 @@ class ColumnNameAcceptanceTest {
         RETURN cOuNt( * )
         ''')
     }
-        
+
     /*
     Scenario: Keeping used expression 2
     */
@@ -27,7 +27,7 @@ class ColumnNameAcceptanceTest {
         RETURN nOdEs( p )
         ''')
     }
-        
+
     /*
     Scenario: Keeping used expression 3
     */
@@ -38,7 +38,7 @@ class ColumnNameAcceptanceTest {
         RETURN coUnt( dIstInct p )
         ''')
     }
-        
+
     /*
     Scenario: Keeping used expression 4
     */
@@ -49,6 +49,5 @@ class ColumnNameAcceptanceTest {
         RETURN aVg(    n.aGe     )
         ''')
     }
-        
+
 }
-    

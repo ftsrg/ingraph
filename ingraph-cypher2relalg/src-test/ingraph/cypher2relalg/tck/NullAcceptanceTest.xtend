@@ -18,7 +18,7 @@ class NullAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
     /*
     Scenario: Ignore null when removing label
     Given an empty graph
@@ -31,6 +31,5 @@ class NullAcceptanceTest {
         RETURN a
         ''')
     }
-        
+
 }
-    

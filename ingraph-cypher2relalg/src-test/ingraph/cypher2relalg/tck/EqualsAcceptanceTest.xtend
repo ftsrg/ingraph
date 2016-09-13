@@ -24,7 +24,7 @@ class EqualsAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Number-typed float comparison
     Given an empty graph
@@ -43,7 +43,7 @@ class EqualsAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Any-typed string comparison
     Given an empty graph
@@ -62,7 +62,7 @@ class EqualsAcceptanceTest {
         RETURN n
         ''')
     }
-        
+
     /*
     Scenario: Comparing nodes to nodes
     Given an empty graph
@@ -81,7 +81,7 @@ class EqualsAcceptanceTest {
         RETURN count(b)
         ''')
     }
-        
+
     /*
     Scenario: Comparing relationships to relationships
     Given an empty graph
@@ -100,6 +100,5 @@ class EqualsAcceptanceTest {
         RETURN count(b)
         ''')
     }
-        
+
 }
-    

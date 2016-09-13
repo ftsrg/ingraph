@@ -17,7 +17,7 @@ class UnwindAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Unwinding a range
     Given any graph
@@ -29,7 +29,7 @@ class UnwindAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Unwinding a concatenation of lists
     Given any graph
@@ -42,7 +42,7 @@ class UnwindAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Unwinding a collected unwound expression
     Given any graph
@@ -56,7 +56,7 @@ class UnwindAcceptanceTest {
         RETURN x
         ''')
     }
-        
+
     /*
     Scenario: Unwinding a collected expression
     Given an empty graph
@@ -74,7 +74,7 @@ class UnwindAcceptanceTest {
         RETURN node.id
         ''')
     }
-        
+
     /*
     Scenario: Creating nodes from an unwound parameter list
     Given an empty graph
@@ -96,7 +96,7 @@ class UnwindAcceptanceTest {
         ORDER BY x
         ''')
     }
-        
+
     /*
     Scenario: Double unwinding a list of lists
     Given any graph
@@ -110,7 +110,7 @@ class UnwindAcceptanceTest {
         RETURN y
         ''')
     }
-        
+
     /*
     Scenario: Unwinding the empty list
     Given any graph
@@ -122,7 +122,7 @@ class UnwindAcceptanceTest {
         RETURN empty
         ''')
     }
-        
+
     /*
     Scenario: Unwinding null
     Given any graph
@@ -134,7 +134,7 @@ class UnwindAcceptanceTest {
         RETURN nil
         ''')
     }
-        
+
     /*
     Scenario: Unwinding list with duplicates
     Given any graph
@@ -146,7 +146,7 @@ class UnwindAcceptanceTest {
         RETURN duplicate
         ''')
     }
-        
+
     /*
     Scenario: Unwind does not prune context
     Given any graph
@@ -159,7 +159,7 @@ class UnwindAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
     /*
     Scenario: Unwind does not remove variables from scope
     Given an empty graph
@@ -183,7 +183,7 @@ class UnwindAcceptanceTest {
         RETURN a, b2
         ''')
     }
-        
+
     /*
     Scenario: Multiple unwinds after each other
     Given any graph
@@ -198,6 +198,5 @@ class UnwindAcceptanceTest {
         RETURN *
         ''')
     }
-        
+
 }
-    

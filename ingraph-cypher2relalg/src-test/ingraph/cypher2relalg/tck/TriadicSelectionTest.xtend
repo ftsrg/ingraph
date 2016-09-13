@@ -17,7 +17,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend
     Given the binary-tree-1 graph
@@ -31,7 +31,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with different relationship type
     Given the binary-tree-1 graph
@@ -45,7 +45,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with superset of relationship type
     Given the binary-tree-1 graph
@@ -59,7 +59,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with implicit subset of relationship type
     Given the binary-tree-1 graph
@@ -73,7 +73,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with explicit subset of relationship type
     Given the binary-tree-1 graph
@@ -87,7 +87,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with same labels
     Given the binary-tree-2 graph
@@ -101,7 +101,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with different labels
     Given the binary-tree-2 graph
@@ -115,7 +115,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with implicit subset of labels
     Given the binary-tree-2 graph
@@ -129,7 +129,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is not a friend with implicit superset of labels
     Given the binary-tree-2 graph
@@ -143,7 +143,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend
     Given the binary-tree-2 graph
@@ -157,7 +157,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with different relationship type
     Given the binary-tree-1 graph
@@ -171,7 +171,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with superset of relationship type
     Given the binary-tree-1 graph
@@ -185,7 +185,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with implicit subset of relationship type
     Given the binary-tree-1 graph
@@ -199,7 +199,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with explicit subset of relationship type
     Given the binary-tree-1 graph
@@ -213,7 +213,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with same labels
     Given the binary-tree-2 graph
@@ -227,7 +227,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with different labels
     Given the binary-tree-2 graph
@@ -241,7 +241,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with implicit subset of labels
     Given the binary-tree-2 graph
@@ -255,7 +255,7 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
     /*
     Scenario: Handling triadic friend of a friend that is a friend with implicit superset of labels
     Given the binary-tree-2 graph
@@ -269,6 +269,5 @@ class TriadicSelectionTest {
         RETURN c.name
         ''')
     }
-        
+
 }
-    

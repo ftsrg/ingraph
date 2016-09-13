@@ -23,7 +23,7 @@ class OrderByAcceptanceTest {
         ORDER BY n.prop
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY DESC should return results in descending order
     And having executed:
@@ -41,7 +41,7 @@ class OrderByAcceptanceTest {
         ORDER BY n.prop DESC
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY of a column introduced in RETURN should return salient results in ascending order
     */
@@ -56,7 +56,7 @@ class OrderByAcceptanceTest {
         ORDER BY rng
         ''')
     }
-        
+
     /*
     Scenario: Renaming columns before ORDER BY should return results in ascending order
     And having executed:
@@ -74,7 +74,7 @@ class OrderByAcceptanceTest {
         ORDER BY n + 2
         ''')
     }
-        
+
     /*
     Scenario: Handle projections with ORDER BY - GH#4937
     And having executed:
@@ -95,7 +95,7 @@ class OrderByAcceptanceTest {
         ORDER BY relevance, c.rank
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY should order booleans in the expected order
     */
@@ -107,7 +107,7 @@ class OrderByAcceptanceTest {
         ORDER BY bools
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY DESC should order booleans in the expected order
     */
@@ -119,7 +119,7 @@ class OrderByAcceptanceTest {
         ORDER BY bools DESC
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY should order strings in the expected order
     */
@@ -131,7 +131,7 @@ class OrderByAcceptanceTest {
         ORDER BY strings
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY DESC should order strings in the expected order
     */
@@ -143,7 +143,7 @@ class OrderByAcceptanceTest {
         ORDER BY strings DESC
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY should order ints in the expected order
     */
@@ -155,7 +155,7 @@ class OrderByAcceptanceTest {
         ORDER BY ints
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY DESC should order ints in the expected order
     */
@@ -167,7 +167,7 @@ class OrderByAcceptanceTest {
         ORDER BY ints DESC
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY should order floats in the expected order
     */
@@ -179,7 +179,7 @@ class OrderByAcceptanceTest {
         ORDER BY floats
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY DESC should order floats in the expected order
     */
@@ -191,7 +191,7 @@ class OrderByAcceptanceTest {
         ORDER BY floats DESC
         ''')
     }
-        
+
     /*
     Scenario: Handle ORDER BY with LIMIT 1
     And having executed:
@@ -209,7 +209,7 @@ class OrderByAcceptanceTest {
         LIMIT 1
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY with LIMIT 0 should not generate errors
     */
@@ -222,7 +222,7 @@ class OrderByAcceptanceTest {
         LIMIT 0
         ''')
     }
-        
+
     /*
     Scenario: ORDER BY with negative parameter for LIMIT should not generate errors
     And parameters are:
@@ -237,6 +237,5 @@ class OrderByAcceptanceTest {
         LIMIT $limit
         ''')
     }
-        
+
 }
-    

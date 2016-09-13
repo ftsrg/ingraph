@@ -24,7 +24,7 @@ class UnionAcceptanceTest {
         RETURN b AS a
         ''')
     }
-        
+
     /*
     Scenario: Two elements, both unique, not distinct
     Given an empty graph
@@ -37,7 +37,7 @@ class UnionAcceptanceTest {
         RETURN 2 AS x
         ''')
     }
-        
+
     /*
     Scenario: Two elements, both unique, distinct
     Given an empty graph
@@ -50,7 +50,7 @@ class UnionAcceptanceTest {
         RETURN 2 AS x
         ''')
     }
-        
+
     /*
     Scenario: Three elements, two unique, distinct
     Given an empty graph
@@ -65,7 +65,7 @@ class UnionAcceptanceTest {
         RETURN 2 AS x
         ''')
     }
-        
+
     /*
     Scenario: Three elements, two unique, not distinct
     Given an empty graph
@@ -80,6 +80,5 @@ class UnionAcceptanceTest {
         RETURN 2 AS x
         ''')
     }
-        
+
 }
-    

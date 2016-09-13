@@ -23,7 +23,7 @@ class PatternComprehensionTest {
         ORDER BY liker.time
         ''')
     }
-        
+
     /*
     Scenario: Returning a pattern comprehension
     Given an empty graph
@@ -41,7 +41,7 @@ class PatternComprehensionTest {
         RETURN [p = (n)-->() | p] AS ps
         ''')
     }
-        
+
     /*
     Scenario: Returning a pattern comprehension with label predicate
     Given an empty graph
@@ -60,7 +60,7 @@ class PatternComprehensionTest {
         RETURN [p = (n)-->(:B) | p]
         ''')
     }
-        
+
     /*
     Scenario: Returning a pattern comprehension with bound nodes
     Given an empty graph
@@ -77,7 +77,7 @@ class PatternComprehensionTest {
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
     }
-        
+
     /*
     Scenario: Using a pattern comprehension in a WITH
     Given an empty graph
@@ -96,7 +96,7 @@ class PatternComprehensionTest {
         RETURN ps, c
         ''')
     }
-        
+
     /*
     Scenario: Using a variable-length pattern comprehension in a WITH
     Given an empty graph
@@ -113,7 +113,7 @@ class PatternComprehensionTest {
         RETURN paths, c
         ''')
     }
-        
+
     /*
     Scenario: Using pattern comprehension in RETURN
     Given an empty graph
@@ -130,7 +130,7 @@ class PatternComprehensionTest {
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
     }
-        
+
     /*
     Scenario: Aggregating on pattern comprehension
     Given an empty graph
@@ -147,7 +147,7 @@ class PatternComprehensionTest {
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
     }
-        
+
     /*
     Scenario: Using pattern comprehension to test existence
     Given an empty graph
@@ -164,7 +164,7 @@ class PatternComprehensionTest {
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
     }
-        
+
     /*
     Scenario: Pattern comprehension inside list comprehension
     Given an empty graph
@@ -187,7 +187,7 @@ class PatternComprehensionTest {
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
     }
-        
+
     /*
     Scenario: Get node degree via size of pattern comprehension
     Given an empty graph
@@ -206,7 +206,7 @@ class PatternComprehensionTest {
         RETURN size([(a)-->() | 1]) AS length
         ''')
     }
-        
+
     /*
     Scenario: Get node degree via size of pattern comprehension that specifies a relationship type
     Given an empty graph
@@ -226,7 +226,7 @@ class PatternComprehensionTest {
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
     }
-        
+
     /*
     Scenario: Get node degree via size of pattern comprehension that specifies multiple relationship types
     Given an empty graph
@@ -246,7 +246,7 @@ class PatternComprehensionTest {
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
     }
-        
+
     /*
     Scenario: Introducing new node variable in pattern comprehension
     Given an empty graph
@@ -263,7 +263,7 @@ class PatternComprehensionTest {
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
     }
-        
+
     /*
     Scenario: Introducing new relationship variable in pattern comprehension
     Given an empty graph
@@ -280,6 +280,5 @@ class PatternComprehensionTest {
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
     }
-        
+
 }
-    
