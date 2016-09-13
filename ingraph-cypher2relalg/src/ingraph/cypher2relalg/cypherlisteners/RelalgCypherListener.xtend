@@ -74,7 +74,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		if (i.hasNext) { // FIXME: union of multiple singleQuery's
 			val rootExpression = createProductionOperator
 			rootExpression.input = i.next
-			
+
 			container.rootExpression = rootExpression
 		}
 	}
@@ -139,7 +139,8 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 				}
 			}
 			// TODO: various atom types to be handled
-			default: i_am_unsupported(returnAtomFirstChild)
+			default:
+				i_am_unsupported(returnAtomFirstChild)
 		}
 	}
 
@@ -163,7 +164,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		} else {
 			trimmer = content
 		}
-		// add distinct node if return DISTINCT was specified
+		// add duplicate-elimination operator if return DISTINCT was specified
 		var AlgebraExpression distinct = null
 		if (return_IsDistinct) {
 			val myDistinct = createDuplicateEliminationOperator
@@ -177,23 +178,24 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	var AlgebraExpression match_AlgebraExpression
 	var AlgebraExpression match_WhereJoinExpression
-	var boolean match_WhereJoinModeIsAntijoin=false
+	var boolean match_WhereJoinModeIsAntijoin = false
 
 	// TODO: where
 	override enterMatch(MatchContext ctx) {
 		match_AlgebraExpression = null
-		match_WhereJoinExpression=null
-		match_WhereJoinModeIsAntijoin=false
+		match_WhereJoinExpression = null
+		match_WhereJoinModeIsAntijoin = false
 	}
 
 	override exitMatch(MatchContext ctx) {
 		if (match_AlgebraExpression != null) {
 			var myAlgebraExpression = match_AlgebraExpression
-			if (match_WhereJoinExpression != null) {
-				var BetaOperator joinNode = if (match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
+			if (match_WhereJoinExpression !=
+				null) {
+				var BetaOperator joinNode = if(match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
 				joinNode.leftInput = myAlgebraExpression
 				joinNode.rightInput = match_WhereJoinExpression
-				myAlgebraExpression=joinNode
+				myAlgebraExpression = joinNode
 			}
 			singleQuery_MatchList.add(myAlgebraExpression)
 		}
@@ -215,7 +217,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterPatternPart(PatternPartContext ctx) {
 		patternPart_AlgebraExpression = null
-		// FIXME: handle grammar rule: variable ws '=' ws anonymousPatternPart
+	// FIXME: handle grammar rule: variable ws '=' ws anonymousPatternPart
 	}
 
 	override exitPatternPart(PatternPartContext ctx) {
@@ -273,7 +275,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterRelationshipDetail(RelationshipDetailContext ctx) {
 		val variableCtx = ctx.getChild(VariableContext, 0)
-		//TODO: process possible multiple relationshipTypes
+		// TODO: process possible multiple relationshipTypes
 		val relationshipTypesCtx = ctx.getChild(RelationshipTypesContext, 0)
 
 		val edgeVariableName = variableCtx?.getChild(SymbolicNameContext, 0)?.text
@@ -318,25 +320,25 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 			}
 		}
 	}
-	
+
 	var boolean where_InsideWhere = false
 	var AlgebraExpression where_JoinExpression
-	var boolean where_JoinModeIsAntijoin=false
+	var boolean where_JoinModeIsAntijoin = false
 
 	override enterWhere(WhereContext ctx) {
 		where_InsideWhere = true
 		functionInvocation_FunctionName = null
-		where_JoinExpression=null
+		where_JoinExpression = null
 	}
 
-	override exitWhere(WhereContext ctx) {	
-		where_JoinModeIsAntijoin="NOT".equalsIgnoreCase(functionInvocation_FunctionName)
+	override exitWhere(WhereContext ctx) {
+		where_JoinModeIsAntijoin = "NOT".equalsIgnoreCase(functionInvocation_FunctionName)
 		where_InsideWhere = false
 
 		switch ctx.parent {
 			MatchContext: {
-				match_WhereJoinModeIsAntijoin=where_JoinModeIsAntijoin
-				match_WhereJoinExpression=where_JoinExpression
+				match_WhereJoinModeIsAntijoin = where_JoinModeIsAntijoin
+				match_WhereJoinExpression = where_JoinExpression
 			}
 		}
 	}
@@ -366,7 +368,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override exitRelationshipsPattern(RelationshipsPatternContext ctx) {
 		where_JoinExpression = chainExpandOperators(relationshipsPattern_GetVerticesOperator,
-				relationshipsPattern_ExpandList)
+			relationshipsPattern_ExpandList)
 	}
 
 	override enterIntegerLiteral(IntegerLiteralContext ctx) {
