@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class SemanticErrorAcceptanceTest {
     
+    /*
+    Scenario: Handling property access on the Any type
+    */
     @Test
     def void testSemanticErrorAcceptance_01() {
         RelalgParser.parse('''
@@ -14,6 +17,9 @@ class SemanticErrorAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Failing when performing property access on a non-map 1
+    */
     @Test
     def void testSemanticErrorAcceptance_02() {
         RelalgParser.parse('''
@@ -22,6 +28,9 @@ class SemanticErrorAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Bad arguments for `range()`
+    */
     @Test
     def void testSemanticErrorAcceptance_04() {
         RelalgParser.parse('''

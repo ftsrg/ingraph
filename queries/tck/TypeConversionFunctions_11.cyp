@@ -1,2 +1,4 @@
-WITH ['2', '2.9', 'foo'] AS numbers
-RETURN [n IN numbers | toInteger(n)] AS int_numbers
+MATCH (m:Movie { rating: 4 })
+WITH *
+MATCH (n)
+RETURN toFloat(n.rating) AS float

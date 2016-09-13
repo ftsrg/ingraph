@@ -30,17 +30,19 @@ class %sTest {
     with open(filename, 'r') as file:
         content = file.read()
 
-    query_pattern = re.compile('When executing query:$\s*"""(.*?)\s*"""$\s*Then (.*?)$', re.MULTILINE | re.DOTALL)
+    indentation_pattern = re.compile('^\s*', re.MULTILINE)
+    query_pattern = re.compile('(Scenario: .*?)When executing query:$\s*"""(.*?)\s*"""$\s*Then (.*?)$', re.MULTILINE | re.DOTALL)
     matches = re.findall(query_pattern, content)
+
     i = 0
     for match in matches:
-        then = match[1]
+        scenario = match[0]
+        query = indentation_pattern.sub("", match[1])
+        then = match[2]
         if "SyntaxError" in then:
             continue
 
         i += 1
-        indentation_pattern = re.compile('^\s*', re.MULTILINE)
-        query = indentation_pattern.sub("", match[0])
 
         if ("CREATE " in query) or ("DELETE " in query) or ("SET " in query):
             continue
@@ -49,13 +51,15 @@ class %sTest {
             query_file.write(query + "\n")
 
         test_case = """
+    /*
+    %s*/
     @Test
     def void test%s_%02d() {
         RelalgParser.parse('''
         %s
         ''')
     }
-        """ % (filename_without_extension, i, indent(query))
+        """ % (scenario, filename_without_extension, i, indent(query))
         test_file.write(test_case)
 
     test_footer = """

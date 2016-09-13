@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class TernaryLogicAcceptanceTest {
     
+    /*
+    Scenario: The inverse of a null is a null
+    */
     @Test
     def void testTernaryLogicAcceptance_01() {
         RelalgParser.parse('''
@@ -13,6 +16,9 @@ class TernaryLogicAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: A literal null IS null
+    */
     @Test
     def void testTernaryLogicAcceptance_02() {
         RelalgParser.parse('''
@@ -20,6 +26,9 @@ class TernaryLogicAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: A literal null is not IS NOT null
+    */
     @Test
     def void testTernaryLogicAcceptance_03() {
         RelalgParser.parse('''
@@ -27,6 +36,9 @@ class TernaryLogicAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: It is unknown - i.e. null - if a null is equal to a null
+    */
     @Test
     def void testTernaryLogicAcceptance_04() {
         RelalgParser.parse('''
@@ -34,38 +46,13 @@ class TernaryLogicAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: It is unknown - i.e. null - if a null is not equal to a null
+    */
     @Test
     def void testTernaryLogicAcceptance_05() {
         RelalgParser.parse('''
         RETURN null <> null AS value
-        ''')
-    }
-        
-    @Test
-    def void testTernaryLogicAcceptance_06() {
-        RelalgParser.parse('''
-        RETURN $lhs AND $rhs AS result
-        ''')
-    }
-        
-    @Test
-    def void testTernaryLogicAcceptance_07() {
-        RelalgParser.parse('''
-        RETURN $lhs OR $rhs AS result
-        ''')
-    }
-        
-    @Test
-    def void testTernaryLogicAcceptance_08() {
-        RelalgParser.parse('''
-        RETURN $lhs XOR $rhs AS result
-        ''')
-    }
-        
-    @Test
-    def void testTernaryLogicAcceptance_09() {
-        RelalgParser.parse('''
-        RETURN $elt IN $coll AS result
         ''')
     }
         

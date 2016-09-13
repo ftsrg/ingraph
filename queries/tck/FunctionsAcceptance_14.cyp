@@ -1,2 +1,3 @@
-MATCH (n)
-RETURN percentileCont(n.prop, $param)
+MATCH (a)
+OPTIONAL MATCH (a)-[r:T]->()
+RETURN type(r)

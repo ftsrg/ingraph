@@ -6,6 +6,10 @@ import ingraph.cypher2relalg.RelalgParser
 
 class ReturnAcceptance2Test {
     
+    /*
+    Scenario: Accept valid Unicode literal
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_05() {
         RelalgParser.parse('''
@@ -13,6 +17,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: LIMIT 0 should return an empty result
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (), (), ()
+      """
+    */
     @Test
     def void testReturnAcceptance2_06() {
         RelalgParser.parse('''
@@ -22,6 +34,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Fail when ordering nodes
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (), ()
+      """
+    */
     @Test
     def void testReturnAcceptance2_07() {
         RelalgParser.parse('''
@@ -31,6 +51,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Ordering with aggregation
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({name: 'nisse'})
+      """
+    */
     @Test
     def void testReturnAcceptance2_08() {
         RelalgParser.parse('''
@@ -40,6 +68,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: DISTINCT on nullable values
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({name: 'Florescu'}), (), ()
+      """
+    */
     @Test
     def void testReturnAcceptance2_09() {
         RelalgParser.parse('''
@@ -48,6 +84,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Return all variables
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Start)-[:T]->()
+      """
+    */
     @Test
     def void testReturnAcceptance2_10() {
         RelalgParser.parse('''
@@ -56,6 +100,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: `sqrt()` returning float values
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_13() {
         RelalgParser.parse('''
@@ -63,6 +111,27 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Arithmetic expressions inside aggregation
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (andres {name: 'Andres'}),
+             (michael {name: 'Michael'}),
+             (peter {name: 'Peter'}),
+             (bread {type: 'Bread'}),
+             (veggies {type: 'Veggies'}),
+             (meat {type: 'Meat'})
+      CREATE (andres)-[:ATE {times: 10}]->(bread),
+             (andres)-[:ATE {times: 8}]->(veggies),
+             (michael)-[:ATE {times: 4}]->(veggies),
+             (michael)-[:ATE {times: 6}]->(bread),
+             (michael)-[:ATE {times: 9}]->(meat),
+             (peter)-[:ATE {times: 7}]->(veggies),
+             (peter)-[:ATE {times: 7}]->(bread),
+             (peter)-[:ATE {times: 4}]->(meat)
+      """
+    */
     @Test
     def void testReturnAcceptance2_14() {
         RelalgParser.parse('''
@@ -74,6 +143,27 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Matching and disregarding output, then matching again
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (andres {name: 'Andres'}),
+             (michael {name: 'Michael'}),
+             (peter {name: 'Peter'}),
+             (bread {type: 'Bread'}),
+             (veggies {type: 'Veggies'}),
+             (meat {type: 'Meat'})
+      CREATE (andres)-[:ATE {times: 10}]->(bread),
+             (andres)-[:ATE {times: 8}]->(veggies),
+             (michael)-[:ATE {times: 4}]->(veggies),
+             (michael)-[:ATE {times: 6}]->(bread),
+             (michael)-[:ATE {times: 9}]->(meat),
+             (peter)-[:ATE {times: 7}]->(veggies),
+             (peter)-[:ATE {times: 7}]->(bread),
+             (peter)-[:ATE {times: 4}]->(meat)
+      """
+    */
     @Test
     def void testReturnAcceptance2_15() {
         RelalgParser.parse('''
@@ -84,6 +174,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Returning a list property
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({foo: [1, 2, 3]})
+      """
+    */
     @Test
     def void testReturnAcceptance2_16() {
         RelalgParser.parse('''
@@ -92,6 +190,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Returning a projected map
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({foo: [1, 2, 3]})
+      """
+    */
     @Test
     def void testReturnAcceptance2_17() {
         RelalgParser.parse('''
@@ -99,6 +205,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Returning an expression
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testReturnAcceptance2_18() {
         RelalgParser.parse('''
@@ -107,6 +221,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Concatenating and returning the size of literal lists
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_19() {
         RelalgParser.parse('''
@@ -114,6 +232,15 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Limiting amount of rows when there are fewer left than the LIMIT argument
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 15) AS i
+      CREATE ({count: i})
+      """
+    */
     @Test
     def void testReturnAcceptance2_21() {
         RelalgParser.parse('''
@@ -125,6 +252,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: `substring()` with default second argument
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_22() {
         RelalgParser.parse('''
@@ -132,6 +263,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Returning all variables with ordering
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 1}), ({id: 10})
+      """
+    */
     @Test
     def void testReturnAcceptance2_23() {
         RelalgParser.parse('''
@@ -141,6 +280,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Using aliased DISTINCT expression in ORDER BY
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 1}), ({id: 10})
+      """
+    */
     @Test
     def void testReturnAcceptance2_24() {
         RelalgParser.parse('''
@@ -150,6 +297,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Returned columns do not change from using ORDER BY
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 1}), ({id: 10})
+      """
+    */
     @Test
     def void testReturnAcceptance2_25() {
         RelalgParser.parse('''
@@ -159,6 +314,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Arithmetic expressions should propagate null values
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_26() {
         RelalgParser.parse('''
@@ -166,6 +325,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Indexing into nested literal lists
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_27() {
         RelalgParser.parse('''
@@ -173,6 +336,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Aliasing expressions
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 42})
+      """
+    */
     @Test
     def void testReturnAcceptance2_28() {
         RelalgParser.parse('''
@@ -181,6 +352,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Projecting an arithmetic expression with aggregation
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 42})
+      """
+    */
     @Test
     def void testReturnAcceptance2_29() {
         RelalgParser.parse('''
@@ -189,6 +368,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Aggregating by a list property has a correct definition of equality
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({a: [1, 2, 3]}), ({a: [1, 2, 3]})
+      """
+    */
     @Test
     def void testReturnAcceptance2_31() {
         RelalgParser.parse('''
@@ -198,6 +385,15 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Reusing variable names
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:Person), (b:Person), (m:Message {id: 10})
+      CREATE (a)-[:LIKE {creationDate: 20160614}]->(m)-[:POSTED_BY]->(b)
+      """
+    */
     @Test
     def void testReturnAcceptance2_32() {
         RelalgParser.parse('''
@@ -210,6 +406,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Concatenating lists of same type
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_33() {
         RelalgParser.parse('''
@@ -217,6 +417,10 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Appending lists of same type
+    Given any graph
+    */
     @Test
     def void testReturnAcceptance2_34() {
         RelalgParser.parse('''
@@ -224,6 +428,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: DISTINCT inside aggregation should work with lists in maps
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({list: ['A', 'B']}), ({list: ['A', 'B']})
+      """
+    */
     @Test
     def void testReturnAcceptance2_35() {
         RelalgParser.parse('''
@@ -232,6 +444,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: Handling DISTINCT with lists in maps
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({list: ['A', 'B']}), ({list: ['A', 'B']})
+      """
+    */
     @Test
     def void testReturnAcceptance2_36() {
         RelalgParser.parse('''
@@ -241,6 +461,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: DISTINCT inside aggregation should work with nested lists in maps
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({list: ['A', 'B']}), ({list: ['A', 'B']})
+      """
+    */
     @Test
     def void testReturnAcceptance2_37() {
         RelalgParser.parse('''
@@ -249,6 +477,14 @@ class ReturnAcceptance2Test {
         ''')
     }
         
+    /*
+    Scenario: DISTINCT inside aggregation should work with nested lists of maps in maps
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({list: ['A', 'B']}), ({list: ['A', 'B']})
+      """
+    */
     @Test
     def void testReturnAcceptance2_38() {
         RelalgParser.parse('''

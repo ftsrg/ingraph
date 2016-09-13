@@ -6,6 +6,14 @@ import ingraph.cypher2relalg.RelalgParser
 
 class SkipLimitAcceptanceTest {
     
+    /*
+    Scenario: SKIP with an expression that does not depend on variables
+    And having executed:
+      """
+      UNWIND range(1, 10) AS i
+      CREATE ({nr: i})
+      """
+    */
     @Test
     def void testSkipLimitAcceptance_01() {
         RelalgParser.parse('''
@@ -16,6 +24,14 @@ class SkipLimitAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: LIMIT with an expression that does not depend on variables
+    And having executed:
+      """
+      UNWIND range(1, 3) AS i
+      CREATE ({nr: i})
+      """
+    */
     @Test
     def void testSkipLimitAcceptance_02() {
         RelalgParser.parse('''

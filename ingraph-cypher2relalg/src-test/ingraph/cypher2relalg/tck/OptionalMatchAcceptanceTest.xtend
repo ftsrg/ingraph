@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class OptionalMatchAcceptanceTest {
     
+    /*
+    Scenario: Return null when no matches due to inline label predicate
+    */
     @Test
     def void testOptionalMatchAcceptance_01() {
         RelalgParser.parse('''
@@ -15,6 +18,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Return null when no matches due to label predicate in WHERE
+    */
     @Test
     def void testOptionalMatchAcceptance_02() {
         RelalgParser.parse('''
@@ -25,6 +31,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Respect predicates on the OPTIONAL MATCH
+    */
     @Test
     def void testOptionalMatchAcceptance_03() {
         RelalgParser.parse('''
@@ -35,6 +44,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Returning label predicate on null node
+    */
     @Test
     def void testOptionalMatchAcceptance_04() {
         RelalgParser.parse('''
@@ -44,6 +56,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: MATCH after OPTIONAL MATCH
+    */
     @Test
     def void testOptionalMatchAcceptance_05() {
         RelalgParser.parse('''
@@ -56,6 +71,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: WITH after OPTIONAL MATCH
+    */
     @Test
     def void testOptionalMatchAcceptance_06() {
         RelalgParser.parse('''
@@ -66,6 +84,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Named paths in optional matches
+    */
     @Test
     def void testOptionalMatchAcceptance_07() {
         RelalgParser.parse('''
@@ -75,6 +96,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: OPTIONAL MATCH and bound nodes
+    */
     @Test
     def void testOptionalMatchAcceptance_08() {
         RelalgParser.parse('''
@@ -84,6 +108,15 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: OPTIONAL MATCH with labels on the optional end node
+    And having executed:
+      """
+      CREATE (:X), (x:X), (y1:Y), (y2:Y:Z)
+      CREATE (x)-[:REL]->(y1),
+             (x)-[:REL]->(y2)
+      """
+    */
     @Test
     def void testOptionalMatchAcceptance_09() {
         RelalgParser.parse('''
@@ -93,6 +126,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Named paths inside optional matches with node predicates
+    */
     @Test
     def void testOptionalMatchAcceptance_10() {
         RelalgParser.parse('''
@@ -102,6 +138,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Variable length optional relationships
+    */
     @Test
     def void testOptionalMatchAcceptance_11() {
         RelalgParser.parse('''
@@ -111,6 +150,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Variable length optional relationships with length predicates
+    */
     @Test
     def void testOptionalMatchAcceptance_12() {
         RelalgParser.parse('''
@@ -120,6 +162,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Optionally matching self-loops
+    */
     @Test
     def void testOptionalMatchAcceptance_13() {
         RelalgParser.parse('''
@@ -129,6 +174,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Optionally matching self-loops without matches
+    */
     @Test
     def void testOptionalMatchAcceptance_14() {
         RelalgParser.parse('''
@@ -139,6 +187,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Variable length optional relationships with bound nodes
+    */
     @Test
     def void testOptionalMatchAcceptance_15() {
         RelalgParser.parse('''
@@ -148,6 +199,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Variable length optional relationships with bound nodes, no matches
+    */
     @Test
     def void testOptionalMatchAcceptance_16() {
         RelalgParser.parse('''
@@ -157,6 +211,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Longer pattern with bound nodes
+    */
     @Test
     def void testOptionalMatchAcceptance_17() {
         RelalgParser.parse('''
@@ -166,6 +223,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Longer pattern with bound nodes without matches
+    */
     @Test
     def void testOptionalMatchAcceptance_18() {
         RelalgParser.parse('''
@@ -175,6 +235,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handling correlated optional matches; first does not match implies second does not match
+    */
     @Test
     def void testOptionalMatchAcceptance_19() {
         RelalgParser.parse('''
@@ -185,6 +248,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handling optional matches between optionally matched entities
+    */
     @Test
     def void testOptionalMatchAcceptance_20() {
         RelalgParser.parse('''
@@ -197,6 +263,9 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handling optional matches between nulls
+    */
     @Test
     def void testOptionalMatchAcceptance_21() {
         RelalgParser.parse('''
@@ -208,6 +277,15 @@ class OptionalMatchAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: OPTIONAL MATCH and `collect()`
+    And having executed:
+      """
+      CREATE (:DoesExist {property: 42})
+      CREATE (:DoesExist {property: 43})
+      CREATE (:DoesExist {property: 44})
+      """
+    */
     @Test
     def void testOptionalMatchAcceptance_22() {
         RelalgParser.parse('''

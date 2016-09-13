@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class LiteralsTest {
     
+    /*
+    Scenario: Return an integer
+    */
     @Test
     def void testLiterals_01() {
         RelalgParser.parse('''
@@ -13,6 +16,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a float
+    */
     @Test
     def void testLiterals_02() {
         RelalgParser.parse('''
@@ -20,6 +26,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a float in exponent form
+    */
     @Test
     def void testLiterals_03() {
         RelalgParser.parse('''
@@ -27,6 +36,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a boolean
+    */
     @Test
     def void testLiterals_04() {
         RelalgParser.parse('''
@@ -34,6 +46,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a single-quoted string
+    */
     @Test
     def void testLiterals_05() {
         RelalgParser.parse('''
@@ -41,6 +56,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a double-quoted string
+    */
     @Test
     def void testLiterals_06() {
         RelalgParser.parse('''
@@ -48,6 +66,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return null
+    */
     @Test
     def void testLiterals_07() {
         RelalgParser.parse('''
@@ -55,6 +76,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return an empty list
+    */
     @Test
     def void testLiterals_08() {
         RelalgParser.parse('''
@@ -62,6 +86,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a nonempty list
+    */
     @Test
     def void testLiterals_09() {
         RelalgParser.parse('''
@@ -69,6 +96,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return an empty map
+    */
     @Test
     def void testLiterals_10() {
         RelalgParser.parse('''
@@ -76,6 +106,9 @@ class LiteralsTest {
         ''')
     }
         
+    /*
+    Scenario: Return a nonempty map
+    */
     @Test
     def void testLiterals_11() {
         RelalgParser.parse('''

@@ -1,2 +1,2 @@
-WITH 'foo' AS foo_string, '' AS empty_string
-RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
+WITH ['1', '2', 'foo'] AS numbers
+RETURN [n IN numbers | toFloat(n)] AS float_numbers

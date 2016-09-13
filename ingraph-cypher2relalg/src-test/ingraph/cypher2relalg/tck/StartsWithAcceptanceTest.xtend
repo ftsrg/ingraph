@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class StartsWithAcceptanceTest {
     
+    /*
+    Scenario: Finding exact matches
+    */
     @Test
     def void testStartsWithAcceptance_01() {
         RelalgParser.parse('''
@@ -15,6 +18,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding beginning of string
+    */
     @Test
     def void testStartsWithAcceptance_02() {
         RelalgParser.parse('''
@@ -24,6 +30,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding end of string 1
+    */
     @Test
     def void testStartsWithAcceptance_03() {
         RelalgParser.parse('''
@@ -33,6 +42,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding end of string 2
+    */
     @Test
     def void testStartsWithAcceptance_04() {
         RelalgParser.parse('''
@@ -42,6 +54,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding middle of string
+    */
     @Test
     def void testStartsWithAcceptance_05() {
         RelalgParser.parse('''
@@ -52,6 +67,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding the empty string
+    */
     @Test
     def void testStartsWithAcceptance_06() {
         RelalgParser.parse('''
@@ -61,6 +79,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding when the middle is known
+    */
     @Test
     def void testStartsWithAcceptance_07() {
         RelalgParser.parse('''
@@ -70,6 +91,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings starting with whitespace
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_08() {
         RelalgParser.parse('''
@@ -79,6 +109,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings starting with newline
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_09() {
         RelalgParser.parse('''
@@ -88,6 +127,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings ending with newline
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_10() {
         RelalgParser.parse('''
@@ -97,6 +145,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings ending with whitespace
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_11() {
         RelalgParser.parse('''
@@ -106,6 +163,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings containing whitespace
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_12() {
         RelalgParser.parse('''
@@ -115,6 +181,15 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Finding strings containing newline
+    And having executed:
+      """
+      CREATE (:Label {name: ' Foo '}),
+             (:Label {name: '\nFoo\n'}),
+             (:Label {name: '\tFoo\t'})
+      """
+    */
     @Test
     def void testStartsWithAcceptance_13() {
         RelalgParser.parse('''
@@ -124,6 +199,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string starts with null
+    */
     @Test
     def void testStartsWithAcceptance_14() {
         RelalgParser.parse('''
@@ -133,6 +211,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string does not start with null
+    */
     @Test
     def void testStartsWithAcceptance_15() {
         RelalgParser.parse('''
@@ -142,6 +223,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string ends with null
+    */
     @Test
     def void testStartsWithAcceptance_16() {
         RelalgParser.parse('''
@@ -151,6 +235,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string does not end with null
+    */
     @Test
     def void testStartsWithAcceptance_17() {
         RelalgParser.parse('''
@@ -160,6 +247,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string contains null
+    */
     @Test
     def void testStartsWithAcceptance_18() {
         RelalgParser.parse('''
@@ -169,6 +259,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No string does not contain null
+    */
     @Test
     def void testStartsWithAcceptance_19() {
         RelalgParser.parse('''
@@ -178,6 +271,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Combining string operators
+    */
     @Test
     def void testStartsWithAcceptance_20() {
         RelalgParser.parse('''
@@ -189,6 +285,9 @@ class StartsWithAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: NOT with CONTAINS
+    */
     @Test
     def void testStartsWithAcceptance_21() {
         RelalgParser.parse('''

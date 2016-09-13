@@ -6,6 +6,15 @@ import ingraph.cypher2relalg.RelalgParser
 
 class AggregationAcceptanceTest {
     
+    /*
+    Scenario: Support multiple divisions in aggregate function
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 7250) AS i
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_01() {
         RelalgParser.parse('''
@@ -14,6 +23,15 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Support column renaming for aggregates as well
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 10) AS i
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_02() {
         RelalgParser.parse('''
@@ -22,6 +40,15 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregates inside normal functions
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 10) AS i
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_03() {
         RelalgParser.parse('''
@@ -30,6 +57,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handle aggregates inside non-aggregate expressions
+    Given an empty graph
+    */
     @Test
     def void testAggregationAcceptance_04() {
         RelalgParser.parse('''
@@ -38,6 +69,15 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Count nodes
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:L), (b1), (b2)
+      CREATE (a)-[:A]->(b1), (a)-[:A]->(b2)
+      """
+    */
     @Test
     def void testAggregationAcceptance_05() {
         RelalgParser.parse('''
@@ -46,6 +86,17 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Sort on aggregate function and normal property
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({division: 'Sweden'})
+      CREATE ({division: 'Germany'})
+      CREATE ({division: 'England'})
+      CREATE ({division: 'Sweden'})
+      """
+    */
     @Test
     def void testAggregationAcceptance_06() {
         RelalgParser.parse('''
@@ -55,6 +106,16 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregate on property
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({x: 33})
+      CREATE ({x: 33})
+      CREATE ({x: 42})
+      """
+    */
     @Test
     def void testAggregationAcceptance_07() {
         RelalgParser.parse('''
@@ -63,6 +124,16 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Count non-null values
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({y: 'a', x: 33})
+      CREATE ({y: 'a'})
+      CREATE ({y: 'b', x: 42})
+      """
+    */
     @Test
     def void testAggregationAcceptance_08() {
         RelalgParser.parse('''
@@ -71,6 +142,16 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Sum non-null values
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({y: 'a', x: 33})
+      CREATE ({y: 'a'})
+      CREATE ({y: 'a', x: 42})
+      """
+    */
     @Test
     def void testAggregationAcceptance_09() {
         RelalgParser.parse('''
@@ -79,6 +160,15 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handle aggregation on functions
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:L), (b1), (b2)
+      CREATE (a)-[:A]->(b1), (a)-[:A]->(b2)
+      """
+    */
     @Test
     def void testAggregationAcceptance_10() {
         RelalgParser.parse('''
@@ -87,6 +177,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Distinct on unbound node
+    Given an empty graph
+    */
     @Test
     def void testAggregationAcceptance_11() {
         RelalgParser.parse('''
@@ -95,6 +189,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Distinct on null
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_12() {
         RelalgParser.parse('''
@@ -103,6 +205,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Collect distinct nulls
+    Given any graph
+    */
     @Test
     def void testAggregationAcceptance_13() {
         RelalgParser.parse('''
@@ -111,6 +217,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Collect distinct values mixed with nulls
+    Given any graph
+    */
     @Test
     def void testAggregationAcceptance_14() {
         RelalgParser.parse('''
@@ -119,6 +229,16 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregate on list values
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({color: ['red']})
+      CREATE ({color: ['blue']})
+      CREATE ({color: ['red']})
+      """
+    */
     @Test
     def void testAggregationAcceptance_15() {
         RelalgParser.parse('''
@@ -127,6 +247,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregates with arithmetics
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_16() {
         RelalgParser.parse('''
@@ -135,6 +263,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregates ordered by arithmetics
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:A), (:X), (:X)
+      """
+    */
     @Test
     def void testAggregationAcceptance_17() {
         RelalgParser.parse('''
@@ -144,6 +280,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Multiple aggregates on same variable
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_18() {
         RelalgParser.parse('''
@@ -152,6 +296,15 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Simple counting of nodes
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(1, 100) AS i
+      CREATE ()
+      """
+    */
     @Test
     def void testAggregationAcceptance_19() {
         RelalgParser.parse('''
@@ -160,6 +313,18 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregation of named paths
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:A), (b:B), (c:C), (d:D), (e:E), (f:F)
+      CREATE (a)-[:R]->(b)
+      CREATE (c)-[:R]->(d)
+      CREATE (d)-[:R]->(e)
+      CREATE (e)-[:R]->(f)
+      """
+    */
     @Test
     def void testAggregationAcceptance_20() {
         RelalgParser.parse('''
@@ -169,6 +334,17 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Aggregation with `min()`
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:T {name: 'a'}), (b:T {name: 'b'}), (c:T {name: 'c'})
+      CREATE (a)-[:R]->(b)
+      CREATE (a)-[:R]->(c)
+      CREATE (c)-[:R]->(b)
+      """
+    */
     @Test
     def void testAggregationAcceptance_21() {
         RelalgParser.parse('''
@@ -179,6 +355,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Handle subexpression in aggregation also occurring as standalone expression with nested aggregation in a literal map
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:A), (:B {prop: 42})
+      """
+    */
     @Test
     def void testAggregationAcceptance_22() {
         RelalgParser.parse('''
@@ -189,6 +373,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Projection during aggregation in WITH before MERGE and after WITH with predicate
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:A {prop: 42})
+      """
+    */
     @Test
     def void testAggregationAcceptance_23() {
         RelalgParser.parse('''
@@ -200,6 +392,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: No overflow during summation
+    Given any graph
+    */
     @Test
     def void testAggregationAcceptance_24() {
         RelalgParser.parse('''
@@ -210,6 +406,14 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Counting with loops
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a), (a)-[:R]->(a)
+      """
+    */
     @Test
     def void testAggregationAcceptance_25() {
         RelalgParser.parse('''
@@ -218,6 +422,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `max()` should aggregate strings
+    Given any graph
+    */
     @Test
     def void testAggregationAcceptance_26() {
         RelalgParser.parse('''
@@ -226,6 +434,10 @@ class AggregationAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `min()` should aggregate strings
+    Given any graph
+    */
     @Test
     def void testAggregationAcceptance_27() {
         RelalgParser.parse('''

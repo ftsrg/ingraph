@@ -6,6 +6,14 @@ import ingraph.cypher2relalg.RelalgParser
 
 class FunctionsAcceptanceTest {
     
+    /*
+    Scenario: Run coalesce
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({name: 'Emil Eifrem', title: 'CEO'}), ({name: 'Nobody'})
+      """
+    */
     @Test
     def void testFunctionsAcceptance_01() {
         RelalgParser.parse('''
@@ -14,6 +22,10 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Functions should return null if they get path containing unbound
+    Given any graph
+    */
     @Test
     def void testFunctionsAcceptance_02() {
         RelalgParser.parse('''
@@ -23,6 +35,10 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `split()`
+    Given any graph
+    */
     @Test
     def void testFunctionsAcceptance_03() {
         RelalgParser.parse('''
@@ -31,6 +47,14 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `properties()` on a node
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (n:Person {name: 'Popeye', level: 9001})
+      """
+    */
     @Test
     def void testFunctionsAcceptance_04() {
         RelalgParser.parse('''
@@ -39,6 +63,14 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `properties()` on a relationship
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (n)-[:R {name: 'Popeye', level: 9001}]->(n)
+      """
+    */
     @Test
     def void testFunctionsAcceptance_05() {
         RelalgParser.parse('''
@@ -47,6 +79,10 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `properties()` on a map
+    Given any graph
+    */
     @Test
     def void testFunctionsAcceptance_06() {
         RelalgParser.parse('''
@@ -54,6 +90,10 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `properties()` on null
+    Given any graph
+    */
     @Test
     def void testFunctionsAcceptance_07() {
         RelalgParser.parse('''
@@ -61,6 +101,10 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `reverse()`
+    Given any graph
+    */
     @Test
     def void testFunctionsAcceptance_08() {
         RelalgParser.parse('''
@@ -68,6 +112,15 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `exists()` with dynamic property lookup
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Person {prop: 'foo'}),
+             (:Person)
+      """
+    */
     @Test
     def void testFunctionsAcceptance_09() {
         RelalgParser.parse('''
@@ -77,56 +130,20 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `percentileDisc()` failing in more involved query
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 10) AS i
+      CREATE (s:S)
+      WITH s, i
+      UNWIND range(0, i) AS j
+      CREATE (s)-[:REL]->()
+      """
+    */
     @Test
     def void testFunctionsAcceptance_10() {
-        RelalgParser.parse('''
-        WITH <map> AS map
-        RETURN exists(map.name) AS exists
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_11() {
-        RelalgParser.parse('''
-        WITH <map> AS map
-        RETURN map.name IS NOT NULL
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_12() {
-        RelalgParser.parse('''
-        MATCH (n)
-        RETURN percentileDisc(n.prop, $percentile) AS p
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_13() {
-        RelalgParser.parse('''
-        MATCH (n)
-        RETURN percentileCont(n.prop, $percentile) AS p
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_14() {
-        RelalgParser.parse('''
-        MATCH (n)
-        RETURN percentileCont(n.prop, $param)
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_15() {
-        RelalgParser.parse('''
-        MATCH (n)
-        RETURN percentileDisc(n.prop, $param)
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_16() {
         RelalgParser.parse('''
         MATCH (n:S)
         WITH n, size([(n)-->() | 1]) AS deg
@@ -137,24 +154,48 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `type()`
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()-[:T]->()
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_17() {
+    def void testFunctionsAcceptance_11() {
         RelalgParser.parse('''
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
     }
         
+    /*
+    Scenario: `type()` on two relationships
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()-[:T1]->()-[:T2]->()
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_18() {
+    def void testFunctionsAcceptance_12() {
         RelalgParser.parse('''
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
     }
         
+    /*
+    Scenario: `type()` on null relationship
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_19() {
+    def void testFunctionsAcceptance_13() {
         RelalgParser.parse('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
@@ -162,8 +203,16 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `type()` on mixed null and non-null relationships
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()-[:T]->()
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_20() {
+    def void testFunctionsAcceptance_14() {
         RelalgParser.parse('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:T]->()
@@ -171,8 +220,16 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `type()` handling Any type
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()-[:T]->()
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_21() {
+    def void testFunctionsAcceptance_15() {
         RelalgParser.parse('''
         MATCH (a)-[r]->()
         WITH [r, 1] AS list
@@ -180,16 +237,16 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `labels()` should accept type Any
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Foo), (:Foo:Bar)
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_22() {
-        RelalgParser.parse('''
-        MATCH p = (n)-[r:T]->()
-        RETURN [x IN [r, <invalid>] | type(x) ] AS list
-        ''')
-    }
-        
-    @Test
-    def void testFunctionsAcceptance_23() {
+    def void testFunctionsAcceptance_16() {
         RelalgParser.parse('''
         MATCH (a)
         WITH [a, 1] AS list
@@ -197,8 +254,16 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `labels()` should accept type Any
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Foo), (:Foo:Bar)
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_24() {
+    def void testFunctionsAcceptance_17() {
         RelalgParser.parse('''
         MATCH (a)
         WITH [a, 1] AS list
@@ -206,8 +271,16 @@ class FunctionsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: `exists()` is case insensitive
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:X {prop: 42}), (:X)
+      """
+    */
     @Test
-    def void testFunctionsAcceptance_25() {
+    def void testFunctionsAcceptance_18() {
         RelalgParser.parse('''
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b

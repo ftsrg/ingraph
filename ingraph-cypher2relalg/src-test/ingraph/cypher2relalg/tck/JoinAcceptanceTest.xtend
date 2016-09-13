@@ -6,6 +6,17 @@ import ingraph.cypher2relalg.RelalgParser
 
 class JoinAcceptanceTest {
     
+    /*
+    Scenario: Find friends of others
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:A {id: 1}),
+             (:A {id: 2}),
+             (:B {id: 2}),
+             (:B {id: 3})
+      """
+    */
     @Test
     def void testJoinAcceptance_01() {
         RelalgParser.parse('''
@@ -15,6 +26,16 @@ class JoinAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Should only join when matching
+    Given an empty graph
+    And having executed:
+      """
+      UNWIND range(0, 1000) AS i
+      CREATE (:A {id: i})
+      MERGE (:B {id: i % 10})
+      """
+    */
     @Test
     def void testJoinAcceptance_02() {
         RelalgParser.parse('''

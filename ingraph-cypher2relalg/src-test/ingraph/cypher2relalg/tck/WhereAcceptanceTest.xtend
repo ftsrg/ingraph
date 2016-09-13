@@ -6,6 +6,14 @@ import ingraph.cypher2relalg.RelalgParser
 
 class WhereAcceptanceTest {
     
+    /*
+    Scenario: NOT and false
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({name: 'a'})
+      """
+    */
     @Test
     def void testWhereAcceptance_01() {
         RelalgParser.parse('''
@@ -15,6 +23,14 @@ class WhereAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Fail when trying to compare strings and numbers
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Label {prop: '15'})
+      """
+    */
     @Test
     def void testWhereAcceptance_02() {
         RelalgParser.parse('''

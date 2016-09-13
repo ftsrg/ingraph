@@ -1,2 +1,2 @@
-MATCH (n)
-RETURN percentileDisc(n.prop, $percentile) AS p
+MATCH ()-[r1]->()-[r2]->()
+RETURN type(r1), type(r2)

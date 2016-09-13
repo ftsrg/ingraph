@@ -6,6 +6,16 @@ import ingraph.cypher2relalg.RelalgParser
 
 class ListComprehensionTest {
     
+    /*
+    Scenario: Returning a list comprehension
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:A)
+      CREATE (a)-[:T]->(:B),
+             (a)-[:T]->(:C)
+      """
+    */
     @Test
     def void testListComprehension_01() {
         RelalgParser.parse('''
@@ -14,6 +24,16 @@ class ListComprehensionTest {
         ''')
     }
         
+    /*
+    Scenario: Using a list comprehension in a WITH
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:A)
+      CREATE (a)-[:T]->(:B),
+             (a)-[:T]->(:C)
+      """
+    */
     @Test
     def void testListComprehension_02() {
         RelalgParser.parse('''
@@ -23,6 +43,16 @@ class ListComprehensionTest {
         ''')
     }
         
+    /*
+    Scenario: Using a list comprehension in a WHERE
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:A {prop: 'c'})
+      CREATE (a)-[:T]->(:B),
+             (a)-[:T]->(:C)
+      """
+    */
     @Test
     def void testListComprehension_03() {
         RelalgParser.parse('''

@@ -1,2 +1,2 @@
-MATCH ()-[r1]->()-[r2]->()
-RETURN type(r1), type(r2)
+MATCH (n:X)
+RETURN n, EXIsTS(n.prop) AS b

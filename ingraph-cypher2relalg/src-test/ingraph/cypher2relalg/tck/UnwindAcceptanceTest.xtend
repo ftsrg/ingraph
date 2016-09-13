@@ -6,6 +6,10 @@ import ingraph.cypher2relalg.RelalgParser
 
 class UnwindAcceptanceTest {
     
+    /*
+    Scenario: Unwinding a list
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_01() {
         RelalgParser.parse('''
@@ -14,6 +18,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding a range
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_02() {
         RelalgParser.parse('''
@@ -22,6 +30,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding a concatenation of lists
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_03() {
         RelalgParser.parse('''
@@ -31,6 +43,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding a collected unwound expression
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_04() {
         RelalgParser.parse('''
@@ -41,6 +57,14 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding a collected expression
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 1}), ({id: 2})
+      """
+    */
     @Test
     def void testUnwindAcceptance_05() {
         RelalgParser.parse('''
@@ -51,6 +75,16 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Creating nodes from an unwound parameter list
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:Year {year: 2016})
+      """
+    And parameters are:
+      | events | [{year: 2016, id: 1}, {year: 2016, id: 2}] |
+    */
     @Test
     def void testUnwindAcceptance_06() {
         RelalgParser.parse('''
@@ -63,6 +97,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Double unwinding a list of lists
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_07() {
         RelalgParser.parse('''
@@ -73,6 +111,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding the empty list
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_08() {
         RelalgParser.parse('''
@@ -81,6 +123,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding null
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_09() {
         RelalgParser.parse('''
@@ -89,6 +135,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwinding list with duplicates
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_10() {
         RelalgParser.parse('''
@@ -97,6 +147,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwind does not prune context
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_11() {
         RelalgParser.parse('''
@@ -106,6 +160,19 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Unwind does not remove variables from scope
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (s:S),
+        (n),
+        (e:E),
+        (s)-[:X]->(e),
+        (s)-[:Y]->(e),
+        (n)-[:Y]->(e)
+      """
+    */
     @Test
     def void testUnwindAcceptance_12() {
         RelalgParser.parse('''
@@ -117,6 +184,10 @@ class UnwindAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Multiple unwinds after each other
+    Given any graph
+    */
     @Test
     def void testUnwindAcceptance_13() {
         RelalgParser.parse('''

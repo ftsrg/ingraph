@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class ColumnNameAcceptanceTest {
     
+    /*
+    Scenario: Keeping used expression 1
+    */
     @Test
     def void testColumnNameAcceptance_01() {
         RelalgParser.parse('''
@@ -14,6 +17,9 @@ class ColumnNameAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Keeping used expression 2
+    */
     @Test
     def void testColumnNameAcceptance_02() {
         RelalgParser.parse('''
@@ -22,6 +28,9 @@ class ColumnNameAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Keeping used expression 3
+    */
     @Test
     def void testColumnNameAcceptance_03() {
         RelalgParser.parse('''
@@ -30,6 +39,9 @@ class ColumnNameAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Keeping used expression 4
+    */
     @Test
     def void testColumnNameAcceptance_04() {
         RelalgParser.parse('''

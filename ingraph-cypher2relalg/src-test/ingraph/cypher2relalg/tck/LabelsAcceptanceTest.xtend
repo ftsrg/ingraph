@@ -6,6 +6,13 @@ import ingraph.cypher2relalg.RelalgParser
 
 class LabelsAcceptanceTest {
     
+    /*
+    Scenario: Using `labels()` in return clauses
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testLabelsAcceptance_10() {
         RelalgParser.parse('''
@@ -14,6 +21,13 @@ class LabelsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Removing a label
+    And having executed:
+      """
+      CREATE (:Foo:Bar)
+      """
+    */
     @Test
     def void testLabelsAcceptance_11() {
         RelalgParser.parse('''
@@ -23,6 +37,13 @@ class LabelsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Removing a non-existent label
+    And having executed:
+      """
+      CREATE (:Foo)
+      """
+    */
     @Test
     def void testLabelsAcceptance_12() {
         RelalgParser.parse('''

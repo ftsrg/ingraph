@@ -1,4 +1,2 @@
-MATCH (m:Movie { rating: 4 })
-WITH *
-MATCH (n)
-RETURN toFloat(n.rating) AS float
+WITH 'foo' AS foo_string, '' AS empty_string
+RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty

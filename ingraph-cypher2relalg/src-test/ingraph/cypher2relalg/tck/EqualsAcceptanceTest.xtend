@@ -6,6 +6,14 @@ import ingraph.cypher2relalg.RelalgParser
 
 class EqualsAcceptanceTest {
     
+    /*
+    Scenario: Number-typed integer comparison
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 0})
+      """
+    */
     @Test
     def void testEqualsAcceptance_01() {
         RelalgParser.parse('''
@@ -17,6 +25,14 @@ class EqualsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Number-typed float comparison
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 0})
+      """
+    */
     @Test
     def void testEqualsAcceptance_02() {
         RelalgParser.parse('''
@@ -28,6 +44,14 @@ class EqualsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Any-typed string comparison
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ({id: 0})
+      """
+    */
     @Test
     def void testEqualsAcceptance_03() {
         RelalgParser.parse('''
@@ -39,6 +63,14 @@ class EqualsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Comparing nodes to nodes
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()
+      """
+    */
     @Test
     def void testEqualsAcceptance_04() {
         RelalgParser.parse('''
@@ -50,6 +82,14 @@ class EqualsAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Comparing relationships to relationships
+    Given an empty graph
+    And having executed:
+      """
+      CREATE ()-[:T]->()
+      """
+    */
     @Test
     def void testEqualsAcceptance_05() {
         RelalgParser.parse('''

@@ -6,6 +6,9 @@ import ingraph.cypher2relalg.RelalgParser
 
 class LargeIntegerEqualityTest {
     
+    /*
+    Scenario: Does not lose precision
+    */
     @Test
     def void testLargeIntegerEquality_01() {
         RelalgParser.parse('''
@@ -14,6 +17,9 @@ class LargeIntegerEqualityTest {
         ''')
     }
         
+    /*
+    Scenario: Handling inlined equality of large integer
+    */
     @Test
     def void testLargeIntegerEquality_02() {
         RelalgParser.parse('''
@@ -22,6 +28,9 @@ class LargeIntegerEqualityTest {
         ''')
     }
         
+    /*
+    Scenario: Handling explicit equality of large integer
+    */
     @Test
     def void testLargeIntegerEquality_03() {
         RelalgParser.parse('''
@@ -31,6 +40,9 @@ class LargeIntegerEqualityTest {
         ''')
     }
         
+    /*
+    Scenario: Handling inlined equality of large integer, non-equal values
+    */
     @Test
     def void testLargeIntegerEquality_04() {
         RelalgParser.parse('''
@@ -39,6 +51,9 @@ class LargeIntegerEqualityTest {
         ''')
     }
         
+    /*
+    Scenario: Handling explicit equality of large integer, non-equal values
+    */
     @Test
     def void testLargeIntegerEquality_05() {
         RelalgParser.parse('''

@@ -6,6 +6,16 @@ import ingraph.cypher2relalg.RelalgParser
 
 class OptionalMatchTest {
     
+    /*
+    Scenario: Satisfies the open world assumption, relationships between same nodes
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:Player), (b:Team)
+      CREATE (a)-[:PLAYS_FOR]->(b),
+             (a)-[:SUPPORTS]->(b)
+      """
+    */
     @Test
     def void testOptionalMatch_01() {
         RelalgParser.parse('''
@@ -15,6 +25,15 @@ class OptionalMatchTest {
         ''')
     }
         
+    /*
+    Scenario: Satisfies the open world assumption, single relationship
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:Player), (b:Team)
+      CREATE (a)-[:PLAYS_FOR]->(b)
+      """
+    */
     @Test
     def void testOptionalMatch_02() {
         RelalgParser.parse('''
@@ -24,6 +43,16 @@ class OptionalMatchTest {
         ''')
     }
         
+    /*
+    Scenario: Satisfies the open world assumption, relationships between different nodes
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (a:Player), (b:Team), (c:Team)
+      CREATE (a)-[:PLAYS_FOR]->(b),
+             (a)-[:SUPPORTS]->(c)
+      """
+    */
     @Test
     def void testOptionalMatch_03() {
         RelalgParser.parse('''

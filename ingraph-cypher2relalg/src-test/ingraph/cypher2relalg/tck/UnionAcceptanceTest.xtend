@@ -6,6 +6,14 @@ import ingraph.cypher2relalg.RelalgParser
 
 class UnionAcceptanceTest {
     
+    /*
+    Scenario: Should be able to create text output from union queries
+    Given an empty graph
+    And having executed:
+      """
+      CREATE (:A), (:B)
+      """
+    */
     @Test
     def void testUnionAcceptance_01() {
         RelalgParser.parse('''
@@ -17,6 +25,10 @@ class UnionAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Two elements, both unique, not distinct
+    Given an empty graph
+    */
     @Test
     def void testUnionAcceptance_02() {
         RelalgParser.parse('''
@@ -26,6 +38,10 @@ class UnionAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Two elements, both unique, distinct
+    Given an empty graph
+    */
     @Test
     def void testUnionAcceptance_03() {
         RelalgParser.parse('''
@@ -35,6 +51,10 @@ class UnionAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Three elements, two unique, distinct
+    Given an empty graph
+    */
     @Test
     def void testUnionAcceptance_04() {
         RelalgParser.parse('''
@@ -46,6 +66,10 @@ class UnionAcceptanceTest {
         ''')
     }
         
+    /*
+    Scenario: Three elements, two unique, not distinct
+    Given an empty graph
+    */
     @Test
     def void testUnionAcceptance_05() {
         RelalgParser.parse('''
