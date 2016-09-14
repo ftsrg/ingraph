@@ -26,8 +26,8 @@ regularQuery : singleQuery ( ws union )* ;
 
 singleQuery : clause ( ws clause )* ;
 
-union : ( UNION sp ALL singleQuery )
-      | ( UNION singleQuery )
+union : ( UNION sp ALL ws singleQuery )
+      | ( UNION ws singleQuery )
       ;
 
 clause : match

@@ -53,8 +53,8 @@ periodicCommitHint : USING sp PERIODIC sp COMMIT ( sp )? ;
 
 loadCSVQuery : loadCSV ( ws clause )* ;
 
-union : ( UNION sp ALL singleQuery )
-      | ( UNION singleQuery )
+union : ( UNION sp ALL ws singleQuery )
+      | ( UNION ws singleQuery )
       ;
 
 clause : loadCSV
