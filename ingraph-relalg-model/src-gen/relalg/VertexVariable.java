@@ -14,7 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link relalg.VertexVariable#getVertexLabel <em>Vertex Label</em>}</li>
- *   <li>{@link relalg.VertexVariable#getAttributeVariables <em>Attribute Variables</em>}</li>
+ *   <li>{@link relalg.VertexVariable#getAttributeVariable <em>Attribute Variable</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getVertexVariable()
@@ -49,19 +49,21 @@ public interface VertexVariable extends Variable {
 	void setVertexLabel(VertexLabel value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute Variables</b></em>' reference list.
+	 * Returns the value of the '<em><b>Attribute Variable</b></em>' reference list.
 	 * The list contents are of type {@link relalg.AttributeVariable}.
+	 * It is bidirectional and its opposite is '{@link relalg.AttributeVariable#getVertexVariable <em>Vertex Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Attribute Variables</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Attribute Variable</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute Variables</em>' reference list.
-	 * @see relalg.RelalgPackage#getVertexVariable_AttributeVariables()
-	 * @model
+	 * @return the value of the '<em>Attribute Variable</em>' reference list.
+	 * @see relalg.RelalgPackage#getVertexVariable_AttributeVariable()
+	 * @see relalg.AttributeVariable#getVertexVariable
+	 * @model opposite="vertexVariable"
 	 * @generated
 	 */
-	EList<AttributeVariable> getAttributeVariables();
+	EList<AttributeVariable> getAttributeVariable();
 
 } // VertexVariable

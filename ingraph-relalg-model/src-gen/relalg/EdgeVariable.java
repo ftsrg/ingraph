@@ -14,7 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link relalg.EdgeVariable#getEdgeLabel <em>Edge Label</em>}</li>
- *   <li>{@link relalg.EdgeVariable#getAttributeVariables <em>Attribute Variables</em>}</li>
+ *   <li>{@link relalg.EdgeVariable#getAttributeVariable <em>Attribute Variable</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getEdgeVariable()
@@ -49,19 +49,21 @@ public interface EdgeVariable extends Variable {
 	void setEdgeLabel(EdgeLabel value);
 
 	/**
-	 * Returns the value of the '<em><b>Attribute Variables</b></em>' reference list.
+	 * Returns the value of the '<em><b>Attribute Variable</b></em>' reference list.
 	 * The list contents are of type {@link relalg.AttributeVariable}.
+	 * It is bidirectional and its opposite is '{@link relalg.AttributeVariable#getEdgeVariable <em>Edge Variable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Attribute Variables</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Attribute Variable</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Attribute Variables</em>' reference list.
-	 * @see relalg.RelalgPackage#getEdgeVariable_AttributeVariables()
-	 * @model
+	 * @return the value of the '<em>Attribute Variable</em>' reference list.
+	 * @see relalg.RelalgPackage#getEdgeVariable_AttributeVariable()
+	 * @see relalg.AttributeVariable#getEdgeVariable
+	 * @model opposite="edgeVariable"
 	 * @generated
 	 */
-	EList<AttributeVariable> getAttributeVariables();
+	EList<AttributeVariable> getAttributeVariable();
 
 } // EdgeVariable

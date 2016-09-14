@@ -4,6 +4,7 @@ import java.util.Arrays
 import relalg.Direction
 import relalg.RelalgFactory
 import relalg.ArithmeticComparisonOperator
+import javax.xml.crypto.dsig.XMLSignature.SignatureValue
 
 class TrainBenchmarkUtil {
 
@@ -24,9 +25,10 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
+		val length = null
 		val integerLiteral0 = createIntegerLiteral => [value = 0]
 		val condition = createArithmeticComparisonExpression => [
-			leftOperand = null
+			leftOperand = length
 			rightOperand = integerLiteral0
 			operator = ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
 		]
@@ -257,8 +259,8 @@ class TrainBenchmarkUtil {
 		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7] // FIXME: [semaphore, route2]
 		
 		val condition = createArithmeticComparisonExpression => [
-			leftOperand = null
-			rightOperand = null
+			leftOperand = route1
+			rightOperand = route2
 			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO			
 		]		
 		val filter = createSelectionOperator => [
@@ -331,6 +333,7 @@ class TrainBenchmarkUtil {
 
 		val sw_currentPosition = createAttributeVariable => [name = "currentPosition"; it.container = container]
 		val swP_position = createAttributeVariable => [name = "position"; it.container = container]
+		val semaphore_signal = createAttributeVariable => [name = "signal"; it.container = container]
 
 		val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
 
@@ -352,9 +355,11 @@ class TrainBenchmarkUtil {
 			it.container = container
 		]
 
-		val _e1 = createEdgeVariable =>
-			[name = "_e1"; edgeLabel = entryLabel; dontCare = true; it.container = container]
-
+		val _e1 = createEdgeVariable => [
+			name = "_e1"; 
+			edgeLabel = entryLabel;
+			dontCare = true; it.container = container
+		]
 		val _e2 = createEdgeVariable => [
 			name = "_e2";
 			edgeLabel = followsLabel;
@@ -396,10 +401,10 @@ class TrainBenchmarkUtil {
 			input = expand3
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
 		]
-
+		
 		val stringLiteralGO = createStringLiteral => [value = "GO"]
 		val condition1 = createArithmeticComparisonExpression => [
-			leftOperand = null 
+			leftOperand = semaphore_signal
 			rightOperand = stringLiteralGO
 			operator = ArithmeticComparisonOperator.EQUAL_TO
 		]
@@ -410,8 +415,8 @@ class TrainBenchmarkUtil {
 		]
 		
 		val condition2 = createArithmeticComparisonExpression => [
-			leftOperand = null 
-			rightOperand = null
+			leftOperand = sw_currentPosition 
+			rightOperand = swP_position
 			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO
 		]
 		val filter2 = createSelectionOperator => [

@@ -191,6 +191,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				T result = caseVariable(variable);
 				if (result == null) result = caseNamedElement(variable);
 				if (result == null) result = caseReturnableElement(variable);
+				if (result == null) result = caseComparable(variable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -200,6 +201,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = caseVariable(vertexVariable);
 				if (result == null) result = caseNamedElement(vertexVariable);
 				if (result == null) result = caseReturnableElement(vertexVariable);
+				if (result == null) result = caseComparable(vertexVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -209,6 +211,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = caseVariable(edgeVariable);
 				if (result == null) result = caseNamedElement(edgeVariable);
 				if (result == null) result = caseReturnableElement(edgeVariable);
+				if (result == null) result = caseComparable(edgeVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -249,6 +252,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = caseVariable(attributeVariable);
 				if (result == null) result = caseNamedElement(attributeVariable);
 				if (result == null) result = caseReturnableElement(attributeVariable);
+				if (result == null) result = caseComparable(attributeVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
