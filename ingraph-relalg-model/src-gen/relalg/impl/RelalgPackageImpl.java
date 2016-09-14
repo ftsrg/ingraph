@@ -29,6 +29,7 @@ import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
+import relalg.ElementVariable;
 import relalg.ExpandOperator;
 import relalg.Expression;
 import relalg.GetEdgesOperator;
@@ -286,6 +287,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass atomEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass elementVariableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -678,15 +686,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getVertexVariable_AttributeVariable() {
-		return (EReference)vertexVariableEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getEdgeVariable() {
 		return edgeVariableEClass;
 	}
@@ -698,15 +697,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EReference getEdgeVariable_EdgeLabel() {
 		return (EReference)edgeVariableEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getEdgeVariable_AttributeVariable() {
-		return (EReference)edgeVariableEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -768,17 +758,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getAttributeVariable_EdgeVariable() {
+	public EReference getAttributeVariable_Element() {
 		return (EReference)attributeVariableEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAttributeVariable_VertexVariable() {
-		return (EReference)attributeVariableEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1029,6 +1010,24 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getElementVariable() {
+		return elementVariableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getElementVariable_Attributes() {
+		return (EReference)elementVariableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getNumberLiteral() {
 		return numberLiteralEClass;
 	}
@@ -1261,11 +1260,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		vertexVariableEClass = createEClass(VERTEX_VARIABLE);
 		createEReference(vertexVariableEClass, VERTEX_VARIABLE__VERTEX_LABEL);
-		createEReference(vertexVariableEClass, VERTEX_VARIABLE__ATTRIBUTE_VARIABLE);
 
 		edgeVariableEClass = createEClass(EDGE_VARIABLE);
 		createEReference(edgeVariableEClass, EDGE_VARIABLE__EDGE_LABEL);
-		createEReference(edgeVariableEClass, EDGE_VARIABLE__ATTRIBUTE_VARIABLE);
 
 		labelEClass = createEClass(LABEL);
 
@@ -1277,8 +1274,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(allDifferentOperatorEClass, ALL_DIFFERENT_OPERATOR__EDGE_VARIABLES);
 
 		attributeVariableEClass = createEClass(ATTRIBUTE_VARIABLE);
-		createEReference(attributeVariableEClass, ATTRIBUTE_VARIABLE__EDGE_VARIABLE);
-		createEReference(attributeVariableEClass, ATTRIBUTE_VARIABLE__VERTEX_VARIABLE);
+		createEReference(attributeVariableEClass, ATTRIBUTE_VARIABLE__ELEMENT);
 
 		namedElementEClass = createEClass(NAMED_ELEMENT);
 		createEAttribute(namedElementEClass, NAMED_ELEMENT__NAME);
@@ -1338,6 +1334,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		atomEClass = createEClass(ATOM);
 
+		elementVariableEClass = createEClass(ELEMENT_VARIABLE);
+		createEReference(elementVariableEClass, ELEMENT_VARIABLE__ATTRIBUTES);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 		arithmeticComparisonOperatorEEnum = createEEnum(ARITHMETIC_COMPARISON_OPERATOR);
@@ -1389,8 +1388,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		variableEClass.getESuperTypes().add(this.getNamedElement());
 		variableEClass.getESuperTypes().add(this.getReturnableElement());
 		variableEClass.getESuperTypes().add(this.getComparable());
-		vertexVariableEClass.getESuperTypes().add(this.getVariable());
-		edgeVariableEClass.getESuperTypes().add(this.getVariable());
+		vertexVariableEClass.getESuperTypes().add(this.getElementVariable());
+		edgeVariableEClass.getESuperTypes().add(this.getElementVariable());
 		labelEClass.getESuperTypes().add(this.getNamedElement());
 		vertexLabelEClass.getESuperTypes().add(this.getLabel());
 		edgeLabelEClass.getESuperTypes().add(this.getLabel());
@@ -1413,6 +1412,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		integerLiteralEClass.getESuperTypes().add(this.getNumberLiteral());
 		getEdgesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		atomEClass.getESuperTypes().add(this.getExpression());
+		elementVariableEClass.getESuperTypes().add(this.getVariable());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1453,11 +1453,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(vertexVariableEClass, VertexVariable.class, "VertexVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVertexVariable_VertexLabel(), this.getVertexLabel(), null, "vertexLabel", null, 1, 1, VertexVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVertexVariable_AttributeVariable(), this.getAttributeVariable(), this.getAttributeVariable_VertexVariable(), "attributeVariable", null, 0, -1, VertexVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(edgeVariableEClass, EdgeVariable.class, "EdgeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEdgeVariable_EdgeLabel(), this.getEdgeLabel(), null, "edgeLabel", null, 1, 1, EdgeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getEdgeVariable_AttributeVariable(), this.getAttributeVariable(), this.getAttributeVariable_EdgeVariable(), "attributeVariable", null, 0, -1, EdgeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(labelEClass, Label.class, "Label", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1469,8 +1467,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getAllDifferentOperator_EdgeVariables(), this.getEdgeVariable(), null, "edgeVariables", null, 0, -1, AllDifferentOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(attributeVariableEClass, AttributeVariable.class, "AttributeVariable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAttributeVariable_EdgeVariable(), this.getEdgeVariable(), this.getEdgeVariable_AttributeVariable(), "edgeVariable", null, 1, 1, AttributeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAttributeVariable_VertexVariable(), this.getVertexVariable(), this.getVertexVariable_AttributeVariable(), "vertexVariable", null, 1, 1, AttributeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAttributeVariable_Element(), this.getElementVariable(), this.getElementVariable_Attributes(), "element", null, 1, 1, AttributeVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1529,6 +1526,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(comparableEClass, relalg.Comparable.class, "Comparable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(atomEClass, Atom.class, "Atom", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(elementVariableEClass, ElementVariable.class, "ElementVariable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getElementVariable_Attributes(), this.getAttributeVariable(), this.getAttributeVariable_Element(), "attributes", null, 0, -1, ElementVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

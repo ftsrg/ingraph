@@ -9,9 +9,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import relalg.AttributeVariable;
-import relalg.EdgeVariable;
+import relalg.ElementVariable;
 import relalg.RelalgPackage;
-import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,32 +20,21 @@ import relalg.VertexVariable;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link relalg.impl.AttributeVariableImpl#getEdgeVariable <em>Edge Variable</em>}</li>
- *   <li>{@link relalg.impl.AttributeVariableImpl#getVertexVariable <em>Vertex Variable</em>}</li>
+ *   <li>{@link relalg.impl.AttributeVariableImpl#getElement <em>Element</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AttributeVariableImpl extends VariableImpl implements AttributeVariable {
 	/**
-	 * The cached value of the '{@link #getEdgeVariable() <em>Edge Variable</em>}' reference.
+	 * The cached value of the '{@link #getElement() <em>Element</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEdgeVariable()
+	 * @see #getElement()
 	 * @generated
 	 * @ordered
 	 */
-	protected EdgeVariable edgeVariable;
-	/**
-	 * The cached value of the '{@link #getVertexVariable() <em>Vertex Variable</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVertexVariable()
-	 * @generated
-	 * @ordered
-	 */
-	protected VertexVariable vertexVariable;
-
+	protected ElementVariable element;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -71,16 +59,16 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EdgeVariable getEdgeVariable() {
-		if (edgeVariable != null && edgeVariable.eIsProxy()) {
-			InternalEObject oldEdgeVariable = (InternalEObject)edgeVariable;
-			edgeVariable = (EdgeVariable)eResolveProxy(oldEdgeVariable);
-			if (edgeVariable != oldEdgeVariable) {
+	public ElementVariable getElement() {
+		if (element != null && element.eIsProxy()) {
+			InternalEObject oldElement = (InternalEObject)element;
+			element = (ElementVariable)eResolveProxy(oldElement);
+			if (element != oldElement) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE, oldEdgeVariable, edgeVariable));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT, oldElement, element));
 			}
 		}
-		return edgeVariable;
+		return element;
 	}
 
 	/**
@@ -88,8 +76,8 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EdgeVariable basicGetEdgeVariable() {
-		return edgeVariable;
+	public ElementVariable basicGetElement() {
+		return element;
 	}
 
 	/**
@@ -97,11 +85,11 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetEdgeVariable(EdgeVariable newEdgeVariable, NotificationChain msgs) {
-		EdgeVariable oldEdgeVariable = edgeVariable;
-		edgeVariable = newEdgeVariable;
+	public NotificationChain basicSetElement(ElementVariable newElement, NotificationChain msgs) {
+		ElementVariable oldElement = element;
+		element = newElement;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE, oldEdgeVariable, newEdgeVariable);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT, oldElement, newElement);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -112,78 +100,18 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEdgeVariable(EdgeVariable newEdgeVariable) {
-		if (newEdgeVariable != edgeVariable) {
+	public void setElement(ElementVariable newElement) {
+		if (newElement != element) {
 			NotificationChain msgs = null;
-			if (edgeVariable != null)
-				msgs = ((InternalEObject)edgeVariable).eInverseRemove(this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLE, EdgeVariable.class, msgs);
-			if (newEdgeVariable != null)
-				msgs = ((InternalEObject)newEdgeVariable).eInverseAdd(this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLE, EdgeVariable.class, msgs);
-			msgs = basicSetEdgeVariable(newEdgeVariable, msgs);
+			if (element != null)
+				msgs = ((InternalEObject)element).eInverseRemove(this, RelalgPackage.ELEMENT_VARIABLE__ATTRIBUTES, ElementVariable.class, msgs);
+			if (newElement != null)
+				msgs = ((InternalEObject)newElement).eInverseAdd(this, RelalgPackage.ELEMENT_VARIABLE__ATTRIBUTES, ElementVariable.class, msgs);
+			msgs = basicSetElement(newElement, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE, newEdgeVariable, newEdgeVariable));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VertexVariable getVertexVariable() {
-		if (vertexVariable != null && vertexVariable.eIsProxy()) {
-			InternalEObject oldVertexVariable = (InternalEObject)vertexVariable;
-			vertexVariable = (VertexVariable)eResolveProxy(oldVertexVariable);
-			if (vertexVariable != oldVertexVariable) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE, oldVertexVariable, vertexVariable));
-			}
-		}
-		return vertexVariable;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public VertexVariable basicGetVertexVariable() {
-		return vertexVariable;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetVertexVariable(VertexVariable newVertexVariable, NotificationChain msgs) {
-		VertexVariable oldVertexVariable = vertexVariable;
-		vertexVariable = newVertexVariable;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE, oldVertexVariable, newVertexVariable);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVertexVariable(VertexVariable newVertexVariable) {
-		if (newVertexVariable != vertexVariable) {
-			NotificationChain msgs = null;
-			if (vertexVariable != null)
-				msgs = ((InternalEObject)vertexVariable).eInverseRemove(this, RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLE, VertexVariable.class, msgs);
-			if (newVertexVariable != null)
-				msgs = ((InternalEObject)newVertexVariable).eInverseAdd(this, RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLE, VertexVariable.class, msgs);
-			msgs = basicSetVertexVariable(newVertexVariable, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE, newVertexVariable, newVertexVariable));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT, newElement, newElement));
 	}
 
 	/**
@@ -194,14 +122,10 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				if (edgeVariable != null)
-					msgs = ((InternalEObject)edgeVariable).eInverseRemove(this, RelalgPackage.EDGE_VARIABLE__ATTRIBUTE_VARIABLE, EdgeVariable.class, msgs);
-				return basicSetEdgeVariable((EdgeVariable)otherEnd, msgs);
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				if (vertexVariable != null)
-					msgs = ((InternalEObject)vertexVariable).eInverseRemove(this, RelalgPackage.VERTEX_VARIABLE__ATTRIBUTE_VARIABLE, VertexVariable.class, msgs);
-				return basicSetVertexVariable((VertexVariable)otherEnd, msgs);
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				if (element != null)
+					msgs = ((InternalEObject)element).eInverseRemove(this, RelalgPackage.ELEMENT_VARIABLE__ATTRIBUTES, ElementVariable.class, msgs);
+				return basicSetElement((ElementVariable)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -214,10 +138,8 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				return basicSetEdgeVariable(null, msgs);
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				return basicSetVertexVariable(null, msgs);
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				return basicSetElement(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -230,12 +152,9 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				if (resolve) return getEdgeVariable();
-				return basicGetEdgeVariable();
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				if (resolve) return getVertexVariable();
-				return basicGetVertexVariable();
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				if (resolve) return getElement();
+				return basicGetElement();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -248,11 +167,8 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				setEdgeVariable((EdgeVariable)newValue);
-				return;
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				setVertexVariable((VertexVariable)newValue);
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				setElement((ElementVariable)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -266,11 +182,8 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				setEdgeVariable((EdgeVariable)null);
-				return;
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				setVertexVariable((VertexVariable)null);
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				setElement((ElementVariable)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -284,10 +197,8 @@ public class AttributeVariableImpl extends VariableImpl implements AttributeVari
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case RelalgPackage.ATTRIBUTE_VARIABLE__EDGE_VARIABLE:
-				return edgeVariable != null;
-			case RelalgPackage.ATTRIBUTE_VARIABLE__VERTEX_VARIABLE:
-				return vertexVariable != null;
+			case RelalgPackage.ATTRIBUTE_VARIABLE__ELEMENT:
+				return element != null;
 		}
 		return super.eIsSet(featureID);
 	}

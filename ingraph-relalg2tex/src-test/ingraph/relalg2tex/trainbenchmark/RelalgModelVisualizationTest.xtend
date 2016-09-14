@@ -10,27 +10,27 @@ class RelalgModelVisualizationTest {
 
 	@Test
 	def void testPosLength() {
-		drawer.serialize(TrainBenchmarkUtil.posLength, "poslength-handcrafted")
+		drawer.serialize(TrainBenchmarkUtil.posLength, "trainbenchmark-poslength-handcrafted")
 	}
 
 	@Test
 	def void testRouteSensor() {
-		drawer.serialize(TrainBenchmarkUtil.routeSensor, "routesensor-handcrafted")
+		drawer.serialize(TrainBenchmarkUtil.routeSensor, "trainbenchmark-routesensor-handcrafted")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() {
-		drawer.serialize(TrainBenchmarkUtil.semaphoreNeighbor, "semaphoreneighbor-handcrafted")
+		drawer.serialize(TrainBenchmarkUtil.semaphoreNeighbor, "trainbenchmark-semaphoreneighbor-handcrafted")
 	}
 
 	@Test
 	def void testSwitchMonitored() {
-		drawer.serialize(TrainBenchmarkUtil.switchMonitored, "switchmonitored-handcrafted")
+		drawer.serialize(TrainBenchmarkUtil.switchMonitored, "trainbenchmark-switchmonitored-handcrafted")
 	}
 
 	@Test
 	def void testSwitchSet() {
-		drawer.serialize(TrainBenchmarkUtil.switchSet, "switchset-handcrafted")
+		drawer.serialize(TrainBenchmarkUtil.switchSet, "trainbenchmark-switchset-handcrafted")
 	}
 
 }

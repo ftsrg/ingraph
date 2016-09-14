@@ -48,17 +48,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dontCare" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="false"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//Variable">
+  <eClassifiers xsi:type="ecore:EClass" name="VertexVariable" eSuperTypes="#//ElementVariable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vertexLabel" lowerBound="1"
         eType="#//VertexLabel"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeVariable" upperBound="-1"
-        eType="#//AttributeVariable" eOpposite="#//AttributeVariable/vertexVariable"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//Variable">
+  <eClassifiers xsi:type="ecore:EClass" name="EdgeVariable" eSuperTypes="#//ElementVariable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="edgeLabel" lowerBound="1"
         eType="#//EdgeLabel"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeVariable" upperBound="-1"
-        eType="#//AttributeVariable" eOpposite="#//AttributeVariable/edgeVariable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true" eSuperTypes="#//NamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="VertexLabel" eSuperTypes="#//Label"/>
@@ -68,10 +64,8 @@
         eType="#//EdgeVariable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeVariable" eSuperTypes="#//Variable">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariable" lowerBound="1"
-        eType="#//EdgeVariable" eOpposite="#//EdgeVariable/attributeVariable"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexVariable" lowerBound="1"
-        eType="#//VertexVariable" eOpposite="#//VertexVariable/attributeVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//ElementVariable" eOpposite="#//ElementVariable/attributes"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -170,4 +164,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Comparable"/>
   <eClassifiers xsi:type="ecore:EClass" name="Atom" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementVariable" abstract="true" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//AttributeVariable" eOpposite="#//AttributeVariable/element"/>
+  </eClassifiers>
 </ecore:EPackage>

@@ -12,19 +12,16 @@ class TrainBenchmarkUtil {
 	def static posLength() {
 		val container = createContainer
 
-		val segment_length = createAttributeVariable => [name = "length"; it.container = container]
 		val segmentLabel = createVertexLabel => [name = "Segment"; it.container = container]
-
 		val segment = createVertexVariable => [
 			name = "segment"
 			vertexLabel = segmentLabel
-			attributeVariables.add(segment_length)
 			it.container = container
 		]
+		val length = createAttributeVariable => [name = "length"; element = segment; it.container = container]	
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
-		val length = null
 		val integerLiteral0 = createIntegerLiteral => [value = 0]
 		val condition = createArithmeticComparisonExpression => [
 			leftOperand = length
@@ -39,7 +36,7 @@ class TrainBenchmarkUtil {
 		]
 		val trimmer = createProjectionOperator => [
 			input = filter1
-			variables.addAll(Arrays.asList(segment, segment_length))
+			variables.addAll(Arrays.asList(segment, length))
 		] // FIXME: renaming
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
@@ -330,22 +327,15 @@ class TrainBenchmarkUtil {
 		val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
 		val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
 
-		val sw_currentPosition = createAttributeVariable => [name = "currentPosition"; it.container = container]
-		val swP_position = createAttributeVariable => [name = "position"; it.container = container]
-		val semaphore_signal = createAttributeVariable => [name = "signal"; it.container = container]
-
 		val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
-
 		val sw = createVertexVariable => [
 			name = "sw";
 			vertexLabel = switchLabel;
-			attributeVariables.add(sw_currentPosition);
 			it.container = container
 		]
 		val swP = createVertexVariable => [
 			name = "swP";
 			vertexLabel = switchPositionLabel;
-			attributeVariables.add(swP_position);
 			it.container = container
 		]
 		val semaphore = createVertexVariable => [
@@ -353,6 +343,11 @@ class TrainBenchmarkUtil {
 			vertexLabel = semaphoreLabel;
 			it.container = container
 		]
+		
+		val currentPosition = createAttributeVariable => [name = "currentPosition"; element = sw; it.container = container]
+		val position = createAttributeVariable => [name = "position"; element = swP; it.container = container]
+		val signal = createAttributeVariable => [name = "signal"; element = semaphore; it.container = container]
+		
 
 		val _e1 = createEdgeVariable => [
 			name = "_e1"; 
@@ -403,7 +398,7 @@ class TrainBenchmarkUtil {
 		
 		val stringLiteralGO = createStringLiteral => [value = "GO"]
 		val condition1 = createArithmeticComparisonExpression => [
-			leftOperand = semaphore_signal
+			leftOperand = signal
 			rightOperand = stringLiteralGO
 			operator = ArithmeticComparisonOperator.EQUAL_TO
 		]
@@ -414,8 +409,8 @@ class TrainBenchmarkUtil {
 		]
 		
 		val condition2 = createArithmeticComparisonExpression => [
-			leftOperand = sw_currentPosition 
-			rightOperand = swP_position
+			leftOperand = currentPosition 
+			rightOperand = position
 			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO
 		]
 		val filter2 = createSelectionOperator => [
@@ -425,7 +420,7 @@ class TrainBenchmarkUtil {
 		]
 		val trimmer = createProjectionOperator => [
 			input = filter2
-			variables.addAll(Arrays.asList(semaphore, route, swP, sw, sw_currentPosition, swP_position))
+			variables.addAll(Arrays.asList(semaphore, route, swP, sw, currentPosition, position))
 		] // FIXME: renaming
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
