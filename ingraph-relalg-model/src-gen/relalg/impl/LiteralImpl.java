@@ -4,23 +4,23 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.NumberLiteral;
+import relalg.Literal;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Number Literal</b></em>'.
+ * An implementation of the model object '<em><b>Literal</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public abstract class NumberLiteralImpl extends LiteralImpl implements NumberLiteral {
+public abstract class LiteralImpl extends AtomImpl implements Literal {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NumberLiteralImpl() {
+	protected LiteralImpl() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public abstract class NumberLiteralImpl extends LiteralImpl implements NumberLit
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.NUMBER_LITERAL;
+		return RelalgPackage.Literals.LITERAL;
 	}
 
-} //NumberLiteralImpl
+} //LiteralImpl

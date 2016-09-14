@@ -19,7 +19,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface StringLiteral extends Atom {
+public interface StringLiteral extends Literal {
 
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.

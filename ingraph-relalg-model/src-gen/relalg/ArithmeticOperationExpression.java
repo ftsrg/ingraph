@@ -19,7 +19,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface ArithmeticOperationExpression extends BinaryExpression {
+public interface ArithmeticOperationExpression extends BinaryExpression, relalg.Comparable {
 	/**
 	 * Returns the value of the '<em><b>Operator</b></em>' attribute.
 	 * The literals are from the enumeration {@link relalg.BinaryArithmeticOperator}.

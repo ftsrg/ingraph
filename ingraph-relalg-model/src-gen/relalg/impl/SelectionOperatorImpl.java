@@ -4,10 +4,13 @@ package relalg.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import relalg.Expression;
 import relalg.RelalgPackage;
 import relalg.SelectionOperator;
 
@@ -19,6 +22,7 @@ import relalg.SelectionOperator;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link relalg.impl.SelectionOperatorImpl#getConditionString <em>Condition String</em>}</li>
  *   <li>{@link relalg.impl.SelectionOperatorImpl#getCondition <em>Condition</em>}</li>
  * </ul>
  *
@@ -26,24 +30,34 @@ import relalg.SelectionOperator;
  */
 public class SelectionOperatorImpl extends AlphaOperatorImpl implements SelectionOperator {
 	/**
-	 * The default value of the '{@link #getCondition() <em>Condition</em>}' attribute.
+	 * The default value of the '{@link #getConditionString() <em>Condition String</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getCondition()
+	 * @see #getConditionString()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String CONDITION_EDEFAULT = null;
+	protected static final String CONDITION_STRING_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getCondition() <em>Condition</em>}' attribute.
+	 * The cached value of the '{@link #getConditionString() <em>Condition String</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConditionString()
+	 * @generated
+	 * @ordered
+	 */
+	protected String conditionString = CONDITION_STRING_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getCondition() <em>Condition</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getCondition()
 	 * @generated
 	 * @ordered
 	 */
-	protected String condition = CONDITION_EDEFAULT;
+	protected Expression condition;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -69,7 +83,28 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getCondition() {
+	public String getConditionString() {
+		return conditionString;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setConditionString(String newConditionString) {
+		String oldConditionString = conditionString;
+		conditionString = newConditionString;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.SELECTION_OPERATOR__CONDITION_STRING, oldConditionString, conditionString));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Expression getCondition() {
 		return condition;
 	}
 
@@ -78,11 +113,47 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setCondition(String newCondition) {
-		String oldCondition = condition;
+	public NotificationChain basicSetCondition(Expression newCondition, NotificationChain msgs) {
+		Expression oldCondition = condition;
 		condition = newCondition;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.SELECTION_OPERATOR__CONDITION, oldCondition, condition));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.SELECTION_OPERATOR__CONDITION, oldCondition, newCondition);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCondition(Expression newCondition) {
+		if (newCondition != condition) {
+			NotificationChain msgs = null;
+			if (condition != null)
+				msgs = ((InternalEObject)condition).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.SELECTION_OPERATOR__CONDITION, null, msgs);
+			if (newCondition != null)
+				msgs = ((InternalEObject)newCondition).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.SELECTION_OPERATOR__CONDITION, null, msgs);
+			msgs = basicSetCondition(newCondition, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.SELECTION_OPERATOR__CONDITION, newCondition, newCondition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
+				return basicSetCondition(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -93,6 +164,8 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION_STRING:
+				return getConditionString();
 			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
 				return getCondition();
 		}
@@ -107,8 +180,11 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION_STRING:
+				setConditionString((String)newValue);
+				return;
 			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
-				setCondition((String)newValue);
+				setCondition((Expression)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -122,8 +198,11 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION_STRING:
+				setConditionString(CONDITION_STRING_EDEFAULT);
+				return;
 			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
-				setCondition(CONDITION_EDEFAULT);
+				setCondition((Expression)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -137,8 +216,10 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case RelalgPackage.SELECTION_OPERATOR__CONDITION_STRING:
+				return CONDITION_STRING_EDEFAULT == null ? conditionString != null : !CONDITION_STRING_EDEFAULT.equals(conditionString);
 			case RelalgPackage.SELECTION_OPERATOR__CONDITION:
-				return CONDITION_EDEFAULT == null ? condition != null : !CONDITION_EDEFAULT.equals(condition);
+				return condition != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -153,8 +234,8 @@ public class SelectionOperatorImpl extends AlphaOperatorImpl implements Selectio
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (condition: ");
-		result.append(condition);
+		result.append(" (conditionString: ");
+		result.append(conditionString);
 		result.append(')');
 		return result.toString();
 	}

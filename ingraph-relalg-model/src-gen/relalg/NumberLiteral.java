@@ -13,5 +13,5 @@ package relalg;
  * @model abstract="true"
  * @generated
  */
-public interface NumberLiteral extends Atom {
+public interface NumberLiteral extends Literal {
 } // NumberLiteral

@@ -47,6 +47,7 @@ import relalg.JoinOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import ingraph.antlr.CypherParser.RelationshipsPatternContext
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
 
@@ -349,7 +350,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 				if (!where_JoinModeIsAntijoin) {
 					val selectionOperator = createSelectionOperator => [
-						condition = ctx.expression.text;
+						conditionString = ctx.expression.text;
 						input = match_AlgebraExpression
 					]
 					match_AlgebraExpression = selectionOperator

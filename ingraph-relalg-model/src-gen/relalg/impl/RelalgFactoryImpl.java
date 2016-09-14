@@ -11,7 +11,41 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import relalg.*;
+import relalg.AllDifferentOperator;
+import relalg.AntiJoinOperator;
+import relalg.ArithmeticComparisonExpression;
+import relalg.ArithmeticComparisonOperator;
+import relalg.ArithmeticOperationExpression;
+import relalg.Atom;
+import relalg.AttributeVariable;
+import relalg.BinaryArithmeticOperator;
+import relalg.BinaryLogicalExpression;
+import relalg.BinaryLogicalOperator;
+import relalg.Direction;
+import relalg.DoubleLiteral;
+import relalg.DuplicateEliminationOperator;
+import relalg.EdgeLabel;
+import relalg.EdgeVariable;
+import relalg.ExpandOperator;
+import relalg.Expression;
+import relalg.GetEdgesOperator;
+import relalg.GetVerticesOperator;
+import relalg.IntegerLiteral;
+import relalg.JoinOperator;
+import relalg.Order;
+import relalg.ProductionOperator;
+import relalg.ProjectionOperator;
+import relalg.RelalgFactory;
+import relalg.RelalgPackage;
+import relalg.SelectionOperator;
+import relalg.StringComparisonExpression;
+import relalg.StringComparisonOperator;
+import relalg.StringLiteral;
+import relalg.UnaryArithmeticOperator;
+import relalg.UnaryExpression;
+import relalg.UnionOperator;
+import relalg.VertexLabel;
+import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -79,11 +113,12 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.ARITHMETIC_COMPARISON_EXPRESSION: return createArithmeticComparisonExpression();
 			case RelalgPackage.UNARY_EXPRESSION: return createUnaryExpression();
 			case RelalgPackage.STRING_COMPARISON_EXPRESSION: return createStringComparisonExpression();
-			case RelalgPackage.ATOM: return createAtom();
 			case RelalgPackage.STRING_LITERAL: return createStringLiteral();
 			case RelalgPackage.DOUBLE_LITERAL: return createDoubleLiteral();
 			case RelalgPackage.INTEGER_LITERAL: return createIntegerLiteral();
 			case RelalgPackage.GET_EDGES_OPERATOR: return createGetEdgesOperator();
+			case RelalgPackage.COMPARABLE: return createComparable();
+			case RelalgPackage.ATOM: return createAtom();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -411,6 +446,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public GetEdgesOperator createGetEdgesOperator() {
 		GetEdgesOperatorImpl getEdgesOperator = new GetEdgesOperatorImpl();
 		return getEdgesOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public relalg.Comparable createComparable() {
+		ComparableImpl comparable = new ComparableImpl();
+		return comparable;
 	}
 
 	/**

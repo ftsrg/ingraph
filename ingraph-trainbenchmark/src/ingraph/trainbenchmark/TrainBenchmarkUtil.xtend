@@ -3,6 +3,7 @@ package ingraph.trainbenchmark
 import java.util.Arrays
 import relalg.Direction
 import relalg.RelalgFactory
+import relalg.ArithmeticComparisonOperator
 
 class TrainBenchmarkUtil {
 
@@ -23,11 +24,18 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
-		val integerLiteral = createIntegerLiteral => [value = 0]
+		val integerLiteral0 = createIntegerLiteral => [value = 0]
+		val condition = createArithmeticComparisonExpression => [
+			leftOperand = null
+			rightOperand = integerLiteral0
+			operator = ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
+		]
+		
 		val filter1 = createSelectionOperator => [
 			input = getVertices
-			condition = "segment.length <= 0"
-		] // FIXME: segment.length <= 0
+			conditionString = "segment.length <= 0"
+			it.condition = condition
+		]
 		val trimmer = createProjectionOperator => [
 			input = filter1
 			variables.addAll(Arrays.asList(segment, segment_length))
@@ -247,7 +255,17 @@ class TrainBenchmarkUtil {
 		]
 
 		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7] // FIXME: [semaphore, route2]
-		val filter = createSelectionOperator => [input = antiJoin; condition = "route1 != route2"] // FIXME: route1 != route2
+		
+		val condition = createArithmeticComparisonExpression => [
+			leftOperand = null
+			rightOperand = null
+			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO			
+		]		
+		val filter = createSelectionOperator => [
+			input = antiJoin
+			conditionString = "route1 != route2"
+			it.condition = condition
+		] // FIXME: route1 != route2
 		val trimmer = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))
@@ -379,9 +397,28 @@ class TrainBenchmarkUtil {
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
 		]
 
-		val stringLiteral = createStringLiteral => [value = "GO"]
-		val filter1 = createSelectionOperator => [input = allDifferent; condition = "semaphore.signal = 'GO'"] // FIXME: semaphore.signal='GO'
-		val filter2 = createSelectionOperator => [input = filter1; condition = "sw.currentPosition != swP.position"] // FIXME: sw.currentPosition != swP.position
+		val stringLiteralGO = createStringLiteral => [value = "GO"]
+		val condition1 = createArithmeticComparisonExpression => [
+			leftOperand = null 
+			rightOperand = stringLiteralGO
+			operator = ArithmeticComparisonOperator.EQUAL_TO
+		]
+		val filter1 = createSelectionOperator => [
+			input = allDifferent
+			conditionString = "semaphore.signal = 'GO'"
+			it.condition = condition1
+		]
+		
+		val condition2 = createArithmeticComparisonExpression => [
+			leftOperand = null 
+			rightOperand = null
+			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO
+		]
+		val filter2 = createSelectionOperator => [
+			input = filter1
+			conditionString = "sw.currentPosition != swP.position"
+			it.condition = condition2
+		]
 		val trimmer = createProjectionOperator => [
 			input = filter2
 			variables.addAll(Arrays.asList(semaphore, route, swP, sw, sw_currentPosition, swP_position))

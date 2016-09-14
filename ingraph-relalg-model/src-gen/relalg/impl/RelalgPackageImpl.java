@@ -36,6 +36,7 @@ import relalg.GetVerticesOperator;
 import relalg.IntegerLiteral;
 import relalg.JoinOperator;
 import relalg.Label;
+import relalg.Literal;
 import relalg.NamedElement;
 import relalg.NumberLiteral;
 import relalg.Order;
@@ -277,6 +278,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass literalEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass atomEClass = null;
 
 	/**
@@ -313,6 +321,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass getEdgesOperatorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass comparableEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -537,8 +552,17 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSelectionOperator_Condition() {
+	public EAttribute getSelectionOperator_ConditionString() {
 		return (EAttribute)selectionOperatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSelectionOperator_Condition() {
+		return (EReference)selectionOperatorEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -879,7 +903,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBinaryLogicalExpression_RightExpression() {
+	public EReference getBinaryLogicalExpression_RightOperand() {
 		return (EReference)binaryLogicalExpressionEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -888,7 +912,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBinaryLogicalExpression_LeftExpression() {
+	public EReference getBinaryLogicalExpression_LeftOperand() {
 		return (EReference)binaryLogicalExpressionEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -908,6 +932,24 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EAttribute getArithmeticComparisonExpression_Operator() {
 		return (EAttribute)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getArithmeticComparisonExpression_RightOperand() {
+		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getArithmeticComparisonExpression_LeftOperand() {
+		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -944,6 +986,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EAttribute getStringComparisonExpression_Operator() {
 		return (EAttribute)stringComparisonExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLiteral() {
+		return literalEClass;
 	}
 
 	/**
@@ -1059,6 +1110,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getComparable() {
+		return comparableEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -1164,7 +1224,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		productionOperatorEClass = createEClass(PRODUCTION_OPERATOR);
 
 		selectionOperatorEClass = createEClass(SELECTION_OPERATOR);
-		createEAttribute(selectionOperatorEClass, SELECTION_OPERATOR__CONDITION);
+		createEAttribute(selectionOperatorEClass, SELECTION_OPERATOR__CONDITION_STRING);
+		createEReference(selectionOperatorEClass, SELECTION_OPERATOR__CONDITION);
 
 		expandOperatorEClass = createEClass(EXPAND_OPERATOR);
 		createEAttribute(expandOperatorEClass, EXPAND_OPERATOR__DIRECTION);
@@ -1221,11 +1282,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		binaryLogicalExpressionEClass = createEClass(BINARY_LOGICAL_EXPRESSION);
 		createEAttribute(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__OPERATOR);
-		createEReference(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION);
-		createEReference(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION);
+		createEReference(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND);
+		createEReference(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND);
 
 		arithmeticComparisonExpressionEClass = createEClass(ARITHMETIC_COMPARISON_EXPRESSION);
 		createEAttribute(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR);
+		createEReference(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__RIGHT_OPERAND);
+		createEReference(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__LEFT_OPERAND);
 
 		unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
 		createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__NEGATED);
@@ -1233,7 +1296,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		stringComparisonExpressionEClass = createEClass(STRING_COMPARISON_EXPRESSION);
 		createEAttribute(stringComparisonExpressionEClass, STRING_COMPARISON_EXPRESSION__OPERATOR);
 
-		atomEClass = createEClass(ATOM);
+		literalEClass = createEClass(LITERAL);
 
 		numberLiteralEClass = createEClass(NUMBER_LITERAL);
 
@@ -1250,6 +1313,10 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(getEdgesOperatorEClass, GET_EDGES_OPERATOR__SOURCE_VERTEX_VARIABLE);
 		createEReference(getEdgesOperatorEClass, GET_EDGES_OPERATOR__TARGET_VERTEX_VARIABLE);
 		createEReference(getEdgesOperatorEClass, GET_EDGES_OPERATOR__EDGE_VARIABLE);
+
+		comparableEClass = createEClass(COMPARABLE);
+
+		atomEClass = createEClass(ATOM);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -1312,16 +1379,19 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		expressionEClass.getESuperTypes().add(this.getReturnableElement());
 		binaryExpressionEClass.getESuperTypes().add(this.getExpression());
 		arithmeticOperationExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
+		arithmeticOperationExpressionEClass.getESuperTypes().add(this.getComparable());
 		binaryLogicalExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
 		arithmeticComparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
 		unaryExpressionEClass.getESuperTypes().add(this.getExpression());
 		stringComparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
-		atomEClass.getESuperTypes().add(this.getExpression());
-		numberLiteralEClass.getESuperTypes().add(this.getAtom());
-		stringLiteralEClass.getESuperTypes().add(this.getAtom());
+		literalEClass.getESuperTypes().add(this.getAtom());
+		literalEClass.getESuperTypes().add(this.getComparable());
+		numberLiteralEClass.getESuperTypes().add(this.getLiteral());
+		stringLiteralEClass.getESuperTypes().add(this.getLiteral());
 		doubleLiteralEClass.getESuperTypes().add(this.getNumberLiteral());
 		integerLiteralEClass.getESuperTypes().add(this.getNumberLiteral());
 		getEdgesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
+		atomEClass.getESuperTypes().add(this.getExpression());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1343,7 +1413,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(productionOperatorEClass, ProductionOperator.class, "ProductionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(selectionOperatorEClass, SelectionOperator.class, "SelectionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSelectionOperator_Condition(), ecorePackage.getEString(), "condition", null, 0, 1, SelectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSelectionOperator_ConditionString(), ecorePackage.getEString(), "conditionString", null, 0, 1, SelectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSelectionOperator_Condition(), this.getExpression(), null, "condition", null, 1, 1, SelectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(expandOperatorEClass, ExpandOperator.class, "ExpandOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getExpandOperator_Direction(), this.getDirection(), "direction", "IN", 0, 1, ExpandOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1400,11 +1471,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(binaryLogicalExpressionEClass, BinaryLogicalExpression.class, "BinaryLogicalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBinaryLogicalExpression_Operator(), this.getBinaryLogicalOperator(), "operator", null, 0, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBinaryLogicalExpression_RightExpression(), this.getExpression(), null, "rightExpression", null, 1, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBinaryLogicalExpression_LeftExpression(), this.getExpression(), null, "leftExpression", null, 1, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBinaryLogicalExpression_RightOperand(), this.getExpression(), null, "rightOperand", null, 1, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBinaryLogicalExpression_LeftOperand(), this.getExpression(), null, "leftOperand", null, 1, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(arithmeticComparisonExpressionEClass, ArithmeticComparisonExpression.class, "ArithmeticComparisonExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArithmeticComparisonExpression_Operator(), this.getArithmeticComparisonOperator(), "operator", null, 0, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticComparisonExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticComparisonExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnaryExpression_Negated(), ecorePackage.getEBoolean(), "negated", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1412,7 +1485,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(stringComparisonExpressionEClass, StringComparisonExpression.class, "StringComparisonExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStringComparisonExpression_Operator(), this.getStringComparisonOperator(), "operator", null, 0, 1, StringComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(atomEClass, Atom.class, "Atom", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(literalEClass, Literal.class, "Literal", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(numberLiteralEClass, NumberLiteral.class, "NumberLiteral", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1429,6 +1502,10 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getGetEdgesOperator_SourceVertexVariable(), this.getVertexVariable(), null, "sourceVertexVariable", null, 1, 1, GetEdgesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGetEdgesOperator_TargetVertexVariable(), this.getVertexVariable(), null, "targetVertexVariable", null, 1, 1, GetEdgesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGetEdgesOperator_EdgeVariable(), this.getEdgeVariable(), null, "edgeVariable", null, 1, 1, GetEdgesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(comparableEClass, relalg.Comparable.class, "Comparable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(atomEClass, Atom.class, "Atom", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

@@ -24,8 +24,8 @@ import relalg.RelalgPackage;
  * </p>
  * <ul>
  *   <li>{@link relalg.impl.BinaryLogicalExpressionImpl#getOperator <em>Operator</em>}</li>
- *   <li>{@link relalg.impl.BinaryLogicalExpressionImpl#getRightExpression <em>Right Expression</em>}</li>
- *   <li>{@link relalg.impl.BinaryLogicalExpressionImpl#getLeftExpression <em>Left Expression</em>}</li>
+ *   <li>{@link relalg.impl.BinaryLogicalExpressionImpl#getRightOperand <em>Right Operand</em>}</li>
+ *   <li>{@link relalg.impl.BinaryLogicalExpressionImpl#getLeftOperand <em>Left Operand</em>}</li>
  * </ul>
  *
  * @generated
@@ -52,24 +52,24 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	protected BinaryLogicalOperator operator = OPERATOR_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getRightExpression() <em>Right Expression</em>}' containment reference.
+	 * The cached value of the '{@link #getRightOperand() <em>Right Operand</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getRightExpression()
+	 * @see #getRightOperand()
 	 * @generated
 	 * @ordered
 	 */
-	protected Expression rightExpression;
+	protected Expression rightOperand;
 
 	/**
-	 * The cached value of the '{@link #getLeftExpression() <em>Left Expression</em>}' containment reference.
+	 * The cached value of the '{@link #getLeftOperand() <em>Left Operand</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLeftExpression()
+	 * @see #getLeftOperand()
 	 * @generated
 	 * @ordered
 	 */
-	protected Expression leftExpression;
+	protected Expression leftOperand;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -116,8 +116,8 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Expression getRightExpression() {
-		return rightExpression;
+	public Expression getRightOperand() {
+		return rightOperand;
 	}
 
 	/**
@@ -125,11 +125,11 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetRightExpression(Expression newRightExpression, NotificationChain msgs) {
-		Expression oldRightExpression = rightExpression;
-		rightExpression = newRightExpression;
+	public NotificationChain basicSetRightOperand(Expression newRightOperand, NotificationChain msgs) {
+		Expression oldRightOperand = rightOperand;
+		rightOperand = newRightOperand;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION, oldRightExpression, newRightExpression);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND, oldRightOperand, newRightOperand);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -140,18 +140,18 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRightExpression(Expression newRightExpression) {
-		if (newRightExpression != rightExpression) {
+	public void setRightOperand(Expression newRightOperand) {
+		if (newRightOperand != rightOperand) {
 			NotificationChain msgs = null;
-			if (rightExpression != null)
-				msgs = ((InternalEObject)rightExpression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION, null, msgs);
-			if (newRightExpression != null)
-				msgs = ((InternalEObject)newRightExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION, null, msgs);
-			msgs = basicSetRightExpression(newRightExpression, msgs);
+			if (rightOperand != null)
+				msgs = ((InternalEObject)rightOperand).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND, null, msgs);
+			if (newRightOperand != null)
+				msgs = ((InternalEObject)newRightOperand).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND, null, msgs);
+			msgs = basicSetRightOperand(newRightOperand, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION, newRightExpression, newRightExpression));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND, newRightOperand, newRightOperand));
 	}
 
 	/**
@@ -159,8 +159,8 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Expression getLeftExpression() {
-		return leftExpression;
+	public Expression getLeftOperand() {
+		return leftOperand;
 	}
 
 	/**
@@ -168,11 +168,11 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetLeftExpression(Expression newLeftExpression, NotificationChain msgs) {
-		Expression oldLeftExpression = leftExpression;
-		leftExpression = newLeftExpression;
+	public NotificationChain basicSetLeftOperand(Expression newLeftOperand, NotificationChain msgs) {
+		Expression oldLeftOperand = leftOperand;
+		leftOperand = newLeftOperand;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION, oldLeftExpression, newLeftExpression);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND, oldLeftOperand, newLeftOperand);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -183,18 +183,18 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setLeftExpression(Expression newLeftExpression) {
-		if (newLeftExpression != leftExpression) {
+	public void setLeftOperand(Expression newLeftOperand) {
+		if (newLeftOperand != leftOperand) {
 			NotificationChain msgs = null;
-			if (leftExpression != null)
-				msgs = ((InternalEObject)leftExpression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION, null, msgs);
-			if (newLeftExpression != null)
-				msgs = ((InternalEObject)newLeftExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION, null, msgs);
-			msgs = basicSetLeftExpression(newLeftExpression, msgs);
+			if (leftOperand != null)
+				msgs = ((InternalEObject)leftOperand).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND, null, msgs);
+			if (newLeftOperand != null)
+				msgs = ((InternalEObject)newLeftOperand).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND, null, msgs);
+			msgs = basicSetLeftOperand(newLeftOperand, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION, newLeftExpression, newLeftExpression));
+			eNotify(new ENotificationImpl(this, Notification.SET, RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND, newLeftOperand, newLeftOperand));
 	}
 
 	/**
@@ -205,10 +205,10 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION:
-				return basicSetRightExpression(null, msgs);
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION:
-				return basicSetLeftExpression(null, msgs);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND:
+				return basicSetRightOperand(null, msgs);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND:
+				return basicSetLeftOperand(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -223,10 +223,10 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 		switch (featureID) {
 			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__OPERATOR:
 				return getOperator();
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION:
-				return getRightExpression();
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION:
-				return getLeftExpression();
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND:
+				return getRightOperand();
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND:
+				return getLeftOperand();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -242,11 +242,11 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__OPERATOR:
 				setOperator((BinaryLogicalOperator)newValue);
 				return;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION:
-				setRightExpression((Expression)newValue);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND:
+				setRightOperand((Expression)newValue);
 				return;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION:
-				setLeftExpression((Expression)newValue);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND:
+				setLeftOperand((Expression)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -263,11 +263,11 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__OPERATOR:
 				setOperator(OPERATOR_EDEFAULT);
 				return;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION:
-				setRightExpression((Expression)null);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND:
+				setRightOperand((Expression)null);
 				return;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION:
-				setLeftExpression((Expression)null);
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND:
+				setLeftOperand((Expression)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -283,10 +283,10 @@ public class BinaryLogicalExpressionImpl extends BinaryExpressionImpl implements
 		switch (featureID) {
 			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__OPERATOR:
 				return operator != OPERATOR_EDEFAULT;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_EXPRESSION:
-				return rightExpression != null;
-			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_EXPRESSION:
-				return leftExpression != null;
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__RIGHT_OPERAND:
+				return rightOperand != null;
+			case RelalgPackage.BINARY_LOGICAL_EXPRESSION__LEFT_OPERAND:
+				return leftOperand != null;
 		}
 		return super.eIsSet(featureID);
 	}

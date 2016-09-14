@@ -7,7 +7,44 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import relalg.*;
+import relalg.AlgebraExpression;
+import relalg.AllDifferentOperator;
+import relalg.AlphaOperator;
+import relalg.AntiJoinOperator;
+import relalg.ArithmeticComparisonExpression;
+import relalg.ArithmeticOperationExpression;
+import relalg.Atom;
+import relalg.AttributeVariable;
+import relalg.BetaOperator;
+import relalg.BinaryExpression;
+import relalg.BinaryLogicalExpression;
+import relalg.Container;
+import relalg.DoubleLiteral;
+import relalg.DuplicateEliminationOperator;
+import relalg.EdgeLabel;
+import relalg.EdgeVariable;
+import relalg.ExpandOperator;
+import relalg.Expression;
+import relalg.GetEdgesOperator;
+import relalg.GetVerticesOperator;
+import relalg.IntegerLiteral;
+import relalg.JoinOperator;
+import relalg.Label;
+import relalg.Literal;
+import relalg.NamedElement;
+import relalg.NumberLiteral;
+import relalg.ProductionOperator;
+import relalg.ProjectionOperator;
+import relalg.RelalgPackage;
+import relalg.ReturnableElement;
+import relalg.SelectionOperator;
+import relalg.StringComparisonExpression;
+import relalg.StringLiteral;
+import relalg.UnaryExpression;
+import relalg.UnionOperator;
+import relalg.Variable;
+import relalg.VertexLabel;
+import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -260,6 +297,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				ArithmeticOperationExpression arithmeticOperationExpression = (ArithmeticOperationExpression)theEObject;
 				T result = caseArithmeticOperationExpression(arithmeticOperationExpression);
 				if (result == null) result = caseBinaryExpression(arithmeticOperationExpression);
+				if (result == null) result = caseComparable(arithmeticOperationExpression);
 				if (result == null) result = caseExpression(arithmeticOperationExpression);
 				if (result == null) result = caseReturnableElement(arithmeticOperationExpression);
 				if (result == null) result = defaultCase(theEObject);
@@ -300,18 +338,22 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case RelalgPackage.ATOM: {
-				Atom atom = (Atom)theEObject;
-				T result = caseAtom(atom);
-				if (result == null) result = caseExpression(atom);
-				if (result == null) result = caseReturnableElement(atom);
+			case RelalgPackage.LITERAL: {
+				Literal literal = (Literal)theEObject;
+				T result = caseLiteral(literal);
+				if (result == null) result = caseAtom(literal);
+				if (result == null) result = caseComparable(literal);
+				if (result == null) result = caseExpression(literal);
+				if (result == null) result = caseReturnableElement(literal);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case RelalgPackage.NUMBER_LITERAL: {
 				NumberLiteral numberLiteral = (NumberLiteral)theEObject;
 				T result = caseNumberLiteral(numberLiteral);
+				if (result == null) result = caseLiteral(numberLiteral);
 				if (result == null) result = caseAtom(numberLiteral);
+				if (result == null) result = caseComparable(numberLiteral);
 				if (result == null) result = caseExpression(numberLiteral);
 				if (result == null) result = caseReturnableElement(numberLiteral);
 				if (result == null) result = defaultCase(theEObject);
@@ -320,7 +362,9 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.STRING_LITERAL: {
 				StringLiteral stringLiteral = (StringLiteral)theEObject;
 				T result = caseStringLiteral(stringLiteral);
+				if (result == null) result = caseLiteral(stringLiteral);
 				if (result == null) result = caseAtom(stringLiteral);
+				if (result == null) result = caseComparable(stringLiteral);
 				if (result == null) result = caseExpression(stringLiteral);
 				if (result == null) result = caseReturnableElement(stringLiteral);
 				if (result == null) result = defaultCase(theEObject);
@@ -330,7 +374,9 @@ public class RelalgSwitch<T> extends Switch<T> {
 				DoubleLiteral doubleLiteral = (DoubleLiteral)theEObject;
 				T result = caseDoubleLiteral(doubleLiteral);
 				if (result == null) result = caseNumberLiteral(doubleLiteral);
+				if (result == null) result = caseLiteral(doubleLiteral);
 				if (result == null) result = caseAtom(doubleLiteral);
+				if (result == null) result = caseComparable(doubleLiteral);
 				if (result == null) result = caseExpression(doubleLiteral);
 				if (result == null) result = caseReturnableElement(doubleLiteral);
 				if (result == null) result = defaultCase(theEObject);
@@ -340,7 +386,9 @@ public class RelalgSwitch<T> extends Switch<T> {
 				IntegerLiteral integerLiteral = (IntegerLiteral)theEObject;
 				T result = caseIntegerLiteral(integerLiteral);
 				if (result == null) result = caseNumberLiteral(integerLiteral);
+				if (result == null) result = caseLiteral(integerLiteral);
 				if (result == null) result = caseAtom(integerLiteral);
+				if (result == null) result = caseComparable(integerLiteral);
 				if (result == null) result = caseExpression(integerLiteral);
 				if (result == null) result = caseReturnableElement(integerLiteral);
 				if (result == null) result = defaultCase(theEObject);
@@ -350,6 +398,20 @@ public class RelalgSwitch<T> extends Switch<T> {
 				GetEdgesOperator getEdgesOperator = (GetEdgesOperator)theEObject;
 				T result = caseGetEdgesOperator(getEdgesOperator);
 				if (result == null) result = caseAlgebraExpression(getEdgesOperator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.COMPARABLE: {
+				relalg.Comparable comparable = (relalg.Comparable)theEObject;
+				T result = caseComparable(comparable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ATOM: {
+				Atom atom = (Atom)theEObject;
+				T result = caseAtom(atom);
+				if (result == null) result = caseExpression(atom);
+				if (result == null) result = caseReturnableElement(atom);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -808,6 +870,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Literal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Literal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLiteral(Literal object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Atom</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -894,6 +971,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGetEdgesOperator(GetEdgesOperator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Comparable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Comparable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComparable(relalg.Comparable object) {
 		return null;
 	}
 

@@ -4,23 +4,24 @@ package relalg.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import relalg.NumberLiteral;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Number Literal</b></em>'.
+ * An implementation of the model object '<em><b>Comparable</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public abstract class NumberLiteralImpl extends LiteralImpl implements NumberLiteral {
+public class ComparableImpl extends MinimalEObjectImpl.Container implements relalg.Comparable {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NumberLiteralImpl() {
+	protected ComparableImpl() {
 		super();
 	}
 
@@ -31,7 +32,7 @@ public abstract class NumberLiteralImpl extends LiteralImpl implements NumberLit
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.NUMBER_LITERAL;
+		return RelalgPackage.Literals.COMPARABLE;
 	}
 
-} //NumberLiteralImpl
+} //ComparableImpl

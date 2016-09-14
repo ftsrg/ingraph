@@ -22,7 +22,7 @@ import relalg.StringLiteral;
  *
  * @generated
  */
-public class StringLiteralImpl extends AtomImpl implements StringLiteral {
+public class StringLiteralImpl extends LiteralImpl implements StringLiteral {
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

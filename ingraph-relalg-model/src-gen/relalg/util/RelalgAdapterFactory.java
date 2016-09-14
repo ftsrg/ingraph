@@ -9,7 +9,44 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import relalg.*;
+import relalg.AlgebraExpression;
+import relalg.AllDifferentOperator;
+import relalg.AlphaOperator;
+import relalg.AntiJoinOperator;
+import relalg.ArithmeticComparisonExpression;
+import relalg.ArithmeticOperationExpression;
+import relalg.Atom;
+import relalg.AttributeVariable;
+import relalg.BetaOperator;
+import relalg.BinaryExpression;
+import relalg.BinaryLogicalExpression;
+import relalg.Container;
+import relalg.DoubleLiteral;
+import relalg.DuplicateEliminationOperator;
+import relalg.EdgeLabel;
+import relalg.EdgeVariable;
+import relalg.ExpandOperator;
+import relalg.Expression;
+import relalg.GetEdgesOperator;
+import relalg.GetVerticesOperator;
+import relalg.IntegerLiteral;
+import relalg.JoinOperator;
+import relalg.Label;
+import relalg.Literal;
+import relalg.NamedElement;
+import relalg.NumberLiteral;
+import relalg.ProductionOperator;
+import relalg.ProjectionOperator;
+import relalg.RelalgPackage;
+import relalg.ReturnableElement;
+import relalg.SelectionOperator;
+import relalg.StringComparisonExpression;
+import relalg.StringLiteral;
+import relalg.UnaryExpression;
+import relalg.UnionOperator;
+import relalg.Variable;
+import relalg.VertexLabel;
+import relalg.VertexVariable;
 
 /**
  * <!-- begin-user-doc -->
@@ -188,8 +225,8 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 				return createStringComparisonExpressionAdapter();
 			}
 			@Override
-			public Adapter caseAtom(Atom object) {
-				return createAtomAdapter();
+			public Adapter caseLiteral(Literal object) {
+				return createLiteralAdapter();
 			}
 			@Override
 			public Adapter caseNumberLiteral(NumberLiteral object) {
@@ -210,6 +247,14 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseGetEdgesOperator(GetEdgesOperator object) {
 				return createGetEdgesOperatorAdapter();
+			}
+			@Override
+			public Adapter caseComparable(relalg.Comparable object) {
+				return createComparableAdapter();
+			}
+			@Override
+			public Adapter caseAtom(Atom object) {
+				return createAtomAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -652,6 +697,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Literal <em>Literal</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Literal
+	 * @generated
+	 */
+	public Adapter createLiteralAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link relalg.Atom <em>Atom</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -732,6 +791,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGetEdgesOperatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.Comparable <em>Comparable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.Comparable
+	 * @generated
+	 */
+	public Adapter createComparableAdapter() {
 		return null;
 	}
 
