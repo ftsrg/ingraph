@@ -978,6 +978,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getStringLiteral_Value() {
+		return (EAttribute)stringLiteralEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDoubleLiteral() {
 		return doubleLiteralEClass;
 	}
@@ -1229,6 +1238,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		numberLiteralEClass = createEClass(NUMBER_LITERAL);
 
 		stringLiteralEClass = createEClass(STRING_LITERAL);
+		createEAttribute(stringLiteralEClass, STRING_LITERAL__VALUE);
 
 		doubleLiteralEClass = createEClass(DOUBLE_LITERAL);
 		createEAttribute(doubleLiteralEClass, DOUBLE_LITERAL__VALUE);
@@ -1407,6 +1417,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(numberLiteralEClass, NumberLiteral.class, "NumberLiteral", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(stringLiteralEClass, StringLiteral.class, "StringLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStringLiteral_Value(), ecorePackage.getEString(), "value", null, 0, 1, StringLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(doubleLiteralEClass, DoubleLiteral.class, "DoubleLiteral", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDoubleLiteral_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, DoubleLiteral.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -23,7 +23,11 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
-		val filter1 = createSelectionOperator => [input = getVertices; condition = "segment.length <= 0"] // FIXME: segment.length <= 0
+		val integerLiteral = createIntegerLiteral => [value = 0]
+		val filter1 = createSelectionOperator => [
+			input = getVertices
+			condition = "segment.length <= 0"
+		] // FIXME: segment.length <= 0
 		val trimmer = createProjectionOperator => [
 			input = filter1
 			variables.addAll(Arrays.asList(segment, segment_length))
@@ -375,6 +379,7 @@ class TrainBenchmarkUtil {
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
 		]
 
+		val stringLiteral = createStringLiteral => [value = "GO"]
 		val filter1 = createSelectionOperator => [input = allDifferent; condition = "semaphore.signal = 'GO'"] // FIXME: semaphore.signal='GO'
 		val filter2 = createSelectionOperator => [input = filter1; condition = "sw.currentPosition != swP.position"] // FIXME: sw.currentPosition != swP.position
 		val trimmer = createProjectionOperator => [

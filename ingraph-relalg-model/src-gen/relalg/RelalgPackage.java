@@ -1558,13 +1558,22 @@ public interface RelalgPackage extends EPackage {
 	int STRING_LITERAL__TEXT = ATOM__TEXT;
 
 	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_LITERAL__VALUE = ATOM_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>String Literal</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_LITERAL_FEATURE_COUNT = ATOM_FEATURE_COUNT + 0;
+	int STRING_LITERAL_FEATURE_COUNT = ATOM_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>String Literal</em>' class.
@@ -2432,6 +2441,17 @@ public interface RelalgPackage extends EPackage {
 	EClass getStringLiteral();
 
 	/**
+	 * Returns the meta object for the attribute '{@link relalg.StringLiteral#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see relalg.StringLiteral#getValue()
+	 * @see #getStringLiteral()
+	 * @generated
+	 */
+	EAttribute getStringLiteral_Value();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.DoubleLiteral <em>Double Literal</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3162,6 +3182,14 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass STRING_LITERAL = eINSTANCE.getStringLiteral();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STRING_LITERAL__VALUE = eINSTANCE.getStringLiteral_Value();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.DoubleLiteralImpl <em>Double Literal</em>}' class.

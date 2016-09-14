@@ -140,7 +140,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Atom" eSuperTypes="#//Expression"/>
   <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" abstract="true" eSuperTypes="#//Atom"/>
-  <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//Atom"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//Atom">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DoubleLiteral" eSuperTypes="#//NumberLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
