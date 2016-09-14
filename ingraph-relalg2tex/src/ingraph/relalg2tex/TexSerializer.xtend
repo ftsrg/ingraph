@@ -19,6 +19,7 @@ import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.SelectionOperator
+import relalg.UnionOperator
 import relalg.Variable
 
 abstract class TexSerializer {
@@ -117,6 +118,10 @@ abstract class TexSerializer {
 
 	def dispatch betaOperator(AntiJoinOperator operator) {
 		'''antijoin'''
+	}
+
+	def dispatch betaOperator(UnionOperator operator) {
+		'''union'''
 	}
 
 	def directionToTex(Direction direction) {

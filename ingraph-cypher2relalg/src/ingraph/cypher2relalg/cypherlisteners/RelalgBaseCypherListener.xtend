@@ -10,6 +10,7 @@ import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.RelalgFactory
+import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
 
@@ -34,6 +35,7 @@ class RelalgBaseCypherListener extends RelalgBaseUnsupportedCypherListener {
 			for (retVal = i.next; i.hasNext;) {
 				val nextAE = switch (betaOperatorType) {
 					case typeof(JoinOperator): createJoinOperator
+					case typeof(UnionOperator): createUnionOperator
 					default: throw new IllegalArgumentException(
 						"Got unexpected BetaOperator type to build left-deep-tree")
 				}

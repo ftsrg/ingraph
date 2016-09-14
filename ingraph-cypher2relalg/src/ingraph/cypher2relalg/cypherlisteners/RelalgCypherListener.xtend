@@ -19,13 +19,13 @@ import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
 import ingraph.antlr.CypherParser.RelationshipPatternContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
-import ingraph.antlr.CypherParser.RelationshipsPatternContext
 import ingraph.antlr.CypherParser.ReturnBodyContext
 import ingraph.antlr.CypherParser.ReturnContext
 import ingraph.antlr.CypherParser.ReturnItemContext
 import ingraph.antlr.CypherParser.RightArrowHeadContext
 import ingraph.antlr.CypherParser.SingleQueryContext
 import ingraph.antlr.CypherParser.SymbolicNameContext
+import ingraph.antlr.CypherParser.UnionContext
 import ingraph.antlr.CypherParser.VariableContext
 import ingraph.antlr.CypherParser.WhereContext
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
@@ -44,6 +44,7 @@ import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
+import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
 
@@ -69,13 +70,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	}
 
 	override exitQuery(QueryContext ctx) {
-		val i = query_SingleQueryList.iterator
-		if (i.hasNext) { // FIXME: union of multiple singleQuery's
-			val rootExpression = createProductionOperator
-			rootExpression.input = i.next
+		val rootExpression = createProductionOperator
+		rootExpression.input = buildLeftDeepTree(typeof(UnionOperator), query_SingleQueryList?.iterator)
 
-			container.rootExpression = rootExpression
-		}
+		container.rootExpression = rootExpression
 	}
 
 	var List<Variable> return_VariableList = null
@@ -143,6 +141,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		}
 	}
 
+	override enterUnion(UnionContext ctx) {
+		//FIXME: make distinction of UNION/UNION ALL
+	}
+
 	/*
 	 * List of relalg subtrees for each MATCH clause.
 	 * 
@@ -152,6 +154,12 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterSingleQuery(SingleQueryContext ctx) {
 		singleQuery_MatchList = new ArrayList<AlgebraExpression>
+
+		// allow for a new return_VariableList for this singleQuery
+		// for duplicate return clause in a single singleQuery, Exception will be raised in enterReturn
+		if (!return_InsideReturn) {
+			return_VariableList=null;
+		}
 	}
 
 	override exitSingleQuery(SingleQueryContext ctx) {
