@@ -21,6 +21,10 @@ import relalg.ProjectionOperator
 import relalg.SelectionOperator
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.ArithmeticComparisonOperator
+import relalg.BinaryLogicalOperator
+import relalg.BinaryArithmeticOperator
+import relalg.UnaryArithmeticOperator
 
 abstract class TexSerializer {
 
@@ -154,6 +158,46 @@ abstract class TexSerializer {
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
 		'''«edgeVariables.map["\\var{"+ name.escape + "}"].join(",~")»'''
+	}
+
+	/**
+	 * toStrings for operators
+	 */
+	def toString(ArithmeticComparisonOperator op) {
+		switch (op) {
+			case EQUAL_TO: '''='''
+			case GREATER_THAN: '''>'''
+			case GREATER_THAN_OR_EQUAL: '''\geq'''
+			case LESS_THAN: '''<'''
+			case LESS_THAN_OR_EQUAL: '''\leq'''
+			case NOT_EQUAL_TO: '''\neq'''
+		}
+	}
+
+	def toString(BinaryLogicalOperator op) {
+		switch (op) {
+			case AND: '''\land'''
+			case OR: '''\lor'''
+			case XOR: '''\lxor'''
+		}
+	}
+
+	def toString(BinaryArithmeticOperator op) {
+		switch (op) {
+			case DIVISION: '''/'''
+			case MINUS: '''-'''
+			case MOD: '''\mod'''
+			case MULTIPLICATION: '''\cdot'''
+			case PLUS: '''+'''
+			case POWER: '''^'''
+		}
+	}
+
+	def toString(UnaryArithmeticOperator op) {
+		switch (op) {
+			case MINUS: '''-'''
+			case PLUS: ''''''
+		}
 	}
 
 }
