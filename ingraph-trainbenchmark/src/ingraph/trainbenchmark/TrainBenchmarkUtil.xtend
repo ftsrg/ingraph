@@ -1,10 +1,9 @@
 package ingraph.trainbenchmark
 
 import java.util.Arrays
+import relalg.ArithmeticComparisonOperator
 import relalg.Direction
 import relalg.RelalgFactory
-import relalg.ArithmeticComparisonOperator
-import javax.xml.crypto.dsig.XMLSignature.SignatureValue
 
 class TrainBenchmarkUtil {
 
