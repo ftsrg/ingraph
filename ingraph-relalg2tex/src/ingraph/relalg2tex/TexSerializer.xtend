@@ -219,7 +219,7 @@ abstract class TexSerializer {
 	}
 	
 	def dispatch convertComparable(ElementVariable elementVariable) {
-		'''\var{elementVariable.name}'''
+		'''\var{«elementVariable.name»}'''
 	}
 
 	def dispatch convertComparable(AttributeVariable attributeVariable) {
