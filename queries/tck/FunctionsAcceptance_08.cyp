@@ -1,1 +1,1 @@
-RETURN properties('Cypher')
+RETURN reverse('raksO')

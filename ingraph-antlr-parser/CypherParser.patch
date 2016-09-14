@@ -1,7 +1,7 @@
 diff -pur orig/CypherParser.java fixed/CypherParser.java
---- orig/CypherParser.java	2016-08-14 22:43:43.531255556 +0200
-+++ fixed/CypherParser.java	2016-08-14 22:51:18.572004756 +0200
-@@ -550,7 +550,7 @@ public class CypherParser extends Parser
+--- orig/CypherParser.java	2016-09-14 19:52:07.735726512 +0200
++++ fixed/CypherParser.java	2016-09-14 19:57:00.904952589 +0200
+@@ -557,7 +557,7 @@ public class CypherParser extends Parser
  		public WithContext with() {
  			return getRuleContext(WithContext.class,0);
  		}
@@ -10,16 +10,16 @@ diff -pur orig/CypherParser.java fixed/CypherParser.java
  			return getRuleContext(ReturnContext.class,0);
  		}
  		public ClauseContext(ParserRuleContext parent, int invokingState) {
-@@ -640,7 +640,7 @@ public class CypherParser extends Parser
+@@ -647,7 +647,7 @@ public class CypherParser extends Parser
  				enterOuterAlt(_localctx, 9);
  				{
- 				setState(210);
+ 				setState(213);
 -				return();
 +				return_();
  				}
  				break;
  			default:
-@@ -1595,7 +1595,7 @@ public class CypherParser extends Parser
+@@ -1602,7 +1602,7 @@ public class CypherParser extends Parser
  		}
  	}
  

@@ -1,0 +1,23 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{m}}$}
+	[. {$\join$}
+		[. {$\getvertices{n}{Single}$}
+		]
+		[. {$\expand{r}{TYPE}{n}{m}{}$}
+			[. {$\getvertices{n}{Single}$}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

@@ -1,2 +1,2 @@
-MATCH (n)
-RETURN DISTINCT n.name
+MATCH p = (a:Start)-->(b)
+RETURN *

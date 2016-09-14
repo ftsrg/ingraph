@@ -4,10 +4,16 @@ import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgFactory
 import relalg.NamedElement
+import relalg.Container
 
 abstract class ElementFactory<TNamedElement extends NamedElement> {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected final Container container
+	
+	new(Container container) {
+		this.container = container	
+	} 
 
 	var n = 1;
 	@Accessors val elements = new HashMap<String, TNamedElement>
@@ -20,7 +26,10 @@ abstract class ElementFactory<TNamedElement extends NamedElement> {
 			elements.put(variableName, variable)
 		}
 
-		elements.get(variableName)
+		val element = elements.get(variableName)
+		container.elements.add(element)
+
+		return element
 	}
 
 	def generateName() {

@@ -1,3 +1,3 @@
 MATCH (a:A)
-MATCH (a)-[:LIKES*1..2]->(c)
+MATCH (a)-[:LIKES*0..0]->(c)
 RETURN c.name

@@ -1,23 +1,30 @@
 package ingraph.relalg2tex
 
+import java.io.File
+import java.nio.charset.Charset
+import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.EList
 import relalg.AlgebraExpression
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.BetaOperator
+import relalg.Container
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ExpandOperator
-import relalg.FilterOperator
+import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
+import relalg.SelectionOperator
+import relalg.UnionOperator
 import relalg.Variable
-import org.apache.commons.io.FileUtils
-import java.nio.charset.Charset
-import java.io.File
+import relalg.ArithmeticComparisonOperator
+import relalg.BinaryLogicalOperator
+import relalg.BinaryArithmeticOperator
+import relalg.UnaryArithmeticOperator
 
 abstract class TexSerializer {
 
@@ -30,8 +37,8 @@ abstract class TexSerializer {
 		this.full = full
 	}
 
-	def serialize(AlgebraExpression expression, String filename) {
-		val tex = convertExpression(expression)
+	def serialize(Container container, String filename) {
+		val tex = convertExpression(container.rootExpression)
 		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		tex
@@ -47,10 +54,10 @@ abstract class TexSerializer {
 	def dispatch CharSequence convertExpression(AlgebraExpression expression) {
 		'''
 			«IF full»
-				\documentclass{minimal}
+				\documentclass[varwidth,convert={density=120}]{standalone}
 				
-				\input{relalg-packages}
-				\input{relalg-commands}
+				\input{inputs/relalg-packages}
+				\input{inputs/relalg-commands}
 				
 				\begin{document}
 			«ENDIF»
@@ -85,8 +92,13 @@ abstract class TexSerializer {
 			'''{«op.targetVertexVariable.vertexLabel?.name?.escape»}'''
 	}
 
-	def dispatch operatorSymbol(FilterOperator op) {
-		'''\selection{...}'''
+	def dispatch operatorSymbol(SelectionOperator op) {
+		'''\selection{«op.conditionString?.replaceAll(" ", "~")»}'''
+	}
+
+	def dispatch operatorSymbol(
+		GetEdgesOperator op) {
+		'''\getedges{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.vertexLabel.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}'''
 	}
 
 	def dispatch operatorSymbol(GetVerticesOperator op) {
@@ -110,6 +122,10 @@ abstract class TexSerializer {
 
 	def dispatch betaOperator(AntiJoinOperator operator) {
 		'''antijoin'''
+	}
+
+	def dispatch betaOperator(UnionOperator operator) {
+		'''union'''
 	}
 
 	def directionToTex(Direction direction) {
@@ -142,6 +158,46 @@ abstract class TexSerializer {
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
 		'''«edgeVariables.map["\\var{"+ name.escape + "}"].join(",~")»'''
+	}
+
+	/**
+	 * toStrings for operators
+	 */
+	def toString(ArithmeticComparisonOperator op) {
+		switch (op) {
+			case EQUAL_TO: '''='''
+			case GREATER_THAN: '''>'''
+			case GREATER_THAN_OR_EQUAL: '''\geq'''
+			case LESS_THAN: '''<'''
+			case LESS_THAN_OR_EQUAL: '''\leq'''
+			case NOT_EQUAL_TO: '''\neq'''
+		}
+	}
+
+	def toString(BinaryLogicalOperator op) {
+		switch (op) {
+			case AND: '''\land'''
+			case OR: '''\lor'''
+			case XOR: '''\lxor'''
+		}
+	}
+
+	def toString(BinaryArithmeticOperator op) {
+		switch (op) {
+			case DIVISION: '''/'''
+			case MINUS: '''-'''
+			case MOD: '''\mod'''
+			case MULTIPLICATION: '''\cdot'''
+			case PLUS: '''+'''
+			case POWER: '''^'''
+		}
+	}
+
+	def toString(UnaryArithmeticOperator op) {
+		switch (op) {
+			case MINUS: '''-'''
+			case PLUS: ''''''
+		}
 	}
 
 }

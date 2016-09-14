@@ -1,7 +1,7 @@
-\documentclass{minimal}
+\documentclass[varwidth,convert={density=120}]{standalone}
 
-\input{relalg-packages}
-\input{relalg-commands}
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
@@ -10,9 +10,7 @@
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{sw}}$}
 		[. {$\antijoin$}
-			[. {$\alldifferent{}$}
-				[. {$\getvertices{sw}{Switch}$}
-				]
+			[. {$\getvertices{sw}{Switch}$}
 			]
 			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$}
 				[. {$\getvertices{sw}{Switch}$}

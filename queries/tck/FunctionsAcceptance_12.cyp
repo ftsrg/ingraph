@@ -1,3 +1,2 @@
-MATCH (n:Person)
-WHERE exists(n['prop'])
-RETURN n
+MATCH ()-[r1]->()-[r2]->()
+RETURN type(r1), type(r2)

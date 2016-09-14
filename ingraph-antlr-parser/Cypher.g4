@@ -26,8 +26,8 @@ regularQuery : singleQuery ( ws union )* ;
 
 singleQuery : clause ( ws clause )* ;
 
-union : ( UNION sp ALL singleQuery )
-      | ( UNION singleQuery )
+union : ( UNION sp ALL ws singleQuery )
+      | ( UNION ws singleQuery )
       ;
 
 clause : match
@@ -123,7 +123,7 @@ relationshipPattern : ( leftArrowHead ws dash ws relationshipDetail? ws dash ws 
                     | ( dash ws relationshipDetail? ws dash )
                     ;
 
-relationshipDetail : '[' variable? '?'? relationshipTypes? ( '*' rangeLiteral )? properties? ']' ;
+relationshipDetail : '[' variable? '?'? relationshipTypes? rangeLiteral? properties? ']' ;
 
 properties : mapLiteral
            | parameter
@@ -135,7 +135,7 @@ nodeLabels : nodeLabel ( ws nodeLabel )* ;
 
 nodeLabel : ':' labelName ;
 
-rangeLiteral : ws ( integerLiteral ws )? ( '..' ws ( integerLiteral ws )? )? ;
+rangeLiteral : '*' ws ( integerLiteral ws )? ( '..' ws ( integerLiteral ws )? )? ;
 
 labelName : symbolicName ;
 
@@ -171,7 +171,7 @@ atom : numberLiteral
      | TRUE
      | FALSE
      | NULL
-     | ( COUNT '(' '*' ')' )
+     | ( COUNT ws '(' ws '*' ws ')' )
      | mapLiteral
      | listComprehension
      | ( '[' ws expression ws ( ',' ws expression ws )* ']' )
@@ -204,7 +204,7 @@ filterExpression : idInColl ( ws where )? ;
 
 idInColl : variable sp IN sp expression ;
 
-functionInvocation : functionName ws '(' ws DISTINCT? ( expression ( ',' ws expression )* )? ws ')' ;
+functionInvocation : functionName ws '(' ws ( DISTINCT ws )? ( expression ( ',' ws expression )* ws )? ')' ;
 
 functionName : symbolicName ;
 

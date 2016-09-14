@@ -1,0 +1,38 @@
+\newcommand{\lxor}{\oplus}
+
+\newcommand{\tuple}[1]{\langle #1 \rangle}
+
+\newcommand{\joinsymbol}{\bowtie}
+\newcommand{\antijoinsymbol}{\, \triangleright \,}
+
+\newcommand{\join}{\joinsymbol}
+\newcommand{\antijoin}{\antijoinsymbol}
+
+\newcommand{\concatenation}{\Vert}
+\newcommand{\union}{\cup}
+\newcommand{\bigunion}{\bigcup}
+\newcommand{\intersection}{\cap}
+
+\newcommand{\var}[1]{\mathtt{#1}}
+\newcommand{\atom}[1]{\mathsf{#1}}
+
+\newcommand{\edgevariable}[2]{[\var{#1}
+	\ifstrempty{#2}{}{\colon\!{\atom{#2}}}
+	]}
+\newcommand{\nodevariable}[2]{(\var{#1}
+	\ifstrempty{#2}{}{\colon\!{\atom{#2}}}
+	)}
+
+\newcommand{\expandbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
+
+\newcommand{\expand}[5]{\updownarrow \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\expandout}[5]{\uparrow \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\expandin}[5]{\downarrow \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\getvertices}[2]{\bigcirc_{\nodevariable{#1}{#2}}}
+\newcommand{\getedges}[3]{\multimapbothvert_{#1}{#2}{#3}}
+
+\newcommand{\alldifferent}[1]{\neq _{\atom{#1}}}
+\newcommand{\duplicateelimination}{\delta}
+\newcommand{\sort}{\tau}
+\newcommand{\projection}[1]{\pi_{#1}}
+\newcommand{\selection}[1]{\sigma_\mathtt{#1}}

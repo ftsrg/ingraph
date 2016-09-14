@@ -1,2 +1,2 @@
-MATCH p = (n)-[r:T]->()
-RETURN [x IN [1, <invalid>] | toInteger(x) ] AS list
+WITH [3.4, 3] AS numbers
+RETURN [n IN numbers | toFloat(n)] AS float_numbers

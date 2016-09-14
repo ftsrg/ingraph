@@ -1,32 +1,22 @@
 buildscript {
-    dependencies {
-        classpath 'org.xtext:xtext-gradle-plugin:1.0.2'
-    }
-    repositories {
-        jcenter()
-    }
+	dependencies { classpath 'org.xtext:xtext-gradle-plugin:1.0.2' }
+	repositories { jcenter() }
 }
 
-plugins {
-    id "org.xtext.xtend" version "1.0.0"
-}
+plugins { id "org.xtext.xtend" version "1.0.0" }
 apply plugin: 'org.xtext.xtend'
 
 ext.xtendVersion = '2.10.0'
 
 dependencies {
-    compile project(':ingraph-antlr-parser')
-    compile project(':ingraph-relalg-model')
-    compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
-    compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
-    compile group: 'junit', name: 'junit', version: '4.12'
+	compile project(':ingraph-antlr-parser')
+	compile project(':ingraph-relalg-model')
+	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
+	compile group: 'junit', name: 'junit', version: '4.12'
 }
 
 sourceSets {
-    main {
-        java { srcDir 'src' }
-    }
-    test {
-        java { srcDir 'src-test' }
-    }
+	main { java { srcDir 'src' } }
+	test { java { srcDir 'src-test' } }
 }

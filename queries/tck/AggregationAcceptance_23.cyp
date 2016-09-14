@@ -1,4 +1,5 @@
-MATCH (a:A), (b:B)
-RETURN coalesce(a.prop, b.prop) AS foo,
-b.prop AS bar,
-{y: count(b)} AS baz
+UNWIND [42] AS props
+WITH props WHERE props > 32
+WITH DISTINCT props AS p
+MERGE (a:A {prop: p})
+RETURN a.prop AS prop

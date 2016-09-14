@@ -1,2 +1,3 @@
-WITH <map> AS map
-RETURN exists(map.name) AS exists
+MATCH (a)
+OPTIONAL MATCH (a)-[r:NOT_THERE]->()
+RETURN type(r)

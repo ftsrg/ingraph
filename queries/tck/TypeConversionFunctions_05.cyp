@@ -1,2 +1,4 @@
-WITH [true, <invalid>] AS list
-RETURN toBoolean(list[1]) AS b
+MATCH (p:Person { age: '42' })
+WITH *
+MATCH (n)
+RETURN toInteger(n.age) AS age

@@ -1,1 +1,2 @@
-RETURN [false, true] + false AS foo
+MATCH (n)
+RETURN count(DISTINCT {foo: n.list}) AS count

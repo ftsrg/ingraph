@@ -1,2 +1,2 @@
-MATCH (n)
-RETURN count(n), collect(n)
+MATCH ()
+RETURN count(*)

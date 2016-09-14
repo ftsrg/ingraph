@@ -1,5 +1,9 @@
 package ingraph.cypher2relalg.cypherlisteners
 
+import ingraph.antlr.CypherParser.DoubleLiteralContext
+import ingraph.antlr.CypherParser.ExpressionContext
+import ingraph.antlr.CypherParser.FunctionInvocationContext
+import ingraph.antlr.CypherParser.IntegerLiteralContext
 import ingraph.antlr.CypherParser.LabelNameContext
 import ingraph.antlr.CypherParser.LeftArrowHeadContext
 import ingraph.antlr.CypherParser.MatchContext
@@ -21,7 +25,9 @@ import ingraph.antlr.CypherParser.ReturnItemContext
 import ingraph.antlr.CypherParser.RightArrowHeadContext
 import ingraph.antlr.CypherParser.SingleQueryContext
 import ingraph.antlr.CypherParser.SymbolicNameContext
+import ingraph.antlr.CypherParser.UnionContext
 import ingraph.antlr.CypherParser.VariableContext
+import ingraph.antlr.CypherParser.WhereContext
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
@@ -31,29 +37,27 @@ import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.AlgebraExpression
+import relalg.BetaOperator
+import relalg.Container
 import relalg.Direction
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
-import relalg.ProductionOperator
+import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import ingraph.antlr.CypherParser.WhereContext
-import ingraph.antlr.CypherParser.FunctionInvocationContext
 import ingraph.antlr.CypherParser.RelationshipsPatternContext
-import ingraph.antlr.CypherParser.ExpressionContext
-import relalg.BetaOperator
 
 class RelalgCypherListener extends RelalgBaseCypherListener {
 
-	@Accessors val vertexVariableFactory = new VertexVariableFactory
-	@Accessors val edgeVariableFactory = new EdgeVariableFactory
+	@Accessors(value=PUBLIC_GETTER) val Container container = createContainer
 
-	@Accessors val vertexLabelFactory = new VertexLabelFactory
-	@Accessors val edgeLabelFactory = new EdgeLabelFactory
+	@Accessors val vertexVariableFactory = new VertexVariableFactory(container)
+	@Accessors val edgeVariableFactory = new EdgeVariableFactory(container)
 
-	@Accessors(value=PUBLIC_GETTER) var ProductionOperator rootExpression
+	@Accessors val vertexLabelFactory = new VertexLabelFactory(container)
+	@Accessors val edgeLabelFactory = new EdgeLabelFactory(container)
 
 	/*
 	 * List of single queries.
@@ -67,11 +71,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	}
 
 	override exitQuery(QueryContext ctx) {
-		val i = query_SingleQueryList.iterator
-		if (i.hasNext) { // FIXME: union of multiple singleQuery's
-			rootExpression = createProductionOperator
-			rootExpression.input = i.next
-		}
+		val rootExpression = createProductionOperator
+		rootExpression.input = buildLeftDeepTree(typeof(UnionOperator), query_SingleQueryList?.iterator)
+
+		container.rootExpression = rootExpression
 	}
 
 	var List<Variable> return_VariableList = null
@@ -116,18 +119,31 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	override enterReturnItem(ReturnItemContext ctx) {
 		// TODO: process renaming commands
 		// val renamedVariableCtx = ctx.variable
-		// dirty hack to traverse down to the single variable
-		val returnItemName = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)?.
+		// dirty hack to traverse down to the single variable/fuctionInvocation etc.
+		val returnAtomFirstChild = ctx.expression?.expression12?.expression11(0)?.expression10(0)?.expression9(0)?.
 			expression8?.expression7?.expression6(0).expression5(0)?.expression4(0)?.expression3?.expression2(0)?.atom?.
-			variable.symbolicName.text
+			getChild(0)
 
-		if (vertexVariableFactory.elements.containsKey(returnItemName)) {
-			returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
-		} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
-			returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
-		} else {
-			println("WARNING: return variable type not handled: " + returnItemName)
+		switch (returnAtomFirstChild) {
+			VariableContext: {
+				val returnItemName = (returnAtomFirstChild as VariableContext).symbolicName.text
+
+				if (vertexVariableFactory.elements.containsKey(returnItemName)) {
+					returnBody_VariableList.add(vertexVariableFactory.createElement(returnItemName))
+				} else if (edgeVariableFactory.elements.containsKey(returnItemName)) {
+					returnBody_VariableList.add(edgeVariableFactory.createElement(returnItemName))
+				} else {
+					i_am_unsupported("WARNING: return variable type not handled: " + returnItemName)
+				}
+			}
+			// TODO: various atom types to be handled
+			default:
+				i_am_unsupported(returnAtomFirstChild)
 		}
+	}
+
+	override enterUnion(UnionContext ctx) {
+		//FIXME: make distinction of UNION/UNION ALL
 	}
 
 	/*
@@ -139,6 +155,12 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterSingleQuery(SingleQueryContext ctx) {
 		singleQuery_MatchList = new ArrayList<AlgebraExpression>
+
+		// allow for a new return_VariableList for this singleQuery
+		// for duplicate return clause in a single singleQuery, Exception will be raised in enterReturn
+		if (!return_InsideReturn) {
+			return_VariableList=null;
+		}
 	}
 
 	override exitSingleQuery(SingleQueryContext ctx) {
@@ -150,7 +172,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		} else {
 			trimmer = content
 		}
-		// add distinct node if return DISTINCT was specified
+		// add duplicate-elimination operator if return DISTINCT was specified
 		var AlgebraExpression distinct = null
 		if (return_IsDistinct) {
 			val myDistinct = createDuplicateEliminationOperator
@@ -164,23 +186,24 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	var AlgebraExpression match_AlgebraExpression
 	var AlgebraExpression match_WhereJoinExpression
-	var boolean match_WhereJoinModeIsAntijoin=false
+	var boolean match_WhereJoinModeIsAntijoin = false
 
 	// TODO: where
 	override enterMatch(MatchContext ctx) {
 		match_AlgebraExpression = null
-		match_WhereJoinExpression=null
-		match_WhereJoinModeIsAntijoin=false
+		match_WhereJoinExpression = null
+		match_WhereJoinModeIsAntijoin = false
 	}
 
 	override exitMatch(MatchContext ctx) {
 		if (match_AlgebraExpression != null) {
 			var myAlgebraExpression = match_AlgebraExpression
-			if (match_WhereJoinExpression != null) {
-				var BetaOperator joinNode = if (match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
+			if (match_WhereJoinExpression !=
+				null) {
+				var BetaOperator joinNode = if(match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
 				joinNode.leftInput = myAlgebraExpression
 				joinNode.rightInput = match_WhereJoinExpression
-				myAlgebraExpression=joinNode
+				myAlgebraExpression = joinNode
 			}
 			singleQuery_MatchList.add(myAlgebraExpression)
 		}
@@ -202,6 +225,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterPatternPart(PatternPartContext ctx) {
 		patternPart_AlgebraExpression = null
+	// FIXME: handle grammar rule: variable ws '=' ws anonymousPatternPart
 	}
 
 	override exitPatternPart(PatternPartContext ctx) {
@@ -259,6 +283,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override enterRelationshipDetail(RelationshipDetailContext ctx) {
 		val variableCtx = ctx.getChild(VariableContext, 0)
+		// TODO: process possible multiple relationshipTypes
 		val relationshipTypesCtx = ctx.getChild(RelationshipTypesContext, 0)
 
 		val edgeVariableName = variableCtx?.getChild(SymbolicNameContext, 0)?.text
@@ -306,22 +331,30 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	var boolean where_InsideWhere = false
 	var AlgebraExpression where_JoinExpression
-	var boolean where_JoinModeIsAntijoin=false
+	var boolean where_JoinModeIsAntijoin = false
 
 	override enterWhere(WhereContext ctx) {
 		where_InsideWhere = true
 		functionInvocation_FunctionName = null
-		where_JoinExpression=null
+		where_JoinExpression = null
 	}
 
 	override exitWhere(WhereContext ctx) {
-		where_JoinModeIsAntijoin="NOT".equalsIgnoreCase(functionInvocation_FunctionName)
+		where_JoinModeIsAntijoin = "NOT".equalsIgnoreCase(functionInvocation_FunctionName)
 		where_InsideWhere = false
 
 		switch ctx.parent {
 			MatchContext: {
-				match_WhereJoinModeIsAntijoin=where_JoinModeIsAntijoin
-				match_WhereJoinExpression=where_JoinExpression
+				match_WhereJoinModeIsAntijoin = where_JoinModeIsAntijoin
+				match_WhereJoinExpression = where_JoinExpression
+
+				if (!where_JoinModeIsAntijoin) {
+					val selectionOperator = createSelectionOperator => [
+						conditionString = ctx.expression.text;
+						input = match_AlgebraExpression
+					]
+					match_AlgebraExpression = selectionOperator
+				}
 			}
 		}
 	}
@@ -351,6 +384,15 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override exitRelationshipsPattern(RelationshipsPatternContext ctx) {
 		where_JoinExpression = chainExpandOperators(relationshipsPattern_GetVerticesOperator,
-				relationshipsPattern_ExpandList)
+			relationshipsPattern_ExpandList)
 	}
+
+	override enterIntegerLiteral(IntegerLiteralContext ctx) {
+		val intValue = Integer.decode(ctx.text)
+	}
+
+	override enterDoubleLiteral(DoubleLiteralContext ctx) {
+		val doubleValue = Double.parseDouble(ctx.text)
+	}
+
 }

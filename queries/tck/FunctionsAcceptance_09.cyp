@@ -1,1 +1,3 @@
-RETURN properties([true, false])
+MATCH (n:Person)
+WHERE exists(n['prop'])
+RETURN n

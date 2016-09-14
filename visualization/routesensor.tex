@@ -1,7 +1,7 @@
-\documentclass{minimal}
+\documentclass[varwidth,convert={density=120}]{standalone}
 
-\input{relalg-packages}
-\input{relalg-commands}
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
@@ -10,12 +10,10 @@
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$}
 		[. {$\antijoin$}
-			[. {$\alldifferent{}$}
-				[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$}
-					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$}
-						[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$}
-							[. {$\getvertices{route}{Route}$}
-							]
+			[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$}
+				[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$}
+					[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$}
+						[. {$\getvertices{route}{Route}$}
 						]
 					]
 				]

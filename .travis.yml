@@ -4,9 +4,9 @@ jdk:
 install: false
 script:
   - ./gradlew assemble
-  - ./gradlew check --continue
+  - ./gradlew check -x test --continue
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
   on_success: change
-  on_failure: change #should be always, once build has been set up to work
+  on_failure: always

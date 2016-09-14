@@ -27,7 +27,7 @@ class ExpressionSerializer extends TexSerializer {
 	 * alpha operators
 	 */
 	def dispatch String convert(GetVerticesOperator operator) {
-		'''\getvertices{«operator.name»}'''
+		'''\getvertices{}'''
 	}
 
 	def dispatch String convert(DuplicateEliminationOperator operator) {

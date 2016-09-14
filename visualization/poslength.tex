@@ -1,7 +1,7 @@
-\documentclass{minimal}
+\documentclass[varwidth,convert={density=120}]{standalone}
 
-\input{relalg-packages}
-\input{relalg-commands}
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
@@ -9,7 +9,7 @@
 \Tree
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{segment}}$}
-		[. {$\alldifferent{}$}
+		[. {$\selection{segment.length~<=~0}$}
 			[. {$\getvertices{segment}{Segment}$}
 			]
 		]

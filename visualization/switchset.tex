@@ -1,7 +1,7 @@
-\documentclass{minimal}
+\documentclass[varwidth,convert={density=120}]{standalone}
 
-\input{relalg-packages}
-\input{relalg-commands}
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
@@ -9,7 +9,8 @@
 \Tree
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw}}$}
-		[. {$\alldifferent{}$}
+		[. {$\selection{semaphore.signal~=~"GO"
+		~~AND~sw.currentPosition~!=~swP.position}$}
 			[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
 				[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
 					[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}

@@ -1,4 +1,4 @@
-MATCH p = (a:T {name: 'a'})-[:R*]->(other:T)
-WHERE other <> a
-WITH a, other, min(length(p)) AS len
-RETURN a.name AS name, collect(other.name) AS others, len
+MATCH (a:A), (b:B)
+RETURN coalesce(a.prop, b.prop) AS foo,
+b.prop AS bar,
+{y: count(b)} AS baz

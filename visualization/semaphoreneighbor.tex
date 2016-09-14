@@ -1,7 +1,7 @@
-\documentclass{minimal}
+\documentclass[varwidth,convert={density=120}]{standalone}
 
-\input{relalg-packages}
-\input{relalg-commands}
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
@@ -10,15 +10,13 @@
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}}$}
 		[. {$\antijoin$}
-			[. {$\alldifferent{}$}
-				[. {$\expandin{\_e6}{gathers}{sensor2}{route2}{Route}$}
-					[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor2}{Sensor}$}
-						[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
-							[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
-								[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
-									[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
-										[. {$\getvertices{semaphore}{Semaphore}$}
-										]
+			[. {$\expandin{\_e6}{gathers}{sensor2}{route2}{Route}$}
+				[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor2}{Sensor}$}
+					[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
+						[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
+							[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
+								[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
+									[. {$\getvertices{semaphore}{Semaphore}$}
 									]
 								]
 							]

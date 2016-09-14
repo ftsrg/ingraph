@@ -1,2 +1,3 @@
-WITH <map> AS map
-RETURN map.name IS NOT NULL
+MATCH (a)
+OPTIONAL MATCH (a)-[r:T]->()
+RETURN type(r)

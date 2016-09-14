@@ -1,1 +1,2 @@
-RETURN reverse('raksO')
+MATCH ()-[r]->()
+RETURN type(r)

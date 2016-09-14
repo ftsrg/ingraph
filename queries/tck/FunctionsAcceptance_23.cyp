@@ -1,3 +1,3 @@
 MATCH (a)
-OPTIONAL MATCH (a)-[r:T]->()
-RETURN type(r)
+WITH [a, 1] AS list
+RETURN labels(list[0]) AS l

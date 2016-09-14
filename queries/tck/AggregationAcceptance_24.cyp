@@ -1,5 +1,4 @@
-UNWIND [42] AS props
-WITH props WHERE props > 32
-WITH DISTINCT props AS p
-MERGE (a:A {prop: p})
-RETURN a.prop AS prop
+UNWIND range(1000000, 2000000) AS i
+WITH i
+LIMIT 3000
+RETURN sum(i)

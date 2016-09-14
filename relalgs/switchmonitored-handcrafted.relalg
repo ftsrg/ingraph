@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ASCII"?>
+<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+  <rootExpression xsi:type="relalg:ProductionOperator">
+    <input xsi:type="relalg:DuplicateEliminationOperator">
+      <input xsi:type="relalg:AntiJoinOperator">
+        <leftInput xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.3"/>
+        <rightInput xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.5" sourceVertexVariable="//@elements.3" targetVertexVariable="//@elements.4"/>
+      </input>
+    </input>
+  </rootExpression>
+  <elements xsi:type="relalg:VertexLabel" name="Sensor"/>
+  <elements xsi:type="relalg:VertexLabel" name="Switch"/>
+  <elements xsi:type="relalg:EdgeLabel" name="monitoredBy"/>
+  <elements xsi:type="relalg:VertexVariable" name="sw" vertexLabel="//@elements.1"/>
+  <elements xsi:type="relalg:VertexVariable" name="_sensor" dontCare="true" vertexLabel="//@elements.0"/>
+  <elements xsi:type="relalg:EdgeVariable" name="_e1" dontCare="true" edgeLabel="//@elements.2"/>
+</relalg:Container>

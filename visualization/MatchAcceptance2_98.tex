@@ -1,0 +1,19 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{n},~\var{m}}$}
+	[. {$\expandout{\_e1}{T}{n}{m}{Z}$}
+		[. {$\getvertices{n}{A}$}
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}
