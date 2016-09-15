@@ -4,7 +4,7 @@ import ingraph.relalg2tex.RelAlgTreeDrawer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
 
-class RelalgModelVisualizationTest {
+class TrainBenchmarkHandcraftedVisualizationTest {
 
 	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
 
