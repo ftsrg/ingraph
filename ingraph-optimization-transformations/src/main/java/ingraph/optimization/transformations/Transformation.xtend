@@ -21,7 +21,7 @@ class Transformation {
 		
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
 
-		val queryPlan = TrainBenchmarkUtil.posLength
+		val queryPlan = TrainBenchmarkUtil.routeSensor
 
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
