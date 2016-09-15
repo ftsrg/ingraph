@@ -1,12 +1,5 @@
-buildscript {
-	dependencies { classpath 'org.xtext:xtext-gradle-plugin:1.0.2' }
-	repositories { jcenter() }
-}
-
 plugins { id "org.xtext.xtend" version "1.0.0" }
 apply plugin: 'org.xtext.xtend'
-
-ext.xtendVersion = '2.10.0'
 
 dependencies {
 	compile project(':ingraph-antlr-parser')

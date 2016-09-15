@@ -1,12 +1,5 @@
-buildscript {
-	dependencies { classpath 'org.xtext:xtext-gradle-plugin:1.0.2' }
-	repositories { jcenter() }
-}
-
 plugins { id "org.xtext.xtend" version "1.0.0" }
 apply plugin: 'org.xtext.xtend'
-
-ext.xtendVersion = '2.10.0'
 
 dependencies {
 	compile project(':ingraph-relalg-model')
@@ -15,7 +8,7 @@ dependencies {
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
-	compile group: 'junit', name: 'junit', version: '4.12'
+	compile group: 'junit', name: 'junit', version: junitVersion
 }
 
 sourceSets {

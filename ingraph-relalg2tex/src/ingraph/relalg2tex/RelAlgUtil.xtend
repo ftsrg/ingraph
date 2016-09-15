@@ -7,26 +7,33 @@ import org.eclipse.emf.common.util.EList
 import relalg.AlgebraExpression
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
+import relalg.ArithmeticComparisonExpression
+import relalg.ArithmeticComparisonOperator
 import relalg.BetaOperator
+import relalg.BinaryArithmeticOperator
+import relalg.BinaryLogicalOperator
 import relalg.Container
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ExpandOperator
+import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
+import relalg.IntegerLiteral
 import relalg.JoinOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.SelectionOperator
+import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
-import relalg.ArithmeticComparisonOperator
-import relalg.BinaryLogicalOperator
-import relalg.BinaryArithmeticOperator
-import relalg.UnaryArithmeticOperator
+import relalg.StringLiteral
+import relalg.AttributeVariable
+import relalg.VertexVariable
+import relalg.ElementVariable
 
-abstract class TexSerializer {
+abstract class RelAlgUtil {
 
 	/**
 	 * whether to generate a full TeX document
@@ -38,7 +45,7 @@ abstract class TexSerializer {
 	}
 
 	def serialize(Container container, String filename) {
-		val tex = convertExpression(container.rootExpression)
+		val tex = convertAlgebraExpression(container.rootExpression)
 		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		tex
@@ -47,11 +54,11 @@ abstract class TexSerializer {
 	/**
 	 * convertExpression
 	 */
-	def dispatch CharSequence convertExpression(ProductionOperator op) {
-		convertExpression(op.input)
+	def dispatch CharSequence convertAlgebraExpression(ProductionOperator op) {
+		convertAlgebraExpression(op.input)
 	}
 
-	def dispatch CharSequence convertExpression(AlgebraExpression expression) {
+	def dispatch CharSequence convertAlgebraExpression(AlgebraExpression expression) {
 		'''
 			«IF full»
 				\documentclass[varwidth,convert={density=120}]{standalone}
@@ -93,7 +100,7 @@ abstract class TexSerializer {
 	}
 
 	def dispatch operatorSymbol(SelectionOperator op) {
-		'''\selection{«op.conditionString?.replaceAll(" ", "~")»}'''
+		'''\selection{«op.condition.convertExpression»}'''
 	}
 
 	def dispatch operatorSymbol(
@@ -161,9 +168,9 @@ abstract class TexSerializer {
 	}
 
 	/**
-	 * toStrings for operators
+	 * conversion for operators
 	 */
-	def toString(ArithmeticComparisonOperator op) {
+	def convert(ArithmeticComparisonOperator op) {
 		switch (op) {
 			case EQUAL_TO: '''='''
 			case GREATER_THAN: '''>'''
@@ -174,7 +181,7 @@ abstract class TexSerializer {
 		}
 	}
 
-	def toString(BinaryLogicalOperator op) {
+	def convert(BinaryLogicalOperator op) {
 		switch (op) {
 			case AND: '''\land'''
 			case OR: '''\lor'''
@@ -182,7 +189,7 @@ abstract class TexSerializer {
 		}
 	}
 
-	def toString(BinaryArithmeticOperator op) {
+	def convert(BinaryArithmeticOperator op) {
 		switch (op) {
 			case DIVISION: '''/'''
 			case MINUS: '''-'''
@@ -193,11 +200,40 @@ abstract class TexSerializer {
 		}
 	}
 
-	def toString(UnaryArithmeticOperator op) {
+	def convert(UnaryArithmeticOperator op) {
 		switch (op) {
 			case MINUS: '''-'''
 			case PLUS: ''''''
 		}
+	}
+
+	/**
+	 * convertComparable
+	 */
+	def dispatch convertComparable(IntegerLiteral integerLiteral) {
+		'''\literal{«integerLiteral.value.toString»}'''
+	}
+
+	def dispatch convertComparable(StringLiteral stringLiteral) {
+		'''\literal{"«stringLiteral.value.toString»"}'''
+	}
+	
+	def dispatch convertComparable(ElementVariable elementVariable) {
+		'''\var{«elementVariable.name»}'''
+	}
+
+	def dispatch convertComparable(AttributeVariable attributeVariable) {
+		'''\var{«attributeVariable.element.name».«attributeVariable.name»}''' 
+	}
+
+	/**
+	 * convertExpression
+	 */
+	def dispatch convertExpression(Expression exp) {
+	}
+
+	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
+		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
 	}
 
 }

@@ -25,6 +25,7 @@ import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
+import relalg.ElementVariable;
 import relalg.ExpandOperator;
 import relalg.Expression;
 import relalg.GetEdgesOperator;
@@ -255,6 +256,10 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAtom(Atom object) {
 				return createAtomAdapter();
+			}
+			@Override
+			public Adapter caseElementVariable(ElementVariable object) {
+				return createElementVariableAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -721,6 +726,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAtomAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.ElementVariable <em>Element Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.ElementVariable
+	 * @generated
+	 */
+	public Adapter createElementVariableAdapter() {
 		return null;
 	}
 

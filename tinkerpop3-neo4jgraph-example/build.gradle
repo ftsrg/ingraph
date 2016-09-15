@@ -1,5 +1,4 @@
 buildscript {
-	repositories { jcenter() }
 	dependencies { classpath 'org.github.ngbinh.scalastyle:gradle-scalastyle-plugin_2.11:0.8.2' }
 }
 
@@ -14,8 +13,6 @@ repositories {
 	mavenCentral()
 	maven { url "https://jitpack.io" }
 }
-
-ext.scalaVersion = "2.11.8"
 
 dependencies {
 	compile "org.scala-lang:scala-library:$scalaVersion"

@@ -23,6 +23,7 @@ import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
+import relalg.ElementVariable;
 import relalg.ExpandOperator;
 import relalg.Expression;
 import relalg.GetEdgesOperator;
@@ -198,6 +199,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.VERTEX_VARIABLE: {
 				VertexVariable vertexVariable = (VertexVariable)theEObject;
 				T result = caseVertexVariable(vertexVariable);
+				if (result == null) result = caseElementVariable(vertexVariable);
 				if (result == null) result = caseVariable(vertexVariable);
 				if (result == null) result = caseNamedElement(vertexVariable);
 				if (result == null) result = caseReturnableElement(vertexVariable);
@@ -208,6 +210,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.EDGE_VARIABLE: {
 				EdgeVariable edgeVariable = (EdgeVariable)theEObject;
 				T result = caseEdgeVariable(edgeVariable);
+				if (result == null) result = caseElementVariable(edgeVariable);
 				if (result == null) result = caseVariable(edgeVariable);
 				if (result == null) result = caseNamedElement(edgeVariable);
 				if (result == null) result = caseReturnableElement(edgeVariable);
@@ -416,6 +419,16 @@ public class RelalgSwitch<T> extends Switch<T> {
 				T result = caseAtom(atom);
 				if (result == null) result = caseExpression(atom);
 				if (result == null) result = caseReturnableElement(atom);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ELEMENT_VARIABLE: {
+				ElementVariable elementVariable = (ElementVariable)theEObject;
+				T result = caseElementVariable(elementVariable);
+				if (result == null) result = caseVariable(elementVariable);
+				if (result == null) result = caseNamedElement(elementVariable);
+				if (result == null) result = caseReturnableElement(elementVariable);
+				if (result == null) result = caseComparable(elementVariable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -900,6 +913,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAtom(Atom object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Element Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Element Variable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseElementVariable(ElementVariable object) {
 		return null;
 	}
 

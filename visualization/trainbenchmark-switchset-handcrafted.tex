@@ -9,8 +9,8 @@
 \Tree
 [. {$\duplicateelimination$}
 	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$}
-		[. {$\selection{sw.currentPosition~!=~swP.position}$}
-			[. {$\selection{semaphore.signal~=~'GO'}$}
+		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$}
+			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
 					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
 						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}

@@ -1,17 +1,23 @@
 allprojects {
-    group = 'ingraph'
-    version = '0.0.1-SNAPSHOT'
+	group = 'ingraph'
+	version = '0.0.1-SNAPSHOT'
 }
 
 subprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+	apply plugin: 'java'
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
-    repositories {
-        mavenCentral()
-    }
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.eclipse.org/content/groups/viatra2" }
+	}
+}
 
-    dependencies {
-    }
+ext {
+	emfVersion = '2.10.0-v20140514-1158'
+	junitVersion = '4.12'
+	scalaVersion = '2.11.8'
+	viatraVersion = '1.4.0.M2'
+	xtendVersion = '2.10.0'
 }
