@@ -101,10 +101,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArithmeticOperationExpression" eSuperTypes="#//BinaryExpression #//Comparable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryArithmeticOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
-        eType="#//Comparable" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
-        eType="#//Comparable" containment="true"/>
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
+        eType="#//Expression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryLogicalExpression" eSuperTypes="#//BinaryExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryLogicalOperator"/>

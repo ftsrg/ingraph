@@ -892,7 +892,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getArithmeticOperationExpression_RightOperand() {
+	public EReference getArithmeticOperationExpression_LeftOperand() {
 		return (EReference)arithmeticOperationExpressionEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -901,7 +901,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getArithmeticOperationExpression_LeftOperand() {
+	public EReference getArithmeticOperationExpression_RightOperand() {
 		return (EReference)arithmeticOperationExpressionEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -957,24 +957,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EAttribute getArithmeticComparisonExpression_Operator() {
 		return (EAttribute)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getArithmeticComparisonExpression_RightOperand() {
-		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(-1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getArithmeticComparisonExpression_LeftOperand() {
-		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(-1);
 	}
 
 	/**
@@ -1357,8 +1339,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		arithmeticOperationExpressionEClass = createEClass(ARITHMETIC_OPERATION_EXPRESSION);
 		createEAttribute(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__OPERATOR);
-		createEReference(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__RIGHT_OPERAND);
 		createEReference(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__LEFT_OPERAND);
+		createEReference(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__RIGHT_OPERAND);
 
 		binaryLogicalExpressionEClass = createEClass(BINARY_LOGICAL_EXPRESSION);
 		createEAttribute(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__OPERATOR);
@@ -1367,8 +1349,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		arithmeticComparisonExpressionEClass = createEClass(ARITHMETIC_COMPARISON_EXPRESSION);
 		createEAttribute(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR);
-		createEReference(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__RIGHT_OPERAND);
-		createEReference(arithmeticComparisonExpressionEClass, ARITHMETIC_COMPARISON_EXPRESSION__LEFT_OPERAND);
 
 		unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
 		createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__NEGATED);
@@ -1558,8 +1538,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(arithmeticOperationExpressionEClass, ArithmeticOperationExpression.class, "ArithmeticOperationExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArithmeticOperationExpression_Operator(), this.getBinaryArithmeticOperator(), "operator", null, 0, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getArithmeticOperationExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getArithmeticOperationExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticOperationExpression_LeftOperand(), this.getExpression(), null, "leftOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticOperationExpression_RightOperand(), this.getExpression(), null, "rightOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(binaryLogicalExpressionEClass, BinaryLogicalExpression.class, "BinaryLogicalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBinaryLogicalExpression_Operator(), this.getBinaryLogicalOperator(), "operator", null, 0, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1568,8 +1548,6 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(arithmeticComparisonExpressionEClass, ArithmeticComparisonExpression.class, "ArithmeticComparisonExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArithmeticComparisonExpression_Operator(), this.getArithmeticComparisonOperator(), "operator", null, 0, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getArithmeticComparisonExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getArithmeticComparisonExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ArithmeticComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnaryExpression_Negated(), ecorePackage.getEBoolean(), "negated", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
