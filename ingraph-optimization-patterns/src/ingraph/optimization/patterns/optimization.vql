@@ -1,0 +1,7 @@
+package ingraph.optimization.patterns
+
+import "http://www.example.org/relalg"
+
+pattern expandVertex(v, e) {
+	ExpandOperator.input(e, v);
+}
