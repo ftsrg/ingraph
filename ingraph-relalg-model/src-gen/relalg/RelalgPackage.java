@@ -2759,69 +2759,6 @@ public interface RelalgPackage extends EPackage {
 	EClass getLiteral();
 
 	/**
-	 * Returns the meta object for class '{@link relalg.Atom <em>Atom</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Atom</em>'.
-	 * @see relalg.Atom
-	 * @generated
-	 */
-	EClass getAtom();
-
-	/**
-	 * Returns the meta object for class '{@link relalg.ElementVariable <em>Element Variable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Element Variable</em>'.
-	 * @see relalg.ElementVariable
-	 * @generated
-	 */
-	EClass getElementVariable();
-
-	/**
-	 * Returns the meta object for the reference list '{@link relalg.ElementVariable#getAttributes <em>Attributes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Attributes</em>'.
-	 * @see relalg.ElementVariable#getAttributes()
-	 * @see #getElementVariable()
-	 * @generated
-	 */
-	EReference getElementVariable_Attributes();
-
-	/**
-	 * Returns the meta object for class '{@link relalg.ComparisonExpression <em>Comparison Expression</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Comparison Expression</em>'.
-	 * @see relalg.ComparisonExpression
-	 * @generated
-	 */
-	EClass getComparisonExpression();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getLeftOperand <em>Left Operand</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Left Operand</em>'.
-	 * @see relalg.ComparisonExpression#getLeftOperand()
-	 * @see #getComparisonExpression()
-	 * @generated
-	 */
-	EReference getComparisonExpression_LeftOperand();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getRightOperand <em>Right Operand</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Right Operand</em>'.
-	 * @see relalg.ComparisonExpression#getRightOperand()
-	 * @see #getComparisonExpression()
-	 * @generated
-	 */
-	EReference getComparisonExpression_RightOperand();
-
-	/**
 	 * Returns the meta object for class '{@link relalg.NumberLiteral <em>Number Literal</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2946,6 +2883,69 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getComparable();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.Atom <em>Atom</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Atom</em>'.
+	 * @see relalg.Atom
+	 * @generated
+	 */
+	EClass getAtom();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ElementVariable <em>Element Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Element Variable</em>'.
+	 * @see relalg.ElementVariable
+	 * @generated
+	 */
+	EClass getElementVariable();
+
+	/**
+	 * Returns the meta object for the reference list '{@link relalg.ElementVariable#getAttributes <em>Attributes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Attributes</em>'.
+	 * @see relalg.ElementVariable#getAttributes()
+	 * @see #getElementVariable()
+	 * @generated
+	 */
+	EReference getElementVariable_Attributes();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ComparisonExpression <em>Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Comparison Expression</em>'.
+	 * @see relalg.ComparisonExpression
+	 * @generated
+	 */
+	EClass getComparisonExpression();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getLeftOperand <em>Left Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Left Operand</em>'.
+	 * @see relalg.ComparisonExpression#getLeftOperand()
+	 * @see #getComparisonExpression()
+	 * @generated
+	 */
+	EReference getComparisonExpression_LeftOperand();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getRightOperand <em>Right Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Right Operand</em>'.
+	 * @see relalg.ComparisonExpression#getRightOperand()
+	 * @see #getComparisonExpression()
+	 * @generated
+	 */
+	EReference getComparisonExpression_RightOperand();
 
 	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
@@ -3615,60 +3615,6 @@ public interface RelalgPackage extends EPackage {
 		EClass LITERAL = eINSTANCE.getLiteral();
 
 		/**
-		 * The meta object literal for the '{@link relalg.impl.AtomImpl <em>Atom</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see relalg.impl.AtomImpl
-		 * @see relalg.impl.RelalgPackageImpl#getAtom()
-		 * @generated
-		 */
-		EClass ATOM = eINSTANCE.getAtom();
-
-		/**
-		 * The meta object literal for the '{@link relalg.impl.ElementVariableImpl <em>Element Variable</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ElementVariableImpl
-		 * @see relalg.impl.RelalgPackageImpl#getElementVariable()
-		 * @generated
-		 */
-		EClass ELEMENT_VARIABLE = eINSTANCE.getElementVariable();
-
-		/**
-		 * The meta object literal for the '<em><b>Attributes</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ELEMENT_VARIABLE__ATTRIBUTES = eINSTANCE.getElementVariable_Attributes();
-
-		/**
-		 * The meta object literal for the '{@link relalg.impl.ComparisonExpressionImpl <em>Comparison Expression</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see relalg.impl.ComparisonExpressionImpl
-		 * @see relalg.impl.RelalgPackageImpl#getComparisonExpression()
-		 * @generated
-		 */
-		EClass COMPARISON_EXPRESSION = eINSTANCE.getComparisonExpression();
-
-		/**
-		 * The meta object literal for the '<em><b>Left Operand</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMPARISON_EXPRESSION__LEFT_OPERAND = eINSTANCE.getComparisonExpression_LeftOperand();
-
-		/**
-		 * The meta object literal for the '<em><b>Right Operand</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMPARISON_EXPRESSION__RIGHT_OPERAND = eINSTANCE.getComparisonExpression_RightOperand();
-
-		/**
 		 * The meta object literal for the '{@link relalg.impl.NumberLiteralImpl <em>Number Literal</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3775,6 +3721,60 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COMPARABLE = eINSTANCE.getComparable();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.AtomImpl <em>Atom</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.AtomImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAtom()
+		 * @generated
+		 */
+		EClass ATOM = eINSTANCE.getAtom();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ElementVariableImpl <em>Element Variable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ElementVariableImpl
+		 * @see relalg.impl.RelalgPackageImpl#getElementVariable()
+		 * @generated
+		 */
+		EClass ELEMENT_VARIABLE = eINSTANCE.getElementVariable();
+
+		/**
+		 * The meta object literal for the '<em><b>Attributes</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ELEMENT_VARIABLE__ATTRIBUTES = eINSTANCE.getElementVariable_Attributes();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ComparisonExpressionImpl <em>Comparison Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ComparisonExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getComparisonExpression()
+		 * @generated
+		 */
+		EClass COMPARISON_EXPRESSION = eINSTANCE.getComparisonExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Left Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPARISON_EXPRESSION__LEFT_OPERAND = eINSTANCE.getComparisonExpression_LeftOperand();
+
+		/**
+		 * The meta object literal for the '<em><b>Right Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPARISON_EXPRESSION__RIGHT_OPERAND = eINSTANCE.getComparisonExpression_RightOperand();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

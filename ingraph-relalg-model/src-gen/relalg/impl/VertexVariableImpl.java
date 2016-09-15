@@ -3,10 +3,12 @@
 package relalg.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import relalg.RelalgPackage;
 import relalg.VertexLabel;
 import relalg.VertexVariable;
@@ -112,7 +114,6 @@ public class VertexVariableImpl extends ElementVariableImpl implements VertexVar
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

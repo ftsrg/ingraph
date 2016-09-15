@@ -402,16 +402,6 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Atom createAtom() {
-		AtomImpl atom = new AtomImpl();
-		return atom;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public StringLiteral createStringLiteral() {
 		StringLiteralImpl stringLiteral = new StringLiteralImpl();
 		return stringLiteral;
@@ -445,6 +435,16 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public GetEdgesOperator createGetEdgesOperator() {
 		GetEdgesOperatorImpl getEdgesOperator = new GetEdgesOperatorImpl();
 		return getEdgesOperator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Atom createAtom() {
+		AtomImpl atom = new AtomImpl();
+		return atom;
 	}
 
 	/**

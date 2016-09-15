@@ -41,6 +41,7 @@ public abstract class ElementVariableImpl extends VariableImpl implements Elemen
 	 * @ordered
 	 */
 	protected EList<AttributeVariable> attributes;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
