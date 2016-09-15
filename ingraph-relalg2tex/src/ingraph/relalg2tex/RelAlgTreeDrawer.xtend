@@ -7,7 +7,7 @@ import relalg.GetVerticesOperator
 import relalg.GetEdgesOperator
 import relalg.AllDifferentOperator
 
-class RelAlgTreeDrawer extends TexSerializer {
+class RelAlgTreeDrawer extends RelAlgUtil {
 
 	new(boolean full) {
 		super(full)

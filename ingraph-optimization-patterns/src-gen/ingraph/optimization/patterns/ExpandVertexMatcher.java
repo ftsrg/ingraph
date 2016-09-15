@@ -16,7 +16,6 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseMatcher;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
-import relalg.AlgebraExpression;
 import relalg.ExpandOperator;
 
 /**
@@ -30,8 +29,8 @@ import relalg.ExpandOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * pattern expandVertex(v, e) {
- * 	ExpandOperator.input(e, v);
+ * pattern expandVertex(e) {
+ * 	ExpandOperator(e);
  * }
  * </pre></code>
  * 
@@ -71,9 +70,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
     return new ExpandVertexMatcher();
   }
   
-  private final static int POSITION_V = 0;
-  
-  private final static int POSITION_E = 1;
+  private final static int POSITION_E = 0;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandVertexMatcher.class);
   
@@ -91,126 +88,78 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return matches represented as a ExpandVertexMatch object.
    * 
    */
-  public Collection<ExpandVertexMatch> getAllMatches(final AlgebraExpression pV, final ExpandOperator pE) {
-    return rawGetAllMatches(new Object[]{pV, pE});
+  public Collection<ExpandVertexMatch> getAllMatches(final ExpandOperator pE) {
+    return rawGetAllMatches(new Object[]{pE});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return a match represented as a ExpandVertexMatch object, or null if no match is found.
    * 
    */
-  public ExpandVertexMatch getOneArbitraryMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    return rawGetOneArbitraryMatch(new Object[]{pV, pE});
+  public ExpandVertexMatch getOneArbitraryMatch(final ExpandOperator pE) {
+    return rawGetOneArbitraryMatch(new Object[]{pE});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    return rawHasMatch(new Object[]{pV, pE});
+  public boolean hasMatch(final ExpandOperator pE) {
+    return rawHasMatch(new Object[]{pE});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final AlgebraExpression pV, final ExpandOperator pE) {
-    return rawCountMatches(new Object[]{pV, pE});
+  public int countMatches(final ExpandOperator pE) {
+    return rawCountMatches(new Object[]{pE});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final AlgebraExpression pV, final ExpandOperator pE, final IMatchProcessor<? super ExpandVertexMatch> processor) {
-    rawForEachMatch(new Object[]{pV, pE}, processor);
+  public void forEachMatch(final ExpandOperator pE, final IMatchProcessor<? super ExpandVertexMatch> processor) {
+    rawForEachMatch(new Object[]{pE}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final AlgebraExpression pV, final ExpandOperator pE, final IMatchProcessor<? super ExpandVertexMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pV, pE}, processor);
+  public boolean forOneArbitraryMatch(final ExpandOperator pE, final IMatchProcessor<? super ExpandVertexMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pE}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public ExpandVertexMatch newMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    return ExpandVertexMatch.newMatch(pV, pE);
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for v.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<AlgebraExpression> rawAccumulateAllValuesOfv(final Object[] parameters) {
-    Set<AlgebraExpression> results = new HashSet<AlgebraExpression>();
-    rawAccumulateAllValues(POSITION_V, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for v.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<AlgebraExpression> getAllValuesOfv() {
-    return rawAccumulateAllValuesOfv(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for v.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<AlgebraExpression> getAllValuesOfv(final ExpandVertexMatch partialMatch) {
-    return rawAccumulateAllValuesOfv(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for v.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<AlgebraExpression> getAllValuesOfv(final ExpandOperator pE) {
-    return rawAccumulateAllValuesOfv(new Object[]{
-    null, 
-    pE
-    });
+  public ExpandVertexMatch newMatch(final ExpandOperator pE) {
+    return ExpandVertexMatch.newMatch(pE);
   }
   
   /**
@@ -233,31 +182,10 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
     return rawAccumulateAllValuesOfe(emptyArray());
   }
   
-  /**
-   * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<ExpandOperator> getAllValuesOfe(final ExpandVertexMatch partialMatch) {
-    return rawAccumulateAllValuesOfe(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<ExpandOperator> getAllValuesOfe(final AlgebraExpression pV) {
-    return rawAccumulateAllValuesOfe(new Object[]{
-    pV, 
-    null
-    });
-  }
-  
   @Override
   protected ExpandVertexMatch tupleToMatch(final Tuple t) {
     try {
-    	return ExpandVertexMatch.newMatch((AlgebraExpression) t.get(POSITION_V), (ExpandOperator) t.get(POSITION_E));
+    	return ExpandVertexMatch.newMatch((ExpandOperator) t.get(POSITION_E));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -267,7 +195,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   @Override
   protected ExpandVertexMatch arrayToMatch(final Object[] match) {
     try {
-    	return ExpandVertexMatch.newMatch((AlgebraExpression) match[POSITION_V], (ExpandOperator) match[POSITION_E]);
+    	return ExpandVertexMatch.newMatch((ExpandOperator) match[POSITION_E]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -277,7 +205,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   @Override
   protected ExpandVertexMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return ExpandVertexMatch.newMutableMatch((AlgebraExpression) match[POSITION_V], (ExpandOperator) match[POSITION_E]);
+    	return ExpandVertexMatch.newMutableMatch((ExpandOperator) match[POSITION_E]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

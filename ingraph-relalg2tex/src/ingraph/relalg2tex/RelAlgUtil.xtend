@@ -33,7 +33,7 @@ import relalg.AttributeVariable
 import relalg.VertexVariable
 import relalg.ElementVariable
 
-abstract class TexSerializer {
+abstract class RelAlgUtil {
 
 	/**
 	 * whether to generate a full TeX document

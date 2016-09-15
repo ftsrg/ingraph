@@ -9,7 +9,6 @@ import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-import relalg.AlgebraExpression;
 import relalg.ExpandOperator;
 
 /**
@@ -27,26 +26,18 @@ import relalg.ExpandOperator;
  */
 @SuppressWarnings("all")
 public abstract class ExpandVertexMatch extends BasePatternMatch {
-  private AlgebraExpression fV;
-  
   private ExpandOperator fE;
   
-  private static List<String> parameterNames = makeImmutableList("v", "e");
+  private static List<String> parameterNames = makeImmutableList("e");
   
-  private ExpandVertexMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    this.fV = pV;
+  private ExpandVertexMatch(final ExpandOperator pE) {
     this.fE = pE;
   }
   
   @Override
   public Object get(final String parameterName) {
-    if ("v".equals(parameterName)) return this.fV;
     if ("e".equals(parameterName)) return this.fE;
     return null;
-  }
-  
-  public AlgebraExpression getV() {
-    return this.fV;
   }
   
   public ExpandOperator getE() {
@@ -56,20 +47,11 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    if ("v".equals(parameterName) ) {
-    	this.fV = (AlgebraExpression) newValue;
-    	return true;
-    }
     if ("e".equals(parameterName) ) {
     	this.fE = (ExpandOperator) newValue;
     	return true;
     }
     return false;
-  }
-  
-  public void setV(final AlgebraExpression pV) {
-    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fV = pV;
   }
   
   public void setE(final ExpandOperator pE) {
@@ -89,19 +71,17 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fV, fE};
+    return new Object[]{fE};
   }
   
   @Override
   public ExpandVertexMatch toImmutable() {
-    return isMutable() ? newMatch(fV, fE) : this;
+    return isMutable() ? newMatch(fE) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
-    result.append("\"v\"=" + prettyPrintValue(fV) + ", ");
-    
     result.append("\"e\"=" + prettyPrintValue(fE)
     );
     return result.toString();
@@ -111,7 +91,6 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((fV == null) ? 0 : fV.hashCode());
     result = prime * result + ((fE == null) ? 0 : fE.hashCode());
     return result;
   }
@@ -133,8 +112,6 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     ExpandVertexMatch other = (ExpandVertexMatch) obj;
-    if (fV == null) {if (other.fV != null) return false;}
-    else if (!fV.equals(other.fV)) return false;
     if (fE == null) {if (other.fE != null) return false;}
     else if (!fE.equals(other.fE)) return false;
     return true;
@@ -158,38 +135,36 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
    * 
    */
   public static ExpandVertexMatch newEmptyMatch() {
-    return new Mutable(null, null);
+    return new Mutable(null);
   }
   
   /**
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static ExpandVertexMatch newMutableMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    return new Mutable(pV, pE);
+  public static ExpandVertexMatch newMutableMatch(final ExpandOperator pE) {
+    return new Mutable(pE);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pV the fixed value of pattern parameter v, or null if not bound.
    * @param pE the fixed value of pattern parameter e, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static ExpandVertexMatch newMatch(final AlgebraExpression pV, final ExpandOperator pE) {
-    return new Immutable(pV, pE);
+  public static ExpandVertexMatch newMatch(final ExpandOperator pE) {
+    return new Immutable(pE);
   }
   
   private static final class Mutable extends ExpandVertexMatch {
-    Mutable(final AlgebraExpression pV, final ExpandOperator pE) {
-      super(pV, pE);
+    Mutable(final ExpandOperator pE) {
+      super(pE);
     }
     
     @Override
@@ -199,8 +174,8 @@ public abstract class ExpandVertexMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends ExpandVertexMatch {
-    Immutable(final AlgebraExpression pV, final ExpandOperator pE) {
-      super(pV, pE);
+    Immutable(final ExpandOperator pE) {
+      super(pE);
     }
     
     @Override

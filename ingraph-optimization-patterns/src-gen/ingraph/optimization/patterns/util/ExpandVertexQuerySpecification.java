@@ -15,13 +15,11 @@ import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecification;
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
-import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
 import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Equality;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
@@ -72,7 +70,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   
   @Override
   public ExpandVertexMatch newMatch(final Object... parameters) {
-    return ExpandVertexMatch.newMatch((relalg.AlgebraExpression) parameters[0], (relalg.ExpandOperator) parameters[1]);
+    return ExpandVertexMatch.newMatch((relalg.ExpandOperator) parameters[0]);
   }
   
   /**
@@ -104,11 +102,9 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ExpandVertexQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pV = new PParameter("v", "relalg.AlgebraExpression", (IInputKey)null, PParameterDirection.INOUT);
-    
     private final PParameter parameter_pE = new PParameter("e", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pV, parameter_pE);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pE);
     
     @Override
     public String getFullyQualifiedName() {
@@ -117,7 +113,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("v","e");
+      return Arrays.asList("e");
     }
     
     @Override
@@ -132,17 +128,12 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_v = body.getOrCreateVariableByName("v");
       		PVariable var_e = body.getOrCreateVariableByName("e");
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_v, parameter_pV),
       		   new ExportedParameter(body, var_e, parameter_pE)
       		));
-      		// 	ExpandOperator.input(e, v)
+      		// 	ExpandOperator(e)
       		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "AlphaOperator", "input")));
-      		new Equality(body, var__virtual_0_, var_v);
       		bodies.add(body);
       	}
       	// to silence compiler error
