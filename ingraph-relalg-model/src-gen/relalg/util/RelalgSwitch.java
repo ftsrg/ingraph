@@ -18,6 +18,7 @@ import relalg.AttributeVariable;
 import relalg.BetaOperator;
 import relalg.BinaryExpression;
 import relalg.BinaryLogicalExpression;
+import relalg.ComparisonExpression;
 import relalg.Container;
 import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
@@ -322,6 +323,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.ARITHMETIC_COMPARISON_EXPRESSION: {
 				ArithmeticComparisonExpression arithmeticComparisonExpression = (ArithmeticComparisonExpression)theEObject;
 				T result = caseArithmeticComparisonExpression(arithmeticComparisonExpression);
+				if (result == null) result = caseComparisonExpression(arithmeticComparisonExpression);
 				if (result == null) result = caseBinaryExpression(arithmeticComparisonExpression);
 				if (result == null) result = caseExpression(arithmeticComparisonExpression);
 				if (result == null) result = caseReturnableElement(arithmeticComparisonExpression);
@@ -339,6 +341,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.STRING_COMPARISON_EXPRESSION: {
 				StringComparisonExpression stringComparisonExpression = (StringComparisonExpression)theEObject;
 				T result = caseStringComparisonExpression(stringComparisonExpression);
+				if (result == null) result = caseComparisonExpression(stringComparisonExpression);
 				if (result == null) result = caseBinaryExpression(stringComparisonExpression);
 				if (result == null) result = caseExpression(stringComparisonExpression);
 				if (result == null) result = caseReturnableElement(stringComparisonExpression);
@@ -429,6 +432,15 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = caseNamedElement(elementVariable);
 				if (result == null) result = caseReturnableElement(elementVariable);
 				if (result == null) result = caseComparable(elementVariable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.COMPARISON_EXPRESSION: {
+				ComparisonExpression comparisonExpression = (ComparisonExpression)theEObject;
+				T result = caseComparisonExpression(comparisonExpression);
+				if (result == null) result = caseBinaryExpression(comparisonExpression);
+				if (result == null) result = caseExpression(comparisonExpression);
+				if (result == null) result = caseReturnableElement(comparisonExpression);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -928,6 +940,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseElementVariable(ElementVariable object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Comparison Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Comparison Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComparisonExpression(ComparisonExpression object) {
 		return null;
 	}
 

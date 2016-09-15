@@ -265,15 +265,6 @@ public interface RelalgFactory extends EFactory {
 	GetEdgesOperator createGetEdgesOperator();
 
 	/**
-	 * Returns a new object of class '<em>Comparable</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Comparable</em>'.
-	 * @generated
-	 */
-	Comparable createComparable();
-
-	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

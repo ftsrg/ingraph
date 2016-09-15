@@ -20,6 +20,7 @@ import relalg.AttributeVariable;
 import relalg.BetaOperator;
 import relalg.BinaryExpression;
 import relalg.BinaryLogicalExpression;
+import relalg.ComparisonExpression;
 import relalg.Container;
 import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
@@ -260,6 +261,10 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseElementVariable(ElementVariable object) {
 				return createElementVariableAdapter();
+			}
+			@Override
+			public Adapter caseComparisonExpression(ComparisonExpression object) {
+				return createComparisonExpressionAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -740,6 +745,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createElementVariableAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.ComparisonExpression <em>Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.ComparisonExpression
+	 * @generated
+	 */
+	public Adapter createComparisonExpressionAdapter() {
 		return null;
 	}
 

@@ -13,6 +13,8 @@ package relalg;
  * </p>
  * <ul>
  *   <li>{@link relalg.ArithmeticOperationExpression#getOperator <em>Operator</em>}</li>
+ *   <li>{@link relalg.ArithmeticOperationExpression#getRightOperand <em>Right Operand</em>}</li>
+ *   <li>{@link relalg.ArithmeticOperationExpression#getLeftOperand <em>Left Operand</em>}</li>
  * </ul>
  *
  * @see relalg.RelalgPackage#getArithmeticOperationExpression()
@@ -48,5 +50,57 @@ public interface ArithmeticOperationExpression extends BinaryExpression, relalg.
 	 * @generated
 	 */
 	void setOperator(BinaryArithmeticOperator value);
+
+	/**
+	 * Returns the value of the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Right Operand</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Right Operand</em>' containment reference.
+	 * @see #setRightOperand(relalg.Comparable)
+	 * @see relalg.RelalgPackage#getArithmeticOperationExpression_RightOperand()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	relalg.Comparable getRightOperand();
+
+	/**
+	 * Sets the value of the '{@link relalg.ArithmeticOperationExpression#getRightOperand <em>Right Operand</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Right Operand</em>' containment reference.
+	 * @see #getRightOperand()
+	 * @generated
+	 */
+	void setRightOperand(relalg.Comparable value);
+
+	/**
+	 * Returns the value of the '<em><b>Left Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Left Operand</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Left Operand</em>' containment reference.
+	 * @see #setLeftOperand(relalg.Comparable)
+	 * @see relalg.RelalgPackage#getArithmeticOperationExpression_LeftOperand()
+	 * @model containment="true" required="true"
+	 * @generated
+	 */
+	relalg.Comparable getLeftOperand();
+
+	/**
+	 * Sets the value of the '{@link relalg.ArithmeticOperationExpression#getLeftOperand <em>Left Operand</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Left Operand</em>' containment reference.
+	 * @see #getLeftOperand()
+	 * @generated
+	 */
+	void setLeftOperand(relalg.Comparable value);
 
 } // ArithmeticOperationExpression

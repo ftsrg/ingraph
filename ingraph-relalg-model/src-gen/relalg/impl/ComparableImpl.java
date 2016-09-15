@@ -15,7 +15,7 @@ import relalg.RelalgPackage;
  *
  * @generated
  */
-public class ComparableImpl extends MinimalEObjectImpl.Container implements relalg.Comparable {
+public abstract class ComparableImpl extends MinimalEObjectImpl.Container implements relalg.Comparable {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

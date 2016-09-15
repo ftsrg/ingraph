@@ -24,6 +24,7 @@ import relalg.BinaryArithmeticOperator;
 import relalg.BinaryExpression;
 import relalg.BinaryLogicalExpression;
 import relalg.BinaryLogicalOperator;
+import relalg.ComparisonExpression;
 import relalg.Direction;
 import relalg.DoubleLiteral;
 import relalg.DuplicateEliminationOperator;
@@ -294,6 +295,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass elementVariableEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass comparisonExpressionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -884,6 +892,24 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getArithmeticOperationExpression_RightOperand() {
+		return (EReference)arithmeticOperationExpressionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getArithmeticOperationExpression_LeftOperand() {
+		return (EReference)arithmeticOperationExpressionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getBinaryLogicalExpression() {
 		return binaryLogicalExpressionEClass;
 	}
@@ -939,7 +965,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	public EReference getArithmeticComparisonExpression_RightOperand() {
-		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(1);
+		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(-1);
 	}
 
 	/**
@@ -948,7 +974,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	public EReference getArithmeticComparisonExpression_LeftOperand() {
-		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(2);
+		return (EReference)arithmeticComparisonExpressionEClass.getEStructuralFeatures().get(-1);
 	}
 
 	/**
@@ -967,6 +993,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EAttribute getUnaryExpression_Negated() {
 		return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getUnaryExpression_Operand() {
+		return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1021,6 +1056,33 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 */
 	public EReference getElementVariable_Attributes() {
 		return (EReference)elementVariableEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getComparisonExpression() {
+		return comparisonExpressionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getComparisonExpression_LeftOperand() {
+		return (EReference)comparisonExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getComparisonExpression_RightOperand() {
+		return (EReference)comparisonExpressionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1295,6 +1357,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		arithmeticOperationExpressionEClass = createEClass(ARITHMETIC_OPERATION_EXPRESSION);
 		createEAttribute(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__OPERATOR);
+		createEReference(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__RIGHT_OPERAND);
+		createEReference(arithmeticOperationExpressionEClass, ARITHMETIC_OPERATION_EXPRESSION__LEFT_OPERAND);
 
 		binaryLogicalExpressionEClass = createEClass(BINARY_LOGICAL_EXPRESSION);
 		createEAttribute(binaryLogicalExpressionEClass, BINARY_LOGICAL_EXPRESSION__OPERATOR);
@@ -1308,6 +1372,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		unaryExpressionEClass = createEClass(UNARY_EXPRESSION);
 		createEAttribute(unaryExpressionEClass, UNARY_EXPRESSION__NEGATED);
+		createEReference(unaryExpressionEClass, UNARY_EXPRESSION__OPERAND);
 
 		stringComparisonExpressionEClass = createEClass(STRING_COMPARISON_EXPRESSION);
 		createEAttribute(stringComparisonExpressionEClass, STRING_COMPARISON_EXPRESSION__OPERATOR);
@@ -1336,6 +1401,10 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		elementVariableEClass = createEClass(ELEMENT_VARIABLE);
 		createEReference(elementVariableEClass, ELEMENT_VARIABLE__ATTRIBUTES);
+
+		comparisonExpressionEClass = createEClass(COMPARISON_EXPRESSION);
+		createEReference(comparisonExpressionEClass, COMPARISON_EXPRESSION__LEFT_OPERAND);
+		createEReference(comparisonExpressionEClass, COMPARISON_EXPRESSION__RIGHT_OPERAND);
 
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
@@ -1401,9 +1470,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		arithmeticOperationExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
 		arithmeticOperationExpressionEClass.getESuperTypes().add(this.getComparable());
 		binaryLogicalExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
-		arithmeticComparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
+		arithmeticComparisonExpressionEClass.getESuperTypes().add(this.getComparisonExpression());
 		unaryExpressionEClass.getESuperTypes().add(this.getExpression());
-		stringComparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
+		stringComparisonExpressionEClass.getESuperTypes().add(this.getComparisonExpression());
 		literalEClass.getESuperTypes().add(this.getAtom());
 		literalEClass.getESuperTypes().add(this.getComparable());
 		numberLiteralEClass.getESuperTypes().add(this.getLiteral());
@@ -1413,6 +1482,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		getEdgesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
 		atomEClass.getESuperTypes().add(this.getExpression());
 		elementVariableEClass.getESuperTypes().add(this.getVariable());
+		comparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1488,6 +1558,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(arithmeticOperationExpressionEClass, ArithmeticOperationExpression.class, "ArithmeticOperationExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArithmeticOperationExpression_Operator(), this.getBinaryArithmeticOperator(), "operator", null, 0, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticOperationExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArithmeticOperationExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ArithmeticOperationExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(binaryLogicalExpressionEClass, BinaryLogicalExpression.class, "BinaryLogicalExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getBinaryLogicalExpression_Operator(), this.getBinaryLogicalOperator(), "operator", null, 0, 1, BinaryLogicalExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1501,6 +1573,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		initEClass(unaryExpressionEClass, UnaryExpression.class, "UnaryExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnaryExpression_Negated(), ecorePackage.getEBoolean(), "negated", null, 0, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnaryExpression_Operand(), this.getExpression(), null, "operand", null, 1, 1, UnaryExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(stringComparisonExpressionEClass, StringComparisonExpression.class, "StringComparisonExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStringComparisonExpression_Operator(), this.getStringComparisonOperator(), "operator", null, 0, 1, StringComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1523,12 +1596,16 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEReference(getGetEdgesOperator_TargetVertexVariable(), this.getVertexVariable(), null, "targetVertexVariable", null, 1, 1, GetEdgesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGetEdgesOperator_EdgeVariable(), this.getEdgeVariable(), null, "edgeVariable", null, 1, 1, GetEdgesOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(comparableEClass, relalg.Comparable.class, "Comparable", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(comparableEClass, relalg.Comparable.class, "Comparable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(atomEClass, Atom.class, "Atom", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(elementVariableEClass, ElementVariable.class, "ElementVariable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getElementVariable_Attributes(), this.getAttributeVariable(), this.getAttributeVariable_Element(), "attributes", null, 0, -1, ElementVariable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(comparisonExpressionEClass, ComparisonExpression.class, "ComparisonExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getComparisonExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComparisonExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

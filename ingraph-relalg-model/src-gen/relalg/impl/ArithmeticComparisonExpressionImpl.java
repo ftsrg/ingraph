@@ -29,7 +29,7 @@ import relalg.RelalgPackage;
  *
  * @generated
  */
-public class ArithmeticComparisonExpressionImpl extends BinaryExpressionImpl implements ArithmeticComparisonExpression {
+public class ArithmeticComparisonExpressionImpl extends ComparisonExpressionImpl implements ArithmeticComparisonExpression {
 	/**
 	 * The default value of the '{@link #getOperator() <em>Operator</em>}' attribute.
 	 * <!-- begin-user-doc -->

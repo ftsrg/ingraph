@@ -1327,13 +1327,31 @@ public interface RelalgPackage extends EPackage {
 	int ARITHMETIC_OPERATION_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION__RIGHT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Left Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_OPERATION_EXPRESSION__LEFT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Arithmetic Operation Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARITHMETIC_OPERATION_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+	int ARITHMETIC_OPERATION_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Arithmetic Operation Expression</em>' class.
@@ -1409,6 +1427,61 @@ public interface RelalgPackage extends EPackage {
 	int BINARY_LOGICAL_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.ComparisonExpressionImpl <em>Comparison Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.ComparisonExpressionImpl
+	 * @see relalg.impl.RelalgPackageImpl#getComparisonExpression()
+	 * @generated
+	 */
+	int COMPARISON_EXPRESSION = 39;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPARISON_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Left Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPARISON_EXPRESSION__LEFT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPARISON_EXPRESSION__RIGHT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPARISON_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Comparison Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPARISON_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.impl.ArithmeticComparisonExpressionImpl <em>Arithmetic Comparison Expression</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1425,25 +1498,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
-
-	/**
-	 * The feature id for the '<em><b>Operator</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION__RIGHT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+	int ARITHMETIC_COMPARISON_EXPRESSION__TEXT = COMPARISON_EXPRESSION__TEXT;
 
 	/**
 	 * The feature id for the '<em><b>Left Operand</b></em>' containment reference.
@@ -1452,7 +1507,43 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION__LEFT_OPERAND = BINARY_EXPRESSION_FEATURE_COUNT + 2;
+	int ARITHMETIC_COMPARISON_EXPRESSION__LEFT_OPERAND = COMPARISON_EXPRESSION__LEFT_OPERAND;
+
+	/**
+	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__RIGHT_OPERAND = COMPARISON_EXPRESSION__RIGHT_OPERAND;
+
+	/**
+	 * The feature id for the '<em><b>Operator</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__OPERATOR = COMPARISON_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__RIGHT_OPERAND = COMPARISON_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Left Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARITHMETIC_COMPARISON_EXPRESSION__LEFT_OPERAND = COMPARISON_EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Arithmetic Comparison Expression</em>' class.
@@ -1461,7 +1552,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 3;
+	int ARITHMETIC_COMPARISON_EXPRESSION_FEATURE_COUNT = COMPARISON_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Arithmetic Comparison Expression</em>' class.
@@ -1470,7 +1561,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARITHMETIC_COMPARISON_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+	int ARITHMETIC_COMPARISON_EXPRESSION_OPERATION_COUNT = COMPARISON_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.UnaryExpressionImpl <em>Unary Expression</em>}' class.
@@ -1501,13 +1592,22 @@ public interface RelalgPackage extends EPackage {
 	int UNARY_EXPRESSION__NEGATED = EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNARY_EXPRESSION__OPERAND = EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Unary Expression</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNARY_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+	int UNARY_EXPRESSION_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Unary Expression</em>' class.
@@ -1535,7 +1635,25 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_COMPARISON_EXPRESSION__TEXT = BINARY_EXPRESSION__TEXT;
+	int STRING_COMPARISON_EXPRESSION__TEXT = COMPARISON_EXPRESSION__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Left Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION__LEFT_OPERAND = COMPARISON_EXPRESSION__LEFT_OPERAND;
+
+	/**
+	 * The feature id for the '<em><b>Right Operand</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_COMPARISON_EXPRESSION__RIGHT_OPERAND = COMPARISON_EXPRESSION__RIGHT_OPERAND;
 
 	/**
 	 * The feature id for the '<em><b>Operator</b></em>' attribute.
@@ -1544,7 +1662,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_COMPARISON_EXPRESSION__OPERATOR = BINARY_EXPRESSION_FEATURE_COUNT + 0;
+	int STRING_COMPARISON_EXPRESSION__OPERATOR = COMPARISON_EXPRESSION_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>String Comparison Expression</em>' class.
@@ -1553,7 +1671,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_COMPARISON_EXPRESSION_FEATURE_COUNT = BINARY_EXPRESSION_FEATURE_COUNT + 1;
+	int STRING_COMPARISON_EXPRESSION_FEATURE_COUNT = COMPARISON_EXPRESSION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>String Comparison Expression</em>' class.
@@ -1562,7 +1680,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_COMPARISON_EXPRESSION_OPERATION_COUNT = BINARY_EXPRESSION_OPERATION_COUNT + 0;
+	int STRING_COMPARISON_EXPRESSION_OPERATION_COUNT = COMPARISON_EXPRESSION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.AtomImpl <em>Atom</em>}' class.
@@ -1904,7 +2022,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 39;
+	int DIRECTION = 40;
 
 	/**
 	 * The meta object id for the '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}' enum.
@@ -1914,7 +2032,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonOperator()
 	 * @generated
 	 */
-	int ARITHMETIC_COMPARISON_OPERATOR = 40;
+	int ARITHMETIC_COMPARISON_OPERATOR = 41;
 
 	/**
 	 * The meta object id for the '{@link relalg.StringComparisonOperator <em>String Comparison Operator</em>}' enum.
@@ -1924,7 +2042,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getStringComparisonOperator()
 	 * @generated
 	 */
-	int STRING_COMPARISON_OPERATOR = 41;
+	int STRING_COMPARISON_OPERATOR = 42;
 
 	/**
 	 * The meta object id for the '{@link relalg.BinaryLogicalOperator <em>Binary Logical Operator</em>}' enum.
@@ -1934,7 +2052,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalOperator()
 	 * @generated
 	 */
-	int BINARY_LOGICAL_OPERATOR = 42;
+	int BINARY_LOGICAL_OPERATOR = 43;
 
 	/**
 	 * The meta object id for the '{@link relalg.BinaryArithmeticOperator <em>Binary Arithmetic Operator</em>}' enum.
@@ -1944,7 +2062,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getBinaryArithmeticOperator()
 	 * @generated
 	 */
-	int BINARY_ARITHMETIC_OPERATOR = 43;
+	int BINARY_ARITHMETIC_OPERATOR = 44;
 
 	/**
 	 * The meta object id for the '{@link relalg.UnaryArithmeticOperator <em>Unary Arithmetic Operator</em>}' enum.
@@ -1954,7 +2072,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getUnaryArithmeticOperator()
 	 * @generated
 	 */
-	int UNARY_ARITHMETIC_OPERATOR = 44;
+	int UNARY_ARITHMETIC_OPERATOR = 45;
 
 	/**
 	 * The meta object id for the '{@link relalg.Order <em>Order</em>}' enum.
@@ -1964,7 +2082,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getOrder()
 	 * @generated
 	 */
-	int ORDER = 45;
+	int ORDER = 46;
 
 
 	/**
@@ -2470,6 +2588,28 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getArithmeticOperationExpression_Operator();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ArithmeticOperationExpression#getRightOperand <em>Right Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Right Operand</em>'.
+	 * @see relalg.ArithmeticOperationExpression#getRightOperand()
+	 * @see #getArithmeticOperationExpression()
+	 * @generated
+	 */
+	EReference getArithmeticOperationExpression_RightOperand();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ArithmeticOperationExpression#getLeftOperand <em>Left Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Left Operand</em>'.
+	 * @see relalg.ArithmeticOperationExpression#getLeftOperand()
+	 * @see #getArithmeticOperationExpression()
+	 * @generated
+	 */
+	EReference getArithmeticOperationExpression_LeftOperand();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.BinaryLogicalExpression <em>Binary Logical Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2577,6 +2717,17 @@ public interface RelalgPackage extends EPackage {
 	EAttribute getUnaryExpression_Negated();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link relalg.UnaryExpression#getOperand <em>Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Operand</em>'.
+	 * @see relalg.UnaryExpression#getOperand()
+	 * @see #getUnaryExpression()
+	 * @generated
+	 */
+	EReference getUnaryExpression_Operand();
+
+	/**
 	 * Returns the meta object for class '{@link relalg.StringComparisonExpression <em>String Comparison Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2637,6 +2788,38 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getElementVariable_Attributes();
+
+	/**
+	 * Returns the meta object for class '{@link relalg.ComparisonExpression <em>Comparison Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Comparison Expression</em>'.
+	 * @see relalg.ComparisonExpression
+	 * @generated
+	 */
+	EClass getComparisonExpression();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getLeftOperand <em>Left Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Left Operand</em>'.
+	 * @see relalg.ComparisonExpression#getLeftOperand()
+	 * @see #getComparisonExpression()
+	 * @generated
+	 */
+	EReference getComparisonExpression_LeftOperand();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link relalg.ComparisonExpression#getRightOperand <em>Right Operand</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Right Operand</em>'.
+	 * @see relalg.ComparisonExpression#getRightOperand()
+	 * @see #getComparisonExpression()
+	 * @generated
+	 */
+	EReference getComparisonExpression_RightOperand();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.NumberLiteral <em>Number Literal</em>}'.
@@ -3294,6 +3477,22 @@ public interface RelalgPackage extends EPackage {
 		EAttribute ARITHMETIC_OPERATION_EXPRESSION__OPERATOR = eINSTANCE.getArithmeticOperationExpression_Operator();
 
 		/**
+		 * The meta object literal for the '<em><b>Right Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARITHMETIC_OPERATION_EXPRESSION__RIGHT_OPERAND = eINSTANCE.getArithmeticOperationExpression_RightOperand();
+
+		/**
+		 * The meta object literal for the '<em><b>Left Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARITHMETIC_OPERATION_EXPRESSION__LEFT_OPERAND = eINSTANCE.getArithmeticOperationExpression_LeftOperand();
+
+		/**
 		 * The meta object literal for the '{@link relalg.impl.BinaryLogicalExpressionImpl <em>Binary Logical Expression</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3380,6 +3579,14 @@ public interface RelalgPackage extends EPackage {
 		EAttribute UNARY_EXPRESSION__NEGATED = eINSTANCE.getUnaryExpression_Negated();
 
 		/**
+		 * The meta object literal for the '<em><b>Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference UNARY_EXPRESSION__OPERAND = eINSTANCE.getUnaryExpression_Operand();
+
+		/**
 		 * The meta object literal for the '{@link relalg.impl.StringComparisonExpressionImpl <em>String Comparison Expression</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3434,6 +3641,32 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ELEMENT_VARIABLE__ATTRIBUTES = eINSTANCE.getElementVariable_Attributes();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.ComparisonExpressionImpl <em>Comparison Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.ComparisonExpressionImpl
+		 * @see relalg.impl.RelalgPackageImpl#getComparisonExpression()
+		 * @generated
+		 */
+		EClass COMPARISON_EXPRESSION = eINSTANCE.getComparisonExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Left Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPARISON_EXPRESSION__LEFT_OPERAND = eINSTANCE.getComparisonExpression_LeftOperand();
+
+		/**
+		 * The meta object literal for the '<em><b>Right Operand</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPARISON_EXPRESSION__RIGHT_OPERAND = eINSTANCE.getComparisonExpression_RightOperand();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.NumberLiteralImpl <em>Number Literal</em>}' class.

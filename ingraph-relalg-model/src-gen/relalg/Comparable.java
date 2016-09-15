@@ -11,7 +11,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  *
  * @see relalg.RelalgPackage#getComparable()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Comparable extends EObject {

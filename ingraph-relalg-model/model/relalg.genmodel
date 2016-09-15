@@ -109,6 +109,8 @@
     <genClasses image="false" ecoreClass="relalg.ecore#//BinaryExpression"/>
     <genClasses ecoreClass="relalg.ecore#//ArithmeticOperationExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//ArithmeticOperationExpression/operator"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ArithmeticOperationExpression/rightOperand"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ArithmeticOperationExpression/leftOperand"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//BinaryLogicalExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//BinaryLogicalExpression/operator"/>
@@ -117,11 +119,12 @@
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//ArithmeticComparisonExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//ArithmeticComparisonExpression/operator"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ArithmeticComparisonExpression/rightOperand"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ArithmeticComparisonExpression/leftOperand"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/rightOperand"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/leftOperand"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//UnaryExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//UnaryExpression/negated"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//UnaryExpression/operand"/>
     </genClasses>
     <genClasses ecoreClass="relalg.ecore#//StringComparisonExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//StringComparisonExpression/operator"/>
@@ -146,6 +149,10 @@
     <genClasses ecoreClass="relalg.ecore#//Atom"/>
     <genClasses image="false" ecoreClass="relalg.ecore#//ElementVariable">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//ElementVariable/attributes"/>
+    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//ComparisonExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/leftOperand"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/rightOperand"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

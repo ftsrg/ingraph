@@ -117,7 +117,6 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 			case RelalgPackage.DOUBLE_LITERAL: return createDoubleLiteral();
 			case RelalgPackage.INTEGER_LITERAL: return createIntegerLiteral();
 			case RelalgPackage.GET_EDGES_OPERATOR: return createGetEdgesOperator();
-			case RelalgPackage.COMPARABLE: return createComparable();
 			case RelalgPackage.ATOM: return createAtom();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -446,16 +445,6 @@ public class RelalgFactoryImpl extends EFactoryImpl implements RelalgFactory {
 	public GetEdgesOperator createGetEdgesOperator() {
 		GetEdgesOperatorImpl getEdgesOperator = new GetEdgesOperatorImpl();
 		return getEdgesOperator;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public relalg.Comparable createComparable() {
-		ComparableImpl comparable = new ComparableImpl();
-		return comparable;
 	}
 
 	/**

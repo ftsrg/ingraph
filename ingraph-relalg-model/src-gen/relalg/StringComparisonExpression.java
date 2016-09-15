@@ -19,7 +19,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface StringComparisonExpression extends BinaryExpression {
+public interface StringComparisonExpression extends ComparisonExpression {
 	/**
 	 * Returns the value of the '<em><b>Operator</b></em>' attribute.
 	 * The literals are from the enumeration {@link relalg.StringComparisonOperator}.

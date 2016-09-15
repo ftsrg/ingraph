@@ -101,6 +101,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArithmeticOperationExpression" eSuperTypes="#//BinaryExpression #//Comparable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryArithmeticOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
+        eType="#//Comparable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
+        eType="#//Comparable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BinaryLogicalExpression" eSuperTypes="#//BinaryExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryLogicalOperator"/>
@@ -109,17 +113,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
         eType="#//Expression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ArithmeticComparisonExpression" eSuperTypes="#//BinaryExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="ArithmeticComparisonExpression" eSuperTypes="#//ComparisonExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//ArithmeticComparisonOperator"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
-        eType="#//Comparable" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
-        eType="#//Comparable" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnaryExpression" eSuperTypes="#//Expression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="negated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" lowerBound="1"
+        eType="#//Expression" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StringComparisonExpression" eSuperTypes="#//BinaryExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="StringComparisonExpression" eSuperTypes="#//ComparisonExpression">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//StringComparisonOperator"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="BinaryLogicalOperator">
@@ -162,10 +164,17 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="edgeVariable" lowerBound="1"
         eType="#//EdgeVariable"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Comparable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Comparable" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Atom" eSuperTypes="#//Expression"/>
   <eClassifiers xsi:type="ecore:EClass" name="ElementVariable" abstract="true" eSuperTypes="#//Variable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
         eType="#//AttributeVariable" eOpposite="#//AttributeVariable/element"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonExpression" abstract="true"
+      eSuperTypes="#//BinaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
+        eType="#//Comparable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
+        eType="#//Comparable" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>
