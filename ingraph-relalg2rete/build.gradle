@@ -5,8 +5,6 @@ repositories {
 	mavenCentral()
 }
 
-ext.scalaVersion = "2.11.8"
-
 dependencies {
 	compile project(':ingraph-relalg-model')
 	compile "org.scala-lang:scala-library:$scalaVersion"

@@ -15,8 +15,6 @@ repositories {
 	maven { url "https://jitpack.io" }
 }
 
-ext.scalaVersion = "2.11.8"
-
 dependencies {
 	compile "org.scala-lang:scala-library:$scalaVersion"
 	compile "org.apache.tinkerpop:neo4j-gremlin:3.2.1"

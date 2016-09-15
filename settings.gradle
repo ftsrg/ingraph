@@ -1,6 +1,8 @@
 rootProject.name = 'ingraph'
 include ':ingraph-antlr-parser'
 include ':ingraph-cypher2relalg'
+include ':ingraph-optimization-patterns'
+include ':ingraph-optimization-transformations'
 include ':ingraph-relalg-model'
 include ':ingraph-relalg2rete'
 include ':ingraph-relalg2tex'
