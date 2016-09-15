@@ -3,29 +3,27 @@
  */
 package ingraph.optimization.patterns.util;
 
-import ingraph.optimization.patterns.ExpandVertexMatch;
+import ingraph.optimization.patterns.ExpandOperatorMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import relalg.ExpandOperator;
-import relalg.GetVerticesOperator;
 
 /**
- * A match processor tailored for the ingraph.optimization.patterns.expandVertex pattern.
+ * A match processor tailored for the ingraph.optimization.patterns.expandOperator pattern.
  * 
  * Clients should derive an (anonymous) class that implements the abstract process().
  * 
  */
 @SuppressWarnings("all")
-public abstract class ExpandVertexProcessor implements IMatchProcessor<ExpandVertexMatch> {
+public abstract class ExpandOperatorProcessor implements IMatchProcessor<ExpandOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pV the value of pattern parameter v in the currently processed match
    * @param pE the value of pattern parameter e in the currently processed match
    * 
    */
-  public abstract void process(final GetVerticesOperator pV, final ExpandOperator pE);
+  public abstract void process(final ExpandOperator pE);
   
   @Override
-  public void process(final ExpandVertexMatch match) {
-    process(match.getV(), match.getE());
+  public void process(final ExpandOperatorMatch match) {
+    process(match.getE());
   }
 }

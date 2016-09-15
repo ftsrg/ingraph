@@ -3,7 +3,9 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.ExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
@@ -18,6 +20,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>expandVertex</li>
+ * <li>expandOperator</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -43,6 +46,7 @@ public final class Optimization extends BaseGeneratedPatternGroup {
   
   private Optimization() throws ViatraQueryException {
     querySpecifications.add(ExpandVertexQuerySpecification.instance());
+    querySpecifications.add(ExpandOperatorQuerySpecification.instance());
   }
   
   public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
@@ -51,5 +55,13 @@ public final class Optimization extends BaseGeneratedPatternGroup {
   
   public ExpandVertexMatcher getExpandVertex(final ViatraQueryEngine engine) throws ViatraQueryException {
     return ExpandVertexMatcher.on(engine);
+  }
+  
+  public ExpandOperatorQuerySpecification getExpandOperator() throws ViatraQueryException {
+    return ExpandOperatorQuerySpecification.instance();
+  }
+  
+  public ExpandOperatorMatcher getExpandOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandOperatorMatcher.on(engine);
   }
 }
