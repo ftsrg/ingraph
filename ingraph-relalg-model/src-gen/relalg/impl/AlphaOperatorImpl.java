@@ -10,8 +10,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import relalg.AlgebraExpression;
 import relalg.AlphaOperator;
+import relalg.Operator;
 import relalg.RelalgPackage;
 
 /**
@@ -27,7 +27,7 @@ import relalg.RelalgPackage;
  *
  * @generated
  */
-public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements AlphaOperator {
+public abstract class AlphaOperatorImpl extends OperatorImpl implements AlphaOperator {
 	/**
 	 * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -36,7 +36,7 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression input;
+	protected Operator input;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -62,7 +62,7 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getInput() {
+	public Operator getInput() {
 		return input;
 	}
 
@@ -71,8 +71,8 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetInput(AlgebraExpression newInput, NotificationChain msgs) {
-		AlgebraExpression oldInput = input;
+	public NotificationChain basicSetInput(Operator newInput, NotificationChain msgs) {
+		Operator oldInput = input;
 		input = newInput;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.ALPHA_OPERATOR__INPUT, oldInput, newInput);
@@ -86,7 +86,7 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setInput(AlgebraExpression newInput) {
+	public void setInput(Operator newInput) {
 		if (newInput != input) {
 			NotificationChain msgs = null;
 			if (input != null)
@@ -137,7 +137,7 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case RelalgPackage.ALPHA_OPERATOR__INPUT:
-				setInput((AlgebraExpression)newValue);
+				setInput((Operator)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -152,7 +152,7 @@ public abstract class AlphaOperatorImpl extends AlgebraExpressionImpl implements
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case RelalgPackage.ALPHA_OPERATOR__INPUT:
-				setInput((AlgebraExpression)null);
+				setInput((Operator)null);
 				return;
 		}
 		super.eUnset(featureID);

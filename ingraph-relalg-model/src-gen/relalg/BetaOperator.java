@@ -20,7 +20,7 @@ package relalg;
  * @model abstract="true"
  * @generated
  */
-public interface BetaOperator extends AlgebraExpression {
+public interface BetaOperator extends Operator {
 	/**
 	 * Returns the value of the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -30,12 +30,12 @@ public interface BetaOperator extends AlgebraExpression {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Left Input</em>' containment reference.
-	 * @see #setLeftInput(AlgebraExpression)
+	 * @see #setLeftInput(Operator)
 	 * @see relalg.RelalgPackage#getBetaOperator_LeftInput()
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	AlgebraExpression getLeftInput();
+	Operator getLeftInput();
 
 	/**
 	 * Sets the value of the '{@link relalg.BetaOperator#getLeftInput <em>Left Input</em>}' containment reference.
@@ -45,7 +45,7 @@ public interface BetaOperator extends AlgebraExpression {
 	 * @see #getLeftInput()
 	 * @generated
 	 */
-	void setLeftInput(AlgebraExpression value);
+	void setLeftInput(Operator value);
 
 	/**
 	 * Returns the value of the '<em><b>Right Input</b></em>' containment reference.
@@ -56,12 +56,12 @@ public interface BetaOperator extends AlgebraExpression {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Right Input</em>' containment reference.
-	 * @see #setRightInput(AlgebraExpression)
+	 * @see #setRightInput(Operator)
 	 * @see relalg.RelalgPackage#getBetaOperator_RightInput()
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	AlgebraExpression getRightInput();
+	Operator getRightInput();
 
 	/**
 	 * Sets the value of the '{@link relalg.BetaOperator#getRightInput <em>Right Input</em>}' containment reference.
@@ -71,6 +71,6 @@ public interface BetaOperator extends AlgebraExpression {
 	 * @see #getRightInput()
 	 * @generated
 	 */
-	void setRightInput(AlgebraExpression value);
+	void setRightInput(Operator value);
 
 } // BetaOperator

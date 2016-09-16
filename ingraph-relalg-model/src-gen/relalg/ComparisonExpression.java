@@ -21,7 +21,6 @@ package relalg;
  * @generated
  */
 public interface ComparisonExpression extends BinaryExpression {
-
 	/**
 	 * Returns the value of the '<em><b>Left Operand</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import relalg.AlgebraExpression;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -41,6 +40,7 @@ import relalg.Label;
 import relalg.Literal;
 import relalg.NamedElement;
 import relalg.NumberLiteral;
+import relalg.Operator;
 import relalg.Order;
 import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
@@ -70,7 +70,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass algebraExpressionEClass = null;
+	private EClass operatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -460,8 +460,8 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAlgebraExpression() {
-		return algebraExpressionEClass;
+	public EClass getOperator() {
+		return operatorEClass;
 	}
 
 	/**
@@ -1266,7 +1266,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		algebraExpressionEClass = createEClass(ALGEBRA_EXPRESSION);
+		operatorEClass = createEClass(OPERATOR);
 
 		projectionOperatorEClass = createEClass(PROJECTION_OPERATOR);
 		createEReference(projectionOperatorEClass, PROJECTION_OPERATOR__VARIABLES);
@@ -1426,13 +1426,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		// Add supertypes to classes
 		projectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		joinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
-		alphaOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
-		betaOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
+		alphaOperatorEClass.getESuperTypes().add(this.getOperator());
+		betaOperatorEClass.getESuperTypes().add(this.getOperator());
 		antiJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
 		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		selectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		expandOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		getVerticesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
+		getVerticesOperatorEClass.getESuperTypes().add(this.getOperator());
 		duplicateEliminationOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		variableEClass.getESuperTypes().add(this.getNamedElement());
 		variableEClass.getESuperTypes().add(this.getReturnableElement());
@@ -1459,13 +1459,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		stringLiteralEClass.getESuperTypes().add(this.getLiteral());
 		doubleLiteralEClass.getESuperTypes().add(this.getNumberLiteral());
 		integerLiteralEClass.getESuperTypes().add(this.getNumberLiteral());
-		getEdgesOperatorEClass.getESuperTypes().add(this.getAlgebraExpression());
+		getEdgesOperatorEClass.getESuperTypes().add(this.getOperator());
 		atomEClass.getESuperTypes().add(this.getExpression());
 		elementVariableEClass.getESuperTypes().add(this.getVariable());
 		comparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(algebraExpressionEClass, AlgebraExpression.class, "AlgebraExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(operatorEClass, Operator.class, "Operator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(projectionOperatorEClass, ProjectionOperator.class, "ProjectionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProjectionOperator_Variables(), this.getVariable(), null, "variables", null, 0, -1, ProjectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1473,11 +1473,11 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(joinOperatorEClass, JoinOperator.class, "JoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(alphaOperatorEClass, AlphaOperator.class, "AlphaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAlphaOperator_Input(), this.getAlgebraExpression(), null, "input", null, 1, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAlphaOperator_Input(), this.getOperator(), null, "input", null, 1, 1, AlphaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(betaOperatorEClass, BetaOperator.class, "BetaOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBetaOperator_LeftInput(), this.getAlgebraExpression(), null, "leftInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBetaOperator_RightInput(), this.getAlgebraExpression(), null, "rightInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_LeftInput(), this.getOperator(), null, "leftInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBetaOperator_RightInput(), this.getOperator(), null, "rightInput", null, 1, 1, BetaOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(antiJoinOperatorEClass, AntiJoinOperator.class, "AntiJoinOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1526,7 +1526,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(unionOperatorEClass, UnionOperator.class, "UnionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(containerEClass, relalg.Container.class, "Container", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getContainer_RootExpression(), this.getAlgebraExpression(), null, "rootExpression", null, 0, 1, relalg.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContainer_RootExpression(), this.getOperator(), null, "rootExpression", null, 0, 1, relalg.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContainer_Elements(), this.getNamedElement(), this.getNamedElement_Container(), "elements", null, 0, -1, relalg.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(expressionEClass, Expression.class, "Expression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

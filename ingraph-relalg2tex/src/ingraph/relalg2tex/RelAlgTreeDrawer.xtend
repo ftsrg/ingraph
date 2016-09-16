@@ -1,11 +1,11 @@
 package ingraph.relalg2tex
 
-import relalg.AlgebraExpression
+import relalg.AllDifferentOperator
 import relalg.AlphaOperator
 import relalg.BetaOperator
-import relalg.GetVerticesOperator
 import relalg.GetEdgesOperator
-import relalg.AllDifferentOperator
+import relalg.GetVerticesOperator
+import relalg.Operator
 
 class RelAlgTreeDrawer extends RelAlgUtil {
 
@@ -13,7 +13,7 @@ class RelAlgTreeDrawer extends RelAlgUtil {
 		super(full)
 	}
 
-	override serializeBody(AlgebraExpression expression) {
+	override serializeBody(Operator expression) {
 		'''
 			\begin{preview}
 			\begin{tikzpicture}
@@ -38,7 +38,7 @@ class RelAlgTreeDrawer extends RelAlgUtil {
 		«ENDIF»'''
 	}
 	 
-	def dispatch CharSequence toNode(AlgebraExpression expression) {
+	def dispatch CharSequence toNode(Operator expression) {
 		'''
 		[. {$«expression?.operatorSymbol»$}«expression?.children»
 		]'''

@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import relalg.AlgebraExpression;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -35,6 +34,7 @@ import relalg.Label;
 import relalg.Literal;
 import relalg.NamedElement;
 import relalg.NumberLiteral;
+import relalg.Operator;
 import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgPackage;
@@ -105,9 +105,9 @@ public class RelalgSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case RelalgPackage.ALGEBRA_EXPRESSION: {
-				AlgebraExpression algebraExpression = (AlgebraExpression)theEObject;
-				T result = caseAlgebraExpression(algebraExpression);
+			case RelalgPackage.OPERATOR: {
+				Operator operator = (Operator)theEObject;
+				T result = caseOperator(operator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -115,7 +115,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				ProjectionOperator projectionOperator = (ProjectionOperator)theEObject;
 				T result = caseProjectionOperator(projectionOperator);
 				if (result == null) result = caseAlphaOperator(projectionOperator);
-				if (result == null) result = caseAlgebraExpression(projectionOperator);
+				if (result == null) result = caseOperator(projectionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -123,21 +123,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 				JoinOperator joinOperator = (JoinOperator)theEObject;
 				T result = caseJoinOperator(joinOperator);
 				if (result == null) result = caseBetaOperator(joinOperator);
-				if (result == null) result = caseAlgebraExpression(joinOperator);
+				if (result == null) result = caseOperator(joinOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case RelalgPackage.ALPHA_OPERATOR: {
 				AlphaOperator alphaOperator = (AlphaOperator)theEObject;
 				T result = caseAlphaOperator(alphaOperator);
-				if (result == null) result = caseAlgebraExpression(alphaOperator);
+				if (result == null) result = caseOperator(alphaOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case RelalgPackage.BETA_OPERATOR: {
 				BetaOperator betaOperator = (BetaOperator)theEObject;
 				T result = caseBetaOperator(betaOperator);
-				if (result == null) result = caseAlgebraExpression(betaOperator);
+				if (result == null) result = caseOperator(betaOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -145,7 +145,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				AntiJoinOperator antiJoinOperator = (AntiJoinOperator)theEObject;
 				T result = caseAntiJoinOperator(antiJoinOperator);
 				if (result == null) result = caseBetaOperator(antiJoinOperator);
-				if (result == null) result = caseAlgebraExpression(antiJoinOperator);
+				if (result == null) result = caseOperator(antiJoinOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -153,7 +153,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				ProductionOperator productionOperator = (ProductionOperator)theEObject;
 				T result = caseProductionOperator(productionOperator);
 				if (result == null) result = caseAlphaOperator(productionOperator);
-				if (result == null) result = caseAlgebraExpression(productionOperator);
+				if (result == null) result = caseOperator(productionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -161,7 +161,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				SelectionOperator selectionOperator = (SelectionOperator)theEObject;
 				T result = caseSelectionOperator(selectionOperator);
 				if (result == null) result = caseAlphaOperator(selectionOperator);
-				if (result == null) result = caseAlgebraExpression(selectionOperator);
+				if (result == null) result = caseOperator(selectionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -169,14 +169,14 @@ public class RelalgSwitch<T> extends Switch<T> {
 				ExpandOperator expandOperator = (ExpandOperator)theEObject;
 				T result = caseExpandOperator(expandOperator);
 				if (result == null) result = caseAlphaOperator(expandOperator);
-				if (result == null) result = caseAlgebraExpression(expandOperator);
+				if (result == null) result = caseOperator(expandOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case RelalgPackage.GET_VERTICES_OPERATOR: {
 				GetVerticesOperator getVerticesOperator = (GetVerticesOperator)theEObject;
 				T result = caseGetVerticesOperator(getVerticesOperator);
-				if (result == null) result = caseAlgebraExpression(getVerticesOperator);
+				if (result == null) result = caseOperator(getVerticesOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,7 +184,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				DuplicateEliminationOperator duplicateEliminationOperator = (DuplicateEliminationOperator)theEObject;
 				T result = caseDuplicateEliminationOperator(duplicateEliminationOperator);
 				if (result == null) result = caseAlphaOperator(duplicateEliminationOperator);
-				if (result == null) result = caseAlgebraExpression(duplicateEliminationOperator);
+				if (result == null) result = caseOperator(duplicateEliminationOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -246,7 +246,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				AllDifferentOperator allDifferentOperator = (AllDifferentOperator)theEObject;
 				T result = caseAllDifferentOperator(allDifferentOperator);
 				if (result == null) result = caseAlphaOperator(allDifferentOperator);
-				if (result == null) result = caseAlgebraExpression(allDifferentOperator);
+				if (result == null) result = caseOperator(allDifferentOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -270,7 +270,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 				UnionOperator unionOperator = (UnionOperator)theEObject;
 				T result = caseUnionOperator(unionOperator);
 				if (result == null) result = caseBetaOperator(unionOperator);
-				if (result == null) result = caseAlgebraExpression(unionOperator);
+				if (result == null) result = caseOperator(unionOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -407,7 +407,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.GET_EDGES_OPERATOR: {
 				GetEdgesOperator getEdgesOperator = (GetEdgesOperator)theEObject;
 				T result = caseGetEdgesOperator(getEdgesOperator);
-				if (result == null) result = caseAlgebraExpression(getEdgesOperator);
+				if (result == null) result = caseOperator(getEdgesOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -449,17 +449,17 @@ public class RelalgSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Algebra Expression</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Operator</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Algebra Expression</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Operator</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAlgebraExpression(AlgebraExpression object) {
+	public T caseOperator(Operator object) {
 		return null;
 	}
 

@@ -9,7 +9,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import relalg.AlgebraExpression;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -37,6 +36,7 @@ import relalg.Label;
 import relalg.Literal;
 import relalg.NamedElement;
 import relalg.NumberLiteral;
+import relalg.Operator;
 import relalg.ProductionOperator;
 import relalg.ProjectionOperator;
 import relalg.RelalgPackage;
@@ -107,8 +107,8 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	protected RelalgSwitch<Adapter> modelSwitch =
 		new RelalgSwitch<Adapter>() {
 			@Override
-			public Adapter caseAlgebraExpression(AlgebraExpression object) {
-				return createAlgebraExpressionAdapter();
+			public Adapter caseOperator(Operator object) {
+				return createOperatorAdapter();
 			}
 			@Override
 			public Adapter caseProjectionOperator(ProjectionOperator object) {
@@ -287,16 +287,16 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
+	 * Creates a new adapter for an object of class '{@link relalg.Operator <em>Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see relalg.AlgebraExpression
+	 * @see relalg.Operator
 	 * @generated
 	 */
-	public Adapter createAlgebraExpressionAdapter() {
+	public Adapter createOperatorAdapter() {
 		return null;
 	}
 

@@ -6,23 +6,23 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import relalg.AlgebraExpression;
+import relalg.Operator;
 import relalg.RelalgPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Algebra Expression</b></em>'.
+ * An implementation of the model object '<em><b>Operator</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public abstract class AlgebraExpressionImpl extends MinimalEObjectImpl.Container implements AlgebraExpression {
+public abstract class OperatorImpl extends MinimalEObjectImpl.Container implements Operator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected AlgebraExpressionImpl() {
+	protected OperatorImpl() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public abstract class AlgebraExpressionImpl extends MinimalEObjectImpl.Container
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return RelalgPackage.Literals.ALGEBRA_EXPRESSION;
+		return RelalgPackage.Literals.OPERATOR;
 	}
 
-} //AlgebraExpressionImpl
+} //OperatorImpl

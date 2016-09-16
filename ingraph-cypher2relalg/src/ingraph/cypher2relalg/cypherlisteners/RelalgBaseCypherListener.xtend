@@ -2,13 +2,13 @@ package ingraph.cypher2relalg.cypherlisteners
 
 import java.util.Iterator
 import java.util.List
-import relalg.AlgebraExpression
 import relalg.BetaOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
+import relalg.Operator
 import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
@@ -26,9 +26,9 @@ class RelalgBaseCypherListener extends RelalgBaseUnsupportedCypherListener {
 		edgeVariable.edgeLabel = label
 	}
 	
-	def AlgebraExpression buildLeftDeepTree(Class<? extends BetaOperator> betaOperatorType,
-		Iterator<AlgebraExpression> i) {
-		var AlgebraExpression retVal = null
+	def Operator buildLeftDeepTree(Class<? extends BetaOperator> betaOperatorType,
+		Iterator<Operator> i) {
+		var Operator retVal = null
 
 		// build a left deep tree of Joins from the match clauses
 		if (i?.hasNext) {
@@ -53,7 +53,7 @@ class RelalgBaseCypherListener extends RelalgBaseUnsupportedCypherListener {
 	 */
 	def chainExpandOperators(GetVerticesOperator gvo, List<ExpandOperator> expandList) {
 		var lastVertexVariable = gvo.vertexVariable
-		var AlgebraExpression lastAlgebraExpression = gvo
+		var Operator lastAlgebraExpression = gvo
 
 		for (ExpandOperator op : expandList) {
 			op.sourceVertexVariable = lastVertexVariable

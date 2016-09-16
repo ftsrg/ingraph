@@ -29,7 +29,7 @@ import relalg.VertexVariable;
  *
  * @generated
  */
-public class GetEdgesOperatorImpl extends AlgebraExpressionImpl implements GetEdgesOperator {
+public class GetEdgesOperatorImpl extends OperatorImpl implements GetEdgesOperator {
 	/**
 	 * The cached value of the '{@link #getSourceVertexVariable() <em>Source Vertex Variable</em>}' reference.
 	 * <!-- begin-user-doc -->

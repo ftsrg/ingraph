@@ -26,7 +26,7 @@ import relalg.VertexVariable;
  *
  * @generated
  */
-public class GetVerticesOperatorImpl extends AlgebraExpressionImpl implements GetVerticesOperator {
+public class GetVerticesOperatorImpl extends OperatorImpl implements GetVerticesOperator {
 	/**
 	 * The cached value of the '{@link #getVertexVariable() <em>Vertex Variable</em>}' reference.
 	 * <!-- begin-user-doc -->

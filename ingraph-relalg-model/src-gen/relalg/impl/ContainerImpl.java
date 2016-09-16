@@ -18,8 +18,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import relalg.AlgebraExpression;
 import relalg.NamedElement;
+import relalg.Operator;
 import relalg.RelalgPackage;
 
 /**
@@ -45,7 +45,7 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	 * @generated
 	 * @ordered
 	 */
-	protected AlgebraExpression rootExpression;
+	protected Operator rootExpression;
 
 	/**
 	 * The cached value of the '{@link #getElements() <em>Elements</em>}' containment reference list.
@@ -81,7 +81,7 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AlgebraExpression getRootExpression() {
+	public Operator getRootExpression() {
 		return rootExpression;
 	}
 
@@ -90,8 +90,8 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetRootExpression(AlgebraExpression newRootExpression, NotificationChain msgs) {
-		AlgebraExpression oldRootExpression = rootExpression;
+	public NotificationChain basicSetRootExpression(Operator newRootExpression, NotificationChain msgs) {
+		Operator oldRootExpression = rootExpression;
 		rootExpression = newRootExpression;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, RelalgPackage.CONTAINER__ROOT_EXPRESSION, oldRootExpression, newRootExpression);
@@ -105,7 +105,7 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setRootExpression(AlgebraExpression newRootExpression) {
+	public void setRootExpression(Operator newRootExpression) {
 		if (newRootExpression != rootExpression) {
 			NotificationChain msgs = null;
 			if (rootExpression != null)
@@ -188,7 +188,7 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case RelalgPackage.CONTAINER__ROOT_EXPRESSION:
-				setRootExpression((AlgebraExpression)newValue);
+				setRootExpression((Operator)newValue);
 				return;
 			case RelalgPackage.CONTAINER__ELEMENTS:
 				getElements().clear();
@@ -207,7 +207,7 @@ public class ContainerImpl extends MinimalEObjectImpl.Container implements relal
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case RelalgPackage.CONTAINER__ROOT_EXPRESSION:
-				setRootExpression((AlgebraExpression)null);
+				setRootExpression((Operator)null);
 				return;
 			case RelalgPackage.CONTAINER__ELEMENTS:
 				getElements().clear();

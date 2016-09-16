@@ -4,11 +4,11 @@ import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.EList
-import relalg.AlgebraExpression
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticComparisonOperator
+import relalg.AttributeVariable
 import relalg.BetaOperator
 import relalg.BinaryArithmeticOperator
 import relalg.BinaryLogicalOperator
@@ -16,22 +16,21 @@ import relalg.Container
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
+import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.IntegerLiteral
 import relalg.JoinOperator
+import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.SelectionOperator
+import relalg.StringLiteral
 import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
-import relalg.StringLiteral
-import relalg.AttributeVariable
-import relalg.VertexVariable
-import relalg.ElementVariable
 
 abstract class RelAlgUtil {
 
@@ -58,7 +57,7 @@ abstract class RelAlgUtil {
 		convertAlgebraExpression(op.input)
 	}
 
-	def dispatch CharSequence convertAlgebraExpression(AlgebraExpression expression) {
+	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
 			«IF full»
 				\documentclass[varwidth,convert={density=120}]{standalone}
@@ -75,7 +74,7 @@ abstract class RelAlgUtil {
 		'''
 	}
 
-	def abstract CharSequence serializeBody(AlgebraExpression expression)
+	def abstract CharSequence serializeBody(Operator expression)
 
 	/**
 	 * operatorSymbol

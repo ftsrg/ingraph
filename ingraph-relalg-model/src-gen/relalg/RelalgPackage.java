@@ -58,32 +58,32 @@ public interface RelalgPackage extends EPackage {
 	RelalgPackage eINSTANCE = relalg.impl.RelalgPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link relalg.impl.AlgebraExpressionImpl <em>Algebra Expression</em>}' class.
+	 * The meta object id for the '{@link relalg.impl.OperatorImpl <em>Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see relalg.impl.AlgebraExpressionImpl
-	 * @see relalg.impl.RelalgPackageImpl#getAlgebraExpression()
+	 * @see relalg.impl.OperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getOperator()
 	 * @generated
 	 */
-	int ALGEBRA_EXPRESSION = 0;
+	int OPERATOR = 0;
 
 	/**
-	 * The number of structural features of the '<em>Algebra Expression</em>' class.
+	 * The number of structural features of the '<em>Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALGEBRA_EXPRESSION_FEATURE_COUNT = 0;
+	int OPERATOR_FEATURE_COUNT = 0;
 
 	/**
-	 * The number of operations of the '<em>Algebra Expression</em>' class.
+	 * The number of operations of the '<em>Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ALGEBRA_EXPRESSION_OPERATION_COUNT = 0;
+	int OPERATOR_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.AlphaOperatorImpl <em>Alpha Operator</em>}' class.
@@ -102,7 +102,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATOR__INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int ALPHA_OPERATOR__INPUT = OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Alpha Operator</em>' class.
@@ -111,7 +111,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int ALPHA_OPERATOR_FEATURE_COUNT = OPERATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Alpha Operator</em>' class.
@@ -120,7 +120,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALPHA_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int ALPHA_OPERATOR_OPERATION_COUNT = OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.
@@ -185,7 +185,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR__LEFT_INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int BETA_OPERATOR__LEFT_INPUT = OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
@@ -194,7 +194,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR__RIGHT_INPUT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int BETA_OPERATOR__RIGHT_INPUT = OPERATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Beta Operator</em>' class.
@@ -203,7 +203,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
+	int BETA_OPERATOR_FEATURE_COUNT = OPERATOR_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Beta Operator</em>' class.
@@ -212,7 +212,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BETA_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int BETA_OPERATOR_OPERATION_COUNT = OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.JoinOperatorImpl <em>Join Operator</em>}' class.
@@ -488,7 +488,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_VERTICES_OPERATOR__VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int GET_VERTICES_OPERATOR__VERTEX_VARIABLE = OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Get Vertices Operator</em>' class.
@@ -497,7 +497,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_VERTICES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int GET_VERTICES_OPERATOR_FEATURE_COUNT = OPERATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Get Vertices Operator</em>' class.
@@ -506,7 +506,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_VERTICES_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int GET_VERTICES_OPERATOR_OPERATION_COUNT = OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.DuplicateEliminationOperatorImpl <em>Duplicate Elimination Operator</em>}' class.
@@ -1930,7 +1930,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_EDGES_OPERATOR__SOURCE_VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 0;
+	int GET_EDGES_OPERATOR__SOURCE_VERTEX_VARIABLE = OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Target Vertex Variable</b></em>' reference.
@@ -1939,7 +1939,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_EDGES_OPERATOR__TARGET_VERTEX_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 1;
+	int GET_EDGES_OPERATOR__TARGET_VERTEX_VARIABLE = OPERATOR_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Edge Variable</b></em>' reference.
@@ -1948,7 +1948,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_EDGES_OPERATOR__EDGE_VARIABLE = ALGEBRA_EXPRESSION_FEATURE_COUNT + 2;
+	int GET_EDGES_OPERATOR__EDGE_VARIABLE = OPERATOR_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Get Edges Operator</em>' class.
@@ -1957,7 +1957,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_EDGES_OPERATOR_FEATURE_COUNT = ALGEBRA_EXPRESSION_FEATURE_COUNT + 3;
+	int GET_EDGES_OPERATOR_FEATURE_COUNT = OPERATOR_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Get Edges Operator</em>' class.
@@ -1966,7 +1966,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GET_EDGES_OPERATOR_OPERATION_COUNT = ALGEBRA_EXPRESSION_OPERATION_COUNT + 0;
+	int GET_EDGES_OPERATOR_OPERATION_COUNT = OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.ComparableImpl <em>Comparable</em>}' class.
@@ -2068,14 +2068,14 @@ public interface RelalgPackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link relalg.AlgebraExpression <em>Algebra Expression</em>}'.
+	 * Returns the meta object for class '{@link relalg.Operator <em>Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Algebra Expression</em>'.
-	 * @see relalg.AlgebraExpression
+	 * @return the meta object for class '<em>Operator</em>'.
+	 * @see relalg.Operator
 	 * @generated
 	 */
-	EClass getAlgebraExpression();
+	EClass getOperator();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.ProjectionOperator <em>Projection Operator</em>}'.
@@ -3001,14 +3001,14 @@ public interface RelalgPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link relalg.impl.AlgebraExpressionImpl <em>Algebra Expression</em>}' class.
+		 * The meta object literal for the '{@link relalg.impl.OperatorImpl <em>Operator</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see relalg.impl.AlgebraExpressionImpl
-		 * @see relalg.impl.RelalgPackageImpl#getAlgebraExpression()
+		 * @see relalg.impl.OperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getOperator()
 		 * @generated
 		 */
-		EClass ALGEBRA_EXPRESSION = eINSTANCE.getAlgebraExpression();
+		EClass OPERATOR = eINSTANCE.getOperator();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.

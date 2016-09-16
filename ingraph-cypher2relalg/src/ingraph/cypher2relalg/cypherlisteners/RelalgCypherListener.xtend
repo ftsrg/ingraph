@@ -36,7 +36,7 @@ import java.util.ArrayList
 import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
-import relalg.AlgebraExpression
+import relalg.Operator
 import relalg.BetaOperator
 import relalg.Container
 import relalg.Direction
@@ -64,10 +64,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	 * 
 	 * FIXME: union should be made upon multiple elements.
 	 */
-	var List<AlgebraExpression> query_SingleQueryList
+	var List<Operator> query_SingleQueryList
 
 	override enterQuery(QueryContext ctx) {
-		query_SingleQueryList = new ArrayList<AlgebraExpression>
+		query_SingleQueryList = new ArrayList<Operator>
 	}
 
 	override exitQuery(QueryContext ctx) {
@@ -151,10 +151,10 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	 * 
 	 * Should be joined together upon exitSingleQuery.
 	 */
-	var List<AlgebraExpression> singleQuery_MatchList
+	var List<Operator> singleQuery_MatchList
 
 	override enterSingleQuery(SingleQueryContext ctx) {
-		singleQuery_MatchList = new ArrayList<AlgebraExpression>
+		singleQuery_MatchList = new ArrayList<Operator>
 
 		// allow for a new return_VariableList for this singleQuery
 		// for duplicate return clause in a single singleQuery, Exception will be raised in enterReturn
@@ -166,14 +166,14 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	override exitSingleQuery(SingleQueryContext ctx) {
 		val content = buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
 		// add trimmer node if return was specified
-		var AlgebraExpression trimmer = null
+		var Operator trimmer = null
 		if (return_VariableList != null) {
 			trimmer = createProjectionOperator => [input = content; variables.addAll(return_VariableList)]
 		} else {
 			trimmer = content
 		}
 		// add duplicate-elimination operator if return DISTINCT was specified
-		var AlgebraExpression distinct = null
+		var Operator distinct = null
 		if (return_IsDistinct) {
 			val myDistinct = createDuplicateEliminationOperator
 			myDistinct.input = trimmer
@@ -184,53 +184,53 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 		query_SingleQueryList.add(distinct)
 	}
 
-	var AlgebraExpression match_AlgebraExpression
-	var AlgebraExpression match_WhereJoinExpression
+	var Operator match_Operator
+	var Operator match_WhereJoinExpression
 	var boolean match_WhereJoinModeIsAntijoin = false
 
 	// TODO: where
 	override enterMatch(MatchContext ctx) {
-		match_AlgebraExpression = null
+		match_Operator = null
 		match_WhereJoinExpression = null
 		match_WhereJoinModeIsAntijoin = false
 	}
 
 	override exitMatch(MatchContext ctx) {
-		if (match_AlgebraExpression != null) {
-			var myAlgebraExpression = match_AlgebraExpression
+		if (match_Operator != null) {
+			var myOperator = match_Operator
 			if (match_WhereJoinExpression !=
 				null) {
 				var BetaOperator joinNode = if(match_WhereJoinModeIsAntijoin) createAntiJoinOperator else createJoinOperator
-				joinNode.leftInput = myAlgebraExpression
+				joinNode.leftInput = myOperator
 				joinNode.rightInput = match_WhereJoinExpression
-				myAlgebraExpression = joinNode
+				myOperator = joinNode
 			}
-			singleQuery_MatchList.add(myAlgebraExpression)
+			singleQuery_MatchList.add(myOperator)
 		}
 	}
 
-	var List<AlgebraExpression> pattern_PatternPartList
+	var List<Operator> pattern_PatternPartList
 
 	override enterPattern(PatternContext ctx) {
-		pattern_PatternPartList = new ArrayList<AlgebraExpression>
+		pattern_PatternPartList = new ArrayList<Operator>
 	}
 
 	override exitPattern(PatternContext ctx) {
-		match_AlgebraExpression = createAllDifferentOperator => [
+		match_Operator = createAllDifferentOperator => [
 			input = buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator)
 		]
 	}
 
-	var AlgebraExpression patternPart_AlgebraExpression
+	var Operator patternPart_Operator
 
 	override enterPatternPart(PatternPartContext ctx) {
-		patternPart_AlgebraExpression = null
+		patternPart_Operator = null
 	// FIXME: handle grammar rule: variable ws '=' ws anonymousPatternPart
 	}
 
 	override exitPatternPart(PatternPartContext ctx) {
-		if (patternPart_AlgebraExpression != null) {
-			pattern_PatternPartList.add(patternPart_AlgebraExpression)
+		if (patternPart_Operator != null) {
+			pattern_PatternPartList.add(patternPart_Operator)
 		}
 	}
 
@@ -247,7 +247,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 
 	override exitPatternElement(PatternElementContext ctx) {
 		if (ctx.getChild(PatternElementContext, 0) == null) {
-			patternPart_AlgebraExpression = chainExpandOperators(patternElement_GetVerticesOperator,
+			patternPart_Operator = chainExpandOperators(patternElement_GetVerticesOperator,
 				patternElement_ExpandList)
 		}
 	}
@@ -330,7 +330,7 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 	}
 
 	var boolean where_InsideWhere = false
-	var AlgebraExpression where_JoinExpression
+	var Operator where_JoinExpression
 	var boolean where_JoinModeIsAntijoin = false
 
 	override enterWhere(WhereContext ctx) {
@@ -351,9 +351,9 @@ class RelalgCypherListener extends RelalgBaseCypherListener {
 				if (!where_JoinModeIsAntijoin) {
 					val selectionOperator = createSelectionOperator => [
 						conditionString = ctx.expression.text;
-						input = match_AlgebraExpression
+						input = match_Operator
 					]
-					match_AlgebraExpression = selectionOperator
+					match_Operator = selectionOperator
 				}
 			}
 		}

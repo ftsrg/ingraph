@@ -1,10 +1,10 @@
 package ingraph.relalg2tex
 
-import relalg.AlgebraExpression
 import relalg.BetaOperator
 import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
+import relalg.Operator
 import relalg.ProjectionOperator
 
 class ExpressionSerializer extends RelAlgUtil {
@@ -19,7 +19,7 @@ class ExpressionSerializer extends RelAlgUtil {
 		this.parentheses = parentheses
 	}
 
-	override serializeBody(AlgebraExpression expression) {
+	override serializeBody(Operator expression) {
 		'''$$«convert(expression)»$$'''
 	}
 

@@ -19,7 +19,7 @@ package relalg;
  * @model abstract="true"
  * @generated
  */
-public interface AlphaOperator extends AlgebraExpression {
+public interface AlphaOperator extends Operator {
 	/**
 	 * Returns the value of the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -29,12 +29,12 @@ public interface AlphaOperator extends AlgebraExpression {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Input</em>' containment reference.
-	 * @see #setInput(AlgebraExpression)
+	 * @see #setInput(Operator)
 	 * @see relalg.RelalgPackage#getAlphaOperator_Input()
 	 * @model containment="true" required="true"
 	 * @generated
 	 */
-	AlgebraExpression getInput();
+	Operator getInput();
 
 	/**
 	 * Sets the value of the '{@link relalg.AlphaOperator#getInput <em>Input</em>}' containment reference.
@@ -44,6 +44,6 @@ public interface AlphaOperator extends AlgebraExpression {
 	 * @see #getInput()
 	 * @generated
 	 */
-	void setInput(AlgebraExpression value);
+	void setInput(Operator value);
 
 } // AlphaOperator

@@ -17,14 +17,15 @@ import relalg.RelalgFactory
 
 class Transformation {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
+	extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
 
 	new() {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());		
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
 	}
-	
+
 	def transform(Container container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
@@ -35,14 +36,26 @@ class Transformation {
 		val transformation = BatchTransformation.forEngine(engine).build
 		val statements = transformation.transformationStatements
 
-		val f = new BatchTransformationRuleFactory
-		val expandVertexRule = f.createRule() //
+		val expandVertexRule = expandVertexRule
+		val expandOperatorRule = expandOperatorRule
+
+		statements.fireAllCurrent(expandVertexRule)
+		statements.fireAllCurrent(expandOperatorRule)
+
+		return container
+	}
+
+	/**
+	 * Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
+	 */
+	def expandVertexRule() {
+		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
 			val getVerticesOperator = getVerticesOperator
 			val expandOperator = expandOperator
 
-			val geo = createGetEdgesOperator => [
+			val getEdgesOperator = createGetEdgesOperator => [
 				sourceVertexVariable = getVerticesOperator.vertexVariable
 				targetVertexVariable = expandOperator.targetVertexVariable
 				edgeVariable = expandOperator.edgeVariable
@@ -53,19 +66,29 @@ class Transformation {
 			// * (parent)-[:leftInput]->(geo) or
 			// * (parent)-[:rightInput]->(geo)
 			val inputOpposite = expandOperator.eContainingFeature
-			expandOperator.eContainer.eSet(inputOpposite, geo)
-			
-			println(geo + " created")
+			expandOperator.eContainer.eSet(inputOpposite, getEdgesOperator)
 		].build
+	}
 
-		val expandOperatorRule = f.createRule() //
+	/**
+	 * Replace a single expand operator with a GetEdgesOperator and a JoinOperator
+	 */
+	def getExpandOperatorRule() {
+		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
-		.action[].build
+		.action [ //
+			val expandOperator = expandOperator
 
-		statements.fireAllCurrent(expandVertexRule)
-		statements.fireAllCurrent(expandOperatorRule)
-		
-		return container
+			val getEdgesOperator = createGetEdgesOperator => [
+				edgeVariable = expandOperator.edgeVariable
+			]
+			val joinOperator = createJoinOperator => [
+				leftInput = expandOperator.input
+				rightInput = getEdgesOperator
+			]
+			val inputOpposite = expandOperator.eContainingFeature
+			expandOperator.eContainer.eSet(inputOpposite, joinOperator)
+		].build
 	}
 
 }

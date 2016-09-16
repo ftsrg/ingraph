@@ -33,12 +33,12 @@ public interface Container extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Root Expression</em>' containment reference.
-	 * @see #setRootExpression(AlgebraExpression)
+	 * @see #setRootExpression(Operator)
 	 * @see relalg.RelalgPackage#getContainer_RootExpression()
 	 * @model containment="true"
 	 * @generated
 	 */
-	AlgebraExpression getRootExpression();
+	Operator getRootExpression();
 
 	/**
 	 * Sets the value of the '{@link relalg.Container#getRootExpression <em>Root Expression</em>}' containment reference.
@@ -48,7 +48,7 @@ public interface Container extends EObject {
 	 * @see #getRootExpression()
 	 * @generated
 	 */
-	void setRootExpression(AlgebraExpression value);
+	void setRootExpression(Operator value);
 
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
