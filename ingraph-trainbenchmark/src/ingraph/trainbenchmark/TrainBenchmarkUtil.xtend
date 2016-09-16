@@ -87,10 +87,11 @@ class TrainBenchmarkUtil {
 			it.container = container
 		]
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = route]
+		val getVerticesRoute1 = createGetVerticesOperator => [vertexVariable = route]
+		val getVerticesRoute2 = createGetVerticesOperator => [vertexVariable = route]
 
 		val expand1 = createExpandOperator => [
-			input = getVertices
+			input = getVerticesRoute1
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = swP
@@ -117,7 +118,7 @@ class TrainBenchmarkUtil {
 		]
 
 		val expand4 = createExpandOperator => [
-			input = getVertices
+			input = getVerticesRoute2
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = sensor

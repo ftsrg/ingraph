@@ -2,11 +2,23 @@ package ingraph.optimization.patterns
 
 import "http://www.example.org/relalg"
 
-pattern expandVertex(v, e) {
-	GetVerticesOperator(v);
-	ExpandOperator.input(e, v);
+//
+//  AlgebraExpression .......................
+// ....... | ................................
+// ....... | input / leftInput / rightInput .
+// ....... V ................................
+// .. ExpandOperator ........................
+// ....... | ................................
+// ....... | input ..........................
+// ....... V ................................
+// GetVerticesOperator ......................
+// 
+
+pattern expandVertex(getVerticesOperator, expandOperator) {
+	ExpandOperator.input(expandOperator, getVerticesOperator);
+	GetVerticesOperator(getVerticesOperator);
 }
 
-pattern expandOperator(e) {
-	ExpandOperator(e);
+pattern expandOperator(expandOperator) {
+	ExpandOperator(expandOperator);
 }

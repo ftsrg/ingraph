@@ -17,13 +17,13 @@ import relalg.ExpandOperator;
 public abstract class ExpandOperatorProcessor implements IMatchProcessor<ExpandOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pE the value of pattern parameter e in the currently processed match
+   * @param pExpandOperator the value of pattern parameter expandOperator in the currently processed match
    * 
    */
-  public abstract void process(final ExpandOperator pE);
+  public abstract void process(final ExpandOperator pExpandOperator);
   
   @Override
   public void process(final ExpandOperatorMatch match) {
-    process(match.getE());
+    process(match.getExpandOperator());
   }
 }

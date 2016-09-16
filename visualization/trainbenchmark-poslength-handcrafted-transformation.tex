@@ -1,0 +1,21 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{segment},~\var{length}}$}
+		[. {$\selection{\var{segment.length} \leq \literal{0}}$}
+			[. {$\getvertices{segment}{Segment}$}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

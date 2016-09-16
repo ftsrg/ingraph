@@ -47,7 +47,7 @@
       <genEnumLiterals ecoreEnumLiteral="relalg.ecore#//Order/DESCENDING"/>
       <genEnumLiterals ecoreEnumLiteral="relalg.ecore#//Order/ASCENDING"/>
     </genEnums>
-    <genClasses image="false" ecoreClass="relalg.ecore#//AlgebraExpression"/>
+    <genClasses image="false" ecoreClass="relalg.ecore#//Operator"/>
     <genClasses ecoreClass="relalg.ecore#//ProjectionOperator">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//ProjectionOperator/variables"/>
     </genClasses>

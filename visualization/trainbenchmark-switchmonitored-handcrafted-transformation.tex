@@ -1,0 +1,21 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\antijoin$}
+		[. {$\getvertices{sw}{Switch}$}
+		]
+		[. {$\getedges{sw}{Sensor}{monitoredBy}$}
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

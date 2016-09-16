@@ -2,7 +2,6 @@ package ingraph.optimization.transformations
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
-import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.apache.log4j.Level
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
@@ -13,20 +12,23 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
+import relalg.Container
+import relalg.RelalgFactory
 
 class Transformation {
 
-	def static void main(String[] args) {
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
+
+	new() {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
-
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
-
-		val queryPlan = TrainBenchmarkUtil.routeSensor
-
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());		
+	}
+	
+	def transform(Container container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
-		resource.contents.add(queryPlan)
+		resource.contents.add(container)
 		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
 			new EMFScope(resourceSet))
 
@@ -37,17 +39,33 @@ class Transformation {
 		val expandVertexRule = f.createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			println(it)
+			val getVerticesOperator = getVerticesOperator
+			val expandOperator = expandOperator
+
+			val geo = createGetEdgesOperator => [
+				sourceVertexVariable = getVerticesOperator.vertexVariable
+				targetVertexVariable = expandOperator.targetVertexVariable
+				edgeVariable = expandOperator.edgeVariable
+			]
+
+			// change containing edge:
+			// * (parent)-[:input]->(geo) or
+			// * (parent)-[:leftInput]->(geo) or
+			// * (parent)-[:rightInput]->(geo)
+			val inputOpposite = expandOperator.eContainingFeature
+			expandOperator.eContainer.eSet(inputOpposite, geo)
+			
+			println(geo + " created")
 		].build
 
 		val expandOperatorRule = f.createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
-		.action[
-			println(it)
-		].build
+		.action[].build
 
 		statements.fireAllCurrent(expandVertexRule)
 		statements.fireAllCurrent(expandOperatorRule)
+		
+		return container
 	}
 
 }

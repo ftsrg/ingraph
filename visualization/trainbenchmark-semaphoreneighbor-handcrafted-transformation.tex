@@ -1,0 +1,37 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$}
+		[. {$\selection{\var{route1} \neq \var{route2}}$}
+			[. {$\antijoin$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
+					[. {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$}
+						[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$}
+							[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
+								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
+									[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
+										[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
+										]
+									]
+								]
+							]
+						]
+					]
+				]
+				[. {$\getedges{semaphore}{Route}{entry}$}
+				]
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

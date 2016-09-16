@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="relalg" nsURI="http://www.example.org/relalg" nsPrefix="relalg">
-  <eClassifiers xsi:type="ecore:EClass" name="AlgebraExpression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectionOperator" eSuperTypes="#//AlphaOperator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
         eType="#//Variable"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//AlgebraExpression"
+  <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//Operator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//Operator"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BetaOperator" abstract="true" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="BetaOperator" abstract="true" eSuperTypes="#//Operator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="leftInput" lowerBound="1"
-        eType="#//AlgebraExpression" containment="true"/>
+        eType="#//Operator" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightInput" lowerBound="1"
-        eType="#//AlgebraExpression" containment="true"/>
+        eType="#//Operator" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProductionOperator" eSuperTypes="#//AlphaOperator"/>
@@ -39,7 +39,7 @@
     <eLiterals name="IN" value="1"/>
     <eLiterals name="OUT" value="2"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetVerticesOperator" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="GetVerticesOperator" eSuperTypes="#//Operator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vertexVariable" lowerBound="1"
         eType="#//VertexVariable"/>
   </eClassifiers>
@@ -74,7 +74,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnionOperator" eSuperTypes="#//BetaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="Container">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rootExpression" eType="#//AlgebraExpression"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootExpression" eType="#//Operator"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         eType="#//NamedElement" containment="true" eOpposite="#//NamedElement/container"/>
@@ -156,7 +156,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="IntegerLiteral" eSuperTypes="#//NumberLiteral">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="GetEdgesOperator" eSuperTypes="#//AlgebraExpression">
+  <eClassifiers xsi:type="ecore:EClass" name="GetEdgesOperator" eSuperTypes="#//Operator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceVertexVariable" lowerBound="1"
         eType="#//VertexVariable"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targetVertexVariable" lowerBound="1"

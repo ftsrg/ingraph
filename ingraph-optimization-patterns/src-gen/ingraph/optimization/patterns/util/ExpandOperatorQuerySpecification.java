@@ -102,9 +102,9 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ExpandOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pE = new PParameter("e", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
+    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pE);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pExpandOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -113,7 +113,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("e");
+      return Arrays.asList("expandOperator");
     }
     
     @Override
@@ -128,12 +128,12 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_e = body.getOrCreateVariableByName("e");
+      		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_e, parameter_pE)
+      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator)
       		));
-      		// 	ExpandOperator(e)
-      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
+      		// 	ExpandOperator(expandOperator)
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
       		bodies.add(body);
       	}
       	// to silence compiler error
