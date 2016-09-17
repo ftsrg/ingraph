@@ -15,7 +15,7 @@ def indent(lines):
 filenames = glob.glob('*.feature')
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
-    test_file = open("../../ingraph-cypher2relalg/src-test/ingraph/cypher2relalg/tck/%sParserTest.xtend" % filename_without_extension, "w")
+    test_file = open("../ingraph-cypher2relalg/src-test/ingraph/cypher2relalg/tck/%sParserTest.xtend" % filename_without_extension, "w")
 
     test_header = """package ingraph.cypher2.tck
 
@@ -45,10 +45,10 @@ class %sParserTest {
 
         i += 1
 
-        if ("CREATE " in query) or ("DELETE " in query) or ("MERGE " in query) or ("SET " in query):
+        if ("CREATE " in query) or ("DELETE " in query) or ("MERGE " in query) or ("REMOVE " in query) or ("SET " in query):
             continue
 
-        with open("../../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
+        with open("../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
             query_file.write(query + "\n")
 
         test_case = """

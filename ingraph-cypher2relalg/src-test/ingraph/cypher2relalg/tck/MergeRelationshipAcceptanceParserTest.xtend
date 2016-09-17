@@ -4,6 +4,6 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
 
-class NullAcceptanceParserTest {
+class MergeRelationshipAcceptanceParserTest {
     
 }

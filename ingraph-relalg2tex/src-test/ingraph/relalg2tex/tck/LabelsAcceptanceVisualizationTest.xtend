@@ -25,38 +25,4 @@ class LabelsAcceptanceVisualizationTest {
         serializer.serialize(container, "LabelsAcceptance_10")
     }
 
-    /*
-    Scenario: Removing a label
-    And having executed:
-      """
-      CREATE (:Foo:Bar)
-      """
-    */
-    @Test
-    def void testLabelsAcceptance_11() {
-        val container = RelalgParser.parse('''
-        MATCH (n)
-        REMOVE n:Foo
-        RETURN labels(n)
-        ''')
-        serializer.serialize(container, "LabelsAcceptance_11")
-    }
-
-    /*
-    Scenario: Removing a non-existent label
-    And having executed:
-      """
-      CREATE (:Foo)
-      """
-    */
-    @Test
-    def void testLabelsAcceptance_12() {
-        val container = RelalgParser.parse('''
-        MATCH (n)
-        REMOVE n:Bar
-        RETURN labels(n)
-        ''')
-        serializer.serialize(container, "LabelsAcceptance_12")
-    }
-
 }

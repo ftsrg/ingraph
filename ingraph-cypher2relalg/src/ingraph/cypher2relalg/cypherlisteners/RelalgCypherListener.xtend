@@ -50,6 +50,7 @@ import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
 import ingraph.cypher2relalg.util.RelalgCypherUtil
+import ingraph.antlr.CypherParser.CreateContext
 
 class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 
@@ -398,6 +399,10 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 
 	override enterDoubleLiteral(DoubleLiteralContext ctx) {
 		val doubleValue = Double.parseDouble(ctx.text)
+	}
+	
+	override enterCreate(CreateContext ctx) {
+		println(ctx.text)
 	}
 
 }
