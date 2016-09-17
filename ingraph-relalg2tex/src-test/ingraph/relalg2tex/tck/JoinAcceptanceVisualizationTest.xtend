@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class JoinAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Find friends of others
@@ -27,7 +27,7 @@ class JoinAcceptanceVisualizationTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        drawer.serialize(container, "JoinAcceptance_01")
+        serializer.serialize(container, "JoinAcceptance_01")
     }
 
     /*
@@ -47,7 +47,7 @@ class JoinAcceptanceVisualizationTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        drawer.serialize(container, "JoinAcceptance_02")
+        serializer.serialize(container, "JoinAcceptance_02")
     }
 
 }

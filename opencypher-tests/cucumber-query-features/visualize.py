@@ -22,11 +22,11 @@ for filename in filenames:
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class %sVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     """ % filename_without_extension
 
     test_file.write(test_header)
@@ -62,7 +62,7 @@ class %sVisualizationTest {
         val container = RelalgParser.parse('''
         %s
         ''')
-        drawer.serialize(container, "%s_%02d")
+        serializer.serialize(container, "%s_%02d")
     }
 """ % (scenario, filename_without_extension, i, indent(query), filename_without_extension, i)
         test_file.write(test_case)

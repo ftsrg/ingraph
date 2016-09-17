@@ -2,11 +2,11 @@ package ingraph.relalg2tex.trainbenchmark
 
 import ingraph.cypher2relalg.RelalgParser
 import org.junit.Test
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
-class TrainBenchmarkQueryPlanVisualizationTest {
+class TrainBenchmarkRelalgParserTreeTest {
 
-	val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
 
 	@Test
 	def void testConnectedSegments() {

@@ -3,10 +3,10 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class SyntaxErrorAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
 }

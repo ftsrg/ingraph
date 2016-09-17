@@ -3,11 +3,11 @@ package ingraph.relalg2tex.trainbenchmark
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import org.junit.Test
 import org.junit.Before
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
-class RouteSensorOptimizationVisualizationTest {
+class RouteSensorOptimizationTreeTest {
 
-	val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
 	var RouteSensorQueryPlanFactory f
 	
 	@Before

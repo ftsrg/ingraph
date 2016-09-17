@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class MiscellaneousErrorAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Failing on merging node with null property
@@ -17,7 +17,7 @@ class MiscellaneousErrorAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         MERGE ({p: null})
         ''')
-        drawer.serialize(container, "MiscellaneousErrorAcceptance_02")
+        serializer.serialize(container, "MiscellaneousErrorAcceptance_02")
     }
 
 }

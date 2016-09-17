@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class VarLengthAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Handling unbounded variable length match
@@ -19,7 +19,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_01")
+        serializer.serialize(container, "VarLengthAcceptance_01")
     }
 
     /*
@@ -32,7 +32,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_02")
+        serializer.serialize(container, "VarLengthAcceptance_02")
     }
 
     /*
@@ -45,7 +45,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_03")
+        serializer.serialize(container, "VarLengthAcceptance_03")
     }
 
     /*
@@ -58,7 +58,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_04")
+        serializer.serialize(container, "VarLengthAcceptance_04")
     }
 
     /*
@@ -71,7 +71,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_05")
+        serializer.serialize(container, "VarLengthAcceptance_05")
     }
 
     /*
@@ -84,7 +84,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_06")
+        serializer.serialize(container, "VarLengthAcceptance_06")
     }
 
     /*
@@ -97,7 +97,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_07")
+        serializer.serialize(container, "VarLengthAcceptance_07")
     }
 
     /*
@@ -110,7 +110,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..0]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_08")
+        serializer.serialize(container, "VarLengthAcceptance_08")
     }
 
     /*
@@ -123,7 +123,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..1]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_09")
+        serializer.serialize(container, "VarLengthAcceptance_09")
     }
 
     /*
@@ -136,7 +136,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_10")
+        serializer.serialize(container, "VarLengthAcceptance_10")
     }
 
     /*
@@ -149,7 +149,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..1]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_11")
+        serializer.serialize(container, "VarLengthAcceptance_11")
     }
 
     /*
@@ -162,7 +162,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..0]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_12")
+        serializer.serialize(container, "VarLengthAcceptance_12")
     }
 
     /*
@@ -175,7 +175,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..0]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_13")
+        serializer.serialize(container, "VarLengthAcceptance_13")
     }
 
     /*
@@ -188,7 +188,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..1]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_14")
+        serializer.serialize(container, "VarLengthAcceptance_14")
     }
 
     /*
@@ -201,7 +201,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_15")
+        serializer.serialize(container, "VarLengthAcceptance_15")
     }
 
     /*
@@ -214,7 +214,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_16")
+        serializer.serialize(container, "VarLengthAcceptance_16")
     }
 
     /*
@@ -227,7 +227,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_17")
+        serializer.serialize(container, "VarLengthAcceptance_17")
     }
 
     /*
@@ -240,7 +240,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_18")
+        serializer.serialize(container, "VarLengthAcceptance_18")
     }
 
     /*
@@ -253,7 +253,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_19")
+        serializer.serialize(container, "VarLengthAcceptance_19")
     }
 
     /*
@@ -266,7 +266,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_20")
+        serializer.serialize(container, "VarLengthAcceptance_20")
     }
 
     /*
@@ -279,7 +279,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_21")
+        serializer.serialize(container, "VarLengthAcceptance_21")
     }
 
     /*
@@ -292,7 +292,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_22")
+        serializer.serialize(container, "VarLengthAcceptance_22")
     }
 
     /*
@@ -305,7 +305,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_23")
+        serializer.serialize(container, "VarLengthAcceptance_23")
     }
 
     /*
@@ -318,7 +318,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_24")
+        serializer.serialize(container, "VarLengthAcceptance_24")
     }
 
     /*
@@ -339,7 +339,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_25")
+        serializer.serialize(container, "VarLengthAcceptance_25")
     }
 
     /*
@@ -366,7 +366,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)<-[:LIKES]-()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_26")
+        serializer.serialize(container, "VarLengthAcceptance_26")
     }
 
     /*
@@ -395,7 +395,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()<-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_27")
+        serializer.serialize(container, "VarLengthAcceptance_27")
     }
 
     /*
@@ -416,7 +416,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (p)-[:LIKES*1]->()-[:LIKES]->()-[r:LIKES*2]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_28")
+        serializer.serialize(container, "VarLengthAcceptance_28")
     }
 
     /*
@@ -437,7 +437,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (p)-[:LIKES]->()-[:LIKES*2]->()-[r:LIKES]->(c)
         RETURN c.name
         ''')
-        drawer.serialize(container, "VarLengthAcceptance_29")
+        serializer.serialize(container, "VarLengthAcceptance_29")
     }
 
 }

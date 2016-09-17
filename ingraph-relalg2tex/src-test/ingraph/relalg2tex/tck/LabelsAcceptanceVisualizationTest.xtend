@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class LabelsAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Using `labels()` in return clauses
@@ -22,7 +22,7 @@ class LabelsAcceptanceVisualizationTest {
         MATCH (n)
         RETURN labels(n)
         ''')
-        drawer.serialize(container, "LabelsAcceptance_10")
+        serializer.serialize(container, "LabelsAcceptance_10")
     }
 
     /*
@@ -39,7 +39,7 @@ class LabelsAcceptanceVisualizationTest {
         REMOVE n:Foo
         RETURN labels(n)
         ''')
-        drawer.serialize(container, "LabelsAcceptance_11")
+        serializer.serialize(container, "LabelsAcceptance_11")
     }
 
     /*
@@ -56,7 +56,7 @@ class LabelsAcceptanceVisualizationTest {
         REMOVE n:Bar
         RETURN labels(n)
         ''')
-        drawer.serialize(container, "LabelsAcceptance_12")
+        serializer.serialize(container, "LabelsAcceptance_12")
     }
 
 }

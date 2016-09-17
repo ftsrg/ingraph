@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class WithAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Passing on pattern nodes
@@ -25,7 +25,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_01")
+        serializer.serialize(container, "WithAcceptance_01")
     }
 
     /*
@@ -47,7 +47,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN a
         ''')
-        drawer.serialize(container, "WithAcceptance_02")
+        serializer.serialize(container, "WithAcceptance_02")
     }
 
     /*
@@ -66,7 +66,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (b)
         RETURN a, b
         ''')
-        drawer.serialize(container, "WithAcceptance_03")
+        serializer.serialize(container, "WithAcceptance_03")
     }
 
     /*
@@ -88,7 +88,7 @@ class WithAcceptanceVisualizationTest {
         WHERE property = b.prop
         RETURN b
         ''')
-        drawer.serialize(container, "WithAcceptance_04")
+        serializer.serialize(container, "WithAcceptance_04")
     }
 
     /*
@@ -111,7 +111,7 @@ class WithAcceptanceVisualizationTest {
         WHERE b.id = property
         RETURN b
         ''')
-        drawer.serialize(container, "WithAcceptance_05")
+        serializer.serialize(container, "WithAcceptance_05")
     }
 
     /*
@@ -135,7 +135,7 @@ class WithAcceptanceVisualizationTest {
         WHERE b.id = idToUse
         RETURN DISTINCT b
         ''')
-        drawer.serialize(container, "WithAcceptance_06")
+        serializer.serialize(container, "WithAcceptance_06")
     }
 
     /*
@@ -156,7 +156,7 @@ class WithAcceptanceVisualizationTest {
         WHERE a.name = 'B'
         RETURN a
         ''')
-        drawer.serialize(container, "WithAcceptance_07")
+        serializer.serialize(container, "WithAcceptance_07")
     }
 
     /*
@@ -180,7 +180,7 @@ class WithAcceptanceVisualizationTest {
         WHERE relCount > 1
         RETURN a
         ''')
-        drawer.serialize(container, "WithAcceptance_08")
+        serializer.serialize(container, "WithAcceptance_08")
     }
 
     /*
@@ -201,7 +201,7 @@ class WithAcceptanceVisualizationTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_09")
+        serializer.serialize(container, "WithAcceptance_09")
     }
 
     /*
@@ -222,7 +222,7 @@ class WithAcceptanceVisualizationTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_10")
+        serializer.serialize(container, "WithAcceptance_10")
     }
 
     /*
@@ -243,7 +243,7 @@ class WithAcceptanceVisualizationTest {
         WHERE a.bar = 'B'
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_11")
+        serializer.serialize(container, "WithAcceptance_11")
     }
 
     /*
@@ -264,7 +264,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-[r]->(b)
         RETURN a, r, b
         ''')
-        drawer.serialize(container, "WithAcceptance_12")
+        serializer.serialize(container, "WithAcceptance_12")
     }
 
     /*
@@ -279,7 +279,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_13")
+        serializer.serialize(container, "WithAcceptance_13")
     }
 
     /*
@@ -292,7 +292,7 @@ class WithAcceptanceVisualizationTest {
         WITH {foo: {bar: 'baz'}} AS nestedMap
         RETURN nestedMap.foo.bar
         ''')
-        drawer.serialize(container, "WithAcceptance_14")
+        serializer.serialize(container, "WithAcceptance_14")
     }
 
     /*
@@ -313,7 +313,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (m:B), (n)-->(x:X)
         RETURN *
         ''')
-        drawer.serialize(container, "WithAcceptance_15")
+        serializer.serialize(container, "WithAcceptance_15")
     }
 
     /*
@@ -332,7 +332,7 @@ class WithAcceptanceVisualizationTest {
         WHERE n.prop = 42
         RETURN count(*)
         ''')
-        drawer.serialize(container, "WithAcceptance_16")
+        serializer.serialize(container, "WithAcceptance_16")
     }
 
     /*
@@ -364,7 +364,7 @@ class WithAcceptanceVisualizationTest {
         WHERE otherPerson.name <> 'NotOther'
         RETURN count(*)
         ''')
-        drawer.serialize(container, "WithAcceptance_17")
+        serializer.serialize(container, "WithAcceptance_17")
     }
 
 }

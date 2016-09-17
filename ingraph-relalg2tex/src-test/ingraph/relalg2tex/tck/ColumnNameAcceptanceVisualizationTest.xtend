@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ColumnNameAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Keeping used expression 1
@@ -18,7 +18,7 @@ class ColumnNameAcceptanceVisualizationTest {
         MATCH (n)
         RETURN cOuNt( * )
         ''')
-        drawer.serialize(container, "ColumnNameAcceptance_01")
+        serializer.serialize(container, "ColumnNameAcceptance_01")
     }
 
     /*
@@ -30,7 +30,7 @@ class ColumnNameAcceptanceVisualizationTest {
         MATCH p = (n)-->(b)
         RETURN nOdEs( p )
         ''')
-        drawer.serialize(container, "ColumnNameAcceptance_02")
+        serializer.serialize(container, "ColumnNameAcceptance_02")
     }
 
     /*
@@ -42,7 +42,7 @@ class ColumnNameAcceptanceVisualizationTest {
         MATCH p = (n)-->(b)
         RETURN coUnt( dIstInct p )
         ''')
-        drawer.serialize(container, "ColumnNameAcceptance_03")
+        serializer.serialize(container, "ColumnNameAcceptance_03")
     }
 
     /*
@@ -54,7 +54,7 @@ class ColumnNameAcceptanceVisualizationTest {
         MATCH p = (n)-->(b)
         RETURN aVg(    n.aGe     )
         ''')
-        drawer.serialize(container, "ColumnNameAcceptance_04")
+        serializer.serialize(container, "ColumnNameAcceptance_04")
     }
 
 }

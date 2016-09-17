@@ -7,7 +7,7 @@ import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 
-class ExpressionSerializer extends AbstractRelalgSerializer {
+class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
 	/**
 	 * whether to use parentheses in the TeX expressions

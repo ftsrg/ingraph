@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ReturnAcceptanceVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Allow addition
@@ -24,7 +24,7 @@ class ReturnAcceptanceVisualizationTest {
         WHERE a.id = 1337
         RETURN a.version + 5
         ''')
-        drawer.serialize(container, "ReturnAcceptance_01")
+        serializer.serialize(container, "ReturnAcceptance_01")
     }
 
     /*
@@ -46,7 +46,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n
         LIMIT 2
         ''')
-        drawer.serialize(container, "ReturnAcceptance_02")
+        serializer.serialize(container, "ReturnAcceptance_02")
     }
 
     /*
@@ -69,7 +69,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP 2
         ''')
-        drawer.serialize(container, "ReturnAcceptance_03")
+        serializer.serialize(container, "ReturnAcceptance_03")
     }
 
     /*
@@ -94,7 +94,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP $skipAmount
         ''')
-        drawer.serialize(container, "ReturnAcceptance_04")
+        serializer.serialize(container, "ReturnAcceptance_04")
     }
 
     /*
@@ -118,7 +118,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP 2
         LIMIT 2
         ''')
-        drawer.serialize(container, "ReturnAcceptance_05")
+        serializer.serialize(container, "ReturnAcceptance_05")
     }
 
     /*
@@ -145,7 +145,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP $s
         LIMIT $l
         ''')
-        drawer.serialize(container, "ReturnAcceptance_06")
+        serializer.serialize(container, "ReturnAcceptance_06")
     }
 
     /*
@@ -166,7 +166,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
         ''')
-        drawer.serialize(container, "ReturnAcceptance_07")
+        serializer.serialize(container, "ReturnAcceptance_07")
     }
 
     /*
@@ -186,7 +186,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT a
         ORDER BY a.name
         ''')
-        drawer.serialize(container, "ReturnAcceptance_08")
+        serializer.serialize(container, "ReturnAcceptance_08")
     }
 
     /*
@@ -203,7 +203,7 @@ class ReturnAcceptanceVisualizationTest {
         MATCH (a)
         RETURN a AS ColumnName
         ''')
-        drawer.serialize(container, "ReturnAcceptance_09")
+        serializer.serialize(container, "ReturnAcceptance_09")
     }
 
     /*
@@ -221,7 +221,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT b
         ORDER BY b.name
         ''')
-        drawer.serialize(container, "ReturnAcceptance_10")
+        serializer.serialize(container, "ReturnAcceptance_10")
     }
 
     /*
@@ -233,7 +233,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
-        drawer.serialize(container, "ReturnAcceptance_11")
+        serializer.serialize(container, "ReturnAcceptance_11")
     }
 
     /*
@@ -245,7 +245,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
-        drawer.serialize(container, "ReturnAcceptance_12")
+        serializer.serialize(container, "ReturnAcceptance_12")
     }
 
     /*
@@ -263,7 +263,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN a, count(*)
         ORDER BY count(*)
         ''')
-        drawer.serialize(container, "ReturnAcceptance_13")
+        serializer.serialize(container, "ReturnAcceptance_13")
     }
 
     /*
@@ -275,7 +275,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN abs(-1)
         ''')
-        drawer.serialize(container, "ReturnAcceptance_14")
+        serializer.serialize(container, "ReturnAcceptance_14")
     }
 
     /*
@@ -287,7 +287,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN size([1, 2, 3]) AS n
         ''')
-        drawer.serialize(container, "ReturnAcceptance_15")
+        serializer.serialize(container, "ReturnAcceptance_15")
     }
 
 }

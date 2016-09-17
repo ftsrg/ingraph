@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class PatternComprehensionVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Pattern comprehension and ORDER BY
@@ -25,7 +25,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [p = (liker)--() | p] AS isNew
         ORDER BY liker.time
         ''')
-        drawer.serialize(container, "PatternComprehension_01")
+        serializer.serialize(container, "PatternComprehension_01")
     }
 
     /*
@@ -44,7 +44,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n)
         RETURN [p = (n)-->() | p] AS ps
         ''')
-        drawer.serialize(container, "PatternComprehension_02")
+        serializer.serialize(container, "PatternComprehension_02")
     }
 
     /*
@@ -64,7 +64,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n:A)
         RETURN [p = (n)-->(:B) | p]
         ''')
-        drawer.serialize(container, "PatternComprehension_03")
+        serializer.serialize(container, "PatternComprehension_03")
     }
 
     /*
@@ -82,7 +82,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (a:A), (b:B)
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
-        drawer.serialize(container, "PatternComprehension_04")
+        serializer.serialize(container, "PatternComprehension_04")
     }
 
     /*
@@ -102,7 +102,7 @@ class PatternComprehensionVisualizationTest {
         WITH [p = (n)-->() | p] AS ps, count(b) AS c
         RETURN ps, c
         ''')
-        drawer.serialize(container, "PatternComprehension_05")
+        serializer.serialize(container, "PatternComprehension_05")
     }
 
     /*
@@ -120,7 +120,7 @@ class PatternComprehensionVisualizationTest {
         WITH [p = (a)-[*]->(b) | p] AS paths, count(a) AS c
         RETURN paths, c
         ''')
-        drawer.serialize(container, "PatternComprehension_06")
+        serializer.serialize(container, "PatternComprehension_06")
     }
 
     /*
@@ -138,7 +138,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n:A)
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
-        drawer.serialize(container, "PatternComprehension_07")
+        serializer.serialize(container, "PatternComprehension_07")
     }
 
     /*
@@ -156,7 +156,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n:A)
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
-        drawer.serialize(container, "PatternComprehension_08")
+        serializer.serialize(container, "PatternComprehension_08")
     }
 
     /*
@@ -174,7 +174,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n:X)
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
-        drawer.serialize(container, "PatternComprehension_09")
+        serializer.serialize(container, "PatternComprehension_09")
     }
 
     /*
@@ -198,7 +198,7 @@ class PatternComprehensionVisualizationTest {
         MATCH p = (n:X)-->(b)
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
-        drawer.serialize(container, "PatternComprehension_10")
+        serializer.serialize(container, "PatternComprehension_10")
     }
 
     /*
@@ -218,7 +218,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (a:X)
         RETURN size([(a)-->() | 1]) AS length
         ''')
-        drawer.serialize(container, "PatternComprehension_11")
+        serializer.serialize(container, "PatternComprehension_11")
     }
 
     /*
@@ -239,7 +239,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (a:X)
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
-        drawer.serialize(container, "PatternComprehension_12")
+        serializer.serialize(container, "PatternComprehension_12")
     }
 
     /*
@@ -260,7 +260,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (a:X)
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
-        drawer.serialize(container, "PatternComprehension_13")
+        serializer.serialize(container, "PatternComprehension_13")
     }
 
     /*
@@ -278,7 +278,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n)
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
-        drawer.serialize(container, "PatternComprehension_14")
+        serializer.serialize(container, "PatternComprehension_14")
     }
 
     /*
@@ -296,7 +296,7 @@ class PatternComprehensionVisualizationTest {
         MATCH (n)
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
-        drawer.serialize(container, "PatternComprehension_15")
+        serializer.serialize(container, "PatternComprehension_15")
     }
 
 }

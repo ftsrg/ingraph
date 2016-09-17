@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelalgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ListComprehensionVisualizationTest {
 
-    val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
     
     /*
     Scenario: Returning a list comprehension
@@ -25,7 +25,7 @@ class ListComprehensionVisualizationTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        drawer.serialize(container, "ListComprehension_01")
+        serializer.serialize(container, "ListComprehension_01")
     }
 
     /*
@@ -45,7 +45,7 @@ class ListComprehensionVisualizationTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        drawer.serialize(container, "ListComprehension_02")
+        serializer.serialize(container, "ListComprehension_02")
     }
 
     /*
@@ -65,7 +65,7 @@ class ListComprehensionVisualizationTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        drawer.serialize(container, "ListComprehension_03")
+        serializer.serialize(container, "ListComprehension_03")
     }
 
 }
