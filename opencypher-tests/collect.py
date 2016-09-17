@@ -17,7 +17,7 @@ for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
     test_file = open("../ingraph-cypher2relalg/src-test/ingraph/cypher2relalg/tck/%sParserTest.xtend" % filename_without_extension, "w")
 
-    test_header = """package ingraph.cypher2.tck
+    test_header = """package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 

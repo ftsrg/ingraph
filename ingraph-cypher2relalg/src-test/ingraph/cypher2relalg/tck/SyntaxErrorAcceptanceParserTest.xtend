@@ -1,4 +1,4 @@
-package ingraph.cypher2.tck
+package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
