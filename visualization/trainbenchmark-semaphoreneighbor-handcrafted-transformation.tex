@@ -13,23 +13,29 @@
 			[. {$\antijoin$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
 					[. {$\join$}
-						[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$}
-							[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
-								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
+						[. {$\join$}
+							[. {$\join$}
+								[. {$\join$}
 									[. {$\join$}
-										[. {$\getedges{semaphore}{Route}{exit}$}
+										[. {$\getedges{semaphore}{Semaphore}{route1}{Route}{\_e1}{exit}$}
 										]
-										[. {$\getedges{route1}{Sensor}{gathers}$}
+										[. {$\getedges{route1}{Route}{sensor1}{Sensor}{\_e2}{gathers}$}
 										]
 									]
+									[. {$\getedges{sensor1}{Sensor}{te1}{}{\_e3}{monitoredBy}$}
+									]
+								]
+								[. {$\getedges{te1}{}{te2}{}{\_e4}{connectsTo}$}
 								]
 							]
+							[. {$\getedges{te2}{}{sensor}{Sensor}{\_e5}{monitoredBy}$}
+							]
 						]
-						[. {$\getedges{sensor}{Route}{gathers}$}
+						[. {$\getedges{sensor}{Sensor}{route2}{Route}{\_e6}{gathers}$}
 						]
 					]
 				]
-				[. {$\getedges{semaphore}{Route}{entry}$}
+				[. {$\getedges{semaphore}{Semaphore}{route2}{Route}{\_e7}{entry}$}
 				]
 			]
 		]

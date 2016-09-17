@@ -12,15 +12,17 @@
 		[. {$\antijoin$}
 			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
 				[. {$\join$}
-					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$}
-						[. {$\getedges{route}{SwitchPosition}{follows}$}
+					[. {$\join$}
+						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$}
+						]
+						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$}
 						]
 					]
-					[. {$\getedges{sw}{Sensor}{monitoredBy}$}
+					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$}
 					]
 				]
 			]
-			[. {$\getedges{route}{Sensor}{gathers}$}
+			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$}
 			]
 		]
 	]

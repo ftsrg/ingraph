@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo > index.html
+cat template-header.html > index.html
 for doc in *.tex; do
   filename="${doc%.*}"
   texfile="$filename.tex"
@@ -12,6 +12,7 @@ for doc in *.tex; do
     echo Compiling $texfile
     pdflatex -shell-escape -interaction=batchmode $filename.tex 1>/dev/null
   fi
-  echo "<h1>$filename</h1>" >> index.html
-  echo "<img src='$filename.png' />" >> index.html;
+  echo "      <h1 id='$filename'><a href='#$filename'>$filename</a></h1>" >> index.html
+  echo "      <img src='$filename.png' />" >> index.html;
 done
+cat template-footer.html >> index.html

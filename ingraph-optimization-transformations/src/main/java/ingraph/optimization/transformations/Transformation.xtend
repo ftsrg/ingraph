@@ -39,8 +39,8 @@ class Transformation {
 		val expandVertexRule = expandVertexRule
 		val expandOperatorRule = expandOperatorRule
 
-		statements.fireAllCurrent(expandVertexRule)
-		statements.fireAllCurrent(expandOperatorRule)
+		statements.fireWhilePossible(expandVertexRule)
+		statements.fireWhilePossible(expandOperatorRule)
 
 		return container
 	}
@@ -77,7 +77,6 @@ class Transformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
-			println("getExpandOperatorRule activated")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [

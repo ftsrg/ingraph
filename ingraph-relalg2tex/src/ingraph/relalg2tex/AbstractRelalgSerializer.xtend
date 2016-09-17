@@ -23,6 +23,7 @@ import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.IntegerLiteral
 import relalg.JoinOperator
+import relalg.NamedElement
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
@@ -31,8 +32,9 @@ import relalg.StringLiteral
 import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.VertexVariable
 
-abstract class RelAlgUtil {
+abstract class AbstractRelalgSerializer {
 
 	/**
 	 * whether to generate a full TeX document
@@ -93,22 +95,24 @@ abstract class RelAlgUtil {
 
 	def dispatch operatorSymbol(ExpandOperator op) {
 		'''\expand«op.direction.directionToTex»''' +
-			'''{«op.edgeVariable.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}''' +
-			'''{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.name.escape»}''' +
-			'''{«op.targetVertexVariable.vertexLabel?.name?.escape»}'''
+			'''«op.edgeVariable.toTexParameter»''' +
+			'''{«op.sourceVertexVariable.escapedName»}''' +
+			'''«op.targetVertexVariable.toTexParameter»'''
 	}
 
 	def dispatch operatorSymbol(SelectionOperator op) {
 		'''\selection{«op.condition.convertExpression»}'''
 	}
 
-	def dispatch operatorSymbol(
-		GetEdgesOperator op) {
-		'''\getedges{«op.sourceVertexVariable.name.escape»}{«op.targetVertexVariable.vertexLabel.name.escape»}{«op.edgeVariable.edgeLabel.name.escape»}'''
+	def dispatch operatorSymbol(GetEdgesOperator op) {
+		'''\getedges''' + //
+			'''«op.sourceVertexVariable.toTexParameter»''' + //
+			'''«op.targetVertexVariable.toTexParameter»''' + // 
+			'''«op.edgeVariable.toTexParameter»'''
 	}
 
 	def dispatch operatorSymbol(GetVerticesOperator op) {
-		'''\getvertices{«op.vertexVariable.name.escape»}{«op.vertexVariable.vertexLabel.name.escape»}'''
+		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabel.escapedName»}'''
 	}
 
 	def dispatch operatorSymbol(ProductionOperator op) {
@@ -164,6 +168,24 @@ abstract class RelAlgUtil {
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
 		'''«edgeVariables.map["\\var{"+ name.escape + "}"].join(",~")»'''
+	}
+
+	/**
+	 * variable to string
+	 */
+	def dispatch toTexParameter(VertexVariable variable) {
+		'''{«variable.escapedName»}{«variable.vertexLabel.escapedName»}'''
+	}
+
+	def dispatch toTexParameter(EdgeVariable variable) {
+		'''{«variable.escapedName»}{«variable.edgeLabel.escapedName»}'''
+	}
+
+	/**
+	 * escapedName
+	 */
+	def escapedName(NamedElement element) {
+		'''«element?.name?.escape»'''
 	}
 
 	/**
