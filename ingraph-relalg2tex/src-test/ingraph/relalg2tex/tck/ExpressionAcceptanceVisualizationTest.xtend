@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ExpressionAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Execute n[0]

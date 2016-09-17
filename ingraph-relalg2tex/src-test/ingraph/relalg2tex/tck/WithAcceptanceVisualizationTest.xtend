@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class WithAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Passing on pattern nodes

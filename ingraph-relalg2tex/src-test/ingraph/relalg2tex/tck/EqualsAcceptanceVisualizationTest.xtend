@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class EqualsAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Number-typed integer comparison

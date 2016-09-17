@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class VarLengthAcceptance2VisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Handling relationships that are already bound in variable length paths

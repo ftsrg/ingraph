@@ -6,7 +6,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class TrainBenchmarkRelalgParserTreeTest {
 
-	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
+	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
 
 	@Test
 	def void testConnectedSegments() {

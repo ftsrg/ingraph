@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class NullAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Ignore null when removing property

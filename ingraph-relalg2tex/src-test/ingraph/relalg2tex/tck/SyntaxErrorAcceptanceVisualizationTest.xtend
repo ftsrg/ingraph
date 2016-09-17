@@ -7,6 +7,6 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class SyntaxErrorAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
 }

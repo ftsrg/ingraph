@@ -1,11 +1,11 @@
 package ingraph.relalg2tex
 
+import relalg.AllDifferentOperator
+import relalg.AlphaOperator
 import relalg.BetaOperator
-import relalg.DuplicateEliminationOperator
-import relalg.ExpandOperator
+import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
-import relalg.ProjectionOperator
 
 class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
@@ -14,41 +14,36 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	 */
 	boolean parentheses
 
-	new(boolean full, boolean parentheses) {
-		super(full)
+	new(boolean parentheses) {
+		super(true)
 		this.parentheses = parentheses
 	}
 
 	override serializeBody(Operator expression) {
-		'''$$«convert(expression)»$$'''
-	}
-
-	/**
-	 * alpha operators
-	 */
-	def dispatch String convert(GetVerticesOperator operator) {
-		'''\getvertices{}'''
-	}
-
-	def dispatch String convert(DuplicateEliminationOperator operator) {
-		'''\duplicateelimination \left(«operator.input.convert»\right)'''
-	}
-
-	def dispatch String convert(ExpandOperator operator) {
-		'''\expand«operator.direction.toString.toLowerCase»{}{} \left(«operator.input.convert»\right)'''
-	}
-
-	def dispatch String convert(ProjectionOperator operator) {
-		'''\projection{...} \left(«operator.input.convert»\right)'''
-	}
-
-	/**
-	 * beta operators
-	 */
-	def dispatch String convert(BetaOperator operator) {
 		'''
-		«IF parentheses» \left( «ENDIF»
-		«operator.leftInput.convert» \«betaOperator(operator)» «operator.rightInput.convert»«IF parentheses» \right) «ENDIF»'''
+		\begin{preview}
+		$«children(expression)»$
+		\end{preview}
+		'''
+	}
+
+	/**
+	 * children
+	 */
+	def dispatch CharSequence children(GetVerticesOperator op) {
+		'''«op.operatorSymbol»'''
+	}
+
+	def dispatch CharSequence children(GetEdgesOperator op) {
+		'''«op.operatorSymbol»'''
+	}
+
+	def dispatch CharSequence children(AlphaOperator op) {
+		'''«op.operatorSymbol» \left(«op.input.children»\right)'''
+	}
+
+	def dispatch CharSequence children(BetaOperator op) {
+		'''«op.leftInput.children» «op.operatorSymbol» «op.rightInput.children»'''
 	}
 
 }

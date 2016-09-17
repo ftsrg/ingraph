@@ -7,7 +7,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class RouteSensorOptimizationTreeTest {
 
-	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
+	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
 	var RouteSensorQueryPlanFactory f
 	
 	@Before

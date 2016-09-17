@@ -6,8 +6,8 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class TrainBenchmarkHandcraftedTreeTest {
 
-	val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
-	
+	val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+
 	@Test
 	def void testPosLength() {
 		serializer.serialize(TrainBenchmarkUtil.posLength, "trainbenchmark-poslength-handcrafted")

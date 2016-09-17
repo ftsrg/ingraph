@@ -7,12 +7,12 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class SemaphoreNeighborTransformedTreeTest {
 
-	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
+	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
 	var SemaphoreNeighborQueryPlanFactory f
-	
+
 	@Before
 	def void init() {
-		f = new SemaphoreNeighborQueryPlanFactory()	
+		f = new SemaphoreNeighborQueryPlanFactory()
 	}
 
 	@Test

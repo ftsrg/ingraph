@@ -5,17 +5,6 @@
 
 \begin{document}
 \begin{preview}
-\begin{tikzpicture}
-\Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{segment}}$}
-		[. {$\selection{}$}
-			[. {$\getvertices{segment}{Segment}$}
-			]
-		]
-	]
-]
-;
-\end{tikzpicture}
+$\duplicateelimination \left(\projection{\var{segment},~\var{length}} \left(\selection{\var{segment.length} \leq \literal{0}} \left(\getvertices{segment}{Segment}\right)\right)\right)$
 \end{preview}
 \end{document}

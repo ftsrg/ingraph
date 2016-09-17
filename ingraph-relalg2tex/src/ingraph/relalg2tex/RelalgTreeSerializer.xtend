@@ -9,8 +9,8 @@ import relalg.Operator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
-	new(boolean full) {
-		super(full)
+	new() {
+		super(true)
 	}
 
 	override serializeBody(Operator expression) {
@@ -53,9 +53,6 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
 	def dispatch children(GetEdgesOperator op) {
 		''''''
-	/**
-	 * children
-	 */
 	}
 
 	def dispatch children(AlphaOperator op) {

@@ -37,18 +37,22 @@ import relalg.VertexVariable
 abstract class AbstractRelalgSerializer {
 
 	/**
-	 * whether to generate a full TeX document
+	 * whether to generate a standalone TeX document
 	 */
-	protected boolean full
+	protected boolean document
 
-	new(boolean full) {
-		this.full = full
+	new(boolean document) {
+		this.document = document
 	}
 
 	def serialize(Container container, String filename) {
 		val tex = convertAlgebraExpression(container.rootExpression)
-		val file = new File("../visualization/" + filename + ".tex")
-		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
+		if (document) {
+			val file = new File("../visualization/" + filename + ".tex")
+			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
+		} else {
+			println(tex)	
+		}
 		tex
 	}
 
@@ -61,8 +65,8 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
-			«IF full»
-				\documentclass[varwidth,convert={density=120}]{standalone}
+			«IF document»
+				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				
 				\input{inputs/relalg-packages}
 				\input{inputs/relalg-commands}
@@ -70,7 +74,7 @@ abstract class AbstractRelalgSerializer {
 				\begin{document}
 			«ENDIF»
 			«serializeBody(expression)»
-			«IF full»
+			«IF document»
 				\end{document}
 			«ENDIF»
 		'''

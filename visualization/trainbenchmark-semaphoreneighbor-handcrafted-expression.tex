@@ -1,0 +1,10 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+$\duplicateelimination \left(\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}} \left(\selection{\var{route1} \neq \var{route2}} \left(\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}} \left(\expandin{\_e6}{gathers}{sensor}{route2}{Route} \left(\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor} \left(\expandout{\_e4}{connectsTo}{te1}{te2}{} \left(\expandin{\_e3}{monitoredBy}{sensor1}{te1}{} \left(\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor} \left(\expandin{\_e1}{exit}{semaphore}{route1}{Route} \left(\getvertices{semaphore}{Semaphore}\right)\right)\right)\right)\right)\right)\right) \antijoin \expandin{\_e7}{entry}{semaphore}{route2}{Route} \left(\getvertices{semaphore}{Semaphore}\right)\right)\right)\right)$
+\end{preview}
+\end{document}

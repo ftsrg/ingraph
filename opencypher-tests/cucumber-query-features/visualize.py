@@ -26,7 +26,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 
 class %sVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     """ % filename_without_extension
 
     test_file.write(test_header)
