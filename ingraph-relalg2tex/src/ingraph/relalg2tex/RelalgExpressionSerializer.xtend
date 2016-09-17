@@ -1,6 +1,5 @@
 package ingraph.relalg2tex
 
-import relalg.AllDifferentOperator
 import relalg.AlphaOperator
 import relalg.BetaOperator
 import relalg.GetEdgesOperator

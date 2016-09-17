@@ -7,22 +7,22 @@
 \begin{preview}
 \begin{tikzpicture}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$}
-		[. {$\antijoin$}
-			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-				[. {$\join$}
-					[. {$\join$}
-						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$}
+[. {$\duplicateelimination \{\var{route, sensor, swP, sw}\}$}
+	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \{\var{route, sensor, swP, sw}\}$}
+		[. {$\antijoin \{\var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4}\}$}
+			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}} \{\var{route, \_e1, swP, \_e2, sw, \_e3, sensor}\}$}
+				[. {$\join \{\var{route, \_e1, swP, \_e2, sw, \_e3, sensor}\}$}
+					[. {$\join \{\var{route, \_e1, swP, \_e2, sw}\}$}
+						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows} \{\var{route, \_e1, swP}\}$}
 						]
-						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$}
+						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target} \{\var{swP, \_e2, sw}\}$}
 						]
 					]
-					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$}
+					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy} \{\var{sw, \_e3, sensor}\}$}
 					]
 				]
 			]
-			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$}
+			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers} \{\var{route, \_e4, sensor}\}$}
 			]
 		]
 	]

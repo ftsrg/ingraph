@@ -68,13 +68,22 @@ public interface RelalgPackage extends EPackage {
 	int OPERATOR = 0;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPERATOR__SCHEMA = 0;
+
+	/**
 	 * The number of structural features of the '<em>Operator</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATOR_FEATURE_COUNT = 0;
+	int OPERATOR_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of operations of the '<em>Operator</em>' class.
@@ -94,6 +103,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int ALPHA_OPERATOR = 3;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALPHA_OPERATOR__SCHEMA = OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -131,6 +149,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int PROJECTION_OPERATOR = 1;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROJECTION_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -179,6 +206,15 @@ public interface RelalgPackage extends EPackage {
 	int BETA_OPERATOR = 4;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BETA_OPERATOR__SCHEMA = OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -223,6 +259,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int JOIN_OPERATOR = 2;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
@@ -271,6 +316,15 @@ public interface RelalgPackage extends EPackage {
 	int ANTI_JOIN_OPERATOR = 5;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANTI_JOIN_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -317,6 +371,15 @@ public interface RelalgPackage extends EPackage {
 	int PRODUCTION_OPERATOR = 6;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRODUCTION_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -352,6 +415,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int SELECTION_OPERATOR = 7;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SELECTION_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -407,6 +479,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int EXPAND_OPERATOR = 8;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPAND_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -482,6 +563,15 @@ public interface RelalgPackage extends EPackage {
 	int GET_VERTICES_OPERATOR = 9;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_VERTICES_OPERATOR__SCHEMA = OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Vertex Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -517,6 +607,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int DUPLICATE_ELIMINATION_OPERATOR = 10;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DUPLICATE_ELIMINATION_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
@@ -1005,6 +1104,15 @@ public interface RelalgPackage extends EPackage {
 	int ALL_DIFFERENT_OPERATOR = 17;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALL_DIFFERENT_OPERATOR__SCHEMA = ALPHA_OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Input</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1113,6 +1221,15 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	int UNION_OPERATOR = 20;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNION_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
@@ -1924,6 +2041,15 @@ public interface RelalgPackage extends EPackage {
 	int GET_EDGES_OPERATOR = 35;
 
 	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GET_EDGES_OPERATOR__SCHEMA = OPERATOR__SCHEMA;
+
+	/**
 	 * The feature id for the '<em><b>Source Vertex Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2076,6 +2202,17 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getOperator();
+
+	/**
+	 * Returns the meta object for the reference list '{@link relalg.Operator#getSchema <em>Schema</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Schema</em>'.
+	 * @see relalg.Operator#getSchema()
+	 * @see #getOperator()
+	 * @generated
+	 */
+	EReference getOperator_Schema();
 
 	/**
 	 * Returns the meta object for class '{@link relalg.ProjectionOperator <em>Projection Operator</em>}'.
@@ -3009,6 +3146,14 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EClass OPERATOR = eINSTANCE.getOperator();
+
+		/**
+		 * The meta object literal for the '<em><b>Schema</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPERATOR__SCHEMA = eINSTANCE.getOperator_Schema();
 
 		/**
 		 * The meta object literal for the '{@link relalg.impl.ProjectionOperatorImpl <em>Projection Operator</em>}' class.

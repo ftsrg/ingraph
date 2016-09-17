@@ -28,20 +28,15 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	/**
 	 * toNode
 	 */
-	def dispatch CharSequence toNode(AllDifferentOperator expression) {
+	def CharSequence toNode(
+		Operator expression) {
 		'''
-		«IF expression.edgeVariables.empty»
-		«toNode(expression.input)»
+		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
+			«toNode((expression as AllDifferentOperator).input)»
 		«ELSE»
-		[. {$«expression?.operatorSymbol»$}«expression?.children»
-		]
+			[. {$«expression?.operatorSymbol» \{\var{«expression.schema.map[ name.escape ].join(", ")»}\}$}«expression?.children»
+			]
 		«ENDIF»'''
-	}
-	 
-	def dispatch CharSequence toNode(Operator expression) {
-		'''
-		[. {$«expression?.operatorSymbol»$}«expression?.children»
-		]'''
 	}
 
 	/**

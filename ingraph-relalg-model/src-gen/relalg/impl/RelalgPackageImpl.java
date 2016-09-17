@@ -469,6 +469,15 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getOperator_Schema() {
+		return (EReference)operatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getProjectionOperator() {
 		return projectionOperatorEClass;
 	}
@@ -1267,6 +1276,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		// Create classes and their features
 		operatorEClass = createEClass(OPERATOR);
+		createEReference(operatorEClass, OPERATOR__SCHEMA);
 
 		projectionOperatorEClass = createEClass(PROJECTION_OPERATOR);
 		createEReference(projectionOperatorEClass, PROJECTION_OPERATOR__VARIABLES);
@@ -1466,6 +1476,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(operatorEClass, Operator.class, "Operator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOperator_Schema(), this.getVariable(), null, "schema", null, 0, -1, Operator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(projectionOperatorEClass, ProjectionOperator.class, "ProjectionOperator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProjectionOperator_Variables(), this.getVariable(), null, "variables", null, 0, -1, ProjectionOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

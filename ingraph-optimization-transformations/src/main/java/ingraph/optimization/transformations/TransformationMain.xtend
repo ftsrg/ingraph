@@ -5,8 +5,13 @@ import ingraph.trainbenchmark.TrainBenchmarkUtil
 class TransformationMain {
 
 	def static void main(String[] args) {
+		val rawQueryPlan = TrainBenchmarkUtil.routeSensor
+
 		val t = new Transformation
-		t.transform(TrainBenchmarkUtil.routeSensor)
+		val transformedQueryPlan = t.transform(rawQueryPlan)
+	
+		val inferencer = new SchemaInferencer
+		val queryPlanWithSchema = inferencer.addSchemaInformation(transformedQueryPlan)
 	}
 
 }

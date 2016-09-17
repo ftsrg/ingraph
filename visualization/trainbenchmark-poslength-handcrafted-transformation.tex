@@ -7,10 +7,10 @@
 \begin{preview}
 \begin{tikzpicture}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{segment},~\var{length}}$}
-		[. {$\selection{\var{segment.length} \leq \literal{0}}$}
-			[. {$\getvertices{segment}{Segment}$}
+[. {$\duplicateelimination \{\var{segment, length}\}$}
+	[. {$\projection{\var{segment},~\var{length}} \{\var{segment, length}\}$}
+		[. {$\selection{\var{segment.length} \leq \literal{0}} \{\var{segment}\}$}
+			[. {$\getvertices{segment}{Segment} \{\var{segment}\}$}
 			]
 		]
 	]

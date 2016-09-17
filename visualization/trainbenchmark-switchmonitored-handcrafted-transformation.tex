@@ -7,11 +7,11 @@
 \begin{preview}
 \begin{tikzpicture}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\antijoin$}
-		[. {$\getvertices{sw}{Switch}$}
+[. {$\duplicateelimination \{\var{sw, \_e1, \_sensor}\}$}
+	[. {$\antijoin \{\var{sw, \_e1, \_sensor}\}$}
+		[. {$\getvertices{sw}{Switch} \{\var{sw}\}$}
 		]
-		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy}$}
+		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy} \{\var{sw, \_e1, \_sensor}\}$}
 		]
 	]
 ]
