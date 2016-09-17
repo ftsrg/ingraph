@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.tck
+package ingraph.cypher2.tck
 
 import org.junit.Test
 
@@ -72,28 +72,6 @@ class UnwindAcceptanceParserTest {
         WITH collect(row) AS rows
         UNWIND rows AS node
         RETURN node.id
-        ''')
-    }
-
-    /*
-    Scenario: Creating nodes from an unwound parameter list
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:Year {year: 2016})
-      """
-    And parameters are:
-      | events | [{year: 2016, id: 1}, {year: 2016, id: 2}] |
-    */
-    @Test
-    def void testUnwindAcceptance_06() {
-        RelalgParser.parse('''
-        UNWIND $events AS event
-        MATCH (y:Year {year: event.year})
-        MERGE (e:Event {id: event.id})
-        MERGE (y)<-[:IN]-(e)
-        RETURN e.id AS x
-        ORDER BY x
         ''')
     }
 

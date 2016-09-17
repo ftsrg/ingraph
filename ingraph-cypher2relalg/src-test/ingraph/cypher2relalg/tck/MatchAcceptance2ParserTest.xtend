@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.tck
+package ingraph.cypher2.tck
 
 import org.junit.Test
 
@@ -1819,27 +1819,6 @@ class MatchAcceptance2ParserTest {
         RelalgParser.parse('''
         MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
         RETURN m
-        ''')
-    }
-
-    /*
-    Scenario: Counting rows after MATCH, MERGE, OPTIONAL MATCH
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (a:A), (b:B)
-      CREATE (a)-[:T1]->(b),
-             (b)-[:T2]->(a)
-      """
-    */
-    @Test
-    def void testMatchAcceptance2_100() {
-        RelalgParser.parse('''
-        MATCH (a)
-        MERGE (b)
-        WITH *
-        OPTIONAL MATCH (a)--(b)
-        RETURN count(*)
         ''')
     }
 

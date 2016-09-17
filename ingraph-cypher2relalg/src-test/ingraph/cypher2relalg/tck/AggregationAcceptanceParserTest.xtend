@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.tck
+package ingraph.cypher2.tck
 
 import org.junit.Test
 
@@ -370,25 +370,6 @@ class AggregationAcceptanceParserTest {
         RETURN coalesce(a.prop, b.prop) AS foo,
         b.prop AS bar,
         {y: count(b)} AS baz
-        ''')
-    }
-
-    /*
-    Scenario: Projection during aggregation in WITH before MERGE and after WITH with predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:A {prop: 42})
-      """
-    */
-    @Test
-    def void testAggregationAcceptance_23() {
-        RelalgParser.parse('''
-        UNWIND [42] AS props
-        WITH props WHERE props > 32
-        WITH DISTINCT props AS p
-        MERGE (a:A {prop: p})
-        RETURN a.prop AS prop
         ''')
     }
 

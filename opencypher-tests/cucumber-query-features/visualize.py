@@ -48,7 +48,7 @@ class %sVisualizationTest {
 
         i += 1
 
-        if ("CREATE " in query) or ("DELETE " in query) or ("SET " in query):
+        if ("CREATE " in query) or ("DELETE " in query) or ("MERGE " in query) or ("SET " in query):
             continue
 
         with open("../../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:

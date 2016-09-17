@@ -1925,28 +1925,6 @@ class MatchAcceptance2VisualizationTest {
     }
 
     /*
-    Scenario: Counting rows after MATCH, MERGE, OPTIONAL MATCH
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (a:A), (b:B)
-      CREATE (a)-[:T1]->(b),
-             (b)-[:T2]->(a)
-      """
-    */
-    @Test
-    def void testMatchAcceptance2_100() {
-        val container = RelalgParser.parse('''
-        MATCH (a)
-        MERGE (b)
-        WITH *
-        OPTIONAL MATCH (a)--(b)
-        RETURN count(*)
-        ''')
-        serializer.serialize(container, "MatchAcceptance2_100")
-    }
-
-    /*
     Scenario: Matching a self-loop
     Given an empty graph
     And having executed:
