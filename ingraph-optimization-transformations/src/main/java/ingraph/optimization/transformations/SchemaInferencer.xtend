@@ -1,8 +1,8 @@
 package ingraph.optimization.transformations
 
+import com.google.common.collect.Iterables
+import com.google.common.collect.Lists
 import java.util.List
-import java.util.stream.Collectors
-import java.util.stream.Stream
 import relalg.AbstractJoinOperator
 import relalg.AlphaOperator
 import relalg.AttributeVariable
@@ -15,8 +15,6 @@ import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.UnionOperator
 import relalg.Variable
-import com.google.common.collect.Lists
-import com.google.common.collect.Iterables
 
 class SchemaInferencer {
 
