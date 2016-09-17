@@ -216,13 +216,13 @@ abstract class RelAlgUtil {
 	def dispatch convertComparable(StringLiteral stringLiteral) {
 		'''\literal{"«stringLiteral.value.toString»"}'''
 	}
-	
+
 	def dispatch convertComparable(ElementVariable elementVariable) {
 		'''\var{«elementVariable.name»}'''
 	}
 
 	def dispatch convertComparable(AttributeVariable attributeVariable) {
-		'''\var{«attributeVariable.element.name».«attributeVariable.name»}''' 
+		'''\var{«attributeVariable.element.name».«attributeVariable.name»}'''
 	}
 
 	/**

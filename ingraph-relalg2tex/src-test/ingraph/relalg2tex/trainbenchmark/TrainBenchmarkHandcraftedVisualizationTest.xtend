@@ -1,12 +1,12 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeDrawer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
 
 class TrainBenchmarkHandcraftedVisualizationTest {
 
-	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+	val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
 
 	@Test
 	def void testPosLength() {

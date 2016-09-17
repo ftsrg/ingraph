@@ -77,9 +77,12 @@ class Transformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
+			println("getExpandOperatorRule activated")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
+				sourceVertexVariable = expandOperator.sourceVertexVariable
+				targetVertexVariable = expandOperator.targetVertexVariable
 				edgeVariable = expandOperator.edgeVariable
 			]
 			val joinOperator = createJoinOperator => [

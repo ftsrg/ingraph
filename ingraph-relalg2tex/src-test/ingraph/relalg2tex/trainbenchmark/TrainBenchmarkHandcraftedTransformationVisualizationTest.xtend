@@ -1,13 +1,13 @@
 package ingraph.relalg2tex.trainbenchmark
 
 import ingraph.optimization.transformations.Transformation
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeDrawer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
 
 class TrainBenchmarkHandcraftedTransformationVisualizationTest {
 
-	val RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+	val RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
 	val Transformation transformation = new Transformation
 
 	@Test

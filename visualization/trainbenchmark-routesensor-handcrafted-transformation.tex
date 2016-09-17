@@ -11,10 +11,12 @@
 	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$}
 		[. {$\antijoin$}
 			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-				[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$}
+				[. {$\join$}
 					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$}
 						[. {$\getedges{route}{SwitchPosition}{follows}$}
 						]
+					]
+					[. {$\getedges{sw}{Sensor}{monitoredBy}$}
 					]
 				]
 			]

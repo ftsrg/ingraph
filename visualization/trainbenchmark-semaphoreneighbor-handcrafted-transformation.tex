@@ -12,16 +12,20 @@
 		[. {$\selection{\var{route1} \neq \var{route2}}$}
 			[. {$\antijoin$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$}
-					[. {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$}
+					[. {$\join$}
 						[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$}
 							[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$}
 								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$}
-									[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$}
-										[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$}
+									[. {$\join$}
+										[. {$\getedges{semaphore}{Route}{exit}$}
+										]
+										[. {$\getedges{route1}{Sensor}{gathers}$}
 										]
 									]
 								]
 							]
+						]
+						[. {$\getedges{sensor}{Route}{gathers}$}
 						]
 					]
 				]

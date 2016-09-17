@@ -7,7 +7,7 @@ import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
 
-class RelAlgTreeDrawer extends RelAlgUtil {
+class RelalgTreeDrawer extends RelAlgUtil {
 
 	new(boolean full) {
 		super(full)

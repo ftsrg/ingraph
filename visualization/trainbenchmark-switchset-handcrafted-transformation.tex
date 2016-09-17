@@ -12,10 +12,14 @@
 		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$}
 			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
-						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
+					[. {$\join$}
+						[. {$\join$}
 							[. {$\getedges{semaphore}{Route}{entry}$}
 							]
+							[. {$\getedges{route}{SwitchPosition}{follows}$}
+							]
+						]
+						[. {$\getedges{swP}{Switch}{target}$}
 						]
 					]
 				]

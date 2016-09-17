@@ -195,10 +195,11 @@ class TrainBenchmarkUtil {
 		val _e7 = createEdgeVariable =>
 			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.container = container]
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore]
+		val getVertices1 = createGetVerticesOperator => [vertexVariable = semaphore]
+		val getVertices2 = createGetVerticesOperator => [vertexVariable = semaphore]
 
 		val expand1 = createExpandOperator => [
-			input = getVertices
+			input = getVertices1
 			direction = Direction.IN
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route1
@@ -246,7 +247,7 @@ class TrainBenchmarkUtil {
 		]
 
 		val expand7 = createExpandOperator => [
-			input = getVertices
+			input = getVertices2
 			direction = Direction.IN
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route2

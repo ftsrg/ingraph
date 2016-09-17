@@ -3,11 +3,11 @@ package ingraph.relalg2tex.trainbenchmark
 import ingraph.trainbenchmark.SemaphoreNeighborQueryPlanFactory
 import org.junit.Before
 import org.junit.Test
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeDrawer
 
 class SemaphoreNeighborOptimizationVisualizationTest {
 
-	val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+	val static RelalgTreeDrawer drawer = new RelalgTreeDrawer(true)
 	var SemaphoreNeighborQueryPlanFactory f
 	
 	@Before
