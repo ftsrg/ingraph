@@ -11,37 +11,37 @@ class TrainBenchmarkQueryPlanVisualizationTest {
 	@Test
 	def void testConnectedSegments() {
 		val expression = RelalgParser.parseFile("trainbenchmark/ConnectedSegments")
-		drawer.serialize(expression, "connectedsegments")
+		drawer.serialize(expression, "trainbenchmark-connectedsegments-relalgparser")
 	}
 
 	@Test
 	def void testPosLength() {
 		val expression = RelalgParser.parseFile("trainbenchmark/PosLength")
-		drawer.serialize(expression, "poslength")
+		drawer.serialize(expression, "trainbenchmark-poslength-relalgparser")
 	}
 
 	@Test
 	def void testRouteSensor() {
 		val expression = RelalgParser.parseFile("trainbenchmark/RouteSensor")
-		drawer.serialize(expression, "routesensor")
+		drawer.serialize(expression, "trainbenchmark-routesensor-relalgparser")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() {
 		val expression = RelalgParser.parseFile("trainbenchmark/SemaphoreNeighbor")
-		drawer.serialize(expression, "semaphoreneighbor")
+		drawer.serialize(expression, "trainbenchmark-semaphoreneighbor-relalgparser")
 	}
 
 	@Test
 	def void testSwitchMonitored() {
 		val expression = RelalgParser.parseFile("trainbenchmark/SwitchMonitored")
-		drawer.serialize(expression, "switchmonitored")
+		drawer.serialize(expression, "trainbenchmark-switchmonitored-relalgparser")
 	}
 
 	@Test
 	def void testSwitchSet() {
 		val expression = RelalgParser.parseFile("trainbenchmark/SwitchSet")
-		drawer.serialize(expression, "switchset")
+		drawer.serialize(expression, "trainbenchmark-switchset-relalgparser")
 	}
 
 }

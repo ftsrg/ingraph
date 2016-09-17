@@ -101,7 +101,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(SelectionOperator op) {
-		'''\selection{«op.condition.convertExpression»}'''
+		'''\selection{«op.condition?.convertExpression»}'''
 	}
 
 	def dispatch operatorSymbol(GetEdgesOperator op) {

@@ -94,3 +94,6 @@ sympy-plots-for-*.tex/
 
 *.soc
 /out
+
+body.html
+
