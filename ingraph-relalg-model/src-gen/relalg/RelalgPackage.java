@@ -251,6 +251,70 @@ public interface RelalgPackage extends EPackage {
 	int BETA_OPERATOR_OPERATION_COUNT = OPERATOR_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link relalg.impl.AbstractJoinOperatorImpl <em>Abstract Join Operator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see relalg.impl.AbstractJoinOperatorImpl
+	 * @see relalg.impl.RelalgPackageImpl#getAbstractJoinOperator()
+	 * @generated
+	 */
+	int ABSTRACT_JOIN_OPERATOR = 40;
+
+	/**
+	 * The feature id for the '<em><b>Schema</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
+
+	/**
+	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Mutual Variables</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR__MUTUAL_VARIABLES = BETA_OPERATOR_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Join Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Abstract Join Operator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_JOIN_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link relalg.impl.JoinOperatorImpl <em>Join Operator</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -267,7 +331,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
+	int JOIN_OPERATOR__SCHEMA = ABSTRACT_JOIN_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
@@ -276,7 +340,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
+	int JOIN_OPERATOR__LEFT_INPUT = ABSTRACT_JOIN_OPERATOR__LEFT_INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
@@ -285,7 +349,16 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
+	int JOIN_OPERATOR__RIGHT_INPUT = ABSTRACT_JOIN_OPERATOR__RIGHT_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Mutual Variables</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN_OPERATOR__MUTUAL_VARIABLES = ABSTRACT_JOIN_OPERATOR__MUTUAL_VARIABLES;
 
 	/**
 	 * The number of structural features of the '<em>Join Operator</em>' class.
@@ -294,7 +367,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 0;
+	int JOIN_OPERATOR_FEATURE_COUNT = ABSTRACT_JOIN_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Join Operator</em>' class.
@@ -303,7 +376,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
+	int JOIN_OPERATOR_OPERATION_COUNT = ABSTRACT_JOIN_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.AntiJoinOperatorImpl <em>Anti Join Operator</em>}' class.
@@ -322,7 +395,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR__SCHEMA = BETA_OPERATOR__SCHEMA;
+	int ANTI_JOIN_OPERATOR__SCHEMA = ABSTRACT_JOIN_OPERATOR__SCHEMA;
 
 	/**
 	 * The feature id for the '<em><b>Left Input</b></em>' containment reference.
@@ -331,7 +404,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR__LEFT_INPUT = BETA_OPERATOR__LEFT_INPUT;
+	int ANTI_JOIN_OPERATOR__LEFT_INPUT = ABSTRACT_JOIN_OPERATOR__LEFT_INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Right Input</b></em>' containment reference.
@@ -340,7 +413,16 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR__RIGHT_INPUT = BETA_OPERATOR__RIGHT_INPUT;
+	int ANTI_JOIN_OPERATOR__RIGHT_INPUT = ABSTRACT_JOIN_OPERATOR__RIGHT_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Mutual Variables</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANTI_JOIN_OPERATOR__MUTUAL_VARIABLES = ABSTRACT_JOIN_OPERATOR__MUTUAL_VARIABLES;
 
 	/**
 	 * The number of structural features of the '<em>Anti Join Operator</em>' class.
@@ -349,7 +431,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR_FEATURE_COUNT = BETA_OPERATOR_FEATURE_COUNT + 0;
+	int ANTI_JOIN_OPERATOR_FEATURE_COUNT = ABSTRACT_JOIN_OPERATOR_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Anti Join Operator</em>' class.
@@ -358,7 +440,7 @@ public interface RelalgPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ANTI_JOIN_OPERATOR_OPERATION_COUNT = BETA_OPERATOR_OPERATION_COUNT + 0;
+	int ANTI_JOIN_OPERATOR_OPERATION_COUNT = ABSTRACT_JOIN_OPERATOR_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link relalg.impl.ProductionOperatorImpl <em>Production Operator</em>}' class.
@@ -2130,7 +2212,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getDirection()
 	 * @generated
 	 */
-	int DIRECTION = 40;
+	int DIRECTION = 41;
 
 	/**
 	 * The meta object id for the '{@link relalg.ArithmeticComparisonOperator <em>Arithmetic Comparison Operator</em>}' enum.
@@ -2140,7 +2222,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getArithmeticComparisonOperator()
 	 * @generated
 	 */
-	int ARITHMETIC_COMPARISON_OPERATOR = 41;
+	int ARITHMETIC_COMPARISON_OPERATOR = 42;
 
 	/**
 	 * The meta object id for the '{@link relalg.StringComparisonOperator <em>String Comparison Operator</em>}' enum.
@@ -2150,7 +2232,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getStringComparisonOperator()
 	 * @generated
 	 */
-	int STRING_COMPARISON_OPERATOR = 42;
+	int STRING_COMPARISON_OPERATOR = 43;
 
 	/**
 	 * The meta object id for the '{@link relalg.BinaryLogicalOperator <em>Binary Logical Operator</em>}' enum.
@@ -2160,7 +2242,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getBinaryLogicalOperator()
 	 * @generated
 	 */
-	int BINARY_LOGICAL_OPERATOR = 43;
+	int BINARY_LOGICAL_OPERATOR = 44;
 
 	/**
 	 * The meta object id for the '{@link relalg.BinaryArithmeticOperator <em>Binary Arithmetic Operator</em>}' enum.
@@ -2170,7 +2252,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getBinaryArithmeticOperator()
 	 * @generated
 	 */
-	int BINARY_ARITHMETIC_OPERATOR = 44;
+	int BINARY_ARITHMETIC_OPERATOR = 45;
 
 	/**
 	 * The meta object id for the '{@link relalg.UnaryArithmeticOperator <em>Unary Arithmetic Operator</em>}' enum.
@@ -2180,7 +2262,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getUnaryArithmeticOperator()
 	 * @generated
 	 */
-	int UNARY_ARITHMETIC_OPERATOR = 45;
+	int UNARY_ARITHMETIC_OPERATOR = 46;
 
 	/**
 	 * The meta object id for the '{@link relalg.Order <em>Order</em>}' enum.
@@ -2190,7 +2272,7 @@ public interface RelalgPackage extends EPackage {
 	 * @see relalg.impl.RelalgPackageImpl#getOrder()
 	 * @generated
 	 */
-	int ORDER = 46;
+	int ORDER = 47;
 
 
 	/**
@@ -3045,6 +3127,27 @@ public interface RelalgPackage extends EPackage {
 	EReference getComparisonExpression_RightOperand();
 
 	/**
+	 * Returns the meta object for class '{@link relalg.AbstractJoinOperator <em>Abstract Join Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Join Operator</em>'.
+	 * @see relalg.AbstractJoinOperator
+	 * @generated
+	 */
+	EClass getAbstractJoinOperator();
+
+	/**
+	 * Returns the meta object for the reference list '{@link relalg.AbstractJoinOperator#getMutualVariables <em>Mutual Variables</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Mutual Variables</em>'.
+	 * @see relalg.AbstractJoinOperator#getMutualVariables()
+	 * @see #getAbstractJoinOperator()
+	 * @generated
+	 */
+	EReference getAbstractJoinOperator_MutualVariables();
+
+	/**
 	 * Returns the meta object for enum '{@link relalg.Direction <em>Direction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3864,6 +3967,24 @@ public interface RelalgPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMPARISON_EXPRESSION__RIGHT_OPERAND = eINSTANCE.getComparisonExpression_RightOperand();
+
+		/**
+		 * The meta object literal for the '{@link relalg.impl.AbstractJoinOperatorImpl <em>Abstract Join Operator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see relalg.impl.AbstractJoinOperatorImpl
+		 * @see relalg.impl.RelalgPackageImpl#getAbstractJoinOperator()
+		 * @generated
+		 */
+		EClass ABSTRACT_JOIN_OPERATOR = eINSTANCE.getAbstractJoinOperator();
+
+		/**
+		 * The meta object literal for the '<em><b>Mutual Variables</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ABSTRACT_JOIN_OPERATOR__MUTUAL_VARIABLES = eINSTANCE.getAbstractJoinOperator_MutualVariables();
 
 		/**
 		 * The meta object literal for the '{@link relalg.Direction <em>Direction</em>}' enum.

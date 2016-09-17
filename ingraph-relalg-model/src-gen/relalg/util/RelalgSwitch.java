@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import relalg.AbstractJoinOperator;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -122,6 +123,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.JOIN_OPERATOR: {
 				JoinOperator joinOperator = (JoinOperator)theEObject;
 				T result = caseJoinOperator(joinOperator);
+				if (result == null) result = caseAbstractJoinOperator(joinOperator);
 				if (result == null) result = caseBetaOperator(joinOperator);
 				if (result == null) result = caseOperator(joinOperator);
 				if (result == null) result = defaultCase(theEObject);
@@ -144,6 +146,7 @@ public class RelalgSwitch<T> extends Switch<T> {
 			case RelalgPackage.ANTI_JOIN_OPERATOR: {
 				AntiJoinOperator antiJoinOperator = (AntiJoinOperator)theEObject;
 				T result = caseAntiJoinOperator(antiJoinOperator);
+				if (result == null) result = caseAbstractJoinOperator(antiJoinOperator);
 				if (result == null) result = caseBetaOperator(antiJoinOperator);
 				if (result == null) result = caseOperator(antiJoinOperator);
 				if (result == null) result = defaultCase(theEObject);
@@ -441,6 +444,14 @@ public class RelalgSwitch<T> extends Switch<T> {
 				if (result == null) result = caseBinaryExpression(comparisonExpression);
 				if (result == null) result = caseExpression(comparisonExpression);
 				if (result == null) result = caseReturnableElement(comparisonExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case RelalgPackage.ABSTRACT_JOIN_OPERATOR: {
+				AbstractJoinOperator abstractJoinOperator = (AbstractJoinOperator)theEObject;
+				T result = caseAbstractJoinOperator(abstractJoinOperator);
+				if (result == null) result = caseBetaOperator(abstractJoinOperator);
+				if (result == null) result = caseOperator(abstractJoinOperator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1045,6 +1056,21 @@ public class RelalgSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseComparisonExpression(ComparisonExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Join Operator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Join Operator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractJoinOperator(AbstractJoinOperator object) {
 		return null;
 	}
 

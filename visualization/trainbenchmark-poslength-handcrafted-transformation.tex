@@ -6,11 +6,12 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination \{\var{segment, length}\}$}
-	[. {$\projection{\var{segment},~\var{length}} \{\var{segment, length}\}$}
-		[. {$\selection{\var{segment.length} \leq \literal{0}} \{\var{segment}\}$}
-			[. {$\getvertices{segment}{Segment} \{\var{segment}\}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{segment, length}$\}}
+	[. {$\projection{\var{segment},~\var{length}}$ \\ \footnotesize $\{\color{gray} \var{segment, length}$\}}
+		[. {$\selection{\var{segment.length} \leq \literal{0}}$ \\ \footnotesize $\{\color{gray} \var{segment}$\}}
+			[. {$\getvertices{segment}{Segment}$ \\ \footnotesize $\{\color{gray} \var{segment}$\}}
 			]
 		]
 	]

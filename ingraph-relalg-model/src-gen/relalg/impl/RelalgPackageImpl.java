@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import relalg.AbstractJoinOperator;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -344,6 +345,13 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * @generated
 	 */
 	private EClass comparisonExpressionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass abstractJoinOperatorEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1189,6 +1197,24 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAbstractJoinOperator() {
+		return abstractJoinOperatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAbstractJoinOperator_MutualVariables() {
+		return (EReference)abstractJoinOperatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getDirection() {
 		return directionEEnum;
 	}
@@ -1396,6 +1422,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		createEReference(comparisonExpressionEClass, COMPARISON_EXPRESSION__LEFT_OPERAND);
 		createEReference(comparisonExpressionEClass, COMPARISON_EXPRESSION__RIGHT_OPERAND);
 
+		abstractJoinOperatorEClass = createEClass(ABSTRACT_JOIN_OPERATOR);
+		createEReference(abstractJoinOperatorEClass, ABSTRACT_JOIN_OPERATOR__MUTUAL_VARIABLES);
+
 		// Create enums
 		directionEEnum = createEEnum(DIRECTION);
 		arithmeticComparisonOperatorEEnum = createEEnum(ARITHMETIC_COMPARISON_OPERATOR);
@@ -1435,10 +1464,10 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 
 		// Add supertypes to classes
 		projectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
-		joinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
+		joinOperatorEClass.getESuperTypes().add(this.getAbstractJoinOperator());
 		alphaOperatorEClass.getESuperTypes().add(this.getOperator());
 		betaOperatorEClass.getESuperTypes().add(this.getOperator());
-		antiJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
+		antiJoinOperatorEClass.getESuperTypes().add(this.getAbstractJoinOperator());
 		productionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		selectionOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
 		expandOperatorEClass.getESuperTypes().add(this.getAlphaOperator());
@@ -1473,6 +1502,7 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		atomEClass.getESuperTypes().add(this.getExpression());
 		elementVariableEClass.getESuperTypes().add(this.getVariable());
 		comparisonExpressionEClass.getESuperTypes().add(this.getBinaryExpression());
+		abstractJoinOperatorEClass.getESuperTypes().add(this.getBetaOperator());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(operatorEClass, Operator.class, "Operator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1595,6 +1625,9 @@ public class RelalgPackageImpl extends EPackageImpl implements RelalgPackage {
 		initEClass(comparisonExpressionEClass, ComparisonExpression.class, "ComparisonExpression", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getComparisonExpression_LeftOperand(), this.getComparable(), null, "leftOperand", null, 1, 1, ComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComparisonExpression_RightOperand(), this.getComparable(), null, "rightOperand", null, 1, 1, ComparisonExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(abstractJoinOperatorEClass, AbstractJoinOperator.class, "AbstractJoinOperator", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAbstractJoinOperator_MutualVariables(), this.getVariable(), null, "mutualVariables", null, 0, -1, AbstractJoinOperator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(directionEEnum, Direction.class, "Direction");

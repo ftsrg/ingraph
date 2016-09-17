@@ -14,7 +14,7 @@ import relalg.RelalgPackage;
  *
  * @generated
  */
-public class AntiJoinOperatorImpl extends BetaOperatorImpl implements AntiJoinOperator {
+public class AntiJoinOperatorImpl extends AbstractJoinOperatorImpl implements AntiJoinOperator {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

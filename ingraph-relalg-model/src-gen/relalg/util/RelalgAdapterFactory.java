@@ -9,6 +9,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import relalg.AbstractJoinOperator;
 import relalg.AllDifferentOperator;
 import relalg.AlphaOperator;
 import relalg.AntiJoinOperator;
@@ -265,6 +266,10 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseComparisonExpression(ComparisonExpression object) {
 				return createComparisonExpressionAdapter();
+			}
+			@Override
+			public Adapter caseAbstractJoinOperator(AbstractJoinOperator object) {
+				return createAbstractJoinOperatorAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -843,6 +848,20 @@ public class RelalgAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createComparisonExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link relalg.AbstractJoinOperator <em>Abstract Join Operator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see relalg.AbstractJoinOperator
+	 * @generated
+	 */
+	public Adapter createAbstractJoinOperatorAdapter() {
 		return null;
 	}
 

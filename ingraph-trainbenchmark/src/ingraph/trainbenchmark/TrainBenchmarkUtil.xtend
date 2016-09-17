@@ -350,7 +350,6 @@ class TrainBenchmarkUtil {
 		val position = createAttributeVariable => [name = "position"; element = swP; it.container = container]
 		val signal = createAttributeVariable => [name = "signal"; element = semaphore; it.container = container]
 		
-
 		val _e1 = createEdgeVariable => [
 			name = "_e1"; 
 			edgeLabel = entryLabel;

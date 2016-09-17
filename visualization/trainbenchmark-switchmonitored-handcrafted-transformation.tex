@@ -6,12 +6,13 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination \{\var{sw, \_e1, \_sensor}\}$}
-	[. {$\antijoin \{\var{sw, \_e1, \_sensor}\}$}
-		[. {$\getvertices{sw}{Switch} \{\var{sw}\}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
+	[. {$\antijoin$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
+		[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\{\color{gray} \var{sw}$\}}
 		]
-		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy} \{\var{sw, \_e1, \_sensor}\}$}
+		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy}$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
 		]
 	]
 ]

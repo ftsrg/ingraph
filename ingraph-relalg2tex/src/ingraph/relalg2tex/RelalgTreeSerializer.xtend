@@ -17,6 +17,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		'''
 			\begin{preview}
 			\begin{tikzpicture}
+			\linespread{1.25}
 			\Tree
 			«toNode(expression)»
 			;
@@ -34,7 +35,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
 			«toNode((expression as AllDifferentOperator).input)»
 		«ELSE»
-			[. {$«expression?.operatorSymbol» \{\var{«expression.schema.map[ name.escape ].join(", ")»}\}$}«expression?.children»
+			[. {$«expression?.operatorSymbol»$ \\ \footnotesize $\{\color{gray} \var{«expression.schema.map[ name.escape ].join(", ")»}$\}}«expression?.children»
 			]
 		«ENDIF»'''
 	}

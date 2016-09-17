@@ -1,9 +1,9 @@
 #!/bin/bash
 
-cat template-header.html > index.html
+cat template-header.html > visualization.html
 echo > body.html
 
-echo "<ul>" >> index.html
+echo "<ul>" >> visualization.html
 for doc in *.tex; do
   filename="${doc%.*}"
   texfile="$filename.tex"
@@ -16,13 +16,13 @@ for doc in *.tex; do
   fi
 
   # toc
-  echo "  <li><a href='#$filename'>$filename</a></li>" >> index.html
+  echo "  <li><a href='#$filename'>$filename</a></li>" >> visualization.html
 
   # content
   echo "      <h1 id='$filename'><a href='#$filename'>$filename</a></h1>" >> body.html
   echo "      <img src='$filename.png' />" >> body.html
 done
-echo "</ul>" >> index.html
+echo "</ul>" >> visualization.html
 
-cat body.html >> index.html
-cat template-footer.html >> index.html
+cat body.html >> visualization.html
+cat template-footer.html >> visualization.html
