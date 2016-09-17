@@ -51,6 +51,7 @@ import relalg.Variable
 import relalg.VertexVariable
 import ingraph.cypher2relalg.util.RelalgCypherUtil
 import ingraph.antlr.CypherParser.CreateContext
+import ingraph.antlr.CypherParser.ClauseContext
 
 class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 
@@ -403,6 +404,11 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 	
 	override enterCreate(CreateContext ctx) {
 		println(ctx.text)
+	}
+	
+	override exitClause(ClauseContext ctx) {
+		println(pattern_PatternPartList.map[ class.simpleName ].join(", "))
+		println
 	}
 
 }
