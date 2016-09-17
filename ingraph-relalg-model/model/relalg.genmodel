@@ -154,5 +154,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/leftOperand"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference relalg.ecore#//ComparisonExpression/rightOperand"/>
     </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//AbstractJoinOperator">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//AbstractJoinOperator/mutualVariables"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

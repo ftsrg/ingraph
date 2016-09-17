@@ -19,6 +19,7 @@ import ingraph.antlr.CypherParser.RelTypeNameContext
 import ingraph.antlr.CypherParser.RelationshipDetailContext
 import ingraph.antlr.CypherParser.RelationshipPatternContext
 import ingraph.antlr.CypherParser.RelationshipTypesContext
+import ingraph.antlr.CypherParser.RelationshipsPatternContext
 import ingraph.antlr.CypherParser.ReturnBodyContext
 import ingraph.antlr.CypherParser.ReturnContext
 import ingraph.antlr.CypherParser.ReturnItemContext
@@ -36,7 +37,6 @@ import java.util.ArrayList
 import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
-import relalg.Operator
 import relalg.BetaOperator
 import relalg.Container
 import relalg.Direction
@@ -44,13 +44,18 @@ import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
+import relalg.Operator
+import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import ingraph.antlr.CypherParser.RelationshipsPatternContext
+import ingraph.cypher2relalg.util.RelalgCypherUtil
 
-class RelalgCypherListener extends RelalgBaseCypherListener {
+class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	extension RelalgCypherUtil util = new RelalgCypherUtil
+	
 	@Accessors(value=PUBLIC_GETTER) val Container container = createContainer
 
 	@Accessors val vertexVariableFactory = new VertexVariableFactory(container)

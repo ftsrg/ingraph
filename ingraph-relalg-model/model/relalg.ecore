@@ -9,7 +9,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
         eType="#//Variable"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//BetaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinOperator" eSuperTypes="#//AbstractJoinOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="AlphaOperator" abstract="true" eSuperTypes="#//Operator">
     <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//Operator"
         containment="true"/>
@@ -20,7 +20,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightInput" lowerBound="1"
         eType="#//Operator" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//BetaOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntiJoinOperator" eSuperTypes="#//AbstractJoinOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="ProductionOperator" eSuperTypes="#//AlphaOperator"/>
   <eClassifiers xsi:type="ecore:EClass" name="SelectionOperator" eSuperTypes="#//AlphaOperator">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -179,5 +179,10 @@
         eType="#//Comparable" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
         eType="#//Comparable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractJoinOperator" abstract="true"
+      eSuperTypes="#//BetaOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mutualVariables" upperBound="-1"
+        eType="#//Variable"/>
   </eClassifiers>
 </ecore:EPackage>

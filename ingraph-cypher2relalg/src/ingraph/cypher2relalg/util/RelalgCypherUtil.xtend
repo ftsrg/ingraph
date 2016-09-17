@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.cypherlisteners
+package ingraph.cypher2relalg.util
 
 import java.util.Iterator
 import java.util.List
@@ -14,9 +14,9 @@ import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
 
-class RelalgBaseCypherListener extends RelalgBaseUnsupportedCypherListener {
+class RelalgCypherUtil {
 
-	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
 		vertexVariable.vertexLabel = label
