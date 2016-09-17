@@ -1,0 +1,19 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\duplicateelimination$}
+	[. {$\projection{\var{n}}$}
+		[. {$\getvertices{n}{}$}
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

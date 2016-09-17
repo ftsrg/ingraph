@@ -1,0 +1,23 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{n},~\var{x}}$}
+	[. {$\join$}
+		[. {$\getvertices{n}{}$}
+		]
+		[. {$\expandout{\_e1}{NOT\_EXIST}{n}{x}{}$}
+			[. {$\getvertices{n}{}$}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}
