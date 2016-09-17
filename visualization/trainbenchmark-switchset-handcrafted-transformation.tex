@@ -13,8 +13,8 @@
 		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
 			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
-					[. {$\join$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
-						[. {$\join$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP}$\}}
+					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
+						[. {$\join \{\var{route}\}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP}$\}}
 							[. {$\getedges{semaphore}{Semaphore}{route}{Route}{\_e1}{entry}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route}$\}}
 							]
 							[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e2}{follows}$ \\ \footnotesize $\{\color{gray} \var{route, \_e2, swP}$\}}

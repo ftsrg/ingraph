@@ -33,6 +33,7 @@ import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.AbstractJoinOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -51,7 +52,7 @@ abstract class AbstractRelalgSerializer {
 			val file = new File("../visualization/" + filename + ".tex")
 			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		} else {
-			println(tex)	
+			println(tex)
 		}
 		tex
 	}
@@ -98,10 +99,8 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(ExpandOperator op) {
-		'''\expand«op.direction.directionToTex»''' +
-			'''«op.edgeVariable.toTexParameter»''' +
-			'''{«op.sourceVertexVariable.escapedName»}''' +
-			'''«op.targetVertexVariable.toTexParameter»'''
+		'''\expand«op.direction.directionToTex»''' + '''«op.edgeVariable.toTexParameter»''' +
+			'''{«op.sourceVertexVariable.escapedName»}''' + '''«op.targetVertexVariable.toTexParameter»'''
 	}
 
 	def dispatch operatorSymbol(SelectionOperator op) {
@@ -110,9 +109,9 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch operatorSymbol(GetEdgesOperator op) {
 		'''\getedges''' + //
-			'''«op.sourceVertexVariable.toTexParameter»''' + //
-			'''«op.targetVertexVariable.toTexParameter»''' + // 
-			'''«op.edgeVariable.toTexParameter»'''
+		'''«op.sourceVertexVariable.toTexParameter»''' + //
+		'''«op.targetVertexVariable.toTexParameter»''' + //
+		'''«op.edgeVariable.toTexParameter»'''
 	}
 
 	def dispatch operatorSymbol(GetVerticesOperator op) {
@@ -130,18 +129,26 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * betaOperator
 	 */
-	def dispatch betaOperator(JoinOperator operator) {
-		'''join'''
-	}
-
-	def dispatch betaOperator(AntiJoinOperator operator) {
-		'''antijoin'''
+	def dispatch betaOperator(AbstractJoinOperator operator) {
+		'''«operator.joinOperator» \{«operator.mutualVariables.map["\\var{"+ name.escape + "}"].join(", ")»\}'''
 	}
 
 	def dispatch betaOperator(UnionOperator operator) {
 		'''union'''
 	}
 
+	/** joinOperator */
+	def dispatch joinOperator(JoinOperator operator) {
+		'''join'''
+	}
+
+	def dispatch joinOperator(AntiJoinOperator operator) {
+		'''antijoin'''
+	}
+
+	/**
+	 * directionToTex
+	 */
 	def directionToTex(Direction direction) {
 		switch direction {
 			case BOTH: {

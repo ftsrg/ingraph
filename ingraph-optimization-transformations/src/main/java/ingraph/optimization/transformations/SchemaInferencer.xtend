@@ -16,6 +16,7 @@ import relalg.ProjectionOperator
 import relalg.UnionOperator
 import relalg.Variable
 import com.google.common.collect.Lists
+import com.google.common.collect.Iterables
 
 class SchemaInferencer {
 
@@ -68,11 +69,14 @@ class SchemaInferencer {
 	}
 
 	def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
-		val leftInputSchema = op.leftInput.inferSchema
-		val rightSchema = op.rightInput.inferSchema
-		op.setSchema(Stream.concat(leftInputSchema.stream, rightSchema.stream).collect(Collectors.toList()))
-
-//		leftSchema.inter
+		val leftInputSchema = Lists.newArrayList(op.leftInput.inferSchema)
+		val rightInputSchema = Lists.newArrayList(op.rightInput.inferSchema)				
+		op.setSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
+		
+		// calculate the mutual variables
+		leftInputSchema.retainAll(rightInputSchema)
+		op.mutualVariables.addAll(leftInputSchema)		
+		
 		op.schema
 	}
 
