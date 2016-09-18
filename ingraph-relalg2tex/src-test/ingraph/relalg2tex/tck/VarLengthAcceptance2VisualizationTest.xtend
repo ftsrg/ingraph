@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class VarLengthAcceptance2VisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Handling relationships that are already bound in variable length paths
@@ -30,6 +32,7 @@ class VarLengthAcceptance2VisualizationTest {
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "VarLengthAcceptance2_01")
     }
 

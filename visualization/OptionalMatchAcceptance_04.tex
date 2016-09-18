@@ -8,12 +8,12 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{m}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{m}}$ \\ \footnotesize $\color{gray} \langle \var{m} \rangle$}
+	[. {$\join \{\var{n}\}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
-		[. {$\expand{r}{TYPE}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expand{r}{TYPE}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+			[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

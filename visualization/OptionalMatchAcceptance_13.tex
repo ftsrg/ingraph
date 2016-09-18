@@ -8,12 +8,12 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
+	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
+		[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expand{r}{}{a}{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expand{r}{}{a}{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
+			[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
 	]

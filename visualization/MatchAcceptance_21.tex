@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{length(p)~=~1}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
+	[. {$\selection{\mathtt{length(p)~=~1}}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, x} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, x} \rangle$}
+			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

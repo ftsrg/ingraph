@@ -8,14 +8,14 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{a},~\var{b},~\var{c},~\var{d}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{a},~\var{b},~\var{c},~\var{d}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c, d} \rangle$}
+	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, c, \backslash{}_e2, d} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{c}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expandout{\backslash{}_e2}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{c, \backslash{}_e2, d} \rangle$}
+			[. {$\getvertices{c}{}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 			]
 		]
 	]

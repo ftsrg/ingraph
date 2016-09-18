@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class MatchAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Path query should return results in written order
@@ -23,6 +25,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a:Label1)<--(:Label2)
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_01")
     }
 
@@ -40,6 +43,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a:Label1)<--(:Label2)--()
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_02")
     }
 
@@ -59,6 +63,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (n), (m)
         RETURN n.value AS n, m.value AS m
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_03")
     }
 
@@ -79,6 +84,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE r.foo = $param
         RETURN b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_04")
     }
 
@@ -97,6 +103,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE a.name = 'Andres'
         RETURN a
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_05")
     }
 
@@ -115,6 +122,7 @@ class MatchAcceptanceVisualizationTest {
         WITH a.name AS a
         RETURN a
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_06")
     }
 
@@ -133,6 +141,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE r.name = 'monkey'
         RETURN a
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_07")
     }
 
@@ -152,6 +161,7 @@ class MatchAcceptanceVisualizationTest {
         WITH n.name AS n
         RETURN n
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_08")
     }
 
@@ -169,6 +179,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (n1)-[rel:KNOWS]->(n2)
         RETURN n1, n2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_09")
     }
 
@@ -188,6 +199,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH ()-[rel:KNOWS]->(x)
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_10")
     }
 
@@ -205,6 +217,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (n)-->(a)-->(b)
         RETURN b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_11")
     }
 
@@ -230,6 +243,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE n.animal = x.animal
         RETURN n, x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_12")
     }
 
@@ -247,6 +261,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (a)-[r {name: 'r'}]-(b)
         RETURN a, b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_13")
     }
 
@@ -266,6 +281,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE r <> r2
         RETURN a, b, c
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_14")
     }
 
@@ -288,6 +304,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE type(r) = 'KNOWS'
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_15")
     }
 
@@ -311,6 +328,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE type(r) = 'KNOWS' OR type(r) = 'HATES'
         RETURN r
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_16")
     }
 
@@ -331,6 +349,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE n.p1 = 12 OR n.p2 = 13
         RETURN n
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_17")
     }
 
@@ -348,6 +367,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a {name: 'A'})-->(b)
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_18")
     }
 
@@ -365,6 +385,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a {name: 'A'})-[rel1]->(b)-[rel2]->(c)
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_19")
     }
 
@@ -383,6 +404,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE length(p) = 10
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_20")
     }
 
@@ -401,6 +423,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE length(p) = 1
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_21")
     }
 
@@ -418,6 +441,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a)-[:REL*2..2]->(b:End)
         RETURN relationships(p)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_22")
     }
 
@@ -435,6 +459,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a:Start)-[:REL*2..2]->(b)
         RETURN relationships(p)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_23")
     }
 
@@ -452,6 +477,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (a)-[r:REL*2..2]->(b:End)
         RETURN r
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_24")
     }
 
@@ -469,6 +495,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (a)-[r:REL*2..2]-(b:End)
         RETURN r
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_25")
     }
 
@@ -486,6 +513,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH (a:Start)-[r:REL*2..2]-(b)
         RETURN r
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_26")
     }
 
@@ -503,6 +531,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (n {name: 'A'})-[:KNOWS*1..2]->(x)
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_27")
     }
 
@@ -520,6 +549,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a)-[*0..1]->(b)
         RETURN a, b, length(p) AS l
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_28")
     }
 
@@ -537,6 +567,7 @@ class MatchAcceptanceVisualizationTest {
         MATCH p = (a {name: 'A'})-[:KNOWS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN p
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_29")
     }
 
@@ -551,6 +582,7 @@ class MatchAcceptanceVisualizationTest {
         WHERE 1 = 0
         RETURN n SKIP 0
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "MatchAcceptance_30")
     }
 

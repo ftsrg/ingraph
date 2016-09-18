@@ -8,17 +8,17 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{Single}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
+	[. {$\join \{\var{a}, \var{c}\}$ \\ \footnotesize $\color{gray} \langle \var{a, c, \backslash{}_e1, b, \backslash{}_e2} \rangle$}
+		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{a, c} \rangle$}
+			[. {$\getvertices{a}{Single}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
-			[. {$\getvertices{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\getvertices{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-				[. {$\getvertices{a}{Single}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expandout{\backslash{}_e2}{}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c} \rangle$}
+			[. {$\expandout{\backslash{}_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+				[. {$\getvertices{a}{Single}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
 		]

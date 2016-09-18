@@ -8,9 +8,9 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{n1},~\var{n2}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\expandout{rel}{KNOWS}{n1}{n2}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\getvertices{n1}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{n1},~\var{n2}}$ \\ \footnotesize $\color{gray} \langle \var{n1, n2} \rangle$}
+	[. {$\expandout{rel}{KNOWS}{n1}{n2}{}$ \\ \footnotesize $\color{gray} \langle \var{n1, rel, n2} \rangle$}
+		[. {$\getvertices{n1}{}$ \\ \footnotesize $\color{gray} \langle \var{n1} \rangle$}
 		]
 	]
 ]

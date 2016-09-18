@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{n}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{n.name~=~'Bob'}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{n}{Person}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{n}}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
+	[. {$\selection{\mathtt{n.name~=~'Bob'}}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, \backslash{}_e1} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{}{n}{\backslash{}_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, \backslash{}_e1} \rangle$}
+			[. {$\getvertices{n}{Person}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

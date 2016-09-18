@@ -8,16 +8,16 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
+	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, b, x, \backslash{}_e1} \rangle$}
+		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
+			[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
-			[. {$\getvertices{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\getvertices{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e1}{}{x}{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{x}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{}{x}{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{x, \backslash{}_e1, b} \rangle$}
+			[. {$\getvertices{x}{}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 			]
 		]
 	]

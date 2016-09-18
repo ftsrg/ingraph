@@ -10,18 +10,18 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
 	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
-		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4} \rangle$}
-			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
-				[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
-					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw} \rangle$}
-						[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP} \rangle$}
+		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor, \backslash{}_e4} \rangle$}
+			[. {$\alldifferent{\var{\backslash{}_e1},~\var{\backslash{}_e2},~\var{\backslash{}_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor} \rangle$}
+				[. {$\expandout{\backslash{}_e3}{monitoredBy}{sw}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor} \rangle$}
+					[. {$\expandout{\backslash{}_e2}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw} \rangle$}
+						[. {$\expandout{\backslash{}_e1}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP} \rangle$}
 							[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
 							]
 						]
 					]
 				]
 			]
-			[. {$\expandout{\_e4}{gathers}{route}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
+			[. {$\expandout{\backslash{}_e4}{gathers}{route}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e4, sensor} \rangle$}
 				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
 				]
 			]

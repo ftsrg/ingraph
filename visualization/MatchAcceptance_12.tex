@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{n},~\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{n.animal~=~x.animal}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{rel}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{n},~\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{n, x} \rangle$}
+	[. {$\selection{\mathtt{n.animal~=~x.animal}}$ \\ \footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$}
+		[. {$\expandout{rel}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$}
+			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class TypeConversionFunctionsVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: `toBoolean()` on valid literal string
@@ -18,6 +20,7 @@ class TypeConversionFunctionsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN toBoolean('true') AS b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_01")
     }
 
@@ -31,6 +34,7 @@ class TypeConversionFunctionsVisualizationTest {
         UNWIND [true, false] AS b
         RETURN toBoolean(b) AS b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_02")
     }
 
@@ -44,6 +48,7 @@ class TypeConversionFunctionsVisualizationTest {
         UNWIND ['true', 'false'] AS s
         RETURN toBoolean(s) AS b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_03")
     }
 
@@ -57,6 +62,7 @@ class TypeConversionFunctionsVisualizationTest {
         UNWIND [null, '', ' tru ', 'f alse'] AS things
         RETURN toBoolean(things) AS b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_04")
     }
 
@@ -76,6 +82,7 @@ class TypeConversionFunctionsVisualizationTest {
         MATCH (n)
         RETURN toInteger(n.age) AS age
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_05")
     }
 
@@ -89,6 +96,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH 82.9 AS weight
         RETURN toInteger(weight)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_06")
     }
 
@@ -102,6 +110,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_07")
     }
 
@@ -115,6 +124,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH [2, 2.9] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_08")
     }
 
@@ -128,6 +138,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH [2, 2.9, '1.7'] AS things
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_09")
     }
 
@@ -141,6 +152,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH ['2', '2.9', 'foo'] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_10")
     }
 
@@ -160,6 +172,7 @@ class TypeConversionFunctionsVisualizationTest {
         MATCH (n)
         RETURN toFloat(n.rating) AS float
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_11")
     }
 
@@ -173,6 +186,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH [3.4, 3] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_12")
     }
 
@@ -186,6 +200,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_13")
     }
 
@@ -199,6 +214,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH [3.4, 3, '5'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_14")
     }
 
@@ -212,6 +228,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH ['1', '2', 'foo'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_15")
     }
 
@@ -231,6 +248,7 @@ class TypeConversionFunctionsVisualizationTest {
         MATCH (n)
         RETURN toString(n.rating)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_16")
     }
 
@@ -248,6 +266,7 @@ class TypeConversionFunctionsVisualizationTest {
         MATCH (m:Movie)
         RETURN toString(m.watched)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_17")
     }
 
@@ -260,6 +279,7 @@ class TypeConversionFunctionsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN toString(1 < 0) AS bool
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_18")
     }
 
@@ -272,6 +292,7 @@ class TypeConversionFunctionsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN toString(true) AS bool
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_19")
     }
 
@@ -284,6 +305,7 @@ class TypeConversionFunctionsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_20")
     }
 
@@ -297,6 +319,7 @@ class TypeConversionFunctionsVisualizationTest {
         WITH [1, 2, 3] AS numbers
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "TypeConversionFunctions_21")
     }
 

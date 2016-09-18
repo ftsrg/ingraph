@@ -8,12 +8,12 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
+	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+		[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expandout{\_e1}{}{a}{b}{Y}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{}{a}{b}{Y}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+			[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
 	]

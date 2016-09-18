@@ -8,13 +8,13 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{a:A}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{\_e4}{}{\_e2}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\expandout{\_e3}{}{b}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-				[. {$\expandin{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-					[. {$\expandin{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-						[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
+	[. {$\selection{\mathtt{a:A}}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1, \backslash{}_e2, b, \backslash{}_e3, \backslash{}_e2, \backslash{}_e4, c} \rangle$}
+		[. {$\expandout{\backslash{}_e4}{}{\backslash{}_e2}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1, \backslash{}_e2, b, \backslash{}_e3, \backslash{}_e2, \backslash{}_e4, c} \rangle$}
+			[. {$\expandout{\backslash{}_e3}{}{b}{\backslash{}_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1, \backslash{}_e2, b, \backslash{}_e3, \backslash{}_e2} \rangle$}
+				[. {$\expandin{\backslash{}_e2}{}{\backslash{}_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1, \backslash{}_e2, b} \rangle$}
+					[. {$\expandin{\backslash{}_e1}{}{a}{\backslash{}_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1} \rangle$}
+						[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 						]
 					]
 				]

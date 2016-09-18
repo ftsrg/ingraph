@@ -8,12 +8,12 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{a~<>~b}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
+	[. {$\selection{\mathtt{a~<>~b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
+		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
+			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
-			[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]
 	]

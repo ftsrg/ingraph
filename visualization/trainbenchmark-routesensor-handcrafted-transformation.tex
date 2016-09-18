@@ -10,20 +10,20 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
 	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
-		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4} \rangle$}
-			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
-				[. {$\join \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
-					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw} \rangle$}
-						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP} \rangle$}
+		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor, \backslash{}_e4} \rangle$}
+			[. {$\alldifferent{\var{\backslash{}_e1},~\var{\backslash{}_e2},~\var{\backslash{}_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor} \rangle$}
+				[. {$\join \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw, \backslash{}_e3, sensor} \rangle$}
+					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP, \backslash{}_e2, sw} \rangle$}
+						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\backslash{}_e1}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e1, swP} \rangle$}
 						]
-						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e2, sw} \rangle$}
+						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\backslash{}_e2}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \backslash{}_e2, sw} \rangle$}
 						]
 					]
-					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e3, sensor} \rangle$}
+					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\backslash{}_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \backslash{}_e3, sensor} \rangle$}
 					]
 				]
 			]
-			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
+			[. {$\getedges{route}{Route}{sensor}{Sensor}{\backslash{}_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \backslash{}_e4, sensor} \rangle$}
 			]
 		]
 	]

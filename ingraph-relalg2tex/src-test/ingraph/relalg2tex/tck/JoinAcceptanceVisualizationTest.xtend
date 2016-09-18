@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class JoinAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Find friends of others
@@ -27,6 +29,7 @@ class JoinAcceptanceVisualizationTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "JoinAcceptance_01")
     }
 
@@ -47,6 +50,7 @@ class JoinAcceptanceVisualizationTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "JoinAcceptance_02")
     }
 

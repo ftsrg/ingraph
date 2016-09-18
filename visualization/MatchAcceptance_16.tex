@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~'HATES'}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{r}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
+	[. {$\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~'HATES'}}$ \\ \footnotesize $\color{gray} \langle \var{n, r, x} \rangle$}
+		[. {$\expandout{r}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, x} \rangle$}
+			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

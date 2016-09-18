@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-	[. {$\expandout{\_e2}{B}{\_e1}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-		[. {$\expandout{\_e1}{A}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+[. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
+	[. {$\expandout{\backslash{}_e2}{B}{\backslash{}_e1}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1, \backslash{}_e2} \rangle$}
+		[. {$\expandout{\backslash{}_e1}{A}{a}{\backslash{}_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, \backslash{}_e1} \rangle$}
+			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
 	]
