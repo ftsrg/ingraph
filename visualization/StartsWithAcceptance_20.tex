@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,10 +6,13 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{a}}$}
-	[. {$\selection{}$}
-		[. {$\getvertices{a}{}$}
+[. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\selection{\mathtt{a.name~STARTS~WITH~'A'
+	AND~a.name~CONTAINS~'C'
+	AND~a.name~ENDS~WITH~'EF'}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		]
 	]
 ]

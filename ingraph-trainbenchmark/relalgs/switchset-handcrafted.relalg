@@ -15,13 +15,13 @@
               </input>
             </input>
             <condition xsi:type="relalg:ArithmeticComparisonExpression">
-              <rightOperand xsi:type="relalg:StringLiteral" value="GO"/>
               <leftOperand xsi:type="relalg:AttributeVariable" name="signal" element="//@elements.10"/>
+              <rightOperand xsi:type="relalg:StringLiteral" value="GO"/>
             </condition>
           </input>
           <condition xsi:type="relalg:ArithmeticComparisonExpression" operator="!=">
-            <rightOperand xsi:type="relalg:AttributeVariable" name="position" element="//@elements.9"/>
             <leftOperand xsi:type="relalg:AttributeVariable" name="currentPosition" element="//@elements.8"/>
+            <rightOperand xsi:type="relalg:AttributeVariable" name="position" element="//@elements.9"/>
           </condition>
         </input>
       </input>

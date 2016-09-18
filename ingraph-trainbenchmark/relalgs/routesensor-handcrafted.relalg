@@ -7,7 +7,9 @@
           <leftInput xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.12 //@elements.13 //@elements.14">
             <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.14" sourceVertexVariable="//@elements.9" targetVertexVariable="//@elements.11">
               <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.10" targetVertexVariable="//@elements.9">
-                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.12" sourceVertexVariable="//@elements.8" targetVertexVariable="//@elements.10"/>
+                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.12" sourceVertexVariable="//@elements.8" targetVertexVariable="//@elements.10">
+                  <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
+                </input>
               </input>
             </input>
           </leftInput>

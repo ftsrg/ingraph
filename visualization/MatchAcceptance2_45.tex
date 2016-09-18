@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,22 +6,24 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{d}}$}
-	[. {$\selection{}$}
-		[. {$\join$}
-			[. {$\expand{\_e4}{}{d}{a}{}$}
-				[. {$\expand{\_e3}{}{c}{d}{}$}
-					[. {$\expand{\_e2}{}{b}{c}{}$}
-						[. {$\expand{\_e1}{}{a}{b}{}$}
-							[. {$\getvertices{a}{}$}
+[. {$\projection{\var{d}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\selection{\mathtt{a.id~=~1
+	AND~c.id~=~2}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\expand{\_e4}{}{d}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\expand{\_e3}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					[. {$\expand{\_e2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+						[. {$\expand{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+							[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 							]
 						]
 					]
 				]
 			]
-			[. {$\expand{\_e5}{}{b}{d}{}$}
-				[. {$\getvertices{b}{}$}
+			[. {$\expand{\_e5}{}{b}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 				]
 			]
 		]

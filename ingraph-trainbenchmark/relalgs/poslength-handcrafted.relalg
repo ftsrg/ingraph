@@ -6,8 +6,8 @@
         <input xsi:type="relalg:SelectionOperator" conditionString="segment.length &lt;= 0">
           <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.1"/>
           <condition xsi:type="relalg:ArithmeticComparisonExpression" operator="&lt;=">
-            <rightOperand xsi:type="relalg:IntegerLiteral"/>
             <leftOperand xsi:type="relalg:AttributeVariable" name="length" element="//@elements.1"/>
+            <rightOperand xsi:type="relalg:IntegerLiteral"/>
           </condition>
         </input>
       </input>

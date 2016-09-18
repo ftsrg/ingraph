@@ -1,4 +1,4 @@
-\documentclass[varwidth=20cm,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,10 +6,11 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{n}}$}
-	[. {$\selection{}$}
-		[. {$\getvertices{n}{}$}
+[. {$\projection{\var{n}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\selection{\mathtt{1~<~n.value~<=~3}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		]
 	]
 ]

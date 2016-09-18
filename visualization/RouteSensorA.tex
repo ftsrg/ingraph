@@ -6,20 +6,21 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$}
-		[. {$\antijoin$}
-			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-				[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$}
-					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$}
-						[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\antijoin \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+						[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 						]
 					]
 				]
 			]
-			[. {$\expandout{\_e4}{gathers}{route}{sensor}{Sensor}$}
-				[. {$\getvertices{route}{Route}$}
+			[. {$\expandout{\_e4}{gathers}{route}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 				]
 			]
 		]

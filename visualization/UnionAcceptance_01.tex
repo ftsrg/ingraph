@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,14 +6,15 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\union$}
-	[. {$\projection{\var{a}}$}
-		[. {$\getvertices{a}{A}$}
+[. {$\union$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		]
 	]
-	[. {$\projection{\var{b}}$}
-		[. {$\getvertices{b}{B}$}
+	[. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\getvertices{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		]
 	]
 ]

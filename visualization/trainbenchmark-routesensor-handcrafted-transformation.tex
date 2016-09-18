@@ -8,22 +8,22 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{route, sensor, swP, sw}$\}}
-	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\{\color{gray} \var{route, sensor, swP, sw}$\}}
-		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4}$\}}
-			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor}$\}}
-				[. {$\join \{\var{sw}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor}$\}}
-					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw}$\}}
-						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP}$\}}
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
+	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{route, sensor, swP, sw} \rangle$}
+		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4} \rangle$}
+			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
+				[. {$\join \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
+					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw} \rangle$}
+						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP} \rangle$}
 						]
-						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\{\color{gray} \var{swP, \_e2, sw}$\}}
+						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e2, sw} \rangle$}
 						]
 					]
-					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\{\color{gray} \var{sw, \_e3, sensor}$\}}
+					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e3, sensor} \rangle$}
 					]
 				]
 			]
-			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\{\color{gray} \var{route, \_e4, sensor}$\}}
+			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
 			]
 		]
 	]

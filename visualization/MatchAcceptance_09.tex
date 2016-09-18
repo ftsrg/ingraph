@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,10 +6,11 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{n1},~\var{n2}}$}
-	[. {$\expandout{rel}{KNOWS}{n1}{n2}{}$}
-		[. {$\getvertices{n1}{}$}
+[. {$\projection{\var{n1},~\var{n2}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\expandout{rel}{KNOWS}{n1}{n2}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\getvertices{n1}{}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		]
 	]
 ]
