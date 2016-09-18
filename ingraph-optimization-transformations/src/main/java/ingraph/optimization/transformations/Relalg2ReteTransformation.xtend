@@ -15,7 +15,7 @@ import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchT
 import relalg.Container
 import relalg.RelalgFactory
 
-class Transformation {
+class Relalg2ReteTransformation {
 
 	extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
 	extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
