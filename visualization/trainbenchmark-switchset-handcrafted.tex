@@ -10,12 +10,12 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
 	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
-		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route, \backslash{}_e2, swP, \backslash{}_e3, sw} \rangle$}
-			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route, \backslash{}_e2, swP, \backslash{}_e3, sw} \rangle$}
-				[. {$\alldifferent{\var{\backslash{}_e1},~\var{\backslash{}_e2},~\var{\backslash{}_e3}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route, \backslash{}_e2, swP, \backslash{}_e3, sw} \rangle$}
-					[. {$\expandout{\backslash{}_e3}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route, \backslash{}_e2, swP, \backslash{}_e3, sw} \rangle$}
-						[. {$\expandout{\backslash{}_e2}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route, \backslash{}_e2, swP} \rangle$}
-							[. {$\expandin{\backslash{}_e1}{entry}{semaphore}{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route} \rangle$}
+		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
+			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
+					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
+						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP} \rangle$}
+							[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route} \rangle$}
 								[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\color{gray} \langle \var{semaphore} \rangle$}
 								]
 							]

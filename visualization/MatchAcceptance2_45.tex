@@ -10,19 +10,19 @@
 \Tree
 [. {$\projection{\var{d}}$ \\ \footnotesize $\color{gray} \langle \var{d} \rangle$}
 	[. {$\selection{\mathtt{a.id~=~1
-	AND~c.id~=~2}}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c, \backslash{}_e3, d, \backslash{}_e4, \backslash{}_e5} \rangle$}
-		[. {$\join \{\var{b}, \var{d}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c, \backslash{}_e3, d, \backslash{}_e4, \backslash{}_e5} \rangle$}
-			[. {$\expand{\backslash{}_e4}{}{d}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c, \backslash{}_e3, d, \backslash{}_e4} \rangle$}
-				[. {$\expand{\backslash{}_e3}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c, \backslash{}_e3, d} \rangle$}
-					[. {$\expand{\backslash{}_e2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2, c} \rangle$}
-						[. {$\expand{\backslash{}_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+	AND~c.id~=~2}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4, \_e5} \rangle$}
+		[. {$\join \{\var{b}, \var{d}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4, \_e5} \rangle$}
+			[. {$\expand{\_e4}{}{d}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4} \rangle$}
+				[. {$\expand{\_e3}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d} \rangle$}
+					[. {$\expand{\_e2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
+						[. {$\expand{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 							[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 							]
 						]
 					]
 				]
 			]
-			[. {$\expand{\backslash{}_e5}{}{b}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \backslash{}_e5, d} \rangle$}
+			[. {$\expand{\_e5}{}{b}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e5, d} \rangle$}
 				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 				]
 			]

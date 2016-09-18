@@ -9,13 +9,13 @@
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{x0}}$ \\ \footnotesize $\color{gray} \langle \var{x0} \rangle$}
-	[. {$\join \{\var{x0}\}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, x0, \backslash{}_e2, x1} \rangle$}
-		[. {$\expandout{\backslash{}_e1}{}{n}{x0}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \backslash{}_e1, x0} \rangle$}
+	[. {$\join \{\var{x0}\}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x0, \_e2, x1} \rangle$}
+		[. {$\expandout{\_e1}{}{n}{x0}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x0} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
-		[. {$\selection{\mathtt{x1.foo~=~'bar'}}$ \\ \footnotesize $\color{gray} \langle \var{x0, \backslash{}_e2, x1} \rangle$}
-			[. {$\expandout{\backslash{}_e2}{}{x0}{x1}{}$ \\ \footnotesize $\color{gray} \langle \var{x0, \backslash{}_e2, x1} \rangle$}
+		[. {$\selection{\mathtt{x1.foo~=~'bar'}}$ \\ \footnotesize $\color{gray} \langle \var{x0, \_e2, x1} \rangle$}
+			[. {$\expandout{\_e2}{}{x0}{x1}{}$ \\ \footnotesize $\color{gray} \langle \var{x0, \_e2, x1} \rangle$}
 				[. {$\getvertices{x0}{}$ \\ \footnotesize $\color{gray} \langle \var{x0} \rangle$}
 				]
 			]

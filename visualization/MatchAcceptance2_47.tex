@@ -9,12 +9,12 @@
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
-	[. {$\join \{\var{a}, \var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b, \backslash{}_e2} \rangle$}
-		[. {$\expandout{\backslash{}_e1}{A}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \backslash{}_e1, b} \rangle$}
+	[. {$\join \{\var{a}, \var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2} \rangle$}
+		[. {$\expandout{\_e1}{A}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
-		[. {$\expandout{\backslash{}_e2}{B}{b}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \backslash{}_e2, a} \rangle$}
+		[. {$\expandout{\_e2}{B}{b}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2, a} \rangle$}
 			[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]

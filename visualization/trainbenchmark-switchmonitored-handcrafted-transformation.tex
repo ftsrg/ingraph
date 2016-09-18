@@ -8,11 +8,11 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{sw, \backslash{}_e1, \backslash{}_sensor} \rangle$}
-	[. {$\antijoin \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{sw, \backslash{}_e1, \backslash{}_sensor} \rangle$}
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
+	[. {$\antijoin \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
 		[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{sw} \rangle$}
 		]
-		[. {$\getedges{sw}{Switch}{\backslash{}_sensor}{Sensor}{\backslash{}_e1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \backslash{}_e1, \backslash{}_sensor} \rangle$}
+		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
 		]
 	]
 ]

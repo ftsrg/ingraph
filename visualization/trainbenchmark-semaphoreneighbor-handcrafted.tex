@@ -10,15 +10,15 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor, te1, te2} \rangle$}
 	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor, te1, te2} \rangle$}
-		[. {$\selection{\var{route1} \neq \var{route2}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2, \backslash{}_e5, sensor, \backslash{}_e6, route2, \backslash{}_e7} \rangle$}
-			[. {$\antijoin \{\var{semaphore}, \var{route2}\}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2, \backslash{}_e5, sensor, \backslash{}_e6, route2, \backslash{}_e7} \rangle$}
-				[. {$\alldifferent{\var{\backslash{}_e1},~\var{\backslash{}_e2},~\var{\backslash{}_e3},~\var{\backslash{}_e4},~\var{\backslash{}_e5},~\var{\backslash{}_e6}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2, \backslash{}_e5, sensor, \backslash{}_e6, route2} \rangle$}
-					[. {$\expandin{\backslash{}_e6}{gathers}{sensor}{route2}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2, \backslash{}_e5, sensor, \backslash{}_e6, route2} \rangle$}
-						[. {$\expandout{\backslash{}_e5}{monitoredBy}{te2}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2, \backslash{}_e5, sensor} \rangle$}
-							[. {$\expandout{\backslash{}_e4}{connectsTo}{te1}{te2}{}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1, \backslash{}_e4, te2} \rangle$}
-								[. {$\expandin{\backslash{}_e3}{monitoredBy}{sensor1}{te1}{}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1, \backslash{}_e3, te1} \rangle$}
-									[. {$\expandout{\backslash{}_e2}{gathers}{route1}{sensor1}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1, \backslash{}_e2, sensor1} \rangle$}
-										[. {$\expandin{\backslash{}_e1}{exit}{semaphore}{route1}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e1, route1} \rangle$}
+		[. {$\selection{\var{route1} \neq \var{route2}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2, \_e7} \rangle$}
+			[. {$\antijoin \{\var{semaphore}, \var{route2}\}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2, \_e7} \rangle$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2} \rangle$}
+					[. {$\expandin{\_e6}{gathers}{sensor}{route2}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2} \rangle$}
+						[. {$\expandout{\_e5}{monitoredBy}{te2}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor} \rangle$}
+							[. {$\expandout{\_e4}{connectsTo}{te1}{te2}{}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2} \rangle$}
+								[. {$\expandin{\_e3}{monitoredBy}{sensor1}{te1}{}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1} \rangle$}
+									[. {$\expandout{\_e2}{gathers}{route1}{sensor1}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1} \rangle$}
+										[. {$\expandin{\_e1}{exit}{semaphore}{route1}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1} \rangle$}
 											[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\color{gray} \langle \var{semaphore} \rangle$}
 											]
 										]
@@ -28,7 +28,7 @@
 						]
 					]
 				]
-				[. {$\expandin{\backslash{}_e7}{entry}{semaphore}{route2}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \backslash{}_e7, route2} \rangle$}
+				[. {$\expandin{\_e7}{entry}{semaphore}{route2}{Route}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e7, route2} \rangle$}
 					[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\color{gray} \langle \var{semaphore} \rangle$}
 					]
 				]

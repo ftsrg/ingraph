@@ -169,8 +169,8 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def escape(String s) {
 		s // 
-			.replace('''_''', '''\_''') //
 			.replace('''\''', '''\backslash{}''')			
+			.replace('''_''', '''\_''') //
 	}
 
 	/**
