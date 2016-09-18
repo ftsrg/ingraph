@@ -406,7 +406,7 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 		println(ctx.text)
 	}
 	
-	override exitClause(ClauseContext ctx) {
+	override exitCreate(CreateContext ctx) {
 		println(pattern_PatternPartList.map[ class.simpleName ].join(", "))
 		println
 	}

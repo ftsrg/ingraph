@@ -35,7 +35,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
 			«toNode((expression as AllDifferentOperator).input)»
 		«ELSE»
-			[. {$«expression?.operatorSymbol»$ \\ \footnotesize $\{\color{gray} \var{«expression.schema.map[ name.escape ].join(", ")»}$\}}«expression?.children»
+			[. {$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(", ")»} \rangle$}«expression?.children»
 			]
 		«ENDIF»'''
 	}

@@ -103,8 +103,9 @@ abstract class AbstractRelalgSerializer {
 			'''{«op.sourceVertexVariable.escapedName»}''' + '''«op.targetVertexVariable.toTexParameter»'''
 	}
 
-	def dispatch operatorSymbol(SelectionOperator op) {
-		'''\selection{«op.condition?.convertExpression»}'''
+	def dispatch operatorSymbol(
+		SelectionOperator op) {
+		'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
 	}
 
 	def dispatch operatorSymbol(GetEdgesOperator op) {
@@ -266,6 +267,17 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
 		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
+	}
+
+	/**
+	 * prettyPrintCondition
+	 */
+	def prettyPrintCondition(String s) {
+		s //
+			.replaceAll(" XOR ", ''' \\lxor ''') //
+			.replaceAll(" AND ", ''' \\land ''') //
+			.replaceAll(" OR ", ''' \\lor ''') //
+			.replaceAll(" ", "~") //
 	}
 
 }
