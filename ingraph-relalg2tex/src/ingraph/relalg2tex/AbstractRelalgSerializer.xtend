@@ -120,7 +120,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(ProductionOperator op) {
-		'''prod'''
+		throw new UnsupportedOperationException("Visualization of production nodes is currently not supported.")
 	}
 
 	def dispatch operatorSymbol(ProjectionOperator op) {
