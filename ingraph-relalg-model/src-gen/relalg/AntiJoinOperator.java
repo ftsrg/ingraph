@@ -13,5 +13,5 @@ package relalg;
  * @model
  * @generated
  */
-public interface AntiJoinOperator extends BetaOperator {
+public interface AntiJoinOperator extends AbstractJoinOperator {
 } // AntiJoinOperator

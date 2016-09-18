@@ -87,10 +87,11 @@ class TrainBenchmarkUtil {
 			it.container = container
 		]
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = route]
+		val getVerticesRoute1 = createGetVerticesOperator => [vertexVariable = route]
+		val getVerticesRoute2 = createGetVerticesOperator => [vertexVariable = route]
 
 		val expand1 = createExpandOperator => [
-			input = getVertices
+			input = getVerticesRoute1
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = swP
@@ -117,7 +118,7 @@ class TrainBenchmarkUtil {
 		]
 
 		val expand4 = createExpandOperator => [
-			input = getVertices
+			input = getVerticesRoute2
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = sensor
@@ -194,10 +195,11 @@ class TrainBenchmarkUtil {
 		val _e7 = createEdgeVariable =>
 			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.container = container]
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore]
+		val getVertices1 = createGetVerticesOperator => [vertexVariable = semaphore]
+		val getVertices2 = createGetVerticesOperator => [vertexVariable = semaphore]
 
 		val expand1 = createExpandOperator => [
-			input = getVertices
+			input = getVertices1
 			direction = Direction.IN
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route1
@@ -245,7 +247,7 @@ class TrainBenchmarkUtil {
 		]
 
 		val expand7 = createExpandOperator => [
-			input = getVertices
+			input = getVertices2
 			direction = Direction.IN
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route2
@@ -348,7 +350,6 @@ class TrainBenchmarkUtil {
 		val position = createAttributeVariable => [name = "position"; element = swP; it.container = container]
 		val signal = createAttributeVariable => [name = "signal"; element = semaphore; it.container = container]
 		
-
 		val _e1 = createEdgeVariable => [
 			name = "_e1"; 
 			edgeLabel = entryLabel;

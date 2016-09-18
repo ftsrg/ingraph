@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class SemanticErrorAcceptanceVisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Handling property access on the Any type
@@ -18,7 +18,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[0]).prop
         ''')
-        drawer.serialize(container, "SemanticErrorAcceptance_01")
+        serializer.serialize(container, "SemanticErrorAcceptance_01")
     }
 
     /*
@@ -30,7 +30,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
         ''')
-        drawer.serialize(container, "SemanticErrorAcceptance_02")
+        serializer.serialize(container, "SemanticErrorAcceptance_02")
     }
 
     /*
@@ -41,7 +41,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN range(2, 8, 0)
         ''')
-        drawer.serialize(container, "SemanticErrorAcceptance_04")
+        serializer.serialize(container, "SemanticErrorAcceptance_04")
     }
 
 }

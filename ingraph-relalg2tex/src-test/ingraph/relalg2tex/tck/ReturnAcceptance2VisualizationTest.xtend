@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ReturnAcceptance2VisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Accept valid Unicode literal
@@ -18,7 +18,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN '\u01FF' AS a
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_05")
+        serializer.serialize(container, "ReturnAcceptance2_05")
     }
 
     /*
@@ -36,7 +36,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN n
         LIMIT 0
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_06")
+        serializer.serialize(container, "ReturnAcceptance2_06")
     }
 
     /*
@@ -54,7 +54,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN n
         ORDER BY n
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_07")
+        serializer.serialize(container, "ReturnAcceptance2_07")
     }
 
     /*
@@ -72,7 +72,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN n.name, count(*) AS foo
         ORDER BY n.name
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_08")
+        serializer.serialize(container, "ReturnAcceptance2_08")
     }
 
     /*
@@ -89,7 +89,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (n)
         RETURN DISTINCT n.name
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_09")
+        serializer.serialize(container, "ReturnAcceptance2_09")
     }
 
     /*
@@ -106,7 +106,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH p = (a:Start)-->(b)
         RETURN *
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_10")
+        serializer.serialize(container, "ReturnAcceptance2_10")
     }
 
     /*
@@ -118,7 +118,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN sqrt(12.96)
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_13")
+        serializer.serialize(container, "ReturnAcceptance2_13")
     }
 
     /*
@@ -151,7 +151,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (me)-[r1:ATE]->()<-[r2:ATE]-(you)
         RETURN me, you, sum((1 - abs(r1.times / H1 - r2.times / H2)) * (r1.times + r2.times) / (H1 + H2)) AS sum
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_14")
+        serializer.serialize(container, "ReturnAcceptance2_14")
     }
 
     /*
@@ -183,7 +183,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH ()-[r1]->()<--()
         RETURN sum(r1.times)
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_15")
+        serializer.serialize(container, "ReturnAcceptance2_15")
     }
 
     /*
@@ -200,7 +200,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (n)
         RETURN n
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_16")
+        serializer.serialize(container, "ReturnAcceptance2_16")
     }
 
     /*
@@ -216,7 +216,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN {a: 1, b: 'foo'}
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_17")
+        serializer.serialize(container, "ReturnAcceptance2_17")
     }
 
     /*
@@ -233,7 +233,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (a)
         RETURN exists(a.id), a IS NOT NULL
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_18")
+        serializer.serialize(container, "ReturnAcceptance2_18")
     }
 
     /*
@@ -245,7 +245,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN size([[], []] + [[]]) AS l
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_19")
+        serializer.serialize(container, "ReturnAcceptance2_19")
     }
 
     /*
@@ -266,7 +266,7 @@ class ReturnAcceptance2VisualizationTest {
         SKIP 10
         LIMIT 10
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_21")
+        serializer.serialize(container, "ReturnAcceptance2_21")
     }
 
     /*
@@ -278,7 +278,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN substring('0123456789', 1) AS s
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_22")
+        serializer.serialize(container, "ReturnAcceptance2_22")
     }
 
     /*
@@ -296,7 +296,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN *
         ORDER BY n.id
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_23")
+        serializer.serialize(container, "ReturnAcceptance2_23")
     }
 
     /*
@@ -314,7 +314,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN DISTINCT n.id AS id
         ORDER BY id DESC
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_24")
+        serializer.serialize(container, "ReturnAcceptance2_24")
     }
 
     /*
@@ -332,7 +332,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN DISTINCT n
         ORDER BY n.id
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_25")
+        serializer.serialize(container, "ReturnAcceptance2_25")
     }
 
     /*
@@ -344,7 +344,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 1 + (2 - (3 * (4 / (5 ^ (6 % null))))) AS a
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_26")
+        serializer.serialize(container, "ReturnAcceptance2_26")
     }
 
     /*
@@ -356,7 +356,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [[1]][0][0]
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_27")
+        serializer.serialize(container, "ReturnAcceptance2_27")
     }
 
     /*
@@ -373,7 +373,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (a)
         RETURN a.id AS a, a.id
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_28")
+        serializer.serialize(container, "ReturnAcceptance2_28")
     }
 
     /*
@@ -390,7 +390,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (a)
         RETURN a, count(a) + 3
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_29")
+        serializer.serialize(container, "ReturnAcceptance2_29")
     }
 
     /*
@@ -408,7 +408,7 @@ class ReturnAcceptance2VisualizationTest {
         WITH a.a AS a, count(*) AS count
         RETURN count
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_31")
+        serializer.serialize(container, "ReturnAcceptance2_31")
     }
 
     /*
@@ -430,7 +430,7 @@ class ReturnAcceptance2VisualizationTest {
         RETURN latestLike.likeTime AS likeTime
         ORDER BY likeTime
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_32")
+        serializer.serialize(container, "ReturnAcceptance2_32")
     }
 
     /*
@@ -442,7 +442,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [1, 10, 100] + [4, 5] AS foo
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_33")
+        serializer.serialize(container, "ReturnAcceptance2_33")
     }
 
     /*
@@ -454,7 +454,7 @@ class ReturnAcceptance2VisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [false, true] + false AS foo
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_34")
+        serializer.serialize(container, "ReturnAcceptance2_34")
     }
 
     /*
@@ -471,7 +471,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (n)
         RETURN count(DISTINCT {foo: n.list}) AS count
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_35")
+        serializer.serialize(container, "ReturnAcceptance2_35")
     }
 
     /*
@@ -489,7 +489,7 @@ class ReturnAcceptance2VisualizationTest {
         WITH DISTINCT {foo: n.list} AS map
         RETURN count(*)
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_36")
+        serializer.serialize(container, "ReturnAcceptance2_36")
     }
 
     /*
@@ -506,7 +506,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (n)
         RETURN count(DISTINCT {foo: [[n.list, n.list], [n.list, n.list]]}) AS count
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_37")
+        serializer.serialize(container, "ReturnAcceptance2_37")
     }
 
     /*
@@ -523,7 +523,7 @@ class ReturnAcceptance2VisualizationTest {
         MATCH (n)
         RETURN count(DISTINCT {foo: [{bar: n.list}, {baz: {apa: n.list}}]}) AS count
         ''')
-        drawer.serialize(container, "ReturnAcceptance2_38")
+        serializer.serialize(container, "ReturnAcceptance2_38")
     }
 
 }

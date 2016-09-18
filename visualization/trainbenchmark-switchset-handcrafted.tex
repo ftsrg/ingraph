@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,16 +6,17 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$}
-		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$}
-			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$}
-				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$}
-					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$}
-						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$}
-							[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$}
-								[. {$\getvertices{semaphore}{Semaphore}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{semaphore, route, swP, sw, currentPosition, position}$\}}
+	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, route, swP, sw, currentPosition, position}$\}}
+		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
+			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
+					[. {$\expandout{\_e3}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw}$\}}
+						[. {$\expandout{\_e2}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route, \_e2, swP}$\}}
+							[. {$\expandin{\_e1}{entry}{semaphore}{route}{Route}$ \\ \footnotesize $\{\color{gray} \var{semaphore, \_e1, route}$\}}
+								[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\{\color{gray} \var{semaphore}$\}}
 								]
 							]
 						]

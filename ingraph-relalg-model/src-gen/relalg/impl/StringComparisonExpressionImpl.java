@@ -25,7 +25,7 @@ import relalg.StringComparisonOperator;
  *
  * @generated
  */
-public class StringComparisonExpressionImpl extends BinaryExpressionImpl implements StringComparisonExpression {
+public class StringComparisonExpressionImpl extends ComparisonExpressionImpl implements StringComparisonExpression {
 	/**
 	 * The default value of the '{@link #getOperator() <em>Operator</em>}' attribute.
 	 * <!-- begin-user-doc -->

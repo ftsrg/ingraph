@@ -21,7 +21,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface GetEdgesOperator extends AlgebraExpression {
+public interface GetEdgesOperator extends Operator {
 	/**
 	 * Returns the value of the '<em><b>Source Vertex Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->

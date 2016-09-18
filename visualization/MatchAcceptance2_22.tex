@@ -1,0 +1,27 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{x0}}$}
+	[. {$\join$}
+		[. {$\expandout{\_e1}{}{n}{x0}{}$}
+			[. {$\getvertices{n}{}$}
+			]
+		]
+		[. {$\selection{}$}
+			[. {$\expandout{\_e2}{}{x0}{x1}{}$}
+				[. {$\getvertices{x0}{}$}
+				]
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

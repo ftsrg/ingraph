@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class FunctionsAcceptanceVisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Run coalesce
@@ -23,7 +23,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_01")
+        serializer.serialize(container, "FunctionsAcceptance_01")
     }
 
     /*
@@ -37,7 +37,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_02")
+        serializer.serialize(container, "FunctionsAcceptance_02")
     }
 
     /*
@@ -50,7 +50,7 @@ class FunctionsAcceptanceVisualizationTest {
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_03")
+        serializer.serialize(container, "FunctionsAcceptance_03")
     }
 
     /*
@@ -67,7 +67,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_04")
+        serializer.serialize(container, "FunctionsAcceptance_04")
     }
 
     /*
@@ -84,7 +84,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_05")
+        serializer.serialize(container, "FunctionsAcceptance_05")
     }
 
     /*
@@ -96,7 +96,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_06")
+        serializer.serialize(container, "FunctionsAcceptance_06")
     }
 
     /*
@@ -108,7 +108,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN properties(null)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_07")
+        serializer.serialize(container, "FunctionsAcceptance_07")
     }
 
     /*
@@ -120,7 +120,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN reverse('raksO')
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_08")
+        serializer.serialize(container, "FunctionsAcceptance_08")
     }
 
     /*
@@ -139,7 +139,7 @@ class FunctionsAcceptanceVisualizationTest {
         WHERE exists(n['prop'])
         RETURN n
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_09")
+        serializer.serialize(container, "FunctionsAcceptance_09")
     }
 
     /*
@@ -164,7 +164,7 @@ class FunctionsAcceptanceVisualizationTest {
         LIMIT 100
         RETURN percentileDisc(0.90, deg), deg
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_10")
+        serializer.serialize(container, "FunctionsAcceptance_10")
     }
 
     /*
@@ -181,7 +181,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_11")
+        serializer.serialize(container, "FunctionsAcceptance_11")
     }
 
     /*
@@ -198,7 +198,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_12")
+        serializer.serialize(container, "FunctionsAcceptance_12")
     }
 
     /*
@@ -216,7 +216,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_13")
+        serializer.serialize(container, "FunctionsAcceptance_13")
     }
 
     /*
@@ -234,7 +234,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_14")
+        serializer.serialize(container, "FunctionsAcceptance_14")
     }
 
     /*
@@ -252,7 +252,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [r, 1] AS list
         RETURN type(list[0])
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_15")
+        serializer.serialize(container, "FunctionsAcceptance_15")
     }
 
     /*
@@ -270,7 +270,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_16")
+        serializer.serialize(container, "FunctionsAcceptance_16")
     }
 
     /*
@@ -288,7 +288,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_17")
+        serializer.serialize(container, "FunctionsAcceptance_17")
     }
 
     /*
@@ -305,7 +305,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')
-        drawer.serialize(container, "FunctionsAcceptance_18")
+        serializer.serialize(container, "FunctionsAcceptance_18")
     }
 
 }

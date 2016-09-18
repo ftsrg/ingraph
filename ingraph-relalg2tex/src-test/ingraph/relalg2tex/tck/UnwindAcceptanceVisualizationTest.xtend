@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class UnwindAcceptanceVisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Unwinding a list
@@ -19,7 +19,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
-        drawer.serialize(container, "UnwindAcceptance_01")
+        serializer.serialize(container, "UnwindAcceptance_01")
     }
 
     /*
@@ -32,7 +32,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
-        drawer.serialize(container, "UnwindAcceptance_02")
+        serializer.serialize(container, "UnwindAcceptance_02")
     }
 
     /*
@@ -46,7 +46,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND (first + second) AS x
         RETURN x
         ''')
-        drawer.serialize(container, "UnwindAcceptance_03")
+        serializer.serialize(container, "UnwindAcceptance_03")
     }
 
     /*
@@ -61,7 +61,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND rows AS x
         RETURN x
         ''')
-        drawer.serialize(container, "UnwindAcceptance_04")
+        serializer.serialize(container, "UnwindAcceptance_04")
     }
 
     /*
@@ -80,30 +80,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND rows AS node
         RETURN node.id
         ''')
-        drawer.serialize(container, "UnwindAcceptance_05")
-    }
-
-    /*
-    Scenario: Creating nodes from an unwound parameter list
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:Year {year: 2016})
-      """
-    And parameters are:
-      | events | [{year: 2016, id: 1}, {year: 2016, id: 2}] |
-    */
-    @Test
-    def void testUnwindAcceptance_06() {
-        val container = RelalgParser.parse('''
-        UNWIND $events AS event
-        MATCH (y:Year {year: event.year})
-        MERGE (e:Event {id: event.id})
-        MERGE (y)<-[:IN]-(e)
-        RETURN e.id AS x
-        ORDER BY x
-        ''')
-        drawer.serialize(container, "UnwindAcceptance_06")
+        serializer.serialize(container, "UnwindAcceptance_05")
     }
 
     /*
@@ -118,7 +95,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND x AS y
         RETURN y
         ''')
-        drawer.serialize(container, "UnwindAcceptance_07")
+        serializer.serialize(container, "UnwindAcceptance_07")
     }
 
     /*
@@ -131,7 +108,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [] AS empty
         RETURN empty
         ''')
-        drawer.serialize(container, "UnwindAcceptance_08")
+        serializer.serialize(container, "UnwindAcceptance_08")
     }
 
     /*
@@ -144,7 +121,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND null AS nil
         RETURN nil
         ''')
-        drawer.serialize(container, "UnwindAcceptance_09")
+        serializer.serialize(container, "UnwindAcceptance_09")
     }
 
     /*
@@ -157,7 +134,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
-        drawer.serialize(container, "UnwindAcceptance_10")
+        serializer.serialize(container, "UnwindAcceptance_10")
     }
 
     /*
@@ -171,7 +148,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND list AS x
         RETURN *
         ''')
-        drawer.serialize(container, "UnwindAcceptance_11")
+        serializer.serialize(container, "UnwindAcceptance_11")
     }
 
     /*
@@ -196,7 +173,7 @@ class UnwindAcceptanceVisualizationTest {
         MATCH (a)-[:Y]->(b2)
         RETURN a, b2
         ''')
-        drawer.serialize(container, "UnwindAcceptance_12")
+        serializer.serialize(container, "UnwindAcceptance_12")
     }
 
     /*
@@ -212,7 +189,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND zs AS z
         RETURN *
         ''')
-        drawer.serialize(container, "UnwindAcceptance_13")
+        serializer.serialize(container, "UnwindAcceptance_13")
     }
 
 }

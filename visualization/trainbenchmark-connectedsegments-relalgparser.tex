@@ -1,0 +1,63 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$}
+	[. {$\join$}
+		[. {$\join$}
+			[. {$\join$}
+				[. {$\join$}
+					[. {$\join$}
+						[. {$\join$}
+							[. {$\expandin{\_e1}{monitoredBy}{sensor}{segment1}{Segment}$}
+								[. {$\getvertices{sensor}{Sensor}$}
+								]
+							]
+							[. {$\expandout{\_e6}{connectsTo}{segment5}{segment6}{Segment}$}
+								[. {$\expandout{\_e5}{connectsTo}{segment4}{segment5}{Segment}$}
+									[. {$\expandout{\_e4}{connectsTo}{segment3}{segment4}{Segment}$}
+										[. {$\expandout{\_e3}{connectsTo}{segment2}{segment3}{Segment}$}
+											[. {$\expandout{\_e2}{connectsTo}{segment1}{segment2}{Segment}$}
+												[. {$\getvertices{segment1}{Segment}$}
+												]
+											]
+										]
+									]
+								]
+							]
+						]
+						[. {$\expandout{\_e7}{monitoredBy}{segment2}{sensor}{Sensor}$}
+							[. {$\getvertices{segment2}{Segment}$}
+							]
+						]
+					]
+					[. {$\expandout{\_e8}{monitoredBy}{segment3}{sensor}{Sensor}$}
+						[. {$\getvertices{segment3}{Segment}$}
+						]
+					]
+				]
+				[. {$\expandout{\_e9}{monitoredBy}{segment4}{sensor}{Sensor}$}
+					[. {$\getvertices{segment4}{Segment}$}
+					]
+				]
+			]
+			[. {$\expandout{\_e10}{monitoredBy}{segment5}{sensor}{Sensor}$}
+				[. {$\getvertices{segment5}{Segment}$}
+				]
+			]
+		]
+		[. {$\expandout{\_e11}{monitoredBy}{segment6}{sensor}{Sensor}$}
+			[. {$\getvertices{segment6}{Segment}$}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

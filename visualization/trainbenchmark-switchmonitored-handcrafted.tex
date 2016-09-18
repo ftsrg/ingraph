@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,13 +6,14 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\antijoin$}
-		[. {$\getvertices{sw}{Switch}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
+	[. {$\antijoin$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
+		[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\{\color{gray} \var{sw}$\}}
 		]
-		[. {$\expandout{\_e1}{monitoredBy}{sw}{\_sensor}{Sensor}$}
-			[. {$\getvertices{sw}{Switch}$}
+		[. {$\expandout{\_e1}{monitoredBy}{sw}{\_sensor}{Sensor}$ \\ \footnotesize $\{\color{gray} \var{sw, \_e1, \_sensor}$\}}
+			[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\{\color{gray} \var{sw}$\}}
 			]
 		]
 	]

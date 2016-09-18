@@ -2,7 +2,6 @@ package ingraph.optimization.transformations
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
-import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.apache.log4j.Level
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
@@ -13,41 +12,85 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
+import relalg.Container
+import relalg.RelalgFactory
 
 class Transformation {
 
-	def static void main(String[] args) {
+	extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
+	extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
+
+	new() {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
-
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
+	}
 
-		val queryPlan = TrainBenchmarkUtil.routeSensor
-
+	def transform(Container container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
-		resource.contents.add(queryPlan)
+		resource.contents.add(container)
 		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
 			new EMFScope(resourceSet))
 
 		val transformation = BatchTransformation.forEngine(engine).build
 		val statements = transformation.transformationStatements
 
-		val f = new BatchTransformationRuleFactory
-		val expandVertexRule = f.createRule() //
+		val expandVertexRule = expandVertexRule
+		val expandOperatorRule = expandOperatorRule
+
+		statements.fireWhilePossible(expandVertexRule)
+		statements.fireWhilePossible(expandOperatorRule)
+
+		return container
+	}
+
+	/**
+	 * Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
+	 */
+	def expandVertexRule() {
+		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			println(it)
-		].build
+			val getVerticesOperator = getVerticesOperator
+			val expandOperator = expandOperator
 
-		val expandOperatorRule = f.createRule() //
+			val getEdgesOperator = createGetEdgesOperator => [
+				sourceVertexVariable = getVerticesOperator.vertexVariable
+				targetVertexVariable = expandOperator.targetVertexVariable
+				edgeVariable = expandOperator.edgeVariable
+			]
+
+			// change containing edge:
+			// * (parent)-[:input]->(geo) or
+			// * (parent)-[:leftInput]->(geo) or
+			// * (parent)-[:rightInput]->(geo)
+			val inputOpposite = expandOperator.eContainingFeature
+			expandOperator.eContainer.eSet(inputOpposite, getEdgesOperator)
+		].build
+	}
+
+	/**
+	 * Replace a single expand operator with a GetEdgesOperator and a JoinOperator
+	 */
+	def getExpandOperatorRule() {
+		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
-		.action[
-			println(it)
-		].build
+		.action [ //
+			val expandOperator = expandOperator
 
-		statements.fireAllCurrent(expandVertexRule)
-		statements.fireAllCurrent(expandOperatorRule)
+			val getEdgesOperator = createGetEdgesOperator => [
+				sourceVertexVariable = expandOperator.sourceVertexVariable
+				targetVertexVariable = expandOperator.targetVertexVariable
+				edgeVariable = expandOperator.edgeVariable
+			]
+			val joinOperator = createJoinOperator => [
+				leftInput = expandOperator.input
+				rightInput = getEdgesOperator
+			]
+			val inputOpposite = expandOperator.eContainingFeature
+			expandOperator.eContainer.eSet(inputOpposite, joinOperator)
+		].build
 	}
 
 }

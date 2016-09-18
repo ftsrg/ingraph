@@ -220,15 +220,6 @@ public interface RelalgFactory extends EFactory {
 	StringComparisonExpression createStringComparisonExpression();
 
 	/**
-	 * Returns a new object of class '<em>Atom</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Atom</em>'.
-	 * @generated
-	 */
-	Atom createAtom();
-
-	/**
 	 * Returns a new object of class '<em>String Literal</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -265,13 +256,13 @@ public interface RelalgFactory extends EFactory {
 	GetEdgesOperator createGetEdgesOperator();
 
 	/**
-	 * Returns a new object of class '<em>Comparable</em>'.
+	 * Returns a new object of class '<em>Atom</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Comparable</em>'.
+	 * @return a new object of class '<em>Atom</em>'.
 	 * @generated
 	 */
-	Comparable createComparable();
+	Atom createAtom();
 
 	/**
 	 * Returns the package supported by this factory.

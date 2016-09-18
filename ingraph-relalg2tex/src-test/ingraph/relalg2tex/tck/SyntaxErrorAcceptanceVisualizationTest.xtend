@@ -1,9 +1,12 @@
 package ingraph.relalg2tex.tck
 
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import org.junit.Test
+
+import ingraph.cypher2relalg.RelalgParser
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class SyntaxErrorAcceptanceVisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
 }

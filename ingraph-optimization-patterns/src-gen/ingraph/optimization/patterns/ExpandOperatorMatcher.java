@@ -29,8 +29,9 @@ import relalg.ExpandOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * pattern expandOperator(e) {
- * 	ExpandOperator(e);
+ * // 2nd transformation
+ * pattern expandOperator(expandOperator) {
+ * 	ExpandOperator(expandOperator);
  * }
  * </pre></code>
  * 
@@ -70,7 +71,7 @@ public class ExpandOperatorMatcher extends BaseMatcher<ExpandOperatorMatch> {
     return new ExpandOperatorMatcher();
   }
   
-  private final static int POSITION_E = 0;
+  private final static int POSITION_EXPANDOPERATOR = 0;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandOperatorMatcher.class);
   
@@ -88,104 +89,104 @@ public class ExpandOperatorMatcher extends BaseMatcher<ExpandOperatorMatch> {
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return matches represented as a ExpandOperatorMatch object.
    * 
    */
-  public Collection<ExpandOperatorMatch> getAllMatches(final ExpandOperator pE) {
-    return rawGetAllMatches(new Object[]{pE});
+  public Collection<ExpandOperatorMatch> getAllMatches(final ExpandOperator pExpandOperator) {
+    return rawGetAllMatches(new Object[]{pExpandOperator});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return a match represented as a ExpandOperatorMatch object, or null if no match is found.
    * 
    */
-  public ExpandOperatorMatch getOneArbitraryMatch(final ExpandOperator pE) {
-    return rawGetOneArbitraryMatch(new Object[]{pE});
+  public ExpandOperatorMatch getOneArbitraryMatch(final ExpandOperator pExpandOperator) {
+    return rawGetOneArbitraryMatch(new Object[]{pExpandOperator});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final ExpandOperator pE) {
-    return rawHasMatch(new Object[]{pE});
+  public boolean hasMatch(final ExpandOperator pExpandOperator) {
+    return rawHasMatch(new Object[]{pExpandOperator});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final ExpandOperator pE) {
-    return rawCountMatches(new Object[]{pE});
+  public int countMatches(final ExpandOperator pExpandOperator) {
+    return rawCountMatches(new Object[]{pExpandOperator});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final ExpandOperator pE, final IMatchProcessor<? super ExpandOperatorMatch> processor) {
-    rawForEachMatch(new Object[]{pE}, processor);
+  public void forEachMatch(final ExpandOperator pExpandOperator, final IMatchProcessor<? super ExpandOperatorMatch> processor) {
+    rawForEachMatch(new Object[]{pExpandOperator}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final ExpandOperator pE, final IMatchProcessor<? super ExpandOperatorMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pE}, processor);
+  public boolean forOneArbitraryMatch(final ExpandOperator pExpandOperator, final IMatchProcessor<? super ExpandOperatorMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pExpandOperator}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public ExpandOperatorMatch newMatch(final ExpandOperator pE) {
-    return ExpandOperatorMatch.newMatch(pE);
+  public ExpandOperatorMatch newMatch(final ExpandOperator pExpandOperator) {
+    return ExpandOperatorMatch.newMatch(pExpandOperator);
   }
   
   /**
-   * Retrieve the set of values that occur in matches for e.
+   * Retrieve the set of values that occur in matches for expandOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  protected Set<ExpandOperator> rawAccumulateAllValuesOfe(final Object[] parameters) {
+  protected Set<ExpandOperator> rawAccumulateAllValuesOfexpandOperator(final Object[] parameters) {
     Set<ExpandOperator> results = new HashSet<ExpandOperator>();
-    rawAccumulateAllValues(POSITION_E, parameters, results);
+    rawAccumulateAllValues(POSITION_EXPANDOPERATOR, parameters, results);
     return results;
   }
   
   /**
-   * Retrieve the set of values that occur in matches for e.
+   * Retrieve the set of values that occur in matches for expandOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<ExpandOperator> getAllValuesOfe() {
-    return rawAccumulateAllValuesOfe(emptyArray());
+  public Set<ExpandOperator> getAllValuesOfexpandOperator() {
+    return rawAccumulateAllValuesOfexpandOperator(emptyArray());
   }
   
   @Override
   protected ExpandOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return ExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_E));
+    	return ExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_EXPANDOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -195,7 +196,7 @@ public class ExpandOperatorMatcher extends BaseMatcher<ExpandOperatorMatch> {
   @Override
   protected ExpandOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return ExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_E]);
+    	return ExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -205,7 +206,7 @@ public class ExpandOperatorMatcher extends BaseMatcher<ExpandOperatorMatch> {
   @Override
   protected ExpandOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return ExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_E]);
+    	return ExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

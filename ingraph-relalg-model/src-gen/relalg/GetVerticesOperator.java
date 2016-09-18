@@ -19,7 +19,7 @@ package relalg;
  * @model
  * @generated
  */
-public interface GetVerticesOperator extends AlgebraExpression {
+public interface GetVerticesOperator extends Operator {
 	/**
 	 * Returns the value of the '<em><b>Vertex Variable</b></em>' reference.
 	 * <!-- begin-user-doc -->

@@ -18,14 +18,14 @@ import relalg.GetVerticesOperator;
 public abstract class ExpandVertexProcessor implements IMatchProcessor<ExpandVertexMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pV the value of pattern parameter v in the currently processed match
-   * @param pE the value of pattern parameter e in the currently processed match
+   * @param pGetVerticesOperator the value of pattern parameter getVerticesOperator in the currently processed match
+   * @param pExpandOperator the value of pattern parameter expandOperator in the currently processed match
    * 
    */
-  public abstract void process(final GetVerticesOperator pV, final ExpandOperator pE);
+  public abstract void process(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator);
   
   @Override
   public void process(final ExpandVertexMatch match) {
-    process(match.getV(), match.getE());
+    process(match.getGetVerticesOperator(), match.getExpandOperator());
   }
 }

@@ -1,0 +1,33 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{d}}$}
+	[. {$\selection{}$}
+		[. {$\join$}
+			[. {$\expand{\_e4}{}{d}{a}{}$}
+				[. {$\expand{\_e3}{}{c}{d}{}$}
+					[. {$\expand{\_e2}{}{b}{c}{}$}
+						[. {$\expand{\_e1}{}{a}{b}{}$}
+							[. {$\getvertices{a}{}$}
+							]
+						]
+					]
+				]
+			]
+			[. {$\expand{\_e5}{}{b}{d}{}$}
+				[. {$\getvertices{b}{}$}
+				]
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

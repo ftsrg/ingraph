@@ -21,36 +21,4 @@ class LabelsAcceptanceParserTest {
         ''')
     }
 
-    /*
-    Scenario: Removing a label
-    And having executed:
-      """
-      CREATE (:Foo:Bar)
-      """
-    */
-    @Test
-    def void testLabelsAcceptance_11() {
-        RelalgParser.parse('''
-        MATCH (n)
-        REMOVE n:Foo
-        RETURN labels(n)
-        ''')
-    }
-
-    /*
-    Scenario: Removing a non-existent label
-    And having executed:
-      """
-      CREATE (:Foo)
-      """
-    */
-    @Test
-    def void testLabelsAcceptance_12() {
-        RelalgParser.parse('''
-        MATCH (n)
-        REMOVE n:Bar
-        RETURN labels(n)
-        ''')
-    }
-
 }

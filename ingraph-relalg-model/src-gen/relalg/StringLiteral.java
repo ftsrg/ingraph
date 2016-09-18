@@ -20,7 +20,6 @@ package relalg;
  * @generated
  */
 public interface StringLiteral extends Literal {
-
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -46,4 +45,5 @@ public interface StringLiteral extends Literal {
 	 * @generated
 	 */
 	void setValue(String value);
+
 } // StringLiteral

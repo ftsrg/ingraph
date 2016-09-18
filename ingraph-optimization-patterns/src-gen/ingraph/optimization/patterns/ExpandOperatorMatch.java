@@ -26,37 +26,37 @@ import relalg.ExpandOperator;
  */
 @SuppressWarnings("all")
 public abstract class ExpandOperatorMatch extends BasePatternMatch {
-  private ExpandOperator fE;
+  private ExpandOperator fExpandOperator;
   
-  private static List<String> parameterNames = makeImmutableList("e");
+  private static List<String> parameterNames = makeImmutableList("expandOperator");
   
-  private ExpandOperatorMatch(final ExpandOperator pE) {
-    this.fE = pE;
+  private ExpandOperatorMatch(final ExpandOperator pExpandOperator) {
+    this.fExpandOperator = pExpandOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
-    if ("e".equals(parameterName)) return this.fE;
+    if ("expandOperator".equals(parameterName)) return this.fExpandOperator;
     return null;
   }
   
-  public ExpandOperator getE() {
-    return this.fE;
+  public ExpandOperator getExpandOperator() {
+    return this.fExpandOperator;
   }
   
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    if ("e".equals(parameterName) ) {
-    	this.fE = (ExpandOperator) newValue;
+    if ("expandOperator".equals(parameterName) ) {
+    	this.fExpandOperator = (ExpandOperator) newValue;
     	return true;
     }
     return false;
   }
   
-  public void setE(final ExpandOperator pE) {
+  public void setExpandOperator(final ExpandOperator pExpandOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fE = pE;
+    this.fExpandOperator = pExpandOperator;
   }
   
   @Override
@@ -71,18 +71,18 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fE};
+    return new Object[]{fExpandOperator};
   }
   
   @Override
   public ExpandOperatorMatch toImmutable() {
-    return isMutable() ? newMatch(fE) : this;
+    return isMutable() ? newMatch(fExpandOperator) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
-    result.append("\"e\"=" + prettyPrintValue(fE)
+    result.append("\"expandOperator\"=" + prettyPrintValue(fExpandOperator)
     );
     return result.toString();
   }
@@ -91,7 +91,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((fE == null) ? 0 : fE.hashCode());
+    result = prime * result + ((fExpandOperator == null) ? 0 : fExpandOperator.hashCode());
     return result;
   }
   
@@ -112,8 +112,8 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     ExpandOperatorMatch other = (ExpandOperatorMatch) obj;
-    if (fE == null) {if (other.fE != null) return false;}
-    else if (!fE.equals(other.fE)) return false;
+    if (fExpandOperator == null) {if (other.fExpandOperator != null) return false;}
+    else if (!fExpandOperator.equals(other.fExpandOperator)) return false;
     return true;
   }
   
@@ -142,29 +142,29 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMutableMatch(final ExpandOperator pE) {
-    return new Mutable(pE);
+  public static ExpandOperatorMatch newMutableMatch(final ExpandOperator pExpandOperator) {
+    return new Mutable(pExpandOperator);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pE the fixed value of pattern parameter e, or null if not bound.
+   * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMatch(final ExpandOperator pE) {
-    return new Immutable(pE);
+  public static ExpandOperatorMatch newMatch(final ExpandOperator pExpandOperator) {
+    return new Immutable(pExpandOperator);
   }
   
   private static final class Mutable extends ExpandOperatorMatch {
-    Mutable(final ExpandOperator pE) {
-      super(pE);
+    Mutable(final ExpandOperator pExpandOperator) {
+      super(pExpandOperator);
     }
     
     @Override
@@ -174,8 +174,8 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends ExpandOperatorMatch {
-    Immutable(final ExpandOperator pE) {
-      super(pE);
+    Immutable(final ExpandOperator pExpandOperator) {
+      super(pExpandOperator);
     }
     
     @Override

@@ -3,11 +3,11 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
-import ingraph.relalg2tex.RelAlgTreeDrawer
+import ingraph.relalg2tex.RelalgTreeSerializer
 
 class LiteralsVisualizationTest {
 
-    val static RelAlgTreeDrawer drawer = new RelAlgTreeDrawer(true)
+    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
     
     /*
     Scenario: Return an integer
@@ -17,7 +17,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 1 AS literal
         ''')
-        drawer.serialize(container, "Literals_01")
+        serializer.serialize(container, "Literals_01")
     }
 
     /*
@@ -28,7 +28,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 1.0 AS literal
         ''')
-        drawer.serialize(container, "Literals_02")
+        serializer.serialize(container, "Literals_02")
     }
 
     /*
@@ -39,7 +39,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN -1e-9 AS literal
         ''')
-        drawer.serialize(container, "Literals_03")
+        serializer.serialize(container, "Literals_03")
     }
 
     /*
@@ -50,7 +50,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN true AS literal
         ''')
-        drawer.serialize(container, "Literals_04")
+        serializer.serialize(container, "Literals_04")
     }
 
     /*
@@ -61,7 +61,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN '' AS literal
         ''')
-        drawer.serialize(container, "Literals_05")
+        serializer.serialize(container, "Literals_05")
     }
 
     /*
@@ -72,7 +72,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN "" AS literal
         ''')
-        drawer.serialize(container, "Literals_06")
+        serializer.serialize(container, "Literals_06")
     }
 
     /*
@@ -83,7 +83,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN null AS literal
         ''')
-        drawer.serialize(container, "Literals_07")
+        serializer.serialize(container, "Literals_07")
     }
 
     /*
@@ -94,7 +94,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [] AS literal
         ''')
-        drawer.serialize(container, "Literals_08")
+        serializer.serialize(container, "Literals_08")
     }
 
     /*
@@ -105,7 +105,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN [0, 1, 2] AS literal
         ''')
-        drawer.serialize(container, "Literals_09")
+        serializer.serialize(container, "Literals_09")
     }
 
     /*
@@ -116,7 +116,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN {} AS literal
         ''')
-        drawer.serialize(container, "Literals_10")
+        serializer.serialize(container, "Literals_10")
     }
 
     /*
@@ -127,7 +127,7 @@ class LiteralsVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
-        drawer.serialize(container, "Literals_11")
+        serializer.serialize(container, "Literals_11")
     }
 
 }

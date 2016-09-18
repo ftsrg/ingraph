@@ -374,25 +374,6 @@ class AggregationAcceptanceParserTest {
     }
 
     /*
-    Scenario: Projection during aggregation in WITH before MERGE and after WITH with predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:A {prop: 42})
-      """
-    */
-    @Test
-    def void testAggregationAcceptance_23() {
-        RelalgParser.parse('''
-        UNWIND [42] AS props
-        WITH props WHERE props > 32
-        WITH DISTINCT props AS p
-        MERGE (a:A {prop: p})
-        RETURN a.prop AS prop
-        ''')
-    }
-
-    /*
     Scenario: No overflow during summation
     Given any graph
     */

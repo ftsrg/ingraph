@@ -1,0 +1,34 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\linespread{1.25}
+\Tree
+[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{route, sensor, swP, sw}$\}}
+	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\{\color{gray} \var{route, sensor, swP, sw}$\}}
+		[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4}$\}}
+			[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor}$\}}
+				[. {$\join \{\var{sw}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw, \_e3, sensor}$\}}
+					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP, \_e2, sw}$\}}
+						[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\{\color{gray} \var{route, \_e1, swP}$\}}
+						]
+						[. {$\getedges{swP}{SwitchPosition}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\{\color{gray} \var{swP, \_e2, sw}$\}}
+						]
+					]
+					[. {$\getedges{sw}{Switch}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\{\color{gray} \var{sw, \_e3, sensor}$\}}
+					]
+				]
+			]
+			[. {$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\{\color{gray} \var{route, \_e4, sensor}$\}}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

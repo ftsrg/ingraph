@@ -20,7 +20,6 @@ package relalg;
  * @generated
  */
 public interface AttributeVariable extends Variable {
-
 	/**
 	 * Returns the value of the '<em><b>Element</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link relalg.ElementVariable#getAttributes <em>Attributes</em>}'.
@@ -48,4 +47,5 @@ public interface AttributeVariable extends Variable {
 	 * @generated
 	 */
 	void setElement(ElementVariable value);
+
 } // AttributeVariable

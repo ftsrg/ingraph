@@ -3,10 +3,12 @@
 package relalg.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import relalg.EdgeLabel;
 import relalg.EdgeVariable;
 import relalg.RelalgPackage;
@@ -112,7 +114,6 @@ public class EdgeVariableImpl extends ElementVariableImpl implements EdgeVariabl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

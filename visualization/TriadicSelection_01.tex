@@ -1,0 +1,21 @@
+\documentclass[varwidth,convert={density=120}]{standalone}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\Tree
+[. {$\projection{\var{c}}$}
+	[. {$\expandout{\_e2}{}{b}{c}{}$}
+		[. {$\expandout{\_e1}{KNOWS}{a}{b}{}$}
+			[. {$\getvertices{a}{A}$}
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

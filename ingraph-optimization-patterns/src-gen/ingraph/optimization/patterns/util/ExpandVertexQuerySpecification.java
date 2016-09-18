@@ -104,11 +104,11 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ExpandVertexQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pV = new PParameter("v", "relalg.GetVerticesOperator", (IInputKey)null, PParameterDirection.INOUT);
+    private final PParameter parameter_pGetVerticesOperator = new PParameter("getVerticesOperator", "relalg.GetVerticesOperator", (IInputKey)null, PParameterDirection.INOUT);
     
-    private final PParameter parameter_pE = new PParameter("e", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
+    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pV, parameter_pE);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pGetVerticesOperator, parameter_pExpandOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -117,7 +117,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("v","e");
+      return Arrays.asList("getVerticesOperator","expandOperator");
     }
     
     @Override
@@ -132,19 +132,19 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_v = body.getOrCreateVariableByName("v");
-      		PVariable var_e = body.getOrCreateVariableByName("e");
+      		PVariable var_getVerticesOperator = body.getOrCreateVariableByName("getVerticesOperator");
+      		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_v, parameter_pV),
-      		   new ExportedParameter(body, var_e, parameter_pE)
+      		   new ExportedParameter(body, var_getVerticesOperator, parameter_pGetVerticesOperator),
+      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator)
       		));
-      		// 	GetVerticesOperator(v)
-      		new TypeConstraint(body, new FlatTuple(var_v), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "GetVerticesOperator")));
-      		// 	ExpandOperator.input(e, v)
-      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
+      		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "AlphaOperator", "input")));
-      		new Equality(body, var__virtual_0_, var_v);
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "AlphaOperator", "input")));
+      		new Equality(body, var__virtual_0_, var_getVerticesOperator);
+      		// 	GetVerticesOperator(getVerticesOperator)
+      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "GetVerticesOperator")));
       		bodies.add(body);
       	}
       	// to silence compiler error
