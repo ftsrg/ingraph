@@ -136,7 +136,7 @@ class RelalgBaseUnsupportedCypherListener extends CypherBaseListener {
 	// c/u/d operations
 	override enterMerge(MergeContext ctx) { i_am_unsupported(ctx); }
 	override enterMergeAction(MergeActionContext ctx) { i_am_unsupported(ctx); }
-	override enterCreate(CreateContext ctx) { }
+	override enterCreate(CreateContext ctx) { i_am_unsupported(ctx); }
 	override enterSet(SetContext ctx) { i_am_unsupported(ctx); }
 	override enterSetItem(SetItemContext ctx) { i_am_unsupported(ctx); }
 	override enterDelete(DeleteContext ctx) { i_am_unsupported(ctx); }
