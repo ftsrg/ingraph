@@ -134,9 +134,9 @@ class RelalgBaseUnsupportedCypherListener extends CypherBaseListener {
 	override enterRelTypeName(RelTypeNameContext ctx) { }  // processed directly in relationshipDetail (has TODO to handle multiple type)
 
 	// c/u/d operations
+	override enterCreate(CreateContext ctx) { i_am_unsupported(ctx); }
 	override enterMerge(MergeContext ctx) { i_am_unsupported(ctx); }
 	override enterMergeAction(MergeActionContext ctx) { i_am_unsupported(ctx); }
-	override enterCreate(CreateContext ctx) { i_am_unsupported(ctx); }
 	override enterSet(SetContext ctx) { i_am_unsupported(ctx); }
 	override enterSetItem(SetItemContext ctx) { i_am_unsupported(ctx); }
 	override enterDelete(DeleteContext ctx) { i_am_unsupported(ctx); }

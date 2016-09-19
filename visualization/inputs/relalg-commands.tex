@@ -31,7 +31,7 @@
 \newcommand{\getverticesop}{\bigcirc}
 \newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
 
-\newcommand{\getedgesop}{\multimapbothvert}
+\newcommand{\getedgesop}{\mathbin{\text{\rotatebox[origin=c]{90}{$\multimapboth$}}}}
 \newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
 
 \newcommand{\alldifferentop}{\neq}
@@ -54,15 +54,26 @@
 \newcommand{\projection}[1]{\projectionop_{#1}}
 
 \newcommand{\selectionop}{\sigma}
-\newcommand{\selection}[1]{\selectionop_{#1}}
+\newcommand{\selection}[1]{\selectionop_{\atom{#1}}}
 
 \newcommand{\renameop}{\rho}
-\newcommand{\rename}[1]{\renameop_{}}
+\newcommand{\rename}[1]{\renameop_{#1}}
+
+\newcommand{\groupingop}{\gamma}
+\newcommand{\grouping}[1]{\groupingop_{#1}}
+
+\newcommand{\topop}{\lambda}
+\newcommand{\topp}[2]{\topop_{#1}^{#2}}
+\newcommand{\skipp}[1]{\topop^{#1}}
+\newcommand{\limit}[1]{\topop_{#1}}
 
 % beta operators
 
 \newcommand{\joinop}{\bowtie}
 \newcommand{\join}{\joinop}
+
+\newcommand{\outerjoinop}{\fullouterjoin}
+\newcommand{\outerjoin}{\outerjoinop}
 
 \newcommand{\antijoinop}{\, \triangleright \,}
 \newcommand{\antijoin}{\antijoinop}
@@ -78,9 +89,6 @@
 
 \newcommand{\intersectionop}{\cap}
 \newcommand{\intersection}{\intersectionop}
-
-%\newcommand{\bigunionop}{\bigcup}
-%\newcommand{\bigunion}{\bigunionop}
 
 \newcommand{\cartesianproductop}{\times}
 \newcommand{\cartesianproduct}{\cartesianproduct}
