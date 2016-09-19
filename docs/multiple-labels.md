@@ -23,7 +23,7 @@ At **query-time**, multiple labels given are **AND**-ed together, but need not t
 
 ## Edge labels
 
-Edges have have one and only **one label at create time**, fo the 1st example below will suceed,
+Edges have one and only **one label at create time**, fo the 1st example below will suceed,
 where the 2nd and 3rd will fail saying
 `A single relationship type must be specified for CREATE`.
 
