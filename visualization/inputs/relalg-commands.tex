@@ -8,10 +8,10 @@
 
 \newcommand{\var}[1]{\mathtt{#1}}
 \newcommand{\edgevariable}[2]{\left[\var{#1}
-	\ifstrempty{#2}{}{\colon\!{\atom{#2}}}
+	\ifstrempty{#2}{}{\colon{\atom{#2}}}
 	\right]}
 \newcommand{\nodevariable}[2]{(\var{#1}
-	\ifstrempty{#2}{}{\colon\!{\atom{#2}}}
+	\ifstrempty{#2}{}{\colon{\atom{#2}}}
 	)}
 
 % alpha operators
@@ -44,7 +44,9 @@
 \newcommand{\sortopasc}{\tau^\Uparrow}
 \newcommand{\sortopdesc}{\tau^\Downarrow}
 
-\newcommand{\sort}[2]{\sortop_{#2}{#2}}
+\newcommand{\sortarbitrary}[3]{\sortop^{#1}_{#2}{#3}}
+
+\newcommand{\sort}[2]{\sortop_{#1}{#2}}
 \newcommand{\sortasc}[2]{\sortopasc_{#1}{#2}}
 \newcommand{\sortdesc}[2]{\sortopdesc_{#1}{#2}}
 
@@ -67,6 +69,9 @@
 
 \newcommand{\unionop}{\cup}
 \newcommand{\union}{\unionop}
+
+\newcommand{\bagunionop}{\uplus}
+\newcommand{\bagunion}{\bagunionop}
 
 \newcommand{\minusop}{\setminus}
 \newcommand{\minus}{\minusop}
