@@ -41,10 +41,12 @@
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 
 \newcommand{\sortop}{\tau}
-\newcommand{\sort}{\sortop}
+\newcommand{\sortopasc}{\tau^\Uparrow}
+\newcommand{\sortopdesc}{\tau^\Downarrow}
 
-\newcommand{\sortasc}{\sort_\Uparrow}
-\newcommand{\sortdesc}{\sort_\Downarrow}
+\newcommand{\sort}[2]{\sortop_{#2}{#2}}
+\newcommand{\sortasc}[2]{\sortopasc_{#1}{#2}}
+\newcommand{\sortdesc}[2]{\sortopdesc_{#1}{#2}}
 
 \newcommand{\projectionop}{\pi}
 \newcommand{\projection}[1]{\projectionop_{#1}}
