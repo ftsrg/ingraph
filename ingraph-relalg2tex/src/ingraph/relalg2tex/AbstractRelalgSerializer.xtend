@@ -153,7 +153,7 @@ abstract class AbstractRelalgSerializer {
 	def directionToTex(Direction direction) {
 		switch direction {
 			case BOTH: {
-				""
+				"both"
 			}
 			case IN: {
 				"in"
