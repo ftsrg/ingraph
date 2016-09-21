@@ -68,6 +68,7 @@ abstract class AbstractRelalgSerializer {
 		'''
 			«IF document»
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+				\usepackage[active,tightpage]{preview}
 				
 				\input{inputs/relalg-packages}
 				\input{inputs/relalg-commands}
@@ -120,7 +121,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(ProductionOperator op) {
-		throw new UnsupportedOperationException("Visualization of production nodes is currently not supported.")
+		throw new UnsupportedOperationException('''Visualization of production nodes is currently not supported.''')
 	}
 
 	def dispatch operatorSymbol(ProjectionOperator op) {
@@ -131,7 +132,7 @@ abstract class AbstractRelalgSerializer {
 	 * betaOperator
 	 */
 	def dispatch betaOperator(AbstractJoinOperator operator) {
-		'''«operator.joinOperator» \{«operator.mutualVariables.map["\\var{"+ name.escape + "}"].join(", ")»\}'''
+		'''«operator.joinOperator» \{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}'''
 	}
 
 	def dispatch betaOperator(UnionOperator operator) {
@@ -153,13 +154,13 @@ abstract class AbstractRelalgSerializer {
 	def directionToTex(Direction direction) {
 		switch direction {
 			case BOTH: {
-				"both"
+				'''both'''
 			}
 			case IN: {
-				"in"
+				'''in'''
 			}
 			case OUT: {
-				"out"
+				'''out'''
 			}
 		}
 	}
