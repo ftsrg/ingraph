@@ -1,3 +1,5 @@
+package ingraph.gqo
+
 import akka.actor.{ActorRef, ActorSystem, Props}
 import hu.bme.mit.incqueryds._
 import hu.bme.mit.incqueryds.trainbenchmark.TrainbenchmarkQuery
