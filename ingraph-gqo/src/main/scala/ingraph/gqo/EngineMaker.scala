@@ -48,11 +48,9 @@ object EngineMaker extends App {
             val node: ActorRef = op match {
               case op: AntiJoinOperator =>
                 val names = op.getMutualVariables.map(_.getName)
-                println(s"anti: $names")
                 newLocal(Props(new HashLeftAntijoiner(expr.child, names, names)))
               case op: JoinOperator =>
                 val names = op.getMutualVariables.map(_.getName)
-                println(s"join: $names")
                 newLocal(Props(new NaturalJoiner(expr.child, names)))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)
@@ -62,7 +60,6 @@ object EngineMaker extends App {
             val nick = op.getVertexVariable.getName
             val label= op.getVertexVariable.getVertexLabel.getName
             vertexConverters.addBinding(label, nick)
-            println(nick, expr.child.hashCode())
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName

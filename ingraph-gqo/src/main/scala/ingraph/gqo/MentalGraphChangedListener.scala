@@ -18,18 +18,13 @@ class MentalGraphChangedListener(
   val vertices = mutable.HashMap[String, Set[nodeType]]()
   val edges = mutable.HashMap[String, Set[nodeType]]()
 
-  def elementToNode(element: Element, nick: String): nodeType = {
-    val x = Map[Any,Any](nick -> element.id) ++
+  def elementToNode(element: Element, nick: String): nodeType =
+    Map[Any,Any](nick -> element.id) ++
       element.keys.map(k => k -> element.value(k))
-    x
-  }
 
-  def edgeToNodeType(edge: Edge, transformer: EdgeTransformer): nodeType = {
-    val x = elementToNode(edge, transformer.nick) +
-      (transformer.source -> edge.inVertex.id) + (transformer.target -> edge.outVertex.id)
-    println(x)
-    x
-  }
+  def edgeToNodeType(edge: Edge, transformer: EdgeTransformer): nodeType =
+    elementToNode(edge, transformer.nick) +
+      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id)
 
   override def vertexAdded(vertex: Vertex): Unit = {
     for (nickSet <- vertexConverters.get(vertex.label);
