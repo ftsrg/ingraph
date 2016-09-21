@@ -35,7 +35,8 @@
 \newcommand{\getedgesop}{\Uparrow}
 \newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
 
-\newcommand{\alldifferentop}{\neq}
+\setlength{\fboxsep}{.15\fboxsep}
+\newcommand{\alldifferentop}{\boxed{\neq}\,\,}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
 
 \newcommand{\duplicateeliminationop}{\delta}
