@@ -1,10 +1,21 @@
 \documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
 
 \begin{document}
 \begin{preview}
-$\getedges{arg1}{arg2}{arg3}{arg4}{arg5}{arg6}$
+\begin{tikzpicture}
+\linespread{1.25}
+\Tree
+[. {$\projection{\var{n}}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
+	[. {$\selection{\mathtt{n.p1~=~12~\lor~n.p2~=~13}}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
+		[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
+		]
+	]
+]
+;
+\end{tikzpicture}
 \end{preview}
 \end{document}

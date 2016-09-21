@@ -1,4 +1,5 @@
 \documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -12,7 +13,7 @@
 	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 		[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expand{r}{}{a}{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
+		[. {$\expandboth{r}{}{a}{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 			[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]

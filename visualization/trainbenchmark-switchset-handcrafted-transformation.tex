@@ -1,4 +1,5 @@
 \documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -10,12 +11,12 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
 	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
-		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
-			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
-				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
-					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP, \_e3, sw} \rangle$}
-						[. {$\join \{\var{route}\}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route, \_e2, swP} \rangle$}
-							[. {$\getedges{semaphore}{Semaphore}{route}{Route}{\_e1}{entry}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route} \rangle$}
+		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+			[. {$\selection{\var{semaphore.signal} = \literal{"GO"}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+						[. {$\join \{\var{route}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP} \rangle$}
+							[. {$\getedges{route}{Route}{semaphore}{Semaphore}{\_e1}{entry}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore} \rangle$}
 							]
 							[. {$\getedges{route}{Route}{swP}{SwitchPosition}{\_e2}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e2, swP} \rangle$}
 							]

@@ -1,4 +1,5 @@
 \documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -10,14 +11,14 @@
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
 	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, r2, c} \rangle$}
-		[. {$\expand{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-			[. {$\expand{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+		[. {$\expandboth{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
+			[. {$\expandboth{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 				[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
 		]
 		[. {$\selection{\mathtt{r~<>~r2}}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
-			[. {$\expand{r2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
+			[. {$\expandboth{r2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
 				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 				]
 			]

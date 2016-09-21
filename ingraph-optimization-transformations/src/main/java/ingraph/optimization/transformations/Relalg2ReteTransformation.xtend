@@ -14,6 +14,7 @@ import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransforma
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
 import relalg.Container
 import relalg.RelalgFactory
+import relalg.ExpandOperator
 
 class Relalg2ReteTransformation {
 
@@ -30,8 +31,7 @@ class Relalg2ReteTransformation {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)
-		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
-			new EMFScope(resourceSet))
+		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(resourceSet))
 
 		val transformation = BatchTransformation.forEngine(engine).build
 		val statements = transformation.transformationStatements
@@ -52,12 +52,11 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			val getVerticesOperator = getVerticesOperator
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
-				sourceVertexVariable = getVerticesOperator.vertexVariable
-				targetVertexVariable = expandOperator.targetVertexVariable
+				sourceVertexVariable = expandOperator.source
+				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
 			]
 
@@ -73,15 +72,15 @@ class Relalg2ReteTransformation {
 	/**
 	 * Replace a single expand operator with a GetEdgesOperator and a JoinOperator
 	 */
-	def getExpandOperatorRule() {
+	def expandOperatorRule() {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
-				sourceVertexVariable = expandOperator.sourceVertexVariable
-				targetVertexVariable = expandOperator.targetVertexVariable
+				sourceVertexVariable = expandOperator.source
+				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
 			]
 			val joinOperator = createJoinOperator => [
@@ -91,6 +90,30 @@ class Relalg2ReteTransformation {
 			val inputOpposite = expandOperator.eContainingFeature
 			expandOperator.eContainer.eSet(inputOpposite, joinOperator)
 		].build
+	}
+
+	def source(ExpandOperator expandOperator) {
+		switch (expandOperator.direction) {
+			case BOTH,
+			case IN: {
+				return expandOperator.targetVertexVariable
+			}
+			case OUT: {
+				return expandOperator.sourceVertexVariable
+			}
+		}
+	}
+
+	def target(ExpandOperator expandOperator) {
+		switch (expandOperator.direction) {
+			case BOTH,
+			case IN: {
+				return expandOperator.sourceVertexVariable
+			}
+			case OUT: {
+				return expandOperator.targetVertexVariable
+			}
+		}
 	}
 
 }

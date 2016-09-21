@@ -1,4 +1,5 @@
 \documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -13,7 +14,7 @@
 		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
 		[. {$\selection{\mathtt{m:NonExistent}}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
-			[. {$\expand{r}{}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+			[. {$\expandboth{r}{}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 				[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 				]
 			]
