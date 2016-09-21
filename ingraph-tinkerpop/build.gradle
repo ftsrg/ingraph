@@ -1,0 +1,4 @@
+dependencies {
+  compile group: 'org.apache.tinkerpop', name: 'tinkergraph-gremlin', version: '3.2.1'
+	testCompile group: 'junit', name: 'junit', version: junitVersion
+}
