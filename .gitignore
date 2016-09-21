@@ -33,5 +33,6 @@ gradle-app.setting
 gen/
 
 .cache-main
+.cache-tests
 xtend-gen
 
