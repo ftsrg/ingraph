@@ -251,7 +251,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch convertComparable(StringLiteral stringLiteral) {
-		'''\literal{"«stringLiteral.value.toString»"}'''
+		'''\literal{'«stringLiteral.value.toString»'}'''
 	}
 
 	def dispatch convertComparable(ElementVariable elementVariable) {
@@ -277,10 +277,10 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def prettyPrintCondition(String s) {
 		s //
-			.replaceAll(" XOR ", ''' \\lxor ''') //
-			.replaceAll(" AND ", ''' \\land ''') //
-			.replaceAll(" OR ", ''' \\lor ''') //
-			.replaceAll(" ", "~") //
+			.replaceAll(''' XOR ''', ''' \\lxor ''') //
+			.replaceAll(''' AND ''', ''' \\land ''') //
+			.replaceAll(''' OR ''', ''' \\lor ''') //
+			.replaceAll(''' ''', '''~''') //
 	}
 
 }
