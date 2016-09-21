@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$( cd "$( dirname "$0" )" && pwd )"
+
 cat template-header.html > visualization.html
 echo > body.html
 

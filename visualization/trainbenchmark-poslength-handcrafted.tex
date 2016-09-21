@@ -8,10 +8,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\duplicateelimination$ \\ \footnotesize $\{\color{gray} \var{segment, length}$\}}
-	[. {$\projection{\var{segment},~\var{length}}$ \\ \footnotesize $\{\color{gray} \var{segment, length}$\}}
-		[. {$\selection{\var{segment.length} \leq \literal{0}}$ \\ \footnotesize $\{\color{gray} \var{segment}$\}}
-			[. {$\getvertices{segment}{Segment}$ \\ \footnotesize $\{\color{gray} \var{segment}$\}}
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{segment, length} \rangle$}
+	[. {$\projection{\var{segment},~\var{length}}$ \\ \footnotesize $\color{gray} \langle \var{segment, length} \rangle$}
+		[. {$\selection{\var{segment.length} \leq \literal{0}}$ \\ \footnotesize $\color{gray} \langle \var{segment} \rangle$}
+			[. {$\getvertices{segment}{Segment}$ \\ \footnotesize $\color{gray} \langle \var{segment} \rangle$}
 			]
 		]
 	]

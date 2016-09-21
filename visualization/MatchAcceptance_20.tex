@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,11 +6,12 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{x}}$}
-	[. {$\selection{}$}
-		[. {$\expandout{\_e1}{}{n}{x}{}$}
-			[. {$\getvertices{n}{}$}
+[. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
+	[. {$\selection{\mathtt{length(p)~=~10}}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
+		[. {$\expandout{\_e1}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
+			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 	]

@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.cypherlisteners
 
+import ingraph.antlr.CypherParser.CreateContext
 import ingraph.antlr.CypherParser.DoubleLiteralContext
 import ingraph.antlr.CypherParser.ExpressionContext
 import ingraph.antlr.CypherParser.FunctionInvocationContext
@@ -33,6 +34,7 @@ import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
+import ingraph.cypher2relalg.util.RelalgCypherUtil
 import java.util.ArrayList
 import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
@@ -49,9 +51,6 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import ingraph.cypher2relalg.util.RelalgCypherUtil
-import ingraph.antlr.CypherParser.CreateContext
-import ingraph.antlr.CypherParser.ClauseContext
 
 class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 
@@ -406,7 +405,7 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 		println(ctx.text)
 	}
 	
-	override exitClause(ClauseContext ctx) {
+	override exitCreate(CreateContext ctx) {
 		println(pattern_PatternPartList.map[ class.simpleName ].join(", "))
 		println
 	}

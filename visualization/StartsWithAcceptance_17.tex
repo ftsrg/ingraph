@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,9 +6,10 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\selection{}$}
-	[. {$\getvertices{a}{}$}
+[. {$\selection{\mathtt{NOT}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
+	[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 	]
 ]
 ;

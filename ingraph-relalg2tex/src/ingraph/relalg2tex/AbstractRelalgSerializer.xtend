@@ -103,8 +103,9 @@ abstract class AbstractRelalgSerializer {
 			'''{«op.sourceVertexVariable.escapedName»}''' + '''«op.targetVertexVariable.toTexParameter»'''
 	}
 
-	def dispatch operatorSymbol(SelectionOperator op) {
-		'''\selection{«op.condition?.convertExpression»}'''
+	def dispatch operatorSymbol(
+		SelectionOperator op) {
+		'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
 	}
 
 	def dispatch operatorSymbol(GetEdgesOperator op) {
@@ -119,7 +120,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(ProductionOperator op) {
-		'''prod'''
+		throw new UnsupportedOperationException("Visualization of production nodes is currently not supported.")
 	}
 
 	def dispatch operatorSymbol(ProjectionOperator op) {
@@ -152,7 +153,7 @@ abstract class AbstractRelalgSerializer {
 	def directionToTex(Direction direction) {
 		switch direction {
 			case BOTH: {
-				""
+				"both"
 			}
 			case IN: {
 				"in"
@@ -167,7 +168,9 @@ abstract class AbstractRelalgSerializer {
 	 * escape
 	 */
 	def escape(String s) {
-		s.replace("_", "\\_")
+		s // 
+			.replace('''\''', '''\backslash{}''')			
+			.replace('''_''', '''\_''') //
 	}
 
 	/**
@@ -266,6 +269,17 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
 		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
+	}
+
+	/**
+	 * prettyPrintCondition
+	 */
+	def prettyPrintCondition(String s) {
+		s //
+			.replaceAll(" XOR ", ''' \\lxor ''') //
+			.replaceAll(" AND ", ''' \\land ''') //
+			.replaceAll(" OR ", ''' \\lor ''') //
+			.replaceAll(" ", "~") //
 	}
 
 }

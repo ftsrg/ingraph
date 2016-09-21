@@ -17,22 +17,24 @@ class TrainBenchmarkHandcraftedTreeTest {
 
 	@Test
 	def void testRouteSensor() {
-		serializer.serialize(TrainBenchmarkUtil.routeSensor.addSchemaInformation, "trainbenchmark-routesensor-handcrafted")
+		serializer.serialize(TrainBenchmarkUtil.routeSensor.addSchemaInformation,
+			"trainbenchmark-routesensor-handcrafted")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() {
-		serializer.serialize(TrainBenchmarkUtil.semaphoreNeighbor.addSchemaInformation, "trainbenchmark-semaphoreneighbor-handcrafted")
+		serializer.serialize(TrainBenchmarkUtil.semaphoreNeighbor.addSchemaInformation,
+			"trainbenchmark-semaphoreneighbor-handcrafted")
 	}
 
 	@Test
 	def void testSwitchMonitored() {
-		serializer.serialize(TrainBenchmarkUtil.switchMonitored.addSchemaInformation, "trainbenchmark-switchmonitored-handcrafted")
+		serializer.serialize(TrainBenchmarkUtil.switchMonitored.addSchemaInformation,
+			"trainbenchmark-switchmonitored-handcrafted")
 	}
 
 	@Test
 	def void testSwitchSet() {
 		serializer.serialize(TrainBenchmarkUtil.switchSet.addSchemaInformation, "trainbenchmark-switchset-handcrafted")
 	}
-
 }

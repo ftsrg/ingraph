@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class KeysAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Using `keys()` on a single node, non-empty result
@@ -24,6 +26,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_01")
     }
 
@@ -43,6 +46,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_02")
     }
 
@@ -61,6 +65,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_03")
     }
 
@@ -79,6 +84,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_04")
     }
 
@@ -97,6 +103,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_05")
     }
 
@@ -115,6 +122,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_06")
     }
 
@@ -133,6 +141,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_07")
     }
 
@@ -145,6 +154,7 @@ class KeysAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_08")
     }
 
@@ -159,6 +169,7 @@ class KeysAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN keys($param) AS k
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "KeysAcceptance_09")
     }
 

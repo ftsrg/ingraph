@@ -1,5 +1,7 @@
 /*.png
 /*.pdf
+visualization.html
+body.html
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -94,6 +96,3 @@ sympy-plots-for-*.tex/
 
 *.soc
 /out
-
-body.html
-

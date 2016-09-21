@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class OrderByAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: ORDER BY should return results in ascending order
@@ -25,6 +27,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS prop
         ORDER BY n.prop
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_01")
     }
 
@@ -44,6 +47,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS prop
         ORDER BY n.prop DESC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_02")
     }
 
@@ -60,6 +64,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN p
         ORDER BY rng
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_03")
     }
 
@@ -79,6 +84,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN n.prop AS n
         ORDER BY n + 2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_04")
     }
 
@@ -101,6 +107,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN c.rank AS rank
         ORDER BY relevance, c.rank
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_05")
     }
 
@@ -114,6 +121,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN bools
         ORDER BY bools
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_06")
     }
 
@@ -127,6 +135,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN bools
         ORDER BY bools DESC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_07")
     }
 
@@ -140,6 +149,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN strings
         ORDER BY strings
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_08")
     }
 
@@ -153,6 +163,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN strings
         ORDER BY strings DESC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_09")
     }
 
@@ -166,6 +177,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN ints
         ORDER BY ints
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_10")
     }
 
@@ -179,6 +191,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN ints
         ORDER BY ints DESC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_11")
     }
 
@@ -192,6 +205,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN floats
         ORDER BY floats
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_12")
     }
 
@@ -205,6 +219,7 @@ class OrderByAcceptanceVisualizationTest {
         RETURN floats
         ORDER BY floats DESC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_13")
     }
 
@@ -224,6 +239,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT 1
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_14")
     }
 
@@ -238,6 +254,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT 0
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_15")
     }
 
@@ -254,6 +271,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY p.name
         LIMIT $limit
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "OrderByAcceptance_16")
     }
 

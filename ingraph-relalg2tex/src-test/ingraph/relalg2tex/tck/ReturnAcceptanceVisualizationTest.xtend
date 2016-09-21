@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ReturnAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Allow addition
@@ -24,6 +26,7 @@ class ReturnAcceptanceVisualizationTest {
         WHERE a.id = 1337
         RETURN a.version + 5
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_01")
     }
 
@@ -46,6 +49,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n
         LIMIT 2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_02")
     }
 
@@ -69,6 +73,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP 2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_03")
     }
 
@@ -94,6 +99,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP $skipAmount
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_04")
     }
 
@@ -118,6 +124,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP 2
         LIMIT 2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_05")
     }
 
@@ -145,6 +152,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP $s
         LIMIT $l
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_06")
     }
 
@@ -166,6 +174,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_07")
     }
 
@@ -186,6 +195,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT a
         ORDER BY a.name
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_08")
     }
 
@@ -203,6 +213,7 @@ class ReturnAcceptanceVisualizationTest {
         MATCH (a)
         RETURN a AS ColumnName
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_09")
     }
 
@@ -221,6 +232,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT b
         ORDER BY b.name
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_10")
     }
 
@@ -233,6 +245,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_11")
     }
 
@@ -245,6 +258,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_12")
     }
 
@@ -263,6 +277,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN a, count(*)
         ORDER BY count(*)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_13")
     }
 
@@ -275,6 +290,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN abs(-1)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_14")
     }
 
@@ -287,6 +303,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = RelalgParser.parse('''
         RETURN size([1, 2, 3]) AS n
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "ReturnAcceptance_15")
     }
 

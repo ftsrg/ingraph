@@ -11,7 +11,9 @@
                   <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.16" sourceVertexVariable="//@elements.11" targetVertexVariable="//@elements.12">
                     <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.15" sourceVertexVariable="//@elements.9" targetVertexVariable="//@elements.11">
                       <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.14" sourceVertexVariable="//@rootExpression/@input/@input/@input/@condition/@leftOperand" targetVertexVariable="//@elements.9">
-                        <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.8" targetVertexVariable="//@rootExpression/@input/@input/@input/@condition/@leftOperand"/>
+                        <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.8" targetVertexVariable="//@rootExpression/@input/@input/@input/@condition/@leftOperand">
+                          <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
+                        </input>
                       </input>
                     </input>
                   </input>
@@ -23,8 +25,8 @@
             </rightInput>
           </input>
           <condition xsi:type="relalg:ArithmeticComparisonExpression" operator="!=">
-            <rightOperand xsi:type="relalg:VertexVariable" name="route2" vertexLabel="//@elements.0"/>
             <leftOperand xsi:type="relalg:VertexVariable" name="route1" vertexLabel="//@elements.0"/>
+            <rightOperand xsi:type="relalg:VertexVariable" name="route2" vertexLabel="//@elements.0"/>
           </condition>
         </input>
       </input>

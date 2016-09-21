@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class AggregationAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Support multiple divisions in aggregate function
@@ -24,6 +26,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN count(n) / 60 / 60 AS count
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_01")
     }
 
@@ -42,6 +45,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*) AS columnName
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_02")
     }
 
@@ -60,6 +64,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN size(collect(a))
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_03")
     }
 
@@ -73,6 +78,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a {name: 'Andres'})<-[:FATHER]-(child)
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_04")
     }
 
@@ -91,6 +97,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a:L)-[rel]->(b)
         RETURN a, count(*)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_05")
     }
 
@@ -112,6 +119,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN n.division, count(*)
         ORDER BY count(*) DESC, n.division ASC
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_06")
     }
 
@@ -131,6 +139,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.x, count(*)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_07")
     }
 
@@ -150,6 +159,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.y, count(n.x)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_08")
     }
 
@@ -169,6 +179,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n.y, sum(n.x)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_09")
     }
 
@@ -187,6 +198,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH p=(a:L)-[*]->(b)
         RETURN b, avg(length(p))
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_10")
     }
 
@@ -200,6 +212,7 @@ class AggregationAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)
         RETURN count(DISTINCT a)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_11")
     }
 
@@ -217,6 +230,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN count(DISTINCT a.foo)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_12")
     }
 
@@ -230,6 +244,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND [null, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_13")
     }
 
@@ -243,6 +258,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND [null, 1, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_14")
     }
 
@@ -262,6 +278,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (a)
         RETURN DISTINCT a.color, count(*)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_15")
     }
 
@@ -279,6 +296,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_16")
     }
 
@@ -297,6 +315,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(a) * 10 + count(b) * 5 AS x
         ORDER BY x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_17")
     }
 
@@ -314,6 +333,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH (n)
         RETURN count(n), collect(n)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_18")
     }
 
@@ -332,6 +352,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()
         RETURN count(*)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_19")
     }
 
@@ -354,6 +375,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN collect(nodes(p)) AS paths, length(p) AS l
         ORDER BY l
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_20")
     }
 
@@ -376,6 +398,7 @@ class AggregationAcceptanceVisualizationTest {
         WITH a, other, min(length(p)) AS len
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_21")
     }
 
@@ -395,6 +418,7 @@ class AggregationAcceptanceVisualizationTest {
         b.prop AS bar,
         {y: count(b)} AS baz
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_22")
     }
 
@@ -410,6 +434,7 @@ class AggregationAcceptanceVisualizationTest {
         LIMIT 3000
         RETURN sum(i)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_24")
     }
 
@@ -427,6 +452,7 @@ class AggregationAcceptanceVisualizationTest {
         MATCH ()-[r]-()
         RETURN count(r)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_25")
     }
 
@@ -440,6 +466,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_26")
     }
 
@@ -453,6 +480,7 @@ class AggregationAcceptanceVisualizationTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "AggregationAcceptance_27")
     }
 

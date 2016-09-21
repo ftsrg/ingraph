@@ -1,4 +1,4 @@
-\documentclass[varwidth,convert={density=120}]{standalone}
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 
 \input{inputs/relalg-packages}
 \input{inputs/relalg-commands}
@@ -6,11 +6,12 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\projection{\var{a}}$}
-	[. {$\selection{}$}
-		[. {$\expandout{r}{KNOWS}{node}{a}{}$}
-			[. {$\getvertices{node}{}$}
+[. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
+	[. {$\selection{\mathtt{r.name~=~'monkey'}}$ \\ \footnotesize $\color{gray} \langle \var{node, r, a} \rangle$}
+		[. {$\expandout{r}{KNOWS}{node}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{node, r, a} \rangle$}
+			[. {$\getvertices{node}{}$ \\ \footnotesize $\color{gray} \langle \var{node} \rangle$}
 			]
 		]
 	]

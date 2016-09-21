@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class WhereAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: NOT and false
@@ -24,6 +26,7 @@ class WhereAcceptanceVisualizationTest {
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "WhereAcceptance_01")
     }
 
@@ -42,6 +45,7 @@ class WhereAcceptanceVisualizationTest {
         WHERE n.prop < 10
         RETURN n.prop AS prop
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "WhereAcceptance_02")
     }
 

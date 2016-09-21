@@ -3,11 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class UnwindAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
     Scenario: Unwinding a list
@@ -19,6 +21,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_01")
     }
 
@@ -32,6 +35,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_02")
     }
 
@@ -46,6 +50,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND (first + second) AS x
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_03")
     }
 
@@ -61,6 +66,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND rows AS x
         RETURN x
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_04")
     }
 
@@ -80,6 +86,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND rows AS node
         RETURN node.id
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_05")
     }
 
@@ -95,6 +102,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND x AS y
         RETURN y
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_07")
     }
 
@@ -108,6 +116,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [] AS empty
         RETURN empty
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_08")
     }
 
@@ -121,6 +130,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND null AS nil
         RETURN nil
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_09")
     }
 
@@ -134,6 +144,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_10")
     }
 
@@ -148,6 +159,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND list AS x
         RETURN *
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_11")
     }
 
@@ -173,6 +185,7 @@ class UnwindAcceptanceVisualizationTest {
         MATCH (a)-[:Y]->(b2)
         RETURN a, b2
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_12")
     }
 
@@ -189,6 +202,7 @@ class UnwindAcceptanceVisualizationTest {
         UNWIND zs AS z
         RETURN *
         ''')
+        container.addSchemaInformation
         serializer.serialize(container, "UnwindAcceptance_13")
     }
 

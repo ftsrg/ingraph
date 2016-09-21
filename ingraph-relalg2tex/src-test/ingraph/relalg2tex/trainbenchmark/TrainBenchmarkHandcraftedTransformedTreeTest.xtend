@@ -1,15 +1,15 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.optimization.transformations.Transformation
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.optimization.transformations.Relalg2ReteTransformation
 
 class TrainBenchmarkHandcraftedTransformedTreeTest {
 
 	val drawer = new RelalgTreeSerializer
-	extension Transformation transformation = new Transformation
+	extension Relalg2ReteTransformation transformation = new Relalg2ReteTransformation
 	extension SchemaInferencer schemaInferencer = new SchemaInferencer
 
 	@Test

@@ -6,14 +6,15 @@
 \begin{document}
 \begin{preview}
 \begin{tikzpicture}
+\linespread{1.25}
 \Tree
-[. {$\duplicateelimination$}
-	[. {$\projection{\var{sw}}$}
-		[. {$\antijoin$}
-			[. {$\getvertices{sw}{Switch}$}
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\projection{\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\antijoin \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 			]
-			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$}
-				[. {$\getvertices{sw}{Switch}$}
+			[. {$\expandout{\_e1}{monitoredBy}{sw}{\_e1}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 				]
 			]
 		]
