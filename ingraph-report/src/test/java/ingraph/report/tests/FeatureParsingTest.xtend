@@ -1,8 +1,11 @@
 package ingraph.report.tests
 
+import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
-import ingraph.report.feature.AbstractScenario
 import ingraph.report.feature.Feature
+import ingraph.report.feature.Scenario
 import ingraph.report.feature.WhenStep
 import java.io.File
 import java.util.Collections
@@ -13,6 +16,9 @@ import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
 
 class FeatureParsingTest {
+
+	extension RelalgTreeSerializer serializer = new RelalgTreeSerializer(false)
+	extension SchemaInferencer inferencer = new SchemaInferencer
 
 	@Test
 	def void loadModel() {
@@ -29,18 +35,19 @@ class FeatureParsingTest {
 			«FOR feature : files.map[processFile(resourceSet)]»
 				\section{«feature.name.escape»}
 				
-				«FOR scenario : feature.scenarios.map[processScenario]»
-					
+				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»					
 					\subsection{«scenario.name.escape»}
 					
 					\begin{lstlisting}
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					\end{lstlisting}
+					
+					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualize»
 				«ENDFOR»	
 			«ENDFOR»
 		'''
 
-		println(doc)
+		FileUtils.writeStringToFile(new File("../opencypher-report/acceptance-tests.tex"), doc)
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {
@@ -51,7 +58,7 @@ class FeatureParsingTest {
 		feature
 	}
 
-	def processScenario(AbstractScenario s) {
+	def processScenario(Scenario s) {
 		// println(resource.errors)
 		s.name = s.name.replaceAll("^Scenario: ", "").replaceAll("\n", "")
 
@@ -78,6 +85,15 @@ class FeatureParsingTest {
 		s //
 		.replaceAll('''#''', '''\\#''') //
 		.replaceAll('''_''', '''\\_''')
+	}
+
+	def visualize(String s) {
+		try {
+			val container = RelalgParser.parse(s)
+			container.addSchemaInformation.serialize
+		} catch (Exception e) {
+			'''Cannot visualize'''
+		}
 	}
 
 }

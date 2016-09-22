@@ -40,21 +40,25 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * whether to generate a standalone TeX document
 	 */
-	protected boolean document
+	protected boolean standaloneDocument
 
 	new(boolean document) {
-		this.document = document
+		this.standaloneDocument = document
 	}
 
 	def serialize(Container container, String filename) {
-		val tex = convertAlgebraExpression(container.rootExpression)
-		if (document) {
+		val tex = serialize(container)
+		if (standaloneDocument) {
 			val file = new File("../visualization/" + filename + ".tex")
 			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		} else {
 			println(tex)
 		}
 		tex
+	}
+	
+	def serialize(Container container) {
+		convertAlgebraExpression(container.rootExpression)
 	}
 
 	/**
@@ -66,7 +70,7 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
-			«IF document»
+			«IF standaloneDocument»
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 				
@@ -76,7 +80,7 @@ abstract class AbstractRelalgSerializer {
 				\begin{document}
 			«ENDIF»
 			«serializeBody(expression)»
-			«IF document»
+			«IF standaloneDocument»
 				\end{document}
 			«ENDIF»
 		'''
