@@ -4,12 +4,12 @@
 package ingraph.report.tests
 
 import ingraph.report.FeatureStandaloneSetup
-import java.io.ByteArrayInputStream
+import ingraph.report.feature.Feature
+import ingraph.report.feature.WhenStep
+import java.util.Collections
 import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
-import ingraph.report.feature.Feature
-import java.util.Collections
 
 class FeatureParsingTest {
 
@@ -21,12 +21,22 @@ class FeatureParsingTest {
 		val resourceSet = injector.getInstance(typeof(XtextResourceSet));
 
 		// load a resource by URI, in this case from the file system
-		val resource = resourceSet.createResource(URI.createURI("../../opencypher-tests/MatchAcceptance.feature"));
+		val resource = resourceSet.createResource(URI.createURI("../opencypher-tests/" + "MatchAcceptance.feature"));
 		resource.load(Collections.emptyMap);
 
 		println(resource.errors)
 		val feature = resource.contents.get(0) as Feature
-		println(PrettyPrinter.prettyPrint(feature))
+		// println(PrettyPrinter.prettyPrint(feature))
+		feature.scenarios.forEach [
+			it.steps.filter(typeof(WhenStep)).forEach [
+				val x = desc //
+				.replaceAll('''"""''', '''''') //
+				.replaceAll("'''", "") //
+				.replaceAll('''\n\s*''', "\n")
+
+				println(x)
+			]
+		]
 	}
 
 }
