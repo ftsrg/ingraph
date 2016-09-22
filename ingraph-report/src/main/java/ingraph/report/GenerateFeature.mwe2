@@ -10,7 +10,7 @@ Workflow {
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
-				baseName = "ingraph.report"
+				baseName = "ingraph-report"
 				rootPath = rootPath
 				runtimeTest = {
 					enabled = true

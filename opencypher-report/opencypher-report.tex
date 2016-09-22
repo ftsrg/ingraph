@@ -1,6 +1,9 @@
 % !TeX spellcheck = en_GB
 % !TeX program = xelatex
-\documentclass[a4paper]{report}
+\documentclass[]{report}
+
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage{hyperref}
 
 \title{openCypher Specification}
 
@@ -8,9 +11,16 @@
 
 \input{../visualization/inputs/relalg-packages}
 \input{../visualization/inputs/relalg-commands}
+\input{listings}
 
 \begin{document}
 
-a
+\maketitle
+
+\tableofcontents
+
+\input{introduction}
+
+\input{acceptance-tests}
 
 \end{document}
