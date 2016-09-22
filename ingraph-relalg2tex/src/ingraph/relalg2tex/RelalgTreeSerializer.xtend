@@ -13,16 +13,18 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		super(true)
 	}
 
+	new(boolean standaloneDocument) {
+		super(standaloneDocument)
+	}
+
 	override serializeBody(Operator expression) {
 		'''
-			\begin{preview}
 			\begin{tikzpicture}
 			\linespread{1.25}
 			\Tree
 			«toNode(expression)»
 			;
 			\end{tikzpicture}
-			\end{preview}
 		'''
 	}
 
