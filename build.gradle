@@ -12,6 +12,10 @@ subprojects {
 		mavenCentral()
 		maven { url "https://repo.eclipse.org/content/groups/viatra2" }
 	}
+
+	configurations.all {
+		exclude group: 'asm'
+	}
 }
 
 ext {
@@ -20,4 +24,5 @@ ext {
 	scalaVersion = '2.11.8'
 	viatraVersion = '1.4.0.M2'
 	xtendVersion = '2.10.0'
+  xtextVersion = '2.10.0'
 }

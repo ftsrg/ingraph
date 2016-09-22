@@ -1,3 +1,18 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'org.xtext:xtext-gradle-plugin:1.0.2'
+	}
+}
+
+apply plugin: 'org.xtext.xtend'
+apply from: "${rootDir}/gradle/source-layout.gradle"
+apply from: "${rootDir}/gradle/maven-deployment.gradle"
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
 dependencies {
 	testCompile "org.eclipse.xtext:org.eclipse.xtext.junit4:${xtextVersion}"
 	testCompile "org.eclipse.xtext:org.eclipse.xtext.xbase.junit:${xtextVersion}"

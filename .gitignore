@@ -36,3 +36,5 @@ gen/
 .cache-tests
 xtend-gen
 xtext-gen
+generated/
+
