@@ -1,0 +1,56 @@
+grammar ingraph.report.Feature with org.eclipse.xtext.common.Terminals hidden(WS, SL_COMMENT)
+
+generate feature "http://www.report.ingraph/Feature"
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Feature:
+	'Feature:' name=ID
+	scenarios+=Scenario*;
+
+Scenario:
+	scenario=SCENARIO_TEXT
+	given=GIVEN_TEXT
+	('And' 'having' 'executed:'	precondition=ESCAPED_STRING)?
+	'When' 'executing' 'query:'	query=ESCAPED_STRING
+	'Then' 'the' 'result' 'should' 'be:' result=Result
+	'And' 'no' 'side' 'effects';
+
+Result:
+	lines+=ResultLine+;
+
+ResultLine:
+	cells+=ExampleCell+ EXAMPLE_ROW_END;
+
+ExampleCell:
+	value=EXAMPLE_CELL;
+
+terminal ESCAPED_STRING returns ecore::EString:
+	'"""' ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | '"'))* '"""';
+
+terminal SCENARIO_TEXT:
+	'Scenario' SPACES ':' NNL* NL;
+
+terminal GIVEN_TEXT:
+	'Given ' NNL* NL;
+
+terminal EXAMPLE_ROW_END:
+	'|' SPACES NL;
+
+terminal EXAMPLE_CELL:
+	'|' !('\r' | '\n' | '|')+;
+
+terminal fragment NNL:
+	!('\r' | '\n');
+
+terminal fragment NL:
+	'\r'? '\n'?;
+
+terminal fragment SPACES:
+	(' ' | '\t')*;
+
+terminal SL_COMMENT:
+	'#' NNL* NL;
+
+terminal WS:
+	(' ' | '\t' | '\r' | '\n')+;
