@@ -75,7 +75,7 @@ Step:
 ;
 
 WhenStep:
-	tags+=TAG* WHEN_TEXT desc=OptionalText (rows += ExampleRow)*
+	tags+=TAG* WHEN_TEXT desc=OptionalText
 ;
 
 ThenStep:
@@ -83,11 +83,11 @@ ThenStep:
 ;
 
 GivenStep:
-	tags+=TAG* GIVEN_TEXT desc=OptionalText (rows += ExampleRow)*
+	tags+=TAG* GIVEN_TEXT desc=OptionalText
 ;
 
 AndStep:
-	AND_TEXT desc=OptionalText (rows += ExampleRow)*
+	AND_TEXT desc=OptionalText
 ;
 
 OptionalText returns ecore::EString:
