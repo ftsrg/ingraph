@@ -56,7 +56,7 @@ abstract class AbstractRelalgSerializer {
 		}
 		tex
 	}
-	
+
 	def serialize(Container container) {
 		convertAlgebraExpression(container.rootExpression)
 	}
@@ -106,8 +106,10 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(ExpandOperator op) {
-		'''\expand«op.direction.directionToTex»''' + '''«op.edgeVariable.toTexParameter»''' +
-			'''{«op.sourceVertexVariable.escapedName»}''' + '''«op.targetVertexVariable.toTexParameter»'''
+		'''\expand«op.direction.directionToTex»''' + //
+		'''{«op.sourceVertexVariable.escapedName»}''' + //
+		'''«op.targetVertexVariable.toTexParameter»''' + //
+		'''«op.edgeVariable.toTexParameter»''' 
 	}
 
 	def dispatch operatorSymbol(
@@ -175,9 +177,8 @@ abstract class AbstractRelalgSerializer {
 	 * escape
 	 */
 	def escape(String s) {
-		s // 
-			.replace('''\''', '''\backslash{}''')			
-			.replace('''_''', '''\_''') //
+		s //
+		.replace('''\''', '''\backslash{}''').replace('''_''', '''\_''') //
 	}
 
 	/**
@@ -283,10 +284,10 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def prettyPrintCondition(String s) {
 		s //
-			.replaceAll(''' XOR ''', ''' \\lxor ''') //
-			.replaceAll(''' AND ''', ''' \\land ''') //
-			.replaceAll(''' OR ''', ''' \\lor ''') //
-			.replaceAll(''' ''', '''~''') //
+		.replaceAll(''' XOR ''', ''' \\lxor ''') //
+		.replaceAll(''' AND ''', ''' \\land ''') //
+		.replaceAll(''' OR ''', ''' \\lor ''') //
+		.replaceAll(''' ''', '''~''') //
 	}
 
 }
