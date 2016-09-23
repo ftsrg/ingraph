@@ -20,13 +20,13 @@
 
 % see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
 \newcommand{\expandbothop}{\updownarrow}
-\newcommand{\expandboth}[5]{\expandbothop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\expandboth}[5]{\expandbothop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
 
 \newcommand{\expandoutop}{\uparrow}
-\newcommand{\expandout}[5]{\expandoutop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\expandout}[5]{\expandoutop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
 
 \newcommand{\expandinop}{\downarrow}
-\newcommand{\expandin}[5]{\expandinop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+\newcommand{\expandin}[5]{\expandinop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
 
 \newcommand{\getverticesop}{\bigcirc}
 \newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
@@ -38,7 +38,7 @@
 %\setlength{\fboxsep}{.15\fboxsep}
 %\newcommand{\alldifferentop}{\boxed{\neq}\,\,}
 %\newcommand{\alldifferentop}{\eqvparsl}
-\newcommand{\alldifferentop}{\not\fallingdotseq\,}
+\newcommand{\alldifferentop}{\not\fallingdotseq}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
 
 \newcommand{\duplicateeliminationop}{\delta}

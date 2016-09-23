@@ -1532,7 +1532,7 @@ RETURN x, y
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x},~\var{y}} \left(\alldifferent{} \left(\getvertices{x}{X} \join \{\} \getvertices{y}{Y}\right) \join \{\var{x}, \var{y}\} \alldifferent{} \left(\expandin{\_e2}{TYPE}{x}{y}{Y} \left(\getvertices{x}{X}\right)\right)\right)$
+$\projection{\var{x},~\var{y}} \left(\alldifferent{} \left(\getvertices{x}{X} \join \{\} \getvertices{y}{Y}\right) \join \{\var{x}, \var{y}\} \alldifferent{} \left(\expandin{x}{y}{Y}{\_e2}{TYPE} \left(\getvertices{x}{X}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1547,7 +1547,7 @@ $\projection{\var{x},~\var{y}} \left(\alldifferent{} \left(\getvertices{x}{X} \j
 			[. {$\getvertices{y}{Y}$ \\ \footnotesize $\color{gray} \langle \var{y} \rangle$}
 			]
 		]
-		[. {$\expandin{\_e2}{TYPE}{x}{y}{Y}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e2, y} \rangle$}
+		[. {$\expandin{x}{y}{Y}{\_e2}{TYPE}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e2, y} \rangle$}
 			[. {$\getvertices{x}{X}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 			]
 		]
@@ -1588,7 +1588,7 @@ RETURN x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{x}{Begin}\right) \join \{\var{x}\} \alldifferent{} \left(\expandout{\_e2}{TYPE}{x}{\_e2}{} \left(\getvertices{x}{Begin}\right)\right)\right)$
+$\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{x}{Begin}\right) \join \{\var{x}\} \alldifferent{} \left(\expandout{x}{\_e2}{}{\_e2}{TYPE} \left(\getvertices{x}{Begin}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1599,7 +1599,7 @@ $\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{x}{Begin}\right) 
 	[. {$\join \{\var{x}\}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e2, \_e2} \rangle$}
 		[. {$\getvertices{x}{Begin}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 		]
-		[. {$\expandout{\_e2}{TYPE}{x}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e2, \_e2} \rangle$}
+		[. {$\expandout{x}{\_e2}{}{\_e2}{TYPE}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e2, \_e2} \rangle$}
 			[. {$\getvertices{x}{Begin}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 			]
 		]
@@ -1658,7 +1658,7 @@ RETURN a, b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandin{\_e2}{R}{a}{b}{B} \left(\getvertices{a}{A}\right)\right)\right)$
+$\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandin{a}{b}{B}{\_e2}{R} \left(\getvertices{a}{A}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1666,7 +1666,7 @@ $\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandin{\_e2}{R}{a}
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
-	[. {$\expandin{\_e2}{R}{a}{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e2, b} \rangle$}
+	[. {$\expandin{a}{b}{B}{\_e2}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e2, b} \rangle$}
 		[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
 	]
@@ -1697,7 +1697,7 @@ RETURN a, b, c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandout{\_e4}{R}{b}{c}{C} \left(\expandout{\_e3}{R}{a}{b}{B} \left(\getvertices{a}{A}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandout{b}{c}{C}{\_e4}{R} \left(\expandout{a}{b}{B}{\_e3}{R} \left(\getvertices{a}{A}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1705,8 +1705,8 @@ $\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandout{\
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
-	[. {$\expandout{\_e4}{R}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b, \_e4, c} \rangle$}
-		[. {$\expandout{\_e3}{R}{a}{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b} \rangle$}
+	[. {$\expandout{b}{c}{C}{\_e4}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b, \_e4, c} \rangle$}
+		[. {$\expandout{a}{b}{B}{\_e3}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b} \rangle$}
 			[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -1742,7 +1742,7 @@ RETURN a, b, c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{\_e4}{R}{b}{c}{} \left(\expandin{\_e3}{R}{a}{b}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{b}{c}{}{\_e4}{R} \left(\expandin{a}{b}{}{\_e3}{R} \left(\getvertices{a}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1750,8 +1750,8 @@ $\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{\_
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
-	[. {$\expandin{\_e4}{R}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b, \_e4, c} \rangle$}
-		[. {$\expandin{\_e3}{R}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b} \rangle$}
+	[. {$\expandin{b}{c}{}{\_e4}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b, \_e4, c} \rangle$}
+		[. {$\expandin{a}{b}{}{\_e3}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e3, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -1787,7 +1787,7 @@ RETURN a, b, c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{r2}{R}{b}{c}{C} \left(\expandout{r1}{R}{a}{b}{B} \left(\getvertices{a}{A}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{b}{c}{C}{r2}{R} \left(\expandout{a}{b}{B}{r1}{R} \left(\getvertices{a}{A}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1795,8 +1795,8 @@ $\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandin{r2
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
-	[. {$\expandin{r2}{R}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{a, r1, b, r2, c} \rangle$}
-		[. {$\expandout{r1}{R}{a}{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, r1, b} \rangle$}
+	[. {$\expandin{b}{c}{C}{r2}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, r1, b, r2, c} \rangle$}
+		[. {$\expandout{a}{b}{B}{r1}{R}$ \\ \footnotesize $\color{gray} \langle \var{a, r1, b} \rangle$}
 			[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -1832,7 +1832,7 @@ RETURN r1, r2, r3
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r1},~\var{r2},~\var{r3}} \left(\alldifferent{} \left(\expandout{r3}{R3}{\_e7}{\_e8}{} \left(\expandin{r2}{R2}{\_e6}{\_e7}{} \left(\expandout{r1}{R1}{\_e5}{\_e6}{} \left(\getvertices{\_e5}{}\right)\right)\right)\right)\right)$
+$\projection{\var{r1},~\var{r2},~\var{r3}} \left(\alldifferent{} \left(\expandout{\_e7}{\_e8}{}{r3}{R3} \left(\expandin{\_e6}{\_e7}{}{r2}{R2} \left(\expandout{\_e5}{\_e6}{}{r1}{R1} \left(\getvertices{\_e5}{}\right)\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -1840,9 +1840,9 @@ $\projection{\var{r1},~\var{r2},~\var{r3}} \left(\alldifferent{} \left(\expandou
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{r1},~\var{r2},~\var{r3}}$ \\ \footnotesize $\color{gray} \langle \var{r1, r2, r3} \rangle$}
-	[. {$\expandout{r3}{R3}{\_e7}{\_e8}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6, r2, \_e7, r3, \_e8} \rangle$}
-		[. {$\expandin{r2}{R2}{\_e6}{\_e7}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6, r2, \_e7} \rangle$}
-			[. {$\expandout{r1}{R1}{\_e5}{\_e6}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6} \rangle$}
+	[. {$\expandout{\_e7}{\_e8}{}{r3}{R3}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6, r2, \_e7, r3, \_e8} \rangle$}
+		[. {$\expandin{\_e6}{\_e7}{}{r2}{R2}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6, r2, \_e7} \rangle$}
+			[. {$\expandout{\_e5}{\_e6}{}{r1}{R1}$ \\ \footnotesize $\color{gray} \langle \var{\_e5, r1, \_e6} \rangle$}
 				[. {$\getvertices{\_e5}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e5} \rangle$}
 				]
 			]
@@ -5798,7 +5798,7 @@ RETURN a
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a}} \left(\selection{\mathtt{a.name~=~'Andres'}} \left(\alldifferent{} \left(\expandboth{rel}{X}{\_e1}{a}{} \left(\getvertices{\_e1}{}\right)\right)\right)\right)$
+$\projection{\var{a}} \left(\selection{\mathtt{a.name~=~'Andres'}} \left(\alldifferent{} \left(\expandboth{\_e1}{a}{}{rel}{X} \left(\getvertices{\_e1}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -5807,7 +5807,7 @@ $\projection{\var{a}} \left(\selection{\mathtt{a.name~=~'Andres'}} \left(\alldif
 \Tree
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 	[. {$\selection{\mathtt{a.name~=~'Andres'}}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$}
-		[. {$\expandboth{rel}{X}{\_e1}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$}
+		[. {$\expandboth{\_e1}{a}{}{rel}{X}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$}
 			[. {$\getvertices{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 			]
 		]
@@ -5864,7 +5864,7 @@ RETURN a
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a}} \left(\selection{\mathtt{r.name~=~'monkey'}} \left(\alldifferent{} \left(\expandout{r}{KNOWS}{node}{a}{} \left(\getvertices{node}{}\right)\right)\right)\right)$
+$\projection{\var{a}} \left(\selection{\mathtt{r.name~=~'monkey'}} \left(\alldifferent{} \left(\expandout{node}{a}{}{r}{KNOWS} \left(\getvertices{node}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -5873,7 +5873,7 @@ $\projection{\var{a}} \left(\selection{\mathtt{r.name~=~'monkey'}} \left(\alldif
 \Tree
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 	[. {$\selection{\mathtt{r.name~=~'monkey'}}$ \\ \footnotesize $\color{gray} \langle \var{node, r, a} \rangle$}
-		[. {$\expandout{r}{KNOWS}{node}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{node, r, a} \rangle$}
+		[. {$\expandout{node}{a}{}{r}{KNOWS}$ \\ \footnotesize $\color{gray} \langle \var{node, r, a} \rangle$}
 			[. {$\getvertices{node}{}$ \\ \footnotesize $\color{gray} \langle \var{node} \rangle$}
 			]
 		]
@@ -5929,7 +5929,7 @@ RETURN n1, n2
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n1},~\var{n2}} \left(\alldifferent{} \left(\expandout{rel}{KNOWS}{n1}{n2}{} \left(\getvertices{n1}{}\right)\right)\right)$
+$\projection{\var{n1},~\var{n2}} \left(\alldifferent{} \left(\expandout{n1}{n2}{}{rel}{KNOWS} \left(\getvertices{n1}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -5937,7 +5937,7 @@ $\projection{\var{n1},~\var{n2}} \left(\alldifferent{} \left(\expandout{rel}{KNO
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{n1},~\var{n2}}$ \\ \footnotesize $\color{gray} \langle \var{n1, n2} \rangle$}
-	[. {$\expandout{rel}{KNOWS}{n1}{n2}{}$ \\ \footnotesize $\color{gray} \langle \var{n1, rel, n2} \rangle$}
+	[. {$\expandout{n1}{n2}{}{rel}{KNOWS}$ \\ \footnotesize $\color{gray} \langle \var{n1, rel, n2} \rangle$}
 		[. {$\getvertices{n1}{}$ \\ \footnotesize $\color{gray} \langle \var{n1} \rangle$}
 		]
 	]
@@ -5968,7 +5968,7 @@ RETURN x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x}} \left(\alldifferent{} \left(\expandout{rel}{KNOWS}{\_e1}{x}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
+$\projection{\var{x}} \left(\alldifferent{} \left(\expandout{\_e1}{x}{}{rel}{KNOWS} \left(\getvertices{\_e1}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -5976,7 +5976,7 @@ $\projection{\var{x}} \left(\alldifferent{} \left(\expandout{rel}{KNOWS}{\_e1}{x
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
-	[. {$\expandout{rel}{KNOWS}{\_e1}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, rel, x} \rangle$}
+	[. {$\expandout{\_e1}{x}{}{rel}{KNOWS}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, rel, x} \rangle$}
 		[. {$\getvertices{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 		]
 	]
@@ -6007,7 +6007,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e2}{}{a}{b}{} \left(\expandout{\_e1}{}{n}{a}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e2}{} \left(\expandout{n}{a}{}{\_e1}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6015,8 +6015,8 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e2}{}{a}{b}{} \le
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
-	[. {$\expandout{\_e2}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, a, \_e2, b} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, a} \rangle$}
+	[. {$\expandout{a}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, a, \_e2, b} \rangle$}
+		[. {$\expandout{n}{a}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, a} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -6053,7 +6053,7 @@ RETURN n, x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n},~\var{x}} \left(\selection{\mathtt{n.animal~=~x.animal}} \left(\alldifferent{} \left(\expandout{rel}{}{n}{x}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
+$\projection{\var{n},~\var{x}} \left(\selection{\mathtt{n.animal~=~x.animal}} \left(\alldifferent{} \left(\expandout{n}{x}{}{rel}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6062,7 +6062,7 @@ $\projection{\var{n},~\var{x}} \left(\selection{\mathtt{n.animal~=~x.animal}} \l
 \Tree
 [. {$\projection{\var{n},~\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{n, x} \rangle$}
 	[. {$\selection{\mathtt{n.animal~=~x.animal}}$ \\ \footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$}
-		[. {$\expandout{rel}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$}
+		[. {$\expandout{n}{x}{}{rel}{}$ \\ \footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -6096,7 +6096,7 @@ RETURN a, b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandboth{\_e2}{}{\_e1}{b}{} \left(\expandboth{\_e1}{}{a}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandboth{\_e1}{b}{}{\_e2}{} \left(\expandboth{a}{\_e1}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6104,8 +6104,8 @@ $\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandboth{\_e2}{}{\
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
-	[. {$\expandboth{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-		[. {$\expandboth{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+	[. {$\expandboth{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
+		[. {$\expandboth{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -6143,7 +6143,7 @@ RETURN a, b, c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandboth{\_e2}{}{\_e1}{b}{} \left(\expandboth{\_e1}{}{a}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right) \join \{\var{b}\} \selection{\mathtt{r~<>~r2}} \left(\alldifferent{} \left(\expandboth{r2}{}{b}{c}{} \left(\getvertices{b}{}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandboth{\_e1}{b}{}{\_e2}{} \left(\expandboth{a}{\_e1}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right) \join \{\var{b}\} \selection{\mathtt{r~<>~r2}} \left(\alldifferent{} \left(\expandboth{b}{c}{}{r2}{} \left(\getvertices{b}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6152,14 +6152,14 @@ $\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandboth{
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
 	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, r2, c} \rangle$}
-		[. {$\expandboth{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-			[. {$\expandboth{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+		[. {$\expandboth{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
+			[. {$\expandboth{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 				[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
 		]
 		[. {$\selection{\mathtt{r~<>~r2}}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
-			[. {$\expandboth{r2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
+			[. {$\expandboth{b}{c}{}{r2}{}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
 				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 				]
 			]
@@ -6225,7 +6225,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~'HATES'}} \left(\alldifferent{} \left(\expandout{r}{}{n}{x}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
+$\projection{\var{r}} \left(\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~'HATES'}} \left(\alldifferent{} \left(\expandout{n}{x}{}{r}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6234,7 +6234,7 @@ $\projection{\var{r}} \left(\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~
 \Tree
 [. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
 	[. {$\selection{\mathtt{type(r)~=~'KNOWS'~\lor~type(r)~=~'HATES'}}$ \\ \footnotesize $\color{gray} \langle \var{n, r, x} \rangle$}
-		[. {$\expandout{r}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, x} \rangle$}
+		[. {$\expandout{n}{x}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, x} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -6353,7 +6353,7 @@ RETURN x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~10}} \left(\alldifferent{} \left(\expandout{\_e1}{}{n}{x}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
+$\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~10}} \left(\alldifferent{} \left(\expandout{n}{x}{}{\_e1}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6362,7 +6362,7 @@ $\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~10}} \left(\alldiffer
 \Tree
 [. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 	[. {$\selection{\mathtt{length(p)~=~10}}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
+		[. {$\expandout{n}{x}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -6397,7 +6397,7 @@ RETURN x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~1}} \left(\alldifferent{} \left(\expandout{\_e1}{}{n}{x}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
+$\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~1}} \left(\alldifferent{} \left(\expandout{n}{x}{}{\_e1}{} \left(\getvertices{n}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6406,7 +6406,7 @@ $\projection{\var{x}} \left(\selection{\mathtt{length(p)~=~1}} \left(\alldiffere
 \Tree
 [. {$\projection{\var{x}}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 	[. {$\selection{\mathtt{length(p)~=~1}}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
+		[. {$\expandout{n}{x}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -6669,7 +6669,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{\_e1}{\_e2}{}{r}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -6677,7 +6677,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} 
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
-	[. {$\expandout{r}{}{\_e1}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
+	[. {$\expandout{\_e1}{\_e2}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
 		[. {$\getvertices{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 		]
 	]
@@ -7084,7 +7084,7 @@ RETURN x0.name
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x0}} \left(\alldifferent{} \left(\expandout{\_e1}{}{n}{x0}{} \left(\getvertices{n}{}\right)\right) \join \{\var{x0}\} \selection{\mathtt{x1.foo~=~'bar'}} \left(\alldifferent{} \left(\expandout{\_e2}{}{x0}{x1}{} \left(\getvertices{x0}{}\right)\right)\right)\right)$
+$\projection{\var{x0}} \left(\alldifferent{} \left(\expandout{n}{x0}{}{\_e1}{} \left(\getvertices{n}{}\right)\right) \join \{\var{x0}\} \selection{\mathtt{x1.foo~=~'bar'}} \left(\alldifferent{} \left(\expandout{x0}{x1}{}{\_e2}{} \left(\getvertices{x0}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7093,12 +7093,12 @@ $\projection{\var{x0}} \left(\alldifferent{} \left(\expandout{\_e1}{}{n}{x0}{} \
 \Tree
 [. {$\projection{\var{x0}}$ \\ \footnotesize $\color{gray} \langle \var{x0} \rangle$}
 	[. {$\join \{\var{x0}\}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x0, \_e2, x1} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{x0}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x0} \rangle$}
+		[. {$\expandout{n}{x0}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x0} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
 		[. {$\selection{\mathtt{x1.foo~=~'bar'}}$ \\ \footnotesize $\color{gray} \langle \var{x0, \_e2, x1} \rangle$}
-			[. {$\expandout{\_e2}{}{x0}{x1}{}$ \\ \footnotesize $\color{gray} \langle \var{x0, \_e2, x1} \rangle$}
+			[. {$\expandout{x0}{x1}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{x0, \_e2, x1} \rangle$}
 				[. {$\getvertices{x0}{}$ \\ \footnotesize $\color{gray} \langle \var{x0} \rangle$}
 				]
 			]
@@ -7140,7 +7140,7 @@ RETURN a.name
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a}} \left(\selection{\mathtt{b:B}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{} \left(\getvertices{a}{}\right)\right)\right) \join \{\var{a}\} \selection{\mathtt{c:C}} \left(\alldifferent{} \left(\expandout{\_e2}{}{a}{c}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+$\projection{\var{a}} \left(\selection{\mathtt{b:B}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right) \join \{\var{a}\} \selection{\mathtt{c:C}} \left(\alldifferent{} \left(\expandout{a}{c}{}{\_e2}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7150,13 +7150,13 @@ $\projection{\var{a}} \left(\selection{\mathtt{b:B}} \left(\alldifferent{} \left
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
 		[. {$\selection{\mathtt{b:B}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
-			[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+			[. {$\expandout{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 				[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
 		]
 		[. {$\selection{\mathtt{c:C}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e2, c} \rangle$}
-			[. {$\expandout{\_e2}{}{a}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e2, c} \rangle$}
+			[. {$\expandout{a}{c}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e2, c} \rangle$}
 				[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
@@ -7198,7 +7198,7 @@ RETURN a.id, b.id
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b}} \left(\selection{\mathtt{a:A}} \left(\alldifferent{} \left(\expandboth{\_e1}{ADMIN}{a}{b}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+$\projection{\var{a},~\var{b}} \left(\selection{\mathtt{a:A}} \left(\alldifferent{} \left(\expandboth{a}{b}{}{\_e1}{ADMIN} \left(\getvertices{a}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7207,7 +7207,7 @@ $\projection{\var{a},~\var{b}} \left(\selection{\mathtt{a:A}} \left(\alldifferen
 \Tree
 [. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
 	[. {$\selection{\mathtt{a:A}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
-		[. {$\expandboth{\_e1}{ADMIN}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandboth{a}{b}{}{\_e1}{ADMIN}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -7328,7 +7328,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{} \left(\getvertices{a}{}\right) \join \{\var{b}\} \expandout{\_e2}{}{b}{b}{} \left(\getvertices{b}{}\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e1}{} \left(\getvertices{a}{}\right) \join \{\var{b}\} \expandout{b}{b}{}{\_e2}{} \left(\getvertices{b}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7337,11 +7337,11 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{} \le
 \Tree
 [. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2} \rangle$}
-		[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{b}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2} \rangle$}
+		[. {$\expandout{b}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2} \rangle$}
 			[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]
@@ -7401,7 +7401,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{T}{a}{b}{} \left(\getvertices{a}{}\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e1}{T} \left(\getvertices{a}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7409,7 +7409,7 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{T}{a}{b}{} \l
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
-	[. {$\expandout{\_e1}{T}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+	[. {$\expandout{a}{b}{}{\_e1}{T}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 		[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
 	]
@@ -7564,7 +7564,7 @@ RETURN n, x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n},~\var{x}} \left(\alldifferent{} \left(\getvertices{n}{}\right) \join \{\var{n}\} \alldifferent{} \left(\expandout{\_e1}{NOT\_EXIST}{n}{x}{} \left(\getvertices{n}{}\right)\right)\right)$
+$\projection{\var{n},~\var{x}} \left(\alldifferent{} \left(\getvertices{n}{}\right) \join \{\var{n}\} \alldifferent{} \left(\expandout{n}{x}{}{\_e1}{NOT\_EXIST} \left(\getvertices{n}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7575,7 +7575,7 @@ $\projection{\var{n},~\var{x}} \left(\alldifferent{} \left(\getvertices{n}{}\rig
 	[. {$\join \{\var{n}\}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
 		[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
-		[. {$\expandout{\_e1}{NOT\_EXIST}{n}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
+		[. {$\expandout{n}{x}{}{\_e1}{NOT\_EXIST}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$}
 			[. {$\getvertices{n}{}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -7634,7 +7634,7 @@ RETURN c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{c}} \left(\selection{\mathtt{a:A}} \left(\alldifferent{} \left(\expandout{\_e4}{}{\_e2}{c}{} \left(\expandout{\_e3}{}{b}{\_e2}{} \left(\expandin{\_e2}{}{\_e1}{b}{} \left(\expandin{\_e1}{}{a}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)\right)\right)\right)$
+$\projection{\var{c}} \left(\selection{\mathtt{a:A}} \left(\alldifferent{} \left(\expandout{\_e2}{c}{}{\_e4}{} \left(\expandout{b}{\_e2}{}{\_e3}{} \left(\expandin{\_e1}{b}{}{\_e2}{} \left(\expandin{a}{\_e1}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7643,10 +7643,10 @@ $\projection{\var{c}} \left(\selection{\mathtt{a:A}} \left(\alldifferent{} \left
 \Tree
 [. {$\projection{\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 	[. {$\selection{\mathtt{a:A}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
-		[. {$\expandout{\_e4}{}{\_e2}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
-			[. {$\expandout{\_e3}{}{b}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2} \rangle$}
-				[. {$\expandin{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-					[. {$\expandin{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+		[. {$\expandout{\_e2}{c}{}{\_e4}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
+			[. {$\expandout{b}{\_e2}{}{\_e3}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2} \rangle$}
+				[. {$\expandin{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
+					[. {$\expandin{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 						[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 						]
 					]
@@ -7695,7 +7695,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{Foo} \left(\getvertices{a}{}\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\expandout{a}{b}{Foo}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7703,7 +7703,7 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{Foo} 
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
-	[. {$\expandout{\_e1}{}{a}{b}{Foo}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+	[. {$\expandout{a}{b}{Foo}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 		[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
 	]
@@ -7734,7 +7734,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{B} \left(\getvertices{\_e1}{A}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{\_e1}{\_e2}{B}{r}{} \left(\getvertices{\_e1}{A}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7742,7 +7742,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{B}
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
-	[. {$\expandout{r}{}{\_e1}{\_e2}{B}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
+	[. {$\expandout{\_e1}{\_e2}{B}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
 		[. {$\getvertices{\_e1}{A}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 		]
 	]
@@ -7878,7 +7878,7 @@ RETURN n
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n}} \left(\selection{\mathtt{n.name~=~'Bob'}} \left(\alldifferent{} \left(\expandout{\_e1}{}{n}{\_e1}{} \left(\getvertices{n}{Person}\right)\right)\right)\right)$
+$\projection{\var{n}} \left(\selection{\mathtt{n.name~=~'Bob'}} \left(\alldifferent{} \left(\expandout{n}{\_e1}{}{\_e1}{} \left(\getvertices{n}{Person}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7887,7 +7887,7 @@ $\projection{\var{n}} \left(\selection{\mathtt{n.name~=~'Bob'}} \left(\alldiffer
 \Tree
 [. {$\projection{\var{n}}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 	[. {$\selection{\mathtt{n.name~=~'Bob'}}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, \_e1} \rangle$}
-		[. {$\expandout{\_e1}{}{n}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, \_e1} \rangle$}
+		[. {$\expandout{n}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, \_e1} \rangle$}
 			[. {$\getvertices{n}{Person}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -7922,7 +7922,7 @@ RETURN a, b, c, d
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c},~\var{d}} \left(\alldifferent{} \left(\expandout{\_e1}{}{a}{b}{} \left(\getvertices{a}{}\right)\right) \join \{\} \alldifferent{} \left(\expandout{\_e2}{}{c}{d}{} \left(\getvertices{c}{}\right)\right)\right)$
+$\projection{\var{a},~\var{b},~\var{c},~\var{d}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e1}{} \left(\getvertices{a}{}\right)\right) \join \{\} \alldifferent{} \left(\expandout{c}{d}{}{\_e2}{} \left(\getvertices{c}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7931,11 +7931,11 @@ $\projection{\var{a},~\var{b},~\var{c},~\var{d}} \left(\alldifferent{} \left(\ex
 \Tree
 [. {$\projection{\var{a},~\var{b},~\var{c},~\var{d}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c, d} \rangle$}
 	[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, c, \_e2, d} \rangle$}
-		[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{c, \_e2, d} \rangle$}
+		[. {$\expandout{c}{d}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{c, \_e2, d} \rangle$}
 			[. {$\getvertices{c}{}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 			]
 		]
@@ -7974,7 +7974,7 @@ RETURN d
 \subsubsection*{Relational algebra expression}
 
 $\projection{\var{d}} \left(\selection{\mathtt{a.id~=~1
-~~\land~c.id~=~2}} \left(\alldifferent{} \left(\expandboth{\_e4}{}{d}{a}{} \left(\expandboth{\_e3}{}{c}{d}{} \left(\expandboth{\_e2}{}{b}{c}{} \left(\expandboth{\_e1}{}{a}{b}{} \left(\getvertices{a}{}\right)\right)\right)\right) \join \{\var{b}, \var{d}\} \expandboth{\_e5}{}{b}{d}{} \left(\getvertices{b}{}\right)\right)\right)\right)$
+~~\land~c.id~=~2}} \left(\alldifferent{} \left(\expandboth{d}{a}{}{\_e4}{} \left(\expandboth{c}{d}{}{\_e3}{} \left(\expandboth{b}{c}{}{\_e2}{} \left(\expandboth{a}{b}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right) \join \{\var{b}, \var{d}\} \expandboth{b}{d}{}{\_e5}{} \left(\getvertices{b}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -7985,17 +7985,17 @@ $\projection{\var{d}} \left(\selection{\mathtt{a.id~=~1
 	[. {$\selection{\mathtt{a.id~=~1
 	~~\land~c.id~=~2}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4, \_e5} \rangle$}
 		[. {$\join \{\var{b}, \var{d}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4, \_e5} \rangle$}
-			[. {$\expandboth{\_e4}{}{d}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4} \rangle$}
-				[. {$\expandboth{\_e3}{}{c}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d} \rangle$}
-					[. {$\expandboth{\_e2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
-						[. {$\expandboth{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+			[. {$\expandboth{d}{a}{}{\_e4}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d, \_e4} \rangle$}
+				[. {$\expandboth{c}{d}{}{\_e3}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c, \_e3, d} \rangle$}
+					[. {$\expandboth{b}{c}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
+						[. {$\expandboth{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 							[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 							]
 						]
 					]
 				]
 			]
-			[. {$\expandboth{\_e5}{}{b}{d}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e5, d} \rangle$}
+			[. {$\expandboth{b}{d}{}{\_e5}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e5, d} \rangle$}
 				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 				]
 			]
@@ -8047,7 +8047,7 @@ RETURN a.name
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a}} \left(\alldifferent{} \left(\expandout{\_e2}{B}{\_e1}{a}{} \left(\expandout{\_e1}{A}{a}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+$\projection{\var{a}} \left(\alldifferent{} \left(\expandout{\_e1}{a}{}{\_e2}{B} \left(\expandout{a}{\_e1}{}{\_e1}{A} \left(\getvertices{a}{}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -8055,8 +8055,8 @@ $\projection{\var{a}} \left(\alldifferent{} \left(\expandout{\_e2}{B}{\_e1}{a}{}
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
-	[. {$\expandout{\_e2}{B}{\_e1}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2} \rangle$}
-		[. {$\expandout{\_e1}{A}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+	[. {$\expandout{\_e1}{a}{}{\_e2}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2} \rangle$}
+		[. {$\expandout{a}{\_e1}{}{\_e1}{A}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -8092,7 +8092,7 @@ RETURN a.name
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a}} \left(\alldifferent{} \left(\expandout{\_e1}{A}{a}{b}{} \left(\getvertices{a}{}\right) \join \{\var{a}, \var{b}\} \expandout{\_e2}{B}{b}{a}{} \left(\getvertices{b}{}\right)\right)\right)$
+$\projection{\var{a}} \left(\alldifferent{} \left(\expandout{a}{b}{}{\_e1}{A} \left(\getvertices{a}{}\right) \join \{\var{a}, \var{b}\} \expandout{b}{a}{}{\_e2}{B} \left(\getvertices{b}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -8101,11 +8101,11 @@ $\projection{\var{a}} \left(\alldifferent{} \left(\expandout{\_e1}{A}{a}{b}{} \l
 \Tree
 [. {$\projection{\var{a}}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 	[. {$\join \{\var{a}, \var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2} \rangle$}
-		[. {$\expandout{\_e1}{A}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{a}{b}{}{\_e1}{A}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{B}{b}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2, a} \rangle$}
+		[. {$\expandout{b}{a}{}{\_e2}{B}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2, a} \rangle$}
 			[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]
@@ -8921,7 +8921,7 @@ RETURN r.prop
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{\_e1}{\_e2}{}{r}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -8929,7 +8929,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} 
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
-	[. {$\expandout{r}{}{\_e1}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
+	[. {$\expandout{\_e1}{\_e2}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
 		[. {$\getvertices{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 		]
 	]
@@ -8960,7 +8960,7 @@ RETURN a AS foo, r AS bar
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{a}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)$
+$\projection{\var{a},~\var{r}} \left(\alldifferent{} \left(\expandout{a}{\_e1}{}{r}{} \left(\getvertices{a}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -8968,7 +8968,7 @@ $\projection{\var{a},~\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{a}{\_
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{a},~\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
-	[. {$\expandout{r}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, r, \_e1} \rangle$}
+	[. {$\expandout{a}{\_e1}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{a, r, \_e1} \rangle$}
 		[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
 	]
@@ -9036,7 +9036,7 @@ RETURN r.bar
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\expandout{\_e1}{\_e2}{}{r}{} \left(\getvertices{\_e1}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -9044,7 +9044,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\expandout{r}{}{\_e1}{\_e2}{} 
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{r}}$ \\ \footnotesize $\color{gray} \langle \var{r} \rangle$}
-	[. {$\expandout{r}{}{\_e1}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
+	[. {$\expandout{\_e1}{\_e2}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$}
 		[. {$\getvertices{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1} \rangle$}
 		]
 	]
@@ -9377,7 +9377,7 @@ RETURN n, m
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n},~\var{m}} \left(\alldifferent{} \left(\expandout{\_e1}{T}{n}{m}{Z} \left(\getvertices{n}{A}\right)\right)\right)$
+$\projection{\var{n},~\var{m}} \left(\alldifferent{} \left(\expandout{n}{m}{Z}{\_e1}{T} \left(\getvertices{n}{A}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -9385,7 +9385,7 @@ $\projection{\var{n},~\var{m}} \left(\alldifferent{} \left(\expandout{\_e1}{T}{n
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{n},~\var{m}}$ \\ \footnotesize $\color{gray} \langle \var{n, m} \rangle$}
-	[. {$\expandout{\_e1}{T}{n}{m}{Z}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$}
+	[. {$\expandout{n}{m}{Z}{\_e1}{T}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$}
 		[. {$\getvertices{n}{A}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
 	]
@@ -11133,7 +11133,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \alldifferent{} \left(\expandboth{r}{}{n}{m}{NonExistent} \left(\getvertices{n}{Single}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \alldifferent{} \left(\expandboth{n}{m}{NonExistent}{r}{} \left(\getvertices{n}{Single}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11144,7 +11144,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right)
 	[. {$\join \{\var{n}\}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
-		[. {$\expandboth{r}{}{n}{m}{NonExistent}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+		[. {$\expandboth{n}{m}{NonExistent}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 			[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -11182,7 +11182,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \selection{\mathtt{m:NonExistent}} \left(\alldifferent{} \left(\expandboth{r}{}{n}{m}{} \left(\getvertices{n}{Single}\right)\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \selection{\mathtt{m:NonExistent}} \left(\alldifferent{} \left(\expandboth{n}{m}{}{r}{} \left(\getvertices{n}{Single}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11194,7 +11194,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right)
 		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
 		[. {$\selection{\mathtt{m:NonExistent}}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
-			[. {$\expandboth{r}{}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+			[. {$\expandboth{n}{m}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 				[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 				]
 			]
@@ -11235,7 +11235,7 @@ RETURN m
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \selection{\mathtt{m.prop~=~42}} \left(\alldifferent{} \left(\expandboth{r}{}{n}{m}{} \left(\getvertices{n}{Single}\right)\right)\right)\right)$
+$\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \selection{\mathtt{m.prop~=~42}} \left(\alldifferent{} \left(\expandboth{n}{m}{}{r}{} \left(\getvertices{n}{Single}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11247,7 +11247,7 @@ $\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right)
 		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
 		[. {$\selection{\mathtt{m.prop~=~42}}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
-			[. {$\expandboth{r}{}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+			[. {$\expandboth{n}{m}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 				[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 				]
 			]
@@ -11287,7 +11287,7 @@ RETURN m:TYPE
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \alldifferent{} \left(\expandboth{r}{TYPE}{n}{m}{} \left(\getvertices{n}{Single}\right)\right)\right)$
+$\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right) \join \{\var{n}\} \alldifferent{} \left(\expandboth{n}{m}{}{r}{TYPE} \left(\getvertices{n}{Single}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11298,7 +11298,7 @@ $\projection{\var{m}} \left(\alldifferent{} \left(\getvertices{n}{Single}\right)
 	[. {$\join \{\var{n}\}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 		[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 		]
-		[. {$\expandboth{r}{TYPE}{n}{m}{}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
+		[. {$\expandboth{n}{m}{}{r}{TYPE}$ \\ \footnotesize $\color{gray} \langle \var{n, r, m} \rangle$}
 			[. {$\getvertices{n}{Single}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
 			]
 		]
@@ -11405,7 +11405,7 @@ RETURN x
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{b}{C}\right) \join \{\var{b}\} \alldifferent{} \left(\expandout{\_e1}{}{x}{b}{C} \left(\getvertices{x}{}\right)\right)\right)$
+$\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{b}{C}\right) \join \{\var{b}\} \alldifferent{} \left(\expandout{x}{b}{C}{\_e1}{} \left(\getvertices{x}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11420,7 +11420,7 @@ $\projection{\var{x}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} 
 			[. {$\getvertices{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e1}{}{x}{b}{C}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e1, b} \rangle$}
+		[. {$\expandout{x}{b}{C}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{x, \_e1, b} \rangle$}
 			[. {$\getvertices{x}{}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 			]
 		]
@@ -11461,7 +11461,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{X}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{\_e1}{}{a}{b}{Y} \left(\getvertices{a}{X}\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{X}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{a}{b}{Y}{\_e1}{} \left(\getvertices{a}{X}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11472,7 +11472,7 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{X}\right) \joi
 	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 		[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expandout{\_e1}{}{a}{b}{Y}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{a}{b}{Y}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{X}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -11575,7 +11575,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{B}\right) \join \{\var{a}\} \alldifferent{} \left(\expandboth{r}{}{a}{a}{B} \left(\getvertices{a}{B}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{B}\right) \join \{\var{a}\} \alldifferent{} \left(\expandboth{a}{a}{B}{r}{} \left(\getvertices{a}{B}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11586,7 +11586,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{B}\right) \joi
 	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 		[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expandboth{r}{}{a}{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
+		[. {$\expandboth{a}{a}{B}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 			[. {$\getvertices{a}{B}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -11624,7 +11624,7 @@ RETURN r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{r}{}{a}{a}{} \left(\getvertices{a}{}\right)\right)\right)$
+$\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{a}{a}{}{r}{} \left(\getvertices{a}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11635,7 +11635,7 @@ $\projection{\var{r}} \left(\alldifferent{} \left(\getvertices{a}{}\right) \join
 	[. {$\join \{\var{a}\}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 		[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 		]
-		[. {$\expandout{r}{}{a}{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
+		[. {$\expandout{a}{a}{}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{a, r} \rangle$}
 			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
@@ -11716,7 +11716,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{Single} \join \{\} \getvertices{c}{C}\right) \join \{\var{a}, \var{c}\} \alldifferent{} \left(\expandout{\_e2}{}{b}{c}{C} \left(\expandout{\_e1}{}{a}{b}{} \left(\getvertices{a}{Single}\right)\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{Single} \join \{\} \getvertices{c}{C}\right) \join \{\var{a}, \var{c}\} \alldifferent{} \left(\expandout{b}{c}{C}{\_e2}{} \left(\expandout{a}{b}{}{\_e1}{} \left(\getvertices{a}{Single}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11731,8 +11731,8 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{Single} \join 
 			[. {$\getvertices{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
-			[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{b}{c}{C}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
+			[. {$\expandout{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 				[. {$\getvertices{a}{Single}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
@@ -11778,7 +11778,7 @@ RETURN b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{c}{C}\right) \join \{\var{a}, \var{c}\} \alldifferent{} \left(\expandout{\_e2}{}{b}{c}{C} \left(\expandout{\_e1}{}{a}{b}{} \left(\getvertices{a}{A}\right)\right)\right)\right)$
+$\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{c}{C}\right) \join \{\var{a}, \var{c}\} \alldifferent{} \left(\expandout{b}{c}{C}{\_e2}{} \left(\expandout{a}{b}{}{\_e1}{} \left(\getvertices{a}{A}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11793,8 +11793,8 @@ $\projection{\var{b}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} 
 			[. {$\getvertices{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 			]
 		]
-		[. {$\expandout{\_e2}{}{b}{c}{C}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
-			[. {$\expandout{\_e1}{}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+		[. {$\expandout{b}{c}{C}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
+			[. {$\expandout{a}{b}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 				[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
@@ -11841,7 +11841,7 @@ RETURN x, r
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{x},~\var{r}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{b}{B}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{\_e1}{}{a}{x}{} \left(\getvertices{a}{A}\right)\right) \join \{\var{b}, \var{x}\} \alldifferent{} \left(\expandout{r}{}{x}{b}{B} \left(\getvertices{x}{}\right)\right)\right)$
+$\projection{\var{x},~\var{r}} \left(\alldifferent{} \left(\getvertices{a}{A} \join \{\} \getvertices{b}{B}\right) \join \{\var{a}\} \alldifferent{} \left(\expandout{a}{x}{}{\_e1}{} \left(\getvertices{a}{A}\right)\right) \join \{\var{b}, \var{x}\} \alldifferent{} \left(\expandout{x}{b}{B}{r}{} \left(\getvertices{x}{}\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -11857,12 +11857,12 @@ $\projection{\var{x},~\var{r}} \left(\alldifferent{} \left(\getvertices{a}{A} \j
 				[. {$\getvertices{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
 				]
 			]
-			[. {$\expandout{\_e1}{}{a}{x}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, x} \rangle$}
+			[. {$\expandout{a}{x}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, x} \rangle$}
 				[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 				]
 			]
 		]
-		[. {$\expandout{r}{}{x}{b}{B}$ \\ \footnotesize $\color{gray} \langle \var{x, r, b} \rangle$}
+		[. {$\expandout{x}{b}{B}{r}{}$ \\ \footnotesize $\color{gray} \langle \var{x, r, b} \rangle$}
 			[. {$\getvertices{x}{}$ \\ \footnotesize $\color{gray} \langle \var{x} \rangle$}
 			]
 		]
@@ -15659,7 +15659,7 @@ RETURN c.name
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{c}} \left(\alldifferent{} \left(\expandout{\_e2}{}{b}{c}{} \left(\expandout{\_e1}{KNOWS}{a}{b}{} \left(\getvertices{a}{A}\right)\right)\right)\right)$
+$\projection{\var{c}} \left(\alldifferent{} \left(\expandout{b}{c}{}{\_e2}{} \left(\expandout{a}{b}{}{\_e1}{KNOWS} \left(\getvertices{a}{A}\right)\right)\right)\right)$
 
 \subsubsection*{Relational algebra tree}
 
@@ -15667,8 +15667,8 @@ $\projection{\var{c}} \left(\alldifferent{} \left(\expandout{\_e2}{}{b}{c}{} \le
 \linespread{1.25}
 \Tree
 [. {$\projection{\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
-	[. {$\expandout{\_e2}{}{b}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
-		[. {$\expandout{\_e1}{KNOWS}{a}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
+	[. {$\expandout{b}{c}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$}
+		[. {$\expandout{a}{b}{}{\_e1}{KNOWS}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$}
 			[. {$\getvertices{a}{A}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 			]
 		]
