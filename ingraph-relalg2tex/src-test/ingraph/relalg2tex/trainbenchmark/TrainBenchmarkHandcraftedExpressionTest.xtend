@@ -6,7 +6,7 @@ import org.junit.Test
 
 class TrainBenchmarkHandcraftedExpressionTest {
 
-	val RelalgExpressionSerializer serializer = new RelalgExpressionSerializer(false)
+	val RelalgExpressionSerializer serializer = new RelalgExpressionSerializer(true, false)
 
 	@Test
 	def void testPosLength() {
