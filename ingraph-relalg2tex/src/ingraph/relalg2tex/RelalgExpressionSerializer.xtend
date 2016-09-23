@@ -13,16 +13,14 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	 */
 	boolean parentheses
 
-	new(boolean parentheses) {
-		super(true)
+	new(boolean standaloneDocument, boolean parentheses) {
+		super(standaloneDocument)
 		this.parentheses = parentheses
 	}
 
 	override serializeBody(Operator expression) {
 		'''
-		\begin{preview}
 		$«children(expression)»$
-		\end{preview}
 		'''
 	}
 

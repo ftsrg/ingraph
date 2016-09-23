@@ -1,6 +1,8 @@
 package ingraph.report.tests
 
+import com.google.common.collect.Lists
 import ingraph.cypher2relalg.RelalgParser
+import ingraph.optimization.transformations.Relalg2ReteTransformation
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
@@ -9,26 +11,31 @@ import ingraph.report.feature.Scenario
 import ingraph.report.feature.WhenStep
 import java.io.File
 import java.util.Collections
+import java.util.List
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
+import ingraph.relalg2tex.RelalgExpressionSerializer
 
 class FeatureParsingTest {
 
-	extension RelalgTreeSerializer serializer = new RelalgTreeSerializer(false)
+	val RelalgTreeSerializer treeSerializer = new RelalgTreeSerializer(false)
+	val RelalgExpressionSerializer expressionSerializer = new RelalgExpressionSerializer(false, false)
 	extension SchemaInferencer inferencer = new SchemaInferencer
+	extension Relalg2ReteTransformation relalg2ReteTransformation = new Relalg2ReteTransformation
 
 	@Test
-	def void loadModel() {
+	def void generateReport() {
 		val CUCUMBER_TESTS_DIR = "../opencypher-tests/"
 
 		val injector = new FeatureStandaloneSetup().createInjectorAndDoEMFRegistration()
 		val resourceSet = injector.getInstance(typeof(XtextResourceSet))
 
-		val files = FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true)
-
+		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
+		Collections.sort(files)
+	
 		val doc = '''
 			\chapter{TCK Acceptance Tests}
 			
@@ -38,14 +45,27 @@ class FeatureParsingTest {
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»					
 					\subsection{«scenario.name.escape»}
 					
+					\subsubsection*{Query specification}
+					
 					\begin{lstlisting}
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					\end{lstlisting}
 					
+					\subsubsection*{Relational algebra expression}
+					
+					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression»
+					
+					\subsubsection*{Relational algebra tree}
+					
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualize»
+					
+					\subsubsection*{Relational algebra tree for incremental queries}
+					
+					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualizeWithTransformations»
+					
 				«ENDFOR»	
 			«ENDFOR»
-		'''
+			'''
 
 		FileUtils.writeStringToFile(new File("../opencypher-report/acceptance-tests.tex"), doc)
 	}
@@ -87,12 +107,30 @@ class FeatureParsingTest {
 		.replaceAll('''_''', '''\\_''')
 	}
 
+	def expression(String s) {
+		try {
+			val container = RelalgParser.parse(s)
+			expressionSerializer.serialize(container.addSchemaInformation)
+		} catch (Exception e) {
+			'''Cannot convert to expression.'''
+		}
+	}
+	
 	def visualize(String s) {
 		try {
 			val container = RelalgParser.parse(s)
-			container.addSchemaInformation.serialize
+			treeSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
-			'''Cannot visualize'''
+			'''Cannot visualize tree.'''
+		}
+	}
+	
+	def visualizeWithTransformations(String s) {
+		try {
+			val container = RelalgParser.parse(s)
+			treeSerializer.serialize(container.transform.addSchemaInformation)
+		} catch (Exception e) {
+			'''Cannot visualize incremental tree.'''
 		}
 	}
 

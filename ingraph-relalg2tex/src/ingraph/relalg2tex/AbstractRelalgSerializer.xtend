@@ -78,9 +78,11 @@ abstract class AbstractRelalgSerializer {
 				\input{inputs/relalg-commands}
 				
 				\begin{document}
+				\begin{preview}
 			«ENDIF»
 			«serializeBody(expression)»
 			«IF standaloneDocument»
+				\end{preview}
 				\end{document}
 			«ENDIF»
 		'''
