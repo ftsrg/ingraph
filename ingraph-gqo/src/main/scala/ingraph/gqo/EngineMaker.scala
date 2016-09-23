@@ -35,7 +35,8 @@ object EngineMaker extends App {
         expr.parent match {
           case op: AlphaOperator =>
             val node: ActorRef = op match {
-              case op: SelectionOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
+              case op: SelectionOperator =>
+                newLocal(Props(new Checker(expr.child, ExpressionParser.parse(op.getCondition))))
               case op: ProjectionOperator =>
                 val variables = op.getVariables.map(_.getName)
                 newLocal(Props(new Trimmer(expr.child, variables)))
