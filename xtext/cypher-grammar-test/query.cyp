@@ -1,3 +1,2 @@
-MATCH (a)
-WHERE asd
-RETURN a
+MATCH (a)<-[]-(c), (a)-[r:T]->(b)
+RETURN x

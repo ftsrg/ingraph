@@ -4,27 +4,119 @@
 package ingraph.tests
 
 import com.google.inject.Inject
-import ingraph.cypher.Model
+import ingraph.cypher.CypherQuery
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(XtextRunner)
 @InjectWith(CypherInjectorProvider)
-class CypherParsingTest{
+class CypherParsingTest {
 
 	@Inject
-	ParseHelper<Model> parseHelper
+	ParseHelper<CypherQuery> parseHelper
 
-	@Test 
-	def void loadModel() {
-		val result = parseHelper.parse('''
-			Hello Xtext!
+	def void testAndPrint(String query) {
+		val result = parseHelper.parse(query)
+		println(query)
+		println(PrettyPrinter.prettyPrint(result))
+	}
+
+	@Test
+	def void test1() {
+		testAndPrint('''
+			MATCH (a)-[r1]-(b), (a)<-[r2]-(b)
+			WHERE a
+			RETURN a
 		''')
-		Assert.assertNotNull(result)
+	}
+
+	@Test
+	def void test2() {
+		testAndPrint('''
+			MATCH (a)-[r1]->(b)
+			MATCH (a)<-[r2]-(c)
+			WHERE a
+			RETURN a
+		''')
+	}
+
+	@Test
+	def void test3() {
+		testAndPrint('''
+			MATCH (a)-[r1]->(b)
+			MATCH (a)<-[r2]-(c)
+			RETURN a
+		''')
+	}
+
+	@Test
+	def void test4() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			UNION
+			MATCH (a)
+			RETURN a
+		''')
+	}
+
+	@Test
+	def void test5() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			UNION ALL
+			MATCH (a)
+			RETURN a
+		''')
+	}
+
+	@Test
+	def void test6() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			ORDER BY a ASC
+		''')
+	}
+
+	@Test
+	def void test7() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			ORDER BY a DESC
+		''')
+	}
+
+	@Test
+	def void test8() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			ORDER BY a DESC LIMIT 1
+		''')
+	}
+
+	@Test
+	def void test9() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			ORDER BY a DESC SKIP 2
+		''')
+	}
+
+	@Test
+	def void test10() {
+		testAndPrint('''
+			MATCH (a)
+			RETURN a
+			ORDER BY a DESC SKIP 3 LIMIT 4
+		''')
 	}
 
 }

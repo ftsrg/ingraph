@@ -10,55 +10,45 @@ regularQuery : singleQuery ( union )* ;
 
 singleQuery : clause ( clause )* ;
 
-union : ( UNION sp ALL singleQuery )
+union : ( UNION ALL singleQuery )
       | ( UNION singleQuery )
       ;
 
 clause : match
-       | unwind
        | with
        | return
        ;
 
-match : ( OPTIONAL sp )? MATCH pattern ( where )? ;
+match : ( OPTIONAL )? MATCH pattern ( where )? ;
 
-with : ( WITH DISTINCT sp returnBody where? )
-     | ( WITH sp returnBody where? )
+with : ( WITH DISTINCT returnBody where? )
+     | ( WITH returnBody where? )
      ;
 
-return : ( RETURN sp DISTINCT sp returnBody )
-       | ( RETURN sp returnBody )
+return : ( RETURN DISTINCT returnBody )
+       | ( RETURN returnBody )
        ;
 
-returnBody : returnItems ( sp order )? ( sp skip )? ( sp limit )? ;
+returnBody : returnItems ( order )? ( skip )? ( limit )? ;
 
 returnItems : ( '*' ( ',' returnItem )* )
-            | ( returnItem ( ',' returnItem )* )
+            | ( variable ( ',' returnItem )* )
             ;
 
-returnItem : ( expression sp AS sp variable )
-           | expression
-           ;
 
-order : ORDER sp BY sp sortItem ( ',' sortItem )* ;
+order : ORDER BY sortItem ( ',' sortItem )* ;
 
-skip : L_SKIP sp expression ;
+skip : L_SKIP expression ;
 
-limit : LIMIT sp expression ;
+limit : LIMIT expression ;
 
 sortItem : ( expression ( DESCENDING | DESC ) )
          | ( expression ( ASCENDING | ASC )? )
          ;
 
-where : WHERE sp expression ;
+where : WHERE expression ;
 
-pattern : patternPart ( ',' patternPart )* ;
-
-patternPart : ( variable '=' anonymousPatternPart )
-            | anonymousPatternPart
-            ;
-
-anonymousPatternPart : patternElement ;
+pattern : patternPart ( ',' patternElement )* ;
 
 patternElement : ( nodePattern ( patternElementChain )* )
                | ( '(' patternElement ')' )
@@ -98,7 +88,7 @@ relationshipsPattern : nodePattern ( patternElementChain )+ ;
 
 filterExpression : idInColl ( where )? ;
 
-idInColl : variable sp IN sp expression ;
+idInColl : variable IN expression ;
 
 functionInvocation : functionName '(' ( DISTINCT )? ( expression ( ',' expression )* )? ')' ;
 

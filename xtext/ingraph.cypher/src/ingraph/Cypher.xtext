@@ -3,7 +3,10 @@ grammar ingraph.Cypher with org.eclipse.xtext.common.Terminals
 generate cypher "http://www.Cypher.ingraph"
 
 CypherQuery:
-	(queries+=Query)+;
+	(query=Query) (unions+=Union)*;
+
+Union:
+	{Union} 'UNION' all?=('ALL')? query=Query;
 
 Query:
 	match=MatchClause
@@ -12,7 +15,7 @@ Query:
 
 	// MATCH
 MatchClause:
-	'MATCH' pattern=Pattern
+	('MATCH' patterns+=Pattern)+
 	('WHERE' condition=Condition)?;
 
 Condition:
@@ -20,29 +23,37 @@ Condition:
 
 	// Patterns
 Pattern:
-	(parts+=PatternPart)+;
+	parts+=PatternPart (',' parts+=PatternPart)*;
 
 PatternPart:
-	node=NodePattern;// (chain+=PatternElementChain)*;
+	node=NodePattern (chain+=PatternElementChain)*;
 
 NodePattern:
-	'(' variable=Variable? (':' label=Label)? ')';
-//
-//PatternElementChain:
-//	relationshipPattern=RelationshipPattern nodePattern=NodePattern;
-//
-//RelationshipPattern:
-//	(LEFT_ARROW_HEAD DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
-//	| (LEFT_ARROW_HEAD DASH RelationshipDetail? DASH)
-//	| (DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
-//	| (DASH RelationshipDetail? DASH);
-//
-//RelationshipDetail:
-//	'[' variable=Variable? ':' label=Label? ']';
+	{NodePattern} '(' variable=Variable? (':' label=Label)? ')';
 
-	// RETURN
+PatternElementChain:
+	relationshipPattern=RelationshipPattern nodePattern=NodePattern;
+
+RelationshipPattern:
+	{RelationshipPattern} ((LEFT_ARROW_HEAD DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+	| (LEFT_ARROW_HEAD DASH RelationshipDetail? DASH)
+	| (DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+	| (DASH RelationshipDetail? DASH));
+
+RelationshipDetail:
+	{RelationshipDetail} '[' variable=Variable? (':' label=Label)? ']';
+
 ReturnClause:
-	{ReturnClause} 'RETURN' ('DISTINCT')? variables+=Variable+;
+	{ReturnClause} 'RETURN' distinct?=('DISTINCT')? variables+=Variable+ order=Order? skip=Skip? limit=Limit?;
+
+Order:
+	'ORDER' 'BY' variables+=Variable+ (asc?=('ASC' | 'ASCENDING') | desc?=('DESC' | 'DESCENDING'));
+
+Skip:
+	'SKIP' amount=INT;
+
+Limit:
+	'LIMIT' amount=INT;
 
 	// Common rules
 Variable:
