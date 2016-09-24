@@ -1,0 +1,9 @@
+grammar ingraph.Cypher with org.eclipse.xtext.common.Terminals
+
+generate cypher "http://www.Cypher.ingraph"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
