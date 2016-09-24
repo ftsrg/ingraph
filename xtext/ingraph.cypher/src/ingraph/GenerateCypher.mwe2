@@ -6,7 +6,7 @@ import org.eclipse.xtext.xtext.generator.model.project.*
 var rootPath = ".."
 
 Workflow {
-	
+
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
@@ -31,12 +31,17 @@ Workflow {
 		language = StandardLanguage {
 			name = "ingraph.Cypher"
 			fileExtensions = "cyp,cypher"
-
 			serializer = {
 				generateStub = false
 			}
 			validator = {
-				// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+			// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+			}
+
+			parserGenerator = {
+				options = {
+					ignoreCase = true
+				}
 			}
 		}
 	}
