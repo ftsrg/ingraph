@@ -1,27 +1,49 @@
 grammar ingraph.Cypher with org.eclipse.xtext.common.Terminals
 
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate cypher "http://www.Cypher.ingraph"
 
 CypherQuery:
 	(query=Query) (unions+=Union)*;
 
 Union:
-	{Union} 'UNION' all?=('ALL')? query=Query;
+	{Union} 'UNION' all?='ALL'? query=Query;
 
 Query:
 	match=MatchClause
 	return=ReturnClause
 	';'?;
 
-	// MATCH
+/* MATCH */
 MatchClause:
 	('MATCH' patterns+=Pattern)+
-	('WHERE' condition=Condition)?;
+	('WHERE' condition=Expression)?;
 
-Condition:
-	ID;
+Expression:
+	not?='NOT' comparison=ArithmeticComparison;
 
-	// Patterns
+ArithmeticComparison:
+	leftOperand=Atom operator=BINARY_ARITHMETIC_COMPARISON_OPERATOR rightOperand=Atom;
+
+BINARY_ARITHMETIC_COMPARISON_OPERATOR:
+	'=' | '<>' | '!=' | '<' | '>' | '<=' | '>=';
+
+Atom:
+	{Atom} (number=NumberLiteral | string=StringLiteral | "NULL");
+
+NumberLiteral:
+	int=IntegerLiteral | double=DoubleLiteral;
+
+IntegerLiteral returns ecore::EInt:
+	INT;
+
+DoubleLiteral returns ecore::EFloat:
+	INT '.' INT;
+
+StringLiteral returns ecore::EString:
+	STRING;
+
+/* Patterns */
 Pattern:
 	parts+=PatternPart (',' parts+=PatternPart)*;
 
@@ -35,16 +57,24 @@ PatternElementChain:
 	relationshipPattern=RelationshipPattern nodePattern=NodePattern;
 
 RelationshipPattern:
-	{RelationshipPattern} ((LEFT_ARROW_HEAD DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
-	| (LEFT_ARROW_HEAD DASH RelationshipDetail? DASH)
-	| (DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
-	| (DASH RelationshipDetail? DASH));
+	both=Both | in=In | out=Out;
+
+Both:
+	{Both} ((LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH RelationshipDetail? DASH));
+
+In:
+	{In} (LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH);
+
+Out:
+	{Out} (DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+;
 
 RelationshipDetail:
 	{RelationshipDetail} '[' variable=Variable? (':' label=Label)? ']';
 
+/* Return */
 ReturnClause:
-	{ReturnClause} 'RETURN' distinct?=('DISTINCT')? variables+=Variable+ order=Order? skip=Skip? limit=Limit?;
+	{ReturnClause} 'RETURN' distinct?='DISTINCT'? variables+=Variable+ order=Order? skip=Skip? limit=Limit?;
 
 Order:
 	'ORDER' 'BY' variables+=Variable+ (asc?=('ASC' | 'ASCENDING') | desc?=('DESC' | 'DESCENDING'));
@@ -55,7 +85,7 @@ Skip:
 Limit:
 	'LIMIT' amount=INT;
 
-	// Common rules
+/* Common rules */
 Variable:
 	name=ID;
 
