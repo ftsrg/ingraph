@@ -20,28 +20,40 @@ MatchClause:
 	('WHERE' condition=Expression)?;
 
 Expression:
-	nots+='NOT'* (logicalExpression=LogicalExpression | comparison=ArithmeticComparison);
+	Expression12;
 
-LogicalExpression:
-	atom=Atom ('OR' logicalExpressions+=LogicalExpression)+;
+Expression12 : leftExpression=Expression11 ( 'OR' rightExpression+=Expression11 )* ;
 
-//expression12 : expression11 ( sp OR sp expression11 )* ;
-//
-//expression11 : expression10 ( sp XOR sp expression10 )* ;
-//
-//expression10 : expression9 ( sp AND sp expression9 )* ;
-//
-//expression9 : ( sp NOT sp )* expression8 ;
-//
-//expression8 : expression7 ( ws partialComparisonExpression )* ;
-//
-//expression7 : expression6 ( ( ws '+' ws expression6 ) | ( ws '-' ws expression6 ) )* ;
-//
-//expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
-//
-//expression5 : expression4 ( ws '^' ws expression4 )* ;
-//
-//expression4 : ( ( '+' | '-' ) ws )* expression3 ;
+Expression11 : leftExpression=Expression10 ( 'XOR' rightExpression+=Expression10 )* ;
+
+Expression10 : leftExpression=Expression9 ( 'AND' rightExpression+=Expression9 )* ;
+
+Expression9 : ( 'NOT' )* Expression8 ;
+
+Expression8 : leftExpression=Expression7 ( comparison+=PartialComparisonExpression )* ;
+
+Expression7 : leftExpression=Expression6 ( ( '+' rightExpression+=Expression6 ) | ( '-' rightExpression+=Expression6 ) )* ;
+
+Expression6 : leftExpression=Expression5 ( ( '*' rightExpression+=Expression5 ) | ( '/' rightExpression+=Expression5 ) | ( '%' rightExpression+=Expression5 ) )* ;
+
+Expression5 : leftExpression=Expression4 ( '^' rightExpression+=Expression4 )* ;
+
+Expression4 : ( ( '+' | '-' ) )* expression=Expression3;
+
+Expression3 : Expression2;
+
+Expression2 : Atom ( PropertyLookup | labels+=NodeLabels )* ;
+
+PropertyLookup:
+	ID;
+	
+NodeLabels:
+	labels+=Label+
+;
+
+PartialComparisonExpression:
+	BINARY_ARITHMETIC_COMPARISON_OPERATOR expression=Expression7
+;
 
 ArithmeticComparison:
 	leftOperand=Atom operator=BINARY_ARITHMETIC_COMPARISON_OPERATOR rightOperand=Atom;
@@ -81,7 +93,7 @@ RelationshipPattern:
 	both=Both | in=In | out=Out;
 
 Both:
-	{Both} (LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH detail=RelationshipDetail? DASH);
+	{Both} ((LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH detail=RelationshipDetail? DASH));
 
 In:
 	{In} LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH;
