@@ -20,7 +20,28 @@ MatchClause:
 	('WHERE' condition=Expression)?;
 
 Expression:
-	not?='NOT' comparison=ArithmeticComparison;
+	nots+='NOT'* (logicalExpression=LogicalExpression | comparison=ArithmeticComparison);
+
+LogicalExpression:
+	atom=Atom ('OR' logicalExpressions+=LogicalExpression)+;
+
+//expression12 : expression11 ( sp OR sp expression11 )* ;
+//
+//expression11 : expression10 ( sp XOR sp expression10 )* ;
+//
+//expression10 : expression9 ( sp AND sp expression9 )* ;
+//
+//expression9 : ( sp NOT sp )* expression8 ;
+//
+//expression8 : expression7 ( ws partialComparisonExpression )* ;
+//
+//expression7 : expression6 ( ( ws '+' ws expression6 ) | ( ws '-' ws expression6 ) )* ;
+//
+//expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
+//
+//expression5 : expression4 ( ws '^' ws expression4 )* ;
+//
+//expression4 : ( ( '+' | '-' ) ws )* expression3 ;
 
 ArithmeticComparison:
 	leftOperand=Atom operator=BINARY_ARITHMETIC_COMPARISON_OPERATOR rightOperand=Atom;
@@ -29,7 +50,7 @@ BINARY_ARITHMETIC_COMPARISON_OPERATOR:
 	'=' | '<>' | '!=' | '<' | '>' | '<=' | '>=';
 
 Atom:
-	{Atom} (number=NumberLiteral | string=StringLiteral | "NULL");
+	{Atom} (number=NumberLiteral | string=StringLiteral | "NULL" | '(' expression=Expression ')');
 
 NumberLiteral:
 	int=IntegerLiteral | double=DoubleLiteral;
@@ -60,13 +81,13 @@ RelationshipPattern:
 	both=Both | in=In | out=Out;
 
 Both:
-	{Both} ((LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH RelationshipDetail? DASH));
+	{Both} (LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH detail=RelationshipDetail? DASH);
 
 In:
-	{In} (LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH);
+	{In} LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH;
 
 Out:
-	{Out} (DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+	{Out} DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD
 ;
 
 RelationshipDetail:
