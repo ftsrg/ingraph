@@ -2,8 +2,60 @@ grammar ingraph.Cypher with org.eclipse.xtext.common.Terminals
 
 generate cypher "http://www.Cypher.ingraph"
 
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
+CypherQuery:
+	(queries+=Query)+;
+
+Query:
+	match=MatchClause
+	return=ReturnClause
+	';'?;
+
+	// MATCH
+MatchClause:
+	'MATCH' pattern=Pattern
+	('WHERE' condition=Condition)?;
+
+Condition:
+	ID;
+
+	// Patterns
+Pattern:
+	(parts+=PatternPart)+;
+
+PatternPart:
+	node=NodePattern;// (chain+=PatternElementChain)*;
+
+NodePattern:
+	'(' variable=Variable? (':' label=Label)? ')';
+//
+//PatternElementChain:
+//	relationshipPattern=RelationshipPattern nodePattern=NodePattern;
+//
+//RelationshipPattern:
+//	(LEFT_ARROW_HEAD DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+//	| (LEFT_ARROW_HEAD DASH RelationshipDetail? DASH)
+//	| (DASH RelationshipDetail? DASH RIGHT_ARROW_HEAD)
+//	| (DASH RelationshipDetail? DASH);
+//
+//RelationshipDetail:
+//	'[' variable=Variable? ':' label=Label? ']';
+
+	// RETURN
+ReturnClause:
+	{ReturnClause} 'RETURN' ('DISTINCT')? variables+=Variable+;
+
+	// Common rules
+Variable:
+	name=ID;
+
+Label:
+	name=ID;
+
+LEFT_ARROW_HEAD:
+	'<' | '⟨' | '〈' | '﹤' | '＜';
+
+RIGHT_ARROW_HEAD:
+	'>' | '⟩' | '〉' | '﹥' | '＞';
+
+DASH:
+	'-' | '­' | '‐' | '‑' | '‒' | '–' | '—' | '―' | '−' | '﹘' | '﹣' | '－';
