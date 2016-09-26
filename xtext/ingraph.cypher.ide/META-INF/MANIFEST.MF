@@ -10,5 +10,6 @@ Require-Bundle: ingraph.cypher,
  org.eclipse.xtext.xbase.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: ingraph.ide.contentassist.antlr,
- ingraph.ide.contentassist.antlr.internal
+ ingraph.ide.contentassist.antlr.internal,
+ ingraph.ide.contentassist.antlr.lexer
 

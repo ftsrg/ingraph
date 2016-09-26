@@ -25,5 +25,6 @@ Export-Package: ingraph.cypher,
  ingraph.scoping,
  ingraph.parser.antlr,
  ingraph,
- ingraph.cypher.util
+ ingraph.cypher.util,
+ ingraph.parser.antlr.lexer
 Import-Package: org.apache.log4j

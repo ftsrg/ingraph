@@ -11,10 +11,10 @@
 \Tree
 [. {$\projection{\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{c} \rangle$}
 	[. {$\selection{\mathtt{a:A}}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
-		[. {$\expandout{\_e4}{}{\_e2}{c}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
-			[. {$\expandout{\_e3}{}{b}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2} \rangle$}
-				[. {$\expandin{\_e2}{}{\_e1}{b}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-					[. {$\expandin{\_e1}{}{a}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
+		[. {$\expandout{\_e2}{c}{}{\_e4}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2, \_e4, c} \rangle$}
+			[. {$\expandout{b}{\_e2}{}{\_e3}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, \_e3, \_e2} \rangle$}
+				[. {$\expandin{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
+					[. {$\expandin{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
 						[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
 						]
 					]

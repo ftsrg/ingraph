@@ -12,15 +12,15 @@
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 	[. {$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 		[. {$\antijoin \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-			[. {$\expandout{\_e3}{monitoredBy}{sw}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-				[. {$\expandout{\_e2}{target}{swP}{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
-					[. {$\expandout{\_e1}{follows}{route}{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\expandout{sw}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\expandout{swP}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					[. {$\expandout{route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 						[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 						]
 					]
 				]
 			]
-			[. {$\expandout{g}{gathers}{route}{sensor}{Sensor}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\expandout{route}{sensor}{Sensor}{g}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
 				]
 			]

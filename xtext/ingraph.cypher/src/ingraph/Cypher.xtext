@@ -19,8 +19,7 @@ MatchClause:
 	('MATCH' patterns+=Pattern)+
 	('WHERE' condition=Expression)?;
 
-Expression:
-	Expression12;
+Expression: Expression12;
 
 Expression12 : leftExpression=Expression11 ( 'OR' rightExpression+=Expression11 )* ;
 
@@ -42,21 +41,15 @@ Expression4 : ( ( '+' | '-' ) )* expression=Expression3;
 
 Expression3 : Expression2;
 
-Expression2 : Atom ( PropertyLookup | labels+=NodeLabels )* ;
+Expression2 : Atom ( propertyLookups+=PropertyLookup | nodeLabels+=NodeLabels )* ;
 
 PropertyLookup:
-	ID;
+	variable=Variable '.' property=Variable;
 	
-NodeLabels:
-	labels+=Label+
-;
+NodeLabels:	labels+=Label+;
 
 PartialComparisonExpression:
-	BINARY_ARITHMETIC_COMPARISON_OPERATOR expression=Expression7
-;
-
-ArithmeticComparison:
-	leftOperand=Atom operator=BINARY_ARITHMETIC_COMPARISON_OPERATOR rightOperand=Atom;
+	BINARY_ARITHMETIC_COMPARISON_OPERATOR expression=Expression7;
 
 BINARY_ARITHMETIC_COMPARISON_OPERATOR:
 	'=' | '<>' | '!=' | '<' | '>' | '<=' | '>=';

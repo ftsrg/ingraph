@@ -8,7 +8,7 @@ import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import ingraph.ide.contentassist.antlr.CypherParser;
 import ingraph.ide.contentassist.antlr.PartialCypherContentAssistParser;
-import ingraph.ide.contentassist.antlr.internal.InternalCypherLexer;
+import ingraph.ide.contentassist.antlr.lexer.InternalCypherLexer;
 import ingraph.ui.contentassist.CypherProposalProvider;
 import ingraph.ui.labeling.CypherDescriptionLabelProvider;
 import ingraph.ui.labeling.CypherLabelProvider;
@@ -107,7 +107,7 @@ public abstract class AbstractCypherUiModule extends DefaultUiModule {
 	public void configureHighlightingLexer(Binder binder) {
 		binder.bind(org.eclipse.xtext.parser.antlr.Lexer.class)
 			.annotatedWith(Names.named(LexerIdeBindings.HIGHLIGHTING))
-			.to(ingraph.parser.antlr.internal.InternalCypherLexer.class);
+			.to(ingraph.parser.antlr.lexer.InternalCypherLexer.class);
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2

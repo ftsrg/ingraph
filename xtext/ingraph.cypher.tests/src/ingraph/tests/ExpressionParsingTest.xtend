@@ -30,4 +30,13 @@ class ExpressionParsingTest {
 		''')
 	}
 
+	@Test
+	def void test2() {
+		testAndPrint('''
+			MATCH (a)-[r1]-(b), (a)<-[r2]-(b)
+			WHERE 1 < 2 + 3
+			RETURN a
+		''')
+	}
+
 }

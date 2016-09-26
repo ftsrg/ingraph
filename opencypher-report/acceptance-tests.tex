@@ -6096,39 +6096,15 @@ RETURN a, b
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b}} \left(\alldifferent{} \left(\expandboth{\_e1}{b}{}{\_e2}{} \left(\expandboth{a}{\_e1}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right)\right)$
+Cannot convert to expression.
 
 \subsubsection*{Relational algebra tree}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
-	[. {$\expandboth{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-		[. {$\expandboth{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
-			[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
-			]
-		]
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize tree.
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{a},~\var{b}}$ \\ \footnotesize $\color{gray} \langle \var{a, b} \rangle$}
-	[. {$\join \{\var{\_e1}\}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, \_e1, a, b, \_e2} \rangle$}
-		[. {$\getedges{\_e1}{}{a}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, \_e1, a} \rangle$}
-		]
-		[. {$\getedges{b}{}{\_e1}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2, \_e1} \rangle$}
-		]
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize incremental tree.
 
 \subsection{Return two subgraphs with bound undirected relationship and optional relationship}
 
@@ -6143,53 +6119,15 @@ RETURN a, b, c
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{a},~\var{b},~\var{c}} \left(\alldifferent{} \left(\expandboth{\_e1}{b}{}{\_e2}{} \left(\expandboth{a}{\_e1}{}{\_e1}{} \left(\getvertices{a}{}\right)\right)\right) \join \{\var{b}\} \selection{\mathtt{r~<>~r2}} \left(\alldifferent{} \left(\expandboth{b}{c}{}{r2}{} \left(\getvertices{b}{}\right)\right)\right)\right)$
+Cannot convert to expression.
 
 \subsubsection*{Relational algebra tree}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
-	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b, r2, c} \rangle$}
-		[. {$\expandboth{\_e1}{b}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, b} \rangle$}
-			[. {$\expandboth{a}{\_e1}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$}
-				[. {$\getvertices{a}{}$ \\ \footnotesize $\color{gray} \langle \var{a} \rangle$}
-				]
-			]
-		]
-		[. {$\selection{\mathtt{r~<>~r2}}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
-			[. {$\expandboth{b}{c}{}{r2}{}$ \\ \footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$}
-				[. {$\getvertices{b}{}$ \\ \footnotesize $\color{gray} \langle \var{b} \rangle$}
-				]
-			]
-		]
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize tree.
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{a},~\var{b},~\var{c}}$ \\ \footnotesize $\color{gray} \langle \var{a, b, c} \rangle$}
-	[. {$\join \{\var{b}\}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, \_e1, a, b, \_e2, c, r2} \rangle$}
-		[. {$\join \{\var{\_e1}\}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, \_e1, a, b, \_e2} \rangle$}
-			[. {$\getedges{\_e1}{}{a}{}{\_e1}{}$ \\ \footnotesize $\color{gray} \langle \var{\_e1, \_e1, a} \rangle$}
-			]
-			[. {$\getedges{b}{}{\_e1}{}{\_e2}{}$ \\ \footnotesize $\color{gray} \langle \var{b, \_e2, \_e1} \rangle$}
-			]
-		]
-		[. {$\selection{\mathtt{r~<>~r2}}$ \\ \footnotesize $\color{gray} \langle \var{c, r2, b} \rangle$}
-			[. {$\getedges{c}{}{b}{}{r2}{}$ \\ \footnotesize $\color{gray} \langle \var{c, r2, b} \rangle$}
-			]
-		]
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize incremental tree.
 
 \subsection{Rel type function works as expected}
 
@@ -9377,33 +9315,15 @@ RETURN n, m
 
 \subsubsection*{Relational algebra expression}
 
-$\projection{\var{n},~\var{m}} \left(\alldifferent{} \left(\expandout{n}{m}{Z}{\_e1}{T} \left(\getvertices{n}{A}\right)\right)\right)$
+Cannot convert to expression.
 
 \subsubsection*{Relational algebra tree}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{n},~\var{m}}$ \\ \footnotesize $\color{gray} \langle \var{n, m} \rangle$}
-	[. {$\expandout{n}{m}{Z}{\_e1}{T}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$}
-		[. {$\getvertices{n}{A}$ \\ \footnotesize $\color{gray} \langle \var{n} \rangle$}
-		]
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize tree.
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\projection{\var{n},~\var{m}}$ \\ \footnotesize $\color{gray} \langle \var{n, m} \rangle$}
-	[. {$\getedges{n}{A}{m}{Z}{\_e1}{T}$ \\ \footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$}
-	]
-]
-;
-\end{tikzpicture}
+Cannot visualize incremental tree.
 
 \subsection{Matching longer variable length paths}
 
