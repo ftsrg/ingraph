@@ -25,7 +25,10 @@
 
 #### Troubleshooting for Eclipse
 
-If you have compile errors in the imported Xtend projects, remove the `build/` directories from the projects with the `./clean-build-dirs.sh` script, right click the parent project and issue **Gradle** | **Refresh Gradle Project**.
+If you have compile errors in the imported Xtend projects:
+1. Remove the `build/` directories from the projects with the `./clean-build-dirs.sh` script.
+2. Right click the parent project and issue **Gradle** | **Refresh Gradle Project**.
+3. Wait for the build to complete. If there are still errors, run **Project** | **Clean**, but hopefully this won't be necessary.
 
 ### IntelliJ IDEA
 
