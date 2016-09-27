@@ -36,8 +36,14 @@ If you have compile errors in the imported Xtend projects, perform the following
 
 In IntelliJ, go to **File** | **Settings** | **Plug-ins**, search for `Xtend`, click **Search in repositories** and install the plug-in.
 
+Unfortunately, the EMF models are not yet supported by IntelliJ IDEA.
+
 ### Gradle
 
-To build the projects from command line
+To build the projects from command line, use the following command:
+
+```bash
+./gradlew clean build --continue
+```
 
 If you get `duplicate class` errors for the Xtend classes, you probably omitted the `clean` target from the Gradle build.
