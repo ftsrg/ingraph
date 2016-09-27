@@ -16,7 +16,16 @@ object ExpressionParser {
             exp.getOperator match {
               case EQUAL_TO => (t: nodeType) => left(t) == right(t)
               case NOT_EQUAL_TO => (t: nodeType) => left(t) != right(t)
-              case _ => (t: nodeType) => true
+              case LESS_THAN_OR_EQUAL => (t: nodeType) => left(t) match {
+                case l: Double => right(t) match {
+                  case r: Double => l <= r
+                  case r: Integer => l <= r
+                }
+                case l: Integer => right(t) match {
+                  case r: Double => l <= r
+                  case r: Integer => l <= r
+                }
+              }
             }
         }
     }
