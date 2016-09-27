@@ -21,10 +21,14 @@ class MentalGraphChangedListener(
   def elementToNode(element: Element, nick: String): nodeType =
     Map[Any,Any](nick -> element.id) ++
       element.keys.map(k => k -> element.value(k))
+  def prefixedVertexToNode(element: Vertex, nick: String): nodeType =
+    element.keys.map(k => s"${nick}_$k" -> element.value(k)).toMap
 
   def edgeToNodeType(edge: Edge, transformer: EdgeTransformer): nodeType =
     elementToNode(edge, transformer.nick) +
-      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id)
+      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id) ++
+      prefixedVertexToNode(edge.outVertex, transformer.source) ++
+      prefixedVertexToNode(edge.inVertex, transformer.target)
 
   override def vertexAdded(vertex: Vertex): Unit = {
     for (nickSet <- vertexConverters.get(vertex.label);

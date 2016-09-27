@@ -16,7 +16,7 @@ object ExpressionParser {
             exp.getOperator match {
               case EQUAL_TO => (t: nodeType) => left(t) == right(t)
               case NOT_EQUAL_TO => (t: nodeType) => left(t) != right(t)
-                // TODO: hard part ;)
+              case _ => (t: nodeType) => true
             }
         }
     }
@@ -25,6 +25,7 @@ object ExpressionParser {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
+    case cmp: AttributeVariable => tuple(cmp.getElement.getName + "_" + cmp.getName)
     case cmp: Variable => tuple(cmp.getName)
   }
 

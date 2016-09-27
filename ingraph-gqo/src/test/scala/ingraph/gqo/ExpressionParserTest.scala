@@ -20,8 +20,8 @@ class ExpressionParserTest extends FlatSpec {
     exp.setRightOperand(right)
 
     exp.setOperator(ArithmeticComparisonOperator.EQUAL_TO)
-
-    assert(ExpressionParser.parse(exp)(Map("test" -> "emfsucks")))
-    assert(!ExpressionParser.parse(exp)(Map("test" -> "emfsucks")))
+    val func = ExpressionParser.parse(exp)
+    assert(func(Map("test" -> "emfsucks")))
+    assert(!func(Map("test" -> "emfrocks")))
   }
 }
