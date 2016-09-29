@@ -1,6 +1,6 @@
 # ingraph
 
-[![Build Status](https://travis-ci.com/bme-db-lab/ingraph.svg?token=dduaCwDzExdmU27AvBiK&branch=master)](https://travis-ci.com/bme-db-lab/ingraph)
+[![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
 ## Contributor's Guide
 
