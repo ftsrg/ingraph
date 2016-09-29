@@ -1,14 +1,15 @@
-# Scala implementation of the Rete algorithm
+# ire: an Incremental Relational Engine
 
-[![Build Status](https://travis-ci.com/wafle/gqo.svg?token=zJXFEucjUmoe79eTxUYj&branch=master)](https://travis-ci.com/wafle/gqo)
+[![Build Status](https://travis-ci.org/FTSRG/ire.svg)](https://travis-ci.org/FTSRG/ire)
 
-The Rete algorithm is a way of doing incremental pattern matching. The point of it being incremental, is
-that small changes to the model don't require full reevaluation, and hence can be done very quickly.
+## Contributor's Guide
 
-This repository contains the implementation of a  truly scalable distributed Rete network, that is able to split the memory requirement of the Rete nodes amongst multiple machines, by sharding them.
+To build the project, issue the following command:
 
-## Prerequisites
+```bash
+gradle clean build
+```
 
-The build requires SBT.
+## License
 
-* [Installing sbt on Linux](http://www.scala-sbt.org/0.13/docs/Installing-sbt-on-Linux.html)
+All code in this repository is available under the [Eclipse Public License v1.0](http://www.eclipse.org/legal/epl-v10.html). The project was supported by the MONDO EU FP7 (EU ICT-611125) project and is currently developed by the MTA-BME Lendület Research Group on Cyber-Physical Systems.
