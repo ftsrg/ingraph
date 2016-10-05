@@ -1,6 +1,6 @@
 import java.io.StringReader
 
-import hu.bme.mit.incqueryds.{RDFReader, utils}
+import hu.bme.mit.ire.{RDFReader, utils}
 import org.scalatest.FlatSpec
 
 

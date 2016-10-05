@@ -1,4 +1,4 @@
-package hu.bme.mit.incqueryds
+package hu.bme.mit.ire
 
 /**
   * Created by wafle on 12/25/2015.

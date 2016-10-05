@@ -1,7 +1,7 @@
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.incqueryds._
+import hu.bme.mit.ire._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 

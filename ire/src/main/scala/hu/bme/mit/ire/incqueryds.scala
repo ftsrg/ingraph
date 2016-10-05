@@ -1,5 +1,5 @@
 package hu.bme.mit
-package object incqueryds {
+package object ire {
   type nodeType = Map[Any,Any]
 
 }

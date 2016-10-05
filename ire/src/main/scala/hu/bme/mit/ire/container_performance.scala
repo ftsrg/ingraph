@@ -1,4 +1,4 @@
-package hu.bme.mit.incqueryds {
+package hu.bme.mit.ire {
 import scala.util.Random
 /**
  * Created by janosmaginecz on 12/03/15.

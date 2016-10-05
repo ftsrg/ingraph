@@ -1,4 +1,4 @@
-package hu.bme.mit.incqueryds
+package hu.bme.mit.ire
 
 import akka.actor.ActorRef
 
