@@ -21,7 +21,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "check the condition properly" in {
       val changeSet = ChangeSet(Vector(Map(0 -> 0, 1 -> "something"), Map(0 -> 0, 1 -> "something else")))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val condition = (n: nodeType) => {
+      val condition = (n: TupleType) => {
         n(1) == "something"
       }
       val checker = system.actorOf(Props(new Checker(echoActor ! _, condition)))

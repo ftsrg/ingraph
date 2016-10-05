@@ -13,10 +13,10 @@ import scala.concurrent.{Future, Promise}
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage with Serializable {
   var lastMessageID = -1
 
-  def send(): Future[Set[nodeType]] = {
-    val messageID = Terminator.idCounter.getNext()
+  def send(): Future[Set[TupleType]] = {
+    val messageID = Terminator.idCounter.getNext
     lastMessageID = messageID
-    val promise = Promise[Set[nodeType]]
+    val promise = Promise[Set[TupleType]]
     production ! ExpectTerminator(terminatorID, messageID, promise)
     val future = promise.future
     inputs.foreach(input => {
@@ -26,8 +26,8 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
     future
   }
 
-  def resend(): Future[Set[nodeType]] = {
-    val promise = Promise[Set[nodeType]]
+  def resend(): Future[Set[TupleType]] = {
+    val promise = Promise[Set[TupleType]]
     production ! ExpectTerminator(terminatorID, lastMessageID, promise)
     val future = promise.future
     inputs.foreach(input => {
@@ -47,7 +47,7 @@ object Terminator {
   val idCounter = new AtomicUniqueCounter
 
   def apply(inputs: Iterable[ReteMessage => Unit], productionNode: ActorRef): Terminator = {
-    val id = idCounter.getNext()
+    val id = idCounter.getNext
     productionNode ! ExpectMoreTerminators(id, inputs)
     new Terminator(id, inputs, productionNode)
   }

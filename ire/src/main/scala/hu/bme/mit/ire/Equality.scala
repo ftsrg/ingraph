@@ -6,7 +6,7 @@ package hu.bme.mit.ire
 class Equality(override val next: (ReteMessage) => Unit,
                val nodeIndex: Int, val equals: Vector[Int],
                override val expectedTerminatorCount:Int = 1) extends
-Checker(next, condition = (node: nodeType) => {
+Checker(next, condition = (node: TupleType) => {
   equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
 }
 )  with SingleForwarder

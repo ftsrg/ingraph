@@ -23,9 +23,7 @@ object utils {
      values.toSeq
   }
   object conversions {
-    implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = {
-      return base ! _
-    }
+    implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = base ! _
 
     implicit class ReteNode(base: ActorRef) extends Serializable {
       def primary(reteMessage: ReteMessage) = {
@@ -43,7 +41,7 @@ object utils {
 class AtomicUniqueCounter {
   private val counter: AtomicInteger = new AtomicInteger(0)
 
-  def getNext() = counter.getAndIncrement()
+  def getNext = counter.getAndIncrement()
 }
 
 trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B]{

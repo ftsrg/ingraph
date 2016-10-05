@@ -1,5 +1,4 @@
 package hu.bme.mit
 package object ire {
-  type nodeType = Map[Any,Any]
-
+  type TupleType = Map[Any,Any]
 }

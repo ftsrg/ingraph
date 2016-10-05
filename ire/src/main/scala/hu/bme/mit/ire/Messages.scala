@@ -9,14 +9,14 @@ import scala.concurrent.Promise
   */
 class ReteMessage() {}
 
-case class ChangeSet(positive: Vector[nodeType] = Vector(), negative: Vector[nodeType] = Vector())
+case class ChangeSet(positive: Vector[TupleType] = Vector(), negative: Vector[TupleType] = Vector())
   extends ReteMessage()
 
 case class ExpectMoreTerminators(id: Int, inputs: Iterable[ReteMessage => Unit])
 
 case class TerminatorMessage(terminatorID: Int, messageID: Int, route: List[ActorRef] = List.empty) extends ReteMessage()
 
-case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[Set[nodeType]]) extends ReteMessage()
+case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[Set[TupleType]]) extends ReteMessage()
 
 case class Pause(messageID: Int) extends ReteMessage()
 

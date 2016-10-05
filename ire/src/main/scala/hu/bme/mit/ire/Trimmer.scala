@@ -5,8 +5,8 @@ package hu.bme.mit.ire
   */
 class ParallelTrimmer(override val children: Vector[(ReteMessage) => Unit],
                       override val selectionVector: Vector[Any],
-                      hashFunction: (nodeType) => Int = n => n.hashCode()) extends TrimmerImpl(selectionVector) with ForkingForwarder {
-  override def forwardHashFunction(n: nodeType): Int = hashFunction(n)
+                      hashFunction: (TupleType) => Int = n => n.hashCode()) extends TrimmerImpl(selectionVector) with ForkingForwarder {
+  override def forwardHashFunction(n: TupleType): Int = hashFunction(n)
 }
 class Trimmer(override val next: (ReteMessage) => Unit,
               override val selectionVector: Vector[Any])

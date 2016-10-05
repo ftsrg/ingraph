@@ -101,7 +101,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val joinerB = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelHashJoiner(forward, primarySel, secondarySel,
-        hashFunction = (n: nodeType) => n(0).hashCode())))
+        hashFunction = (n: TupleType) => n(0).hashCode())))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 2 -> 2))))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 2 -> 3))))
 

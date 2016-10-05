@@ -18,9 +18,9 @@ class NaturalJoiner(override val next: (ReteMessage) => Unit, val selector: Vect
 class ParallelHashJoiner(override val children: Vector[(ReteMessage) => Unit],
                          override val primarySelector: Vector[Any],
                          override val secondarySelector: Vector[Any],
-                         hashFunction: (nodeType) => Int = n => n.hashCode()
+                         hashFunction: (TupleType) => Int = n => n.hashCode()
                         ) extends HashJoinerImpl(primarySelector, secondarySelector) with ForkingForwarder {
-  override def forwardHashFunction(n: nodeType): Int = hashFunction(n)
+  override def forwardHashFunction(n: TupleType): Int = hashFunction(n)
 
   override def forward(cs: ChangeSet) = super[ForkingForwarder].forward(cs)
   override def forward(t: TerminatorMessage) = super[ForkingForwarder].forward(t)
@@ -29,8 +29,10 @@ class ParallelHashJoiner(override val children: Vector[(ReteMessage) => Unit],
 abstract class HashJoinerImpl(val primarySelector: Vector[Any],
                               val secondarySelector: Vector[Any])
   extends BetaNode {
-  val primaryValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with MultiMap[Vector[Any], nodeType]
-  val secondaryValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with mutable.MultiMap[Vector[Any], nodeType]
+  val primaryValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
+    with mutable.MultiMap[Vector[Any], TupleType]
+  val secondaryValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
+    with mutable.MultiMap[Vector[Any], TupleType]
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive

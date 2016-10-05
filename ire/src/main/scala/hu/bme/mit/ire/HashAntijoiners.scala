@@ -7,8 +7,10 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
   val primarySelector: Vector[Any]
   val secondarySelector: Vector[Any]
 
-  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with MultiMap[Vector[Any], nodeType]
-  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[nodeType]] with MultiMap[Vector[Any], nodeType]
+  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
+    with mutable.MultiMap[Vector[Any], TupleType]
+  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
+    with mutable.MultiMap[Vector[Any], TupleType]
 
   def onForwardingSide(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive

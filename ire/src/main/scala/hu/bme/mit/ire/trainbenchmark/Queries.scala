@@ -24,7 +24,7 @@ abstract class TrainbenchmarkQuery {
   val terminator: Terminator
   val actors = new collection.mutable.MutableList[ActorRef]()
   lazy val log = system.log
-  def getResults(): Set[nodeType] = {
+  def getResults(): Set[TupleType] = {
     log.info("termination started")
     val res = Await.result(terminator.send(), timeout)
     log.info("termination finished")
