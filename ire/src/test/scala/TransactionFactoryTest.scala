@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.incqueryds.{ChangeSet, TransactionFactory}
+import hu.bme.mit.ire.{ChangeSet, TransactionFactory}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 /**

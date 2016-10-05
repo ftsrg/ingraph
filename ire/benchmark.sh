@@ -9,6 +9,6 @@ do
   then
     git checkout $commit
     gradle clean jmhJar
-    java -jar build/libs/gqo-jmh.jar -gc true -rf csv -rff benchmarkresults/`git rev-parse HEAD`.csv
+    java -jar build/libs/ire-jmh.jar -gc true -rf csv -rff benchmarkresults/`git rev-parse HEAD`.csv
   fi
 done

@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import hu.bme.mit.incqueryds._
+import hu.bme.mit.ire._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class HashAntijoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender

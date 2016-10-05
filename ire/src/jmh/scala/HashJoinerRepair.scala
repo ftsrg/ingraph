@@ -2,8 +2,8 @@ package x
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import hu.bme.mit.incqueryds._
-import hu.bme.mit.incqueryds.utils.conversions._
+import hu.bme.mit.ire._
+import hu.bme.mit.ire.utils.conversions._
 import org.openjdk.jmh.annotations._
 
 import scala.concurrent.Await

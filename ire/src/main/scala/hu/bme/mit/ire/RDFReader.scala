@@ -1,4 +1,4 @@
-package hu.bme.mit.incqueryds
+package hu.bme.mit.ire
 
 /**
  * Created by Maginecz on 3/4/2015.
