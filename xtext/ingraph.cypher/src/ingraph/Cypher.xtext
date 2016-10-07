@@ -19,40 +19,114 @@ MatchClause:
 	('MATCH' patterns+=Pattern)+
 	('WHERE' condition=Expression)?;
 
-Expression: Expression12;
+Expression: OrExpression;
 
-Expression12 : leftExpression=Expression11 ( 'OR' rightExpression+=Expression11 )* ;
+/**
+ * expression12 : expression11 ( sp OR sp expression11 )* ;
+ */
+OrExpression returns Expression : 
+	XorExpression ( {OrExpression .leftExpression=current} 'OR'  rightExpression+=XorExpression )?
+;
 
-Expression11 : leftExpression=Expression10 ( 'XOR' rightExpression+=Expression10 )* ;
+/**
+ * expression11 : expression10 ( sp XOR sp expression10 )* ;
+ */
+XorExpression returns Expression : 
+	AndExpression ( {XorExpression.leftExpression=current} 'XOR' rightExpression+=AndExpression )?
+;
 
-Expression10 : leftExpression=Expression9 ( 'AND' rightExpression+=Expression9 )* ;
+/**
+ * expression10 : expression9 ( sp AND sp expression9 )* ;
+ */
+AndExpression returns Expression:
+	NotExpression ( {AndExpression.leftExpression=current} 'AND' rightExpression+=NotExpression )?
+;
 
-Expression9 : ( 'NOT' )* Expression8 ;
+/**
+ * expression9 : ( sp NOT sp )* expression8 ;
+ */
+NotExpression returns Expression: 
+	'NOT' ArithmeticComparisonExpression
+;
 
-Expression8 : leftExpression=Expression7 ( comparison+=PartialComparisonExpression )* ;
+/**
+ * expression8 : expression7 ( ws partialComparisonExpression )* ;
+ */ 
+ArithmeticComparisonExpression returns Expression: 
+	AdditionLikeExpression ( 
+		{ArithmeticComparisonExpression.leftExpression=current} (operatorType=BinaryComparisonOperator) rightExpression+=AdditionLikeExpression
+	)?
+;
 
-Expression7 : leftExpression=Expression6 ( ( '+' rightExpression+=Expression6 ) | ( '-' rightExpression+=Expression6 ) )* ;
+enum BinaryComparisonOperator: 
+	equals='=' |
+	notEqualsDiamond='<>' | 
+	notEquals='!=' |
+	lessThan='<' |
+	greaterThan='>' | 
+	lessThanOrEquals='<=' |
+	greaterThanOrEquals='>='
+;
 
-Expression6 : leftExpression=Expression5 ( ( '*' rightExpression+=Expression5 ) | ( '/' rightExpression+=Expression5 ) | ( '%' rightExpression+=Expression5 ) )* ;
+/**
+ * expression7 : expression6 ( ( ws '+' ws expression6 ) | ( ws '-' ws expression6 ) )* ;
+ */
+AdditionLikeExpression returns Expression: 
+	MultiplicationLikeExpression ( 
+		{PlusMinusExpression.leftExpression=current} operator=AdditionLikeOperator rightExpression+=MultiplicationLikeExpression
+	)?
+;
 
-Expression5 : leftExpression=Expression4 ( '^' rightExpression+=Expression4 )* ;
+enum AdditionLikeOperator:
+	addition="+" |
+	subtraction="-"
+;
 
-Expression4 : ( ( '+' | '-' ) )* expression=Expression3;
+/**
+ * expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
+ */
+MultiplicationLikeExpression returns Expression: 
+	PowerExpression ( 
+		{MultiplicationLikeExpression.leftExpression=current} operator=MultiplicationLikeOperator rightExpression+=PowerExpression
+	)?
+;
 
-Expression3 : Expression2;
+enum MultiplicationLikeOperator:
+	multiplication="*" |
+	division="/" |
+	modulo="%"
+;
 
-Expression2 : Atom ( propertyLookups+=PropertyLookup | nodeLabels+=NodeLabels )* ;
+/**
+ * expression5 : expression4 ( ws '^' ws expression4 )* ;
+ */
+PowerExpression returns Expression: 
+	UnaryExpression ( {PowerExpression.leftExpression=current} '^' rightExpression+=UnaryExpression )?
+;
+
+/**
+ * expression4 : ( ( '+' | '-' ) ws )* expression3 ;
+ */
+UnaryExpression returns Expression: 
+	{UnaryPlusExpression}=>'+' expression=Expression3 |
+	{UnaryMinusExpression}=>'-' expression=Expression3
+;
+
+/**
+ * Not supported.
+ * expression3 : expression2 ( ( ws '[' expression ']' ) | ( ws '[' expression? '..' expression? ']' ) | ( ( ( ws '=~' ) | ( sp IN ) | ( sp STARTS sp WITH ) | ( sp ENDS sp WITH ) | ( sp CONTAINS ) ) ws expression2 ) | ( sp IS sp NULL ) | ( sp IS sp NOT sp NULL ) )* ;
+ */
+Expression3 : PropertyLookupExpression;
+
+/**
+ * expression2 : atom ( propertyLookup | nodeLabels )* ;
+ */
+PropertyLookupExpression : Atom ( propertyLookups+=PropertyLookup | nodeLabels+=NodeLabels )* ;
 
 PropertyLookup:
 	variable=Variable '.' property=Variable;
 	
 NodeLabels:	labels+=Label+;
-
-PartialComparisonExpression:
-	BINARY_ARITHMETIC_COMPARISON_OPERATOR expression=Expression7;
-
-BINARY_ARITHMETIC_COMPARISON_OPERATOR:
-	'=' | '<>' | '!=' | '<' | '>' | '<=' | '>=';
 
 Atom:
 	{Atom} (number=NumberLiteral | string=StringLiteral | "NULL" | '(' expression=Expression ')');
@@ -69,7 +143,8 @@ DoubleLiteral returns ecore::EFloat:
 StringLiteral returns ecore::EString:
 	STRING;
 
-/* Patterns */
+// Patterns
+
 Pattern:
 	parts+=PatternPart (',' parts+=PatternPart)*;
 
@@ -100,10 +175,19 @@ RelationshipDetail:
 
 /* Return */
 ReturnClause:
-	{ReturnClause} 'RETURN' distinct?='DISTINCT'? variables+=Variable+ order=Order? skip=Skip? limit=Limit?;
+	{ReturnClause} 'RETURN' distinct?='DISTINCT'? 
+	variables+=Variable 
+	orderBy=OrderBy?
+	skip=Skip? 
+	limit=Limit?;
 
-Order:
-	'ORDER' 'BY' variables+=Variable+ (asc?=('ASC' | 'ASCENDING') | desc?=('DESC' | 'DESCENDING'));
+OrderBy:
+	'ORDER' 'BY' conditions+=OrderByCondition (',' conditions+=OrderByCondition)*;
+
+OrderByCondition:
+	expression=PropertyLookupExpression
+	(('ASC' | 'ASCENDING') | desc?=('DESC' | 'DESCENDING'))
+;
 
 Skip:
 	'SKIP' amount=INT;
@@ -113,9 +197,12 @@ Limit:
 
 /* Common rules */
 Variable:
-	name=ID;
+	SymbolicName;
 
 Label:
+	SymbolicName;	
+
+SymbolicName:
 	name=ID;
 
 LEFT_ARROW_HEAD:
