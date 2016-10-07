@@ -116,32 +116,63 @@ UnaryExpression returns Expression:
  * Not supported.
  * expression3 : expression2 ( ( ws '[' expression ']' ) | ( ws '[' expression? '..' expression? ']' ) | ( ( ( ws '=~' ) | ( sp IN ) | ( sp STARTS sp WITH ) | ( sp ENDS sp WITH ) | ( sp CONTAINS ) ) ws expression2 ) | ( sp IS sp NULL ) | ( sp IS sp NOT sp NULL ) )* ;
  */
-Expression3 : PropertyLookupExpression;
+Expression3 : 
+	PropertyLookupExpression
+;
 
 /**
  * expression2 : atom ( propertyLookup | nodeLabels )* ;
  */
-PropertyLookupExpression : Atom ( propertyLookups+=PropertyLookup | nodeLabels+=NodeLabels )* ;
+PropertyLookupExpression : 
+	Atom 
+	( propertyLookups+=PropertyLookup ) //| nodeLabels+=NodeLabels )*
+;
 
 PropertyLookup:
-	variable=Variable '.' property=Variable;
-	
-NodeLabels:	labels+=Label+;
+	variable=Variable '.' property=PropertyKeyName
+;
 
-Atom:
-	{Atom} (number=NumberLiteral | string=StringLiteral | "NULL" | '(' expression=Expression ')');
+NodeLabels:	
+	labels+=Label+
+;
 
-NumberLiteral:
-	int=IntegerLiteral | double=DoubleLiteral;
+/** 
+ * atom : numberLiteral
+ *      | StringLiteral
+ *      | parameter
+ *      | TRUE
+ *      | FALSE
+ *      | NULL
+ *      | ( COUNT ws '(' ws '*' ws ')' )
+ *      | mapLiteral
+ *      | listComprehension
+ *      | ( '[' ws expression ws ( ',' ws expression ws )* ']' )
+ *      | ( FILTER ws '(' ws filterExpression ws ')' )
+ *      | ( EXTRACT ws '(' ws filterExpression ws ( ws '|' expression )? ')' )
+ *      | ( ALL ws '(' ws filterExpression ws ')' )
+ *      | ( ANY ws '(' ws filterExpression ws ')' )
+ *      | ( NONE ws '(' ws filterExpression ws ')' )
+ *      | ( SINGLE ws '(' ws filterExpression ws ')' )
+ *      | relationshipsPattern
+ *      | parenthesizedExpression
+ *      | functionInvocation
+ *      | variable
+ *      ;
+ */
+Atom returns Expression:
+	({NumberLiteral} value=INT | {StringLiteral} value=STRING | {NullExpression} "NULL" | '(' Expression ')');
 
-IntegerLiteral returns ecore::EInt:
-	INT;
-
-DoubleLiteral returns ecore::EFloat:
-	INT '.' INT;
-
-StringLiteral returns ecore::EString:
-	STRING;
+//NumberLiteral:
+//	int=IntegerLiteral | double=DoubleLiteral;
+//
+//IntegerLiteral returns ecore::EInt:
+//	INT;
+//
+//DoubleLiteral returns ecore::EFloat:
+//	INT '.' INT;
+//
+//StringLiteral returns ecore::EString:
+//	STRING;
 
 // Patterns
 
@@ -202,8 +233,12 @@ Variable:
 Label:
 	SymbolicName;	
 
+PropertyKeyName:
+	SymbolicName;
+
 SymbolicName:
 	name=ID;
+
 
 LEFT_ARROW_HEAD:
 	'<' | '⟨' | '〈' | '﹤' | '＜';
