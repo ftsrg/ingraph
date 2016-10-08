@@ -2,48 +2,49 @@ import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.trainbenchmark._
 import org.scalatest.FlatSpec
-import org.scalatest.concurrent.Timeouts
-import org.scalatest.time.SpanSugar._
+import org.scalatest.concurrent.TimeLimits
 
 /**
  * Created by wafle on 12/09/15.
  */
-class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
+class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
   class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
     val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs:ChangeSet) => forwarder ! (cs))
+      "testval" -> ((cs:ChangeSet) => forwarder ! cs)
     )
     override val terminator: Terminator = Terminator( Vector(forwarder ! _), production)
   }
 
   class TestQuery2 extends TrainbenchmarkQuery {
-    override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
+    override val production: ActorRef = system.actorOf(Props(new Production("TestQuery", 2)))
     val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
     val forwarder2 = system.actorOf(Props(new Checker(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs:ChangeSet) => forwarder ! (cs)),
-      "testval2" -> ((cs:ChangeSet) => forwarder2 ! (cs))
+      "testval" -> ((cs:ChangeSet) => forwarder ! cs),
+      "testval2" -> ((cs:ChangeSet) => forwarder2 ! cs)
     )
     override val terminator: Terminator = Terminator( Vector(forwarder ! _, forwarder2 ! _), production)
   }
 
   "multiple queries" should "work" in {
-    val input = new TransactionFactory(10)
-    val query = new TestQuery1
-    val query2 = new TestQuery2
-    input.subscribe(query.inputLookup)
-    input.subscribe(query2.inputLookup)
-    val tran0 = input.newBatchTransaction()
-    tran0.add("testval", Map(0 -> 5, 1 -> 5))
-    tran0.add("testval", Map(0 -> 5, 1 -> 6))
-    tran0.add("testval2", Map(0 -> 5, 1 -> 7))
-    tran0.close()
-    val res1 = query.getResults()
-    assert(res1 == Set(Map(0 -> 5, 1 -> 5), Map(0 -> 5, 1 -> 6)))
-    val res2 = query2.getResults()
-    assert(res2 == Set(Map(0 -> 5, 1 -> 5), Map(0 -> 5, 1 -> 6), Map(0 -> 5, 1 -> 7)))
+    for (i <- 1 to 1000) {
+      val input = new TransactionFactory(10)
+      val query = new TestQuery1
+      val query2 = new TestQuery2
+      input.subscribe(query.inputLookup)
+      input.subscribe(query2.inputLookup)
+      val tran0 = input.newBatchTransaction()
+      tran0.add("testval", Map(0 -> 5, 1 -> 5))
+      tran0.add("testval", Map(0 -> 5, 1 -> 6))
+      tran0.add("testval2", Map(0 -> 5, 1 -> 7))
+      tran0.close()
+      val res1 = query.getResults()
+      assert(res1 == Set(Map(0 -> 5, 1 -> 5), Map(0 -> 5, 1 -> 6)))
+      val res2 = query2.getResults()
+      assert(res2 == Set(Map(0 -> 5, 1 -> 5), Map(0 -> 5, 1 -> 6), Map(0 -> 5, 1 -> 7)))
+    }
   }
 
   "integartion" should "work" in {
@@ -66,7 +67,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with Timeouts{
     val res1 = query.getResults()
     assert(res1 == Set(Map(0 -> 5, 1 -> 7), Map(0 -> 5, 1 -> 8)))
     val beginTime : Long = System.nanoTime()
-    (1 to 500).foreach( i => {
+    (1 to 5000).foreach( i => {
       val tranRemove7 = input.newBatchTransaction()
       tranRemove7.remove("testval", Map(0 -> 5, 1 -> 7))
       tranRemove7.close()
