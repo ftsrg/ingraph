@@ -20,7 +20,7 @@ apply plugin: "me.champeau.gradle.jmh"
 apply plugin: 'maven-publish'
 
 group = "hu.bme.mit"
-version = "1.0"
+version = "0.1.0"
 
 repositories {
     jcenter()
