@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
   id "com.github.maiflai.scalatest" version "0.14"
+  id "com.jfrog.bintray" version "1.7"
 }
 
 apply plugin: "scala"
@@ -47,4 +48,22 @@ publishing {
       from components.java
     }
   }
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  pkg {
+    repo = 'maven'
+    name = 'ire'
+    userOrg = 'ftsrg'
+    licenses = ['EPL-1.0']
+    vcsUrl = 'https://github.com/FTSRG/ire.git'
+    version {
+      name = '0.1.0'
+      desc = 'Initial version'
+      released = new Date()
+    }
+  }
+  publications = ['mavenJava']
 }
