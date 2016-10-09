@@ -10,6 +10,3 @@ notifications:
   email: false
   on_success: change
   on_failure: always
-branches:
-  except:
-  - gh-pages
