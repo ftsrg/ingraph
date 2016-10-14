@@ -13,7 +13,6 @@
 /out
 /SDK/*SDK
 /target
-/*.bat
 *.class
 out
 build
