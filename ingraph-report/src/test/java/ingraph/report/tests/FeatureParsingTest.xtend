@@ -35,35 +35,36 @@ class FeatureParsingTest {
 
 		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
 		Collections.sort(files)
-	
+
 		val doc = '''
 			\chapter{TCK Acceptance Tests}
-			
+			\label{chp:acceptance-tests}
+
 			«FOR feature : files.map[processFile(resourceSet)]»
 				\section{«feature.name.escape»}
-				
-				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»					
+
+				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
 					\subsection{«scenario.name.escape»}
-					
+
 					\subsubsection*{Query specification}
-					
+
 					\begin{lstlisting}
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					\end{lstlisting}
-					
+
 					\subsubsection*{Relational algebra expression}
-					
+
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression»
-					
+
 					\subsubsection*{Relational algebra tree}
-					
+
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualize»
-					
+
 					\subsubsection*{Relational algebra tree for incremental queries}
-					
+
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualizeWithTransformations»
-					
-				«ENDFOR»	
+
+				«ENDFOR»
 			«ENDFOR»
 			'''
 
@@ -97,7 +98,7 @@ class FeatureParsingTest {
 		.replaceAll('''"""''', "") // """
 		.replaceAll("'''", "") // '''
 		.replaceAll("\n      ", "\n") // indentation
-		.replaceAll("^\n", "") // newline at the start 
+		.replaceAll("^\n", "") // newline at the start
 		.replaceAll("\n$", "") // newline at the end
 	}
 
@@ -115,7 +116,7 @@ class FeatureParsingTest {
 			'''Cannot convert to expression.'''
 		}
 	}
-	
+
 	def visualize(String s) {
 		try {
 			val container = RelalgParser.parse(s)
@@ -124,7 +125,7 @@ class FeatureParsingTest {
 			'''Cannot visualize tree.'''
 		}
 	}
-	
+
 	def visualizeWithTransformations(String s) {
 		try {
 			val container = RelalgParser.parse(s)
