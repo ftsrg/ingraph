@@ -28,10 +28,10 @@
 	breaklines=true,	
 	frameround=tttt,
 	captionpos=b,
+	tabsize=2,
 	frame=tb,
 	framerule=0pt,
 	framexleftmargin=0.25em,
-	tabsize=4,
 }
 
 \lstdefinelanguage{cypher}
@@ -41,7 +41,7 @@
 		% some legacy rules
 		INDEX, DROP, UNIQUE, CONSTRAINT, EXPLAIN, PROFILE, START, CASE,
 		% some SQL-only keywords
-		GROUP,
+		GROUP, HAVING,
 	},
 	sensitive=true,
 	morecomment=[l]{//},
@@ -49,4 +49,27 @@
 	morestring=[b]{"},
 }
 
-\lstset{language=Cypher}
+\newcommand{\listingcypher}[2]{
+	\lstset{
+		language=Cypher
+	}
+	\lstinputlisting[label=lst:#1, caption=#2.]{queries/#1.cyp}
+}
+
+\definecolor{relationship}{RGB}{171,0,85}
+\lstset{
+	basicstyle=\small\ttfamily,
+	tabsize=4,
+	morekeywords={Class, encapsulates, Feature},
+%	literate=*
+%	{[:gathers]}{\textcolor{relationship}{[:gathers]}}{1}
+}
+
+
+\lstset{language=Cypher,
+	literate=*
+	{<v>}{\guillemotleft{}}{1}
+	{</v>}{\guillemotright{}}{1},
+%	{<v>}{\guilsinglleft{}}{1}
+%	{</v>}{\guilsinglright{}}{1},
+}

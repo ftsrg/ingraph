@@ -1,0 +1,17 @@
+\section{Related Work}
+\label{sec:related-work}
+
+The TinkerPop framework~\cite{TinkerPop} aims to provide a standard data model for property graphs, along with Gremlin, a high-level graph-traversal language~\cite{Rodriguez:2015:GGT:2815072.2815073} and the Gremlin Structure API, a low-level programming interface.
+
+Besides property graphs, graph queries can be formalized on different graph-like data models and even relational databases.
+
+\paragraph{EMF.} The Eclipse Modeling Framework (EMF) is an object-oriented modelling framework widely used in model-driven engineering. 
+Henshin~\cite{DBLP:conf/models/ArendtBJKT10} provides a visual language for defining patterns, while Epsilon~\cite{DBLP:conf/icmt/KolovosPP08} and \viatraquery~\cite{DBLP:conf/models/BergmannHRVBBO10} provide high-level declarative (textual) query languages, Epsilon Pattern Language and \vql.
+
+\paragraph{RDF.} The Resource Description Framework (RDF)~\cite{RDF} aims to describe entities of the semantic web. RDF assumes sparse, ever-growing and incomplete data stored as triples that can be queried using the \sparql~\cite{SPARQL} graph pattern language.
+%A formal definition of the \sparql language is given in~\cite{DBLP:journals/tods/PerezAG09}.
+
+\lstset{language=}
+
+\paragraph{SQL.} In general, relational databases offer limited support for graph queries: recursive queries are supported by \mbox{PostgreSQL} using the \lstinline+WITH RECURSIVE+ keyword and by the Oracle Database using the \lstinline+CONNECT BY+ keyword. Graph queries are supported in \saphana Graph
+Scale-Out Extension prototype~\cite{DBLP:conf/btw/RudolfPBL13}, through a SQL-based language~\cite{DBLP:conf/gg/KrauseJDSKN16}.
