@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
+## User's Guide
+
+See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
+
 ## Contributor's Guide
 
 ### Eclipse
