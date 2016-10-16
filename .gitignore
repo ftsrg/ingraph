@@ -38,3 +38,5 @@ xtend-gen
 xtext-gen
 generated/
 
+out/
+
