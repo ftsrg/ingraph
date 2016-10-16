@@ -12,7 +12,7 @@ script:
   - sudo apt-get update
   - sudo apt-get install -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
   - ./gradlew assemble
-  - ./gradlew check --continue
+  - ./gradlew check --continue || true
   - cd opencypher-report
   - make
   - cd ..
