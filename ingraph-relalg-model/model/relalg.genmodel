@@ -73,19 +73,13 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//ExpandOperator/sourceVertexVariable"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//ExpandOperator/targetVertexVariable"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//GetVerticesOperator">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetVerticesOperator/vertexVariable"/>
-    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//GetVerticesOperator"/>
     <genClasses ecoreClass="relalg.ecore#//DuplicateEliminationOperator"/>
     <genClasses image="false" ecoreClass="relalg.ecore#//Variable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//Variable/dontCare"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//VertexVariable">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//VertexVariable/vertexLabel"/>
-    </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//EdgeVariable">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//EdgeVariable/edgeLabel"/>
-    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//VertexVariable"/>
+    <genClasses ecoreClass="relalg.ecore#//EdgeVariable"/>
     <genClasses image="false" ecoreClass="relalg.ecore#//Label"/>
     <genClasses ecoreClass="relalg.ecore#//VertexLabel"/>
     <genClasses ecoreClass="relalg.ecore#//EdgeLabel"/>
@@ -140,11 +134,7 @@
     <genClasses ecoreClass="relalg.ecore#//IntegerLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute relalg.ecore#//IntegerLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="relalg.ecore#//GetEdgesOperator">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetEdgesOperator/sourceVertexVariable"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetEdgesOperator/targetVertexVariable"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference relalg.ecore#//GetEdgesOperator/edgeVariable"/>
-    </genClasses>
+    <genClasses ecoreClass="relalg.ecore#//GetEdgesOperator"/>
     <genClasses ecoreClass="relalg.ecore#//Comparable"/>
     <genClasses ecoreClass="relalg.ecore#//Atom"/>
     <genClasses image="false" ecoreClass="relalg.ecore#//ElementVariable">

@@ -3,10 +3,10 @@
     modelDirectory="ingraph-relalg-xcore/src/main/java-gen",
     complianceLevel="8.0"
 )
-package sample.model
+package relalg
 
 class RelationalAlgebraContainer {
-	refers Operator rootExpression
+	contains Operator rootExpression
 }
 
 abstract class NamedElement {
@@ -17,12 +17,22 @@ abstract class Label extends NamedElement {}
 class VertexLabel extends Label {}
 class EdgeLabel extends Label {}
 
+/* Variables */
 abstract class Variable extends NamedElement, ReturnableElement {
 	boolean dontCare = "false"
 }
-class ElementVariable extends Variable {}
-class VertexVariable extends ElementVariable {}
-class EdgeVariable extends ElementVariable {}
+class ElementVariable extends Variable {
+	refers AttributeVariable[] attributes opposite element
+}
+class VertexVariable extends ElementVariable {
+	refers VertexLabel vertexLabel
+}
+class EdgeVariable extends ElementVariable {
+	refers EdgeLabel edgeLabel
+}
+class AttributeVariable extends Variable {
+	refers ElementVariable element opposite attributes
+}
 
 abstract class ReturnableElement {}
 
@@ -36,17 +46,21 @@ abstract class Operator {
 /* Nullary operators */
 
 class GetVerticesOperator extends Operator {
-	
+	refers VertexVariable vertexVariable
 }
 
+// (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
 class GetEdgesOperator extends Operator {
-	
+	refers VertexVariable sourceVertexVariable
+	refers EdgeVariable edgeVariable
+	refers VertexVariable targetVertexVariable
 }
 
 /* Alpha operators */
 
 abstract class AlphaOperator extends Operator {
-	refers Operator input
+	contains Operator input
+	refers Variable[] schema
 }
 
 class ProductionOperator extends AlphaOperator {}
@@ -55,28 +69,34 @@ class SelectionOperator extends AlphaOperator {
 	String conditionString 
 }
 
-class ProjectionOperator extends AlphaOperator {}
+class ProjectionOperator extends AlphaOperator {
+	refers Variable[] variables
+}
 
 class ExpandOperator extends AlphaOperator {
 	Direction direction
-	
+	refers VertexVariable sourceVertexVariable
+	refers EdgeVariable edgeVariable
+	refers VertexVariable targetVertexVariable
 }
 
 class DuplicateEliminationOperator extends AlphaOperator {
 	
 }
 
-class AllDifferentOperator extends AlphaOperator {}
+class AllDifferentOperator extends AlphaOperator {
+	refers EdgeVariable[] edgeVariables
+}
 
 /* Beta operators */
 
 abstract class BetaOperator extends Operator {
-	refers Operator leftInput
-	refers Operator rightInput
+	contains Operator leftInput
+	contains Operator rightInput
 }
 
 abstract class AbstractJoinOperator extends BetaOperator {
-	
+	refers Variable[] mutualVariables
 }
 
 class JoinOperator extends AbstractJoinOperator {}

@@ -26,8 +26,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated model -->
       <package
-            uri="sample.model"
-            class="sample.model.ModelPackage"
+            uri="relalg"
+            class="relalg.RelalgPackage"
             genModel="src/main/resources/model.xcore"/>
    </extension>
 
