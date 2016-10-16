@@ -2,7 +2,7 @@ DOCUMENT=opencypher-report
 
 all: clean
 	pdflatex $(DOCUMENT)
-	bibtex $(DOCUMENT)
+	bibtex $(DOCUMENT) || true
 	pdflatex $(DOCUMENT)
 	pdflatex $(DOCUMENT)
 
