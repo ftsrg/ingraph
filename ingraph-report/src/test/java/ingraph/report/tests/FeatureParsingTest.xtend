@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
 import ingraph.relalg2tex.RelalgExpressionSerializer
+import ingraph.report.feature.ThenStep
 
 class FeatureParsingTest {
 
@@ -41,9 +42,11 @@ class FeatureParsingTest {
 			\label{chp:acceptance-tests}
 
 			«FOR feature : files.map[processFile(resourceSet)]»
+			
 				\section{«feature.name.escape»}
 
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
+					«IF scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty»
 					\subsection{«scenario.name.escape»}
 
 					\subsubsection*{Query specification}
@@ -51,6 +54,9 @@ class FeatureParsingTest {
 					\begin{lstlisting}
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					\end{lstlisting}
+
+«««					\subsubsection*{Then step}
+«««					«scenario.steps.filter(typeof(ThenStep)).map[text].join»
 
 					\subsubsection*{Relational algebra expression}
 
@@ -63,7 +69,7 @@ class FeatureParsingTest {
 					\subsubsection*{Relational algebra tree for incremental queries}
 
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualizeWithTransformations»
-
+					«ENDIF»
 				«ENDFOR»
 			«ENDFOR»
 			'''

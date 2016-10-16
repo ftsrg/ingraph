@@ -71,23 +71,23 @@ Background:
 ;
 
 Step:
-	WhenStep | ThenStep | GivenStep | AndStep
-;
-
-WhenStep:
-	tags+=TAG* WHEN_TEXT desc=OptionalText
-;
-
-ThenStep:
-	tags+=TAG* THEN_TEXT desc=OptionalText (rows += ExampleRow)*
+	GivenStep | WhenStep | ThenStep | AndStep
 ;
 
 GivenStep:
-	tags+=TAG* GIVEN_TEXT desc=OptionalText
+	tags+=TAG* text=GIVEN_TEXT desc=OptionalText
+;
+
+WhenStep:
+	tags+=TAG* text=WHEN_TEXT desc=OptionalText
+;
+
+ThenStep:
+	tags+=TAG* text=THEN_TEXT desc=OptionalText (rows += ExampleRow)*
 ;
 
 AndStep:
-	AND_TEXT desc=OptionalText
+	text=AND_TEXT desc=OptionalText
 ;
 
 OptionalText returns ecore::EString:
