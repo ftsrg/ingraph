@@ -10,10 +10,14 @@ See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
 
 ### Eclipse
 
-1. Start with Eclipse Modeling.
-1. Install the **Xtend IDE** and the **Xtext SDK** from the Mars/Neon update site.
-1. Go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+1. It is recommended to start with the **Eclipse IDE for Java Developers** distribution.
+1. Install the following from your the update site of your Eclipse release (e.g. the Neon update site).
+    * **Xtend IDE**
+    * **Xtext SDK**
+    * **EMF - Eclipse Modeling Framework Xcore SDK**
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. This is required for the Modeling and VIATRA projects, as they require custom natures to work properly.
+
+If you do not have Buildship: go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
 #### How to update the EMF model
 
@@ -39,8 +43,6 @@ If you have compile errors in the imported Xtend projects, perform the following
 ### IntelliJ IDEA
 
 In IntelliJ, go to **File** | **Settings** | **Plug-ins**, search for `Xtend`, click **Search in repositories** and install the plug-in.
-
-Unfortunately, the EMF models are not yet supported by IntelliJ IDEA.
 
 ### Gradle
 
