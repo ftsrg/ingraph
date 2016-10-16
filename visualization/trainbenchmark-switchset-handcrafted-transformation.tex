@@ -11,8 +11,8 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
 	[. {$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route, swP, sw, currentPosition, position} \rangle$}
-		[. {$\selection{\var{sw.currentPosition} \neq \var{swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
-			[. {$\selection{\var{semaphore.signal} = \literal{'GO'}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+		[. {$\selection{\mathtt{sw.currentPosition != swP.position}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
+			[. {$\selection{\mathtt{semaphore.signal = 'GO'}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
 					[. {$\join \{\var{swP}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$}
 						[. {$\join \{\var{route}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP} \rangle$}

@@ -11,7 +11,7 @@
 \Tree
 [. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor, te1, te2} \rangle$}
 	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor, te1, te2} \rangle$}
-		[. {$\selection{route1 != route2}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2, \_e7} \rangle$}
+		[. {$\selection{\mathtt{route1 != route2}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2, \_e7} \rangle$}
 			[. {$\antijoin \{\var{semaphore}, \var{route2}\}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2, \_e7} \rangle$}
 				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2} \rangle$}
 					[. {$\expandin{sensor}{route2}{Route}{\_e6}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{semaphore, \_e1, route1, \_e2, sensor1, \_e3, te1, \_e4, te2, \_e5, sensor, \_e6, route2} \rangle$}

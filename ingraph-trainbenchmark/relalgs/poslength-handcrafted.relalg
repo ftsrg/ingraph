@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<relalg:RelationalAlgebraContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="relalg">
+<relalg:RelationalAlgebraContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
   <rootExpression xsi:type="relalg:ProductionOperator">
     <input xsi:type="relalg:DuplicateEliminationOperator">
       <input xsi:type="relalg:ProjectionOperator" variables="//@elements.1 //@elements.2">

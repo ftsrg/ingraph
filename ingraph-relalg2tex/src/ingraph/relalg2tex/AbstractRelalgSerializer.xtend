@@ -104,7 +104,7 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch operatorSymbol(
 		SelectionOperator op) {
-		'''\selection{«op.conditionString»}'''
+		'''\selection{\mathtt{«op.conditionString»}}'''
 		//'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
 	}
 
