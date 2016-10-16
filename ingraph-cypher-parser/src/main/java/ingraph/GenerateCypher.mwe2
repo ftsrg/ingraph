@@ -10,18 +10,15 @@ Workflow {
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
-				baseName = "ingraph.cypher"
+				baseName = "ingraph-cypher-parser"
 				rootPath = rootPath
 				runtimeTest = {
 					enabled = true
 				}
-				eclipsePlugin = {
-					enabled = true
-				}
-				eclipsePluginTest = {
-					enabled = true
-				}
-				createEclipseMetaData = true
+//				web = {
+//					enabled = true
+//				}
+				mavenLayout = true
 			}
 			code = {
 				encoding = "UTF-8"
@@ -31,13 +28,13 @@ Workflow {
 		language = StandardLanguage {
 			name = "ingraph.Cypher"
 			fileExtensions = "cyp,cypher"
+
 			serializer = {
 				generateStub = false
 			}
 			validator = {
-			// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+				// composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
 			}
-
 			parserGenerator = {
 				options = {
 					ignoreCase = true

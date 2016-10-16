@@ -1,0 +1,250 @@
+grammar ingraph.Cypher with org.eclipse.xtext.common.Terminals
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+generate cypher "http://www.Cypher.ingraph"
+
+CypherQuery:
+	(query=Query) (unions+=Union)*;
+
+Union:
+	{Union} 'UNION' all?='ALL'? query=Query;
+
+Query:
+	match=MatchClause
+	return=ReturnClause
+	';'?;
+
+/* MATCH */
+MatchClause:
+	('MATCH' patterns+=Pattern)+
+	('WHERE' condition=Expression)?;
+
+Expression: OrExpression;
+
+/**
+ * expression12 : expression11 ( sp OR sp expression11 )* ;
+ */
+OrExpression returns Expression : 
+	XorExpression ( {OrExpression .leftExpression=current} 'OR'  rightExpression+=XorExpression )?
+;
+
+/**
+ * expression11 : expression10 ( sp XOR sp expression10 )* ;
+ */
+XorExpression returns Expression : 
+	AndExpression ( {XorExpression.leftExpression=current} 'XOR' rightExpression+=AndExpression )?
+;
+
+/**
+ * expression10 : expression9 ( sp AND sp expression9 )* ;
+ */
+AndExpression returns Expression:
+	NotExpression ( {AndExpression.leftExpression=current} 'AND' rightExpression+=NotExpression )?
+;
+
+/**
+ * expression9 : ( sp NOT sp )* expression8 ;
+ */
+NotExpression returns Expression: 
+	'NOT' ArithmeticComparisonExpression
+;
+
+/**
+ * expression8 : expression7 ( ws partialComparisonExpression )* ;
+ */ 
+ArithmeticComparisonExpression returns Expression: 
+	AdditionLikeExpression ( 
+		{ArithmeticComparisonExpression.leftExpression=current} (operatorType=BinaryComparisonOperator) rightExpression+=AdditionLikeExpression
+	)?
+;
+
+enum BinaryComparisonOperator: 
+	equals='=' |
+	notEqualsDiamond='<>' | 
+	notEquals='!=' |
+	lessThan='<' |
+	greaterThan='>' | 
+	lessThanOrEquals='<=' |
+	greaterThanOrEquals='>='
+;
+
+/**
+ * expression7 : expression6 ( ( ws '+' ws expression6 ) | ( ws '-' ws expression6 ) )* ;
+ */
+AdditionLikeExpression returns Expression: 
+	MultiplicationLikeExpression ( 
+		{PlusMinusExpression.leftExpression=current} operator=AdditionLikeOperator rightExpression+=MultiplicationLikeExpression
+	)?
+;
+
+enum AdditionLikeOperator:
+	addition="+" |
+	subtraction="-"
+;
+
+/**
+ * expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
+ */
+MultiplicationLikeExpression returns Expression: 
+	PowerExpression ( 
+		{MultiplicationLikeExpression.leftExpression=current} operator=MultiplicationLikeOperator rightExpression+=PowerExpression
+	)?
+;
+
+enum MultiplicationLikeOperator:
+	multiplication="*" |
+	division="/" |
+	modulo="%"
+;
+
+/**
+ * expression5 : expression4 ( ws '^' ws expression4 )* ;
+ */
+PowerExpression returns Expression: 
+	UnaryExpression ( {PowerExpression.leftExpression=current} '^' rightExpression+=UnaryExpression )?
+;
+
+/**
+ * expression4 : ( ( '+' | '-' ) ws )* expression3 ;
+ */
+UnaryExpression returns Expression: 
+	{UnaryPlusExpression}=>'+' expression=Expression3 |
+	{UnaryMinusExpression}=>'-' expression=Expression3
+;
+
+/**
+ * Not supported.
+ * expression3 : expression2 ( ( ws '[' expression ']' ) | ( ws '[' expression? '..' expression? ']' ) | ( ( ( ws '=~' ) | ( sp IN ) | ( sp STARTS sp WITH ) | ( sp ENDS sp WITH ) | ( sp CONTAINS ) ) ws expression2 ) | ( sp IS sp NULL ) | ( sp IS sp NOT sp NULL ) )* ;
+ */
+Expression3 : 
+	PropertyLookupExpression
+;
+
+/**
+ * expression2 : atom ( propertyLookup | nodeLabels )* ;
+ */
+PropertyLookupExpression : 
+	Atom 
+	( propertyLookups+=PropertyLookup ) //| nodeLabels+=NodeLabels )*
+;
+
+PropertyLookup:
+	variable=Variable '.' property=PropertyKeyName
+;
+
+NodeLabels:	
+	labels+=Label+
+;
+
+/** 
+ * atom : numberLiteral
+ *      | StringLiteral
+ *      | parameter
+ *      | TRUE
+ *      | FALSE
+ *      | NULL
+ *      | ( COUNT ws '(' ws '*' ws ')' )
+ *      | mapLiteral
+ *      | listComprehension
+ *      | ( '[' ws expression ws ( ',' ws expression ws )* ']' )
+ *      | ( FILTER ws '(' ws filterExpression ws ')' )
+ *      | ( EXTRACT ws '(' ws filterExpression ws ( ws '|' expression )? ')' )
+ *      | ( ALL ws '(' ws filterExpression ws ')' )
+ *      | ( ANY ws '(' ws filterExpression ws ')' )
+ *      | ( NONE ws '(' ws filterExpression ws ')' )
+ *      | ( SINGLE ws '(' ws filterExpression ws ')' )
+ *      | relationshipsPattern
+ *      | parenthesizedExpression
+ *      | functionInvocation
+ *      | variable
+ *      ;
+ */
+Atom returns Expression:
+	({NumberLiteral} value=INT | {StringLiteral} value=STRING | {NullExpression} "NULL" | '(' Expression ')');
+
+//NumberLiteral:
+//	int=IntegerLiteral | double=DoubleLiteral;
+//
+//IntegerLiteral returns ecore::EInt:
+//	INT;
+//
+//DoubleLiteral returns ecore::EFloat:
+//	INT '.' INT;
+//
+//StringLiteral returns ecore::EString:
+//	STRING;
+
+// Patterns
+
+Pattern:
+	parts+=PatternPart (',' parts+=PatternPart)*;
+
+PatternPart:
+	node=NodePattern (chain+=PatternElementChain)*;
+
+NodePattern:
+	{NodePattern} '(' variable=Variable? (':' label=Label)? ')';
+
+PatternElementChain:
+	relationshipPattern=RelationshipPattern nodePattern=NodePattern;
+
+RelationshipPattern:
+	both=Both | in=In | out=Out;
+
+Both:
+	{Both} ((LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD) | (DASH detail=RelationshipDetail? DASH));
+
+In:
+	{In} LEFT_ARROW_HEAD DASH detail=RelationshipDetail? DASH;
+
+Out:
+	{Out} DASH detail=RelationshipDetail? DASH RIGHT_ARROW_HEAD
+;
+
+RelationshipDetail:
+	{RelationshipDetail} '[' variable=Variable? (':' label=Label)? ']';
+
+/* Return */
+ReturnClause:
+	{ReturnClause} 'RETURN' distinct?='DISTINCT'? 
+	variables+=Variable 
+	orderBy=OrderBy?
+	skip=Skip? 
+	limit=Limit?;
+
+OrderBy:
+	'ORDER' 'BY' conditions+=OrderByCondition (',' conditions+=OrderByCondition)*;
+
+OrderByCondition:
+	expression=PropertyLookupExpression
+	(('ASC' | 'ASCENDING') | desc?=('DESC' | 'DESCENDING'))
+;
+
+Skip:
+	'SKIP' amount=INT;
+
+Limit:
+	'LIMIT' amount=INT;
+
+/* Common rules */
+Variable:
+	SymbolicName;
+
+Label:
+	SymbolicName;	
+
+PropertyKeyName:
+	SymbolicName;
+
+SymbolicName:
+	name=ID;
+
+
+LEFT_ARROW_HEAD:
+	'<' | '⟨' | '〈' | '﹤' | '＜';
+
+RIGHT_ARROW_HEAD:
+	'>' | '⟩' | '〉' | '﹥' | '＞';
+
+DASH:
+	'-' | '­' | '‐' | '‑' | '‒' | '–' | '—' | '―' | '−' | '﹘' | '﹣' | '－';

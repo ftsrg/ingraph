@@ -20,7 +20,7 @@ See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
     * **Xtend IDE**
     * **Xtext SDK**
     * **EMF - Eclipse Modeling Framework Xcore SDK**
-1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. This is required for the Modeling and VIATRA projects, as they require custom natures to work properly.
+1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the Modeling and VIATRA projects, as they require custom natures to work properly.)
 
 If you do not have Buildship: go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
