@@ -2,17 +2,22 @@ sudo: required
 dist: trusty
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
 install: false
 script:
-  - sudo apt-get update
-  - sudo apt-get install -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
-  - ./gradlew assemble
-  - ./gradlew check -x test --continue
-  - cd opencypher-report
-  - make
+- sudo apt-get update
+- sudo apt-get install -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra
+  texlive-latex-extra
+- "./gradlew assemble"
+- "./gradlew check -x test --continue"
+- cd opencypher-report
+- make
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
   on_success: change
   on_failure: always
+env:
+  global:
+    GH_REF: github.com/FTSRG/ingraph.git
+    secure: CQJxAZZwYk65fYp8r1/78Dc/nmiSnmGR+9h+Yss8I2rrdPJ4EFwUQUC8G31FauKsiKDMXlvRf+JeDfRuHe6792Dsj0K1eh5XXlOWDNYlGTUkPuuCINDAA9/vgSCGtcXSM6OUWSEVyZMI5PGVJ3IiOq0abmSGeW6uvduUmGUn8rCPvLfaapiy9H+SuFskfkVE3exVpQTj/EFb0agOYOexvtoV8U0XqPtEP1LOHl4LlkA4iFGA5JwMYGB9AnJs+G1TYHz6qrnHZG8GF73aQR65EP/3uMRDmK4ZRpOI21/vM7eMPYEYjFq1UE0WUCngRthyGTHqAu/zofYwWow06+YMCYYQY5uLDo9VoZ2aw70a2kOZkjVjklJ8GOEE7klNJpr1h5bMAh7zUCA0gTV/YpSG5TyK1oo/rY4CP1fB9kzhI+ywgRESpiAgSDqw4OmvjS/WYCmudQ4q+4pyVGBOVgO35JDefEpn+kGwNRKU3OKAdJMlyHC2meYBz/6+q9g7yvKhu+Rmo4ela6hMP6w4h7yAYfl53HmT/uHsf0XFOoehj99LqJc1yz4rTk1Kl1/x/u70JvmtKNNkxO6g4cCJYyUk6ZSH5w/ZJUvev17KRw3tb8uj0XVGdHpfJwHqFB6bGKd0sZknRVMd2R2krA1HCGGKHKBgPL+mg+CkA3BIrJAK26M=
