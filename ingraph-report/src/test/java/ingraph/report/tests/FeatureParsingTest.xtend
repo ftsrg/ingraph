@@ -42,7 +42,6 @@ class FeatureParsingTest {
 			\label{chp:acceptance-tests}
 
 			«FOR feature : files.map[processFile(resourceSet)]»
-			
 				\section{«feature.name.escape»}
 
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
