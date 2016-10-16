@@ -5,10 +5,8 @@
 -->
 
 <plugin
-      name="%pluginName"
       id="ingraph-relalg-xcore"
-      version="1.0.0"
-      provider-name="%providerName">
+      version="1.0.0">
 
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
@@ -26,7 +24,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated model -->
       <package
-            uri="relalg"
+            uri="http://www.example.org/relalg"
             class="relalg.RelalgPackage"
             genModel="src/main/resources/model.xcore"/>
    </extension>

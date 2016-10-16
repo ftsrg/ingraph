@@ -1,3 +1,6 @@
+@Ecore(
+	nsURI="http://www.example.org/relalg"
+)
 @GenModel(
     bundleManifest="false",
     modelDirectory="ingraph-relalg-xcore/src/main/java-gen",

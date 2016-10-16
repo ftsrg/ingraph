@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="ASCII"?>
-<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+<relalg:RelationalAlgebraContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="relalg">
   <rootExpression xsi:type="relalg:ProductionOperator">
     <input xsi:type="relalg:DuplicateEliminationOperator">
-      <input xsi:type="relalg:ProjectionOperator" variables="//@elements.8 //@rootExpression/@input/@input/@input/@condition/@leftOperand //@rootExpression/@input/@input/@input/@condition/@rightOperand //@elements.9 //@elements.10 //@elements.11 //@elements.12">
+      <input xsi:type="relalg:ProjectionOperator" variables="//@elements.10 //@elements.8 //@elements.9 //@elements.11 //@elements.12 //@elements.13 //@elements.14">
         <input xsi:type="relalg:SelectionOperator" conditionString="route1 != route2">
           <input xsi:type="relalg:AntiJoinOperator">
-            <leftInput xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.13 //@elements.14 //@elements.15 //@elements.16 //@elements.17 //@elements.18">
-              <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.18" sourceVertexVariable="//@elements.10" targetVertexVariable="//@rootExpression/@input/@input/@input/@condition/@rightOperand">
-                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.17" sourceVertexVariable="//@elements.12" targetVertexVariable="//@elements.10">
-                  <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.16" sourceVertexVariable="//@elements.11" targetVertexVariable="//@elements.12">
-                    <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.15" sourceVertexVariable="//@elements.9" targetVertexVariable="//@elements.11">
-                      <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.14" sourceVertexVariable="//@rootExpression/@input/@input/@input/@condition/@leftOperand" targetVertexVariable="//@elements.9">
-                        <input xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.8" targetVertexVariable="//@rootExpression/@input/@input/@input/@condition/@leftOperand">
-                          <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
+            <leftInput xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.15 //@elements.16 //@elements.17 //@elements.18 //@elements.19 //@elements.20">
+              <input xsi:type="relalg:ExpandOperator" direction="IN" sourceVertexVariable="//@elements.12" edgeVariable="//@elements.20" targetVertexVariable="//@elements.9">
+                <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.14" edgeVariable="//@elements.19" targetVertexVariable="//@elements.12">
+                  <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.13" edgeVariable="//@elements.18" targetVertexVariable="//@elements.14">
+                    <input xsi:type="relalg:ExpandOperator" direction="IN" sourceVertexVariable="//@elements.11" edgeVariable="//@elements.17" targetVertexVariable="//@elements.13">
+                      <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.8" edgeVariable="//@elements.16" targetVertexVariable="//@elements.11">
+                        <input xsi:type="relalg:ExpandOperator" direction="IN" sourceVertexVariable="//@elements.10" edgeVariable="//@elements.15" targetVertexVariable="//@elements.8">
+                          <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.10"/>
                         </input>
                       </input>
                     </input>
@@ -20,14 +20,10 @@
                 </input>
               </input>
             </leftInput>
-            <rightInput xsi:type="relalg:ExpandOperator" edgeVariable="//@elements.19" sourceVertexVariable="//@elements.8" targetVertexVariable="//@rootExpression/@input/@input/@input/@condition/@rightOperand">
-              <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
+            <rightInput xsi:type="relalg:ExpandOperator" direction="IN" sourceVertexVariable="//@elements.10" edgeVariable="//@elements.21" targetVertexVariable="//@elements.9">
+              <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.10"/>
             </rightInput>
           </input>
-          <condition xsi:type="relalg:ArithmeticComparisonExpression" operator="!=">
-            <leftOperand xsi:type="relalg:VertexVariable" name="route1" vertexLabel="//@elements.0"/>
-            <rightOperand xsi:type="relalg:VertexVariable" name="route2" vertexLabel="//@elements.0"/>
-          </condition>
         </input>
       </input>
     </input>
@@ -40,6 +36,8 @@
   <elements xsi:type="relalg:EdgeLabel" name="exit"/>
   <elements xsi:type="relalg:EdgeLabel" name="gathers"/>
   <elements xsi:type="relalg:EdgeLabel" name="monitoredBy"/>
+  <elements xsi:type="relalg:VertexVariable" name="route1" vertexLabel="//@elements.0"/>
+  <elements xsi:type="relalg:VertexVariable" name="route2" vertexLabel="//@elements.0"/>
   <elements xsi:type="relalg:VertexVariable" name="semaphore" vertexLabel="//@elements.1"/>
   <elements xsi:type="relalg:VertexVariable" name="sensor1" vertexLabel="//@elements.2"/>
   <elements xsi:type="relalg:VertexVariable" name="sensor" vertexLabel="//@elements.2"/>
@@ -52,4 +50,4 @@
   <elements xsi:type="relalg:EdgeVariable" name="_e5" dontCare="true" edgeLabel="//@elements.7"/>
   <elements xsi:type="relalg:EdgeVariable" name="_e6" dontCare="true" edgeLabel="//@elements.6"/>
   <elements xsi:type="relalg:EdgeVariable" name="_e7" dontCare="true" edgeLabel="//@elements.4"/>
-</relalg:Container>
+</relalg:RelationalAlgebraContainer>

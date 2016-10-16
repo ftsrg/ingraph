@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ingraph-relalg-xcore
+Bundle-SymbolicName: ingraph-relalg-xcore;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Export-Package: relalg,
+ relalg.impl,
+ relalg.util

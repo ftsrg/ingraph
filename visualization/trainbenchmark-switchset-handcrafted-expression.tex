@@ -6,6 +6,6 @@
 
 \begin{document}
 \begin{preview}
-$\duplicateelimination \left(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}} \left(\selection{\var{sw.currentPosition} \neq \var{swP.position}} \left(\selection{\var{semaphore.signal} = \literal{'GO'}} \left(\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}} \left(\expandout{swP}{sw}{Switch}{\_e3}{target} \left(\expandout{route}{swP}{SwitchPosition}{\_e2}{follows} \left(\expandin{semaphore}{route}{Route}{\_e1}{entry} \left(\getvertices{semaphore}{Semaphore}\right)\right)\right)\right)\right)\right)\right)\right)$
+$\duplicateelimination \left(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{currentPosition},~\var{position}} \left(\selection{sw.currentPosition != swP.position} \left(\selection{semaphore.signal = 'GO'} \left(\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3}} \left(\expandout{swP}{sw}{Switch}{\_e3}{target} \left(\expandout{route}{swP}{SwitchPosition}{\_e2}{follows} \left(\expandin{semaphore}{route}{Route}{\_e1}{entry} \left(\getvertices{semaphore}{Semaphore}\right)\right)\right)\right)\right)\right)\right)\right)$
 \end{preview}
 \end{document}

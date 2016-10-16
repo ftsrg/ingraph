@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="ASCII"?>
-<relalg:Container xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://www.example.org/relalg">
+<relalg:RelationalAlgebraContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="relalg">
   <rootExpression xsi:type="relalg:ProductionOperator">
     <input xsi:type="relalg:DuplicateEliminationOperator">
       <input xsi:type="relalg:ProjectionOperator" variables="//@elements.8 //@elements.11 //@elements.10 //@elements.9">
         <input xsi:type="relalg:AntiJoinOperator">
           <leftInput xsi:type="relalg:AllDifferentOperator" edgeVariables="//@elements.12 //@elements.13 //@elements.14">
-            <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.14" sourceVertexVariable="//@elements.9" targetVertexVariable="//@elements.11">
-              <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.13" sourceVertexVariable="//@elements.10" targetVertexVariable="//@elements.9">
-                <input xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.12" sourceVertexVariable="//@elements.8" targetVertexVariable="//@elements.10">
+            <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.9" edgeVariable="//@elements.14" targetVertexVariable="//@elements.11">
+              <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.10" edgeVariable="//@elements.13" targetVertexVariable="//@elements.9">
+                <input xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.8" edgeVariable="//@elements.12" targetVertexVariable="//@elements.10">
                   <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
                 </input>
               </input>
             </input>
           </leftInput>
-          <rightInput xsi:type="relalg:ExpandOperator" direction="OUT" edgeVariable="//@elements.15" sourceVertexVariable="//@elements.8" targetVertexVariable="//@elements.11">
+          <rightInput xsi:type="relalg:ExpandOperator" direction="OUT" sourceVertexVariable="//@elements.8" edgeVariable="//@elements.15" targetVertexVariable="//@elements.11">
             <input xsi:type="relalg:GetVerticesOperator" vertexVariable="//@elements.8"/>
           </rightInput>
         </input>
@@ -36,4 +36,4 @@
   <elements xsi:type="relalg:EdgeVariable" name="_e2" dontCare="true" edgeLabel="//@elements.7"/>
   <elements xsi:type="relalg:EdgeVariable" name="_e3" dontCare="true" edgeLabel="//@elements.6"/>
   <elements xsi:type="relalg:EdgeVariable" name="_e4" dontCare="true" edgeLabel="//@elements.5"/>
-</relalg:Container>
+</relalg:RelationalAlgebraContainer>

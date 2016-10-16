@@ -54,9 +54,6 @@ class FeatureParsingTest {
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					\end{lstlisting}
 
-«««					\subsubsection*{Then step}
-«««					«scenario.steps.filter(typeof(ThenStep)).map[text].join»
-
 					\subsubsection*{Relational algebra expression}
 
 					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression»

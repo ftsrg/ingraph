@@ -1,6 +1,6 @@
 package ingraph.optimization.patterns
 
-import "http://www.example.org/relalg"
+import "http://www.example.org/relalg";
 
 // 1st transformation
 pattern expandVertex(getVerticesOperator, expandOperator) {

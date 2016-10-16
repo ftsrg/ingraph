@@ -2,19 +2,15 @@ package ingraph.relalg2tex
 
 import java.io.File
 import java.nio.charset.Charset
-import org.antlr.v4.runtime.atn.SemanticContext.AND
-import org.antlr.v4.runtime.atn.SemanticContext.OR
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.EList
 import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
-import relalg.AttributeVariable
 import relalg.BetaOperator
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
-import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
