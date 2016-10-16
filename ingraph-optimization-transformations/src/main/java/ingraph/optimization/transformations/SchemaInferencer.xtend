@@ -6,13 +6,13 @@ import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AlphaOperator
 import relalg.AttributeVariable
-import relalg.Container
 import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.ProjectionOperator
+import relalg.RelationalAlgebraContainer
 import relalg.UnionOperator
 import relalg.Variable
 
@@ -21,7 +21,7 @@ class SchemaInferencer {
 	new() {
 	}
 
-	def addSchemaInformation(Container container) {
+	def addSchemaInformation(RelationalAlgebraContainer container) {
 		val rootExpression = container.rootExpression
 		rootExpression.inferSchema
 		container

@@ -7,10 +7,12 @@ package relalg
 
 class RelationalAlgebraContainer {
 	contains Operator rootExpression
+	contains NamedElement[] elements opposite containerr
 }
 
 abstract class NamedElement {
 	String name
+	refers RelationalAlgebraContainer containerr opposite elements
 }
 
 abstract class Label extends NamedElement {}
@@ -40,7 +42,7 @@ abstract class ReturnableElement {}
 /* Operators */
 
 abstract class Operator {
-	
+	refers Variable[] schema
 }
 
 /* Nullary operators */
@@ -60,7 +62,6 @@ class GetEdgesOperator extends Operator {
 
 abstract class AlphaOperator extends Operator {
 	contains Operator input
-	refers Variable[] schema
 }
 
 class ProductionOperator extends AlphaOperator {}
@@ -103,7 +104,7 @@ class JoinOperator extends AbstractJoinOperator {}
 
 class AntiJoinOperator extends AbstractJoinOperator {}
 
-class UnionOperator extends AbstractJoinOperator {}
+class UnionOperator extends BetaOperator {}
 
 /* enums */
 

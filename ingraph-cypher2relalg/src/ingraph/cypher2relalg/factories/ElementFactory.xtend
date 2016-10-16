@@ -2,16 +2,16 @@ package ingraph.cypher2relalg.factories
 
 import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
-import relalg.RelalgFactory
 import relalg.NamedElement
-import relalg.Container
+import relalg.RelalgFactory
+import relalg.RelationalAlgebraContainer
 
 abstract class ElementFactory<TNamedElement extends NamedElement> {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	protected final Container container
+	protected final RelationalAlgebraContainer container
 	
-	new(Container container) {
+	new(RelationalAlgebraContainer container) {
 		this.container = container	
 	} 
 
@@ -27,7 +27,7 @@ abstract class ElementFactory<TNamedElement extends NamedElement> {
 		}
 
 		val element = elements.get(variableName)
-		container.elements.add(element)
+		//container.elements.add(element)
 
 		return element
 	}

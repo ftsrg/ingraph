@@ -3,13 +3,12 @@ repositories {
     maven { url "http://docs.inf.mit.bme.hu/trainbenchmark-deps" }
 }
 
-
 apply plugin: "scala"
 
 ext.scalaVersion = "2.11.8"
 
 dependencies {
-    compile project(':ingraph-relalg-model')
+    compile project(':ingraph-relalg-xcore')
     compile project(':ingraph-trainbenchmark')
     compile project(':ingraph-tinkerpop')
     compile project(':ingraph-optimization-transformations')

@@ -1,9 +1,9 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
-import org.junit.Test
-import org.junit.Before
 import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
+import org.junit.Before
+import org.junit.Test
 
 class RouteSensorOptimizationTreeTest {
 

@@ -5,62 +5,62 @@ import relalg.Direction
 
 class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 
-	val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-	val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
-	val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
+	val routeLabel = createVertexLabel => [name = "Route"; it.containerr = container]
+	val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.containerr = container]
+	val sensorLabel = createVertexLabel => [name = "Sensor"; it.containerr = container]
 
-	val connectsToLabel = createEdgeLabel => [name = "connectsTo"; it.container = container]
-	val entryLabel = createEdgeLabel => [name = "entry"; it.container = container]
-	val exitLabel = createEdgeLabel => [name = "exit"; it.container = container]
-	val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
+	val connectsToLabel = createEdgeLabel => [name = "connectsTo"; it.containerr = container]
+	val entryLabel = createEdgeLabel => [name = "entry"; it.containerr = container]
+	val exitLabel = createEdgeLabel => [name = "exit"; it.containerr = container]
+	val gathersLabel = createEdgeLabel => [name = "gathers"; it.containerr = container]
+	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.containerr = container]
 
-	val route1 = createVertexVariable => [name = "route1"; vertexLabel = routeLabel; it.container = container]
-	val route2 = createVertexVariable => [name = "route2"; vertexLabel = routeLabel; it.container = container]
+	val route1 = createVertexVariable => [name = "route1"; vertexLabel = routeLabel; it.containerr = container]
+	val route2 = createVertexVariable => [name = "route2"; vertexLabel = routeLabel; it.containerr = container]
 	val semaphore = createVertexVariable => [
 		name = "semaphore";
 		vertexLabel = semaphoreLabel;
-		it.container = container
+		it.containerr = container
 	]
-	val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabel = sensorLabel; it.container = container]
-	val sensor2 = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
-	val te1 = createVertexVariable => [name = "te1"; it.container = container]
-	val te2 = createVertexVariable => [name = "te2"; it.container = container]
+	val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabel = sensorLabel; it.containerr = container]
+	val sensor2 = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.containerr = container]
+	val te1 = createVertexVariable => [name = "te1"; it.containerr = container]
+	val te2 = createVertexVariable => [name = "te2"; it.containerr = container]
 
 	def semaphoreNeighborA() {
-		val _e1 = createEdgeVariable => [name = "_e1"; edgeLabel = exitLabel; dontCare = true; it.container = container]
+		val _e1 = createEdgeVariable => [name = "_e1"; edgeLabel = exitLabel; dontCare = true; it.containerr = container]
 		val _e2 = createEdgeVariable => [
 			name = "_e2";
 			edgeLabel = gathersLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e3 = createEdgeVariable => [
 			name = "_e3";
 			edgeLabel = monitoredByLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e4 = createEdgeVariable => [
 			name = "_e4";
 			edgeLabel = connectsToLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e5 = createEdgeVariable => [
 			name = "_e5";
 			edgeLabel = monitoredByLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e6 = createEdgeVariable => [
 			name = "_e6";
 			edgeLabel = gathersLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e7 = createEdgeVariable =>
-			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.container = container]
+			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.containerr = container]
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore]
 

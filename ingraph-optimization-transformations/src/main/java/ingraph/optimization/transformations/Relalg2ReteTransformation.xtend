@@ -12,9 +12,9 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
-import relalg.Container
-import relalg.RelalgFactory
 import relalg.ExpandOperator
+import relalg.RelalgFactory
+import relalg.RelationalAlgebraContainer
 
 class Relalg2ReteTransformation {
 
@@ -24,10 +24,10 @@ class Relalg2ReteTransformation {
 	new() {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 	}
 
-	def transform(Container container) {
+	def transform(RelationalAlgebraContainer container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)

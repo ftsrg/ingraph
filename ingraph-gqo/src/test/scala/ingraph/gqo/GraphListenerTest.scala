@@ -8,6 +8,8 @@ import org.apache.tinkerpop.gremlin.structure.io.IoCore
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.scalatest.FlatSpec
 import relalg.ProductionOperator
+import ingraph.optimization.transformations.Relalg2ReteTransformation
+import ingraph.optimization.transformations.SchemaInferencer
 
 
 class GrapListenerTest extends FlatSpec {

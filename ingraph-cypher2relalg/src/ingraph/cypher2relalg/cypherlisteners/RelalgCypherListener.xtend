@@ -40,14 +40,13 @@ import java.util.List
 import org.antlr.v4.runtime.tree.TerminalNode
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.BetaOperator
-import relalg.Container
-import relalg.Direction
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
 import relalg.Operator
 import relalg.RelalgFactory
+import relalg.RelationalAlgebraContainer
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
@@ -57,7 +56,7 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension RelalgCypherUtil util = new RelalgCypherUtil
 	
-	@Accessors(value=PUBLIC_GETTER) val Container container = createContainer
+	@Accessors(value=PUBLIC_GETTER) val RelationalAlgebraContainer container = createRelationalAlgebraContainer
 
 	@Accessors val vertexVariableFactory = new VertexVariableFactory(container)
 	@Accessors val edgeVariableFactory = new EdgeVariableFactory(container)
@@ -274,11 +273,11 @@ class RelalgCypherListener extends RelalgBaseUnsupportedCypherListener{
 		val isRightArrow = ctx.getChild(RelationshipPatternContext, 0)?.getChild(RightArrowHeadContext, 0) != null
 
 		val expandOperator = createExpandOperator() => [
-			edgeVariable = patternElementChain_EdgeVariable;
-			direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
-				Direction.BOTH
-			else if(isLeftArrow) Direction.IN else Direction.OUT;
-			targetVertexVariable = patternElementChain_VertexVariable
+//			edgeVariable = patternElementChain_EdgeVariable;
+//			direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
+//				Direction.BOTH
+//			else if(isLeftArrow) Direction.IN else Direction.OUT;
+//			targetVertexVariable = patternElementChain_VertexVariable
 		]
 
 		switch ctx.parent {

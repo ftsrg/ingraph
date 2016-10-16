@@ -5,45 +5,45 @@ import relalg.Direction
 
 class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 
-	val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-	val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
-	val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
-	val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; it.container = container]
+	val routeLabel = createVertexLabel => [name = "Route"; it.containerr = container]
+	val sensorLabel = createVertexLabel => [name = "Sensor"; it.containerr = container]
+	val switchLabel = createVertexLabel => [name = "Switch"; it.containerr = container]
+	val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; it.containerr = container]
 
-	val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
-	val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
-	val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
+	val followsLabel = createEdgeLabel => [name = "follows"; it.containerr = container]
+	val gathersLabel = createEdgeLabel => [name = "gathers"; it.containerr = container]
+	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.containerr = container]
+	val targetLabel = createEdgeLabel => [name = "target"; it.containerr = container]
 
-	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
-	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel; it.container = container]
-	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel; it.container = container]
-	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
+	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.containerr = container]
+	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel; it.containerr = container]
+	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel; it.containerr = container]
+	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.containerr = container]
 
 	def routeSensorA() {
 		val _e1 = createEdgeVariable => [
 			name = "_e1";
 			edgeLabel = followsLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e2 = createEdgeVariable => [
 			name = "_e2";
 			edgeLabel = targetLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e3 = createEdgeVariable => [
 			name = "_e3";
 			edgeLabel = monitoredByLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 		val _e4 = createEdgeVariable => [
 			name = "_e4";
 			edgeLabel = gathersLabel;
 			dontCare = true;
-			it.container = container
+			it.containerr = container
 		]
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = route]

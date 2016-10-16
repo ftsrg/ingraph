@@ -2,7 +2,7 @@ plugins { id "org.xtext.xtend" version "1.0.0" }
 apply plugin: 'org.xtext.xtend'
 
 dependencies {
-	compile project(':ingraph-relalg-model')
+	compile project(':ingraph-relalg-xcore')
 	compile project(':ingraph-cypher2relalg')
 	compile project(':ingraph-optimization-transformations')
 	compile project(':ingraph-trainbenchmark')

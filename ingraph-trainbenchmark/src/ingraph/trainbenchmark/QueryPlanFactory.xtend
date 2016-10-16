@@ -9,6 +9,6 @@ class QueryPlanFactory {
 
 	protected val extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
-	protected val container = createContainer
+	protected val container = createRelationalAlgebraContainer
 
 }

@@ -5,12 +5,12 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
-import relalg.Container
+import relalg.RelationalAlgebraContainer
 
 class RelalgUtil {
 
-	def static save(Container container, String filename) {
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl());
+	def static save(RelationalAlgebraContainer container, String filename) {
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 
 		val resourceSet = new ResourceSetImpl
 		val uri = URI.createFileURI(filename + ".relalg")

@@ -49,6 +49,7 @@ dependencies {
 
     compile 'org.eclipse.emf:org.eclipse.emf.common:2.11+'
     compile 'org.eclipse.emf:org.eclipse.emf.ecore:2.11+'
+	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.11+'
     compile 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:1.1.100'
     compile "org.eclipse.xtext:org.eclipse.xtext.xbase.lib:$xtextVersion"
 
