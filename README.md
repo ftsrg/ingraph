@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
+## Generated Artifacts
+
+* [Test summary](http://docs.inf.mit.bme.hu/ingraph/test/)
+* [Technical report on compliance with the OpenCypher TCK](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf)
+
 ## User's Guide
 
 See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
