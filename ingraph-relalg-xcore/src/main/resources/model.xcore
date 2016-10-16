@@ -5,6 +5,96 @@
 )
 package sample.model
 
-class User {
-    String name
+class RelationalAlgebraContainer {
+	refers Operator rootExpression
 }
+
+abstract class NamedElement {
+	String name
+}
+
+abstract class Label extends NamedElement {}
+class VertexLabel extends Label {}
+class EdgeLabel extends Label {}
+
+abstract class Variable extends NamedElement, ReturnableElement {
+	boolean dontCare = "false"
+}
+class ElementVariable extends Variable {}
+class VertexVariable extends ElementVariable {}
+class EdgeVariable extends ElementVariable {}
+
+abstract class ReturnableElement {}
+
+
+/* Operators */
+
+abstract class Operator {
+	
+}
+
+/* Nullary operators */
+
+class GetVerticesOperator extends Operator {
+	
+}
+
+class GetEdgesOperator extends Operator {
+	
+}
+
+/* Alpha operators */
+
+abstract class AlphaOperator extends Operator {
+	refers Operator input
+}
+
+class ProductionOperator extends AlphaOperator {}
+
+class SelectionOperator extends AlphaOperator {
+	String conditionString 
+}
+
+class ProjectionOperator extends AlphaOperator {}
+
+class ExpandOperator extends AlphaOperator {
+	Direction direction
+	
+}
+
+class DuplicateEliminationOperator extends AlphaOperator {
+	
+}
+
+class AllDifferentOperator extends AlphaOperator {}
+
+/* Beta operators */
+
+abstract class BetaOperator extends Operator {
+	refers Operator leftInput
+	refers Operator rightInput
+}
+
+abstract class AbstractJoinOperator extends BetaOperator {
+	
+}
+
+class JoinOperator extends AbstractJoinOperator {}
+
+class AntiJoinOperator extends AbstractJoinOperator {}
+
+class UnionOperator extends AbstractJoinOperator {}
+
+/* enums */
+
+enum Direction {
+	BOTH,
+	IN,
+	OUT
+}
+
+enum Order {
+	ASCENDING,
+	DESCENDING
+}
+

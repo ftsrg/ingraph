@@ -9,7 +9,7 @@ public class SampleModelTest {
 
 	@Test
 	public void testCreateUser() {
-		assertNotNull(ModelFactory.eINSTANCE.createUser());
+		assertNotNull(ModelFactory.eINSTANCE.createRelationalAlgebraContainer());
 	}
 
 }
