@@ -1,0 +1,10 @@
+@GenModel(
+    bundleManifest="false",
+    modelDirectory="ingraph-relalg-xcore/src/main/java-gen",
+    complianceLevel="8.0"
+)
+package sample.model
+
+class User {
+    String name
+}
