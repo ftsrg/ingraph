@@ -2,6 +2,8 @@ DOCUMENT=opencypher-report
 
 all: clean
 	pdflatex $(DOCUMENT)
+	bibtex $(DOCUMENT)
+	pdflatex $(DOCUMENT)
 	pdflatex $(DOCUMENT)
 
 clean:

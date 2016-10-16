@@ -11,6 +11,8 @@ script:
   - ./gradlew check -x test --continue
   - cd opencypher-report
   - make
+  - cd ..
+  - ./deploy.sh
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
