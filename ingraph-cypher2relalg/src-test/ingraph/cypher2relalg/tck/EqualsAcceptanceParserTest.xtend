@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class EqualsAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH collect([0, 0.0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
@@ -35,7 +35,7 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH collect([0.5, 0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
@@ -54,7 +54,7 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH collect(['0', 0]) AS things
         UNWIND things AS arr
         WITH arr[0] AS expected
@@ -73,7 +73,7 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WITH a
         MATCH (b)
@@ -92,7 +92,7 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[a]->()
         WITH a
         MATCH ()-[b]->()

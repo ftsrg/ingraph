@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class SemanticErrorAcceptanceParserTest {
     
@@ -11,7 +11,7 @@ class SemanticErrorAcceptanceParserTest {
     */
     @Test
     def void testSemanticErrorAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [{prop: 0}, 1] AS list
         RETURN (list[0]).prop
         ''')
@@ -22,7 +22,7 @@ class SemanticErrorAcceptanceParserTest {
     */
     @Test
     def void testSemanticErrorAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
         ''')
@@ -33,7 +33,7 @@ class SemanticErrorAcceptanceParserTest {
     */
     @Test
     def void testSemanticErrorAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN range(2, 8, 0)
         ''')
     }

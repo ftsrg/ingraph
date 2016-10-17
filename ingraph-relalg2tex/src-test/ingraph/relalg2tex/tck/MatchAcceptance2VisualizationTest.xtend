@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -17,7 +17,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
@@ -31,7 +31,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r
         ''')
@@ -53,7 +53,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:TextNode)
         WHERE i.id > 'te'
         RETURN i
@@ -76,7 +76,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i)
         WHERE exists(i.id) OR i.id > 'te'
         RETURN i
@@ -95,7 +95,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_05() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:Child)
         WHERE i.id > 'te'
         RETURN i
@@ -114,7 +114,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_06() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:Child)
         WHERE NOT exists(i.id) OR i.id > 'te'
         RETURN i
@@ -136,7 +136,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ()-[*]->()
         WITH count(*) AS count, p AS p
         WITH nodes(p) AS nodes
@@ -160,7 +160,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN a, b, c
         ''')
@@ -182,7 +182,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'})-[*]->(x)
         RETURN x
         ''')
@@ -203,7 +203,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_10() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..2]->()
         RETURN p
         ''')
@@ -224,7 +224,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_11() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..]->()
         RETURN p
         ''')
@@ -244,7 +244,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_12() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (c {name: 'C'})
         MATCH (a)-->(b)
         RETURN a, b, c
@@ -268,7 +268,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_13() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (b {name: 'B'})
         MATCH (a)-->(x)<-->(b)
         RETURN x
@@ -294,7 +294,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_14() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
@@ -331,7 +331,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_15() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'a'}), (b {name: 'b'}), (c {name: 'c'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
@@ -352,7 +352,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_16() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH (a)-[:KNOWS]->()-[:KNOWS]->(foo)
         RETURN foo
@@ -372,7 +372,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_17() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
         OPTIONAL MATCH p = (a)-->(x)
@@ -393,7 +393,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_18() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
         RETURN p
@@ -413,7 +413,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_19() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
         OPTIONAL MATCH p = (a)-[r*]->(x)
@@ -435,7 +435,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_20() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[r*2]->()
         RETURN r
@@ -455,7 +455,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_21() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (other:B)
         OPTIONAL MATCH (a)-[r]->(other)
         WITH other WHERE r IS NULL
@@ -476,7 +476,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_22() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)-->(x0)
         OPTIONAL MATCH (x0)-->(x1)
         WHERE x1.foo = 'bar'
@@ -498,7 +498,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_23() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-->(b)
         WHERE b:B
         OPTIONAL MATCH (a)-->(c)
@@ -519,7 +519,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_24() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[:ADMIN]-(b)
         WHERE a:A
         RETURN a.id, b.id
@@ -538,7 +538,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_25() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
@@ -556,7 +556,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_26() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a), (b)
         WHERE a <> b
         RETURN a, b
@@ -577,7 +577,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_27() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-->(b), (b)-->(b)
         RETURN b
         ''')
@@ -595,7 +595,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_28() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH (a)-[r*]-(b)
         WHERE r IS NULL
@@ -617,7 +617,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_29() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[:T|:T]->(b)
         RETURN b
         ''')
@@ -640,7 +640,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_30() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A)-->(n)-->(m)
         RETURN n.x, count(*)
         ORDER BY n.x
@@ -660,7 +660,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_31() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         WHERE n.foo = 'bar'
         RETURN n
@@ -679,7 +679,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_32() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (b)<--(a)
         RETURN p
         ''')
@@ -693,7 +693,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_33() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (n)
         RETURN n
         ''')
@@ -711,7 +711,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_34() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, x
@@ -730,7 +730,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_35() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, collect(x)
@@ -749,7 +749,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_36() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)<--()<--(b)-->()-->(c)
         WHERE a:A
         RETURN c
@@ -770,7 +770,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_37() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-->(b:Foo)
         RETURN b
         ''')
@@ -791,7 +791,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_38() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (:A)-[r]->(:B)
         RETURN r
         ''')
@@ -810,7 +810,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_39() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A:B:C)
         RETURN a
         ''')
@@ -828,7 +828,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_40() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         RETURN (n:Foo)
         ''')
@@ -858,7 +858,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_41() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (advertiser)-[:ADV_HAS_PRODUCT]->(out)-[:AP_HAS_VALUE]->(red)<-[:AA_HAS_VALUE]-(a)
         WHERE advertiser.id = $1
         AND a.id = $2
@@ -880,7 +880,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_42() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         RETURN (n:Foo)
         ''')
@@ -901,7 +901,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_43() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Person)-->()
         WHERE n.name = 'Bob'
         RETURN n
@@ -922,7 +922,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_44() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-->(b)
         MATCH (c)-->(d)
         RETURN a, b, c, d
@@ -947,7 +947,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_45() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)--(b)--(c)--(d)--(a), (b)--(d)
         WHERE a.id = 1
         AND c.id = 2
@@ -970,7 +970,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_46() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[:A]->()-[:B]->(a)
         RETURN a.name
         ''')
@@ -991,7 +991,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_47() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[:A]->(b), (b)-[:B]->(a)
         RETURN a.name
         ''')
@@ -1009,7 +1009,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_48() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[r*1..1]->(b)
         RETURN r
         ''')
@@ -1023,7 +1023,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_49() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         WITH a
         MATCH (a)-->(b)
@@ -1043,7 +1043,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_50() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a:Label)
         WITH a
         MATCH (a)-->(b)
@@ -1059,7 +1059,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_51() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         WITH a
         OPTIONAL MATCH (a)-->(b)
@@ -1075,7 +1075,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_52() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         RETURN a
         ''')
@@ -1093,7 +1093,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_53() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (a)
         RETURN p
         ''')
@@ -1111,7 +1111,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_54() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ()-[*0..]->()
         RETURN p
         ''')
@@ -1129,7 +1129,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_55() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         RETURN n.prop AS n, count(n) AS count
         ''')
@@ -1148,7 +1148,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_56() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2
         MATCH ()-[r2]->()
@@ -1169,7 +1169,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_57() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2, count(*) AS c
         ORDER BY c
@@ -1191,7 +1191,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_58() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[r]->(b)
         WITH a, r, b, count(*) AS c
         ORDER BY c
@@ -1213,7 +1213,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_59() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r]->()
         WITH r
         LIMIT 1
@@ -1234,7 +1234,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_60() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1255,7 +1255,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_61() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1276,7 +1276,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_62() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1:X:Y)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1297,7 +1297,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_63() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r:T]->()
         WITH r, a1
         LIMIT 1
@@ -1318,7 +1318,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_64() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r:T]->() WITH r, a1
         LIMIT 1
         MATCH (a1)-[r:T]->(b2)
@@ -1340,7 +1340,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_65() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r1]->()-[r2]->()
         WITH [r1, r2] AS rs
         LIMIT 1
@@ -1363,7 +1363,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_66() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS first, b AS second
         LIMIT 1
@@ -1386,7 +1386,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_67() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS second, b AS first
         LIMIT 1
@@ -1407,7 +1407,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_68() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1428,7 +1428,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_69() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1450,7 +1450,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_70() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         WITH n.prop AS n2
         RETURN n2.prop
@@ -1469,7 +1469,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_71() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (foo)
         RETURN foo.bar AS x
         ORDER BY x DESC
@@ -1485,7 +1485,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_72() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN count(a) > 0
         ''')
@@ -1505,7 +1505,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_73() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Artist)-[:WORKED_WITH* {year: 1988}]->(b:Artist)
         RETURN *
         ''')
@@ -1525,7 +1525,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_74() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a), (b)
         WHERE a.id = 0
         AND (a)-[:T]->(b:Label)
@@ -1549,7 +1549,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_75() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Blue)-[r*]->(b:Green)
         RETURN count(r)
         ''')
@@ -1568,7 +1568,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_76() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (n:Movie)--(m)
         RETURN p
         LIMIT 1
@@ -1587,7 +1587,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_77() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (a)
         WITH p
         RETURN p
@@ -1608,7 +1608,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_78() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (n)-->(m)--(o)
         RETURN p
         ''')
@@ -1629,7 +1629,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_79() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH path = (n)-->(m)--(o)--(p)
         RETURN path
         ''')
@@ -1652,7 +1652,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_80() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH topRoute = (:Start)<-[:CONNECTED_TO]-()-[:CONNECTED_TO*3..3]-(:End)
         RETURN topRoute
         ''')
@@ -1670,7 +1670,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_81() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop
         ''')
@@ -1688,7 +1688,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_82() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r.prop
         ''')
@@ -1707,7 +1707,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_83() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)-[r]->()
         RETURN a AS foo, r AS bar
         ''')
@@ -1725,7 +1725,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_84() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN a.bar
         ''')
@@ -1743,7 +1743,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_85() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r.bar
         ''')
@@ -1761,7 +1761,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_86() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN a.name, a.age, a.seasons
         ''')
@@ -1779,7 +1779,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_87() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop + 1 AS foo
         ''')
@@ -1797,7 +1797,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_88() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop2 + a.prop1 AS foo
         ''')
@@ -1816,7 +1816,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_89() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r*0..1]-()
         RETURN last(r) AS l
         ''')
@@ -1834,7 +1834,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_90() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A)
         OPTIONAL MATCH (a)-[:FOO]->(b:B)
         OPTIONAL MATCH (b)<-[:BAR*]-(c:B)
@@ -1855,7 +1855,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_91() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)-[r]->(m)
         RETURN [n, r, m] AS r
         ''')
@@ -1874,7 +1874,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_92() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)-[r]->(m)
         RETURN {node1: n, rel: r, node2: m} AS m
         ''')
@@ -1893,7 +1893,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_93() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ({prop: 'a'})-->({prop: 'b'})
         RETURN p
         ''')
@@ -1912,7 +1912,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_94() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = ({prop: 'a'})<--({prop: 'b'})
         RETURN p
         ''')
@@ -1932,7 +1932,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_95() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (n)-->(k)<--(n)
         RETURN p
         ''')
@@ -1952,7 +1952,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_96() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p = (n)<-->(k)<--(n)
         RETURN p
         ''')
@@ -1972,7 +1972,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_97() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH p=(n)<-->(k)<-->(n)
         RETURN p
         ''')
@@ -1992,7 +1992,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_98() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:A:B:C:D:E:F:G:H:I:J:K:L:M)-[:T]->(m:Z:Y:X:W:V:U)
         RETURN n, m
         ''')
@@ -2017,7 +2017,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_99() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
         RETURN m
         ''')
@@ -2036,7 +2036,7 @@ class MatchAcceptance2VisualizationTest {
     */
     @Test
     def void testMatchAcceptance2_101() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r]-()
         RETURN type(r) AS r
         ''')

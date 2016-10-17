@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class LargeCreateQueryParserTest {
     

@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class UnwindAcceptanceParserTest {
     
@@ -12,7 +12,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
@@ -24,7 +24,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
@@ -36,7 +36,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [1, 2, 3] AS first, [4, 5, 6] AS second
         UNWIND (first + second) AS x
         RETURN x
@@ -49,7 +49,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND RANGE(1, 2) AS row
         WITH collect(row) AS rows
         UNWIND rows AS x
@@ -67,7 +67,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (row)
         WITH collect(row) AS rows
         UNWIND rows AS node
@@ -81,7 +81,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [[1, 2, 3], [4, 5, 6]] AS lol
         UNWIND lol AS x
         UNWIND x AS y
@@ -95,7 +95,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND [] AS empty
         RETURN empty
         ''')
@@ -107,7 +107,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND null AS nil
         RETURN nil
         ''')
@@ -119,7 +119,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
@@ -131,7 +131,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [1, 2, 3] AS list
         UNWIND list AS x
         RETURN *
@@ -153,7 +153,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:S)-[:X]->(b1)
         WITH a, collect(b1) AS bees
         UNWIND bees AS b2
@@ -168,7 +168,7 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [1, 2] AS xs, [3, 4] AS ys, [5, 6] AS zs
         UNWIND xs AS x
         UNWIND ys AS y

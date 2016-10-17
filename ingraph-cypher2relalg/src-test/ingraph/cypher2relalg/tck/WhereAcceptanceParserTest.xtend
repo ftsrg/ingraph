@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class WhereAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class WhereAcceptanceParserTest {
     */
     @Test
     def void testWhereAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
@@ -33,7 +33,7 @@ class WhereAcceptanceParserTest {
     */
     @Test
     def void testWhereAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Label)
         WHERE n.prop < 10
         RETURN n.prop AS prop

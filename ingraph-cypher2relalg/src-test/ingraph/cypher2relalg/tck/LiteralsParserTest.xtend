@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class LiteralsParserTest {
     
@@ -11,7 +11,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN 1 AS literal
         ''')
     }
@@ -21,7 +21,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN 1.0 AS literal
         ''')
     }
@@ -31,7 +31,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN -1e-9 AS literal
         ''')
     }
@@ -41,7 +41,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN true AS literal
         ''')
     }
@@ -51,7 +51,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN '' AS literal
         ''')
     }
@@ -61,7 +61,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN "" AS literal
         ''')
     }
@@ -71,7 +71,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN null AS literal
         ''')
     }
@@ -81,7 +81,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [] AS literal
         ''')
     }
@@ -91,7 +91,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [0, 1, 2] AS literal
         ''')
     }
@@ -101,7 +101,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN {} AS literal
         ''')
     }
@@ -111,7 +111,7 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
     }

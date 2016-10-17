@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class LabelsAcceptanceParserTest {
     
@@ -15,7 +15,7 @@ class LabelsAcceptanceParserTest {
     */
     @Test
     def void testLabelsAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN labels(n)
         ''')

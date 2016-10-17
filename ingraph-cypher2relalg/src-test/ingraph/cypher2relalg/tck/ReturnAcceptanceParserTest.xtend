@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class ReturnAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WHERE a.id = 1337
         RETURN a.version + 5
@@ -37,7 +37,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         LIMIT 2
@@ -58,7 +58,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -82,7 +82,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -104,7 +104,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -130,7 +130,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -152,7 +152,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
@@ -171,7 +171,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN DISTINCT a
         ORDER BY a.name
@@ -188,7 +188,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN a AS ColumnName
         ''')
@@ -204,7 +204,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)-->(b)
         RETURN DISTINCT b
         ORDER BY b.name
@@ -217,7 +217,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
     }
@@ -228,7 +228,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
     }
@@ -243,7 +243,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN a, count(*)
         ORDER BY count(*)
@@ -256,7 +256,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN abs(-1)
         ''')
     }
@@ -267,7 +267,7 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_15() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN size([1, 2, 3]) AS n
         ''')
     }

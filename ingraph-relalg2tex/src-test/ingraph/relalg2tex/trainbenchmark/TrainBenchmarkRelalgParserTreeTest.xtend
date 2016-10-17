@@ -1,8 +1,8 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.cypher2relalg.RelalgParser
 import org.junit.Test
 import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.cypher2relalg.CypherParser
 
 class TrainBenchmarkRelalgParserTreeTest {
 
@@ -10,37 +10,37 @@ class TrainBenchmarkRelalgParserTreeTest {
 
 	@Test
 	def void testConnectedSegments() {
-		val expression = RelalgParser.parseFile("trainbenchmark/ConnectedSegments")
+		val expression = CypherParser.parseFile("trainbenchmark/ConnectedSegments")
 		drawer.serialize(expression, "trainbenchmark-connectedsegments-relalgparser")
 	}
 
 	@Test
 	def void testPosLength() {
-		val expression = RelalgParser.parseFile("trainbenchmark/PosLength")
+		val expression = CypherParser.parseFile("trainbenchmark/PosLength")
 		drawer.serialize(expression, "trainbenchmark-poslength-relalgparser")
 	}
 
 	@Test
 	def void testRouteSensor() {
-		val expression = RelalgParser.parseFile("trainbenchmark/RouteSensor")
+		val expression = CypherParser.parseFile("trainbenchmark/RouteSensor")
 		drawer.serialize(expression, "trainbenchmark-routesensor-relalgparser")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() {
-		val expression = RelalgParser.parseFile("trainbenchmark/SemaphoreNeighbor")
+		val expression = CypherParser.parseFile("trainbenchmark/SemaphoreNeighbor")
 		drawer.serialize(expression, "trainbenchmark-semaphoreneighbor-relalgparser")
 	}
 
 	@Test
 	def void testSwitchMonitored() {
-		val expression = RelalgParser.parseFile("trainbenchmark/SwitchMonitored")
+		val expression = CypherParser.parseFile("trainbenchmark/SwitchMonitored")
 		drawer.serialize(expression, "trainbenchmark-switchmonitored-relalgparser")
 	}
 
 	@Test
 	def void testSwitchSet() {
-		val expression = RelalgParser.parseFile("trainbenchmark/SwitchSet")
+		val expression = CypherParser.parseFile("trainbenchmark/SwitchSet")
 		drawer.serialize(expression, "trainbenchmark-switchset-relalgparser")
 	}
 

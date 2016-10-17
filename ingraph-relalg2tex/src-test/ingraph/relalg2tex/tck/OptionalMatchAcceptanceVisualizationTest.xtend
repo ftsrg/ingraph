@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m:NonExistent)
         RETURN r
@@ -30,7 +30,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m)
         WHERE m:NonExistent
@@ -45,7 +45,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m)
         WHERE m.prop = 42
@@ -60,7 +60,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r:TYPE]-(m)
         RETURN m:TYPE
@@ -74,7 +74,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_05() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-->(b:NonExistent)
         OPTIONAL MATCH (a)-->(c:NonExistent)
@@ -91,7 +91,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_06() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a:A)
         WITH a AS a
         MATCH (b:B)
@@ -106,7 +106,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A)
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
@@ -120,7 +120,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (b:C)
         OPTIONAL MATCH (x)-->(b)
         RETURN x
@@ -140,7 +140,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:X)
         OPTIONAL MATCH (a)-->(b:Y)
         RETURN b
@@ -154,7 +154,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_10() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
@@ -168,7 +168,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_11() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-[*]->(b)
         RETURN b
@@ -182,7 +182,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_12() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-[*3..]-(b)
         RETURN b
@@ -196,7 +196,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_13() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:B)
         OPTIONAL MATCH (a)-[r]-(a)
         RETURN r
@@ -210,7 +210,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_14() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a)
         WHERE NOT (a:B)
         OPTIONAL MATCH (a)-[r]->(a)
@@ -225,7 +225,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_15() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Single), (x:C)
         OPTIONAL MATCH (a)-[*]->(x)
         RETURN x
@@ -239,7 +239,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_16() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH p = (a)-[*]->(b)
         RETURN p
@@ -253,7 +253,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_17() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:Single), (c:C)
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
@@ -267,7 +267,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_18() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (c:C)
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
@@ -281,7 +281,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_19() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH (a)-->(x)
         OPTIONAL MATCH (x)-[r]->(b)
@@ -296,7 +296,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_20() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a:NotThere)
         WITH a
         MATCH (b:B)
@@ -313,7 +313,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_21() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (a:NotThere)
         OPTIONAL MATCH (b:NotThere)
         WITH a, b
@@ -335,7 +335,7 @@ class OptionalMatchAcceptanceVisualizationTest {
     */
     @Test
     def void testOptionalMatchAcceptance_22() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (f:DoesExist)
         OPTIONAL MATCH (n:DoesNotExist)
         RETURN collect(DISTINCT n.property) AS a, collect(DISTINCT f.property) AS b

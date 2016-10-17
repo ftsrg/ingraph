@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class KeysAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -34,7 +34,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -51,7 +51,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -68,7 +68,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -85,7 +85,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -102,7 +102,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -119,7 +119,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -132,7 +132,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
     }
@@ -145,7 +145,7 @@ class KeysAcceptanceParserTest {
     */
     @Test
     def void testKeysAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN keys($param) AS k
         ''')
     }

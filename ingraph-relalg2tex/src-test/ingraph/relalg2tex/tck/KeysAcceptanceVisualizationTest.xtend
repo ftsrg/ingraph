@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -41,7 +41,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -60,7 +60,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -79,7 +79,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH (n)
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
@@ -98,7 +98,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_05() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -117,7 +117,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_06() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -136,7 +136,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         OPTIONAL MATCH ()-[r:KNOWS]-()
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
@@ -151,7 +151,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
         container.addSchemaInformation
@@ -166,7 +166,7 @@ class KeysAcceptanceVisualizationTest {
     */
     @Test
     def void testKeysAcceptance_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN keys($param) AS k
         ''')
         container.addSchemaInformation

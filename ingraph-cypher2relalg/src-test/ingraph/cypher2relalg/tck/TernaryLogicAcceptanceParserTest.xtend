@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class TernaryLogicAcceptanceParserTest {
     
@@ -11,7 +11,7 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN NOT null AS value
         ''')
     }
@@ -21,7 +21,7 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN null IS NULL AS value
         ''')
     }
@@ -31,7 +31,7 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN null IS NOT NULL AS value
         ''')
     }
@@ -41,7 +41,7 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN null = null AS value
         ''')
     }
@@ -51,7 +51,7 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN null <> null AS value
         ''')
     }

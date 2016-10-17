@@ -1,15 +1,18 @@
 package ingraph.report.tests
 
 import com.google.common.collect.Lists
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.Relalg2ReteTransformation
 import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
 import ingraph.report.feature.Scenario
+import ingraph.report.feature.ThenStep
 import ingraph.report.feature.WhenStep
 import java.io.File
+import java.nio.charset.Charset
 import java.util.Collections
 import java.util.List
 import org.apache.commons.io.FileUtils
@@ -17,8 +20,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
-import ingraph.relalg2tex.RelalgExpressionSerializer
-import ingraph.report.feature.ThenStep
 
 class FeatureParsingTest {
 
@@ -45,7 +46,15 @@ class FeatureParsingTest {
 				\section{«feature.name.escape»}
 
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
-					«IF scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty»
+					«val query = scenario.steps.filter(typeof(WhenStep)).map[desc].join»
+					«IF 
+						scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
+						!query.contains("CREATE ") &&
+						!query.contains("MERGE ") &&
+						!query.contains("REMOVE ") &&
+						!query.contains("SET ") &&
+						!query.contains("DELETE ")	
+					»
 					\subsection{«scenario.name.escape»}
 
 					\subsubsection*{Query specification}
@@ -69,8 +78,7 @@ class FeatureParsingTest {
 				«ENDFOR»
 			«ENDFOR»
 			'''
-
-		FileUtils.writeStringToFile(new File("../opencypher-report/acceptance-tests.tex"), doc)
+		FileUtils.writeStringToFile(new File("../opencypher-report/acceptance-tests.tex"), doc, Charset.defaultCharset())
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {
@@ -112,7 +120,7 @@ class FeatureParsingTest {
 
 	def expression(String s) {
 		try {
-			val container = RelalgParser.parse(s)
+			val container = CypherParser.parseString(s)
 			expressionSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
 			'''Cannot convert to expression.'''
@@ -121,7 +129,7 @@ class FeatureParsingTest {
 
 	def visualize(String s) {
 		try {
-			val container = RelalgParser.parse(s)
+			val container = CypherParser.parseString(s)
 			treeSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
 			'''Cannot visualize tree.'''
@@ -130,7 +138,7 @@ class FeatureParsingTest {
 
 	def visualizeWithTransformations(String s) {
 		try {
-			val container = RelalgParser.parse(s)
+			val container = CypherParser.parseString(s)
 			treeSerializer.serialize(container.transform.addSchemaInformation)
 		} catch (Exception e) {
 			'''Cannot visualize incremental tree.'''

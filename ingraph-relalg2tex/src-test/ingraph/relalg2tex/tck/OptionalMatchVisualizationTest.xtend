@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -23,7 +23,7 @@ class OptionalMatchVisualizationTest {
     */
     @Test
     def void testOptionalMatch_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
@@ -43,7 +43,7 @@ class OptionalMatchVisualizationTest {
     */
     @Test
     def void testOptionalMatch_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
@@ -64,7 +64,7 @@ class OptionalMatchVisualizationTest {
     */
     @Test
     def void testOptionalMatch_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch

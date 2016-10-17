@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN [1, 2, 3][0] AS value
         ''')
         container.addSchemaInformation
@@ -32,7 +32,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
@@ -48,7 +48,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
@@ -64,7 +64,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_06() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
@@ -80,7 +80,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
@@ -95,7 +95,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
@@ -111,7 +111,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
@@ -127,7 +127,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_10() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -143,7 +143,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_11() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -159,7 +159,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_12() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -175,7 +175,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_13() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -191,7 +191,7 @@ class ExpressionAcceptanceVisualizationTest {
     */
     @Test
     def void testExpressionAcceptance_14() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')

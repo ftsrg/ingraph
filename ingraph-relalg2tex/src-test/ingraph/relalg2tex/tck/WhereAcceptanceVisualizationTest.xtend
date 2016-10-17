@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class WhereAcceptanceVisualizationTest {
     */
     @Test
     def void testWhereAcceptance_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n)
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
@@ -40,7 +40,7 @@ class WhereAcceptanceVisualizationTest {
     */
     @Test
     def void testWhereAcceptance_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (n:Label)
         WHERE n.prop < 10
         RETURN n.prop AS prop

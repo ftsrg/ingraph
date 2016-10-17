@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class SkipLimitAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class SkipLimitAcceptanceParserTest {
     */
     @Test
     def void testSkipLimitAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WITH n SKIP toInteger(rand()*9)
         WITH count(*) AS count
@@ -34,7 +34,7 @@ class SkipLimitAcceptanceParserTest {
     */
     @Test
     def void testSkipLimitAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count

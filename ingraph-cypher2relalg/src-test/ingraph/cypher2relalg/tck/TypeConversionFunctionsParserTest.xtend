@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class TypeConversionFunctionsParserTest {
     
@@ -12,7 +12,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN toBoolean('true') AS b
         ''')
     }
@@ -23,7 +23,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND [true, false] AS b
         RETURN toBoolean(b) AS b
         ''')
@@ -35,7 +35,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND ['true', 'false'] AS s
         RETURN toBoolean(s) AS b
         ''')
@@ -47,7 +47,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND [null, '', ' tru ', 'f alse'] AS things
         RETURN toBoolean(things) AS b
         ''')
@@ -63,7 +63,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (p:Person { age: '42' })
         WITH *
         MATCH (n)
@@ -77,7 +77,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH 82.9 AS weight
         RETURN toInteger(weight)
         ''')
@@ -89,7 +89,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
@@ -101,7 +101,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [2, 2.9] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
@@ -113,7 +113,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [2, 2.9, '1.7'] AS things
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
@@ -125,7 +125,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH ['2', '2.9', 'foo'] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
@@ -141,7 +141,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
@@ -155,7 +155,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [3.4, 3] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -167,7 +167,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
@@ -179,7 +179,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [3.4, 3, '5'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -191,7 +191,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_15() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH ['1', '2', 'foo'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -207,7 +207,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_16() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
@@ -225,7 +225,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_17() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (m:Movie)
         RETURN toString(m.watched)
         ''')
@@ -237,7 +237,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_18() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN toString(1 < 0) AS bool
         ''')
     }
@@ -248,7 +248,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_19() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN toString(true) AS bool
         ''')
     }
@@ -259,7 +259,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_20() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
     }
@@ -270,7 +270,7 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_21() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH [1, 2, 3] AS numbers
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')

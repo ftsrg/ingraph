@@ -1,7 +1,7 @@
 package ingraph.cypher2relalg.cud
 
-import ingraph.cypher2relalg.RelalgParser
 import org.junit.Test
+import ingraph.cypher2relalg.CypherParser
 
 class CudOperationsTest {
 
@@ -11,7 +11,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreate_01() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()
 		''')
 	}
@@ -22,7 +22,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreate_02() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (), ()
 		''')
 	}
@@ -33,7 +33,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreate_03() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()-[:TYPE]->()
 		''')
 	}
@@ -44,7 +44,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreate_04() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:Label)
 		''')
 	}
@@ -55,7 +55,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreate_05() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ({created: true})
 		''')
 	}
@@ -66,7 +66,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_01() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()
 		''')
 	}
@@ -77,7 +77,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_02() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)
 		''')
 	}
@@ -88,7 +88,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_03() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A:B:C:D)
 		''')
 	}
@@ -103,7 +103,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_04() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH ()
 			CREATE ()
 		''')
@@ -119,7 +119,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_05() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH ()
 			CREATE ()
 			WITH *
@@ -138,7 +138,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_06() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH ()
 			CREATE ()
 		''')
@@ -150,7 +150,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_07() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (n {prop: 'foo'})
 			RETURN n.prop AS p
 		''')
@@ -162,7 +162,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_08() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (n {id: 12, property: null})
 			RETURN n.id AS id
 		''')
@@ -174,7 +174,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_09() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()-[r:X {id: 12, property: null}]->()
 			RETURN r.id
 		''')
@@ -186,7 +186,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_10() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()-[:R]->()
 		''')
 	}
@@ -197,7 +197,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_11() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (root:R)-[:LINK]->(root)
 		''')
 	}
@@ -212,7 +212,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_12() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (root:R)
 			CREATE (root)-[:LINK]->(root)
 		''')
@@ -224,7 +224,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_13() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (a), (b),
 			(a)-[:R]->(b)
 		''')
@@ -236,7 +236,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_14() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()-[:R {prop: 42}]->()
 		''')
 	}
@@ -252,7 +252,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_15() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (x:X), (y:Y)
 			CREATE (x)<-[:TYPE]-(y)
 		''')
@@ -268,7 +268,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_16() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (x:Begin)
 			CREATE (x)-[:TYPE]->(:End)
 		''')
@@ -284,7 +284,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_17() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH ()
 			CREATE ()
 			WITH *
@@ -298,7 +298,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_18() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)<-[:R]-(:B)
 		''')
 	}
@@ -309,7 +309,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_19() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)-[:R]->(:B)-[:R]->(:C)
 		''')
 	}
@@ -320,7 +320,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_20() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)<-[:R]-(:B)<-[:R]-(:C)
 		''')
 	}
@@ -331,7 +331,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_21() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)-[:R]->(:B)<-[:R]-(:C)
 		''')
 	}
@@ -342,7 +342,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_22() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE ()-[:R1]->()<-[:R2]-()-[:R3]->()
 		''')
 	}
@@ -357,7 +357,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_23() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (n)
 			MATCH (m)
 			WITH n AS a, m AS b
@@ -376,7 +376,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_24() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (n)
 			WITH n AS a
 			CREATE (a)-[:T]->()
@@ -394,7 +394,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_25() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (n)
 			MATCH (m)
 			WITH n AS a, m AS b
@@ -415,7 +415,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_26() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			MATCH (n)
 			WITH n AS a
 			CREATE (a)-[:T]->()
@@ -431,7 +431,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_27() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (a)
 			WITH a
 			WITH *
@@ -446,7 +446,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_28() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (a)
 			WITH a
 			UNWIND [0] AS i
@@ -461,7 +461,7 @@ class CudOperationsTest {
 	 */
 	@Test
 	def void testCreateAcceptance_31() {
-		RelalgParser.parse('''
+		CypherParser.parseString('''
 			CREATE (:A)<-[:R1]-(:B)-[:R2]->(:C)
 		''')
 	}

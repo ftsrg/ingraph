@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class OptionalMatchAcceptanceParserTest {
     
@@ -11,7 +11,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m:NonExistent)
         RETURN r
@@ -23,7 +23,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m)
         WHERE m:NonExistent
@@ -36,7 +36,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r]-(m)
         WHERE m.prop = 42
@@ -49,7 +49,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Single)
         OPTIONAL MATCH (n)-[r:TYPE]-(m)
         RETURN m:TYPE
@@ -61,7 +61,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-->(b:NonExistent)
         OPTIONAL MATCH (a)-->(c:NonExistent)
@@ -76,7 +76,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH (a:A)
         WITH a AS a
         MATCH (b:B)
@@ -89,7 +89,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A)
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
@@ -101,7 +101,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:C)
         OPTIONAL MATCH (x)-->(b)
         RETURN x
@@ -119,7 +119,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:X)
         OPTIONAL MATCH (a)-->(b:Y)
         RETURN b
@@ -131,7 +131,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
@@ -143,7 +143,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-[*]->(b)
         RETURN b
@@ -155,7 +155,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:Single)
         OPTIONAL MATCH (a)-[*3..]-(b)
         RETURN b
@@ -167,7 +167,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:B)
         OPTIONAL MATCH (a)-[r]-(a)
         RETURN r
@@ -179,7 +179,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WHERE NOT (a:B)
         OPTIONAL MATCH (a)-[r]->(a)
@@ -192,7 +192,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_15() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:Single), (x:C)
         OPTIONAL MATCH (a)-[*]->(x)
         RETURN x
@@ -204,7 +204,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_16() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH p = (a)-[*]->(b)
         RETURN p
@@ -216,7 +216,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_17() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:Single), (c:C)
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
@@ -228,7 +228,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_18() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (c:C)
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
@@ -240,7 +240,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_19() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH (a)-->(x)
         OPTIONAL MATCH (x)-[r]->(b)
@@ -253,7 +253,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_20() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH (a:NotThere)
         WITH a
         MATCH (b:B)
@@ -268,7 +268,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_21() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH (a:NotThere)
         OPTIONAL MATCH (b:NotThere)
         WITH a, b
@@ -288,7 +288,7 @@ class OptionalMatchAcceptanceParserTest {
     */
     @Test
     def void testOptionalMatchAcceptance_22() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         OPTIONAL MATCH (f:DoesExist)
         OPTIONAL MATCH (n:DoesNotExist)
         RETURN collect(DISTINCT n.property) AS a, collect(DISTINCT f.property) AS b

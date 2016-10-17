@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -17,7 +17,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
@@ -31,7 +31,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
@@ -45,7 +45,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [1, 2, 3] AS first, [4, 5, 6] AS second
         UNWIND (first + second) AS x
         RETURN x
@@ -60,7 +60,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND RANGE(1, 2) AS row
         WITH collect(row) AS rows
         UNWIND rows AS x
@@ -80,7 +80,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_05() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (row)
         WITH collect(row) AS rows
         UNWIND rows AS node
@@ -96,7 +96,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [[1, 2, 3], [4, 5, 6]] AS lol
         UNWIND lol AS x
         UNWIND x AS y
@@ -112,7 +112,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND [] AS empty
         RETURN empty
         ''')
@@ -126,7 +126,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND null AS nil
         RETURN nil
         ''')
@@ -140,7 +140,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_10() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
@@ -154,7 +154,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_11() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [1, 2, 3] AS list
         UNWIND list AS x
         RETURN *
@@ -178,7 +178,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_12() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (a:S)-[:X]->(b1)
         WITH a, collect(b1) AS bees
         UNWIND bees AS b2
@@ -195,7 +195,7 @@ class UnwindAcceptanceVisualizationTest {
     */
     @Test
     def void testUnwindAcceptance_13() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [1, 2] AS xs, [3, 4] AS ys, [5, 6] AS zs
         UNWIND xs AS x
         UNWIND ys AS y

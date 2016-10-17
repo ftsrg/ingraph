@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -17,7 +17,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_01() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN toBoolean('true') AS b
         ''')
         container.addSchemaInformation
@@ -30,7 +30,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_02() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND [true, false] AS b
         RETURN toBoolean(b) AS b
         ''')
@@ -44,7 +44,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_03() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND ['true', 'false'] AS s
         RETURN toBoolean(s) AS b
         ''')
@@ -58,7 +58,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_04() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         UNWIND [null, '', ' tru ', 'f alse'] AS things
         RETURN toBoolean(things) AS b
         ''')
@@ -76,7 +76,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_05() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (p:Person { age: '42' })
         WITH *
         MATCH (n)
@@ -92,7 +92,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_06() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH 82.9 AS weight
         RETURN toInteger(weight)
         ''')
@@ -106,7 +106,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_07() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
@@ -120,7 +120,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_08() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [2, 2.9] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
@@ -134,7 +134,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_09() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [2, 2.9, '1.7'] AS things
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
@@ -148,7 +148,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_10() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH ['2', '2.9', 'foo'] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
@@ -166,7 +166,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_11() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
@@ -182,7 +182,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_12() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [3.4, 3] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -196,7 +196,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_13() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
@@ -210,7 +210,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_14() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [3.4, 3, '5'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -224,7 +224,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_15() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH ['1', '2', 'foo'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
@@ -242,7 +242,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_16() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
@@ -262,7 +262,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_17() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         MATCH (m:Movie)
         RETURN toString(m.watched)
         ''')
@@ -276,7 +276,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_18() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN toString(1 < 0) AS bool
         ''')
         container.addSchemaInformation
@@ -289,7 +289,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_19() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN toString(true) AS bool
         ''')
         container.addSchemaInformation
@@ -302,7 +302,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_20() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
         container.addSchemaInformation
@@ -315,7 +315,7 @@ class TypeConversionFunctionsVisualizationTest {
     */
     @Test
     def void testTypeConversionFunctions_21() {
-        val container = RelalgParser.parse('''
+        val container = CypherParser.parseString('''
         WITH [1, 2, 3] AS numbers
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')

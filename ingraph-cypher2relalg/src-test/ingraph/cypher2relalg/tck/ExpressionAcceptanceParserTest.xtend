@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class ExpressionAcceptanceParserTest {
     
@@ -11,7 +11,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [1, 2, 3][0] AS value
         ''')
     }
@@ -25,7 +25,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
@@ -39,7 +39,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
@@ -53,7 +53,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
@@ -67,7 +67,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
@@ -80,7 +80,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
@@ -94,7 +94,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
@@ -108,7 +108,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -122,7 +122,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -136,7 +136,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -150,7 +150,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
@@ -164,7 +164,7 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')

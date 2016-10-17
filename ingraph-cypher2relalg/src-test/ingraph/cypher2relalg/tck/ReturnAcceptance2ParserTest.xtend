@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class ReturnAcceptance2ParserTest {
     
@@ -12,7 +12,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN '\u01FF' AS a
         ''')
     }
@@ -27,7 +27,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         LIMIT 0
@@ -44,7 +44,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n
@@ -61,7 +61,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n.name, count(*) AS foo
         ORDER BY n.name
@@ -78,7 +78,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN DISTINCT n.name
         ''')
@@ -94,7 +94,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH p = (a:Start)-->(b)
         RETURN *
         ''')
@@ -106,7 +106,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN sqrt(12.96)
         ''')
     }
@@ -134,7 +134,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (me)-[r1:ATE]->()<-[r2:ATE]-(you)
         WHERE me.name = 'Michael'
         WITH me, count(DISTINCT r1) AS H1, count(DISTINCT r2) AS H2, you
@@ -166,7 +166,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_15() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-->()
         WITH 1 AS x
         MATCH ()-[r1]->()<--()
@@ -184,7 +184,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_16() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
@@ -200,7 +200,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_17() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN {a: 1, b: 'foo'}
         ''')
     }
@@ -215,7 +215,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_18() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN exists(a.id), a IS NOT NULL
         ''')
@@ -227,7 +227,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_19() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN size([[], []] + [[]]) AS l
         ''')
     }
@@ -243,7 +243,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_21() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN a.count
         ORDER BY a.count
@@ -258,7 +258,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_22() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN substring('0123456789', 1) AS s
         ''')
     }
@@ -273,7 +273,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_23() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN *
         ORDER BY n.id
@@ -290,7 +290,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_24() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN DISTINCT n.id AS id
         ORDER BY id DESC
@@ -307,7 +307,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_25() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN DISTINCT n
         ORDER BY n.id
@@ -320,7 +320,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_26() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN 1 + (2 - (3 * (4 / (5 ^ (6 % null))))) AS a
         ''')
     }
@@ -331,7 +331,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_27() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [[1]][0][0]
         ''')
     }
@@ -346,7 +346,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_28() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN a.id AS a, a.id
         ''')
@@ -362,7 +362,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_29() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN a, count(a) + 3
         ''')
@@ -378,7 +378,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_31() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WITH a.a AS a, count(*) AS count
         RETURN count
@@ -396,7 +396,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_32() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (person:Person)<--(message)<-[like]-(:Person)
         WITH like.creationDate AS likeTime, person AS person
         ORDER BY likeTime, message.id
@@ -412,7 +412,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_33() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [1, 10, 100] + [4, 5] AS foo
         ''')
     }
@@ -423,7 +423,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_34() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN [false, true] + false AS foo
         ''')
     }
@@ -438,7 +438,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_35() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN count(DISTINCT {foo: n.list}) AS count
         ''')
@@ -454,7 +454,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_36() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WITH DISTINCT {foo: n.list} AS map
         RETURN count(*)
@@ -471,7 +471,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_37() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN count(DISTINCT {foo: [[n.list, n.list], [n.list, n.list]]}) AS count
         ''')
@@ -487,7 +487,7 @@ class ReturnAcceptance2ParserTest {
     */
     @Test
     def void testReturnAcceptance2_38() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN count(DISTINCT {foo: [{bar: n.list}, {baz: {apa: n.list}}]}) AS count
         ''')

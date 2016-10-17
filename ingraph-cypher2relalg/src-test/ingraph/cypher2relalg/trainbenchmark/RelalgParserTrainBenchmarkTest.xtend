@@ -1,38 +1,38 @@
 package ingraph.cypher2relalg.trainbenchmark
 
-import ingraph.cypher2relalg.RelalgParser
 import java.io.IOException
 import org.junit.Test
+import ingraph.cypher2relalg.CypherParser
 
 class RelalgParserTrainBenchmarkTest {
 	
 	@Test
 	def void testConnectedSegments() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/ConnectedSegments")
+		CypherParser.parseFile("trainbenchmark/ConnectedSegments")
 	}
 
 	@Test
 	def void testPosLength() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/PosLength")
+		CypherParser.parseFile("trainbenchmark/PosLength")
 	}
 
 	@Test
 	def void testRouteSensor() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/RouteSensor")
+		CypherParser.parseFile("trainbenchmark/RouteSensor")
 	}
 
 	@Test
 	def void testSwitchMonitored() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/SwitchMonitored")
+		CypherParser.parseFile("trainbenchmark/SwitchMonitored")
 	}
 
 	@Test
 	def void testSwitchSet() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/SwitchSet")
+		CypherParser.parseFile("trainbenchmark/SwitchSet")
 	}
 
 	@Test
 	def void testSemaphoreNeighbor() throws IOException {
-		RelalgParser.parseFile("trainbenchmark/SemaphoreNeighbor")
+		CypherParser.parseFile("trainbenchmark/SemaphoreNeighbor")
 	}
 }

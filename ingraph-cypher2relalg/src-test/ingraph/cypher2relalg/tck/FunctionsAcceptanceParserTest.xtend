@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class FunctionsAcceptanceParserTest {
     
@@ -16,7 +16,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
@@ -28,7 +28,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         WITH null AS a
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
@@ -41,7 +41,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
@@ -57,7 +57,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
@@ -73,7 +73,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
@@ -85,7 +85,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
     }
@@ -96,7 +96,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN properties(null)
         ''')
     }
@@ -107,7 +107,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         RETURN reverse('raksO')
         ''')
     }
@@ -123,7 +123,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Person)
         WHERE exists(n['prop'])
         RETURN n
@@ -144,7 +144,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:S)
         WITH n, size([(n)-->() | 1]) AS deg
         WHERE deg > 2
@@ -164,7 +164,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_11() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
@@ -180,7 +180,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_12() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
@@ -196,7 +196,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_13() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
@@ -213,7 +213,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_14() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
@@ -230,7 +230,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_15() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)-[r]->()
         WITH [r, 1] AS list
         RETURN type(list[0])
@@ -247,7 +247,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_16() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
@@ -264,7 +264,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_17() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a)
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
@@ -281,7 +281,7 @@ class FunctionsAcceptanceParserTest {
     */
     @Test
     def void testFunctionsAcceptance_18() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')

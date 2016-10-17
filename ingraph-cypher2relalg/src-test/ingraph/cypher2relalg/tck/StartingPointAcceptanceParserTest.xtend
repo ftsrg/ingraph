@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class StartingPointAcceptanceParserTest {
     
@@ -18,7 +18,7 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
@@ -37,7 +37,7 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n:Animal)
         RETURN n
         ''')
@@ -54,7 +54,7 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE n.prop = 2
         RETURN n

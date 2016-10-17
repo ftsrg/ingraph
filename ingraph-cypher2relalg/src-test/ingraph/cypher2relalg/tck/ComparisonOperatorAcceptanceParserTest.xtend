@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class ComparisonOperatorAcceptanceParserTest {
     
@@ -17,7 +17,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 1 < n.value < 3
         RETURN n.value
@@ -35,7 +35,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 1 < n.value <= 3
         RETURN n.value
@@ -53,7 +53,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_03() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 1 <= n.value < 3
         RETURN n.value
@@ -71,7 +71,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_04() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 1 <= n.value <= 3
         RETURN n.value
@@ -89,7 +89,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_05() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' < n.value < 'c'
         RETURN n.value
@@ -107,7 +107,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_06() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
@@ -125,7 +125,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_07() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
@@ -143,7 +143,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_08() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
@@ -160,7 +160,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_09() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)
         WHERE 10 < n.value <= 3
         RETURN n.value
@@ -182,7 +182,7 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_10() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (n)-->(m)
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)

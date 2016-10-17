@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.RelalgParser
+import ingraph.cypher2relalg.CypherParser
 
 class JoinAcceptanceParserTest {
     
@@ -19,7 +19,7 @@ class JoinAcceptanceParserTest {
     */
     @Test
     def void testJoinAcceptance_01() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
@@ -38,7 +38,7 @@ class JoinAcceptanceParserTest {
     */
     @Test
     def void testJoinAcceptance_02() {
-        RelalgParser.parse('''
+        CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
