@@ -1,4 +1,4 @@
-# openCypher specification
+# ingraph workflow
 
 ![](opencypher-to-incremental-queries-workflow.png)
 
