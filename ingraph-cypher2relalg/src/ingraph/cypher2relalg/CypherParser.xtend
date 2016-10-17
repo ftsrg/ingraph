@@ -9,6 +9,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import relalg.RelalgFactory
 import ingraph.emf.util.PrettyPrinter
+import org.slizaa.neo4j.opencypher.openCypher.Return
 
 class CypherParser {
 
@@ -37,6 +38,9 @@ class CypherParser {
 
 		val singleQuery = cypherQuery.statement as SingleQuery
 		singleQuery.clauses.filter(typeof(Match)).forEach[
+			println(PrettyPrinter.prettyPrint(it))
+		]
+		singleQuery.clauses.filter(typeof(Return)).forEach[
 			println(PrettyPrinter.prettyPrint(it))
 		]
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ingraph-cypher2relalg</name>
-	<comment>Project ingraph-cypher2relalg created by Buildship.</comment>
+	<name>ingraph-cypher2relalg-antlr</name>
+	<comment>Project ingraph-cypher2relalg-antlr created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
