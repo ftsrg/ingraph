@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
+## Third Party Sources
+
+* The project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/). See also the [Why Xtext?](docs/why-xtext.md) document.
+
 ## Generated Artifacts
 
 * [Test summary](http://docs.inf.mit.bme.hu/ingraph/test/)

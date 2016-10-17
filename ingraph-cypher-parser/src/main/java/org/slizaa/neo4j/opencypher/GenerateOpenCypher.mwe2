@@ -26,7 +26,7 @@ Workflow {
 			}
 		}
 		language = StandardLanguage {
-			name = "ingraph.Cypher"
+			name = "org.slizaa.neo4j.opencypher.OpenCypher"
 			fileExtensions = "cyp,cypher"
 
 			serializer = {
@@ -38,6 +38,7 @@ Workflow {
 			parserGenerator = {
 				options = {
 					ignoreCase = true
+					backtrack = true
 				}
 			}
 		}

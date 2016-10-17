@@ -1,19 +1,20 @@
 package ingraph.tests
 
 import com.google.inject.Inject
-import ingraph.cypher.CypherQuery
 import org.eclipse.xtext.junit4.InjectWith
 import org.eclipse.xtext.junit4.XtextRunner
 import org.eclipse.xtext.junit4.util.ParseHelper
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.tests.OpenCypherInjectorProvider
 
 @RunWith(XtextRunner)
-@InjectWith(CypherInjectorProvider)
+@InjectWith(OpenCypherInjectorProvider)
 class ExpressionParsingTest {
 
 	@Inject
-	ParseHelper<CypherQuery> parseHelper
+	ParseHelper<Cypher> parseHelper
 
 	def void testAndPrint(String query) {
 		val result = parseHelper.parse(query)
