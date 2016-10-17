@@ -5,7 +5,10 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.slizaa.neo4j.opencypher.OpenCypherStandaloneSetup
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.Match
+import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import relalg.RelalgFactory
+import ingraph.emf.util.PrettyPrinter
 
 class CypherParser {
 
@@ -31,6 +34,11 @@ class CypherParser {
 
 	def static processQuery(Cypher cypherQuery) {
 		val container = RelalgFactory.eINSTANCE.createRelationalAlgebraContainer
+
+		val singleQuery = cypherQuery.statement as SingleQuery
+		singleQuery.clauses.filter(typeof(Match)).forEach[
+			println(PrettyPrinter.prettyPrint(it))
+		]
 
 		container
 	}

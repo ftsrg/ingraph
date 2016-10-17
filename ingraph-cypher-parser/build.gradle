@@ -45,10 +45,10 @@ dependencies {
 task generateXtextLanguage(type: JavaExec) {
 	main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
 	classpath = configurations.mwe2
-	inputs.file "src/main/java/ingraph/GenerateCypher.mwe2"
-	inputs.file "src/main/java/ingraph/Cypher.xtext"
+	inputs.file "src/main/java/org/slizaa/neo4j/opencypher/GenerateOpenCypher.mwe2"
+	inputs.file "src/main/java/org/slizaa/neo4j/opencypher/OpenCypher.xtext"
 	outputs.dir "src/main/xtext-gen"
-	args += "src/main/java/ingraph/GenerateCypher.mwe2"
+	args += "src/main/java/org/slizaa/neo4j/opencypher/GenerateOpenCypher.mwe2"
 	args += "-p"
 	args += "rootPath=/${projectDir}/.."
 }

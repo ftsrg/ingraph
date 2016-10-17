@@ -1,4 +1,4 @@
-package ingraph.tests;
+package ingraph.emf.util;
 
 import java.util.ArrayList;
 import java.util.List;
