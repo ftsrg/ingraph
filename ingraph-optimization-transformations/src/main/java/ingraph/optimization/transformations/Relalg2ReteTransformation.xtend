@@ -27,11 +27,13 @@ class Relalg2ReteTransformation {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 	}
 
-	def transformToRete(RelationalAlgebraContainer container) {
+	def transformToRete(RelationalAlgebraContainer container) {	
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)
-		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(new EMFScope(resourceSet))
+
+		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
+			new EMFScope(resourceSet))
 
 		val transformation = BatchTransformation.forEngine(engine).build
 		val statements = transformation.transformationStatements
@@ -52,6 +54,7 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
+			println("expandVertexRule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -76,6 +79,7 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
+			println("expandOperatorRule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [

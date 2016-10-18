@@ -31,7 +31,7 @@ import relalg.GetVerticesOperator;
  * <p>Original source:
  * <code><pre>
  * // 1st transformation
- * pattern expandVertex(getVerticesOperator, expandOperator) {
+ * pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator) {
  * 	ExpandOperator.input(expandOperator, getVerticesOperator);
  * 	GetVerticesOperator(getVerticesOperator);
  * }

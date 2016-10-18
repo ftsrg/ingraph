@@ -10,7 +10,7 @@ import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 
-class MentalGraphChangedListener(
+class IngraphChangedListener(
                                   vertexConverters: Map[String, mutable.Set[String]],
                                   edgeConverters: Map[String, mutable.Set[EdgeTransformer]],
                                   inputLookup: Map[String, (ChangeSet) => Unit]

@@ -30,7 +30,7 @@ import relalg.ExpandOperator;
  * <p>Original source:
  * <code><pre>
  * // 2nd transformation
- * pattern expandOperator(expandOperator) {
+ * pattern expandOperator(expandOperator : ExpandOperator) {
  * 	ExpandOperator(expandOperator);
  * }
  * </pre></code>

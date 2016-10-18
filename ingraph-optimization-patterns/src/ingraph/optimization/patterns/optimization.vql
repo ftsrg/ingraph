@@ -3,12 +3,12 @@ package ingraph.optimization.patterns
 import "http://www.example.org/relalg";
 
 // 1st transformation
-pattern expandVertex(getVerticesOperator, expandOperator) {
+pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator) {
 	ExpandOperator.input(expandOperator, getVerticesOperator);
 	GetVerticesOperator(getVerticesOperator);
 }
 
 // 2nd transformation
-pattern expandOperator(expandOperator) {
+pattern expandOperator(expandOperator : ExpandOperator) {
 	ExpandOperator(expandOperator);
 }

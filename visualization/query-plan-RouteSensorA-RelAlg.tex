@@ -9,10 +9,10 @@
 \begin{tikzpicture}
 \linespread{1.25}
 \Tree
-[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor, \_e4} \rangle$}
-	[. {$\expandout{sw}{sensor}{Sensor}{\_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw, \_e3, sensor} \rangle$}
-		[. {$\expandout{swP}{sw}{Switch}{\_e2}{target}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP, \_e2, sw} \rangle$}
-			[. {$\expandout{route}{swP}{SwitchPosition}{\_e1}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e1, swP} \rangle$}
+[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw, \_e2, sensor, \_e4} \rangle$}
+	[. {$\expandout{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw, \_e2, sensor} \rangle$}
+		[. {$\expandout{swP}{sw}{Switch}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw} \rangle$}
+			[. {$\expandout{route}{swP}{SwitchPosition}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP} \rangle$}
 				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
 				]
 			]

@@ -1,81 +1,67 @@
 package ingraph.trainbenchmark
 
-import java.util.Arrays
 import relalg.Direction
 
 class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 
-	val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-	val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
-	val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
-	val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; it.container = container]
+	// vertex labels
+	val routeLabel = createVertexLabel => [name = "Route"]
+	val sensorLabel = createVertexLabel => [name = "Sensor"]
+	val switchLabel = createVertexLabel => [name = "Switch"]
+	val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"]
 
-	val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
-	val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
-	val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
+	// edge labels
+	val followsLabel = createEdgeLabel => [name = "follows"]
+	val gathersLabel = createEdgeLabel => [name = "gathers"]
+	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"]
+	val targetLabel = createEdgeLabel => [name = "target"]
 
-	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
-	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel; it.container = container]
-	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel; it.container = container]
-	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
+	// vertex variables
+	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel]
+	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel]
+	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel]
+	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel]
+
+	// edge variables
+	val target = createEdgeVariable => [name = "_e1"; edgeLabel = targetLabel]
+	val monitoredBy = createEdgeVariable => [name = "_e2"; edgeLabel = monitoredByLabel]
+	val follows = createEdgeVariable => [name = "_e3"; edgeLabel = followsLabel]
+	val gathers = createEdgeVariable => [name = "_e4"; edgeLabel = gathersLabel]
+
+	// inputs
+	val getRoutes = createGetVerticesOperator => [vertexVariable = route]
+	val getSws = createGetVerticesOperator => [vertexVariable = sw]
+	val getSwPs = createGetVerticesOperator => [vertexVariable = swP]
+	val getSensor = createGetVerticesOperator => [vertexVariable = sensor]
 
 	def routeSensorA() {
-		val _e1 = createEdgeVariable => [
-			name = "_e1";
-			edgeLabel = followsLabel;
-			dontCare = true;
-			it.container = container
-		]
-		val _e2 = createEdgeVariable => [
-			name = "_e2";
-			edgeLabel = targetLabel;
-			dontCare = true;
-			it.container = container
-		]
-		val _e3 = createEdgeVariable => [
-			name = "_e3";
-			edgeLabel = monitoredByLabel;
-			dontCare = true;
-			it.container = container
-		]
-		val _e4 = createEdgeVariable => [
-			name = "_e4";
-			edgeLabel = gathersLabel;
-			dontCare = true;
-			it.container = container
-		]
-
-		val getVertices = createGetVerticesOperator => [vertexVariable = route]
-
 		val expand1 = createExpandOperator => [
-			input = getVertices
+			input = getRoutes
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = swP
-			edgeVariable = _e1
+			edgeVariable = follows
 		]
 		val expand2 = createExpandOperator => [
 			input = expand1
 			direction = Direction.OUT
 			sourceVertexVariable = swP
 			targetVertexVariable = sw
-			edgeVariable = _e2
+			edgeVariable = target
 		]
 		val expand3 = createExpandOperator => [
 			input = expand2
 			direction = Direction.OUT
 			sourceVertexVariable = sw
 			targetVertexVariable = sensor
-			edgeVariable = _e3
+			edgeVariable = monitoredBy
 		]
-
 		val expand4 = createExpandOperator => [
-			input = getVertices
+			input = getRoutes
 			direction = Direction.OUT
 			sourceVertexVariable = route
 			targetVertexVariable = sensor
-			edgeVariable = _e4
+			edgeVariable = gathers
 		]
 
 		val antiJoin = createAntiJoinOperator => [
@@ -83,18 +69,100 @@ class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 			rightInput = expand4
 		]
 		val production = createProductionOperator => [input = antiJoin]
-		
+
 		container.rootExpression = production
 		container.addSchemaInformation
 		return container
 	}
 
 	def routeSensorB() {
-		container
+		val expand1 = createExpandOperator => [
+			input = getSwPs
+			direction = Direction.OUT
+			sourceVertexVariable = swP
+			targetVertexVariable = sw
+			edgeVariable = target
+		]
+		val expand2 = createExpandOperator => [
+			input = expand1
+			direction = Direction.OUT
+			sourceVertexVariable = sw
+			targetVertexVariable = sensor
+			edgeVariable = monitoredBy
+		]
+		val expand3 = createExpandOperator => [
+			input = expand2
+			direction = Direction.IN
+			sourceVertexVariable = swP
+			targetVertexVariable = route
+			edgeVariable = follows
+		]
+		val expand4 = createExpandOperator => [
+			input = getRoutes
+			direction = Direction.OUT
+			sourceVertexVariable = route
+			targetVertexVariable = sensor
+			edgeVariable = gathers
+		]
+
+		val antiJoin = createAntiJoinOperator => [
+			leftInput = expand3
+			rightInput = expand4
+		]
+		val production = createProductionOperator => [input = antiJoin]
+
+		container.rootExpression = production
+		container.addSchemaInformation
+		return container
 	}
 
 	def routeSensorC() {
-		container
+		val expand1 = createExpandOperator => [
+			input = getRoutes
+			direction = Direction.OUT
+			sourceVertexVariable = route
+			targetVertexVariable = swP
+			edgeVariable = follows
+		]
+		val expand2 = createExpandOperator => [
+			input = getSws
+			direction = Direction.IN
+			sourceVertexVariable = sw
+			targetVertexVariable = sensor
+			edgeVariable = monitoredBy
+		]
+		val expand3 = createExpandOperator => [
+			input = getRoutes
+			direction = Direction.OUT
+			sourceVertexVariable = route
+			targetVertexVariable = sensor
+			edgeVariable = gathers
+		]
+		val expand4 = createExpandOperator => [
+			input = getSwPs
+			direction = Direction.IN
+			sourceVertexVariable = swP
+			targetVertexVariable = sw
+			edgeVariable = target
+		]
+
+		val join1 = createJoinOperator => [
+			leftInput = expand1
+			rightInput = expand2
+		]
+		val antiJoin = createAntiJoinOperator => [
+			leftInput = join1
+			rightInput = expand3
+		]
+		val join2 = createJoinOperator => [
+			leftInput = antiJoin
+			rightInput = expand4
+		]
+		val production = createProductionOperator => [input = join2]
+
+		container.rootExpression = production
+		container.addSchemaInformation
+		return container
 	}
 
 }

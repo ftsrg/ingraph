@@ -18,9 +18,9 @@ class GrapListenerTest extends FlatSpec {
   "semaphoreneighbour" should "work" in {
     val rete = new Relalg2ReteTransformation
     val inferencer = new SchemaInferencer
-    val sn = inferencer.addSchemaInformation(rete.transform(TrainBenchmarkUtil.switchSet()))
-    val engine = EngineMaker.createQueryEngine(sn.getRootExpression.asInstanceOf[ProductionOperator])
-    val listener = new MentalGraphChangedListener(
+    val relAlgContainer = inferencer.addSchemaInformation(rete.transformToRete(TrainBenchmarkUtil.switchSet()))
+    val engine = EngineMaker.createQueryEngine(relAlgContainer.getRootExpression.asInstanceOf[ProductionOperator])
+    val listener = new IngraphChangedListener(
       engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup)
     val graph = new EventGraph[Graph](TinkerGraph.open())
     graph.addListener(listener)

@@ -1,0 +1,37 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\linespread{1.25}
+\Tree
+[. {$\join \{\var{swP}, \var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor, \_e4, \_e1} \rangle$}
+	[. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor, \_e4} \rangle$}
+		[. {$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor} \rangle$}
+			[. {$\expandout{route}{swP}{SwitchPosition}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP} \rangle$}
+				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
+				]
+			]
+			[. {$\expandin{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e2, sensor} \rangle$}
+				[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{sw} \rangle$}
+				]
+			]
+		]
+		[. {$\expandout{route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
+			[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
+			]
+		]
+	]
+	[. {$\expandin{swP}{sw}{Switch}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw} \rangle$}
+		[. {$\getvertices{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{swP} \rangle$}
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

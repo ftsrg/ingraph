@@ -19,26 +19,34 @@ class RouteSensorOptimizationTreeTest {
 	}
 
 	@Test
-	def void testRouteSensorA() {
-		drawer.serialize(routeSensorA, "query-plan-RouteSensorA")
+	def void testRouteSensorARelAlg() {
+		drawer.serialize(routeSensorA, "query-plan-RouteSensorA-RelAlg")
 	}
 
 	@Test
 	def void testRouteSensorARete() {
-		drawer.serialize(routeSensorA.transformToRete, "query-plan-RouteSensorARete")
+		drawer.serialize(routeSensorA.transformToRete, "query-plan-RouteSensorA-Rete")
 	}
 
 
-	@Ignore
 	@Test
-	def void testRouteSensorB() {
-		drawer.serialize(routeSensorB, "query-plan-RouteSensorB")
+	def void testRouteSensorBRelAlg() {
+		drawer.serialize(routeSensorB, "query-plan-RouteSensorB-RelAlg")
 	}
 
-	@Ignore
 	@Test
-	def void testRouteSensorC() {
-		drawer.serialize(routeSensorC, "query-plan-RouteSensorC")
+	def void testRouteSensorBRete() {
+		drawer.serialize(routeSensorB.transformToRete, "query-plan-RouteSensorB-Rete")
+	}
+
+	@Test
+	def void testRouteSensorCRelAlg() {
+		drawer.serialize(routeSensorC, "query-plan-RouteSensorC-RelAlg")
+	}
+	
+	@Test
+	def void testRouteSensorCRete() {
+		drawer.serialize(routeSensorC.transformToRete, "query-plan-RouteSensorC-Rete")
 	}
 
 }
