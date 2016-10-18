@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class ComparisonOperatorAcceptanceParserTest {
     
@@ -17,11 +19,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,11 +39,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -53,11 +59,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -71,11 +79,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -89,11 +99,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -107,11 +119,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -125,11 +139,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -143,11 +159,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -160,11 +178,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -182,11 +202,13 @@ class ComparisonOperatorAcceptanceParserTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-->(m)
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

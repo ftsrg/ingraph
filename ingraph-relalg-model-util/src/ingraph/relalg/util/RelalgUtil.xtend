@@ -9,16 +9,16 @@ import relalg.RelationalAlgebraContainer
 
 class RelalgUtil {
 
-	def static save(RelationalAlgebraContainer container, String filename) {
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
+	public static val MODEL_EXTENSION = "relalg"
+
+	def static void save(RelationalAlgebraContainer container, String filename) {
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_EXTENSION, new XMIResourceFactoryImpl())
 
 		val resourceSet = new ResourceSetImpl
-		val uri = URI.createFileURI(filename + ".relalg")
+		val uri = URI.createFileURI(filename + "." + MODEL_EXTENSION)
 		val resource = resourceSet.createResource(uri)
 		resource.contents.add(container)
 		resource.save(Collections.emptyMap)
-
-		return container
 	}
 	
 }

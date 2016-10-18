@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class OptionalMatchParserTest {
     
@@ -18,11 +20,13 @@ class OptionalMatchParserTest {
     */
     @Test
     def void testOptionalMatch_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -36,11 +40,13 @@ class OptionalMatchParserTest {
     */
     @Test
     def void testOptionalMatch_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -55,11 +61,13 @@ class OptionalMatchParserTest {
     */
     @Test
     def void testOptionalMatch_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Player)-[:PLAYS_FOR]->(team:Team)
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

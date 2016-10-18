@@ -21,7 +21,9 @@ for filename in filenames:
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class %sParserTest {
     """ % filename_without_extension
@@ -51,16 +53,19 @@ class %sParserTest {
         with open("../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
             query_file.write(query + "\n")
 
+        test_name = "%s_%02d" % (filename_without_extension, i)
         test_case = """
     /*
     %s*/
     @Test
-    def void test%s_%02d() {
-        CypherParser.parseString('''
+    def void test%s() {
+        val cypher = CypherParser.parseString('''
         %s
         ''')
+        CypherUtil.save(cypher, "../cypxmi/%s")
+        Cypher2RelAlg.processCypher(cypher)
     }
-""" % (scenario, filename_without_extension, i, indent(query))
+""" % (scenario, test_name, indent(query), test_name)
         test_file.write(test_case)
 
     test_footer = """

@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -23,7 +23,7 @@ class ListComprehensionVisualizationTest {
     */
     @Test
     def void testListComprehension_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
@@ -43,7 +43,7 @@ class ListComprehensionVisualizationTest {
     */
     @Test
     def void testListComprehension_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (n:A)-->()
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
@@ -64,7 +64,7 @@ class ListComprehensionVisualizationTest {
     */
     @Test
     def void testListComprehension_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)-->(b)
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b

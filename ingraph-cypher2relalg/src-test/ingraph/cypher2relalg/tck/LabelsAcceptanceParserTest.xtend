@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class LabelsAcceptanceParserTest {
     
@@ -15,10 +17,12 @@ class LabelsAcceptanceParserTest {
     */
     @Test
     def void testLabelsAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN labels(n)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LabelsAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN" distinct="true">
+      <body xsi:type="openCypher:ReturnItems">
+        <order>
+          <orderBy sort="DESC">
+            <expression xsi:type="openCypher:VariableRef">
+              <variableRef href="dummy:/example.cyp#|0"/>
+            </expression>
+          </orderBy>
+        </order>
+        <items>
+          <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef">
+              <variableRef href="dummy:/example.cyp#|1"/>
+            </left>
+            <propertyLookups propertyKeyName="id"/>
+          </expression>
+          <alias name="id"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

@@ -13,7 +13,9 @@
 	[. {$\antijoin \{\var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
 		[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{sw} \rangle$}
 		]
-		[. {$\getedges{sw}{Switch}{\_sensor}{Sensor}{\_e1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
+		[. {$\expandout{sw}{\_sensor}{Sensor}{\_e1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sw, \_e1, \_sensor} \rangle$}
+			[. {$\getvertices{sw}{Switch}$ \\ \footnotesize $\color{gray} \langle \var{sw} \rangle$}
+			]
 		]
 	]
 ]

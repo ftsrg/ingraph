@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class TernaryLogicAcceptanceParserTest {
     
@@ -11,9 +13,11 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN NOT null AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -21,9 +25,11 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN null IS NULL AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -31,9 +37,11 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN null IS NOT NULL AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -41,9 +49,11 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN null = null AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -51,9 +61,11 @@ class TernaryLogicAcceptanceParserTest {
     */
     @Test
     def void testTernaryLogicAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN null <> null AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

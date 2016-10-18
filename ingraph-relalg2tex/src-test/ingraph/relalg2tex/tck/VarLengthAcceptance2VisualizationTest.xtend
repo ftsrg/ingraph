@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -27,7 +27,7 @@ class VarLengthAcceptance2VisualizationTest {
     */
     @Test
     def void testVarLengthAcceptance2_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()-[r:EDGE]-()
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c

@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class VarLengthAcceptanceParserTest {
     
@@ -11,11 +13,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -23,11 +27,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*..]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,11 +41,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*0]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -47,11 +55,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -59,11 +69,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -71,11 +83,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*0..2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -83,11 +97,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1..2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -95,11 +111,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*0..0]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -107,11 +125,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1..1]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -119,11 +139,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*2..2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -131,11 +153,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*2..1]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -143,11 +167,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1..0]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -155,11 +181,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*..0]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -167,11 +195,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*..1]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -179,11 +209,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*..2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -191,11 +223,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*0..]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -203,11 +237,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1..]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -215,11 +251,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*2..]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -227,11 +265,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*0]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -239,11 +279,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_20() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES]->()-[:LIKES*0]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_20")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -251,11 +293,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_21() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*1]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_21")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -263,11 +307,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_22() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES]->()-[:LIKES*1]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_22")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -275,11 +321,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_23() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES*2]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_23")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -287,11 +335,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_24() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES]->()-[:LIKES*2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_24")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -307,11 +357,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_25() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES]->()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_25")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -333,11 +385,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_26() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)<-[:LIKES]-()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_26")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -361,11 +415,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_27() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[:LIKES]->()<-[:LIKES*3]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_27")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -381,11 +437,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_28() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (p)-[:LIKES*1]->()-[:LIKES]->()-[r:LIKES*2]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_28")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -401,11 +459,13 @@ class VarLengthAcceptanceParserTest {
     */
     @Test
     def void testVarLengthAcceptance_29() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (p)-[:LIKES]->()-[:LIKES*2]->()-[r:LIKES]->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_29")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

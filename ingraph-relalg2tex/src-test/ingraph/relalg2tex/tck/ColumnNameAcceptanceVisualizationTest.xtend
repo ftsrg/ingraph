@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class ColumnNameAcceptanceVisualizationTest {
     */
     @Test
     def void testColumnNameAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN cOuNt( * )
         ''')
@@ -29,7 +29,7 @@ class ColumnNameAcceptanceVisualizationTest {
     */
     @Test
     def void testColumnNameAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (n)-->(b)
         RETURN nOdEs( p )
         ''')
@@ -42,7 +42,7 @@ class ColumnNameAcceptanceVisualizationTest {
     */
     @Test
     def void testColumnNameAcceptance_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (n)-->(b)
         RETURN coUnt( dIstInct p )
         ''')
@@ -55,7 +55,7 @@ class ColumnNameAcceptanceVisualizationTest {
     */
     @Test
     def void testColumnNameAcceptance_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (n)-->(b)
         RETURN aVg(    n.aGe     )
         ''')

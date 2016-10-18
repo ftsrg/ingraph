@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class StartsWithAcceptanceParserTest {
     
@@ -11,11 +13,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -23,11 +27,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,11 +41,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -47,11 +55,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name ENDS WITH 'AB'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -59,12 +69,14 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'a'
         AND a.name ENDS WITH 'f'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -72,11 +84,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH ''
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -84,11 +98,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name CONTAINS 'CD'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -102,11 +118,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -120,11 +138,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -138,11 +158,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -156,11 +178,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -174,11 +198,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -192,11 +218,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -204,11 +232,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -216,11 +246,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE NOT a.name STARTS WITH null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -228,11 +260,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name ENDS WITH null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -240,11 +274,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE NOT a.name ENDS WITH null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -252,11 +288,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name CONTAINS null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -264,11 +302,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE NOT a.name CONTAINS null
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -276,13 +316,15 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_20() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'A'
         AND a.name CONTAINS 'C'
         AND a.name ENDS WITH 'EF'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_20")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -290,11 +332,13 @@ class StartsWithAcceptanceParserTest {
     */
     @Test
     def void testStartsWithAcceptance_21() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE NOT a.name CONTAINS 'b'
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_21")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

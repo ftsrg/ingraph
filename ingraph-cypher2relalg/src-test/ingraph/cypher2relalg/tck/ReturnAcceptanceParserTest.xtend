@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class ReturnAcceptanceParserTest {
     
@@ -16,11 +18,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WHERE a.id = 1337
         RETURN a.version + 5
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -37,11 +41,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         LIMIT 2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -58,12 +64,14 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
         SKIP 2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -82,12 +90,14 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
         SKIP $skipAmount
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -104,13 +114,15 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
         SKIP 2
         LIMIT 2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -130,13 +142,15 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
         SKIP $s
         LIMIT $l
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -152,11 +166,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -171,11 +187,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN DISTINCT a
         ORDER BY a.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -188,10 +206,12 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a AS ColumnName
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -204,11 +224,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-->(b)
         RETURN DISTINCT b
         ORDER BY b.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -217,9 +239,11 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -228,9 +252,11 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -243,11 +269,13 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a, count(*)
         ORDER BY count(*)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -256,9 +284,11 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN abs(-1)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -267,9 +297,11 @@ class ReturnAcceptanceParserTest {
     */
     @Test
     def void testReturnAcceptance_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN size([1, 2, 3]) AS n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ReturnAcceptance_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

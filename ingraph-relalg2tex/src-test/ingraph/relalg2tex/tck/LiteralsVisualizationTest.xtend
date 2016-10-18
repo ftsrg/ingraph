@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN 1 AS literal
         ''')
         container.addSchemaInformation
@@ -28,7 +28,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN 1.0 AS literal
         ''')
         container.addSchemaInformation
@@ -40,7 +40,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN -1e-9 AS literal
         ''')
         container.addSchemaInformation
@@ -52,7 +52,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN true AS literal
         ''')
         container.addSchemaInformation
@@ -64,7 +64,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_05() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN '' AS literal
         ''')
         container.addSchemaInformation
@@ -76,7 +76,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_06() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN "" AS literal
         ''')
         container.addSchemaInformation
@@ -88,7 +88,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_07() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN null AS literal
         ''')
         container.addSchemaInformation
@@ -100,7 +100,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_08() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN [] AS literal
         ''')
         container.addSchemaInformation
@@ -112,7 +112,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_09() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN [0, 1, 2] AS literal
         ''')
         container.addSchemaInformation
@@ -124,7 +124,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_10() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN {} AS literal
         ''')
         container.addSchemaInformation
@@ -136,7 +136,7 @@ class LiteralsVisualizationTest {
     */
     @Test
     def void testLiterals_11() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
         container.addSchemaInformation

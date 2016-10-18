@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="m"/>
+            <nodeLabels>
+              <nodeLabels labelName="Movie"/>
+            </nodeLabels>
+            <properties xsi:type="openCypher:MapLiteral">
+              <entries key="rating">
+                <value xsi:type="openCypher:NumberConstant" value="4"/>
+              </entries>
+            </properties>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems" all="*"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="toFloat"/>
+            <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef">
+                <variableRef href="dummy:/example.cyp#|0"/>
+              </left>
+              <propertyLookups propertyKeyName="rating"/>
+            </parameter>
+          </expression>
+          <alias name="float"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

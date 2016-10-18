@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class AggregationAcceptanceParserTest {
     
@@ -17,10 +19,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN count(n) / 60 / 60 AS count
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -34,10 +38,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()
         RETURN count(*) AS columnName
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -51,10 +57,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN size(collect(a))
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -63,10 +71,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'Andres'})<-[:FATHER]-(child)
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -80,10 +90,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:L)-[rel]->(b)
         RETURN a, count(*)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -99,11 +111,13 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.division, count(*)
         ORDER BY count(*) DESC, n.division ASC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -118,10 +132,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.x, count(*)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -136,10 +152,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.y, count(n.x)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -154,10 +172,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.y, sum(n.x)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -171,10 +191,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p=(a:L)-[*]->(b)
         RETURN b, avg(length(p))
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -183,10 +205,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         RETURN count(DISTINCT a)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -199,10 +223,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN count(DISTINCT a.foo)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -211,10 +237,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [null, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -223,10 +251,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [null, 1, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -241,10 +271,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN DISTINCT a.color, count(*)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -257,10 +289,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -273,11 +307,13 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:X)
         RETURN count(a) * 10 + count(b) * 5 AS x
         ORDER BY x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -290,10 +326,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN count(n), collect(n)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -307,10 +345,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()
         RETURN count(*)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -327,11 +367,13 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_20() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (a)-[*]->(b)
         RETURN collect(nodes(p)) AS paths, length(p) AS l
         ORDER BY l
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_20")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -347,12 +389,14 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_21() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (a:T {name: 'a'})-[:R*]->(other:T)
         WHERE other <> a
         WITH a, other, min(length(p)) AS len
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_21")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -365,12 +409,14 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_22() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         RETURN coalesce(a.prop, b.prop) AS foo,
         b.prop AS bar,
         {y: count(b)} AS baz
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_22")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -379,12 +425,14 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_24() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND range(1000000, 2000000) AS i
         WITH i
         LIMIT 3000
         RETURN sum(i)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_24")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -397,10 +445,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_25() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]-()
         RETURN count(r)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_25")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -409,10 +459,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_26() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_26")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -421,10 +473,12 @@ class AggregationAcceptanceParserTest {
     */
     @Test
     def void testAggregationAcceptance_27() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_27")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

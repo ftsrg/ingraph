@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+            <nodeLabels>
+              <nodeLabels labelName="A"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="b"/>
+            <nodeLabels>
+              <nodeLabels labelName="C"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Match" optional="true">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="x"/>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true"/>
+            <nodePattern>
+              <variable name="b"/>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="dummy:/example.cyp#|0"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

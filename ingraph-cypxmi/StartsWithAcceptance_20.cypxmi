@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+      <where>
+        <expression xsi:type="openCypher:ExpressionAnd" operator="AND">
+          <left xsi:type="openCypher:ExpressionAnd" operator="AND">
+            <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef">
+                <variableRef href="dummy:/example.cyp#|0"/>
+              </left>
+              <expression3Parts xsi:type="openCypher:StartsWith">
+                <expression xsi:type="openCypher:StringConstant" value="'A'"/>
+              </expression3Parts>
+              <propertyLookups propertyKeyName="name"/>
+            </left>
+            <right xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef">
+                <variableRef href="dummy:/example.cyp#|1"/>
+              </left>
+              <expression3Parts xsi:type="openCypher:Contains">
+                <expression xsi:type="openCypher:StringConstant" value="'C'"/>
+              </expression3Parts>
+              <propertyLookups propertyKeyName="name"/>
+            </right>
+          </left>
+          <right xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef">
+              <variableRef href="dummy:/example.cyp#|2"/>
+            </left>
+            <expression3Parts xsi:type="openCypher:EndsWith">
+              <expression xsi:type="openCypher:StringConstant" value="'EF'"/>
+            </expression3Parts>
+            <propertyLookups propertyKeyName="name"/>
+          </right>
+        </expression>
+      </where>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="dummy:/example.cyp#|3"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

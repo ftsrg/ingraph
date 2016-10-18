@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class LargeIntegerEqualityParserTest {
     
@@ -11,10 +13,12 @@ class LargeIntegerEqualityParserTest {
     */
     @Test
     def void testLargeIntegerEquality_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Label)
         RETURN p.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -22,10 +26,12 @@ class LargeIntegerEqualityParserTest {
     */
     @Test
     def void testLargeIntegerEquality_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -33,11 +39,13 @@ class LargeIntegerEqualityParserTest {
     */
     @Test
     def void testLargeIntegerEquality_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Label)
         WHERE p.id = 4611686018427387905
         RETURN p.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -45,10 +53,12 @@ class LargeIntegerEqualityParserTest {
     */
     @Test
     def void testLargeIntegerEquality_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -56,11 +66,13 @@ class LargeIntegerEqualityParserTest {
     */
     @Test
     def void testLargeIntegerEquality_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Label)
         WHERE p.id = 4611686018427387900
         RETURN p.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

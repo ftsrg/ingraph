@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class TypeConversionFunctionsParserTest {
     
@@ -12,9 +14,11 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN toBoolean('true') AS b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -23,10 +27,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [true, false] AS b
         RETURN toBoolean(b) AS b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,10 +41,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND ['true', 'false'] AS s
         RETURN toBoolean(s) AS b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -47,10 +55,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [null, '', ' tru ', 'f alse'] AS things
         RETURN toBoolean(things) AS b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -63,12 +73,14 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Person { age: '42' })
         WITH *
         MATCH (n)
         RETURN toInteger(n.age) AS age
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -77,10 +89,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH 82.9 AS weight
         RETURN toInteger(weight)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -89,10 +103,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -101,10 +117,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [2, 2.9] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -113,10 +131,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [2, 2.9, '1.7'] AS things
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -125,10 +145,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH ['2', '2.9', 'foo'] AS numbers
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -141,12 +163,14 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
         RETURN toFloat(n.rating) AS float
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -155,10 +179,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [3.4, 3] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -167,10 +193,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -179,10 +207,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [3.4, 3, '5'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -191,10 +221,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH ['1', '2', 'foo'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -207,12 +239,14 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
         MATCH (n)
         RETURN toString(n.rating)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -225,10 +259,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (m:Movie)
         RETURN toString(m.watched)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -237,9 +273,11 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN toString(1 < 0) AS bool
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -248,9 +286,11 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN toString(true) AS bool
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -259,9 +299,11 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_20() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_20")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -270,10 +312,12 @@ class TypeConversionFunctionsParserTest {
     */
     @Test
     def void testTypeConversionFunctions_21() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [1, 2, 3] AS numbers
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TypeConversionFunctions_21")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

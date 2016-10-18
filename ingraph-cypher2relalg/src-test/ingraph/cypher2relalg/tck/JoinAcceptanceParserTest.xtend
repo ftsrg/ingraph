@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class JoinAcceptanceParserTest {
     
@@ -19,11 +21,13 @@ class JoinAcceptanceParserTest {
     */
     @Test
     def void testJoinAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/JoinAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -38,11 +42,13 @@ class JoinAcceptanceParserTest {
     */
     @Test
     def void testJoinAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/JoinAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

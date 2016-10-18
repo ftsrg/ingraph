@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class SkipLimitAcceptanceParserTest {
     
@@ -16,12 +18,14 @@ class SkipLimitAcceptanceParserTest {
     */
     @Test
     def void testSkipLimitAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WITH n SKIP toInteger(rand()*9)
         WITH count(*) AS count
         RETURN count > 0 AS nonEmpty
         ''')
+        CypherUtil.save(cypher, "../cypxmi/SkipLimitAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -34,11 +38,13 @@ class SkipLimitAcceptanceParserTest {
     */
     @Test
     def void testSkipLimitAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count
         ''')
+        CypherUtil.save(cypher, "../cypxmi/SkipLimitAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

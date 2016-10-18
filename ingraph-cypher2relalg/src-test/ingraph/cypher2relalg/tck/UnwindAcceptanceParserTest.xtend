@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class UnwindAcceptanceParserTest {
     
@@ -12,10 +14,12 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -24,10 +28,12 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -36,11 +42,13 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [1, 2, 3] AS first, [4, 5, 6] AS second
         UNWIND (first + second) AS x
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -49,12 +57,14 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND RANGE(1, 2) AS row
         WITH collect(row) AS rows
         UNWIND rows AS x
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -67,12 +77,14 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (row)
         WITH collect(row) AS rows
         UNWIND rows AS node
         RETURN node.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -81,12 +93,14 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [[1, 2, 3], [4, 5, 6]] AS lol
         UNWIND lol AS x
         UNWIND x AS y
         RETURN y
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -95,10 +109,12 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [] AS empty
         RETURN empty
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -107,10 +123,12 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND null AS nil
         RETURN nil
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -119,10 +137,12 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -131,11 +151,13 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [1, 2, 3] AS list
         UNWIND list AS x
         RETURN *
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -153,13 +175,15 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:S)-[:X]->(b1)
         WITH a, collect(b1) AS bees
         UNWIND bees AS b2
         MATCH (a)-[:Y]->(b2)
         RETURN a, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -168,13 +192,15 @@ class UnwindAcceptanceParserTest {
     */
     @Test
     def void testUnwindAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [1, 2] AS xs, [3, 4] AS ys, [5, 6] AS zs
         UNWIND xs AS x
         UNWIND ys AS y
         UNWIND zs AS z
         RETURN *
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnwindAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

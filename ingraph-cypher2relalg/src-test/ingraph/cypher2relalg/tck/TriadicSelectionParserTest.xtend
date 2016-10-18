@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class TriadicSelectionParserTest {
     
@@ -12,10 +14,12 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -24,12 +28,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -38,12 +44,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:FOLLOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -52,12 +60,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -66,12 +76,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -80,12 +92,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS|FOLLOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -94,12 +108,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -108,12 +124,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:Y)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -122,12 +140,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -136,12 +156,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -150,12 +172,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -164,12 +188,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:FOLLOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -178,12 +204,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -192,12 +220,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -206,12 +236,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS|FOLLOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -220,12 +252,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -234,12 +268,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:Y)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -248,12 +284,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -262,12 +300,14 @@ class TriadicSelectionParserTest {
     */
     @Test
     def void testTriadicSelection_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

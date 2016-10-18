@@ -15,6 +15,7 @@ import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchT
 import relalg.ExpandOperator
 import relalg.RelalgFactory
 import relalg.RelationalAlgebraContainer
+import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification
 
 class Relalg2ReteTransformation {
 
@@ -27,7 +28,7 @@ class Relalg2ReteTransformation {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 	}
 
-	def transformToRete(RelationalAlgebraContainer container) {	
+	def transformToRete(RelationalAlgebraContainer container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)
@@ -45,6 +46,10 @@ class Relalg2ReteTransformation {
 		statements.fireWhilePossible(expandOperatorRule)
 
 		return container
+	}
+
+	def getMatcher() {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 
 	/**

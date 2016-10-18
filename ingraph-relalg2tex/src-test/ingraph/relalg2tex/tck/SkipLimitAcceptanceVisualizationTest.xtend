@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class SkipLimitAcceptanceVisualizationTest {
     */
     @Test
     def void testSkipLimitAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         WITH n SKIP toInteger(rand()*9)
         WITH count(*) AS count
@@ -41,7 +41,7 @@ class SkipLimitAcceptanceVisualizationTest {
     */
     @Test
     def void testSkipLimitAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count

@@ -1,7 +1,7 @@
 package ingraph.cypher2relalg.cud
 
+import ingraph.cypherparser.CypherParser
 import org.junit.Test
-import ingraph.cypher2relalg.CypherParser
 
 class CudOperationsTest {
 

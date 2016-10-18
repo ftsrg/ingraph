@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class PatternComprehensionParserTest {
     
@@ -17,11 +19,13 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (liker)
         RETURN [p = (liker)--() | p] AS isNew
         ORDER BY liker.time
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -36,10 +40,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN [p = (n)-->() | p] AS ps
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -55,10 +61,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:A)
         RETURN [p = (n)-->(:B) | p]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -72,10 +80,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -90,11 +100,13 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-->(b)
         WITH [p = (n)-->() | p] AS ps, count(b) AS c
         RETURN ps, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -107,11 +119,13 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WITH [p = (a)-[*]->(b) | p] AS paths, count(a) AS c
         RETURN paths, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -125,10 +139,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:A)
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -142,10 +158,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:A)
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -159,10 +177,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:X)
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -182,10 +202,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n:X)-->(b)
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -201,10 +223,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:X)
         RETURN size([(a)-->() | 1]) AS length
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -221,10 +245,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:X)
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -241,10 +267,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:X)
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -258,10 +286,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -275,10 +305,12 @@ class PatternComprehensionParserTest {
     */
     @Test
     def void testPatternComprehension_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
+        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

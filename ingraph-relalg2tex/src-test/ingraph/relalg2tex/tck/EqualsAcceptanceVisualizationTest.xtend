@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class EqualsAcceptanceVisualizationTest {
     */
     @Test
     def void testEqualsAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         WITH collect([0, 0.0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
@@ -42,7 +42,7 @@ class EqualsAcceptanceVisualizationTest {
     */
     @Test
     def void testEqualsAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         WITH collect([0.5, 0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
@@ -63,7 +63,7 @@ class EqualsAcceptanceVisualizationTest {
     */
     @Test
     def void testEqualsAcceptance_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         WITH collect(['0', 0]) AS things
         UNWIND things AS arr
         WITH arr[0] AS expected
@@ -84,7 +84,7 @@ class EqualsAcceptanceVisualizationTest {
     */
     @Test
     def void testEqualsAcceptance_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WITH a
         MATCH (b)
@@ -105,7 +105,7 @@ class EqualsAcceptanceVisualizationTest {
     */
     @Test
     def void testEqualsAcceptance_05() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()-[a]->()
         WITH a
         MATCH ()-[b]->()

@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class ExpressionAcceptanceParserTest {
     
@@ -11,9 +13,11 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN [1, 2, 3][0] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -25,10 +29,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -39,10 +45,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -53,10 +61,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -67,10 +77,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -80,10 +92,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -94,10 +108,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -108,10 +124,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -122,10 +140,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -136,10 +156,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -150,10 +172,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -164,10 +188,12 @@ class ExpressionAcceptanceParserTest {
     */
     @Test
     def void testExpressionAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

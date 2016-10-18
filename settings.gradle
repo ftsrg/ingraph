@@ -11,3 +11,5 @@ include ':ingraph-relalg2tex'
 include ':ingraph-report'
 include ':ingraph-tinkerpop'
 include ':ingraph-trainbenchmark'
+include ':cypxmi'
+

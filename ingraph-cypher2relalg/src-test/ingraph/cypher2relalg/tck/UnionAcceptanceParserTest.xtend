@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class UnionAcceptanceParserTest {
     
@@ -16,13 +18,15 @@ class UnionAcceptanceParserTest {
     */
     @Test
     def void testUnionAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         RETURN a AS a
         UNION
         MATCH (b:B)
         RETURN b AS a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -31,11 +35,13 @@ class UnionAcceptanceParserTest {
     */
     @Test
     def void testUnionAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 1 AS x
         UNION ALL
         RETURN 2 AS x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -44,11 +50,13 @@ class UnionAcceptanceParserTest {
     */
     @Test
     def void testUnionAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 1 AS x
         UNION
         RETURN 2 AS x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -57,13 +65,15 @@ class UnionAcceptanceParserTest {
     */
     @Test
     def void testUnionAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 2 AS x
         UNION
         RETURN 1 AS x
         UNION
         RETURN 2 AS x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -72,13 +82,15 @@ class UnionAcceptanceParserTest {
     */
     @Test
     def void testUnionAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 2 AS x
         UNION ALL
         RETURN 1 AS x
         UNION ALL
         RETURN 2 AS x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

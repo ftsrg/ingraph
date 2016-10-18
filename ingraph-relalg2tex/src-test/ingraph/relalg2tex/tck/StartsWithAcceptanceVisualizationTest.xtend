@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
@@ -30,7 +30,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
@@ -44,7 +44,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
@@ -58,7 +58,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name ENDS WITH 'AB'
         RETURN a
@@ -72,7 +72,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_05() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'a'
         AND a.name ENDS WITH 'f'
@@ -87,7 +87,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_06() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH ''
         RETURN a
@@ -101,7 +101,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_07() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name CONTAINS 'CD'
         RETURN a
@@ -121,7 +121,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_08() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
@@ -141,7 +141,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_09() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
@@ -161,7 +161,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_10() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
@@ -181,7 +181,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_11() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
@@ -201,7 +201,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_12() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
@@ -221,7 +221,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_13() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
@@ -235,7 +235,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_14() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH null
         RETURN a
@@ -249,7 +249,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_15() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE NOT a.name STARTS WITH null
         RETURN a
@@ -263,7 +263,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_16() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name ENDS WITH null
         RETURN a
@@ -277,7 +277,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_17() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE NOT a.name ENDS WITH null
         RETURN a
@@ -291,7 +291,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_18() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name CONTAINS null
         RETURN a
@@ -305,7 +305,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_19() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE NOT a.name CONTAINS null
         RETURN a
@@ -319,7 +319,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_20() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE a.name STARTS WITH 'A'
         AND a.name CONTAINS 'C'
@@ -335,7 +335,7 @@ class StartsWithAcceptanceVisualizationTest {
     */
     @Test
     def void testStartsWithAcceptance_21() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         WHERE NOT a.name CONTAINS 'b'
         RETURN a

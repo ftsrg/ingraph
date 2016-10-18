@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class ListComprehensionParserTest {
     
@@ -18,10 +20,12 @@ class ListComprehensionParserTest {
     */
     @Test
     def void testListComprehension_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ListComprehension_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -36,11 +40,13 @@ class ListComprehensionParserTest {
     */
     @Test
     def void testListComprehension_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n:A)-->()
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ListComprehension_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -55,11 +61,13 @@ class ListComprehensionParserTest {
     */
     @Test
     def void testListComprehension_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-->(b)
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ListComprehension_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

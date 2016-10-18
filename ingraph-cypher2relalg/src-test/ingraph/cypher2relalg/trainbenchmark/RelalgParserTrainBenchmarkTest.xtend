@@ -1,8 +1,8 @@
 package ingraph.cypher2relalg.trainbenchmark
 
+import ingraph.cypherparser.CypherParser
 import java.io.IOException
 import org.junit.Test
-import ingraph.cypher2relalg.CypherParser
 
 class RelalgParserTrainBenchmarkTest {
 	

@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class LargeIntegerEqualityVisualizationTest {
     */
     @Test
     def void testLargeIntegerEquality_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (p:Label)
         RETURN p.id
         ''')
@@ -29,7 +29,7 @@ class LargeIntegerEqualityVisualizationTest {
     */
     @Test
     def void testLargeIntegerEquality_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
@@ -42,7 +42,7 @@ class LargeIntegerEqualityVisualizationTest {
     */
     @Test
     def void testLargeIntegerEquality_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (p:Label)
         WHERE p.id = 4611686018427387905
         RETURN p.id
@@ -56,7 +56,7 @@ class LargeIntegerEqualityVisualizationTest {
     */
     @Test
     def void testLargeIntegerEquality_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
@@ -69,7 +69,7 @@ class LargeIntegerEqualityVisualizationTest {
     */
     @Test
     def void testLargeIntegerEquality_05() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (p:Label)
         WHERE p.id = 4611686018427387900
         RETURN p.id

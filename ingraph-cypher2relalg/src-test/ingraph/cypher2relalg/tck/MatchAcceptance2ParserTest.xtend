@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class MatchAcceptance2ParserTest {
     
@@ -12,10 +14,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -24,10 +28,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -44,11 +50,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:TextNode)
         WHERE i.id > 'te'
         RETURN i
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -65,11 +73,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i)
         WHERE exists(i.id) OR i.id > 'te'
         RETURN i
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -82,11 +92,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:Child)
         WHERE i.id > 'te'
         RETURN i
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -99,11 +111,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (:Root {name: 'x'})-->(i:Child)
         WHERE NOT exists(i.id) OR i.id > 'te'
         RETURN i
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -119,12 +133,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ()-[*]->()
         WITH count(*) AS count, p AS p
         WITH nodes(p) AS nodes
         RETURN *
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -141,10 +157,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN a, b, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -161,10 +179,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'})-[*]->(x)
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -180,10 +200,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..2]->()
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -199,10 +221,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..]->()
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -217,11 +241,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (c {name: 'C'})
         MATCH (a)-->(b)
         RETURN a, b, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -239,11 +265,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (b {name: 'B'})
         MATCH (a)-->(x)<-->(b)
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -263,11 +291,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -298,11 +328,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'a'}), (b {name: 'b'}), (c {name: 'c'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -317,11 +349,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH (a)-[:KNOWS]->()-[:KNOWS]->(foo)
         RETURN foo
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -335,12 +369,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_17() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
         OPTIONAL MATCH p = (a)-->(x)
         RETURN x, p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_17")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -354,11 +390,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_18() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_18")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -372,12 +410,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_19() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
         OPTIONAL MATCH p = (a)-[r*]->(x)
         RETURN r, x, p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_19")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -392,11 +432,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_20() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         MATCH (a)-[r*2]->()
         RETURN r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_20")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -410,12 +452,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_21() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (other:B)
         OPTIONAL MATCH (a)-[r]->(other)
         WITH other WHERE r IS NULL
         RETURN other
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_21")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -429,12 +473,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_22() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-->(x0)
         OPTIONAL MATCH (x0)-->(x1)
         WHERE x1.foo = 'bar'
         RETURN x0.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_22")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -449,13 +495,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_23() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-->(b)
         WHERE b:B
         OPTIONAL MATCH (a)-->(c)
         WHERE c:C
         RETURN a.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_23")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -468,11 +516,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_24() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[:ADMIN]-(b)
         WHERE a:A
         RETURN a.id, b.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_24")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -485,10 +535,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_25() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_25")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -501,11 +553,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_26() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a), (b)
         WHERE a <> b
         RETURN a, b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_26")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -520,10 +574,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_27() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-->(b), (b)-->(b)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_27")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -536,13 +592,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_28() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH (a)-[r*]-(b)
         WHERE r IS NULL
         AND a <> b
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_28")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -556,10 +614,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_29() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[:T|:T]->(b)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_29")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -577,12 +637,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_30() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)-->(n)-->(m)
         RETURN n.x, count(*)
         ORDER BY n.x
         LIMIT 1000
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_30")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -595,11 +657,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_31() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE n.foo = 'bar'
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_31")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -612,10 +676,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_32() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (b)<--(a)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_32")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -624,10 +690,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_33() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (n)
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_33")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -640,11 +708,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_34() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, x
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_34")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -657,11 +727,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_35() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, collect(x)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_35")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -674,11 +746,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_36() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)<--()<--(b)-->()-->(c)
         WHERE a:A
         RETURN c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_36")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -693,10 +767,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_37() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-->(b:Foo)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_37")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -712,10 +788,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_38() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (:A)-[r]->(:B)
         RETURN r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_38")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -729,10 +807,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_39() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A:B:C)
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_39")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -745,10 +825,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_40() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN (n:Foo)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_40")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -773,7 +855,7 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_41() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (advertiser)-[:ADV_HAS_PRODUCT]->(out)-[:AP_HAS_VALUE]->(red)<-[:AA_HAS_VALUE]-(a)
         WHERE advertiser.id = $1
         AND a.id = $2
@@ -781,6 +863,8 @@ class MatchAcceptance2ParserTest {
         AND out.name = 'product1'
         RETURN out.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_41")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -793,10 +877,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_42() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN (n:Foo)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_42")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -812,11 +898,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_43() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:Person)-->()
         WHERE n.name = 'Bob'
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_43")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -831,11 +919,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_44() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-->(b)
         MATCH (c)-->(d)
         RETURN a, b, c, d
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_44")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -854,12 +944,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_45() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)--(b)--(c)--(d)--(a), (b)--(d)
         WHERE a.id = 1
         AND c.id = 2
         RETURN d
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_45")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -875,10 +967,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_46() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[:A]->()-[:B]->(a)
         RETURN a.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_46")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -894,10 +988,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_47() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[:A]->(b), (b)-[:B]->(a)
         RETURN a.name
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_47")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -910,10 +1006,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_48() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[r*1..1]->(b)
         RETURN r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_48")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -922,12 +1020,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_49() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         WITH a
         MATCH (a)-->(b)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_49")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -940,12 +1040,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_50() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (a:Label)
         WITH a
         MATCH (a)-->(b)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_50")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -954,12 +1056,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_51() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         WITH a
         OPTIONAL MATCH (a)-->(b)
         RETURN b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_51")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -968,10 +1072,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_52() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         OPTIONAL MATCH (a)
         RETURN a
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_52")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -984,10 +1090,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_53() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (a)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_53")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1000,10 +1108,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_54() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ()-[*0..]->()
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_54")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1016,10 +1126,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_55() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.prop AS n, count(n) AS count
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_55")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1033,12 +1145,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_56() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2
         MATCH ()-[r2]->()
         RETURN r2 AS rel
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_56")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1052,13 +1166,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_57() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2, count(*) AS c
         ORDER BY c
         MATCH ()-[r2]->()
         RETURN r2 AS rel
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_57")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1072,7 +1188,7 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_58() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[r]->(b)
         WITH a, r, b, count(*) AS c
         ORDER BY c
@@ -1080,6 +1196,8 @@ class MatchAcceptance2ParserTest {
         RETURN r AS rel
         ORDER BY rel.id
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_58")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1092,13 +1210,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_59() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
         WITH r
         LIMIT 1
         OPTIONAL MATCH (a2)-[r]->(b2)
         RETURN a2, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_59")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1111,13 +1231,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_60() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
         OPTIONAL MATCH (a1)-[r]->(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_60")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1130,13 +1252,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_61() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
         MATCH (a1:X)-[r]->(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_61")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1149,13 +1273,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_62() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1:X:Y)-[r]->()
         WITH r, a1
         LIMIT 1
         MATCH (a1:Y)-[r]->(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_62")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1168,13 +1294,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_63() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r:T]->()
         WITH r, a1
         LIMIT 1
         MATCH (a1)-[r:Y]->(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_63")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1187,12 +1315,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_64() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r:T]->() WITH r, a1
         LIMIT 1
         MATCH (a1)-[r:T]->(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_64")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1207,13 +1337,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_65() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r1]->()-[r2]->()
         WITH [r1, r2] AS rs
         LIMIT 1
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_65")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1228,13 +1360,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_66() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS first, b AS second
         LIMIT 1
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_66")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1249,13 +1383,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_67() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS second, b AS first
         LIMIT 1
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_67")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1268,13 +1404,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_68() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
         OPTIONAL MATCH (a1)<-[r]-(b2)
         RETURN a1, r, b2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_68")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1287,7 +1425,7 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_69() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a1)-[r]->()
         WITH r, a1
         LIMIT 1
@@ -1295,6 +1433,8 @@ class MatchAcceptance2ParserTest {
         WHERE a1 = a2
         RETURN a1, r, b2, a2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_69")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1307,11 +1447,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_70() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WITH n.prop AS n2
         RETURN n2.prop
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_70")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1324,12 +1466,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_71() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (foo)
         RETURN foo.bar AS x
         ORDER BY x DESC
         LIMIT 4
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_71")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1338,10 +1482,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_72() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN count(a) > 0
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_72")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1356,10 +1502,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_73() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:Artist)-[:WORKED_WITH* {year: 1988}]->(b:Artist)
         RETURN *
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_73")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1374,13 +1522,15 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_74() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a), (b)
         WHERE a.id = 0
         AND (a)-[:T]->(b:Label)
         OR (a)-[:T*]->(b:MissingLabel)
         RETURN DISTINCT b
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_74")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1396,10 +1546,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_75() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:Blue)-[r*]->(b:Green)
         RETURN count(r)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_75")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1413,11 +1565,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_76() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n:Movie)--(m)
         RETURN p
         LIMIT 1
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_76")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1430,11 +1584,13 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_77() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (a)
         WITH p
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_77")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1449,10 +1605,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_78() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->(m)--(o)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_78")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1468,10 +1626,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_79() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH path = (n)-->(m)--(o)--(p)
         RETURN path
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_79")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1489,10 +1649,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_80() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH topRoute = (:Start)<-[:CONNECTED_TO]-()-[:CONNECTED_TO*3..3]-(:End)
         RETURN topRoute
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_80")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1505,10 +1667,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_81() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_81")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1521,10 +1685,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_82() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r.prop
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_82")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1538,10 +1704,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_83() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)-[r]->()
         RETURN a AS foo, r AS bar
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_83")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1554,10 +1722,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_84() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a.bar
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_84")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1570,10 +1740,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_85() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN r.bar
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_85")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1586,10 +1758,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_86() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a.name, a.age, a.seasons
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_86")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1602,10 +1776,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_87() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop + 1 AS foo
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_87")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1618,10 +1794,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_88() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN a.prop2 + a.prop1 AS foo
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_88")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1635,10 +1813,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_89() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r*0..1]-()
         RETURN last(r) AS l
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_89")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1651,12 +1831,14 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_90() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a:A)
         OPTIONAL MATCH (a)-[:FOO]->(b:B)
         OPTIONAL MATCH (b)<-[:BAR*]-(c:B)
         RETURN a, b, c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_90")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1670,10 +1852,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_91() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-[r]->(m)
         RETURN [n, r, m] AS r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_91")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1687,10 +1871,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_92() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)-[r]->(m)
         RETURN {node1: n, rel: r, node2: m} AS m
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_92")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1704,10 +1890,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_93() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ({prop: 'a'})-->({prop: 'b'})
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_93")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1721,10 +1909,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_94() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = ({prop: 'a'})<--({prop: 'b'})
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_94")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1739,10 +1929,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_95() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->(k)<--(n)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_95")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1757,10 +1949,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_96() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)<-->(k)<--(n)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_96")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1775,10 +1969,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_97() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p=(n)<-->(k)<-->(n)
         RETURN p
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_97")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1793,10 +1989,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_98() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:A:B:C:D:E:F:G:H:I:J:K:L:M)-[:T]->(m:Z:Y:X:W:V:U)
         RETURN n, m
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_98")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1816,10 +2014,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_99() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
         RETURN m
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_99")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -1833,10 +2033,12 @@ class MatchAcceptance2ParserTest {
     */
     @Test
     def void testMatchAcceptance2_101() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r]-()
         RETURN type(r) AS r
         ''')
+        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_101")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

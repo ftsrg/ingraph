@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class VarLengthAcceptance2ParserTest {
     
@@ -22,11 +24,13 @@ class VarLengthAcceptance2ParserTest {
     */
     @Test
     def void testVarLengthAcceptance2_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[r:EDGE]-()
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
+        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance2_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

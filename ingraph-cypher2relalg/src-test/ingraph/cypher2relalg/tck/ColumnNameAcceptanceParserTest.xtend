@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class ColumnNameAcceptanceParserTest {
     
@@ -11,10 +13,12 @@ class ColumnNameAcceptanceParserTest {
     */
     @Test
     def void testColumnNameAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN cOuNt( * )
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -22,10 +26,12 @@ class ColumnNameAcceptanceParserTest {
     */
     @Test
     def void testColumnNameAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->(b)
         RETURN nOdEs( p )
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -33,10 +39,12 @@ class ColumnNameAcceptanceParserTest {
     */
     @Test
     def void testColumnNameAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->(b)
         RETURN coUnt( dIstInct p )
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -44,10 +52,12 @@ class ColumnNameAcceptanceParserTest {
     */
     @Test
     def void testColumnNameAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH p = (n)-->(b)
         RETURN aVg(    n.aGe     )
         ''')
+        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

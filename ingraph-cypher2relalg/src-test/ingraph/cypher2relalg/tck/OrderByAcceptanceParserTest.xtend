@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class OrderByAcceptanceParserTest {
     
@@ -17,11 +19,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.prop AS prop
         ORDER BY n.prop
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,11 +39,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.prop AS prop
         ORDER BY n.prop DESC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -47,7 +53,7 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH [0, 1] AS prows, [[2], [3, 4]] AS qrows
         UNWIND prows AS p
         UNWIND qrows[p] AS q
@@ -55,6 +61,8 @@ class OrderByAcceptanceParserTest {
         RETURN p
         ORDER BY rng
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -68,11 +76,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n.prop AS n
         ORDER BY n + 2
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -88,12 +98,14 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (c:Crew {name: 'Neo'})
         WITH c, 0 AS relevance
         RETURN c.rank AS rank
         ORDER BY relevance, c.rank
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -101,11 +113,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [true, false] AS bools
         RETURN bools
         ORDER BY bools
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -113,11 +127,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [true, false] AS bools
         RETURN bools
         ORDER BY bools DESC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -125,11 +141,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND ['.*', '', ' ', 'one'] AS strings
         RETURN strings
         ORDER BY strings
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -137,11 +155,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND ['.*', '', ' ', 'one'] AS strings
         RETURN strings
         ORDER BY strings DESC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -149,11 +169,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1, 3, 2] AS ints
         RETURN ints
         ORDER BY ints
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -161,11 +183,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1, 3, 2] AS ints
         RETURN ints
         ORDER BY ints DESC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -173,11 +197,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_12() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1.5, 1.3, 999.99] AS floats
         RETURN floats
         ORDER BY floats
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_12")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -185,11 +211,13 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_13() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         UNWIND [1.5, 1.3, 999.99] AS floats
         RETURN floats
         ORDER BY floats DESC
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_13")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -202,12 +230,14 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_14() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Person)
         RETURN p.name AS name
         ORDER BY p.name
         LIMIT 1
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_14")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -215,12 +245,14 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_15() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Person)
         RETURN p.name AS name
         ORDER BY p.name
         LIMIT 0
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_15")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -230,12 +262,14 @@ class OrderByAcceptanceParserTest {
     */
     @Test
     def void testOrderByAcceptance_16() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (p:Person)
         RETURN p.name AS name
         ORDER BY p.name
         LIMIT $limit
         ''')
+        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_16")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

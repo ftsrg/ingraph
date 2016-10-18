@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+            <nodeLabels>
+              <nodeLabels labelName="Label"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+      <where>
+        <expression xsi:type="openCypher:ExpressionComparison" operator="&lt;">
+          <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef">
+              <variableRef href="dummy:/example.cyp#|0"/>
+            </left>
+            <propertyLookups propertyKeyName="prop"/>
+          </left>
+          <right xsi:type="openCypher:NumberConstant" value="10"/>
+        </expression>
+      </where>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef">
+              <variableRef href="dummy:/example.cyp#|1"/>
+            </left>
+            <propertyLookups propertyKeyName="prop"/>
+          </expression>
+          <alias name="prop"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

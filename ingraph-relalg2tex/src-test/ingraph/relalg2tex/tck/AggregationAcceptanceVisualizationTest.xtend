@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -22,7 +22,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN count(n) / 60 / 60 AS count
         ''')
@@ -41,7 +41,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()
         RETURN count(*) AS columnName
         ''')
@@ -60,7 +60,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_03() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         RETURN size(collect(a))
         ''')
@@ -74,7 +74,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a {name: 'Andres'})<-[:FATHER]-(child)
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
@@ -93,7 +93,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_05() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a:L)-[rel]->(b)
         RETURN a, count(*)
         ''')
@@ -114,7 +114,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_06() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN n.division, count(*)
         ORDER BY count(*) DESC, n.division ASC
@@ -135,7 +135,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_07() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN n.x, count(*)
         ''')
@@ -155,7 +155,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_08() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN n.y, count(n.x)
         ''')
@@ -175,7 +175,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_09() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN n.y, sum(n.x)
         ''')
@@ -194,7 +194,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_10() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p=(a:L)-[*]->(b)
         RETURN b, avg(length(p))
         ''')
@@ -208,7 +208,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_11() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         OPTIONAL MATCH (a)
         RETURN count(DISTINCT a)
         ''')
@@ -226,7 +226,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_12() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         RETURN count(DISTINCT a.foo)
         ''')
@@ -240,7 +240,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_13() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         UNWIND [null, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
@@ -254,7 +254,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_14() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         UNWIND [null, 1, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
@@ -274,7 +274,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_15() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a)
         RETURN DISTINCT a.color, count(*)
         ''')
@@ -292,7 +292,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_16() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
@@ -310,7 +310,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_17() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a:A), (b:X)
         RETURN count(a) * 10 + count(b) * 5 AS x
         ORDER BY x
@@ -329,7 +329,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_18() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (n)
         RETURN count(n), collect(n)
         ''')
@@ -348,7 +348,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_19() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()
         RETURN count(*)
         ''')
@@ -370,7 +370,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_20() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (a)-[*]->(b)
         RETURN collect(nodes(p)) AS paths, length(p) AS l
         ORDER BY l
@@ -392,7 +392,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_21() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH p = (a:T {name: 'a'})-[:R*]->(other:T)
         WHERE other <> a
         WITH a, other, min(length(p)) AS len
@@ -412,7 +412,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_22() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH (a:A), (b:B)
         RETURN coalesce(a.prop, b.prop) AS foo,
         b.prop AS bar,
@@ -428,7 +428,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_24() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         UNWIND range(1000000, 2000000) AS i
         WITH i
         LIMIT 3000
@@ -448,7 +448,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_25() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         MATCH ()-[r]-()
         RETURN count(r)
         ''')
@@ -462,7 +462,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_26() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
         ''')
@@ -476,7 +476,7 @@ class AggregationAcceptanceVisualizationTest {
     */
     @Test
     def void testAggregationAcceptance_27() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)
         ''')

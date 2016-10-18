@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class EqualsAcceptanceParserTest {
     
@@ -16,13 +18,15 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH collect([0, 0.0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -35,13 +39,15 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH collect([0.5, 0]) AS numbers
         UNWIND numbers AS arr
         WITH arr[0] AS expected
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -54,13 +60,15 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         WITH collect(['0', 0]) AS things
         UNWIND things AS arr
         WITH arr[0] AS expected
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -73,13 +81,15 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (a)
         WITH a
         MATCH (b)
         WHERE a = b
         RETURN count(b)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -92,13 +102,15 @@ class EqualsAcceptanceParserTest {
     */
     @Test
     def void testEqualsAcceptance_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH ()-[a]->()
         WITH a
         MATCH ()-[b]->()
         WHERE a = b
         RETURN count(b)
         ''')
+        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

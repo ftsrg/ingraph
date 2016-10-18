@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class LiteralsParserTest {
     
@@ -11,9 +13,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 1 AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -21,9 +25,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN 1.0 AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -31,9 +37,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN -1e-9 AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -41,9 +49,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_04() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN true AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_04")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -51,9 +61,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_05() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN '' AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_05")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -61,9 +73,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_06() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN "" AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_06")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -71,9 +85,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_07() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN null AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_07")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -81,9 +97,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_08() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN [] AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_08")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -91,9 +109,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_09() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN [0, 1, 2] AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_09")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -101,9 +121,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_10() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN {} AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_10")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -111,9 +133,11 @@ class LiteralsParserTest {
     */
     @Test
     def void testLiterals_11() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
+        CypherUtil.save(cypher, "../cypxmi/Literals_11")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

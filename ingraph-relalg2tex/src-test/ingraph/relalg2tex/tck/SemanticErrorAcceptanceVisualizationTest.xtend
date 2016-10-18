@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class SemanticErrorAcceptanceVisualizationTest {
     */
     @Test
     def void testSemanticErrorAcceptance_01() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         WITH [{prop: 0}, 1] AS list
         RETURN (list[0]).prop
         ''')
@@ -29,7 +29,7 @@ class SemanticErrorAcceptanceVisualizationTest {
     */
     @Test
     def void testSemanticErrorAcceptance_02() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
         ''')
@@ -42,7 +42,7 @@ class SemanticErrorAcceptanceVisualizationTest {
     */
     @Test
     def void testSemanticErrorAcceptance_04() {
-        val container = CypherParser.parseString('''
+        val container = Cypher2RelAlg.processString('''
         RETURN range(2, 8, 0)
         ''')
         container.addSchemaInformation

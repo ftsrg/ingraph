@@ -2,7 +2,9 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.CypherParser
+import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypherparser.CypherParser
+import ingraph.cypherparser.CypherUtil
 
 class StartingPointAcceptanceParserTest {
     
@@ -18,10 +20,12 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_01() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_01")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -37,10 +41,12 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_02() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n:Animal)
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_02")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
     /*
@@ -54,11 +60,13 @@ class StartingPointAcceptanceParserTest {
     */
     @Test
     def void testStartingPointAcceptance_03() {
-        CypherParser.parseString('''
+        val cypher = CypherParser.parseString('''
         MATCH (n)
         WHERE n.prop = 2
         RETURN n
         ''')
+        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_03")
+        Cypher2RelAlg.processCypher(cypher)
     }
 
 }

@@ -1,0 +1,43 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{inputs/relalg-packages}
+\input{inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{tikzpicture}
+\linespread{1.25}
+\Tree
+[. {$\duplicateelimination$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+	[. {$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor},~\var{te1},~\var{te2}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+		[. {$\selection{\mathtt{}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+			[. {$\antijoin \{\}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+				[. {$\alldifferent{\var{\_e1},~\var{\_e2},~\var{\_e3},~\var{\_e4},~\var{\_e5},~\var{\_e6}}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					[. {$\expandin{sensor}{route2}{Route}{\_e6}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+						[. {$\expandout{te2}{sensor}{Sensor}{\_e5}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+							[. {$\expandout{te1}{te2}{}{\_e4}{connectsTo}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+								[. {$\expandin{sensor1}{te1}{}{\_e3}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+									[. {$\expandout{route1}{sensor1}{Sensor}{\_e2}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+										[. {$\expandin{semaphore}{route1}{Route}{\_e1}{exit}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+											[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+											]
+										]
+									]
+								]
+							]
+						]
+					]
+				]
+				[. {$\expandin{semaphore}{route2}{Route}{\_e7}{entry}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					[. {$\getvertices{semaphore}{Semaphore}$ \\ \footnotesize $\color{gray} \langle \var{} \rangle$}
+					]
+				]
+			]
+		]
+	]
+]
+;
+\end{tikzpicture}
+\end{preview}
+\end{document}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+            <nodeLabels>
+              <nodeLabels labelName="A"/>
+              <nodeLabels labelName="B"/>
+              <nodeLabels labelName="C"/>
+              <nodeLabels labelName="D"/>
+              <nodeLabels labelName="E"/>
+              <nodeLabels labelName="F"/>
+              <nodeLabels labelName="G"/>
+              <nodeLabels labelName="H"/>
+              <nodeLabels labelName="I"/>
+              <nodeLabels labelName="J"/>
+              <nodeLabels labelName="K"/>
+              <nodeLabels labelName="L"/>
+              <nodeLabels labelName="M"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>T</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="m"/>
+              <nodeLabels>
+                <nodeLabels labelName="Z"/>
+                <nodeLabels labelName="Y"/>
+                <nodeLabels labelName="X"/>
+                <nodeLabels labelName="W"/>
+                <nodeLabels labelName="V"/>
+                <nodeLabels labelName="U"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="dummy:/example.cyp#|0"/>
+          </expression>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="dummy:/example.cyp#|1"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>
