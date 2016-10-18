@@ -53,6 +53,8 @@ Incremental openCypher queries could also be beneficial for:
 # Publications
 
 * G. Szárnyas, J. Marton: [Formalizing openCypher Graph Queries in Relational Algebra](pub/btw2017-opencypher.pdf) (submitted to BTW 2017)
+* G. Szárnyas, J. Maginecz, D. Varró: Evaluation of Optimization Strategies for Incremental Graph Queries (Periodica Polytechnica 2017, accepted)
+* J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 
 # Related projects
