@@ -10,12 +10,12 @@ package relalg
 
 class RelationalAlgebraContainer {
 	contains Operator rootExpression
-	contains NamedElement[] elements opposite containerr
+	contains NamedElement[] elements opposite ^container
 }
 
 abstract class NamedElement {
 	String name
-	refers RelationalAlgebraContainer containerr opposite elements
+	refers RelationalAlgebraContainer ^container opposite elements
 }
 
 abstract class Label extends NamedElement {}
@@ -45,6 +45,7 @@ abstract class ReturnableElement {}
 /* Operators */
 
 abstract class Operator {
+	String description
 	refers Variable[] schema
 }
 
@@ -64,7 +65,7 @@ class GetEdgesOperator extends Operator {
 /* Alpha operators */
 
 abstract class AlphaOperator extends Operator {
-	contains Operator input
+	refers Operator input
 }
 
 class ProductionOperator extends AlphaOperator {}

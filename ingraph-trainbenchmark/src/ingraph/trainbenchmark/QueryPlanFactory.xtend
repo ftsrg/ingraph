@@ -1,5 +1,6 @@
 package ingraph.trainbenchmark
 
+import ingraph.relalg.util.SchemaInferencer
 import relalg.RelalgFactory
 
 /**
@@ -7,8 +8,9 @@ import relalg.RelalgFactory
  */
 class QueryPlanFactory {
 
-	protected val extension RelalgFactory factory = RelalgFactory.eINSTANCE
-
+	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
+	
 	protected val container = createRelationalAlgebraContainer
 
 }

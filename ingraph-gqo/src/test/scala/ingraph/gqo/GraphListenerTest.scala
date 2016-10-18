@@ -1,15 +1,16 @@
 package ingraph.gqo
 
-import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
-import ingraph.optimization.transformations.{Relalg2ReteTransformation, SchemaInferencer}
-import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.apache.tinkerpop.gremlin.structure.Graph
 import org.apache.tinkerpop.gremlin.structure.io.IoCore
 import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import org.scalatest.FlatSpec
-import relalg.ProductionOperator
+
+import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
+
 import ingraph.optimization.transformations.Relalg2ReteTransformation
-import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.relalg.util.SchemaInferencer
+import ingraph.trainbenchmark.TrainBenchmarkUtil
+import relalg.ProductionOperator
 
 
 class GrapListenerTest extends FlatSpec {

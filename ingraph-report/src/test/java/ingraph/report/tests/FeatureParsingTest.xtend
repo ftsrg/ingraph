@@ -3,7 +3,7 @@ package ingraph.report.tests
 import com.google.common.collect.Lists
 import ingraph.cypher2relalg.CypherParser
 import ingraph.optimization.transformations.Relalg2ReteTransformation
-import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
@@ -139,7 +139,7 @@ class FeatureParsingTest {
 	def visualizeWithTransformations(String s) {
 		try {
 			val container = CypherParser.parseString(s)
-			treeSerializer.serialize(container.transform.addSchemaInformation)
+			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
 		} catch (Exception e) {
 			'''Cannot visualize incremental tree.'''
 		}

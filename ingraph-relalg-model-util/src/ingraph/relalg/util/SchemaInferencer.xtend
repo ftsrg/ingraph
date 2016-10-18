@@ -1,4 +1,4 @@
-package ingraph.optimization.transformations
+package ingraph.relalg.util
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
@@ -23,13 +23,15 @@ class SchemaInferencer {
 
 	def addSchemaInformation(RelationalAlgebraContainer container) {
 		val rootExpression = container.rootExpression
-		rootExpression.inferSchema
+		rootExpression.inferSchema		
 		container
 	}
 
 	/**
 	 * inferSchema
 	 */
+	 
+	// nullary operators
 	def dispatch List<Variable> inferSchema(GetVerticesOperator op) {
 		op.defineSchema(#[op.vertexVariable])
 	}
@@ -38,6 +40,7 @@ class SchemaInferencer {
 		op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
 	}
 
+	// unary operators
 	def dispatch List<Variable> inferSchema(ProjectionOperator op) {
 		val schema = op.input.inferSchema
 
@@ -62,10 +65,12 @@ class SchemaInferencer {
 		op.defineSchema(schema)
 	}
 
+	// rest of the unary operators
 	def dispatch List<Variable> inferSchema(AlphaOperator op) {
 		op.defineSchema(op.input.inferSchema)
 	}
 
+	// binary operators
 	def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
 		val leftInputSchema = Lists.newArrayList(op.leftInput.inferSchema)
 		val rightInputSchema = Lists.newArrayList(op.rightInput.inferSchema)
@@ -77,7 +82,7 @@ class SchemaInferencer {
 
 		op.schema
 	}
-
+	
 	def dispatch List<Variable> inferSchema(UnionOperator op) {
 		// The openCypher acceptance test and the Neo4j code contradict each other:
 		// OpenCypher

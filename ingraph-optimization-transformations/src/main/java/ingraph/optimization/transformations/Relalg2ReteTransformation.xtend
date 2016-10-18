@@ -18,8 +18,8 @@ import relalg.RelationalAlgebraContainer
 
 class Relalg2ReteTransformation {
 
-	extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
-	extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
+	val extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
+	val extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
 
 	new() {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
@@ -27,7 +27,7 @@ class Relalg2ReteTransformation {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 	}
 
-	def transform(RelationalAlgebraContainer container) {
+	def transformToRete(RelationalAlgebraContainer container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)

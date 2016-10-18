@@ -1,6 +1,6 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.junit.Test

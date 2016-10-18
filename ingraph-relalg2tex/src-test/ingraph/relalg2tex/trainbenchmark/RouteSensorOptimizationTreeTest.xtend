@@ -3,31 +3,42 @@ package ingraph.relalg2tex.trainbenchmark
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
+import ingraph.optimization.transformations.Relalg2ReteTransformation
 
 class RouteSensorOptimizationTreeTest {
 
 	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
-	var RouteSensorQueryPlanFactory f
+	val extension Relalg2ReteTransformation transformation = new Relalg2ReteTransformation
+	extension RouteSensorQueryPlanFactory factory
 	
 	@Before
 	def void init() {
-		f = new RouteSensorQueryPlanFactory()	
+		factory = new RouteSensorQueryPlanFactory()	
 	}
 
 	@Test
 	def void testRouteSensorA() {
-		drawer.serialize(f.routeSensorA, "RouteSensorA")
+		drawer.serialize(routeSensorA, "query-plan-RouteSensorA")
 	}
 
+	@Test
+	def void testRouteSensorARete() {
+		drawer.serialize(routeSensorA.transformToRete, "query-plan-RouteSensorARete")
+	}
+
+
+	@Ignore
 	@Test
 	def void testRouteSensorB() {
-		drawer.serialize(f.routeSensorB, "RouteSensorB")
+		drawer.serialize(routeSensorB, "query-plan-RouteSensorB")
 	}
 
+	@Ignore
 	@Test
 	def void testRouteSensorC() {
-		drawer.serialize(f.routeSensorC, "RouteSensorC")
+		drawer.serialize(routeSensorC, "query-plan-RouteSensorC")
 	}
 
 }

@@ -10,5 +10,4 @@ dependencies {
 	compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
 	compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: dseVersion
 	compile project(':ingraph-optimization-patterns')
-	compile project(':ingraph-trainbenchmark')
 }

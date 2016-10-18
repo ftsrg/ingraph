@@ -21,8 +21,8 @@ for filename in filenames:
 
 import org.junit.Test
 
-ingraph.cypher2relalg.CypherParser
-import ingraph.optimization.transformations.SchemaInferencer
+import ingraph.cypher2relalg.CypherParser
+import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class %sVisualizationTest {
