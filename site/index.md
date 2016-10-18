@@ -16,7 +16,7 @@ Understanding the [big data landscape](img/Big-Data-Landscape-2016-v18-FINAL.png
 
 ### Data model
 
-ingraph operates on the [property graph data model](https://arxiv.org/abs/1006.2361). In computer science, property graphs are also known as a typed, attributed graphs.
+ingraph operates on the [property graph data model](https://arxiv.org/abs/1006.2361). In computer science, property graphs are also known as [typed](http://link.springer.com/chapter/10.1007/3-540-45832-8_14)/[heterogeneous](http://www.sciencedirect.com/science/article/pii/S0957417412009657) [attributed](http://dl.acm.org/citation.cfm?id=1281271) graphs.
 
 Typed graphs are also used in other disciplines, usually for analysis with the tools of [network theory](https://en.wikipedia.org/wiki/Network_theory). Related terms include multidimensional networks ([social network analysis](http://link.springer.com/article/10.1007/s11280-012-0190-4)), multiplex networks ([physics](https://arxiv.org/abs/1403.1546)) and multi[-]layer[ed] networks ([social network analysis](https://arxiv.org/abs/1207.4293) and [physics](https://arxiv.org/abs/1309.7233)).
 
