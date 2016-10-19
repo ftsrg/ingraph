@@ -14,7 +14,7 @@ class TrainBenchmarkUtil {
 		val segmentLabel = createVertexLabel => [name = "Segment"; it.container = container]
 		val segment = createVertexVariable => [
 			name = "segment"
-			vertexLabel = segmentLabel
+			vertexLabels.add(segmentLabel)
 			it.container = container
 		]
 		val length = createAttributeVariable => [name = "length"; element = segment; it.container = container]	
@@ -56,10 +56,10 @@ class TrainBenchmarkUtil {
 		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
 		val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
 
-		val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
-		val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel; it.container = container]
-		val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel; it.container = container]
-		val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
+		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); it.container = container]
+		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); it.container = container]
+		val swP = createVertexVariable => [name = "swP"; vertexLabels.add(switchPositionLabel); it.container = container]
+		val sensor = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); it.container = container]
 
 		val _e1 = createEdgeVariable => [
 			name = "_e1";
@@ -113,7 +113,7 @@ class TrainBenchmarkUtil {
 
 		val allDifferent = createAllDifferentOperator => [
 			input = expand3
-			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
+			edgeVariables.addAll(#[_e1, _e2, _e3])
 		]
 
 		val expand4 = createExpandOperator => [
@@ -148,15 +148,15 @@ class TrainBenchmarkUtil {
 		val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
 		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
 
-		val route1 = createVertexVariable => [name = "route1"; vertexLabel = routeLabel; it.container = container]
-		val route2 = createVertexVariable => [name = "route2"; vertexLabel = routeLabel; it.container = container]
+		val route1 = createVertexVariable => [name = "route1"; vertexLabels.add(routeLabel); it.container = container]
+		val route2 = createVertexVariable => [name = "route2"; vertexLabels.add(routeLabel); it.container = container]
 		val semaphore = createVertexVariable => [
 			name = "semaphore";
-			vertexLabel = semaphoreLabel;
+			vertexLabels.add(semaphoreLabel);
 			it.container = container
 		]
-		val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabel = sensorLabel; it.container = container]
-		val sensor2 = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
+		val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabels.add(sensorLabel); it.container = container]
+		val sensor2 = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); it.container = container]
 		val te1 = createVertexVariable => [name = "te1"; it.container = container]
 		val te2 = createVertexVariable => [name = "te2"; it.container = container]
 
@@ -283,10 +283,10 @@ class TrainBenchmarkUtil {
 
 		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
 
-		val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel; it.container = container]
+		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); it.container = container]
 		val _sensor = createVertexVariable => [
 			name = "_sensor";
-			vertexLabel = sensorLabel;
+			vertexLabels.add(sensorLabel);
 			dontCare = true;
 			it.container = container
 		]
@@ -328,20 +328,20 @@ class TrainBenchmarkUtil {
 		val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
 		val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
 
-		val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel; it.container = container]
+		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); it.container = container]
 		val sw = createVertexVariable => [
 			name = "sw";
-			vertexLabel = switchLabel;
+			vertexLabels.add(switchLabel);
 			it.container = container
 		]
 		val swP = createVertexVariable => [
 			name = "swP";
-			vertexLabel = switchPositionLabel;
+			vertexLabels.add(switchPositionLabel);
 			it.container = container
 		]
 		val semaphore = createVertexVariable => [
 			name = "semaphore";
-			vertexLabel = semaphoreLabel;
+			vertexLabels.add(semaphoreLabel);
 			it.container = container
 		]
 		

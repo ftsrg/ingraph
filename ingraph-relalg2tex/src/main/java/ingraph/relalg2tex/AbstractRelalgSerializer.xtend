@@ -116,7 +116,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorSymbol(GetVerticesOperator op) {
-		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabel.escapedName»}'''
+		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
 	}
 
 	def dispatch operatorSymbol(ProductionOperator op) {
@@ -187,7 +187,7 @@ abstract class AbstractRelalgSerializer {
 	 * variable to string
 	 */
 	def dispatch toTexParameter(VertexVariable variable) {
-		'''{«variable.escapedName»}{«variable.vertexLabel.escapedName»}'''
+		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName]»}'''
 	}
 
 	def dispatch toTexParameter(EdgeVariable variable) {

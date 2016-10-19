@@ -58,7 +58,7 @@ object EngineFactory extends App {
 
           case op: GetVerticesOperator =>
             val nick = op.getVertexVariable.getName
-            val label= op.getVertexVariable.getVertexLabel.getName
+            val label= op.getVertexVariable.getVertexLabels.get(0).getName // TODO fix this for multiple labels
             vertexConverters.addBinding(label, nick)
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>

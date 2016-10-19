@@ -4,15 +4,18 @@ import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
+import ingraph.emf.util.PrettyPrinter
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
-import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
-import relalg.RelalgFactory
-import org.slizaa.neo4j.opencypher.openCypher.Where
 import org.slizaa.neo4j.opencypher.openCypher.Return
-import org.slizaa.neo4j.opencypher.openCypher.ReturnItem
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
+import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
+import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import org.slizaa.neo4j.opencypher.openCypher.Where
+import relalg.RelalgFactory
 
 class RelalgBuilder {
 
@@ -27,6 +30,10 @@ class RelalgBuilder {
 	val edgeLabelFactory = new EdgeLabelFactory(container)
 
 	def build(Cypher cypher) {
+		EcoreUtil.resolveAll(cypher)
+
+		println(PrettyPrinter.prettyPrint(cypher))
+
 		val statement = cypher.statement
 		if (statement instanceof SingleQuery) {
 			val clauses = statement.clauses
@@ -36,16 +43,34 @@ class RelalgBuilder {
 				val variableName = element.nodepattern.variable.name
 
 				val vertexVariable = vertexVariableFactory.createElement(variableName)
-
-				println(element.nodepattern.nodeLabels.nodeLabels.map[labelName].join(", "))
 			]
-			clauses.filter(typeof(Where)).forEach [
-				
-			]
-			clauses.filter(typeof(Return)).forEach[ 
+			clauses.filter(typeof(Where)).forEach[]
+			clauses.filter(typeof(Return)).forEach [
 				val distinct = it.distinct
-				val items = it.body as ReturnItems
-				println(items.items.map[expression].join(", "))
+				val body = it.body as ReturnItems
+				val all = body.all
+				val order = body.order
+				val skip = body.skip
+				val limit = body.limit
+
+				body.items.forEach [
+					// RETURN expression AS alias, ...
+					val expression = it.expression
+					val alias = it.alias
+
+					switch expression {
+						VariableRef: {
+							println('''variableref: «expression.variableRef.name»''')
+						}
+						ExpressionNodeLabelsAndPropertyLookup: {
+							println('''lookup: «expression.propertyLookups.get(0).propertyKeyName»''')
+						}
+						default: {
+							println('''Return item «it» not supported''')
+						}
+					}
+					println
+				]
 			]
 		}
 

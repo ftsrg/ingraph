@@ -17,10 +17,10 @@ class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 	val targetLabel = createEdgeLabel => [name = "target"]
 
 	// vertex variables
-	val route = createVertexVariable => [name = "route"; vertexLabel = routeLabel]
-	val sw = createVertexVariable => [name = "sw"; vertexLabel = switchLabel]
-	val swP = createVertexVariable => [name = "swP"; vertexLabel = switchPositionLabel]
-	val sensor = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel]
+	val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel)]
+	val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel)]
+	val swP = createVertexVariable => [name = "swP"; vertexLabels.add(switchPositionLabel)]
+	val sensor = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel)]
 
 	// edge variables
 	val target = createEdgeVariable => [name = "_e1"; edgeLabel = targetLabel]
