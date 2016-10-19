@@ -11,6 +11,6 @@ class QueryPlanFactory {
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
 	
-	protected val container = createRelationalAlgebraContainer
+	protected val container = createRelalgContainer
 
 }

@@ -1,11 +1,11 @@
 package ingraph.cypher2relalg.factories
 
 import relalg.EdgeLabel
-import relalg.RelationalAlgebraContainer
+import relalg.RelalgContainer
 
 class EdgeLabelFactory extends ElementFactory<EdgeLabel> {
 	
-	new(RelationalAlgebraContainer container) {
+	new(RelalgContainer container) {
 		super(container)
 	}
 	

@@ -1,11 +1,11 @@
 package ingraph.cypher2relalg.factories
 
 import relalg.EdgeVariable
-import relalg.RelationalAlgebraContainer
+import relalg.RelalgContainer
 
 class EdgeVariableFactory extends VariableFactory<EdgeVariable> {
 	
-	new(RelationalAlgebraContainer container) {
+	new(RelalgContainer container) {
 		super(container)
 	}
 	

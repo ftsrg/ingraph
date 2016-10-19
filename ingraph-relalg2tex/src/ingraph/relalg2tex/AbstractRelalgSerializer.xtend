@@ -19,11 +19,11 @@ import relalg.NamedElement
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
-import relalg.RelationalAlgebraContainer
 import relalg.SelectionOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.RelalgContainer
 
 abstract class AbstractRelalgSerializer {
 
@@ -36,7 +36,7 @@ abstract class AbstractRelalgSerializer {
 		this.standaloneDocument = document
 	}
 
-	def serialize(RelationalAlgebraContainer container, String filename) {
+	def serialize(RelalgContainer container, String filename) {
 		val tex = serialize(container)
 		if (standaloneDocument) {
 			val file = new File("../visualization/" + filename + ".tex")
@@ -47,8 +47,8 @@ abstract class AbstractRelalgSerializer {
 		tex
 	}
 
-	def serialize(RelationalAlgebraContainer container) {
-		convertAlgebraExpression(container.rootExpression)
+	def serialize(RelalgContainer container) {
+		convertAlgebraExpression(container.getRootExpression)
 	}
 
 	/**

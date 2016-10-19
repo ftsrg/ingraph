@@ -8,14 +8,14 @@
 )
 package relalg
 
-class RelationalAlgebraContainer {
+class RelalgContainer {
 	contains Operator rootExpression
 	contains NamedElement[] elements opposite ^container
 }
 
 abstract class NamedElement {
 	String name
-	refers RelationalAlgebraContainer ^container opposite elements
+	refers RelalgContainer ^container opposite elements
 }
 
 abstract class Label extends NamedElement {}

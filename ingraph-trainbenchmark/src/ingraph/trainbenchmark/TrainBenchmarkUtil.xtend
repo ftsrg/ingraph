@@ -9,7 +9,7 @@ class TrainBenchmarkUtil {
 	static val extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def static posLength() {
-		val container = createRelationalAlgebraContainer
+		val container = createRelalgContainer
 
 		val segmentLabel = createVertexLabel => [name = "Segment"; it.container = container]
 		val segment = createVertexVariable => [
@@ -44,7 +44,7 @@ class TrainBenchmarkUtil {
 	}
 
 	def static routeSensor() {
-		val container = createRelationalAlgebraContainer
+		val container = createRelalgContainer
 
 		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
 		val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
@@ -136,7 +136,7 @@ class TrainBenchmarkUtil {
 	}
 
 	def static semaphoreNeighbor() {
-		val container = createRelationalAlgebraContainer
+		val container = createRelalgContainer
 
 		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
 		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
@@ -276,7 +276,7 @@ class TrainBenchmarkUtil {
 	}
 
 	def static switchMonitored() {
-		val container = createRelationalAlgebraContainer
+		val container = createRelalgContainer
 
 		val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
 		val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
@@ -317,7 +317,7 @@ class TrainBenchmarkUtil {
 	}
 
 	def static switchSet() {
-		val container = createRelationalAlgebraContainer
+		val container = createRelalgContainer
 
 		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
 		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]

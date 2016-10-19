@@ -14,8 +14,8 @@ import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransforma
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
 import relalg.ExpandOperator
 import relalg.RelalgFactory
-import relalg.RelationalAlgebraContainer
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification
+import relalg.RelalgContainer
 
 class Relalg2ReteTransformation {
 
@@ -28,7 +28,7 @@ class Relalg2ReteTransformation {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
 	}
 
-	def transformToRete(RelationalAlgebraContainer container) {
+	def transformToRete(RelalgContainer container) {
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)

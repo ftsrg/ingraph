@@ -1,11 +1,11 @@
 package ingraph.cypher2relalg.factories
 
-import relalg.RelationalAlgebraContainer
 import relalg.VertexVariable
+import relalg.RelalgContainer
 
 class VertexVariableFactory extends VariableFactory<VertexVariable> {
 	
-	new(RelationalAlgebraContainer container) {
+	new(RelalgContainer container) {
 		super(container)
 	}
 	

@@ -1,11 +1,11 @@
 package ingraph.cypher2relalg.factories
 
-import relalg.RelationalAlgebraContainer
 import relalg.VertexLabel
+import relalg.RelalgContainer
 
 class VertexLabelFactory extends ElementFactory<VertexLabel> {
 	
-	new(RelationalAlgebraContainer container) {
+	new(RelalgContainer container) {
 		super(container)
 	}
 	

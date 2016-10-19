@@ -5,13 +5,13 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
-import relalg.RelationalAlgebraContainer
+import relalg.RelalgContainer
 
 class RelalgUtil {
 
 	public static val MODEL_EXTENSION = "relalg"
 
-	def static void save(RelationalAlgebraContainer container, String filename) {
+	def static void save(RelalgContainer container, String filename) {
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_EXTENSION, new XMIResourceFactoryImpl())
 
 		val resourceSet = new ResourceSetImpl

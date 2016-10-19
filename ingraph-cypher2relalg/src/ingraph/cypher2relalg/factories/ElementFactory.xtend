@@ -4,14 +4,14 @@ import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.NamedElement
 import relalg.RelalgFactory
-import relalg.RelationalAlgebraContainer
+import relalg.RelalgContainer
 
 abstract class ElementFactory<TNamedElement extends NamedElement> {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	protected final RelationalAlgebraContainer container
+	protected final RelalgContainer container
 	
-	new(RelationalAlgebraContainer container) {
+	new(RelalgContainer container) {
 		this.container = container	
 	} 
 

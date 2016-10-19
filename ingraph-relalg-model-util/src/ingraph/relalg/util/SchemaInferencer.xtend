@@ -12,17 +12,17 @@ import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.ProjectionOperator
-import relalg.RelationalAlgebraContainer
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.RelalgContainer
 
 class SchemaInferencer {
 
 	new() {
 	}
 
-	def addSchemaInformation(RelationalAlgebraContainer container) {
-		val rootExpression = container.rootExpression
+	def addSchemaInformation(RelalgContainer container) {
+		val rootExpression = container.getRootExpression
 		rootExpression.inferSchema		
 		container
 	}

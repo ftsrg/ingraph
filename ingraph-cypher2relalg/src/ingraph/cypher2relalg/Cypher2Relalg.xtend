@@ -11,22 +11,22 @@ import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine
 import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import relalg.RelalgFactory
-import relalg.RelationalAlgebraContainer
+import relalg.RelalgContainer
 
 class Cypher2Relalg {
 
-	def static RelationalAlgebraContainer processFile(String queryFile) {
+	def static RelalgContainer processFile(String queryFile) {
 		val cypher = CypherParser.parseFile(queryFile)
 		return processCypher(cypher)
 	}
 
-	def static RelationalAlgebraContainer processString(String queryString) {
+	def static RelalgContainer processString(String queryString) {
 		val cypher = CypherParser.parseString(queryString)
 		return processCypher(cypher)
 	}
 
-	def static RelationalAlgebraContainer processCypher(Cypher cypherQuery) {
-		val container = RelalgFactory.eINSTANCE.createRelationalAlgebraContainer
+	def static RelalgContainer processCypher(Cypher cypherQuery) {
+		val container = RelalgFactory.eINSTANCE.createRelalgContainer
 
 		// we shouldn't register a full XMI resource factory for relalg models
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
