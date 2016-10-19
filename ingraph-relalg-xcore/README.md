@@ -9,10 +9,10 @@ Note that the model is currently **not serializable**, due to various limitation
     ```
            AntiJoin
           /        \
-     ExpandOut      |     
+     ExpandOut      |
          |          |
      ExpandOut  ExpandOut
-          \        /     
+          \        /
          GetVertices
     ```
 
@@ -21,7 +21,7 @@ Note that the model is currently **not serializable**, due to various limitation
     ```
             AntiJoin
            /        \
-     ExpandOut       |     
+     ExpandOut       |
          |           |
      ExpandOut   ExpandOut
          |           |
