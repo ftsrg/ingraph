@@ -4,13 +4,13 @@ import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
 import hu.bme.mit.incqueryds.{ChangeSet, nodeType}
-import ingraph.gqo.EngineMaker.EdgeTransformer
+import ingraph.gqo.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 
-class IngraphChangedListener(
+class IngraphGraphChangedListener(
                                   vertexConverters: Map[String, mutable.Set[String]],
                                   edgeConverters: Map[String, mutable.Set[EdgeTransformer]],
                                   inputLookup: Map[String, (ChangeSet) => Unit]

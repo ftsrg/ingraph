@@ -12,15 +12,14 @@ import ingraph.relalg.util.SchemaInferencer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import relalg.ProductionOperator
 
-
-class GrapListenerTest extends FlatSpec {
+class IngraphGraphListenerTest extends FlatSpec {
   val modelPath = "../trainbenchmark/models/railway-repair-1-tinkerpop.graphml"
   "semaphoreneighbour" should "work" in {
     val rete = new Relalg2ReteTransformation
     val inferencer = new SchemaInferencer
     val relAlgContainer = inferencer.addSchemaInformation(rete.transformToRete(TrainBenchmarkUtil.switchSet()))
-    val engine = EngineMaker.createQueryEngine(relAlgContainer.getRootExpression.asInstanceOf[ProductionOperator])
-    val listener = new IngraphChangedListener(
+    val engine = EngineFactory.createQueryEngine(relAlgContainer.getRootExpression.asInstanceOf[ProductionOperator])
+    val listener = new IngraphGraphChangedListener(
       engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup)
     val graph = new EventGraph[Graph](TinkerGraph.open())
     graph.addListener(listener)

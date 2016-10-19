@@ -9,7 +9,7 @@ import relalg._
 
 import scala.collection.mutable
 
-object EngineMaker extends App {
+object EngineFactory extends App {
 
   implicit def emfConversion[E](list: EList[E]): Vector[E] = {
     (for (v <- 0 until list.size)
