@@ -1,6 +1,4 @@
-!.project
-!.classpath
-!src-gen/ingraph/optimization/patterns/*.java
-!src-gen/ingraph/optimization/patterns/util/*.java
-src-gen/ingraph/optimization/patterns/.gitignore
-src-gen/ingraph/optimization/patterns/util/.gitignore
+!src-gen/**/.java
+!src-gen/**/.java
+src-gen/**/.gitignore
+src-gen/**/.gitignore
