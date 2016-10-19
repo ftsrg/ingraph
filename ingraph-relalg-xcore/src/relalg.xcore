@@ -3,7 +3,7 @@
 )
 @GenModel(
     bundleManifest="false",
-    modelDirectory="ingraph-relalg-xcore/src/main/java-gen",
+    modelDirectory="ingraph-relalg-xcore/build/xcore/main",
     complianceLevel="8.0"
 )
 package relalg
