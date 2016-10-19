@@ -18,7 +18,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -32,7 +32,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*..]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -46,7 +46,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -60,7 +60,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -74,7 +74,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -88,7 +88,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*0..2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -102,7 +102,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1..2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -116,7 +116,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*0..0]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -130,7 +130,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1..1]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -144,7 +144,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*2..2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -158,7 +158,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*2..1]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -172,7 +172,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1..0]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -186,7 +186,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*..0]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -200,7 +200,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*..1]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -214,7 +214,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*..2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -228,7 +228,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*0..]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -242,7 +242,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1..]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -256,7 +256,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*2..]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -270,7 +270,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*0]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_19")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_19")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -284,7 +284,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_20")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_20")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -298,7 +298,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*1]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_21")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_21")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -312,7 +312,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_22")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_22")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -326,7 +326,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES*2]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_23")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_23")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -340,7 +340,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_24")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_24")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -362,7 +362,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_25")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_25")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -390,7 +390,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)<-[:LIKES]-()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_26")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_26")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -420,7 +420,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (a)-[:LIKES]->()<-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_27")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_27")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -442,7 +442,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (p)-[:LIKES*1]->()-[:LIKES]->()-[r:LIKES*2]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_28")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_28")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -464,7 +464,7 @@ class VarLengthAcceptanceParserTest {
         MATCH (p)-[:LIKES]->()-[:LIKES*2]->()-[r:LIKES]->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance_29")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_29")
         Cypher2RelAlg.processCypher(cypher)
     }
 

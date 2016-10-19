@@ -22,7 +22,7 @@ class FunctionsAcceptanceParserTest {
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -37,7 +37,7 @@ class FunctionsAcceptanceParserTest {
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -51,7 +51,7 @@ class FunctionsAcceptanceParserTest {
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -69,7 +69,7 @@ class FunctionsAcceptanceParserTest {
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -87,7 +87,7 @@ class FunctionsAcceptanceParserTest {
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -100,7 +100,7 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -113,7 +113,7 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN properties(null)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -126,7 +126,7 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN reverse('raksO')
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -146,7 +146,7 @@ class FunctionsAcceptanceParserTest {
         WHERE exists(n['prop'])
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -172,7 +172,7 @@ class FunctionsAcceptanceParserTest {
         LIMIT 100
         RETURN percentileDisc(0.90, deg), deg
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -190,7 +190,7 @@ class FunctionsAcceptanceParserTest {
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -208,7 +208,7 @@ class FunctionsAcceptanceParserTest {
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -227,7 +227,7 @@ class FunctionsAcceptanceParserTest {
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -246,7 +246,7 @@ class FunctionsAcceptanceParserTest {
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -265,7 +265,7 @@ class FunctionsAcceptanceParserTest {
         WITH [r, 1] AS list
         RETURN type(list[0])
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -284,7 +284,7 @@ class FunctionsAcceptanceParserTest {
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -303,7 +303,7 @@ class FunctionsAcceptanceParserTest {
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -321,7 +321,7 @@ class FunctionsAcceptanceParserTest {
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/FunctionsAcceptance_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 

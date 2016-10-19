@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:NumberConstant" value="1"/>
+            <expressions xsi:type="openCypher:NumberConstant" value="2"/>
+          </expression>
+          <alias name="xs"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:NumberConstant" value="3"/>
+            <expressions xsi:type="openCypher:NumberConstant" value="4"/>
+          </expression>
+          <alias name="ys"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:NumberConstant" value="5"/>
+            <expressions xsi:type="openCypher:NumberConstant" value="6"/>
+          </expression>
+          <alias name="zs"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:VariableRef">
+        <variableRef href="http:/example.cyp#|0"/>
+      </expression>
+      <variable name="x"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:VariableRef">
+        <variableRef href="http:/example.cyp#|1"/>
+      </expression>
+      <variable name="y"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:VariableRef">
+        <variableRef href="http:/example.cyp#|2"/>
+      </expression>
+      <variable name="z"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems" all="*"/>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

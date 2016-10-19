@@ -18,7 +18,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -32,7 +32,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -46,7 +46,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -60,7 +60,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH 'AB'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -75,7 +75,7 @@ class StartsWithAcceptanceParserTest {
         AND a.name ENDS WITH 'f'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -89,7 +89,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH ''
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -103,7 +103,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS 'CD'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -123,7 +123,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -143,7 +143,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -163,7 +163,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -183,7 +183,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -203,7 +203,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -223,7 +223,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -237,7 +237,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -251,7 +251,7 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name STARTS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -265,7 +265,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -279,7 +279,7 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name ENDS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -293,7 +293,7 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -307,7 +307,7 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name CONTAINS null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_19")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_19")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -323,7 +323,7 @@ class StartsWithAcceptanceParserTest {
         AND a.name ENDS WITH 'EF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_20")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_20")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -337,7 +337,7 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name CONTAINS 'b'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartsWithAcceptance_21")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_21")
         Cypher2RelAlg.processCypher(cypher)
     }
 

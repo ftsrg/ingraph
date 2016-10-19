@@ -24,7 +24,7 @@ class SkipLimitAcceptanceParserTest {
         WITH count(*) AS count
         RETURN count > 0 AS nonEmpty
         ''')
-        CypherUtil.save(cypher, "../cypxmi/SkipLimitAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SkipLimitAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -43,7 +43,7 @@ class SkipLimitAcceptanceParserTest {
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count
         ''')
-        CypherUtil.save(cypher, "../cypxmi/SkipLimitAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SkipLimitAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 

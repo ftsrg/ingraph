@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:NumberConstant" value="0"/>
+            <expressions xsi:type="openCypher:NumberConstant" value="1"/>
+          </expression>
+          <alias name="prows"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:ExpressionList">
+              <expressions xsi:type="openCypher:NumberConstant" value="2"/>
+            </expressions>
+            <expressions xsi:type="openCypher:ExpressionList">
+              <expressions xsi:type="openCypher:NumberConstant" value="3"/>
+              <expressions xsi:type="openCypher:NumberConstant" value="4"/>
+            </expressions>
+          </expression>
+          <alias name="qrows"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:VariableRef">
+        <variableRef href="http:/example.cyp#|0"/>
+      </expression>
+      <variable name="p"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:VariableRef">
+        <expression3Parts xsi:type="openCypher:Index">
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|2"/>
+          </expression>
+        </expression3Parts>
+        <variableRef href="http:/example.cyp#|1"/>
+      </expression>
+      <variable name="q"/>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|3"/>
+          </expression>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|4"/>
+            </parameter>
+          </expression>
+          <alias name="rng"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <order>
+          <orderBy>
+            <expression xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|5"/>
+            </expression>
+          </orderBy>
+        </order>
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|6"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

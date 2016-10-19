@@ -24,7 +24,7 @@ class StartingPointAcceptanceParserTest {
         MATCH (n)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -45,7 +45,7 @@ class StartingPointAcceptanceParserTest {
         MATCH (n:Animal)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -65,7 +65,7 @@ class StartingPointAcceptanceParserTest {
         WHERE n.prop = 2
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/StartingPointAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 

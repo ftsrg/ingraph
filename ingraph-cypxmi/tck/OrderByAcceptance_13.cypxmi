@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Unwind">
+      <expression xsi:type="openCypher:ExpressionList">
+        <expressions xsi:type="openCypher:NumberConstant" value="1.5"/>
+        <expressions xsi:type="openCypher:NumberConstant" value="1.3"/>
+        <expressions xsi:type="openCypher:NumberConstant" value="999.99"/>
+      </expression>
+      <variable name="floats"/>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <order>
+          <orderBy sort="DESC">
+            <expression xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|0"/>
+            </expression>
+          </orderBy>
+        </order>
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|1"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

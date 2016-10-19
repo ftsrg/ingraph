@@ -24,7 +24,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -44,7 +44,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -64,7 +64,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -84,7 +84,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -104,7 +104,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -124,7 +124,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -144,7 +144,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -164,7 +164,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -183,7 +183,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -207,7 +207,7 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ComparisonOperatorAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 

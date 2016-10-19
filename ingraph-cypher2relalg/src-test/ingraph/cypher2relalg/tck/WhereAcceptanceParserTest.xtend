@@ -23,7 +23,7 @@ class WhereAcceptanceParserTest {
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WhereAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WhereAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -42,7 +42,7 @@ class WhereAcceptanceParserTest {
         WHERE n.prop < 10
         RETURN n.prop AS prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WhereAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WhereAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 

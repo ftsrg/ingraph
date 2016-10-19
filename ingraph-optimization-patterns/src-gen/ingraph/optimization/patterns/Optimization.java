@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/optimization.vql
+ * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/Optimization.vql
  */
 package ingraph.optimization.patterns;
 
@@ -12,10 +12,10 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
- * A pattern group formed of all patterns defined in optimization.vql.
+ * A pattern group formed of all patterns defined in Optimization.vql.
  * 
  * <p>Use the static instance as any {@link org.eclipse.viatra.query.runtime.api.IPatternGroup}, to conveniently prepare
- * a VIATRA Query engine for matching all patterns originally defined in file optimization.vql,
+ * a VIATRA Query engine for matching all patterns originally defined in file Optimization.vql,
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>

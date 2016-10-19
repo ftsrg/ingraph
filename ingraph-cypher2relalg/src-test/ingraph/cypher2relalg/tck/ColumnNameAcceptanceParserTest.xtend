@@ -17,7 +17,7 @@ class ColumnNameAcceptanceParserTest {
         MATCH (n)
         RETURN cOuNt( * )
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -30,7 +30,7 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN nOdEs( p )
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -43,7 +43,7 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN coUnt( dIstInct p )
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -56,7 +56,7 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN aVg(    n.aGe     )
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ColumnNameAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+            <properties xsi:type="openCypher:MapLiteral">
+              <entries key="name">
+                <value xsi:type="openCypher:StringConstant" value="'Andres'"/>
+              </entries>
+            </properties>
+          </nodepattern>
+          <chain>
+            <relationshipPattern incoming="true">
+              <detail>
+                <types>
+                  <relTypeName>FATHER</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="child"/>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:MapLiteral">
+            <entries key="foo">
+              <value xsi:type="openCypher:ExpressionComparison" operator="=">
+                <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                  <left xsi:type="openCypher:VariableRef">
+                    <variableRef href="http:/example.cyp#|0"/>
+                  </left>
+                  <propertyLookups propertyKeyName="name"/>
+                </left>
+                <right xsi:type="openCypher:StringConstant" value="'Andres'"/>
+              </value>
+            </entries>
+            <entries key="kids">
+              <value xsi:type="openCypher:FunctionInvocation">
+                <functionName name="collect"/>
+                <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                  <left xsi:type="openCypher:VariableRef">
+                    <variableRef href="http:/example.cyp#|1"/>
+                  </left>
+                  <propertyLookups propertyKeyName="name"/>
+                </parameter>
+              </value>
+            </entries>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

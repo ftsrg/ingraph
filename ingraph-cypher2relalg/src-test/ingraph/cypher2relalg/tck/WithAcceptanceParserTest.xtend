@@ -24,7 +24,7 @@ class WithAcceptanceParserTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -47,7 +47,7 @@ class WithAcceptanceParserTest {
         MATCH (a)-->(b)
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -67,7 +67,7 @@ class WithAcceptanceParserTest {
         MATCH (b)
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -90,7 +90,7 @@ class WithAcceptanceParserTest {
         WHERE property = b.prop
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -114,7 +114,7 @@ class WithAcceptanceParserTest {
         WHERE b.id = property
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -139,7 +139,7 @@ class WithAcceptanceParserTest {
         WHERE b.id = idToUse
         RETURN DISTINCT b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -161,7 +161,7 @@ class WithAcceptanceParserTest {
         WHERE a.name = 'B'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -186,7 +186,7 @@ class WithAcceptanceParserTest {
         WHERE relCount > 1
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -208,7 +208,7 @@ class WithAcceptanceParserTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -230,7 +230,7 @@ class WithAcceptanceParserTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -252,7 +252,7 @@ class WithAcceptanceParserTest {
         WHERE a.bar = 'B'
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -274,7 +274,7 @@ class WithAcceptanceParserTest {
         MATCH (a)-[r]->(b)
         RETURN a, r, b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -290,7 +290,7 @@ class WithAcceptanceParserTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -304,7 +304,7 @@ class WithAcceptanceParserTest {
         WITH {foo: {bar: 'baz'}} AS nestedMap
         RETURN nestedMap.foo.bar
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -326,7 +326,7 @@ class WithAcceptanceParserTest {
         MATCH (m:B), (n)-->(x:X)
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -346,7 +346,7 @@ class WithAcceptanceParserTest {
         WHERE n.prop = 42
         RETURN count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -379,7 +379,7 @@ class WithAcceptanceParserTest {
         WHERE otherPerson.name <> 'NotOther'
         RETURN count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/WithAcceptance_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WithAcceptance_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 

@@ -25,7 +25,7 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -45,7 +45,7 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -66,7 +66,7 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OptionalMatch_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 

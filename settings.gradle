@@ -2,6 +2,7 @@ rootProject.name = 'ingraph'
 
 include ':ingraph-cypher-parser'
 include ':ingraph-cypher2relalg'
+include ':ingraph-cypxmi'
 include ':ingraph-gqo'
 include ':ingraph-optimization-patterns'
 include ':ingraph-optimization-transformations'
@@ -11,5 +12,4 @@ include ':ingraph-relalg2tex'
 include ':ingraph-report'
 include ':ingraph-tinkerpop'
 include ':ingraph-trainbenchmark'
-include ':cypxmi'
 

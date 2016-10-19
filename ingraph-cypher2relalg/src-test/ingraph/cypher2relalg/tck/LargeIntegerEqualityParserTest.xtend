@@ -17,7 +17,7 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label)
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -30,7 +30,7 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -44,7 +44,7 @@ class LargeIntegerEqualityParserTest {
         WHERE p.id = 4611686018427387905
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -57,7 +57,7 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -71,7 +71,7 @@ class LargeIntegerEqualityParserTest {
         WHERE p.id = 4611686018427387900
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LargeIntegerEquality_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 

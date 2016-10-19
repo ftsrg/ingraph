@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns>
+          <var name="p"/>
+          <part xsi:type="openCypher:PatternElement">
+            <nodepattern>
+              <variable name="a"/>
+            </nodepattern>
+            <chain>
+              <relationshipPattern outgoing="true">
+                <detail>
+                  <range/>
+                </detail>
+              </relationshipPattern>
+              <nodePattern>
+                <variable name="b"/>
+              </nodePattern>
+            </chain>
+          </part>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <order>
+          <orderBy>
+            <expression xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|0"/>
+            </expression>
+          </orderBy>
+        </order>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="collect"/>
+            <parameter xsi:type="openCypher:FunctionInvocation">
+              <functionName name="nodes"/>
+              <parameter xsi:type="openCypher:VariableRef">
+                <variableRef href="http:/example.cyp#|1"/>
+              </parameter>
+            </parameter>
+          </expression>
+          <alias name="paths"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="length"/>
+            <parameter xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|2"/>
+            </parameter>
+          </expression>
+          <alias name="l"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

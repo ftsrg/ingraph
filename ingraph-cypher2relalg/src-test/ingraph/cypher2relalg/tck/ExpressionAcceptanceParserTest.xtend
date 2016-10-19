@@ -16,7 +16,7 @@ class ExpressionAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN [1, 2, 3][0] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -33,7 +33,7 @@ class ExpressionAcceptanceParserTest {
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -49,7 +49,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -65,7 +65,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -81,7 +81,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -96,7 +96,7 @@ class ExpressionAcceptanceParserTest {
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -112,7 +112,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -128,7 +128,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -144,7 +144,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -160,7 +160,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -176,7 +176,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -192,7 +192,7 @@ class ExpressionAcceptanceParserTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ExpressionAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 

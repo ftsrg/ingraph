@@ -1,16 +1,15 @@
 package ingraph.relalg2tex.trainbenchmark
 
+import ingraph.optimization.transformations.RelAlg2ReteTransformation
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
-import ingraph.optimization.transformations.Relalg2ReteTransformation
 
 class RouteSensorOptimizationTreeTest {
 
 	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
-	val extension Relalg2ReteTransformation transformation = new Relalg2ReteTransformation
+	val extension RelAlg2ReteTransformation transformation = new RelAlg2ReteTransformation
 	extension RouteSensorQueryPlanFactory factory
 	
 	@Before

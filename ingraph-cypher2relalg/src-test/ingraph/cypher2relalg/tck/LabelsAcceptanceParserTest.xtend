@@ -21,7 +21,7 @@ class LabelsAcceptanceParserTest {
         MATCH (n)
         RETURN labels(n)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/LabelsAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LabelsAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 

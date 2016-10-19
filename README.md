@@ -34,9 +34,9 @@ Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` direc
 
 #### Opening `cypxmi` models
 
-The `.cypxmi` files contain the models as parsed by Xtext.
+The `cypxmi` files contain the models as parsed by Xtext.
 
-To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository.
+To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
 
 #### Troubleshooting for Eclipse
 

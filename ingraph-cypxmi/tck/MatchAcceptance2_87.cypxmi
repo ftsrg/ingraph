@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionPlusMinus" operator="+">
+            <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef">
+                <variableRef href="http:/example.cyp#|0"/>
+              </left>
+              <propertyLookups propertyKeyName="prop"/>
+            </left>
+            <right xsi:type="openCypher:NumberConstant" value="1"/>
+          </expression>
+          <alias name="foo"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

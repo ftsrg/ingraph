@@ -2,7 +2,7 @@ package ingraph.report.tests
 
 import com.google.common.collect.Lists
 import ingraph.cypher2relalg.Cypher2RelAlg
-import ingraph.optimization.transformations.Relalg2ReteTransformation
+import ingraph.optimization.transformations.RelAlg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgTreeSerializer
@@ -26,7 +26,7 @@ class FeatureParsingTest {
 	val RelalgTreeSerializer treeSerializer = new RelalgTreeSerializer(false)
 	val RelalgExpressionSerializer expressionSerializer = new RelalgExpressionSerializer(false, false)
 	extension SchemaInferencer inferencer = new SchemaInferencer
-	extension Relalg2ReteTransformation relalg2ReteTransformation = new Relalg2ReteTransformation
+	extension RelAlg2ReteTransformation RelAlg2ReteTransformation = new RelAlg2ReteTransformation
 
 	@Test
 	def void generateReport() {

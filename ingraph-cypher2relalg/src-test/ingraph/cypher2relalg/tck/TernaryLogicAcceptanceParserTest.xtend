@@ -16,7 +16,7 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN NOT null AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -28,7 +28,7 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null IS NULL AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -40,7 +40,7 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null IS NOT NULL AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -52,7 +52,7 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null = null AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -64,7 +64,7 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null <> null AS value
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TernaryLogicAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 

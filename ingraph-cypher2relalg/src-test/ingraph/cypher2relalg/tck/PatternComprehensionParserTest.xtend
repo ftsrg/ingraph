@@ -24,7 +24,7 @@ class PatternComprehensionParserTest {
         RETURN [p = (liker)--() | p] AS isNew
         ORDER BY liker.time
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -44,7 +44,7 @@ class PatternComprehensionParserTest {
         MATCH (n)
         RETURN [p = (n)-->() | p] AS ps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -65,7 +65,7 @@ class PatternComprehensionParserTest {
         MATCH (n:A)
         RETURN [p = (n)-->(:B) | p]
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -84,7 +84,7 @@ class PatternComprehensionParserTest {
         MATCH (a:A), (b:B)
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -105,7 +105,7 @@ class PatternComprehensionParserTest {
         WITH [p = (n)-->() | p] AS ps, count(b) AS c
         RETURN ps, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -124,7 +124,7 @@ class PatternComprehensionParserTest {
         WITH [p = (a)-[*]->(b) | p] AS paths, count(a) AS c
         RETURN paths, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -143,7 +143,7 @@ class PatternComprehensionParserTest {
         MATCH (n:A)
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -162,7 +162,7 @@ class PatternComprehensionParserTest {
         MATCH (n:A)
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -181,7 +181,7 @@ class PatternComprehensionParserTest {
         MATCH (n:X)
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -206,7 +206,7 @@ class PatternComprehensionParserTest {
         MATCH p = (n:X)-->(b)
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -227,7 +227,7 @@ class PatternComprehensionParserTest {
         MATCH (a:X)
         RETURN size([(a)-->() | 1]) AS length
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -249,7 +249,7 @@ class PatternComprehensionParserTest {
         MATCH (a:X)
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -271,7 +271,7 @@ class PatternComprehensionParserTest {
         MATCH (a:X)
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -290,7 +290,7 @@ class PatternComprehensionParserTest {
         MATCH (n)
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -309,7 +309,7 @@ class PatternComprehensionParserTest {
         MATCH (n)
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
-        CypherUtil.save(cypher, "../cypxmi/PatternComprehension_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/PatternComprehension_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 

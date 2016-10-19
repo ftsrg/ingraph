@@ -21,7 +21,7 @@ class CypherParser {
 		// https://wiki.eclipse.org/Xtext/FAQ
 		val injector = new OpenCypherStandaloneSetup().createInjectorAndDoEMFRegistration();
 		val resourceSet = injector.getInstance(XtextResourceSet);
-		val resource = resourceSet.createResource(URI.createURI("dummy:/example.cyp"));
+		val resource = resourceSet.createResource(URI.createURI("http:/example.cyp"));
 		val in = new ByteArrayInputStream(queryString.getBytes());
 		resource.load(in, resourceSet.getLoadOptions());
 		val cypher = resource.contents.get(0) as Cypher;

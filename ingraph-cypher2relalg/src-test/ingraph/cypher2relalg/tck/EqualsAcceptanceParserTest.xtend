@@ -25,7 +25,7 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -46,7 +46,7 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -67,7 +67,7 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -88,7 +88,7 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -109,7 +109,7 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/EqualsAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 

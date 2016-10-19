@@ -17,7 +17,7 @@ class SemanticErrorAcceptanceParserTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[0]).prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/SemanticErrorAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -30,7 +30,7 @@ class SemanticErrorAcceptanceParserTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/SemanticErrorAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -42,7 +42,7 @@ class SemanticErrorAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN range(2, 8, 0)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/SemanticErrorAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 

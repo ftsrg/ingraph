@@ -24,7 +24,7 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS prop
         ORDER BY n.prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -44,7 +44,7 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS prop
         ORDER BY n.prop DESC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -61,7 +61,7 @@ class OrderByAcceptanceParserTest {
         RETURN p
         ORDER BY rng
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -81,7 +81,7 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS n
         ORDER BY n + 2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -104,7 +104,7 @@ class OrderByAcceptanceParserTest {
         RETURN c.rank AS rank
         ORDER BY relevance, c.rank
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -118,7 +118,7 @@ class OrderByAcceptanceParserTest {
         RETURN bools
         ORDER BY bools
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -132,7 +132,7 @@ class OrderByAcceptanceParserTest {
         RETURN bools
         ORDER BY bools DESC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -146,7 +146,7 @@ class OrderByAcceptanceParserTest {
         RETURN strings
         ORDER BY strings
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -160,7 +160,7 @@ class OrderByAcceptanceParserTest {
         RETURN strings
         ORDER BY strings DESC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -174,7 +174,7 @@ class OrderByAcceptanceParserTest {
         RETURN ints
         ORDER BY ints
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -188,7 +188,7 @@ class OrderByAcceptanceParserTest {
         RETURN ints
         ORDER BY ints DESC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -202,7 +202,7 @@ class OrderByAcceptanceParserTest {
         RETURN floats
         ORDER BY floats
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -216,7 +216,7 @@ class OrderByAcceptanceParserTest {
         RETURN floats
         ORDER BY floats DESC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -236,7 +236,7 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT 1
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -251,7 +251,7 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT 0
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -268,7 +268,7 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT $limit
         ''')
-        CypherUtil.save(cypher, "../cypxmi/OrderByAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OrderByAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 

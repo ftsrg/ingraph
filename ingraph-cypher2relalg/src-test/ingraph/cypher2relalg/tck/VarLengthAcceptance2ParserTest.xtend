@@ -29,7 +29,7 @@ class VarLengthAcceptance2ParserTest {
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/VarLengthAcceptance2_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance2_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 

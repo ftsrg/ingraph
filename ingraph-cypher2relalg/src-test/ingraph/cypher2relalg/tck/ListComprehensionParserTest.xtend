@@ -24,7 +24,7 @@ class ListComprehensionParserTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ListComprehension_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -45,7 +45,7 @@ class ListComprehensionParserTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ListComprehension_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -66,7 +66,7 @@ class ListComprehensionParserTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/ListComprehension_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 

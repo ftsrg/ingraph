@@ -26,7 +26,7 @@ class JoinAcceptanceParserTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/JoinAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/JoinAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -47,7 +47,7 @@ class JoinAcceptanceParserTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/JoinAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/JoinAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 

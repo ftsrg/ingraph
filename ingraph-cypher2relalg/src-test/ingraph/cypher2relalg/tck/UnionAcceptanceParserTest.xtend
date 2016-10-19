@@ -25,7 +25,7 @@ class UnionAcceptanceParserTest {
         MATCH (b:B)
         RETURN b AS a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -40,7 +40,7 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -55,7 +55,7 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -72,7 +72,7 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -89,7 +89,7 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/UnionAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 

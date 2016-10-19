@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/optimization.vql
+ * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/Optimization.vql
  */
 package ingraph.optimization.patterns;
 

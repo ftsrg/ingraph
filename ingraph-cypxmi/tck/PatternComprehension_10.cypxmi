@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns>
+          <var name="p"/>
+          <part xsi:type="openCypher:PatternElement">
+            <nodepattern>
+              <variable name="n"/>
+              <nodeLabels>
+                <nodeLabels labelName="X"/>
+              </nodeLabels>
+            </nodepattern>
+            <chain>
+              <relationshipPattern outgoing="true"/>
+              <nodePattern>
+                <variable name="b"/>
+              </nodePattern>
+            </chain>
+          </part>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|0"/>
+          </expression>
+        </items>
+        <items>
+          <expression>
+            <expression3Parts xsi:type="openCypher:Index">
+              <expression xsi:type="openCypher:VariableRef">
+                <expression3Parts xsi:type="openCypher:InCollection">
+                  <expression xsi:type="openCypher:FunctionInvocation">
+                    <functionName name="nodes"/>
+                    <parameter xsi:type="openCypher:VariableRef">
+                      <variableRef href="http:/example.cyp#|2"/>
+                    </parameter>
+                  </expression>
+                </expression3Parts>
+                <variableRef href="http:/example.cyp#|1"/>
+              </expression>
+            </expression3Parts>
+            <expression3Parts xsi:type="openCypher:Index">
+              <expression xsi:type="openCypher:RelationshipsPattern">
+                <nodePattern>
+                  <variable name="x"/>
+                </nodePattern>
+                <chain>
+                  <relationshipPattern outgoing="true"/>
+                  <nodePattern>
+                    <nodeLabels>
+                      <nodeLabels labelName="Y"/>
+                    </nodeLabels>
+                  </nodePattern>
+                </chain>
+              </expression>
+            </expression3Parts>
+          </expression>
+          <alias name="list"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

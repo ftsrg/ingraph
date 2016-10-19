@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+            <nodeLabels>
+              <nodeLabels labelName="Artist"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>WORKED_WITH</relTypeName>
+                </types>
+                <range/>
+                <properties xsi:type="openCypher:MapLiteral">
+                  <entries key="year">
+                    <value xsi:type="openCypher:NumberConstant" value="1988"/>
+                  </entries>
+                </properties>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="b"/>
+              <nodeLabels>
+                <nodeLabels labelName="Artist"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems" all="*"/>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

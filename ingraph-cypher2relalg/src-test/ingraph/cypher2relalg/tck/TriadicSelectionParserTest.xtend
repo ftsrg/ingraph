@@ -18,7 +18,7 @@ class TriadicSelectionParserTest {
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -34,7 +34,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -50,7 +50,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -66,7 +66,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -82,7 +82,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -98,7 +98,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -114,7 +114,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -130,7 +130,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -146,7 +146,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -162,7 +162,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -178,7 +178,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -194,7 +194,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -210,7 +210,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -226,7 +226,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -242,7 +242,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -258,7 +258,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -274,7 +274,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -290,7 +290,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -306,7 +306,7 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/TriadicSelection_19")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_19")
         Cypher2RelAlg.processCypher(cypher)
     }
 

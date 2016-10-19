@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="me"/>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <variable name="r1"/>
+                <types>
+                  <relTypeName>ATE</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern/>
+          </chain>
+          <chain>
+            <relationshipPattern incoming="true">
+              <detail>
+                <variable name="r2"/>
+                <types>
+                  <relTypeName>ATE</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="you"/>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+      <where>
+        <expression xsi:type="openCypher:ExpressionComparison" operator="=">
+          <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|0"/>
+            </left>
+            <propertyLookups propertyKeyName="name"/>
+          </left>
+          <right xsi:type="openCypher:StringConstant" value="'Michael'"/>
+        </expression>
+      </where>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|1"/>
+          </expression>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation" distinct="true">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|2"/>
+            </parameter>
+          </expression>
+          <alias name="H1"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation" distinct="true">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:VariableRef">
+              <variableRef href="http:/example.cyp#|3"/>
+            </parameter>
+          </expression>
+          <alias name="H2"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|4"/>
+          </expression>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="me"/>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <variable name="r1"/>
+                <types>
+                  <relTypeName>ATE</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern/>
+          </chain>
+          <chain>
+            <relationshipPattern incoming="true">
+              <detail>
+                <variable name="r2"/>
+                <types>
+                  <relTypeName>ATE</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="you"/>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|5"/>
+          </expression>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef">
+            <variableRef href="http:/example.cyp#|6"/>
+          </expression>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="sum"/>
+            <parameter xsi:type="openCypher:ExpressionMulDiv" operator="/">
+              <left xsi:type="openCypher:ExpressionMulDiv" operator="*">
+                <left xsi:type="openCypher:ParenthesizedExpression">
+                  <expression xsi:type="openCypher:ExpressionPlusMinus" operator="-">
+                    <left xsi:type="openCypher:NumberConstant" value="1"/>
+                    <right xsi:type="openCypher:FunctionInvocation">
+                      <functionName name="abs"/>
+                      <parameter xsi:type="openCypher:ExpressionPlusMinus" operator="-">
+                        <left xsi:type="openCypher:ExpressionMulDiv" operator="/">
+                          <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                            <left xsi:type="openCypher:VariableRef">
+                              <variableRef href="http:/example.cyp#|7"/>
+                            </left>
+                            <propertyLookups propertyKeyName="times"/>
+                          </left>
+                          <right xsi:type="openCypher:VariableRef">
+                            <variableRef href="http:/example.cyp#|8"/>
+                          </right>
+                        </left>
+                        <right xsi:type="openCypher:ExpressionMulDiv" operator="/">
+                          <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                            <left xsi:type="openCypher:VariableRef">
+                              <variableRef href="http:/example.cyp#|9"/>
+                            </left>
+                            <propertyLookups propertyKeyName="times"/>
+                          </left>
+                          <right xsi:type="openCypher:VariableRef">
+                            <variableRef href="http:/example.cyp#|10"/>
+                          </right>
+                        </right>
+                      </parameter>
+                    </right>
+                  </expression>
+                </left>
+                <right xsi:type="openCypher:ParenthesizedExpression">
+                  <expression xsi:type="openCypher:ExpressionPlusMinus" operator="+">
+                    <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                      <left xsi:type="openCypher:VariableRef">
+                        <variableRef href="http:/example.cyp#|11"/>
+                      </left>
+                      <propertyLookups propertyKeyName="times"/>
+                    </left>
+                    <right xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                      <left xsi:type="openCypher:VariableRef">
+                        <variableRef href="http:/example.cyp#|12"/>
+                      </left>
+                      <propertyLookups propertyKeyName="times"/>
+                    </right>
+                  </expression>
+                </right>
+              </left>
+              <right xsi:type="openCypher:ParenthesizedExpression">
+                <expression xsi:type="openCypher:ExpressionPlusMinus" operator="+">
+                  <left xsi:type="openCypher:VariableRef">
+                    <variableRef href="http:/example.cyp#|13"/>
+                  </left>
+                  <right xsi:type="openCypher:VariableRef">
+                    <variableRef href="http:/example.cyp#|14"/>
+                  </right>
+                </expression>
+              </right>
+            </parameter>
+          </expression>
+          <alias name="sum"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

@@ -18,7 +18,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -32,7 +32,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r]->()
         RETURN r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -55,7 +55,7 @@ class MatchAcceptance2ParserTest {
         WHERE i.id > 'te'
         RETURN i
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -78,7 +78,7 @@ class MatchAcceptance2ParserTest {
         WHERE exists(i.id) OR i.id > 'te'
         RETURN i
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -97,7 +97,7 @@ class MatchAcceptance2ParserTest {
         WHERE i.id > 'te'
         RETURN i
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -116,7 +116,7 @@ class MatchAcceptance2ParserTest {
         WHERE NOT exists(i.id) OR i.id > 'te'
         RETURN i
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -139,7 +139,7 @@ class MatchAcceptance2ParserTest {
         WITH nodes(p) AS nodes
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -161,7 +161,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN a, b, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -183,7 +183,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a {name: 'A'})-[*]->(x)
         RETURN x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -204,7 +204,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = ({name: 'A'})-[:KNOWS*..2]->()
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -225,7 +225,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = ({name: 'A'})-[:KNOWS*..]->()
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -246,7 +246,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(b)
         RETURN a, b, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -270,7 +270,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(x)<-->(b)
         RETURN x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -296,7 +296,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -333,7 +333,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -354,7 +354,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a)-[:KNOWS]->()-[:KNOWS]->(foo)
         RETURN foo
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -375,7 +375,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH p = (a)-->(x)
         RETURN x, p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -395,7 +395,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -416,7 +416,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH p = (a)-[r*]->(x)
         RETURN r, x, p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_19")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_19")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -437,7 +437,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[r*2]->()
         RETURN r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_20")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_20")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -458,7 +458,7 @@ class MatchAcceptance2ParserTest {
         WITH other WHERE r IS NULL
         RETURN other
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_21")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_21")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -479,7 +479,7 @@ class MatchAcceptance2ParserTest {
         WHERE x1.foo = 'bar'
         RETURN x0.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_22")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_22")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -502,7 +502,7 @@ class MatchAcceptance2ParserTest {
         WHERE c:C
         RETURN a.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_23")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_23")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -521,7 +521,7 @@ class MatchAcceptance2ParserTest {
         WHERE a:A
         RETURN a.id, b.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_24")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_24")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -539,7 +539,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_25")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_25")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -558,7 +558,7 @@ class MatchAcceptance2ParserTest {
         WHERE a <> b
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_26")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_26")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -578,7 +578,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(b), (b)-->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_27")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_27")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -599,7 +599,7 @@ class MatchAcceptance2ParserTest {
         AND a <> b
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_28")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_28")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -618,7 +618,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[:T|:T]->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_29")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_29")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -643,7 +643,7 @@ class MatchAcceptance2ParserTest {
         ORDER BY n.x
         LIMIT 1000
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_30")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_30")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -662,7 +662,7 @@ class MatchAcceptance2ParserTest {
         WHERE n.foo = 'bar'
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_31")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_31")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -680,7 +680,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = (b)<--(a)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_32")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_32")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -694,7 +694,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (n)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_33")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_33")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -713,7 +713,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_34")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_34")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -732,7 +732,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, collect(x)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_35")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_35")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -751,7 +751,7 @@ class MatchAcceptance2ParserTest {
         WHERE a:A
         RETURN c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_36")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_36")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -771,7 +771,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(b:Foo)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_37")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_37")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -792,7 +792,7 @@ class MatchAcceptance2ParserTest {
         MATCH (:A)-[r]->(:B)
         RETURN r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_38")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_38")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -811,7 +811,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a:A:B:C)
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_39")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_39")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -829,7 +829,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)
         RETURN (n:Foo)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_40")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_40")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -863,7 +863,7 @@ class MatchAcceptance2ParserTest {
         AND out.name = 'product1'
         RETURN out.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_41")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_41")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -881,7 +881,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)
         RETURN (n:Foo)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_42")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_42")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -903,7 +903,7 @@ class MatchAcceptance2ParserTest {
         WHERE n.name = 'Bob'
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_43")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_43")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -924,7 +924,7 @@ class MatchAcceptance2ParserTest {
         MATCH (c)-->(d)
         RETURN a, b, c, d
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_44")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_44")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -950,7 +950,7 @@ class MatchAcceptance2ParserTest {
         AND c.id = 2
         RETURN d
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_45")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_45")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -971,7 +971,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[:A]->()-[:B]->(a)
         RETURN a.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_46")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_46")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -992,7 +992,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[:A]->(b), (b)-[:B]->(a)
         RETURN a.name
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_47")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_47")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1010,7 +1010,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[r*1..1]->(b)
         RETURN r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_48")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_48")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1026,7 +1026,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_49")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_49")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1046,7 +1046,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_50")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_50")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1062,7 +1062,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a)-->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_51")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_51")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1076,7 +1076,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a)
         RETURN a
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_52")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_52")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1094,7 +1094,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = (a)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_53")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_53")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1112,7 +1112,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = ()-[*0..]->()
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_54")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_54")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1130,7 +1130,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)
         RETURN n.prop AS n, count(n) AS count
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_55")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_55")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1151,7 +1151,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r2]->()
         RETURN r2 AS rel
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_56")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_56")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1173,7 +1173,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r2]->()
         RETURN r2 AS rel
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_57")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_57")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1196,7 +1196,7 @@ class MatchAcceptance2ParserTest {
         RETURN r AS rel
         ORDER BY rel.id
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_58")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_58")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1217,7 +1217,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a2)-[r]->(b2)
         RETURN a2, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_59")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_59")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1238,7 +1238,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a1)-[r]->(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_60")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_60")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1259,7 +1259,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a1:X)-[r]->(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_61")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_61")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1280,7 +1280,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a1:Y)-[r]->(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_62")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_62")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1301,7 +1301,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a1)-[r:Y]->(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_63")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_63")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1321,7 +1321,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a1)-[r:T]->(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_64")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_64")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1344,7 +1344,7 @@ class MatchAcceptance2ParserTest {
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_65")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_65")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1367,7 +1367,7 @@ class MatchAcceptance2ParserTest {
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_66")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_66")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1390,7 +1390,7 @@ class MatchAcceptance2ParserTest {
         MATCH (first)-[rs*]->(second)
         RETURN first, second
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_67")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_67")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1411,7 +1411,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (a1)<-[r]-(b2)
         RETURN a1, r, b2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_68")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_68")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1433,7 +1433,7 @@ class MatchAcceptance2ParserTest {
         WHERE a1 = a2
         RETURN a1, r, b2, a2
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_69")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_69")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1452,7 +1452,7 @@ class MatchAcceptance2ParserTest {
         WITH n.prop AS n2
         RETURN n2.prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_70")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_70")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1472,7 +1472,7 @@ class MatchAcceptance2ParserTest {
         ORDER BY x DESC
         LIMIT 4
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_71")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_71")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1486,7 +1486,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN count(a) > 0
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_72")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_72")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1506,7 +1506,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a:Artist)-[:WORKED_WITH* {year: 1988}]->(b:Artist)
         RETURN *
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_73")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_73")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1529,7 +1529,7 @@ class MatchAcceptance2ParserTest {
         OR (a)-[:T*]->(b:MissingLabel)
         RETURN DISTINCT b
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_74")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_74")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1550,7 +1550,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a:Blue)-[r*]->(b:Green)
         RETURN count(r)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_75")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_75")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1570,7 +1570,7 @@ class MatchAcceptance2ParserTest {
         RETURN p
         LIMIT 1
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_76")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_76")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1589,7 +1589,7 @@ class MatchAcceptance2ParserTest {
         WITH p
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_77")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_77")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1609,7 +1609,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = (n)-->(m)--(o)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_78")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_78")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1630,7 +1630,7 @@ class MatchAcceptance2ParserTest {
         MATCH path = (n)-->(m)--(o)--(p)
         RETURN path
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_79")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_79")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1653,7 +1653,7 @@ class MatchAcceptance2ParserTest {
         MATCH topRoute = (:Start)<-[:CONNECTED_TO]-()-[:CONNECTED_TO*3..3]-(:End)
         RETURN topRoute
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_80")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_80")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1671,7 +1671,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN a.prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_81")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_81")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1689,7 +1689,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r]->()
         RETURN r.prop
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_82")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_82")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1708,7 +1708,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)-[r]->()
         RETURN a AS foo, r AS bar
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_83")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_83")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1726,7 +1726,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN a.bar
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_84")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_84")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1744,7 +1744,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r]->()
         RETURN r.bar
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_85")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_85")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1762,7 +1762,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN a.name, a.age, a.seasons
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_86")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_86")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1780,7 +1780,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN a.prop + 1 AS foo
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_87")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_87")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1798,7 +1798,7 @@ class MatchAcceptance2ParserTest {
         MATCH (a)
         RETURN a.prop2 + a.prop1 AS foo
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_88")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_88")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1817,7 +1817,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r*0..1]-()
         RETURN last(r) AS l
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_89")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_89")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1837,7 +1837,7 @@ class MatchAcceptance2ParserTest {
         OPTIONAL MATCH (b)<-[:BAR*]-(c:B)
         RETURN a, b, c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_90")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_90")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1856,7 +1856,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)-[r]->(m)
         RETURN [n, r, m] AS r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_91")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_91")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1875,7 +1875,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n)-[r]->(m)
         RETURN {node1: n, rel: r, node2: m} AS m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_92")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_92")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1894,7 +1894,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = ({prop: 'a'})-->({prop: 'b'})
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_93")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_93")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1913,7 +1913,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = ({prop: 'a'})<--({prop: 'b'})
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_94")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_94")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1933,7 +1933,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = (n)-->(k)<--(n)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_95")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_95")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1953,7 +1953,7 @@ class MatchAcceptance2ParserTest {
         MATCH p = (n)<-->(k)<--(n)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_96")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_96")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1973,7 +1973,7 @@ class MatchAcceptance2ParserTest {
         MATCH p=(n)<-->(k)<-->(n)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_97")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_97")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -1993,7 +1993,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n:A:B:C:D:E:F:G:H:I:J:K:L:M)-[:T]->(m:Z:Y:X:W:V:U)
         RETURN n, m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_98")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_98")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -2018,7 +2018,7 @@ class MatchAcceptance2ParserTest {
         MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
         RETURN m
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_99")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_99")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -2037,7 +2037,7 @@ class MatchAcceptance2ParserTest {
         MATCH ()-[r]-()
         RETURN type(r) AS r
         ''')
-        CypherUtil.save(cypher, "../cypxmi/MatchAcceptance2_101")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/MatchAcceptance2_101")
         Cypher2RelAlg.processCypher(cypher)
     }
 

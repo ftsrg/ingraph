@@ -23,7 +23,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -43,7 +43,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -62,7 +62,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -81,7 +81,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -100,7 +100,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -119,7 +119,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -138,7 +138,7 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -151,7 +151,7 @@ class KeysAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -166,7 +166,7 @@ class KeysAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN keys($param) AS k
         ''')
-        CypherUtil.save(cypher, "../cypxmi/KeysAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 

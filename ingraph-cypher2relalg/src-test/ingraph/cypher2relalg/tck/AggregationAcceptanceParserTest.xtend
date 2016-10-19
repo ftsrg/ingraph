@@ -23,7 +23,7 @@ class AggregationAcceptanceParserTest {
         MATCH (n)
         RETURN count(n) / 60 / 60 AS count
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_01")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_01")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -42,7 +42,7 @@ class AggregationAcceptanceParserTest {
         MATCH ()
         RETURN count(*) AS columnName
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_02")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_02")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -61,7 +61,7 @@ class AggregationAcceptanceParserTest {
         MATCH (a)
         RETURN size(collect(a))
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_03")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_03")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -75,7 +75,7 @@ class AggregationAcceptanceParserTest {
         MATCH (a {name: 'Andres'})<-[:FATHER]-(child)
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_04")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_04")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -94,7 +94,7 @@ class AggregationAcceptanceParserTest {
         MATCH (a:L)-[rel]->(b)
         RETURN a, count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_05")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_05")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -116,7 +116,7 @@ class AggregationAcceptanceParserTest {
         RETURN n.division, count(*)
         ORDER BY count(*) DESC, n.division ASC
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_06")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_06")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -136,7 +136,7 @@ class AggregationAcceptanceParserTest {
         MATCH (n)
         RETURN n.x, count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_07")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_07")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -156,7 +156,7 @@ class AggregationAcceptanceParserTest {
         MATCH (n)
         RETURN n.y, count(n.x)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_08")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_08")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -176,7 +176,7 @@ class AggregationAcceptanceParserTest {
         MATCH (n)
         RETURN n.y, sum(n.x)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_09")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_09")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -195,7 +195,7 @@ class AggregationAcceptanceParserTest {
         MATCH p=(a:L)-[*]->(b)
         RETURN b, avg(length(p))
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_10")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_10")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -209,7 +209,7 @@ class AggregationAcceptanceParserTest {
         OPTIONAL MATCH (a)
         RETURN count(DISTINCT a)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_11")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_11")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -227,7 +227,7 @@ class AggregationAcceptanceParserTest {
         MATCH (a)
         RETURN count(DISTINCT a.foo)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_12")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_12")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -241,7 +241,7 @@ class AggregationAcceptanceParserTest {
         UNWIND [null, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_13")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_13")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -255,7 +255,7 @@ class AggregationAcceptanceParserTest {
         UNWIND [null, 1, null] AS x
         RETURN collect(DISTINCT x) AS c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_14")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_14")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -275,7 +275,7 @@ class AggregationAcceptanceParserTest {
         MATCH (a)
         RETURN DISTINCT a.color, count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_15")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_15")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -293,7 +293,7 @@ class AggregationAcceptanceParserTest {
         MATCH ()
         RETURN count(*) * 10 AS c
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_16")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_16")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -312,7 +312,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(a) * 10 + count(b) * 5 AS x
         ORDER BY x
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_17")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_17")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -330,7 +330,7 @@ class AggregationAcceptanceParserTest {
         MATCH (n)
         RETURN count(n), collect(n)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_18")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_18")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -349,7 +349,7 @@ class AggregationAcceptanceParserTest {
         MATCH ()
         RETURN count(*)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_19")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_19")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -372,7 +372,7 @@ class AggregationAcceptanceParserTest {
         RETURN collect(nodes(p)) AS paths, length(p) AS l
         ORDER BY l
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_20")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_20")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -395,7 +395,7 @@ class AggregationAcceptanceParserTest {
         WITH a, other, min(length(p)) AS len
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_21")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_21")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -415,7 +415,7 @@ class AggregationAcceptanceParserTest {
         b.prop AS bar,
         {y: count(b)} AS baz
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_22")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_22")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -431,7 +431,7 @@ class AggregationAcceptanceParserTest {
         LIMIT 3000
         RETURN sum(i)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_24")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_24")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -449,7 +449,7 @@ class AggregationAcceptanceParserTest {
         MATCH ()-[r]-()
         RETURN count(r)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_25")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_25")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -463,7 +463,7 @@ class AggregationAcceptanceParserTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN max(i)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_26")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_26")
         Cypher2RelAlg.processCypher(cypher)
     }
 
@@ -477,7 +477,7 @@ class AggregationAcceptanceParserTest {
         UNWIND ['a', 'b', 'B', null, 'abc', 'abc1'] AS i
         RETURN min(i)
         ''')
-        CypherUtil.save(cypher, "../cypxmi/AggregationAcceptance_27")
+        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/AggregationAcceptance_27")
         Cypher2RelAlg.processCypher(cypher)
     }
 
