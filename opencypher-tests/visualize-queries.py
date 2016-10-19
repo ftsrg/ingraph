@@ -21,7 +21,7 @@ for filename in filenames:
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -61,7 +61,7 @@ class %sVisualizationTest {
     %s*/
     @Test
     def void test%s_%02d() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         %s
         ''')
         container.addSchemaInformation

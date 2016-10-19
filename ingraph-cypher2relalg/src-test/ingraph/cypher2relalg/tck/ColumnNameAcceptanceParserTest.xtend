@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -18,7 +18,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN cOuNt( * )
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -31,7 +31,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN nOdEs( p )
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -44,7 +44,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN coUnt( dIstInct p )
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -57,7 +57,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN aVg(    n.aGe     )
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

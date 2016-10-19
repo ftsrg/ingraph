@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -24,7 +24,7 @@ class WhereAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WhereAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -43,7 +43,7 @@ class WhereAcceptanceParserTest {
         RETURN n.prop AS prop
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/WhereAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

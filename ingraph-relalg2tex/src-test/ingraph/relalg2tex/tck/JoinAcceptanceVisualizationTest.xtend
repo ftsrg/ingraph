@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -24,7 +24,7 @@ class JoinAcceptanceVisualizationTest {
     */
     @Test
     def void testJoinAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
@@ -45,7 +45,7 @@ class JoinAcceptanceVisualizationTest {
     */
     @Test
     def void testJoinAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b

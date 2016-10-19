@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -24,7 +24,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -44,7 +44,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -63,7 +63,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -82,7 +82,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -101,7 +101,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -120,7 +120,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -139,7 +139,7 @@ class KeysAcceptanceParserTest {
         RETURN DISTINCT x AS theProps
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -152,7 +152,7 @@ class KeysAcceptanceParserTest {
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -167,7 +167,7 @@ class KeysAcceptanceParserTest {
         RETURN keys($param) AS k
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -17,7 +17,7 @@ class LiteralsParserTest {
         RETURN 1 AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -29,7 +29,7 @@ class LiteralsParserTest {
         RETURN 1.0 AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -41,7 +41,7 @@ class LiteralsParserTest {
         RETURN -1e-9 AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -53,7 +53,7 @@ class LiteralsParserTest {
         RETURN true AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -65,7 +65,7 @@ class LiteralsParserTest {
         RETURN '' AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -77,7 +77,7 @@ class LiteralsParserTest {
         RETURN "" AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -89,7 +89,7 @@ class LiteralsParserTest {
         RETURN null AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -101,7 +101,7 @@ class LiteralsParserTest {
         RETURN [] AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -113,7 +113,7 @@ class LiteralsParserTest {
         RETURN [0, 1, 2] AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -125,7 +125,7 @@ class LiteralsParserTest {
         RETURN {} AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -137,7 +137,7 @@ class LiteralsParserTest {
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

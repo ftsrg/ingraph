@@ -17,7 +17,7 @@ import relalg.RelalgFactory
 import relalg.RelationalAlgebraContainer
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification
 
-class RelAlg2ReteTransformation {
+class Relalg2ReteTransformation {
 
 	val extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
 	val extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory

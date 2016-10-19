@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -17,7 +17,7 @@ class ExpressionAcceptanceParserTest {
         RETURN [1, 2, 3][0] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -34,7 +34,7 @@ class ExpressionAcceptanceParserTest {
         RETURN n['nam' + 'e'] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -50,7 +50,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -66,7 +66,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[toString(idx)] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -82,7 +82,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -97,7 +97,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[$idx] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -113,7 +113,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[toInteger(idx)] AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -129,7 +129,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx]
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -145,7 +145,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx]
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -161,7 +161,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx]
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -177,7 +177,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx]
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -193,7 +193,7 @@ class ExpressionAcceptanceParserTest {
         RETURN expr[idx]
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ExpressionAcceptance_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

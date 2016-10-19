@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -22,7 +22,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 1 < n.value < 3
         RETURN n.value
@@ -42,7 +42,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 1 < n.value <= 3
         RETURN n.value
@@ -62,7 +62,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 1 <= n.value < 3
         RETURN n.value
@@ -82,7 +82,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 1 <= n.value <= 3
         RETURN n.value
@@ -102,7 +102,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 'a' < n.value < 'c'
         RETURN n.value
@@ -122,7 +122,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
@@ -142,7 +142,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
@@ -162,7 +162,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
@@ -181,7 +181,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE 10 < n.value <= 3
         RETURN n.value
@@ -205,7 +205,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
     */
     @Test
     def void testComparisonOperatorAcceptance_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)-->(m)
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)

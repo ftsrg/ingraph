@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -19,7 +19,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -33,7 +33,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -47,7 +47,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -61,7 +61,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -76,7 +76,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -90,7 +90,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -104,7 +104,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -124,7 +124,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -144,7 +144,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -164,7 +164,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -184,7 +184,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -204,7 +204,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -224,7 +224,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -238,7 +238,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -252,7 +252,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -266,7 +266,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -280,7 +280,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -294,7 +294,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -308,7 +308,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_19")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -324,7 +324,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_20")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -338,7 +338,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartsWithAcceptance_21")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

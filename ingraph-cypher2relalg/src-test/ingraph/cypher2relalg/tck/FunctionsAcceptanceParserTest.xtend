@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -23,7 +23,7 @@ class FunctionsAcceptanceParserTest {
         RETURN coalesce(a.title, a.name)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -38,7 +38,7 @@ class FunctionsAcceptanceParserTest {
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -52,7 +52,7 @@ class FunctionsAcceptanceParserTest {
         RETURN count(item) AS item
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -70,7 +70,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(p) AS m
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -88,7 +88,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(r) AS m
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -101,7 +101,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -114,7 +114,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(null)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -127,7 +127,7 @@ class FunctionsAcceptanceParserTest {
         RETURN reverse('raksO')
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -147,7 +147,7 @@ class FunctionsAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -173,7 +173,7 @@ class FunctionsAcceptanceParserTest {
         RETURN percentileDisc(0.90, deg), deg
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -191,7 +191,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -209,7 +209,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r1), type(r2)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -228,7 +228,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -247,7 +247,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -266,7 +266,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(list[0])
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -285,7 +285,7 @@ class FunctionsAcceptanceParserTest {
         RETURN labels(list[0]) AS l
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -304,7 +304,7 @@ class FunctionsAcceptanceParserTest {
         RETURN labels(list[1]) AS l
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -322,7 +322,7 @@ class FunctionsAcceptanceParserTest {
         RETURN n, EXIsTS(n.prop) AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

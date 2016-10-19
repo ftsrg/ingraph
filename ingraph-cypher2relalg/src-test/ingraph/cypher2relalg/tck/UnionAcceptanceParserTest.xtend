@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -26,7 +26,7 @@ class UnionAcceptanceParserTest {
         RETURN b AS a
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -41,7 +41,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -56,7 +56,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -73,7 +73,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -90,7 +90,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

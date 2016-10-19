@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -19,7 +19,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -33,7 +33,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -47,7 +47,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -61,7 +61,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -75,7 +75,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -89,7 +89,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -103,7 +103,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -117,7 +117,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -131,7 +131,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -145,7 +145,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -159,7 +159,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -173,7 +173,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -187,7 +187,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -201,7 +201,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -215,7 +215,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -229,7 +229,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -243,7 +243,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -257,7 +257,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -271,7 +271,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_19")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -285,7 +285,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_20")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -299,7 +299,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_21")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -313,7 +313,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_22")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -327,7 +327,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_23")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -341,7 +341,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_24")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -363,7 +363,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_25")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -391,7 +391,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_26")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -421,7 +421,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_27")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -443,7 +443,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_28")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -465,7 +465,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance_29")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

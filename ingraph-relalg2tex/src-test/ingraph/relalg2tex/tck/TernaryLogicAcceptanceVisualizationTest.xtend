@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -16,7 +16,7 @@ class TernaryLogicAcceptanceVisualizationTest {
     */
     @Test
     def void testTernaryLogicAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN NOT null AS value
         ''')
         container.addSchemaInformation
@@ -28,7 +28,7 @@ class TernaryLogicAcceptanceVisualizationTest {
     */
     @Test
     def void testTernaryLogicAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN null IS NULL AS value
         ''')
         container.addSchemaInformation
@@ -40,7 +40,7 @@ class TernaryLogicAcceptanceVisualizationTest {
     */
     @Test
     def void testTernaryLogicAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN null IS NOT NULL AS value
         ''')
         container.addSchemaInformation
@@ -52,7 +52,7 @@ class TernaryLogicAcceptanceVisualizationTest {
     */
     @Test
     def void testTernaryLogicAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN null = null AS value
         ''')
         container.addSchemaInformation
@@ -64,7 +64,7 @@ class TernaryLogicAcceptanceVisualizationTest {
     */
     @Test
     def void testTernaryLogicAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN null <> null AS value
         ''')
         container.addSchemaInformation

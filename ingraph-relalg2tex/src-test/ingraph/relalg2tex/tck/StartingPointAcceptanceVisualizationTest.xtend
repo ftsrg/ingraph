@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -23,7 +23,7 @@ class StartingPointAcceptanceVisualizationTest {
     */
     @Test
     def void testStartingPointAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ''')
@@ -44,7 +44,7 @@ class StartingPointAcceptanceVisualizationTest {
     */
     @Test
     def void testStartingPointAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:Animal)
         RETURN n
         ''')
@@ -63,7 +63,7 @@ class StartingPointAcceptanceVisualizationTest {
     */
     @Test
     def void testStartingPointAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE n.prop = 2
         RETURN n

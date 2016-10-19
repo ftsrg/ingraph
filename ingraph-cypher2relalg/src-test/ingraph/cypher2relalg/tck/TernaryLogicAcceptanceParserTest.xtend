@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -17,7 +17,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN NOT null AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -29,7 +29,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null IS NULL AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -41,7 +41,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null IS NOT NULL AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -53,7 +53,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null = null AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -65,7 +65,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null <> null AS value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TernaryLogicAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -19,7 +19,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -34,7 +34,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -49,7 +49,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN m
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -63,7 +63,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN m:TYPE
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -80,7 +80,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN d
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -95,7 +95,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN a, b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -109,7 +109,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN p
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -123,7 +123,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -143,7 +143,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -157,7 +157,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN p
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -171,7 +171,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -185,7 +185,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -199,7 +199,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -214,7 +214,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -228,7 +228,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -242,7 +242,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN p
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -256,7 +256,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -270,7 +270,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -285,7 +285,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN x, r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_19")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -302,7 +302,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN a, b, r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_20")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -318,7 +318,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN a, b, r
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_21")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -338,7 +338,7 @@ class OptionalMatchAcceptanceParserTest {
         RETURN collect(DISTINCT n.property) AS a, collect(DISTINCT f.property) AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatchAcceptance_22")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

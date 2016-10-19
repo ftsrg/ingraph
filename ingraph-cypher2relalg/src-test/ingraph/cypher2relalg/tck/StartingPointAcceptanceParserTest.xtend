@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -25,7 +25,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -46,7 +46,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -66,7 +66,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/StartingPointAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

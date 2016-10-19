@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class UnionAcceptanceVisualizationTest {
     */
     @Test
     def void testUnionAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)
         RETURN a AS a
         UNION
@@ -38,7 +38,7 @@ class UnionAcceptanceVisualizationTest {
     */
     @Test
     def void testUnionAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 1 AS x
         UNION ALL
         RETURN 2 AS x
@@ -53,7 +53,7 @@ class UnionAcceptanceVisualizationTest {
     */
     @Test
     def void testUnionAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 1 AS x
         UNION
         RETURN 2 AS x
@@ -68,7 +68,7 @@ class UnionAcceptanceVisualizationTest {
     */
     @Test
     def void testUnionAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 2 AS x
         UNION
         RETURN 1 AS x
@@ -85,7 +85,7 @@ class UnionAcceptanceVisualizationTest {
     */
     @Test
     def void testUnionAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 2 AS x
         UNION ALL
         RETURN 1 AS x

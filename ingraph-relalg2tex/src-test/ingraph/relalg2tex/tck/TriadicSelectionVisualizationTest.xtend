@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -17,7 +17,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
@@ -31,7 +31,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -47,7 +47,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:FOLLOWS]->(c)
         WITH c WHERE r IS NULL
@@ -63,7 +63,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r]->(c)
         WITH c WHERE r IS NULL
@@ -79,7 +79,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -95,7 +95,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS|FOLLOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -111,7 +111,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -127,7 +127,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:Y)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -143,7 +143,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -159,7 +159,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NULL
@@ -175,7 +175,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_11() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -191,7 +191,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_12() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:FOLLOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -207,7 +207,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_13() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r]->(c)
         WITH c WHERE r IS NOT NULL
@@ -223,7 +223,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_14() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -239,7 +239,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_15() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS|FOLLOWS]->(b)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -255,7 +255,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_16() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -271,7 +271,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_17() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c:Y)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -287,7 +287,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_18() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b)-->(c:X)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL
@@ -303,7 +303,7 @@ class TriadicSelectionVisualizationTest {
     */
     @Test
     def void testTriadicSelection_19() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[:KNOWS]->(b:X)-->(c)
         OPTIONAL MATCH (a)-[r:KNOWS]->(c)
         WITH c WHERE r IS NOT NULL

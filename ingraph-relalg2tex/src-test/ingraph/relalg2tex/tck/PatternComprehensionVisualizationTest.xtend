@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -22,7 +22,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (liker)
         RETURN [p = (liker)--() | p] AS isNew
         ORDER BY liker.time
@@ -43,7 +43,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN [p = (n)-->() | p] AS ps
         ''')
@@ -64,7 +64,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:A)
         RETURN [p = (n)-->(:B) | p]
         ''')
@@ -83,7 +83,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A), (b:B)
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
@@ -103,7 +103,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)-->(b)
         WITH [p = (n)-->() | p] AS ps, count(b) AS c
         RETURN ps, c
@@ -122,7 +122,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A), (b:B)
         WITH [p = (a)-[*]->(b) | p] AS paths, count(a) AS c
         RETURN paths, c
@@ -142,7 +142,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:A)
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
@@ -161,7 +161,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:A)
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
@@ -180,7 +180,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:X)
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
@@ -205,7 +205,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH p = (n:X)-->(b)
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
@@ -226,7 +226,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_11() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:X)
         RETURN size([(a)-->() | 1]) AS length
         ''')
@@ -248,7 +248,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_12() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:X)
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
@@ -270,7 +270,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_13() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:X)
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
@@ -289,7 +289,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_14() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
@@ -308,7 +308,7 @@ class PatternComprehensionVisualizationTest {
     */
     @Test
     def void testPatternComprehension_15() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')

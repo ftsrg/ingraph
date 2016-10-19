@@ -1,17 +1,17 @@
 package ingraph.cypher2relalg.trainbenchmark
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherUtil
 import java.io.IOException
 import org.junit.Test
 import ingraph.cypherparser.CypherParser
 
-class RelAlgParserTrainBenchmarkTest {
+class RelalgParserTrainBenchmarkTest {
 	
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
 		CypherUtil.save(cypher, "../ingraph-cypxmi/trainbenchmark/" + query)
-		Cypher2RelAlg.processCypher(cypher)
+		Cypher2Relalg.processCypher(cypher)
 	}
 	
 	@Test

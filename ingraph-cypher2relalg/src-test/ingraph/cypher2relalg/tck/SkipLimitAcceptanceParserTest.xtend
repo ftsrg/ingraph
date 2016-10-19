@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -25,7 +25,7 @@ class SkipLimitAcceptanceParserTest {
         RETURN count > 0 AS nonEmpty
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SkipLimitAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -44,7 +44,7 @@ class SkipLimitAcceptanceParserTest {
         RETURN count(*) AS count
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SkipLimitAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

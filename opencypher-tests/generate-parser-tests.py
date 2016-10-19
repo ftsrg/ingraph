@@ -21,7 +21,7 @@ for filename in filenames:
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -63,7 +63,7 @@ class %sParserTest {
         %s
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/%s")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 """ % (scenario, test_name, indent(query), test_name)
         test_file.write(test_case)

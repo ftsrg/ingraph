@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -30,7 +30,7 @@ class VarLengthAcceptance2ParserTest {
         RETURN count(p) AS c
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance2_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -25,7 +25,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -45,7 +45,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -65,7 +65,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -85,7 +85,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -105,7 +105,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -125,7 +125,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -145,7 +145,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -165,7 +165,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -184,7 +184,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN n.value
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -208,7 +208,7 @@ class ComparisonOperatorAcceptanceParserTest {
         RETURN labels(m)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

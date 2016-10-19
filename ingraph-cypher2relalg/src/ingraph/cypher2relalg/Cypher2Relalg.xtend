@@ -13,7 +13,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import relalg.RelalgFactory
 import relalg.RelationalAlgebraContainer
 
-class Cypher2RelAlg {
+class Cypher2Relalg {
 
 	def static RelationalAlgebraContainer processFile(String queryFile) {
 		val cypher = CypherParser.parseFile(queryFile)

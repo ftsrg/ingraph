@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -19,7 +19,7 @@ class UnwindAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -33,7 +33,7 @@ class UnwindAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -48,7 +48,7 @@ class UnwindAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -64,7 +64,7 @@ class UnwindAcceptanceParserTest {
         RETURN x
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -84,7 +84,7 @@ class UnwindAcceptanceParserTest {
         RETURN node.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -100,7 +100,7 @@ class UnwindAcceptanceParserTest {
         RETURN y
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -114,7 +114,7 @@ class UnwindAcceptanceParserTest {
         RETURN empty
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -128,7 +128,7 @@ class UnwindAcceptanceParserTest {
         RETURN nil
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -142,7 +142,7 @@ class UnwindAcceptanceParserTest {
         RETURN duplicate
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -157,7 +157,7 @@ class UnwindAcceptanceParserTest {
         RETURN *
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -183,7 +183,7 @@ class UnwindAcceptanceParserTest {
         RETURN a, b2
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -200,7 +200,7 @@ class UnwindAcceptanceParserTest {
         RETURN *
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnwindAcceptance_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

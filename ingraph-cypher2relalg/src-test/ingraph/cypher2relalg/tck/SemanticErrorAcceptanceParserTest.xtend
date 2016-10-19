@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -18,7 +18,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN (list[0]).prop
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -31,7 +31,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN (list[1]).prop
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -43,7 +43,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN range(2, 8, 0)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/SemanticErrorAcceptance_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

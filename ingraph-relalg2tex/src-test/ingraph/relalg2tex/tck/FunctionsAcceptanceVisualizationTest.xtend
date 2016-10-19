@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
@@ -35,7 +35,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         WITH null AS a
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
@@ -50,7 +50,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
@@ -68,7 +68,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
@@ -86,7 +86,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
@@ -100,7 +100,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
         container.addSchemaInformation
@@ -113,7 +113,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN properties(null)
         ''')
         container.addSchemaInformation
@@ -126,7 +126,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN reverse('raksO')
         ''')
         container.addSchemaInformation
@@ -144,7 +144,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:Person)
         WHERE exists(n['prop'])
         RETURN n
@@ -167,7 +167,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:S)
         WITH n, size([(n)-->() | 1]) AS deg
         WHERE deg > 2
@@ -189,7 +189,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_11() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
@@ -207,7 +207,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_12() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
@@ -225,7 +225,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_13() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
@@ -244,7 +244,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_14() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
@@ -263,7 +263,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_15() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)-[r]->()
         WITH [r, 1] AS list
         RETURN type(list[0])
@@ -282,7 +282,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_16() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
@@ -301,7 +301,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_17() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
@@ -320,7 +320,7 @@ class FunctionsAcceptanceVisualizationTest {
     */
     @Test
     def void testFunctionsAcceptance_18() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')

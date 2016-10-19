@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WHERE a.id = 1337
         RETURN a.version + 5
@@ -44,7 +44,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         LIMIT 2
@@ -67,7 +67,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -93,7 +93,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -117,7 +117,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -145,7 +145,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ORDER BY n.name ASC
@@ -169,7 +169,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
@@ -190,7 +190,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN DISTINCT a
         ORDER BY a.name
@@ -209,7 +209,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a AS ColumnName
         ''')
@@ -227,7 +227,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)-->(b)
         RETURN DISTINCT b
         ORDER BY b.name
@@ -242,7 +242,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_11() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
         container.addSchemaInformation
@@ -255,7 +255,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_12() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
         container.addSchemaInformation
@@ -272,7 +272,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_13() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a, count(*)
         ORDER BY count(*)
@@ -287,7 +287,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_14() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN abs(-1)
         ''')
         container.addSchemaInformation
@@ -300,7 +300,7 @@ class ReturnAcceptanceVisualizationTest {
     */
     @Test
     def void testReturnAcceptance_15() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         RETURN size([1, 2, 3]) AS n
         ''')
         container.addSchemaInformation

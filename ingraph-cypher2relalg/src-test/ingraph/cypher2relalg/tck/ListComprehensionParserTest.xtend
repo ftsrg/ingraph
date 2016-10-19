@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -25,7 +25,7 @@ class ListComprehensionParserTest {
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -46,7 +46,7 @@ class ListComprehensionParserTest {
         RETURN p, c
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -67,7 +67,7 @@ class ListComprehensionParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

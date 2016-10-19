@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -19,7 +19,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -35,7 +35,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -51,7 +51,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -67,7 +67,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -83,7 +83,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -99,7 +99,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -115,7 +115,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -131,7 +131,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -147,7 +147,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -163,7 +163,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -179,7 +179,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -195,7 +195,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -211,7 +211,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -227,7 +227,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -243,7 +243,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -259,7 +259,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -275,7 +275,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -291,7 +291,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -307,7 +307,7 @@ class TriadicSelectionParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TriadicSelection_19")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

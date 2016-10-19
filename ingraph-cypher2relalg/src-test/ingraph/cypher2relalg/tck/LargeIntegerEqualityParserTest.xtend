@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -18,7 +18,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -31,7 +31,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -45,7 +45,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -58,7 +58,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -72,7 +72,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/LargeIntegerEquality_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

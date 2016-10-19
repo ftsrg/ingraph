@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 
@@ -18,7 +18,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean('true') AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_01")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -32,7 +32,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(b) AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_02")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -46,7 +46,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(s) AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_03")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -60,7 +60,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(things) AS b
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_04")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -80,7 +80,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(n.age) AS age
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_05")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -94,7 +94,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(weight)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_06")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -108,7 +108,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_07")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -122,7 +122,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_08")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -136,7 +136,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_09")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -150,7 +150,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_10")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -170,7 +170,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toFloat(n.rating) AS float
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_11")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -184,7 +184,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_12")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -198,7 +198,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_13")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -212,7 +212,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_14")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -226,7 +226,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_15")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -246,7 +246,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(n.rating)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_16")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -264,7 +264,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(m.watched)
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_17")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -277,7 +277,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(1 < 0) AS bool
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_18")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -290,7 +290,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(true) AS bool
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_19")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -303,7 +303,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_20")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
     /*
@@ -317,7 +317,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
         CypherUtil.save(cypher, "../ingraph-cypxmi/tck/TypeConversionFunctions_21")
-        Cypher2RelAlg.processCypher(cypher)
+        Cypher2Relalg.processCypher(cypher)
     }
 
 }

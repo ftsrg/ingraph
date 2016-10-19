@@ -2,7 +2,7 @@ package ingraph.relalg2tex.tck
 
 import org.junit.Test
 
-import ingraph.cypher2relalg.Cypher2RelAlg
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
@@ -21,7 +21,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_01() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)
         WITH a
         MATCH (a)-->(b)
@@ -42,7 +42,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_02() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)
         WITH a
         ORDER BY a.name
@@ -64,7 +64,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_03() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH a
         MATCH (b)
@@ -86,7 +86,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_04() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:Begin)
         WITH a.prop AS property
         MATCH (b:End)
@@ -109,7 +109,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_05() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:Begin)
         WITH a.prop AS property
         LIMIT 1
@@ -133,7 +133,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_06() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH a.prop AS property, a.key AS idToUse
         ORDER BY property
@@ -158,7 +158,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_07() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH a
         WHERE a.name = 'B'
@@ -183,7 +183,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_08() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)-->()
         WITH a, count(*) AS relCount
         WHERE relCount > 1
@@ -205,7 +205,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_09() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH a.bar AS bars, count(*) AS relCount
         ORDER BY a.bar
@@ -227,7 +227,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_10() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH DISTINCT a.bar AS bars
         ORDER BY a.bar
@@ -249,7 +249,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_11() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a)
         WITH DISTINCT a.bar AS bars
         WHERE a.bar = 'B'
@@ -269,7 +269,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_12() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (a:A)-[r:REL]->(b:B)
         WITH a AS b, b AS tmp, r AS r
         WITH b AS a, r
@@ -287,7 +287,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_13() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (a:Start)
         WITH a
         MATCH (a)-->(b)
@@ -303,7 +303,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_14() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         WITH {foo: {bar: 'baz'}} AS nestedMap
         RETURN nestedMap.foo.bar
         ''')
@@ -322,7 +322,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_15() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n:A)
         WITH n
         LIMIT 1
@@ -343,7 +343,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_16() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (n)
         WITH n
         WHERE n.prop = 42
@@ -374,7 +374,7 @@ class WithAcceptanceVisualizationTest {
     */
     @Test
     def void testWithAcceptance_17() {
-        val container = Cypher2RelAlg.processString('''
+        val container = Cypher2Relalg.processString('''
         MATCH (david {name: 'David'})--(otherPerson)-->()
         WITH otherPerson, count(*) AS foaf
         WHERE foaf > 1
