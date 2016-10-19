@@ -24,7 +24,11 @@ See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
     * **Xtend IDE**
     * **Xtext SDK**
     * **EMF - Eclipse Modeling Framework Xcore SDK**
-1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the Modeling and VIATRA projects, as they require custom natures to work properly.)
+1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
+1. Go to the **ingraph-cypher-parser** project, navigate to the `src/main/java` source folder, and right click the `org.slizaa.neo4j.opencypher` package's `GenerateOpenCypher.mwe2` file and choose **Run As** | **MWE2 Workflow**. If you get a warning that there are errors in the project, click **Proceed**.
+1. Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
+1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**.
+1. You may have to clean the workspace.
 
 If you do not have Buildship: go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
