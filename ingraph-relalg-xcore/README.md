@@ -7,7 +7,6 @@ Note that the model is currently **not serializable**, due to various limitation
 * The relational algebra expression may not be a tree. For example, if we looking for potential triangles with a missing edge, the expression may look like this:
 
     ```
-    .
            AntiJoin
           /        \
      ExpandOut      |     
@@ -20,7 +19,6 @@ Note that the model is currently **not serializable**, due to various limitation
     Upon visualization, the expression if unfolded to a tree:
 
     ```
-    .
             AntiJoin
            /        \
      ExpandOut       |     
