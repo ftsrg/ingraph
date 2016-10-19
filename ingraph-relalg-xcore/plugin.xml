@@ -26,7 +26,7 @@
       <package
             uri="http://www.example.org/relalg"
             class="relalg.RelalgPackage"
-            genModel="src/main/resources/relalg.xcore"/>
+            genModel="src/relalg.xcore"/>
    </extension>
 
 </plugin>
