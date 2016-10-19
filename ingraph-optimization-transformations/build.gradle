@@ -1,15 +1,12 @@
-plugins { id "org.xtext.xtend" version "1.0.0" }
-
 apply plugin: 'org.xtext.xtend'
+apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-
-ext { dseVersion = '0.15.0-SNAPSHOT' }
 
 dependencies {
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
 	compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
-	compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: dseVersion
+	compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: viatraDseVersion
 	compile project(':ingraph-optimization-patterns')
 }

@@ -38,14 +38,6 @@ The `cypxmi` files contain the models as parsed by Xtext.
 
 To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
 
-#### Troubleshooting for Eclipse
-
-If you have compile errors in the imported Xtend projects, perform the following steps.
-
-1. Remove the `build/` directories from the projects with the `./clean-build-dirs.sh` script.
-1. Right click the parent project and issue **Gradle** | **Refresh Gradle Project**.
-1. Wait for the build to complete. If there are still errors, run **Project** | **Clean**, but hopefully this won't be necessary.
-
 ### IntelliJ IDEA
 
 In IntelliJ, go to **File** | **Settings** | **Plug-ins**, search for `Xtend`, click **Search in repositories** and install the plug-in.

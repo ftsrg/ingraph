@@ -1,4 +1,7 @@
 apply plugin: 'org.xtext.xtend'
+apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 dependencies {
 	compile project(':ingraph-cypher-parser')
@@ -12,6 +15,5 @@ dependencies {
 }
 
 sourceSets {
-	main { java { srcDirs = ['src', 'src-gen'] } }
-	test { java { srcDir 'src-test' } }
+	main { java { srcDirs = ['src/main/java', 'src-gen'] } }
 }

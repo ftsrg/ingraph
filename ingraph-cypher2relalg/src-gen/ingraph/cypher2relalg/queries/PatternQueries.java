@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-cypher2relalg/src/ingraph/cypher2relalg/queries/PatternQueries.vql
+ * Generated from platform:/resource/ingraph-cypher2relalg/src/main/java/ingraph/cypher2relalg/queries/PatternQueries.vql
  */
 package ingraph.cypher2relalg.queries;
 

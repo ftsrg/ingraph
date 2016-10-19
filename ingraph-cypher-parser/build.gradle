@@ -1,6 +1,5 @@
 apply plugin: 'org.xtext.xtend'
 apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
-apply from: "${rootDir}/gradle/maven-deployment.gradle"
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
