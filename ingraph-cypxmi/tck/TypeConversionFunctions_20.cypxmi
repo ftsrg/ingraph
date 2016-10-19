@@ -19,9 +19,7 @@
             </filterExpression>
             <expression xsi:type="openCypher:FunctionInvocation">
               <functionName name="toString"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@body/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
             </expression>
           </expression>
           <alias name="list"/>

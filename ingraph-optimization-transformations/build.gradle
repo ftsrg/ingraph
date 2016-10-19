@@ -1,6 +1,8 @@
 plugins { id "org.xtext.xtend" version "1.0.0" }
 
 apply plugin: 'org.xtext.xtend'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 ext { dseVersion = '0.15.0-SNAPSHOT' }
 

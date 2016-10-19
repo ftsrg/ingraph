@@ -18,9 +18,7 @@
       <returnBody xsi:type="openCypher:ReturnItems">
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="prop"/>
           </expression>
           <alias name="property"/>
@@ -40,13 +38,9 @@
       </pattern>
       <where>
         <expression xsi:type="openCypher:ExpressionComparison" operator="=">
-          <left xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </left>
+          <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias"/>
           <right xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|2"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@pattern/@patterns.0/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="prop"/>
           </right>
         </expression>
@@ -55,9 +49,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
       </body>
     </clauses>

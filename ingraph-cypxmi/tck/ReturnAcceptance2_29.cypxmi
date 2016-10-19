@@ -14,17 +14,13 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
         <items>
           <expression xsi:type="openCypher:ExpressionPlusMinus" operator="+">
             <left xsi:type="openCypher:FunctionInvocation">
               <functionName name="count"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             </left>
             <right xsi:type="openCypher:NumberConstant" value="3"/>
           </expression>

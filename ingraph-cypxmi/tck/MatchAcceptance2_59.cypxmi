@@ -23,9 +23,7 @@
           <limit xsi:type="openCypher:NumberConstant" value="1"/>
         </limit>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable"/>
         </items>
       </returnBody>
     </clauses>
@@ -51,19 +49,13 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
         </items>
       </body>
     </clauses>

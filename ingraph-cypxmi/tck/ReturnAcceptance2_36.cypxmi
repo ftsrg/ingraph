@@ -17,9 +17,7 @@
           <expression xsi:type="openCypher:MapLiteral">
             <entries key="foo">
               <value xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                <left xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|0"/>
-                </left>
+                <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
                 <propertyLookups propertyKeyName="list"/>
               </value>
             </entries>

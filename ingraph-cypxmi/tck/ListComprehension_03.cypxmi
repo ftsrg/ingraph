@@ -18,9 +18,7 @@
       </pattern>
       <where>
         <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-          <left xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </left>
+          <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
           <expression3Parts xsi:type="openCypher:InCollection">
             <expression xsi:type="openCypher:ListComprehension">
               <filterExpression>
@@ -28,17 +26,13 @@
                   <variable name="x"/>
                   <expression xsi:type="openCypher:FunctionInvocation">
                     <functionName name="labels"/>
-                    <parameter xsi:type="openCypher:VariableRef">
-                      <variableRef href="http:/example.cyp#|1"/>
-                    </parameter>
+                    <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
                   </expression>
                 </idInColl>
               </filterExpression>
               <expression xsi:type="openCypher:FunctionInvocation">
                 <functionName name="lower"/>
-                <parameter xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|2"/>
-                </parameter>
+                <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@where/@expression/@expression3Parts.0/@expression/@filterExpression/@idInColl/@variable"/>
               </expression>
             </expression>
           </expression3Parts>
@@ -49,9 +43,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
         </items>
       </body>
     </clauses>

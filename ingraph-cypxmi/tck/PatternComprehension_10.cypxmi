@@ -26,23 +26,18 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
         </items>
         <items>
           <expression>
             <expression3Parts xsi:type="openCypher:Index">
-              <expression xsi:type="openCypher:VariableRef">
+              <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@body/@items.1/@expression/@expression3Parts.1/@expression/@nodePattern/@variable">
                 <expression3Parts xsi:type="openCypher:InCollection">
                   <expression xsi:type="openCypher:FunctionInvocation">
                     <functionName name="nodes"/>
-                    <parameter xsi:type="openCypher:VariableRef">
-                      <variableRef href="http:/example.cyp#|2"/>
-                    </parameter>
+                    <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
                   </expression>
                 </expression3Parts>
-                <variableRef href="http:/example.cyp#|1"/>
               </expression>
             </expression3Parts>
             <expression3Parts xsi:type="openCypher:Index">

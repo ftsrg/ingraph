@@ -63,9 +63,7 @@
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="count"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@var"/>
           </expression>
           <alias name="c"/>
         </items>

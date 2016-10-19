@@ -36,32 +36,24 @@
       <returnBody xsi:type="openCypher:ReturnItems">
         <order>
           <orderBy>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias"/>
           </orderBy>
           <orderBy>
             <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
               <propertyLookups propertyKeyName="id"/>
             </expression>
           </orderBy>
         </order>
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|2"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.1/@relationshipPattern/@detail/@variable"/>
             <propertyLookups propertyKeyName="creationDate"/>
           </expression>
           <alias name="likeTime"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
           <alias name="person"/>
         </items>
       </returnBody>
@@ -75,9 +67,7 @@
               <functionName name="collect"/>
               <parameter xsi:type="openCypher:MapLiteral">
                 <entries key="likeTime">
-                  <value xsi:type="openCypher:VariableRef">
-                    <variableRef href="http:/example.cyp#|4"/>
-                  </value>
+                  <value xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias"/>
                 </entries>
               </parameter>
             </parameter>
@@ -85,9 +75,7 @@
           <alias name="latestLike"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|5"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
           <alias name="person"/>
         </items>
       </returnBody>
@@ -96,16 +84,12 @@
       <body xsi:type="openCypher:ReturnItems">
         <order>
           <orderBy>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|6"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias"/>
           </orderBy>
         </order>
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|7"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@returnBody/@items.0/@alias"/>
             <propertyLookups propertyKeyName="likeTime"/>
           </expression>
           <alias name="likeTime"/>

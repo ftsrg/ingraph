@@ -15,9 +15,7 @@
       <returnBody xsi:type="openCypher:ReturnItems">
         <items>
           <expression xsi:type="openCypher:ExpressionList">
-            <expressions xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expressions>
+            <expressions xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <expressions xsi:type="openCypher:NumberConstant" value="1"/>
           </expression>
           <alias name="list"/>
@@ -29,11 +27,10 @@
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="labels"/>
-            <parameter xsi:type="openCypher:VariableRef">
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias">
               <expression3Parts xsi:type="openCypher:Index">
                 <expression xsi:type="openCypher:NumberConstant" value="1"/>
               </expression3Parts>
-              <variableRef href="http:/example.cyp#|1"/>
             </parameter>
           </expression>
           <alias name="l"/>

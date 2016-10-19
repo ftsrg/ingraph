@@ -17,16 +17,13 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias">
             <expression3Parts xsi:type="openCypher:Index">
               <expression xsi:type="openCypher:FunctionInvocation">
                 <functionName name="toString"/>
-                <parameter xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|1"/>
-                </parameter>
+                <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.1/@alias"/>
               </expression>
             </expression3Parts>
-            <variableRef href="http:/example.cyp#|0"/>
           </expression>
           <alias name="value"/>
         </items>

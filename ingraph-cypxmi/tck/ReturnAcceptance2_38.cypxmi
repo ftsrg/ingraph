@@ -22,9 +22,7 @@
                   <expressions xsi:type="openCypher:MapLiteral">
                     <entries key="bar">
                       <value xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                        <left xsi:type="openCypher:VariableRef">
-                          <variableRef href="http:/example.cyp#|0"/>
-                        </left>
+                        <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
                         <propertyLookups propertyKeyName="list"/>
                       </value>
                     </entries>
@@ -34,9 +32,7 @@
                       <value xsi:type="openCypher:MapLiteral">
                         <entries key="apa">
                           <value xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                            <left xsi:type="openCypher:VariableRef">
-                              <variableRef href="http:/example.cyp#|1"/>
-                            </left>
+                            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
                             <propertyLookups propertyKeyName="list"/>
                           </value>
                         </entries>

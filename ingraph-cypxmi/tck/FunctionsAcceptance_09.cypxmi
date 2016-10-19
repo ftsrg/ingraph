@@ -16,11 +16,10 @@
       <where>
         <expression xsi:type="openCypher:FunctionInvocation">
           <functionName name="exists"/>
-          <parameter xsi:type="openCypher:VariableRef">
+          <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable">
             <expression3Parts xsi:type="openCypher:Index">
               <expression xsi:type="openCypher:StringConstant" value="'prop'"/>
             </expression3Parts>
-            <variableRef href="http:/example.cyp#|0"/>
           </parameter>
         </expression>
       </where>
@@ -28,9 +27,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
       </body>
     </clauses>

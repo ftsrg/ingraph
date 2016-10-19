@@ -30,9 +30,7 @@
                 <variable name="x"/>
                 <expression xsi:type="openCypher:FunctionInvocation">
                   <functionName name="collect"/>
-                  <parameter xsi:type="openCypher:VariableRef">
-                    <variableRef href="http:/example.cyp#|0"/>
-                  </parameter>
+                  <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
                 </expression>
               </idInColl>
             </filterExpression>
@@ -40,9 +38,7 @@
               <functionName name="head"/>
               <parameter xsi:type="openCypher:FunctionInvocation">
                 <functionName name="nodes"/>
-                <parameter xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|1"/>
-                </parameter>
+                <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
               </parameter>
             </expression>
           </expression>
@@ -51,9 +47,7 @@
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="count"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|2"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
           </expression>
           <alias name="c"/>
         </items>
@@ -62,14 +56,10 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|4"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.1/@alias"/>
         </items>
       </body>
     </clauses>

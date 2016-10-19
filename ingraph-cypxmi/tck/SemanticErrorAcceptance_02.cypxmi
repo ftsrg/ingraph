@@ -22,11 +22,10 @@
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
             <left xsi:type="openCypher:ParenthesizedExpression">
-              <expression xsi:type="openCypher:VariableRef">
+              <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias">
                 <expression3Parts xsi:type="openCypher:Index">
                   <expression xsi:type="openCypher:NumberConstant" value="1"/>
                 </expression3Parts>
-                <variableRef href="http:/example.cyp#|0"/>
               </expression>
             </left>
             <propertyLookups propertyKeyName="prop"/>

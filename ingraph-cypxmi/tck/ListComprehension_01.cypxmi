@@ -27,9 +27,7 @@
                 <variable name="x"/>
                 <expression xsi:type="openCypher:FunctionInvocation">
                   <functionName name="collect"/>
-                  <parameter xsi:type="openCypher:VariableRef">
-                    <variableRef href="http:/example.cyp#|0"/>
-                  </parameter>
+                  <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
                 </expression>
               </idInColl>
             </filterExpression>
@@ -37,9 +35,7 @@
               <functionName name="head"/>
               <parameter xsi:type="openCypher:FunctionInvocation">
                 <functionName name="nodes"/>
-                <parameter xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|1"/>
-                </parameter>
+                <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@body/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
               </parameter>
             </expression>
           </expression>

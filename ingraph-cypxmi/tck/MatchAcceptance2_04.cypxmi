@@ -28,17 +28,13 @@
           <left xsi:type="openCypher:FunctionInvocation">
             <functionName name="exists"/>
             <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
               <propertyLookups propertyKeyName="id"/>
             </parameter>
           </left>
           <right xsi:type="openCypher:ExpressionComparison" operator=">">
             <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
               <propertyLookups propertyKeyName="id"/>
             </left>
             <right xsi:type="openCypher:StringConstant" value="'te'"/>
@@ -49,9 +45,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
         </items>
       </body>
     </clauses>

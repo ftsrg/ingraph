@@ -1,0 +1,4 @@
+!src-gen/**/.java
+!src-gen/**/.java
+src-gen/**/.gitignore
+src-gen/**/.gitignore

@@ -25,25 +25,17 @@
       <returnBody xsi:type="openCypher:ReturnItems">
         <order>
           <orderBy>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.3/@alias"/>
           </orderBy>
         </order>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
         </items>
         <items>
           <expression xsi:type="openCypher:Count"/>
@@ -75,17 +67,13 @@
         <order>
           <orderBy>
             <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|4"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.3/@body/@items.0/@alias"/>
               <propertyLookups propertyKeyName="id"/>
             </expression>
           </orderBy>
         </order>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|5"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable"/>
           <alias name="rel"/>
         </items>
       </body>

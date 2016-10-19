@@ -14,17 +14,13 @@
     <clauses xsi:type="openCypher:With">
       <returnBody xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
       </returnBody>
       <where>
         <expression xsi:type="openCypher:ExpressionComparison" operator="=">
           <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|1"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="name"/>
           </left>
           <right xsi:type="openCypher:StringConstant" value="'B'"/>
@@ -34,9 +30,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
         </items>
       </body>
     </clauses>

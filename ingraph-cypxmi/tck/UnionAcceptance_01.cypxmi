@@ -18,9 +18,7 @@
       <clauses xsi:type="openCypher:Return" return="RETURN">
         <body xsi:type="openCypher:ReturnItems">
           <items>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@singleQuery/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <alias name="a"/>
           </items>
         </body>
@@ -43,9 +41,7 @@
         <clauses xsi:type="openCypher:Return" return="RETURN">
           <body xsi:type="openCypher:ReturnItems">
             <items>
-              <expression xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </expression>
+              <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@union.0/@singleQuery/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
               <alias name="a"/>
             </items>
           </body>

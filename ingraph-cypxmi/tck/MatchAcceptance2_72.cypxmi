@@ -17,9 +17,7 @@
           <expression xsi:type="openCypher:ExpressionComparison" operator=">">
             <left xsi:type="openCypher:FunctionInvocation">
               <functionName name="count"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             </left>
             <right xsi:type="openCypher:NumberConstant" value="0"/>
           </expression>

@@ -58,9 +58,8 @@
           <alias name="matches"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable">
             <expression3Parts xsi:type="openCypher:IsNull"/>
-            <variableRef href="http:/example.cyp#|0"/>
           </expression>
           <alias name="optMatch"/>
         </items>

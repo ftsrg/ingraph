@@ -15,15 +15,11 @@
       <body xsi:type="openCypher:ReturnItems">
         <order>
           <orderBy>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@variable"/>
           </orderBy>
         </order>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@variable"/>
         </items>
       </body>
     </clauses>

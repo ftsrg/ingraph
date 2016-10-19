@@ -52,18 +52,14 @@
             <left xsi:type="openCypher:ExpressionAnd" operator="AND">
               <left xsi:type="openCypher:ExpressionComparison" operator="=">
                 <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                  <left xsi:type="openCypher:VariableRef">
-                    <variableRef href="http:/example.cyp#|0"/>
-                  </left>
+                  <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
                   <propertyLookups propertyKeyName="id"/>
                 </left>
                 <right xsi:type="openCypher:Parameter" parameter="1"/>
               </left>
               <right xsi:type="openCypher:ExpressionComparison" operator="=">
                 <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                  <left xsi:type="openCypher:VariableRef">
-                    <variableRef href="http:/example.cyp#|1"/>
-                  </left>
+                  <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.2/@nodePattern/@variable"/>
                   <propertyLookups propertyKeyName="id"/>
                 </left>
                 <right xsi:type="openCypher:Parameter" parameter="2"/>
@@ -71,9 +67,7 @@
             </left>
             <right xsi:type="openCypher:ExpressionComparison" operator="=">
               <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-                <left xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|2"/>
-                </left>
+                <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.1/@nodePattern/@variable"/>
                 <propertyLookups propertyKeyName="name"/>
               </left>
               <right xsi:type="openCypher:StringConstant" value="'red'"/>
@@ -81,9 +75,7 @@
           </left>
           <right xsi:type="openCypher:ExpressionComparison" operator="=">
             <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|3"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
               <propertyLookups propertyKeyName="name"/>
             </left>
             <right xsi:type="openCypher:StringConstant" value="'product1'"/>
@@ -95,9 +87,7 @@
       <body xsi:type="openCypher:ReturnItems">
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|4"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
             <propertyLookups propertyKeyName="name"/>
           </expression>
         </items>

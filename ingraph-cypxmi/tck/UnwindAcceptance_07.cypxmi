@@ -22,23 +22,17 @@
       </returnBody>
     </clauses>
     <clauses xsi:type="openCypher:Unwind">
-      <expression xsi:type="openCypher:VariableRef">
-        <variableRef href="http:/example.cyp#|0"/>
-      </expression>
+      <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias"/>
       <variable name="x"/>
     </clauses>
     <clauses xsi:type="openCypher:Unwind">
-      <expression xsi:type="openCypher:VariableRef">
-        <variableRef href="http:/example.cyp#|1"/>
-      </expression>
+      <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@variable"/>
       <variable name="y"/>
     </clauses>
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@variable"/>
         </items>
       </body>
     </clauses>

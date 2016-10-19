@@ -21,16 +21,12 @@
             <filterExpression>
               <idInColl>
                 <variable name="n"/>
-                <expression xsi:type="openCypher:VariableRef">
-                  <variableRef href="http:/example.cyp#|0"/>
-                </expression>
+                <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias"/>
               </idInColl>
             </filterExpression>
             <expression xsi:type="openCypher:FunctionInvocation">
               <functionName name="toString"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@body/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
             </expression>
           </expression>
           <alias name="string_numbers"/>

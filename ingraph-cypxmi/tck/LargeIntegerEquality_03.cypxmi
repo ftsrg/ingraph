@@ -16,9 +16,7 @@
       <where>
         <expression xsi:type="openCypher:ExpressionComparison" operator="=">
           <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="id"/>
           </left>
           <right xsi:type="openCypher:NumberConstant" value="4611686018427387905"/>
@@ -29,9 +27,7 @@
       <body xsi:type="openCypher:ReturnItems">
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|1"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="id"/>
           </expression>
         </items>

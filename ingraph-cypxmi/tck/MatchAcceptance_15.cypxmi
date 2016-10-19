@@ -29,9 +29,7 @@
         <expression xsi:type="openCypher:ExpressionComparison" operator="=">
           <left xsi:type="openCypher:FunctionInvocation">
             <functionName name="type"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@relationshipPattern/@detail/@variable"/>
           </left>
           <right xsi:type="openCypher:StringConstant" value="'KNOWS'"/>
         </expression>
@@ -40,9 +38,7 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
         </items>
       </body>
     </clauses>

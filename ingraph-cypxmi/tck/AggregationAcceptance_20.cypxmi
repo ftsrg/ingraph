@@ -28,9 +28,7 @@
       <body xsi:type="openCypher:ReturnItems">
         <order>
           <orderBy>
-            <expression xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|0"/>
-            </expression>
+            <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@body/@items.1/@alias"/>
           </orderBy>
         </order>
         <items>
@@ -38,9 +36,7 @@
             <functionName name="collect"/>
             <parameter xsi:type="openCypher:FunctionInvocation">
               <functionName name="nodes"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|1"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
             </parameter>
           </expression>
           <alias name="paths"/>
@@ -48,9 +44,7 @@
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="length"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|2"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
           </expression>
           <alias name="l"/>
         </items>

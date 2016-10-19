@@ -39,35 +39,25 @@
       </pattern>
       <where>
         <expression xsi:type="openCypher:ExpressionComparison" operator="&lt;>">
-          <left xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|0"/>
-          </left>
-          <right xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|1"/>
-          </right>
+          <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@chain.0/@nodePattern/@variable"/>
+          <right xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
         </expression>
       </where>
     </clauses>
     <clauses xsi:type="openCypher:With">
       <returnBody xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|2"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|3"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@chain.0/@nodePattern/@variable"/>
         </items>
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="min"/>
             <parameter xsi:type="openCypher:FunctionInvocation">
               <functionName name="length"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|4"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
             </parameter>
           </expression>
           <alias name="len"/>
@@ -78,9 +68,7 @@
       <body xsi:type="openCypher:ReturnItems">
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-            <left xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|5"/>
-            </left>
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
             <propertyLookups propertyKeyName="name"/>
           </expression>
           <alias name="name"/>
@@ -89,18 +77,14 @@
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="collect"/>
             <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|6"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@chain.0/@nodePattern/@variable"/>
               <propertyLookups propertyKeyName="name"/>
             </parameter>
           </expression>
           <alias name="others"/>
         </items>
         <items>
-          <expression xsi:type="openCypher:VariableRef">
-            <variableRef href="http:/example.cyp#|7"/>
-          </expression>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.2/@alias"/>
         </items>
       </body>
     </clauses>

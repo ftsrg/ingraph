@@ -18,9 +18,7 @@
             <functionName name="size"/>
             <parameter xsi:type="openCypher:FunctionInvocation">
               <functionName name="collect"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
             </parameter>
           </expression>
         </items>

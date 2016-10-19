@@ -19,14 +19,13 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable">
             <expression3Parts xsi:type="openCypher:Index">
               <expression xsi:type="openCypher:ExpressionPlusMinus" operator="+">
                 <left xsi:type="openCypher:StringConstant" value="'nam'"/>
                 <right xsi:type="openCypher:StringConstant" value="'e'"/>
               </expression>
             </expression3Parts>
-            <variableRef href="http:/example.cyp#|0"/>
           </expression>
           <alias name="value"/>
         </items>

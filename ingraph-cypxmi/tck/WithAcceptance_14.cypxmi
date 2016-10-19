@@ -23,9 +23,7 @@
         <items>
           <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
             <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
-              <left xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </left>
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias"/>
               <propertyLookups propertyKeyName="foo"/>
             </left>
             <propertyLookups propertyKeyName="bar"/>

@@ -1,26 +1,11 @@
-buildscript {
-	repositories {
-		jcenter()
-		maven {
-		  url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath "org.xtext:xtext-gradle-plugin:${xtextGradlePluginVersion}"
-	}
-}
 plugins {
     id "org.xtext.builder" version "1.0.0"
 }
 
-apply plugin: 'java'
 apply plugin: 'org.xtext.xtend'
 apply from: "${rootDir}/gradle/source-layout-xcore.gradle"
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

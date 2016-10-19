@@ -15,11 +15,10 @@
     <clauses xsi:type="openCypher:Return" return="RETURN">
       <body xsi:type="openCypher:ReturnItems">
         <items>
-          <expression xsi:type="openCypher:VariableRef">
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias">
             <expression3Parts xsi:type="openCypher:Index">
               <expression xsi:type="openCypher:Parameter" parameter="idx"/>
             </expression3Parts>
-            <variableRef href="http:/example.cyp#|0"/>
           </expression>
           <alias name="value"/>
         </items>

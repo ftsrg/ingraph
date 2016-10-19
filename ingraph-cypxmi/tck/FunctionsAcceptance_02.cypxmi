@@ -37,34 +37,26 @@
             <functionName name="length"/>
             <parameter xsi:type="openCypher:FunctionInvocation">
               <functionName name="nodes"/>
-              <parameter xsi:type="openCypher:VariableRef">
-                <variableRef href="http:/example.cyp#|0"/>
-              </parameter>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@var"/>
             </parameter>
           </expression>
         </items>
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="type"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|1"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@part/@chain.0/@relationshipPattern/@detail/@variable"/>
           </expression>
         </items>
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="nodes"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|2"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@var"/>
           </expression>
         </items>
         <items>
           <expression xsi:type="openCypher:FunctionInvocation">
             <functionName name="relationships"/>
-            <parameter xsi:type="openCypher:VariableRef">
-              <variableRef href="http:/example.cyp#|3"/>
-            </parameter>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@var"/>
           </expression>
         </items>
       </body>
