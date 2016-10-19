@@ -6,7 +6,7 @@ import java.io.IOException
 import org.junit.Test
 import ingraph.cypherparser.CypherParser
 
-class RelalgParserTrainBenchmarkTest {
+class TrainBenchmarkCypher2RelalgTest {
 	
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)

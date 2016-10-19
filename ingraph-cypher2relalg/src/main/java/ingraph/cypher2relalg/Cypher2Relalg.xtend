@@ -1,16 +1,7 @@
 package ingraph.cypher2relalg
 
-import ingraph.cypher2relalg.queries.util.EdgeVariablesQuerySpecification
-import ingraph.cypher2relalg.queries.util.NodeVariablesQuerySpecification
 import ingraph.cypherparser.CypherParser
-import org.eclipse.emf.common.util.URI
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
-import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine
-import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
-import relalg.RelalgFactory
 import relalg.RelalgContainer
 
 class Cypher2Relalg {
@@ -25,40 +16,9 @@ class Cypher2Relalg {
 		return processCypher(cypher)
 	}
 
-	def static RelalgContainer processCypher(Cypher cypherQuery) {
-		val container = RelalgFactory.eINSTANCE.createRelalgContainer
-
-		// we shouldn't register a full XMI resource factory for relalg models
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
-		
-		val resourceSet = new ResourceSetImpl
-		val resource = resourceSet.createResource(URI.createFileURI("file:/queryplan.relalg"))
-
-		resource.contents.add(cypherQuery)
-
-		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
-			new EMFScope(resourceSet))
-
-		println("NodeVariables")
-		val nodeVariables = engine.getMatcher(NodeVariablesQuerySpecification.instance).allMatches
-		nodeVariables.forEach [
-			println(it)
-		]
-
-		println("EdgeVariables")
-		val edgeVariables = engine.getMatcher(EdgeVariablesQuerySpecification.instance).allMatches
-		edgeVariables.forEach [
-			println(it)
-		]
-
-//		val singleQuery = cypherQuery.statement as SingleQuery
-//		singleQuery.clauses.filter(typeof(Match)).forEach [
-//			println(PrettyPrinter.prettyPrint(it))
-//		]
-//		singleQuery.clauses.filter(typeof(Return)).forEach [
-//			println(PrettyPrinter.prettyPrint(it))
-//		]
-		container
+	def static RelalgContainer processCypher(Cypher cypher) {
+		val builder = new RelalgBuilder()
+		return builder.build(cypher)
 	}
 
 }

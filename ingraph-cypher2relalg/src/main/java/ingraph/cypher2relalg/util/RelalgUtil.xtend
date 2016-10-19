@@ -14,12 +14,14 @@ import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
 
-class RelalgCypherUtil {
+class RelalgUtil {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
-		vertexVariable.vertexLabel = label
+		if (!vertexVariable.vertexLabels.contains(label)) {
+			vertexVariable.vertexLabels.add(label)
+		}
 	}
 
 	def ensureLabel(EdgeVariable edgeVariable, EdgeLabel label) {
