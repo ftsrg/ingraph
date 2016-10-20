@@ -28,9 +28,4 @@ class SemaphoreNeighborOptimizationTest {
 		drawer.serialize(semaphoreNeighborA.transformToRete, "query-plan-SemaphoreNeighborA-Rete")
 	}
 
-	@Test
-	def void serializationTest() {
-		RelalgUtil.save(semaphoreNeighborA, "/tmp/plan")
-	}
-
 }

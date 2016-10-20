@@ -19,12 +19,10 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
 	override serializeBody(Operator expression) {
 		'''
-			\begin{tikzpicture}
-			\linespread{1.25}
-			\Tree
+			\begin{forest} for tree={align=center}
 			«toNode(expression)»
 			;
-			\end{tikzpicture}
+			\end{forest}
 		'''
 	}
 
@@ -37,7 +35,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
 			«toNode((expression as AllDifferentOperator).input)»
 		«ELSE»
-			[. {$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(', ')»} \rangle$}«expression?.children»
+			[{$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(', ')»} \rangle$}«expression?.children»
 			]
 		«ENDIF»'''
 	}
@@ -55,14 +53,14 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
 	def dispatch children(AlphaOperator op) {
 		'''
-			
+
 				«op.input?.toNode»
 		'''
 	}
 
 	def dispatch children(BetaOperator op) {
 		'''
-			
+
 				«op.leftInput.toNode»
 				«op.rightInput.toNode»
 		'''
