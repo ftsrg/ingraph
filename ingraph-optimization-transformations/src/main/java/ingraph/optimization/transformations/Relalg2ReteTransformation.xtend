@@ -2,6 +2,7 @@ package ingraph.optimization.transformations
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
+import ingraph.relalg.util.SchemaInferencer
 import org.apache.log4j.Level
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
@@ -12,14 +13,13 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
-import relalg.ExpandOperator
-import relalg.RelalgContainer
-import relalg.RelalgFactory
-import ingraph.relalg.util.SchemaInferencer
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtext.EcoreUtil2
 import relalg.AlphaOperator
 import relalg.BetaOperator
+import relalg.ExpandOperator
+import relalg.GetEdgesOperator
+import relalg.Operator
+import relalg.RelalgContainer
+import relalg.RelalgFactory
 
 class Relalg2ReteTransformation {
 
@@ -30,6 +30,22 @@ class Relalg2ReteTransformation {
 		// ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
+	}
+	
+	def void changeOperator(Operator parentOperator, Operator currentOperator, Operator newOperator) {
+		switch parentOperator {
+			AlphaOperator: {
+				parentOperator.input = newOperator
+			}
+			BetaOperator: {
+				if (parentOperator.leftInput.equals(currentOperator)) {
+					parentOperator.leftInput = newOperator	
+				}
+				if (parentOperator.rightInput.equals(currentOperator)) {
+					parentOperator.rightInput = newOperator	
+				}
+			}
+		}
 	}
 
 	def transformToRete(RelalgContainer container) {
@@ -50,7 +66,7 @@ class Relalg2ReteTransformation {
 		val expandOperatorRule = expandOperatorRule
 
 		statements.fireWhilePossible(expandVertexRule)
-//		statements.fireWhilePossible(expandOperatorRule)
+		statements.fireWhilePossible(expandOperatorRule)
 
 		return container
 	}
@@ -75,20 +91,7 @@ class Relalg2ReteTransformation {
 				edgeVariable = expandOperator.edgeVariable
 			]
 			
-			val parentOperator = parentOperator
-			switch parentOperator {
-				AlphaOperator: {
-					parentOperator.input = getEdgesOperator
-				}
-				BetaOperator: {
-					if (parentOperator.leftInput.equals(expandOperator)) {
-						parentOperator.leftInput = getEdgesOperator	
-					}
-					if (parentOperator.rightInput.equals(expandOperator)) {
-						parentOperator.rightInput = getEdgesOperator	
-					}
-				}
-			}
+			changeOperator(parentOperator, expandOperator, getEdgesOperator)
 		].build
 	}
 
@@ -111,8 +114,8 @@ class Relalg2ReteTransformation {
 				leftInput = expandOperator.input
 				rightInput = getEdgesOperator
 			]
-			val inputOpposite = expandOperator.eContainingFeature
-			expandOperator.eContainer.eSet(inputOpposite, joinOperator)
+			
+			changeOperator(parentOperator, expandOperator, joinOperator)
 		].build
 	}
 

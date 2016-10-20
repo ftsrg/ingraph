@@ -21,8 +21,8 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
- * <li>expandVertex</li>
  * <li>parentOperator</li>
+ * <li>expandVertex</li>
  * <li>expandOperator</li>
  * </ul>
  * 
@@ -48,17 +48,9 @@ public final class Optimization extends BaseGeneratedPatternGroup {
   private static Optimization INSTANCE;
   
   private Optimization() throws ViatraQueryException {
-    querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ParentOperatorQuerySpecification.instance());
+    querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorQuerySpecification.instance());
-  }
-  
-  public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
-    return ExpandVertexQuerySpecification.instance();
-  }
-  
-  public ExpandVertexMatcher getExpandVertex(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandVertexMatcher.on(engine);
   }
   
   public ParentOperatorQuerySpecification getParentOperator() throws ViatraQueryException {
@@ -67,6 +59,14 @@ public final class Optimization extends BaseGeneratedPatternGroup {
   
   public ParentOperatorMatcher getParentOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
     return ParentOperatorMatcher.on(engine);
+  }
+  
+  public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
+    return ExpandVertexQuerySpecification.instance();
+  }
+  
+  public ExpandVertexMatcher getExpandVertex(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandVertexMatcher.on(engine);
   }
   
   public ExpandOperatorQuerySpecification getExpandOperator() throws ViatraQueryException {

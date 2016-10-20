@@ -2,13 +2,6 @@ package ingraph.optimization.patterns
 
 import "http://www.example.org/relalg";
 
-// 1st transformation
-pattern expandVertex(parentOperator : Operator, getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator) {
-	find parentOperator(parentOperator, expandOperator);
-	ExpandOperator.input(expandOperator, getVerticesOperator);
-	GetVerticesOperator(getVerticesOperator);
-}
-
 pattern parentOperator(parentOperator : Operator, operator : Operator) {
 	AlphaOperator.input(parentOperator, operator);
 } or {
@@ -17,7 +10,15 @@ pattern parentOperator(parentOperator : Operator, operator : Operator) {
 	BetaOperator.rightInput(parentOperator, operator);
 }
 
+// 1st transformation
+pattern expandVertex(parentOperator : Operator, getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator) {
+	find parentOperator(parentOperator, expandOperator);
+	ExpandOperator.input(expandOperator, getVerticesOperator);
+	GetVerticesOperator(getVerticesOperator);
+}
+
 // 2nd transformation
-pattern expandOperator(expandOperator : ExpandOperator) {
+pattern expandOperator(parentOperator : Operator, expandOperator : ExpandOperator) {
+	find parentOperator(parentOperator, expandOperator);
 	ExpandOperator(expandOperator);
 }
