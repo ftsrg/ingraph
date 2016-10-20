@@ -12,28 +12,28 @@
 [{$\selection{\var{route1} \neq \var{route2}}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2, mb1, sensor1, mb2, sensor2, route1, g1, exit, semaphore, route2, g2} \rangle$}
 [{$\join \{\var{sensor2}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2, mb1, sensor1, mb2, sensor2, route1, g1, exit, semaphore, route2, g2} \rangle$}
 [{$\join \{\var{sensor1}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2, mb1, sensor1, mb2, sensor2, route1, g1, exit, semaphore} \rangle$}
-[{$\join \{\var{te2}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2, mb1, sensor1, mb2, sensor2} \rangle$}
-[{$\join \{\var{te1}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2, mb1, sensor1} \rangle$}
-[{$\getedges{te1}{TrackElement}{te2}{TrackElement}{ct}{connectsTo}$ \\ \footnotesize $\color{gray} \langle \var{te1, ct, te2} \rangle$}
+[{$\join \{\var{te2}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2, sensor1, sensor2} \rangle$}
+[{$\join \{\var{te1}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2, sensor1} \rangle$}
+[{$\getedges{te1}{TrackElement}{te2}{TrackElement}{ct}{connectsTo}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2} \rangle$}
 ]
-[{$\getedges{te1}{TrackElement}{sensor1}{Sensor}{mb1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te1, mb1, sensor1} \rangle$}
-]
-]
-[{$\getedges{te2}{TrackElement}{sensor2}{Sensor}{mb2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te2, mb2, sensor2} \rangle$}
+[{$\getedges{te1}{TrackElement}{sensor1}{Sensor}{mb1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te1, sensor1} \rangle$}
 ]
 ]
-[{$\join \{\var{route1}\}$ \\ \footnotesize $\color{gray} \langle \var{route1, g1, sensor1, exit, semaphore} \rangle$}
-[{$\getedges{route1}{Route}{sensor1}{Sensor}{g1}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route1, g1, sensor1} \rangle$}
-]
-[{$\getedges{route1}{Route}{semaphore}{Semaphore}{exit}{exit}$ \\ \footnotesize $\color{gray} \langle \var{route1, exit, semaphore} \rangle$}
+[{$\getedges{te2}{TrackElement}{sensor2}{Sensor}{mb2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te2, sensor2} \rangle$}
 ]
 ]
+[{$\join \{\var{route1}\}$ \\ \footnotesize $\color{gray} \langle \var{route1, sensor1, semaphore} \rangle$}
+[{$\getedges{route1}{Route}{sensor1}{Sensor}{g1}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route1, sensor1} \rangle$}
 ]
-[{$\getedges{route2}{Route}{sensor2}{Sensor}{g2}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route2, g2, sensor2} \rangle$}
+[{$\getedges{route1}{Route}{semaphore}{Semaphore}{exit}{exit}$ \\ \footnotesize $\color{gray} \langle \var{route1, semaphore} \rangle$}
 ]
 ]
 ]
-[{$\getedges{route2}{Route}{semaphore}{Semaphore}{entry}{entry}$ \\ \footnotesize $\color{gray} \langle \var{route2, entry, semaphore} \rangle$}
+[{$\getedges{route2}{Route}{sensor2}{Sensor}{g2}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route2, sensor2} \rangle$}
+]
+]
+]
+[{$\getedges{route2}{Route}{semaphore}{Semaphore}{entry}{entry}$ \\ \footnotesize $\color{gray} \langle \var{route2, semaphore} \rangle$}
 ]
 ]
 ]

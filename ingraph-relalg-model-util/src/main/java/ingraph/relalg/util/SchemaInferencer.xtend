@@ -18,6 +18,16 @@ import relalg.RelalgContainer
 
 class SchemaInferencer {
 
+	val boolean includeEdges
+
+	new() {
+		this.includeEdges = true
+	}
+
+	new(boolean includeEdges) {
+		this.includeEdges = includeEdges
+	}
+
 	def addSchemaInformation(RelalgContainer container) {
 		val rootExpression = container.getRootExpression
 		rootExpression.inferSchema
@@ -33,7 +43,11 @@ class SchemaInferencer {
 	}
 
 	def dispatch List<Variable> inferSchema(GetEdgesOperator op) {
-		op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
+		if (includeEdges) {
+			op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
+		} else {
+			op.defineSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
+		}
 	}
 
 	// unary operators
@@ -56,7 +70,9 @@ class SchemaInferencer {
 
 	def dispatch List<Variable> inferSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.inferSchema)
-		schema.add(op.edgeVariable)
+		if (includeEdges) {
+			schema.add(op.edgeVariable)
+		}
 		schema.add(op.targetVertexVariable)
 		op.defineSchema(schema)
 	}

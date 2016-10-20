@@ -48,7 +48,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def serialize(RelalgContainer container, String filename) {		
-		val schemaInferencer = new SchemaInferencer
+		val schemaInferencer = new SchemaInferencer(false)
 		schemaInferencer.addSchemaInformation(container)
 
 		val tex = serialize(container)

@@ -35,7 +35,6 @@ class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 	val getRoutes = createGetVerticesOperator => [vertexVariable = route; container = routeSensor]
 	val getSws = createGetVerticesOperator => [vertexVariable = sw; container = routeSensor]
 	val getSwPs = createGetVerticesOperator => [vertexVariable = swP; container = routeSensor]
-	val getSensor = createGetVerticesOperator => [vertexVariable = sensor; container = routeSensor]
 
 	def routeSensorA() {
 		val expand1 = createExpandOperator => [
