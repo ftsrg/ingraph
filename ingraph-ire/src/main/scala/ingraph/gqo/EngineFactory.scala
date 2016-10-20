@@ -63,7 +63,7 @@ object EngineFactory extends App {
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName
-            val label = op.getEdgeVariable.getEdgeLabel.getName
+            val label = op.getEdgeVariable.getEdgeLabels.get(0).getName // TODO fix this for multiple labels
             val sourceNick = op.getSourceVertexVariable.getName
             val targetNick = op.getTargetVertexVariable.getName
             edgeConverters.addBinding(label, EdgeTransformer(nick, source = sourceNick, target = targetNick))
