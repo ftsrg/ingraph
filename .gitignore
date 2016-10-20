@@ -3,6 +3,8 @@ bin/
 target/
 tmp/
 .settings/
+.classpath
+.project
 .DS_Store*
 .metadata
 runtimeInfo
