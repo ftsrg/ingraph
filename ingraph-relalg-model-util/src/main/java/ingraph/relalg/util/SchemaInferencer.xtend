@@ -18,19 +18,15 @@ import relalg.RelalgContainer
 
 class SchemaInferencer {
 
-	new() {
-	}
-
 	def addSchemaInformation(RelalgContainer container) {
 		val rootExpression = container.getRootExpression
-		rootExpression.inferSchema		
+		rootExpression.inferSchema
 		container
 	}
 
 	/**
 	 * inferSchema
 	 */
-	 
 	// nullary operators
 	def dispatch List<Variable> inferSchema(GetVerticesOperator op) {
 		op.defineSchema(#[op.vertexVariable])
@@ -82,7 +78,7 @@ class SchemaInferencer {
 
 		op.schema
 	}
-	
+
 	def dispatch List<Variable> inferSchema(UnionOperator op) {
 		// The openCypher acceptance test and the Neo4j code contradict each other:
 		// OpenCypher

@@ -12,6 +12,7 @@ class RelalgContainer {
 	refers Operator rootExpression
 	contains NamedElement[] elements opposite ^container
 	contains Operator[] operators opposite ^container
+	contains Expression[] expressions opposite ^container
 }
 
 abstract class NamedElement {
@@ -24,7 +25,7 @@ class VertexLabel extends Label {}
 class EdgeLabel extends Label {}
 
 /* Variables */
-abstract class Variable extends NamedElement, ReturnableElement {
+abstract class Variable extends NamedElement, ReturnableElement, ComparableElement {
 	boolean dontCare = "false"
 }
 class ElementVariable extends Variable {
@@ -74,7 +75,7 @@ class ProductionOperator extends AlphaOperator {}
 
 class SelectionOperator extends AlphaOperator {
 	String conditionString
-	refers Expression expression
+	refers Expression condition
 }
 
 class ProjectionOperator extends AlphaOperator {
@@ -116,24 +117,27 @@ class UnionOperator extends BetaOperator {}
 /* expression */
 
 abstract class Expression {
+	refers RelalgContainer ^container opposite expressions
 	String text
 }
 
-class ArithmeticOperationExpression {
+abstract class BinaryExpression extends Expression {}
+
+class ArithmeticOperationExpression extends BinaryExpression {
 	BinaryArithmeticOperator operator
 }
 
-class ComparisonExpression {
+class ArithmeticComparisonExpression extends BinaryExpression {
 	ArithmeticComparisonOperator operator
-	refers Comparable leftOperand
-	refers Comparable rightOperand
+	refers ComparableElement leftOperand
+	refers ComparableElement rightOperand
 }
 
-abstract class Comparable {}
+abstract class ComparableElement {}
 
 abstract class Atom extends Expression {}
 
-abstract class Literal extends Atom, Comparable {}
+abstract class Literal extends Atom, ComparableElement {}
 
 class StringLiteral extends Literal {
 	String value
@@ -178,4 +182,15 @@ enum ArithmeticComparisonOperator {
 	GREATER_THAN_OR_EQUAL,
 	LESS_THAN,
 	LESS_THAN_OR_EQUAL
+}
+
+enum UnaryArithmeticOperator {
+	MINUS,
+	PLUS
+}
+
+enum BinaryLogicalOperator {
+	AND,
+	OR,
+	XOR
 }

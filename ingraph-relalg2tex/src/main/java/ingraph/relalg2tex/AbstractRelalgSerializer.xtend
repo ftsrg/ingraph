@@ -1,5 +1,6 @@
 package ingraph.relalg2tex
 
+import ingraph.relalg.util.SchemaInferencer
 import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils
@@ -7,24 +8,33 @@ import org.eclipse.emf.common.util.EList
 import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
+import relalg.ArithmeticComparisonExpression
+import relalg.ArithmeticComparisonOperator
+import relalg.AttributeVariable
 import relalg.BetaOperator
+import relalg.BinaryArithmeticOperator
+import relalg.BinaryLogicalOperator
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
+import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
+import relalg.IntegerLiteral
 import relalg.JoinOperator
 import relalg.NamedElement
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
+import relalg.RelalgContainer
 import relalg.SelectionOperator
+import relalg.StringLiteral
+import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.RelalgContainer
-import ingraph.relalg.util.SchemaInferencer
 
 abstract class AbstractRelalgSerializer {
 
@@ -108,8 +118,8 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch operatorSymbol(
 		SelectionOperator op) {
-		'''\selection{\mathtt{«op.conditionString»}}'''
-		//'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
+//		'''\selection{\mathtt{«op.conditionString»}}'''
+		'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
 	}
 
 	def dispatch operatorSymbol(GetEdgesOperator op) {
@@ -204,85 +214,85 @@ abstract class AbstractRelalgSerializer {
 	def escapedName(NamedElement element) {
 		'''«element?.name?.escape»'''
 	}
-//
-//	/**
-//	 * conversion for operators
-//	 */
-//	def convert(ArithmeticComparisonOperator op) {
-//		switch (op) {
-//			case EQUAL_TO: '''='''
-//			case GREATER_THAN: '''>'''
-//			case GREATER_THAN_OR_EQUAL: '''\geq'''
-//			case LESS_THAN: '''<'''
-//			case LESS_THAN_OR_EQUAL: '''\leq'''
-//			case NOT_EQUAL_TO: '''\neq'''
-//		}
-//	}
-//
-//	def convert(BinaryLogicalOperator op) {
-//		switch (op) {
-//			case AND: '''\land'''
-//			case OR: '''\lor'''
-//			case XOR: '''\lxor'''
-//		}
-//	}
-//
-//	def convert(BinaryArithmeticOperator op) {
-//		switch (op) {
-//			case DIVISION: '''/'''
-//			case MINUS: '''-'''
-//			case MOD: '''\mod'''
-//			case MULTIPLICATION: '''\cdot'''
-//			case PLUS: '''+'''
-//			case POWER: '''^'''
-//		}
-//	}
-//
-//	def convert(UnaryArithmeticOperator op) {
-//		switch (op) {
-//			case MINUS: '''-'''
-//			case PLUS: ''''''
-//		}
-//	}
-//
-//	/**
-//	 * convertComparable
-//	 */
-//	def dispatch convertComparable(IntegerLiteral integerLiteral) {
-//		'''\literal{«integerLiteral.value.toString»}'''
-//	}
-//
-//	def dispatch convertComparable(StringLiteral stringLiteral) {
-//		'''\literal{'«stringLiteral.value.toString»'}'''
-//	}
-//
-//	def dispatch convertComparable(ElementVariable elementVariable) {
-//		'''\var{«elementVariable.name»}'''
-//	}
-//
-//	def dispatch convertComparable(AttributeVariable attributeVariable) {
-//		'''\var{«attributeVariable.element.name».«attributeVariable.name»}'''
-//	}
-//
-//	/**
-//	 * convertExpression
-//	 */
-//	def dispatch convertExpression(Expression exp) {
-//	}
-//
-//	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
-//		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
-//	}
-//
-//	/**
-//	 * prettyPrintCondition
-//	 */
-//	def prettyPrintCondition(String s) {
-//		s //
-//		.replaceAll(''' XOR ''', ''' \\lxor ''') //
-//		.replaceAll(''' AND ''', ''' \\land ''') //
-//		.replaceAll(''' OR ''', ''' \\lor ''') //
-//		.replaceAll(''' ''', '''~''') //
-//	}
+
+	/**
+	 * conversion for operators
+	 */
+	def convert(ArithmeticComparisonOperator op) {
+		switch (op) {
+			case EQUAL_TO: '''='''
+			case GREATER_THAN: '''>'''
+			case GREATER_THAN_OR_EQUAL: '''\geq'''
+			case LESS_THAN: '''<'''
+			case LESS_THAN_OR_EQUAL: '''\leq'''
+			case NOT_EQUAL_TO: '''\neq'''
+		}
+	}
+
+	def convert(BinaryLogicalOperator op) {
+		switch (op) {
+			case AND: '''\land'''
+			case OR: '''\lor'''
+			case XOR: '''\lxor'''
+		}
+	}
+
+	def convert(BinaryArithmeticOperator op) {
+		switch (op) {
+			case DIVISION: '''/'''
+			case MINUS: '''-'''
+			case MOD: '''\mod'''
+			case MULTIPLICATION: '''\cdot'''
+			case PLUS: '''+'''
+			case POWER: '''^'''
+		}
+	}
+
+	def convert(UnaryArithmeticOperator op) {
+		switch (op) {
+			case MINUS: '''-'''
+			case PLUS: ''''''
+		}
+	}
+
+	/**
+	 * convertComparable
+	 */
+	def dispatch convertComparable(IntegerLiteral integerLiteral) {
+		'''\literal{«integerLiteral.value.toString»}'''
+	}
+
+	def dispatch convertComparable(StringLiteral stringLiteral) {
+		'''\literal{'«stringLiteral.value.toString»'}'''
+	}
+
+	def dispatch convertComparable(ElementVariable elementVariable) {
+		'''\var{«elementVariable.name»}'''
+	}
+
+	def dispatch convertComparable(AttributeVariable attributeVariable) {
+		'''\var{«attributeVariable.element.name».«attributeVariable.name»}'''
+	}
+
+	/**
+	 * convertExpression
+	 */
+	def dispatch convertExpression(Expression exp) {
+	}
+
+	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
+		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
+	}
+
+	/**
+	 * prettyPrintCondition
+	 */
+	def prettyPrintCondition(String s) {
+		s //
+		.replaceAll(''' XOR ''', ''' \\lxor ''') //
+		.replaceAll(''' AND ''', ''' \\land ''') //
+		.replaceAll(''' OR ''', ''' \\lor ''') //
+		.replaceAll(''' ''', '''~''') //
+	}
 
 }

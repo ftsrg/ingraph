@@ -16,7 +16,6 @@ import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchT
 import relalg.AlphaOperator
 import relalg.BetaOperator
 import relalg.ExpandOperator
-import relalg.GetEdgesOperator
 import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
@@ -71,10 +70,6 @@ class Relalg2ReteTransformation {
 		return container
 	}
 
-	def getMatcher() {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-
 	/**
 	 * Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
 	 */
@@ -82,6 +77,7 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
+			println("expand vertex rule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -101,6 +97,7 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
+			println("expandoperator rule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
