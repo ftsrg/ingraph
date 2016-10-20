@@ -25,7 +25,7 @@ class Cypher2RelalgUtil {
 	}
 
 	def ensureLabel(EdgeVariable edgeVariable, EdgeLabel label) {
-		edgeVariable.edgeLabel = label
+		edgeVariable.edgeLabels.add(label) // TODO this is not correct
 	}
 	
 	def Operator buildLeftDeepTree(Class<? extends BetaOperator> betaOperatorType,

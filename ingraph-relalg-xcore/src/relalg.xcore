@@ -32,10 +32,10 @@ class ElementVariable extends Variable {
 	refers AttributeVariable[] attributes opposite element
 }
 class VertexVariable extends ElementVariable {
-	refers VertexLabel[] vertexLabels
+	refers VertexLabel[] vertexLabels // the vertex must have *all* of these labels
 }
 class EdgeVariable extends ElementVariable {
-	refers EdgeLabel edgeLabel
+	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
 }
 class AttributeVariable extends Variable {
 	refers ElementVariable element opposite attributes

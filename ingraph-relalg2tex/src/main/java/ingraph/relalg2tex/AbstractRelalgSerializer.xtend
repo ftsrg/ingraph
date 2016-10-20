@@ -201,11 +201,11 @@ abstract class AbstractRelalgSerializer {
 	 * variable to string
 	 */
 	def dispatch toTexParameter(VertexVariable variable) {
-		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName]»}'''
+		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName].join("\\land")»}'''
 	}
 
 	def dispatch toTexParameter(EdgeVariable variable) {
-		'''{«variable.escapedName»}{«variable.edgeLabel.escapedName»}'''
+		'''{«variable.escapedName»}{«variable.edgeLabels.map[escapedName].join("\\lor")»}'''
 	}
 
 	/**

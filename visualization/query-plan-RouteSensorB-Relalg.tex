@@ -6,24 +6,22 @@
 
 \begin{document}
 \begin{preview}
-\begin{tikzpicture}
-\linespread{1.25}
-\Tree
-[. {$\antijoin \{\var{sensor}, \var{route}\}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor, \_e3, route, \_e4} \rangle$}
-	[. {$\expandin{swP}{route}{[Route]}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor, \_e3, route} \rangle$}
-		[. {$\expandout{sw}{sensor}{[Sensor]}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor} \rangle$}
-			[. {$\expandout{swP}{sw}{[Switch]}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw} \rangle$}
-				[. {$\getvertices{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{swP} \rangle$}
-				]
-			]
-		]
-	]
-	[. {$\expandout{route}{sensor}{[Sensor]}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
-		[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
-		]
-	]
+\begin{forest} for tree={align=center}
+[{$\antijoin \{\var{sensor}, \var{route}\}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor, \_e3, route, \_e4} \rangle$}
+[{$\expandin{swP}{route}{Route}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor, \_e3, route} \rangle$}
+[{$\expandout{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw, \_e2, sensor} \rangle$}
+[{$\expandout{swP}{sw}{Switch}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{swP, \_e1, sw} \rangle$}
+[{$\getvertices{swP}{SwitchPosition}$ \\ \footnotesize $\color{gray} \langle \var{swP} \rangle$}
+]
+]
+]
+]
+[{$\expandout{route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
+[{$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
+]
+]
 ]
 ;
-\end{tikzpicture}
+\end{forest}
 \end{preview}
 \end{document}

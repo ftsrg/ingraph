@@ -26,10 +26,10 @@ class RouteSensorQueryPlanFactory extends QueryPlanFactory {
 	val sensor = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); container = routeSensor]
 
 	// edge variables
-	val target = createEdgeVariable => [name = "_e1"; edgeLabel = targetLabel; container = routeSensor]
-	val monitoredBy = createEdgeVariable => [name = "_e2"; edgeLabel = monitoredByLabel; container = routeSensor]
-	val follows = createEdgeVariable => [name = "_e3"; edgeLabel = followsLabel; container = routeSensor]
-	val gathers = createEdgeVariable => [name = "_e4"; edgeLabel = gathersLabel; container = routeSensor]
+	val target = createEdgeVariable => [name = "_e1"; edgeLabels.add(targetLabel); container = routeSensor]
+	val monitoredBy = createEdgeVariable => [name = "_e2"; edgeLabels.add(monitoredByLabel); container = routeSensor]
+	val follows = createEdgeVariable => [name = "_e3"; edgeLabels.add(followsLabel); container = routeSensor]
+	val gathers = createEdgeVariable => [name = "_e4"; edgeLabels.add(gathersLabel); container = routeSensor]
 
 	// inputs
 	val getRoutes = createGetVerticesOperator => [vertexVariable = route; container = routeSensor]
