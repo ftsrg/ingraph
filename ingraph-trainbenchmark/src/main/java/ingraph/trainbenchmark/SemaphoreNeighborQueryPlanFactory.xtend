@@ -8,65 +8,44 @@ class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 	// container
 	val semaphoreNeighbor = createRelalgContainer
 	
-//	val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-//	val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
-//	val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
-//
-//	val connectsToLabel = createEdgeLabel => [name = "connectsTo"; it.container = container]
-//	val entryLabel = createEdgeLabel => [name = "entry"; it.container = container]
-//	val exitLabel = createEdgeLabel => [name = "exit"; it.container = container]
-//	val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-//	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
-//
-//	val route1 = createVertexVariable => [name = "route1"; vertexLabel = routeLabel; it.container = container]
-//	val route2 = createVertexVariable => [name = "route2"; vertexLabel = routeLabel; it.container = container]
-//	val semaphore = createVertexVariable => [
-//		name = "semaphore";
-//		vertexLabel = semaphoreLabel;
-//		it.container = container
-//	]
-//	val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabel = sensorLabel; it.container = container]
-//	val sensor2 = createVertexVariable => [name = "sensor"; vertexLabel = sensorLabel; it.container = container]
-//	val te1 = createVertexVariable => [name = "te1"; it.container = container]
-//	val te2 = createVertexVariable => [name = "te2"; it.container = container]
-//
-//	def semaphoreNeighborA() {
-//		val _e1 = createEdgeVariable => [name = "_e1"; edgeLabel = exitLabel; dontCare = true; it.container = container]
-//		val _e2 = createEdgeVariable => [
-//			name = "_e2";
-//			edgeLabel = gathersLabel;
-//			dontCare = true;
-//			it.container = container
-//		]
-//		val _e3 = createEdgeVariable => [
-//			name = "_e3";
-//			edgeLabel = monitoredByLabel;
-//			dontCare = true;
-//			it.container = container
-//		]
-//		val _e4 = createEdgeVariable => [
-//			name = "_e4";
-//			edgeLabel = connectsToLabel;
-//			dontCare = true;
-//			it.container = container
-//		]
-//		val _e5 = createEdgeVariable => [
-//			name = "_e5";
-//			edgeLabel = monitoredByLabel;
-//			dontCare = true;
-//			it.container = container
-//		]
-//		val _e6 = createEdgeVariable => [
-//			name = "_e6";
-//			edgeLabel = gathersLabel;
-//			dontCare = true;
-//			it.container = container
-//		]
-//		val _e7 = createEdgeVariable =>
-//			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.container = container]
-//
-//		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore]
-//
+	// vertex labels
+	val routeLabel = createVertexLabel => [name = "Route"; container = semaphoreNeighbor]
+	val semaphoreLabel = createVertexLabel => [name = "Semaphore"; container = semaphoreNeighbor]
+	val sensorLabel = createVertexLabel => [name = "Sensor"; container = semaphoreNeighbor]
+
+	// edge labels
+	val connectsToLabel = createEdgeLabel => [name = "connectsTo"; container = semaphoreNeighbor]
+	val entryLabel = createEdgeLabel => [name = "entry"; container = semaphoreNeighbor]
+	val exitLabel = createEdgeLabel => [name = "exit"; container = semaphoreNeighbor]
+	val gathersLabel = createEdgeLabel => [name = "gathers"; container = semaphoreNeighbor]
+	val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; container = semaphoreNeighbor]
+
+	// vertex variables
+	val route1 = createVertexVariable => [name = "route1"; vertexLabels.add(routeLabel); container = semaphoreNeighbor]
+	val route2 = createVertexVariable => [name = "route2"; vertexLabels.add(routeLabel); container = semaphoreNeighbor]
+	val semaphore = createVertexVariable => [name = "semaphore"; vertexLabels.add(semaphoreLabel); container = semaphoreNeighbor]
+	val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabels.add(sensorLabel); container = semaphoreNeighbor]
+	val sensor2 = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); container = semaphoreNeighbor]
+	val te1 = createVertexVariable => [name = "te1"; container = semaphoreNeighbor]
+	val te2 = createVertexVariable => [name = "te2"; container = semaphoreNeighbor]
+
+	// edge variables
+	val gathers = createEdgeVariable => [name = "_e1"; edgeLabel = gathersLabel; container = semaphoreNeighbor]
+	val monitoredBy = createEdgeVariable => [name = "_e2"; edgeLabel = monitoredByLabel; container = semaphoreNeighbor]
+	val connectsTo = createEdgeVariable => [name = "_e3"; edgeLabel = connectsToLabel; container = semaphoreNeighbor]
+	val entry = createEdgeVariable => [name = "_e4"; edgeLabel = entryLabel; container = semaphoreNeighbor]
+	val exit = createEdgeVariable => [name = "_e4"; edgeLabel = exitLabel; container = semaphoreNeighbor]
+	
+	// inputs
+	val getSemaphores = createGetVerticesOperator => [vertexVariable = semaphore; container = semaphoreNeighbor]
+	val getRoute1s = createGetVerticesOperator => [vertexVariable = route1; container = semaphoreNeighbor]
+	val getRoute2s = createGetVerticesOperator => [vertexVariable = route2; container = semaphoreNeighbor]
+	val getSensor1s = createGetVerticesOperator => [vertexVariable = sensor1; container = semaphoreNeighbor]
+	val getSensor2s = createGetVerticesOperator => [vertexVariable = sensor2; container = semaphoreNeighbor]
+	val getTE1s = createGetVerticesOperator => [vertexVariable = te1; container = semaphoreNeighbor]
+	val getTE2s = createGetVerticesOperator => [vertexVariable = te2; container = semaphoreNeighbor]
+
+	def semaphoreNeighborA() {
 //		val expand1 = createExpandOperator => [
 //			input = getVertices
 //			direction = Direction.IN
@@ -110,10 +89,6 @@ class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 //			edgeVariable = _e6
 //		]
 //
-//		val allDifferent = createAllDifferentOperator => [
-//			input = expand6
-//			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3, _e4, _e5, _e6))
-//		]
 //
 //		val expand7 = createExpandOperator => [
 //			input = getVertices
@@ -123,7 +98,7 @@ class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 //			edgeVariable = _e7
 //		]
 //
-//		val antiJoin = createAntiJoinOperator => [leftInput = allDifferent; rightInput = expand7] // FIXME: [semaphore, route2]
+//		val antiJoin = createAntiJoinOperator => [leftInput = ; rightInput = expand7] // FIXME: [semaphore, route2]
 //		val filter = createSelectionOperator => [input = antiJoin] // FIXME: route1 != route2
 //		val trimmer = createProjectionOperator => [
 //			input = filter
@@ -131,10 +106,10 @@ class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 //		]
 //		val de = createDuplicateEliminationOperator => [input = trimmer]
 //		val production = createProductionOperator => [input = de]
-//		container.rootExpression = production
-//		container
-//	}
-//
+//		semaphoreNeighbor.rootExpression = production
+		return semaphoreNeighbor
+	}
+
 //	def semaphoreNeighborB() {
 //		container
 //	}

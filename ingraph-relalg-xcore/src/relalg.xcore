@@ -73,7 +73,8 @@ abstract class AlphaOperator extends Operator {
 class ProductionOperator extends AlphaOperator {}
 
 class SelectionOperator extends AlphaOperator {
-	String conditionString 
+	String conditionString
+	refers Expression expression
 }
 
 class ProjectionOperator extends AlphaOperator {
@@ -112,6 +113,42 @@ class AntiJoinOperator extends AbstractJoinOperator {}
 
 class UnionOperator extends BetaOperator {}
 
+/* expression */
+
+abstract class Expression {
+	String text
+}
+
+class ArithmeticOperationExpression {
+	BinaryArithmeticOperator operator
+}
+
+class ComparisonExpression {
+	ArithmeticComparisonOperator operator
+	refers Comparable leftOperand
+	refers Comparable rightOperand
+}
+
+abstract class Comparable {}
+
+abstract class Atom extends Expression {}
+
+abstract class Literal extends Atom, Comparable {}
+
+class StringLiteral extends Literal {
+	String value
+}
+
+abstract class NumberLiteral {}
+
+class DoubleLiteral extends NumberLiteral {
+	Double value
+}
+
+class IntegerLiteral extends NumberLiteral {
+	Integer value
+}
+
 /* enums */
 
 enum Direction {
@@ -125,3 +162,20 @@ enum Order {
 	DESCENDING
 }
 
+enum BinaryArithmeticOperator {
+	PLUS,
+	MINUS,
+	MULTIPLICATION,
+	DIVISION,
+	MOD,
+	POWER
+}
+
+enum ArithmeticComparisonOperator {
+	EQUAL_TO,
+	NOT_EQUAL_TO,
+	GREATER_THAN,
+	GREATER_THAN_OR_EQUAL,
+	LESS_THAN,
+	LESS_THAN_OR_EQUAL
+}

@@ -82,7 +82,6 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			println("expandVertexRule fired " + expandOperator.schema.map[name].join(", "))
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -102,7 +101,6 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
-			println("expandOperatorRule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
