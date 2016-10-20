@@ -24,6 +24,7 @@ import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
 import relalg.RelalgContainer
+import ingraph.relalg.util.SchemaInferencer
 
 abstract class AbstractRelalgSerializer {
 
@@ -36,7 +37,10 @@ abstract class AbstractRelalgSerializer {
 		this.standaloneDocument = document
 	}
 
-	def serialize(RelalgContainer container, String filename) {
+	def serialize(RelalgContainer container, String filename) {		
+		val schemaInferencer = new SchemaInferencer
+		schemaInferencer.addSchemaInformation(container)
+
 		val tex = serialize(container)
 		if (standaloneDocument) {
 			val file = new File("../visualization/" + filename + ".tex")

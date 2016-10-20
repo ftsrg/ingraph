@@ -9,17 +9,17 @@ class TrainBenchmarkUtil {
 	static val extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def static posLength() {
-		val container = createRelalgContainer
+		val posLength = createRelalgContainer
 
-		val segmentLabel = createVertexLabel => [name = "Segment"; it.container = container]
+		val segmentLabel = createVertexLabel => [name = "Segment"; container = posLength]
 		val segment = createVertexVariable => [
 			name = "segment"
 			vertexLabels.add(segmentLabel)
-			it.container = container
+			container = posLength
 		]
-		val length = createAttributeVariable => [name = "length"; element = segment; it.container = container]	
+		val length = createAttributeVariable => [name = "length"; element = segment; container = posLength]	
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
+		val getVertices = createGetVerticesOperator => [vertexVariable = segment; container = posLength]
 
 //		val integerLiteral0 = createIntegerLiteral => [value = 0]
 //		val condition = createArithmeticComparisonExpression => [
@@ -32,58 +32,60 @@ class TrainBenchmarkUtil {
 			input = getVertices
 			conditionString = "segment.length <= 0"
 //			it.condition = condition
+			container = posLength
 		]
 		val trimmer = createProjectionOperator => [
 			input = filter1
-			variables.addAll(Arrays.asList(segment, length))
+			variables.addAll(#[segment, length])
+			container = posLength
 		] // FIXME: renaming
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
-		container.rootExpression = production
-		container
+		posLength.rootExpression = production
+		posLength
 	}
 
 	def static routeSensor() {
-		val container = createRelalgContainer
+		val routeSensor = createRelalgContainer
 
-		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-		val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
-		val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
-		val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; it.container = container]
+		val routeLabel = createVertexLabel => [name = "Route"; container = routeSensor]
+		val sensorLabel = createVertexLabel => [name = "Sensor"; container = routeSensor]
+		val switchLabel = createVertexLabel => [name = "Switch"; container = routeSensor]
+		val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; container = routeSensor]
 
-		val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
-		val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
-		val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
+		val followsLabel = createEdgeLabel => [name = "follows"; container = routeSensor]
+		val gathersLabel = createEdgeLabel => [name = "gathers"; container = routeSensor]
+		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; container = routeSensor]
+		val targetLabel = createEdgeLabel => [name = "target"; container = routeSensor]
 
-		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); it.container = container]
-		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); it.container = container]
-		val swP = createVertexVariable => [name = "swP"; vertexLabels.add(switchPositionLabel); it.container = container]
-		val sensor = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); it.container = container]
+		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); container = routeSensor]
+		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); container = routeSensor]
+		val swP = createVertexVariable => [name = "swP"; vertexLabels.add(switchPositionLabel); container = routeSensor]
+		val sensor = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); container = routeSensor]
 
 		val _e1 = createEdgeVariable => [
 			name = "_e1";
 			edgeLabel = followsLabel;
 			dontCare = true;
-			it.container = container
+			container = routeSensor
 		]
 		val _e2 = createEdgeVariable => [
 			name = "_e2";
 			edgeLabel = targetLabel;
 			dontCare = true;
-			it.container = container
+			container = routeSensor
 		]
 		val _e3 = createEdgeVariable => [
 			name = "_e3";
 			edgeLabel = monitoredByLabel;
 			dontCare = true;
-			it.container = container
+			container = routeSensor
 		]
 		val _e4 = createEdgeVariable => [
 			name = "_e4";
 			edgeLabel = gathersLabel;
 			dontCare = true;
-			it.container = container
+			container = routeSensor
 		]
 
 		val getVerticesRoute1 = createGetVerticesOperator => [vertexVariable = route]
@@ -131,68 +133,77 @@ class TrainBenchmarkUtil {
 		]
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
-		container.rootExpression = production
-		container
+		routeSensor.rootExpression = production
+		routeSensor
 	}
 
 	def static semaphoreNeighbor() {
-		val container = createRelalgContainer
+		val semaphoreNeighbor = createRelalgContainer
 
-		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
-		val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
+		val routeLabel = createVertexLabel => [name = "Route"; container = semaphoreNeighbor]
+		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; container = semaphoreNeighbor]
+		val sensorLabel = createVertexLabel => [name = "Sensor"; container = semaphoreNeighbor]
 
-		val connectsToLabel = createEdgeLabel => [name = "connectsTo"; it.container = container]
-		val entryLabel = createEdgeLabel => [name = "entry"; it.container = container]
-		val exitLabel = createEdgeLabel => [name = "exit"; it.container = container]
-		val gathersLabel = createEdgeLabel => [name = "gathers"; it.container = container]
-		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
+		val connectsToLabel = createEdgeLabel => [name = "connectsTo"; container = semaphoreNeighbor]
+		val entryLabel = createEdgeLabel => [name = "entry"; container = semaphoreNeighbor]
+		val exitLabel = createEdgeLabel => [name = "exit"; container = semaphoreNeighbor]
+		val gathersLabel = createEdgeLabel => [name = "gathers"; container = semaphoreNeighbor]
+		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; container = semaphoreNeighbor]
 
-		val route1 = createVertexVariable => [name = "route1"; vertexLabels.add(routeLabel); it.container = container]
-		val route2 = createVertexVariable => [name = "route2"; vertexLabels.add(routeLabel); it.container = container]
+		val route1 = createVertexVariable => [name = "route1"; vertexLabels.add(routeLabel); container = semaphoreNeighbor]
+		val route2 = createVertexVariable => [name = "route2"; vertexLabels.add(routeLabel); container = semaphoreNeighbor]
 		val semaphore = createVertexVariable => [
 			name = "semaphore";
 			vertexLabels.add(semaphoreLabel);
-			it.container = container
+			container = semaphoreNeighbor
 		]
-		val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabels.add(sensorLabel); it.container = container]
-		val sensor2 = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); it.container = container]
-		val te1 = createVertexVariable => [name = "te1"; it.container = container]
-		val te2 = createVertexVariable => [name = "te2"; it.container = container]
+		val sensor1 = createVertexVariable => [name = "sensor1"; vertexLabels.add(sensorLabel); container = semaphoreNeighbor]
+		val sensor2 = createVertexVariable => [name = "sensor"; vertexLabels.add(sensorLabel); container = semaphoreNeighbor]
+		val te1 = createVertexVariable => [name = "te1"; container = semaphoreNeighbor]
+		val te2 = createVertexVariable => [name = "te2"; container = semaphoreNeighbor]
 
-		val _e1 = createEdgeVariable => [name = "_e1"; edgeLabel = exitLabel; dontCare = true; it.container = container]
+		val _e1 = createEdgeVariable => [
+			name = "_e1"
+			edgeLabel = exitLabel
+			dontCare = true
+			container = semaphoreNeighbor
+		]
 		val _e2 = createEdgeVariable => [
-			name = "_e2";
-			edgeLabel = gathersLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e2"
+			edgeLabel = gathersLabel
+			dontCare = true
+			container = semaphoreNeighbor
 		]
 		val _e3 = createEdgeVariable => [
-			name = "_e3";
-			edgeLabel = monitoredByLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e3"
+			edgeLabel = monitoredByLabel
+			dontCare = true
+			container = semaphoreNeighbor
 		]
 		val _e4 = createEdgeVariable => [
-			name = "_e4";
-			edgeLabel = connectsToLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e4"
+			edgeLabel = connectsToLabel
+			dontCare = true
+			container = semaphoreNeighbor
 		]
 		val _e5 = createEdgeVariable => [
-			name = "_e5";
-			edgeLabel = monitoredByLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e5"
+			edgeLabel = monitoredByLabel
+			dontCare = true
+			container = semaphoreNeighbor
 		]
 		val _e6 = createEdgeVariable => [
-			name = "_e6";
-			edgeLabel = gathersLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e6"
+			edgeLabel = gathersLabel
+			dontCare = true
+			container = semaphoreNeighbor
 		]
-		val _e7 = createEdgeVariable =>
-			[name = "_e7"; edgeLabel = entryLabel; dontCare = true; it.container = container]
+		val _e7 = createEdgeVariable => [
+			name = "_e7"
+			edgeLabel = entryLabel
+			dontCare = true
+			container = semaphoreNeighbor
+		]
 
 		val getVertices1 = createGetVerticesOperator => [vertexVariable = semaphore]
 		val getVertices2 = createGetVerticesOperator => [vertexVariable = semaphore]
@@ -271,31 +282,31 @@ class TrainBenchmarkUtil {
 		]
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
-		container.rootExpression = production
-		container
+		semaphoreNeighbor.rootExpression = production
+		semaphoreNeighbor
 	}
 
 	def static switchMonitored() {
-		val container = createRelalgContainer
+		val switchMonitored = createRelalgContainer
 
-		val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]
-		val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
+		val sensorLabel = createVertexLabel => [name = "Sensor"; container = switchMonitored]
+		val switchLabel = createVertexLabel => [name = "Switch"; container = switchMonitored]
 
-		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; it.container = container]
+		val monitoredByLabel = createEdgeLabel => [name = "monitoredBy"; container = switchMonitored]
 
-		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); it.container = container]
+		val sw = createVertexVariable => [name = "sw"; vertexLabels.add(switchLabel); container = switchMonitored]
 		val _sensor = createVertexVariable => [
 			name = "_sensor";
 			vertexLabels.add(sensorLabel);
 			dontCare = true;
-			it.container = container
+			container = switchMonitored
 		]
 
 		val _e1 = createEdgeVariable => [
 			name = "_e1";
 			edgeLabel = monitoredByLabel;
 			dontCare = true;
-			it.container = container
+			container = switchMonitored
 		]
 
 		val getVertices1 = createGetVerticesOperator => [vertexVariable = sw]
@@ -312,59 +323,60 @@ class TrainBenchmarkUtil {
 		val antiJoin = createAntiJoinOperator => [leftInput = getVertices1; rightInput = expand1]
 		val de = createDuplicateEliminationOperator => [input = antiJoin]
 		val production = createProductionOperator => [input = de]
-		container.rootExpression = production
-		container
+		switchMonitored.rootExpression = production
+		switchMonitored
 	}
 
 	def static switchSet() {
-		val container = createRelalgContainer
+		val switchSet = createRelalgContainer
 
-		val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
-		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
-		val switchLabel = createVertexLabel => [name = "Switch"; it.container = container]
-		val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; it.container = container]
+		val routeLabel = createVertexLabel => [name = "Route"; container = switchSet]
+		val semaphoreLabel = createVertexLabel => [name = "Semaphore"; container = switchSet]
+		val switchLabel = createVertexLabel => [name = "Switch"; container = switchSet]
+		val switchPositionLabel = createVertexLabel => [name = "SwitchPosition"; container = switchSet]
 
-		val entryLabel = createEdgeLabel => [name = "entry"; it.container = container]
-		val followsLabel = createEdgeLabel => [name = "follows"; it.container = container]
-		val targetLabel = createEdgeLabel => [name = "target"; it.container = container]
+		val entryLabel = createEdgeLabel => [name = "entry"; container = switchSet]
+		val followsLabel = createEdgeLabel => [name = "follows"; container = switchSet]
+		val targetLabel = createEdgeLabel => [name = "target"; container = switchSet]
 
-		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); it.container = container]
+		val route = createVertexVariable => [name = "route"; vertexLabels.add(routeLabel); container = switchSet]
 		val sw = createVertexVariable => [
-			name = "sw";
-			vertexLabels.add(switchLabel);
-			it.container = container
+			name = "sw"
+			vertexLabels.add(switchLabel)
+			container = switchSet
 		]
 		val swP = createVertexVariable => [
-			name = "swP";
-			vertexLabels.add(switchPositionLabel);
-			it.container = container
+			name = "swP"
+			vertexLabels.add(switchPositionLabel)
+			container = switchSet
 		]
 		val semaphore = createVertexVariable => [
-			name = "semaphore";
-			vertexLabels.add(semaphoreLabel);
-			it.container = container
+			name = "semaphore"
+			vertexLabels.add(semaphoreLabel)
+			container = switchSet
 		]
 		
-		val currentPosition = createAttributeVariable => [name = "currentPosition"; element = sw; it.container = container]
-		val position = createAttributeVariable => [name = "position"; element = swP; it.container = container]
-		val signal = createAttributeVariable => [name = "signal"; element = semaphore; it.container = container]
+		val currentPosition = createAttributeVariable => [name = "currentPosition"; element = sw; container = switchSet]
+		val position = createAttributeVariable => [name = "position"; element = swP; container = switchSet]
+		val signal = createAttributeVariable => [name = "signal"; element = semaphore; container = switchSet]
 		
 		val _e1 = createEdgeVariable => [
-			name = "_e1"; 
-			edgeLabel = entryLabel;
-			dontCare = true; it.container = container
+			name = "_e1"
+			edgeLabel = entryLabel
+			dontCare = true
+			container = switchSet
 		]
 		val _e2 = createEdgeVariable => [
-			name = "_e2";
-			edgeLabel = followsLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e2"
+			edgeLabel = followsLabel
+			dontCare = true
+			container = switchSet
 		]
 		val _e3 = createEdgeVariable => [
-			name = "_e3";
-			edgeLabel = targetLabel;
-			dontCare = true;
-			it.container = container
+			name = "_e3"
+			edgeLabel = targetLabel
+			dontCare = true
+			container = switchSet
 		]
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = semaphore]
@@ -424,8 +436,8 @@ class TrainBenchmarkUtil {
 		] // FIXME: renaming
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
-		container.rootExpression = production
-		container
+		switchSet.rootExpression = production
+		switchSet
 	}
 
 }

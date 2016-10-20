@@ -10,17 +10,13 @@
 \linespread{1.25}
 \Tree
 [. {$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw, \_e2, sensor, \_e4} \rangle$}
-	[. {$\expandout{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw, \_e2, sensor} \rangle$}
-		[. {$\expandout{swP}{sw}{Switch}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw} \rangle$}
-			[. {$\expandout{route}{swP}{SwitchPosition}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP} \rangle$}
-				[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
-				]
+	[. {$\expandout{sw}{sensor}{[Sensor]}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw, \_e2, sensor} \rangle$}
+		[. {$\expandout{swP}{sw}{[Switch]}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, \_e1, sw} \rangle$}
+			[. {$\getedges{route}{[Route]}{swP}{[SwitchPosition]}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP} \rangle$}
 			]
 		]
 	]
-	[. {$\expandout{route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
-		[. {$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
-		]
+	[. {$\getedges{route}{[Route]}{sensor}{[Sensor]}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e4, sensor} \rangle$}
 	]
 ]
 ;

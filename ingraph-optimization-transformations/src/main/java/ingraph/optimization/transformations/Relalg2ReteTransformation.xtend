@@ -13,9 +13,13 @@ import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
 import relalg.ExpandOperator
-import relalg.RelalgFactory
-import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification
 import relalg.RelalgContainer
+import relalg.RelalgFactory
+import ingraph.relalg.util.SchemaInferencer
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.xtext.EcoreUtil2
+import relalg.AlphaOperator
+import relalg.BetaOperator
 
 class Relalg2ReteTransformation {
 
@@ -29,6 +33,9 @@ class Relalg2ReteTransformation {
 	}
 
 	def transformToRete(RelalgContainer container) {
+		val inferencer = new SchemaInferencer
+		inferencer.addSchemaInformation(container)
+		
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)
@@ -43,7 +50,7 @@ class Relalg2ReteTransformation {
 		val expandOperatorRule = expandOperatorRule
 
 		statements.fireWhilePossible(expandVertexRule)
-		statements.fireWhilePossible(expandOperatorRule)
+//		statements.fireWhilePossible(expandOperatorRule)
 
 		return container
 	}
@@ -59,7 +66,7 @@ class Relalg2ReteTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			println("expandVertexRule fired")
+			println("expandVertexRule fired " + expandOperator.schema.map[name].join(", "))
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -67,13 +74,21 @@ class Relalg2ReteTransformation {
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
 			]
-
-			// change containing edge:
-			// * (parent)-[:input]->(geo) or
-			// * (parent)-[:leftInput]->(geo) or
-			// * (parent)-[:rightInput]->(geo)
-			val inputOpposite = expandOperator.eContainingFeature
-			expandOperator.eContainer.eSet(inputOpposite, getEdgesOperator)
+			
+			val parentOperator = parentOperator
+			switch parentOperator {
+				AlphaOperator: {
+					parentOperator.input = getEdgesOperator
+				}
+				BetaOperator: {
+					if (parentOperator.leftInput.equals(expandOperator)) {
+						parentOperator.leftInput = getEdgesOperator	
+					}
+					if (parentOperator.rightInput.equals(expandOperator)) {
+						parentOperator.rightInput = getEdgesOperator	
+					}
+				}
+			}
 		].build
 	}
 

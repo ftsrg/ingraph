@@ -9,8 +9,9 @@
 package relalg
 
 class RelalgContainer {
-	contains Operator rootExpression
+	refers Operator rootExpression
 	contains NamedElement[] elements opposite ^container
+	contains Operator[] operators opposite ^container
 }
 
 abstract class NamedElement {
@@ -45,6 +46,7 @@ abstract class ReturnableElement {}
 /* Operators */
 
 abstract class Operator {
+	refers RelalgContainer ^container opposite operators 
 	String description
 	refers Variable[] schema
 }

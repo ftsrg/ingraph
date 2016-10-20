@@ -7,6 +7,7 @@ import ingraph.optimization.patterns.ExpandVertexMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import relalg.ExpandOperator;
 import relalg.GetVerticesOperator;
+import relalg.Operator;
 
 /**
  * A match processor tailored for the ingraph.optimization.patterns.expandVertex pattern.
@@ -18,14 +19,15 @@ import relalg.GetVerticesOperator;
 public abstract class ExpandVertexProcessor implements IMatchProcessor<ExpandVertexMatch> {
   /**
    * Defines the action that is to be executed on each match.
+   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * @param pGetVerticesOperator the value of pattern parameter getVerticesOperator in the currently processed match
    * @param pExpandOperator the value of pattern parameter expandOperator in the currently processed match
    * 
    */
-  public abstract void process(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator);
+  public abstract void process(final Operator pParentOperator, final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator);
   
   @Override
   public void process(final ExpandVertexMatch match) {
-    process(match.getGetVerticesOperator(), match.getExpandOperator());
+    process(match.getParentOperator(), match.getGetVerticesOperator(), match.getExpandOperator());
   }
 }

@@ -5,6 +5,9 @@ import relalg.Direction
 
 class SemaphoreNeighborQueryPlanFactory extends QueryPlanFactory {
 
+	// container
+	val semaphoreNeighbor = createRelalgContainer
+	
 //	val routeLabel = createVertexLabel => [name = "Route"; it.container = container]
 //	val semaphoreLabel = createVertexLabel => [name = "Semaphore"; it.container = container]
 //	val sensorLabel = createVertexLabel => [name = "Sensor"; it.container = container]

@@ -14,7 +14,7 @@ import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
 
-class RelalgUtil {
+class Cypher2RelalgUtil {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 

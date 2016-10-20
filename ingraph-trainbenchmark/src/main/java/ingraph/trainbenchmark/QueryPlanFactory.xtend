@@ -8,9 +8,7 @@ import relalg.RelalgFactory
  */
 class QueryPlanFactory {
 
-	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
-	
-	protected val container = createRelalgContainer
+	protected val extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected val extension SchemaInferencer schemaInferencer = new SchemaInferencer
 
 }
