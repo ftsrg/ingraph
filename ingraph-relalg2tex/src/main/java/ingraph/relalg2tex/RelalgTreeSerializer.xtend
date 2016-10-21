@@ -6,6 +6,7 @@ import relalg.BetaOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
+import relalg.NullaryOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -36,7 +37,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 			«toNode((expression as AllDifferentOperator).input)»
 		«ELSE»
 			[{$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(', ')»} \rangle$}«expression?.children»
-			]
+			«IF expression instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»]
 		«ENDIF»'''
 	}
 

@@ -15,26 +15,26 @@
 [{$\join \{\var{te2}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2, sensor1, sensor2} \rangle$}
 [{$\join \{\var{te1}\}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2, sensor1} \rangle$}
 [{$\getedges{te1}{TrackElement}{te2}{TrackElement}{ct}{connectsTo}$ \\ \footnotesize $\color{gray} \langle \var{te1, te2} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 [{$\getedges{te1}{TrackElement}{sensor1}{Sensor}{mb1}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te1, sensor1} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 ]
 [{$\getedges{te2}{TrackElement}{sensor2}{Sensor}{mb2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{te2, sensor2} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 ]
 [{$\join \{\var{route1}\}$ \\ \footnotesize $\color{gray} \langle \var{route1, semaphore, sensor1} \rangle$}
 [{$\getedges{route1}{Route}{semaphore}{Semaphore}{exit}{exit}$ \\ \footnotesize $\color{gray} \langle \var{route1, semaphore} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 [{$\getedges{sensor1}{Sensor}{route1}{Route}{g1}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{sensor1, route1} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 ]
 ]
 [{$\getedges{route2}{Route}{sensor2}{Sensor}{g2}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route2, sensor2} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 ]
 ]
 [{$\getedges{route2}{Route}{semaphore}{Semaphore}{entry}{entry}$ \\ \footnotesize $\color{gray} \langle \var{route2, semaphore} \rangle$}
-]
+,tier=input,for tree={blue,densely dashed}]
 ]
 ]
 ;

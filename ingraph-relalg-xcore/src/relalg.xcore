@@ -62,12 +62,14 @@ class Cardinality {
 }
 
 /* Nullary operators */
-class GetVerticesOperator extends Operator {
+abstract class NullaryOperator extends Operator {}
+
+class GetVerticesOperator extends NullaryOperator {
 	refers VertexVariable vertexVariable
 }
 
 // (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
-class GetEdgesOperator extends Operator {
+class GetEdgesOperator extends NullaryOperator {
 	refers VertexVariable sourceVertexVariable
 	refers EdgeVariable edgeVariable
 	refers VertexVariable targetVertexVariable
