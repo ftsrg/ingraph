@@ -87,6 +87,8 @@ class ExpandOperator extends AlphaOperator {
 	refers VertexVariable sourceVertexVariable
 	refers EdgeVariable edgeVariable
 	refers VertexVariable targetVertexVariable
+	Integer minHops
+	Integer maxHops
 }
 
 class DuplicateEliminationOperator extends AlphaOperator {
@@ -95,6 +97,30 @@ class DuplicateEliminationOperator extends AlphaOperator {
 
 class AllDifferentOperator extends AlphaOperator {
 	refers EdgeVariable[] edgeVariables
+}
+
+class SortOperator extends AlphaOperator {
+	refers SortEntry[] entries
+}
+
+class SortEntry {
+	refers Variable variable
+	OrderDirection orderDirection
+}
+
+class TopOperator extends AlphaOperator {
+	Integer skip
+	Integer limit
+}
+
+class GroupingOperator extends AlphaOperator {	
+	refers GroupingEntry[] entries
+}
+
+class GroupingEntry {
+	AggregationType aggregationType
+	refers Variable variable
+	refers Variable aggregatedVariable
 }
 
 /* Beta operators */
@@ -110,9 +136,13 @@ abstract class AbstractJoinOperator extends BetaOperator {
 
 class JoinOperator extends AbstractJoinOperator {}
 
+class LeftOuterJoinOperator extends AbstractJoinOperator {}
+
 class AntiJoinOperator extends AbstractJoinOperator {}
 
-class UnionOperator extends BetaOperator {}
+class UnionOperator extends BetaOperator {
+	Boolean bag // set or bag union
+}
 
 /* expression */
 
@@ -161,7 +191,7 @@ enum Direction {
 	OUT
 }
 
-enum Order {
+enum OrderDirection {
 	ASCENDING,
 	DESCENDING
 }
@@ -193,4 +223,12 @@ enum BinaryLogicalOperator {
 	AND,
 	OR,
 	XOR
+}
+
+enum AggregationType {
+	COUNT,
+	SUM,
+	AVG,
+	MAX,
+	MIN
 }
