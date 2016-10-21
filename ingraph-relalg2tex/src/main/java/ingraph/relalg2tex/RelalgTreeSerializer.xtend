@@ -42,7 +42,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 			[
 			{$«op?.operatorToTex»$ \\
 			\footnotesize $\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
-			«IF includeCardinality» \\ \footnotesize \# «op.cardinality.prettyPrint»«ENDIF»}''' +
+			«IF includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
 		'''«op?.children»''' + // invoke children
 		'''
 			«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
@@ -77,7 +77,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		'''
 	}
 
-	def prettyPrint(Cardinality cardinality) {
+	def formatCardinality(Cardinality cardinality) {
 		return String.format("%.02f", cardinality?.value)
 	}
 

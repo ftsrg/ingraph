@@ -1,0 +1,12 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+// AND expressions are cascadable
+pattern CascadableSelection(selection : SelectionOperator, leftOperand : LogicalExpression, rightOperand : LogicalExpression) {
+	SelectionOperator.condition(selection, condition);
+	BinaryLogicalExpression.operator(condition, ::AND);
+
+	BinaryLogicalExpression.leftOperand(condition, leftOperand);
+	BinaryLogicalExpression.rightOperand(condition, rightOperand);
+}

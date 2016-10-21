@@ -32,7 +32,7 @@ class RelalgBuilder {
 	def build(Cypher cypher) {
 		EcoreUtil.resolveAll(cypher)
 
-		println(PrettyPrinter.prettyPrint(cypher))
+		println(PrettyPrinter.format(cypher))
 
 		val statement = cypher.statement
 		if (statement instanceof SingleQuery) {

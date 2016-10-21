@@ -12,13 +12,15 @@ import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticComparisonOperator
 import relalg.AttributeVariable
 import relalg.BinaryArithmeticOperator
+import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperator
+import relalg.BinaryOperator
+import relalg.BooleanLiteral
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
-import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.IntegerLiteral
@@ -34,7 +36,6 @@ import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.BinaryOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -47,7 +48,7 @@ abstract class AbstractRelalgSerializer {
 		this.standaloneDocument = document
 	}
 
-	def serialize(RelalgContainer container, String filename) {		
+	def serialize(RelalgContainer container, String filename) {
 		val schemaInferencer = new SchemaInferencer(false)
 		schemaInferencer.addSchemaInformation(container)
 
@@ -113,20 +114,21 @@ abstract class AbstractRelalgSerializer {
 		'''\expand«op.direction.directionToTex»''' + //
 		'''{«op.sourceVertexVariable.escapedName»}''' + //
 		'''«op.targetVertexVariable.toTexParameter»''' + //
-		'''«op.edgeVariable.toTexParameter»''' 
+		'''«op.edgeVariable.toTexParameter»'''
 	}
 
 	def dispatch operatorToTex(
 		SelectionOperator op) {
-//		'''\selection{\mathtt{«op.conditionString»}}'''
-		'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
+		'''\selection{''' +
+		'''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettifyCondition»}«ENDIF»''' +
+		'''}'''
 	}
 
 	def dispatch operatorToTex(GetEdgesOperator op) {
 		'''\getedgesi''' + //
 		'''«op.sourceVertexVariable.toTexParameter»''' + //
 		'''«op.targetVertexVariable.toTexParameter»''' + //
-		'''$ \\ $''' + // ugly hack for adding a newline and starting a new math expression 
+		'''$ \\ $''' + // oops - ugly hack for adding a newline and starting a new math expression 
 		'''\getedgesii''' + //
 		'''«op.edgeVariable.toTexParameter»'''
 	}
@@ -279,17 +281,22 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * convertExpression
 	 */
-	def dispatch convertExpression(Expression exp) {
+	def dispatch String convertExpression(BinaryLogicalExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
 	}
 
-	def dispatch convertExpression(ArithmeticComparisonExpression exp) {
+	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {
 		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
+	}
+	
+	def dispatch String convertExpression(BooleanLiteral exp) {
+		'''\mathtt{«if (exp.value) "true" else "false"»}'''
 	}
 
 	/**
-	 * prettyPrintCondition
+	 * prettifyCondition
 	 */
-	def prettyPrintCondition(String s) {
+	def prettifyCondition(String s) {
 		s //
 		.replaceAll(''' XOR ''', ''' \\lxor ''') //
 		.replaceAll(''' AND ''', ''' \\land ''') //

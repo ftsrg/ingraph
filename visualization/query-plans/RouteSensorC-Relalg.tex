@@ -10,55 +10,55 @@
 [
 {$\join \{\var{swP}, \var{sw}\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sw, sensor} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\antijoin \{\var{route}, \var{sensor}\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sw, sensor} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\join \{\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sw, sensor} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\expandout{route}{swP}{SwitchPosition}{\_e3}{follows}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\getvertices{route}{Route}$ \\
 \footnotesize $\color{gray} \langle \var{route} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
 {$\expandin{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\
 \footnotesize $\color{gray} \langle \var{sw, sensor} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\getvertices{sw}{Switch}$ \\
 \footnotesize $\color{gray} \langle \var{sw} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
 {$\expandout{route}{sensor}{Sensor}{\_e4}{gathers}$ \\
 \footnotesize $\color{gray} \langle \var{route, sensor} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\getvertices{route}{Route}$ \\
 \footnotesize $\color{gray} \langle \var{route} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
 {$\expandin{swP}{sw}{Switch}{\_e1}{target}$ \\
 \footnotesize $\color{gray} \langle \var{swP, sw} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\getvertices{swP}{SwitchPosition}$ \\
 \footnotesize $\color{gray} \langle \var{swP} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]

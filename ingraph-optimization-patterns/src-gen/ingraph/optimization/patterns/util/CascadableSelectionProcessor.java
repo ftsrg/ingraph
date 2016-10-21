@@ -1,0 +1,32 @@
+/**
+ * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/TrivialOptimizations.vql
+ */
+package ingraph.optimization.patterns.util;
+
+import ingraph.optimization.patterns.CascadableSelectionMatch;
+import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
+import relalg.LogicalExpression;
+import relalg.SelectionOperator;
+
+/**
+ * A match processor tailored for the ingraph.optimization.patterns.CascadableSelection pattern.
+ * 
+ * Clients should derive an (anonymous) class that implements the abstract process().
+ * 
+ */
+@SuppressWarnings("all")
+public abstract class CascadableSelectionProcessor implements IMatchProcessor<CascadableSelectionMatch> {
+  /**
+   * Defines the action that is to be executed on each match.
+   * @param pSelection the value of pattern parameter selection in the currently processed match
+   * @param pLeftOperand the value of pattern parameter leftOperand in the currently processed match
+   * @param pRightOperand the value of pattern parameter rightOperand in the currently processed match
+   * 
+   */
+  public abstract void process(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand);
+  
+  @Override
+  public void process(final CascadableSelectionMatch match) {
+    process(match.getSelection(), match.getLeftOperand(), match.getRightOperand());
+  }
+}

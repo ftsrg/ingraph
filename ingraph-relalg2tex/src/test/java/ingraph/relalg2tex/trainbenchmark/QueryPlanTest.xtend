@@ -1,12 +1,13 @@
 package ingraph.relalg2tex.trainbenchmark
 
+import ingraph.emf.util.PrettyPrinter
 import ingraph.optimization.transformations.Relalg2ReteTransformation
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import ingraph.trainbenchmark.SemaphoreNeighborQueryPlanFactory
 import org.junit.Test
 
-class OptimizationTest {
+class QueryPlanTest {
 
 	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer
 	val extension Relalg2ReteTransformation transformation = new Relalg2ReteTransformation

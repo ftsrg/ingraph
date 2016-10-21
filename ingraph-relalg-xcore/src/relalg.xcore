@@ -85,7 +85,7 @@ class ProductionOperator extends UnaryOperator {
 
 class SelectionOperator extends UnaryOperator {
 	String conditionString
-	refers Expression condition
+	refers LogicalExpression condition
 }
 
 class ProjectionOperator extends UnaryOperator {
@@ -109,7 +109,7 @@ class AllDifferentOperator extends UnaryOperator {
 	refers EdgeVariableSet edgeVariableSets
 }
 
-class EdgeVariableSet { // TODO
+class EdgeVariableSet { // TODO - we should think about this a bit more
 	refers EdgeVariable[] edgeVariables
 }
 
@@ -166,17 +166,35 @@ abstract class Expression {
 	String text
 }
 
+abstract class ArithmeticExpression {
+}
+
 abstract class BinaryExpression extends Expression {
 }
 
-class ArithmeticOperationExpression extends BinaryExpression {
+// arithmetic operations evaluate to a number, hence they are arithmetic expressins
+class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
 	BinaryArithmeticOperator operator
 }
 
-class ArithmeticComparisonExpression extends BinaryExpression {
+// artihmetic comparisons evaluate to true/false, hence they are logical expressions
+class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
 	ArithmeticComparisonOperator operator
 	refers ComparableElement leftOperand
 	refers ComparableElement rightOperand
+}
+
+// not sure what we will make of this
+abstract class StringExpression extends Expression {
+}
+
+abstract class LogicalExpression extends Expression {
+}
+
+class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
+	BinaryLogicalOperator operator
+	refers LogicalExpression leftOperand
+	refers LogicalExpression rightOperand
 }
 
 abstract class ComparableElement {
@@ -188,11 +206,15 @@ abstract class Atom extends Expression {
 abstract class Literal extends Atom, ComparableElement {
 }
 
-class StringLiteral extends Literal {
+class BooleanLiteral extends Literal, LogicalExpression {
+	boolean value
+}
+
+class StringLiteral extends Literal, StringExpression {
 	String value
 }
 
-abstract class NumberLiteral {
+abstract class NumberLiteral extends Literal, ArithmeticExpression {
 }
 
 class DoubleLiteral extends NumberLiteral {

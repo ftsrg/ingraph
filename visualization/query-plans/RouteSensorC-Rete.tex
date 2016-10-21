@@ -10,36 +10,36 @@
 [
 {$\join \{\var{swP}, \var{sw}\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sensor, sw} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\antijoin \{\var{route}, \var{sensor}\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sensor, sw} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\join \{\}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP, sensor, sw} \rangle$
- \\ \footnotesize \# nu}
+}
 [
 {$\getedgesi{route}{Route}{swP}{SwitchPosition}$ \\ $\getedgesii{\_e3}{follows}$ \\
 \footnotesize $\color{gray} \langle \var{route, swP} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 [
 {$\getedgesi{sensor}{Sensor}{sw}{Switch}$ \\ $\getedgesii{\_e2}{monitoredBy}$ \\
 \footnotesize $\color{gray} \langle \var{sensor, sw} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
 {$\getedgesi{route}{Route}{sensor}{Sensor}$ \\ $\getedgesii{\_e4}{gathers}$ \\
 \footnotesize $\color{gray} \langle \var{route, sensor} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
 {$\getedgesi{sw}{Switch}{swP}{SwitchPosition}$ \\ $\getedgesii{\_e1}{target}$ \\
 \footnotesize $\color{gray} \langle \var{sw, swP} \rangle$
- \\ \footnotesize \# nu},tier=input,for tree={blue,densely dashed}
+},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ;
