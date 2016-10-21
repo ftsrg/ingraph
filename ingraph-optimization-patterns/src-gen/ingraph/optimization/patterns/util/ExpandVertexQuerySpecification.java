@@ -105,11 +105,11 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ExpandVertexQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://www.example.org/relalg", "Operator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
-    private final PParameter parameter_pGetVerticesOperator = new PParameter("getVerticesOperator", "relalg.GetVerticesOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://www.example.org/relalg", "GetVerticesOperator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pGetVerticesOperator = new PParameter("getVerticesOperator", "relalg.GetVerticesOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "GetVerticesOperator")), PParameterDirection.INOUT);
     
-    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://www.example.org/relalg", "ExpandOperator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "ExpandOperator")), PParameterDirection.INOUT);
     
     private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pGetVerticesOperator, parameter_pExpandOperator);
     
@@ -138,9 +138,9 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_getVerticesOperator = body.getOrCreateVariableByName("getVerticesOperator");
       		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "GetVerticesOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_getVerticesOperator, parameter_pGetVerticesOperator),
@@ -149,12 +149,12 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       		// 	find parentOperator(parentOperator, expandOperator)
       		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_expandOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "AlphaOperator", "input")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AlphaOperator", "input")));
       		new Equality(body, var__virtual_0_, var_getVerticesOperator);
       		// 	GetVerticesOperator(getVerticesOperator)
-      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "GetVerticesOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
       		bodies.add(body);
       	}
       	// to silence compiler error

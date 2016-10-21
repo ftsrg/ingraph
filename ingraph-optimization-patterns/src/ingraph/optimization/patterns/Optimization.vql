@@ -1,6 +1,6 @@
 package ingraph.optimization.patterns
 
-import "http://www.example.org/relalg";
+import "http://ingraph/relalg";
 
 pattern parentOperator(parentOperator : Operator, operator : Operator) {
 	AlphaOperator.input(parentOperator, operator);

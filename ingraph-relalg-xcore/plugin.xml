@@ -24,7 +24,7 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated model -->
       <package
-            uri="http://www.example.org/relalg"
+            uri="http://ingraph/relalg"
             class="relalg.RelalgPackage"
             genModel="src/relalg.xcore"/>
    </extension>

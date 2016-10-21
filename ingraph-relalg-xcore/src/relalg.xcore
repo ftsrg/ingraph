@@ -1,5 +1,5 @@
 @Ecore(
-	nsURI="http://www.example.org/relalg"
+	nsURI="http://ingraph/relalg"
 )
 @GenModel(
     bundleManifest="false",
@@ -47,7 +47,7 @@ abstract class ReturnableElement {}
 /* Operators */
 
 abstract class Operator {
-	refers RelalgContainer ^container opposite operators 
+	refers RelalgContainer ^container opposite operators
 	String description
 	refers Variable[] schema
 }
@@ -90,7 +90,7 @@ class ExpandOperator extends AlphaOperator {
 }
 
 class DuplicateEliminationOperator extends AlphaOperator {
-	
+
 }
 
 class AllDifferentOperator extends AlphaOperator {

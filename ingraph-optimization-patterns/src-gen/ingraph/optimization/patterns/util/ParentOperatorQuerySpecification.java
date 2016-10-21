@@ -103,9 +103,9 @@ public final class ParentOperatorQuerySpecification extends BaseGeneratedEMFQuer
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ParentOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://www.example.org/relalg", "Operator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
-    private final PParameter parameter_pOperator = new PParameter("operator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://www.example.org/relalg", "Operator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pOperator = new PParameter("operator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
     private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pOperator);
     
@@ -133,16 +133,16 @@ public final class ParentOperatorQuerySpecification extends BaseGeneratedEMFQuer
       		PBody body = new PBody(this);
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_operator = body.getOrCreateVariableByName("operator");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_operator, parameter_pOperator)
       		));
       		// 	AlphaOperator.input(parentOperator, operator)
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "AlphaOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AlphaOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "AlphaOperator", "input")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AlphaOperator", "input")));
       		new Equality(body, var__virtual_0_, var_operator);
       		bodies.add(body);
       	}
@@ -150,16 +150,16 @@ public final class ParentOperatorQuerySpecification extends BaseGeneratedEMFQuer
       		PBody body = new PBody(this);
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_operator = body.getOrCreateVariableByName("operator");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_operator, parameter_pOperator)
       		));
       		// 	BetaOperator.leftInput(parentOperator, operator)
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "BetaOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BetaOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "BetaOperator", "leftInput")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BetaOperator", "leftInput")));
       		new Equality(body, var__virtual_0_, var_operator);
       		bodies.add(body);
       	}
@@ -167,16 +167,16 @@ public final class ParentOperatorQuerySpecification extends BaseGeneratedEMFQuer
       		PBody body = new PBody(this);
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_operator = body.getOrCreateVariableByName("operator");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_operator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_operator, parameter_pOperator)
       		));
       		// 	BetaOperator.rightInput(parentOperator, operator)
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "BetaOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BetaOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://www.example.org/relalg", "BetaOperator", "rightInput")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BetaOperator", "rightInput")));
       		new Equality(body, var__virtual_0_, var_operator);
       		bodies.add(body);
       	}
