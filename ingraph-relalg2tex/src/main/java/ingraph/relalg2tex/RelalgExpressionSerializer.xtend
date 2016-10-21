@@ -28,19 +28,19 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	 * children
 	 */
 	def dispatch CharSequence children(GetVerticesOperator op) {
-		'''«op.operatorSymbol»'''
+		'''«op.operatorToTex»'''
 	}
 
 	def dispatch CharSequence children(GetEdgesOperator op) {
-		'''«op.operatorSymbol»'''
+		'''«op.operatorToTex»'''
 	}
 
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operatorSymbol» \left(«op.getInput.children»\right)'''
+		'''«op.operatorToTex» \left(«op.getInput.children»\right)'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.getLeftInput.children» «op.operatorSymbol» «op.getRightInput.children»'''
+		'''«op.getLeftInput.children» «op.operatorToTex» «op.getRightInput.children»'''
 	}
 
 }

@@ -97,47 +97,49 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * operatorSymbol
 	 */
-	def dispatch operatorSymbol(AllDifferentOperator op) {
+	def dispatch operatorToTex(AllDifferentOperator op) {
 		'''\alldifferent{«op.edgeVariables.edgeVariableList»}'''
 	}
 
-	def dispatch operatorSymbol(BinaryOperator op) {
+	def dispatch operatorToTex(BinaryOperator op) {
 		'''\«binaryOperator(op)»'''
 	}
 
-	def dispatch operatorSymbol(DuplicateEliminationOperator op) {
+	def dispatch operatorToTex(DuplicateEliminationOperator op) {
 		'''\duplicateelimination'''
 	}
 
-	def dispatch operatorSymbol(ExpandOperator op) {
+	def dispatch operatorToTex(ExpandOperator op) {
 		'''\expand«op.direction.directionToTex»''' + //
 		'''{«op.sourceVertexVariable.escapedName»}''' + //
 		'''«op.targetVertexVariable.toTexParameter»''' + //
 		'''«op.edgeVariable.toTexParameter»''' 
 	}
 
-	def dispatch operatorSymbol(
+	def dispatch operatorToTex(
 		SelectionOperator op) {
 //		'''\selection{\mathtt{«op.conditionString»}}'''
 		'''\selection{«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettyPrintCondition»}«ENDIF»}'''
 	}
 
-	def dispatch operatorSymbol(GetEdgesOperator op) {
-		'''\getedges''' + //
+	def dispatch operatorToTex(GetEdgesOperator op) {
+		'''\getedgesi''' + //
 		'''«op.sourceVertexVariable.toTexParameter»''' + //
 		'''«op.targetVertexVariable.toTexParameter»''' + //
+		'''$ \\ $''' + // ugly hack for adding a newline and starting a new math expression 
+		'''\getedgesii''' + //
 		'''«op.edgeVariable.toTexParameter»'''
 	}
 
-	def dispatch operatorSymbol(GetVerticesOperator op) {
+	def dispatch operatorToTex(GetVerticesOperator op) {
 		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
 	}
 
-	def dispatch operatorSymbol(ProductionOperator op) {
+	def dispatch operatorToTex(ProductionOperator op) {
 		throw new UnsupportedOperationException('''Visualization of production nodes is currently not supported.''')
 	}
 
-	def dispatch operatorSymbol(ProjectionOperator op) {
+	def dispatch operatorToTex(ProjectionOperator op) {
 		'''\projection{«op.variables.variableList»}'''
 	}
 

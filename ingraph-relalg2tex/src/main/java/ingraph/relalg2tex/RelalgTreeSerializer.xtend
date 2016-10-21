@@ -7,8 +7,11 @@ import relalg.Operator
 import relalg.NullaryOperator
 import relalg.UnaryOperator
 import relalg.BinaryOperator
+import relalg.Cardinality
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
+
+	val includeCardinality = true
 
 	new() {
 		super(true)
@@ -30,15 +33,22 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	/**
 	 * toNode
 	 */
-	def CharSequence toNode(
-		Operator expression) {
+	def CharSequence toNode(Operator op) {
 		'''
-		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
-			«toNode((expression as AllDifferentOperator).getInput)»
-		«ELSE»
-			[{$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(', ')»} \rangle$}«expression?.children»
-			«IF expression instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»]
-		«ENDIF»'''
+«««		Optimization: an AllDifferent operator with a single edge variable is not useful at all.
+«««		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
+«««			«toNode((expression as AllDifferentOperator).getInput)»
+«««		«ELSE»
+			[
+			{$«op?.operatorToTex»$ \\
+			\footnotesize $\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
+			«IF includeCardinality» \\ \footnotesize \# «op.cardinality.prettyPrint»«ENDIF»}''' +
+		'''«op?.children»''' + // invoke children
+		'''
+			«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
+			]
+«««		«ENDIF»
+		'''
 	}
 
 	/**
@@ -65,6 +75,10 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 				«op.getLeftInput.toNode»
 				«op.getRightInput.toNode»
 		'''
+	}
+
+	def prettyPrint(Cardinality cardinality) {
+		return String.format("%.02f", cardinality?.value)
 	}
 
 }

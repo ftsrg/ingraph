@@ -58,7 +58,7 @@ abstract class Operator {
 }
 
 class Cardinality {
-	Double cardinality
+	Double value
 }
 
 /* Nullary operators */

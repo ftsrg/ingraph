@@ -2,7 +2,6 @@ package ingraph.optimization.transformations
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
-import ingraph.relalg.util.SchemaInferencer
 import org.apache.log4j.Level
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
@@ -13,12 +12,12 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
+import relalg.BinaryOperator
 import relalg.ExpandOperator
 import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryOperator
-import relalg.BinaryOperator
 
 class Relalg2ReteTransformation {
 
