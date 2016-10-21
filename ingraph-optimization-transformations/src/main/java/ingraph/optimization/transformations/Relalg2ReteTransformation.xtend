@@ -48,9 +48,6 @@ class Relalg2ReteTransformation {
 	}
 
 	def transformToRete(RelalgContainer container) {
-		val inferencer = new SchemaInferencer
-		inferencer.addSchemaInformation(container)
-		
 		val resourceSet = new ResourceSetImpl
 		val resource = resourceSet.createResource(URI.createURI("queryplan.relalg"))
 		resource.contents.add(container)

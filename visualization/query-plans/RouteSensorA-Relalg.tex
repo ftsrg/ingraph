@@ -1,0 +1,27 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[{$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, swP, sw, sensor} \rangle$}
+[{$\expandout{sw}{sensor}{Sensor}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{route, swP, sw, sensor} \rangle$}
+[{$\expandout{swP}{sw}{Switch}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{route, swP, sw} \rangle$}
+[{$\expandout{route}{swP}{SwitchPosition}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, swP} \rangle$}
+[{$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
+]
+]
+]
+]
+[{$\expandout{route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, sensor} \rangle$}
+[{$\getvertices{route}{Route}$ \\ \footnotesize $\color{gray} \langle \var{route} \rangle$}
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

@@ -78,8 +78,8 @@ abstract class AbstractRelalgSerializer {
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 				
-				\input{inputs/relalg-packages}
-				\input{inputs/relalg-commands}
+				\input{../inputs/relalg-packages}
+				\input{../inputs/relalg-commands}
 				
 				\begin{document}
 				\begin{preview}

@@ -1,0 +1,27 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[{$\join \{\var{swP}, \var{sw}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor, \_e4, \_e1} \rangle$}
+[{$\antijoin \{\var{route}, \var{sensor}\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor, \_e4} \rangle$}
+[{$\join \{\}$ \\ \footnotesize $\color{gray} \langle \var{route, \_e3, swP, sw, \_e2, sensor} \rangle$}
+[{$\getedges{route}{Route}{swP}{SwitchPosition}{\_e3}{follows}$ \\ \footnotesize $\color{gray} \langle \var{route, swP} \rangle$}
+]
+[{$\getedges{sensor}{Sensor}{sw}{Switch}{\_e2}{monitoredBy}$ \\ \footnotesize $\color{gray} \langle \var{sensor, sw} \rangle$}
+]
+]
+[{$\getedges{route}{Route}{sensor}{Sensor}{\_e4}{gathers}$ \\ \footnotesize $\color{gray} \langle \var{route, sensor} \rangle$}
+]
+]
+[{$\getedges{sw}{Switch}{swP}{SwitchPosition}{\_e1}{target}$ \\ \footnotesize $\color{gray} \langle \var{sw, swP} \rangle$}
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}
