@@ -151,7 +151,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AlphaOperator", "input")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
       		new Equality(body, var__virtual_0_, var_getVerticesOperator);
       		// 	GetVerticesOperator(getVerticesOperator)
       		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));

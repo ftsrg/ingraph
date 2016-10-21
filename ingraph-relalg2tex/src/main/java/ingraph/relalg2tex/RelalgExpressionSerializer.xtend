@@ -1,10 +1,10 @@
 package ingraph.relalg2tex
 
-import relalg.AlphaOperator
-import relalg.BetaOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
+import relalg.UnaryOperator
+import relalg.BinaryOperator
 
 class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
@@ -35,12 +35,12 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 		'''«op.operatorSymbol»'''
 	}
 
-	def dispatch CharSequence children(AlphaOperator op) {
-		'''«op.operatorSymbol» \left(«op.input.children»\right)'''
+	def dispatch CharSequence children(UnaryOperator op) {
+		'''«op.operatorSymbol» \left(«op.getInput.children»\right)'''
 	}
 
-	def dispatch CharSequence children(BetaOperator op) {
-		'''«op.leftInput.children» «op.operatorSymbol» «op.rightInput.children»'''
+	def dispatch CharSequence children(BinaryOperator op) {
+		'''«op.getLeftInput.children» «op.operatorSymbol» «op.getRightInput.children»'''
 	}
 
 }

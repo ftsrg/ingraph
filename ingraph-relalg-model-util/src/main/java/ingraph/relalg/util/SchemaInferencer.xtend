@@ -4,7 +4,6 @@ import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import java.util.List
 import relalg.AbstractJoinOperator
-import relalg.AlphaOperator
 import relalg.AttributeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
@@ -15,6 +14,7 @@ import relalg.ProjectionOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.RelalgContainer
+import relalg.UnaryOperator
 
 class SchemaInferencer {
 
@@ -52,7 +52,7 @@ class SchemaInferencer {
 
 	// unary operators
 	def dispatch List<Variable> inferSchema(ProjectionOperator op) {
-		val schema = op.input.inferSchema
+		val schema = op.getInput.inferSchema
 
 		// check if all projected variables are in the schema
 		op.variables.filter(typeof(AttributeVariable)).forEach [
@@ -69,7 +69,7 @@ class SchemaInferencer {
 	}
 
 	def dispatch List<Variable> inferSchema(ExpandOperator op) {
-		val schema = Lists.newArrayList(op.input.inferSchema)
+		val schema = Lists.newArrayList(op.getInput.inferSchema)
 		if (includeEdges) {
 			schema.add(op.edgeVariable)
 		}
@@ -78,14 +78,14 @@ class SchemaInferencer {
 	}
 
 	// rest of the unary operators
-	def dispatch List<Variable> inferSchema(AlphaOperator op) {
-		op.defineSchema(op.input.inferSchema)
+	def dispatch List<Variable> inferSchema(UnaryOperator op) {
+		op.defineSchema(op.getInput.inferSchema)
 	}
 
 	// binary operators
 	def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
-		val leftInputSchema = Lists.newArrayList(op.leftInput.inferSchema)
-		val rightInputSchema = Lists.newArrayList(op.rightInput.inferSchema)
+		val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
+		val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
 		op.defineSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
 
 		// calculate the mutual variables
@@ -121,11 +121,11 @@ class SchemaInferencer {
 		// Neo4j
 		// https://github.com/neo4j/neo4j/blob/3.1/community/cypher/spec-suite-tools/src/test/scala/cypher/feature/steps/SpecSuiteErrorHandler.scala#L166
 		// All sub queries in an UNION must have the same column names
-		op.leftInput.inferSchema
-		op.rightInput.inferSchema
+		op.getLeftInput.inferSchema
+		op.getRightInput.inferSchema
 
 		// we only keep the left schema
-		op.defineSchema(op.leftInput.schema)
+		op.defineSchema(op.getLeftInput.schema)
 	}
 
 	/**

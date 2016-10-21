@@ -30,11 +30,11 @@ import relalg.Operator;
  * <p>Original source:
  * <code><pre>
  * pattern parentOperator(parentOperator : Operator, operator : Operator) {
- * 	AlphaOperator.input(parentOperator, operator);
+ * 	UnaryOperator.input(parentOperator, operator);
  * } or {
- * 	BetaOperator.leftInput(parentOperator, operator);
+ * 	BinaryOperator.leftInput(parentOperator, operator);
  * } or {
- * 	BetaOperator.rightInput(parentOperator, operator);
+ * 	BinaryOperator.rightInput(parentOperator, operator);
  * }
  * </pre></code>
  * 

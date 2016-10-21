@@ -41,4 +41,5 @@ xtext-gen
 generated/
 
 out/
+.tmpBin/
 

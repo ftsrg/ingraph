@@ -2,7 +2,6 @@ package ingraph.cypher2relalg.util
 
 import java.util.Iterator
 import java.util.List
-import relalg.BetaOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.ExpandOperator
@@ -13,6 +12,7 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
+import relalg.BinaryOperator
 
 class Cypher2RelalgUtil {
 
@@ -28,18 +28,18 @@ class Cypher2RelalgUtil {
 		edgeVariable.edgeLabels.add(label) // TODO this is not correct
 	}
 	
-	def Operator buildLeftDeepTree(Class<? extends BetaOperator> betaOperatorType,
+	def Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
 		Iterator<Operator> i) {
 		var Operator retVal = null
 
 		// build a left deep tree of Joins from the match clauses
 		if (i?.hasNext) {
 			for (retVal = i.next; i.hasNext;) {
-				val nextAE = switch (betaOperatorType) {
+				val nextAE = switch (binaryOperatorType) {
 					case typeof(JoinOperator): createJoinOperator
 					case typeof(UnionOperator): createUnionOperator
 					default: throw new IllegalArgumentException(
-						"Got unexpected BetaOperator type to build left-deep-tree")
+						"Got unexpected BinaryOperator type to build left-deep-tree")
 				}
 				nextAE.rightInput = i.next
 				nextAE.leftInput = retVal

@@ -17,11 +17,21 @@
 	\ifstrempty{#2}{}{\colon{\atom{#2}}}
 	)}
 
-% alpha operators
+% see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
+
+% nullary operators
+
+\newcommand{\getverticesop}{\bigcirc}
+\newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
+
+%\newcommand{\getedgesop}{\mathbin{\text{\rotatebox[origin=c]{90}{$\multimapboth$}}}}
+\newcommand{\getedgesop}{\Uparrow}
+\newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
+
+% unary operators
 
 \newcommand{\expandbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
 
-% see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
 \newcommand{\expandbothop}{\updownarrow}
 \newcommand{\expandboth}[5]{\expandbothop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
 
@@ -31,16 +41,6 @@
 \newcommand{\expandinop}{\downarrow}
 \newcommand{\expandin}[5]{\expandinop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
 
-\newcommand{\getverticesop}{\bigcirc}
-\newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
-
-%\newcommand{\getedgesop}{\mathbin{\text{\rotatebox[origin=c]{90}{$\multimapboth$}}}}
-\newcommand{\getedgesop}{\Uparrow}
-\newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
-
-%\setlength{\fboxsep}{.15\fboxsep}
-%\newcommand{\alldifferentop}{\boxed{\neq}\,\,}
-%\newcommand{\alldifferentop}{\eqvparsl}
 \newcommand{\alldifferentop}{\not\fallingdotseq}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
 
@@ -72,7 +72,7 @@
 \newcommand{\skipp}[1]{\topop^{#1}}
 \newcommand{\limit}[1]{\topop_{#1}}
 
-% beta operators
+% binary operators
 
 \newcommand{\joinop}{\bowtie}
 \newcommand{\join}{\joinop}

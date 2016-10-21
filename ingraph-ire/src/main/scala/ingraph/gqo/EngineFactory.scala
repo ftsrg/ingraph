@@ -33,7 +33,7 @@ object EngineFactory extends App {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: AlphaOperator =>
+          case op: UnaryOperator =>
             val node: ActorRef = op match {
               case op: SelectionOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
               case op: ProjectionOperator =>
@@ -44,7 +44,7 @@ object EngineFactory extends App {
             }
             remaining += ForwardConnection(op.getInput, node)
 
-          case op: BetaOperator =>
+          case op: BinaryOperator =>
             val node: ActorRef = op match {
               case op: AntiJoinOperator =>
                 val names = op.getMutualVariables.map(_.getName)

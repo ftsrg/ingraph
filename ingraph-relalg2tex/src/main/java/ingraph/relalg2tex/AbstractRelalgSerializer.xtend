@@ -11,7 +11,6 @@ import relalg.AntiJoinOperator
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticComparisonOperator
 import relalg.AttributeVariable
-import relalg.BetaOperator
 import relalg.BinaryArithmeticOperator
 import relalg.BinaryLogicalOperator
 import relalg.Direction
@@ -35,6 +34,7 @@ import relalg.UnaryArithmeticOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.BinaryOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -69,7 +69,7 @@ abstract class AbstractRelalgSerializer {
 	 * convertExpression
 	 */
 	def dispatch CharSequence convertAlgebraExpression(ProductionOperator op) {
-		convertAlgebraExpression(op.input)
+		convertAlgebraExpression(op.getInput)
 	}
 
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
@@ -101,8 +101,8 @@ abstract class AbstractRelalgSerializer {
 		'''\alldifferent{«op.edgeVariables.edgeVariableList»}'''
 	}
 
-	def dispatch operatorSymbol(BetaOperator op) {
-		'''\«betaOperator(op)»'''
+	def dispatch operatorSymbol(BinaryOperator op) {
+		'''\«binaryOperator(op)»'''
 	}
 
 	def dispatch operatorSymbol(DuplicateEliminationOperator op) {
@@ -142,13 +142,13 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	/**
-	 * betaOperator
+	 * binaryOperator
 	 */
-	def dispatch betaOperator(AbstractJoinOperator operator) {
+	def dispatch binaryOperator(AbstractJoinOperator operator) {
 		'''«operator.joinOperator» \{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}'''
 	}
 
-	def dispatch betaOperator(UnionOperator operator) {
+	def dispatch binaryOperator(UnionOperator operator) {
 		'''union'''
 	}
 

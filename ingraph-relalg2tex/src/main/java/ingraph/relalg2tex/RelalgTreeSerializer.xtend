@@ -1,12 +1,12 @@
 package ingraph.relalg2tex
 
 import relalg.AllDifferentOperator
-import relalg.AlphaOperator
-import relalg.BetaOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.NullaryOperator
+import relalg.UnaryOperator
+import relalg.BinaryOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -34,7 +34,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		Operator expression) {
 		'''
 		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
-			«toNode((expression as AllDifferentOperator).input)»
+			«toNode((expression as AllDifferentOperator).getInput)»
 		«ELSE»
 			[{$«expression?.operatorSymbol»$ \\ \footnotesize $\color{gray} \langle \var{«expression.schema.map[ name.escape ].join(', ')»} \rangle$}«expression?.children»
 			«IF expression instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»]
@@ -52,18 +52,18 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		''''''
 	}
 
-	def dispatch children(AlphaOperator op) {
+	def dispatch children(UnaryOperator op) {
 		'''
 
-				«op.input?.toNode»
+				«op.getInput?.toNode»
 		'''
 	}
 
-	def dispatch children(BetaOperator op) {
+	def dispatch children(BinaryOperator op) {
 		'''
 
-				«op.leftInput.toNode»
-				«op.rightInput.toNode»
+				«op.getLeftInput.toNode»
+				«op.getRightInput.toNode»
 		'''
 	}
 

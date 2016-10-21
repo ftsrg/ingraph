@@ -13,12 +13,12 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
-import relalg.AlphaOperator
-import relalg.BetaOperator
 import relalg.ExpandOperator
 import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.UnaryOperator
+import relalg.BinaryOperator
 
 class Rete2CanonicalTransformation {
 
@@ -33,14 +33,14 @@ class Rete2CanonicalTransformation {
 	
 	def void changeOperator(Operator parentOperator, Operator currentOperator, Operator newOperator) {
 		switch parentOperator {
-			AlphaOperator: {
+			UnaryOperator: {
 				parentOperator.input = newOperator
 			}
-			BetaOperator: {
-				if (parentOperator.leftInput.equals(currentOperator)) {
+			BinaryOperator: {
+				if (parentOperator.getLeftInput.equals(currentOperator)) {
 					parentOperator.leftInput = newOperator	
 				}
-				if (parentOperator.rightInput.equals(currentOperator)) {
+				if (parentOperator.getRightInput.equals(currentOperator)) {
 					parentOperator.rightInput = newOperator	
 				}
 			}
@@ -106,7 +106,7 @@ class Rete2CanonicalTransformation {
 				edgeVariable = expandOperator.edgeVariable
 			]
 			val joinOperator = createJoinOperator => [
-				leftInput = expandOperator.input
+				leftInput = expandOperator.getInput
 				rightInput = getEdgesOperator
 			]
 			

@@ -75,24 +75,24 @@ class GetEdgesOperator extends NullaryOperator {
 	refers VertexVariable targetVertexVariable
 }
 
-/* Alpha operators */
-abstract class AlphaOperator extends Operator {
+/* Unary operators */
+abstract class UnaryOperator extends Operator {
 	refers Operator input
 }
 
-class ProductionOperator extends AlphaOperator {
+class ProductionOperator extends UnaryOperator {
 }
 
-class SelectionOperator extends AlphaOperator {
+class SelectionOperator extends UnaryOperator {
 	String conditionString
 	refers Expression condition
 }
 
-class ProjectionOperator extends AlphaOperator {
+class ProjectionOperator extends UnaryOperator {
 	refers Variable[] variables
 }
 
-class ExpandOperator extends AlphaOperator {
+class ExpandOperator extends UnaryOperator {
 	Direction direction
 	refers VertexVariable sourceVertexVariable
 	refers EdgeVariable edgeVariable
@@ -101,10 +101,10 @@ class ExpandOperator extends AlphaOperator {
 	Integer maxHops
 }
 
-class DuplicateEliminationOperator extends AlphaOperator {
+class DuplicateEliminationOperator extends UnaryOperator {
 }
 
-class AllDifferentOperator extends AlphaOperator {
+class AllDifferentOperator extends UnaryOperator {
 	refers EdgeVariable[] edgeVariables
 	refers EdgeVariableSet edgeVariableSets
 }
@@ -113,7 +113,7 @@ class EdgeVariableSet { // TODO
 	refers EdgeVariable[] edgeVariables
 }
 
-class SortOperator extends AlphaOperator {
+class SortOperator extends UnaryOperator {
 	contains SortEntry[] entries
 }
 
@@ -122,12 +122,12 @@ class SortEntry {
 	OrderDirection orderDirection
 }
 
-class TopOperator extends AlphaOperator {
+class TopOperator extends UnaryOperator {
 	Integer skip
 	Integer limit
 }
 
-class GroupingOperator extends AlphaOperator {
+class GroupingOperator extends UnaryOperator {
 	contains GroupingEntry[] entries
 }
 
@@ -137,13 +137,13 @@ class GroupingEntry {
 	refers Variable aggregatedVariable
 }
 
-/* Beta operators */
-abstract class BetaOperator extends Operator {
+/* Binary operators */
+abstract class BinaryOperator extends Operator {
 	contains Operator leftInput
 	contains Operator rightInput
 }
 
-abstract class AbstractJoinOperator extends BetaOperator {
+abstract class AbstractJoinOperator extends BinaryOperator {
 	refers Variable[] mutualVariables
 }
 
@@ -156,7 +156,7 @@ class LeftOuterJoinOperator extends AbstractJoinOperator {
 class AntiJoinOperator extends AbstractJoinOperator {
 }
 
-class UnionOperator extends BetaOperator {
+class UnionOperator extends BinaryOperator {
 	Boolean bag // set or bag union
 }
 
