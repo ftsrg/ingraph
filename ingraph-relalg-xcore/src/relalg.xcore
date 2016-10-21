@@ -100,7 +100,7 @@ class AllDifferentOperator extends AlphaOperator {
 }
 
 class SortOperator extends AlphaOperator {
-	refers SortEntry[] entries
+	contains SortEntry[] entries
 }
 
 class SortEntry {
@@ -114,7 +114,7 @@ class TopOperator extends AlphaOperator {
 }
 
 class GroupingOperator extends AlphaOperator {	
-	refers GroupingEntry[] entries
+	contains GroupingEntry[] entries
 }
 
 class GroupingEntry {
