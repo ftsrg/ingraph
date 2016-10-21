@@ -1,11 +1,7 @@
-@Ecore(
-	nsURI="http://ingraph/relalg"
-)
-@GenModel(
-    bundleManifest="false",
+@Ecore(nsURI="http://ingraph/relalg")
+@GenModel(bundleManifest="false",
     modelDirectory="ingraph-relalg-xcore/build/xcore/main",
-    complianceLevel="8.0"
-)
+    complianceLevel="8.0")
 package relalg
 
 class RelalgContainer {
@@ -20,40 +16,52 @@ abstract class NamedElement {
 	refers RelalgContainer ^container opposite elements
 }
 
-abstract class Label extends NamedElement {}
-class VertexLabel extends Label {}
-class EdgeLabel extends Label {}
+abstract class Label extends NamedElement {
+}
+
+class VertexLabel extends Label {
+}
+
+class EdgeLabel extends Label {
+}
 
 /* Variables */
 abstract class Variable extends NamedElement, ReturnableElement, ComparableElement {
 	boolean dontCare = "false"
 }
+
 class ElementVariable extends Variable {
 	refers AttributeVariable[] attributes opposite element
 }
+
 class VertexVariable extends ElementVariable {
 	refers VertexLabel[] vertexLabels // the vertex must have *all* of these labels
 }
+
 class EdgeVariable extends ElementVariable {
 	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
 }
+
 class AttributeVariable extends Variable {
 	refers ElementVariable element opposite attributes
 }
 
-abstract class ReturnableElement {}
-
+abstract class ReturnableElement {
+}
 
 /* Operators */
-
 abstract class Operator {
 	refers RelalgContainer ^container opposite operators
 	String description
 	refers Variable[] schema
+	contains Cardinality cardinality
+}
+
+class Cardinality {
+	Double cardinality
 }
 
 /* Nullary operators */
-
 class GetVerticesOperator extends Operator {
 	refers VertexVariable vertexVariable
 }
@@ -66,12 +74,12 @@ class GetEdgesOperator extends Operator {
 }
 
 /* Alpha operators */
-
 abstract class AlphaOperator extends Operator {
 	refers Operator input
 }
 
-class ProductionOperator extends AlphaOperator {}
+class ProductionOperator extends AlphaOperator {
+}
 
 class SelectionOperator extends AlphaOperator {
 	String conditionString
@@ -92,10 +100,14 @@ class ExpandOperator extends AlphaOperator {
 }
 
 class DuplicateEliminationOperator extends AlphaOperator {
-
 }
 
 class AllDifferentOperator extends AlphaOperator {
+	refers EdgeVariable[] edgeVariables
+	refers EdgeVariableSet edgeVariableSets
+}
+
+class EdgeVariableSet { // TODO
 	refers EdgeVariable[] edgeVariables
 }
 
@@ -113,7 +125,7 @@ class TopOperator extends AlphaOperator {
 	Integer limit
 }
 
-class GroupingOperator extends AlphaOperator {	
+class GroupingOperator extends AlphaOperator {
 	contains GroupingEntry[] entries
 }
 
@@ -124,7 +136,6 @@ class GroupingEntry {
 }
 
 /* Beta operators */
-
 abstract class BetaOperator extends Operator {
 	contains Operator leftInput
 	contains Operator rightInput
@@ -134,24 +145,27 @@ abstract class AbstractJoinOperator extends BetaOperator {
 	refers Variable[] mutualVariables
 }
 
-class JoinOperator extends AbstractJoinOperator {}
+class JoinOperator extends AbstractJoinOperator {
+}
 
-class LeftOuterJoinOperator extends AbstractJoinOperator {}
+class LeftOuterJoinOperator extends AbstractJoinOperator {
+}
 
-class AntiJoinOperator extends AbstractJoinOperator {}
+class AntiJoinOperator extends AbstractJoinOperator {
+}
 
 class UnionOperator extends BetaOperator {
 	Boolean bag // set or bag union
 }
 
 /* expression */
-
 abstract class Expression {
 	refers RelalgContainer ^container opposite expressions
 	String text
 }
 
-abstract class BinaryExpression extends Expression {}
+abstract class BinaryExpression extends Expression {
+}
 
 class ArithmeticOperationExpression extends BinaryExpression {
 	BinaryArithmeticOperator operator
@@ -163,17 +177,21 @@ class ArithmeticComparisonExpression extends BinaryExpression {
 	refers ComparableElement rightOperand
 }
 
-abstract class ComparableElement {}
+abstract class ComparableElement {
+}
 
-abstract class Atom extends Expression {}
+abstract class Atom extends Expression {
+}
 
-abstract class Literal extends Atom, ComparableElement {}
+abstract class Literal extends Atom, ComparableElement {
+}
 
 class StringLiteral extends Literal {
 	String value
 }
 
-abstract class NumberLiteral {}
+abstract class NumberLiteral {
+}
 
 class DoubleLiteral extends NumberLiteral {
 	Double value
@@ -184,51 +202,70 @@ class IntegerLiteral extends NumberLiteral {
 }
 
 /* enums */
-
 enum Direction {
-	BOTH,
-	IN,
+	BOTH
+	,
+	IN
+	,
 	OUT
 }
 
 enum OrderDirection {
-	ASCENDING,
+	ASCENDING
+	,
 	DESCENDING
 }
 
 enum BinaryArithmeticOperator {
-	PLUS,
-	MINUS,
-	MULTIPLICATION,
-	DIVISION,
-	MOD,
+	PLUS
+	,
+	MINUS
+	,
+	MULTIPLICATION
+	,
+	DIVISION
+	,
+	MOD
+	,
 	POWER
 }
 
 enum ArithmeticComparisonOperator {
-	EQUAL_TO,
-	NOT_EQUAL_TO,
-	GREATER_THAN,
-	GREATER_THAN_OR_EQUAL,
-	LESS_THAN,
+	EQUAL_TO
+	,
+	NOT_EQUAL_TO
+	,
+	GREATER_THAN
+	,
+	GREATER_THAN_OR_EQUAL
+	,
+	LESS_THAN
+	,
 	LESS_THAN_OR_EQUAL
 }
 
 enum UnaryArithmeticOperator {
-	MINUS,
+	MINUS
+	,
 	PLUS
 }
 
 enum BinaryLogicalOperator {
-	AND,
-	OR,
+	AND
+	,
+	OR
+	,
 	XOR
 }
 
 enum AggregationType {
-	COUNT,
-	SUM,
-	AVG,
-	MAX,
+	COUNT
+	,
+	SUM
+	,
+	AVG
+	,
+	MAX
+	,
 	MIN
 }
