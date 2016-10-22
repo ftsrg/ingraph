@@ -143,11 +143,17 @@ abstract class BinaryOperator extends Operator {
 	contains Operator rightInput
 }
 
+abstract class CommutativeBinaryOperator extends BinaryOperator {
+}
+
+abstract class AssociativeBinaryOperator extends BinaryOperator {
+}
+
 abstract class AbstractJoinOperator extends BinaryOperator {
 	refers Variable[] mutualVariables
 }
 
-class JoinOperator extends AbstractJoinOperator {
+class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
 }
 
 class LeftOuterJoinOperator extends AbstractJoinOperator {
@@ -156,7 +162,7 @@ class LeftOuterJoinOperator extends AbstractJoinOperator {
 class AntiJoinOperator extends AbstractJoinOperator {
 }
 
-class UnionOperator extends BinaryOperator {
+class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
 	Boolean bag // set or bag union
 }
 
