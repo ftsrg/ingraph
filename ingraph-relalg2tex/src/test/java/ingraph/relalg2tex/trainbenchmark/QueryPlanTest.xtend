@@ -1,6 +1,5 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.emf.util.PrettyPrinter
 import ingraph.optimization.transformations.Relalg2ReteTransformation
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory

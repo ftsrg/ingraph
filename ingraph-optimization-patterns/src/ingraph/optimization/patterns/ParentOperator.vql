@@ -1,0 +1,11 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+pattern parentOperator(parentOperator : Operator, operator : Operator) {
+	UnaryOperator.input(parentOperator, operator);
+} or {
+	BinaryOperator.leftInput(parentOperator, operator);
+} or {
+	BinaryOperator.rightInput(parentOperator, operator);
+}

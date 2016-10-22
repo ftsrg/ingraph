@@ -10,6 +10,7 @@ import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import relalg.LogicalExpression;
+import relalg.Operator;
 import relalg.SelectionOperator;
 
 /**
@@ -27,30 +28,38 @@ import relalg.SelectionOperator;
  */
 @SuppressWarnings("all")
 public abstract class CascadableSelectionMatch extends BasePatternMatch {
-  private SelectionOperator fSelection;
+  private Operator fParentOperator;
+  
+  private SelectionOperator fSelectionOperator;
   
   private LogicalExpression fLeftOperand;
   
   private LogicalExpression fRightOperand;
   
-  private static List<String> parameterNames = makeImmutableList("selection", "leftOperand", "rightOperand");
+  private static List<String> parameterNames = makeImmutableList("parentOperator", "selectionOperator", "leftOperand", "rightOperand");
   
-  private CascadableSelectionMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    this.fSelection = pSelection;
+  private CascadableSelectionMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    this.fParentOperator = pParentOperator;
+    this.fSelectionOperator = pSelectionOperator;
     this.fLeftOperand = pLeftOperand;
     this.fRightOperand = pRightOperand;
   }
   
   @Override
   public Object get(final String parameterName) {
-    if ("selection".equals(parameterName)) return this.fSelection;
+    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
+    if ("selectionOperator".equals(parameterName)) return this.fSelectionOperator;
     if ("leftOperand".equals(parameterName)) return this.fLeftOperand;
     if ("rightOperand".equals(parameterName)) return this.fRightOperand;
     return null;
   }
   
-  public SelectionOperator getSelection() {
-    return this.fSelection;
+  public Operator getParentOperator() {
+    return this.fParentOperator;
+  }
+  
+  public SelectionOperator getSelectionOperator() {
+    return this.fSelectionOperator;
   }
   
   public LogicalExpression getLeftOperand() {
@@ -64,8 +73,12 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    if ("selection".equals(parameterName) ) {
-    	this.fSelection = (SelectionOperator) newValue;
+    if ("parentOperator".equals(parameterName) ) {
+    	this.fParentOperator = (Operator) newValue;
+    	return true;
+    }
+    if ("selectionOperator".equals(parameterName) ) {
+    	this.fSelectionOperator = (SelectionOperator) newValue;
     	return true;
     }
     if ("leftOperand".equals(parameterName) ) {
@@ -79,9 +92,14 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
     return false;
   }
   
-  public void setSelection(final SelectionOperator pSelection) {
+  public void setParentOperator(final Operator pParentOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fSelection = pSelection;
+    this.fParentOperator = pParentOperator;
+  }
+  
+  public void setSelectionOperator(final SelectionOperator pSelectionOperator) {
+    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
+    this.fSelectionOperator = pSelectionOperator;
   }
   
   public void setLeftOperand(final LogicalExpression pLeftOperand) {
@@ -106,18 +124,20 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fSelection, fLeftOperand, fRightOperand};
+    return new Object[]{fParentOperator, fSelectionOperator, fLeftOperand, fRightOperand};
   }
   
   @Override
   public CascadableSelectionMatch toImmutable() {
-    return isMutable() ? newMatch(fSelection, fLeftOperand, fRightOperand) : this;
+    return isMutable() ? newMatch(fParentOperator, fSelectionOperator, fLeftOperand, fRightOperand) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
-    result.append("\"selection\"=" + prettyPrintValue(fSelection) + ", ");
+    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator) + ", ");
+    
+    result.append("\"selectionOperator\"=" + prettyPrintValue(fSelectionOperator) + ", ");
     
     result.append("\"leftOperand\"=" + prettyPrintValue(fLeftOperand) + ", ");
     
@@ -130,7 +150,8 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((fSelection == null) ? 0 : fSelection.hashCode());
+    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
+    result = prime * result + ((fSelectionOperator == null) ? 0 : fSelectionOperator.hashCode());
     result = prime * result + ((fLeftOperand == null) ? 0 : fLeftOperand.hashCode());
     result = prime * result + ((fRightOperand == null) ? 0 : fRightOperand.hashCode());
     return result;
@@ -153,8 +174,10 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     CascadableSelectionMatch other = (CascadableSelectionMatch) obj;
-    if (fSelection == null) {if (other.fSelection != null) return false;}
-    else if (!fSelection.equals(other.fSelection)) return false;
+    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
+    else if (!fParentOperator.equals(other.fParentOperator)) return false;
+    if (fSelectionOperator == null) {if (other.fSelectionOperator != null) return false;}
+    else if (!fSelectionOperator.equals(other.fSelectionOperator)) return false;
     if (fLeftOperand == null) {if (other.fLeftOperand != null) return false;}
     else if (!fLeftOperand.equals(other.fLeftOperand)) return false;
     if (fRightOperand == null) {if (other.fRightOperand != null) return false;}
@@ -180,40 +203,42 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
    * 
    */
   public static CascadableSelectionMatch newEmptyMatch() {
-    return new Mutable(null, null, null);
+    return new Mutable(null, null, null, null);
   }
   
   /**
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static CascadableSelectionMatch newMutableMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return new Mutable(pSelection, pLeftOperand, pRightOperand);
+  public static CascadableSelectionMatch newMutableMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return new Mutable(pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static CascadableSelectionMatch newMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return new Immutable(pSelection, pLeftOperand, pRightOperand);
+  public static CascadableSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return new Immutable(pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand);
   }
   
   private static final class Mutable extends CascadableSelectionMatch {
-    Mutable(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-      super(pSelection, pLeftOperand, pRightOperand);
+    Mutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+      super(pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand);
     }
     
     @Override
@@ -223,8 +248,8 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends CascadableSelectionMatch {
-    Immutable(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-      super(pSelection, pLeftOperand, pRightOperand);
+    Immutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+      super(pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand);
     }
     
     @Override

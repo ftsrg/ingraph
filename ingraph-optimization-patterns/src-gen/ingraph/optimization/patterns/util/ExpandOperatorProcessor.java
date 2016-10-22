@@ -18,14 +18,14 @@ import relalg.Operator;
 public abstract class ExpandOperatorProcessor implements IMatchProcessor<ExpandOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * @param pExpandOperator the value of pattern parameter expandOperator in the currently processed match
+   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * 
    */
-  public abstract void process(final Operator pParentOperator, final ExpandOperator pExpandOperator);
+  public abstract void process(final ExpandOperator pExpandOperator, final Operator pParentOperator);
   
   @Override
   public void process(final ExpandOperatorMatch match) {
-    process(match.getParentOperator(), match.getExpandOperator());
+    process(match.getExpandOperator(), match.getParentOperator());
   }
 }

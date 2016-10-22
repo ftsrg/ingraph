@@ -2,23 +2,36 @@ package ingraph.optimization.patterns
 
 import "http://ingraph/relalg";
 
-pattern parentOperator(parentOperator : Operator, operator : Operator) {
-	UnaryOperator.input(parentOperator, operator);
-} or {
-	BinaryOperator.leftInput(parentOperator, operator);
-} or {
-	BinaryOperator.rightInput(parentOperator, operator);
-}
+/*
+    parentOperator
+          | 
+          | *input
+          V
+    expandOperator
+          |
+          | input
+          V
+  getVerticesOperator
 
+*/
 // 1st transformation
-pattern expandVertex(parentOperator : Operator, getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator) {
+pattern
+expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
 	GetVerticesOperator(getVerticesOperator);
 }
 
+/*
+    parentOperator
+          | 
+          | *input
+          V
+    expandOperator
+*/
 // 2nd transformation
-pattern expandOperator(parentOperator : Operator, expandOperator : ExpandOperator) {
+pattern
+expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	ExpandOperator(expandOperator);
 }

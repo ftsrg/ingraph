@@ -27,54 +27,54 @@ import relalg.Operator;
  */
 @SuppressWarnings("all")
 public abstract class ExpandOperatorMatch extends BasePatternMatch {
-  private Operator fParentOperator;
-  
   private ExpandOperator fExpandOperator;
   
-  private static List<String> parameterNames = makeImmutableList("parentOperator", "expandOperator");
+  private Operator fParentOperator;
   
-  private ExpandOperatorMatch(final Operator pParentOperator, final ExpandOperator pExpandOperator) {
-    this.fParentOperator = pParentOperator;
+  private static List<String> parameterNames = makeImmutableList("expandOperator", "parentOperator");
+  
+  private ExpandOperatorMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     this.fExpandOperator = pExpandOperator;
+    this.fParentOperator = pParentOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
-    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
     if ("expandOperator".equals(parameterName)) return this.fExpandOperator;
+    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
     return null;
-  }
-  
-  public Operator getParentOperator() {
-    return this.fParentOperator;
   }
   
   public ExpandOperator getExpandOperator() {
     return this.fExpandOperator;
   }
   
+  public Operator getParentOperator() {
+    return this.fParentOperator;
+  }
+  
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    if ("parentOperator".equals(parameterName) ) {
-    	this.fParentOperator = (Operator) newValue;
-    	return true;
-    }
     if ("expandOperator".equals(parameterName) ) {
     	this.fExpandOperator = (ExpandOperator) newValue;
+    	return true;
+    }
+    if ("parentOperator".equals(parameterName) ) {
+    	this.fParentOperator = (Operator) newValue;
     	return true;
     }
     return false;
   }
   
-  public void setParentOperator(final Operator pParentOperator) {
-    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fParentOperator = pParentOperator;
-  }
-  
   public void setExpandOperator(final ExpandOperator pExpandOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     this.fExpandOperator = pExpandOperator;
+  }
+  
+  public void setParentOperator(final Operator pParentOperator) {
+    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
+    this.fParentOperator = pParentOperator;
   }
   
   @Override
@@ -89,20 +89,20 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fParentOperator, fExpandOperator};
+    return new Object[]{fExpandOperator, fParentOperator};
   }
   
   @Override
   public ExpandOperatorMatch toImmutable() {
-    return isMutable() ? newMatch(fParentOperator, fExpandOperator) : this;
+    return isMutable() ? newMatch(fExpandOperator, fParentOperator) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
-    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator) + ", ");
+    result.append("\"expandOperator\"=" + prettyPrintValue(fExpandOperator) + ", ");
     
-    result.append("\"expandOperator\"=" + prettyPrintValue(fExpandOperator)
+    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator)
     );
     return result.toString();
   }
@@ -111,8 +111,8 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
     result = prime * result + ((fExpandOperator == null) ? 0 : fExpandOperator.hashCode());
+    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
     return result;
   }
   
@@ -133,10 +133,10 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     ExpandOperatorMatch other = (ExpandOperatorMatch) obj;
-    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
-    else if (!fParentOperator.equals(other.fParentOperator)) return false;
     if (fExpandOperator == null) {if (other.fExpandOperator != null) return false;}
     else if (!fExpandOperator.equals(other.fExpandOperator)) return false;
+    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
+    else if (!fParentOperator.equals(other.fParentOperator)) return false;
     return true;
   }
   
@@ -165,31 +165,31 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMutableMatch(final Operator pParentOperator, final ExpandOperator pExpandOperator) {
-    return new Mutable(pParentOperator, pExpandOperator);
+  public static ExpandOperatorMatch newMutableMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    return new Mutable(pExpandOperator, pParentOperator);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMatch(final Operator pParentOperator, final ExpandOperator pExpandOperator) {
-    return new Immutable(pParentOperator, pExpandOperator);
+  public static ExpandOperatorMatch newMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    return new Immutable(pExpandOperator, pParentOperator);
   }
   
   private static final class Mutable extends ExpandOperatorMatch {
-    Mutable(final Operator pParentOperator, final ExpandOperator pExpandOperator) {
-      super(pParentOperator, pExpandOperator);
+    Mutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+      super(pExpandOperator, pParentOperator);
     }
     
     @Override
@@ -199,8 +199,8 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends ExpandOperatorMatch {
-    Immutable(final Operator pParentOperator, final ExpandOperator pExpandOperator) {
-      super(pParentOperator, pExpandOperator);
+    Immutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+      super(pExpandOperator, pParentOperator);
     }
     
     @Override

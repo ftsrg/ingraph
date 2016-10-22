@@ -5,10 +5,8 @@ package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandVertexMatcher;
-import ingraph.optimization.patterns.ParentOperatorMatcher;
 import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
-import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
@@ -21,7 +19,6 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
- * <li>parentOperator</li>
  * <li>expandVertex</li>
  * <li>expandOperator</li>
  * </ul>
@@ -48,17 +45,8 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   private static Relalg2Rete INSTANCE;
   
   private Relalg2Rete() throws ViatraQueryException {
-    querySpecifications.add(ParentOperatorQuerySpecification.instance());
     querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorQuerySpecification.instance());
-  }
-  
-  public ParentOperatorQuerySpecification getParentOperator() throws ViatraQueryException {
-    return ParentOperatorQuerySpecification.instance();
-  }
-  
-  public ParentOperatorMatcher getParentOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ParentOperatorMatcher.on(engine);
   }
   
   public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {

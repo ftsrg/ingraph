@@ -3,10 +3,18 @@ package ingraph.optimization.patterns
 import "http://ingraph/relalg";
 
 // AND expressions are cascadable
-pattern CascadableSelection(selection : SelectionOperator, leftOperand : LogicalExpression, rightOperand : LogicalExpression) {
-	SelectionOperator.condition(selection, condition);
-	BinaryLogicalExpression.operator(condition, ::AND);
+pattern CascadableSelection(parentOperator : Operator, selectionOperator : SelectionOperator, leftOperand : LogicalExpression, rightOperand : LogicalExpression) {
+	find parentOperator(parentOperator, selectionOperator); 
 
+	SelectionOperator.condition(selectionOperator, condition);
+	
+	// condition: leftOperand AND rightOperand
+	BinaryLogicalExpression.operator(condition, ::AND);
 	BinaryLogicalExpression.leftOperand(condition, leftOperand);
 	BinaryLogicalExpression.rightOperand(condition, rightOperand);
+}
+
+pattern SwappableSelection(parentOperator : Operator, selectionOperator1 : SelectionOperator, selectionOperator2: SelectionOperator) {
+	find parentOperator(parentOperator, selectionOperator1);
+	SelectionOperator.input(selectionOperator1, selectionOperator2);
 }

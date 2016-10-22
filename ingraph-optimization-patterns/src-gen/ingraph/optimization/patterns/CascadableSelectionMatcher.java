@@ -17,6 +17,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
 import relalg.LogicalExpression;
+import relalg.Operator;
 import relalg.SelectionOperator;
 
 /**
@@ -31,10 +32,13 @@ import relalg.SelectionOperator;
  * <p>Original source:
  * <code><pre>
  * // AND expressions are cascadable
- * pattern CascadableSelection(selection : SelectionOperator, leftOperand : LogicalExpression, rightOperand : LogicalExpression) {
- * 	SelectionOperator.condition(selection, condition);
- * 	BinaryLogicalExpression.operator(condition, ::AND);
+ * pattern CascadableSelection(parentOperator : Operator, selectionOperator : SelectionOperator, leftOperand : LogicalExpression, rightOperand : LogicalExpression) {
+ * 	find parentOperator(parentOperator, selectionOperator); 
  * 
+ * 	SelectionOperator.condition(selectionOperator, condition);
+ * 	
+ * 	// condition: leftOperand AND rightOperand
+ * 	BinaryLogicalExpression.operator(condition, ::AND);
  * 	BinaryLogicalExpression.leftOperand(condition, leftOperand);
  * 	BinaryLogicalExpression.rightOperand(condition, rightOperand);
  * }
@@ -74,11 +78,13 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
     return new CascadableSelectionMatcher();
   }
   
-  private final static int POSITION_SELECTION = 0;
+  private final static int POSITION_PARENTOPERATOR = 0;
   
-  private final static int POSITION_LEFTOPERAND = 1;
+  private final static int POSITION_SELECTIONOPERATOR = 1;
   
-  private final static int POSITION_RIGHTOPERAND = 2;
+  private final static int POSITION_LEFTOPERAND = 2;
+  
+  private final static int POSITION_RIGHTOPERAND = 3;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(CascadableSelectionMatcher.class);
   
@@ -96,130 +102,181 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return matches represented as a CascadableSelectionMatch object.
    * 
    */
-  public Collection<CascadableSelectionMatch> getAllMatches(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return rawGetAllMatches(new Object[]{pSelection, pLeftOperand, pRightOperand});
+  public Collection<CascadableSelectionMatch> getAllMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawGetAllMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return a match represented as a CascadableSelectionMatch object, or null if no match is found.
    * 
    */
-  public CascadableSelectionMatch getOneArbitraryMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return rawGetOneArbitraryMatch(new Object[]{pSelection, pLeftOperand, pRightOperand});
+  public CascadableSelectionMatch getOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawGetOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return rawHasMatch(new Object[]{pSelection, pLeftOperand, pRightOperand});
+  public boolean hasMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawHasMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return rawCountMatches(new Object[]{pSelection, pLeftOperand, pRightOperand});
+  public int countMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawCountMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand, final IMatchProcessor<? super CascadableSelectionMatch> processor) {
-    rawForEachMatch(new Object[]{pSelection, pLeftOperand, pRightOperand}, processor);
+  public void forEachMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand, final IMatchProcessor<? super CascadableSelectionMatch> processor) {
+    rawForEachMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand, final IMatchProcessor<? super CascadableSelectionMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pSelection, pLeftOperand, pRightOperand}, processor);
+  public boolean forOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand, final IMatchProcessor<? super CascadableSelectionMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pSelection the fixed value of pattern parameter selection, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOperand the fixed value of pattern parameter leftOperand, or null if not bound.
    * @param pRightOperand the fixed value of pattern parameter rightOperand, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public CascadableSelectionMatch newMatch(final SelectionOperator pSelection, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return CascadableSelectionMatch.newMatch(pSelection, pLeftOperand, pRightOperand);
+  public CascadableSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return CascadableSelectionMatch.newMatch(pParentOperator, pSelectionOperator, pLeftOperand, pRightOperand);
   }
   
   /**
-   * Retrieve the set of values that occur in matches for selection.
+   * Retrieve the set of values that occur in matches for parentOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  protected Set<SelectionOperator> rawAccumulateAllValuesOfselection(final Object[] parameters) {
-    Set<SelectionOperator> results = new HashSet<SelectionOperator>();
-    rawAccumulateAllValues(POSITION_SELECTION, parameters, results);
+  protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
+    Set<Operator> results = new HashSet<Operator>();
+    rawAccumulateAllValues(POSITION_PARENTOPERATOR, parameters, results);
     return results;
   }
   
   /**
-   * Retrieve the set of values that occur in matches for selection.
+   * Retrieve the set of values that occur in matches for parentOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<SelectionOperator> getAllValuesOfselection() {
-    return rawAccumulateAllValuesOfselection(emptyArray());
+  public Set<Operator> getAllValuesOfparentOperator() {
+    return rawAccumulateAllValuesOfparentOperator(emptyArray());
   }
   
   /**
-   * Retrieve the set of values that occur in matches for selection.
+   * Retrieve the set of values that occur in matches for parentOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<SelectionOperator> getAllValuesOfselection(final CascadableSelectionMatch partialMatch) {
-    return rawAccumulateAllValuesOfselection(partialMatch.toArray());
+  public Set<Operator> getAllValuesOfparentOperator(final CascadableSelectionMatch partialMatch) {
+    return rawAccumulateAllValuesOfparentOperator(partialMatch.toArray());
   }
   
   /**
-   * Retrieve the set of values that occur in matches for selection.
+   * Retrieve the set of values that occur in matches for parentOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<SelectionOperator> getAllValuesOfselection(final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
-    return rawAccumulateAllValuesOfselection(new Object[]{
+  public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawAccumulateAllValuesOfparentOperator(new Object[]{
+    null, 
+    pSelectionOperator, 
+    pLeftOperand, 
+    pRightOperand
+    });
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for selectionOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator(final Object[] parameters) {
+    Set<SelectionOperator> results = new HashSet<SelectionOperator>();
+    rawAccumulateAllValues(POSITION_SELECTIONOPERATOR, parameters, results);
+    return results;
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for selectionOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SelectionOperator> getAllValuesOfselectionOperator() {
+    return rawAccumulateAllValuesOfselectionOperator(emptyArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for selectionOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SelectionOperator> getAllValuesOfselectionOperator(final CascadableSelectionMatch partialMatch) {
+    return rawAccumulateAllValuesOfselectionOperator(partialMatch.toArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for selectionOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SelectionOperator> getAllValuesOfselectionOperator(final Operator pParentOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
+    return rawAccumulateAllValuesOfselectionOperator(new Object[]{
+    pParentOperator, 
     null, 
     pLeftOperand, 
     pRightOperand
@@ -260,9 +317,10 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<LogicalExpression> getAllValuesOfleftOperand(final SelectionOperator pSelection, final LogicalExpression pRightOperand) {
+  public Set<LogicalExpression> getAllValuesOfleftOperand(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pRightOperand) {
     return rawAccumulateAllValuesOfleftOperand(new Object[]{
-    pSelection, 
+    pParentOperator, 
+    pSelectionOperator, 
     null, 
     pRightOperand
     });
@@ -302,9 +360,10 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<LogicalExpression> getAllValuesOfrightOperand(final SelectionOperator pSelection, final LogicalExpression pLeftOperand) {
+  public Set<LogicalExpression> getAllValuesOfrightOperand(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand) {
     return rawAccumulateAllValuesOfrightOperand(new Object[]{
-    pSelection, 
+    pParentOperator, 
+    pSelectionOperator, 
     pLeftOperand, 
     null
     });
@@ -313,7 +372,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   @Override
   protected CascadableSelectionMatch tupleToMatch(final Tuple t) {
     try {
-    	return CascadableSelectionMatch.newMatch((SelectionOperator) t.get(POSITION_SELECTION), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
+    	return CascadableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -323,7 +382,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   @Override
   protected CascadableSelectionMatch arrayToMatch(final Object[] match) {
     try {
-    	return CascadableSelectionMatch.newMatch((SelectionOperator) match[POSITION_SELECTION], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -333,7 +392,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   @Override
   protected CascadableSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return CascadableSelectionMatch.newMutableMatch((SelectionOperator) match[POSITION_SELECTION], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

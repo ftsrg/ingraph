@@ -6,6 +6,7 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.CascadableSelectionMatch;
 import ingraph.optimization.patterns.CascadableSelectionMatcher;
+import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Equality;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.ConstantValue;
+import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameterDirection;
@@ -72,7 +74,7 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
   
   @Override
   public CascadableSelectionMatch newMatch(final Object... parameters) {
-    return CascadableSelectionMatch.newMatch((relalg.SelectionOperator) parameters[0], (relalg.LogicalExpression) parameters[1], (relalg.LogicalExpression) parameters[2]);
+    return CascadableSelectionMatch.newMatch((relalg.Operator) parameters[0], (relalg.SelectionOperator) parameters[1], (relalg.LogicalExpression) parameters[2], (relalg.LogicalExpression) parameters[3]);
   }
   
   /**
@@ -104,13 +106,15 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static CascadableSelectionQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pSelection = new PParameter("selection", "relalg.SelectionOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "SelectionOperator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
+    
+    private final PParameter parameter_pSelectionOperator = new PParameter("selectionOperator", "relalg.SelectionOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "SelectionOperator")), PParameterDirection.INOUT);
     
     private final PParameter parameter_pLeftOperand = new PParameter("leftOperand", "relalg.LogicalExpression", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "LogicalExpression")), PParameterDirection.INOUT);
     
     private final PParameter parameter_pRightOperand = new PParameter("rightOperand", "relalg.LogicalExpression", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "LogicalExpression")), PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pSelection, parameter_pLeftOperand, parameter_pRightOperand);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pSelectionOperator, parameter_pLeftOperand, parameter_pRightOperand);
     
     @Override
     public String getFullyQualifiedName() {
@@ -119,7 +123,7 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("selection","leftOperand","rightOperand");
+      return Arrays.asList("parentOperator","selectionOperator","leftOperand","rightOperand");
     }
     
     @Override
@@ -134,24 +138,29 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_selection = body.getOrCreateVariableByName("selection");
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+      		PVariable var_selectionOperator = body.getOrCreateVariableByName("selectionOperator");
       		PVariable var_leftOperand = body.getOrCreateVariableByName("leftOperand");
       		PVariable var_rightOperand = body.getOrCreateVariableByName("rightOperand");
       		PVariable var_condition = body.getOrCreateVariableByName("condition");
-      		new TypeConstraint(body, new FlatTuple(var_selection), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		new TypeConstraint(body, new FlatTuple(var_leftOperand), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
       		new TypeConstraint(body, new FlatTuple(var_rightOperand), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_selection, parameter_pSelection),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
+      		   new ExportedParameter(body, var_selectionOperator, parameter_pSelectionOperator),
       		   new ExportedParameter(body, var_leftOperand, parameter_pLeftOperand),
       		   new ExportedParameter(body, var_rightOperand, parameter_pRightOperand)
       		));
-      		// 	SelectionOperator.condition(selection, condition)
-      		new TypeConstraint(body, new FlatTuple(var_selection), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
+      		// 	find parentOperator(parentOperator, selectionOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_selectionOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//  	SelectionOperator.condition(selectionOperator, condition)
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_selection, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "SelectionOperator", "condition")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "SelectionOperator", "condition")));
       		new Equality(body, var__virtual_0_, var_condition);
-      		// 	BinaryLogicalExpression.operator(condition, ::AND)
+      		// 		// condition: leftOperand AND rightOperand	BinaryLogicalExpression.operator(condition, ::AND)
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
       		new ConstantValue(body, var__virtual_1_, getEnumLiteral("http://ingraph/relalg", "BinaryLogicalOperator", "AND").getInstance());
       		new TypeConstraint(body, new FlatTuple(var_condition), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));

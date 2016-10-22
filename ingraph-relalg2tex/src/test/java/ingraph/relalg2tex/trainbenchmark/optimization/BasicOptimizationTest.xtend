@@ -1,17 +1,18 @@
 package ingraph.relalg2tex.trainbenchmark.optimization
 
-import ingraph.emf.util.PrettyPrinter
 import ingraph.optimization.transformations.cost.ReteCostFunction
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Test
 import relalg.BinaryLogicalOperator
 import relalg.RelalgFactory
+import ingraph.optimization.transformations.ReteOptimization
 
 class BasicOptimizationTest {
 
-	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(false)
+	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
 	val extension ReteCostFunction function = new ReteCostFunction
 	val extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	val extension ReteOptimization optimization = new ReteOptimization
 
 //	val extension Relalg transformation = new 
 	@Test
@@ -30,11 +31,18 @@ class BasicOptimizationTest {
 			it.condition = condition
 			container = c
 		]
-		c.rootExpression = selectionOperator
+		val productionOperator = createProductionOperator => [
+			input = selectionOperator
+			container = c
+		]
+		c.rootExpression = productionOperator
 
-		println(serialize(c))
+		println(c.serialize)
 
 		// act
+		c.optimize()
+		
+		println(c.serialize)
 	}
 
 }

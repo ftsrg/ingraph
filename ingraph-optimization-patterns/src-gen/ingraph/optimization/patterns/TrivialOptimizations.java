@@ -4,7 +4,9 @@
 package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.CascadableSelectionMatcher;
+import ingraph.optimization.patterns.SwappableSelectionMatcher;
 import ingraph.optimization.patterns.util.CascadableSelectionQuerySpecification;
+import ingraph.optimization.patterns.util.SwappableSelectionQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
@@ -18,6 +20,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>CascadableSelection</li>
+ * <li>SwappableSelection</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -43,6 +46,7 @@ public final class TrivialOptimizations extends BaseGeneratedPatternGroup {
   
   private TrivialOptimizations() throws ViatraQueryException {
     querySpecifications.add(CascadableSelectionQuerySpecification.instance());
+    querySpecifications.add(SwappableSelectionQuerySpecification.instance());
   }
   
   public CascadableSelectionQuerySpecification getCascadableSelection() throws ViatraQueryException {
@@ -51,5 +55,13 @@ public final class TrivialOptimizations extends BaseGeneratedPatternGroup {
   
   public CascadableSelectionMatcher getCascadableSelection(final ViatraQueryEngine engine) throws ViatraQueryException {
     return CascadableSelectionMatcher.on(engine);
+  }
+  
+  public SwappableSelectionQuerySpecification getSwappableSelection() throws ViatraQueryException {
+    return SwappableSelectionQuerySpecification.instance();
+  }
+  
+  public SwappableSelectionMatcher getSwappableSelection(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return SwappableSelectionMatcher.on(engine);
   }
 }
