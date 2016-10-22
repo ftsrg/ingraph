@@ -7,7 +7,7 @@ import org.scalatest.FlatSpec
 
 import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
 
-import ingraph.optimization.transformations.Relalg2ReteTransformation
+import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.trainbenchmark.TrainBenchmarkUtil
 import relalg.ProductionOperator
