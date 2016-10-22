@@ -11,10 +11,10 @@ class ReteOptimization extends AbstractRelalgTransformation {
 
 	def optimize(RelalgContainer container) {
 		val statements = register(container)
-		statements.fireWhilePossible(cascadingSelectionsRule)
-		statements.fireOne(swappableSelectionsRule)
-		statements.fireOne(commutativeOperatorRule)
-//		statements.fireOne(associativeOperatorRule)
+		statements.fireAllCurrent(cascadingSelectionsRule)
+		statements.fireAllCurrent(swappableSelectionsRule)
+		statements.fireAllCurrent(commutativeOperatorRule)
+		statements.fireAllCurrent(associativeOperatorRule)
 		return container
 	}
 
