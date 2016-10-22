@@ -1,7 +1,8 @@
-package ingraph.optimization.transformations
+package ingraph.optimization.transformations.relalg2rete
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
+import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {

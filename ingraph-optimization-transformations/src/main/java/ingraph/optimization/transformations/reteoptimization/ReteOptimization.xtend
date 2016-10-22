@@ -1,20 +1,20 @@
-package ingraph.optimization.transformations
+package ingraph.optimization.transformations.reteoptimization
 
 import ingraph.optimization.patterns.CascadableSelectionMatcher
+import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
+import ingraph.optimization.patterns.SwappableSelectionMatcher
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
 	def optimize(RelalgContainer container) {
 		val statements = register(container)
-		statements.fireWhilePossible(cascadeConditionRule)
+		statements.fireWhilePossible(cascadingSelectionsRule)
+		statements.fireOne(swappableSelectionsRule)
 		return container
 	}
-
-	/**
-	 * Cascading condition rule
-	 */
-	protected def cascadeConditionRule() {
+	
+	protected def cascadingSelectionsRule() {
 		createRule() //
 		.precondition(CascadableSelectionMatcher.querySpecification) //
 		.action [ //
@@ -36,6 +36,18 @@ class ReteOptimization extends AbstractRelalgTransformation {
 				input = selectionOperator1
 			]
 			changeOperator(parentOperator, selectionOperator, selectionOperator2)
+		].build
+	}
+
+	protected def swappableSelectionsRule() {
+		createRule() //
+		.precondition(SwappableSelectionMatcher.querySpecification) //
+		.action [ //
+			println("swappableSelections fired")
+			selectionOperator1.input = selectionOperator2.input
+			selectionOperator2.input = selectionOperator1
+			
+			changeOperator(parentOperator, selectionOperator1, selectionOperator2)
 		].build
 	}
 

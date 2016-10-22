@@ -2,7 +2,7 @@ package ingraph.report.tests
 
 import com.google.common.collect.Lists
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.Relalg2ReteTransformation
+import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgTreeSerializer

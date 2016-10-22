@@ -1,11 +1,11 @@
 package ingraph.relalg2tex.trainbenchmark.optimization
 
 import ingraph.optimization.transformations.cost.ReteCostFunction
+import ingraph.optimization.transformations.reteoptimization.ReteOptimization
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Test
 import relalg.BinaryLogicalOperator
 import relalg.RelalgFactory
-import ingraph.optimization.transformations.ReteOptimization
 
 class BasicOptimizationTest {
 

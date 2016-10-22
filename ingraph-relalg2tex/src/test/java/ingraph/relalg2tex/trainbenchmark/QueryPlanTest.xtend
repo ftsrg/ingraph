@@ -1,6 +1,6 @@
 package ingraph.relalg2tex.trainbenchmark
 
-import ingraph.optimization.transformations.Relalg2ReteTransformation
+import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.trainbenchmark.RouteSensorQueryPlanFactory
 import ingraph.trainbenchmark.SemaphoreNeighborQueryPlanFactory
