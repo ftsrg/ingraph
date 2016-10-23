@@ -13,8 +13,8 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		val statements = register(container)
 		statements.fireAllCurrent(cascadingSelectionsRule)
 		statements.fireAllCurrent(swappableSelectionsRule)
-		statements.fireAllCurrent(commutativeOperatorRule)
 		statements.fireAllCurrent(associativeOperatorRule)
+		statements.fireAllCurrent(commutativeOperatorRule)
 		return container
 	}
 
@@ -22,7 +22,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(CascadableSelectionMatcher.querySpecification) //
 		.action [ //
-			println("cascadeConditionRule fired")
+			System.err.println("cascadeConditionRule fired")
 			val selectionOperator = selectionOperator
 			val leftOperand = leftOperand
 			val rightOperand = rightOperand
@@ -47,7 +47,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(SwappableSelectionMatcher.querySpecification) //
 		.action [ //
-			println("swappableSelections fired")
+			System.err.println("swappableSelections fired")
 			selectionOperator1.input = selectionOperator2.input
 			selectionOperator2.input = selectionOperator1
 
@@ -59,7 +59,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(CommutativeOperatorMatcher.querySpecification) //
 		.action [ //
-			println("commutativeJoin fired")
+			System.err.println("commutativeJoin fired")
 			op.rightInput = leftInput
 			op.leftInput = rightInput
 		].build
@@ -69,7 +69,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(AssociativeOperatorMatcher.querySpecification) //
 		.action [ //
-			println("associativeJoin fired")
+			System.err.println("associativeJoin fired")
 			op2.leftInput = a
 			op2.rightInput = op1
 			op1.leftInput = b
