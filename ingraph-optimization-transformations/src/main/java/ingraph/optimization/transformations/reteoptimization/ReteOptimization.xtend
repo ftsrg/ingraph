@@ -5,11 +5,14 @@ import ingraph.optimization.patterns.CascadableSelectionMatcher
 import ingraph.optimization.patterns.CommutativeOperatorMatcher
 import ingraph.optimization.patterns.SwappableSelectionMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
+import org.eclipse.viatra.dse.api.DesignSpaceExplorer
+import org.eclipse.viatra.dse.evolutionary.EvolutionaryStrategyBuilder
 import relalg.RelalgContainer
+import relalg.RelalgPackage
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
-	def optimize(RelalgContainer container) {
+	def performSimpleOptimization(RelalgContainer container) {
 		val statements = register(container)
 		statements.fireAllCurrent(cascadingSelectionsRule)
 		statements.fireAllCurrent(swappableSelectionsRule)
@@ -17,6 +20,33 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		statements.fireAllCurrent(commutativeOperatorRule)
 		return container
 	}
+	
+	def performDseOptimization(RelalgContainer container) {	
+		val dse = new DesignSpaceExplorer()
+		
+        dse.setInitialModel(container)
+        dse.addMetaModelPackage(RelalgPackage.eINSTANCE)
+        //dse.setStateCoderFactory(TODO)
+        //dse.addTransformationRule(TODO)
+        
+        //dse.addObjective(TODO)
+        
+        val populationSize = 40
+        val nsga2 = EvolutionaryStrategyBuilder.createNsga2Builder(populationSize)
+        //nsga2.initialPopulationSelector =
+		//nsga2.mutationRate = 
+        //nsga2.addMutation()
+        //nsga2.addCrossover() 
+		//nsga2.setStopCondition()
+		
+		dse.startExploration(nsga2.build())
+		
+		val solutionTrajectory = dse.getArbitrarySolution()
+        solutionTrajectory.doTransformation(container)
+        
+		return container
+	}
+	
 
 	protected def cascadingSelectionsRule() {
 		createRule() //

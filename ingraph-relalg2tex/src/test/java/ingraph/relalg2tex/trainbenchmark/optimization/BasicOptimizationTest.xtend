@@ -39,7 +39,7 @@ class BasicOptimizationTest {
 		println(ctr.serialize)
 
 		// act
-		ctr.optimize()
+		ctr.performSimpleOptimization()
 		
 		println(ctr.serialize)
 	}
@@ -96,7 +96,7 @@ class BasicOptimizationTest {
 		println(ctr.serialize)
 		
 		// act
-		ctr.optimize()		
+		ctr.performSimpleOptimization()		
 		
 		println(ctr.serialize)
 	}
@@ -129,7 +129,7 @@ class BasicOptimizationTest {
 		println(ctr.serialize)
 		
 		// act
-		ctr.optimize()		
+		ctr.performSimpleOptimization()		
 		
 		println(ctr.serialize)
 	}
