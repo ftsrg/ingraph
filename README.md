@@ -19,22 +19,29 @@ See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
 
 ### Eclipse
 
-1. It is recommended to start with the **Eclipse IDE for Java Developers** distribution.
-1. Install the following from your the update site of your Eclipse release (e.g. the Neon update site).
-    * **Xtend IDE**
-    * **Xtext SDK**
-    * **EMF - Eclipse Modeling Framework Xcore SDK**
+1. It is recommended to start with the latest milestone (currently, [Oxygen M2](http://www.eclipse.org/downloads/packages/release/Oxygen/M2)) **Eclipse IDE for Java and DSL Developers** distribution. This has the required dependencies. If you start from another Eclipse distribution, you should install the missing plug-ins:
+    * From the Marketplace:
+      * If you do not have Buildship: go to the **Eclipse Marketplace**, install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+    * From the update site of your Eclipse release (e.g. the Oxygen update site).
+      * **Xtend IDE**
+      * **Xtext SDK**
+      * **EMF - Eclipse Modeling Framework Xcore SDK**
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
-1. Go to the **ingraph-cypher-parser** project, navigate to the `src/main/java` source folder, and right click the `org.slizaa.neo4j.opencypher` package's `GenerateOpenCypher.mwe2` file and choose **Run As** | **MWE2 Workflow**. If you get a warning that there are errors in the project, click **Proceed**.
-1. Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
-1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**.
-1. You may have to clean the workspace.
+1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
+1. You may have to clean the workspace once.
 
-If you do not have Buildship: go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+#### How to run the tests
+
+Running Xtend JUnit tests from a Gradle project is tricky. If you encounter a `ClassNotFound` exception, you should navigate the cursor to the **name of the class**, not the name of a test method, and press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>, <kbd>T</kbd>.
 
 #### How to update the relational algebra model
 
 Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `src/main/java-gen` directory manually.
+
+#### How to update the grammars
+
+1. Go to the **ingraph-cypher-parser** project, navigate to the `src/main/java` source folder, and right click the `org.slizaa.neo4j.opencypher` package's `GenerateOpenCypher.mwe2` file and choose **Run As** | **MWE2 Workflow**. If you get a warning that there are errors in the project, click **Proceed**.
+1. Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
 
 #### Opening `cypxmi` models
 
