@@ -1,4 +1,4 @@
-package ingraph.gqo
+package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.incqueryds._
@@ -35,12 +35,27 @@ object EngineFactory extends App {
         expr.parent match {
           case op: UnaryOperator =>
             val node: ActorRef = op match {
-              case op: SelectionOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
+              case op: SelectionOperator =>
+                newLocal(Props(new Checker(expr.child, ExpressionParser.parse(op.getCondition))))
               case op: ProjectionOperator =>
                 val variables = op.getVariables.map(_.getName)
                 newLocal(Props(new Trimmer(expr.child, variables)))
               case op: DuplicateEliminationOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
-              case op: AllDifferentOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
+              case op: AllDifferentOperator =>
+                val names = op.getEdgeVariables.map(_.getName)
+                def allDifferent(r: nodeType): Boolean = {
+                  val seen = mutable.HashSet[Any]()
+                  for (value <- names.map(r(_))) {
+                    if (seen(value)) {
+                      return false
+                    } else {
+                      seen += value
+                    }
+                  }
+                  true
+                }
+
+                newLocal(Props(new Checker(expr.child, allDifferent)))
             }
             remaining += ForwardConnection(op.getInput, node)
 
@@ -72,7 +87,6 @@ object EngineFactory extends App {
       }
 
       override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap
-      println(inputs.values)
       override val terminator: Terminator = Terminator(inputs.values, production)
     }
 }

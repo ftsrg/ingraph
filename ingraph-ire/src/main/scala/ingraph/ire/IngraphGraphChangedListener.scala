@@ -1,10 +1,10 @@
-package ingraph.gqo
+package ingraph.ire
 
 import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
 import hu.bme.mit.incqueryds.{ChangeSet, nodeType}
-import ingraph.gqo.EngineFactory.EdgeTransformer
+import ingraph.ire.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 
 import scala.collection.JavaConversions._
@@ -20,11 +20,13 @@ class IngraphGraphChangedListener(
 
   def elementToNode(element: Element, nick: String): nodeType =
     Map[Any,Any](nick -> element.id) ++
-      element.keys.map(k => k -> element.value(k))
+      element.keys.map(k => s"${nick}_$k" -> element.value(k))
 
   def edgeToNodeType(edge: Edge, transformer: EdgeTransformer): nodeType =
     elementToNode(edge, transformer.nick) +
-      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id)
+      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id) ++
+      elementToNode(edge.outVertex, transformer.source) ++
+      elementToNode(edge.inVertex, transformer.target)
 
   override def vertexAdded(vertex: Vertex): Unit = {
     for (nickSet <- vertexConverters.get(vertex.label);
