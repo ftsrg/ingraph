@@ -1,0 +1,14 @@
+\section{Introduction}
+\label{sec:introduction}
+
+%https://markorodriguez.com/2013/01/09/on-graph-computing/
+
+\paragraph{Context.} Graphs are a well-known formalism, widely used for describing and analysing systems. Graphs provide an intuitive formalism for modelling real-world scenarios, as the human mind tends to interpret the world in terms of objects (\emph{vertices}) and their respective relationships to one another (\emph{edges})~\cite{CollectivelyGeneratedModel}. 
+
+The \emph{property graph} data model~\cite{DBLP:books/igi/Sakr11/RodriguezN11} extends graphs by adding labels and properties for both vertices and edges. This gives a rich set of features for users to model their specific domain in a natural way. Graph databases are able to store property graphs and query their contents with complex graph patterns, which, otherwise would be are cumbersome to define and/or inefficient to evaluate on traditional relational databases and query technologies.
+
+Neo4j~\cite{Neo4j}, a popular NoSQL property graph database, offers the Cypher~\cite{Cypher} query language to specify graph patterns. Cypher is a high-level declarative query language which can be optimised by the query engine. The \opencypher project~\cite{openCypher} is an initiative of Neo Technology, the company behind Neo4j, to deliver an open specification of Cypher.
+
+\paragraph{Problem and objectives.} The \opencypher project features a formal specification of the grammar of the query language (\cref{sec:opencypher}) and a set of acceptance tests that define the behaviour of various Cypher features. However, there is no mathematical formalisation for any of the language features. In ambiguous cases, the user is advised to consult Neo4j's Cypher documentation or to experiment with Neo4j's Cypher query engine and follow its behaviour. Our goal is to provide a formal specification for the core features of \opencypher.
+
+\paragraph{Contributions.} In this paper, we use a formal definition of the property graph data model~\cite{DBLP:conf/edbt/HolschG16} and an extended version of relational algebra, operating on multisets (bags) and featuring additional operators~\cite{DBLP:books/daglib/0020812}. These allow us to construct a concise formal specification for the core features in the \opencypher grammar, which can then serve as a basis for implementing an \opencypher-compliant query engine.

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <skip>
+          <skip xsi:type="openCypher:FunctionInvocation">
+            <functionName name="toInteger"/>
+            <parameter xsi:type="openCypher:ExpressionMulDiv" operator="*">
+              <left xsi:type="openCypher:FunctionInvocation">
+                <functionName name="rand"/>
+              </left>
+              <right xsi:type="openCypher:NumberConstant" value="9"/>
+            </parameter>
+          </skip>
+        </skip>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:Count"/>
+          <alias name="count"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionComparison" operator=">">
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.2/@returnBody/@items.0/@alias"/>
+            <right xsi:type="openCypher:NumberConstant" value="0"/>
+          </expression>
+          <alias name="nonEmpty"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionList">
+            <expressions xsi:type="openCypher:NumberConstant" value="3.4"/>
+            <expressions xsi:type="openCypher:NumberConstant" value="3"/>
+            <expressions xsi:type="openCypher:StringConstant" value="'5'"/>
+          </expression>
+          <alias name="numbers"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ListComprehension">
+            <filterExpression>
+              <idInColl>
+                <variable name="n"/>
+                <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias"/>
+              </idInColl>
+            </filterExpression>
+            <expression xsi:type="openCypher:FunctionInvocation">
+              <functionName name="toFloat"/>
+              <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@body/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
+            </expression>
+          </expression>
+          <alias name="float_numbers"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

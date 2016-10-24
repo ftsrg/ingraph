@@ -1,0 +1,27 @@
+\section{The openCypher Query Language}
+\label{sec:opencypher}
+
+\paragraph{Language.} As the primary query language of Neo4j~\cite{Neo4j}, Cypher~\cite{Cypher} was designed to read easily. It allows users to specify the graph pattern by a syntax resembling an actual graph. The goal of the \opencypher project~\cite{openCypher} is to provide a standardised specification of the Cypher language.
+\cref{lst:example} shows an \opencypher query, which returns all people who (1)~are both actors and directors and (2)~have acted in a movie together with $\atom{Clint~Eastwood}$.\\
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[label=lst:example, caption={Get people who are both actors and directors and acted in a movie with Clint Eastwood.}]
+MATCH (a1)-[:ACTS_IN]->(:Movie)<-[:ACTS_IN]-(a2:Actor:Director)
+WHERE a1.name = "Clint Eastwood"
+RETURN a2
+\end{lstlisting}
+\end{minipage}
+
+The query returns with a bag of vertices that have both the labels $\atom{Actor}$ and $\atom{Director}$ and share a common $\atom{Movie}$ neighbor through $\atom{ACTS\_IN}$ edges. Cypher guarantees that these edges are only traversed once, so the vertex of $\atom{Clint~Eastwood}$ is not returned (see the section on the uniqueness of edges).
+
+\paragraph{Implementation.} While Neo4j uses a parsing expression grammar (PEG)~\cite{DBLP:conf/popl/Ford04} for specifying the grammar rules of Cypher, openCypher aims to achieve an implementation-agnostic specification by only providing a context-free grammar. The parser can be implemented using any capable parser technology, \eg \antlr~\cite{Parr:2013:DAR:2501720} or Xtext~\cite{DBLP:conf/oopsla/EysholdtB10}. %It also possible to generate a grammar following the ISO 14977 Extended Backus--Naur Form~\cite{ISO14977},
+
+\paragraph{Legacy grammar rules.} It is not a goal of the openCypher project to fully cover the features of Neo4j's Cypher language: ``Not all grammar rules of the Cypher language will be standardised in their current form, meaning that they will not be part of openCypher as-is. Therefore, the openCypher grammar will not include some well-known Cypher constructs; these are called 'legacy'.''\footnote{\url{https://github.com/opencypher/openCypher/tree/master/grammar}} The \emph{legacy rules} include commands (\lstinline+CREATE INDEX+, \lstinline+CREATE UNIQUE CONSTRAINT+, etc.), pre-parser rules (\lstinline+EXPLAIN+, \lstinline+PROFILE+) and deprecated constructs (\lstinline+START+). A detailed description is provided in the openCypher specification. In our work, we focused on the \emph{standard core} of the language and ignored legacy rules.
+
+% http://neo4j.com/docs/developer-manual/current/cypher/#cypherdoc-uniqueness
+\paragraph{Uniqueness for edges.} In an \opencypher query, a \lstinline+MATCH+ clause defines a graph pattern. A query can be composed of multiple patterns spanning multiple \lstinline+MATCH+ clauses. For the matches of a pattern within a single \lstinline+MATCH+ clause, edges are required to be unique. %even for disconnected graph patterns.
+However, matches for multiple \lstinline+MATCH+ clauses can share edges. This uniqueness criterium can be expressed in a compact way with the \alldifferenttext operator introduced in \cref{sec:rga}. For vertices, this restriction does not apply.
+
+\paragraph{Aggregation.} It indeed makes sense to calculate aggregation over graph pattern matches, though, its result will not necessarily be pattern match with vertices and edges. Based on some \emph{grouping criteria}, matches are put into categories, and values for the grouping criteria as well as grouping functions\footnote{For example, \lstinline+count+, \lstinline+avg+, \lstinline+sum+, \lstinline+max+, \lstinline+min+, \lstinline+stdDev+, \lstinline+stdDevP+, \lstinline+collect+. The \lstinline+collect+ function is an exception as it does not return a single scalar value but returns a collection (list).} over the groups, the aggregations are evaluated in a single tuple for each and every category. In the SQL query language, grouping criteria is explicitly given by using the \lstinline+GROUP BY+ clause. In \opencypher, however, this is done implicitly in the \lstinline+RETURN+ as well as in \lstinline+WITH+ clauses: vertices, edges and their properties that appear outside the grouping functions become the \emph{grouping criteria}.\footnote{This approach is also used by some SQL code assistant IDEs generating the \lstinline+GROUP BY+ clause for a query.}
+
+\paragraph{Subqueries.} One can compose an \opencypher query of multiple subqueries. Subqueries, written subsequently, mostly begin by a \lstinline+MATCH+ clause and end at (including) a \lstinline+RETURN+ or \lstinline+WITH+ clause, the latter having an optional \lstinline+WHERE+ clause to follow. The \lstinline+WITH+ and \lstinline+RETURN+ clauses determine the resulting schema of the subquery by specifiying the vertices, edges, attributes and aggregates of the result. When \lstinline+WITH+ has the optional \lstinline+WHERE+ clause, it applies an other filter on the subquery result.~\footnote{This is much like the \lstinline+HAVING+ construct of the SQL language with the major difference that it is also allowed in \opencypher in case no aggregation has been done.} The last subquery must be ended by \lstinline+RETURN+, whereas all the previous ones must be ended by \lstinline+WITH+. If a query is composed by more than one subqueries, their results are joined together using \jointext or \leftouterjointext operators.

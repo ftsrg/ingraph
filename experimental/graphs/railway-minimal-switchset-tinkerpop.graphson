@@ -1,6 +1,0 @@
-{"id":0,"label":"vertex","outE":{"elements":[{"id":4,"inV":2},{"id":15,"inV":12}]},"properties":{"type":[{"id":1,"value":"Region"}]}}
-{"id":16,"label":"vertex","inE":{"follows":[{"id":20,"outV":9}]},"outE":{"target":[{"id":19,"inV":12}]},"properties":{"position":[{"id":18,"value":"STRAIGHT"}],"type":[{"id":17,"value":"SwitchPosition"}]}}
-{"id":2,"label":"vertex","inE":{"elements":[{"id":4,"outV":0}]},"outE":{"semaphores":[{"id":8,"inV":5}]},"properties":{"type":[{"id":3,"value":"Segment"}]}}
-{"id":5,"label":"vertex","inE":{"entry":[{"id":11,"outV":9}],"semaphores":[{"id":8,"outV":2}]},"properties":{"type":[{"id":6,"value":"Semaphore"}],"signal":[{"id":7,"value":"GO"}]}}
-{"id":9,"label":"vertex","outE":{"entry":[{"id":11,"inV":5}],"follows":[{"id":20,"inV":16}]},"properties":{"type":[{"id":10,"value":"Route"}]}}
-{"id":12,"label":"vertex","inE":{"elements":[{"id":15,"outV":0}],"target":[{"id":19,"outV":16}]},"properties":{"currentPosition":[{"id":14,"value":"DIVERGING"}],"type":[{"id":13,"value":"Switch"}]}}

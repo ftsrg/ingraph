@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="sensor"/>
+            <nodeLabels>
+              <nodeLabels labelName="Sensor"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern incoming="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment1"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment1"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>connectsTo</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment2"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>connectsTo</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment3"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>connectsTo</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment4"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>connectsTo</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment5"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>connectsTo</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="segment6"/>
+              <nodeLabels>
+                <nodeLabels labelName="Segment"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment2"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="sensor"/>
+              <nodeLabels>
+                <nodeLabels labelName="Sensor"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment3"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="sensor"/>
+              <nodeLabels>
+                <nodeLabels labelName="Sensor"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment4"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="sensor"/>
+              <nodeLabels>
+                <nodeLabels labelName="Sensor"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment5"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="sensor"/>
+              <nodeLabels>
+                <nodeLabels labelName="Sensor"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="segment6"/>
+            <nodeLabels>
+              <nodeLabels labelName="Segment"/>
+            </nodeLabels>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>monitoredBy</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="sensor"/>
+              <nodeLabels>
+                <nodeLabels labelName="Sensor"/>
+              </nodeLabels>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@chain.0/@nodePattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.1/@chain.0/@nodePattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.1/@chain.1/@nodePattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.1/@chain.2/@nodePattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.1/@chain.3/@nodePattern/@variable"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.1/@chain.4/@nodePattern/@variable"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

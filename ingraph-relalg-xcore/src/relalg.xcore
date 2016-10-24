@@ -1,0 +1,301 @@
+@Ecore(nsURI="http://ingraph/relalg")
+@GenModel(bundleManifest="false",
+    modelDirectory="ingraph-relalg-xcore/build/xcore/main",
+    complianceLevel="8.0")
+package relalg
+
+class RelalgContainer {
+	refers Operator rootExpression
+	contains NamedElement[] elements opposite ^container
+	contains Operator[] operators opposite ^container
+	contains Expression[] expressions opposite ^container
+}
+
+abstract class NamedElement {
+	String name
+	refers RelalgContainer ^container opposite elements
+}
+
+abstract class Label extends NamedElement {
+}
+
+class VertexLabel extends Label {
+}
+
+class EdgeLabel extends Label {
+}
+
+/* Variables */
+abstract class Variable extends NamedElement, ReturnableElement, ComparableElement {
+	boolean dontCare = "false"
+}
+
+class ElementVariable extends Variable {
+	refers AttributeVariable[] attributes opposite element
+}
+
+class VertexVariable extends ElementVariable {
+	refers VertexLabel[] vertexLabels // the vertex must have *all* of these labels
+}
+
+class EdgeVariable extends ElementVariable {
+	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
+}
+
+class AttributeVariable extends Variable {
+	refers ElementVariable element opposite attributes
+}
+
+abstract class ReturnableElement {
+}
+
+/* Operators */
+abstract class Operator {
+	refers RelalgContainer ^container opposite operators
+	String description
+	refers Variable[] schema
+	contains Cardinality cardinality
+}
+
+class Cardinality {
+	Double value
+}
+
+/* Nullary operators */
+abstract class NullaryOperator extends Operator {}
+
+class GetVerticesOperator extends NullaryOperator {
+	refers VertexVariable vertexVariable
+}
+
+// (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
+class GetEdgesOperator extends NullaryOperator {
+	refers VertexVariable sourceVertexVariable
+	refers EdgeVariable edgeVariable
+	refers VertexVariable targetVertexVariable
+}
+
+/* Unary operators */
+abstract class UnaryOperator extends Operator {
+	refers Operator input
+}
+
+class ProductionOperator extends UnaryOperator {
+}
+
+class SelectionOperator extends UnaryOperator {
+	String conditionString
+	refers LogicalExpression condition
+}
+
+class ProjectionOperator extends UnaryOperator {
+	refers Variable[] variables
+}
+
+class ExpandOperator extends UnaryOperator {
+	Direction direction
+	refers VertexVariable sourceVertexVariable
+	refers EdgeVariable edgeVariable
+	refers VertexVariable targetVertexVariable
+	Integer minHops
+	Integer maxHops
+}
+
+class DuplicateEliminationOperator extends UnaryOperator {
+}
+
+class AllDifferentOperator extends UnaryOperator {
+	refers EdgeVariable[] edgeVariables
+	refers EdgeVariableSet edgeVariableSets
+}
+
+class EdgeVariableSet { // TODO - we should think about this a bit more
+	refers EdgeVariable[] edgeVariables
+}
+
+class SortOperator extends UnaryOperator {
+	contains SortEntry[] entries
+}
+
+class SortEntry {
+	refers Variable variable
+	OrderDirection orderDirection
+}
+
+class TopOperator extends UnaryOperator {
+	Integer skip
+	Integer limit
+}
+
+class GroupingOperator extends UnaryOperator {
+	contains GroupingEntry[] entries
+}
+
+class GroupingEntry {
+	AggregationType aggregationType
+	refers Variable variable
+	refers Variable aggregatedVariable
+}
+
+/* Binary operators */
+abstract class BinaryOperator extends Operator {
+	contains Operator leftInput
+	contains Operator rightInput
+}
+
+abstract class CommutativeBinaryOperator extends BinaryOperator {
+}
+
+abstract class AssociativeBinaryOperator extends BinaryOperator {
+}
+
+abstract class AbstractJoinOperator extends BinaryOperator {
+	refers Variable[] mutualVariables
+}
+
+class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+}
+
+class LeftOuterJoinOperator extends AbstractJoinOperator {
+}
+
+class AntiJoinOperator extends AbstractJoinOperator {
+}
+
+class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+	Boolean bag // set or bag union
+}
+
+/* expression */
+abstract class Expression {
+	refers RelalgContainer ^container opposite expressions
+	String text
+}
+
+abstract class ArithmeticExpression {
+}
+
+abstract class BinaryExpression extends Expression {
+}
+
+// arithmetic operations evaluate to a number, hence they are arithmetic expressins
+class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
+	BinaryArithmeticOperator operator
+}
+
+// artihmetic comparisons evaluate to true/false, hence they are logical expressions
+class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
+	ArithmeticComparisonOperator operator
+	refers ComparableElement leftOperand
+	refers ComparableElement rightOperand
+}
+
+// not sure what we will make of this
+abstract class StringExpression extends Expression {
+}
+
+abstract class LogicalExpression extends Expression {
+}
+
+class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
+	BinaryLogicalOperator operator
+	refers LogicalExpression leftOperand
+	refers LogicalExpression rightOperand
+}
+
+abstract class ComparableElement {
+}
+
+abstract class Atom extends Expression {
+}
+
+abstract class Literal extends Atom, ComparableElement {
+}
+
+class BooleanLiteral extends Literal, LogicalExpression {
+	boolean value
+}
+
+class StringLiteral extends Literal, StringExpression {
+	String value
+}
+
+abstract class NumberLiteral extends Literal, ArithmeticExpression {
+}
+
+class DoubleLiteral extends NumberLiteral {
+	Double value
+}
+
+class IntegerLiteral extends NumberLiteral {
+	Integer value
+}
+
+/* enums */
+enum Direction {
+	BOTH
+	,
+	IN
+	,
+	OUT
+}
+
+enum OrderDirection {
+	ASCENDING
+	,
+	DESCENDING
+}
+
+enum BinaryArithmeticOperator {
+	PLUS
+	,
+	MINUS
+	,
+	MULTIPLICATION
+	,
+	DIVISION
+	,
+	MOD
+	,
+	POWER
+}
+
+enum ArithmeticComparisonOperator {
+	EQUAL_TO
+	,
+	NOT_EQUAL_TO
+	,
+	GREATER_THAN
+	,
+	GREATER_THAN_OR_EQUAL
+	,
+	LESS_THAN
+	,
+	LESS_THAN_OR_EQUAL
+}
+
+enum UnaryArithmeticOperator {
+	MINUS
+	,
+	PLUS
+}
+
+enum BinaryLogicalOperator {
+	AND
+	,
+	OR
+	,
+	XOR
+}
+
+enum AggregationType {
+	COUNT
+	,
+	SUM
+	,
+	AVG
+	,
+	MAX
+	,
+	MIN
+}

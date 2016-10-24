@@ -1,11 +1,12 @@
 /**
- * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/optimization.vql
+ * Generated from platform:/resource/ingraph-optimization-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
  */
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.ExpandOperatorMatch;
 import ingraph.optimization.patterns.ExpandOperatorMatcher;
+import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +18,10 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecificat
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
-import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
+import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameterDirection;
@@ -70,7 +71,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
   
   @Override
   public ExpandOperatorMatch newMatch(final Object... parameters) {
-    return ExpandOperatorMatch.newMatch((relalg.ExpandOperator) parameters[0]);
+    return ExpandOperatorMatch.newMatch((relalg.ExpandOperator) parameters[0], (relalg.Operator) parameters[1]);
   }
   
   /**
@@ -102,9 +103,11 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static ExpandOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", (IInputKey)null, PParameterDirection.INOUT);
+    private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "ExpandOperator")), PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pExpandOperator);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
+    
+    private final List<PParameter> parameters = Arrays.asList(parameter_pExpandOperator, parameter_pParentOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -113,7 +116,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("expandOperator");
+      return Arrays.asList("expandOperator","parentOperator");
     }
     
     @Override
@@ -129,11 +132,17 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
       	{
       		PBody body = new PBody(this);
       		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator)
+      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
+      		// 	find parentOperator(parentOperator, expandOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_expandOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		// 	ExpandOperator(expandOperator)
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://www.example.org/relalg", "ExpandOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		bodies.add(body);
       	}
       	// to silence compiler error

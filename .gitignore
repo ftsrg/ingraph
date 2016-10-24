@@ -3,6 +3,8 @@ bin/
 target/
 tmp/
 .settings/
+.classpath
+.project
 .DS_Store*
 .metadata
 runtimeInfo
@@ -35,4 +37,9 @@ gen/
 .cache-main
 .cache-tests
 xtend-gen
+#xtext-gen
+generated/
+
+out/
+.tmpBin/
 

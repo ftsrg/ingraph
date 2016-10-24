@@ -1,0 +1,3 @@
+task plot(type: Exec) {
+  commandLine 'Rscript', 'report.R'
+}

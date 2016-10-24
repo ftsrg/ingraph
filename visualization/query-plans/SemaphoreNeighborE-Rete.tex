@@ -1,0 +1,88 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}}$ \\
+\footnotesize $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor2, te1, te2} \rangle$
+}
+[
+{$\join \{\var{route2}, \var{sensor2}\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2, te1, sensor1, te2} \rangle$
+}
+[
+{$\join \{\var{te1}\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2, te1, sensor1, te2} \rangle$
+}
+[
+{$\join \{\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2, te1, sensor1} \rangle$
+}
+[
+{$\join \{\var{route2}, \var{sensor2}\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2} \rangle$
+}
+[
+{$\antijoin \{\var{semaphore}, \var{route2}\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2} \rangle$
+}
+[
+{$\selection{\var{route1} \neq \var{route2}}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2} \rangle$
+}
+[
+{$\join \{\}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore, route2, sensor2} \rangle$
+}
+[
+{$\getedgesi{route1}{Route}{semaphore}{Semaphore}$ \\ $\getedgesii{exit}{exit}$ \\
+\footnotesize $\color{gray} \langle \var{route1, semaphore} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+[
+{$\getedgesi{route2}{Route}{sensor2}{Sensor}$ \\ $\getedgesii{g2}{gathers}$ \\
+\footnotesize $\color{gray} \langle \var{route2, sensor2} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+{$\getedgesi{route2}{Route}{semaphore}{Semaphore}$ \\ $\getedgesii{entry}{entry}$ \\
+\footnotesize $\color{gray} \langle \var{route2, semaphore} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\getedgesi{sensor2}{Sensor}{route2}{Route}$ \\ $\getedgesii{g2}{gathers}$ \\
+\footnotesize $\color{gray} \langle \var{sensor2, route2} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\getedgesi{te1}{TrackElement}{sensor1}{Sensor}$ \\ $\getedgesii{mb1}{monitoredBy}$ \\
+\footnotesize $\color{gray} \langle \var{te1, sensor1} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\getedgesi{te1}{TrackElement}{te2}{TrackElement}$ \\ $\getedgesii{ct}{connectsTo}$ \\
+\footnotesize $\color{gray} \langle \var{te1, te2} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\getedgesi{route2}{Route}{sensor2}{Sensor}$ \\ $\getedgesii{mb2}{monitoredBy}$ \\
+\footnotesize $\color{gray} \langle \var{route2, sensor2} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

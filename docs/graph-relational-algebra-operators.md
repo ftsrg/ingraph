@@ -2,7 +2,11 @@
 
 List of graph relational operators with examples.
 
-## Alfa nodes
+## Nullary Operators
+
+* `GetVertices(vertexVar=inactiveRoute:Route)`
+
+## Unary operators
 
 * `AllDifferent([_e1, _e2])`
 * `Distinct([segment, segment.length AS length])`
@@ -16,13 +20,9 @@ List of graph relational operators with examples.
 * `Production([activeRoute])`
 * `Trimmer`
 
-## Beta nodes
+## Binary operators
 
 * `AntiJoin([route, sensor])`
 * `AntiJoin(activeRoute=inactiveRoute)`
 * `NaturalJoin`
 * `NotIn(activeRoute)` (variable not appear in 2nd input)
-
-## Misc
-
-* `GetVertices(vertexVar=inactiveRoute:Route)`

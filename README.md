@@ -1,31 +1,53 @@
 # ingraph
 
-[![Build Status](https://travis-ci.com/bme-db-lab/ingraph.svg?token=dduaCwDzExdmU27AvBiK&branch=master)](https://travis-ci.com/bme-db-lab/ingraph)
+[![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
+
+## Third Party Sources
+
+* The project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/). See also the [Why Xtext?](docs/why-xtext.md) document.
+
+## Generated Artifacts
+
+* [Test summary](http://docs.inf.mit.bme.hu/ingraph/test/)
+* [Technical report on compliance with the OpenCypher TCK](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf)
+
+## User's Guide
+
+See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
 
 ## Contributor's Guide
 
 ### Eclipse
 
-1. Start with Eclipse Modeling.
-1. Install the **Xtend IDE** and the **Xtext SDK** from the Mars/Neon update site.
-1. Go to the **Eclipse Marketplace**, e.g. the **Buildship: Eclipse Plug-ins for Gradle**. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+1. It is recommended to start with the latest milestone (currently, [Oxygen M2](http://www.eclipse.org/downloads/packages/release/Oxygen/M2)) **Eclipse IDE for Java and DSL Developers** distribution. This has the required dependencies. If you start from another Eclipse distribution, you should install the missing plug-ins:
+    * From the Marketplace:
+      * If you do not have Buildship: go to the **Eclipse Marketplace**, install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+    * From the update site of your Eclipse release (e.g. the Oxygen update site).
+      * **Xtend IDE**
+      * **Xtext SDK**
+      * **EMF - Eclipse Modeling Framework Xcore SDK**
+1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
+1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
+1. You may have to clean the workspace once.
 
-#### How to update the EMF model
+#### How to run the tests
 
-1. Go to the **ingraph-relalg-model** project.
-1. Open the **Modeling** perspective (`Ctrl`+`3`, Modeling).
-1. Open the `model/relalg.aird` file by double clicking on it, then clicking the small black triangle (left to the file name). Open **Representations per category**, **Design**, **Entities**, **relalg**.
+Running Xtend JUnit tests from a Gradle project is tricky. If you encounter a `ClassNotFound` exception, you should navigate the cursor to the **name of the class**, not the name of a test method, and press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>, <kbd>T</kbd>.
 
-#### How to regenerate the code
+#### How to update the relational algebra model
 
-1. Go to the **ingraph-relalg-model** project.
-1. Open the `model/relalg.genmodel` file.
-1. Right click the root node of the tree and choose **Reload...**. Select **Ecore model**, click **Next** and click **Load**. Click **Next** and **Finish**.
-1. Right click the root node of the tree and choose **Generate Model Code**.
+Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `src/main/java-gen` directory manually.
 
-#### Troubleshooting for Eclipse
+#### How to update the grammars
 
-If you have compile errors in the imported Xtend projects, remove the `build/` directories from the projects.
+1. Go to the **ingraph-cypher-parser** project, navigate to the `src/main/java` source folder, and right click the `org.slizaa.neo4j.opencypher` package's `GenerateOpenCypher.mwe2` file and choose **Run As** | **MWE2 Workflow**. If you get a warning that there are errors in the project, click **Proceed**.
+1. Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
+
+#### Opening `cypxmi` models
+
+The `cypxmi` files contain the models as parsed by Xtext.
+
+To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
 
 ### IntelliJ IDEA
 
@@ -33,6 +55,14 @@ In IntelliJ, go to **File** | **Settings** | **Plug-ins**, search for `Xtend`, c
 
 ### Gradle
 
-To build the projects from command line
+To build the projects from command line, use the following command:
+
+```bash
+./gradlew clean build --continue
+```
 
 If you get `duplicate class` errors for the Xtend classes, you probably omitted the `clean` target from the Gradle build.
+
+## License
+
+The project uses the Apache 2.0 license and is supported by the MTA-BME Lendület Research Group on Cyber-Physical Systems.

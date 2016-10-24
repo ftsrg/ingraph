@@ -1,15 +1,15 @@
-plugins { id "org.xtext.xtend" version "1.0.0" }
 apply plugin: 'org.xtext.xtend'
+apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 dependencies {
-	compile project(':ingraph-antlr-parser')
-	compile project(':ingraph-relalg-model')
+	compile project(':ingraph-cypher-parser')
+	compile project(':ingraph-relalg-xcore')
+	compile project(':ingraph-relalg-model-util')
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
 	compile group: 'junit', name: 'junit', version: '4.12'
-}
-
-sourceSets {
-	main { java { srcDir 'src' } }
-	test { java { srcDir 'src-test' } }
+	compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
 }

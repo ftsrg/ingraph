@@ -1,4 +1,0 @@
-dependencies {
-    compile project(':ingraph-algebra')
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
-}

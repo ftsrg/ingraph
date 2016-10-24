@@ -1,16 +1,50 @@
 % !TeX spellcheck = en_GB
-% !TeX program = xelatex
-\documentclass[a4paper]{report}
-
-\title{openCypher Specification}
-
-\author{Gábor Szárnyas, József Marton}
+% !TeX program = pdflatex
+\documentclass[]{report}
 
 \input{../visualization/inputs/relalg-packages}
 \input{../visualization/inputs/relalg-commands}
 
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage{hyperref}
+
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[figurename=Fig.]{caption}
+\usepackage{xcolor}
+\usepackage{csquotes}
+\usepackage{microtype}
+\usepackage[math]{blindtext}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{rotate}
+\usepackage{enumitem}
+
+\input{commands}
+
+\input{listings}
+\usepackage[capitalise,nameinlink]{cleveref}
+
+\nonfrenchspacing
+
+% title page
+\title{openCypher Specification}
+\author{G\'abor Sz\'arnyas, J\'ozsef Marton}
+\usepackage[]{datetime}
+\date{\yyyymmdddate \today~\currenttime}
+
 \begin{document}
 
-a
+\maketitle
+
+\tableofcontents
+
+\input{executive-summary}
+
+\input{foundations}
+
+\input{acceptance-tests}
 
 \end{document}

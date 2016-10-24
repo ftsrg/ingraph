@@ -1,5 +1,8 @@
 \newcommand{\lxor}{\oplus}
 
+\newcommand{\asc}{\twoheaduparrow}
+\newcommand{\desc}{\twoheaddownarrow}
+
 \newcommand{\tuple}[1]{\langle #1 \rangle}
 \newcommand{\concatenation}{\Vert}
 
@@ -14,19 +17,9 @@
 	\ifstrempty{#2}{}{\colon{\atom{#2}}}
 	)}
 
-% alpha operators
-
-\newcommand{\expandbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
-
 % see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
-\newcommand{\expandbothop}{\updownarrow}
-\newcommand{\expandboth}[5]{\expandbothop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
 
-\newcommand{\expandoutop}{\uparrow}
-\newcommand{\expandout}[5]{\expandoutop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
-
-\newcommand{\expandinop}{\downarrow}
-\newcommand{\expandin}[5]{\expandinop \edgevariable{#1}{#2} \expandbody{#3}{#4}{#5}}
+% nullary operators
 
 \newcommand{\getverticesop}{\bigcirc}
 \newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
@@ -34,16 +27,29 @@
 %\newcommand{\getedgesop}{\mathbin{\text{\rotatebox[origin=c]{90}{$\multimapboth$}}}}
 \newcommand{\getedgesop}{\Uparrow}
 \newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
+\newcommand{\getedgesi}[4]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}}}
+\newcommand{\getedgesii}[2]{\edgevariable{#1}{#2}}
 
-\newcommand{\alldifferentop}{\neq}
+% unary operators
+
+\newcommand{\expandbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
+
+\newcommand{\expandbothop}{\updownarrow}
+\newcommand{\expandboth}[5]{\expandbothop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
+
+\newcommand{\expandoutop}{\uparrow}
+\newcommand{\expandout}[5]{\expandoutop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
+
+\newcommand{\expandinop}{\downarrow}
+\newcommand{\expandin}[5]{\expandinop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
+
+\newcommand{\alldifferentop}{\not\fallingdotseq}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
 
 \newcommand{\duplicateeliminationop}{\delta}
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 
 \newcommand{\sortop}{\tau}
-\newcommand{\sortopasc}{\tau^\Uparrow}
-\newcommand{\sortopdesc}{\tau^\Downarrow}
 
 \newcommand{\sortarbitrary}[3]{\sortop^{#1}_{#2}{#3}}
 
@@ -68,7 +74,7 @@
 \newcommand{\skipp}[1]{\topop^{#1}}
 \newcommand{\limit}[1]{\topop_{#1}}
 
-% beta operators
+% binary operators
 
 \newcommand{\joinop}{\bowtie}
 \newcommand{\join}{\joinop}

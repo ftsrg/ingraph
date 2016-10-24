@@ -1,0 +1,6 @@
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+In this paper, we presented a formal specification for a subset of the \opencypher query language. This provides the theoretical foundations to use \opencypher as a language for graph query engines. Using the proposed mapping, an \opencypher-compliant query engine could be built on any relational database engine to (1)~store property graphs as graph relations and to (2)~efficiently evaluate the extended operators of \rga.
+
+As a future work, we will give formal specification of the operators for incremental query evaluation, which requires us to define \emph{maintenance operations} to keep their result in sync with the latest set of changes. Our long-term research objective is to design and prototype a \emph{distributed, incremental graph query engine}~\cite{DBLP:conf/models/SzarnyasIRHBV14} for the property graph data model.

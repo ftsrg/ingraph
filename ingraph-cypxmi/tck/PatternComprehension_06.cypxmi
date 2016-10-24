@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+            <nodeLabels>
+              <nodeLabels labelName="A"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="b"/>
+            <nodeLabels>
+              <nodeLabels labelName="B"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression>
+            <expression3Parts xsi:type="openCypher:Index">
+              <expression xsi:type="openCypher:ExpressionComparison" operator="=">
+                <left xsi:type="openCypher:VariableRef">
+                  <variableRef href="http:/example.cyp#|0"/>
+                </left>
+                <right xsi:type="openCypher:RelationshipsPattern">
+                  <nodePattern>
+                    <variable name="a"/>
+                  </nodePattern>
+                  <chain>
+                    <relationshipPattern outgoing="true">
+                      <detail>
+                        <range/>
+                      </detail>
+                    </relationshipPattern>
+                    <nodePattern>
+                      <variable name="b"/>
+                    </nodePattern>
+                  </chain>
+                </right>
+              </expression>
+            </expression3Parts>
+          </expression>
+          <alias name="paths"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+          </expression>
+          <alias name="c"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@alias"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.1/@alias"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

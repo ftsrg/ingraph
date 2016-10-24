@@ -1,0 +1,107 @@
+\newcommand{\retescale}{0.45}
+\newcommand{\patternscale}{0.28}
+\newcommand{\diagramscale}{0.75}
+\newcommand{\phasesscale}{0.5}
+
+\newcommand{\mysf}[1]{$\mathsf{#1}$}
+\newcommand{\query}[1]{\mysf{#1}\xspace}
+
+\newcommand{\connectedsegments}{\query{ConnectedSegments}}
+\newcommand{\poslength}{\query{PosLength}}
+\newcommand{\routesensor}{\query{RouteSensor}}
+\newcommand{\switchmonitored}{\query{SwitchMonitored}}
+\newcommand{\switchset}{\query{SwitchSet}}
+\newcommand{\semaphoreneighbor}{\query{SemaphoreNeighbor}}
+
+\newcommand{\iq}{\mbox{\textsc{IncQuery}}\xspace}
+\newcommand{\iqd}{\mbox{\textsc{IncQuery-D}}\xspace}
+\newcommand{\eiq}{\mbox{\textsc{EMF-IncQuery}}\xspace}
+\newcommand{\viatraquery}{\mbox{\textsc{Viatra} Query}\xspace}
+\newcommand{\vql}{\mbox{\textsc{Viatra} Query Language}\xspace}
+\newcommand{\tb}{Train Benchmark\xspace}
+\newcommand{\antlr}{\mbox{ANTLR4}\xspace}
+\newcommand{\saphana}{SAP \mbox{HANA}\xspace}
+\newcommand{\ingraph}{\textsf{ingraph}\xspace}
+\newcommand{\opencypher}{\mbox{openCypher}\xspace}
+\newcommand{\cypher}{\mbox{Cypher}\xspace}
+\newcommand{\sparql}{\mbox{SPARQL}\xspace}
+\newcommand{\rga}{relational graph algebra\xspace}
+\newcommand{\RGA}{Relational Graph Algebra\xspace}
+
+\newcommand{\queryplanscale}{0.9}
+
+\newcommand{\fig}[4]{
+	\centerline{\includegraphics[scale=#4]{#1}}
+	\captionof{figure}{#3.}\label{fig:#2}
+}
+
+\newcommand{\queryplan}[2]{\fig{../ingraph/visualization/#1.pdf}{#1}{#2}{\queryplanscale}}
+
+\newcommand{\eg}{e.g.\xspace}
+\newcommand{\ie}{i.e.\xspace}
+\newcommand{\etal}{et al.\xspace}
+\newcommand{\wrt}{w.r.t.\xspace}
+
+% text for operators
+\newcommand{\operatortext}[1]{\mbox{\emph{#1}}\xspace}
+
+\newcommand{\projectiontext}{\operatortext{projection}}
+\newcommand{\selectiontext}{\operatortext{selection}}
+\newcommand{\antijointext}{\operatortext{antijoin}}
+\newcommand{\jointext}{\operatortext{natural join}}
+\newcommand{\leftouterjointext}{\operatortext{left outer join}}
+\newcommand{\cartesianproducttext}{\operatortext{Cartesian product}}
+\newcommand{\uniontext}{\operatortext{union}}
+\newcommand{\baguniontext}{\operatortext{bag union}}
+\newcommand{\intersectiontext}{\operatortext{intersection}}
+\newcommand{\minustext}{\operatortext{minus}}
+\newcommand{\renametext}{\operatortext{rename}}
+
+\newcommand{\alldifferenttext}{\operatortext{all-different}}
+\newcommand{\duplicateeliminationtext}{\operatortext{duplicate-elimination}}
+\newcommand{\sorttext}{\operatortext{sorting}}
+\newcommand{\groupingtext}{\operatortext{grouping}}
+\newcommand{\toptext}{\operatortext{top}}
+
+\newcommand{\expandouttext}{\operatortext{expand-out}}
+\newcommand{\expandintext}{\operatortext{expand-in}}
+\newcommand{\expandbothtext}{\operatortext{expand-both}}
+
+\newcommand{\getverticestext}{\operatortext{get-vertices}}
+\newcommand{\getedgestext}{\operatortext{get-edges}}
+
+\newcommand{\yes}{$\mdlgblkcircle$\xspace}
+\newcommand{\no}{$\mdlgwhtcircle$\xspace}
+
+\newcommand{\append}{\,\|\,}
+\newcommand{\appendtext}{\operatortext{append}}
+\newcommand{\remove}{-}
+\newcommand{\removetext}{\operatortext{remove}}
+
+\newcommand{\breakable}[2][c]{%
+	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
+\newcommand{\vertexlabels}{L_v}
+\newcommand{\edgelabels}{L_e}
+
+\newcommand{\verticestoedges}{\mathsf{src\_trg}}
+\newcommand{\propertyfunction}[2]{\mathrm{#1}(#2)}
+
+\newcommand{\vertexproperties}{P_v}
+\newcommand{\edgeproperties}{P_e}
+
+\newcommand{\vertexproperty}[1]{p_{#1}}
+\newcommand{\edgeproperty}[1]{p_{#1}}
+
+\newcommand{\vertexlabelfunction}{l_v}
+\newcommand{\edgelabelfunction}{l_e}
+
+\newcommand{\assign}{\rightarrow}
+
+\newcommand{\attr}[1]{\mathrm{attr}(#1)}
+\newcommand{\dom}[1]{\mathrm{dom}(#1)}
+\newcommand{\schema}[1]{\mathrm{sch}(\mathsf{#1})}
+
+%\newcommand{\relnull}{\bot}
+%\newcommand{\relnull}{-}
+\newcommand{\relnull}{\varepsilon}

@@ -9,17 +9,9 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{cmll}
 \usepackage{stix}
 \usepackage{etoolbox}
 
 \usepackage{tikz}
-\usepackage{tikz-qtree}
-\usetikzlibrary{shapes.gates.logic.US,trees,positioning,arrows}
-\tikzset{
-	level distance=1.5cm,
-	sibling distance=1cm,
-	edge from parent path={(\tikzparentnode.south) -- (\tikzchildnode.north)},
-	every node/.style={draw},
-	every tree node/.style={align=center,anchor=north}
-}
+\usepackage{forest}
+\tikzset{every node/.style={draw}}

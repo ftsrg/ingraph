@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+            <nodeLabels>
+              <nodeLabels labelName="A"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="a"/>
+          </nodepattern>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>LIKES</relTypeName>
+                </types>
+              </detail>
+            </relationshipPattern>
+            <nodePattern/>
+          </chain>
+          <chain>
+            <relationshipPattern outgoing="true">
+              <detail>
+                <types>
+                  <relTypeName>LIKES</relTypeName>
+                </types>
+                <range lower="0"/>
+              </detail>
+            </relationshipPattern>
+            <nodePattern>
+              <variable name="c"/>
+            </nodePattern>
+          </chain>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@chain.1/@nodePattern/@variable"/>
+            <propertyLookups propertyKeyName="name"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

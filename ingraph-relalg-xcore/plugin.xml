@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin
+      id="ingraph-relalg-xcore"
+      version="1.0.0">
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf.ecore" export="true"/>
+      <import plugin="org.eclipse.xtext.xbase.lib" export="true"/>
+      <import plugin="org.eclipse.emf.ecore.xcore.lib" export="true"/>
+   </requires>
+
+   <runtime>
+      <library name=".">
+         <export name="*"/>
+      </library>
+   </runtime>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated model -->
+      <package
+            uri="http://ingraph/relalg"
+            class="relalg.RelalgPackage"
+            genModel="src/relalg.xcore"/>
+   </extension>
+
+</plugin>

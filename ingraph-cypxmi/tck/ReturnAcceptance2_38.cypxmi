@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation" distinct="true">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:MapLiteral">
+              <entries key="foo">
+                <value xsi:type="openCypher:ExpressionList">
+                  <expressions xsi:type="openCypher:MapLiteral">
+                    <entries key="bar">
+                      <value xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                        <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+                        <propertyLookups propertyKeyName="list"/>
+                      </value>
+                    </entries>
+                  </expressions>
+                  <expressions xsi:type="openCypher:MapLiteral">
+                    <entries key="baz">
+                      <value xsi:type="openCypher:MapLiteral">
+                        <entries key="apa">
+                          <value xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+                            <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+                            <propertyLookups propertyKeyName="list"/>
+                          </value>
+                        </entries>
+                      </value>
+                    </entries>
+                  </expressions>
+                </value>
+              </entries>
+            </parameter>
+          </expression>
+          <alias name="count"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

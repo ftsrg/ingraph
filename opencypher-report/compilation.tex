@@ -1,0 +1,116 @@
+\section{Mapping \opencypher Queries to \RGA}
+\label{sec:compilation}
+
+In this section, we first give the mapping algorithm of \opencypher queries to \rga, then we give a more detailed listing of the compilation rules for the query language constructs in \cref{table:mapping}.
+We follow the bottom-up approach to build the \rga tree based on the \opencypher query. The algorithm is as follows. Join operations always use all common variables to match the two inputs (see \jointext in \cref{sec:rga}).
+
+\setlength\tabcolsep{3.6pt}
+\begin{enumerate}
+\label{alg:build-rga-tree}
+	\item A single pattern is turned left-to-right to a \getverticestext for the first vertex and a chain of \expandintext, \expandouttext or \expandbothtext operators for inbound, outbound or undirected relationships, respectively.
+	\item Patterns in the same \lstinline+MATCH+ clause are joined by \jointext.
+	\item Append an \alldifferenttext operator for all edge variables that appear in the \lstinline+MATCH+ clause because of the non-repeating edges language rule.
+	\item Process the \lstinline+WHERE+ clause. Note that according to the grammar, \lstinline+WHERE+ is bound to a \lstinline+MATCH+ clause.
+	\item Several \lstinline+MATCH+ clauses are connected to a left deep tree of \jointext. If \lstinline+MATCH+ has the \lstinline+OPTIONAL+ modifier, \leftouterjointext is used instead of \jointext.
+	\item If there is a positive or negative pattern deferred from \lstinline+WHERE+ processing,
+		append it as a \jointext or \antijointext operator, respectively.
+	\item Append \groupingtext, if \lstinline+RETURN+ or \lstinline+WITH+ clause has grouping functions inside
+	\item Append \projectiontext operator based on the \lstinline+RETURN+ or \lstinline+WITH+ clause. This operator will also handle the renaming (i.e. \lstinline+AS+).
+	\item Append \duplicateeliminationtext operator, if the \lstinline+RETURN+ or \lstinline+WITH+ clause has the \lstinline+DISTINCT+ modifier.
+	\item Append a \selectiontext operator in case the \lstinline+WITH+ had the optional \lstinline+WHERE+ clause.
+	\item If this is not the first subquery, join to the \rga tree using \jointext or \leftouterjointext.
+	\item Assemble a \uniontext operation from the query parts\footnote{In this context, query parts refer to those parts of the query connected by the \lstinline+UNION+ \opencypher keyword.}. As the \uniontext operator is technically a binary operator, the \uniontext of more than two query parts are represented as a left deep tree of \lstinline+UNION+ operators.
+\end{enumerate}
+
+\setlength\extrarowheight{2.5pt}
+\setlength\tabcolsep{3.6pt}
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\multicolumn{2}{|l|}{ \bf Language construct } & \bf Relational algebra expression \\ \hline\hline
+
+		%\hline
+		\multicolumn{3}{|l|}{Vertex, edge and path patterns } \\ \cline{2-3}
+
+		& \lstinline+()+ & $\getvertices{\_v}{}$ \\ \cline{2-3}
+
+		& \lstinline+(:<v>t1</v>:<v>t2</v>)+ & $\getvertices{\_v}{t1 \land t2 \land \ldots}$ \\ \cline{2-3}
+
+		& \lstinline+(<v>v</v>:<v>t1</v>:<v>t2</v>)+ & $\getvertices{v}{t1 \land t2 \land \ldots}$ \\ \cline{2-3}
+
+		& \lstinline+<v>p</v>-[<v>e</v>:<v>l1|...</v>]-(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & \multirow{2}{*}{$\expandboth{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$} \\ \cline{2-2}
+		& \lstinline+<v>p</v><-[<v>e</v>:<v>l1|...</v>]->(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & \\ \cline{2-3}
+
+		& \lstinline+<v>p</v>-[<v>e</v>:<v>l1|...</v>]->(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & $\expandout{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>p</v><-[<v>e</v>:<v>l1|...</v>]-(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & $\expandin{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>p</v>-[<v>l1|...</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{t1 \land t2 \land \ldots}{E}{l1 \lor \ldots}(\atom{p})$ \\ \cline{2-3}
+
+		\hline \multicolumn{3}{|l|}{Combining and filtering pattern matches } \\ \cline{2-3}
+
+		& \lstinline+MATCH <v>p</v>+ & $\alldifferent{\atom{edges~of~p}} \left(\atom{p}\right)$ \\ \cline{2-3}
+
+		& \lstinline+MATCH <v>p1</v>, <v>p2</v>+ &
+		$\alldifferent{\atom{edges~of~p1~and~p2}} \left( \atom{p_1}~\join~\atom{p_2} \right)$ \\ \cline{2-3}
+
+		& \breakable{
+			\lstinline+MATCH <v>p1</v>+ \\
+			\lstinline+MATCH <v>p2</v>+
+		} &
+		$\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right)~\join~\alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$ \\ \cline{2-3}
+
+		& \breakable{
+			\lstinline+MATCH <v>p1</v>+ \\
+			\lstinline+OPTIONAL MATCH <v>p2</v>+
+		} & $\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right)~\myleftouterjoin~\alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$ \\ \cline{2-3}
+
+		& \breakable{
+			\lstinline+MATCH <v>p</v>+ \\
+			\lstinline+WHERE <v>condition</v>+
+		} & \breakable{$\selection{\atom{condition}}{\left( r \right)}$, where $\atom{condition}$ may \tabularnewline specify patterns and arithmetic \tabularnewline constraints on existing variables} \\ \cline{2-3}
+
+		\hline \multicolumn{3}{|l|}{Result and sub-result operations. Rules for \lstinline+RETURN+ also apply to \lstinline+WITH+.} \\ \cline{2-3}
+
+		& \lstinline+RETURN <v>variables</v>+ & $\projection{\atom{variables}}{\left( r \right)}$ \\ \cline{2-3}
+
+		& \lstinline+RETURN <v>v1</v> AS <v>alias1</v> ...+ & $\projection{\atom{v1} \assign \atom{alias1}, \ldots }\left( r \right)$ \\ \cline{2-3}
+
+		& \lstinline+RETURN DISTINCT <v>variables</v>+ & $\duplicateelimination\left(\projection{\atom{variables}}{\left( r \right)}\right)$ \\ \cline{2-3}
+
+		& \lstinline+RETURN <v>variables</v>, <v>aggregates</v>+ & $\grouping{\atom{variables}, \atom{aggregates}}{\left( r \right)}$ \\ \cline{2-3}
+
+		\hline \multicolumn{3}{|l|}{List operations } \\ \cline{2-3}
+
+		& \lstinline+ORDER BY <v>v1</v> [ASC|DESC] ...+ & $\sort{\asc/\desc \atom{v1}, \ldots}{\left( r \right)}$ \\ \cline{2-3}
+
+		& \lstinline+LIMIT <v>l</v>+ & $\limit{l}(r)$ \\ \cline{2-3}
+
+		& \lstinline+SKIP <v>s</v>+ & $\skipp{s}(r)$ \\ \cline{2-3}
+		
+		& \lstinline+SKIP <v>s</v> LIMIT <v>l</v>+ & $\topp{l}{s}(r)$ \\ \cline{2-3}
+		
+		\hline \multicolumn{3}{|l|}{Combining results } \\ \cline{2-3}
+		
+		& \lstinline+<v>query1</v> UNION <v>query2</v>+ & $r_1 \union r_2$ \\ \cline{2-3}
+
+		& \lstinline+<v>query1</v> UNION ALL <v>query2</v>+ & $r_1 \bagunion r_2$ \\ \hline
+	\end{tabular}
+	\caption{Mapping from \opencypher constructs to relational algebra.}
+	\label{table:mapping}
+\end{table}
+
+\paragraph{Example.} The example query in~\cref{lst:example} can be formalized as:
+{\footnotesize
+	\begin{align*}
+	&\projection{a2} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
+	\end{align*}
+}
+
+Note that the $\alldifferentop$ guarantees the uniqueness constraint for the edges (\cref{sec:opencypher}), which prevents the query from returning the vertex $\atom{Clint~Eastwood}$.
+
+\paragraph{Optimisations.} Queries with negative conditions for patterns can also be expressed using the \antijointext operator. For example, \lstinline+MATCH <v>p1</v> WHERE NOT <v>p2</v>+ can be formalized as
+$$\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right) \antijoin \alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$$
+
+\paragraph{Limitations.} Our mapping does not completely cover the \opencypher language. As discussed in \cref{sec:opencypher}, some constructs are defined as legacy and thus were omitted. Also, we did not formalize expressions (\eg  conditions in selections), collections (arrays and maps), which are required for both path variables\footnote{\lstinline+MATCH p=(:Person)-[:FRIEND*1..2]->(:Person)+} and the \lstinline+UNWIND+ operator. The mapping does not cover parameters and data manipulation operations, \eg \lstinline+CREATE+, \lstinline+DELETE+, \lstinline+SET+ and \lstinline+MERGE+.

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match">
+      <pattern>
+        <patterns>
+          <var name="p"/>
+          <part xsi:type="openCypher:PatternElement">
+            <nodepattern>
+              <variable name="n"/>
+              <nodeLabels>
+                <nodeLabels labelName="A"/>
+              </nodeLabels>
+            </nodepattern>
+            <chain>
+              <relationshipPattern outgoing="true"/>
+              <nodePattern/>
+            </chain>
+          </part>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ListComprehension">
+            <filterExpression>
+              <idInColl>
+                <variable name="x"/>
+                <expression xsi:type="openCypher:FunctionInvocation">
+                  <functionName name="collect"/>
+                  <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
+                </expression>
+              </idInColl>
+            </filterExpression>
+            <expression xsi:type="openCypher:FunctionInvocation">
+              <functionName name="head"/>
+              <parameter xsi:type="openCypher:FunctionInvocation">
+                <functionName name="nodes"/>
+                <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.0/@expression/@filterExpression/@idInColl/@variable"/>
+              </parameter>
+            </expression>
+          </expression>
+          <alias name="p"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation">
+            <functionName name="count"/>
+            <parameter xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@part/@nodepattern/@variable"/>
+          </expression>
+          <alias name="c"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@var"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@returnBody/@items.1/@alias"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

@@ -1,0 +1,75 @@
+%if lstlistings is used
+%better approach: use the minted package - see https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings#The_minted_package
+%SzG: updating minted is quite cumbersome, see http://tex.stackexchange.com/questions/18083/how-to-add-custom-c-keywords-to-be-recognized-by-minted
+\usepackage{listings}
+
+\definecolor{lightgray}{RGB}{242,242,242}
+\definecolor{keywordcolor}{RGB}{0,0,160}
+\definecolor{commentcolor}{RGB}{0,128,64}
+\definecolor{stringcolor}{RGB}{0,128,0}
+\lstset{
+	numbers=left,
+	numberstyle=\scriptsize\ttfamily,
+	stepnumber=1,
+	numbersep=5pt,
+	%
+	backgroundcolor=\color{lightgray},
+	basicstyle=\scriptsize\ttfamily, % print whole listing small
+	keywordstyle=\color{keywordcolor}\bfseries\ttfamily,
+	commentstyle=\color{commentcolor}\ttfamily,
+	stringstyle=\color{stringcolor}\ttfamily,
+	identifierstyle=, % nothing happens
+	%
+	showstringspaces=false, % no special string spaces
+	aboveskip=3pt,
+	belowskip=3pt,
+	columns=flexible,
+	keepspaces=true,
+	breaklines=true,	
+	frameround=tttt,
+	captionpos=b,
+	tabsize=2,
+	frame=tb,
+	framerule=0pt,
+	framexleftmargin=0.25em,
+}
+
+\lstdefinelanguage{cypher}
+{
+	morekeywords={
+		MATCH, OPTIONAL, WHERE, NOT, AND, OR, XOR, RETURN, DISTINCT, ORDER, BY, ASC, ASCENDING, DESC, DESCENDING, UNWIND, AS, UNION, WITH, ALL, CREATE, DELETE, DETACH, REMOVE, SET, MERGE, SET, SKIP, LIMIT,
+		% some legacy rules
+		INDEX, DROP, UNIQUE, CONSTRAINT, EXPLAIN, PROFILE, START, CASE,
+		% some SQL-only keywords
+		GROUP, HAVING,
+	},
+	sensitive=true,
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]{"},
+}
+
+\newcommand{\listingcypher}[2]{
+	\lstset{
+		language=Cypher
+	}
+	\lstinputlisting[label=lst:#1, caption=#2.]{queries/#1.cyp}
+}
+
+\definecolor{relationship}{RGB}{171,0,85}
+\lstset{
+	basicstyle=\small\ttfamily,
+	tabsize=4,
+	morekeywords={Class, encapsulates, Feature},
+%	literate=*
+%	{[:gathers]}{\textcolor{relationship}{[:gathers]}}{1}
+}
+
+
+\lstset{language=Cypher,
+	literate=*
+	{<v>}{\guillemotleft{}}{1}
+	{</v>}{\guillemotright{}}{1},
+%	{<v>}{\guilsinglleft{}}{1}
+%	{</v>}{\guilsinglright{}}{1},
+}

@@ -1,2 +1,0 @@
-{"id":0,"label":"vertex","outE":{"elements":[{"id":5,"inV":2}]},"properties":{"type":[{"id":1,"value":"Region"}]}}
-{"id":2,"label":"vertex","inE":{"elements":[{"id":5,"outV":0}]},"properties":{"length":[{"id":4,"value":-1}],"type":[{"id":3,"value":"Segment"}]}}

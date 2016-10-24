@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:With">
+      <returnBody xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:MapLiteral">
+            <entries key="foo">
+              <value xsi:type="openCypher:MapLiteral">
+                <entries key="bar">
+                  <value xsi:type="openCypher:StringConstant" value="'baz'"/>
+                </entries>
+              </value>
+            </entries>
+          </expression>
+          <alias name="nestedMap"/>
+        </items>
+      </returnBody>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+            <left xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@returnBody/@items.0/@alias"/>
+              <propertyLookups propertyKeyName="foo"/>
+            </left>
+            <propertyLookups propertyKeyName="bar"/>
+          </expression>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>

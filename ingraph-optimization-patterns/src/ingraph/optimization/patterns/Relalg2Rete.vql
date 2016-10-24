@@ -1,0 +1,37 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+/*
+    parentOperator
+          | 
+          | *input
+          V
+    expandOperator
+          |
+          | input
+          V
+  getVerticesOperator
+
+*/
+// 1st transformation
+pattern
+expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+	find parentOperator(parentOperator, expandOperator);
+	ExpandOperator.input(expandOperator, getVerticesOperator);
+	GetVerticesOperator(getVerticesOperator);
+}
+
+/*
+    parentOperator
+          | 
+          | *input
+          V
+    expandOperator
+*/
+// 2nd transformation
+pattern
+expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
+	find parentOperator(parentOperator, expandOperator);
+	ExpandOperator(expandOperator);
+}

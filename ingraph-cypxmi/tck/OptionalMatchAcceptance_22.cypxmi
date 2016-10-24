@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCypher:Cypher xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:openCypher="http://www.slizaa.org/neo4j/opencypher/OpenCypher">
+  <queryOptions xsi:type="openCypher:AllOptions"/>
+  <statement xsi:type="openCypher:SingleQuery">
+    <clauses xsi:type="openCypher:Match" optional="true">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="f"/>
+            <nodeLabels>
+              <nodeLabels labelName="DoesExist"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Match" optional="true">
+      <pattern>
+        <patterns xsi:type="openCypher:PatternElement">
+          <nodepattern>
+            <variable name="n"/>
+            <nodeLabels>
+              <nodeLabels labelName="DoesNotExist"/>
+            </nodeLabels>
+          </nodepattern>
+        </patterns>
+      </pattern>
+    </clauses>
+    <clauses xsi:type="openCypher:Return" return="RETURN">
+      <body xsi:type="openCypher:ReturnItems">
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation" distinct="true">
+            <functionName name="collect"/>
+            <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.1/@pattern/@patterns.0/@nodepattern/@variable"/>
+              <propertyLookups propertyKeyName="property"/>
+            </parameter>
+          </expression>
+          <alias name="a"/>
+        </items>
+        <items>
+          <expression xsi:type="openCypher:FunctionInvocation" distinct="true">
+            <functionName name="collect"/>
+            <parameter xsi:type="openCypher:ExpressionNodeLabelsAndPropertyLookup">
+              <left xsi:type="openCypher:VariableRef" variableRef="//@statement/@clauses.0/@pattern/@patterns.0/@nodepattern/@variable"/>
+              <propertyLookups propertyKeyName="property"/>
+            </parameter>
+          </expression>
+          <alias name="b"/>
+        </items>
+      </body>
+    </clauses>
+  </statement>
+</openCypher:Cypher>
