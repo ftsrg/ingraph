@@ -288,8 +288,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * bulkImportQuery : periodicCommitHint ws loadCSVQuery ;
-		// * / periodicCommitHint=PeriodicCommitHint
-		//loadCSVQuery=LoadCSVQuery
+		// * / periodicCommitHint=PeriodicCommitHint loadCSVQuery=LoadCSVQuery
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -474,8 +473,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *        ;
 		// * 
 		// * Comment: We handle 'createUnique' within the 'create' clause
-		// * /
-		//LoadCSV | Start | Match | Unwind | Merge | Create | Set | Delete | Remove | Foreach | With | Return
+		// * / LoadCSV | Start | Match | Unwind | Merge | Create | Set | Delete | Remove | Foreach | With | Return
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
@@ -495,8 +493,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *        ;
 		// * 
 		// * Comment: We handle 'createUnique' within the 'create' clause
-		// * /
-		//LoadCSV
+		// * / LoadCSV
 		public RuleCall getLoadCSVParserRuleCall_0() { return cLoadCSVParserRuleCall_0; }
 		
 		//Start
@@ -560,8 +557,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *         | createRelationshipPropertyExistenceConstraint
 		// *         | dropRelationshipPropertyExistenceConstraint
 		// *         ;
-		// * /
-		//CreateIndex | DropIndex | CreateUniqueConstraint | DropUniqueConstraint | CreateNodePropertyExistenceConstraint |
+		// * / CreateIndex | DropIndex | CreateUniqueConstraint | DropUniqueConstraint | CreateNodePropertyExistenceConstraint |
 		//DropNodePropertyExistenceConstraint | CreateRelationshipPropertyExistenceConstraint |
 		//DropRelationshipPropertyExistenceConstraint
 		public Alternatives getAlternatives() { return cAlternatives; }
@@ -576,8 +572,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *         | createRelationshipPropertyExistenceConstraint
 		// *         | dropRelationshipPropertyExistenceConstraint
 		// *         ;
-		// * /
-		//CreateIndex
+		// * / CreateIndex
 		public RuleCall getCreateIndexParserRuleCall_0() { return cCreateIndexParserRuleCall_0; }
 		
 		//DropIndex
@@ -631,17 +626,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cCREATEKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final RuleCall cNodePropertyExistenceConstraintParserRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		
-		//CreateNodePropertyExistenceConstraint:
-		/// *
+		//CreateNodePropertyExistenceConstraint: / *
 		// * createNodePropertyExistenceConstraint : CREATE sp nodePropertyExistenceConstraint ;
-		// * / 'CREATE'
-		//	NodePropertyExistenceConstraint;
+		// * / 'CREATE' NodePropertyExistenceConstraint;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * createNodePropertyExistenceConstraint : CREATE sp nodePropertyExistenceConstraint ;
-		// * / 'CREATE'
-		//NodePropertyExistenceConstraint
+		// * / 'CREATE' NodePropertyExistenceConstraint
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -658,17 +650,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cCREATEKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final RuleCall cRelationshipPropertyExistenceConstraintParserRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		
-		//CreateRelationshipPropertyExistenceConstraint:
-		/// *
+		//CreateRelationshipPropertyExistenceConstraint: / *
 		// * createRelationshipPropertyExistenceConstraint : CREATE sp relationshipPropertyExistenceConstraint ;
-		// * / 'CREATE'
-		//	RelationshipPropertyExistenceConstraint;
+		// * / 'CREATE' RelationshipPropertyExistenceConstraint;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * createRelationshipPropertyExistenceConstraint : CREATE sp relationshipPropertyExistenceConstraint ;
-		// * / 'CREATE'
-		//RelationshipPropertyExistenceConstraint
+		// * / 'CREATE' RelationshipPropertyExistenceConstraint
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -716,8 +705,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//DropUniqueConstraint: / *
 		// * dropUniqueConstraint : DROP sp uniqueConstraint ;
-		// * / 'DROP'
-		//	uniqueConstraint=UniqueConstraint;
+		// * / 'DROP' uniqueConstraint=UniqueConstraint;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -743,17 +731,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cNodePropertyExistenceConstraintAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNodePropertyExistenceConstraintNodePropertyExistenceConstraintParserRuleCall_1_0 = (RuleCall)cNodePropertyExistenceConstraintAssignment_1.eContents().get(0);
 		
-		//DropNodePropertyExistenceConstraint:
-		/// *
+		//DropNodePropertyExistenceConstraint: / *
 		// * dropNodePropertyExistenceConstraint : DROP sp nodePropertyExistenceConstraint ;
-		// * / 'DROP'
-		//	nodePropertyExistenceConstraint=NodePropertyExistenceConstraint;
+		// * / 'DROP' nodePropertyExistenceConstraint=NodePropertyExistenceConstraint;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * dropNodePropertyExistenceConstraint : DROP sp nodePropertyExistenceConstraint ;
-		// * / 'DROP'
-		//nodePropertyExistenceConstraint=NodePropertyExistenceConstraint
+		// * / 'DROP' nodePropertyExistenceConstraint=NodePropertyExistenceConstraint
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -774,17 +759,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cRelationshipPropertyExistenceConstraintAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cRelationshipPropertyExistenceConstraintRelationshipPropertyExistenceConstraintParserRuleCall_1_0 = (RuleCall)cRelationshipPropertyExistenceConstraintAssignment_1.eContents().get(0);
 		
-		//DropRelationshipPropertyExistenceConstraint:
-		/// *
+		//DropRelationshipPropertyExistenceConstraint: / *
 		// * dropRelationshipPropertyExistenceConstraint : DROP sp relationshipPropertyExistenceConstraint ;
-		// * / 'DROP'
-		//	relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint;
+		// * / 'DROP' relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * dropRelationshipPropertyExistenceConstraint : DROP sp relationshipPropertyExistenceConstraint ;
-		// * / 'DROP'
-		//relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint
+		// * / 'DROP' relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -840,14 +822,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Index: / *
 		// * index : INDEX sp ON ws nodeLabel '(' propertyKeyName ')' ;
-		// * / 'INDEX' 'ON' nodeLabel=NodeLabel '('
-		//	propertyKeyName=PropertyKeyName ')';
+		// * / 'INDEX' 'ON' nodeLabel=NodeLabel '(' propertyKeyName=PropertyKeyName ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * index : INDEX sp ON ws nodeLabel '(' propertyKeyName ')' ;
-		// * / 'INDEX' 'ON' nodeLabel=NodeLabel '('
-		//propertyKeyName=PropertyKeyName ')'
+		// * / 'INDEX' 'ON' nodeLabel=NodeLabel '(' propertyKeyName=PropertyKeyName ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -893,25 +873,21 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cISKeyword_8 = (Keyword)cGroup.eContents().get(8);
 		private final Keyword cUNIQUEKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
-		//UniqueConstraint:
-		/// *
+		//UniqueConstraint: / *
 		// * uniqueConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp propertyExpression sp IS sp UNIQUE ;
-		// * /
-		//	'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
+		// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
 		//	'UNIQUE';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * uniqueConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp propertyExpression sp IS sp UNIQUE ;
-		// * /
-		//'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
+		// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
 		//'UNIQUE'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * uniqueConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp propertyExpression sp IS sp UNIQUE ;
-		// * /
-		//'CONSTRAINT'
+		// * / 'CONSTRAINT'
 		public Keyword getCONSTRAINTKeyword_0() { return cCONSTRAINTKeyword_0; }
 		
 		//'ON'
@@ -968,25 +944,21 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cPropertyExpressionPropertyExpressionParserRuleCall_9_0 = (RuleCall)cPropertyExpressionAssignment_9.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_10 = (Keyword)cGroup.eContents().get(10);
 		
-		//NodePropertyExistenceConstraint:
-		/// *
+		//NodePropertyExistenceConstraint: / *
 		// * nodePropertyExistenceConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//	'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
+		// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
 		//	propertyExpression=PropertyExpression ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * nodePropertyExistenceConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
+		// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
 		//propertyExpression=PropertyExpression ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * nodePropertyExistenceConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//'CONSTRAINT'
+		// * / 'CONSTRAINT'
 		public Keyword getCONSTRAINTKeyword_0() { return cCONSTRAINTKeyword_0; }
 		
 		//'ON'
@@ -1042,25 +1014,21 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cPropertyExpressionPropertyExpressionParserRuleCall_6_0 = (RuleCall)cPropertyExpressionAssignment_6.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		
-		//RelationshipPropertyExistenceConstraint:
-		/// *
+		//RelationshipPropertyExistenceConstraint: / *
 		// * relationshipPropertyExistenceConstraint : CONSTRAINT sp ON ws relationshipPatternSyntax ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//	'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
+		// * / 'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
 		//	propertyExpression=PropertyExpression ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * relationshipPropertyExistenceConstraint : CONSTRAINT sp ON ws relationshipPatternSyntax ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
+		// * / 'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
 		//propertyExpression=PropertyExpression ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * relationshipPropertyExistenceConstraint : CONSTRAINT sp ON ws relationshipPatternSyntax ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-		// * /
-		//'CONSTRAINT'
+		// * / 'CONSTRAINT'
 		public Keyword getCONSTRAINTKeyword_0() { return cCONSTRAINTKeyword_0; }
 		
 		//'ON'
@@ -1119,8 +1087,8 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * relationshipPatternSyntax : ( '(' ws ')' dash '[' variable relType ']' dash '(' ws ')' )
 		// *                           | ( '(' ws ')' dash '[' variable relType ']' rightArrowHead dash '(' ws ')' )
 		// *                           | ( '(' ws ')' leftArrowHead dash '[' variable relType ']' dash '(' ws ')' );
-		// * /
-		//'(' ')' incoming?=LeftArrowHead? Dash '[' variable=Variable relType=RelType ']' Dash outgoing?=RightArrowHead? '(' ')'
+		// * / '(' ')' incoming?=LeftArrowHead? Dash '[' variable=Variable relType=RelType ']' Dash outgoing?=RightArrowHead? '('
+		//')'
 		public Group getGroup() { return cGroup; }
 		
 		//'('
@@ -1282,8 +1250,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * match : ( OPTIONAL sp )? MATCH ws pattern ( hint )* ( ws where )? ;
-		// * / optional?='OPTIONAL'? 'MATCH'
-		//pattern=Pattern hints+=Hint* where=Where?
+		// * / optional?='OPTIONAL'? 'MATCH' pattern=Pattern hints+=Hint* where=Where?
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1327,8 +1294,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Unwind: / *
 		// * unwind : UNWIND ws expression sp AS sp variable ;
-		// * / 'UNWIND' expression=Expression 'AS'
-		//	variable=Variable;
+		// * / 'UNWIND' expression=Expression 'AS' variable=Variable;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -1367,8 +1333,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Merge: / *
 		// * merge : MERGE ws patternPart ( sp mergeAction )* ;
-		// * / 'MERGE' patternPart=PatternPart
-		//	mergeActions+=MergeAction*;
+		// * / 'MERGE' patternPart=PatternPart mergeActions+=MergeAction*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -1408,16 +1373,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * mergeAction : ( ON sp MATCH sp set )
 		// *             | ( ON sp CREATE sp set )
 		// *             ;
-		// * /
-		//	'ON' action=('MATCH' | 'CREATE') set=Set;
+		// * / 'ON' action=('MATCH' | 'CREATE') set=Set;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * mergeAction : ( ON sp MATCH sp set )
 		// *             | ( ON sp CREATE sp set )
 		// *             ;
-		// * / 'ON'
-		//action=('MATCH' | 'CREATE') set=Set
+		// * / 'ON' action=('MATCH' | 'CREATE') set=Set
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1454,14 +1417,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cPatternAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cPatternPatternParserRuleCall_2_0 = (RuleCall)cPatternAssignment_2.eContents().get(0);
 		
-		//Create:
-		/// *
+		//Create: / *
 		// * create : CREATE ws pattern ;
 		// * createUnique : CREATE sp UNIQUE ws pattern ;
 		// * 
 		// * Comment: We handle 'create' and 'createUnqiue' in the same clause
-		// * /
-		//	'CREATE' unique?='UNIQUE'? pattern=Pattern;
+		// * / 'CREATE' unique?='UNIQUE'? pattern=Pattern;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -1469,8 +1430,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * createUnique : CREATE sp UNIQUE ws pattern ;
 		// * 
 		// * Comment: We handle 'create' and 'createUnqiue' in the same clause
-		// * /
-		//'CREATE' unique?='UNIQUE'? pattern=Pattern
+		// * / 'CREATE' unique?='UNIQUE'? pattern=Pattern
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1478,8 +1438,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * createUnique : CREATE sp UNIQUE ws pattern ;
 		// * 
 		// * Comment: We handle 'create' and 'createUnqiue' in the same clause
-		// * /
-		//'CREATE'
+		// * / 'CREATE'
 		public Keyword getCREATEKeyword_0() { return cCREATEKeyword_0; }
 		
 		//unique?='UNIQUE'?
@@ -1575,8 +1534,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *         | ( variable '=' expression )
 		// *         | ( variable '+=' expression )
 		// *         | ( variable nodeLabels );
-		// * /
-		//propertyExpression=PropertyExpression '=' expression=Expression | variable=Variable '=' expression=Expression |
+		// * / propertyExpression=PropertyExpression '=' expression=Expression | variable=Variable '=' expression=Expression |
 		//variable=Variable '+=' expression=Expression | variable=Variable nodeLabels=NodeLabels
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
@@ -1585,8 +1543,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *         | ( variable '=' expression )
 		// *         | ( variable '+=' expression )
 		// *         | ( variable nodeLabels );
-		// * /
-		//propertyExpression=PropertyExpression '=' expression=Expression
+		// * / propertyExpression=PropertyExpression '=' expression=Expression
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//propertyExpression=PropertyExpression
@@ -1675,15 +1632,13 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * delete : ( DELETE expression ( ',' expression )* )
 		// *        | ( DETACH sp DELETE expression ( ',' expression )* );
-		// * /
-		//detach?='DETACH'? 'DELETE' expressions+=Expression (',' expressions+=Expression)*
+		// * / detach?='DETACH'? 'DELETE' expressions+=Expression (',' expressions+=Expression)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * delete : ( DELETE expression ( ',' expression )* )
 		// *        | ( DETACH sp DELETE expression ( ',' expression )* );
-		// * /
-		//detach?='DETACH'?
+		// * / detach?='DETACH'?
 		public Assignment getDetachAssignment_0() { return cDetachAssignment_0; }
 		
 		//'DETACH'
@@ -1723,14 +1678,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Remove: / *
 		// * remove : REMOVE sp removeItem ( ws ',' ws removeItem )* ;
-		// * / 'REMOVE' removeItems+=RemoveItem (','
-		//	removeItems+=RemoveItem)*;
+		// * / 'REMOVE' removeItems+=RemoveItem (',' removeItems+=RemoveItem)*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * remove : REMOVE sp removeItem ( ws ',' ws removeItem )* ;
-		// * / 'REMOVE' removeItems+=RemoveItem (','
-		//removeItems+=RemoveItem)*
+		// * / 'REMOVE' removeItems+=RemoveItem (',' removeItems+=RemoveItem)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1773,15 +1726,13 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * removeItem : ( variable nodeLabels )
 		// *              | propertyExpression;
-		// * / variable=Variable
-		//nodeLabels=NodeLabels | PropertyExpression
+		// * / variable=Variable nodeLabels=NodeLabels | PropertyExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
 		// * removeItem : ( variable nodeLabels )
 		// *              | propertyExpression;
-		// * / variable=Variable
-		//nodeLabels=NodeLabels
+		// * / variable=Variable nodeLabels=NodeLabels
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//variable=Variable
@@ -1816,14 +1767,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Foreach: / *
 		// * foreach : FOREACH ws '(' ws variable sp IN sp expression ws '|' ( sp clause )+ ws ')' ;
-		// * / 'FOREACH' '('
-		//	variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')';
+		// * / 'FOREACH' '(' variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * foreach : FOREACH ws '(' ws variable sp IN sp expression ws '|' ( sp clause )+ ws ')' ;
-		// * / 'FOREACH' '('
-		//variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')'
+		// * / 'FOREACH' '(' variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1875,15 +1824,13 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		//With: / *
 		// * with : ( WITH DISTINCT sp returnBody where? )
 		// *      | ( WITH sp returnBody where? );
-		// * / 'WITH'
-		//	distint?='DISTINCT'? returnBody=ReturnBody where=Where?;
+		// * / 'WITH' distint?='DISTINCT'? returnBody=ReturnBody where=Where?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * with : ( WITH DISTINCT sp returnBody where? )
 		// *      | ( WITH sp returnBody where? );
-		// * / 'WITH'
-		//distint?='DISTINCT'? returnBody=ReturnBody where=Where?
+		// * / 'WITH' distint?='DISTINCT'? returnBody=ReturnBody where=Where?
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -1927,8 +1874,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * return : ( RETURN sp DISTINCT sp returnBody )
 		// *        | ( RETURN sp returnBody );
-		// * / return='RETURN'
-		//distinct?='DISTINCT'? body=ReturnBody
+		// * / return='RETURN' distinct?='DISTINCT'? body=ReturnBody
 		public Group getGroup() { return cGroup; }
 		
 		//return='RETURN'
@@ -1966,8 +1912,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * returnBody : returnItems ( sp order )? ( sp skip )? ( sp limit )? ;
-		// * / ReturnItems order=Order? skip=Skip?
-		//limit=Limit?
+		// * / ReturnItems order=Order? skip=Skip? limit=Limit?
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2085,8 +2030,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * returnItem : ( expression sp AS sp variable )
 		// *              | expression;
-		// * / expression=Expression ('AS'
-		//alias=Variable)?
+		// * / expression=Expression ('AS' alias=Variable)?
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2124,8 +2068,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Order: / *
 		// * order : ORDER sp BY sp sortItem ( ',' ws sortItem )* ;
-		// * / 'ORDER' 'BY' orderBy+=SortItem (','
-		//	orderBy+=SortItem)*;
+		// * / 'ORDER' 'BY' orderBy+=SortItem (',' orderBy+=SortItem)*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -2234,8 +2177,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * sortItem : ( expression ( DESCENDING | DESC ) )
 		// *          | ( expression ( ASCENDING | ASC )? );
-		// * /
-		//expression=Expression sort=('DESCENDING' | 'DESC' | 'ASCENDING' | 'ASC')?
+		// * / expression=Expression sort=('DESCENDING' | 'DESC' | 'ASCENDING' | 'ASC')?
 		public Group getGroup() { return cGroup; }
 		
 		//expression=Expression
@@ -2452,14 +2394,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Start: / *
 		// * start : START sp startPoint ( ws ',' ws startPoint )* where? ;
-		// * / 'START' startPoint+=StartPoint (','
-		//	startPoint+=StartPoint)* where=Where?;
+		// * / 'START' startPoint+=StartPoint (',' startPoint+=StartPoint)* where=Where?;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * start : START sp startPoint ( ws ',' ws startPoint )* where? ;
-		// * / 'START' startPoint+=StartPoint (','
-		//startPoint+=StartPoint)* where=Where?
+		// * / 'START' startPoint+=StartPoint (',' startPoint+=StartPoint)* where=Where?
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2562,14 +2502,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//NodeLookup: / *
 		// * nodeLookup : NODE ( identifiedIndexLookup | indexQuery | idLookup ) ;
-		// * / 'NODE'
-		//	(IdentifiedIndexLookup | IndexQuery | IdLookup);
+		// * / 'NODE' (IdentifiedIndexLookup | IndexQuery | IdLookup);
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * nodeLookup : NODE ( identifiedIndexLookup | indexQuery | idLookup ) ;
-		// * / 'NODE' (IdentifiedIndexLookup |
-		//IndexQuery | IdLookup)
+		// * / 'NODE' (IdentifiedIndexLookup | IndexQuery | IdLookup)
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2645,17 +2583,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cLegacyParameterLegacyParameterParserRuleCall_5_1_0 = (RuleCall)cLegacyParameterAssignment_5_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
-		//IdentifiedIndexLookup:
-		/// *
+		//IdentifiedIndexLookup: / *
 		// * identifiedIndexLookup : ':' symbolicName '(' symbolicName '=' ( StringLiteral | legacyParameter ) ')' ;
-		// * / ':'
-		//	indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')';
+		// * / ':' indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * identifiedIndexLookup : ':' symbolicName '(' symbolicName '=' ( StringLiteral | legacyParameter ) ')' ;
-		// * / ':'
-		//indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')'
+		// * / ':' indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2715,14 +2650,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//IndexQuery: / *
 		// * indexQuery : ':' symbolicName '(' ( StringLiteral | legacyParameter ) ')' ;
-		// * / ':'
-		//	indexName=SYMBOLIC_NAME '(' (query=STRING_LITERAL | parameter=Parameter) ')';
+		// * / ':' indexName=SYMBOLIC_NAME '(' (query=STRING_LITERAL | parameter=Parameter) ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * indexQuery : ':' symbolicName '(' ( StringLiteral | legacyParameter ) ')' ;
-		// * / ':' indexName=SYMBOLIC_NAME '('
-		//(query=STRING_LITERAL | parameter=Parameter) ')'
+		// * / ':' indexName=SYMBOLIC_NAME '(' (query=STRING_LITERAL | parameter=Parameter) ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2772,14 +2705,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//IdLookup: / *
 		// * idLookup : '(' ( literalIds | legacyParameter | '*' ) ')' ;
-		// * / '(' (ids=LiteralIds |
-		//	legacyParameter=Parameter | wildcard='*') ')';
+		// * / '(' (ids=LiteralIds | legacyParameter=Parameter | wildcard='*') ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * idLookup : '(' ( literalIds | legacyParameter | '*' ) ')' ;
-		// * / '(' (ids=LiteralIds | legacyParameter=Parameter |
-		//wildcard='*') ')'
+		// * / '(' (ids=LiteralIds | legacyParameter=Parameter | wildcard='*') ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2827,8 +2758,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * literalIds : unsignedIntegerLiteral ( ws ',' ws unsignedIntegerLiteral )*;
-		// * / ids+=DecimalInteger (','
-		//ids+=DecimalInteger)*
+		// * / ids+=DecimalInteger (',' ids+=DecimalInteger)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -2936,15 +2866,13 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * patternPart : ( variable ws '=' ws anonymousPatternPart )
 		// *               | anonymousPatternPart;
-		// * /
-		//var=Variable '=' part=AnonymousPatternPart | AnonymousPatternPart
+		// * / var=Variable '=' part=AnonymousPatternPart | AnonymousPatternPart
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
 		// * patternPart : ( variable ws '=' ws anonymousPatternPart )
 		// *               | anonymousPatternPart;
-		// * /
-		//var=Variable '=' part=AnonymousPatternPart
+		// * / var=Variable '=' part=AnonymousPatternPart
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//var=Variable
@@ -2978,8 +2906,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * anonymousPatternPart : shortestPathPattern
 		// *                      | patternElement;
-		// * / ShortestPathPattern |
-		//PatternElement
+		// * / ShortestPathPattern | PatternElement
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
@@ -3080,15 +3007,13 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		/// *
 		// * patternElement : ( nodePattern ( ws patternElementChain )* )
 		// *                | ( '(' patternElement ')' );
-		// * /
-		//nodepattern=NodePattern chain+=PatternElementChain* | '(' PatternElement ')'
+		// * / nodepattern=NodePattern chain+=PatternElementChain* | '(' PatternElement ')'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
 		// * patternElement : ( nodePattern ( ws patternElementChain )* )
 		// *                | ( '(' patternElement ')' );
-		// * /
-		//nodepattern=NodePattern chain+=PatternElementChain*
+		// * / nodepattern=NodePattern chain+=PatternElementChain*
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//nodepattern=NodePattern
@@ -3176,8 +3101,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * patternElementChain : relationshipPattern ws nodePattern ;
-		// * / relationshipPattern=RelationshipPattern
-		//nodePattern=NodePattern
+		// * / relationshipPattern=RelationshipPattern nodePattern=NodePattern
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3326,8 +3250,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *            | parameter
 		// *            | legacyParameter
 		// *            ;
-		// * / MapLiteral |
-		//Parameter | LegacyParameter
+		// * / MapLiteral | Parameter | LegacyParameter
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
@@ -3382,14 +3305,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//RelationshipTypes: / *
 		// * relationshipTypes : ':' relTypeName ( ws '|' ':'? ws relTypeName )* ;
-		// * / ':'
-		//	relTypeName+=RelTypeName ('|' ':'? relTypeName+=RelTypeName)*;
+		// * / ':' relTypeName+=RelTypeName ('|' ':'? relTypeName+=RelTypeName)*;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * relationshipTypes : ':' relTypeName ( ws '|' ':'? ws relTypeName )* ;
-		// * / ':' relTypeName+=RelTypeName ('|' ':'?
-		//relTypeName+=RelTypeName)*
+		// * / ':' relTypeName+=RelTypeName ('|' ':'? relTypeName+=RelTypeName)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3576,8 +3497,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression12 : expression11 ( sp OR sp expression11 )* ;
-		// * / ExpressionXor ({ExpressionOr.left=current}
-		//operator='OR' right=ExpressionXor)*
+		// * / ExpressionXor ({ExpressionOr.left=current} operator='OR' right=ExpressionXor)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3620,8 +3540,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression11 : expression10 ( sp XOR sp expression10 )* ;
-		// * / ExpressionAnd ({ExpressionXor.left=current}
-		//operator='XOR' right=ExpressionAnd)*
+		// * / ExpressionAnd ({ExpressionXor.left=current} operator='XOR' right=ExpressionAnd)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3664,8 +3583,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression10 : expression9 ( sp AND sp expression9 )* ;
-		// * / ExpressionNot ({ExpressionAnd.left=current}
-		//operator='AND' right=ExpressionNot)*
+		// * / ExpressionNot ({ExpressionAnd.left=current} operator='AND' right=ExpressionNot)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3710,8 +3628,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression9 : ( sp NOT sp expression9 ) | expression8;'
 		// * We should eventually adjust this...
-		// * /
-		//operator='NOT' left=ExpressionNot | ExpressionComparison
+		// * / operator='NOT' left=ExpressionNot | ExpressionComparison
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
@@ -3719,8 +3636,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression9 : ( sp NOT sp expression9 ) | expression8;'
 		// * We should eventually adjust this...
-		// * /
-		//operator='NOT' left=ExpressionNot
+		// * / operator='NOT' left=ExpressionNot
 		public Group getGroup_0() { return cGroup_0; }
 		
 		//operator='NOT'
@@ -3773,8 +3689,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *                             | ( '>=' ws expression7 );
 		// * 
 		// * Comment: combined clause for 'expression8' and 'partialComparisonExpression'
-		// * /
-		//ExpressionPlusMinus ({ExpressionComparison.left=current} operator=('=' | '<>' | '!=' | '<' | '>' | '<=' | '>=')
+		// * / ExpressionPlusMinus ({ExpressionComparison.left=current} operator=('=' | '<>' | '!=' | '<' | '>' | '<=' | '>=')
 		//right=ExpressionPlusMinus)*
 		public Group getGroup() { return cGroup; }
 		
@@ -3790,8 +3705,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *                             | ( '>=' ws expression7 );
 		// * 
 		// * Comment: combined clause for 'expression8' and 'partialComparisonExpression'
-		// * /
-		//ExpressionPlusMinus
+		// * / ExpressionPlusMinus
 		public RuleCall getExpressionPlusMinusParserRuleCall_0() { return cExpressionPlusMinusParserRuleCall_0; }
 		
 		//({ExpressionComparison.left=current} operator=('=' | '<>' | '!=' | '<' | '>' | '<=' | '>=') right=ExpressionPlusMinus)*
@@ -3852,8 +3766,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression7 : expression6 ( ( ws '+' ws expression6 ) | ( ws '-' ws expression6 ) )* ;
-		// * / ExpressionMulDiv
-		//({ExpressionPlusMinus.left=current} operator=('+' | '-') right=ExpressionMulDiv)*
+		// * / ExpressionMulDiv ({ExpressionPlusMinus.left=current} operator=('+' | '-') right=ExpressionMulDiv)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -3905,14 +3818,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
-		// * /
-		//ExpressionPower ({ExpressionMulDiv.left=current} operator=('*' | '/' | '%') right=ExpressionPower)*
+		// * / ExpressionPower ({ExpressionMulDiv.left=current} operator=('*' | '/' | '%') right=ExpressionPower)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * expression6 : expression5 ( ( ws '*' ws expression5 ) | ( ws '/' ws expression5 ) | ( ws '%' ws expression5 ) )* ;
-		// * /
-		//ExpressionPower
+		// * / ExpressionPower
 		public RuleCall getExpressionPowerParserRuleCall_0() { return cExpressionPowerParserRuleCall_0; }
 		
 		//({ExpressionMulDiv.left=current} operator=('*' | '/' | '%') right=ExpressionPower)*
@@ -3959,8 +3870,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression5 : expression4 ( ws '^' ws expression4 )* ;
-		// * / ExpressionUnaryPlusMinus
-		//({ExpressionPower.left=current} operator='^' right=ExpressionUnaryPlusMinus)*
+		// * / ExpressionUnaryPlusMinus ({ExpressionPower.left=current} operator='^' right=ExpressionUnaryPlusMinus)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -4010,8 +3920,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression4 : expression3 | ( ws '+' ws expression3 ) | ( ws '-' ws expression3 );'
 		// * We should eventually adjust this...
-		// * /
-		//Expression3 | operator='+' left=Expression3 | => operator='-' left=Expression3
+		// * / Expression3 | operator='+' left=Expression3 | => operator='-' left=Expression3
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		/// *
@@ -4019,8 +3928,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression4 : expression3 | ( ws '+' ws expression3 ) | ( ws '-' ws expression3 );'
 		// * We should eventually adjust this...
-		// * /
-		//Expression3
+		// * / Expression3
 		public RuleCall getExpression3ParserRuleCall_0() { return cExpression3ParserRuleCall_0; }
 		
 		//operator='+' left=Expression3
@@ -4069,8 +3977,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression3 : expression2 ( ( ws '[' expression ']' ) | ( ws '[' expression? '..' expression? ']' ) | ( ws '=~' expression2 ) | ( sp IN expression2 ) | ( sp STARTS sp WITH expression2 ) | ( sp ENDS sp WITH expression2 ) | ( sp CONTAINS expression2 ) | ( sp IS sp NULL ) | ( sp IS sp NOT sp NULL ) )* ;'
 		// * We should eventually adjust this... 
-		// * /
-		//ExpressionNodeLabelsAndPropertyLookup expression3Parts+=Expression3Part*
+		// * / ExpressionNodeLabelsAndPropertyLookup expression3Parts+=Expression3Part*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -4078,8 +3985,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Clause is modeled on the former antlr clause 'expression3 : expression2 ( ( ws '[' expression ']' ) | ( ws '[' expression? '..' expression? ']' ) | ( ws '=~' expression2 ) | ( sp IN expression2 ) | ( sp STARTS sp WITH expression2 ) | ( sp ENDS sp WITH expression2 ) | ( sp CONTAINS expression2 ) | ( sp IS sp NULL ) | ( sp IS sp NOT sp NULL ) )* ;'
 		// * We should eventually adjust this... 
-		// * /
-		//ExpressionNodeLabelsAndPropertyLookup
+		// * / ExpressionNodeLabelsAndPropertyLookup
 		public RuleCall getExpressionNodeLabelsAndPropertyLookupParserRuleCall_0() { return cExpressionNodeLabelsAndPropertyLookupParserRuleCall_0; }
 		
 		//expression3Parts+=Expression3Part*
@@ -4340,8 +4246,8 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * expression2 : atom ( propertyLookup | nodeLabels )* ;
-		// * / Atom
-		//({ExpressionNodeLabelsAndPropertyLookup.left=current} propertyLookups+=PropertyLookup | nodeLabelList+=NodeLabel)*
+		// * / Atom ({ExpressionNodeLabelsAndPropertyLookup.left=current} propertyLookups+=PropertyLookup |
+		//nodeLabelList+=NodeLabel)*
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -4474,25 +4380,24 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// * Expression1 * / Atom Expression:
 		//	{NumberConstant} value=Number | {StringConstant} value=STRING_LITERAL | Parameter | LegacyParameter | {BoolConstant}
-		//	value=('TRUE' | 'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '('
-		//	'*' ')' | MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (','
-		//	expressions+=Expression)* ']') | {Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|'
-		//	expression=Expression)? ')' | Reduce | {Filter} 'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '('
-		//	filterExpression=FilterExpression ')' | {Any} 'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '('
-		//	filterExpression=FilterExpression ')' | {Single} 'SINGLE' '(' filterExpression=FilterExpression ')' |
-		//	ShortestPathPattern | RelationshipsPattern | ParenthesizedExpression | FunctionInvocation | {VariableRef}
-		//	variableRef=[Variable|SYMBOLIC_NAME_X]
+		//	value=('TRUE' |
+		//	'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '(' '*' ')' |
+		//	MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (',' expressions+=Expression)* ']') |
+		//	{Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|' expression=Expression)? ')' | Reduce | {Filter}
+		//	'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '(' filterExpression=FilterExpression ')' | {Any}
+		//	'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '(' filterExpression=FilterExpression ')' | {Single}
+		//	'SINGLE' '(' filterExpression=FilterExpression ')' | ShortestPathPattern | RelationshipsPattern |
+		//	ParenthesizedExpression | FunctionInvocation | {VariableRef} variableRef=[Variable|SYMBOLIC_NAME_X]
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{NumberConstant} value=Number | {StringConstant} value=STRING_LITERAL | Parameter | LegacyParameter | {BoolConstant}
-		//value=('TRUE' | 'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '('
-		//'*' ')' | MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (','
-		//expressions+=Expression)* ']') | {Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|' expression=Expression)?
-		//')' | Reduce | {Filter} 'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '('
-		//filterExpression=FilterExpression ')' | {Any} 'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '('
-		//filterExpression=FilterExpression ')' | {Single} 'SINGLE' '(' filterExpression=FilterExpression ')' |
-		//ShortestPathPattern | RelationshipsPattern | ParenthesizedExpression | FunctionInvocation | {VariableRef}
-		//variableRef=[Variable|SYMBOLIC_NAME_X]
+		//value=('TRUE' | 'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '(' '*'
+		//')' | MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (',' expressions+=Expression)*
+		//']') | {Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|' expression=Expression)? ')' | Reduce | {Filter}
+		//'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '(' filterExpression=FilterExpression ')' | {Any}
+		//'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '(' filterExpression=FilterExpression ')' | {Single}
+		//'SINGLE' '(' filterExpression=FilterExpression ')' | ShortestPathPattern | RelationshipsPattern |
+		//ParenthesizedExpression | FunctionInvocation | {VariableRef} variableRef=[Variable|SYMBOLIC_NAME_X]
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//{NumberConstant} value=Number
@@ -4809,14 +4714,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Reduce: / *
 		// * reduce : REDUCE ws '(' variable '=' expression ',' idInColl '|' expression ')' ;
-		// * / 'REDUCE' '('
-		//	accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|' expression=Expression ')';
+		// * / 'REDUCE' '(' accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|'
+		//	expression=Expression ')';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * reduce : REDUCE ws '(' variable '=' expression ',' idInColl '|' expression ')' ;
-		// * / 'REDUCE' '('
-		//accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|' expression=Expression ')'
+		// * / 'REDUCE' '(' accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|'
+		//expression=Expression ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -4909,8 +4814,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * relationshipsPattern : nodePattern ( ws patternElementChain )+ ;
-		// * / nodePattern=NodePattern
-		//chain+=PatternElementChain+
+		// * / nodePattern=NodePattern chain+=PatternElementChain+
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5016,14 +4920,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		/// *
 		// * functionInvocation : functionName ws '(' ws DISTINCT? ( expression ( ',' ws expression )* )? ws ')' ;
-		// * /
-		//functionName=FunctionName '(' distinct?='DISTINCT'? (parameter+=Expression (',' parameter+=Expression)*)? ')'
+		// * / functionName=FunctionName '(' distinct?='DISTINCT'? (parameter+=Expression (',' parameter+=Expression)*)? ')'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
 		// * functionInvocation : functionName ws '(' ws DISTINCT? ( expression ( ',' ws expression )* )? ws ')' ;
-		// * /
-		//functionName=FunctionName
+		// * / functionName=FunctionName
 		public Assignment getFunctionNameAssignment_0() { return cFunctionNameAssignment_0; }
 		
 		//FunctionName
@@ -5093,14 +4995,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//ListComprehension: / *
 		// * listComprehension : '[' filterExpression ( ws '|' expression )? ']' ;
-		// * / '['
-		//	filterExpression=FilterExpression ('|' expression=Expression)? ']';
+		// * / '[' filterExpression=FilterExpression ('|' expression=Expression)? ']';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * listComprehension : '[' filterExpression ( ws '|' expression )? ']' ;
-		// * / '[' filterExpression=FilterExpression
-		//('|' expression=Expression)? ']'
+		// * / '[' filterExpression=FilterExpression ('|' expression=Expression)? ']'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5146,14 +5046,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//PropertyLookup: / *
 		// * propertyLookup : ws '.' ws ( ( propertyKeyName ( '?' | '!' ) ) | propertyKeyName ) ;
-		// * / '.'
-		//	(propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName);
+		// * / '.' (propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName);
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * propertyLookup : ws '.' ws ( ( propertyKeyName ( '?' | '!' ) ) | propertyKeyName ) ;
-		// * / '.'
-		//(propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName)
+		// * / '.' (propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName)
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5212,8 +5110,8 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cENDKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//CaseExpression:
-		//	('CASE' caseAlternatives+=CaseAlternatives+ | 'CASE' caseExpression=Expression caseAlternatives+=CaseAlternatives+)
-		//	('ELSE' elseExpression=Expression)? 'END';
+		//	('CASE' caseAlternatives+=CaseAlternatives+ | 'CASE' caseExpression=Expression
+		//	caseAlternatives+=CaseAlternatives+) ('ELSE' elseExpression=Expression)? 'END';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//('CASE' caseAlternatives+=CaseAlternatives+ | 'CASE' caseExpression=Expression caseAlternatives+=CaseAlternatives+)
@@ -5280,8 +5178,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//CaseAlternatives: / *
 		// * caseAlternatives : WHEN ws expression ws THEN ws expression ;
-		// * / 'WHEN' when=Expression 'THEN'
-		//	then=Expression;
+		// * / 'WHEN' when=Expression 'THEN' then=Expression;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -5418,14 +5315,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cParameterNumberParserRuleCall_1_0_1 = (RuleCall)cParameterAlternatives_1_0.eContents().get(1);
 		private final Keyword cRightCurlyBracketKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
-		//LegacyParameter:
-		/// *
+		//LegacyParameter: / *
 		// * legacyParameter : '{' ws ( symbolicName | DecimalInteger ) ws '}' ;
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkLegacyParameterFormat(LegacyParameter)
-		// * /
-		//	'{' parameter=(SYMBOLIC_NAME | Number) '}';
+		// * / '{' parameter=(SYMBOLIC_NAME | Number) '}';
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -5433,8 +5328,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkLegacyParameterFormat(LegacyParameter)
-		// * /
-		//'{' parameter=(SYMBOLIC_NAME | Number) '}'
+		// * / '{' parameter=(SYMBOLIC_NAME | Number) '}'
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5442,8 +5336,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkLegacyParameterFormat(LegacyParameter)
-		// * /
-		//'{'
+		// * / '{'
 		public Keyword getLeftCurlyBracketKeyword_0() { return cLeftCurlyBracketKeyword_0; }
 		
 		//parameter=(SYMBOLIC_NAME | Number)
@@ -5470,14 +5363,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cParameterSYMBOLIC_NAMETerminalRuleCall_1_0_0 = (RuleCall)cParameterAlternatives_1_0.eContents().get(0);
 		private final RuleCall cParameterNumberParserRuleCall_1_0_1 = (RuleCall)cParameterAlternatives_1_0.eContents().get(1);
 		
-		//Parameter:
-		/// *
+		//Parameter: / *
 		// * parameter : '$' ( symbolicName | DecimalInteger ) ;
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkParameterFormat(Parameter)
-		// * /
-		//	'$' parameter=(SYMBOLIC_NAME | Number);
+		// * / '$' parameter=(SYMBOLIC_NAME | Number);
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
@@ -5485,8 +5376,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkParameterFormat(Parameter)
-		// * /
-		//'$' parameter=(SYMBOLIC_NAME | Number)
+		// * / '$' parameter=(SYMBOLIC_NAME | Number)
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5494,8 +5384,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * 
 		// * Comment: Format of DecimalInteger is checked via 
 		// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkParameterFormat(Parameter)
-		// * /
-		//'$'
+		// * / '$'
 		public Keyword getDollarSignKeyword_0() { return cDollarSignKeyword_0; }
 		
 		//parameter=(SYMBOLIC_NAME | Number)
@@ -5836,8 +5725,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *                  | THEN
 		// *                  | L_0X
 		// *                   ;
-		// * /
-		//SYMBOLIC_NAME | 'CYPHER' | 'EXPLAIN' | 'PROFILE' | 'USING' | 'PERIODIC' | 'COMMIT' | 'UNION' | 'ALL' | 'CREATE' |
+		// * / SYMBOLIC_NAME | 'CYPHER' | 'EXPLAIN' | 'PROFILE' | 'USING' | 'PERIODIC' | 'COMMIT' | 'UNION' | 'ALL' | 'CREATE' |
 		//'INDEX' | 'ON' | 'DROP' | 'CONSTRAINT' | 'ASSERT' | 'IS' | 'UNIQUE' | 'EXISTS' | 'LOAD' | 'CSV' | 'WITH' | 'HEADERS' |
 		//'FROM' | 'AS' | 'FIELDTERMINATOR' | 'OPTIONAL' | 'MATCH' | 'UNWIND' | 'MERGE' | 'SET' | 'DELETE' | 'DETACH' | 'REMOVE'
 		//| 'FOREACH' | 'IN' | 'DISTINCT' | 'RETURN' | 'ORDER' | 'BY' | 'SKIP' | 'LIMIT' | 'DESCENDING' | 'DESC' | 'ASCENDING' |
@@ -5926,8 +5814,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// *                  | THEN
 		// *                  | L_0X
 		// *                   ;
-		// * /
-		//SYMBOLIC_NAME
+		// * / SYMBOLIC_NAME
 		public RuleCall getSYMBOLIC_NAMETerminalRuleCall_0() { return cSYMBOLIC_NAMETerminalRuleCall_0; }
 		
 		//'CYPHER'
@@ -6599,11 +6486,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getCreateUniqueConstraintAccess().getRule();
 	}
 	
-	//CreateNodePropertyExistenceConstraint:
-	/// *
+	//CreateNodePropertyExistenceConstraint: / *
 	// * createNodePropertyExistenceConstraint : CREATE sp nodePropertyExistenceConstraint ;
-	// * / 'CREATE'
-	//	NodePropertyExistenceConstraint;
+	// * / 'CREATE' NodePropertyExistenceConstraint;
 	public CreateNodePropertyExistenceConstraintElements getCreateNodePropertyExistenceConstraintAccess() {
 		return pCreateNodePropertyExistenceConstraint;
 	}
@@ -6612,11 +6497,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getCreateNodePropertyExistenceConstraintAccess().getRule();
 	}
 	
-	//CreateRelationshipPropertyExistenceConstraint:
-	/// *
+	//CreateRelationshipPropertyExistenceConstraint: / *
 	// * createRelationshipPropertyExistenceConstraint : CREATE sp relationshipPropertyExistenceConstraint ;
-	// * / 'CREATE'
-	//	RelationshipPropertyExistenceConstraint;
+	// * / 'CREATE' RelationshipPropertyExistenceConstraint;
 	public CreateRelationshipPropertyExistenceConstraintElements getCreateRelationshipPropertyExistenceConstraintAccess() {
 		return pCreateRelationshipPropertyExistenceConstraint;
 	}
@@ -6638,8 +6521,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//DropUniqueConstraint: / *
 	// * dropUniqueConstraint : DROP sp uniqueConstraint ;
-	// * / 'DROP'
-	//	uniqueConstraint=UniqueConstraint;
+	// * / 'DROP' uniqueConstraint=UniqueConstraint;
 	public DropUniqueConstraintElements getDropUniqueConstraintAccess() {
 		return pDropUniqueConstraint;
 	}
@@ -6648,11 +6530,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getDropUniqueConstraintAccess().getRule();
 	}
 	
-	//DropNodePropertyExistenceConstraint:
-	/// *
+	//DropNodePropertyExistenceConstraint: / *
 	// * dropNodePropertyExistenceConstraint : DROP sp nodePropertyExistenceConstraint ;
-	// * / 'DROP'
-	//	nodePropertyExistenceConstraint=NodePropertyExistenceConstraint;
+	// * / 'DROP' nodePropertyExistenceConstraint=NodePropertyExistenceConstraint;
 	public DropNodePropertyExistenceConstraintElements getDropNodePropertyExistenceConstraintAccess() {
 		return pDropNodePropertyExistenceConstraint;
 	}
@@ -6661,11 +6541,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getDropNodePropertyExistenceConstraintAccess().getRule();
 	}
 	
-	//DropRelationshipPropertyExistenceConstraint:
-	/// *
+	//DropRelationshipPropertyExistenceConstraint: / *
 	// * dropRelationshipPropertyExistenceConstraint : DROP sp relationshipPropertyExistenceConstraint ;
-	// * / 'DROP'
-	//	relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint;
+	// * / 'DROP' relationshipPropertyExistenceConstraint=RelationshipPropertyExistenceConstraint;
 	public DropRelationshipPropertyExistenceConstraintElements getDropRelationshipPropertyExistenceConstraintAccess() {
 		return pDropRelationshipPropertyExistenceConstraint;
 	}
@@ -6687,8 +6565,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Index: / *
 	// * index : INDEX sp ON ws nodeLabel '(' propertyKeyName ')' ;
-	// * / 'INDEX' 'ON' nodeLabel=NodeLabel '('
-	//	propertyKeyName=PropertyKeyName ')';
+	// * / 'INDEX' 'ON' nodeLabel=NodeLabel '(' propertyKeyName=PropertyKeyName ')';
 	public IndexElements getIndexAccess() {
 		return pIndex;
 	}
@@ -6697,11 +6574,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getIndexAccess().getRule();
 	}
 	
-	//UniqueConstraint:
-	/// *
+	//UniqueConstraint: / *
 	// * uniqueConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp propertyExpression sp IS sp UNIQUE ;
-	// * /
-	//	'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
+	// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' propertyExpression=PropertyExpression 'IS'
 	//	'UNIQUE';
 	public UniqueConstraintElements getUniqueConstraintAccess() {
 		return pUniqueConstraint;
@@ -6711,11 +6586,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getUniqueConstraintAccess().getRule();
 	}
 	
-	//NodePropertyExistenceConstraint:
-	/// *
+	//NodePropertyExistenceConstraint: / *
 	// * nodePropertyExistenceConstraint : CONSTRAINT sp ON ws '(' variable nodeLabel ')' ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-	// * /
-	//	'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
+	// * / 'CONSTRAINT' 'ON' '(' variable=Variable nodeLabel=NodeLabel ')' 'ASSERT' 'EXISTS' '('
 	//	propertyExpression=PropertyExpression ')';
 	public NodePropertyExistenceConstraintElements getNodePropertyExistenceConstraintAccess() {
 		return pNodePropertyExistenceConstraint;
@@ -6725,11 +6598,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getNodePropertyExistenceConstraintAccess().getRule();
 	}
 	
-	//RelationshipPropertyExistenceConstraint:
-	/// *
+	//RelationshipPropertyExistenceConstraint: / *
 	// * relationshipPropertyExistenceConstraint : CONSTRAINT sp ON ws relationshipPatternSyntax ws ASSERT sp EXISTS ws '(' propertyExpression ')' ;
-	// * /
-	//	'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
+	// * / 'CONSTRAINT' 'ON' relationshipPattern=RelationshipPatternSyntax 'ASSERT' 'EXISTS' '('
 	//	propertyExpression=PropertyExpression ')';
 	public RelationshipPropertyExistenceConstraintElements getRelationshipPropertyExistenceConstraintAccess() {
 		return pRelationshipPropertyExistenceConstraint;
@@ -6783,8 +6654,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Unwind: / *
 	// * unwind : UNWIND ws expression sp AS sp variable ;
-	// * / 'UNWIND' expression=Expression 'AS'
-	//	variable=Variable;
+	// * / 'UNWIND' expression=Expression 'AS' variable=Variable;
 	public UnwindElements getUnwindAccess() {
 		return pUnwind;
 	}
@@ -6795,8 +6665,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Merge: / *
 	// * merge : MERGE ws patternPart ( sp mergeAction )* ;
-	// * / 'MERGE' patternPart=PatternPart
-	//	mergeActions+=MergeAction*;
+	// * / 'MERGE' patternPart=PatternPart mergeActions+=MergeAction*;
 	public MergeElements getMergeAccess() {
 		return pMerge;
 	}
@@ -6809,8 +6678,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	// * mergeAction : ( ON sp MATCH sp set )
 	// *             | ( ON sp CREATE sp set )
 	// *             ;
-	// * /
-	//	'ON' action=('MATCH' | 'CREATE') set=Set;
+	// * / 'ON' action=('MATCH' | 'CREATE') set=Set;
 	public MergeActionElements getMergeActionAccess() {
 		return pMergeAction;
 	}
@@ -6819,14 +6687,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getMergeActionAccess().getRule();
 	}
 	
-	//Create:
-	/// *
+	//Create: / *
 	// * create : CREATE ws pattern ;
 	// * createUnique : CREATE sp UNIQUE ws pattern ;
 	// * 
 	// * Comment: We handle 'create' and 'createUnqiue' in the same clause
-	// * /
-	//	'CREATE' unique?='UNIQUE'? pattern=Pattern;
+	// * / 'CREATE' unique?='UNIQUE'? pattern=Pattern;
 	public CreateElements getCreateAccess() {
 		return pCreate;
 	}
@@ -6869,8 +6735,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Remove: / *
 	// * remove : REMOVE sp removeItem ( ws ',' ws removeItem )* ;
-	// * / 'REMOVE' removeItems+=RemoveItem (','
-	//	removeItems+=RemoveItem)*;
+	// * / 'REMOVE' removeItems+=RemoveItem (',' removeItems+=RemoveItem)*;
 	public RemoveElements getRemoveAccess() {
 		return pRemove;
 	}
@@ -6891,8 +6756,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Foreach: / *
 	// * foreach : FOREACH ws '(' ws variable sp IN sp expression ws '|' ( sp clause )+ ws ')' ;
-	// * / 'FOREACH' '('
-	//	variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')';
+	// * / 'FOREACH' '(' variable=Variable 'IN' expression=Expression '|' clause+=Clause+ ')';
 	public ForeachElements getForeachAccess() {
 		return pForeach;
 	}
@@ -6904,8 +6768,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	//With: / *
 	// * with : ( WITH DISTINCT sp returnBody where? )
 	// *      | ( WITH sp returnBody where? );
-	// * / 'WITH'
-	//	distint?='DISTINCT'? returnBody=ReturnBody where=Where?;
+	// * / 'WITH' distint?='DISTINCT'? returnBody=ReturnBody where=Where?;
 	public WithElements getWithAccess() {
 		return pWith;
 	}
@@ -6956,8 +6819,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Order: / *
 	// * order : ORDER sp BY sp sortItem ( ',' ws sortItem )* ;
-	// * / 'ORDER' 'BY' orderBy+=SortItem (','
-	//	orderBy+=SortItem)*;
+	// * / 'ORDER' 'BY' orderBy+=SortItem (',' orderBy+=SortItem)*;
 	public OrderElements getOrderAccess() {
 		return pOrder;
 	}
@@ -7012,8 +6874,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Start: / *
 	// * start : START sp startPoint ( ws ',' ws startPoint )* where? ;
-	// * / 'START' startPoint+=StartPoint (','
-	//	startPoint+=StartPoint)* where=Where?;
+	// * / 'START' startPoint+=StartPoint (',' startPoint+=StartPoint)* where=Where?;
 	public StartElements getStartAccess() {
 		return pStart;
 	}
@@ -7044,8 +6905,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//NodeLookup: / *
 	// * nodeLookup : NODE ( identifiedIndexLookup | indexQuery | idLookup ) ;
-	// * / 'NODE'
-	//	(IdentifiedIndexLookup | IndexQuery | IdLookup);
+	// * / 'NODE' (IdentifiedIndexLookup | IndexQuery | IdLookup);
 	public NodeLookupElements getNodeLookupAccess() {
 		return pNodeLookup;
 	}
@@ -7064,11 +6924,9 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getRelationshipLookupAccess().getRule();
 	}
 	
-	//IdentifiedIndexLookup:
-	/// *
+	//IdentifiedIndexLookup: / *
 	// * identifiedIndexLookup : ':' symbolicName '(' symbolicName '=' ( StringLiteral | legacyParameter ) ')' ;
-	// * / ':'
-	//	indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')';
+	// * / ':' indexName=SYMBOLIC_NAME '(' key=SYMBOLIC_NAME '=' (value=STRING_LITERAL | legacyParameter=LegacyParameter) ')';
 	public IdentifiedIndexLookupElements getIdentifiedIndexLookupAccess() {
 		return pIdentifiedIndexLookup;
 	}
@@ -7079,8 +6937,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//IndexQuery: / *
 	// * indexQuery : ':' symbolicName '(' ( StringLiteral | legacyParameter ) ')' ;
-	// * / ':'
-	//	indexName=SYMBOLIC_NAME '(' (query=STRING_LITERAL | parameter=Parameter) ')';
+	// * / ':' indexName=SYMBOLIC_NAME '(' (query=STRING_LITERAL | parameter=Parameter) ')';
 	public IndexQueryElements getIndexQueryAccess() {
 		return pIndexQuery;
 	}
@@ -7091,8 +6948,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//IdLookup: / *
 	// * idLookup : '(' ( literalIds | legacyParameter | '*' ) ')' ;
-	// * / '(' (ids=LiteralIds |
-	//	legacyParameter=Parameter | wildcard='*') ')';
+	// * / '(' (ids=LiteralIds | legacyParameter=Parameter | wildcard='*') ')';
 	public IdLookupElements getIdLookupAccess() {
 		return pIdLookup;
 	}
@@ -7237,8 +7093,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//RelationshipTypes: / *
 	// * relationshipTypes : ':' relTypeName ( ws '|' ':'? ws relTypeName )* ;
-	// * / ':'
-	//	relTypeName+=RelTypeName ('|' ':'? relTypeName+=RelTypeName)*;
+	// * / ':' relTypeName+=RelTypeName ('|' ':'? relTypeName+=RelTypeName)*;
 	public RelationshipTypesElements getRelationshipTypesAccess() {
 		return pRelationshipTypes;
 	}
@@ -7437,14 +7292,14 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	/// * Expression1 * / Atom Expression:
 	//	{NumberConstant} value=Number | {StringConstant} value=STRING_LITERAL | Parameter | LegacyParameter | {BoolConstant}
-	//	value=('TRUE' | 'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '('
-	//	'*' ')' | MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (','
-	//	expressions+=Expression)* ']') | {Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|'
-	//	expression=Expression)? ')' | Reduce | {Filter} 'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '('
-	//	filterExpression=FilterExpression ')' | {Any} 'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '('
-	//	filterExpression=FilterExpression ')' | {Single} 'SINGLE' '(' filterExpression=FilterExpression ')' |
-	//	ShortestPathPattern | RelationshipsPattern | ParenthesizedExpression | FunctionInvocation | {VariableRef}
-	//	variableRef=[Variable|SYMBOLIC_NAME_X]
+	//	value=('TRUE' |
+	//	'FALSE') | {NullConstant} 'NULL' | {CaseExpression} expression=CaseExpression | {Count} 'COUNT' '(' '*' ')' |
+	//	MapLiteral | ListComprehension | {ExpressionList} ('[' expressions+=Expression (',' expressions+=Expression)* ']') |
+	//	{Filter} 'EXTRACT' '(' filterExpression=FilterExpression ('|' expression=Expression)? ')' | Reduce | {Filter}
+	//	'FILTER' '(' filterExpression=FilterExpression ')' | {All} 'ALL' '(' filterExpression=FilterExpression ')' | {Any}
+	//	'ANY' '(' filterExpression=FilterExpression ')' | {None} 'NONE' '(' filterExpression=FilterExpression ')' | {Single}
+	//	'SINGLE' '(' filterExpression=FilterExpression ')' | ShortestPathPattern | RelationshipsPattern |
+	//	ParenthesizedExpression | FunctionInvocation | {VariableRef} variableRef=[Variable|SYMBOLIC_NAME_X]
 	public AtomElements getAtomAccess() {
 		return pAtom;
 	}
@@ -7455,8 +7310,8 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Reduce: / *
 	// * reduce : REDUCE ws '(' variable '=' expression ',' idInColl '|' expression ')' ;
-	// * / 'REDUCE' '('
-	//	accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|' expression=Expression ')';
+	// * / 'REDUCE' '(' accumulator=Variable '=' accumulatorExpression=Expression ',' idInColl=IdInColl '|'
+	//	expression=Expression ')';
 	public ReduceElements getReduceAccess() {
 		return pReduce;
 	}
@@ -7528,8 +7383,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//ListComprehension: / *
 	// * listComprehension : '[' filterExpression ( ws '|' expression )? ']' ;
-	// * / '['
-	//	filterExpression=FilterExpression ('|' expression=Expression)? ']';
+	// * / '[' filterExpression=FilterExpression ('|' expression=Expression)? ']';
 	public ListComprehensionElements getListComprehensionAccess() {
 		return pListComprehension;
 	}
@@ -7540,8 +7394,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//PropertyLookup: / *
 	// * propertyLookup : ws '.' ws ( ( propertyKeyName ( '?' | '!' ) ) | propertyKeyName ) ;
-	// * / '.'
-	//	(propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName);
+	// * / '.' (propertyKeyName=PropertyKeyName propertyOperator=('?' | '!') | propertyKeyName=PropertyKeyName);
 	public PropertyLookupElements getPropertyLookupAccess() {
 		return pPropertyLookup;
 	}
@@ -7551,8 +7404,8 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//CaseExpression:
-	//	('CASE' caseAlternatives+=CaseAlternatives+ | 'CASE' caseExpression=Expression caseAlternatives+=CaseAlternatives+)
-	//	('ELSE' elseExpression=Expression)? 'END';
+	//	('CASE' caseAlternatives+=CaseAlternatives+ | 'CASE' caseExpression=Expression
+	//	caseAlternatives+=CaseAlternatives+) ('ELSE' elseExpression=Expression)? 'END';
 	public CaseExpressionElements getCaseExpressionAccess() {
 		return pCaseExpression;
 	}
@@ -7563,8 +7416,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//CaseAlternatives: / *
 	// * caseAlternatives : WHEN ws expression ws THEN ws expression ;
-	// * / 'WHEN' when=Expression 'THEN'
-	//	then=Expression;
+	// * / 'WHEN' when=Expression 'THEN' then=Expression;
 	public CaseAlternativesElements getCaseAlternativesAccess() {
 		return pCaseAlternatives;
 	}
@@ -7603,14 +7455,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getMapLiteralEntryAccess().getRule();
 	}
 	
-	//LegacyParameter:
-	/// *
+	//LegacyParameter: / *
 	// * legacyParameter : '{' ws ( symbolicName | DecimalInteger ) ws '}' ;
 	// * 
 	// * Comment: Format of DecimalInteger is checked via 
 	// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkLegacyParameterFormat(LegacyParameter)
-	// * /
-	//	'{' parameter=(SYMBOLIC_NAME | Number) '}';
+	// * / '{' parameter=(SYMBOLIC_NAME | Number) '}';
 	public LegacyParameterElements getLegacyParameterAccess() {
 		return pLegacyParameter;
 	}
@@ -7619,14 +7469,12 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		return getLegacyParameterAccess().getRule();
 	}
 	
-	//Parameter:
-	/// *
+	//Parameter: / *
 	// * parameter : '$' ( symbolicName | DecimalInteger ) ;
 	// * 
 	// * Comment: Format of DecimalInteger is checked via 
 	// * org.slizaa.neo4j.opencypher.validation.OpenCypherValidator.checkParameterFormat(Parameter)
-	// * /
-	//	'$' parameter=(SYMBOLIC_NAME | Number);
+	// * / '$' parameter=(SYMBOLIC_NAME | Number);
 	public ParameterElements getParameterAccess() {
 		return pParameter;
 	}
@@ -7726,8 +7574,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//terminal SYMBOLIC_NAME: / *
 	// * Comment: reduced character set
-	// * / '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' |
-	//	'_' | '0'..'9')*;
+	// * / '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getSYMBOLIC_NAMERule() {
 		return tSYMBOLIC_NAME;
 	}
