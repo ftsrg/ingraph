@@ -35,6 +35,8 @@ class IntegrationTest extends FlatSpec {
       val io = graph.io(IoCore.graphml)
       io.readGraph(modelPath)
       val results = engine.getResults().size
+      
+      System.err.println("Test results: " + results)
       assert(results == t.expectedResultSize)
     }
   )

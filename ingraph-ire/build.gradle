@@ -1,3 +1,7 @@
+plugins {
+    id "com.github.maiflai.scalatest" version "0.14"
+}
+
 repositories {
     jcenter()
     maven { url "http://docs.inf.mit.bme.hu/trainbenchmark-deps" }
@@ -14,5 +18,5 @@ dependencies {
     compile project(':ingraph-optimization-transformations')
     compile group: 'hu.bme.mit', name: 'gqo', version:'1.0'
     compile group: 'junit', name: 'junit', version: '4.12'
-    testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '2.2.6'
+    testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '3.0.0'
 }
