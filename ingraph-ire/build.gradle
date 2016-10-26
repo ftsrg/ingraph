@@ -19,4 +19,5 @@ dependencies {
     compile group: 'hu.bme.mit', name: 'gqo', version:'1.0'
     compile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: '3.0.0'
+    testRuntime 'org.pegdown:pegdown:1.6.0'
 }
