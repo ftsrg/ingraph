@@ -143,7 +143,7 @@ class RelalgBuilder {
 		val edgeVariable = edgeVariableFactory.createElement(edgeVariableName)
 
 		// add labels to the variable
-		r.types?.relTypeName.forEach [
+		r.types?.relTypeName?.forEach [
 			edgeVariable.ensureLabel(edgeLabelFactory.createElement(it))
 		]
 
@@ -155,7 +155,7 @@ class RelalgBuilder {
 		val vertexVariable = vertexVariableFactory.createElement(vertexVariableName)
 
 		// add labels to the variable
-		n.nodeLabels.nodeLabels.forEach [
+		n.nodeLabels?.nodeLabels?.forEach [
 			vertexVariable.ensureLabel(vertexLabelFactory.createElement(it.labelName))
 		]
 		vertexVariable
