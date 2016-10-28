@@ -4,22 +4,36 @@ import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
+import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.emf.util.PrettyPrinter
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.Match
+import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
+import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
+import org.slizaa.neo4j.opencypher.openCypher.PatternPart
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
+import org.slizaa.neo4j.opencypher.openCypher.Statement
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.Where
+import relalg.Direction
+import relalg.ExpandOperator
+import relalg.JoinOperator
+import relalg.Operator
 import relalg.RelalgFactory
+import relalg.VertexVariable
+import relalg.ProjectionOperator
+import relalg.UnaryOperator
 
 class RelalgBuilder {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil
 
 	val container = createRelalgContainer
 
@@ -35,6 +49,122 @@ class RelalgBuilder {
 		println(PrettyPrinter.format(cypher))
 
 		val statement = cypher.statement
+		// legacy_builder_by_szarnyasg(statement)
+		container.rootExpression = buildRelalg(statement)
+
+		container
+	}
+
+	def dispatch Operator buildRelalg(SingleQuery q) {
+		val clauses = q.clauses
+
+		val singleQuery_MatchList = clauses.filter(typeof(Match)).map[buildRelalg(it)]
+		val content = buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
+
+		val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
+
+		if (singleQuery_returnClauseList == null || singleQuery_returnClauseList.empty) {
+			content
+		} else {
+			singleQuery_returnClauseList.head
+		}
+	}
+
+	def UnaryOperator buildRelalgReturn(Return r, Operator content) {
+		// FIXME: add variables: variables.addAll(return_VariableList)
+		val trimmer = createProjectionOperator => [input = content]
+
+		// add duplicate-elimination operator if return DISTINCT was specified
+		if (r.distinct) {
+			createDuplicateEliminationOperator => [
+				input = trimmer
+			]
+		} else {
+			trimmer
+		}
+
+	}
+
+	def dispatch Operator buildRelalg(Match m) {
+		// FIXME: handle OPTIONAL
+		// handle comma-separated patternParts in the MATCH clause
+		val pattern_PatternPartList = m.pattern.patterns.map[buildRelalg(it)]
+
+		// they are natural joined together
+		val allDifferentOperator = createAllDifferentOperator => [
+			input = buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator)
+		]
+
+		if (m.where != null) {
+			// TODO: proper expression/where clause handling
+			createSelectionOperator => [
+				conditionString = 'TODO';
+				input = allDifferentOperator
+			]
+		} else {
+			allDifferentOperator
+		}
+	}
+
+	def dispatch Operator buildRelalg(PatternPart p) {
+		// TODO: handle variable assignment
+		// pass through variable assignment body to buildRelalg(PatternElement e)
+		buildRelalg(p.part)
+	}
+
+	def dispatch Operator buildRelalg(PatternElement e) {
+		val patternElement_GetVerticesOperator = createGetVerticesOperator => [
+			vertexVariable = buildVertexVariable(e.nodepattern)
+		]
+		val patternElement_ExpandList = e.chain.map[buildRelalg(it) as ExpandOperator]
+
+		chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
+	}
+
+	def dispatch Operator buildRelalg(PatternElementChain ec) {
+		val patternElementChain_VertexVariable = buildVertexVariable(ec.nodePattern)
+		val patternElementChain_EdgeVariable = buildEdgeVariable(ec.relationshipPattern.detail)
+
+		val isLeftArrow = ec.relationshipPattern.incoming
+		val isRightArrow = ec.relationshipPattern.outgoing
+
+		createExpandOperator() => [
+			edgeVariable = patternElementChain_EdgeVariable;
+			direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
+				Direction.BOTH
+			else if(isLeftArrow) Direction.IN else Direction.OUT;
+			targetVertexVariable = patternElementChain_VertexVariable
+		]
+
+	}
+
+	def buildEdgeVariable(RelationshipDetail r) {
+		val edgeVariableName = r.variable?.name
+		val edgeVariable = edgeVariableFactory.createElement(edgeVariableName)
+
+		// add labels to the variable
+		r.types?.relTypeName.forEach [
+			edgeVariable.ensureLabel(edgeLabelFactory.createElement(it))
+		]
+
+		edgeVariable
+	}
+
+	protected def VertexVariable buildVertexVariable(NodePattern n) {
+		val vertexVariableName = n.variable?.name
+		val vertexVariable = vertexVariableFactory.createElement(vertexVariableName)
+
+		// add labels to the variable
+		n.nodeLabels.nodeLabels.forEach [
+			vertexVariable.ensureLabel(vertexLabelFactory.createElement(it.labelName))
+		]
+		vertexVariable
+	}
+
+//	def dispatch buildRelalg(Cypher rule) {
+//		println(String::format("received unsupported cypher element: %s", rule.class.toString()))
+//	}
+	protected def void legacy_builder_by_szarnyasg(Statement statement) {
 		if (statement instanceof SingleQuery) {
 			val clauses = statement.clauses
 
@@ -73,8 +203,6 @@ class RelalgBuilder {
 				]
 			]
 		}
-
-		container
 	}
 
 // VIATRA Queries
