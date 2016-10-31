@@ -5,24 +5,14 @@
 \input{../inputs/relalg-commands}
 
 \begin{document}
-	\begin{preview}
-		\begin{forest} for tree={align=center}
-			[
-			{$\union$ \\
-				\footnotesize $\color{gray} \langle \var{} \rangle$
-			}
-			[
-			{$\getvertices{v}{l}$ \\
-				\footnotesize $\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-			]
-			[
-			{$\getvertices{v}{r}$ \\
-				\footnotesize $\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-			]
-			]
-			;
-		\end{forest}
-	\end{preview}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\selection{\mathtt{true} \land \mathtt{false}}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+]
+;
+\end{forest}
+\end{preview}
 \end{document}

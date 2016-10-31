@@ -21,6 +21,11 @@ class ReteCostFunction {
 		return container
 	}
 
+	def getEstimation(RelalgContainer container) {
+		estimateCost(container)
+		container.rootExpression.cardinality.value
+	}
+
 	/**
 	 * Nullary operators
 	 */

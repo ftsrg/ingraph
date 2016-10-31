@@ -6,9 +6,11 @@ import ingraph.optimization.patterns.CommutativeOperatorMatcher
 import ingraph.optimization.patterns.SwappableSelectionMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.eclipse.viatra.dse.api.DesignSpaceExplorer
-import org.eclipse.viatra.dse.evolutionary.EvolutionaryStrategyBuilder
+import org.eclipse.viatra.dse.api.Objectives
+import org.eclipse.viatra.dse.api.Strategies
 import relalg.RelalgContainer
 import relalg.RelalgPackage
+import org.eclipse.viatra.dse.solutionstore.SolutionStore
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -20,33 +22,27 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		statements.fireAllCurrent(commutativeOperatorRule)
 		return container
 	}
-	
-	def performDseOptimization(RelalgContainer container) {	
+
+	def performDseOptimization(RelalgContainer container) {
 		val dse = new DesignSpaceExplorer()
-		
-        dse.setInitialModel(container)
-        dse.addMetaModelPackage(RelalgPackage.eINSTANCE)
-        //dse.setStateCoderFactory(TODO)
-        //dse.addTransformationRule(TODO)
-        
-        //dse.addObjective(TODO)
-        
-        val populationSize = 40
-        val nsga2 = EvolutionaryStrategyBuilder.createNsga2Builder(populationSize)
-        //nsga2.initialPopulationSelector =
-		//nsga2.mutationRate = 
-        //nsga2.addMutation()
-        //nsga2.addCrossover() 
-		//nsga2.setStopCondition()
-		
-		dse.startExploration(nsga2.build())
-		
-		val solutionTrajectory = dse.getArbitrarySolution()
-        solutionTrajectory.doTransformation(container)
-        
+
+		dse.setInitialModel(container)
+		dse.addMetaModelPackage(RelalgPackage.eINSTANCE)
+		dse.addTransformationRule(cascadingSelectionsRule)
+		// dse.setStateCoderFactory(TODO)
+
+		val strategy = Strategies.createDfsStrategy.continueIfHardObjectivesFulfilled
+		dse.addObjective(Objectives.createDummyHardObjective)
+		dse.addObjective(new ReteCostObjective())
+
+		dse.solutionStore = new SolutionStore(0).storeBestSolutionsOnly
+		dse.startExploration(strategy)
+
+		// perform the transformation of a solution on the relalg expression
+		dse.getArbitrarySolution().doTransformation(container)
+
 		return container
 	}
-	
 
 	protected def cascadingSelectionsRule() {
 		createRule() //
