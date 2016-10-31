@@ -47,7 +47,7 @@ gradle clean build
 
 The project is implemented in Scala. We recommend the following IDEs:
 * IntelliJ IDEA with the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
-* Eclipse with the [Scala IDE](http://scala-ide.org/). Do not forget to install the **ScalaTest for Scala IDE** plug-in.
+* Eclipse with the [Scala IDE](http://scala-ide.org/). Do not forget to install the [**ScalaTest for Scala IDE**](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
 
 ## License
 
