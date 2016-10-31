@@ -19,16 +19,19 @@ See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
 
 ### Eclipse
 
-1. It is recommended to start with the latest milestone (currently, [Oxygen M2](http://www.eclipse.org/downloads/packages/release/Oxygen/M2)) **Eclipse IDE for Java and DSL Developers** distribution. This has the required dependencies. If you start from another Eclipse distribution, you should install the missing plug-ins:
-    * From the Marketplace:
-      * If you do not have Buildship: go to the **Eclipse Marketplace**, install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
-    * From the update site of your Eclipse release (e.g. the Oxygen update site).
-      * **Xtend IDE**
-      * **Xtext SDK**
-      * **EMF - Eclipse Modeling Framework Xcore SDK**
+1. It is recommended to start with the latest milestone (currently, [Oxygen M2](http://www.eclipse.org/downloads/packages/release/Oxygen/M2)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
 1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
 1. You may have to clean the workspace once.
+
+:notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has all the required dependencies. If you start from another Eclipse flavor/distribution, you should install the missing plug-ins:
+
+* From the Marketplace:
+  * If you do not have Buildship: go to the **Eclipse Marketplace**, install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+* From the update site of your Eclipse release (e.g. the Oxygen update site).
+  * **Xtend IDE**
+  * **Xtext SDK**
+  * **EMF - Eclipse Modeling Framework Xcore SDK**
 
 #### How to run the tests
 
