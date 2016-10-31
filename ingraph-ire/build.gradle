@@ -13,7 +13,7 @@ ext.scalaVersion = "2.11.8"
 
 dependencies {
     compile project(':ingraph-relalg-xcore')
-    compile project(':ingraph-trainbenchmark')
+    compile project(':ingraph-trainbenchmark-query-plans')
     compile project(':ingraph-tinkerpop')
     compile project(':ingraph-optimization-transformations')
     compile group: 'hu.bme.mit', name: 'gqo', version:'1.0'
