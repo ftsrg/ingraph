@@ -1,9 +1,9 @@
 package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
-import hu.bme.mit.incqueryds._
-import hu.bme.mit.incqueryds.trainbenchmark.TrainbenchmarkQuery
-import hu.bme.mit.incqueryds.utils.conversions._
+import hu.bme.mit.ire._
+import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
+import hu.bme.mit.ire.utils.conversions._
 import org.eclipse.emf.common.util.EList
 import relalg._
 
@@ -40,10 +40,10 @@ object EngineFactory extends App {
               case op: ProjectionOperator =>
                 val variables = op.getVariables.map(_.getName)
                 newLocal(Props(new Trimmer(expr.child, variables)))
-              case op: DuplicateEliminationOperator => newLocal(Props(new Checker(expr.child, (r: nodeType) => true)))
+              case op: DuplicateEliminationOperator => newLocal(Props(new Checker(expr.child, (r: TupleType) => true)))
               case op: AllDifferentOperator =>
                 val names = op.getEdgeVariables.map(_.getName)
-                def allDifferent(r: nodeType): Boolean = {
+                def allDifferent(r: TupleType): Boolean = {
                   val seen = mutable.HashSet[Any]()
                   for (value <- names.map(r(_))) {
                     if (seen(value)) {

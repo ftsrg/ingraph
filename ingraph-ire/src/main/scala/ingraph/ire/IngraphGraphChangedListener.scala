@@ -3,7 +3,7 @@ package ingraph.ire
 import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
-import hu.bme.mit.incqueryds.{ChangeSet, nodeType}
+import hu.bme.mit.ire.{ChangeSet, TupleType}
 import ingraph.ire.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 
@@ -15,14 +15,14 @@ class IngraphGraphChangedListener(
                                   edgeConverters: Map[String, mutable.Set[EdgeTransformer]],
                                   inputLookup: Map[String, (ChangeSet) => Unit]
                                 ) extends GraphChangedListener {
-  val vertices = mutable.HashMap[String, Set[nodeType]]()
-  val edges = mutable.HashMap[String, Set[nodeType]]()
+  val vertices = mutable.HashMap[String, Set[TupleType]]()
+  val edges = mutable.HashMap[String, Set[TupleType]]()
 
-  def elementToNode(element: Element, nick: String): nodeType =
+  def elementToNode(element: Element, nick: String): TupleType =
     Map[Any,Any](nick -> element.id) ++
       element.keys.map(k => s"${nick}_$k" -> element.value(k))
 
-  def edgeToNodeType(edge: Edge, transformer: EdgeTransformer): nodeType =
+  def edgeToTupleType(edge: Edge, transformer: EdgeTransformer): TupleType =
     elementToNode(edge, transformer.nick) +
       (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id) ++
       elementToNode(edge.outVertex, transformer.source) ++
@@ -37,7 +37,7 @@ class IngraphGraphChangedListener(
   override def edgeAdded(edge: Edge): Unit = {
     for (transformerSet <- edgeConverters.get(edge.label);
          transformer <- transformerSet)
-      inputLookup(transformer.nick)(ChangeSet(positive= Vector(edgeToNodeType(edge, transformer))))
+      inputLookup(transformer.nick)(ChangeSet(positive= Vector(edgeToTupleType(edge, transformer))))
   }
 
   override def vertexPropertyChanged(vertex: Vertex, key: String, oldValue: scala.Any, setValue: scala.Any): Unit = ???

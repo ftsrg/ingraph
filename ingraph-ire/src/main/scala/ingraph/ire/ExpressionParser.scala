@@ -1,22 +1,22 @@
 package ingraph.ire
 
-import hu.bme.mit.incqueryds._
+import hu.bme.mit.ire.TupleType
 import relalg._
 
 object ExpressionParser {
-  def parse(expression: Expression): (nodeType) => Boolean =
+  def parse(expression: Expression): (TupleType) => Boolean =
     expression match {
       case exp: BinaryExpression =>
         println("parsed")
         exp match {
           case exp: ArithmeticComparisonExpression =>
-            def left: (nodeType) => Any = parseComparable(exp.getLeftOperand, _)
-            def right: (nodeType) => Any = parseComparable(exp.getRightOperand, _)
+            def left: (TupleType) => Any = parseComparable(exp.getLeftOperand, _)
+            def right: (TupleType) => Any = parseComparable(exp.getRightOperand, _)
             import ArithmeticComparisonOperator._
             exp.getOperator match {
-              case EQUAL_TO => (t: nodeType) => left(t) == right(t)
-              case NOT_EQUAL_TO => (t: nodeType) => left(t) != right(t)
-              case LESS_THAN_OR_EQUAL => (t: nodeType) => left(t) match {
+              case EQUAL_TO => (t: TupleType) => left(t) == right(t)
+              case NOT_EQUAL_TO => (t: TupleType) => left(t) != right(t)
+              case LESS_THAN_OR_EQUAL => (t: TupleType) => left(t) match {
                 case l: Double => right(t) match {
                   case r: Double => l <= r
                   case r: Integer => l <= r
@@ -30,7 +30,7 @@ object ExpressionParser {
         }
     }
 
-  private def parseComparable(cmp: ComparableElement, tuple: nodeType) = cmp match {
+  private def parseComparable(cmp: ComparableElement, tuple: TupleType) = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
