@@ -25,8 +25,8 @@ class IntegrationTest extends FlatSpec {
   ).foreach(
     t => t.name should "work" in {
       val adapter = new IngraphAdapter(t.network)
+      adapter.reader.readGraph(modelPath)
       val results = adapter.engine.getResults().size
-      System.err.println("Test results: " + results)
       assert(results == t.expectedResultSize)
     }
   )
