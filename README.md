@@ -63,6 +63,10 @@ To build the projects from command line, use the following command:
 
 If you get `duplicate class` errors for the Xtend classes, you probably omitted the `clean` target from the Gradle build.
 
+## Using from other projects
+
+To deploy the artifacts in your local Maven repository, issue `gradle publishToMavenLocal`.
+
 ## License
 
 The project uses the Apache 2.0 license and is supported by the MTA-BME Lendület Research Group on Cyber-Physical Systems.
