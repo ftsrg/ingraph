@@ -1,6 +1,7 @@
 package ingraph.trainbenchmark
 
 import java.util.Arrays
+import relalg.ArithmeticComparisonOperator
 import relalg.Direction
 import relalg.RelalgFactory
 
@@ -21,23 +22,23 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [vertexVariable = segment; container = posLength]
 
-//		val integerLiteral0 = createIntegerLiteral => [value = 0]
-//		val condition = createArithmeticComparisonExpression => [
-//			leftOperand = length
-//			rightOperand = integerLiteral0
-//			operator = ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
-//		]
+		val integerLiteral0 = createIntegerLiteral => [value = 0]
+		val condition = createArithmeticComparisonExpression => [
+			leftOperand = length
+			rightOperand = integerLiteral0
+			operator = ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
+		]
 		val filter1 = createSelectionOperator => [
 			input = getVertices
 			conditionString = "segment.length <= 0"
-//			it.condition = condition
+			it.condition = condition
 			container = posLength
 		]
 		val trimmer = createProjectionOperator => [
 			input = filter1
 			variables.addAll(#[segment, length])
 			container = posLength
-		] // FIXME: renaming
+		]
 		val de = createDuplicateEliminationOperator => [input = trimmer]
 		val production = createProductionOperator => [input = de]
 		posLength.rootExpression = production
@@ -134,7 +135,7 @@ class TrainBenchmarkUtil {
 			leftInput = allDifferent
 			rightInput = expand4
 			container = routeSensor
-		] // FIXME: [route, sensor]
+		]
 		val trimmer = createProjectionOperator => [
 			input = antiJoin
 			variables.addAll(Arrays.asList(route, sensor, swP, sw))
@@ -313,18 +314,18 @@ class TrainBenchmarkUtil {
 			leftInput = allDifferent
 			rightInput = expand7
 			container = semaphoreNeighbor
-		] // FIXME: [semaphore, route2]
-//		val condition = createArithmeticComparisonExpression => [
-//			leftOperand = route1
-//			rightOperand = route2
-//			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO			
-//		]		
+		]
+		val condition = createArithmeticComparisonExpression => [
+			leftOperand = route1
+			rightOperand = route2
+			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO			
+		]		
 		val filter = createSelectionOperator => [
 			input = antiJoin
 			conditionString = "route1 != route2"
 			container = semaphoreNeighbor
-//			it.condition = condition
-		] // FIXME: route1 != route2
+			it.condition = condition
+		]
 		val trimmer = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))
@@ -488,35 +489,35 @@ class TrainBenchmarkUtil {
 			container = switchSet
 		]
 
-//		val stringLiteralGO = createStringLiteral => [value = "GO"]
-//		val condition1 = createArithmeticComparisonExpression => [
-//			leftOperand = signal
-//			rightOperand = stringLiteralGO
-//			operator = ArithmeticComparisonOperator.EQUAL_TO
-//		]
+		val stringLiteralGO = createStringLiteral => [value = "GO"]
+		val condition1 = createArithmeticComparisonExpression => [
+			leftOperand = signal
+			rightOperand = stringLiteralGO
+			operator = ArithmeticComparisonOperator.EQUAL_TO
+		]
 		val filter1 = createSelectionOperator => [
 			input = allDifferent
 			conditionString = "semaphore.signal = 'GO'"
 			container = switchSet
-//			it.condition = condition1
+			it.condition = condition1
 		]
 
-//		val condition2 = createArithmeticComparisonExpression => [
-//			leftOperand = currentPosition 
-//			rightOperand = position
-//			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO
-//		]
+		val condition2 = createArithmeticComparisonExpression => [
+			leftOperand = currentPosition 
+			rightOperand = position
+			operator = ArithmeticComparisonOperator.NOT_EQUAL_TO
+		]
 		val filter2 = createSelectionOperator => [
 			input = filter1
 			conditionString = "sw.currentPosition != swP.position"
 			container = switchSet
-//			it.condition = condition2
+			it.condition = condition2
 		]
 		val trimmer = createProjectionOperator => [
 			input = filter2
 			variables.addAll(Arrays.asList(semaphore, route, swP, sw, currentPosition, position))
 			container = switchSet
-		] // FIXME: renaming
+		]
 		val de = createDuplicateEliminationOperator => [
 			input = trimmer
 			container = switchSet
