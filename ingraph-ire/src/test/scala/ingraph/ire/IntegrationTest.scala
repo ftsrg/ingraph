@@ -24,18 +24,8 @@ class IntegrationTest extends FlatSpec {
     TestCase("SwitchSet", TrainBenchmarkUtil.switchSet(), 5)
   ).foreach(
     t => t.name should "work" in {
-      val rete = new Relalg2ReteTransformation
-      val inferencer = new SchemaInferencer
-      val sn = inferencer.addSchemaInformation(rete.transformToRete(t.network))
-      val engine = EngineFactory.createQueryEngine(sn.getRootExpression.asInstanceOf[ProductionOperator])
-      val listener = new IngraphGraphChangedListener(
-        engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup)
-      val graph = new EventGraph[Graph](TinkerGraph.open())
-      graph.addListener(listener)
-      val io = graph.io(IoCore.graphml)
-      io.readGraph(modelPath)
-      val results = engine.getResults().size
-      
+      val adapter = new IngraphAdapter(t.network)
+      val results = adapter.engine.getResults().size
       System.err.println("Test results: " + results)
       assert(results == t.expectedResultSize)
     }
