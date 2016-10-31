@@ -5,6 +5,16 @@ allprojects {
 
 subprojects {
 	apply plugin: 'java'
+	apply plugin: 'maven-publish'
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+			}
+		}
+	}
+
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
 
