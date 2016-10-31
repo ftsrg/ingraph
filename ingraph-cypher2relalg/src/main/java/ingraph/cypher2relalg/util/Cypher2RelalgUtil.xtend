@@ -67,4 +67,20 @@ class Cypher2RelalgUtil {
 
 		lastAlgebraExpression
 	}
+
+	/**
+	 * Chain binary operators together to build a left deep tree.
+	 *
+	 * head is put on the leftInput for the 1st element of the tail list, which in turn will be put on the leftInput on the 2nd element of the tail list and so on.
+	 */
+	def chainBinaryOperatorsLeft(Operator head, List<? extends BinaryOperator> tail) {
+		var lastAlgebraExpression = head
+
+		for (BinaryOperator op : tail) {
+			op.leftInput = lastAlgebraExpression
+			lastAlgebraExpression = op
+		}
+
+		lastAlgebraExpression
+	}
 }

@@ -14,6 +14,7 @@ import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
+import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
@@ -26,9 +27,8 @@ import relalg.ExpandOperator
 import relalg.JoinOperator
 import relalg.Operator
 import relalg.RelalgFactory
-import relalg.VertexVariable
-import relalg.ProjectionOperator
 import relalg.UnaryOperator
+import relalg.VertexVariable
 
 class RelalgBuilder {
 
@@ -53,6 +53,19 @@ class RelalgBuilder {
 		container.rootExpression = buildRelalg(statement)
 
 		container
+	}
+
+	def dispatch Operator buildRelalg(RegularQuery q) {
+		val queryListHead = buildRelalg(q.singleQuery)
+		val queryListTail = q.union?.map [
+			val mapIt = it
+			createUnionOperator => [
+				bag = mapIt.all
+				rightInput = buildRelalg(mapIt.singleQuery)
+			]
+		]
+
+		chainBinaryOperatorsLeft(queryListHead, queryListTail)
 	}
 
 	def dispatch Operator buildRelalg(SingleQuery q) {
