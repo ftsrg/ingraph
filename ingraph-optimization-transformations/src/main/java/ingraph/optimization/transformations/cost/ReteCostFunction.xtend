@@ -11,6 +11,7 @@ import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.SelectionOperator
 import relalg.AntiJoinOperator
+import relalg.UnionOperator
 
 class ReteCostFunction {
 
@@ -107,6 +108,17 @@ class ReteCostFunction {
 		
 		op.cardinality = createCardinality => [
 			value = op.leftInput.cardinality.value 
+		]
+		op.cardinality.value
+	}
+	
+	def dispatch Double estimate(UnionOperator op) {
+		estimate(op.leftInput)
+		estimate(op.rightInput)
+		
+		// for the sake of simplicity, we add the number of elements
+		op.cardinality = createCardinality => [
+			value = op.leftInput.cardinality.value + op.rightInput.cardinality.value 
 		]
 		op.cardinality.value
 	}

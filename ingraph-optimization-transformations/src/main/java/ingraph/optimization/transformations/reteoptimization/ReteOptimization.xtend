@@ -39,8 +39,14 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		dse.startExploration(strategy)
 
 		// perform the transformation of a solution on the relalg expression
-		dse.getArbitrarySolution().doTransformation(container)
-
+		val solution = dse.getArbitrarySolution();
+		
+		if (solution != null) {
+			solution.doTransformation(container)
+		} else {
+			println("No solution found")
+		}
+		
 		return container
 	}
 

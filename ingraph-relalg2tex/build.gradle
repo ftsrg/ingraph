@@ -11,12 +11,6 @@ dependencies {
 	compile project(':ingraph-optimization-transformations')
 	compile project(':ingraph-trainbenchmark-query-plans')
 	
-//	compile group: "org.eclipse.emf:org.eclipse.emf.common:${emfVersion}"
-//	compile group: "org.eclipse.emf:org.eclipse.emf.ecore.xmi:${emfVersion}"
-//	compile group: "org.eclipse.emf:org.eclipse.emf.ecore:${emfVersion}"
-//	compile group: "org.eclipse.emf:org.eclipse.emf.edit:${emfVersion}"
-//	compile group: "org.eclipse.birt.runtime:org.eclipse.emf.ecore.change:2.10.0.v20150123-0348"	
-	
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
