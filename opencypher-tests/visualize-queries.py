@@ -15,7 +15,7 @@ def indent(lines):
 filenames = glob.glob('*.feature')
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
-    test_file = open("../ingraph-relalg2tex/src/test/java/ingraph/relalg2tex/tck/%sVisualizationTest.xtend" % filename_without_extension, "w")
+    test_file = open("../ingraph-optimization-tests/src/test/java/ingraph/relalg2tex/tck/%sVisualizationTest.xtend" % filename_without_extension, "w")
 
     test_header = """package ingraph.relalg2tex.tck
 
