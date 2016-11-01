@@ -8,9 +8,15 @@ import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.emf.util.PrettyPrinter
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.Expression
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
+import org.slizaa.neo4j.opencypher.openCypher.NumberConstant
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
@@ -20,13 +26,20 @@ import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.Statement
+import org.slizaa.neo4j.opencypher.openCypher.StringConstant
+import org.slizaa.neo4j.opencypher.openCypher.Variable
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.Where
+import relalg.ArithmeticComparisonOperator
+import relalg.BinaryLogicalOperator
+import relalg.ComparableElement
 import relalg.Direction
 import relalg.ExpandOperator
 import relalg.JoinOperator
+import relalg.LogicalExpression
 import relalg.Operator
 import relalg.RelalgFactory
+import relalg.UnaryLogicalOperator
 import relalg.UnaryOperator
 import relalg.VertexVariable
 
@@ -109,14 +122,99 @@ class RelalgBuilder {
 		]
 
 		if (m.where != null) {
-			// TODO: proper expression/where clause handling
 			createSelectionOperator => [
-				conditionString = 'TODO';
+				condition = buildRelalgLogicalExpression(m.where.expression)
 				input = allDifferentOperator
 			]
 		} else {
 			allDifferentOperator
 		}
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e) {
+		createBinaryLogicalExpression => [
+			operator = BinaryLogicalOperator.AND
+			leftOperand = buildRelalgLogicalExpression(e.left)
+			rightOperand = buildRelalgLogicalExpression(e.right)
+		]
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionOr e) {
+		createBinaryLogicalExpression => [
+			operator = BinaryLogicalOperator.OR
+			leftOperand = buildRelalgLogicalExpression(e.left)
+			rightOperand = buildRelalgLogicalExpression(e.right)
+		]
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionXor e) {
+		createBinaryLogicalExpression => [
+			operator = BinaryLogicalOperator.XOR
+			leftOperand = buildRelalgLogicalExpression(e.left)
+			rightOperand = buildRelalgLogicalExpression(e.right)
+		]
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(Expression e) {
+		switch e.operator {
+			case "not":
+				createUnaryLogicalExpression => [
+					operator = UnaryLogicalOperator.NOT
+					leftOperand = buildRelalgLogicalExpression(e.left)
+				]
+			default:
+				throw new UnsupportedOperationException("TODO: " + e.operator)
+		}
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e) {
+		createArithmeticComparisonExpression => [
+			operator = switch e.operator {
+				case "=": ArithmeticComparisonOperator.EQUAL_TO
+				case "!=",
+				case "<>": ArithmeticComparisonOperator.NOT_EQUAL_TO
+				case "<": ArithmeticComparisonOperator.LESS_THAN
+				case "<=": ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
+				case ">": ArithmeticComparisonOperator.GREATER_THAN
+				case ">=": ArithmeticComparisonOperator.GREATER_THAN_OR_EQUAL
+			}
+			leftOperand = buildRelalgComparableElement(e.left)
+			rightOperand = buildRelalgComparableElement(e.right)
+		]
+	}
+
+	def dispatch ComparableElement buildRelalgComparableElement(NumberConstant e) {
+		try {
+			val n = Integer.parseInt(e.value)
+			createIntegerLiteral => [
+				value = n
+			]
+		} catch (NumberFormatException ex) {
+			createDoubleLiteral => [
+				value = Double.parseDouble(e.value)
+			]
+		}
+	}
+
+	def dispatch ComparableElement buildRelalgComparableElement(StringConstant e) {
+		createStringLiteral => [
+			value = e.value
+		]
+	}
+
+	def dispatch ComparableElement buildRelalgComparableElement(Variable e) {
+		// FIXME: add real variable handling
+		createStringLiteral => [
+			value = e.name
+		]
+	}
+
+	def dispatch ComparableElement buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
+		buildRelalgComparableElement(e.left)
+	}
+
+	def dispatch ComparableElement buildRelalgComparableElement(VariableRef e) {
+		buildRelalgComparableElement(e.variableRef)
 	}
 
 	def dispatch Operator buildRelalg(PatternPart p) {
