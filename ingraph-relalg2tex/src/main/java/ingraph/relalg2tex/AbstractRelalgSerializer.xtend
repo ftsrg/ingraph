@@ -33,6 +33,8 @@ import relalg.RelalgContainer
 import relalg.SelectionOperator
 import relalg.StringLiteral
 import relalg.UnaryArithmeticOperator
+import relalg.UnaryLogicalExpression
+import relalg.UnaryLogicalOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
@@ -241,6 +243,12 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
+	def convert(UnaryLogicalOperator op) {
+		switch (op) {
+			case NOT: '''\neg'''
+		}
+	}
+
 	def convert(BinaryArithmeticOperator op) {
 		switch (op) {
 			case DIVISION: '''/'''
@@ -283,6 +291,10 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def dispatch String convertExpression(BinaryLogicalExpression exp) {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+	}
+
+	def dispatch String convertExpression(UnaryLogicalExpression exp) {
+		'''«exp.operator.convert» «exp.leftOperand.convertExpression»'''
 	}
 
 	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {

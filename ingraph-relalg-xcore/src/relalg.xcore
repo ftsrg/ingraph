@@ -203,6 +203,11 @@ class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
 	refers LogicalExpression rightOperand
 }
 
+class UnaryLogicalExpression extends Expression, LogicalExpression {
+	UnaryLogicalOperator operator
+	refers LogicalExpression leftOperand
+}
+
 abstract class ComparableElement {
 }
 
@@ -286,6 +291,10 @@ enum BinaryLogicalOperator {
 	OR
 	,
 	XOR
+}
+
+enum UnaryLogicalOperator {
+	NOT
 }
 
 enum AggregationType {
