@@ -1,0 +1,63 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\join \{\var{r}\}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2, n, \_e1, \_e3, \_e4, \_e2, m} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
+}
+[
+{$\expandboth{\_e1}{\_e2}{}{r}{EDGE}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
+}
+[
+{$\getvertices{\_e1}{}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{n, \_e1, \_e3, r, \_e4, \_e2, m} \rangle$
+}
+[
+{$\expandboth{\_e4}{m}{}{\_e2}{}$ \\
+\footnotesize $\color{gray} \langle \var{n, \_e1, \_e3, r, \_e4, \_e2, m} \rangle$
+}
+[
+{$\expandboth{\_e3}{\_e4}{}{r}{EDGE}$ \\
+\footnotesize $\color{gray} \langle \var{n, \_e1, \_e3, r, \_e4} \rangle$
+}
+[
+{$\expandboth{n}{\_e3}{}{\_e1}{}$ \\
+\footnotesize $\color{gray} \langle \var{n, \_e1, \_e3} \rangle$
+}
+[
+{$\getvertices{n}{}$ \\
+\footnotesize $\color{gray} \langle \var{n} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

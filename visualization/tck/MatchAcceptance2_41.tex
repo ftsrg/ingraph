@@ -1,0 +1,48 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\selection{\mathtt{TODO}}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser, \_e1, out, \_e2, red, \_e3, a} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser, \_e1, out, \_e2, red, \_e3, a} \rangle$
+}
+[
+{$\expandin{red}{a}{}{\_e3}{AA\_HAS\_VALUE}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser, \_e1, out, \_e2, red, \_e3, a} \rangle$
+}
+[
+{$\expandout{out}{red}{}{\_e2}{AP\_HAS\_VALUE}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser, \_e1, out, \_e2, red} \rangle$
+}
+[
+{$\expandout{advertiser}{out}{}{\_e1}{ADV\_HAS\_PRODUCT}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser, \_e1, out} \rangle$
+}
+[
+{$\getvertices{advertiser}{}$ \\
+\footnotesize $\color{gray} \langle \var{advertiser} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

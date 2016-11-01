@@ -1,0 +1,53 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\join \{\var{a}\}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, c} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+}
+[
+{$\getvertices{a}{A}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, c} \rangle$
+}
+[
+{$\expandboth{\_e1}{c}{}{\_e2}{LIKES}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, \_e1, \_e2, c} \rangle$
+}
+[
+{$\expandout{a}{\_e1}{}{\_e1}{LIKES}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, \_e1} \rangle$
+}
+[
+{$\getvertices{a}{A}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

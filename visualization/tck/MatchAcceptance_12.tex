@@ -1,0 +1,38 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\selection{\mathtt{TODO}}$ \\
+\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
+}
+[
+{$\expandout{n}{x}{}{rel}{}$ \\
+\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
+}
+[
+{$\getvertices{n}{}$ \\
+\footnotesize $\color{gray} \langle \var{n} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

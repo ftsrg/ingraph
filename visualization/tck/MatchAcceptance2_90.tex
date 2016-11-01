@@ -1,0 +1,68 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\join \{\var{b}\}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$
+}
+[
+{$\join \{\var{a}\}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+}
+[
+{$\getvertices{a}{A}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$
+}
+[
+{$\expandout{a}{b}{B}{\_e1}{FOO}$ \\
+\footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$
+}
+[
+{$\getvertices{a}{A}$ \\
+\footnotesize $\color{gray} \langle \var{a} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{b, \_e2, c} \rangle$
+}
+[
+{$\expandin{b}{c}{B}{\_e2}{BAR}$ \\
+\footnotesize $\color{gray} \langle \var{b, \_e2, c} \rangle$
+}
+[
+{$\getvertices{b}{B}$ \\
+\footnotesize $\color{gray} \langle \var{b} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

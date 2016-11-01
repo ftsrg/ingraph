@@ -1,0 +1,68 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\join \{\var{me}, \var{r1}, \var{r2}, \var{you}\}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e1, r2, you, \_e2} \rangle$
+}
+[
+{$\selection{\mathtt{TODO}}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e1, r2, you} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e1, r2, you} \rangle$
+}
+[
+{$\expandin{\_e1}{you}{}{r2}{ATE}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e1, r2, you} \rangle$
+}
+[
+{$\expandout{me}{\_e1}{}{r1}{ATE}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e1} \rangle$
+}
+[
+{$\getvertices{me}{}$ \\
+\footnotesize $\color{gray} \langle \var{me} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e2, r2, you} \rangle$
+}
+[
+{$\expandin{\_e2}{you}{}{r2}{ATE}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e2, r2, you} \rangle$
+}
+[
+{$\expandout{me}{\_e2}{}{r1}{ATE}$ \\
+\footnotesize $\color{gray} \langle \var{me, r1, \_e2} \rangle$
+}
+[
+{$\getvertices{me}{}$ \\
+\footnotesize $\color{gray} \langle \var{me} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

@@ -1,0 +1,53 @@
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../inputs/relalg-packages}
+\input{../inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+[
+{$\projection{}$ \\
+\footnotesize $\color{gray} \langle \var{} \rangle$
+}
+[
+{$\join \{\var{r}\}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2, a2, b2} \rangle$
+}
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
+}
+[
+{$\expandout{\_e1}{\_e2}{}{r}{}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
+}
+[
+{$\getvertices{\_e1}{}$ \\
+\footnotesize $\color{gray} \langle \var{\_e1} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+{$\alldifferent{}$ \\
+\footnotesize $\color{gray} \langle \var{a2, r, b2} \rangle$
+}
+[
+{$\expandout{a2}{b2}{}{r}{}$ \\
+\footnotesize $\color{gray} \langle \var{a2, r, b2} \rangle$
+}
+[
+{$\getvertices{a2}{}$ \\
+\footnotesize $\color{gray} \langle \var{a2} \rangle$
+},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}
