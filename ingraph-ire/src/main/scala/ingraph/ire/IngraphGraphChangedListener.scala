@@ -14,17 +14,19 @@ class IngraphGraphChangedListener(
                                   vertexConverters: Map[String, mutable.Set[String]],
                                   edgeConverters: Map[String, mutable.Set[EdgeTransformer]],
                                   inputLookup: Map[String, (ChangeSet) => Unit]
-                                ) extends GraphChangedListener {
+                                ) extends GraphChangedListener with IdParser {
   val vertices = mutable.HashMap[String, Set[TupleType]]()
   val edges = mutable.HashMap[String, Set[TupleType]]()
 
+  override def idParser(obj: Any): Any = obj
+
   def elementToNode(element: Element, nick: String): TupleType =
-    Map[Any,Any](nick -> element.id) ++
+    Map[Any,Any](nick -> idParser(element.id)) ++
       element.keys.map(k => s"${nick}_$k" -> element.value(k))
 
   def edgeToTupleType(edge: Edge, transformer: EdgeTransformer): TupleType =
     elementToNode(edge, transformer.nick) +
-      (transformer.source -> edge.outVertex.id) + (transformer.target -> edge.inVertex.id) ++
+      (transformer.source -> idParser(edge.outVertex.id)) + (transformer.target -> idParser(edge.inVertex.id)) ++
       elementToNode(edge.outVertex, transformer.source) ++
       elementToNode(edge.inVertex, transformer.target)
 

@@ -15,7 +15,7 @@ class IngraphAdapter(plan: RelalgContainer) {
 
   val engine = EngineFactory.createQueryEngine(sn.getRootExpression.asInstanceOf[ProductionOperator])
   private val listener = new IngraphGraphChangedListener(
-    engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup)
+    engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup) with LongIdParser
 
   private val graph = new EventGraph[Graph](TinkerGraph.open())
   graph.addListener(listener)
