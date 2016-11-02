@@ -4,13 +4,16 @@ import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
+import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 	new() {
-		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
+	  val logger = Logger.getRootLogger
+	  logger.setLevel(Level.ERROR)
+	  ViatraQueryLoggingUtil.setExternalLogger(logger) 
 	}
 
 	def log(String log) {

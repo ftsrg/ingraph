@@ -6,15 +6,13 @@ import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import org.eclipse.viatra.transformation.runtime.emf.rules.batch.BatchTransformationRuleFactory
 import org.eclipse.viatra.transformation.runtime.emf.transformation.batch.BatchTransformation
+import org.eclipse.xtext.EcoreUtil2
 import relalg.BinaryOperator
 import relalg.ExpandOperator
 import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryOperator
-import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtext.EcoreUtil2
-import javax.swing.tree.ExpandVetoException
 
 abstract class AbstractRelalgTransformation {
 
