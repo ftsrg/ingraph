@@ -1,8 +1,9 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.TransactionFactory
-import ingraph.trainbenchmark.TrainBenchmarkUtil
 import org.scalatest.FlatSpec
+
+import hu.bme.mit.ire.TransactionFactory
+import ingraph.optimization.data.TrainBenchmarkUtil
 import relalg.RelalgContainer
 
 

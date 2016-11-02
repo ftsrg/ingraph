@@ -1,10 +1,10 @@
-package ingraph.relalg2tex.trainbenchmark.optimization
+package ingraph.relalg2tex.optimization
 
 import ingraph.optimization.transformations.reteoptimization.ReteOptimization
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Test
 
-class DseOptimizationTest {
+class BasicOptimizationTest {
 
 	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
 	val extension ReteOptimization optimization = new ReteOptimization
@@ -42,5 +42,5 @@ class DseOptimizationTest {
 		ctr.performSimpleOptimization
 		println(ctr.serialize)
 	}
-	
+
 }

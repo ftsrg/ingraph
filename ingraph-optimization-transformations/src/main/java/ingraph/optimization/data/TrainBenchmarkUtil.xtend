@@ -1,4 +1,4 @@
-package ingraph.trainbenchmark
+package ingraph.optimization.data
 
 import java.util.Arrays
 import relalg.ArithmeticComparisonOperator

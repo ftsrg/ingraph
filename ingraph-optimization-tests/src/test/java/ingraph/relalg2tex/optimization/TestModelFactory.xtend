@@ -1,4 +1,4 @@
-package ingraph.relalg2tex.trainbenchmark.optimization
+package ingraph.relalg2tex.optimization
 
 import relalg.BinaryLogicalOperator
 import relalg.RelalgFactory
