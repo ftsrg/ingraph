@@ -7,7 +7,6 @@ object ExpressionParser {
   def parse(expression: Expression): (TupleType) => Boolean =
     expression match {
       case exp: BinaryExpression =>
-        println("parsed")
         exp match {
           case exp: ArithmeticComparisonExpression =>
             def left: (TupleType) => Any = parseComparable(exp.getLeftOperand, _)
