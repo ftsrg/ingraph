@@ -25,6 +25,36 @@ object ExpressionParser {
                   case r: Integer => l <= r
                 }
               }
+              case LESS_THAN => (t: TupleType) => left(t) match {
+                case l: Double => right(t) match {
+                  case r: Double => l < r
+                  case r: Integer => l < r
+                }
+                case l: Integer => right(t) match {
+                  case r: Double => l < r
+                  case r: Integer => l < r
+                }
+              }
+              case GREATER_THAN_OR_EQUAL => (t: TupleType) => left(t) match {
+                case l: Double => right(t) match {
+                  case r: Double => l >= r
+                  case r: Integer => l >= r
+                }
+                case l: Integer => right(t) match {
+                  case r: Double => l >= r
+                  case r: Integer => l >= r
+                }
+              }
+              case GREATER_THAN => (t: TupleType) => left(t) match {
+                case l: Double => right(t) match {
+                  case r: Double => l > r
+                  case r: Integer => l > r
+                }
+                case l: Integer => right(t) match {
+                  case r: Double => l > r
+                  case r: Integer => l > r
+                }
+              }
             }
         }
     }
