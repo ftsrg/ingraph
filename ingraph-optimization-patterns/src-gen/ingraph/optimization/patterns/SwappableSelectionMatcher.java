@@ -8,7 +8,6 @@ import ingraph.optimization.patterns.util.SwappableSelectionQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.log4j.Logger;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import org.eclipse.viatra.query.runtime.api.IQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
@@ -78,7 +77,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   private final static int POSITION_SELECTIONOPERATOR2 = 2;
   
-  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(SwappableSelectionMatcher.class);
+  private final static org.apache.log4j.Logger LOGGER = ViatraQueryLoggingUtil.getLogger(SwappableSelectionMatcher.class);
   
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.

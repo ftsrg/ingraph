@@ -8,7 +8,6 @@ import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.log4j.Logger;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import org.eclipse.viatra.query.runtime.api.IQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
@@ -91,7 +90,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   
   private final static int POSITION_PARENTOPERATOR = 2;
   
-  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandVertexMatcher.class);
+  private final static org.apache.log4j.Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandVertexMatcher.class);
   
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
