@@ -1,15 +1,9 @@
 package ingraph.ire
 
-import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.util.SchemaInferencer
+import hu.bme.mit.ire.TransactionFactory
 import ingraph.trainbenchmark.TrainBenchmarkUtil
-import org.apache.tinkerpop.gremlin.structure.Graph
-import org.apache.tinkerpop.gremlin.structure.io.IoCore
-import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl.Container
 import org.scalatest.FlatSpec
-import relalg.{ProductionOperator, RelalgContainer}
+import relalg.RelalgContainer
 
 
 class IntegrationTest extends FlatSpec {
@@ -25,7 +19,12 @@ class IntegrationTest extends FlatSpec {
   ).foreach(
     t => t.name should "work" in {
       val adapter = new IngraphAdapter(t.network)
-      adapter.reader.readGraph(modelPath)
+      val tf = new TransactionFactory(16)
+      tf.subscribe(adapter.engine.inputLookup)
+      val tran = tf.newBatchTransaction()
+
+      adapter.readGraph(modelPath, tran)
+      tran.close()
       val results = adapter.engine.getResults().size
       assert(results == t.expectedResultSize)
     }

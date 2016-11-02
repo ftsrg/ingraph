@@ -3,7 +3,7 @@ package ingraph.ire
 import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
-import hu.bme.mit.ire.{ChangeSet, TupleType}
+import hu.bme.mit.ire.{ChangeSet, Transaction, TupleType}
 import ingraph.ire.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 
@@ -19,6 +19,7 @@ class IngraphGraphChangedListener(
   val edges = mutable.HashMap[String, Set[TupleType]]()
 
   override def idParser(obj: Any): Any = obj
+  var transaction: Transaction = _
 
   def elementToNode(element: Element, nick: String): TupleType =
     Map[Any,Any](nick -> idParser(element.id)) ++
@@ -33,13 +34,13 @@ class IngraphGraphChangedListener(
   override def vertexAdded(vertex: Vertex): Unit = {
     for (nickSet <- vertexConverters.get(vertex.label);
          nick <- nickSet)
-      inputLookup(nick)(ChangeSet(positive= Vector(elementToNode(vertex, nick))))
+      transaction.add(nick, elementToNode(vertex, nick))
   }
 
   override def edgeAdded(edge: Edge): Unit = {
     for (transformerSet <- edgeConverters.get(edge.label);
          transformer <- transformerSet)
-      inputLookup(transformer.nick)(ChangeSet(positive= Vector(edgeToTupleType(edge, transformer))))
+      transaction.add(transformer.nick, edgeToTupleType(edge, transformer))
   }
 
   override def vertexPropertyChanged(vertex: Vertex, key: String, oldValue: scala.Any, setValue: scala.Any): Unit = ???
