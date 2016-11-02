@@ -6,7 +6,12 @@ import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
-	
+
+	def log(String log) {
+		println("hello")
+//		println(log)
+	}
+
 	def transformToRete(RelalgContainer container) {
 		val statements = register(container)
 		statements.fireWhilePossible(expandVertexRule)
@@ -21,7 +26,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
-			println("expandVertexRule fired")
+//			log("expandVertexRule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -29,7 +34,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
 			]
-			
+
 			changeOperator(parentOperator, expandOperator, getEdgesOperator)
 		].build
 	}
@@ -41,7 +46,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		createRule() //
 		.precondition(ExpandOperatorMatcher.querySpecification) //
 		.action [ //
-			println("expandOperatorRule fired")
+//			println("expandOperatorRule fired")
 			val expandOperator = expandOperator
 
 			val getEdgesOperator = createGetEdgesOperator => [
@@ -53,7 +58,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				leftInput = expandOperator.getInput
 				rightInput = getEdgesOperator
 			]
-			
+
 			changeOperator(parentOperator, expandOperator, joinOperator)
 		].build
 	}

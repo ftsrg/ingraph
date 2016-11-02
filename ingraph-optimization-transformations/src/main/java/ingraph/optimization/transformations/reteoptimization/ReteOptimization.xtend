@@ -11,6 +11,7 @@ import org.eclipse.viatra.dse.api.Strategies
 import relalg.RelalgContainer
 import relalg.RelalgPackage
 import org.eclipse.viatra.dse.solutionstore.SolutionStore
+import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -24,6 +25,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 	}
 
 	def performDseOptimization(RelalgContainer container) {
+		DesignSpaceExplorer.turnOnLogging(DseLoggingLevel.OFF)
 		val dse = new DesignSpaceExplorer()
 
 		dse.setInitialModel(container)
