@@ -12,6 +12,9 @@ import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryOperator
+import org.eclipse.emf.ecore.util.EcoreUtil
+import org.eclipse.xtext.EcoreUtil2
+import javax.swing.tree.ExpandVetoException
 
 abstract class AbstractRelalgTransformation {
 
@@ -19,7 +22,6 @@ abstract class AbstractRelalgTransformation {
 	protected val extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
 
 	new() {
-		ViatraQueryLoggingUtil.setupConsoleAppenderForDefaultLogger()
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
 	}
 
@@ -45,6 +47,10 @@ abstract class AbstractRelalgTransformation {
 					parentOperator.rightInput = newOperator
 				}
 			}
+		}
+		
+		if (currentOperator instanceof ExpandOperator) {
+			EcoreUtil2.delete(currentOperator)
 		}
 	}
 
