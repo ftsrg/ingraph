@@ -8,6 +8,7 @@ import ingraph.optimization.patterns.util.CommutativeOperatorQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.log4j.Logger;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import org.eclipse.viatra.query.runtime.api.IQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
@@ -77,7 +78,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   private final static int POSITION_RIGHTINPUT = 2;
   
-  private final static org.apache.log4j.Logger LOGGER = ViatraQueryLoggingUtil.getLogger(CommutativeOperatorMatcher.class);
+  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(CommutativeOperatorMatcher.class);
   
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
