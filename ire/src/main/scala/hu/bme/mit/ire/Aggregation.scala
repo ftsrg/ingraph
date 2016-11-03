@@ -8,7 +8,7 @@ trait Aggregator {
 }
 
 class Counter(override val next: (ReteMessage) => Unit,
-              val keys: Vector[Any],
+              val keys: Vector[Any], as: String,
               override val expectedTerminatorCount:Int = 1) extends AlphaNode with SingleForwarder {
   val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
   override def onChangeSet(changeSet: ChangeSet): Unit = {
@@ -35,10 +35,10 @@ class Counter(override val next: (ReteMessage) => Unit,
     val negative = new VectorBuilder[TupleType]
     for ((key, oldValue) <- oldValues) {
       if (oldValue != 0) {
-        negative += Map("count" -> oldValues(key)) ++ key.zipWithIndex.map(kv => keys(kv._2) -> kv._1).toMap
+        negative += Map(as -> oldValues(key)) ++ key.zipWithIndex.map(kv => keys(kv._2) -> kv._1).toMap
       }
       if (counts(key) != 0) {
-        positive += Map("count" -> counts(key)) ++ key.zipWithIndex.map(kv => keys(kv._2) -> kv._1).toMap
+        positive += Map(as -> counts(key)) ++ key.zipWithIndex.map(kv => keys(kv._2) -> kv._1).toMap
       }
     }
 

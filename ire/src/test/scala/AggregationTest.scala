@@ -21,7 +21,7 @@ class AggregationTest(_system: ActorSystem) extends TestKit(_system) with Implic
     "count with complex keys" in {
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new Counter(echoActor ! _, Vector("city", "sex"))))
+      val counter = system.actorOf(Props(new Counter(echoActor ! _, Vector("city", "sex"), "count")))
       counter ! ChangeSet(positive = Vector(odin))
       expectMsg(ChangeSet(positive = Vector(Map("sex" -> "male", "city" -> "Asgard", "count" -> 1))))
       counter ! ChangeSet(positive = Vector(thor))
