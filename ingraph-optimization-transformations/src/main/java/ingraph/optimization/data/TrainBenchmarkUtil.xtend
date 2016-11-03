@@ -34,12 +34,12 @@ class TrainBenchmarkUtil {
 			it.condition = condition
 			container = posLength
 		]
-		val trimmer = createProjectionOperator => [
+		val projection = createProjectionOperator => [
 			input = filter1
 			variables.addAll(#[segment, length])
 			container = posLength
 		]
-		val de = createDuplicateEliminationOperator => [input = trimmer]
+		val de = createDuplicateEliminationOperator => [input = projection]
 		val production = createProductionOperator => [input = de]
 		posLength.rootExpression = production
 		posLength
@@ -136,13 +136,13 @@ class TrainBenchmarkUtil {
 			rightInput = expand4
 			container = routeSensor
 		]
-		val trimmer = createProjectionOperator => [
+		val projection = createProjectionOperator => [
 			input = antiJoin
 			variables.addAll(Arrays.asList(route, sensor, swP, sw))
 			container = routeSensor
 		]
 		val de = createDuplicateEliminationOperator => [
-			input = trimmer
+			input = projection
 			container = routeSensor
 		]
 		val production = createProductionOperator => [
@@ -326,13 +326,13 @@ class TrainBenchmarkUtil {
 			container = semaphoreNeighbor
 			it.condition = condition
 		]
-		val trimmer = createProjectionOperator => [
+		val projection = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))
 			container = semaphoreNeighbor
 		]
 		val de = createDuplicateEliminationOperator => [
-			input = trimmer
+			input = projection
 			container = semaphoreNeighbor
 		]
 		val production = createProductionOperator => [
@@ -513,13 +513,13 @@ class TrainBenchmarkUtil {
 			container = switchSet
 			it.condition = condition2
 		]
-		val trimmer = createProjectionOperator => [
+		val projection = createProjectionOperator => [
 			input = filter2
 			variables.addAll(Arrays.asList(semaphore, route, swP, sw, currentPosition, position))
 			container = switchSet
 		]
 		val de = createDuplicateEliminationOperator => [
-			input = trimmer
+			input = projection
 			container = switchSet
 		]
 		val production = createProductionOperator => [
