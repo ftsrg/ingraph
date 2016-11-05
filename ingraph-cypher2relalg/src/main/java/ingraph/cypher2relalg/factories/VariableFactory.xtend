@@ -3,7 +3,7 @@ package ingraph.cypher2relalg.factories
 import relalg.Variable
 import relalg.RelalgContainer
 
-abstract class VariableFactory<TVariable extends Variable> extends ElementFactory<TVariable> {
+abstract class VariableFactory<TVariable extends Variable> extends NamedElementFactory<TVariable> {
 	
 	new(RelalgContainer container) {
 		super(container)

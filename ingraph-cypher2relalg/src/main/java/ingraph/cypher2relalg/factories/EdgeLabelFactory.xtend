@@ -3,7 +3,7 @@ package ingraph.cypher2relalg.factories
 import relalg.EdgeLabel
 import relalg.RelalgContainer
 
-class EdgeLabelFactory extends ElementFactory<EdgeLabel> {
+class EdgeLabelFactory extends NamedElementFactory<EdgeLabel> {
 	
 	new(RelalgContainer container) {
 		super(container)

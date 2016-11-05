@@ -6,7 +6,7 @@ import relalg.NamedElement
 import relalg.RelalgFactory
 import relalg.RelalgContainer
 
-abstract class ElementFactory<TNamedElement extends NamedElement> {
+abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	protected final RelalgContainer container
