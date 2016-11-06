@@ -5,10 +5,8 @@
 package relalg
 
 class RelalgContainer {
-	refers Operator rootExpression
+	contains Operator rootExpression
 	contains NamedElement[] elements opposite ^container
-	contains Operator[] operators opposite ^container
-	contains Expression[] expressions opposite ^container
 }
 
 abstract class NamedElement {
@@ -51,7 +49,6 @@ abstract class ReturnableElement {
 
 /* Operators */
 abstract class Operator {
-	refers RelalgContainer ^container opposite operators
 	String description
 	refers Variable[] schema
 	contains Cardinality cardinality
@@ -77,7 +74,7 @@ class GetEdgesOperator extends NullaryOperator {
 
 /* Unary operators */
 abstract class UnaryOperator extends Operator {
-	refers Operator input
+	contains Operator input
 }
 
 class ProductionOperator extends UnaryOperator {
@@ -85,7 +82,7 @@ class ProductionOperator extends UnaryOperator {
 
 class SelectionOperator extends UnaryOperator {
 	String conditionString
-	refers LogicalExpression condition
+	contains LogicalExpression condition
 }
 
 class ProjectionOperator extends UnaryOperator {
@@ -106,7 +103,7 @@ class DuplicateEliminationOperator extends UnaryOperator {
 
 class AllDifferentOperator extends UnaryOperator {
 	refers EdgeVariable[] edgeVariables
-	refers EdgeVariableSet edgeVariableSets
+	contains EdgeVariableSet edgeVariableSets
 }
 
 class EdgeVariableSet { // TODO - we should think about this a bit more
@@ -168,7 +165,6 @@ class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, Associati
 
 /* expression */
 abstract class Expression {
-	refers RelalgContainer ^container opposite expressions
 	String text
 }
 
@@ -186,8 +182,8 @@ class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpressi
 // artihmetic comparisons evaluate to true/false, hence they are logical expressions
 class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
 	ArithmeticComparisonOperator operator
-	refers ComparableElement leftOperand
-	refers ComparableElement rightOperand
+	contains ComparableElement leftOperand
+	contains ComparableElement rightOperand
 }
 
 // not sure what we will make of this
@@ -199,13 +195,13 @@ abstract class LogicalExpression extends Expression {
 
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
 	BinaryLogicalOperator operator
-	refers LogicalExpression leftOperand
-	refers LogicalExpression rightOperand
+	contains LogicalExpression leftOperand
+	contains LogicalExpression rightOperand
 }
 
 class UnaryLogicalExpression extends Expression, LogicalExpression {
 	UnaryLogicalOperator operator
-	refers LogicalExpression leftOperand
+	contains LogicalExpression leftOperand
 }
 
 abstract class ComparableElement {

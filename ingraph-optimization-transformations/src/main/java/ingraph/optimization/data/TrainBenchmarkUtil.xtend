@@ -20,7 +20,7 @@ class TrainBenchmarkUtil {
 		]
 		val length = createAttributeVariable => [name = "length"; element = segment; container = posLength]
 
-		val getVertices = createGetVerticesOperator => [vertexVariable = segment; container = posLength]
+		val getVertices = createGetVerticesOperator => [vertexVariable = segment]
 
 		val integerLiteral0 = createIntegerLiteral => [value = 0]
 		val condition = createArithmeticComparisonExpression => [
@@ -32,12 +32,10 @@ class TrainBenchmarkUtil {
 			input = getVertices
 			conditionString = "segment.length <= 0"
 			it.condition = condition
-			container = posLength
 		]
 		val projection = createProjectionOperator => [
 			input = filter1
 			variables.addAll(#[segment, length])
-			container = posLength
 		]
 		val de = createDuplicateEliminationOperator => [input = projection]
 		val production = createProductionOperator => [input = de]
@@ -88,8 +86,8 @@ class TrainBenchmarkUtil {
 			container = routeSensor
 		]
 
-		val getVerticesRoute1 = createGetVerticesOperator => [vertexVariable = route; container = routeSensor]
-		val getVerticesRoute2 = createGetVerticesOperator => [vertexVariable = route; container = routeSensor]
+		val getVerticesRoute1 = createGetVerticesOperator => [vertexVariable = route]
+		val getVerticesRoute2 = createGetVerticesOperator => [vertexVariable = route]
 
 		val expand1 = createExpandOperator => [
 			input = getVerticesRoute1
@@ -97,7 +95,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = route
 			targetVertexVariable = swP
 			edgeVariable = _e1
-			container = routeSensor
 		]
 		val expand2 = createExpandOperator => [
 			input = expand1
@@ -105,7 +102,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = swP
 			targetVertexVariable = sw
 			edgeVariable = _e2
-			container = routeSensor
 		]
 		val expand3 = createExpandOperator => [
 			input = expand2
@@ -113,13 +109,11 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = sw
 			targetVertexVariable = sensor
 			edgeVariable = _e3
-			container = routeSensor
 		]
 
 		val allDifferent = createAllDifferentOperator => [
 			input = expand3
 			edgeVariables.addAll(#[_e1, _e2, _e3])
-			container = routeSensor
 		]
 
 		val expand4 = createExpandOperator => [
@@ -128,26 +122,21 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = route
 			targetVertexVariable = sensor
 			edgeVariable = _e4
-			container = routeSensor
 		]
 
 		val antiJoin = createAntiJoinOperator => [
 			leftInput = allDifferent
 			rightInput = expand4
-			container = routeSensor
 		]
 		val projection = createProjectionOperator => [
 			input = antiJoin
 			variables.addAll(Arrays.asList(route, sensor, swP, sw))
-			container = routeSensor
 		]
 		val de = createDuplicateEliminationOperator => [
 			input = projection
-			container = routeSensor
 		]
 		val production = createProductionOperator => [
 			input = de
-			container = routeSensor
 		]
 		routeSensor.rootExpression = production
 		routeSensor
@@ -239,11 +228,9 @@ class TrainBenchmarkUtil {
 
 		val getVertices1 = createGetVerticesOperator => [
 			vertexVariable = semaphore
-			container = semaphoreNeighbor
 		]
 		val getVertices2 = createGetVerticesOperator => [
 			vertexVariable = semaphore
-			container = semaphoreNeighbor
 		]
 
 		val expand1 = createExpandOperator => [
@@ -252,7 +239,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route1
 			edgeVariable = _e1
-			container = semaphoreNeighbor
 		]
 		val expand2 = createExpandOperator => [
 			input = expand1
@@ -260,7 +246,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = route1
 			targetVertexVariable = sensor1
 			edgeVariable = _e2
-			container = semaphoreNeighbor
 		]
 		val expand3 = createExpandOperator => [
 			input = expand2
@@ -268,7 +253,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = sensor1
 			targetVertexVariable = te1
 			edgeVariable = _e3
-			container = semaphoreNeighbor
 		]
 		val expand4 = createExpandOperator => [
 			input = expand3
@@ -276,7 +260,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = te1
 			targetVertexVariable = te2
 			edgeVariable = _e4
-			container = semaphoreNeighbor
 		]
 		val expand5 = createExpandOperator => [
 			input = expand4
@@ -284,7 +267,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = te2
 			targetVertexVariable = sensor2
 			edgeVariable = _e5
-			container = semaphoreNeighbor
 		]
 		val expand6 = createExpandOperator => [
 			input = expand5
@@ -292,13 +274,11 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = sensor2
 			targetVertexVariable = route2
 			edgeVariable = _e6
-			container = semaphoreNeighbor
 		]
 
 		val allDifferent = createAllDifferentOperator => [
 			input = expand6
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3, _e4, _e5, _e6))
-			container = semaphoreNeighbor
 		]
 
 		val expand7 = createExpandOperator => [
@@ -307,13 +287,11 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route2
 			edgeVariable = _e7
-			container = semaphoreNeighbor
 		]
 
 		val antiJoin = createAntiJoinOperator => [
 			leftInput = allDifferent
 			rightInput = expand7
-			container = semaphoreNeighbor
 		]
 		val condition = createArithmeticComparisonExpression => [
 			leftOperand = route1
@@ -323,21 +301,17 @@ class TrainBenchmarkUtil {
 		val filter = createSelectionOperator => [
 			input = antiJoin
 			conditionString = "route1 != route2"
-			container = semaphoreNeighbor
 			it.condition = condition
 		]
 		val projection = createProjectionOperator => [
 			input = filter
 			variables.addAll(Arrays.asList(semaphore, route1, route2, sensor1, sensor2, te1, te2))
-			container = semaphoreNeighbor
 		]
 		val de = createDuplicateEliminationOperator => [
 			input = projection
-			container = semaphoreNeighbor
 		]
 		val production = createProductionOperator => [
 			input = de
-			container = semaphoreNeighbor
 		]
 		semaphoreNeighbor.rootExpression = production
 		semaphoreNeighbor
@@ -368,11 +342,9 @@ class TrainBenchmarkUtil {
 
 		val getVertices1 = createGetVerticesOperator => [
 			vertexVariable = sw
-			container = switchMonitored
 		]
 		val getVertices2 = createGetVerticesOperator => [
 			vertexVariable = sw
-			container = switchMonitored
 		]
 		
 		val expand1 = createExpandOperator => [
@@ -381,21 +353,17 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = sw
 			targetVertexVariable = _sensor
 			edgeVariable = _e1
-			container = switchMonitored
 		]
 
 		val antiJoin = createAntiJoinOperator => [
 			leftInput = getVertices1
 			rightInput = expand1
-			container = switchMonitored
 		]
 		val de = createDuplicateEliminationOperator => [
 			input = antiJoin
-			container = switchMonitored
 		]
 		val production = createProductionOperator => [
 			input = de
-			container = switchMonitored
 		]
 		switchMonitored.rootExpression = production
 		switchMonitored
@@ -455,7 +423,6 @@ class TrainBenchmarkUtil {
 
 		val getVertices = createGetVerticesOperator => [
 			vertexVariable = semaphore
-			container = switchSet
 		]
 
 		val expand1 = createExpandOperator => [
@@ -464,7 +431,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = semaphore
 			targetVertexVariable = route
 			edgeVariable = _e1
-			container = switchSet
 		]
 		val expand2 = createExpandOperator => [
 			input = expand1
@@ -472,7 +438,6 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = route
 			targetVertexVariable = swP
 			edgeVariable = _e2
-			container = switchSet
 		]
 		val expand3 = createExpandOperator => [
 			input = expand2
@@ -480,13 +445,11 @@ class TrainBenchmarkUtil {
 			sourceVertexVariable = swP
 			targetVertexVariable = sw
 			edgeVariable = _e3
-			container = switchSet
 		]
 
 		val allDifferent = createAllDifferentOperator => [
 			input = expand3
 			edgeVariables.addAll(Arrays.asList(_e1, _e2, _e3))
-			container = switchSet
 		]
 
 		val stringLiteralGO = createStringLiteral => [value = "GO"]
@@ -498,7 +461,6 @@ class TrainBenchmarkUtil {
 		val filter1 = createSelectionOperator => [
 			input = allDifferent
 			conditionString = "semaphore.signal = 'GO'"
-			container = switchSet
 			it.condition = condition1
 		]
 
@@ -510,21 +472,17 @@ class TrainBenchmarkUtil {
 		val filter2 = createSelectionOperator => [
 			input = filter1
 			conditionString = "sw.currentPosition != swP.position"
-			container = switchSet
 			it.condition = condition2
 		]
 		val projection = createProjectionOperator => [
 			input = filter2
 			variables.addAll(Arrays.asList(semaphore, route, swP, sw, currentPosition, position))
-			container = switchSet
 		]
 		val de = createDuplicateEliminationOperator => [
 			input = projection
-			container = switchSet
 		]
 		val production = createProductionOperator => [
 			input = de
-			container = switchSet
 		]
 		switchSet.rootExpression = production
 		switchSet
