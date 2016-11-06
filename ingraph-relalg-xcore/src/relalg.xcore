@@ -134,6 +134,9 @@ class GroupingEntry {
 	refers Variable aggregatedVariable
 }
 
+class UnwindOperator extends UnaryOperator {
+}
+
 /* Binary operators */
 abstract class BinaryOperator extends Operator {
 	contains Operator leftInput

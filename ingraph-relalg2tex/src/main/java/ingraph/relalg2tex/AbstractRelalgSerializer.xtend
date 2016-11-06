@@ -38,6 +38,7 @@ import relalg.UnaryLogicalOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.UnwindOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -145,6 +146,10 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch operatorToTex(ProjectionOperator op) {
 		'''\projection{«op.variables.variableList»}'''
+	}
+	
+	def dispatch operatorToTex(UnwindOperator op) {
+		'''\unwind'''
 	}
 
 	/**
