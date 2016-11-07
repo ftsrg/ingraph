@@ -10,21 +10,18 @@ class TestModelFactory {
 	public def testModel1() {
 		val ctr = createRelalgContainer
 		
-		val l = createBooleanLiteral => [value = true; container = ctr]
-		val r = createBooleanLiteral => [value = false; container = ctr]
+		val l = createBooleanLiteral => [value = true]
+		val r = createBooleanLiteral => [value = false]
 		val condition = createBinaryLogicalExpression => [
 			operator = BinaryLogicalOperator.AND
 			leftOperand = l
 			rightOperand = r
-			container = ctr
 		]
 		val selectionOperator = createSelectionOperator => [
 			it.condition = condition
-			container = ctr
 		]
 		val productionOperator = createProductionOperator => [
 			input = selectionOperator
-			container = ctr
 		]
 		ctr.rootExpression = productionOperator
 		ctr
@@ -46,34 +43,28 @@ class TestModelFactory {
 			edgeVariable = eA
 			sourceVertexVariable = v1
 			targetVertexVariable = v2
-			container = ctr 
 		]
 		val b = createGetEdgesOperator => [
 			edgeVariable = eB
 			sourceVertexVariable = v2
 			targetVertexVariable = v3
-			container = ctr 
 		]
 		val c = createGetEdgesOperator => [
 			edgeVariable = eC
 			sourceVertexVariable = v3
 			targetVertexVariable = v4
-			container = ctr 
 		]
 		
 		val op1 = createJoinOperator => [
 			leftInput = a
 			rightInput = b
-			container = ctr
 		]
 		val op2 = createJoinOperator => [
 			leftInput = op1
 			rightInput = c
-			container = ctr
 		]
 		val productionOperator = createProductionOperator => [
 			input = op2
-			container = ctr
 		]
 		ctr.rootExpression = productionOperator
 		ctr
@@ -88,17 +79,15 @@ class TestModelFactory {
 		val v1 = createVertexVariable => [ name = "v"; vertexLabels.add(leftLabel); container = ctr ]
 		val v2 = createVertexVariable => [ name = "v"; vertexLabels.add(rightLabel); container = ctr ]
 		
-		val leftOp = createGetVerticesOperator => [ vertexVariable = v1; container = ctr ]
-		val rightOp = createGetVerticesOperator => [ vertexVariable = v2; container = ctr ]
+		val leftOp = createGetVerticesOperator => [ vertexVariable = v1 ]
+		val rightOp = createGetVerticesOperator => [ vertexVariable = v2 ]
 		
 		val op = createUnionOperator => [
 			leftInput = leftOp
 			rightInput = rightOp
-			container = ctr
 		]
 		val productionOperator = createProductionOperator => [
 			input = op
-			container = ctr
 		]
 		ctr.rootExpression = productionOperator
 		ctr

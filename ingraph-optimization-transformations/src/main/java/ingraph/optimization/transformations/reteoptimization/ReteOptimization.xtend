@@ -61,15 +61,11 @@ class ReteOptimization extends AbstractRelalgTransformation {
 			val leftOperand = leftOperand
 			val rightOperand = rightOperand
 
-			val c = selectionOperator.container
-
 			val selectionOperator1 = createSelectionOperator => [
-				container = c
 				condition = leftOperand
 				input = selectionOperator.input
 			]
 			val selectionOperator2 = createSelectionOperator => [
-				container = c
 				condition = rightOperand
 				input = selectionOperator1
 			]

@@ -41,7 +41,6 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
-				container = expandOperator.container
 			]
 
 			changeOperator(parentOperator, expandOperator, getEdgesOperator)
@@ -62,12 +61,10 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
-				container = expandOperator.container
 			]
 			val joinOperator = createJoinOperator => [
 				leftInput = expandOperator.getInput
 				rightInput = getEdgesOperator
-				container = expandOperator.container
 			]
 
 			changeOperator(parentOperator, expandOperator, joinOperator)
