@@ -2328,13 +2328,13 @@ public interface OpenCypherPackage extends EPackage
   int SHORTEST_PATH_PATTERN__NODE_LABEL_LIST = ANONYMOUS_PATTERN_PART_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SHORTEST_PATH_PATTERN__PROPERTY_LOOKUP = ANONYMOUS_PATTERN_PART_FEATURE_COUNT + 6;
+  int SHORTEST_PATH_PATTERN__PROPERTY_LOOKUPS = ANONYMOUS_PATTERN_PART_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Pattern Element</b></em>' containment reference.
@@ -2844,13 +2844,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION__NODE_LABEL_LIST = PROPERTY_EXPRESSION_FEATURE_COUNT + 3;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION__PROPERTY_LOOKUP = PROPERTY_EXPRESSION_FEATURE_COUNT + 4;
+  int EXPRESSION__PROPERTY_LOOKUPS = PROPERTY_EXPRESSION_FEATURE_COUNT + 4;
 
   /**
    * The number of structural features of the '<em>Expression</em>' class.
@@ -2926,13 +2926,13 @@ public interface OpenCypherPackage extends EPackage
   int REDUCE__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REDUCE__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int REDUCE__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Accumulator</b></em>' containment reference.
@@ -3044,13 +3044,13 @@ public interface OpenCypherPackage extends EPackage
   int PARENTHESIZED_EXPRESSION__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARENTHESIZED_EXPRESSION__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int PARENTHESIZED_EXPRESSION__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -3135,13 +3135,13 @@ public interface OpenCypherPackage extends EPackage
   int RELATIONSHIPS_PATTERN__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RELATIONSHIPS_PATTERN__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int RELATIONSHIPS_PATTERN__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Node Pattern</b></em>' containment reference.
@@ -3309,13 +3309,13 @@ public interface OpenCypherPackage extends EPackage
   int FUNCTION_INVOCATION__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FUNCTION_INVOCATION__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int FUNCTION_INVOCATION__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Function Name</b></em>' containment reference.
@@ -3446,13 +3446,13 @@ public interface OpenCypherPackage extends EPackage
   int LIST_COMPREHENSION__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LIST_COMPREHENSION__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int LIST_COMPREHENSION__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -3583,13 +3583,13 @@ public interface OpenCypherPackage extends EPackage
   int CASE_EXPRESSION__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CASE_EXPRESSION__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int CASE_EXPRESSION__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Expression</b></em>' containment reference.
@@ -3766,13 +3766,13 @@ public interface OpenCypherPackage extends EPackage
   int MAP_LITERAL__NODE_LABEL_LIST = PROPERTIES_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAP_LITERAL__PROPERTY_LOOKUP = PROPERTIES_FEATURE_COUNT + 6;
+  int MAP_LITERAL__PROPERTY_LOOKUPS = PROPERTIES_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Entries</b></em>' containment reference list.
@@ -3894,13 +3894,13 @@ public interface OpenCypherPackage extends EPackage
   int LEGACY_PARAMETER__NODE_LABEL_LIST = PROPERTIES_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LEGACY_PARAMETER__PROPERTY_LOOKUP = PROPERTIES_FEATURE_COUNT + 6;
+  int LEGACY_PARAMETER__PROPERTY_LOOKUPS = PROPERTIES_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Parameter</b></em>' attribute.
@@ -3985,13 +3985,13 @@ public interface OpenCypherPackage extends EPackage
   int PARAMETER__NODE_LABEL_LIST = PROPERTIES_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PARAMETER__PROPERTY_LOOKUP = PROPERTIES_FEATURE_COUNT + 6;
+  int PARAMETER__PROPERTY_LOOKUPS = PROPERTIES_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Parameter</b></em>' attribute.
@@ -4279,13 +4279,13 @@ public interface OpenCypherPackage extends EPackage
   int SHORTEST_PATH__NODE_LABEL_LIST = SHORTEST_PATH_PATTERN__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SHORTEST_PATH__PROPERTY_LOOKUP = SHORTEST_PATH_PATTERN__PROPERTY_LOOKUP;
+  int SHORTEST_PATH__PROPERTY_LOOKUPS = SHORTEST_PATH_PATTERN__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Pattern Element</b></em>' containment reference.
@@ -4388,13 +4388,13 @@ public interface OpenCypherPackage extends EPackage
   int ALL_SHORTEST_PATH__NODE_LABEL_LIST = SHORTEST_PATH_PATTERN__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ALL_SHORTEST_PATH__PROPERTY_LOOKUP = SHORTEST_PATH_PATTERN__PROPERTY_LOOKUP;
+  int ALL_SHORTEST_PATH__PROPERTY_LOOKUPS = SHORTEST_PATH_PATTERN__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Pattern Element</b></em>' containment reference.
@@ -4479,13 +4479,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_OR__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_OR__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_OR__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -4570,13 +4570,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_XOR__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_XOR__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_XOR__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -4661,13 +4661,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_AND__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_AND__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_AND__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -4752,13 +4752,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_COMPARISON__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_COMPARISON__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_COMPARISON__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -4843,13 +4843,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_PLUS_MINUS__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_PLUS_MINUS__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_PLUS_MINUS__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -4934,13 +4934,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_MUL_DIV__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_MUL_DIV__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_MUL_DIV__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -5025,13 +5025,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_POWER__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_POWER__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_POWER__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Right</b></em>' containment reference.
@@ -5294,22 +5294,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
-
-  /**
    * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__PROPERTY_LOOKUPS = EXPRESSION_FEATURE_COUNT + 0;
+  int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The number of structural features of the '<em>Expression Node Labels And Property Lookup</em>' class.
@@ -5318,7 +5309,7 @@ public interface OpenCypherPackage extends EPackage
    * @generated
    * @ordered
    */
-  int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 1;
+  int EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP_FEATURE_COUNT = EXPRESSION_FEATURE_COUNT + 0;
 
   /**
    * The meta object id for the '{@link org.slizaa.neo4j.opencypher.openCypher.impl.NumberConstantImpl <em>Number Constant</em>}' class.
@@ -5385,13 +5376,13 @@ public interface OpenCypherPackage extends EPackage
   int NUMBER_CONSTANT__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NUMBER_CONSTANT__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int NUMBER_CONSTANT__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -5476,13 +5467,13 @@ public interface OpenCypherPackage extends EPackage
   int STRING_CONSTANT__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int STRING_CONSTANT__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int STRING_CONSTANT__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -5567,13 +5558,13 @@ public interface OpenCypherPackage extends EPackage
   int BOOL_CONSTANT__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int BOOL_CONSTANT__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int BOOL_CONSTANT__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -5658,13 +5649,13 @@ public interface OpenCypherPackage extends EPackage
   int NULL_CONSTANT__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NULL_CONSTANT__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int NULL_CONSTANT__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The number of structural features of the '<em>Null Constant</em>' class.
@@ -5740,13 +5731,13 @@ public interface OpenCypherPackage extends EPackage
   int COUNT__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COUNT__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int COUNT__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The number of structural features of the '<em>Count</em>' class.
@@ -5822,13 +5813,13 @@ public interface OpenCypherPackage extends EPackage
   int EXPRESSION_LIST__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int EXPRESSION_LIST__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int EXPRESSION_LIST__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Expressions</b></em>' containment reference list.
@@ -5913,13 +5904,13 @@ public interface OpenCypherPackage extends EPackage
   int FILTER__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FILTER__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int FILTER__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -6013,13 +6004,13 @@ public interface OpenCypherPackage extends EPackage
   int ALL__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ALL__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int ALL__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -6104,13 +6095,13 @@ public interface OpenCypherPackage extends EPackage
   int ANY__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ANY__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int ANY__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -6195,13 +6186,13 @@ public interface OpenCypherPackage extends EPackage
   int NONE__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int NONE__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int NONE__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -6286,13 +6277,13 @@ public interface OpenCypherPackage extends EPackage
   int SINGLE__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int SINGLE__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int SINGLE__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Filter Expression</b></em>' containment reference.
@@ -6377,13 +6368,13 @@ public interface OpenCypherPackage extends EPackage
   int VARIABLE_REF__NODE_LABEL_LIST = EXPRESSION__NODE_LABEL_LIST;
 
   /**
-   * The feature id for the '<em><b>Property Lookup</b></em>' containment reference list.
+   * The feature id for the '<em><b>Property Lookups</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_REF__PROPERTY_LOOKUP = EXPRESSION__PROPERTY_LOOKUP;
+  int VARIABLE_REF__PROPERTY_LOOKUPS = EXPRESSION__PROPERTY_LOOKUPS;
 
   /**
    * The feature id for the '<em><b>Variable Ref</b></em>' reference.
@@ -8574,15 +8565,15 @@ public interface OpenCypherPackage extends EPackage
   EReference getExpression_NodeLabelList();
 
   /**
-   * Returns the meta object for the containment reference list '{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookup <em>Property Lookup</em>}'.
+   * Returns the meta object for the containment reference list '{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookups <em>Property Lookups</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Property Lookup</em>'.
-   * @see org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookup()
+   * @return the meta object for the containment reference list '<em>Property Lookups</em>'.
+   * @see org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookups()
    * @see #getExpression()
    * @generated
    */
-  EReference getExpression_PropertyLookup();
+  EReference getExpression_PropertyLookups();
 
   /**
    * Returns the meta object for class '{@link org.slizaa.neo4j.opencypher.openCypher.Expression3Part <em>Expression3 Part</em>}'.
@@ -9566,17 +9557,6 @@ public interface OpenCypherPackage extends EPackage
    * @generated
    */
   EClass getExpressionNodeLabelsAndPropertyLookup();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup#getPropertyLookups <em>Property Lookups</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Property Lookups</em>'.
-   * @see org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup#getPropertyLookups()
-   * @see #getExpressionNodeLabelsAndPropertyLookup()
-   * @generated
-   */
-  EReference getExpressionNodeLabelsAndPropertyLookup_PropertyLookups();
 
   /**
    * Returns the meta object for class '{@link org.slizaa.neo4j.opencypher.openCypher.NumberConstant <em>Number Constant</em>}'.
@@ -11625,12 +11605,12 @@ public interface OpenCypherPackage extends EPackage
     EReference EXPRESSION__NODE_LABEL_LIST = eINSTANCE.getExpression_NodeLabelList();
 
     /**
-     * The meta object literal for the '<em><b>Property Lookup</b></em>' containment reference list feature.
+     * The meta object literal for the '<em><b>Property Lookups</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference EXPRESSION__PROPERTY_LOOKUP = eINSTANCE.getExpression_PropertyLookup();
+    EReference EXPRESSION__PROPERTY_LOOKUPS = eINSTANCE.getExpression_PropertyLookups();
 
     /**
      * The meta object literal for the '{@link org.slizaa.neo4j.opencypher.openCypher.impl.Expression3PartImpl <em>Expression3 Part</em>}' class.
@@ -12455,14 +12435,6 @@ public interface OpenCypherPackage extends EPackage
      * @generated
      */
     EClass EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP = eINSTANCE.getExpressionNodeLabelsAndPropertyLookup();
-
-    /**
-     * The meta object literal for the '<em><b>Property Lookups</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__PROPERTY_LOOKUPS = eINSTANCE.getExpressionNodeLabelsAndPropertyLookup_PropertyLookups();
 
     /**
      * The meta object literal for the '{@link org.slizaa.neo4j.opencypher.openCypher.impl.NumberConstantImpl <em>Number Constant</em>}' class.

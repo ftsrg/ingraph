@@ -44,7 +44,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Variable;
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getExpression3Parts <em>Expression3 Parts</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getNodeLabelList <em>Node Label List</em>}</li>
- *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getPropertyLookup <em>Property Lookup</em>}</li>
+ *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getPropertyLookups <em>Property Lookups</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.MapLiteralImpl#getEntries <em>Entries</em>}</li>
  * </ul>
  *
@@ -123,14 +123,14 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
   protected EList<NodeLabel> nodeLabelList;
 
   /**
-   * The cached value of the '{@link #getPropertyLookup() <em>Property Lookup</em>}' containment reference list.
+   * The cached value of the '{@link #getPropertyLookups() <em>Property Lookups</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPropertyLookup()
+   * @see #getPropertyLookups()
    * @generated
    * @ordered
    */
-  protected EList<PropertyLookup> propertyLookup;
+  protected EList<PropertyLookup> propertyLookups;
 
   /**
    * The cached value of the '{@link #getEntries() <em>Entries</em>}' containment reference list.
@@ -363,13 +363,13 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<PropertyLookup> getPropertyLookup()
+  public EList<PropertyLookup> getPropertyLookups()
   {
-    if (propertyLookup == null)
+    if (propertyLookups == null)
     {
-      propertyLookup = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP);
+      propertyLookups = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS);
     }
-    return propertyLookup;
+    return propertyLookups;
   }
 
   /**
@@ -406,8 +406,8 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         return ((InternalEList<?>)getExpression3Parts()).basicRemove(otherEnd, msgs);
       case OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST:
         return ((InternalEList<?>)getNodeLabelList()).basicRemove(otherEnd, msgs);
-      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP:
-        return ((InternalEList<?>)getPropertyLookup()).basicRemove(otherEnd, msgs);
+      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS:
+        return ((InternalEList<?>)getPropertyLookups()).basicRemove(otherEnd, msgs);
       case OpenCypherPackage.MAP_LITERAL__ENTRIES:
         return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
     }
@@ -436,8 +436,8 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         return getExpression3Parts();
       case OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST:
         return getNodeLabelList();
-      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP:
-        return getPropertyLookup();
+      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS:
+        return getPropertyLookups();
       case OpenCypherPackage.MAP_LITERAL__ENTRIES:
         return getEntries();
     }
@@ -475,9 +475,9 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         getNodeLabelList().clear();
         getNodeLabelList().addAll((Collection<? extends NodeLabel>)newValue);
         return;
-      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
-        getPropertyLookup().addAll((Collection<? extends PropertyLookup>)newValue);
+      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
+        getPropertyLookups().addAll((Collection<? extends PropertyLookup>)newValue);
         return;
       case OpenCypherPackage.MAP_LITERAL__ENTRIES:
         getEntries().clear();
@@ -515,8 +515,8 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
       case OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST:
         getNodeLabelList().clear();
         return;
-      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
+      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
         return;
       case OpenCypherPackage.MAP_LITERAL__ENTRIES:
         getEntries().clear();
@@ -547,8 +547,8 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         return expression3Parts != null && !expression3Parts.isEmpty();
       case OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST:
         return nodeLabelList != null && !nodeLabelList.isEmpty();
-      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP:
-        return propertyLookup != null && !propertyLookup.isEmpty();
+      case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS:
+        return propertyLookups != null && !propertyLookups.isEmpty();
       case OpenCypherPackage.MAP_LITERAL__ENTRIES:
         return entries != null && !entries.isEmpty();
     }
@@ -587,7 +587,7 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         case OpenCypherPackage.MAP_LITERAL__LEFT: return OpenCypherPackage.EXPRESSION__LEFT;
         case OpenCypherPackage.MAP_LITERAL__EXPRESSION3_PARTS: return OpenCypherPackage.EXPRESSION__EXPRESSION3_PARTS;
         case OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST: return OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST;
-        case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP: return OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP;
+        case OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS: return OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS;
         default: return -1;
       }
     }
@@ -626,7 +626,7 @@ public class MapLiteralImpl extends PropertiesImpl implements MapLiteral
         case OpenCypherPackage.EXPRESSION__LEFT: return OpenCypherPackage.MAP_LITERAL__LEFT;
         case OpenCypherPackage.EXPRESSION__EXPRESSION3_PARTS: return OpenCypherPackage.MAP_LITERAL__EXPRESSION3_PARTS;
         case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST: return OpenCypherPackage.MAP_LITERAL__NODE_LABEL_LIST;
-        case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP: return OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUP;
+        case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS: return OpenCypherPackage.MAP_LITERAL__PROPERTY_LOOKUPS;
         default: return -1;
       }
     }

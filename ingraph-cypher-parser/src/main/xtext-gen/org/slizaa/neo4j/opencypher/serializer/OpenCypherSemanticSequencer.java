@@ -2040,7 +2040,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns All
 	 *
 	 * Constraint:
-	 *     (filterExpression=FilterExpression propertyLookup+=PropertyLookup+)
+	 *     (filterExpression=FilterExpression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, All semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2053,7 +2053,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Any
 	 *
 	 * Constraint:
-	 *     (filterExpression=FilterExpression propertyLookup+=PropertyLookup+)
+	 *     (filterExpression=FilterExpression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, Any semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2066,7 +2066,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns BoolConstant
 	 *
 	 * Constraint:
-	 *     ((value='TRUE' | value='FALSE') propertyLookup+=PropertyLookup+)
+	 *     ((value='TRUE' | value='FALSE') propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, BoolConstant semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2079,7 +2079,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns CaseExpression
 	 *
 	 * Constraint:
-	 *     (expression=CaseExpression propertyLookup+=PropertyLookup+)
+	 *     (expression=CaseExpression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, CaseExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2092,7 +2092,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Count
 	 *
 	 * Constraint:
-	 *     propertyLookup+=PropertyLookup+
+	 *     propertyLookups+=PropertyLookup+
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, Count semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2105,7 +2105,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns ExpressionList
 	 *
 	 * Constraint:
-	 *     (expressions+=Expression expressions+=Expression* propertyLookup+=PropertyLookup+)
+	 *     (expressions+=Expression expressions+=Expression* propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, ExpressionList semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2118,7 +2118,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Filter
 	 *
 	 * Constraint:
-	 *     (((filterExpression=FilterExpression expression=Expression?) | filterExpression=FilterExpression) propertyLookup+=PropertyLookup+)
+	 *     (((filterExpression=FilterExpression expression=Expression?) | filterExpression=FilterExpression) propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, Filter semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2131,7 +2131,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns None
 	 *
 	 * Constraint:
-	 *     (filterExpression=FilterExpression propertyLookup+=PropertyLookup+)
+	 *     (filterExpression=FilterExpression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, None semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2144,7 +2144,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns NullConstant
 	 *
 	 * Constraint:
-	 *     propertyLookup+=PropertyLookup+
+	 *     propertyLookups+=PropertyLookup+
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, NullConstant semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2157,7 +2157,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns NumberConstant
 	 *
 	 * Constraint:
-	 *     (value=Number propertyLookup+=PropertyLookup+)
+	 *     (value=Number propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, NumberConstant semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2170,7 +2170,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Single
 	 *
 	 * Constraint:
-	 *     (filterExpression=FilterExpression propertyLookup+=PropertyLookup+)
+	 *     (filterExpression=FilterExpression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, Single semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2183,7 +2183,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns StringConstant
 	 *
 	 * Constraint:
-	 *     (value=STRING_LITERAL propertyLookup+=PropertyLookup+)
+	 *     (value=STRING_LITERAL propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, StringConstant semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -2196,7 +2196,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns VariableRef
 	 *
 	 * Constraint:
-	 *     (variableRef=[Variable|SYMBOLIC_NAME_X] propertyLookup+=PropertyLookup+)
+	 *     (variableRef=[Variable|SYMBOLIC_NAME_X] propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Atom_PropertyExpression(ISerializationContext context, VariableRef semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3408,7 +3408,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns FunctionInvocation
 	 *
 	 * Constraint:
-	 *     (functionName=FunctionName distinct?='DISTINCT'? (parameter+=Expression parameter+=Expression*)? propertyLookup+=PropertyLookup+)
+	 *     (functionName=FunctionName distinct?='DISTINCT'? (parameter+=Expression parameter+=Expression*)? propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_FunctionInvocation_PropertyExpression(ISerializationContext context, FunctionInvocation semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3597,7 +3597,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns LegacyParameter
 	 *
 	 * Constraint:
-	 *     ((parameter=SYMBOLIC_NAME | parameter=Number) propertyLookup+=PropertyLookup+)
+	 *     ((parameter=SYMBOLIC_NAME | parameter=Number) propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_LegacyParameter_PropertyExpression(ISerializationContext context, LegacyParameter semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3641,7 +3641,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns ListComprehension
 	 *
 	 * Constraint:
-	 *     (filterExpression=FilterExpression expression=Expression? propertyLookup+=PropertyLookup+)
+	 *     (filterExpression=FilterExpression expression=Expression? propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_ListComprehension_PropertyExpression(ISerializationContext context, ListComprehension semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3726,7 +3726,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns MapLiteral
 	 *
 	 * Constraint:
-	 *     ((entries+=MapLiteralEntry entries+=MapLiteralEntry*)? propertyLookup+=PropertyLookup+)
+	 *     ((entries+=MapLiteralEntry entries+=MapLiteralEntry*)? propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_MapLiteral_PropertyExpression(ISerializationContext context, MapLiteral semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3872,7 +3872,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Parameter
 	 *
 	 * Constraint:
-	 *     ((parameter=SYMBOLIC_NAME | parameter=Number) propertyLookup+=PropertyLookup+)
+	 *     ((parameter=SYMBOLIC_NAME | parameter=Number) propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_Parameter_PropertyExpression(ISerializationContext context, org.slizaa.neo4j.opencypher.openCypher.Parameter semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3904,7 +3904,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns ParenthesizedExpression
 	 *
 	 * Constraint:
-	 *     (expression=Expression propertyLookup+=PropertyLookup+)
+	 *     (expression=Expression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_ParenthesizedExpression_PropertyExpression(ISerializationContext context, ParenthesizedExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -3997,7 +3997,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns Reduce
 	 *
 	 * Constraint:
-	 *     (accumulator=Variable accumulatorExpression=Expression idInColl=IdInColl expression=Expression propertyLookup+=PropertyLookup+)
+	 *     (accumulator=Variable accumulatorExpression=Expression idInColl=IdInColl expression=Expression propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_PropertyExpression_Reduce(ISerializationContext context, Reduce semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -4010,7 +4010,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns RelationshipsPattern
 	 *
 	 * Constraint:
-	 *     (nodePattern=NodePattern chain+=PatternElementChain+ propertyLookup+=PropertyLookup+)
+	 *     (nodePattern=NodePattern chain+=PatternElementChain+ propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_PropertyExpression_RelationshipsPattern(ISerializationContext context, RelationshipsPattern semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -4023,7 +4023,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns AllShortestPath
 	 *
 	 * Constraint:
-	 *     (patternElement=PatternElement propertyLookup+=PropertyLookup+)
+	 *     (patternElement=PatternElement propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_PropertyExpression_ShortestPathPattern(ISerializationContext context, AllShortestPath semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -4036,7 +4036,7 @@ public class OpenCypherSemanticSequencer extends AbstractDelegatingSemanticSeque
 	 *     PropertyExpression returns ShortestPath
 	 *
 	 * Constraint:
-	 *     (patternElement=PatternElement propertyLookup+=PropertyLookup+)
+	 *     (patternElement=PatternElement propertyLookups+=PropertyLookup+)
 	 */
 	protected void sequence_PropertyExpression_ShortestPathPattern(ISerializationContext context, ShortestPath semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

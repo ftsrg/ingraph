@@ -3145,7 +3145,7 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getExpression_PropertyLookup()
+  public EReference getExpression_PropertyLookups()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(4);
   }
@@ -4085,16 +4085,6 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getExpressionNodeLabelsAndPropertyLookup_PropertyLookups()
-  {
-    return (EReference)expressionNodeLabelsAndPropertyLookupEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getNumberConstant()
   {
     return numberConstantEClass;
@@ -4628,7 +4618,7 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
     createEReference(expressionEClass, EXPRESSION__LEFT);
     createEReference(expressionEClass, EXPRESSION__EXPRESSION3_PARTS);
     createEReference(expressionEClass, EXPRESSION__NODE_LABEL_LIST);
-    createEReference(expressionEClass, EXPRESSION__PROPERTY_LOOKUP);
+    createEReference(expressionEClass, EXPRESSION__PROPERTY_LOOKUPS);
 
     expression3PartEClass = createEClass(EXPRESSION3_PART);
 
@@ -4762,7 +4752,6 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
     isNotNullEClass = createEClass(IS_NOT_NULL);
 
     expressionNodeLabelsAndPropertyLookupEClass = createEClass(EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP);
-    createEReference(expressionNodeLabelsAndPropertyLookupEClass, EXPRESSION_NODE_LABELS_AND_PROPERTY_LOOKUP__PROPERTY_LOOKUPS);
 
     numberConstantEClass = createEClass(NUMBER_CONSTANT);
     createEAttribute(numberConstantEClass, NUMBER_CONSTANT__VALUE);
@@ -5198,7 +5187,7 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
     initEReference(getExpression_Left(), this.getExpression(), null, "left", null, 0, 1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_Expression3Parts(), this.getExpression3Part(), null, "expression3Parts", null, 0, -1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getExpression_NodeLabelList(), this.getNodeLabel(), null, "nodeLabelList", null, 0, -1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getExpression_PropertyLookup(), this.getPropertyLookup(), null, "propertyLookup", null, 0, -1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getExpression_PropertyLookups(), this.getPropertyLookup(), null, "propertyLookups", null, 0, -1, Expression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expression3PartEClass, Expression3Part.class, "Expression3Part", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -5332,7 +5321,6 @@ public class OpenCypherPackageImpl extends EPackageImpl implements OpenCypherPac
     initEClass(isNotNullEClass, IsNotNull.class, "IsNotNull", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(expressionNodeLabelsAndPropertyLookupEClass, ExpressionNodeLabelsAndPropertyLookup.class, "ExpressionNodeLabelsAndPropertyLookup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getExpressionNodeLabelsAndPropertyLookup_PropertyLookups(), this.getPropertyLookup(), null, "propertyLookups", null, 0, -1, ExpressionNodeLabelsAndPropertyLookup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(numberConstantEClass, NumberConstant.class, "NumberConstant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getNumberConstant_Value(), ecorePackage.getEString(), "value", null, 0, 1, NumberConstant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

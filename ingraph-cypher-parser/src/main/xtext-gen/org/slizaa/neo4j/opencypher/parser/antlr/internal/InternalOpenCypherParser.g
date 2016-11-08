@@ -8954,17 +8954,17 @@ rulePropertyExpression returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getPropertyExpressionAccess().getPropertyLookupPropertyLookupParserRuleCall_1_0());
+					newCompositeNode(grammarAccess.getPropertyExpressionAccess().getPropertyLookupsPropertyLookupParserRuleCall_1_0());
 				}
-				lv_propertyLookup_1_0=rulePropertyLookup
+				lv_propertyLookups_1_0=rulePropertyLookup
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getPropertyExpressionRule());
 					}
 					add(
 						$current,
-						"propertyLookup",
-						lv_propertyLookup_1_0,
+						"propertyLookups",
+						lv_propertyLookups_1_0,
 						"org.slizaa.neo4j.opencypher.OpenCypher.PropertyLookup");
 					afterParserOrEnumRuleCall();
 				}

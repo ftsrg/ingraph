@@ -5403,16 +5403,16 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.slizaa.neo4j.opencypher.OpenCypher.PropertyExpression");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cAtomParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Assignment cPropertyLookupAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cPropertyLookupPropertyLookupParserRuleCall_1_0 = (RuleCall)cPropertyLookupAssignment_1.eContents().get(0);
+		private final Assignment cPropertyLookupsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cPropertyLookupsPropertyLookupParserRuleCall_1_0 = (RuleCall)cPropertyLookupsAssignment_1.eContents().get(0);
 		
 		//PropertyExpression:
-		//	Atom propertyLookup+=PropertyLookup+;
+		//	Atom propertyLookups+=PropertyLookup+;
 		@Override public ParserRule getRule() { return rule; }
 		
 		/// *
 		// * propertyExpression : atom ( ws propertyLookup )+ ;
-		// * / Atom propertyLookup+=PropertyLookup+
+		// * / Atom propertyLookups+=PropertyLookup+
 		public Group getGroup() { return cGroup; }
 		
 		/// *
@@ -5420,11 +5420,11 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 		// * / Atom
 		public RuleCall getAtomParserRuleCall_0() { return cAtomParserRuleCall_0; }
 		
-		//propertyLookup+=PropertyLookup+
-		public Assignment getPropertyLookupAssignment_1() { return cPropertyLookupAssignment_1; }
+		//propertyLookups+=PropertyLookup+
+		public Assignment getPropertyLookupsAssignment_1() { return cPropertyLookupsAssignment_1; }
 		
 		//PropertyLookup
-		public RuleCall getPropertyLookupPropertyLookupParserRuleCall_1_0() { return cPropertyLookupPropertyLookupParserRuleCall_1_0; }
+		public RuleCall getPropertyLookupsPropertyLookupParserRuleCall_1_0() { return cPropertyLookupsPropertyLookupParserRuleCall_1_0; }
 	}
 	public class PropertyKeyNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.slizaa.neo4j.opencypher.OpenCypher.PropertyKeyName");
@@ -7484,7 +7484,7 @@ public class OpenCypherGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//PropertyExpression:
-	//	Atom propertyLookup+=PropertyLookup+;
+	//	Atom propertyLookups+=PropertyLookup+;
 	public PropertyExpressionElements getPropertyExpressionAccess() {
 		return pPropertyExpression;
 	}

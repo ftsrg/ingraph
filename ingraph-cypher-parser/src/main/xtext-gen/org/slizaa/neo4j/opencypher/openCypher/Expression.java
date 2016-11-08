@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getLeft <em>Left</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getExpression3Parts <em>Expression3 Parts</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getNodeLabelList <em>Node Label List</em>}</li>
- *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookup <em>Property Lookup</em>}</li>
+ *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.Expression#getPropertyLookups <em>Property Lookups</em>}</li>
  * </ul>
  *
  * @see org.slizaa.neo4j.opencypher.openCypher.OpenCypherPackage#getExpression()
@@ -112,19 +112,19 @@ public interface Expression extends PropertyExpression
   EList<NodeLabel> getNodeLabelList();
 
   /**
-   * Returns the value of the '<em><b>Property Lookup</b></em>' containment reference list.
+   * Returns the value of the '<em><b>Property Lookups</b></em>' containment reference list.
    * The list contents are of type {@link org.slizaa.neo4j.opencypher.openCypher.PropertyLookup}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Property Lookup</em>' containment reference list isn't clear,
+   * If the meaning of the '<em>Property Lookups</em>' containment reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Property Lookup</em>' containment reference list.
-   * @see org.slizaa.neo4j.opencypher.openCypher.OpenCypherPackage#getExpression_PropertyLookup()
+   * @return the value of the '<em>Property Lookups</em>' containment reference list.
+   * @see org.slizaa.neo4j.opencypher.openCypher.OpenCypherPackage#getExpression_PropertyLookups()
    * @model containment="true"
    * @generated
    */
-  EList<PropertyLookup> getPropertyLookup();
+  EList<PropertyLookup> getPropertyLookups();
 
 } // Expression

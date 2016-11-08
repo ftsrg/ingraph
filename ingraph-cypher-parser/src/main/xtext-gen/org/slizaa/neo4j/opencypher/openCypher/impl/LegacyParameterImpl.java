@@ -43,7 +43,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Variable;
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getExpression3Parts <em>Expression3 Parts</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getNodeLabelList <em>Node Label List</em>}</li>
- *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getPropertyLookup <em>Property Lookup</em>}</li>
+ *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getPropertyLookups <em>Property Lookups</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.LegacyParameterImpl#getParameter <em>Parameter</em>}</li>
  * </ul>
  *
@@ -122,14 +122,14 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
   protected EList<NodeLabel> nodeLabelList;
 
   /**
-   * The cached value of the '{@link #getPropertyLookup() <em>Property Lookup</em>}' containment reference list.
+   * The cached value of the '{@link #getPropertyLookups() <em>Property Lookups</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPropertyLookup()
+   * @see #getPropertyLookups()
    * @generated
    * @ordered
    */
-  protected EList<PropertyLookup> propertyLookup;
+  protected EList<PropertyLookup> propertyLookups;
 
   /**
    * The default value of the '{@link #getParameter() <em>Parameter</em>}' attribute.
@@ -372,13 +372,13 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<PropertyLookup> getPropertyLookup()
+  public EList<PropertyLookup> getPropertyLookups()
   {
-    if (propertyLookup == null)
+    if (propertyLookups == null)
     {
-      propertyLookup = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP);
+      propertyLookups = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS);
     }
-    return propertyLookup;
+    return propertyLookups;
   }
 
   /**
@@ -424,8 +424,8 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         return ((InternalEList<?>)getExpression3Parts()).basicRemove(otherEnd, msgs);
       case OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST:
         return ((InternalEList<?>)getNodeLabelList()).basicRemove(otherEnd, msgs);
-      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP:
-        return ((InternalEList<?>)getPropertyLookup()).basicRemove(otherEnd, msgs);
+      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS:
+        return ((InternalEList<?>)getPropertyLookups()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -452,8 +452,8 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         return getExpression3Parts();
       case OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST:
         return getNodeLabelList();
-      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP:
-        return getPropertyLookup();
+      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS:
+        return getPropertyLookups();
       case OpenCypherPackage.LEGACY_PARAMETER__PARAMETER:
         return getParameter();
     }
@@ -491,9 +491,9 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         getNodeLabelList().clear();
         getNodeLabelList().addAll((Collection<? extends NodeLabel>)newValue);
         return;
-      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
-        getPropertyLookup().addAll((Collection<? extends PropertyLookup>)newValue);
+      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
+        getPropertyLookups().addAll((Collection<? extends PropertyLookup>)newValue);
         return;
       case OpenCypherPackage.LEGACY_PARAMETER__PARAMETER:
         setParameter((String)newValue);
@@ -530,8 +530,8 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
       case OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST:
         getNodeLabelList().clear();
         return;
-      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
+      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
         return;
       case OpenCypherPackage.LEGACY_PARAMETER__PARAMETER:
         setParameter(PARAMETER_EDEFAULT);
@@ -562,8 +562,8 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         return expression3Parts != null && !expression3Parts.isEmpty();
       case OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST:
         return nodeLabelList != null && !nodeLabelList.isEmpty();
-      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP:
-        return propertyLookup != null && !propertyLookup.isEmpty();
+      case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS:
+        return propertyLookups != null && !propertyLookups.isEmpty();
       case OpenCypherPackage.LEGACY_PARAMETER__PARAMETER:
         return PARAMETER_EDEFAULT == null ? parameter != null : !PARAMETER_EDEFAULT.equals(parameter);
     }
@@ -602,7 +602,7 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         case OpenCypherPackage.LEGACY_PARAMETER__LEFT: return OpenCypherPackage.EXPRESSION__LEFT;
         case OpenCypherPackage.LEGACY_PARAMETER__EXPRESSION3_PARTS: return OpenCypherPackage.EXPRESSION__EXPRESSION3_PARTS;
         case OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST: return OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST;
-        case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP: return OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP;
+        case OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS: return OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS;
         default: return -1;
       }
     }
@@ -641,7 +641,7 @@ public class LegacyParameterImpl extends PropertiesImpl implements LegacyParamet
         case OpenCypherPackage.EXPRESSION__LEFT: return OpenCypherPackage.LEGACY_PARAMETER__LEFT;
         case OpenCypherPackage.EXPRESSION__EXPRESSION3_PARTS: return OpenCypherPackage.LEGACY_PARAMETER__EXPRESSION3_PARTS;
         case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST: return OpenCypherPackage.LEGACY_PARAMETER__NODE_LABEL_LIST;
-        case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP: return OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUP;
+        case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS: return OpenCypherPackage.LEGACY_PARAMETER__PROPERTY_LOOKUPS;
         default: return -1;
       }
     }

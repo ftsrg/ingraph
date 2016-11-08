@@ -24894,24 +24894,24 @@ public class InternalOpenCypherParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "rulePropertyExpression"
-    // InternalOpenCypherParser.g:8935:1: rulePropertyExpression returns [EObject current=null] : (this_Atom_0= ruleAtom ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+ ) ;
+    // InternalOpenCypherParser.g:8935:1: rulePropertyExpression returns [EObject current=null] : (this_Atom_0= ruleAtom ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+ ) ;
     public final EObject rulePropertyExpression() throws RecognitionException {
         EObject current = null;
 
         EObject this_Atom_0 = null;
 
-        EObject lv_propertyLookup_1_0 = null;
+        EObject lv_propertyLookups_1_0 = null;
 
 
 
         	enterRule();
 
         try {
-            // InternalOpenCypherParser.g:8941:2: ( (this_Atom_0= ruleAtom ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+ ) )
-            // InternalOpenCypherParser.g:8942:2: (this_Atom_0= ruleAtom ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+ )
+            // InternalOpenCypherParser.g:8941:2: ( (this_Atom_0= ruleAtom ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+ ) )
+            // InternalOpenCypherParser.g:8942:2: (this_Atom_0= ruleAtom ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+ )
             {
-            // InternalOpenCypherParser.g:8942:2: (this_Atom_0= ruleAtom ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+ )
-            // InternalOpenCypherParser.g:8943:3: this_Atom_0= ruleAtom ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+
+            // InternalOpenCypherParser.g:8942:2: (this_Atom_0= ruleAtom ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+ )
+            // InternalOpenCypherParser.g:8943:3: this_Atom_0= ruleAtom ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+
             {
             if ( state.backtracking==0 ) {
 
@@ -24934,7 +24934,7 @@ public class InternalOpenCypherParser extends AbstractInternalAntlrParser {
               			afterParserOrEnumRuleCall();
               		
             }
-            // InternalOpenCypherParser.g:8954:3: ( (lv_propertyLookup_1_0= rulePropertyLookup ) )+
+            // InternalOpenCypherParser.g:8954:3: ( (lv_propertyLookups_1_0= rulePropertyLookup ) )+
             int cnt117=0;
             loop117:
             do {
@@ -24948,18 +24948,18 @@ public class InternalOpenCypherParser extends AbstractInternalAntlrParser {
 
                 switch (alt117) {
             	case 1 :
-            	    // InternalOpenCypherParser.g:8955:4: (lv_propertyLookup_1_0= rulePropertyLookup )
+            	    // InternalOpenCypherParser.g:8955:4: (lv_propertyLookups_1_0= rulePropertyLookup )
             	    {
-            	    // InternalOpenCypherParser.g:8955:4: (lv_propertyLookup_1_0= rulePropertyLookup )
-            	    // InternalOpenCypherParser.g:8956:5: lv_propertyLookup_1_0= rulePropertyLookup
+            	    // InternalOpenCypherParser.g:8955:4: (lv_propertyLookups_1_0= rulePropertyLookup )
+            	    // InternalOpenCypherParser.g:8956:5: lv_propertyLookups_1_0= rulePropertyLookup
             	    {
             	    if ( state.backtracking==0 ) {
 
-            	      					newCompositeNode(grammarAccess.getPropertyExpressionAccess().getPropertyLookupPropertyLookupParserRuleCall_1_0());
+            	      					newCompositeNode(grammarAccess.getPropertyExpressionAccess().getPropertyLookupsPropertyLookupParserRuleCall_1_0());
             	      				
             	    }
             	    pushFollow(FOLLOW_118);
-            	    lv_propertyLookup_1_0=rulePropertyLookup();
+            	    lv_propertyLookups_1_0=rulePropertyLookup();
 
             	    state._fsp--;
             	    if (state.failed) return current;
@@ -24970,8 +24970,8 @@ public class InternalOpenCypherParser extends AbstractInternalAntlrParser {
             	      					}
             	      					add(
             	      						current,
-            	      						"propertyLookup",
-            	      						lv_propertyLookup_1_0,
+            	      						"propertyLookups",
+            	      						lv_propertyLookups_1_0,
             	      						"org.slizaa.neo4j.opencypher.OpenCypher.PropertyLookup");
             	      					afterParserOrEnumRuleCall();
             	      				

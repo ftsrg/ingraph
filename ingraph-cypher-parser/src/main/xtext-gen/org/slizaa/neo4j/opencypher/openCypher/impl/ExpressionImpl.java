@@ -36,7 +36,7 @@ import org.slizaa.neo4j.opencypher.openCypher.PropertyLookup;
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.ExpressionImpl#getLeft <em>Left</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.ExpressionImpl#getExpression3Parts <em>Expression3 Parts</em>}</li>
  *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.ExpressionImpl#getNodeLabelList <em>Node Label List</em>}</li>
- *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.ExpressionImpl#getPropertyLookup <em>Property Lookup</em>}</li>
+ *   <li>{@link org.slizaa.neo4j.opencypher.openCypher.impl.ExpressionImpl#getPropertyLookups <em>Property Lookups</em>}</li>
  * </ul>
  *
  * @generated
@@ -94,14 +94,14 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
   protected EList<NodeLabel> nodeLabelList;
 
   /**
-   * The cached value of the '{@link #getPropertyLookup() <em>Property Lookup</em>}' containment reference list.
+   * The cached value of the '{@link #getPropertyLookups() <em>Property Lookups</em>}' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getPropertyLookup()
+   * @see #getPropertyLookups()
    * @generated
    * @ordered
    */
-  protected EList<PropertyLookup> propertyLookup;
+  protected EList<PropertyLookup> propertyLookups;
 
   /**
    * <!-- begin-user-doc -->
@@ -228,13 +228,13 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
-  public EList<PropertyLookup> getPropertyLookup()
+  public EList<PropertyLookup> getPropertyLookups()
   {
-    if (propertyLookup == null)
+    if (propertyLookups == null)
     {
-      propertyLookup = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP);
+      propertyLookups = new EObjectContainmentEList<PropertyLookup>(PropertyLookup.class, this, OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS);
     }
-    return propertyLookup;
+    return propertyLookups;
   }
 
   /**
@@ -253,8 +253,8 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
         return ((InternalEList<?>)getExpression3Parts()).basicRemove(otherEnd, msgs);
       case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST:
         return ((InternalEList<?>)getNodeLabelList()).basicRemove(otherEnd, msgs);
-      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP:
-        return ((InternalEList<?>)getPropertyLookup()).basicRemove(otherEnd, msgs);
+      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS:
+        return ((InternalEList<?>)getPropertyLookups()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -277,8 +277,8 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
         return getExpression3Parts();
       case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST:
         return getNodeLabelList();
-      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP:
-        return getPropertyLookup();
+      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS:
+        return getPropertyLookups();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -308,9 +308,9 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
         getNodeLabelList().clear();
         getNodeLabelList().addAll((Collection<? extends NodeLabel>)newValue);
         return;
-      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
-        getPropertyLookup().addAll((Collection<? extends PropertyLookup>)newValue);
+      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
+        getPropertyLookups().addAll((Collection<? extends PropertyLookup>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -338,8 +338,8 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
       case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST:
         getNodeLabelList().clear();
         return;
-      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP:
-        getPropertyLookup().clear();
+      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS:
+        getPropertyLookups().clear();
         return;
     }
     super.eUnset(featureID);
@@ -363,8 +363,8 @@ public class ExpressionImpl extends PropertyExpressionImpl implements Expression
         return expression3Parts != null && !expression3Parts.isEmpty();
       case OpenCypherPackage.EXPRESSION__NODE_LABEL_LIST:
         return nodeLabelList != null && !nodeLabelList.isEmpty();
-      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUP:
-        return propertyLookup != null && !propertyLookup.isEmpty();
+      case OpenCypherPackage.EXPRESSION__PROPERTY_LOOKUPS:
+        return propertyLookups != null && !propertyLookups.isEmpty();
     }
     return super.eIsSet(featureID);
   }
