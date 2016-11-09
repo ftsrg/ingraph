@@ -42,6 +42,7 @@ import relalg.RelalgFactory
 import relalg.UnaryLogicalOperator
 import relalg.UnaryOperator
 import relalg.VertexVariable
+import ingraph.cypher2relalg.util.ElementVariableUtil
 
 class RelalgBuilder {
 
@@ -49,6 +50,8 @@ class RelalgBuilder {
 	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil
 
 	val container = createRelalgContainer
+
+	extension ElementVariableUtil elementVariableUtil = new ElementVariableUtil(container)
 
 	val vertexVariableFactory = new VertexVariableFactory(container)
 	val edgeVariableFactory = new EdgeVariableFactory(container)
@@ -210,6 +213,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch ComparableElement buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
+		// FIXME: add attribute handling
 		buildRelalgComparableElement(e.left)
 	}
 
