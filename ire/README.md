@@ -4,7 +4,7 @@
 
 ## User's Guide
 
-ire is released on [Bintray](https://bintray.com/ftsrg/maven/ire).
+ire is released on [Bintray](https://bintray.com/ftsrg-open/maven/ire).
 
 For Maven or Gradle, use the following snippets.
 
@@ -20,7 +20,7 @@ For Maven or Gradle, use the following snippets.
 <repositories>
   <repository>
     <id>ire</id>
-    <url>https://ftsrg.bintray.com/maven</url>
+    <url>https://ftsrg-open.bintray.com/maven</url>
   </repository>
 </repositories>
 ```
@@ -29,7 +29,7 @@ For Maven or Gradle, use the following snippets.
 
 ```groovy
 repositories {
-	maven { url "http://ftsrg.bintray.com/maven" }
+	maven { url "http://ftsrg-open.bintray.com/maven" }
 }
 
 dependencies {
@@ -48,6 +48,19 @@ gradle clean build
 The project is implemented in Scala. We recommend the following IDEs:
 * IntelliJ IDEA with the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
 * Eclipse with the [Scala IDE](http://scala-ide.org/). Do not forget to install the [**ScalaTest for Scala IDE**](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
+
+### Deploying to Bintray
+
+To upload the artifacts to [Bintray](https://bintray.com/ftsrg-open/maven/ire), use the following commands:
+
+```
+# set your username, e.g. szarnyasg
+$ export BINTRAY_USER=
+# set your Bintray API key (from https://bintray.com/profile/edit/organizations)
+$ export BINTRAY_KEY=
+# upload
+$ gradle bintrayUpload
+```
 
 ## License
 
