@@ -5,6 +5,7 @@ Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [
 |                                 | Cypher                           | VIATRA Query Language    |
 | ------------------------------- | -------------------------------- | ------------------------ |
 | data model                      | property graph ([paper](http://arxiv.org/abs/1006.2361), [Neo4j documentation](https://neo4j.com/docs/developer-manual/current/introduction/#graphdb-concepts), [TinkerPop3 Graph Structure](http://tinkerpop.apache.org/docs/current/reference/#_the_graph_structure)) | [EMF](https://eclipse.org/modeling/emf/) |
+| model schema                    | not known in advance             | known in advance (EMF)   |
 | unique identifiers              | both vertices and edges have unique identifiers which can be accessed with the [`ID()`](https://neo4j.com/docs/developer-manual/current/cypher/#functions-id) method [1] | not required             |
 | collection type for the result of a query/operation | list         | set                      |
 | multiple edges                  | [allowed](multiple-edges.md)     | not allowed              |
