@@ -10,27 +10,22 @@ See also the [Standard construct](standard-constructs.md) document.
 
 #### Standard
 
-Query constructs:
-
-* `MATCH`
-* `RETURN`
-* `UNWIND`
-* `OPTIONAL MATCH`
-* `WITH`
-* `UNION`
-
-Data manipulation:
-
-* `CREATE`
-* `MERGE`
-* `SET`
-* `DELETE`
-* `DETACH DELETE`
-* `REMOVE`
-
-Procedure calls:
-
-* `CALL ... YIELD`
+* Query constructs
+  * `MATCH`
+  * `RETURN`
+  * `UNWIND`
+  * `OPTIONAL MATCH`
+  * `WITH`
+  * `UNION`
+* Data manipulation
+  * `CREATE`
+  * `MERGE`
+  * `SET`
+  * `DELETE`
+  * `DETACH DELETE`
+  * `REMOVE`
+* Procedure calls
+  * `CALL ... YIELD`
 
 #### Legacy
 
