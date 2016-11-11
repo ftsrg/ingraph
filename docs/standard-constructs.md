@@ -10,9 +10,13 @@ The openCypher documentation defines [legacy grammar rules](https://github.com/o
 
 The grammar rules are divided to 5 categories. The **basic grammar** and the **cypher** categories both have some legacy rules. The **commands**, **pre-parser** and **start** categories are considered completely legacy.
 
-In this document, we collected the legacy grammar rules from all categories.
+## Standard openCypher
 
-## Normal categories
+See the [Standard constructs explained](standard-constructs-explained.md) document.
+
+## Legacy categories
+
+In this section, we collected the legacy grammar rules from all categories.
 
 ### Basic grammar
 
