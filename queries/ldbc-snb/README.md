@@ -4,13 +4,13 @@ The Cypher implementations are taken from the [LDBC specification v0.2.2](https:
 
 ## Paths and legacy Cypher features used by the queries
 
-|                                 | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Q7 | Q8 | Q9 | Q10 | Q11 | Q12 | Q13 | Q14 |
-| ------------------------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --- | --- | --- | --- | --- |
-| variable length path            | x  |    | x  |    | x  | x  |    |    | x  | x   | x   | x   |     |     |
-| `CASE`                          | x  | x  |    |    |    |    |    |    | x  |     |     |     | x   |     |
-| `shortestPath`                  |    |    |    |    |    |    |    |    |    |     |     |     | x   |     |
-| `allShortestPaths`              |    |    |    |    |    |    |    |    |    |     |     |     |     | x   |
-| `reduce`                        |    |    |    |    |    |    |    |    |    |     |     |     |     | x   |
+|                                 |  Q1 |  Q2 |  Q3 |  Q4 |  Q5 |  Q6 |  Q7 |  Q8 |  Q9 | Q10 | Q11 | Q12 | Q13 | Q14 |
+| ------------------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| variable length path            |  x  |     |  x  |     |  x  |  x  |     |     |  x  |  x  | x   | x   |     |     |
+| `CASE`                          |  x  |  x  |     |     |     |     |     |     |  x  |     |     |     | x   |     |
+| `shortestPath`                  |     |     |     |     |     |     |     |     |     |     |     |     | x   |     |
+| `allShortestPaths`              |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
+| `reduce`                        |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
 
 Technically, Q10 has a variable length path, but the length of the path is `2..2`.
 
