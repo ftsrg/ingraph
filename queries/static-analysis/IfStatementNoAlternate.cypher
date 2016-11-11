@@ -9,6 +9,6 @@ WHERE
   NOT (if)-[:alternate]->(:Statement)
 
 MERGE
-  (if)			    -[:`_normal`]-> (test)         -[:`_end`]->
-	(testE)   		-[:`_true`]->   (consequent)   -[:`_end`]->
-	(consequentE)	-[:`_normal`]-> (ifE)
+  (if)	        -[:`_normal`]-> (test)       -[:`_end`]->
+  (testE)       -[:`_true`]->   (consequent) -[:`_end`]->
+  (consequentE)	-[:`_normal`]-> (ifE)
