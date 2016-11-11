@@ -59,7 +59,8 @@ class Cardinality {
 }
 
 /* Nullary operators */
-abstract class NullaryOperator extends Operator {}
+abstract class NullaryOperator extends Operator {
+}
 
 class GetVerticesOperator extends NullaryOperator {
 	refers VertexVariable vertexVariable
@@ -135,6 +136,9 @@ class GroupingEntry {
 }
 
 class UnwindOperator extends UnaryOperator {
+	// UNWIND <sourceVariable> AS <targetVariable>
+	refers Variable sourceVariable
+	refers Variable targetVariable
 }
 
 /* Binary operators */
