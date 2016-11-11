@@ -1,6 +1,8 @@
-== Language features included in openCypher
+# Standard constructs explained
 
-See the [Cypher documentation](https://neo4j.com/docs/developer-manual/current/cypher/).
+Based on the [Standardisation scope of Cypher](https://github.com/opencypher/openCypher/blob/master/docs/standardisation-scope.adoc) document.
+
+See also the [Standard construct](standard-constructs.md) document.
 
 ## Standard vs. legacy features
 
