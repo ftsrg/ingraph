@@ -5,7 +5,7 @@ WHERE oldPost.creationDate < {2}
 WITH tag, post, length(collect(oldPost)) AS oldPostCount
 WHERE oldPostCount=0
 RETURN
-tag.name AS tagName,
-length(collect(post)) AS postCount
+  tag.name AS tagName,
+  length(collect(post)) AS postCount
 ORDER BY postCount DESC, tagName ASC
 LIMIT {4}

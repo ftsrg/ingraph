@@ -1,6 +1,6 @@
 # Differences between Cypher and the VIATRA Query Language
 
-Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [VIATRA Query Language](https://wiki.eclipse.org/VIATRA/Query/UserDocumentation/QueryLanguage) offer a formalism for specifying graph patterns.
+Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [VIATRA Query Language](https://wiki.eclipse.org/VIATRA/Query/UserDocumentation/QueryLanguage) (VQL) offer a formalism for specifying graph patterns.
 
 |                                 | Cypher                           | VIATRA Query Language    |
 | ------------------------------- | -------------------------------- | ------------------------ |
