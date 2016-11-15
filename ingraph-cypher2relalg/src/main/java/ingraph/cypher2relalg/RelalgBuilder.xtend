@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
+import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.emf.util.PrettyPrinter
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
@@ -42,7 +43,6 @@ import relalg.RelalgFactory
 import relalg.UnaryLogicalOperator
 import relalg.UnaryOperator
 import relalg.VertexVariable
-import ingraph.cypher2relalg.util.ElementVariableUtil
 
 class RelalgBuilder {
 
@@ -94,14 +94,21 @@ class RelalgBuilder {
 
 		if (singleQuery_returnClauseList == null || singleQuery_returnClauseList.empty) {
 			content
-		} else {
+		} else if (singleQuery_returnClauseList.length == 1) {
 			singleQuery_returnClauseList.head
+		} else {
+			throw new UnsupportedOperationException('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
 		}
 	}
 
 	def UnaryOperator buildRelalgReturn(Return r, Operator content) {
-		// FIXME: add variables: variables.addAll(return_VariableList)
-		val trimmer = createProjectionOperator => [input = content]
+		// FIXME: add * handling
+		val returnBody = r.body as ReturnItems
+
+		val trimmer = createProjectionOperator => [
+			input = content
+			variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as Variable])
+		]
 
 		// add duplicate-elimination operator if return DISTINCT was specified
 		if (r.distinct) {
@@ -206,15 +213,29 @@ class RelalgBuilder {
 	}
 
 	def dispatch ComparableElement buildRelalgComparableElement(Variable e) {
-		// FIXME: add real variable handling
-		createStringLiteral => [
-			value = e.name
-		]
+		//FIXME: determine whether we need to return a VertexVariable or an EdgeVariable
+		vertexVariableFactory.createElement(e.name)
 	}
 
 	def dispatch ComparableElement buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
-		// FIXME: add attribute handling
-		buildRelalgComparableElement(e.left)
+		val ce = buildRelalgComparableElement(e.left)
+
+		switch ce {
+			VertexVariable: {
+				if (e.propertyLookups.length == 1) {
+					ce.createAttribute(e.propertyLookups.get(0).propertyKeyName)
+				} else {
+					throw new UnsupportedOperationException('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+				}
+			}
+
+			default: {
+				throw new UnsupportedOperationException('''Unsupported ComparableElement type received: «ce.class.name»''')
+			}
+
+		}
+
+
 	}
 
 	def dispatch ComparableElement buildRelalgComparableElement(VariableRef e) {
