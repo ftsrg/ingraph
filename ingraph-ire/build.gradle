@@ -9,6 +9,10 @@ repositories {
 
 apply plugin: "scala"
 
+jar {
+	from sourceSets.main.allScala
+}
+
 ext.scalaVersion = "2.11.8"
 
 dependencies {
