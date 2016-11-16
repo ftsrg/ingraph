@@ -14,11 +14,11 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	val includeCardinality = true
 
 	new() {
-		super(true)
+		super(true, true)
 	}
 
-	new(boolean standaloneDocument) {
-		super(standaloneDocument)
+	new(boolean standaloneDocument, boolean includeMutualVariables) {
+		super(standaloneDocument, includeMutualVariables)
 	}
 
 	override serializeBody(Operator expression) {
@@ -81,4 +81,16 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 		return String.format("%.02f", cardinality?.value)
 	}
 
+	/**
+	 * operatorSymbol
+	 */
+	def dispatch operatorToTex(GetEdgesOperator op) {
+		'''\getedgesi''' + //
+		'''«op.sourceVertexVariable.toTexParameter»''' + //
+		'''«op.targetVertexVariable.toTexParameter»''' + //
+		'''$ \\ $''' + // oops - ugly hack for adding a newline and starting a new math expression 
+		'''\getedgesii''' + //
+		'''«op.edgeVariable.toTexParameter»'''
+	}
+	
 }

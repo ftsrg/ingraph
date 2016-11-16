@@ -13,14 +13,14 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	 */
 	boolean parentheses
 
-	new(boolean standaloneDocument, boolean parentheses) {
-		super(standaloneDocument)
+	new(boolean standaloneDocument, boolean includeMutualVariables, boolean parentheses) {
+		super(standaloneDocument, includeMutualVariables)
 		this.parentheses = parentheses
 	}
 
 	override serializeBody(Operator expression) {
 		'''
-		$«children(expression)»$
+			$«children(expression)»$
 		'''
 	}
 
@@ -41,6 +41,13 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
 	def dispatch CharSequence children(BinaryOperator op) {
 		'''«op.getLeftInput.children» «op.operatorToTex» «op.getRightInput.children»'''
+	}
+
+	/**
+	 * operatorSymbol
+	 */
+	def dispatch operatorToTex(GetEdgesOperator op) {
+		'''\getedges«op.sourceVertexVariable.toTexParameter»«op.targetVertexVariable.toTexParameter»«op.edgeVariable.toTexParameter»'''
 	}
 
 }

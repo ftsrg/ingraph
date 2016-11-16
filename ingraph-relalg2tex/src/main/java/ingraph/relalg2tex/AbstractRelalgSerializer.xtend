@@ -46,9 +46,15 @@ abstract class AbstractRelalgSerializer {
 	 * whether to generate a standalone TeX document
 	 */
 	protected boolean standaloneDocument
+	
+	/**
+	 * whether to include mutual variables for joins and antijoins
+	 */
+	protected boolean includeMutualVariables
 
-	new(boolean document) {
+	new(boolean document, boolean includeMutualVariables) {
 		this.standaloneDocument = document
+		this.includeMutualVariables = includeMutualVariables
 	}
 
 	def serialize(RelalgContainer container, String filename) {
@@ -127,15 +133,6 @@ abstract class AbstractRelalgSerializer {
 		'''}'''
 	}
 
-	def dispatch operatorToTex(GetEdgesOperator op) {
-		'''\getedgesi''' + //
-		'''«op.sourceVertexVariable.toTexParameter»''' + //
-		'''«op.targetVertexVariable.toTexParameter»''' + //
-		'''$ \\ $''' + // oops - ugly hack for adding a newline and starting a new math expression 
-		'''\getedgesii''' + //
-		'''«op.edgeVariable.toTexParameter»'''
-	}
-
 	def dispatch operatorToTex(GetVerticesOperator op) {
 		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
 	}
@@ -156,7 +153,8 @@ abstract class AbstractRelalgSerializer {
 	 * binaryOperator
 	 */
 	def dispatch binaryOperator(AbstractJoinOperator operator) {
-		'''«operator.joinOperator» \{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}'''
+		'''«operator.joinOperator»''' +
+		'''«IF includeMutualVariables»\{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
 	}
 
 	def dispatch binaryOperator(UnionOperator operator) {
