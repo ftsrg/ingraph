@@ -28,7 +28,7 @@ abstract class Variable extends NamedElement, ReturnableElement, ComparableEleme
 	boolean dontCare = "false"
 }
 
-class ElementVariable extends Variable {
+abstract class ElementVariable extends Variable {
 	refers AttributeVariable[] attributes opposite element
 }
 
