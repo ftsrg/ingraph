@@ -20,7 +20,9 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
 	override serializeBody(Operator expression) {
 		'''
-			$«children(expression)»$
+			«IF standaloneDocument»$$«ENDIF»
+			«children(expression)»
+			«IF standaloneDocument»$$«ENDIF»
 		'''
 	}
 
@@ -28,26 +30,19 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	 * children
 	 */
 	def dispatch CharSequence children(GetVerticesOperator op) {
-		'''«op.operatorToTex»'''
+		'''«op.operator»'''
 	}
 
 	def dispatch CharSequence children(GetEdgesOperator op) {
-		'''«op.operatorToTex»'''
+		'''«op.operator»'''
 	}
 
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operatorToTex» \left(«op.getInput.children»\right)'''
+		'''«op.operator» \Big(«op.input.children»\Big)'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.getLeftInput.children» «op.operatorToTex» «op.getRightInput.children»'''
-	}
-
-	/**
-	 * operatorSymbol
-	 */
-	def dispatch operatorToTex(GetEdgesOperator op) {
-		'''\getedges«op.sourceVertexVariable.toTexParameter»«op.targetVertexVariable.toTexParameter»«op.edgeVariable.toTexParameter»'''
+		'''«op.leftInput.children» «op.operator» «op.rightInput.children»'''
 	}
 
 }

@@ -33,21 +33,25 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	/**
 	 * toNode
 	 */
-	def CharSequence toNode(Operator op) {
+	def CharSequence toNode(
+		Operator op) {
 		'''
-«««		Optimization: an AllDifferent operator with a single edge variable is not useful at all.
+		«««		Optimization: an AllDifferent operator with a single edge variable is not useful at all.
 «««		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
 «««			«toNode((expression as AllDifferentOperator).getInput)»
 «««		«ELSE»
 			[
-			{$«op?.operatorToTex»$ \\
-			\footnotesize $\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
+			««« $ first line \\ second line $	
+			{«op.operator»$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
 			«IF includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
-		'''«op?.children»''' + // invoke children
-		'''
+				'''«op?.children»''' + // invoke children
+				'''
 			«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
 			]
-«««		«ENDIF»
+		«««		«ENDIF»
 		'''
 	}
 
@@ -64,16 +68,16 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
 	def dispatch children(UnaryOperator op) {
 		'''
-
-				«op.getInput?.toNode»
+			
+			«op.input?.toNode»
 		'''
 	}
 
 	def dispatch children(BinaryOperator op) {
 		'''
-
-				«op.getLeftInput.toNode»
-				«op.getRightInput.toNode»
+			
+			«op.leftInput.toNode»
+			«op.rightInput.toNode»
 		'''
 	}
 
@@ -82,15 +86,20 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	}
 
 	/**
-	 * operatorSymbol
+	 * operatorToTeX
 	 */
-	def dispatch operatorToTex(GetEdgesOperator op) {
-		'''\getedgesi''' + //
-		'''«op.sourceVertexVariable.toTexParameter»''' + //
-		'''«op.targetVertexVariable.toTexParameter»''' + //
-		'''$ \\ $''' + // oops - ugly hack for adding a newline and starting a new math expression 
-		'''\getedgesii''' + //
-		'''«op.edgeVariable.toTexParameter»'''
+	override dispatch operatorToTex(GetEdgesOperator op) {
+		#[
+			'''\getedgesi«op.sourceVertexVariable.toTexParameterWithLabels»«op.targetVertexVariable.toTexParameterWithLabels»''',
+			'''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''
+		]
 	}
-	
+
+	/**
+	 * operator
+	 */
+	override operator(Operator op) {
+		'''$«op?.operatorToTex.join('''$\\$''')»'''
+	}
+
 }

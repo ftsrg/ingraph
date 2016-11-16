@@ -46,7 +46,7 @@ abstract class AbstractRelalgSerializer {
 	 * whether to generate a standalone TeX document
 	 */
 	protected boolean standaloneDocument
-	
+
 	/**
 	 * whether to include mutual variables for joins and antijoins
 	 */
@@ -72,14 +72,14 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def serialize(RelalgContainer container) {
-		convertAlgebraExpression(container.getRootExpression)
+		convertAlgebraExpression(container.rootExpression)
 	}
 
 	/**
 	 * convertExpression
 	 */
 	def dispatch CharSequence convertAlgebraExpression(ProductionOperator op) {
-		convertAlgebraExpression(op.getInput)
+		convertAlgebraExpression(op.input)
 	}
 
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
@@ -104,49 +104,66 @@ abstract class AbstractRelalgSerializer {
 
 	def abstract CharSequence serializeBody(Operator expression)
 
+	def operator(Operator op) {
+		op.operatorToTex.join("")
+	}
+
 	/**
-	 * operatorSymbol
+	 * operatorToTex
 	 */
 	def dispatch operatorToTex(AllDifferentOperator op) {
-		'''\alldifferent{«op.edgeVariables.edgeVariableList»}'''
+		#['''\alldifferent{«op.edgeVariables.edgeVariableList»}''']
 	}
 
 	def dispatch operatorToTex(BinaryOperator op) {
-		'''\«binaryOperator(op)»'''
+		#['''\«binaryOperator(op)»''']
 	}
 
 	def dispatch operatorToTex(DuplicateEliminationOperator op) {
-		'''\duplicateelimination'''
+		#['''\duplicateelimination''']
 	}
 
 	def dispatch operatorToTex(ExpandOperator op) {
-		'''\expand«op.direction.directionToTex»''' + //
-		'''{«op.sourceVertexVariable.escapedName»}''' + //
-		'''«op.targetVertexVariable.toTexParameter»''' + //
-		'''«op.edgeVariable.toTexParameter»'''
+		#[
+			'''\expand«op.direction.directionToTex»''' + //
+			'''{«op.sourceVertexVariable.escapedName»}''' + //
+			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
+			'''«op.edgeVariable.toTexParameterWithLabels»'''
+		]
 	}
 
-	def dispatch operatorToTex(
-		SelectionOperator op) {
-		'''\selection{''' +
-		'''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.prettifyCondition»}«ENDIF»''' +
-		'''}'''
+	def dispatch operatorToTex(SelectionOperator op) {
+		#[
+			'''\selection{''' +
+			'''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.conditionToTex»}«ENDIF»''' +
+			'''}'''
+		]
+	}
+
+	def dispatch operatorToTex(GetEdgesOperator op) {
+		#[
+			'''\getedges''' + '''«op.sourceVertexVariable.toTexParameterWithLabels»''' +
+			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + '''«op.edgeVariable.toTexParameterWithLabels»'''
+		]
 	}
 
 	def dispatch operatorToTex(GetVerticesOperator op) {
-		'''\getvertices{«op.vertexVariable.escapedName»}{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
-	}
-
-	def dispatch operatorToTex(ProductionOperator op) {
-		throw new UnsupportedOperationException('''Visualization of production nodes is currently not supported.''')
+		#[
+			'''\getvertices''' + '''{«op.vertexVariable.escapedName»}''' +
+			'''{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
+		]
 	}
 
 	def dispatch operatorToTex(ProjectionOperator op) {
-		'''\projection{«op.variables.variableList»}'''
+		#['''\projection{«op.variables.variableList»}''']
 	}
-	
+
 	def dispatch operatorToTex(UnwindOperator op) {
-		'''\unwind'''
+		#['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
+	}
+
+	def dispatch operatorToTex(ProductionOperator op) {
+		throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
 	}
 
 	/**
@@ -207,13 +224,13 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	/**
-	 * variable to string
+	 * Convert ElementVariable to string, including the labels
 	 */
-	def dispatch toTexParameter(VertexVariable variable) {
+	def dispatch toTexParameterWithLabels(VertexVariable variable) {
 		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName].join("\\land")»}'''
 	}
 
-	def dispatch toTexParameter(EdgeVariable variable) {
+	def dispatch toTexParameterWithLabels(EdgeVariable variable) {
 		'''{«variable.escapedName»}{«variable.edgeLabels.map[escapedName].join("\\lor")»}'''
 	}
 
@@ -303,7 +320,7 @@ abstract class AbstractRelalgSerializer {
 	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {
 		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
 	}
-	
+
 	def dispatch String convertExpression(BooleanLiteral exp) {
 		'''\mathtt{«if (exp.value) "true" else "false"»}'''
 	}
@@ -311,7 +328,7 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * prettifyCondition
 	 */
-	def prettifyCondition(String s) {
+	def conditionToTex(String s) {
 		s //
 		.replaceAll(''' XOR ''', ''' \\lxor ''') //
 		.replaceAll(''' AND ''', ''' \\land ''') //
@@ -320,3 +337,4 @@ abstract class AbstractRelalgSerializer {
 	}
 
 }
+		
