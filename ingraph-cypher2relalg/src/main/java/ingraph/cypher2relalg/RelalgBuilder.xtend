@@ -107,7 +107,7 @@ class RelalgBuilder {
 
 		val trimmer = createProjectionOperator => [
 			input = content
-			variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as Variable])
+			variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as relalg.Variable])
 		]
 
 		// add duplicate-elimination operator if return DISTINCT was specified
