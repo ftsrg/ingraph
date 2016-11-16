@@ -156,7 +156,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch LogicalExpression buildRelalgLogicalExpression(Expression e) {
-		switch e.operator {
+		switch e.operator.toLowerCase {
 			case "not":
 				createUnaryLogicalExpression => [
 					operator = UnaryLogicalOperator.NOT
