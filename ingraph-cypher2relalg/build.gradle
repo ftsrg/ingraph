@@ -7,6 +7,7 @@ dependencies {
 	compile project(':ingraph-cypher-parser')
 	compile project(':ingraph-relalg-xcore')
 	compile project(':ingraph-relalg-model-util')
+	testCompile project(':ingraph-relalg2tex')
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.lib', version: xtendVersion
