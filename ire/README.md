@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ire.svg)](https://travis-ci.org/FTSRG/ire)
 
-## User's Guide
+## User's guide
 
 ire is released on [Bintray](https://bintray.com/ftsrg-open/maven/ire).
 
@@ -20,7 +20,7 @@ For Maven or Gradle, use the following snippets.
 <repositories>
   <repository>
     <id>ire</id>
-    <url>https://ftsrg-open.bintray.com/maven</url>
+    <url>https://dl.bintray.com/ftsrg-open/maven</url>
   </repository>
 </repositories>
 ```
@@ -29,7 +29,7 @@ For Maven or Gradle, use the following snippets.
 
 ```groovy
 repositories {
-	maven { url "http://ftsrg-open.bintray.com/maven" }
+	maven { url "https://dl.bintray.com/ftsrg-open/maven" }
 }
 
 dependencies {
@@ -37,7 +37,7 @@ dependencies {
 }
 ```
 
-## Contributor's Guide
+## Contributor's guide
 
 To build the project, issue the following command:
 
