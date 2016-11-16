@@ -54,7 +54,7 @@ The project is implemented in Scala. We recommend the following IDEs:
 To upload the artifacts to [Bintray](https://bintray.com/ftsrg-open/maven/ire), use the following commands:
 
 ```
-# set your username, e.g. szarnyasg
+# set your username (e.g. szarnyasg)
 $ export BINTRAY_USER=
 # set your Bintray API key (from https://bintray.com/profile/edit/organizations)
 $ export BINTRAY_KEY=
