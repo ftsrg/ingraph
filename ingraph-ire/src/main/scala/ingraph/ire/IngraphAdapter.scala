@@ -17,11 +17,10 @@ import relalg.RelalgContainer
 
 class IngraphAdapter(plan: RelalgContainer) {
   
-  private val rete = new Relalg2ReteTransformation
+  private val relalg2Rete = new Relalg2ReteTransformation
   private val inferencer = new SchemaInferencer
-  private val sn = inferencer.addSchemaInformation(rete.transformToRete(plan))
-
-  val engine = EngineFactory.createQueryEngine(sn.getRootExpression.asInstanceOf[ProductionOperator])
+  private val retePlan = inferencer.addSchemaInformation(relalg2Rete.transformToRete(plan))
+  val engine = EngineFactory.createQueryEngine(retePlan.getRootExpression.asInstanceOf[ProductionOperator])
 
   private val listener = new IngraphGraphChangedListener(
     engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup) with LongIdParser
