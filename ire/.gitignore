@@ -26,3 +26,9 @@ results/
 benchmarkresults/
 
 .gradle/
+/bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
