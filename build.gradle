@@ -15,6 +15,10 @@ subprojects {
 		}
 	}
 
+	jar {
+		from sourceSets.main.allJava
+	}
+
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
 
@@ -25,7 +29,7 @@ subprojects {
 	}
 
 	configurations.all { exclude group: 'asm' }
-
+	
 	buildscript {
 		repositories {
 			jcenter()
