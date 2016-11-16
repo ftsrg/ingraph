@@ -6,7 +6,7 @@ import org.junit.Test
 
 class BasicOptimizationTest {
 
-	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
+	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true, true)
 	val extension ReteOptimization optimization = new ReteOptimization
 	val extension TestModelFactory testModelFactory = new TestModelFactory
 

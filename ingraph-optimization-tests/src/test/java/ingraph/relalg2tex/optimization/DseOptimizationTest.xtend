@@ -6,7 +6,7 @@ import org.junit.Test
 
 class DseOptimizationTest {
 
-	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true)
+	val extension RelalgTreeSerializer drawer = new RelalgTreeSerializer(true, true)
 	val extension ReteOptimization optimization = new ReteOptimization
 	val extension TestModelFactory testModelFactory = new TestModelFactory
 
@@ -17,7 +17,7 @@ class DseOptimizationTest {
 		println(ctr.serialize)
 
 		// act
-		ctr.performSimpleOptimization
+		ctr.performDseOptimization
 		println(ctr.serialize)
 	}
 
@@ -28,7 +28,7 @@ class DseOptimizationTest {
 		println(ctr.serialize)
 
 		// act
-		ctr.performSimpleOptimization
+		ctr.performDseOptimization
 		println(ctr.serialize)
 	}
 
@@ -39,7 +39,7 @@ class DseOptimizationTest {
 		println(ctr.serialize)
 
 		// act
-		ctr.performSimpleOptimization
+		ctr.performDseOptimization
 		println(ctr.serialize)
 	}
 	
