@@ -11,14 +11,12 @@ import relalg.Cardinality
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
-	val includeCardinality = true
-
-	new() {
-		super(true, true)
+	protected new() {
+		super()
 	}
 
-	new(boolean standaloneDocument, boolean includeMutualVariables) {
-		super(standaloneDocument, includeMutualVariables)
+	protected new(RelalgSerializerConfig config) {
+		super(config)
 	}
 
 	override serializeBody(Operator expression) {
@@ -46,12 +44,12 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
-			«IF includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
-				'''«op?.children»''' + // invoke children
-				'''
+			«IF config.includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
+			'''«op?.children»''' + // invoke children
+			'''
 			«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
 			]
-		«««		«ENDIF»
+			«««		«ENDIF»
 		'''
 	}
 
@@ -88,7 +86,8 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	/**
 	 * operatorToTeX
 	 */
-	override dispatch operatorToTex(GetEdgesOperator op) {
+	override dispatch operatorToTex(
+		GetEdgesOperator op) {
 		#[
 			'''\getedgesi«op.sourceVertexVariable.toTexParameterWithLabels»«op.targetVertexVariable.toTexParameterWithLabels»''',
 			'''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''

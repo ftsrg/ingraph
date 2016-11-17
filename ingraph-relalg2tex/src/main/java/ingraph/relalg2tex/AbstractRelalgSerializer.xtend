@@ -42,19 +42,14 @@ import relalg.UnwindOperator
 
 abstract class AbstractRelalgSerializer {
 
-	/**
-	 * whether to generate a standalone TeX document
-	 */
-	protected boolean standaloneDocument
+	protected val RelalgSerializerConfig config
 
-	/**
-	 * whether to include mutual variables for joins and antijoins
-	 */
-	protected boolean includeMutualVariables
+	protected new() {
+		this.config = RelalgSerializerConfig.defaultConfig
+	}
 
-	new(boolean document, boolean includeMutualVariables) {
-		this.standaloneDocument = document
-		this.includeMutualVariables = includeMutualVariables
+	protected new(RelalgSerializerConfig config) {
+		this.config = config
 	}
 
 	def serialize(RelalgContainer container, String filename) {
@@ -62,7 +57,7 @@ abstract class AbstractRelalgSerializer {
 		schemaInferencer.addSchemaInformation(container)
 
 		val tex = serialize(container)
-		if (standaloneDocument) {
+		if (config.standaloneDocument) {
 			val file = new File("../visualization/" + filename + ".tex")
 			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 		} else {
@@ -84,7 +79,7 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
-			«IF standaloneDocument»
+			«IF config.standaloneDocument»
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 				
@@ -95,7 +90,7 @@ abstract class AbstractRelalgSerializer {
 				\begin{preview}
 			«ENDIF»
 			«serializeBody(expression)»
-			«IF standaloneDocument»
+			«IF config.standaloneDocument»
 				\end{preview}
 				\end{document}
 			«ENDIF»
@@ -171,7 +166,7 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def dispatch binaryOperator(AbstractJoinOperator operator) {
 		'''«operator.joinOperator»''' +
-		'''«IF includeMutualVariables»\{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
+		'''«IF config.includeMutualVariables»\{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
 	}
 
 	def dispatch binaryOperator(UnionOperator operator) {

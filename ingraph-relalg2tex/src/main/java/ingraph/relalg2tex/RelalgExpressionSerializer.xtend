@@ -8,21 +8,19 @@ import relalg.BinaryOperator
 
 class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
-	/**
-	 * whether to use parentheses in the TeX expressions
-	 */
-	boolean parentheses
+	protected new() {
+		super()
+	}
 
-	new(boolean standaloneDocument, boolean includeMutualVariables, boolean parentheses) {
-		super(standaloneDocument, includeMutualVariables)
-		this.parentheses = parentheses
+	protected new(RelalgSerializerConfig config) {
+		super(config)
 	}
 
 	override serializeBody(Operator expression) {
 		'''
-			«IF standaloneDocument»$$«ENDIF»
+			«IF config.standaloneDocument»$$«ENDIF»
 			«children(expression)»
-			«IF standaloneDocument»$$«ENDIF»
+			«IF config.standaloneDocument»$$«ENDIF»
 		'''
 	}
 
