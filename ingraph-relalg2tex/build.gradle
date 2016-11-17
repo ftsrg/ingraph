@@ -5,7 +5,7 @@ apply plugin: 'idea'
 
 dependencies {
 	compile project(':ingraph-relalg-xcore')
-	compile project(':ingraph-optimization-transformations')
+	compile project(':ingraph-relalg-model-util')
 
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion

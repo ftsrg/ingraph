@@ -11,11 +11,11 @@ import relalg.Cardinality
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
-	protected new() {
+	new() {
 		super()
 	}
 
-	protected new(RelalgSerializerConfig config) {
+	new(RelalgSerializerConfig config) {
 		super(config)
 	}
 

@@ -36,9 +36,9 @@ import relalg.UnaryArithmeticOperator
 import relalg.UnaryLogicalExpression
 import relalg.UnaryLogicalOperator
 import relalg.UnionOperator
+import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.UnwindOperator
 
 abstract class AbstractRelalgSerializer {
 
