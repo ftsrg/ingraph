@@ -1,6 +1,6 @@
 # ire: an Incremental Relational Engine
 
-[![Build Status](https://travis-ci.org/FTSRG/ire.svg)](https://travis-ci.org/FTSRG/ire)
+[![Build Status](https://travis-ci.org/FTSRG/ire.svg)](https://travis-ci.org/FTSRG/ire) [ ![Download](https://api.bintray.com/packages/ftsrg-open/maven/ire/images/download.svg) ](https://bintray.com/ftsrg-open/maven/ire/_latestVersion)
 
 ## User's guide
 
