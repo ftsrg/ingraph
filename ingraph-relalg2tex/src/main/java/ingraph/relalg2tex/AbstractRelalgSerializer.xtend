@@ -60,8 +60,6 @@ abstract class AbstractRelalgSerializer {
 		if (config.standaloneDocument) {
 			val file = new File("../visualization/" + filename + ".tex")
 			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
-		} else {
-			println(tex)
 		}
 		tex
 	}

@@ -56,11 +56,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 	/**
 	 * children
 	 */
-	def dispatch children(GetVerticesOperator op) {
-		''''''
-	}
-
-	def dispatch children(GetEdgesOperator op) {
+	def dispatch children(NullaryOperator op) {
 		''''''
 	}
 
