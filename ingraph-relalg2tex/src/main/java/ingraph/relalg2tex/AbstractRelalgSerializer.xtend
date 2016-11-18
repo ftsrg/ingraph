@@ -209,7 +209,7 @@ abstract class AbstractRelalgSerializer {
 	 * list
 	 */
 	def variableList(EList<Variable> variables) {
-		'''«variables.map["\\var{"+ name.escape + "}"].join(",~")»'''
+		'''«variables.map[convertComparable(it)].join(",~")»'''
 	}
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
