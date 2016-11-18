@@ -59,7 +59,7 @@ bintray {
   pkg {
     repo = 'maven'
     name = 'ire'
-    userOrg = 'ftsrg-open'
+    userOrg = 'ftsrg'
     licenses = ['EPL-1.0']
     vcsUrl = 'https://github.com/FTSRG/ire.git'
     version {
