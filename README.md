@@ -66,6 +66,17 @@ dependencies {
   * **Xtext SDK**
   * **EMF - Eclipse Modeling Framework Xcore SDK**
 
+#### Troubleshooting
+
+* **Problem:** during import, you may encounter the following error:
+
+  ```
+  Synchronize Gradle builds with workspace failed due to an unexpected error.
+  Unsupported method: HierarchicalEclipseProject.getIdentifier().
+  ```
+
+* **Solution:** click **Previous** and set the **Gradle wrapper**'s version manually to 3.0 (in our experience, 3.1 and 3.2 do not work).
+
 #### How to run the tests
 
 Running Xtend JUnit tests from a Gradle project is tricky. If you encounter a `ClassNotFound` exception, you should navigate the cursor to the **name of the class**, not the name of a test method, and press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>, <kbd>T</kbd>.
