@@ -19,7 +19,7 @@ For Maven or Gradle, use the following snippets.
 
 <repositories>
   <repository>
-    <id>ire</id>
+    <id>ftsrg</id>
     <url>https://dl.bintray.com/ftsrg/maven</url>
   </repository>
 </repositories>
