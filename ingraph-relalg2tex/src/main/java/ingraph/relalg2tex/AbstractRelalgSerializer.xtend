@@ -53,18 +53,18 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def serialize(RelalgContainer container, String filename) {
-		val schemaInferencer = new SchemaInferencer(false)
-		schemaInferencer.addSchemaInformation(container)
-
 		val tex = serialize(container)
-		if (config.standaloneDocument) {
-			val file = new File("../visualization/" + filename + ".tex")
-			FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
-		}
+
+		val file = new File("../visualization/" + filename + ".tex")
+		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
+
 		tex
 	}
 
 	def serialize(RelalgContainer container) {
+		val schemaInferencer = new SchemaInferencer(false)
+		schemaInferencer.addSchemaInformation(container)
+
 		convertAlgebraExpression(container.rootExpression)
 	}
 
