@@ -21,7 +21,9 @@ class ElementVariableUtil {
 			factories.put(element, new AttributeVariableFactory(container))
 		}
 
-		val attribute = factories.get(element).createElement(attributeName)
+		val attribute = factories.get(element).createElement(attributeName) => [
+			it.element = element
+		]
 
 		return attribute
 	}
