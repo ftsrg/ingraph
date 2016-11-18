@@ -2,18 +2,51 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
-## Third Party Sources
+## Third-party sources
 
 * The project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/). See also the [Why Xtext?](docs/why-xtext.md) document.
 
-## Generated Artifacts
+## Generated artifacts
 
 * [Test summary](http://docs.inf.mit.bme.hu/ingraph/test/)
 * [Technical report on compliance with the OpenCypher TCK](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf)
 
-## User's Guide
+## User's guide
 
-See the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
+For a high-level overview, see the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
+
+ingraph is released on [Bintray](https://bintray.com/ftsrg/maven/ire).
+
+For Maven or Gradle, use the following snippets.
+
+### Maven
+
+```xml
+<dependency>
+  <groupId>ingraph</groupId>
+  <artifactId>ingraph-...</artifactId>
+  <version>0.1.0</version>
+</dependency>
+
+<repositories>
+  <repository>
+    <id>ftsrg</id>
+    <url>https://dl.bintray.com/ftsrg/maven</url>
+  </repository>
+</repositories>
+```
+
+### Gradle
+
+```groovy
+repositories {
+	maven { url "https://dl.bintray.com/ftsrg/maven" }
+}
+
+dependencies {
+	compile 'ingraph:ingraph-...:0.1.0'
+}
+```
 
 ## Contributor's Guide
 
@@ -69,6 +102,21 @@ If you get `duplicate class` errors for the Xtend classes, you probably omitted 
 ## Using from other projects
 
 To deploy the artifacts in your local Maven repository, issue `gradle publishToMavenLocal`.
+
+### Deploying to Bintray
+
+To upload the artifacts to [Bintray](https://bintray.com/ftsrg/maven/ire), use the following commands:
+
+```
+# set your username (e.g. szarnyasg)
+$ export BINTRAY_USER=
+# set your Bintray API key (from https://bintray.com/profile/edit/, **API Key**)
+$ export BINTRAY_KEY=
+# upload
+$ gradle bintrayUpload
+```
+
+Go to the Bintray [Maven repository site](https://bintray.com/ftsrg/maven) and click **Publish**.
 
 ## License
 

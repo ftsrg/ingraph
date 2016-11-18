@@ -4,7 +4,7 @@ plugins {
 
 repositories {
     jcenter()
-    maven { url "https://dl.bintray.com/ftsrg-open/maven" }
+    maven { url "https://dl.bintray.com/ftsrg/maven" }
 }
 
 apply plugin: "scala"

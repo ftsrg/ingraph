@@ -1,51 +1,74 @@
+plugins {
+  id "com.jfrog.bintray" version "1.7" apply false
+}
+
 allprojects {
-	group = 'ingraph'
-	version = '0.0.1-SNAPSHOT'
+  group = 'ingraph'
+  version = '0.1.0'
 }
 
 subprojects {
-	apply plugin: 'java'
-	apply plugin: 'maven-publish'
+  apply plugin: 'java'
+  apply plugin: 'maven-publish'
+  apply plugin: 'com.jfrog.bintray'
 
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				from components.java
-			}
-		}
-	}
+  jar {
+    from sourceSets.main.allJava
+  }
 
-	jar {
-		from sourceSets.main.allJava
-	}
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+  repositories {
+    jcenter()
+    maven { url "https://repo.eclipse.org/content/groups/acceleo" }
+    maven { url "https://repo.eclipse.org/content/groups/viatra2" }
+  }
 
-	repositories {
-		jcenter()
-		maven { url "https://repo.eclipse.org/content/groups/acceleo" }
-		maven { url "https://repo.eclipse.org/content/groups/viatra2" }
-	}
+  configurations.all { exclude group: 'asm' }
 
-	configurations.all { exclude group: 'asm' }
-	
-	buildscript {
-		repositories {
-			jcenter()
-			maven { url "https://plugins.gradle.org/m2/" }
-		}
-		dependencies { classpath 'org.xtext:xtext-gradle-plugin:1.0.12' }
-	}
+  buildscript {
+    repositories {
+      jcenter()
+      maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies { classpath 'org.xtext:xtext-gradle-plugin:1.0.12' }
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+      }
+    }
+  }
+
+  bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    pkg {
+      repo = 'maven'
+      name = 'ingraph'
+      userOrg = 'ftsrg'
+      licenses = ['Apache-2.0']
+      vcsUrl = 'https://github.com/FTSRG/ingraph.git'
+      version {
+        name = '0.1.0'
+        desc = 'Initial version'
+        released = new Date()
+      }
+    }
+    publications = ['mavenJava']
+  }
 }
 
 ext {
-	emfVersion = '2.10.1'
-	junitVersion = '4.12'
-	scalaVersion = '2.11.8'
-	viatraVersion = '1.5.0-SNAPSHOT'
-	viatraDseVersion = '0.15.0-SNAPSHOT'
-	xtendVersion = '2.10.0'
-	xtextVersion = '2.10.0'
-	xtextGradlePluginVersion = '1.0.12'
+  emfVersion = '2.10.1'
+  junitVersion = '4.12'
+  scalaVersion = '2.11.8'
+  viatraVersion = '1.5.0-SNAPSHOT'
+  viatraDseVersion = '0.15.0-SNAPSHOT'
+  xtendVersion = '2.10.0'
+  xtextVersion = '2.10.0'
+  xtextGradlePluginVersion = '1.0.12'
 }
