@@ -39,6 +39,7 @@ dependencies {
     compile "org.scala-lang:scala-library:$scalaVersion"
     compile "com.typesafe.akka:akka-actor_2.11:$akkaVersion"
     compile "com.typesafe.akka:akka-remote_2.11:$akkaVersion"
+	compile "org.openjdk.jmh:jmh-core:1.16"
 
     testCompile "com.typesafe.akka:akka-testkit_2.11:$akkaVersion"
     testCompile "org.scalatest:scalatest_2.11:3.0.0"
