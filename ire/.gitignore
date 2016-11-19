@@ -32,3 +32,5 @@ benchmarkresults/
 .classpath
 .project
 .settings/
+
+*.cache*
