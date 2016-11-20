@@ -19,6 +19,7 @@ class Production(queryName: String, val expectedTerminatorCount: Int = 1) extend
   val terminatorPromises = mutable.Map.empty[Int, Promise[Set[TupleType]]]
   val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
 
+  val listeners = new mutable.ListBuffer[ChangeListener]
 
   def getAndResetElapsedTime(): Long = {
     val t1 = System.nanoTime()
@@ -30,10 +31,14 @@ class Production(queryName: String, val expectedTerminatorCount: Int = 1) extend
   override def receive: Actor.Receive = {
     case ChangeSet(p, n) =>
       p.foreach {
-        results.add
+        t =>
+          results.add(t)
+          listeners.foreach(_.added(t))
       }
       n.foreach {
-        results.remove
+        t =>
+          results.remove(t)
+          listeners.foreach(_.removed(t))
       }
 
     case ExpectMoreTerminators(terminatorID, inputs) => inputsToResume(terminatorID) = inputs
@@ -43,14 +48,32 @@ class Production(queryName: String, val expectedTerminatorCount: Int = 1) extend
       receivedTerminatorCount(messageID) += 1
       if (receivedTerminatorCount(messageID) == expectedTerminatorCount) {
         inputsToResume(terminatorID).foreach(input => input(Resume(messageID)))
+        listeners.foreach(_.terminated())
         terminatorPromises(messageID).success(results.toSet)
         receivedTerminatorCount.drop(messageID)
         terminatorPromises.drop(messageID)
-
       }
 
     case ExpectTerminator(terminatorID, messageID, promise) =>
       receivedTerminatorCount(messageID) = 0
       terminatorPromises(messageID) = promise
+    case AddListener(listener) =>
+      listeners += listener
   }
+}
+
+case class AddListener(listener: ChangeListener)
+
+abstract class ChangeListener {
+  val positive = new mutable.ListBuffer[TupleType]
+  val negative = new mutable.ListBuffer[TupleType]
+  def added(tuple: TupleType) = positive += tuple
+  def removed(tuple: TupleType) = negative += tuple
+  def terminated() = {
+    listener(positive.toList, negative.toList)
+    positive.clear()
+    negative.clear()
+  }
+
+  def listener(positive: List[TupleType], negative: List[TupleType])
 }

@@ -46,6 +46,9 @@ abstract class TrainbenchmarkQuery {
     actors.foreach( actor => actor ! PoisonPill)
   }
 
+  def addListener(listener: ChangeListener) = {
+    production ! AddListener(listener)
+  }
 }
 
 abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery {
