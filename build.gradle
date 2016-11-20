@@ -1,5 +1,5 @@
 plugins {
-  id "com.jfrog.bintray" version "1.7" apply false
+  id "com.jfrog.bintray" version "1.7.1" apply false
 }
 
 allprojects {
@@ -46,6 +46,8 @@ subprojects {
   bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
+    publish = true
+    override = true
     pkg {
       repo = 'maven'
       name = 'ingraph'
