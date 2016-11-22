@@ -1,6 +1,6 @@
 # ingraph
 
-[![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
+[![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph) [ ![Download](https://api.bintray.com/packages/ftsrg/maven/ingraph/images/download.svg) ](https://bintray.com/ftsrg/maven/ingraph/_latestVersion)
 
 ## Third-party sources
 
