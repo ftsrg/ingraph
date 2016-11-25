@@ -41,14 +41,14 @@ Currently, the ingraph project is not mature enough for production use. Instead,
 
 Candidates for primary use cases of incremental openCypher queries are:
 
-* Model validation (see the [IncQuery-D paper](pub/models2014-incqueryd.pdf))
+* Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf))
+* Static analysis of source code repositories ([technical report](pub/stein-daniel-static-analysis.pdf))
+* Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
 * Model simulation and analysis of runtime models
-* Static analysis of source code repositories (technical report in progress)
-* Fraud detection
 
 Incremental openCypher queries could also be beneficial for:
 
-* Recommendation engines
+* Recommendation engines ([Neo4j white paper](https://neo4j.com/resources/recommendations-business-white-paper/))
 
 # Publications
 
