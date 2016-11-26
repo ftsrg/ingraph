@@ -16,7 +16,7 @@ script:
 #  - cd opencypher-report
 #  - make
 #  - cd ..
-#  - ./deploy.sh
+  - ./deploy.sh
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
   email: false
