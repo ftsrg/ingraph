@@ -1,12 +1,7 @@
-import java.util
-
 import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-
-import scala.collection.JavaConverters._
-import scala.collection.mutable
 
 class HashAntijoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -40,16 +35,33 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       joiner ! Secondary(sec)
       joiner ! Primary(prim)
-
-      expectMsg(ChangeSet(
-        positive = Vector(t(1, 2))
-      ))
+      expectMsg(ChangeSet(positive = Vector(t(1, 2))))
 
       joiner ! Secondary(ChangeSet(negative = Vector(t(3, 5), t(4, 7))))
       expectMsg(ChangeSet(positive = Vector(t(1, 4))))
     }
 
     "do simple antijoins 1" in {
+      val prim = ChangeSet(
+        positive = Vector(t(1, 2), t(1, 3), t(1, 4))
+      )
+      val sec = ChangeSet(
+        positive = Vector(t(3, 5), t(3, 6), t(4, 7))
+      )
+      val primarySel = Vector(1)
+      val secondarySel = Vector(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+
+      joiner ! Secondary(sec)
+      joiner ! Primary(prim)
+      expectMsg(ChangeSet(positive = Vector(t(1, 2))))
+
+      joiner ! Secondary(ChangeSet(positive = Vector(t(2, 8), t(3, 9))))
+      expectMsg(ChangeSet(negative = Vector(t(1, 2))))
+    }
+
+    "do simple antijoins 2" in {
       val prim = ChangeSet(
         positive = Vector(t(15, 16, 17, 18), t(4, 5, 6, 7))
       )
