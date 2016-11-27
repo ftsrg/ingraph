@@ -3,16 +3,18 @@ package hu.bme.mit.ire
 import scala.collection.mutable
 import scala.collection.mutable.MultiMap
 
-abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
-  val primarySelector: Vector[Any]
-  val secondarySelector: Vector[Any]
+class HashAntijoiner(override val next: (ReteMessage) => Unit,
+             val primarySelector: Vector[Any],
+             val secondarySelector: Vector[Any],
+             override val expectedTerminatorCount:Int = 2)  extends BetaNode with SingleForwarder  {
+
 
   val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
   with mutable.MultiMap[Vector[Any], TupleType]
   val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
   with mutable.MultiMap[Vector[Any], TupleType]
 
-  def onForwardingSide(changeSet: ChangeSet): Unit = {
+  def onPrimary(changeSet: ChangeSet): Unit = {
   val positive = changeSet.positive
   val negative = changeSet.negative
 
@@ -42,7 +44,7 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
   )
   }
 
-  def onAntiSide(changeSet: ChangeSet): Unit = {
+  def onSecondary(changeSet: ChangeSet): Unit = {
   val positive = changeSet.positive
   val negative = changeSet.negative
 
@@ -77,24 +79,4 @@ abstract class HashAntijoiner extends BetaNode with SingleForwarder  {
 
   forward(ChangeSet(joinedPositive, joinedNegative))
   }
-}
-
-class HashLeftAntijoiner(override val next: (ReteMessage) => Unit,
-             override val primarySelector: Vector[Any],
-             override val secondarySelector: Vector[Any],
-             override val expectedTerminatorCount:Int = 2) extends HashAntijoiner {
-
-  override def onPrimary(changeSet: ChangeSet): Unit = onForwardingSide(changeSet)
-
-  override def onSecondary(changeSet: ChangeSet): Unit = onAntiSide(changeSet)
-}
-
-class HashRightAntijoiner(override val next: (ReteMessage) => Unit,
-             override val primarySelector: Vector[Any],
-             override val secondarySelector: Vector[Any],
-             override val expectedTerminatorCount:Int = 2) extends HashAntijoiner {
-
-  override def onPrimary(changeSet: ChangeSet): Unit = onAntiSide(changeSet)
-
-  override def onSecondary(changeSet: ChangeSet): Unit = onForwardingSide(changeSet)
 }
