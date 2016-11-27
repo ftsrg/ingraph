@@ -2,6 +2,7 @@ import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.{ChangeSet, Trimmer}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import TestUtil._
 
 /**
  * Created by Maginecz on 3/16/2015.
@@ -19,8 +20,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "A Trimmer" must {
     "select the values" in {
       val changes = ChangeSet(
-        positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18), Map(0 -> 4, 1 -> 5, 2 -> 6, 3 -> 7)),
-        negative = Vector(Map(0 -> -0, 1 -> -1, 2 -> -2, 3 -> -3), Map(0 -> -10, 1 -> -11, 2 -> -12, 3 -> -13))
+        positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)),
+        negative = Vector(tuple(-0, -1, -2, -3), tuple(-10, -11, -12, -13))
       )
       val selectionVector = Vector(0, 2)
       val expectedChanges = ChangeSet(
@@ -36,16 +37,16 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(expectedChanges)
     }
 
-    val changeSet = ChangeSet(positive = Vector(Map(0 -> 0, 1 -> "something")),
-      negative = Vector(Map(0 -> 0, 1 -> "something else")))
+    val changeSet = ChangeSet(positive = Vector(tuple(0, "something")),
+      negative = Vector(tuple(0, "something else")))
 
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1, 0))))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = Vector(Map(1 -> "something", 0  -> 0)),
-        negative = Vector(Map(1 -> "something else", 0 -> 0))))
+      expectMsg(ChangeSet(positive = Vector(tuple(0, "something")),
+        negative = Vector(tuple(0, "something else"))))
     }
 
     "do projection with lesser length" in {

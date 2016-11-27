@@ -7,6 +7,8 @@ import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
 import hu.bme.mit.ire._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
+import TestUtil._
+
 class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
@@ -15,8 +17,6 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
-
-  import TestUtil._
 
   "A HashJoin" must {
     "join the values" in {
