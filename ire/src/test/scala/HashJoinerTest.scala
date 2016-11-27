@@ -16,10 +16,12 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
     TestKit.shutdownActorSystem(system)
   }
 
+  import TestUtil._
+
   "A HashJoin" must {
     "join the values" in {
       val prim = ChangeSet(
-        positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18), Map(0 -> 4, 1 -> 5, 2 -> 6, 3 -> 7))
+        positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))
       )
       val sec = ChangeSet(
         positive = Vector(Map(1 -> 15, 2 -> 16, 4 -> 13))
@@ -32,7 +34,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       joiner ! Primary(prim)
       joiner ! Secondary(sec)
       expectMsg(ChangeSet(
-        positive = Vector(Map(0 -> 15, 1 -> 16, 2 -> 17, 3 -> 18, 4 -> 13))
+        positive = Vector(tuple(15, 16, 17, 18, 13))
       ))
     }
 
@@ -43,13 +45,13 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _,primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(
-        positive = Vector(Map(0 -> 5, 1 -> 6, 2 -> 7), Map(0 -> 10, 1 -> 11, 2 -> 7))
+        positive = Vector(tuple(5, 6, 7), tuple(10, 11, 7))
       )
       )
 
       joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 7, 3 -> 8))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(
-        positive = Vector(Map(0 -> 10, 1 -> 11, 2 -> 7, 3 -> 8), Map(0 -> 5, 1 -> 6, 2 -> 7, 3 -> 8))
+        positive = Vector(tuple(10, 11, 7, 8), tuple(5, 6, 7, 8))
       )
       ): _*
       )
@@ -61,7 +63,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(
-        positive = Vector(Map(0 -> 1, 1 -> 5), Map(0 -> 2, 1 -> 6))
+        positive = Vector(tuple(1, 5), tuple(2, 6))
       )
       )
 
@@ -69,7 +71,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
         positive = Vector(Map(0 -> 5, 2 -> 10))
       )
       )
-      expectMsg(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 5, 2 -> 10))))
+      expectMsg(ChangeSet(positive = Vector(tuple(1, 5, 10))))
     }
     "do join new 1" in {
       val primarySel = Vector(1)
@@ -77,20 +79,20 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
 
-      joiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4), Map(0 -> 3, 1 -> 4))))
+      joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
 
       joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
       expectMsgAnyOf(utils.changeSetPermutations(
-        ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
+        ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Primary(ChangeSet(negative = Vector(Map(0 -> 3, 1 -> 4))))
-      expectMsg(ChangeSet(negative = Vector(Map(0 -> 3, 1 -> 4, 2 -> 5))))
-      joiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 3, 1 -> 4))))
-      expectMsg(ChangeSet(positive = Vector(Map(0 -> 3, 1 -> 4, 2 -> 5))))
+      joiner ! Primary(ChangeSet(negative = Vector(tuple(3, 4))))
+      expectMsg(ChangeSet(negative = Vector(tuple(3, 4, 5))))
+      joiner ! Primary(ChangeSet(positive = Vector(tuple(3, 4))))
+      expectMsg(ChangeSet(positive = Vector(tuple(3, 4, 5))))
       joiner ! Secondary(ChangeSet(negative = Vector(Map(0 -> 4, 2 -> 5))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
       joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(Map(0 -> 2, 1 -> 4, 2 -> 5), Map(0 -> 3, 1 -> 4, 2 -> 5)))): _*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
     "do parallel joins" in {
@@ -105,13 +107,13 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 2 -> 2))))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 2 -> 3))))
 
-      forkingJoiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 0, 1 -> 2))))
-      forkingJoiner ! Primary(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
 
       joinerB ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 3 -> 3))))
-      expectMsg(ChangeSet(positive = Vector(Map(0 -> 1, 1 -> 2, 2 -> 3, 3 -> 3))))
+      expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
       joinerA ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 3 -> 3))))
-      expectMsg(ChangeSet(positive = Vector(Map(0 -> 0, 1 -> 2, 2 -> 2, 3 -> 3))))
+      expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
     }
   }
 }
