@@ -35,6 +35,10 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 		return element
 	}
 
+	def hasElement(String elementName) {
+		return (elements.get(elementName) != null)
+	}
+
 	def generateName() {
 		'_e' + n++;
 	}

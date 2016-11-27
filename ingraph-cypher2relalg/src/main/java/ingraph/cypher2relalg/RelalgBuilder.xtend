@@ -9,7 +9,6 @@ import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.emf.util.PrettyPrinter
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
-import org.slizaa.neo4j.opencypher.openCypher.Expression
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
@@ -28,20 +27,23 @@ import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.Statement
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
-import org.slizaa.neo4j.opencypher.openCypher.Variable
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.Where
 import relalg.ArithmeticComparisonOperator
+import relalg.AttributeVariable
 import relalg.BinaryLogicalOperator
-import relalg.ComparableElement
+import relalg.ComparableExpression
 import relalg.Direction
+import relalg.EdgeVariable
 import relalg.ExpandOperator
+import relalg.Expression
 import relalg.JoinOperator
 import relalg.LogicalExpression
 import relalg.Operator
 import relalg.RelalgFactory
 import relalg.UnaryLogicalOperator
 import relalg.UnaryOperator
+import relalg.Variable
 import relalg.VertexVariable
 
 class RelalgBuilder {
@@ -107,7 +109,14 @@ class RelalgBuilder {
 
 		val trimmer = createProjectionOperator => [
 			input = content
-			variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as relalg.Variable])
+			variables.addAll(returnBody.items.map[
+				val mapIt=it
+				createReturnableElement => [
+					expression = buildRelalgExpression(mapIt.expression)
+					alias = mapIt.alias?.name
+				]
+			])
+			//variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as relalg.Variable])
 		]
 
 		// add duplicate-elimination operator if return DISTINCT was specified
@@ -165,7 +174,7 @@ class RelalgBuilder {
 		]
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(Expression e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
 		switch e.operator.toLowerCase {
 			case "not":
 				createUnaryLogicalExpression => [
@@ -193,7 +202,7 @@ class RelalgBuilder {
 		]
 	}
 
-	def dispatch ComparableElement buildRelalgComparableElement(NumberConstant e) {
+	def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {
 		try {
 			val n = Integer.parseInt(e.value)
 			createIntegerLiteral => [
@@ -206,41 +215,77 @@ class RelalgBuilder {
 		}
 	}
 
-	def dispatch ComparableElement buildRelalgComparableElement(StringConstant e) {
+	def dispatch ComparableExpression buildRelalgComparableElement(StringConstant e) {
 		createStringLiteral => [
 			value = e.value
 		]
 	}
 
-	def dispatch ComparableElement buildRelalgComparableElement(Variable e) {
-		//FIXME: determine whether we need to return a VertexVariable or an EdgeVariable
-		vertexVariableFactory.createElement(e.name)
+	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
+		val x = buildRelalgVariable(e)
+		// as AttributeVariable
+		if (x instanceof AttributeVariable) {
+			x as AttributeVariable
+		} else {
+			throw new UnsupportedOperationException('''Unsupported type received: «x.class.name»''')
+		}
 	}
 
-	def dispatch ComparableElement buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
-		val ce = buildRelalgComparableElement(e.left)
+	def dispatch Expression buildRelalgExpression(VariableRef e) {
+		buildRelalgVariable(e)
+	}
 
-		switch ce {
+	def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
+		buildRelalgVariable(e)
+	}
+
+	def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
+		val ev = buildRelalgVariable(e.left)
+		switch ev {
 			VertexVariable: {
 				if (e.propertyLookups.length == 1) {
-					ce.createAttribute(e.propertyLookups.get(0).propertyKeyName)
+					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
+				} else {
+					throw new UnsupportedOperationException('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+				}
+			}
+
+			EdgeVariable: {
+				if (e.propertyLookups.length == 1) {
+					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
 				} else {
 					throw new UnsupportedOperationException('''PropertyLookup count «e.propertyLookups.length» not supported.''')
 				}
 			}
 
 			default: {
-				throw new UnsupportedOperationException('''Unsupported ComparableElement type received: «ce.class.name»''')
+				throw new UnsupportedOperationException('''Unsupported type received: «ev.class.name»''')
+			}
+		}
+	}
+
+	def dispatch Variable buildRelalgVariable(VariableRef varRef) {
+		switch varRef {
+			case vertexVariableFactory.hasElement(varRef.variableRef.name)
+						    && edgeVariableFactory.hasElement(varRef.variableRef.name): {
+				throw new UnsupportedOperationException('''Variable name ambigous: «varRef.variableRef.name»''')
 			}
 
+			case vertexVariableFactory.hasElement(varRef.variableRef.name): {
+				vertexVariableFactory.createElement(varRef.variableRef.name)
+			}
+
+			case edgeVariableFactory.hasElement(varRef.variableRef.name): {
+				edgeVariableFactory.createElement(varRef.variableRef.name)
+			}
+
+			default: {
+				throw new UnsupportedOperationException('''Variable name not found: «varRef.variableRef.name»''')
+			}
 		}
-
-
 	}
 
-	def dispatch ComparableElement buildRelalgComparableElement(VariableRef e) {
-		buildRelalgComparableElement(e.variableRef)
-	}
+
 
 	def dispatch Operator buildRelalg(PatternPart p) {
 		// TODO: handle variable assignment

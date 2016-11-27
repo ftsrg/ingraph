@@ -25,7 +25,7 @@ class EdgeLabel extends Label {
 }
 
 /* Variables */
-abstract class Variable extends NamedElement, ReturnableElement, ComparableElement {
+abstract class Variable extends Atom, NamedElement {
 	boolean dontCare = "false"
 }
 
@@ -41,11 +41,13 @@ class EdgeVariable extends ElementVariable {
 	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
 }
 
-class AttributeVariable extends Variable {
+class AttributeVariable extends Variable, ComparableExpression {
 	refers ElementVariable element opposite attributes
 }
 
-abstract class ReturnableElement {
+class ReturnableElement {
+	String alias
+	contains Expression expression
 }
 
 /* Operators */
@@ -88,7 +90,7 @@ class SelectionOperator extends UnaryOperator {
 }
 
 class ProjectionOperator extends UnaryOperator {
-	refers Variable[] variables
+	refers ReturnableElement[] variables
 }
 
 class ExpandOperator extends UnaryOperator {
@@ -176,7 +178,10 @@ abstract class Expression {
 	String text
 }
 
-abstract class ArithmeticExpression {
+abstract class ArithmeticExpression extends ComparableExpression {
+}
+
+abstract class UnaryExpression extends Expression {
 }
 
 abstract class BinaryExpression extends Expression {
@@ -185,17 +190,24 @@ abstract class BinaryExpression extends Expression {
 // arithmetic operations evaluate to a number, hence they are arithmetic expressins
 class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
 	BinaryArithmeticOperator operator
+	contains ArithmeticExpression leftOperand
+	contains ArithmeticExpression rightOperand
+}
+
+class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
+	UnaryArithmeticOperator operator
+	contains ArithmeticExpression leftOperand
 }
 
 // artihmetic comparisons evaluate to true/false, hence they are logical expressions
 class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
 	ArithmeticComparisonOperator operator
-	contains ComparableElement leftOperand
-	contains ComparableElement rightOperand
+	contains ComparableExpression leftOperand
+	contains ComparableExpression rightOperand
 }
 
 // not sure what we will make of this
-abstract class StringExpression extends Expression {
+abstract class StringExpression extends ComparableExpression {
 }
 
 abstract class LogicalExpression extends Expression {
@@ -207,18 +219,18 @@ class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
 	contains LogicalExpression rightOperand
 }
 
-class UnaryLogicalExpression extends Expression, LogicalExpression {
+class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 	UnaryLogicalOperator operator
 	contains LogicalExpression leftOperand
 }
 
-abstract class ComparableElement {
+abstract class ComparableExpression extends Expression {
 }
 
 abstract class Atom extends Expression {
 }
 
-abstract class Literal extends Atom, ComparableElement {
+abstract class Literal extends Atom {
 }
 
 class BooleanLiteral extends Literal, LogicalExpression {

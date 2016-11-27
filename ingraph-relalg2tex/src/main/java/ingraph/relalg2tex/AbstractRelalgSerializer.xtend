@@ -39,6 +39,8 @@ import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.Expression
+import java.util.List
 
 abstract class AbstractRelalgSerializer {
 
@@ -62,8 +64,9 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def serialize(RelalgContainer container) {
-		val schemaInferencer = new SchemaInferencer(false)
-		schemaInferencer.addSchemaInformation(container)
+		//FIXME: make this work again, jmarton, 20161126
+		//val schemaInferencer = new SchemaInferencer(false)
+		//schemaInferencer.addSchemaInformation(container)
 
 		convertAlgebraExpression(container.rootExpression)
 	}
@@ -148,7 +151,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch operatorToTex(ProjectionOperator op) {
-		#['''\projection{«op.variables.variableList»}''']
+		#['''\projection{«op.variables.map[expression].variableList»}''']
 	}
 
 	def dispatch operatorToTex(UnwindOperator op) {
@@ -208,8 +211,8 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * list
 	 */
-	def variableList(EList<Variable> variables) {
-		'''«variables.map[convertComparable(it)].join(",~")»'''
+	def variableList(List<Expression> variables) {
+		'''«variables.map[convertExpression(it)].join(",~")»'''
 	}
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
@@ -280,22 +283,26 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
+	def dispatch convertExpression(Void x) {
+		'''Void:null'''
+	}
+
 	/**
 	 * convertComparable
 	 */
-	def dispatch convertComparable(IntegerLiteral integerLiteral) {
+	def dispatch convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value.toString»}'''
 	}
 
-	def dispatch convertComparable(StringLiteral stringLiteral) {
+	def dispatch convertExpression(StringLiteral stringLiteral) {
 		'''\literal{'«stringLiteral.value.toString»'}'''
 	}
 
-	def dispatch convertComparable(ElementVariable elementVariable) {
+	def dispatch convertExpression(ElementVariable elementVariable) {
 		'''\var{«elementVariable.name»}'''
 	}
 
-	def dispatch convertComparable(AttributeVariable attributeVariable) {
+	def dispatch convertExpression(AttributeVariable attributeVariable) {
 		'''\var{«attributeVariable.element.name».«attributeVariable.name»}'''
 	}
 
@@ -311,7 +318,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {
-		'''«exp.leftOperand.convertComparable» «exp.operator.convert» «exp.rightOperand.convertComparable»'''
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
 	}
 
 	def dispatch String convertExpression(BooleanLiteral exp) {
