@@ -51,15 +51,17 @@ class RelalgBuilder {
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil
 
-	val container = createRelalgContainer
+	// this will be returned and will hold the result of the compilation
+	// never rename this to container as that name will collide with the Expression.container field name
+	val topLevelContainer = createRelalgContainer
 
-	extension ElementVariableUtil elementVariableUtil = new ElementVariableUtil(container)
+	extension ElementVariableUtil elementVariableUtil = new ElementVariableUtil(topLevelContainer)
 
-	val vertexVariableFactory = new VertexVariableFactory(container)
-	val edgeVariableFactory = new EdgeVariableFactory(container)
+	val vertexVariableFactory = new VertexVariableFactory(topLevelContainer)
+	val edgeVariableFactory = new EdgeVariableFactory(topLevelContainer)
 
-	val vertexLabelFactory = new VertexLabelFactory(container)
-	val edgeLabelFactory = new EdgeLabelFactory(container)
+	val vertexLabelFactory = new VertexLabelFactory(topLevelContainer)
+	val edgeLabelFactory = new EdgeLabelFactory(topLevelContainer)
 
 	def build(Cypher cypher) {
 		EcoreUtil.resolveAll(cypher)
@@ -68,9 +70,9 @@ class RelalgBuilder {
 
 		val statement = cypher.statement
 		// legacy_builder_by_szarnyasg(statement)
-		container.rootExpression = buildRelalg(statement)
+		topLevelContainer.rootExpression = buildRelalg(statement)
 
-		container
+		topLevelContainer
 	}
 
 	def dispatch Operator buildRelalg(RegularQuery q) {
@@ -155,6 +157,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperator.AND
 			leftOperand = buildRelalgLogicalExpression(e.left)
 			rightOperand = buildRelalgLogicalExpression(e.right)
+			container = topLevelContainer
 		]
 	}
 
@@ -163,6 +166,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperator.OR
 			leftOperand = buildRelalgLogicalExpression(e.left)
 			rightOperand = buildRelalgLogicalExpression(e.right)
+			container = topLevelContainer
 		]
 	}
 
@@ -171,6 +175,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperator.XOR
 			leftOperand = buildRelalgLogicalExpression(e.left)
 			rightOperand = buildRelalgLogicalExpression(e.right)
+			container = topLevelContainer
 		]
 	}
 
@@ -180,6 +185,7 @@ class RelalgBuilder {
 				createUnaryLogicalExpression => [
 					operator = UnaryLogicalOperator.NOT
 					leftOperand = buildRelalgLogicalExpression(e.left)
+					container = topLevelContainer
 				]
 			default:
 				throw new UnsupportedOperationException("TODO: " + e.operator)
@@ -199,6 +205,7 @@ class RelalgBuilder {
 			}
 			leftOperand = buildRelalgComparableElement(e.left)
 			rightOperand = buildRelalgComparableElement(e.right)
+			container = topLevelContainer
 		]
 	}
 
@@ -207,10 +214,12 @@ class RelalgBuilder {
 			val n = Integer.parseInt(e.value)
 			createIntegerLiteral => [
 				value = n
+				container = topLevelContainer
 			]
 		} catch (NumberFormatException ex) {
 			createDoubleLiteral => [
 				value = Double.parseDouble(e.value)
+				container = topLevelContainer
 			]
 		}
 	}
@@ -218,6 +227,7 @@ class RelalgBuilder {
 	def dispatch ComparableExpression buildRelalgComparableElement(StringConstant e) {
 		createStringLiteral => [
 			value = e.value
+			container = topLevelContainer
 		]
 	}
 

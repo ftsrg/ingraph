@@ -6,13 +6,14 @@ package relalg
 
 class RelalgContainer {
 	String name
-	contains Operator rootExpression
-	contains NamedElement[] elements opposite ^container
+	refers Operator rootExpression
+	contains NamedElement[] elements opposite ^namedElementContainer
+	contains Expression[] expressions opposite ^container
 }
 
 abstract class NamedElement {
 	String name
-	refers RelalgContainer ^container opposite elements
+	refers RelalgContainer ^namedElementContainer opposite elements
 }
 
 abstract class Label extends NamedElement {
@@ -47,7 +48,7 @@ class AttributeVariable extends Variable, ComparableExpression {
 
 class ReturnableElement {
 	String alias
-	contains Expression expression
+	refers Expression expression
 }
 
 /* Operators */
@@ -86,11 +87,11 @@ class ProductionOperator extends UnaryOperator {
 
 class SelectionOperator extends UnaryOperator {
 	String conditionString
-	contains LogicalExpression condition
+	refers LogicalExpression condition
 }
 
 class ProjectionOperator extends UnaryOperator {
-	refers ReturnableElement[] variables
+	contains ReturnableElement[] variables
 }
 
 class ExpandOperator extends UnaryOperator {
@@ -175,6 +176,7 @@ class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, Associati
 
 /* expression */
 abstract class Expression {
+	refers RelalgContainer ^container opposite expressions
 	String text
 }
 
@@ -190,20 +192,20 @@ abstract class BinaryExpression extends Expression {
 // arithmetic operations evaluate to a number, hence they are arithmetic expressins
 class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
 	BinaryArithmeticOperator operator
-	contains ArithmeticExpression leftOperand
-	contains ArithmeticExpression rightOperand
+	refers ArithmeticExpression leftOperand
+	refers ArithmeticExpression rightOperand
 }
 
 class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
 	UnaryArithmeticOperator operator
-	contains ArithmeticExpression leftOperand
+	refers ArithmeticExpression leftOperand
 }
 
 // artihmetic comparisons evaluate to true/false, hence they are logical expressions
 class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
 	ArithmeticComparisonOperator operator
-	contains ComparableExpression leftOperand
-	contains ComparableExpression rightOperand
+	refers ComparableExpression leftOperand
+	refers ComparableExpression rightOperand
 }
 
 // not sure what we will make of this
@@ -215,13 +217,13 @@ abstract class LogicalExpression extends Expression {
 
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
 	BinaryLogicalOperator operator
-	contains LogicalExpression leftOperand
-	contains LogicalExpression rightOperand
+	refers LogicalExpression leftOperand
+	refers LogicalExpression rightOperand
 }
 
 class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 	UnaryLogicalOperator operator
-	contains LogicalExpression leftOperand
+	refers LogicalExpression leftOperand
 }
 
 abstract class ComparableExpression extends Expression {

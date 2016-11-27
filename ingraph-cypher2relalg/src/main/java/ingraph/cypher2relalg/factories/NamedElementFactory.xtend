@@ -24,7 +24,7 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 		if (elements.get(variableName) == null) {
 			val variable = createSpecificNamedElement => [
 				name = variableName
-				it.container = this.container
+				it.namedElementContainer = this.container
 			]
 			elements.put(variableName, variable)
 		}
