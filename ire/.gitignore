@@ -34,3 +34,4 @@ benchmarkresults/
 .settings/
 
 *.cache*
+*.iml
