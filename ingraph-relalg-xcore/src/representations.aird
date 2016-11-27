@@ -671,6 +671,7 @@
   <semanticResources>java:/Objects/java.text.CalendarBuilder</semanticResources>
   <semanticResources>java:/Objects/org.eclipse.emf.ecore.impl.BasicEObjectImpl</semanticResources>
   <semanticResources>java:/Objects/org.eclipse.emf.common.util.BasicEMap</semanticResources>
+  <semanticResources>platform:/resource/org.eclipse.emf.ecore.xcore.lib/model/XcoreLang.xcore</semanticResources>
   <ownedViews xmi:type="viewpoint:DRepresentationContainer" xmi:id="_newLkLQpEeaVrbL-lTeGug">
     <ownedRepresentations xmi:type="diagram:DSemanticDiagram" xmi:id="_WdSHQLQsEeaVrbL-lTeGug" name="relalg class diagram">
       <ownedAnnotationEntries xmi:type="description:AnnotationEntry" xmi:id="_WdSHQbQsEeaVrbL-lTeGug" source="DANNOTATION_CUSTOMIZATION_KEY">
