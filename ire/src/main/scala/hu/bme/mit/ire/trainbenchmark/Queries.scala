@@ -1,13 +1,8 @@
 package hu.bme.mit.ire.trainbenchmark
 
-import java.io.FileInputStream
-
 import akka.actor._
-import akka.remote.RemoteScope
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.utils.conversions._
 
-import scala.collection.immutable.HashMap
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
@@ -48,18 +43,5 @@ abstract class TrainbenchmarkQuery {
 
   def addListener(listener: ChangeListener) = {
     production ! AddListener(listener)
-  }
-}
-
-abstract class DistributedTrainbenchmarkQuery extends TrainbenchmarkQuery {
-  val remoteActors = new collection.mutable.MutableList[ActorRef]()
-  def newRemote(props: Props, address: Address): ActorRef = {
-    val actor = newLocal(props.withDeploy(Deploy(scope = RemoteScope(address))))
-    remoteActors += actor
-    actor
-  }
-  override def shutdown: Unit = {
-    remoteActors.foreach( actor => actor ! PoisonPill)
-    super.shutdown()
   }
 }
