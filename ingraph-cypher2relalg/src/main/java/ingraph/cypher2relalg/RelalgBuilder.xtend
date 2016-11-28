@@ -7,6 +7,8 @@ import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.emf.util.PrettyPrinter
+import org.eclipse.emf.common.util.BasicEList
+import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
@@ -17,11 +19,13 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.NumberConstant
+import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
@@ -38,10 +42,12 @@ import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.JoinOperator
+import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
 import relalg.Operator
 import relalg.RelalgFactory
 import relalg.UnaryLogicalOperator
+import relalg.UnaryNodeLogicalOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
@@ -132,6 +138,15 @@ class RelalgBuilder {
 
 	}
 
+	/*
+	 * MATCH clause is compiled as follows:
+	 * (the lower elements being the input for the upper ones)
+	 *
+	 * - Selection as built from the where clause
+	 * - Left outer join of the patterns extracted from the where clause (is any)
+	 * - AllDifferentOperator on the edges in the patternParts
+	 * - natural join of comma-separated patternParts in the MATCH clause
+	 */
 	def dispatch Operator buildRelalg(Match m) {
 		// FIXME: handle OPTIONAL
 		// handle comma-separated patternParts in the MATCH clause
@@ -143,48 +158,69 @@ class RelalgBuilder {
 		]
 
 		if (m.where != null) {
-			createSelectionOperator => [
-				condition = buildRelalgLogicalExpression(m.where.expression)
-				input = allDifferentOperator
+			// left outer joins extracted from the patterns in the where clause
+			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
+
+			val selectionOperator = createSelectionOperator => [
+				condition = buildRelalgLogicalExpression(m.where.expression, joinOperationsOfWhereClause)
 			]
+
+			val selectionInput = if (joinOperationsOfWhereClause.empty) {
+				allDifferentOperator
+			} else {
+				/*
+				 * add allDifferentOperator before the joins derived from the where clause
+				 * and create the tree of left outer joins
+				 */
+				val EList<Operator> h = new BasicEList<Operator>()
+				h.add(allDifferentOperator)
+				h.addAll(joinOperationsOfWhereClause)
+
+				buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator)
+			}
+
+			selectionOperator.input = selectionInput
+			selectionOperator
 		} else {
 			allDifferentOperator
 		}
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e, EList<Operator> joins) {
 		createBinaryLogicalExpression => [
 			operator = BinaryLogicalOperator.AND
-			leftOperand = buildRelalgLogicalExpression(e.left)
-			rightOperand = buildRelalgLogicalExpression(e.right)
+			leftOperand = buildRelalgLogicalExpression(e.left, joins)
+			rightOperand = buildRelalgLogicalExpression(e.right, joins)
 			container = topLevelContainer
 		]
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionOr e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionOr e, EList<Operator> joins) {
 		createBinaryLogicalExpression => [
 			operator = BinaryLogicalOperator.OR
-			leftOperand = buildRelalgLogicalExpression(e.left)
-			rightOperand = buildRelalgLogicalExpression(e.right)
+			leftOperand = buildRelalgLogicalExpression(e.left, joins)
+			rightOperand = buildRelalgLogicalExpression(e.right, joins)
 			container = topLevelContainer
 		]
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionXor e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionXor e, EList<Operator> joins) {
 		createBinaryLogicalExpression => [
 			operator = BinaryLogicalOperator.XOR
-			leftOperand = buildRelalgLogicalExpression(e.left)
-			rightOperand = buildRelalgLogicalExpression(e.right)
+			leftOperand = buildRelalgLogicalExpression(e.left, joins)
+			rightOperand = buildRelalgLogicalExpression(e.right, joins)
 			container = topLevelContainer
 		]
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e
+		, EList<Operator> joins
+	) {
 		switch e.operator.toLowerCase {
 			case "not":
 				createUnaryLogicalExpression => [
 					operator = UnaryLogicalOperator.NOT
-					leftOperand = buildRelalgLogicalExpression(e.left)
+					leftOperand = buildRelalgLogicalExpression(e.left, joins)
 					container = topLevelContainer
 				]
 			default:
@@ -192,7 +228,48 @@ class RelalgBuilder {
 		}
 	}
 
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e) {
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ParenthesizedExpression e, EList<Operator> joins) {
+		buildRelalgLogicalExpression(e.expression, joins)
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(RelationshipsPattern e, EList<Operator> joins) {
+		// We add all the variables in the pattern as a NOT NULL expression
+		// TODO: add the pattern itself as an outer join
+		val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
+
+		relationshipVariableExpressions.add(createUnaryNodeLogicalExpression => [
+			operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+			leftOperand = vertexVariableFactory.createElement(e.nodePattern.variable.name)
+			container = topLevelContainer
+		])
+
+		relationshipVariableExpressions.addAll(
+			e.chain.map[
+				val mapIt = it
+				createUnaryNodeLogicalExpression => [
+					operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+					leftOperand = edgeVariableFactory.createElement(mapIt.relationshipPattern.detail.variable.name)
+					container = topLevelContainer
+				]
+			]
+		)
+		relationshipVariableExpressions.addAll(
+			e.chain.map[
+				val mapIt = it
+				createUnaryNodeLogicalExpression => [
+					operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+					leftOperand = vertexVariableFactory.createElement(mapIt.nodePattern.variable.name)
+					container = topLevelContainer
+				]
+			]
+		)
+
+		joins.add(buildRelalg(e))
+
+		buildLeftDeepTree(BinaryLogicalOperator.AND, relationshipVariableExpressions.iterator, topLevelContainer)
+	}
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e, EList<Operator> joins) {
 		createArithmeticComparisonExpression => [
 			operator = switch e.operator {
 				case "=": ArithmeticComparisonOperator.EQUAL_TO
@@ -299,15 +376,32 @@ class RelalgBuilder {
 
 	def dispatch Operator buildRelalg(PatternPart p) {
 		// TODO: handle variable assignment
+		if (p.^var != null) {
+			throw new UnsupportedOperationException('Variable assignment not supported for PatternPart (in MATCH clause)')
+		}
 		// pass through variable assignment body to buildRelalg(PatternElement e)
 		buildRelalg(p.part)
 	}
 
 	def dispatch Operator buildRelalg(PatternElement e) {
+		buildRelalgFromPattern(e.nodepattern, e.chain)
+	}
+
+	def dispatch Operator buildRelalg(RelationshipsPattern e) {
+		buildRelalgFromPattern(e.nodePattern, e.chain)
+	}
+
+	/*
+	 * This will create the relational algebraic representation of a patternElement.
+	 *
+	 * This was factored out to handle PatternElement and RelationshipsPattern in the same code
+	 */
+
+	def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
 		val patternElement_GetVerticesOperator = createGetVerticesOperator => [
-			vertexVariable = buildVertexVariable(e.nodepattern)
+			vertexVariable = buildVertexVariable(n)
 		]
-		val patternElement_ExpandList = e.chain.map[buildRelalg(it) as ExpandOperator]
+		val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
 		chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
 	}

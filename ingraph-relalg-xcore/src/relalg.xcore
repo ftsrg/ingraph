@@ -226,6 +226,13 @@ class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 	refers LogicalExpression leftOperand
 }
 
+// for conditions like "nodeVariable IS NULL"
+// possibly later ElementVariable can be generalized
+class UnaryNodeLogicalExpression extends UnaryExpression, LogicalExpression {
+	UnaryNodeLogicalOperator operator
+	refers ElementVariable leftOperand
+}
+
 abstract class ComparableExpression extends Expression {
 }
 
@@ -313,6 +320,16 @@ enum BinaryLogicalOperator {
 
 enum UnaryLogicalOperator {
 	NOT
+	,
+	IS_NULL
+	,
+	IS_NOT_NULL
+}
+
+enum UnaryNodeLogicalOperator {
+	IS_NULL
+	,
+	IS_NOT_NULL
 }
 
 enum AggregationType {

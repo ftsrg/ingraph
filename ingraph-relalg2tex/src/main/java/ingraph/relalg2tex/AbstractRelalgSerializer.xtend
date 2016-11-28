@@ -1,8 +1,8 @@
 package ingraph.relalg2tex
 
-import ingraph.relalg.util.SchemaInferencer
 import java.io.File
 import java.nio.charset.Charset
+import java.util.List
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.EList
 import relalg.AbstractJoinOperator
@@ -21,10 +21,12 @@ import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.IntegerLiteral
 import relalg.JoinOperator
+import relalg.LeftOuterJoinOperator
 import relalg.NamedElement
 import relalg.Operator
 import relalg.ProductionOperator
@@ -35,12 +37,11 @@ import relalg.StringLiteral
 import relalg.UnaryArithmeticOperator
 import relalg.UnaryLogicalExpression
 import relalg.UnaryLogicalOperator
+import relalg.UnaryNodeLogicalExpression
+import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
-import relalg.Variable
 import relalg.VertexVariable
-import relalg.Expression
-import java.util.List
 
 abstract class AbstractRelalgSerializer {
 
@@ -83,10 +84,10 @@ abstract class AbstractRelalgSerializer {
 			«IF config.standaloneDocument»
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
-				
+
 				\input{../../../ingraph/visualization/inputs/relalg-packages}
 				\input{../../../ingraph/visualization/inputs/relalg-commands}
-				
+
 				\begin{document}
 				\begin{preview}
 			«ENDIF»
@@ -183,6 +184,10 @@ abstract class AbstractRelalgSerializer {
 		'''antijoin'''
 	}
 
+	def dispatch joinOperator(LeftOuterJoinOperator operator) {
+		'''leftouterjoin'''
+	}
+
 	/**
 	 * directionToTex
 	 */
@@ -265,6 +270,13 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
+	def convert(UnaryNodeLogicalOperator op) {
+		switch (op) {
+			case IS_NULL: '''IS NULL'''
+			case IS_NOT_NULL: '''IS NOT NULL'''
+		}
+	}
+
 	def convert(BinaryArithmeticOperator op) {
 		switch (op) {
 			case DIVISION: '''/'''
@@ -314,7 +326,11 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch String convertExpression(UnaryLogicalExpression exp) {
-		'''«exp.operator.convert» «exp.leftOperand.convertExpression»'''
+		'''«exp.operator.convert» \left( «exp.leftOperand.convertExpression» \right)'''
+	}
+
+	def dispatch String convertExpression(UnaryNodeLogicalExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert»'''
 	}
 
 	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {
@@ -337,4 +353,3 @@ abstract class AbstractRelalgSerializer {
 	}
 
 }
-		

@@ -2,17 +2,21 @@ package ingraph.cypher2relalg.util
 
 import java.util.Iterator
 import java.util.List
+import relalg.BinaryLogicalOperator
+import relalg.BinaryOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
+import relalg.LeftOuterJoinOperator
+import relalg.LogicalExpression
 import relalg.Operator
+import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
-import relalg.BinaryOperator
 
 class Cypher2RelalgUtil {
 
@@ -27,7 +31,7 @@ class Cypher2RelalgUtil {
 	def ensureLabel(EdgeVariable edgeVariable, EdgeLabel label) {
 		edgeVariable.edgeLabels.add(label) // TODO this is not correct
 	}
-	
+
 	def Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
 		Iterator<Operator> i) {
 		var Operator retVal = null
@@ -38,11 +42,32 @@ class Cypher2RelalgUtil {
 				val nextAE = switch (binaryOperatorType) {
 					case typeof(JoinOperator): createJoinOperator
 					case typeof(UnionOperator): createUnionOperator
+					case typeof(LeftOuterJoinOperator): createLeftOuterJoinOperator
 					default: throw new IllegalArgumentException(
 						"Got unexpected BinaryOperator type to build left-deep-tree")
 				}
 				nextAE.rightInput = i.next
 				nextAE.leftInput = retVal
+				retVal = nextAE
+			}
+		}
+
+		return retVal
+	}
+
+	def LogicalExpression buildLeftDeepTree(BinaryLogicalOperator binaryLogicalOperator,
+		Iterator<? extends LogicalExpression> i, RelalgContainer outerContainer) {
+		var LogicalExpression retVal = null
+
+		// build a left deep tree of logical expressions with AND/OR
+		if (i?.hasNext) {
+			for (retVal = i.next; i.hasNext;) {
+				val nextAE = createBinaryLogicalExpression => [
+					operator = binaryLogicalOperator
+					container = outerContainer
+				]
+				nextAE.rightOperand = i.next
+				nextAE.leftOperand = retVal
 				retVal = nextAE
 			}
 		}
