@@ -2,9 +2,9 @@ package hu.bme.mit.ire
 
 import scala.collection.mutable
 
-trait Transaction {
+trait Transaction extends AutoCloseable {
+  override def close(): Unit
   def add(pred: String, node: TupleType)
-  def close(): Unit
   def remove(pred: String, node: TupleType)
 }
 
