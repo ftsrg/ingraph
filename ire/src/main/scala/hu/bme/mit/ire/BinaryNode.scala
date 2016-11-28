@@ -10,7 +10,7 @@ case class Primary(value: ReteMessage) extends ReteMessage
 
 case class Secondary(value: ReteMessage) extends ReteMessage
 
-abstract class BetaNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
+abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
   def onPrimary(changeSet: ChangeSet)
 

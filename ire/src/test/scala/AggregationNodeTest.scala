@@ -1,12 +1,12 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{ChangeSet, Checker, _}
+import hu.bme.mit.ire.{ChangeSet, SelectionNode, _}
 import org.scalactic.TolerantNumerics
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.Duration
 
-class AggregationTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -28,7 +28,7 @@ class AggregationTest(_system: ActorSystem) extends TestKit(_system) with Implic
   "count with complex keys" in {
 
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val counter = system.actorOf(Props(new Counter(echoActor ! _, Vector("city", "sex"), "count")))
+    val counter = system.actorOf(Props(new CountNode(echoActor ! _, Vector("city", "sex"), "count")))
     counter ! ChangeSet(positive = Vector(odin))
     expectMsg(ChangeSet(positive = Vector(Map("sex" -> "male", "city" -> "Asgard", "count" -> 1))))
     counter ! ChangeSet(positive = Vector(thor))
@@ -67,7 +67,7 @@ class AggregationTest(_system: ActorSystem) extends TestKit(_system) with Implic
   "Sum" must {
   "sum with complex keys" in {
     val echoActor = system.actorOf(TestActors.echoActorProps)
-    val counter = system.actorOf(Props(new Summer(echoActor ! _, Vector("sex"), "height", "sum")))
+    val counter = system.actorOf(Props(new SumNode(echoActor ! _, Vector("sex"), "height", "sum")))
     counter ! ChangeSet(positive = Vector(odin))
     assertNextChangeset(key = "sum", positive = Some(1))
     counter ! ChangeSet(positive = Vector(thor))

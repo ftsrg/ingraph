@@ -5,7 +5,7 @@ import akka.actor.{Actor, Stash}
 /**
   * Created by wafle on 12/25/2015.
   */
-abstract class AlphaNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
+abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
   val log = context.system.log
   val name = self.path.name
   def onChangeSet(changeSet: ChangeSet)
