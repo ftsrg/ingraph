@@ -3,7 +3,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-class HashAntijoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -25,7 +25,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Secondary(sec)
       joiner ! Primary(prim)
@@ -45,7 +45,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Secondary(sec)
       joiner ! Primary(prim)
@@ -66,7 +66,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(0, 1)
       val secondarySel = Vector(1, 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Secondary(sec)
 
@@ -86,7 +86,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(2)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(prim)
       expectMsg(ChangeSet(positive = Vector(tuple(5, 6, 7), tuple(10, 11, 7))))
@@ -105,7 +105,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(prim)
       expectMsgAnyOf(
@@ -128,7 +128,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(prim)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2), tuple(3, 4))))
@@ -167,7 +167,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(prim)
       expectMsg(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3))))
@@ -208,7 +208,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val primarySel = Vector(1, 3)
       val secondarySel = Vector(0, 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashAntijoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(prim)
       expectMsg(ChangeSet(Vector(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))))

@@ -8,7 +8,7 @@ import TestUtil._
 /**
  * Created by Maginecz on 4/10/2015.
  */
-class CheckerTests(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class SelectionTests(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -17,14 +17,14 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  "Checker" must {
+  "Selection" must {
     "check the condition properly" in {
       val changeSet = ChangeSet(Vector(tuple(0, "something"), tuple(0, "something else")))
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val condition = (n: TupleType) => {
         n(1) == "something"
       }
-      val checker = system.actorOf(Props(new Checker(echoActor ! _, condition)))
+      val checker = system.actorOf(Props(new SelectionNode(echoActor ! _, condition)))
 
       checker ! changeSet
       expectMsg(ChangeSet(positive = Vector(tuple(0, "something"))))
@@ -44,7 +44,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "check inequality properly" in {
       val changeSet = ChangeSet(Vector(tuple(0, 2, 1), tuple(0, 3, 0), tuple(0, 0, 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val inequalityChecker = system.actorOf(Props(new Inequality(echoActor ! _, 0, Vector(1, 2))))
+      val inequalityChecker = system.actorOf(Props(new InequalityNode(echoActor ! _, 0, Vector(1, 2))))
 
       inequalityChecker ! changeSet
       expectMsg(ChangeSet(Vector(tuple(0, 2, 1))))

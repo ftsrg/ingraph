@@ -9,7 +9,7 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import TestUtil._
 
-class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -29,7 +29,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val primarySel = Vector(0, 1)
       val secondarySel = Vector(1, 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)), name = "testSelector")
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)), name = "testSelector")
 
       joiner ! Primary(prim)
       joiner ! Secondary(sec)
@@ -42,7 +42,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val primarySel = Vector(2)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _,primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _,primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(
         positive = Vector(tuple(5, 6, 7), tuple(10, 11, 7))
@@ -60,7 +60,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(
         positive = Vector(tuple(1, 5), tuple(2, 6))
@@ -77,7 +77,7 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val primarySel = Vector(1)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
 
@@ -99,10 +99,10 @@ class HashJoinerTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val primarySel = Vector(0)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joinerA = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
-      val joinerB = system.actorOf(Props(new HashJoiner(echoActor ! _, primarySel, secondarySel)))
+      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
+      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
-      val forkingJoiner = system.actorOf(Props(new ParallelHashJoiner(forward, primarySel, secondarySel,
+      val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, primarySel, secondarySel,
         hashFunction = (n: TupleType) => n(0).hashCode())))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 2 -> 2))))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 2 -> 3))))

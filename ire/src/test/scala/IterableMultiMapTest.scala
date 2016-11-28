@@ -32,7 +32,7 @@ class IterableMultiMapTest extends WordSpec{
       )
       assert(checkMap == mutable.Map(
         1->mutable.Set.empty,
-        5-> mutable.Set.empty)
+        5->mutable.Set.empty)
       )
     }
   }

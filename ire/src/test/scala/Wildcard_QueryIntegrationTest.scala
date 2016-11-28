@@ -10,8 +10,8 @@ import TestUtil._
  */
 class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
   class TestQuery1 extends TrainbenchmarkQuery {
-    override val production: ActorRef = system.actorOf(Props(new Production("TestQuery")))
-    val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
+    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
+    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs:ChangeSet) => forwarder ! cs)
     )
@@ -19,9 +19,9 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
   }
 
   class TestQuery2 extends TrainbenchmarkQuery {
-    override val production: ActorRef = system.actorOf(Props(new Production("TestQuery", 2)))
-    val forwarder = system.actorOf(Props(new Checker(production ! _, a => true)))
-    val forwarder2 = system.actorOf(Props(new Checker(production ! _, a => true)))
+    override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
+    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
+    val forwarder2 = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs:ChangeSet) => forwarder ! cs),
       "testval2" -> ((cs:ChangeSet) => forwarder2 ! cs)

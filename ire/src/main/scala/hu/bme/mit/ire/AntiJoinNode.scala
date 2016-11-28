@@ -1,12 +1,11 @@
 package hu.bme.mit.ire
 
 import scala.collection.mutable
-import scala.collection.mutable.MultiMap
 
-class HashAntijoiner(override val next: (ReteMessage) => Unit,
-                         val primarySelector: Vector[Any],
-                         val secondarySelector: Vector[Any],
-                         override val expectedTerminatorCount:Int = 2)  extends BetaNode with SingleForwarder  {
+class AntiJoinNode(override val next: (ReteMessage) => Unit,
+                   val primarySelector: Vector[Any],
+                   val secondarySelector: Vector[Any],
+                   override val expectedTerminatorCount:Int = 2)  extends BinaryNode with SingleForwarder  {
 
 
   val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]

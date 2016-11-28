@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{ChangeSet, Trimmer}
+import hu.bme.mit.ire.{ChangeSet, ProjectionNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import TestUtil._
 
@@ -8,7 +8,7 @@ import TestUtil._
  * Created by Maginecz on 3/16/2015.
  */
 
-class TrimmerTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -29,7 +29,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
         negative = Vector(Map(0 -> -0, 2 -> -2), Map(0 -> -10, 2 -> -12))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val selector = system.actorOf(Props(new Trimmer(echoActor ! _, selectionVector)), name = "testSelector")
+      val selector = system.actorOf(Props(new ProjectionNode(echoActor ! _, selectionVector)), name = "testSelector")
 
       selector ! changes
       expectMsg(expectedChanges)
@@ -42,7 +42,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1, 0))))
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, Vector(1, 0))))
 
       checker ! changeSet
       expectMsg(ChangeSet(positive = Vector(tuple(0, "something")),
@@ -51,7 +51,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
     "do projection with lesser length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new Trimmer(echoActor ! _, Vector(1))))
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, Vector(1))))
 
       checker ! changeSet
       expectMsg(ChangeSet(positive = Vector(Map(1 -> "something")), negative = Vector(Map(1 -> "something else"))))

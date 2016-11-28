@@ -1,15 +1,14 @@
 package hu.bme.mit.ire
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
-import scala.util.Random
 
 trait Aggregator {
 
 }
 
-class Counter(override val next: (ReteMessage) => Unit,
-              val keys: Vector[Any], as: String,
-              override val expectedTerminatorCount:Int = 1) extends AlphaNode with SingleForwarder {
+class CountNode(override val next: (ReteMessage) => Unit,
+                val keys: Vector[Any], as: String,
+                override val expectedTerminatorCount:Int = 1) extends UnaryNode with SingleForwarder {
   val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = new mutable.HashMap[Vector[Any], Int]
@@ -46,9 +45,9 @@ class Counter(override val next: (ReteMessage) => Unit,
   }
 }
 
-class Average(override val next: (ReteMessage) => Unit,
-            val keys: Vector[Any],
-            override val expectedTerminatorCount:Int = 1) extends AlphaNode with SingleForwarder {
+class AverageNode(override val next: (ReteMessage) => Unit,
+                  val keys: Vector[Any],
+                  override val expectedTerminatorCount:Int = 1) extends UnaryNode with SingleForwarder {
   var count = 0
   override def onChangeSet(changeSet: ChangeSet): Unit = {
 
@@ -56,9 +55,9 @@ class Average(override val next: (ReteMessage) => Unit,
 
 }
 
-class Summer(override val next: (ReteMessage) => Unit,
-             val aggregationKeys: Vector[Any], val sumKey: Any, as: String,
-             override val expectedTerminatorCount:Int = 1) extends AlphaNode with SingleForwarder {
+class SumNode(override val next: (ReteMessage) => Unit,
+              val aggregationKeys: Vector[Any], val sumKey: Any, as: String,
+              override val expectedTerminatorCount:Int = 1) extends UnaryNode with SingleForwarder {
   val sums = new mutable.HashMap[Vector[Any], Any].withDefault(d => 0)
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = new mutable.HashMap[Vector[Any], Any]

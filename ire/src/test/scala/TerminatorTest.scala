@@ -20,15 +20,15 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "alpha nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val production = system.actorOf(Props(new Production("alpha test", 2)))
-      val intermediary = system.actorOf(Props(new Checker(production ! _, c => true, expectedTerminatorCount = 2)))
-      val input1 = system.actorOf(Props(new Checker(production ! _, c => true)))
+      val production = system.actorOf(Props(new ProductionNode("alpha test", 2)))
+      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true, expectedTerminatorCount = 2)))
+      val input1 = system.actorOf(Props(new SelectionNode(production ! _, c => true)))
       input1 ! ChangeSet(positive = Vector(tuple(15)))
       input1 ! ChangeSet(positive = Vector(tuple(19)))
-      val input2 = system.actorOf(Props(new Checker(intermediary ! _, c => true)))
+      val input2 = system.actorOf(Props(new SelectionNode(intermediary ! _, c => true)))
       input2 ! ChangeSet(positive = Vector(tuple(25)))
       input2 ! ChangeSet(positive = Vector(tuple(29)))
-      val input3 = system.actorOf(Props(new Checker(intermediary ! _, c => true)))
+      val input3 = system.actorOf(Props(new SelectionNode(intermediary ! _, c => true)))
 
       val terminator = Terminator(List(
         input1 ! _, input2 ! _, input3 ! _
@@ -45,10 +45,10 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "beta nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val production = system.actorOf(Props(new Production("")), "Production")
-      val checker = system.actorOf(Props(new Checker(production ! _, c => true)), "checker")
-      val intermediary = system.actorOf(Props(new HashJoiner(checker ! _,Vector(0), Vector(0))), "intermediary")
-      val input1 = system.actorOf(Props(new HashJoiner(intermediary ! Primary(_), Vector(0), Vector(0))), "inputBeta")
+      val production = system.actorOf(Props(new ProductionNode("")), "Production")
+      val checker = system.actorOf(Props(new SelectionNode(production ! _, c => true)), "checker")
+      val intermediary = system.actorOf(Props(new JoinNode(checker ! _,Vector(0), Vector(0))), "intermediary")
+      val input1 = system.actorOf(Props(new JoinNode(intermediary ! Primary(_), Vector(0), Vector(0))), "inputBeta")
       val msg15 = ChangeSet(positive = Vector(tuple(15)))
       input1 ! Primary(msg15)
       input1 ! Secondary(msg15)

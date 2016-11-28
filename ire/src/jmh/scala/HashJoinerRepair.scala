@@ -37,9 +37,9 @@ class HashJoinerRepair {
   @Setup(Level.Iteration)
   def createNetwork(): Unit = {
     system = ActorSystem()
-    val production = system.actorOf(Props(new Production("")))
+    val production = system.actorOf(Props(new ProductionNode("")))
     joiner = system.actorOf(Props(
-      new NaturalJoiner(production, Vector(0))))
+      new NaturalJoinNode(production, Vector(0))))
     terminator = Terminator(Seq(joiner.primary, joiner.secondary), production)
     joiner ! Primary(primary)
     joiner ! Secondary(secondary)
