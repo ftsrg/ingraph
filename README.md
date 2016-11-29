@@ -4,7 +4,7 @@
 
 ## Third-party sources
 
-* The project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/). See also the [Why Xtext?](docs/why-xtext.md) document.
+* The project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/) (licensed under [EPL-v1.0](https://www.eclipse.org/legal/epl-v10.html)). See also the [Why Xtext?](docs/why-xtext.md) document.
 
 ## Generated artifacts
 
