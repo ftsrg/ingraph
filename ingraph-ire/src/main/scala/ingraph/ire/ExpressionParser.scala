@@ -59,7 +59,7 @@ object ExpressionParser {
         }
     }
 
-  private def parseComparable(cmp: ComparableElement, tuple: TupleType) = cmp match {
+  private def parseComparable(cmp: ComparableExpression, tuple: TupleType) = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
