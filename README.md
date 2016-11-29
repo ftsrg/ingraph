@@ -4,7 +4,9 @@
 
 ## Third-party sources
 
-This project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/) (licensed under [EPL-v1.0](https://www.eclipse.org/legal/epl-v10.html)). To use it, clone the `slizaa-opencypher-xtext` repository and install it to your local Maven repository:
+This project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/) licensed under [EPL-v1.0](https://www.eclipse.org/legal/epl-v10.html). (See also the [Why Xtext?](docs/why-xtext.md) document.)
+
+To use it, clone the `slizaa-opencypher-xtext` repository and install it to your local Maven repository:
 
 ```bash
 git clone https://github.com/slizaa/slizaa-opencypher-xtext/
@@ -12,7 +14,7 @@ cd slizaa-opencypher-xtext
 mvn clean install
 ```
 
-See also the [Why Xtext?](docs/why-xtext.md) document.
+You can also use the [`scripts/get-slizaa.sh`](scripts/get-slizaa.sh) to run these commands.
 
 ## Generated artifacts
 
