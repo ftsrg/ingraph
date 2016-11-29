@@ -11,6 +11,7 @@ install: false
 script:
 #  - sudo apt-get update
 #  - sudo apt-get install -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
+  - scripts/get-slizaa.sh
   - ./gradlew assemble
   - ./gradlew check --continue || true
 #  - cd opencypher-report
