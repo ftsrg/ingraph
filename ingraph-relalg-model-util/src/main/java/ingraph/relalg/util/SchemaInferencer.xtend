@@ -65,7 +65,8 @@ class SchemaInferencer {
 				throw new IllegalStateException("Variable " + it.name +
 					" is not part of the schema in projection operator.")
 		]
-		op.defineSchema(op.variables)
+//		TODO fix this
+		op.defineSchema(op.variables as List)
 	}
 
 	def dispatch List<Variable> inferSchema(ExpandOperator op) {
