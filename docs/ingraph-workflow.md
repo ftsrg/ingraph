@@ -14,7 +14,7 @@
 
 * **openCypher query specification:** the query as a string.
 * **query syntax graph:** the abstract syntax graph of the query.
-* **relational algebra model:** query model using the extended operators of relational algebra, defined in [Xcore](https://wiki.eclipse.org/Xcore). For the operators, see our [openCypher report](docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf).
+* **relational algebra model:** query model using the extended operators of relational algebra, defined in [Xcore](https://wiki.eclipse.org/Xcore). For the operators, see our [openCypher report](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf).
 * **Rete network model:** a [Rete network](https://inf.mit.bme.hu/en/research/publications/incquery-d-distributed-incremental-model-query-framework-cloud) for incremental query evaluation defined in [Xcore](https://wiki.eclipse.org/Xcore). Also see our [openCypher report](docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf) for details.
 * **Rete network:** a continuously operating Rete network, using the [Akka](http://akka.io/) distributed asynchronous framework.
 
