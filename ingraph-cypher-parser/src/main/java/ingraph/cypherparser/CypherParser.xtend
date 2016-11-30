@@ -12,7 +12,7 @@ class CypherParser {
 		// https://typefox.io/how-and-why-use-xtext-without-the-ide
 		val injector = new OpenCypherStandaloneSetup().createInjectorAndDoEMFRegistration();
 		val resourceSet = injector.getInstance(XtextResourceSet);
-		val filePath = "../queries/" + fileName + ".cyp"
+		val filePath = "../queries/" + fileName + ".cypher"
 		val cypher = resourceSet.getResource(URI.createFileURI(filePath), true).contents.get(0) as Cypher;
 		return cypher
 	}
@@ -21,7 +21,7 @@ class CypherParser {
 		// https://wiki.eclipse.org/Xtext/FAQ
 		val injector = new OpenCypherStandaloneSetup().createInjectorAndDoEMFRegistration();
 		val resourceSet = injector.getInstance(XtextResourceSet);
-		val resource = resourceSet.createResource(URI.createURI("http:/example.cyp"));
+		val resource = resourceSet.createResource(URI.createURI("http:/example.cypher"));
 		val in = new ByteArrayInputStream(queryString.getBytes());
 		resource.load(in, resourceSet.getLoadOptions());
 		val cypher = resource.contents.get(0) as Cypher;

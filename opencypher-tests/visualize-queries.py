@@ -53,7 +53,7 @@ class %sVisualizationTest {
         if ("CREATE " in query) or ("DELETE " in query) or ("MERGE " in query) or ("REMOVE " in query) or ("SET " in query):
             continue
 
-        with open("../queries/tck/%s_%02d.cyp" % (filename_without_extension, i), "w") as query_file:
+        with open("../queries/tck/%s_%02d.cypher" % (filename_without_extension, i), "w") as query_file:
             query_file.write(query + "\n")
 
         test_case = """
