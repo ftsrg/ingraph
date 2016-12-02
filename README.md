@@ -62,7 +62,7 @@ dependencies {
 
 ### Eclipse
 
-1. It is recommended to start with the latest milestone (currently, [Oxygen M2](http://www.eclipse.org/downloads/packages/release/Oxygen/M2)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
+1. It is recommended to start with the latest version (currently, [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
 1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
 1. You may have to clean the workspace once.
