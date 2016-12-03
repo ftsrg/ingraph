@@ -168,7 +168,7 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def dispatch binaryOperator(AbstractJoinOperator operator) {
 		'''«operator.joinOperator»''' +
-		'''«IF config.includeMutualVariables»\{«operator.mutualVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
+		'''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
 	}
 
 	def dispatch binaryOperator(UnionOperator operator) {

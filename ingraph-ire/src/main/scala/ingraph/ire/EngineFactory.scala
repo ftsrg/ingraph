@@ -62,10 +62,10 @@ object EngineFactory extends App {
           case op: BinaryOperator =>
             val node: ActorRef = op match {
               case op: AntiJoinOperator =>
-                val names = op.getMutualVariables.map(_.getName)
+                val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new HashLeftAntijoiner(expr.child, names, names)))
               case op: JoinOperator =>
-                val names = op.getMutualVariables.map(_.getName)
+                val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new NaturalJoiner(expr.child, names)))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)

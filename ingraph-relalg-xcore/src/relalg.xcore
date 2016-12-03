@@ -158,7 +158,7 @@ abstract class AssociativeBinaryOperator extends BinaryOperator {
 }
 
 abstract class AbstractJoinOperator extends BinaryOperator {
-	refers Variable[] mutualVariables
+	refers Variable[] commonVariables
 }
 
 class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {

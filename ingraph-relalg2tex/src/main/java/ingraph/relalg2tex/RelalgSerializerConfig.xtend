@@ -20,7 +20,7 @@ class RelalgSerializerConfig {
 	/**
 	 * whether to include mutual variables for joins and antijoins
 	 */
-	public var boolean includeMutualVariables = false
+	public var boolean includeCommonVariables = false
 	
 	def static defaultConfig() {
 		return new RelalgSerializerConfig

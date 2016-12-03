@@ -91,7 +91,7 @@ class SchemaInferencer {
 
 		// calculate the mutual variables
 		leftInputSchema.retainAll(rightInputSchema)
-		op.mutualVariables.addAll(leftInputSchema)
+		op.commonVariables.addAll(leftInputSchema)
 
 		op.schema
 	}
