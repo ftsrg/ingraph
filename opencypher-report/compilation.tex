@@ -104,7 +104,7 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 \paragraph{Example.} The example query in~\cref{lst:example} can be formalized as:
 {\footnotesize
 	\begin{align*}
-	&\projection{a2} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
+	&\projection{a2} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN}{1}{1} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN}{1}{1} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
 	\end{align*}
 }
 

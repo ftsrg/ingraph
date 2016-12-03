@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph) [ ![Download](https://api.bintray.com/packages/ftsrg/maven/ingraph/images/download.svg) ](https://bintray.com/ftsrg/maven/ingraph/_latestVersion)
 
-## Third-party sources
+## Third-party dependencies
 
 This project uses the Xtext grammar of the [slizaa-opencypher-xtext project](https://github.com/slizaa/slizaa-opencypher-xtext/) licensed under [EPL-v1.0](https://www.eclipse.org/legal/epl-v10.html). (See also the [Why Xtext?](docs/why-xtext.md) document.)
 
@@ -87,22 +87,29 @@ dependencies {
 
 * **Solution:** click **Previous** and set the **Gradle wrapper**'s version manually to 3.0 (in our experience, 3.1 and 3.2 do not work).
 
+* **Problem:** during the `generateXtext` task, you get the following error:
+
+```
+java.lang.IllegalArgumentException: The 'no null' constraint is violated
+```
+
+* **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
+
 #### How to run the tests
 
 Running Xtend JUnit tests from a Gradle project is tricky. If you encounter a `ClassNotFound` exception, you should navigate the cursor to the **name of the class**, not the name of a test method, and press <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>, <kbd>T</kbd>.
 
 #### How to update the relational algebra model
 
-Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `src/main/java-gen` directory manually.
+Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `build/xcore/main` directory manually.
 
-#### How to update the grammars
+#### How to update the grammars for parsing the Cucumber tests
 
-1. Go to the **ingraph-cypher-parser** project, navigate to the `src/main/java` source folder, and right click the `org.slizaa.neo4j.opencypher` package's `GenerateOpenCypher.mwe2` file and choose **Run As** | **MWE2 Workflow**. If you get a warning that there are errors in the project, click **Proceed**.
-1. Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
+Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
 
 #### Opening `cypxmi` models
 
-The `cypxmi` files contain the models as parsed by Xtext.
+If you want to investigate the generated Xtext models, generate the `cypxmi` files using the provided unit tests.
 
 To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
 

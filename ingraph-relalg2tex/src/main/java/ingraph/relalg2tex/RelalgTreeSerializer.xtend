@@ -1,13 +1,11 @@
 package ingraph.relalg2tex
 
-import relalg.AllDifferentOperator
-import relalg.GetEdgesOperator
-import relalg.GetVerticesOperator
-import relalg.Operator
-import relalg.NullaryOperator
-import relalg.UnaryOperator
 import relalg.BinaryOperator
 import relalg.Cardinality
+import relalg.GetEdgesOperator
+import relalg.NullaryOperator
+import relalg.Operator
+import relalg.UnaryOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 

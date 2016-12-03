@@ -34,6 +34,7 @@ import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.SelectionOperator
 import relalg.StringLiteral
+import relalg.TransitiveClosureOperator
 import relalg.UnaryArithmeticOperator
 import relalg.UnaryLogicalExpression
 import relalg.UnaryLogicalOperator
@@ -48,7 +49,7 @@ abstract class AbstractRelalgSerializer {
 	protected val RelalgSerializerConfig config
 
 	protected new() {
-		this.config = RelalgSerializerConfig.defaultConfig
+		this.config = RelalgSerializerConfig.build[]
 	}
 
 	protected new(RelalgSerializerConfig config) {
@@ -123,6 +124,16 @@ abstract class AbstractRelalgSerializer {
 	def dispatch operatorToTex(ExpandOperator op) {
 		#[
 			'''\expand«op.direction.directionToTex»''' + //
+			'''{«op.sourceVertexVariable.escapedName»}''' + //
+			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
+			'''«op.edgeVariable.toTexParameterWithLabels»''' + //
+			'''{«op.minHops»}{«op.maxHops»}'''
+		]
+	}
+	
+	def dispatch operatorToTex(TransitiveClosureOperator op) {
+		#[
+			'''\transitiveclosure«op.direction.directionToTex»''' + //
 			'''{«op.sourceVertexVariable.escapedName»}''' + //
 			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
 			'''«op.edgeVariable.toTexParameterWithLabels»'''

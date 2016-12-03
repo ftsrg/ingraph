@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
+import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
@@ -23,8 +24,10 @@ import org.junit.Test
 
 class FeatureParsingTest {
 
-	val RelalgTreeSerializer treeSerializer = new RelalgTreeSerializer(false)
-	val RelalgExpressionSerializer expressionSerializer = new RelalgExpressionSerializer(false, false)
+	val RelalgTreeSerializer treeSerializer = new RelalgTreeSerializer
+	
+	val RelalgSerializerConfig config = RelalgSerializerConfig.builder.build
+	val RelalgExpressionSerializer expressionSerializer = new RelalgExpressionSerializer(config)
 	extension SchemaInferencer inferencer = new SchemaInferencer
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
@@ -65,7 +68,9 @@ class FeatureParsingTest {
 
 					\subsubsection*{Relational algebra expression}
 
-					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression»
+					\begin{flalign*}
+					& «scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression» &
+					\end{flalign*}
 
 					\subsubsection*{Relational algebra tree}
 
@@ -90,7 +95,6 @@ class FeatureParsingTest {
 	}
 
 	def processScenario(Scenario s) {
-		// println(resource.errors)
 		s.name = s.name.replaceAll("^Scenario: ", "").replaceAll("\n", "")
 
 		s.steps.filter(typeof(WhenStep)).forEach[desc = desc.cleanup]
@@ -123,7 +127,7 @@ class FeatureParsingTest {
 			val container = Cypher2Relalg.processString(s)
 			expressionSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
-			'''Cannot convert to expression.'''
+			'''\text{Cannot convert to expression.}'''
 		}
 	}
 
@@ -132,7 +136,7 @@ class FeatureParsingTest {
 			val container = Cypher2Relalg.processString(s)
 			treeSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
-			'''Cannot visualize tree.'''
+			'''\text{Cannot visualize tree.}'''
 		}
 	}
 

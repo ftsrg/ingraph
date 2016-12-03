@@ -72,7 +72,7 @@ class RelalgBuilder {
 	def build(Cypher cypher) {
 		EcoreUtil.resolveAll(cypher)
 
-		println(PrettyPrinter.format(cypher))
+//		println(PrettyPrinter.format(cypher))
 
 		val statement = cypher.statement
 		// legacy_builder_by_szarnyasg(statement)

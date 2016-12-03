@@ -94,13 +94,28 @@ class ProjectionOperator extends UnaryOperator {
 	contains ReturnableElement[] variables
 }
 
-class ExpandOperator extends UnaryOperator {
+abstract class NavigationOperator extends UnaryOperator {
 	Direction direction
 	refers VertexVariable sourceVertexVariable
 	refers EdgeVariable edgeVariable
-	refers VertexVariable targetVertexVariable
+	refers VertexVariable targetVertexVariable	
+}
+
+enum MaxHopsType {
+	LIMITED, UNLIMITED
+}
+
+class MaxHops {
+	MaxHopsType hopsType
+	Integer hops	
+}
+
+class ExpandOperator extends NavigationOperator {
 	Integer minHops
-	Integer maxHops
+	refers MaxHops maxHops
+}
+
+class TransitiveClosureOperator extends NavigationOperator {
 }
 
 class DuplicateEliminationOperator extends UnaryOperator {

@@ -10,12 +10,10 @@
 \newcommand{\atom}[1]{\mathsf{#1}}
 
 \newcommand{\var}[1]{\mathtt{#1}}
-\newcommand{\edgevariable}[2]{\left[\var{#1}
-	\ifstrempty{#2}{}{\colon{\atom{#2}}}
-	\right]}
+\newcommand{\edgevariable}[2]{\var{#1}
+	\ifstrempty{#2}{}{\colon{\atom{#2}}}}
 \newcommand{\nodevariable}[2]{(\var{#1}
-	\ifstrempty{#2}{}{\colon{\atom{#2}}}
-	)}
+	\ifstrempty{#2}{}{\colon{\atom{#2}}})}
 
 % see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
 
@@ -26,49 +24,81 @@
 
 %\newcommand{\getedgesop}{\mathbin{\text{\rotatebox[origin=c]{90}{$\multimapboth$}}}}
 \newcommand{\getedgesop}{\Uparrow}
-\newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \edgevariable{#5}{#6}}
+\newcommand{\getedges}[6]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 \newcommand{\getedgesi}[4]{\getedgesop_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}}}
 \newcommand{\getedgesii}[2]{\edgevariable{#1}{#2}}
 
-% unary operators
+%%%%%%%%%% unary operators %%%%%%%%%%
+\newcommand{\nagivationbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
 
-\newcommand{\expandbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
+% expand operators
+\newcommand{\expandedgevariable}[4]{
+	\left[
+	  \edgevariable{#1}{#2}
+	  \ifstrequal{#3}{1}{
+	  	\ifstrequal{#4}{1}
+	  	{} % minHops = 1 and maxHops = 1 -> write nothing
+	    {\ast \atom{#3} \ldots \atom{\infty}} % minHops = 1 and maxHops != 1
+	  }{
+	  {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1
+%	    \ifstrequal{#4}{1}
+%	    {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1 and maxHops = 1
+%	    {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1 and maxHops != 1
+	  }
+	\right]}
 
 \newcommand{\expandbothop}{\updownarrow}
-\newcommand{\expandboth}[5]{\expandbothop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
+\newcommand{\expandboth}[7]{\expandbothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 \newcommand{\expandoutop}{\uparrow}
-\newcommand{\expandout}[5]{\expandoutop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5} }
+\newcommand{\expandout}[7]{\expandoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 \newcommand{\expandinop}{\downarrow}
-\newcommand{\expandin}[5]{\expandinop \expandbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
+\newcommand{\expandin}[7]{\expandinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
+% transitive closure operators
+\newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
+\newcommand{\transitiveclosureboth}[5]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
+
+\newcommand{\transitiveclosureupop}{\oplus \updownarrow}
+\newcommand{\transitiveclosureup}[5]{\transitiveclosureupop \nagivationbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
+
+\newcommand{\transitiveclosuredownop}{\oplus \updownarrow}
+\newcommand{\transitiveclosuredown}[5]{\transitiveclosuredownop \nagivationbody{#1}{#2}{#3} \edgevariable{#4}{#5}}
+
+%
 \newcommand{\alldifferentop}{\not\fallingdotseq}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
 
+%
 \newcommand{\duplicateeliminationop}{\delta}
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 
+% sort operator
 \newcommand{\sortop}{\tau}
-
 \newcommand{\sortarbitrary}[3]{\sortop^{#1}_{#2}{#3}}
 
 \newcommand{\sort}[2]{\sortop_{#1}{#2}}
 \newcommand{\sortasc}[2]{\sortopasc_{#1}{#2}}
 \newcommand{\sortdesc}[2]{\sortopdesc_{#1}{#2}}
 
+%
 \newcommand{\projectionop}{\pi}
 \newcommand{\projection}[1]{\projectionop_\atom{#1}}
 
+%
 \newcommand{\selectionop}{\sigma}
 \newcommand{\selection}[1]{\selectionop_\atom{#1}}
 
+%
 \newcommand{\renameop}{\rho}
 \newcommand{\rename}[1]{\renameop_\atom{#1}}
 
+%
 \newcommand{\groupingop}{\gamma}
 \newcommand{\grouping}[1]{\groupingop_\atom{#1}}
 
+% top/skip/limit operators
 \newcommand{\topop}{\lambda}
 \newcommand{\topp}[2]{\topop_{#1}^{#2}}
 \newcommand{\skipp}[1]{\topop^{#1}}
@@ -80,7 +110,7 @@
 \newcommand{\unwindop}{\omega}
 \newcommand{\unwind}[2]{\unwindop_{#1}^{#2}}
 
-% binary operators
+%%%%%%%%%% binary operators %%%%%%%%%%
 
 \newcommand{\joinop}{\bowtie}
 \newcommand{\join}{\joinop}
