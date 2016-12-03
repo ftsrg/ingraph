@@ -35,18 +35,20 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 
 		& \lstinline+()+ & $\getvertices{\_v}{}$ \\ \cline{2-3}
 
-		& \lstinline+(:<v>t1</v>:<v>t2</v>)+ & $\getvertices{\_v}{t1 \land t2 \land \ldots}$ \\ \cline{2-3}
+		& \lstinline+(:types)+ & $\getvertices{\_v}{types}$ \\ \cline{2-3}
 
-		& \lstinline+(<v>v</v>:<v>t1</v>:<v>t2</v>)+ & $\getvertices{v}{t1 \land t2 \land \ldots}$ \\ \cline{2-3}
+		& \lstinline+(<v>v</v>:types)+ & $\getvertices{v}{types}$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>e</v>:<v>l1|...</v>]-(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & \multirow{2}{*}{$\expandboth{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$} \\ \cline{2-2}
-		& \lstinline+<v>p</v><-[<v>e</v>:<v>l1|...</v>]->(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & \\ \cline{2-3}
+		% expand operators
+		& \lstinline+<v>p</v>-[<v>e</v>:<v>labels</v>]-(<v>w</v>:types...)+ & \multirow{2}{*}{$\expandboth{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$} \\ \cline{2-2}
 
-		& \lstinline+<v>p</v>-[<v>e</v>:<v>l1|...</v>]->(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & $\expandout{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>p</v><-[<v>e</v>:<v>labels</v>]->(<v>w</v>:types...)+ & \\ \cline{2-3}
 
-		& \lstinline+<v>p</v><-[<v>e</v>:<v>l1|...</v>]-(<v>w</v>:<v>t1</v>:<v>t2</v>...)+ & $\expandin{v}{w}{t1 \land t2 \land \ldots}{e}{l1 \lor \ldots} (\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>p</v>-[<v>e</v>:<v>labels</v>]->(<v>w</v>:types...)+ & $\expandout{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>l1|...</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{t1 \land t2 \land \ldots}{E}{l1 \lor \ldots}(\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>p</v><-[<v>e</v>:<v>labels</v>]-(<v>w</v>:types...)+ & $\expandin{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>p</v>-[<v>labels</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{max}(\atom{p})$ \\ \cline{2-3}
 
 		\hline \multicolumn{3}{|l|}{Combining and filtering pattern matches } \\ \cline{2-3}
 

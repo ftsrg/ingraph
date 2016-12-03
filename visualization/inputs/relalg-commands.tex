@@ -31,6 +31,8 @@
 %%%%%%%%%% unary operators %%%%%%%%%%
 \newcommand{\nagivationbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
 
+\newcommand{\kleenestar}{\,\,\ast}
+
 % expand operators
 \newcommand{\expandedgevariable}[4]{
 	\left[
@@ -38,9 +40,9 @@
 	  \ifstrequal{#3}{1}{
 	  	\ifstrequal{#4}{1}
 	  	{} % minHops = 1 and maxHops = 1 -> write nothing
-	    {\ast \atom{#3} \ldots \atom{\infty}} % minHops = 1 and maxHops != 1
+	    {\kleenestar \atom{#3} \ldots \atom{\infty}} % minHops = 1 and maxHops != 1
 	  }{
-	  {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1
+	  {\kleenestar \atom{#3} \ldots \atom{#4}} % minHops != 1
 %	    \ifstrequal{#4}{1}
 %	    {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1 and maxHops = 1
 %	    {\ast \atom{#3} \ldots \atom{#4}} % minHops != 1 and maxHops != 1
