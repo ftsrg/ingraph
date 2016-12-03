@@ -14,7 +14,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   import TestUtil._
 
-  "HashJoiner" must {
+  "AntiJoin" must {
     "do simple antijoins 0" in {
       val prim = ChangeSet(
         positive = Vector(tuple(1, 2), tuple(1, 3), tuple(1, 4))
@@ -51,7 +51,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       joiner ! Primary(prim)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2))))
 
-      // TODO uncomment this after refactoring
+      // TODO fix incremental maintenance
 //      joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 8), tuple(3, 9))))
 //      expectMsg(ChangeSet(negative = Vector(tuple(1, 2))))
     }

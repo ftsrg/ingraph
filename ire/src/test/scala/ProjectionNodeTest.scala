@@ -17,7 +17,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  "A Trimmer" must {
+  "Projection" must {
     "select the values" in {
       val changes = ChangeSet(
         positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)),

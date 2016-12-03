@@ -18,7 +18,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
     TestKit.shutdownActorSystem(system)
   }
 
-  "A HashJoin" must {
+  "Join" must {
     "join the values" in {
       val prim = ChangeSet(
         positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))

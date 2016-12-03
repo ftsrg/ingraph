@@ -17,7 +17,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
-  "alpha nodes" must {
+  "Unary nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new ProductionNode("alpha test", 2)))
@@ -42,7 +42,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       assert(Await.result(future, Duration(1,HOURS)) == expected)
     }
   }
-  "beta nodes" must {
+  "Binary nodes" must {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new ProductionNode("")), "Production")
@@ -77,7 +77,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       })
     }
   }
-  "node splitting" should {
+  "Node splitting" should {
     "work" in {
 
     }
