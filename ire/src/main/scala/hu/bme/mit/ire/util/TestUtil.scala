@@ -1,3 +1,5 @@
+package hu.bme.mit.ire.util
+
 import hu.bme.mit.ire.datatypes.TupleType
 
 object TestUtil {

@@ -1,4 +1,4 @@
-import TestUtil._
+import hu.bme.mit.ire.util.TestUtil._
 import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.ChangeSet

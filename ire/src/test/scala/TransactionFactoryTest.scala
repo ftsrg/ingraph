@@ -1,4 +1,4 @@
-import TestUtil._
+import hu.bme.mit.ire.util.TestUtil._
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.TransactionFactory
