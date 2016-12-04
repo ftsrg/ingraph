@@ -98,7 +98,7 @@ abstract class NavigationOperator extends UnaryOperator {
 	Direction direction
 	refers VertexVariable sourceVertexVariable
 	refers EdgeVariable edgeVariable
-	refers VertexVariable targetVertexVariable	
+	refers VertexVariable targetVertexVariable
 }
 
 enum MaxHopsType {
@@ -107,7 +107,7 @@ enum MaxHopsType {
 
 class MaxHops {
 	MaxHopsType hopsType
-	Integer hops	
+	Integer hops
 }
 
 class ExpandOperator extends NavigationOperator {
@@ -185,7 +185,7 @@ class LeftOuterJoinOperator extends AbstractJoinOperator {
 class AntiJoinOperator extends AbstractJoinOperator {
 }
 
-class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+class UnionOperator extends CommutativeBinaryOperator, AssociativeBinaryOperator {
 	Boolean bag // set or bag union
 }
 
