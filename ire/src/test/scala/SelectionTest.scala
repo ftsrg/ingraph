@@ -4,10 +4,10 @@ import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.TupleType
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{Equality, InequalityNode, SelectionNode}
+import hu.bme.mit.ire.nodes.unary.{EqualityNode, InequalityNode, SelectionNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-class SelectionTests(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class SelectionTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -33,7 +33,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "check equality properly" in {
       val changeSet = ChangeSet(Vector(tuple(0, 2, 1), tuple(0, 0, 0), tuple(0, 2, 0)))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val equalityChecker = system.actorOf(Props(new Equality(echoActor ! _, 0, Vector(1, 2))))
+      val equalityChecker = system.actorOf(Props(new EqualityNode(echoActor ! _, 0, Vector(1, 2))))
 
       equalityChecker ! changeSet
       expectMsg(ChangeSet(Vector(tuple(0, 0, 0))))
