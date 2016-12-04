@@ -1,4 +1,7 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.unary
+
+import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 /**
   * Created by wafle on 27/12/15.

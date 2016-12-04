@@ -1,9 +1,11 @@
 
+import TestUtil._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire._
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.nodes.unary.{Equality, InequalityNode, SelectionNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import TestUtil._
 
 /**
  * Created by Maginecz on 4/10/2015.

@@ -2,12 +2,14 @@
   * Created by Maginecz on 3/21/2015.
   */
 
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActorRef, TestActors, TestKit}
-import hu.bme.mit.ire._
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-
 import TestUtil._
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
+import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
+import hu.bme.mit.ire.util.utils
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
