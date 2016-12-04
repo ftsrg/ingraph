@@ -3,9 +3,6 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-/**
-  * Created by wafle on 27/12/15.
-  */
 abstract class ProjectionImpl(val selectionVector: Vector[Any]) extends UnaryNode {
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
@@ -18,4 +15,3 @@ abstract class ProjectionImpl(val selectionVector: Vector[Any]) extends UnaryNod
 class ProjectionNode(override val next: (ReteMessage) => Unit,
                      override val selectionVector: Vector[Any])
   extends ProjectionImpl(selectionVector) with SingleForwarder {}
-

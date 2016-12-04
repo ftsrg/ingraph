@@ -3,9 +3,6 @@ import org.scalatest.WordSpec
 
 import scala.collection.mutable
 
-/**
- * Created by wafle on 8/30/2015.
- */
 class IterableMultiMapTest extends WordSpec{
   "IterableMultiMap.unzip" should {
     "return the right number of values" in {

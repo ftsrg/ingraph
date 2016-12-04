@@ -7,9 +7,6 @@ import hu.bme.mit.ire.messages._
 import scala.collection.mutable
 import scala.concurrent.Promise
 
-/**
-  * Created by wafle on 27/12/15.
-  */
 class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) extends Actor {
   val log = context.system.log
 

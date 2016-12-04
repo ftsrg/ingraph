@@ -7,9 +7,6 @@ import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{Equality, InequalityNode, SelectionNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-/**
- * Created by Maginecz on 4/10/2015.
- */
 class SelectionTests(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 

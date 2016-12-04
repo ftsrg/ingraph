@@ -6,9 +6,6 @@ import hu.bme.mit.ire.{ForkingForwarder, _}
 
 import scala.collection.mutable
 
-/**
-  * Created by wafle on 12/25/2015.
-  */
 class JoinNode(override val next: (ReteMessage) => Unit,
                override val primarySelector: Vector[Any],
                override val secondarySelector: Vector[Any]

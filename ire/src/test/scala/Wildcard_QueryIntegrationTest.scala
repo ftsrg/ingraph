@@ -7,9 +7,6 @@ import hu.bme.mit.ire.trainbenchmark._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.TimeLimits
 
-/**
- * Created by wafle on 12/09/15.
- */
 class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
   class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))

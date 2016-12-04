@@ -1,7 +1,3 @@
-/**
-  * Created by Maginecz on 3/21/2015.
-  */
-
 import TestUtil._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}

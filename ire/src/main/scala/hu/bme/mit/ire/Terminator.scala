@@ -10,9 +10,6 @@ import hu.bme.mit.ire.util.AtomicUniqueCounter
 import scala.collection.mutable
 import scala.concurrent.{Future, Promise}
 
-/**
-  * Created by wafle on 27/12/15.
-  */
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage with Serializable {
   var lastMessageID = -1
 
@@ -71,4 +68,3 @@ trait TerminatorHandler {
     terminatorCount(terminator.messageID) = count
   }
 }
-

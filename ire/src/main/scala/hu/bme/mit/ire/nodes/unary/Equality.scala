@@ -4,9 +4,6 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.TupleType
 import hu.bme.mit.ire.messages.ReteMessage
 
-/**
-  * Created by wafle on 12/25/2015.
-  */
 class Equality(override val next: (ReteMessage) => Unit,
                val nodeIndex: Int, val equals: Vector[Int],
                override val expectedTerminatorCount:Int = 1) extends

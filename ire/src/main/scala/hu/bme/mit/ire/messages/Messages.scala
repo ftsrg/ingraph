@@ -5,9 +5,6 @@ import hu.bme.mit.ire.datatypes.TupleType
 
 import scala.concurrent.Promise
 
-/**
-  * Created by wafle on 12/25/2015.
-  */
 class ReteMessage() {}
 
 case class ChangeSet(positive: Vector[TupleType] = Vector(), negative: Vector[TupleType] = Vector())
