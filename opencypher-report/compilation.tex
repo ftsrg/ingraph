@@ -48,7 +48,9 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 
 		& \lstinline+<v>p</v><-[<v>e</v>:<v>labels</v>]-(<v>w</v>:types...)+ & $\expandin{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>labels</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{max}(\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>p</v>-[<v>E</v>:<v>labels</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{max}(\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>p</v>-[<v>E</v>:<v>labels</v>*]->(<v>w</v>:<v>t2</v>)+ & $\transitiveclosureout{v}{w}{types}{E}{labels}(\atom{p})$ \\ \cline{2-3}
 
 		\hline \multicolumn{3}{|l|}{Combining and filtering pattern matches } \\ \cline{2-3}
 
@@ -90,11 +92,11 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 		& \lstinline+LIMIT <v>l</v>+ & $\limit{l}(r)$ \\ \cline{2-3}
 
 		& \lstinline+SKIP <v>s</v>+ & $\skipp{s}(r)$ \\ \cline{2-3}
-		
+
 		& \lstinline+SKIP <v>s</v> LIMIT <v>l</v>+ & $\topp{l}{s}(r)$ \\ \cline{2-3}
-		
+
 		\hline \multicolumn{3}{|l|}{Combining results } \\ \cline{2-3}
-		
+
 		& \lstinline+<v>query1</v> UNION <v>query2</v>+ & $r_1 \union r_2$ \\ \cline{2-3}
 
 		& \lstinline+<v>query1</v> UNION ALL <v>query2</v>+ & $r_1 \bagunion r_2$ \\ \hline
