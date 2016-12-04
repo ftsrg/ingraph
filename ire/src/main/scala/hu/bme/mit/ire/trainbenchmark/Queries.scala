@@ -3,8 +3,8 @@ package hu.bme.mit.ire.trainbenchmark
 import akka.actor._
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.listeners.{AddListener, ChangeListener}
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{AddListener, ChangeListener}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
