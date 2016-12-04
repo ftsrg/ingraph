@@ -23,6 +23,8 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
       val sec = ChangeSet(
         positive = Vector(Map(1 -> 15, 2 -> 16, 4 -> 13))
+        //positive = Vector(tuple(0, 15, 16, 0, 13))
+
       )
       val primarySel = Vector(0, 1)
       val secondarySel = Vector(1, 2)

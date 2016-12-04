@@ -2,6 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.Actor
 import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.listeners.{AddListener, ChangeListener}
 import hu.bme.mit.ire.messages._
 
 import scala.collection.mutable

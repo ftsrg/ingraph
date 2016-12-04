@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.nodes.unary
+package hu.bme.mit.ire.listeners
 
 import hu.bme.mit.ire.datatypes.TupleType
 
