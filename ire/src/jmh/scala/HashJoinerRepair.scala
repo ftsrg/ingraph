@@ -3,7 +3,10 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.utils.conversions._
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.nodes.binary.NaturalJoinNode
+import hu.bme.mit.ire.nodes.unary.ProductionNode
+import hu.bme.mit.ire.util.utils.conversions._
 import org.openjdk.jmh.annotations._
 
 import scala.concurrent.Await

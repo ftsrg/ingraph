@@ -1,4 +1,8 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.binary
+
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
+import hu.bme.mit.ire.{ForkingForwarder, _}
 
 import scala.collection.mutable
 

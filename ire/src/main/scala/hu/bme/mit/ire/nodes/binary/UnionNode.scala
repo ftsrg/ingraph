@@ -1,4 +1,8 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.binary
+
+import hu.bme.mit.ire._
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 import scala.collection.mutable
 
@@ -10,9 +14,6 @@ class UnionNode(override val next: (ReteMessage) => Unit,
   def onUpdate(changeSet: ChangeSet) {
     val positive = changeSet.positive
     val negative = changeSet.negative
-
-    println(positive)
-    println(negative)
 
     val forwardPositive = for {
       tuple <- positive if !result.contains(tuple)

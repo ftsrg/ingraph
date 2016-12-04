@@ -1,6 +1,8 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{Actor, Stash}
+import hu.bme.mit.ire._
+import hu.bme.mit.ire.messages._
 
 /**
   * Created by wafle on 12/25/2015.

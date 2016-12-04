@@ -1,8 +1,9 @@
+import TestUtil._
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{ChangeSet, ProjectionNode}
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.nodes.unary.ProjectionNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import TestUtil._
 
 /**
  * Created by Maginecz on 3/16/2015.

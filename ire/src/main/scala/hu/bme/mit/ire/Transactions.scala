@@ -1,5 +1,8 @@
 package hu.bme.mit.ire
 
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.ChangeSet
+
 import scala.collection.mutable
 
 trait Transaction extends AutoCloseable {

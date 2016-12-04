@@ -1,9 +1,12 @@
+import TestUtil._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.utils.conversions._
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
+import hu.bme.mit.ire.util.utils.conversions._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import TestUtil._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, _}

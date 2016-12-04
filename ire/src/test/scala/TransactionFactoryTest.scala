@@ -1,8 +1,9 @@
+import TestUtil._
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{ChangeSet, TransactionFactory}
+import hu.bme.mit.ire.TransactionFactory
+import hu.bme.mit.ire.messages.ChangeSet
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import TestUtil._
 
 /**
  * Created by janosmaginecz on 05/05/15.

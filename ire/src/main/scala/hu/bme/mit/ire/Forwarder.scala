@@ -1,5 +1,8 @@
 package hu.bme.mit.ire
 
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
+
 /**
   * Created by wafle on 12/25/2015.
   */

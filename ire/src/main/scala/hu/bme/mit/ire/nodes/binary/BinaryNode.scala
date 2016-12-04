@@ -1,29 +1,25 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.binary
 
 import akka.actor.{Actor, Stash}
-
-/**
-  * Created by wafle on 12/25/2015.
-  */
-
-case class Primary(value: ReteMessage) extends ReteMessage
-
-case class Secondary(value: ReteMessage) extends ReteMessage
+import hu.bme.mit.ire._
+import hu.bme.mit.ire.messages._
 
 abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
+
   def onPrimary(changeSet: ChangeSet)
 
   def onSecondary(changeSet: ChangeSet)
 
   var primaryPause: Option[Pause] = None
   var secondaryPause: Option[Pause] = None
+
   override def receive: Actor.Receive = {
     case Primary(reteMessage: ReteMessage) => {
       primaryPause match {
         case Some(pause) => {
           reteMessage match {
-            case resume: Resume =>{
+            case resume: Resume => {
               if (resume.messageID == pause.messageID)
                 primaryPause = None
               if (secondaryPause.isEmpty)
@@ -46,10 +42,10 @@ abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor wi
       }
     }
     case Secondary(reteMessage: ReteMessage) => {
-      secondaryPause match  {
+      secondaryPause match {
         case Some(pause) => {
           reteMessage match {
-            case resume: Resume =>{
+            case resume: Resume => {
               if (resume.messageID == pause.messageID)
                 secondaryPause = None
               if (primaryPause.isEmpty)

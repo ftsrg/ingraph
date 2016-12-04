@@ -1,6 +1,7 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.messages
 
 import akka.actor.ActorRef
+import hu.bme.mit.ire.datatypes.TupleType
 
 import scala.concurrent.Promise
 

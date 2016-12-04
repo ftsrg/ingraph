@@ -1,6 +1,8 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.Actor
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages._
 
 import scala.collection.mutable
 import scala.concurrent.Promise
@@ -60,20 +62,4 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
     case AddListener(listener) =>
       listeners += listener
   }
-}
-
-case class AddListener(listener: ChangeListener)
-
-abstract class ChangeListener {
-  val positive = new mutable.ListBuffer[TupleType]
-  val negative = new mutable.ListBuffer[TupleType]
-  def added(tuple: TupleType) = positive += tuple
-  def removed(tuple: TupleType) = negative += tuple
-  def terminated() = {
-    listener(positive.toList, negative.toList)
-    positive.clear()
-    negative.clear()
-  }
-
-  def listener(positive: List[TupleType], negative: List[TupleType])
 }

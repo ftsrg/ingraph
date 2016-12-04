@@ -1,6 +1,7 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire._
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.nodes.binary.UnionNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class UnionNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender

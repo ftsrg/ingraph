@@ -1,7 +1,8 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.{ChangeSet, SelectionNode, _}
-import org.scalactic.TolerantNumerics
+import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.nodes.unary.{CountNode, SumNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.Duration

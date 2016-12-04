@@ -1,9 +1,11 @@
+import TestUtil._
 import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire._
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.trainbenchmark._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.TimeLimits
-import TestUtil._
 
 /**
  * Created by wafle on 12/09/15.

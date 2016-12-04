@@ -1,4 +1,4 @@
-package hu.bme.mit.ire
+package hu.bme.mit.ire.util
 
 object GenericMath {
   def plus(a: Any, b: Any): Any = a match {
