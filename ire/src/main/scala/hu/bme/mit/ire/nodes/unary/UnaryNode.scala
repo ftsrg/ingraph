@@ -4,9 +4,6 @@ import akka.actor.{Actor, Stash}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages._
 
-/**
-  * Created by wafle on 12/25/2015.
-  */
 abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor with Forwarder with Stash with TerminatorHandler {
   val log = context.system.log
   val name = self.path.name

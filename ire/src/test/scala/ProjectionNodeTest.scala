@@ -5,10 +5,6 @@ import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.ProjectionNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-/**
- * Created by Maginecz on 3/16/2015.
- */
-
 class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
 

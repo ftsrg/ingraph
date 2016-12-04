@@ -5,9 +5,6 @@ import hu.bme.mit.ire.TransactionFactory
 import hu.bme.mit.ire.messages.ChangeSet
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-/**
- * Created by janosmaginecz on 05/05/15.
- */
 class TransactionFactoryTest (_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
   def this() = this(ActorSystem("MySpec"))
