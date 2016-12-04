@@ -13,7 +13,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  import TestUtil._
+  import hu.bme.mit.ire.util.TestUtil._
 
   "Union" must {
     "do simple unions 0" in {

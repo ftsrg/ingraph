@@ -14,7 +14,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     TestKit.shutdownActorSystem(system)
   }
 
-  import TestUtil._
+  import hu.bme.mit.ire.util.TestUtil._
 
   "AntiJoin" must {
     "do simple antijoins 0" in {

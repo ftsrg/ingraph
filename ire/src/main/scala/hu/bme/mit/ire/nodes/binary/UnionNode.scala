@@ -6,8 +6,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 import scala.collection.mutable
 
-class UnionNode(override val next: (ReteMessage) => Unit,
-                override val expectedTerminatorCount: Int = 2) extends BinaryNode with SingleForwarder  {
+class UnionNode(override val next: (ReteMessage) => Unit) extends BinaryNode with SingleForwarder  {
 
   val result = mutable.Set[TupleType]()
 

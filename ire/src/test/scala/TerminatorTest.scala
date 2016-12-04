@@ -1,4 +1,4 @@
-import TestUtil._
+import hu.bme.mit.ire.util.TestUtil._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
@@ -21,7 +21,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new ProductionNode("alpha test", 2)))
-      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true, expectedTerminatorCount = 2)))
+//      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true, expectedTerminatorCount = 2))) // TODO wtf
+      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true)))
       val input1 = system.actorOf(Props(new SelectionNode(production ! _, c => true)))
       input1 ! ChangeSet(positive = Vector(tuple(15)))
       input1 ! ChangeSet(positive = Vector(tuple(19)))

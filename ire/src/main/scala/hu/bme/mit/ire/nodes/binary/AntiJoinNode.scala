@@ -8,8 +8,7 @@ import scala.collection.mutable
 
 class AntiJoinNode(override val next: (ReteMessage) => Unit,
                    val primarySelector: Vector[Any],
-                   val secondarySelector: Vector[Any],
-                   override val expectedTerminatorCount:Int = 2)  extends BinaryNode with SingleForwarder  {
+                   val secondarySelector: Vector[Any])  extends BinaryNode with SingleForwarder  {
 
 
   val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]

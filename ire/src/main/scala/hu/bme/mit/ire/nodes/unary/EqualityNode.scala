@@ -5,8 +5,7 @@ import hu.bme.mit.ire.datatypes.TupleType
 import hu.bme.mit.ire.messages.ReteMessage
 
 class EqualityNode(override val next: (ReteMessage) => Unit,
-                   val nodeIndex: Int, val equals: Vector[Int],
-                   override val expectedTerminatorCount:Int = 1) extends
+                   val nodeIndex: Int, val equals: Vector[Int]) extends
 SelectionNode(next, condition = (node: TupleType) => {
   equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
 }

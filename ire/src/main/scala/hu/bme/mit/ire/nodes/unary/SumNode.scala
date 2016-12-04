@@ -9,8 +9,7 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 class SumNode(override val next: (ReteMessage) => Unit,
-              val aggregationKeys: Vector[Any], val sumKey: Any, as: String,
-              override val expectedTerminatorCount:Int = 1) extends UnaryNode with SingleForwarder {
+              val aggregationKeys: Vector[Any], val sumKey: Any, as: String) extends UnaryNode with SingleForwarder {
   val sums = new mutable.HashMap[Vector[Any], Any].withDefault(d => 0)
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = new mutable.HashMap[Vector[Any], Any]
