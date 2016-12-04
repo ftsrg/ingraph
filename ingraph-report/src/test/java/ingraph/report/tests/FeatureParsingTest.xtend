@@ -24,10 +24,10 @@ import org.junit.Test
 
 class FeatureParsingTest {
 
-	val RelalgTreeSerializer treeSerializer = new RelalgTreeSerializer
+	val treeSerializer = new RelalgTreeSerializer
 	
-	val RelalgSerializerConfig config = RelalgSerializerConfig.builder.build
-	val RelalgExpressionSerializer expressionSerializer = new RelalgExpressionSerializer(config)
+	val config = RelalgSerializerConfig.builder.build
+	val expressionSerializer = new RelalgExpressionSerializer(config)
 	extension SchemaInferencer inferencer = new SchemaInferencer
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 

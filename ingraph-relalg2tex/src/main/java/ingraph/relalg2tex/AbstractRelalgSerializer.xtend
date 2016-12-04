@@ -49,7 +49,7 @@ abstract class AbstractRelalgSerializer {
 	protected val RelalgSerializerConfig config
 
 	protected new() {
-		this.config = RelalgSerializerConfig.build[]
+		this.config = RelalgSerializerConfig.builder.build
 	}
 
 	protected new(RelalgSerializerConfig config) {
