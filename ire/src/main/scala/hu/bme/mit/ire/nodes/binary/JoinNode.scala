@@ -49,26 +49,23 @@ abstract class JoinNodeImpl(val primaryTupleWidth: Int, val secondaryTupleWidth:
       otherTuple ++ extract(tuple, secondaryMaskInverse)
   }
 
-  def join(delta: ChangeSet, slotIndexer: Indexer, otherIndexer: Indexer, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
-    // calculate the tuples based on the other slot's indexer
-    println(delta.positive)
-
-    val joinedPositiveTuples: Vector[Tuple] = for {
-      tuple <- delta.positive
+  def joinTuples(tuples: Vector[Tuple], otherIndexer: Indexer, slotMask: Mask, slot: Slot): Vector[Tuple] = {
+    for {
+      tuple <- tuples
       joinAttributes = slotMask.map(i => tuple(i))
       if otherIndexer.contains(joinAttributes)
-        otherTupleFull <- otherIndexer(joinAttributes)
+      otherTupleFull <- otherIndexer(joinAttributes)
     } yield combine(tuple, otherTupleFull, slot)
+  }
 
-    val joinedNegativeTuples: Vector[Tuple] = Vector[Tuple]()
+  def join(delta: ChangeSet, slotIndexer: Indexer, otherIndexer: Indexer, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
+    // join the tuples based on the other slot's indexer
+    val joinedPositiveTuples: Vector[Tuple] = joinTuples(delta.positive, otherIndexer, slotMask, slot)
+    val joinedNegativeTuples: Vector[Tuple] = joinTuples(delta.negative, otherIndexer, slotMask, slot)
 
     // maintain the content of the slot's indexer
-    for (tuple <- delta.positive) {
-      slotIndexer.addBinding(extract(tuple, slotMask), tuple)
-    }
-    for (tuple <- delta.negative) {
-      slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
-    }
+    for (tuple <- delta.positive) slotIndexer.addBinding   (extract(tuple, slotMask), tuple)
+    for (tuple <- delta.negative) slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
 
     forward(ChangeSet(joinedPositiveTuples, joinedNegativeTuples))
   }
