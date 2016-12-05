@@ -1,5 +1,6 @@
 package hu.bme.mit.ire
 
 package object datatypes {
-  type TupleType = Map[Any, Any]
+  type TupleType = IndexedSeq[Any]
+  type Mask = IndexedSeq[Int]
 }
