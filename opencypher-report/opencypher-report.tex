@@ -51,7 +51,11 @@
 \bibliographystyle{abbrv}
 \bibliography{bib}
 
-\appendix
-%\input{acceptance-tests}
+\IfFileExists{./do-not-include-acceptance-tests}{
+	% do nothing
+}{
+	\appendix
+	\input{acceptance-tests}
+}
 
 \end{document}
