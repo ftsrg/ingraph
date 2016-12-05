@@ -15,9 +15,6 @@ class JoinNode(override val next: (ReteMessage) => Unit,
               ) extends JoinNodeImpl(primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask) with SingleForwarder {
 }
 
-//class NaturalJoinNode(override val next: (ReteMessage) => Unit, val selector: Vector[Any]
-//                     ) extends JoinNodeImpl(selector, selector) with SingleForwarder {}
-//
 //class ParallelJoinNode(override val children: Vector[(ReteMessage) => Unit],
 //                       override val primaryMask: Mask,
 //                       override val secondaryMask: Mask,
@@ -30,8 +27,10 @@ class JoinNode(override val next: (ReteMessage) => Unit,
 //  override def forward(t: TerminatorMessage) = super[ForkingForwarder].forward(t)
 //}
 
-abstract class JoinNodeImpl(val primaryTupleWidth: Int, val secondaryTupleWidth: Int,
-                            val primaryMask: Mask, val secondaryMask: Mask) extends BinaryNode {
+abstract class JoinNodeImpl(val primaryTupleWidth: Int,
+                            val secondaryTupleWidth: Int,
+                            val primaryMask: Mask,
+                            val secondaryMask: Mask) extends BinaryNode {
   val primaryIndexer:   Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
   val secondaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
 
@@ -72,67 +71,10 @@ abstract class JoinNodeImpl(val primaryTupleWidth: Int, val secondaryTupleWidth:
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     join(changeSet, primaryIndexer, secondaryIndexer, primaryMask, secondaryMaskInverse, Primary)
-
-    //    val joinedPositive = for {
-    //      primary <- positive
-    //      key = primarySelector.map(i => primary(i))
-    //      if secondaryIndexer.contains(key)
-    //      secondary <- secondaryIndexer(key)
-    //    } yield primary ++ secondary.filterKeys(k => !primary.keySet.contains(k))
-    //
-    //    val joinedNegative = for {
-    //      primary <- negative
-    //      key = primarySelector.map(i => primary(i))
-    //      if secondaryIndexer.contains(key)
-    //      secondary <- secondaryIndexer(key)
-    //    } yield primary ++ secondary.filterKeys(k => !primary.keySet.contains(k))
-    //
-    //    forward(ChangeSet(joinedPositive, joinedNegative))
-    //    positive.foreach(
-    //      m => {
-    //        val key = primarySelector.map(i => m(i))
-    //        primaryIndexer.addBinding(key, m)
-    //      }
-    //    )
-    //    negative.foreach(
-    //      m => {
-    //        val key = primarySelector.map(i => m(i))
-    //        primaryIndexer.removeBinding(key, m)
-    //      }
-    //    )
   }
 
   def onSecondary(changeSet: ChangeSet): Unit = {
     join(changeSet, secondaryIndexer, primaryIndexer, secondaryMask, primaryMaskInverse, Secondary)
-
-    //    val joinedPositive = for {
-    //      secondary <- positive
-    //      key = secondarySelector.map(i => secondary(i))
-    //      if primaryIndexer.contains(key)
-    //      primary <- primaryIndexer(key)
-    //    } yield primary ++ secondary.filterKeys(k => !primary.keySet.contains(k))
-    //
-    //
-    //    val joinedNegative = for {
-    //      secondary <- negative
-    //      key = secondarySelector.map(i => secondary(i))
-    //      if primaryIndexer.contains(key)
-    //      primary <- primaryIndexer(key)
-    //    } yield primary ++ secondary.filterKeys(k => !primary.keySet.contains(k))
-    //
-    //    forward(ChangeSet(joinedPositive, joinedNegative))
-    //
-    //    positive.foreach(
-    //      m => {
-    //        val key = secondarySelector.map(i => m(i))
-    //        secondaryIndexer.addBinding(key, m) //must be used with multimaps
-    //      }
-    //    )
-    //    negative.foreach(
-    //      m => {
-    //        val key = secondarySelector.map(i => m(i))
-    //        secondaryIndexer.removeBinding(key, m)
-    //      }
-    //    )
   }
+
 }
