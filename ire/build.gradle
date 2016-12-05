@@ -1,12 +1,12 @@
 buildscript {
   repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
+  maven {
+    url "https://plugins.gradle.org/m2/"
+  }
   }
   dependencies {
-    classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
-    classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+  classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+  classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
   }
 }
 
@@ -47,9 +47,9 @@ dependencies {
 
 publishing {
   publications {
-    mavenJava(MavenPublication) {
-      from components.java
-    }
+  mavenJava(MavenPublication) {
+    from components.java
+  }
   }
 }
 
@@ -59,16 +59,16 @@ bintray {
   publish = true
   override = true
   pkg {
-    repo = 'maven'
-    name = 'ire'
-    userOrg = 'ftsrg'
-    licenses = ['EPL-1.0']
-    vcsUrl = 'https://github.com/FTSRG/ire.git'
-    version {
-      name = '0.1.0'
-      desc = 'Initial version'
-      released = new Date()
-    }
+  repo = 'maven'
+  name = 'ire'
+  userOrg = 'ftsrg'
+  licenses = ['EPL-1.0']
+  vcsUrl = 'https://github.com/FTSRG/ire.git'
+  version {
+    name = '0.1.0'
+    desc = 'Initial version'
+    released = new Date()
+  }
   }
   publications = ['mavenJava']
 }
