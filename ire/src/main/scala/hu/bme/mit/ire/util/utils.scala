@@ -19,8 +19,9 @@ object utils {
       pos <- cs.positive.permutations;
       neg <- cs.negative.permutations
     ) yield ChangeSet(pos, neg)
-     values.toSeq
+    values.toSeq
   }
+
   object conversions {
     implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = base ! _
 
@@ -33,6 +34,7 @@ object utils {
         base ! Secondary(reteMessage)
       }
     }
+
   }
 
 }
@@ -43,11 +45,11 @@ class AtomicUniqueCounter {
   def getNext = counter.getAndIncrement()
 }
 
-trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B]{
-  def multiUnzip : (Iterable[A], Iterable[B]) = {
+trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B] {
+  def multiUnzip: (Iterable[A], Iterable[B]) = {
     val b1 = genericBuilder[A]
     val b2 = genericBuilder[B]
-    this.foreach ( keyValueSet => {
+    this.foreach(keyValueSet => {
       keyValueSet._2.foreach(value => {
         b1 += keyValueSet._1
         b2 += value

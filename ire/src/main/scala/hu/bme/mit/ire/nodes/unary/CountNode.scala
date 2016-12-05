@@ -10,6 +10,7 @@ import scala.collection.mutable
 class CountNode(override val next: (ReteMessage) => Unit,
                 val keys: Vector[Any], as: String) extends UnaryNode with SingleForwarder {
   val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
+
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = new mutable.HashMap[Vector[Any], Int]
 

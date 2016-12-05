@@ -6,7 +6,7 @@ import hu.bme.mit.ire.util.utils
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
-with WordSpecLike with Matchers with BeforeAndAfterAll {
+  with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
 
@@ -54,8 +54,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2))))
 
       // TODO fix incremental maintenance
-//      joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 8), tuple(3, 9))))
-//      expectMsg(ChangeSet(negative = Vector(tuple(1, 2))))
+      //      joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 8), tuple(3, 9))))
+      //      expectMsg(ChangeSet(negative = Vector(tuple(1, 2))))
     }
 
     "do simple antijoins 2" in {
@@ -95,7 +95,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       joiner ! Secondary(sec)
       expectMsgAnyOf(utils.changeSetPermutations(
-        ChangeSet(negative = Vector(tuple(5, 6, 7), tuple(10, 11, 7)))):_*)
+        ChangeSet(negative = Vector(tuple(5, 6, 7), tuple(10, 11, 7)))): _*)
     }
     "do antijoin 2" in {
       val prim = ChangeSet(
@@ -111,7 +111,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       joiner ! Primary(prim)
       expectMsgAnyOf(
-        utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 5), tuple(2, 6)))):_*
+        utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 5), tuple(2, 6)))): _*
       )
 
       joiner ! Secondary(sec)
@@ -136,7 +136,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2), tuple(3, 4))))
 
       joiner ! Secondary(secondary)
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 2), tuple(3, 4)))):_*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 2), tuple(3, 4)))): _*)
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 5))))
       expectMsg(ChangeSet(positive = Vector(tuple(3, 4))))
@@ -178,7 +178,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       expectMsgAnyOf(
         utils.changeSetPermutations(
           ChangeSet(negative = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3)))
-        ):_*
+        ): _*
       )
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 7))))
@@ -186,25 +186,25 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 8))))
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 9))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))):_*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
 
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 5))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))):_*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(3, 4))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 3), tuple(2, 3)))):_*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 3), tuple(2, 3)))): _*)
 
       joiner ! Primary(ChangeSet(positive = Vector(tuple(4, 3))))
       expectMsg(ChangeSet(positive = Vector(tuple(4, 3))))
 
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(3, 5))))
-      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 3), tuple(2, 3), tuple(4, 3)))):_*)
+      expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 3), tuple(2, 3), tuple(4, 3)))): _*)
 
       joiner ! Primary(ChangeSet(positive = Vector(tuple(7, 4))))
     }
     "do antijoin new 3" in {
       val prim = ChangeSet(
-        positive = Vector(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7),tuple(3, 2, 5, 4))
+        positive = Vector(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))
       )
 
       val primarySel = Vector(1, 3)
@@ -220,7 +220,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-        utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 2, 3, 4),tuple(3, 2, 5, 4),tuple(8, 2, 6, 4)))):_*
+        utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
 
       joiner ! Secondary(ChangeSet(
@@ -230,7 +230,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-          utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 2, 3, 4),tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))):_*
+        utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
     }
   }

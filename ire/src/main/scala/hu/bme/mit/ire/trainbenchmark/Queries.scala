@@ -15,13 +15,14 @@ object TrainbenchmarkQuery {
 }
 
 abstract class TrainbenchmarkQuery {
+  lazy val log = system.log
   val system = TrainbenchmarkQuery.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]
   val terminator: Terminator
   val actors = new collection.mutable.MutableList[ActorRef]()
-  lazy val log = system.log
+
   def getResults(): Set[TupleType] = {
     log.info("termination started")
     val res = Await.result(terminator.send(), timeout)
@@ -40,8 +41,9 @@ abstract class TrainbenchmarkQuery {
     actors += actor
     actor
   }
+
   def shutdown(): Unit = {
-    actors.foreach( actor => actor ! PoisonPill)
+    actors.foreach(actor => actor ! PoisonPill)
   }
 
   def addListener(listener: ChangeListener) = {

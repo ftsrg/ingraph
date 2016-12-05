@@ -6,13 +6,12 @@ import hu.bme.mit.ire.messages._
 
 abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
+  var primaryPause: Option[Pause] = None
+  var secondaryPause: Option[Pause] = None
 
   def onPrimary(changeSet: ChangeSet)
 
   def onSecondary(changeSet: ChangeSet)
-
-  var primaryPause: Option[Pause] = None
-  var secondaryPause: Option[Pause] = None
 
   override def receive: Actor.Receive = {
     case Primary(reteMessage: ReteMessage) => {

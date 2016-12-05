@@ -37,6 +37,7 @@ trait SingleForwarder extends Forwarder {
 
 trait Forwarder {
   val name: String
+
   def forward(cs: ChangeSet)
 
   def forward(terminator: TerminatorMessage)

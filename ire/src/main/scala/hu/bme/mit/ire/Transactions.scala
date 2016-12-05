@@ -7,17 +7,37 @@ import scala.collection.mutable
 
 trait Transaction extends AutoCloseable {
   override def close(): Unit
+
   def add(pred: String, node: TupleType)
+
   def remove(pred: String, node: TupleType)
 }
 
 class TransactionFactory(val messageSize: Int = 16) {
   val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
   val usedIDs = new mutable.HashSet[Long]()
+  val idGenerator = new scala.util.Random
 
   def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
     for ((attribute, func) <- subscriber)
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
+  }
+
+  def newBatchTransaction(): BatchTransaction = {
+    new BatchTransaction()
+  }
+
+  def newContinousTransaction(): ContinuousTransaction = {
+    new ContinuousTransaction(messageSize)
+  }
+
+  def newKey(): Long = {
+    var newId: Long = 0L
+    do {
+      newId = idGenerator.nextLong()
+    } while (usedIDs.contains(newId))
+
+    newId
   }
 
   class BatchTransaction() extends Transaction {
@@ -25,8 +45,8 @@ class TransactionFactory(val messageSize: Int = 16) {
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[TupleType]]
 
     def close(): Unit = {
-      positiveChangeSets.foreach( kv=> subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
-      negativeChangeSets.foreach( kv=> subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
+      positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
+      negativeChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
       positiveChangeSets.clear()
       negativeChangeSets.clear()
     }
@@ -50,7 +70,7 @@ class TransactionFactory(val messageSize: Int = 16) {
     }
   }
 
-  class ContinuousTransaction(messageSize:Int) extends BatchTransaction() {
+  class ContinuousTransaction(messageSize: Int) extends BatchTransaction() {
 
     override def add(pred: String, node: TupleType) = {
       super.add(pred, node)
@@ -67,24 +87,5 @@ class TransactionFactory(val messageSize: Int = 16) {
         negativeChangeSets(pred) = Vector.empty[TupleType]
       }
     }
-  }
-
-  def newBatchTransaction(): BatchTransaction = {
-    new BatchTransaction()
-  }
-
-  def newContinousTransaction(): ContinuousTransaction = {
-    new ContinuousTransaction(messageSize)
-  }
-
-  val idGenerator = new scala.util.Random
-
-  def newKey(): Long = {
-    var newId: Long = 0L
-    do {
-      newId = idGenerator.nextLong()
-    } while (usedIDs.contains(newId))
-
-    newId
   }
 }

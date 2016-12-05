@@ -1,9 +1,9 @@
-import hu.bme.mit.ire.util.TestUtil._
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.TupleType
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
+import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.utils
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -42,7 +42,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primarySel = Vector(2)
       val secondarySel = Vector(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _,primarySel, secondarySel)))
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
 
       joiner ! Primary(ChangeSet(
         positive = Vector(tuple(5, 6, 7), tuple(10, 11, 7))
@@ -68,7 +68,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
 
       joiner ! Secondary(ChangeSet(
-        positive = Vector(Map(0 -> 5, 2 -> 10))
+        positive = Vector(tuple(5, 0, 10))
       )
       )
       expectMsg(ChangeSet(positive = Vector(tuple(1, 5, 10))))
@@ -81,7 +81,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
       joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
+      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 0, 5)))) //Map(0 -> 4, 2 -> 5))))
       expectMsgAnyOf(utils.changeSetPermutations(
         ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
@@ -89,9 +89,9 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       expectMsg(ChangeSet(negative = Vector(tuple(3, 4, 5))))
       joiner ! Primary(ChangeSet(positive = Vector(tuple(3, 4))))
       expectMsg(ChangeSet(positive = Vector(tuple(3, 4, 5))))
-      joiner ! Secondary(ChangeSet(negative = Vector(Map(0 -> 4, 2 -> 5))))
+      joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 0, 5))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
-      joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 4, 2 -> 5))))
+      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 0, 5))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
@@ -104,15 +104,15 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, primarySel, secondarySel,
         hashFunction = (n: TupleType) => n(0).hashCode())))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 2 -> 2))))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 2 -> 3))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 2)))) //Map(0 -> 0, 2 -> 2))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 3)))) //Map(0 -> 1, 2 -> 3))))
 
       forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
       forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
 
-      joinerB ! Secondary(ChangeSet(positive = Vector(Map(0 -> 1, 3 -> 3))))
+      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 0, 3)))) // Map(0 -> 1, 3 -> 3))))
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
-      joinerA ! Secondary(ChangeSet(positive = Vector(Map(0 -> 0, 3 -> 3))))
+      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 0, 3)))) // Map(0 -> 0, 3 -> 3))))
       expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
     }
   }

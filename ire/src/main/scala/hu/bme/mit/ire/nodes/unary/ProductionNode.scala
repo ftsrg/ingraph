@@ -12,14 +12,11 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
   val log = context.system.log
 
   val receivedTerminatorCount = mutable.Map.empty[Int, Int]
-
-  var t0 = System.nanoTime()
-
   val results = new mutable.HashSet[TupleType]
   val terminatorPromises = mutable.Map.empty[Int, Promise[Set[TupleType]]]
   val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
-
   val listeners = new mutable.ListBuffer[ChangeListener]
+  var t0 = System.nanoTime()
 
   def getAndResetElapsedTime(): Long = {
     val t1 = System.nanoTime()

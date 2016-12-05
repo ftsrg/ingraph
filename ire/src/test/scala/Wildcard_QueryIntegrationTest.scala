@@ -1,31 +1,32 @@
-import hu.bme.mit.ire.util.TestUtil._
 import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.trainbenchmark._
+import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.TimeLimits
 
 class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
+
   class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
-    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs:ChangeSet) => forwarder ! cs)
+      "testval" -> ((cs: ChangeSet) => forwarder ! cs)
     )
-    override val terminator: Terminator = Terminator( Vector(forwarder ! _), production)
+    override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
+    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
   }
 
   class TestQuery2 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
+    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
+      "testval" -> ((cs: ChangeSet) => forwarder ! cs),
+      "testval2" -> ((cs: ChangeSet) => forwarder2 ! cs)
+    )
+    override val terminator: Terminator = Terminator(Vector(forwarder ! _, forwarder2 ! _), production)
     val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
     val forwarder2 = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs:ChangeSet) => forwarder ! cs),
-      "testval2" -> ((cs:ChangeSet) => forwarder2 ! cs)
-    )
-    override val terminator: Terminator = Terminator( Vector(forwarder ! _, forwarder2 ! _), production)
   }
 
   "multiple queries" should "work" in {
@@ -66,8 +67,8 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
     tran1.close()
     val res1 = query.getResults()
     assert(res1 == Set(tuple(5, 7), tuple(5, 8)))
-    val beginTime : Long = System.nanoTime()
-    (1 to 5000).foreach( i => {
+    val beginTime: Long = System.nanoTime()
+    (1 to 5000).foreach(i => {
       val tranRemove7 = input.newBatchTransaction()
       tranRemove7.remove("testval", tuple(5, 7))
       tranRemove7.close()
@@ -80,8 +81,8 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
       tranAdd78.add("testval", tuple(5, 7))
       tranAdd78.add("testval", tuple(5, 8))
       tranAdd78.close()
-    } )
-    val endTime : Long = System.nanoTime() - beginTime
+    })
+    val endTime: Long = System.nanoTime() - beginTime
     val avg = endTime / 500 / 3
   }
 }

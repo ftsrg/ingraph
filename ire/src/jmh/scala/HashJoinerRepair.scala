@@ -1,4 +1,5 @@
 package x
+
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
@@ -34,8 +35,8 @@ class HashJoinerRepair {
     val rnd = new Random(256)
     primary = ChangeSet(positive = Vector.fill(size)(tuple(rnd.nextInt(size / 2), rnd.nextDouble())))
     secondary = ChangeSet(positive = Vector.fill(size)(tuple(rnd.nextInt(size / 2), rnd.nextDouble())))
-    val secondaryKeys = secondary.positive.map( s => s(0)).toSet
-    repairSet = ChangeSet(negative = rnd.shuffle(primary.positive.filter( p => secondaryKeys.contains(p(0)))).take(100))
+    val secondaryKeys = secondary.positive.map(s => s(0)).toSet
+    repairSet = ChangeSet(negative = rnd.shuffle(primary.positive.filter(p => secondaryKeys.contains(p(0)))).take(100))
   }
 
   @Setup(Level.Iteration)
@@ -58,6 +59,6 @@ class HashJoinerRepair {
 
   @TearDown(Level.Iteration)
   def tearDown(): Unit = {
-   system.terminate()
+    system.terminate()
   }
 }

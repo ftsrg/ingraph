@@ -54,14 +54,15 @@ object Terminator {
 }
 
 
-
 trait TerminatorHandler {
   val expectedTerminatorCount: Int
   val terminatorCount = new mutable.HashMap[Int, Int]
+
   def forward(terminator: TerminatorMessage)
+
   def handleTerminator(terminator: TerminatorMessage): Unit = {
     val count = terminatorCount.getOrElse(terminator.messageID, 0) + 1
-    if ( count >= expectedTerminatorCount) {
+    if (count >= expectedTerminatorCount) {
       forward(terminator)
       terminatorCount -= terminator.messageID
     }
