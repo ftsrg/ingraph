@@ -1,12 +1,14 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.{Mask, TupleType}
 import hu.bme.mit.ire.messages.ReteMessage
 
+// not sure we need this class - SzG
 class EqualityNode(override val next: (ReteMessage) => Unit,
-                   val nodeIndex: Int, val equals: Vector[Int]) extends
-  SelectionNode(next, condition = (node: TupleType) => {
-    equals.map { i => node(i) }.forall { value => value == node(nodeIndex) }
-  }
+                   val distinguishedElementIndex: Int,
+                   val equals: Mask) extends
+  SelectionNode(
+    next,
+    condition = (tuple: TupleType) => { equals.map { i => tuple(i) }.forall { value => value == tuple(distinguishedElementIndex) } }
   ) with SingleForwarder
