@@ -4,8 +4,7 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
-                            val condition: (Tuple) => Boolean) extends UnaryNode with SingleForwarder {
+class TransitiveClosureNode(override val next: (ReteMessage) => Unit) extends UnaryNode with SingleForwarder {
   def onChangeSet(changeSet: ChangeSet): Unit = {
 
   }
