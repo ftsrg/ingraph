@@ -22,8 +22,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
         positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))
       )
       val sec = ChangeSet(
-        positive = Vector(Map(1 -> 15, 2 -> 16, 4 -> 13))
-        //positive = Vector(tuple(0, 15, 16, 0, 13))
+        positive = Vector(tuple(0, 15, 16, 0, 13))
 
       )
       val primarySel = Vector(0, 1)
@@ -49,7 +48,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
       )
 
-      joiner ! Secondary(ChangeSet(positive = Vector(Map(0 -> 7, 3 -> 8))))
+      joiner ! Secondary(ChangeSet(positive = Vector(tuple(7, 0, 0, 8))))
       expectMsgAnyOf(utils.changeSetPermutations(ChangeSet(
         positive = Vector(tuple(10, 11, 7, 8), tuple(5, 6, 7, 8))
       )
@@ -81,7 +80,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
       joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 0, 5)))) //Map(0 -> 4, 2 -> 5))))
+      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 0, 5))))
       expectMsgAnyOf(utils.changeSetPermutations(
         ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
@@ -104,15 +103,15 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, primarySel, secondarySel,
         hashFunction = (n: TupleType) => n(0).hashCode())))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 2)))) //Map(0 -> 0, 2 -> 2))))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 3)))) //Map(0 -> 1, 2 -> 3))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 2))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 3))))
 
       forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
       forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
 
-      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 0, 3)))) // Map(0 -> 1, 3 -> 3))))
+      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 0, 3))))
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
-      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 0, 3)))) // Map(0 -> 0, 3 -> 3))))
+      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 0, 3))))
       expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
     }
   }

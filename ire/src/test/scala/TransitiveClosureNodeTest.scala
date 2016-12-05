@@ -19,7 +19,7 @@ class TransitiveClosureNodeTestextends(_system: ActorSystem) extends TestKit(_sy
         positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))
       )
       val sec = ChangeSet(
-        positive = Vector(Map(1 -> 15, 2 -> 16, 4 -> 13))
+        positive = Vector()
       )
       val primarySel = Vector(0, 1)
       val secondarySel = Vector(1, 2)
