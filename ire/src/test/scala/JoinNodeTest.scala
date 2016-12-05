@@ -1,6 +1,6 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
 import hu.bme.mit.ire.util.TestUtil._
@@ -102,7 +102,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)))
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, primarySel, secondarySel,
-        hashFunction = (n: TupleType) => n(0).hashCode())))
+        hashFunction = (n: Tuple) => n(0).hashCode())))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 2))))
       forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 3))))
 

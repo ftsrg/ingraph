@@ -1,7 +1,7 @@
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{EqualityNode, InequalityNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
@@ -20,7 +20,7 @@ class SelectionTest(_system: ActorSystem) extends TestKit(_system) with Implicit
     "check the condition properly" in {
       val changeSet = ChangeSet(Vector(tuple(0, "something"), tuple(0, "something else")))
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val condition = (n: TupleType) => {
+      val condition = (n: Tuple) => {
         n(1) == "something"
       }
       val checker = system.actorOf(Props(new SelectionNode(echoActor ! _, condition)))

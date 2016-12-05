@@ -1,6 +1,6 @@
 package hu.bme.mit.ire
 
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 
 import scala.collection.mutable
@@ -8,9 +8,9 @@ import scala.collection.mutable
 trait Transaction extends AutoCloseable {
   override def close(): Unit
 
-  def add(pred: String, node: TupleType)
+  def add(pred: String, node: Tuple)
 
-  def remove(pred: String, node: TupleType)
+  def remove(pred: String, node: Tuple)
 }
 
 class TransactionFactory(val messageSize: Int = 16) {
@@ -41,8 +41,8 @@ class TransactionFactory(val messageSize: Int = 16) {
   }
 
   class BatchTransaction() extends Transaction {
-    val positiveChangeSets = mutable.HashMap.empty[String, Vector[TupleType]]
-    val negativeChangeSets = mutable.HashMap.empty[String, Vector[TupleType]]
+    val positiveChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
+    val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 
     def close(): Unit = {
       positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
@@ -51,20 +51,20 @@ class TransactionFactory(val messageSize: Int = 16) {
       negativeChangeSets.clear()
     }
 
-    def add(pred: String, node: TupleType) = {
+    def add(pred: String, node: Tuple) = {
       if (subscribers.contains(pred)) {
         if (!positiveChangeSets.contains(pred))
-          positiveChangeSets(pred) = Vector.empty[TupleType]
+          positiveChangeSets(pred) = Vector.empty[Tuple]
         positiveChangeSets(pred) +:= node
       }
     }
 
-    def remove(pred: String, node: TupleType) = {
+    def remove(pred: String, node: Tuple) = {
       // DO NOT usedIDs.remove(subj), there are enough long values to go around, that having to deal with transient IDs
       // is not worth it
       if (subscribers.contains(pred)) {
         if (!negativeChangeSets.contains(pred))
-          negativeChangeSets(pred) = Vector.empty[TupleType]
+          negativeChangeSets(pred) = Vector.empty[Tuple]
         negativeChangeSets(pred) +:= node
       }
     }
@@ -72,19 +72,19 @@ class TransactionFactory(val messageSize: Int = 16) {
 
   class ContinuousTransaction(messageSize: Int) extends BatchTransaction() {
 
-    override def add(pred: String, node: TupleType) = {
+    override def add(pred: String, node: Tuple) = {
       super.add(pred, node)
       if (subscribers.contains(pred) && positiveChangeSets(pred).size == messageSize) {
         subscribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
-        positiveChangeSets(pred) = Vector.empty[TupleType]
+        positiveChangeSets(pred) = Vector.empty[Tuple]
       }
     }
 
-    override def remove(pred: String, node: TupleType) = {
+    override def remove(pred: String, node: Tuple) = {
       super.remove(pred, node)
       if (subscribers.contains(pred) && negativeChangeSets(pred).size == messageSize) {
         subscribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
-        negativeChangeSets(pred) = Vector.empty[TupleType]
+        negativeChangeSets(pred) = Vector.empty[Tuple]
       }
     }
   }

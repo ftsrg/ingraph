@@ -2,7 +2,7 @@ package hu.bme.mit.ire.trainbenchmark
 
 import akka.actor._
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.{AddListener, ChangeListener}
 import hu.bme.mit.ire.messages.ChangeSet
 
@@ -23,7 +23,7 @@ abstract class TrainbenchmarkQuery {
   val terminator: Terminator
   val actors = new collection.mutable.MutableList[ActorRef]()
 
-  def getResults(): Set[TupleType] = {
+  def getResults(): Set[Tuple] = {
     log.info("termination started")
     val res = Await.result(terminator.send(), timeout)
     log.info("termination finished")

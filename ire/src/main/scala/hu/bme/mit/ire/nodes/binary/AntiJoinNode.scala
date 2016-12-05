@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.binary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 import scala.collection.mutable
@@ -11,10 +11,10 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
                    val secondarySelector: Vector[Any]) extends BinaryNode with SingleForwarder {
 
 
-  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
-    with mutable.MultiMap[Vector[Any], TupleType]
-  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[TupleType]]
-    with mutable.MultiMap[Vector[Any], TupleType]
+  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[Tuple]]
+    with mutable.MultiMap[Vector[Any], Tuple]
+  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[Tuple]]
+    with mutable.MultiMap[Vector[Any], Tuple]
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val positive = changeSet.positive

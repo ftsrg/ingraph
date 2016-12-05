@@ -1,6 +1,6 @@
 package hu.bme.mit.ire.nodes.binary
 
-import hu.bme.mit.ire.datatypes.{Mask, TupleType}
+import hu.bme.mit.ire.datatypes.{Mask, Tuple}
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
 import hu.bme.mit.ire.{ForkingForwarder, _}
 
@@ -18,9 +18,9 @@ class JoinNode(override val next: (ReteMessage) => Unit,
 class ParallelJoinNode(override val children: Vector[(ReteMessage) => Unit],
                        override val primaryMask: Mask,
                        override val secondaryMask: Mask,
-                       hashFunction: (TupleType) => Int = n => n.hashCode()
+                       hashFunction: (Tuple) => Int = n => n.hashCode()
                       ) extends JoinNodeImpl(primaryMask, secondaryMask) with ForkingForwarder {
-  override def forwardHashFunction(n: TupleType): Int = hashFunction(n)
+  override def forwardHashFunction(n: Tuple): Int = hashFunction(n)
 
   override def forward(cs: ChangeSet) = super[ForkingForwarder].forward(cs)
 
@@ -39,7 +39,7 @@ abstract class JoinNodeImpl(val primaryMask: Mask,
 
   val inverseSecondaryMask = Vector.range(0, secondaryMask.length) filter (i => !secondaryMask.contains(i))
 
-  def join(left: Set[TupleType], right: Set[TupleType]): Set[TupleType] = {
+  def join(left: Set[Tuple], right: Set[Tuple]): Set[Tuple] = {
     val joined = for {
       primaryVec <- left
       key = primaryMask.map(i => primaryVec(i))
