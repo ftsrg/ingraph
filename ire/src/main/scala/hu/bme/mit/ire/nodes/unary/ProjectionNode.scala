@@ -1,17 +1,18 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-abstract class ProjectionImpl(val selectionVector: Vector[Any]) extends UnaryNode {
+abstract class ProjectionImpl(val mask: Mask) extends UnaryNode {
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
-      changeSet.positive.map(m => m.filterKeys(selectionVector.contains)),
-      changeSet.negative.map(m => m.filterKeys(selectionVector.contains))
+      changeSet.positive.map(t => mask.map(i => t(i))),
+      changeSet.negative.map(t => mask.map(i => t(i)))
     ))
   }
 }
 
 class ProjectionNode(override val next: (ReteMessage) => Unit,
-                     override val selectionVector: Vector[Any])
-  extends ProjectionImpl(selectionVector) with SingleForwarder {}
+                     override val mask: Mask)
+  extends ProjectionImpl(mask) with SingleForwarder {}

@@ -1,6 +1,6 @@
 package hu.bme.mit.ire
 
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
 
 trait ForkingForwarder extends Forwarder {
@@ -9,7 +9,7 @@ trait ForkingForwarder extends Forwarder {
   if (children.size < 2)
     throw new IllegalArgumentException("use base class for 1 child node")
 
-  def forwardHashFunction(n: TupleType): Int
+  def forwardHashFunction(n: Tuple): Int
 
   def forward(cs: ChangeSet) = {
     cs.positive.groupBy(

@@ -1,16 +1,16 @@
 package hu.bme.mit.ire.listeners
 
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 
 import scala.collection.mutable
 
 abstract class ChangeListener {
-  val positive = new mutable.ListBuffer[TupleType]
-  val negative = new mutable.ListBuffer[TupleType]
+  val positive = new mutable.ListBuffer[Tuple]
+  val negative = new mutable.ListBuffer[Tuple]
 
-  def added(tuple: TupleType) = positive += tuple
+  def added(tuple: Tuple) = positive += tuple
 
-  def removed(tuple: TupleType) = negative += tuple
+  def removed(tuple: Tuple) = negative += tuple
 
   def terminated() = {
     listener(positive.toList, negative.toList)
@@ -18,5 +18,5 @@ abstract class ChangeListener {
     negative.clear()
   }
 
-  def listener(positive: List[TupleType], negative: List[TupleType])
+  def listener(positive: List[Tuple], negative: List[Tuple])
 }

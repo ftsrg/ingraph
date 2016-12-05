@@ -7,7 +7,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
 
-object utils {
+object Utils {
   def nop(id: String, b: AnyRef) = {}
 
   def idStringToLong(in: String): Long = {

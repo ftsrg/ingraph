@@ -3,7 +3,7 @@ package hu.bme.mit.ire
 import java.io.{IOException, ObjectInputStream, ObjectOutputStream}
 
 import akka.actor.ActorRef
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages._
 import hu.bme.mit.ire.util.AtomicUniqueCounter
 
@@ -13,10 +13,10 @@ import scala.concurrent.{Future, Promise}
 class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => Unit], production: ActorRef) extends ReteMessage with Serializable {
   var lastMessageID = -1
 
-  def send(): Future[Set[TupleType]] = {
+  def send(): Future[Set[Tuple]] = {
     val messageID = Terminator.idCounter.getNext
     lastMessageID = messageID
-    val promise = Promise[Set[TupleType]]
+    val promise = Promise[Set[Tuple]]
     production ! ExpectTerminator(terminatorID, messageID, promise)
     val future = promise.future
     inputs.foreach(input => {
@@ -26,8 +26,8 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
     future
   }
 
-  def resend(): Future[Set[TupleType]] = {
-    val promise = Promise[Set[TupleType]]
+  def resend(): Future[Set[Tuple]] = {
+    val promise = Promise[Set[Tuple]]
     production ! ExpectTerminator(terminatorID, lastMessageID, promise)
     val future = promise.future
     inputs.foreach(input => {
