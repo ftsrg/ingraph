@@ -65,14 +65,23 @@ where predicate $\theta$ is a propositional formula. The operator selects all tu
 
 \paragraph{Binary operators.} The $\unionop$ operator produces the set union of two relations, while the $\bagunionop$ operator produces the \emph{bag union} of two operators, \eg $\{\tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\} \bagunionop \{\tuple{1, 2}\} = \{\tuple{1, 2}, \tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\}$. For both the \uniontext and \baguniontext operators, the schema of the operands must have the same number of attributes. Some authors also require that they share a common schema, \ie have the same set of attributes~\cite{DBLP:books/daglib/0020812}.
 
-The $\cartesianproductop$ operator produces the \cartesianproducttext $ t = r \cartesianproductop s.$ The result of the \jointext operator $\joinop$ is determined by creating the Cartesian product of the relations, then filtering those tuples which are equal on the attributes that share a common name. The combined tuples are projected: from the attributes present in both of the two input relations, we only keep the ones in $r$ and drop the ones in $s$. Thus, the join operator is defined as
+The $\cartesianproductop$ operator produces the \cartesianproducttext:
+
+$$ t = r \cartesianproductop s.$$
+
+The result of the \jointext operator $\joinop$ is determined by creating the Cartesian product of the relations, then filtering those tuples which are equal on the attributes that share a common name. The combined tuples are projected: from the attributes present in both of the two input relations, we only keep the ones in $r$ and drop the ones in $s$. Thus, the join operator is defined as
 $$r \join s = \pi_{R \union S} \left(\selection{r.A_1 = s.A_1\,\land\,\ldots\,\land\,r.A_n = s.A_n)} \left(r \times s\right) \right),$$
 where $ \{ A_1, \ldots, A_n \} $ is the set of attributes that occur both in $R$ and $S$, \ie $ R \intersection S = \{ A_1, \ldots, A_n \} $. Note that if the set of common attributes is empty, the \jointext operator is equivalent to the Cartesian product of the relations.
 The join operator is both commutative and associative: $r \join s = s \join r$ and $(r \join s) \join t = r \join (s \join t)$, respectively.
+
 The \antijointext operator $\antijoinop$ (also known as \emph{left anti semijoin}) collects the tuples from the left relation $r$ which have no matching pair in the right relation $s$:
 $$ t = r \antijoin s = r \setminus \pi_{R} \left(r \join s\right), $$
 where $\pi_{R}$ denotes a projection operator, which only keeps the attributes of the schema over relation $r$. The antijoin operator is not commutative and not associative.
-The \leftouterjointext $\myleftouterjoin$ pads tuples from the left relation that did not match any from the right relation with $\relnull$ values and adds them to the result of the \jointext~\cite{DBLP:books/daglib/0015084}.
+
+The \leftouterjointext $\myleftouterjoin$ pads tuples from the left relation that did not match any from the right relation with $\relnull$ values and adds them to the result of the \jointext~\cite{DBLP:books/daglib/0015084}:
+$$ t = r \myleftouterjoin s = (r \join s) \union (r \antijoin s) \cartesianproductop \{\relnull, \ldots, \relnull\}, $$
+
+where the constant relation $\{\relnull, \ldots, \relnull\}$ is on the schema $S \setminus R$.
 
 \subsection{Common Extensions to Relational Algebra}
 

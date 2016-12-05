@@ -82,9 +82,13 @@ As their name suggests, unary nodes implement unary relational algebraic operato
 \begin{itemize}
 	\item The \emph{projection node} performs a projection operation on the input relation.
 	\item The \emph{selection node} performs a selection operation on the input relation.
+	\item The \emph{all-different node} \ldots
+	\item The \emph{grouping node} \ldots
+	\item The \emph{unwind node} \ldots
+	\item The \emph{top node} \ldots
 \end{itemize}
 
-As both the projection and the selection operators are distributive \wrt the union and set minus operators, their results can be maintained by performing the operation for the change set $\Delta r$.
+As all operators are distributive \wrt the union and set minus operators \todo{are they? prove}, their results can be maintained by performing the operation for the change set $\Delta r$.
 
 \section{Binary Nodes}
 \label{sec:binary-nodes}
