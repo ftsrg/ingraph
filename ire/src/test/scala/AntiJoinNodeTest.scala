@@ -38,10 +38,10 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
     }
 
     "do simple antijoins 1" in {
-      val prim = ChangeSet(
+      val primary = ChangeSet(
         positive = Vector(tuple(1, 2), tuple(1, 3), tuple(1, 4))
       )
-      val sec = ChangeSet(
+      val secondary = ChangeSet(
         positive = Vector(tuple(3, 5), tuple(3, 6), tuple(4, 7))
       )
       val primarySel = Vector(1)
@@ -49,8 +49,8 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primarySel, secondarySel)))
 
-      joiner ! Secondary(sec)
-      joiner ! Primary(prim)
+      joiner ! Secondary(secondary)
+      joiner ! Primary(primary)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2))))
 
       // TODO fix incremental maintenance
