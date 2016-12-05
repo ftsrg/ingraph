@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.Actor
-import hu.bme.mit.ire.datatypes.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.{AddListener, ChangeListener}
 import hu.bme.mit.ire.messages._
 
@@ -12,8 +12,8 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
   val log = context.system.log
 
   val receivedTerminatorCount = mutable.Map.empty[Int, Int]
-  val results = new mutable.HashSet[TupleType]
-  val terminatorPromises = mutable.Map.empty[Int, Promise[Set[TupleType]]]
+  val results = new mutable.HashSet[Tuple]
+  val terminatorPromises = mutable.Map.empty[Int, Promise[Set[Tuple]]]
   val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
   val listeners = new mutable.ListBuffer[ChangeListener]
   var t0 = System.nanoTime()
