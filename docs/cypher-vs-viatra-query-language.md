@@ -7,7 +7,7 @@ Both [Cypher](https://neo4j.com/docs/developer-manual/current/cypher/) and the [
 | | Cypher | VIATRA Query Language |
 | ------------------------------- | -------------------------------- | ------------------------ |
 | collection type for the result of a query/operation | set/multiset/list         | set                      |
-| accessing types from queries    | can use the `type()` of vertices of edges in the query | "metaqueries" are not supported |
+| accessing types from queries    | can use `labels()` of vertices and `type()` of edges in the query | "metaqueries" are not supported |
 
 ## Data representation
 
