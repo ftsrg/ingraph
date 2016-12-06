@@ -60,7 +60,7 @@ There are no legacy sub-clauses.
 
 #### Standard
 
-There are no hints in standard OpenCypher
+There are no hints in standard OpenCypher.
 
 #### Legacy
 
@@ -73,7 +73,7 @@ There are no hints in standard OpenCypher
 
 #### Standard
 
-There are no commands in standard OpenCypher
+There are no commands in standard OpenCypher.
 
 #### Legacy
 
@@ -125,8 +125,8 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 
 #### Standard
 
-* List comprehensions
-* Pattern comprehensions
+* [List comprehensions](https://neo4j.com/docs/developer-manual/current/cypher/#_list_comprehension)
+* [Pattern comprehensions](https://github.com/neo4j/neo4j/commit/c067fd918c23aebb156f4cec268e134b1f61c08e#diff-726176c1183002e63d5bb9361f5e1c52R114)
 * Parameters with new syntax (`$`)
 * Literals
 * [Aggregation functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-clause)
