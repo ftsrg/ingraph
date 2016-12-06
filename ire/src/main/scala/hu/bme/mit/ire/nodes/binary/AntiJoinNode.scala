@@ -1,84 +1,79 @@
 package hu.bme.mit.ire.nodes.binary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-import scala.collection.mutable
+import scala.collection.{GenSetLike, SetLike, mutable}
 
 class AntiJoinNode(override val next: (ReteMessage) => Unit,
-                   val primarySelector: Vector[Any],
-                   val secondarySelector: Vector[Any]) extends BinaryNode with SingleForwarder {
+                   override val primaryMask: Mask,
+                   override val secondaryMask: Mask)
+  extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
-
-  val forwardValues = new mutable.HashMap[Vector[Any], mutable.Set[Tuple]]
-    with mutable.MultiMap[Vector[Any], Tuple]
-  val antiValues = new mutable.HashMap[Vector[Any], mutable.Set[Tuple]]
-    with mutable.MultiMap[Vector[Any], Tuple]
+  val primaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+  val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
+  val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
 
   def onPrimary(changeSet: ChangeSet): Unit = {
-    val positive = changeSet.positive
-    val negative = changeSet.negative
+    val resultPositive = for {
+      tuple <- changeSet.positive
+      if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
+    } yield tuple
 
-//    val joinedPositive = for {
-//      node <- positive
-//      if !antiValues.contains(primarySelector.map(i => node(i)))
-//    } yield node
-//
-//
-//    val joinedNegative = for {
-//      node <- negative
-//    } yield node
-//
-//    forward(ChangeSet(joinedPositive, joinedNegative))
-//
-//    positive.foreach(
-//      m => {
-//        val key = primarySelector.map(i => m(i))
-//        forwardValues.addBinding(key, m)
-//      }
-//    )
-//    negative.foreach(
-//      m => {
-//        val key = primarySelector.map(i => m(i))
-//        forwardValues.removeBinding(key, m)
-//      }
-//    )
+    val resultNegative = for {
+      tuple <- changeSet.negative
+      if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
+    } yield tuple
+
+    forward(ChangeSet(resultPositive, resultNegative))
+
+    // maintain the content of the slot's indexer
+    for (tuple <- changeSet.positive) primaryIndexer.addBinding   (extract(tuple, primaryMask), tuple)
+    for (tuple <- changeSet.negative) primaryIndexer.removeBinding(extract(tuple, primaryMask), tuple)
   }
 
   def onSecondary(changeSet: ChangeSet): Unit = {
-    val positive = changeSet.positive
-    val negative = changeSet.negative
+    // positive part
+    def deltaSProjected = changeSet.positive.map(tuple => extract(tuple, secondaryMask)).toSet
+    def deltaSMinusS = deltaSProjected -- secondaryProjectedTuples
 
-//    positive.foreach(
-//      m => {
-//        val key = secondarySelector.map(i => m(i))
-//        antiValues.addBinding(key, m)
-//      }
-//    )
-//    negative.foreach(
-//      m => {
-//        val key = secondarySelector.map(i => m(i))
-//        antiValues.removeBinding(key, m)
-//      }
-//    )
-//
-//    val joinedNegative = (for {//this is switched because antijoin
-//      node <- positive
-//      key = secondarySelector.map(i => node(i))
-//      if antiValues.contains(key)
-//      if forwardValues.contains(key)
-//      value <- forwardValues(key)
-//    } yield value).distinct
-//
-//    val joinedPositive = (for {
-//      node <- negative
-//      key = secondarySelector.map(i => node(i))
-//      if !antiValues.contains(key)
-//      if forwardValues.contains(key)
-//      value <- forwardValues(key)
-//    } yield value).distinct
-//
-//    forward(ChangeSet(joinedPositive, joinedNegative))
+    def resultNegative = leftJoin(primaryIndexer.values, deltaSMinusS, primaryMask)
+
+    // negative part
+    def sMinusDeltaS = secondaryTuples -- changeSet.negative
+    def sMinusDeltaSProjected = sMinusDeltaS.map(tuple => extract(tuple, secondaryMask))
+
+    def x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toSet
+    def y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toSet
+    def resultPositive = x -- y
+
+    forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
+
+    // maintain the content of the slot's indexer
+    for (tuple <- changeSet.positive) {
+      secondaryTuples.add(tuple)
+      secondaryProjectedTuples.add(extract(tuple, secondaryMask))
+    }
+    for (tuple <- changeSet.negative) {
+      secondaryTuples.remove(tuple)
+      secondaryProjectedTuples.remove(extract(tuple, secondaryMask))
+    }
   }
+
+  def projectSecondaryTuples(tuples: Vector[Tuple]): Vector[Tuple] = {
+    for {
+      tuple <- tuples
+    } yield extract(tuple, secondaryMask)
+  }
+
+  def leftJoin(leftTuples: Iterable[collection.Set[Tuple]], rightTuples: collection.Set[Tuple], leftMask: Mask): Iterable[Tuple] = {
+    val result = for {
+      leftTupleSets <- leftTuples
+      leftTuple <- leftTupleSets
+      if rightTuples.contains(extract(leftTuple, leftMask))
+    } yield leftTuple
+    result
+  }
+
 }
