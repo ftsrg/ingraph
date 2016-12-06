@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes.{Indexer, Mask, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
 
 import scala.collection.mutable
 
@@ -12,25 +12,30 @@ class JoinNode(override val next: (ReteMessage) => Unit,
                override val secondaryTupleWidth: Int,
                override val primaryMask: Mask,
                override val secondaryMask: Mask
-              ) extends JoinNodeImpl(primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask) with SingleForwarder {
+              ) extends JoinNodeImpl with SingleForwarder {
 }
 
-//class ParallelJoinNode(override val children: Vector[(ReteMessage) => Unit],
-//                       override val primaryMask: Mask,
-//                       override val secondaryMask: Mask,
-//                       hashFunction: (Tuple) => Int = n => n.hashCode()
-//                      ) extends JoinNodeImpl(primaryMask, secondaryMask) with ForkingForwarder {
-//  override def forwardHashFunction(n: Tuple): Int = hashFunction(n)
-//
-//  override def forward(cs: ChangeSet) = super[ForkingForwarder].forward(cs)
-//
-//  override def forward(t: TerminatorMessage) = super[ForkingForwarder].forward(t)
-//}
+class ParallelJoinNode(override val children: Vector[(ReteMessage) => Unit],
+                       override val primaryTupleWidth: Int,
+                       override val secondaryTupleWidth: Int,
+                       override val primaryMask: Mask,
+                       override val secondaryMask: Mask,
+                       hashFunction: (Tuple) => Int = n => n.hashCode()
+                      ) extends JoinNodeImpl with ForkingForwarder {
 
-abstract class JoinNodeImpl(val primaryTupleWidth: Int,
-                            val secondaryTupleWidth: Int,
-                            val primaryMask: Mask,
-                            val secondaryMask: Mask) extends BinaryNode {
+  override def forwardHashFunction(n: Tuple): Int = hashFunction(n)
+
+  override def forward(cs: ChangeSet) = super[ForkingForwarder].forward(cs)
+
+  override def forward(t: TerminatorMessage) = super[ForkingForwarder].forward(t)
+}
+
+abstract class JoinNodeImpl extends BinaryNode {
+  val primaryTupleWidth: Int
+  val secondaryTupleWidth: Int
+  val primaryMask: Mask
+  val secondaryMask: Mask
+
   val primaryIndexer:   Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
   val secondaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
 
