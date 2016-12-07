@@ -35,20 +35,18 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
 
   def onSecondary(changeSet: ChangeSet): Unit = {
     // positive part
-    def deltaSProjected = changeSet.positive.map(tuple => extract(tuple, secondaryMask)).toSet
-    def deltaSMinusS = deltaSProjected -- secondaryProjectedTuples
+    val deltaSProjected = changeSet.positive.map(tuple => extract(tuple, secondaryMask)).toSet
+    val deltaSMinusS = deltaSProjected -- secondaryProjectedTuples
 
-    def resultNegative = leftJoin(primaryIndexer.values, deltaSMinusS, primaryMask)
+    val resultNegative = leftJoin(primaryIndexer.values, deltaSMinusS, primaryMask)
 
     // negative part
-    def sMinusDeltaS = secondaryTuples -- changeSet.negative
-    def sMinusDeltaSProjected = sMinusDeltaS.map(tuple => extract(tuple, secondaryMask))
+    val sMinusDeltaS = secondaryTuples -- changeSet.negative
+    val sMinusDeltaSProjected = sMinusDeltaS.map(tuple => extract(tuple, secondaryMask))
 
-    def x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toSet
-    def y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toSet
-    def resultPositive = x -- y
-
-    forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
+    val x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toSet
+    val y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toSet
+    val resultPositive = x -- y
 
     // maintain the content of the slot's indexer
     for (tuple <- changeSet.positive) {
@@ -59,6 +57,8 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
       secondaryTuples.remove(tuple)
       secondaryProjectedTuples.remove(extract(tuple, secondaryMask))
     }
+
+    forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
   }
 
   def projectSecondaryTuples(tuples: Vector[Tuple]): Vector[Tuple] = {
