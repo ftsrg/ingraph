@@ -10,6 +10,7 @@ import scala.concurrent.duration.Duration
 class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
+  // city, name, weapon, sex, height
   val odin: Tuple = Vector("Asgard", "Odin", "Gungnir", "male", 1)
   val thor: Tuple = Vector("Asgard", "Thor", "Mjölnir", "male", 1.1f)
   val freya: Tuple = Vector("Asgard", "Freya", "N/A", "female", 1.1)
@@ -26,7 +27,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
     "count with complex keys" in {
 
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new CountNode(echoActor ! _, Vector(3, 0))))
+      val counter = system.actorOf(Props(new CountNode(echoActor ! _, Vector(3, 0)))) // sex and the city
       counter ! ChangeSet(positive = Vector(odin))
       expectMsg(ChangeSet(positive = Vector(Vector("male", "Asgard", 1))))
       counter ! ChangeSet(positive = Vector(thor))
@@ -64,7 +65,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Sum" should {
     "sum with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new SumNode(echoActor ! _, Vector(3), 4)))
+      val counter = system.actorOf(Props(new SumNode(echoActor ! _, Vector(3), 4))) // sex, sum for height
       counter ! ChangeSet(positive = Vector(odin))
       assertNextChangeset(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = Vector(thor))

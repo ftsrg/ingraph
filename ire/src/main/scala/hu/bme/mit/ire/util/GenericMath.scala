@@ -1,5 +1,7 @@
 package hu.bme.mit.ire.util
 
+// see the TypeSafeMathSupport class of Neo4j:
+// https://github.com/neo4j/neo4j/blob/3.1/community/cypher/cypher-compiler-3.1/src/main/scala/org/neo4j/cypher/internal/compiler/v3_1/helpers/TypeSafeMathSupport.scala
 object GenericMath {
   def plus(a: Any, b: Any): Any = a match {
     case a: Float =>

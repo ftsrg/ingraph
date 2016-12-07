@@ -7,6 +7,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import scala.collection.immutable.{Seq, VectorBuilder}
 import scala.collection.mutable
 
+// the CountNode follows the COUNT(*) semantics, i.e. you do not have to specify the attribute to count
 class CountNode(override val next: (ReteMessage) => Unit,
                 val keys: Vector[Int]) extends UnaryNode with SingleForwarder {
   val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
