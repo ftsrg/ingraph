@@ -24,11 +24,11 @@ class UnionNodeTest(_system: ActorSystem) extends TestKit(_system) with Implicit
         positive = Vector(tuple(1, 2), tuple(1, 4))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new UnionNode(echoActor ! _)))
+      val union = system.actorOf(Props(new UnionNode(echoActor ! _)))
 
-      joiner ! Primary(prim)
+      union ! Primary(prim)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2), tuple(1, 3))))
-      joiner ! Secondary(sec)
+      union ! Secondary(sec)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 4))))
     }
   }
