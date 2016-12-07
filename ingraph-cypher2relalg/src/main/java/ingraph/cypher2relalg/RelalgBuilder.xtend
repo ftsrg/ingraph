@@ -239,7 +239,7 @@ class RelalgBuilder {
 
 		relationshipVariableExpressions.add(createUnaryNodeLogicalExpression => [
 			operator = UnaryNodeLogicalOperator.IS_NOT_NULL
-			leftOperand = vertexVariableFactory.createElement(e.nodePattern.variable.name)
+			leftOperand = buildVertexVariable(e.nodePattern)
 			container = topLevelContainer
 		])
 
@@ -248,7 +248,7 @@ class RelalgBuilder {
 				val mapIt = it
 				createUnaryNodeLogicalExpression => [
 					operator = UnaryNodeLogicalOperator.IS_NOT_NULL
-					leftOperand = edgeVariableFactory.createElement(mapIt.relationshipPattern.detail.variable.name)
+					leftOperand = buildEdgeVariable(mapIt.relationshipPattern.detail)
 					container = topLevelContainer
 				]
 			]
@@ -258,7 +258,7 @@ class RelalgBuilder {
 				val mapIt = it
 				createUnaryNodeLogicalExpression => [
 					operator = UnaryNodeLogicalOperator.IS_NOT_NULL
-					leftOperand = vertexVariableFactory.createElement(mapIt.nodePattern.variable.name)
+					leftOperand = buildVertexVariable(mapIt.nodePattern)
 					container = topLevelContainer
 				]
 			]
@@ -424,8 +424,7 @@ class RelalgBuilder {
 	}
 
 	def buildEdgeVariable(RelationshipDetail r) {
-		val edgeVariableName = r.variable?.name
-		val edgeVariable = edgeVariableFactory.createElement(edgeVariableName)
+		val edgeVariable = edgeVariableFactory.createElement(r)
 
 		// add labels to the variable
 		r.types?.relTypeName?.forEach [
@@ -436,8 +435,7 @@ class RelalgBuilder {
 	}
 
 	protected def VertexVariable buildVertexVariable(NodePattern n) {
-		val vertexVariableName = n.variable?.name
-		val vertexVariable = vertexVariableFactory.createElement(vertexVariableName)
+		val vertexVariable = vertexVariableFactory.createElement(n)
 
 		// add labels to the variable
 		n.nodeLabels?.nodeLabels?.forEach [

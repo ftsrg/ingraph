@@ -15,7 +15,8 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 		this.container = container	
 	} 
 
-	var n = 1;
+	// ensure that we generate unique names in the compiler
+	static var n = 1;
 	@Accessors val elements = new HashMap<String, TNamedElement>
 
 	def createElement(String elementName) {
