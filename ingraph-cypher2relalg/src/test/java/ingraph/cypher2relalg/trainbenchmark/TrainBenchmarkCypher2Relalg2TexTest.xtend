@@ -5,9 +5,12 @@ import ingraph.cypherparser.CypherParser
 import ingraph.relalg2tex.RelalgTreeSerializer
 import java.io.IOException
 import org.junit.Test
+import ingraph.relalg2tex.RelalgSerializerConfig
 
 class TrainBenchmarkCypher2Relalg2TexTest {
-	val static RelalgTreeSerializer drawer = new RelalgTreeSerializer
+	
+	val config = RelalgSerializerConfig.builder.consoleOutput(true).build
+	val drawer = new RelalgTreeSerializer(config)
 	
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)

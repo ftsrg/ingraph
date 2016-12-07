@@ -62,6 +62,7 @@ abstract class AbstractRelalgSerializer {
 		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 
+
 		tex
 	}
 
@@ -70,7 +71,13 @@ abstract class AbstractRelalgSerializer {
 		//val schemaInferencer = new SchemaInferencer(false)
 		//schemaInferencer.addSchemaInformation(container)
 
-		convertAlgebraExpression(container.rootExpression)
+		val s = convertAlgebraExpression(container.rootExpression)
+		
+		if (config.consoleOutput) {
+			println(s)
+		}
+		
+		return s
 	}
 
 	/**

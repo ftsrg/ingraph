@@ -27,4 +27,9 @@ class RelalgSerializerConfig {
 	 */
 	boolean includeCommonVariables
 
+	/**
+	 * whether to include cardinality information in the serializer (for trees)
+	 */
+	boolean consoleOutput
+
 }
