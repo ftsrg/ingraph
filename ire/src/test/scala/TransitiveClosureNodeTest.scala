@@ -1,6 +1,7 @@
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.nodes.unary.TransitiveClosureNode
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -15,22 +16,19 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
 
   "A TransitiveClosureNode" must {
     "calculate transitive closure" in {
-      val prim = ChangeSet(
-        positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))
+      val changeSet = ChangeSet(
+        positive = Vector(tuple(1, "a", 2), tuple(2, "b", 3))
       )
-      val sec = ChangeSet(
-        positive = Vector()
-      )
-      val primarySel = Vector(0, 1)
-      val secondarySel = Vector(1, 2)
+      val src = 0
+      val trg = 2
+      val edge = 1
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      //      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primarySel, secondarySel)), name = "testSelector")
-      //
-      //      joiner ! Primary(prim)
-      //      joiner ! Secondary(sec)
-      //      expectMsg(ChangeSet(
-      //        positive = Vector(tuple(15, 16, 17, 18, 13))
-      //      ))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)), name = "testSelector")
+
+      transitiveClosure ! changeSet
+//      expectMsg(ChangeSet(
+//        positive = Vector(tuple(1, 2), tuple(2, 3), tuple(2, 3))
+//      ))
     }
   }
 
