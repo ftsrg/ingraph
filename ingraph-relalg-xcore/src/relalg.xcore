@@ -26,7 +26,7 @@ class EdgeLabel extends Label {
 }
 
 /* Variables */
-abstract class Variable extends Atom, NamedElement {
+abstract class Variable extends Atom, NamedElement, ComparableExpression {
 	boolean dontCare = "false"
 }
 
@@ -42,7 +42,7 @@ class EdgeVariable extends ElementVariable {
 	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
 }
 
-class AttributeVariable extends Variable, ComparableExpression {
+class AttributeVariable extends Variable {
 	refers ElementVariable element opposite attributes
 }
 

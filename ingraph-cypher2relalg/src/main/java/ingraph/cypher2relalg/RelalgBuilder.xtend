@@ -270,6 +270,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e, EList<Operator> joins) {
+		//FIXME: add type check to ensure that the operands are comparable
 		createArithmeticComparisonExpression => [
 			operator = switch e.operator {
 				case "=": ArithmeticComparisonOperator.EQUAL_TO
@@ -306,6 +307,10 @@ class RelalgBuilder {
 			value = e.value
 			container = topLevelContainer
 		]
+	}
+
+	def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
+		buildRelalgVariable(e)
 	}
 
 	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
