@@ -1,0 +1,754 @@
+\chapter{TCK Acceptance Tests}
+\label{chp:acceptance-tests}
+
+\section{PosLength}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (segment:Segment)
+WHERE segment.length <= 0
+RETURN DISTINCT segment, segment.length AS length
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{segment},~\var{segment.length}} \Big(\selection{\var{segment.length} \leq \literal{0}} \Big(\alldifferent{} \Big(\getvertices{segment}{Segment}\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{segment},~\var{segment.length}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\selection{\var{segment.length} \leq \literal{0}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{SwitchSet}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (semaphore:Semaphore)<-[:entry]-(route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)
+WHERE semaphore.signal = "GO"
+  AND sw.currentPosition != swP.position
+RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}} \Big(\selection{\var{semaphore.signal} = \literal{'"GO"'} \land \var{sw.currentPosition} \neq \var{swP.position}} \Big(\alldifferent{} \Big(\expandout{swP}{sw}{Switch}{\_e3}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e2}{follows}{}{} \Big(\expandin{semaphore}{route}{Route}{\_e1}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\selection{\var{semaphore.signal} = \literal{'"GO"'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{swP}{sw}{Switch}{\_e9}{target}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{route}{swP}{SwitchPosition}{\_e8}{follows}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{semaphore}{route}{Route}{\_e7}{entry}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{semaphore}{Semaphore}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{ConnectedSegments}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH
+(sensor:Sensor)<-[:monitoredBy]-(segment1:Segment),
+(segment1:Segment)-[:connectsTo]->
+(segment2:Segment)-[:connectsTo]->
+(segment3:Segment)-[:connectsTo]->
+(segment4:Segment)-[:connectsTo]->
+(segment5:Segment)-[:connectsTo]->(segment6:Segment),
+(segment2:Segment)-[:monitoredBy]->(sensor:Sensor),
+(segment3:Segment)-[:monitoredBy]->(sensor:Sensor),
+(segment4:Segment)-[:monitoredBy]->(sensor:Sensor),
+(segment5:Segment)-[:monitoredBy]->(sensor:Sensor),
+(segment6:Segment)-[:monitoredBy]->(sensor:Sensor)
+RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}} \Big(\alldifferent{} \Big(\expandin{sensor}{segment1}{Segment}{\_e10}{monitoredBy}{}{} \Big(\getvertices{sensor}{Sensor}\Big) \join \expandout{segment5}{segment6}{Segment}{\_e15}{connectsTo}{}{} \Big(\expandout{segment4}{segment5}{Segment}{\_e14}{connectsTo}{}{} \Big(\expandout{segment3}{segment4}{Segment}{\_e13}{connectsTo}{}{} \Big(\expandout{segment2}{segment3}{Segment}{\_e12}{connectsTo}{}{} \Big(\expandout{segment1}{segment2}{Segment}{\_e11}{connectsTo}{}{} \Big(\getvertices{segment1}{Segment}\Big)\Big)\Big)\Big)\Big) \join \expandout{segment2}{sensor}{Sensor}{\_e16}{monitoredBy}{}{} \Big(\getvertices{segment2}{Segment}\Big) \join \expandout{segment3}{sensor}{Sensor}{\_e17}{monitoredBy}{}{} \Big(\getvertices{segment3}{Segment}\Big) \join \expandout{segment4}{sensor}{Sensor}{\_e18}{monitoredBy}{}{} \Big(\getvertices{segment4}{Segment}\Big) \join \expandout{segment5}{sensor}{Sensor}{\_e19}{monitoredBy}{}{} \Big(\getvertices{segment5}{Segment}\Big) \join \expandout{segment6}{sensor}{Sensor}{\_e20}{monitoredBy}{}{} \Big(\getvertices{segment6}{Segment}\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{sensor}{segment1}{Segment}{\_e32}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{sensor}{Sensor}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+	{$\expandout{segment5}{segment6}{Segment}{\_e37}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{segment4}{segment5}{Segment}{\_e36}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{segment3}{segment4}{Segment}{\_e35}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{segment2}{segment3}{Segment}{\_e34}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{segment1}{segment2}{Segment}{\_e33}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment1}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+[
+	{$\expandout{segment2}{sensor}{Sensor}{\_e38}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment2}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{segment3}{sensor}{Sensor}{\_e39}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment3}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{segment4}{sensor}{Sensor}{\_e40}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment4}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{segment5}{sensor}{Sensor}{\_e41}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment5}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{segment6}{sensor}{Sensor}{\_e42}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{segment6}{Segment}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{RouteSensor}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
+WHERE NOT ((route)-[g:gathers]->(sensor))
+RETURN DISTINCT route, sensor, swP, sw
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\selection{\neg \left( \var{route} IS NOT NULL \land \var{g} IS NOT NULL \land \var{sensor} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e45}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e44}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e43}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big) \leftouterjoin \expandout{route}{sensor}{Sensor}{g}{gathers}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\selection{\neg \left( \var{route} IS NOT NULL \land \var{g} IS NOT NULL \land \var{sensor} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{sw}{sensor}{Sensor}{\_e51}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{swP}{sw}{Switch}{\_e50}{target}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{route}{swP}{SwitchPosition}{\_e49}{follows}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{route}{Route}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+[
+	{$\expandout{route}{sensor}{Sensor}{g}{gathers}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{route}{Route}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{ActiveRoute}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (inactiveRoute:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)
+WHERE swP.position <> sw.currentPosition
+WITH collect(inactiveRoute) AS inactiveRoutes
+
+MATCH (activeRoute:Route)
+WHERE NOT activeRoute IN inactiveRoutes
+
+RETURN activeRoute
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\text{Cannot convert to expression.}
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+Cannot visualize incremental tree.
+\section{SemaphoreNeighbor}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (semaphore:Semaphore)<-[:exit]-(route1:Route)-[:gathers]->(sensor1:Sensor)<-[:monitoredBy]-(te1)-[:connectsTo]->(te2)-[:monitoredBy]->(sensor2:Sensor)<-[:gathers]-(route2:Route)
+WHERE NOT ((semaphore)<-[:entry]-(route2))
+      AND route1 != route2
+RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}} \Big(\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{_e64} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}} \Big(\alldifferent{} \Big(\expandin{sensor2}{route2}{Route}{\_e63}{gathers}{}{} \Big(\expandout{te2}{sensor2}{Sensor}{\_e62}{monitoredBy}{}{} \Big(\expandout{te1}{te2}{}{\_e61}{connectsTo}{}{} \Big(\expandin{sensor1}{te1}{}{\_e60}{monitoredBy}{}{} \Big(\expandout{route1}{sensor1}{Sensor}{\_e59}{gathers}{}{} \Big(\expandin{semaphore}{route1}{Route}{\_e58}{exit}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big) \leftouterjoin \expandin{semaphore}{route2}{Route}{\_e64}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{_e78} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{sensor2}{route2}{Route}{\_e77}{gathers}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{te2}{sensor2}{Sensor}{\_e76}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{te1}{te2}{}{\_e75}{connectsTo}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{sensor1}{te1}{}{\_e74}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{route1}{sensor1}{Sensor}{\_e73}{gathers}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{semaphore}{route1}{Route}{\_e72}{exit}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{semaphore}{Semaphore}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+]
+[
+	{$\expandin{semaphore}{route2}{Route}{\_e78}{entry}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{semaphore}{Semaphore}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{RouteSensorPositive}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
+RETURN DISTINCT route, sensor, swP, sw
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e81}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e80}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e79}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{sw}{sensor}{Sensor}{\_e87}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{swP}{sw}{Switch}{\_e86}{target}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{route}{swP}{SwitchPosition}{\_e85}{follows}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{route}{Route}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\section{SwitchMonitored}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (sw:Switch)
+WHERE NOT ((sw)-[:monitoredBy]->(:Sensor))
+RETURN DISTINCT sw
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\duplicateelimination \Big(\projection{\var{sw}} \Big(\selection{\neg \left( \var{sw} IS NOT NULL \land \var{_e88} IS NOT NULL \land \var{_e89} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\getvertices{sw}{Switch}\Big) \leftouterjoin \expandout{sw}{\_e89}{Sensor}{\_e88}{monitoredBy}{}{} \Big(\getvertices{sw}{Switch}\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\text{Cannot visualize tree.}
+
+\subsection*{Relational algebra tree for incremental queries}
+\begin{forest} for tree={align=center}
+[
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\projection{\var{sw}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\selection{\neg \left( \var{sw} IS NOT NULL \land \var{_e92} IS NOT NULL \land \var{_e93} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{sw}{Switch}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+	{$\expandout{sw}{\_e93}{Sensor}{\_e92}{monitoredBy}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{sw}{Switch}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}

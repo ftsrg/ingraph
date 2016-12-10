@@ -2,11 +2,6 @@ package ingraph.report.tests
 
 import com.google.common.collect.Lists
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.util.SchemaInferencer
-import ingraph.relalg2tex.RelalgExpressionSerializer
-import ingraph.relalg2tex.RelalgSerializerConfig
-import ingraph.relalg2tex.RelalgTreeSerializer
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
 import ingraph.report.feature.Scenario
@@ -22,17 +17,10 @@ import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
 
-class FeatureParsingTest {
-
-	val treeSerializer = new RelalgTreeSerializer
-	
-	val config = RelalgSerializerConfig.builder.build
-	val expressionSerializer = new RelalgExpressionSerializer(config)
-	extension SchemaInferencer inferencer = new SchemaInferencer
-	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+class TckReportTest extends IngraphReportTest {
 
 	@Test
-	def void generateReport() {
+	def void generateChapter() {
 		val CUCUMBER_TESTS_DIR = "../opencypher-tests/"
 
 		val injector = new FeatureStandaloneSetup().createInjectorAndDoEMFRegistration()
@@ -102,51 +90,6 @@ class FeatureParsingTest {
 //		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup]
 //		s.steps.filter(typeof(ThenStep)).forEach[desc = desc.cleanup]
 		s
-	}
-
-	/**
-	 * Drops indentation and quotes.
-	 */
-	def cleanup(String s) {
-		s //
-		.replaceAll('''"""''', "") // """
-		.replaceAll("'''", "") // '''
-		.replaceAll("\n      ", "\n") // indentation
-		.replaceAll("^\n", "") // newline at the start
-		.replaceAll("\n$", "") // newline at the end
-	}
-
-	def escape(String s) {
-		s //
-		.replaceAll('''#''', '''\\#''') //
-		.replaceAll('''_''', '''\\_''')
-	}
-
-	def expression(String s) {
-		try {
-			val container = Cypher2Relalg.processString(s)
-			expressionSerializer.serialize(container.addSchemaInformation)
-		} catch (Exception e) {
-			'''\text{Cannot convert to expression.}'''
-		}
-	}
-
-	def visualize(String s) {
-		try {
-			val container = Cypher2Relalg.processString(s)
-			treeSerializer.serialize(container.addSchemaInformation)
-		} catch (Exception e) {
-			'''\text{Cannot visualize tree.}'''
-		}
-	}
-
-	def visualizeWithTransformations(String s) {
-		try {
-			val container = Cypher2Relalg.processString(s)
-			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
-		} catch (Exception e) {
-			'''Cannot visualize incremental tree.'''
-		}
 	}
 
 }

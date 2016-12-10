@@ -7,13 +7,13 @@ import org.junit.Test
 import ingraph.cypherparser.CypherParser
 
 class TrainBenchmarkCypher2RelalgTest {
-	
+
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
 		CypherUtil.save(cypher, "../ingraph-cypxmi/trainbenchmark/" + query)
 		Cypher2Relalg.processCypher(cypher)
 	}
-	
+
 	@Test
 	def void testConnectedSegments() throws IOException {
 		process("ConnectedSegments")
@@ -43,5 +43,5 @@ class TrainBenchmarkCypher2RelalgTest {
 	def void testSemaphoreNeighbor() throws IOException {
 		process("SemaphoreNeighbor")
 	}
-	
+
 }

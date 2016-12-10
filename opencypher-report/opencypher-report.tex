@@ -51,11 +51,15 @@
 \bibliographystyle{abbrv}
 \bibliography{bib}
 
-\IfFileExists{./do-not-include-acceptance-tests}{
+\IfFileExists{./disable-appendix}{
+ll
 	% do nothing
 }{
 	\appendix
 	\input{acceptance-tests}
+%	\input{movie-database}
+%	\input{social-network-benchmark}
+	\input{trainbenchmark}
 }
 
 \end{document}

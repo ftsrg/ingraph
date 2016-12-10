@@ -56,12 +56,12 @@ abstract class AbstractRelalgSerializer {
 		this.config = config
 	}
 
+
 	def serialize(RelalgContainer container, String filename) {
 		val tex = serialize(container)
 
 		val file = new File("../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
-
 
 		tex
 	}
