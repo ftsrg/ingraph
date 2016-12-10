@@ -1,5 +1,5 @@
-\chapter{TCK Acceptance Tests}
-\label{chp:acceptance-tests}
+\chapter{Train Benchmark}
+\label{chp:trainbenchmark}
 
 \section{PosLength}
 
@@ -21,6 +21,7 @@ RETURN DISTINCT segment, segment.length AS length
 \text{Cannot visualize tree.}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -59,6 +60,7 @@ RETURN DISTINCT segment, segment.length AS length
 ]
 ;
 \end{forest}
+}
 \section{SwitchSet}
 
 \subsection*{Query specification}
@@ -168,7 +170,10 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 \subsection*{Relational algebra tree}
 \text{Cannot visualize tree.}
 
+
 \subsection*{Relational algebra tree for incremental queries}
+
+\resizebox{\textwidth}{!}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
@@ -354,6 +359,8 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ;
 \end{forest}
+}
+
 \section{RouteSensor}
 
 \subsection*{Query specification}

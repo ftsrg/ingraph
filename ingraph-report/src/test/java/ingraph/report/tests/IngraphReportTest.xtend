@@ -6,6 +6,10 @@ import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
+import java.io.File
+import java.nio.charset.Charset
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 
 class IngraphReportTest {
 
@@ -14,6 +18,21 @@ class IngraphReportTest {
 	protected val treeSerializer = new RelalgTreeSerializer
 	protected val config = RelalgSerializerConfig.builder.build
 	protected val expressionSerializer = new RelalgExpressionSerializer(config)
+
+	def toChapter(String directoryName, String chapterTitle) {
+		val files = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false);
+
+		val doc = '''
+			\chapter{«chapterTitle»}
+			\label{chp:«directoryName»}
+			
+			«FOR file : files» 
+				«val query = FilenameUtils.removeExtension(file.name)»
+				«toSection(directoryName, query)»
+			«ENDFOR»
+		'''
+		FileUtils.writeStringToFile(new File('''../opencypher-report/«directoryName».tex'''), doc, Charset.defaultCharset())
+	}
 
 	/**
 	 * Drops indentation and quotes.
@@ -61,6 +80,38 @@ class IngraphReportTest {
 			e.printStackTrace
 			'''Cannot visualize incremental tree.'''
 		}
+	}
+	
+	def toSection(String directoryName, String query) {
+		val fileName = '''../queries/«directoryName»/«query».cypher'''
+		val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
+
+		'''
+		\section{«query»}
+		
+		\subsection*{Query specification}
+		
+		\begin{lstlisting}
+		«querySpecification»
+		\end{lstlisting}
+		
+		\subsection*{Relational algebra expression}
+		
+		\begin{flalign*}
+		«querySpecification.expression»
+		\end{flalign*}
+		
+		\subsection*{Relational algebra tree}
+		\adjustbox{max width=\textwidth}{%
+		«querySpecification.expression.visualize»
+		}
+		
+		\subsection*{Relational algebra tree for incremental queries}
+		\adjustbox{max width=\textwidth}{%
+		«querySpecification.visualizeWithTransformations»
+		}
+		
+		'''
 	}
 	
 }

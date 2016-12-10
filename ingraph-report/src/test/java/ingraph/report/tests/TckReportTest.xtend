@@ -1,7 +1,6 @@
 package ingraph.report.tests
 
 import com.google.common.collect.Lists
-import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
 import ingraph.report.feature.Scenario
@@ -31,7 +30,7 @@ class TckReportTest extends IngraphReportTest {
 
 		val doc = '''
 			\chapter{TCK Acceptance Tests}
-			\label{chp:acceptance-tests}
+			\label{chp:tck}
 
 			«FOR feature : files.map[processFile(resourceSet)]»
 				\section{«feature.name.escape»}
@@ -71,7 +70,7 @@ class TckReportTest extends IngraphReportTest {
 				«ENDFOR»
 			«ENDFOR»
 			'''
-		FileUtils.writeStringToFile(new File("../opencypher-report/acceptance-tests.tex"), doc, Charset.defaultCharset())
+		FileUtils.writeStringToFile(new File("../opencypher-report/tck.tex"), doc, Charset.defaultCharset())
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {

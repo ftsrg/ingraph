@@ -28,7 +28,7 @@ Find the most prolific actors
 ```
 MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)
 RETURN a, count(*)
-ORDER BY count(*) DESC LIMIT 10;
+ORDER BY count(*) DESC LIMIT 10
 ```
 
 ### Queries using aggregation
@@ -40,7 +40,7 @@ MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)
 WITH a, count(m) AS movie_count
 WHERE movie_count < 3
 RETURN a, movie_count
-ORDER BY movie_count DESC LIMIT 5;
+ORDER BY movie_count DESC LIMIT 5
 ```
 
 Find the actors with 20+ movies, and the movies in which they acted
@@ -50,7 +50,7 @@ MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)
 WITH a, collect(m.title) AS movies
 WHERE length(movies) >= 20
 RETURN a, movies
-ORDER BY length(movies) DESC LIMIT 10;
+ORDER BY length(movies) DESC LIMIT 10
 ```
 
 Find prolific actors (10+) who have directed at least two films, count films acted in and list films directed
@@ -64,7 +64,7 @@ MATCH (a:Director)-[:DIRECTED]->(m:Movie)
 WITH a, acted, collect(m.title) AS directed
 WHERE length(directed) >= 2
 RETURN a.name, acted, directed
-ORDER BY length(directed) DESC, acted DESC;
+ORDER BY length(directed) DESC, acted DESC
 ```
 
 Rewritten to filter both `:Actor` and `:Director` labels up front
@@ -78,7 +78,7 @@ MATCH (a:Actor:Director)-[:DIRECTED]->(m:Movie)
 WITH a, acted, collect(m.title) AS directed
 WHERE length(directed) >= 2
 RETURN a.name, acted, directed
-ORDER BY length(directed) DESC, acted DESC;
+ORDER BY length(directed) DESC, acted DESC
 ```
 
 Using the lowest cardinality label, `:Director`
@@ -92,7 +92,7 @@ MATCH (a)-[:DIRECTED]->(m)
 WITH a, acted, collect(m.title) AS directed
 WHERE length(directed) >= 2
 RETURN a.name, acted, directed
-ORDER BY length(directed) DESC, acted DESC;
+ORDER BY length(directed) DESC, acted DESC
 ```
 
 ### User ratings
@@ -112,7 +112,7 @@ MATCH (u:User)-[r:RATED]->(m:Movie)<-[r2:RATED]-(likeminded),
 (u)-[:FRIEND]-(friend)
 WHERE r.stars > 3 AND r2.stars >= 3
 RETURN likeminded, count(*)
-ORDER BY count(*) desc LIMIT 10;
+ORDER BY count(*) desc LIMIT 10
 ```
 
 User Ratings
@@ -167,7 +167,7 @@ List all Tom Hanks movies...
 
 ```
 MATCH (tom:Person {name: "Tom Hanks"})-[:ACTED_IN]->(tomHanksMovies)
-RETURN tom,tomHanksMovies
+RETURN tom, tomHanksMovies
 ```
 
 Who directed "Cloud Atlas"?
@@ -192,6 +192,7 @@ RETURN people.name, Type(relatedTo), relatedTo
 ```
 
 Movies and actors up to 4 "hops" away from Kevin Bacon
+
 ```
 MATCH (bacon:Person {name:"Kevin Bacon"})-[*1..4]-(hollywood)
 RETURN DISTINCT hollywood

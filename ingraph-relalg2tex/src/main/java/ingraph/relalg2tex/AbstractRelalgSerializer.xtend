@@ -246,11 +246,11 @@ abstract class AbstractRelalgSerializer {
 	 * Convert ElementVariable to string, including the labels
 	 */
 	def dispatch toTexParameterWithLabels(VertexVariable variable) {
-		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName].join("\\land")»}'''
+		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName].join(" \\land ")»}'''
 	}
 
 	def dispatch toTexParameterWithLabels(EdgeVariable variable) {
-		'''{«variable.escapedName»}{«variable.edgeLabels.map[escapedName].join("\\lor")»}'''
+		'''{«variable.escapedName»}{«variable.edgeLabels.map[escapedName].join(" \\lor ")»}'''
 	}
 
 	/**
