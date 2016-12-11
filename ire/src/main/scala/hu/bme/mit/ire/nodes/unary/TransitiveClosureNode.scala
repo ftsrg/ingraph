@@ -68,6 +68,10 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
     var removedPathsBuilder = new VectorBuilder[Tuple]
 
+    if(!reachableVertices.contains(sourceId) || !reachableFrom.contains(targetId)){
+      return Vector.empty
+    }
+
     for (source <- reachableFrom.getOrElse(sourceId, Set.empty).toStream #::: Stream(sourceId)) {
       for (target <- reachableVertices.getOrElse(targetId, Map.empty).keys.toStream #::: Stream(targetId)) {
         val containingPaths = reachableVertices(source)(target).filter(_.contains(edgeId))

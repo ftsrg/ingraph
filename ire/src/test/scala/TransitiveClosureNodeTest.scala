@@ -8,6 +8,10 @@ import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
+  val src = 0
+  val trg = 2
+  val edge = 1
+
   def this() = this(ActorSystem("MySpec"))
 
   override def afterAll {
@@ -19,9 +23,7 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       val changeSet = ChangeSet(
         positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
       )
-      val src = 0
-      val trg = 2
-      val edge = 1
+
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
 
@@ -37,9 +39,7 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       val changeSet = ChangeSet(
         positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
       )
-      val src = 0
-      val trg = 2
-      val edge = 1
+
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
 
@@ -60,9 +60,7 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       val changeSet = ChangeSet(
         positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
       )
-      val src = 0
-      val trg = 2
-      val edge = 1
+
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
 
@@ -83,4 +81,25 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
     }
   }
 
+  "A TransitiveClosureNode" must {
+    "not do anything in case of non-present vertices or edges" in {
+      val changeSet = ChangeSet(
+        positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
+      )
+
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
+
+      transitiveClosure ! changeSet
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 2, Vector(100)), tuple(1, 3, Vector(100, 101)), tuple(2, 3, Vector(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(negative = Vector(tuple(2, 1010, 3)))
+      expectNoMsg
+
+      transitiveClosure ! ChangeSet(negative = Vector(tuple(0, 100, 2)))
+      expectNoMsg
+    }
+  }
 }
