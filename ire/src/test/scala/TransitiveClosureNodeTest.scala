@@ -55,4 +55,32 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
     }
   }
 
+  "A TransitiveClosureNode" must {
+    "calculate negative updates" in {
+      val changeSet = ChangeSet(
+        positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
+      )
+      val src = 0
+      val trg = 2
+      val edge = 1
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
+
+      transitiveClosure ! changeSet
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 2, Vector(100)), tuple(1, 3, Vector(100, 101)), tuple(2, 3, Vector(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(negative = Vector(tuple(2, 101, 3)))
+      expectMsg(ChangeSet(
+        negative = Vector(tuple(1, 3, Vector(100, 101)), tuple(2, 3, Vector(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(negative = Vector(tuple(1, 100, 2)))
+      expectMsg(ChangeSet(
+        negative = Vector(tuple(1, 2, Vector(100)))
+      ))
+    }
+  }
+
 }

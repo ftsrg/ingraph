@@ -19,8 +19,8 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
   def onChangeSet(changeSet: ChangeSet): Unit = {
     forward(ChangeSet(
-      changeSet.positive.flatMap(newPathsWithEdge),
-      Vector()
+      positive = changeSet.positive.flatMap(newPathsWithEdge),
+      negative = changeSet.negative.flatMap(removePathsWithEdge)
     ))
   }
 
@@ -59,5 +59,35 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
     }
 
     newPathsBuilder.result
+  }
+
+  private def removePathsWithEdge(inputTuple: Tuple): Vector[Tuple] = {
+    val sourceId = inputTuple(src).asInstanceOf[Number].longValue
+    val targetId = inputTuple(trg).asInstanceOf[Number].longValue
+    val edgeId = inputTuple(edge).asInstanceOf[Number].longValue
+
+    var removedPathsBuilder = new VectorBuilder[Tuple]
+
+    for (source <- reachableFrom.getOrElse(sourceId, Set.empty).toStream #::: Stream(sourceId)) {
+      for (target <- reachableVertices.getOrElse(targetId, Map.empty).keys.toStream #::: Stream(targetId)) {
+        val containingPaths = reachableVertices(source)(target).filter(_.contains(edgeId))
+        removedPathsBuilder ++= containingPaths.map(tuple(source, target, _))
+
+        reachableVertices(source)(target) = reachableVertices(source)(target).diff(containingPaths)
+        if(reachableVertices(source)(target).isEmpty){
+          reachableFrom(target) -= source
+          if(reachableFrom(target).isEmpty){
+            reachableFrom.remove(target)
+          }
+
+          reachableVertices(source).remove(target)
+          if(reachableVertices(source).isEmpty){
+            reachableVertices.remove(source)
+          }
+        }
+      }
+    }
+
+    removedPathsBuilder.result
   }
 }
