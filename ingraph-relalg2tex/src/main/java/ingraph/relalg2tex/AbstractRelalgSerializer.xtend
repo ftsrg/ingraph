@@ -43,6 +43,8 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
+import relalg.EdgeLabelSet
+import relalg.LabelSetStatus
 
 abstract class AbstractRelalgSerializer {
 
@@ -164,8 +166,7 @@ abstract class AbstractRelalgSerializer {
 
 	def dispatch operatorToTex(GetVerticesOperator op) {
 		#[
-			'''\getvertices''' + '''{«op.vertexVariable.escapedName»}''' +
-			'''{«op.vertexVariable.vertexLabels.map[escapedName].join(":")»}'''
+			'''\getvertices«op.vertexVariable.toTexParameterWithLabels»'''
 		]
 	}
 
@@ -246,11 +247,23 @@ abstract class AbstractRelalgSerializer {
 	 * Convert ElementVariable to string, including the labels
 	 */
 	def dispatch toTexParameterWithLabels(VertexVariable variable) {
-		'''{«variable.escapedName»}{«variable.vertexLabels.map[escapedName].join(" \\land ")»}'''
+		'''{«variable.escapedName»}{'''
+		+ switch variable.vertexLabelSet?.status {
+			case LabelSetStatus.CONTRADICTING: "CONTRADICTING LABEL CONSTRAINTS"
+			case null: "" // null labelset means empty labelset constraint
+			default: variable.vertexLabelSet.vertexLabels.map[escapedName].join(" \\land ")
+		}
+		+ '''}'''
 	}
 
 	def dispatch toTexParameterWithLabels(EdgeVariable variable) {
-		'''{«variable.escapedName»}{«variable.edgeLabels.map[escapedName].join(" \\lor ")»}'''
+		'''{«variable.escapedName»}{'''
+		+ switch variable.edgeLabelSet?.status {
+			case LabelSetStatus.CONTRADICTING: "CONTRADICTING LABEL CONSTRAINTS"
+			case null: "" // null labelset means empty labelset constraint
+			default: variable.edgeLabelSet.edgeLabels.map[escapedName].join(" \\lor ")
+		}
+		+ '''}'''
 	}
 
 	/**

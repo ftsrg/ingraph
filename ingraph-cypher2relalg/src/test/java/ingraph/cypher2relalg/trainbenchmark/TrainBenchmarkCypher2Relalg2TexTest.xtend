@@ -9,7 +9,7 @@ import ingraph.relalg2tex.RelalgSerializerConfig
 
 class TrainBenchmarkCypher2Relalg2TexTest {
 	
-	val config = RelalgSerializerConfig.builder.consoleOutput(true).build
+	val config = RelalgSerializerConfig.builder.consoleOutput(false).build
 	val drawer = new RelalgTreeSerializer(config)
 	
 	def process(String query) {

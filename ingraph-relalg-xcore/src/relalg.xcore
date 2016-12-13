@@ -25,6 +25,38 @@ class VertexLabel extends Label {
 class EdgeLabel extends Label {
 }
 
+/**
+ * A set of labels. 
+ */
+abstract class LabelSet {
+	LabelSetStatus status = "EMPTY"
+}
+
+/**
+ * A vertex satisfies a labelset constraint iff it has all the labels in the labelset.
+ * 
+ * The vertex itself might has more labels, so in case of more than one labelset constraint
+ * for a single vertex variable, it is always satisfiable, i.e.
+ * LabelSet.status should never be LabelSetStatus.CONTRADICTING.
+ */
+class VertexLabelSet extends LabelSet {
+	refers VertexLabel[] vertexLabels // the vertex must have *all* of these labels
+}
+
+/**
+ * An edge satisfies a labelset constraint iff it has any of the labels in the labelset.
+ * An edge might has at most one label.
+ * 
+ * For an edge variable, the combination of the following labelset constraints
+ * is contradicting, thus un-satisfiable:
+ *  1. [edge1:A|B], so edge1 needs to have either label A, either label B
+ *  2. [edge1:C], so edge1 needs to have label C.
+ * These are contradicting as a single edge instance can have at most one label.
+ */
+class EdgeLabelSet extends LabelSet {
+	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
+}
+
 /* Variables */
 abstract class Variable extends Atom, NamedElement, ComparableExpression {
 	boolean dontCare = "false"
@@ -35,11 +67,11 @@ abstract class ElementVariable extends Variable {
 }
 
 class VertexVariable extends ElementVariable {
-	refers VertexLabel[] vertexLabels // the vertex must have *all* of these labels
+	contains VertexLabelSet vertexLabelSet // the vertex must have *all* of these labels
 }
 
 class EdgeVariable extends ElementVariable {
-	refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
+	contains EdgeLabelSet edgeLabelSet // the edge must have *one* of these labels
 }
 
 class AttributeVariable extends Variable {
@@ -357,4 +389,46 @@ enum AggregationType {
 	MAX
 	,
 	MIN
+}
+
+/**
+ * Indicates if the labelset represented is theoretically satisfiable or not
+ * 
+ * An EMP
+ * 
+ * If it is undefined, it matches every labels.
+ * If it is defined, but empty, matching semantics differs.
+ * Indicates if this labelset is theoretically satisfiable (true)
+ * or non-satisfiable (false).
+ *
+ * A labelset can be non-satisfiable (false, also known as contradicting) if,
+ * for the same edge variable edge1, the following labelset constraints
+ * were given in the query:
+ *  1. [edge1:A|B], so edge1 needs to have either label A, either label B
+ *  2. [edge1:C], so edge1 needs to have label C.
+ *  These are contradicting as a single edge instance can have at most one label.
+ */
+enum LabelSetStatus {
+	/** Each edge and vertex satisfies an empty labelset constraint */
+	EMPTY
+	,
+	/**
+	 * Theoretically, a non-empty labelset constraint is satisfiable,
+	 * but matching semantics differ for different variables:
+	 *  1. a vertex must have *all* of the labels
+	 *  2. an edge must have *one* of the labels
+	 */
+	NON_EMPTY
+	,
+	/**
+	 * A labelset constraint might be non-satisfiable,
+	 * in case it is a combination of multiple  labelset constraints.
+	 * 
+	 * For an edge variable, the combination of the following labelset constraints
+	 * is contradicting, thus un-satisfiable:
+	 *  1. [edge1:A|B], so edge1 needs to have either label A, either label B
+	 *  2. [edge1:C], so edge1 needs to have label C.
+	 * These are contradicting as a single edge instance can have at most one label.
+	 */
+	CONTRADICTING
 }
