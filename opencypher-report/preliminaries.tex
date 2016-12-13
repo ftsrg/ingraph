@@ -17,7 +17,7 @@ Furthermore, graph $G$ has properties (\emph{attributed graph}). Let $D$ be a se
 	\item $\edgeproperties$ is a set of edge properties. An edge property $p_j \in \edgeproperties$ is a function $p_j: E \assign D_j \unionop \{ \relnull \}$, which assigns a property value from a domain $D_j \in D$ to an edge $e \in E$, if $e$ has property $p_j$, otherwise $p_j(e)$ returns $\relnull$.
 \end{itemize}
 
-\paragraph{Running example.} \cref{fig:running-example-property-graph} presents an example inspired by the Movie Database dataset\footnote{\url{https://neo4j.com/developer/movie-database/}}.
+\paragraph{Running example.} \autoref{fig:running-example-property-graph} presents an example inspired by the Movie Database dataset\footnote{\url{https://neo4j.com/developer/movie-database/}}.
 
 \begin{minipage}[b]{0.48\linewidth}
 	\includegraphics[width=6cm]{movie-graph}
@@ -105,13 +105,13 @@ The \getverticestext nullary operator $\getvertices{v}{t_1 \land \ldots \land t_
 The \expandbothtext unary operator $\expandboth{E}{l_1 \lor \ldots \lor l_k \ast min \ldots max}{v}{w}{t_1 \land \ldots \land t_n}(r)$ adds (1)~a new attribute $w$ to $r$ containing the IDs of vertices having \emph{all} labels $t_1, \ldots, t_n$ that can be reached from vertices of attribute $v$ by traversing edges having \emph{any} labels $l_1, \ldots, l_n$, and (2)~a new attribute $E$ for the edges of the path from $v$ to $w$. The operator may use at least $\atom{min}$ and at most $\atom{max}$ hops, both defaulting to $1$ if omitted. % With the default setting, \ie $\atom{min}=\atom{max}=1$, a single edge variable $e$ can be used instead of edge list $E$.
 The \expandintext operator~$\expandinop$ and \expandouttext operator~$\expandoutop$ only consider directed paths from $w$ to $v$ and from $v$ to $w$, respectively.
 
-We propose the \alldifferenttext operator to guarantee the uniqueness of edges (see the remark on \emph{uniqueness of edges} in \cref{sec:opencypher}). The \alldifferenttext operator $\alldifferent{E_1, E_2, E_3, \ldots}{(r)}$ filters $r$ to keep tuples where the variables in $\bigcup_{i} E_{i}$ are pairwise different.\footnote{Should e.g. $E_2$ be a set of the single variable $e_2$, the variable name can be used as a shorthand instead, so $\alldifferent{E_1, e_2, E_3, \ldots}{(r)} ~ \equiv ~ \alldifferent{E_1, \{e_2\}, E_3, \ldots}{(r)}$}
+We propose the \alldifferenttext operator to guarantee the uniqueness of edges (see the remark on \emph{uniqueness of edges} in \autoref{sec:opencypher}). The \alldifferenttext operator $\alldifferent{E_1, E_2, E_3, \ldots}{(r)}$ filters $r$ to keep tuples where the variables in $\bigcup_{i} E_{i}$ are pairwise different.\footnote{Should e.g. $E_2$ be a set of the single variable $e_2$, the variable name can be used as a shorthand instead, so $\alldifferent{E_1, e_2, E_3, \ldots}{(r)} ~ \equiv ~ \alldifferent{E_1, \{e_2\}, E_3, \ldots}{(r)}$}
 It can be expressed as a \selectiontext:
 $$\alldifferent{E_1, E_2, E_3, \ldots}{(r)} = \selection{ \bigwedge\limits_{e_1, e_2 \,\in\, \bigcup\limits_{i} {E_i} ~ \wedge ~ { e_1 \,\neq\, e_2 } } { r.e_1 \,\neq\, r.e_2 } }{(r)}$$
 
 \paragraph{Property access.} Assuming that $x$ is an attribute of a graph relation, we use the notation $x.a$ in (1)~attribute lists for projections and (2)~selection conditions to express the access to the corresponding value of property $a$ in the property graph~\cite{DBLP:conf/edbt/HolschG16}.
 
-\paragraph{Summary.} \cref{table:collections} provides an overview of the operators of \rga.
+\paragraph{Summary.} \autoref{table:collections} provides an overview of the operators of \rga.
 
 \newcommand{\propheader}{\multirow{2}{*}{\bf prop.}}
 \newcommand{\rgaheader}{\multirow{2}{*}{\breakable{\bf RGA}}}

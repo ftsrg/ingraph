@@ -1,5 +1,6 @@
 package ingraph.report.tests
 
+import com.google.common.collect.Lists
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
@@ -8,6 +9,7 @@ import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import java.io.File
 import java.nio.charset.Charset
+import java.util.Collections
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
@@ -20,7 +22,8 @@ class IngraphReportTest {
 	protected val expressionSerializer = new RelalgExpressionSerializer(config)
 
 	def toChapter(String directoryName, String chapterTitle) {
-		val files = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false);
+		val files = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).toList
+        Collections.sort(files)
 
 		val doc = '''
 			\chapter{«chapterTitle»}

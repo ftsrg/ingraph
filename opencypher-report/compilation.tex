@@ -1,8 +1,8 @@
 \section{Mapping \opencypher Queries to \RGA}
 \label{sec:compilation}
 
-In this section, we first give the mapping algorithm of \opencypher queries to \rga, then we give a more detailed listing of the compilation rules for the query language constructs in \cref{table:mapping}.
-We follow the bottom-up approach to build the \rga tree based on the \opencypher query. The algorithm is as follows. Join operations always use all common variables to match the two inputs (see \jointext in \cref{sec:rga}).
+In this section, we first give the mapping algorithm of \opencypher queries to \rga, then we give a more detailed listing of the compilation rules for the query language constructs in \autoref{table:mapping}.
+We follow the bottom-up approach to build the \rga tree based on the \opencypher query. The algorithm is as follows. Join operations always use all common variables to match the two inputs (see \jointext in \autoref{sec:rga}).
 
 \setlength\tabcolsep{3.6pt}
 \begin{enumerate}
@@ -105,16 +105,16 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 	\label{table:mapping}
 \end{table}
 
-\paragraph{Example.} The example query in~\cref{lst:example} can be formalized as:
+\paragraph{Example.} The example query in~\autoref{lst:example} can be formalized as:
 {\footnotesize
 	\begin{align*}
 	&\projection{a2} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN}{1}{1} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN}{1}{1} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
 	\end{align*}
 }
 
-Note that the $\alldifferentop$ guarantees the uniqueness constraint for the edges (\cref{sec:opencypher}), which prevents the query from returning the vertex $\atom{Clint~Eastwood}$.
+Note that the $\alldifferentop$ guarantees the uniqueness constraint for the edges (\autoref{sec:opencypher}), which prevents the query from returning the vertex $\atom{Clint~Eastwood}$.
 
 \paragraph{Optimisations.} Queries with negative conditions for patterns can also be expressed using the \antijointext operator. For example, \lstinline+MATCH <v>p1</v> WHERE NOT <v>p2</v>+ can be formalized as
 $$\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right) \antijoin \alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$$
 
-\paragraph{Limitations.} Our mapping does not completely cover the \opencypher language. As discussed in \cref{sec:opencypher}, some constructs are defined as legacy and thus were omitted. Also, we did not formalize expressions (\eg  conditions in selections), collections (arrays and maps), which are required for both path variables\footnote{\lstinline+MATCH p=(:Person)-[:FRIEND*1..2]->(:Person)+} and the \lstinline+UNWIND+ operator. The mapping does not cover parameters and data manipulation operations, \eg \lstinline+CREATE+, \lstinline+DELETE+, \lstinline+SET+ and \lstinline+MERGE+.
+\paragraph{Limitations.} Our mapping does not completely cover the \opencypher language. As discussed in \autoref{sec:opencypher}, some constructs are defined as legacy and thus were omitted. Also, we did not formalize expressions (\eg  conditions in selections), collections (arrays and maps), which are required for both path variables\footnote{\lstinline+MATCH p=(:Person)-[:FRIEND*1..2]->(:Person)+} and the \lstinline+UNWIND+ operator. The mapping does not cover parameters and data manipulation operations, \eg \lstinline+CREATE+, \lstinline+DELETE+, \lstinline+SET+ and \lstinline+MERGE+.

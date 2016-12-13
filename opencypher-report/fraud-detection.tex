@@ -1,167 +1,6 @@
 \chapter{Fraud Detection}
 \label{chp:fraud-detection}
 
-\section{shared-contact-information}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
-WITH
-  contactInformation,
-  count(accountHolder) AS RingSize
-
-MATCH (contactInformation)<-[]-(accountHolder)
-WITH
-  collect(accountHolder.UniqueId) AS AccountHolders,
-  contactInformation, RingSize
-WHERE RingSize > 1
-
-RETURN
-  AccountHolders AS FraudRing,
-  labels(contactInformation) AS ContactType,
-  RingSize
-ORDER BY
-  RingSize DESC
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{financial-risk}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
-WITH
-  contactInformation,
-  count(accountHolder) AS RingSize
-
-MATCH
-  (contactInformation)<-[]-(accountHolder),
-  (accountHolder)-[r:HAS_CREDITCARD|HAS_UNSECUREDLOAN]->(unsecuredAccount)
-WITH
-  collect(DISTINCT accountHolder.UniqueId) AS AccountHolders,
-  contactInformation, RingSize,
-  SUM(
-    CASE type(r)
-      WHEN 'HAS_CREDITCARD' THEN unsecuredAccount.LIMIT
-      WHEN 'HAS_UNSECUREDLOAN' THEN unsecuredAccount.Balance
-    ELSE 0
-  END) AS FinancialRisk
-WHERE RingSize > 1
-
-RETURN
-  AccountHolders AS FraudRing,
-  labels(contactInformation) AS ContactType,
-  RingSize,
-  round(FinancialRisk) AS FinancialRisk
-
-ORDER BY FinancialRisk DESC
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\alldifferent{} \Big(\expandout{accountHolder}{contactInformation}{}{\_e7}{}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big) \join \alldifferent{} \Big(\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e8}{}{}{} \Big(\getvertices{contactInformation}{}\Big) \join \expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big)
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-\begin{forest} for tree={align=center}
-[
-	{$\join$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{accountHolder}{contactInformation}{}{\_e11}{}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{accountHolder}{AccountHolder}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\join$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e12}{}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{contactInformation}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-[
-	{$\expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{accountHolder}{AccountHolder}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-;
-\end{forest}
-}
-
 \section{create}
 
 \subsection*{Query specification}
@@ -287,5 +126,166 @@ RETURN *
 ]
 ;
 \end{forest}
+}
+
+\section{financial-risk}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
+WITH
+  contactInformation,
+  count(accountHolder) AS RingSize
+
+MATCH
+  (contactInformation)<-[]-(accountHolder),
+  (accountHolder)-[r:HAS_CREDITCARD|HAS_UNSECUREDLOAN]->(unsecuredAccount)
+WITH
+  collect(DISTINCT accountHolder.UniqueId) AS AccountHolders,
+  contactInformation, RingSize,
+  SUM(
+    CASE type(r)
+      WHEN 'HAS_CREDITCARD' THEN unsecuredAccount.LIMIT
+      WHEN 'HAS_UNSECUREDLOAN' THEN unsecuredAccount.Balance
+    ELSE 0
+  END) AS FinancialRisk
+WHERE RingSize > 1
+
+RETURN
+  AccountHolders AS FraudRing,
+  labels(contactInformation) AS ContactType,
+  RingSize,
+  round(FinancialRisk) AS FinancialRisk
+
+ORDER BY FinancialRisk DESC
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\alldifferent{} \Big(\expandout{accountHolder}{contactInformation}{}{\_e1}{}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big) \join \alldifferent{} \Big(\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e2}{}{}{} \Big(\getvertices{contactInformation}{}\Big) \join \expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{accountHolder}{contactInformation}{}{\_e5}{}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{accountHolder}{AccountHolder}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e6}{}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{contactInformation}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+	{$\expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{accountHolder}{AccountHolder}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+}
+
+\section{shared-contact-information}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
+WITH
+  contactInformation,
+  count(accountHolder) AS RingSize
+
+MATCH (contactInformation)<-[]-(accountHolder)
+WITH
+  collect(accountHolder.UniqueId) AS AccountHolders,
+  contactInformation, RingSize
+WHERE RingSize > 1
+
+RETURN
+  AccountHolders AS FraudRing,
+  labels(contactInformation) AS ContactType,
+  RingSize
+ORDER BY
+  RingSize DESC
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\text{Cannot convert to expression.}
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+Cannot visualize incremental tree.
 }
 

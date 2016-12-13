@@ -43,30 +43,35 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
-\section{query-6}
+}
+
+\section{query-11}
 
 \subsection*{Query specification}
 
 \begin{lstlisting}
-MATCH
-  (person:Person)-[:KNOWS*1..2]-(friend:Person),
-  (friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
+MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)
 WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
-WHERE NOT(commonTag = knownTag)
-WITH DISTINCT commonTag, knownTag, friend
-MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
-WHERE (commonPost)-[:HAS_CREATOR]->(friend)
+WITH DISTINCT friend
+MATCH (friend)-[worksAt:WORKS_AT]->(company:Company)-[:IS_LOCATED_IN]->(:Country)
+WHERE worksAt.workFrom < $date
 RETURN
-  commonTag.name AS tagName,
-  count(commonPost) AS postCount
+  friend.id AS friendId,
+  friend.firstName AS friendFirstName,
+  friend.lastName AS friendLastName,
+  worksAt.workFrom AS workFromYear,
+  company.name AS companyName
 ORDER BY
-  postCount DESC,
-  tagName ASC
+  workFromYear ASC,
+  friendId ASC,
+  companyName DESC
 LIMIT 10
 \end{lstlisting}
 
@@ -77,33 +82,34 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
-\section{query-7}
+}
+
+\section{query-12}
 
 \subsection*{Query specification}
 
 \begin{lstlisting}
-MATCH (person:Person)<-[:HAS_CREATOR]-(message)<-[like:LIKES]-(liker:Person)
-WITH liker, message, like.creationDate AS likeTime, person
-ORDER BY
-  likeTime DESC,
-  message.id ASC
-WITH liker, head(collect({msg: message, likeTime: likeTime})) AS latestLike, person
+MATCH (:Person)-[:KNOWS]-(friend:Person)
+OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(comment:Comment)-[:REPLY_OF]->(:Post)-[:HAS_TAG]->(tag:Tag),
+(tag)-[:HAS_TYPE]->(tagClass:TagClass)-[:IS_SUBCLASS_OF*0..]->(baseTagClass:TagClass)
+WHERE tagClass.name = $class
+   OR baseTagClass.name = $class
 RETURN
-  liker.id AS personId,
-  liker.firstName AS personFirstName,
-  liker.lastName AS personLastName,
-  latestLike.likeTime AS likeTime,
-  NOT((liker)-[:KNOWS]-(person)) AS isNew,
-  latestLike.msg.id AS messageId,
-  latestLike.msg.content AS messageContent,
-  latestLike.likeTime - latestLike.msg.creationDate AS latencyAsMilli
+  friend.id AS friendId,
+  friend.firstName AS friendFirstName,
+  friend.lastName AS friendLastName,
+  collect(DISTINCT tag.name) AS tagNames,
+  count(DISTINCT comment) AS count
 ORDER BY
-  likeTime DESC,
-  personId ASC
+  count DESC,
+  friendId ASC
 LIMIT 10
 \end{lstlisting}
 
@@ -114,10 +120,15 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
+
 \section{query-3}
 
 \subsection*{Query specification}
@@ -163,115 +174,15 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
-\section{query-8}
+}
 
-\subsection*{Query specification}
-
-\begin{lstlisting}
-MATCH (start:Person)<-[:HAS_CREATOR]-()<-[:REPLY_OF]-(comment:Comment)-[:HAS_CREATOR]->(person:Person)
-RETURN
-  person.id AS personId,
-  person.firstName AS personFirstName,
-  person.lastName AS personLastName,
-  comment.id AS commentId,
-  comment.creationDate AS commentCreationDate,
-  comment.content AS commentContent
-ORDER BY
-  commentCreationDate DESC,
-  commentId ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e52}{HAS\_CREATOR}{}{} \Big(\expandin{\_e49}{comment}{Comment}{\_e51}{REPLY\_OF}{}{} \Big(\expandin{start}{\_e49}{}{\_e50}{HAS\_CREATOR}{}{} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\text{Cannot visualize tree.}
-
-\subsection*{Relational algebra tree for incremental queries}
-\begin{forest} for tree={align=center}
-[
-	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{comment}{person}{Person}{\_e60}{HAS\_CREATOR}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandin{\_e57}{comment}{Comment}{\_e59}{REPLY\_OF}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandin{start}{\_e57}{}{\_e58}{HAS\_CREATOR}{}{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{start}{Person}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-]
-;
-\end{forest}
-\section{query-5}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)<-[membership:HAS_MEMBER]-(forum:Forum)
-WHERE membership.joinDate > $date
-  AND NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-WITH DISTINCT friend, forum
-OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(post:Post)<-[:CONTAINER_OF]-(forum)
-WITH forum, count(post) AS postCount
-RETURN
-  forum.title AS forumName,
-  postCount
-ORDER BY
-  postCount DESC,
-  forum.id ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\text{Cannot visualize tree.}
-
-\subsection*{Relational algebra tree for incremental queries}
-Cannot visualize incremental tree.
 \section{query-4}
 
 \subsection*{Query specification}
@@ -300,30 +211,71 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
-\section{query-11}
+}
+
+\section{query-5}
 
 \subsection*{Query specification}
 
 \begin{lstlisting}
-MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)
+MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)<-[membership:HAS_MEMBER]-(forum:Forum)
+WHERE membership.joinDate > $date
+  AND NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
+WITH DISTINCT friend, forum
+OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(post:Post)<-[:CONTAINER_OF]-(forum)
+WITH forum, count(post) AS postCount
+RETURN
+  forum.title AS forumName,
+  postCount
+ORDER BY
+  postCount DESC,
+  forum.id ASC
+LIMIT 10
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\text{Cannot convert to expression.}
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+Cannot visualize incremental tree.
+}
+
+\section{query-6}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH
+  (person:Person)-[:KNOWS*1..2]-(friend:Person),
+  (friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
 WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-WITH DISTINCT friend
-MATCH (friend)-[worksAt:WORKS_AT]->(company:Company)-[:IS_LOCATED_IN]->(:Country)
-WHERE worksAt.workFrom < $date
+MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
+WHERE NOT(commonTag = knownTag)
+WITH DISTINCT commonTag, knownTag, friend
+MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
+WHERE (commonPost)-[:HAS_CREATOR]->(friend)
 RETURN
-  friend.id AS friendId,
-  friend.firstName AS friendFirstName,
-  friend.lastName AS friendLastName,
-  worksAt.workFrom AS workFromYear,
-  company.name AS companyName
+  commonTag.name AS tagName,
+  count(commonPost) AS postCount
 ORDER BY
-  workFromYear ASC,
-  friendId ASC,
-  companyName DESC
+  postCount DESC,
+  tagName ASC
 LIMIT 10
 \end{lstlisting}
 
@@ -334,29 +286,38 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
-\section{query-12}
+}
+
+\section{query-7}
 
 \subsection*{Query specification}
 
 \begin{lstlisting}
-MATCH (:Person)-[:KNOWS]-(friend:Person)
-OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(comment:Comment)-[:REPLY_OF]->(:Post)-[:HAS_TAG]->(tag:Tag),
-(tag)-[:HAS_TYPE]->(tagClass:TagClass)-[:IS_SUBCLASS_OF*0..]->(baseTagClass:TagClass)
-WHERE tagClass.name = $class
-   OR baseTagClass.name = $class
-RETURN
-  friend.id AS friendId,
-  friend.firstName AS friendFirstName,
-  friend.lastName AS friendLastName,
-  collect(DISTINCT tag.name) AS tagNames,
-  count(DISTINCT comment) AS count
+MATCH (person:Person)<-[:HAS_CREATOR]-(message)<-[like:LIKES]-(liker:Person)
+WITH liker, message, like.creationDate AS likeTime, person
 ORDER BY
-  count DESC,
-  friendId ASC
+  likeTime DESC,
+  message.id ASC
+WITH liker, head(collect({msg: message, likeTime: likeTime})) AS latestLike, person
+RETURN
+  liker.id AS personId,
+  liker.firstName AS personFirstName,
+  liker.lastName AS personLastName,
+  latestLike.likeTime AS likeTime,
+  NOT((liker)-[:KNOWS]-(person)) AS isNew,
+  latestLike.msg.id AS messageId,
+  latestLike.msg.content AS messageContent,
+  latestLike.likeTime - latestLike.msg.creationDate AS latencyAsMilli
+ORDER BY
+  likeTime DESC,
+  personId ASC
 LIMIT 10
 \end{lstlisting}
 
@@ -367,7 +328,91 @@ LIMIT 10
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
+
+\section{query-8}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (start:Person)<-[:HAS_CREATOR]-()<-[:REPLY_OF]-(comment:Comment)-[:HAS_CREATOR]->(person:Person)
+RETURN
+  person.id AS personId,
+  person.firstName AS personFirstName,
+  person.lastName AS personLastName,
+  comment.id AS commentId,
+  comment.creationDate AS commentCreationDate,
+  comment.content AS commentContent
+ORDER BY
+  commentCreationDate DESC,
+  commentId ASC
+LIMIT 10
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e823}{HAS\_CREATOR}{}{} \Big(\expandin{\_e820}{comment}{Comment}{\_e822}{REPLY\_OF}{}{} \Big(\expandin{start}{\_e820}{}{\_e821}{HAS\_CREATOR}{}{} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{comment}{person}{Person}{\_e831}{HAS\_CREATOR}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{\_e828}{comment}{Comment}{\_e830}{REPLY\_OF}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{start}{\_e828}{}{\_e829}{HAS\_CREATOR}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{start}{Person}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+}
+
