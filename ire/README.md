@@ -64,6 +64,14 @@ $ gradle bintrayUpload
 
 Go to the Bintray [Maven repository site](https://bintray.com/ftsrg/maven) and click **Publish**.
 
+### Troubleshooting
+
+* **Problem:** The code compiles, but IntelliJ shows the following error when running the tests:
+
+    > java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
+
+* **Solution:** update the Scala SDK in your project to 2.12.
+
 ## Use cases
 
 [ingraph](https://github.com/FTSRG/ingraph), an incremental graph query engine (based on the openCypher query language) uses ire as its computation engine.

@@ -1,7 +1,8 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
-import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
+import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -99,26 +100,26 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 5))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
-    //
-    //    "do parallel joins" in {
-    //      val primaryMask = mask(0)
-    //      val secondaryMask = mask(0)
-    //      val echoActor = system.actorOf(TestActors.echoActorProps)
-    //      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, primaryMask, secondaryMask)))
-    //      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, primaryMask, secondaryMask)))
-    //      val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
-    //      val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, primaryMask, secondaryMask,
-    //        hashFunction = (n: Tuple) => n(0).hashCode())))
-    //      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 2))))
-    //      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 3))))
-    //
-    //      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
-    //      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
-    //
-    //      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 0, 0, 3))))
-    //      expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
-    //      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 0, 0, 3))))
-    //      expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
-    //    }
+
+    "do parallel joins" in {
+      val primaryMask = mask(0)
+      val secondaryMask = mask(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
+      val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, 2, 2, primaryMask, secondaryMask,
+        hashFunction = (n: Tuple) => n(0).hashCode())))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 2))))
+      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 3))))
+
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
+
+      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 3))))
+      expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
+      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 3))))
+      expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
+    }
   }
 }
