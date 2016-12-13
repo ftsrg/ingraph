@@ -1,0 +1,291 @@
+\chapter{Fraud Detection}
+\label{chp:fraud-detection}
+
+\section{shared-contact-information}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
+WITH
+  contactInformation,
+  count(accountHolder) AS RingSize
+
+MATCH (contactInformation)<-[]-(accountHolder)
+WITH
+  collect(accountHolder.UniqueId) AS AccountHolders,
+  contactInformation, RingSize
+WHERE RingSize > 1
+
+RETURN
+  AccountHolders AS FraudRing,
+  labels(contactInformation) AS ContactType,
+  RingSize
+ORDER BY
+  RingSize DESC
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\text{Cannot convert to expression.}
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+Cannot visualize incremental tree.
+}
+
+\section{financial-risk}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+MATCH (accountHolder:AccountHolder)-[]->(contactInformation)
+WITH
+  contactInformation,
+  count(accountHolder) AS RingSize
+
+MATCH
+  (contactInformation)<-[]-(accountHolder),
+  (accountHolder)-[r:HAS_CREDITCARD|HAS_UNSECUREDLOAN]->(unsecuredAccount)
+WITH
+  collect(DISTINCT accountHolder.UniqueId) AS AccountHolders,
+  contactInformation, RingSize,
+  SUM(
+    CASE type(r)
+      WHEN 'HAS_CREDITCARD' THEN unsecuredAccount.LIMIT
+      WHEN 'HAS_UNSECUREDLOAN' THEN unsecuredAccount.Balance
+    ELSE 0
+  END) AS FinancialRisk
+WHERE RingSize > 1
+
+RETURN
+  AccountHolders AS FraudRing,
+  labels(contactInformation) AS ContactType,
+  RingSize,
+  round(FinancialRisk) AS FinancialRisk
+
+ORDER BY FinancialRisk DESC
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\alldifferent{} \Big(\expandout{accountHolder}{contactInformation}{}{\_e7}{}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big) \join \alldifferent{} \Big(\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e8}{}{}{} \Big(\getvertices{contactInformation}{}\Big) \join \expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{} \Big(\getvertices{accountHolder}{AccountHolder}\Big)\Big)
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandout{accountHolder}{contactInformation}{}{\_e11}{}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{accountHolder}{AccountHolder}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\expandin{contactInformation}{accountHolder}{AccountHolder}{\_e12}{}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{contactInformation}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+[
+	{$\expandout{accountHolder}{unsecuredAccount}{}{r}{HAS\_CREDITCARD \lor HAS\_UNSECUREDLOAN}{}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+[
+	{$\getvertices{accountHolder}{AccountHolder}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+}
+
+\section{create}
+
+\subsection*{Query specification}
+
+\begin{lstlisting}
+// Create account holders
+CREATE (accountHolder1:AccountHolder {
+  FirstName: "John",
+  LastName: "Doe",
+  UniqueId: "JohnDoe" })
+
+CREATE (accountHolder2:AccountHolder {
+  FirstName: "Jane",
+  LastName: "Appleseed",
+  UniqueId: "JaneAppleseed" })
+
+CREATE (accountHolder3:AccountHolder {
+  FirstName: "Matt",
+  LastName: "Smith",
+  UniqueId: "MattSmith" })
+
+// Create Address
+CREATE (address1:Address {
+  Street: "123 NW 1st Street",
+  City: "San Francisco",
+  State: "California",
+  ZipCode: "94101" })
+
+// Connect 3 account holders to 1 address
+CREATE
+  (accountHolder1)-[:HAS_ADDRESS]->(address1),
+  (accountHolder2)-[:HAS_ADDRESS]->(address1),
+  (accountHolder3)-[:HAS_ADDRESS]->(address1)
+
+// Create Phone Number
+CREATE (phoneNumber1:PhoneNumber { PhoneNumber: "555-555-5555" })
+
+// Connect 2 account holders to 1 phone number
+CREATE
+  (accountHolder1)-[:HAS_PHONENUMBER]->(phoneNumber1),
+  (accountHolder2)-[:HAS_PHONENUMBER]->(phoneNumber1)
+
+// Create SSN
+CREATE (ssn1:SSN { SSN: "241-23-1234" })
+
+// Connect 2 account holders to 1 SSN
+CREATE
+  (accountHolder2)-[:HAS_SSN]->(ssn1),
+  (accountHolder3)-[:HAS_SSN]->(ssn1)
+
+// Create SSN and connect 1 account holder
+CREATE (ssn2:SSN { SSN: "241-23-4567" })<-[:HAS_SSN]-(accountHolder1)
+
+// Create Credit Card and connect 1 account holder
+CREATE (creditCard1:CreditCard {
+  AccountNumber: "1234567890123456",
+  Limit: 5000, Balance: 1442.23,
+  ExpirationDate: "01-20",
+  SecurityCode: "123" })<-[:HAS_CREDITCARD]-(accountHolder1)
+
+// Create Bank Account and connect 1 account holder
+CREATE (bankAccount1:BankAccount {
+  AccountNumber: "2345678901234567",
+  Balance: 7054.43 })<-[:HAS_BANKACCOUNT]-(accountHolder1)
+
+// Create Credit Card and connect 1 account holder
+CREATE (creditCard2:CreditCard {
+  AccountNumber: "1234567890123456",
+  Limit: 4000, Balance: 2345.56,
+  ExpirationDate: "02-20",
+  SecurityCode: "456" })<-[:HAS_CREDITCARD]-(accountHolder2)
+
+// Create Bank Account and connect 1 account holder
+CREATE (bankAccount2:BankAccount {
+  AccountNumber: "3456789012345678",
+  Balance: 4231.12 })<-[:HAS_BANKACCOUNT]-(accountHolder2)
+
+// Create Unsecured Loan and connect 1 account holder
+CREATE (unsecuredLoan2:UnsecuredLoan {
+  AccountNumber: "4567890123456789-0",
+  Balance: 9045.53,
+  APR: .0541,
+  LoanAmount: 12000.00 })<-[:HAS_UNSECUREDLOAN]-(accountHolder2)
+
+// Create Bank Account and connect 1 account holder
+CREATE (bankAccount3:BankAccount {
+  AccountNumber: "4567890123456789",
+  Balance: 12345.45 })<-[:HAS_BANKACCOUNT]-(accountHolder3)
+
+// Create Unsecured Loan and connect 1 account holder
+CREATE (unsecuredLoan3:UnsecuredLoan {
+  AccountNumber: "5678901234567890-0",
+  Balance: 16341.95, APR: .0341,
+  LoanAmount: 22000.00 })<-[:HAS_UNSECUREDLOAN]-(accountHolder3)
+
+// Create Phone Number and connect 1 account holder
+CREATE (phoneNumber2:PhoneNumber {
+  PhoneNumber: "555-555-1234" })<-[:HAS_PHONENUMBER]-(accountHolder3)
+
+RETURN *
+\end{lstlisting}
+
+\subsection*{Relational algebra expression}
+
+\begin{flalign*}
+\text{Cannot convert to expression.}
+\end{flalign*}
+
+\subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
+\text{Cannot visualize tree.}
+}
+
+\subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\projection{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{} \rangle$
+			}
+]
+;
+\end{forest}
+}
+

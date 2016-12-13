@@ -18,7 +18,9 @@ RETURN DISTINCT segment, segment.length AS length
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
 \adjustbox{max width=\textwidth}{%
@@ -61,6 +63,7 @@ RETURN DISTINCT segment, segment.length AS length
 ;
 \end{forest}
 }
+
 \section{SwitchSet}
 
 \subsection*{Query specification}
@@ -79,9 +82,12 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -141,6 +147,8 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 ]
 ;
 \end{forest}
+}
+
 \section{ConnectedSegments}
 
 \subsection*{Query specification}
@@ -168,12 +176,12 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
-
+}
 
 \subsection*{Relational algebra tree for incremental queries}
-
-\resizebox{\textwidth}{!}{%
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
@@ -378,9 +386,12 @@ RETURN DISTINCT route, sensor, swP, sw
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -461,6 +472,8 @@ RETURN DISTINCT route, sensor, swP, sw
 ]
 ;
 \end{forest}
+}
+
 \section{ActiveRoute}
 
 \subsection*{Query specification}
@@ -483,10 +496,15 @@ RETURN activeRoute
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
+
 \section{SemaphoreNeighbor}
 
 \subsection*{Query specification}
@@ -505,9 +523,12 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -609,6 +630,8 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 ]
 ;
 \end{forest}
+}
+
 \section{RouteSensorPositive}
 
 \subsection*{Query specification}
@@ -625,9 +648,12 @@ RETURN DISTINCT route, sensor, swP, sw
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -680,6 +706,8 @@ RETURN DISTINCT route, sensor, swP, sw
 ]
 ;
 \end{forest}
+}
+
 \section{SwitchMonitored}
 
 \subsection*{Query specification}
@@ -697,9 +725,12 @@ RETURN DISTINCT sw
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsection*{Relational algebra tree for incremental queries}
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -759,3 +790,5 @@ RETURN DISTINCT sw
 ]
 ;
 \end{forest}
+}
+

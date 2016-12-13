@@ -1,9 +1,20 @@
+% !TeX spellcheck = en_GB
+% !TeX encoding = UTF-8
 \chapter*{Executive Summary}
 \label{chp:executive-summary}
 
-This document is generated on each commit of the \ingraph repository\footnote{\url{https://github.com/FTSRG/ingraph}}. The document has two goals.
+This document is generated on each commit of the \ingraph repository\footnote{\url{https://github.com/FTSRG/ingraph}}. 
 
-\begin{enumerate}
-	\item \cref{chp:foundations} introduces the theoretical foundations of the \opencypher language.
-	\item \cref{chp:acceptance-tests} contains the acceptance tests defined in the \opencypher Technology Compliance Kit\footnote{\url{https://github.com/opencypher/openCypher/tree/master/tck}}.
-\end{enumerate}
+\paragraph{Structure.} \autoref{chp:foundations} introduces the theoretical foundations of the \opencypher language. \autoref{chp:incremental} presents incremental relational operators.
+
+\paragraph{Appendices.} The appendix chapters contain sets of Cypher queries, and their representations as relational algebraic expressions and trees, along with their incremental equivalents.
+
+\begin{itemize}
+	\item \autoref{chp:tck}: the acceptance tests defined in the \opencypher Technology Compliance Kit\footnote{\url{https://github.com/opencypher/openCypher/tree/master/tck}}.
+	\item \autoref{chp:fraud-detection}: fraud detection queries based on the Neo4j white paper.
+	\item \autoref{chp:ldbc-snb}: LDBC Social Network Benchmark queries.
+	\item \autoref{chp:movie-database}: Movie Database queries from the Neo4j tutorials.
+	\item \autoref{chp:static-analysis-java}: Java static analysis queries.
+	\item \autoref{chp:static-analysis-javascript}: JavaScript static analysis queries.
+	\item \autoref{chp:trainbenchmark}: Train Benchmark queries.
+\end{itemize}
