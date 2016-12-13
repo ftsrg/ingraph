@@ -120,30 +120,31 @@ println("2nd 2ndary")
       )
     }
     "do antijoin new 1" in {
-      val prim = ChangeSet(
-        positive = Vector(tuple(1, 2), tuple(3, 4))
-      )
-      val secondary = ChangeSet(
-        positive = Vector(tuple(2, 3), tuple(2, 4), tuple(4, 5))
-      )
       val primaryMask = mask(1)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
-      joiner ! Primary(prim)
-      expectMsg(ChangeSet(positive = Vector(tuple(1, 2), tuple(3, 4))))
+      joiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2), tuple(3, 4))))
+      expectMsg(
+        ChangeSet(positive = Vector(tuple(1, 2), tuple(3, 4)))
+      )
 
-      joiner ! Secondary(secondary)
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(1, 2), tuple(3, 4)))): _*)
+      joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 3), tuple(2, 4), tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(
+        ChangeSet(negative = Vector(tuple(1, 2), tuple(3, 4)))
+      ): _*)
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 5))))
-      expectMsg(ChangeSet(positive = Vector(tuple(3, 4))))
+      expectMsg(
+        ChangeSet(positive = Vector(tuple(3, 4)))
+      )
 
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(2, 3))))
-
       joiner ! Secondary(ChangeSet(negative = Vector(tuple(2, 4))))
-      expectMsg(ChangeSet(positive = Vector(tuple(1, 2))))
+      expectMsg(
+        ChangeSet(positive = Vector(tuple(1, 2)))
+      )
 
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(3, 4))))
 

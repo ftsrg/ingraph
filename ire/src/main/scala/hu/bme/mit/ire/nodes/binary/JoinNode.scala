@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes.{Indexer, Mask, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
 
 import scala.collection.mutable
 

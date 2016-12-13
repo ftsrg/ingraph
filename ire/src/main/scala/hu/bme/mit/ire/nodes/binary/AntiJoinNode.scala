@@ -51,12 +51,17 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
     // maintain the content of the slot's indexer
     for (tuple <- changeSet.positive) {
       secondaryTuples.add(tuple)
-      secondaryProjectedTuples.add(extract(tuple, secondaryMask))
+      //secondaryProjectedTuples.add(extract(tuple, secondaryMask))
     }
     for (tuple <- changeSet.negative) {
       secondaryTuples.remove(tuple)
-      secondaryProjectedTuples.remove(extract(tuple, secondaryMask))
+      //secondaryProjectedTuples.remove(extract(tuple, secondaryMask))
     }
+    // TODO introduce an appropriate data structure to maintain this incrementally
+    secondaryProjectedTuples.clear()
+    secondaryProjectedTuples ++= (for {
+      tuple <- secondaryTuples
+    } yield extract(tuple, secondaryMask))
 
     forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
   }
