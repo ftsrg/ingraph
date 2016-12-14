@@ -73,12 +73,12 @@ object EngineFactory extends App {
 
           case op: GetVerticesOperator =>
             val nick = op.getVertexVariable.getName
-            val label= op.getVertexVariable.getVertexLabels.get(0).getName // TODO fix this for multiple labels
+            val label= op.getVertexVariable.getVertexLabelSet.getVertexLabels.get(0).getName // TODO fix this for multiple labels
             vertexConverters.addBinding(label, nick)
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName
-            val label = op.getEdgeVariable.getEdgeLabels.get(0).getName // TODO fix this for multiple labels
+            val label = op.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName // TODO fix this for multiple labels
             val sourceNick = op.getSourceVertexVariable.getName
             val targetNick = op.getTargetVertexVariable.getName
             edgeConverters.addBinding(label, EdgeTransformer(nick, source = sourceNick, target = targetNick))
