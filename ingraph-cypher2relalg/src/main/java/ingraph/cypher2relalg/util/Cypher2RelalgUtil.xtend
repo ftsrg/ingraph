@@ -1,7 +1,10 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.cypher2relalg.factories.EdgeLabelFactory
+import java.util.ArrayList
 import java.util.Iterator
 import java.util.List
+import org.eclipse.emf.common.util.EList
 import relalg.BinaryLogicalOperator
 import relalg.BinaryOperator
 import relalg.EdgeLabel
@@ -18,13 +21,15 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
-import org.eclipse.emf.common.util.EList
-import ingraph.cypher2relalg.factories.EdgeLabelFactory
-import java.util.ArrayList
 
 class Cypher2RelalgUtil {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	extension IngraphLogger logger
+
+	new(IngraphLogger logger) {
+		this.logger=logger
+	}
 
 	def ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
 		if (vertexVariable.vertexLabelSet == null) {
@@ -98,6 +103,7 @@ class Cypher2RelalgUtil {
 			}
 			
 			edgeVariable.edgeLabelSet.status = if (edgeVariable.edgeLabelSet.edgeLabels.empty) {
+					warning('''Contradicting labelset constraints found for edge variable «edgeVariable.name»''')
 					LabelSetStatus.CONTRADICTING
 				} else {
 					LabelSetStatus.NON_EMPTY	
@@ -118,8 +124,10 @@ class Cypher2RelalgUtil {
 					case typeof(JoinOperator): createJoinOperator
 					case typeof(UnionOperator): createUnionOperator
 					case typeof(LeftOuterJoinOperator): createLeftOuterJoinOperator
-					default: throw new IllegalArgumentException(
-						"Got unexpected BinaryOperator type to build left-deep-tree")
+					default: {
+						unsupported('''Got unexpected BinaryOperator type «binaryOperatorType.name» to build left-deep-tree''')
+						null
+					}
 				}
 				nextAE.rightInput = i.next
 				nextAE.leftInput = retVal

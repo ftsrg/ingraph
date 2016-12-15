@@ -6,6 +6,7 @@ import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
+import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.emf.util.PrettyPrinter
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -55,7 +56,8 @@ import relalg.VertexVariable
 class RelalgBuilder {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil
+	extension IngraphLogger logger = new IngraphLogger(RelalgBuilder.name)
+	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
 
 	// this will be returned and will hold the result of the compilation
 	// never rename this to container as that name will collide with the Expression.container field name
@@ -107,7 +109,8 @@ class RelalgBuilder {
 		} else if (singleQuery_returnClauseList.length == 1) {
 			singleQuery_returnClauseList.head
 		} else {
-			throw new UnsupportedOperationException('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
+			unrecoverableError('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
+			null
 		}
 	}
 
@@ -223,8 +226,10 @@ class RelalgBuilder {
 					leftOperand = buildRelalgLogicalExpression(e.left, joins)
 					container = topLevelContainer
 				]
-			default:
-				throw new UnsupportedOperationException("TODO: " + e.operator)
+			default: {
+				unsupported("TODO: " + e.operator)
+				null
+			}
 		}
 	}
 
@@ -319,7 +324,8 @@ class RelalgBuilder {
 		if (x instanceof AttributeVariable) {
 			x as AttributeVariable
 		} else {
-			throw new UnsupportedOperationException('''Unsupported type received: «x.class.name»''')
+			unsupported('''Unsupported type received: «x.class.name»''')
+			null
 		}
 	}
 
@@ -338,7 +344,8 @@ class RelalgBuilder {
 				if (e.propertyLookups.length == 1) {
 					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
 				} else {
-					throw new UnsupportedOperationException('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+					unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+					null
 				}
 			}
 
@@ -346,12 +353,14 @@ class RelalgBuilder {
 				if (e.propertyLookups.length == 1) {
 					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
 				} else {
-					throw new UnsupportedOperationException('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+					unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+					null
 				}
 			}
 
 			default: {
-				throw new UnsupportedOperationException('''Unsupported type received: «ev.class.name»''')
+				unrecoverableError('''Unsupported type received: «ev.class.name»''')
+				null
 			}
 		}
 	}
@@ -360,7 +369,8 @@ class RelalgBuilder {
 		switch varRef {
 			case vertexVariableFactory.hasElement(varRef.variableRef.name)
 						    && edgeVariableFactory.hasElement(varRef.variableRef.name): {
-				throw new UnsupportedOperationException('''Variable name ambigous: «varRef.variableRef.name»''')
+				unrecoverableError('''Variable name ambigous: «varRef.variableRef.name»''')
+				null
 			}
 
 			case vertexVariableFactory.hasElement(varRef.variableRef.name): {
@@ -372,7 +382,8 @@ class RelalgBuilder {
 			}
 
 			default: {
-				throw new UnsupportedOperationException('''Variable name not found: «varRef.variableRef.name»''')
+				unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
+				null
 			}
 		}
 	}
@@ -382,7 +393,7 @@ class RelalgBuilder {
 	def dispatch Operator buildRelalg(PatternPart p) {
 		// TODO: handle variable assignment
 		if (p.^var != null) {
-			throw new UnsupportedOperationException('Variable assignment not supported for PatternPart (in MATCH clause)')
+			unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
 		}
 		// pass through variable assignment body to buildRelalg(PatternElement e)
 		buildRelalg(p.part)
