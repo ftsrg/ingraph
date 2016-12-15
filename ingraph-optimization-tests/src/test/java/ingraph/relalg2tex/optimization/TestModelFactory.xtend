@@ -76,8 +76,8 @@ class TestModelFactory {
 		val leftLabel = createVertexLabel => [ name = "l" ]
 		val rightLabel = createVertexLabel => [ name = "r" ]
 		
-		val v1 = createVertexVariable => [ name = "v"; vertexLabels.add(leftLabel); container = ctr ]
-		val v2 = createVertexVariable => [ name = "v"; vertexLabels.add(rightLabel); container = ctr ]
+		val v1 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(leftLabel); container = ctr ]
+		val v2 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(rightLabel); container = ctr ]
 		
 		val leftOp = createGetVerticesOperator => [ vertexVariable = v1 ]
 		val rightOp = createGetVerticesOperator => [ vertexVariable = v2 ]
