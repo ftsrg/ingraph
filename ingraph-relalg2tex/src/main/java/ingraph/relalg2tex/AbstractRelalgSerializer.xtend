@@ -297,6 +297,7 @@ abstract class AbstractRelalgSerializer {
 	def convert(UnaryLogicalOperator op) {
 		switch (op) {
 			case NOT: '''\neg'''
+			default: throw new UnsupportedOperationException('''UnaryLogicalOperator «op»''')
 		}
 	}
 
