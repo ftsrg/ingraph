@@ -26,6 +26,7 @@ import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.IntegerLiteral
 import relalg.JoinOperator
+import relalg.LabelSetStatus
 import relalg.LeftOuterJoinOperator
 import relalg.NamedElement
 import relalg.Operator
@@ -43,8 +44,6 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
-import relalg.EdgeLabelSet
-import relalg.LabelSetStatus
 
 abstract class AbstractRelalgSerializer {
 

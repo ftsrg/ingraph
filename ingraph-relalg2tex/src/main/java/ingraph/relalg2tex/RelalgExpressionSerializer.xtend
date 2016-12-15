@@ -1,10 +1,9 @@
 package ingraph.relalg2tex
 
-import relalg.GetEdgesOperator
-import relalg.GetVerticesOperator
+import relalg.BinaryOperator
+import relalg.NullaryOperator
 import relalg.Operator
 import relalg.UnaryOperator
-import relalg.BinaryOperator
 
 class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
@@ -27,14 +26,10 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	/**
 	 * children
 	 */
-	def dispatch CharSequence children(GetVerticesOperator op) {
+	def dispatch CharSequence children(NullaryOperator op) {
 		'''«op.operator»'''
 	}
-
-	def dispatch CharSequence children(GetEdgesOperator op) {
-		'''«op.operator»'''
-	}
-
+	
 	def dispatch CharSequence children(UnaryOperator op) {
 		'''«op.operator» \Big(«op.input.children»\Big)'''
 	}
