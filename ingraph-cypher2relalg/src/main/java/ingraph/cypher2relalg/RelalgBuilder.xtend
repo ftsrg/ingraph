@@ -54,6 +54,7 @@ import relalg.Variable
 import relalg.VertexVariable
 import relalg.MaxHopsType
 import javax.swing.text.html.MinimalHTMLWriter
+import org.slizaa.neo4j.opencypher.openCypher.Parameter
 
 class RelalgBuilder {
 
@@ -329,6 +330,11 @@ class RelalgBuilder {
 			unsupported('''Unsupported type received: «x.class.name»''')
 			null
 		}
+	}
+	
+	def dispatch ComparableExpression buildRelalgComparableElement(Parameter p) {
+	    val relalgParameter = createParameter => [name = p.parameter]
+	    relalgParameter
 	}
 
 	def dispatch Expression buildRelalgExpression(VariableRef e) {

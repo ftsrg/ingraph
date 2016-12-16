@@ -69,9 +69,9 @@ class SchemaInferencer {
                     " is not part of the schema in projection operator.")
         ]
 
-        op.defineSchema(op.variables.map [
-            if (expression instanceof VertexVariable) {
-                expression as VertexVariable
+        op.defineSchema(op.variables.map [           
+            if (expression instanceof Variable) {
+                expression as Variable
             }
         ])
     }

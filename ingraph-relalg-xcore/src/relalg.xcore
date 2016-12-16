@@ -248,7 +248,7 @@ class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpr
 	refers ArithmeticExpression leftOperand
 }
 
-// artihmetic comparisons evaluate to true/false, hence they are logical expressions
+// arithmetic comparisons evaluate to true/false, hence they are logical expressions
 class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
 	ArithmeticComparisonOperator operator
 	refers ComparableExpression leftOperand
@@ -260,6 +260,10 @@ abstract class StringExpression extends ComparableExpression {
 }
 
 abstract class LogicalExpression extends Expression {
+}
+
+class Parameter extends ComparableExpression {
+    String name
 }
 
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {

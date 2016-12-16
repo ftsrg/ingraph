@@ -91,6 +91,8 @@ class IngraphReportTest {
         val fileName = '''../queries/«directoryName»/«query».cypher'''
         val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
 
+        println(querySpecification)
+
         '''
             \section{«query»}
             
