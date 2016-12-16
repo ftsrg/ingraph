@@ -219,7 +219,7 @@ class RelalgBuilder {
 	def dispatch LogicalExpression buildRelalgLogicalExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e
 		, EList<Operator> joins
 	) {
-		switch e.operator.toLowerCase {
+		switch e.operator ?: e.operator.toLowerCase {
 			case "not":
 				createUnaryLogicalExpression => [
 					operator = UnaryLogicalOperator.NOT
