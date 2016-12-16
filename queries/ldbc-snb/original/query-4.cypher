@@ -1,3 +1,4 @@
+// Q4. New Topics. Given a start Person, find the top 10 most popular Tags (by total number of posts with the tag) that are attached to Posts that were created by that Person’s friends within a given time interval.
 MATCH (person:Person {id:{1}})-[:KNOWS]-(:Person)<-[:HAS_CREATOR]-(post:Post)-[HAS_TAG]->(tag:Tag)
 WHERE post.creationDate >= {2} AND post.creationDate < {3}
 OPTIONAL MATCH (tag)<-[:HAS_TAG]-(oldPost:Post)

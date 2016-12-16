@@ -1,3 +1,4 @@
+// Q10. Friend recommendation. Find top 10 friends of a friend who posts much about the interests of Person and little about not interesting topics for the user. The search is restricted by the candidate’s horoscopeSign. Returns friends for whom the difference between the total number of their posts about the interests of the specified user and the total number of their posts about topics that are not interests of the user, is as large as possible. Sort the result descending by this difference.
 MATCH (person:Person {id:{1}})-[:KNOWS*2..2]-(friend:Person)-[:IS_LOCATED_IN]->(city:City)
 WHERE ((friend.birthday_month = {2} AND friend.birthday_day >= 21)
    OR (friend.birthday_month = ({2}+1)%12 AND friend.birthday_day < 22))

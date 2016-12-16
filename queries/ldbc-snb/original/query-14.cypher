@@ -1,3 +1,4 @@
+// Q14. Weighted paths. Given PersonX and PersonY, find all weighted paths of the shortest length between them in the subgraph induced by the Knows relationship. The weight of the path takes into consideration amount of Posts/Comments exchanged.
 MATCH path = allShortestPaths((person1:Person {id:{1}})-[:KNOWS]-(person2:Person {id:{2}}))
 WITH nodes(path) AS pathNodes
 RETURN

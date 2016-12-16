@@ -1,3 +1,4 @@
+// Q11. Job referral. Find top 10 friends of the specified Person, or a friend of her friend (excluding the specified person), who has long worked in a company in a specified Country. Sort ascending by start date, and then ascending by person identifier.
 MATCH (person:Person {id:{1}})-[:KNOWS*1..2]-(friend:Person)
 WHERE not(person=friend)
 WITH DISTINCT friend
