@@ -44,6 +44,7 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
+import relalg.MaxHops
 
 abstract class AbstractRelalgSerializer {
 
@@ -135,9 +136,16 @@ abstract class AbstractRelalgSerializer {
 			'''{«op.sourceVertexVariable.escapedName»}''' + //
 			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
 			'''«op.edgeVariable.toTexParameterWithLabels»''' + //
-			'''{«op.minHops»}{«op.maxHops»}'''
+			'''{«op.minHops»}{«op.maxHops.hopsToString»}'''
 		]
 	}
+
+    def CharSequence hopsToString(MaxHops hops) {
+        switch hops.maxHopsType {
+            case LIMITED: hops.hops.toString
+            case UNLIMITED: "*"
+        }
+    }
 	
 	def dispatch operatorToTex(TransitiveClosureOperator op) {
 		#[
@@ -186,7 +194,7 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def dispatch binaryOperator(AbstractJoinOperator operator) {
 		'''«operator.joinOperator»''' +
-		'''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«name.escape»}'''].join(", ")»\}«ENDIF»'''
+		'''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
 	}
 
 	def dispatch binaryOperator(UnionOperator operator) {
@@ -228,7 +236,10 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def escape(String s) {
 		s //
-		.replace('''\''', '''\backslash{}''').replace('''_''', '''\_''') //
+        .replace('''"''', "")//
+		.replace(''' ''', '''\ ''') //
+		.replace('''\''', '''\backslash{}''') //
+		.replace('''_''', '''\_''') //
 	}
 
 	/**
@@ -239,7 +250,7 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {
-		'''«edgeVariables.map["\\var{"+ name.escape + "}"].join(",~")»'''
+		'''«edgeVariables.map["\\var{"+ escapedName + "}"].join(",~")»'''
 	}
 
 	/**
@@ -297,7 +308,6 @@ abstract class AbstractRelalgSerializer {
 	def convert(UnaryLogicalOperator op) {
 		switch (op) {
 			case NOT: '''\neg'''
-			default: throw new UnsupportedOperationException('''UnaryLogicalOperator «op»''')
 		}
 	}
 
@@ -338,15 +348,15 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch convertExpression(StringLiteral stringLiteral) {
-		'''\literal{'«stringLiteral.value.toString»'}'''
+		'''\literal{'«stringLiteral.value.toString.escape»'}'''
 	}
 
 	def dispatch convertExpression(ElementVariable elementVariable) {
-		'''\var{«elementVariable.name»}'''
+		'''\var{«elementVariable.escapedName»}'''
 	}
 
 	def dispatch convertExpression(AttributeVariable attributeVariable) {
-		'''\var{«attributeVariable.element.name».«attributeVariable.name»}'''
+		'''\var{«attributeVariable.element.name».«attributeVariable.escapedName»}'''
 	}
 
 	/**

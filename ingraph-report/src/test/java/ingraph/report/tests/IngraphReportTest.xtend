@@ -106,7 +106,7 @@ class IngraphReportTest {
 		
 		\subsection*{Relational algebra tree}
 		\adjustbox{max width=\textwidth}{%
-		«querySpecification.expression.visualize»
+		«querySpecification.visualize»
 		}
 		
 		\subsection*{Relational algebra tree for incremental queries}

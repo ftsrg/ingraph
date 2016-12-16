@@ -52,6 +52,8 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.MaxHopsType
+import javax.swing.text.html.MinimalHTMLWriter
 
 class RelalgBuilder {
 
@@ -429,12 +431,22 @@ class RelalgBuilder {
 		val isLeftArrow = ec.relationshipPattern.incoming
 		val isRightArrow = ec.relationshipPattern.outgoing
 
+        val range = ec.relationshipPattern.detail.range
+
 		createExpandOperator() => [
 			edgeVariable = patternElementChain_EdgeVariable;
 			direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
 				Direction.BOTH
 			else if(isLeftArrow) Direction.IN else Direction.OUT;
-			targetVertexVariable = patternElementChain_VertexVariable
+			targetVertexVariable = patternElementChain_VertexVariable;
+		    minHops = if (range == null) 1 else Integer.valueOf(ec.relationshipPattern.detail.range.lower)
+			maxHops = if (range == null) createMaxHops() => [
+                maxHopsType = MaxHopsType.LIMITED
+                hops = 1
+			] else createMaxHops() => [
+			    maxHopsType = if (range.upper != null) MaxHopsType.LIMITED else MaxHopsType.UNLIMITED;
+			    hops = if (range.upper != null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
+		    ]
 		]
 
 	}
