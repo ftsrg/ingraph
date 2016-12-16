@@ -9,6 +9,7 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
+import java.util.Comparator
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
@@ -23,7 +24,7 @@ class IngraphReportTest {
     def toChapter(String directoryName, String chapterTitle) {
         val fileNames = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).map[name].
             toList
-        Collections.sort(fileNames)
+        Collections.sort(fileNames, new NaturalOrderComparator());
 
         val doc = '''
             \chapter{«chapterTitle»}
