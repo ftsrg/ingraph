@@ -54,16 +54,44 @@ Given a property graph $G$, relation $r$ is a \emph{graph relation} if the follo
 $$\forall A \in \attr{r}: \dom{A} \subseteq V \union E \union D,$$
 where $\attr{r}$ is the set of attributes of $r$, $\dom{A}$ is the domain of attribute $A$. The schema of $r$, $\schema{r}$ is a list containing the attribute names. For schema transformations, the \appendtext operator is denoted by $\append$, the \removetext operator is denoted by $\remove$.
 
-\subsection{Foundations of Relational Algebra}
+\section{Operators of Relational Algebra}
 
-\paragraph{Basic operators of relational algebra.} We give a brief summary of the operators in relational algebra. A more detailed discussion is available in database textbooks, \eg~\cite{DBLP:books/daglib/0006733}.
+For well-known relational algebra operators (\eg selection, projection, join) and common extensions (\eg aggregation, left outer join), we only give a brief summary. A more detailed discussion is available in database textbooks, \eg~\cite{DBLP:books/daglib/0020812, DBLP:books/daglib/0006733}.
 
-\paragraph{Unary operators.} The \projectiontext operator $\projectionop$ keeps a specific set of attributes in the relation: $ t = \projection{A_1, \ldots, A_n} \left(r\right).$ Note that the tuples are not deduplicated by default, \ie the results will have the same number of tuples as the input relation $r$. The projection operator can also rename the attributes, \eg $\projection{v1 \assign v2} \left(r\right)$ renames $\atom{v1}$ to $\atom{v2}$.
+We also adapted graph-specific operators from~\cite{DBLP:conf/edbt/HolschG16}\footnote{The \textsc{GetNodes} operator introduced in~\cite{DBLP:conf/edbt/HolschG16} and did not support labels. We extended it by allowing the specification of vertex labels and renamed it to \getverticestext to be consistent with the rest of the definitions. We also extended the \textsc{ExpandIn} and \textsc{ExpandOut} operators to allow it to return a set of edges, and introduced the \expandbothtext operator to allow navigation to both directions.} and propose operators.
+
+\subsection{Nullary Operators}
+\label{sec:nullary-operators}
+
+The \getverticestext nullary operator $\getvertices{v}{t_1 \land \ldots \land t_n}$ returns a graph relation of a single attribute $v$ that contains the ID of all vertices that have \emph{all} of labels $t_1, \ldots, t_n$.
+
+\subsection{Unary Operators}
+\label{sec:unary-operators}
+
+The \projectiontext operator $\projectionop$ keeps a specific set of attributes in the relation: $ t = \projection{A_1, \ldots, A_n} \left(r\right).$ Note that the tuples are not deduplicated by default, \ie the results will have the same number of tuples as the input relation $r$. The projection operator can also rename the attributes, \eg $\projection{v1 \assign v2} \left(r\right)$ renames $\atom{v1}$ to $\atom{v2}$.
 The \selectiontext operator $\selectionop$ filters the incoming relation according to some criteria. Formally,
 $ t = \selection{\theta} \left(r\right), $
 where predicate $\theta$ is a propositional formula. The operator selects all tuples in $r$ for which $\theta$ holds.
 
-\paragraph{Binary operators.} The $\unionop$ operator produces the set union of two relations, while the $\bagunionop$ operator produces the \emph{bag union} of two operators, \eg $\{\tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\} \bagunionop \{\tuple{1, 2}\} = \{\tuple{1, 2}, \tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\}$. For both the \uniontext and \baguniontext operators, the schema of the operands must have the same number of attributes. Some authors also require that they share a common schema, \ie have the same set of attributes~\cite{DBLP:books/daglib/0020812}.
+The \duplicateeliminationtext operator $\duplicateeliminationop$ eliminates duplicate tuples in a bag.
+
+The \groupingtext operator $\groupingop$ groups tuples according to their value in one or more attributes and aggregates the remaining attributes. %Aggregated values (scalars and inline collections) makes \rga not closed under \groupingtext.
+
+The \sorttext operator $\sortop$ transforms a bag relation of tuples to a list of tuples by ordering them. The ordering is defined by specified attributes of the tuples with an ordering direction (ascending $\asc$/descending $\desc$) for each attribute, \eg $\sortop_{\asc \atom{v1}, \desc \atom{v2}} (r)$.
+
+The \toptext operator $\topp{l}{s}$ (adapted from~\cite{DBLP:conf/sigmod/LiCIS05}) takes a list as its input, skips the top $s$ tuples and returns the next $l$ tuples.\footnote{SQL implementations offer the \texttt{OFFSET} and the \texttt{LIMIT}/\texttt{TOP} keywords.}
+
+The \expandbothtext unary operator $\expandboth{E}{l_1 \lor \ldots \lor l_k \ast min \ldots max}{v}{w}{t_1 \land \ldots \land t_n}(r)$ adds (1)~a new attribute $w$ to $r$ containing the IDs of vertices having \emph{all} labels $t_1, \ldots, t_n$ that can be reached from vertices of attribute $v$ by traversing edges having \emph{any} labels $l_1, \ldots, l_n$, and (2)~a new attribute $E$ for the edges of the path from $v$ to $w$. The operator may use at least $\atom{min}$ and at most $\atom{max}$ hops, both defaulting to $1$ if omitted. % With the default setting, \ie $\atom{min}=\atom{max}=1$, a single edge variable $e$ can be used instead of edge list $E$.
+The \expandintext operator~$\expandinop$ and \expandouttext operator~$\expandoutop$ only consider directed paths from $w$ to $v$ and from $v$ to $w$, respectively.
+
+We propose the \alldifferenttext operator to guarantee the uniqueness of edges (see the remark on \emph{uniqueness of edges} in \autoref{sec:opencypher}). The \alldifferenttext operator $\alldifferent{E_1, E_2, E_3, \ldots}{(r)}$ filters $r$ to keep tuples where the variables in $\bigcup_{i} E_{i}$ are pairwise different.\footnote{Should e.g. $E_2$ be a set of the single variable $e_2$, the variable name can be used as a shorthand instead, so $\alldifferent{E_1, e_2, E_3, \ldots}{(r)} ~ \equiv ~ \alldifferent{E_1, \{e_2\}, E_3, \ldots}{(r)}$}
+It can be expressed as a \selectiontext:
+$$\alldifferent{E_1, E_2, E_3, \ldots}{(r)} = \selection{ \bigwedge\limits_{e_1, e_2 \,\in\, \bigcup\limits_{i} {E_i} ~ \wedge ~ { e_1 \,\neq\, e_2 } } { r.e_1 \,\neq\, r.e_2 } }{(r)}$$
+
+\subsection{Binary Operators}
+\label{sec:binary-operators}
+
+The $\unionop$ operator produces the set union of two relations, while the $\bagunionop$ operator produces the \emph{bag union} of two operators, \eg $\{\tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\} \bagunionop \{\tuple{1, 2}\} = \{\tuple{1, 2}, \tuple{1, 2}, \tuple{1, 2}, \tuple{3, 4}\}$. For both the \uniontext and \baguniontext operators, the schema of the operands must have the same number of attributes. Some authors also require that they share a common schema, \ie have the same set of attributes~\cite{DBLP:books/daglib/0020812}.
 
 The $\cartesianproductop$ operator produces the \cartesianproducttext:
 
@@ -83,35 +111,13 @@ $$ t = r \myleftouterjoin s = (r \join s) \union (r \antijoin s) \cartesianprodu
 
 where the constant relation $\{\relnull, \ldots, \relnull\}$ is on the schema $S \setminus R$.
 
-\subsection{Common Extensions to Relational Algebra}
+\subsection{Property Access}
 
-Most textbooks also define \emph{extended operators} of relational algebra~\cite{DBLP:books/daglib/0020812}:
+Assuming that $x$ is an attribute of a graph relation, we use the notation $x.a$ in (1)~attribute lists for projections and (2)~selection conditions to express the access to the corresponding value of property $a$ in the property graph~\cite{DBLP:conf/edbt/HolschG16}.
 
-\begin{itemize}
-	\item The \duplicateeliminationtext operator $\duplicateeliminationop$ eliminates duplicate tuples in a bag.
-	\item The \groupingtext operator $\groupingop$ groups tuples according to their value in one or more attributes and aggregates the remaining attributes. %Aggregated values (scalars and inline collections) makes \rga not closed under \groupingtext.
-	\item The \sorttext operator $\sortop$ transforms a bag relation of tuples to a list of tuples by ordering them. The ordering is defined by specified attributes of the tuples with an ordering direction (ascending $\asc$/descending $\desc$) for each attribute, \eg $\sortop_{\asc \atom{v1}, \desc \atom{v2}} (r)$.
-\end{itemize}
+\subsection{Summary of Operators}
 
-The \toptext operator $\topp{l}{s}$ (adapted from~\cite{DBLP:conf/sigmod/LiCIS05}) takes a list as its input, skips the top $s$ tuples and returns the next $l$ tuples.\footnote{SQL implementations offer the \texttt{OFFSET} and the \texttt{LIMIT}/\texttt{TOP} keywords.}
-
-\subsection{Graph-Specific Extensions to Relational Algebra}
-\label{sec:rga}
-
-We adapted graph-specific operators from~\cite{DBLP:conf/edbt/HolschG16}\footnote{The \textsc{GetNodes} operator introduced in~\cite{DBLP:conf/edbt/HolschG16} and did not support labels. We extended it by allowing the specification of vertex labels and renamed it to \getverticestext to be consistent with the rest of the definitions. We also extended the \textsc{ExpandIn} and \textsc{ExpandOut} operators to allow it to return a set of edges, and introduced the \expandbothtext operator to allow navigation to both directions.} and propose an additional operator.
-
-The \getverticestext nullary operator $\getvertices{v}{t_1 \land \ldots \land t_n}$ returns a graph relation of a single attribute $v$ that contains the ID of all vertices that have \emph{all} of labels $t_1, \ldots, t_n$.
-
-The \expandbothtext unary operator $\expandboth{E}{l_1 \lor \ldots \lor l_k \ast min \ldots max}{v}{w}{t_1 \land \ldots \land t_n}(r)$ adds (1)~a new attribute $w$ to $r$ containing the IDs of vertices having \emph{all} labels $t_1, \ldots, t_n$ that can be reached from vertices of attribute $v$ by traversing edges having \emph{any} labels $l_1, \ldots, l_n$, and (2)~a new attribute $E$ for the edges of the path from $v$ to $w$. The operator may use at least $\atom{min}$ and at most $\atom{max}$ hops, both defaulting to $1$ if omitted. % With the default setting, \ie $\atom{min}=\atom{max}=1$, a single edge variable $e$ can be used instead of edge list $E$.
-The \expandintext operator~$\expandinop$ and \expandouttext operator~$\expandoutop$ only consider directed paths from $w$ to $v$ and from $v$ to $w$, respectively.
-
-We propose the \alldifferenttext operator to guarantee the uniqueness of edges (see the remark on \emph{uniqueness of edges} in \autoref{sec:opencypher}). The \alldifferenttext operator $\alldifferent{E_1, E_2, E_3, \ldots}{(r)}$ filters $r$ to keep tuples where the variables in $\bigcup_{i} E_{i}$ are pairwise different.\footnote{Should e.g. $E_2$ be a set of the single variable $e_2$, the variable name can be used as a shorthand instead, so $\alldifferent{E_1, e_2, E_3, \ldots}{(r)} ~ \equiv ~ \alldifferent{E_1, \{e_2\}, E_3, \ldots}{(r)}$}
-It can be expressed as a \selectiontext:
-$$\alldifferent{E_1, E_2, E_3, \ldots}{(r)} = \selection{ \bigwedge\limits_{e_1, e_2 \,\in\, \bigcup\limits_{i} {E_i} ~ \wedge ~ { e_1 \,\neq\, e_2 } } { r.e_1 \,\neq\, r.e_2 } }{(r)}$$
-
-\paragraph{Property access.} Assuming that $x$ is an attribute of a graph relation, we use the notation $x.a$ in (1)~attribute lists for projections and (2)~selection conditions to express the access to the corresponding value of property $a$ in the property graph~\cite{DBLP:conf/edbt/HolschG16}.
-
-\paragraph{Summary.} \autoref{table:collections} provides an overview of the operators of \rga.
+\autoref{table:collections} provides an overview of the operators of \rga.
 
 \newcommand{\propheader}{\multirow{2}{*}{\bf prop.}}
 \newcommand{\rgaheader}{\multirow{2}{*}{\breakable{\bf RGA}}}

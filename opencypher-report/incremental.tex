@@ -17,7 +17,13 @@ Numerous algorithms were proposed for incremental pattern matching. Mostly, thes
 \section{Overview of Rete Networks}
 \label{sec:rete}
 
-%\fig{rete/rete}{The structure of the Rete propagation network}{0.65}
+\begin{figure}
+	\centering
+	\includegraphics[width=8.5cm]{rete/rete}
+	\caption{The structure of the Rete propagation network.}
+	\label{fig:rete/rete}
+\end{figure}
+
 \todo{Draw a Rete network in tikz}
 
 The Rete algorithm constructs a network of three types of nodes. Following \autoref{fig:rete/rete}, from bottom to top:
@@ -47,7 +53,7 @@ provide the relations for each label of the graph. For example, the input node f
 	\item If the edge `d' between vertices 2 and 6 is deleted, the input node sends a negative update to its subscriber nodes with the change set $ \left\{ \tuple{2, d, 6} \right\} $.
 \end{itemize}
 
-The relations contained by input nodes can be defined with nullary operators (\autoref{sec:nullary}): input nodes indexing vertices implement the \getverticestext operator, while input nodes indexing edges implement the \getedgestext operator.
+The relations contained by input nodes can be defined with nullary operators (\autoref{sec:nullary-operators}): input nodes indexing vertices implement the \getverticestext operator, while input nodes indexing edges implement the \getedgestext operator.
 
 \section{Unary Nodes}
 
@@ -77,7 +83,7 @@ Similarly, for \emph{negative updates}:
 
 Unary nodes are often implemented as \emph{stateless} nodes, \ie they do not store the results of the previous executions. Instead, these results are cached in their subscribers, \eg indexers of \emph{binary nodes} (\autoref{sec:binary-nodes}) or \emph{production nodes} (\autoref{sec:production-node}).
 
-As their name suggests, unary nodes implement unary relational algebraic operators (\autoref{sec:unary}):
+As their name suggests, unary nodes implement unary relational algebraic operators (\autoref{sec:unary-operators}):
 
 \begin{itemize}
 	\item The \emph{projection node} performs a projection operation on the input relation.
@@ -95,7 +101,7 @@ As all operators are distributive \wrt the union and set minus operators \todo{a
 
 %\fig{rete/binary-node}{Graphical notation of a binary node}{\retescale}
 
-\emph{Binary nodes} %(\autoref{fig:rete/binary-node})
+\emph{Binary nodes} implement \emph{binary relational operators} (\autoref{sec:binary-operators}) and
 have two input slots: the \emph{primary} ($p$) and the \emph{secondary} ($s$). Binary node implementations typically cache both their input relations in \emph{indexers}.
 
 \subsection{Natural Join Node}
@@ -138,7 +144,7 @@ As the antijoin operator is not commutative, handling update messages requires u
 		$$ \Delta t = \Delta p \antijoin s $$
 	\end{itemize}
 
-	\item Update on the secondary slot. This case is more difficult to handle, so we recall the definition of the antijoin operator from \autoref{sec:binary} for relations $p$ and $s$:
+	\item Update on the secondary slot. This case is more difficult to handle, so we recall the definition of the antijoin operator from \autoref{sec:binary-operators} for relations $p$ and $s$:
 	\begin{align*}
 		t & \equiv p \antijoin s = p \setminus \left(p \join \pi_{P \cap S} (s)\right),
 	\end{align*}

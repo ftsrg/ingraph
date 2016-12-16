@@ -55,7 +55,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}} \Big(\alldifferent{} \Big(\expandin{sensor}{segment1}{Segment}{\_e553}{monitoredBy}{}{} \Big(\getvertices{sensor}{Sensor}\Big) \join \expandout{segment5}{segment6}{Segment}{\_e558}{connectsTo}{}{} \Big(\expandout{segment4}{segment5}{Segment}{\_e557}{connectsTo}{}{} \Big(\expandout{segment3}{segment4}{Segment}{\_e556}{connectsTo}{}{} \Big(\expandout{segment2}{segment3}{Segment}{\_e555}{connectsTo}{}{} \Big(\expandout{segment1}{segment2}{Segment}{\_e554}{connectsTo}{}{} \Big(\getvertices{segment1}{Segment}\Big)\Big)\Big)\Big)\Big) \join \expandout{segment2}{sensor}{Sensor}{\_e559}{monitoredBy}{}{} \Big(\getvertices{segment2}{Segment}\Big) \join \expandout{segment3}{sensor}{Sensor}{\_e560}{monitoredBy}{}{} \Big(\getvertices{segment3}{Segment}\Big) \join \expandout{segment4}{sensor}{Sensor}{\_e561}{monitoredBy}{}{} \Big(\getvertices{segment4}{Segment}\Big) \join \expandout{segment5}{sensor}{Sensor}{\_e562}{monitoredBy}{}{} \Big(\getvertices{segment5}{Segment}\Big) \join \expandout{segment6}{sensor}{Sensor}{\_e563}{monitoredBy}{}{} \Big(\getvertices{segment6}{Segment}\Big)\Big)\Big)
+\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}} \Big(\alldifferent{} \Big(\expandin{sensor}{segment1}{Segment}{\_e7}{monitoredBy}{}{} \Big(\getvertices{sensor}{Sensor}\Big) \join \expandout{segment5}{segment6}{Segment}{\_e12}{connectsTo}{}{} \Big(\expandout{segment4}{segment5}{Segment}{\_e11}{connectsTo}{}{} \Big(\expandout{segment3}{segment4}{Segment}{\_e10}{connectsTo}{}{} \Big(\expandout{segment2}{segment3}{Segment}{\_e9}{connectsTo}{}{} \Big(\expandout{segment1}{segment2}{Segment}{\_e8}{connectsTo}{}{} \Big(\getvertices{segment1}{Segment}\Big)\Big)\Big)\Big)\Big) \join \expandout{segment2}{sensor}{Sensor}{\_e13}{monitoredBy}{}{} \Big(\getvertices{segment2}{Segment}\Big) \join \expandout{segment3}{sensor}{Sensor}{\_e14}{monitoredBy}{}{} \Big(\getvertices{segment3}{Segment}\Big) \join \expandout{segment4}{sensor}{Sensor}{\_e15}{monitoredBy}{}{} \Big(\getvertices{segment4}{Segment}\Big) \join \expandout{segment5}{sensor}{Sensor}{\_e16}{monitoredBy}{}{} \Big(\getvertices{segment5}{Segment}\Big) \join \expandout{segment6}{sensor}{Sensor}{\_e17}{monitoredBy}{}{} \Big(\getvertices{segment6}{Segment}\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -115,7 +115,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandin{sensor}{segment1}{Segment}{\_e575}{monitoredBy}{}{}$
+	{$\expandin{sensor}{segment1}{Segment}{\_e29}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -129,31 +129,31 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment5}{segment6}{Segment}{\_e580}{connectsTo}{}{}$
+	{$\expandout{segment5}{segment6}{Segment}{\_e34}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{segment4}{segment5}{Segment}{\_e579}{connectsTo}{}{}$
+	{$\expandout{segment4}{segment5}{Segment}{\_e33}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{segment3}{segment4}{Segment}{\_e578}{connectsTo}{}{}$
+	{$\expandout{segment3}{segment4}{Segment}{\_e32}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{segment2}{segment3}{Segment}{\_e577}{connectsTo}{}{}$
+	{$\expandout{segment2}{segment3}{Segment}{\_e31}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{segment1}{segment2}{Segment}{\_e576}{connectsTo}{}{}$
+	{$\expandout{segment1}{segment2}{Segment}{\_e30}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -172,7 +172,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment2}{sensor}{Sensor}{\_e581}{monitoredBy}{}{}$
+	{$\expandout{segment2}{sensor}{Sensor}{\_e35}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -187,7 +187,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment3}{sensor}{Sensor}{\_e582}{monitoredBy}{}{}$
+	{$\expandout{segment3}{sensor}{Sensor}{\_e36}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -202,7 +202,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment4}{sensor}{Sensor}{\_e583}{monitoredBy}{}{}$
+	{$\expandout{segment4}{sensor}{Sensor}{\_e37}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -217,7 +217,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment5}{sensor}{Sensor}{\_e584}{monitoredBy}{}{}$
+	{$\expandout{segment5}{sensor}{Sensor}{\_e38}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -232,7 +232,7 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 ]
 ]
 [
-	{$\expandout{segment6}{sensor}{Sensor}{\_e585}{monitoredBy}{}{}$
+	{$\expandout{segment6}{sensor}{Sensor}{\_e39}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -328,7 +328,7 @@ RETURN DISTINCT route, sensor, swP, sw
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\selection{\neg \left( \var{route} IS NOT NULL \land \var{g} IS NOT NULL \land \var{sensor} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e588}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e587}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e586}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big) \leftouterjoin \expandout{route}{sensor}{Sensor}{g}{gathers}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)
+\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\selection{\neg \left( \var{route} IS NOT NULL \land \var{g} IS NOT NULL \land \var{sensor} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e42}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e41}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e40}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big) \leftouterjoin \expandout{route}{sensor}{Sensor}{g}{gathers}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -370,19 +370,19 @@ RETURN DISTINCT route, sensor, swP, sw
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{sw}{sensor}{Sensor}{\_e594}{monitoredBy}{}{}$
+	{$\expandout{sw}{sensor}{Sensor}{\_e48}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{swP}{sw}{Switch}{\_e593}{target}{}{}$
+	{$\expandout{swP}{sw}{Switch}{\_e47}{target}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{route}{swP}{SwitchPosition}{\_e592}{follows}{}{}$
+	{$\expandout{route}{swP}{SwitchPosition}{\_e46}{follows}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -432,7 +432,7 @@ RETURN DISTINCT route, sensor, swP, sw
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e597}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e596}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e595}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)\Big)\Big)
+\duplicateelimination \Big(\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}} \Big(\alldifferent{} \Big(\expandout{sw}{sensor}{Sensor}{\_e51}{monitoredBy}{}{} \Big(\expandout{swP}{sw}{Switch}{\_e50}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e49}{follows}{}{} \Big(\getvertices{route}{Route}\Big)\Big)\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -462,19 +462,19 @@ RETURN DISTINCT route, sensor, swP, sw
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{sw}{sensor}{Sensor}{\_e603}{monitoredBy}{}{}$
+	{$\expandout{sw}{sensor}{Sensor}{\_e57}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{swP}{sw}{Switch}{\_e602}{target}{}{}$
+	{$\expandout{swP}{sw}{Switch}{\_e56}{target}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{route}{swP}{SwitchPosition}{\_e601}{follows}{}{}$
+	{$\expandout{route}{swP}{SwitchPosition}{\_e55}{follows}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -510,7 +510,7 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}} \Big(\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{_e610} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}} \Big(\alldifferent{} \Big(\expandin{sensor2}{route2}{Route}{\_e609}{gathers}{}{} \Big(\expandout{te2}{sensor2}{Sensor}{\_e608}{monitoredBy}{}{} \Big(\expandout{te1}{te2}{}{\_e607}{connectsTo}{}{} \Big(\expandin{sensor1}{te1}{}{\_e606}{monitoredBy}{}{} \Big(\expandout{route1}{sensor1}{Sensor}{\_e605}{gathers}{}{} \Big(\expandin{semaphore}{route1}{Route}{\_e604}{exit}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big) \leftouterjoin \expandin{semaphore}{route2}{Route}{\_e610}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)
+\duplicateelimination \Big(\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}} \Big(\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{\_e64} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}} \Big(\alldifferent{} \Big(\expandin{sensor2}{route2}{Route}{\_e63}{gathers}{}{} \Big(\expandout{te2}{sensor2}{Sensor}{\_e62}{monitoredBy}{}{} \Big(\expandout{te1}{te2}{}{\_e61}{connectsTo}{}{} \Big(\expandin{sensor1}{te1}{}{\_e60}{monitoredBy}{}{} \Big(\expandout{route1}{sensor1}{Sensor}{\_e59}{gathers}{}{} \Big(\expandin{semaphore}{route1}{Route}{\_e58}{exit}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big) \leftouterjoin \expandin{semaphore}{route2}{Route}{\_e64}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -534,7 +534,7 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{_e624} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}}$
+	{$\selection{\neg \left( \var{semaphore} IS NOT NULL \land \var{\_e78} IS NOT NULL \land \var{route2} IS NOT NULL \right) \land \var{route1} \neq \var{route2}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -552,37 +552,37 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandin{sensor2}{route2}{Route}{\_e623}{gathers}{}{}$
+	{$\expandin{sensor2}{route2}{Route}{\_e77}{gathers}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{te2}{sensor2}{Sensor}{\_e622}{monitoredBy}{}{}$
+	{$\expandout{te2}{sensor2}{Sensor}{\_e76}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{te1}{te2}{}{\_e621}{connectsTo}{}{}$
+	{$\expandout{te1}{te2}{}{\_e75}{connectsTo}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandin{sensor1}{te1}{}{\_e620}{monitoredBy}{}{}$
+	{$\expandin{sensor1}{te1}{}{\_e74}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{route1}{sensor1}{Sensor}{\_e619}{gathers}{}{}$
+	{$\expandout{route1}{sensor1}{Sensor}{\_e73}{gathers}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandin{semaphore}{route1}{Route}{\_e618}{exit}{}{}$
+	{$\expandin{semaphore}{route1}{Route}{\_e72}{exit}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -602,7 +602,7 @@ RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 ]
 ]
 [
-	{$\expandin{semaphore}{route2}{Route}{\_e624}{entry}{}{}$
+	{$\expandin{semaphore}{route2}{Route}{\_e78}{entry}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -636,7 +636,7 @@ RETURN DISTINCT sw
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{sw}} \Big(\selection{\neg \left( \var{sw} IS NOT NULL \land \var{_e625} IS NOT NULL \land \var{_e626} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\getvertices{sw}{Switch}\Big) \leftouterjoin \expandout{sw}{\_e626}{Sensor}{\_e625}{monitoredBy}{}{} \Big(\getvertices{sw}{Switch}\Big)\Big)\Big)\Big)
+\duplicateelimination \Big(\projection{\var{sw}} \Big(\selection{\neg \left( \var{sw} IS NOT NULL \land \var{\_e79} IS NOT NULL \land \var{\_e80} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\getvertices{sw}{Switch}\Big) \leftouterjoin \expandout{sw}{\_e80}{Sensor}{\_e79}{monitoredBy}{}{} \Big(\getvertices{sw}{Switch}\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -660,7 +660,7 @@ RETURN DISTINCT sw
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\selection{\neg \left( \var{sw} IS NOT NULL \land \var{_e629} IS NOT NULL \land \var{_e630} IS NOT NULL \right)}$
+	{$\selection{\neg \left( \var{sw} IS NOT NULL \land \var{\_e83} IS NOT NULL \land \var{\_e84} IS NOT NULL \right)}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -686,7 +686,7 @@ RETURN DISTINCT sw
 ]
 ]
 [
-	{$\expandout{sw}{\_e630}{Sensor}{\_e629}{monitoredBy}{}{}$
+	{$\expandout{sw}{\_e84}{Sensor}{\_e83}{monitoredBy}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -721,7 +721,7 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}} \Big(\selection{\var{semaphore.signal} = \literal{'"GO"'} \land \var{sw.currentPosition} \neq \var{swP.position}} \Big(\alldifferent{} \Big(\expandout{swP}{sw}{Switch}{\_e633}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e632}{follows}{}{} \Big(\expandin{semaphore}{route}{Route}{\_e631}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
+\duplicateelimination \Big(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}} \Big(\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}} \Big(\alldifferent{} \Big(\expandout{swP}{sw}{Switch}{\_e87}{target}{}{} \Big(\expandout{route}{swP}{SwitchPosition}{\_e86}{follows}{}{} \Big(\expandin{semaphore}{route}{Route}{\_e85}{entry}{}{} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
@@ -745,7 +745,7 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\selection{\var{semaphore.signal} = \literal{'"GO"'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
+	{$\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
@@ -757,19 +757,19 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{swP}{sw}{Switch}{\_e639}{target}{}{}$
+	{$\expandout{swP}{sw}{Switch}{\_e93}{target}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandout{route}{swP}{SwitchPosition}{\_e638}{follows}{}{}$
+	{$\expandout{route}{swP}{SwitchPosition}{\_e92}{follows}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$
 			}
 [
-	{$\expandin{semaphore}{route}{Route}{\_e637}{entry}{}{}$
+	{$\expandin{semaphore}{route}{Route}{\_e91}{entry}{}{}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{} \rangle$

@@ -2,7 +2,7 @@
 \label{sec:compilation}
 
 In this section, we first give the mapping algorithm of \opencypher queries to \rga, then we give a more detailed listing of the compilation rules for the query language constructs in \autoref{table:mapping}.
-We follow the bottom-up approach to build the \rga tree based on the \opencypher query. The algorithm is as follows. Join operations always use all common variables to match the two inputs (see \jointext in \autoref{sec:rga}).
+We follow the bottom-up approach to build the \rga tree based on the \opencypher query. The algorithm is as follows. Join operations always use all common variables to match the two inputs (see \jointext in \autoref{sec:binary-operators}).
 
 \setlength\tabcolsep{3.6pt}
 \begin{enumerate}
