@@ -14,106 +14,108 @@ import org.apache.commons.io.FilenameUtils
 
 class IngraphReportTest {
 
-	protected extension SchemaInferencer inferencer = new SchemaInferencer
-	protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
-	protected val treeSerializer = new RelalgTreeSerializer
-	protected val config = RelalgSerializerConfig.builder.build
-	protected val expressionSerializer = new RelalgExpressionSerializer(config)
+    protected extension SchemaInferencer inferencer = new SchemaInferencer
+    protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+    protected val treeSerializer = new RelalgTreeSerializer
+    protected val config = RelalgSerializerConfig.builder.build
+    protected val expressionSerializer = new RelalgExpressionSerializer(config)
 
-	def toChapter(String directoryName, String chapterTitle) {
-		val files = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).toList
-        Collections.sort(files)
+    def toChapter(String directoryName, String chapterTitle) {
+        val fileNames = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).map[name].
+            toList
+        Collections.sort(fileNames)
 
-		val doc = '''
-			\chapter{«chapterTitle»}
-			\label{chp:«directoryName»}
-			
-			«FOR file : files» 
-				«val query = FilenameUtils.removeExtension(file.name)»
-				«toSection(directoryName, query)»
-			«ENDFOR»
-		'''
-		FileUtils.writeStringToFile(new File('''../opencypher-report/«directoryName».tex'''), doc, Charset.defaultCharset())
-	}
+        val doc = '''
+            \chapter{«chapterTitle»}
+            \label{chp:«directoryName»}
+            
+            «FOR fileName : fileNames»
+                «val query = FilenameUtils.removeExtension(fileName)»
+                «toSection(directoryName, query)»
+            «ENDFOR»
+        '''
+        FileUtils.writeStringToFile(new File('''../opencypher-report/«directoryName».tex'''), doc,
+            Charset.defaultCharset())
+    }
 
-	/**
-	 * Drops indentation and quotes.
-	 */
-	def cleanup(String s) {
-		s //
-		.replaceAll('''"""''', "") // """
-		.replaceAll("'''", "") // '''
-		.replaceAll("\n      ", "\n") // indentation
-		.replaceAll("^\n", "") // newline at the start
-		.replaceAll("\n$", "") // newline at the end
-	}
+    /**
+     * Drops indentation and quotes.
+     */
+    def cleanup(String s) {
+        s //
+        .replaceAll('''"""''', "") // """
+        .replaceAll("'''", "") // '''
+        .replaceAll("\n      ", "\n") // indentation
+        .replaceAll("^\n", "") // newline at the start
+        .replaceAll("\n$", "") // newline at the end
+    }
 
-	def escape(String s) {
-		s //
-		.replaceAll('''#''', '''\\#''') //
-		.replaceAll('''_''', '''\\_''')
-	}
+    def escape(String s) {
+        s //
+        .replaceAll('''#''', '''\\#''') //
+        .replaceAll('''_''', '''\\_''')
+    }
 
-	def expression(CharSequence s) {
-		try {
-			val container = Cypher2Relalg.processString(s.toString)
-			expressionSerializer.serialize(container.addSchemaInformation).toString
-		} catch (Exception e) {
-			e.printStackTrace
-			'''\text{Cannot convert to expression.}'''
-		}
-	}
+    def expression(CharSequence s) {
+        try {
+            val container = Cypher2Relalg.processString(s.toString)
+            expressionSerializer.serialize(container.addSchemaInformation).toString
+        } catch (Exception e) {
+            e.printStackTrace
+            '''\text{Cannot convert to expression.}'''
+        }
+    }
 
-	def visualize(CharSequence s) {
-		try {
-			val container = Cypher2Relalg.processString(s.toString)
-			treeSerializer.serialize(container.addSchemaInformation)
-		} catch (Exception e) {
-			e.printStackTrace
-			'''\text{Cannot visualize tree.}'''
-		}
-	}
+    def visualize(CharSequence s) {
+        try {
+            val container = Cypher2Relalg.processString(s.toString)
+            treeSerializer.serialize(container.addSchemaInformation)
+        } catch (Exception e) {
+            e.printStackTrace
+            '''\text{Cannot visualize tree.}'''
+        }
+    }
 
-	def visualizeWithTransformations(CharSequence s) {
-		try {
-			val container = Cypher2Relalg.processString(s.toString)
-			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
-		} catch (Exception e) {
-			e.printStackTrace
-			'''Cannot visualize incremental tree.'''
-		}
-	}
-	
-	def toSection(String directoryName, String query) {
-		val fileName = '''../queries/«directoryName»/«query».cypher'''
-		val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
+    def visualizeWithTransformations(CharSequence s) {
+        try {
+            val container = Cypher2Relalg.processString(s.toString)
+            treeSerializer.serialize(container.transformToRete.addSchemaInformation)
+        } catch (Exception e) {
+            e.printStackTrace
+            '''Cannot visualize incremental tree.'''
+        }
+    }
 
-		'''
-		\section{«query»}
-		
-		\subsection*{Query specification}
-		
-		\begin{lstlisting}
-		«querySpecification»
-		\end{lstlisting}
-		
-		\subsection*{Relational algebra expression}
-		
-		\begin{flalign*}
-		«querySpecification.expression»
-		\end{flalign*}
-		
-		\subsection*{Relational algebra tree}
-		\adjustbox{max width=\textwidth}{%
-		«querySpecification.visualize»
-		}
-		
-		\subsection*{Relational algebra tree for incremental queries}
-		\adjustbox{max width=\textwidth}{%
-		«querySpecification.visualizeWithTransformations»
-		}
-		
-		'''
-	}
-	
+    def toSection(String directoryName, String query) {
+        val fileName = '''../queries/«directoryName»/«query».cypher'''
+        val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
+
+        '''
+            \section{«query»}
+            
+            \subsection*{Query specification}
+            
+            \begin{lstlisting}
+            «querySpecification»
+            \end{lstlisting}
+            
+            \subsection*{Relational algebra expression}
+            
+            \begin{flalign*}
+            «querySpecification.expression»
+            \end{flalign*}
+            
+            \subsection*{Relational algebra tree}
+            \adjustbox{max width=\textwidth}{%
+            «querySpecification.visualize»
+            }
+            
+            \subsection*{Relational algebra tree for incremental queries}
+            \adjustbox{max width=\textwidth}{%
+            «querySpecification.visualizeWithTransformations»
+            }
+            
+        '''
+    }
+
 }

@@ -11,11 +11,10 @@ import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.ProjectionOperator
-import relalg.UnionOperator
-import relalg.Variable
 import relalg.RelalgContainer
 import relalg.UnaryOperator
-import relalg.RelalgFactory
+import relalg.UnionOperator
+import relalg.Variable
 import relalg.VertexVariable
 
 class SchemaInferencer {
