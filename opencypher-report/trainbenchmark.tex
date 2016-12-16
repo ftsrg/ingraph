@@ -65,61 +65,61 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, segment1, segment2, segment3, segment4, segment5, segment6} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24, \_e25, \_e26, \_e27, \_e28} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24, \_e25, \_e26, \_e27, \_e28} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24, \_e25, \_e26, \_e27} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24, \_e25, \_e26} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24, \_e25} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6, \_e24} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6} \rangle$
 			}
 [
 	{$\expandin{sensor}{segment1}{Segment}{\_e18}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e18, segment1} \rangle$
 			}
 [
 	{$\getvertices{sensor}{Sensor}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -127,37 +127,37 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment5}{segment6}{Segment}{\_e23}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5, \_e23, segment6} \rangle$
 			}
 [
 	{$\expandout{segment4}{segment5}{Segment}{\_e22}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4, \_e22, segment5} \rangle$
 			}
 [
 	{$\expandout{segment3}{segment4}{Segment}{\_e21}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e19, segment2, \_e20, segment3, \_e21, segment4} \rangle$
 			}
 [
 	{$\expandout{segment2}{segment3}{Segment}{\_e20}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e19, segment2, \_e20, segment3} \rangle$
 			}
 [
 	{$\expandout{segment1}{segment2}{Segment}{\_e19}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e19, segment2} \rangle$
 			}
 [
 	{$\getvertices{segment1}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -170,13 +170,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment2}{sensor}{Sensor}{\_e24}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment2, \_e24, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment2}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment2} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -185,13 +185,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment3}{sensor}{Sensor}{\_e25}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment3, \_e25, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment3}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment3} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -200,13 +200,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment4}{sensor}{Sensor}{\_e26}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment4, \_e26, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment4}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment4} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -215,13 +215,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment5}{sensor}{Sensor}{\_e27}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment5, \_e27, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment5}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment5} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -230,13 +230,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment6}{sensor}{Sensor}{\_e28}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment6, \_e28, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment6}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment6} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -254,61 +254,61 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, segment1, segment2, segment3, segment4, segment5, segment6} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35, \_e36, \_e37, \_e38, \_e39} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35, \_e36, \_e37, \_e38, \_e39} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35, \_e36, \_e37, \_e38} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35, \_e36, \_e37} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35, \_e36} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6, \_e35} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6} \rangle$
 			}
 [
 	{$\expandin{sensor}{segment1}{Segment}{\_e29}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor, \_e29, segment1} \rangle$
 			}
 [
 	{$\getvertices{sensor}{Sensor}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{sensor} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -316,37 +316,37 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment5}{segment6}{Segment}{\_e34}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5, \_e34, segment6} \rangle$
 			}
 [
 	{$\expandout{segment4}{segment5}{Segment}{\_e33}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4, \_e33, segment5} \rangle$
 			}
 [
 	{$\expandout{segment3}{segment4}{Segment}{\_e32}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e30, segment2, \_e31, segment3, \_e32, segment4} \rangle$
 			}
 [
 	{$\expandout{segment2}{segment3}{Segment}{\_e31}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e30, segment2, \_e31, segment3} \rangle$
 			}
 [
 	{$\expandout{segment1}{segment2}{Segment}{\_e30}{connectsTo}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1, \_e30, segment2} \rangle$
 			}
 [
 	{$\getvertices{segment1}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment1} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -359,13 +359,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment2}{sensor}{Sensor}{\_e35}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment2, \_e35, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment2}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment2} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -374,13 +374,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment3}{sensor}{Sensor}{\_e36}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment3, \_e36, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment3}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment3} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -389,13 +389,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment4}{sensor}{Sensor}{\_e37}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment4, \_e37, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment4}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment4} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -404,13 +404,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment5}{sensor}{Sensor}{\_e38}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment5, \_e38, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment5}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment5} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -419,13 +419,13 @@ RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 	{$\expandout{segment6}{sensor}{Sensor}{\_e39}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment6, \_e39, sensor} \rangle$
 			}
 [
 	{$\getvertices{segment6}{Segment}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{segment6} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -449,91 +449,17 @@ RETURN DISTINCT segment, segment.length AS length
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{segment},~\var{segment.length}} \Big(\selection{\var{segment.length} \leq \literal{0}} \Big(\alldifferent{} \Big(\getvertices{segment}{Segment}\Big)\Big)\Big)\Big)
+\text{Cannot convert to expression.}
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
 \adjustbox{max width=\textwidth}{%
-\begin{forest} for tree={align=center}
-[
-	{$\duplicateelimination$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\projection{\var{segment},~\var{segment.length}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\selection{\var{segment.length} \leq \literal{0}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{segment}{Segment}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-;
-\end{forest}
+\text{Cannot visualize tree.}
 }
 
 \subsection*{Relational algebra tree for incremental queries}
 \adjustbox{max width=\textwidth}{%
-\begin{forest} for tree={align=center}
-[
-	{$\duplicateelimination$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\projection{\var{segment},~\var{segment.length}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\selection{\var{segment.length} \leq \literal{0}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{segment}{Segment}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-;
-\end{forest}
+Cannot visualize incremental tree.
 }
 
 \section{RouteSensor}
@@ -584,43 +510,43 @@ RETURN DISTINCT route, sensor, swP, sw
 	{$\duplicateelimination$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, sensor, swP, sw} \rangle$
 			}
 [
 	{$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, sensor, swP, sw} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e52, swP, \_e53, sw, \_e54, sensor} \rangle$
 			}
 [
 	{$\expandout{sw}{sensor}{Sensor}{\_e54}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e52, swP, \_e53, sw, \_e54, sensor} \rangle$
 			}
 [
 	{$\expandout{swP}{sw}{Switch}{\_e53}{target}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e52, swP, \_e53, sw} \rangle$
 			}
 [
 	{$\expandout{route}{swP}{SwitchPosition}{\_e52}{follows}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e52, swP} \rangle$
 			}
 [
 	{$\getvertices{route}{Route}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -640,43 +566,43 @@ RETURN DISTINCT route, sensor, swP, sw
 	{$\duplicateelimination$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, sensor, swP, sw} \rangle$
 			}
 [
 	{$\projection{\var{route},~\var{sensor},~\var{swP},~\var{sw}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, sensor, swP, sw} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e55, swP, \_e56, sw, \_e57, sensor} \rangle$
 			}
 [
 	{$\expandout{sw}{sensor}{Sensor}{\_e57}{monitoredBy}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e55, swP, \_e56, sw, \_e57, sensor} \rangle$
 			}
 [
 	{$\expandout{swP}{sw}{Switch}{\_e56}{target}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e55, swP, \_e56, sw} \rangle$
 			}
 [
 	{$\expandout{route}{swP}{SwitchPosition}{\_e55}{follows}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route, \_e55, swP} \rangle$
 			}
 [
 	{$\getvertices{route}{Route}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
+			$\color{gray} \langle \var{route} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -756,132 +682,16 @@ RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\duplicateelimination \Big(\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}} \Big(\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}} \Big(\alldifferent{} \Big(\expandout{swP}{sw}{Switch}{\_e78}{target}{1}{1} \Big(\expandout{route}{swP}{SwitchPosition}{\_e77}{follows}{1}{1} \Big(\expandin{semaphore}{route}{Route}{\_e76}{entry}{1}{1} \Big(\getvertices{semaphore}{Semaphore}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
+\text{Cannot convert to expression.}
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
 \adjustbox{max width=\textwidth}{%
-\begin{forest} for tree={align=center}
-[
-	{$\duplicateelimination$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{swP}{sw}{Switch}{\_e81}{target}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{route}{swP}{SwitchPosition}{\_e80}{follows}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandin{semaphore}{route}{Route}{\_e79}{entry}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{semaphore}{Semaphore}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-]
-]
-]
-;
-\end{forest}
+\text{Cannot visualize tree.}
 }
 
 \subsection*{Relational algebra tree for incremental queries}
 \adjustbox{max width=\textwidth}{%
-\begin{forest} for tree={align=center}
-[
-	{$\duplicateelimination$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition},~\var{swP.position}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\alldifferent{}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{swP}{sw}{Switch}{\_e84}{target}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandout{route}{swP}{SwitchPosition}{\_e83}{follows}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\expandin{semaphore}{route}{Route}{\_e82}{entry}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			}
-[
-	{$\getvertices{semaphore}{Semaphore}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-]
-]
-]
-]
-]
-;
-\end{forest}
+Cannot visualize incremental tree.
 }
 

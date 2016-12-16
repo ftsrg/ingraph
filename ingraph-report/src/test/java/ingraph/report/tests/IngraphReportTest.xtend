@@ -1,6 +1,5 @@
 package ingraph.report.tests
 
-import com.google.common.collect.Lists
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
@@ -58,7 +57,7 @@ class IngraphReportTest {
 	def expression(CharSequence s) {
 		try {
 			val container = Cypher2Relalg.processString(s.toString)
-			expressionSerializer.serialize(container) //.addSchemaInformation).toString
+			expressionSerializer.serialize(container.addSchemaInformation).toString
 		} catch (Exception e) {
 			e.printStackTrace
 			'''\text{Cannot convert to expression.}'''
@@ -68,7 +67,7 @@ class IngraphReportTest {
 	def visualize(CharSequence s) {
 		try {
 			val container = Cypher2Relalg.processString(s.toString)
-			treeSerializer.serialize(container) //.addSchemaInformation)
+			treeSerializer.serialize(container.addSchemaInformation)
 		} catch (Exception e) {
 			e.printStackTrace
 			'''\text{Cannot visualize tree.}'''
@@ -78,7 +77,7 @@ class IngraphReportTest {
 	def visualizeWithTransformations(CharSequence s) {
 		try {
 			val container = Cypher2Relalg.processString(s.toString)
-			treeSerializer.serialize(container.transformToRete) //.addSchemaInformation)
+			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
 		} catch (Exception e) {
 			e.printStackTrace
 			'''Cannot visualize incremental tree.'''

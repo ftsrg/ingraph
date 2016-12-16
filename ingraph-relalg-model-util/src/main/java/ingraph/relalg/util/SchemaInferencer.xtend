@@ -15,126 +15,134 @@ import relalg.UnionOperator
 import relalg.Variable
 import relalg.RelalgContainer
 import relalg.UnaryOperator
+import relalg.RelalgFactory
+import relalg.VertexVariable
 
 class SchemaInferencer {
 
-	val boolean includeEdges
+    val boolean includeEdges
+    var RelalgContainer container
 
-	new() {
-		this.includeEdges = true
-	}
+    new() {
+        this.includeEdges = true
+    }
 
-	new(boolean includeEdges) {
-		this.includeEdges = includeEdges
-	}
+    new(boolean includeEdges) {
+        this.includeEdges = includeEdges
+    }
 
-	def addSchemaInformation(RelalgContainer container) {
-		val rootExpression = container.getRootExpression
-		rootExpression.inferSchema
-		container
-	}
+    def addSchemaInformation(RelalgContainer container) {
+        val rootExpression = container.getRootExpression
+        this.container = container // TODO ugly hack
+        rootExpression.inferSchema
+        container
+    }
 
-	/**
-	 * inferSchema
-	 */
-	// nullary operators
-	def dispatch List<Variable> inferSchema(GetVerticesOperator op) {
-		op.defineSchema(#[op.vertexVariable])
-	}
+    /**
+     * inferSchema
+     */
+    // nullary operators
+    def dispatch List<Variable> inferSchema(GetVerticesOperator op) {
+        op.defineSchema(#[op.vertexVariable])
+    }
 
-	def dispatch List<Variable> inferSchema(GetEdgesOperator op) {
-		if (includeEdges) {
-			op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
-		} else {
-			op.defineSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
-		}
-	}
+    def dispatch List<Variable> inferSchema(GetEdgesOperator op) {
+        if (includeEdges) {
+            op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
+        } else {
+            op.defineSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
+        }
+    }
 
-	// unary operators
-	def dispatch List<Variable> inferSchema(ProjectionOperator op) {
-		val schema = op.getInput.inferSchema
+    // unary operators
+    def dispatch List<Variable> inferSchema(ProjectionOperator op) {
+        val schema = op.getInput.inferSchema
 
-		// check if all projected variables are in the schema
-		op.variables.filter(typeof(AttributeVariable)).forEach [
-			if (!schema.contains(it.element))
-				throw new IllegalStateException("Attribute " + it.name +
-					" cannot be projected as its vertex/edge variable does not exists.")
-		]
-		op.variables.filter(typeof(ElementVariable)).forEach [
-			if (!schema.contains(it))
-				throw new IllegalStateException("Variable " + it.name +
-					" is not part of the schema in projection operator.")
-		]
-//		TODO fix this
-		op.defineSchema(op.variables as List)
-	}
+        // check if all projected variables are in the schema
+        op.variables.filter(AttributeVariable).forEach [
+            if (!schema.contains(it.element))
+                throw new IllegalStateException("Attribute " + it.name +
+                    " cannot be projected as its vertex/edge variable does not exists.")
+        ]
+        op.variables.filter(ElementVariable).forEach [
+            if (!schema.contains(it))
+                throw new IllegalStateException("Variable " + it.name +
+                    " is not part of the schema in projection operator.")
+        ]
 
-	def dispatch List<Variable> inferSchema(ExpandOperator op) {
-		val schema = Lists.newArrayList(op.getInput.inferSchema)
-		if (includeEdges) {
-			schema.add(op.edgeVariable)
-		}
-		schema.add(op.targetVertexVariable)
-		op.defineSchema(schema)
-	}
+        op.defineSchema(op.variables.map [
+            if (expression instanceof VertexVariable) {
+                expression as VertexVariable
+            }
+        ])
+    }
 
-	// rest of the unary operators
-	def dispatch List<Variable> inferSchema(UnaryOperator op) {
-		op.defineSchema(op.getInput.inferSchema)
-	}
+    def dispatch List<Variable> inferSchema(ExpandOperator op) {
+        val schema = Lists.newArrayList(op.getInput.inferSchema)
+        if (includeEdges) {
+            schema.add(op.edgeVariable)
+        }
+        schema.add(op.targetVertexVariable)
+        op.defineSchema(schema)
+    }
 
-	// binary operators
-	def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
-		val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
-		val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
-		op.defineSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
+    // rest of the unary operators
+    def dispatch List<Variable> inferSchema(UnaryOperator op) {
+        op.defineSchema(op.getInput.inferSchema)
+    }
 
-		// calculate the mutual variables
-		leftInputSchema.retainAll(rightInputSchema)
-		op.commonVariables.addAll(leftInputSchema)
+    // binary operators
+    def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
+        val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
+        val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
+        op.defineSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
 
-		op.schema
-	}
+        // calculate the mutual variables
+        leftInputSchema.retainAll(rightInputSchema)
+        op.commonVariables.addAll(leftInputSchema)
 
-	def dispatch List<Variable> inferSchema(UnionOperator op) {
-		// The openCypher acceptance test and the Neo4j code contradict each other:
-		// OpenCypher
-		// https://github.com/opencypher/openCypher/blob/master/tck/features/UnionAcceptance.feature
-		// Scenario: Should be able to create text output from union queries
-		// Given an empty graph
-		// And having executed:
-		// """
-		// CREATE (:A), (:B)
-		// """
-		// When executing query:
-		// """
-		// MATCH (a:A)
-		// RETURN a AS a
-		// UNION
-		// MATCH (b:B)
-		// RETURN b AS a
-		// """
-		// Then the result should be:
-		// | a    |
-		// | (:A) |
-		// | (:B) |
-		// And no side effects
-		// Neo4j
-		// https://github.com/neo4j/neo4j/blob/3.1/community/cypher/spec-suite-tools/src/test/scala/cypher/feature/steps/SpecSuiteErrorHandler.scala#L166
-		// All sub queries in an UNION must have the same column names
-		op.getLeftInput.inferSchema
-		op.getRightInput.inferSchema
+        op.schema
+    }
 
-		// we only keep the left schema
-		op.defineSchema(op.getLeftInput.schema)
-	}
+    def dispatch List<Variable> inferSchema(UnionOperator op) {
+        // The openCypher acceptance test and the Neo4j code contradict each other:
+        // OpenCypher
+        // https://github.com/opencypher/openCypher/blob/master/tck/features/UnionAcceptance.feature
+        // Scenario: Should be able to create text output from union queries
+        // Given an empty graph
+        // And having executed:
+        // """
+        // CREATE (:A), (:B)
+        // """
+        // When executing query:
+        // """
+        // MATCH (a:A)
+        // RETURN a AS a
+        // UNION
+        // MATCH (b:B)
+        // RETURN b AS a
+        // """
+        // Then the result should be:
+        // | a    |
+        // | (:A) |
+        // | (:B) |
+        // And no side effects
+        // Neo4j
+        // https://github.com/neo4j/neo4j/blob/3.1/community/cypher/spec-suite-tools/src/test/scala/cypher/feature/steps/SpecSuiteErrorHandler.scala#L166
+        // All sub queries in an UNION must have the same column names
+        op.getLeftInput.inferSchema
+        op.getRightInput.inferSchema
 
-	/**
-	 * defineSchema
-	 */
-	def defineSchema(Operator op, List<Variable> schema) {
-		op.schema.addAll(schema)
-		schema
-	}
+        // we only keep the left schema
+        op.defineSchema(op.getLeftInput.schema)
+    }
+
+    /**
+     * defineSchema
+     */
+    def defineSchema(Operator op, List<Variable> schema) {
+        op.schema.addAll(schema)
+        schema
+    }
 
 }
