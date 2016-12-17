@@ -1,219 +1,6 @@
 \chapter{LDBC Social Network Benchmark}
 \label{chp:ldbc-snb}
 
-\section{query-3}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q3. Friends within 2 steps that recently traveled to countries X and Y. Find top 20 friends and friends of friends of a given Person who have made a post or a comment in the foreign CountryX and CountryY within a specified period of DurationInDays after a startDate. Sorted results descending by total number of posts.
-MATCH
-  (person:Person)-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(messageX),
-  (messageX)-[:IS_LOCATED_IN]->(countryX:Country)
-WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-  AND NOT((friend)-[:IS_LOCATED_IN]->()-[:IS_PART_OF]->(countryX))
-  AND countryX.name = $countryXName
-  AND messageX.creationDate >= $date1
-  AND messageX.creationDate < $date2
-WITH friend, count(DISTINCT messageX) AS xCount
-MATCH (friend)<-[:HAS_CREATOR]-(messageY)-[:IS_LOCATED_IN]->(countryY:Country)
-WHERE countryY.name = $countryYName
-  AND NOT((friend)-[:IS_LOCATED_IN]->()-[:IS_PART_OF]->(countryY))
-  AND messageY.creationDate >= $date1
-  AND messageY.creationDate < $date2
-WITH
-  friend.id AS friendId,
-  friend.firstName AS friendFirstName,
-  friend.lastName AS friendLastName,
-  xCount,
-  count(DISTINCT messageY) AS yCount
-RETURN
-  friendId,
-  friendFirstName,
-  friendLastName,
-  xCount,
-  yCount,
-  xCount + yCount AS xyCount
-ORDER BY
-  xyCount DESC,
-  friendId ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-4}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q4. New Topics. Given a start Person, find the top 10 most popular Tags (by total number of posts with the tag) that are attached to Posts that were created by that Person's friends within a given time interval.
-MATCH (person:Person)-[:KNOWS]-(:Person)<-[:HAS_CREATOR]-(post:Post)-[HAS_TAG]->(tag:Tag)
-WHERE post.creationDate >= $date1
-  AND post.creationDate < $date2
-OPTIONAL MATCH (tag)<-[:HAS_TAG]-(oldPost:Post)
-WHERE oldPost.creationDate < $date1
-WITH tag, post, length(collect(oldPost)) AS oldPostCount
-WHERE oldPostCount=0
-RETURN
-  tag.name AS tagName,
-  length(collect(post)) AS postCount
-ORDER BY
-  postCount DESC,
-  tagName ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-5}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q5. New groups. Given a start Person, find the top 20 Forums the friends and friends of friends of that Person joined after a given Date. Sort results descending by the number of Posts in each Forum that were created by any of these Persons.
-MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)<-[membership:HAS_MEMBER]-(forum:Forum)
-WHERE membership.joinDate > $date
-  AND NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-WITH DISTINCT friend, forum
-OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(post:Post)<-[:CONTAINER_OF]-(forum)
-WITH forum, count(post) AS postCount
-RETURN
-  forum.title AS forumName,
-  postCount
-ORDER BY
-  postCount DESC,
-  forum.id ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-6}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q6. Tag co-occurrence. Given a start Person and some Tag, find the other Tags that occur together with this Tag on Posts that were created by Person's friends and friends of friends. Return top 10 Tags, sorted descending by the count of Posts that were created by these Persons, which contain both this Tag and the given Tag.
-MATCH
-  (person:Person)-[:KNOWS*1..2]-(friend:Person),
-  (friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
-WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
-WHERE NOT(commonTag = knownTag)
-WITH DISTINCT commonTag, knownTag, friend
-MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
-WHERE (commonPost)-[:HAS_CREATOR]->(friend)
-RETURN
-  commonTag.name AS tagName,
-  count(commonPost) AS postCount
-ORDER BY
-  postCount DESC,
-  tagName ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-7}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q7. Recent likes. For the specified Person get the most recent likes of any of the person's posts, and the latency between the corresponding post and the like. Flag Likes from outside the direct connections. Return top 20 Likes, ordered descending by creation date of the like.
-MATCH (person:Person)<-[:HAS_CREATOR]-(message)<-[like:LIKES]-(liker:Person)
-WITH liker, message, like.creationDate AS likeTime, person
-ORDER BY
-  likeTime DESC,
-  message.id ASC
-WITH liker, head(collect({msg: message, likeTime: likeTime})) AS latestLike, person
-RETURN
-  liker.id AS personId,
-  liker.firstName AS personFirstName,
-  liker.lastName AS personLastName,
-  latestLike.likeTime AS likeTime,
-  NOT((liker)-[:KNOWS]-(person)) AS isNew,
-  latestLike.msg.id AS messageId,
-  latestLike.msg.content AS messageContent,
-  latestLike.likeTime - latestLike.msg.creationDate AS latencyAsMilli
-ORDER BY
-  likeTime DESC,
-  personId ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
 \section{query-8}
 
 \subsection*{Query specification}
@@ -237,147 +24,132 @@ LIMIT 10
 \subsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+\topp{10}{} \Big(\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}} \Big(\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e4}{HAS\_CREATOR}{1}{1} \Big(\expandin{\_e1}{comment}{Comment}{\_e3}{REPLY\_OF}{1}{1} \Big(\expandin{start}{\_e1}{}{\_e2}{HAS\_CREATOR}{1}{1} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
 \end{flalign*}
 
 \subsection*{Relational algebra tree}
 \adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
+\begin{forest} for tree={align=center}
+[
+	{$\topp{10}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment, \_e4, person} \rangle$
+			}
+[
+	{$\expandout{comment}{person}{Person}{\_e4}{HAS\_CREATOR}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment, \_e4, person} \rangle$
+			}
+[
+	{$\expandin{\_e1}{comment}{Comment}{\_e3}{REPLY\_OF}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment} \rangle$
+			}
+[
+	{$\expandin{start}{\_e1}{}{\_e2}{HAS\_CREATOR}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1} \rangle$
+			}
+[
+	{$\getvertices{start}{Person}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
 }
 
 \subsection*{Relational algebra tree for incremental queries}
 \adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-10}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q10. Friend recommendation. Find top 10 friends of a friend who posts much about the interests of Person and little about not interesting topics for the user. The search is restricted by the candidate's horoscopeSign. Returns friends for whom the difference between the total number of their posts about the interests of the specified user and the total number of their posts about topics that are not interests of the user, is as large as possible. Sort the result descending by this difference.
-MATCH (person:Person)-[:KNOWS*2..2]-(friend:Person)-[:IS_LOCATED_IN]->(city:City)
-WHERE ((friend.birthday_month = $month AND friend.birthday_day >= 21)
-   OR (friend.birthday_month = ($month+1) % 12 AND friend.birthday_day < 22))
-  AND NOT(friend = person) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-  AND NOT((friend)-[:KNOWS]-(person))
-WITH DISTINCT friend, city, person
-OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(post:Post)
-WITH
-  friend,
-  city,
-  collect(post) AS posts,
-  person
-WITH
-  friend,
-  city,
-  length(posts) AS postCount,
-  length([p IN posts WHERE (p)-[:HAS_TAG]->(:Tag)<-[:HAS_INTEREST]-(person)]) AS commonPostCount
-RETURN
-  friend.id AS personId,
-  friend.firstName AS personFirstName,
-  friend.lastName AS personLastName,
-  friend.gender AS personGender,
-  city.name AS personCityName,
-  commonPostCount - (postCount - commonPostCount) AS commonInterestScore
-ORDER BY
-  commonInterestScore DESC,
-  personId ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-11}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q11. Job referral. Find top 10 friends of the specified Person, or a friend of her friend (excluding the specified person), who has long worked in a company in a specified Country. Sort ascending by start date, and then ascending by person identifier.
-MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)
-WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
-WITH DISTINCT friend
-MATCH (friend)-[worksAt:WORKS_AT]->(company:Company)-[:IS_LOCATED_IN]->(:Country)
-WHERE worksAt.workFrom < $date
-RETURN
-  friend.id AS friendId,
-  friend.firstName AS friendFirstName,
-  friend.lastName AS friendLastName,
-  worksAt.workFrom AS workFromYear,
-  company.name AS companyName
-ORDER BY
-  workFromYear ASC,
-  friendId ASC,
-  companyName DESC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
-}
-
-\section{query-12}
-
-\subsection*{Query specification}
-
-\begin{lstlisting}
-// Q12. Expert Search. Find friends of a Person who have replied the most to posts with a tag in a given TagCategory. Return top 20 persons, sorted descending by number of replies.
-MATCH (:Person)-[:KNOWS]-(friend:Person)
-OPTIONAL MATCH (friend)<-[:HAS_CREATOR]-(comment:Comment)-[:REPLY_OF]->(:Post)-[:HAS_TAG]->(tag:Tag),
-(tag)-[:HAS_TYPE]->(tagClass:TagClass)-[:IS_SUBCLASS_OF*0..]->(baseTagClass:TagClass)
-WHERE tagClass.name = $class
-   OR baseTagClass.name = $class
-RETURN
-  friend.id AS friendId,
-  friend.firstName AS friendFirstName,
-  friend.lastName AS friendLastName,
-  collect(DISTINCT tag.name) AS tagNames,
-  count(DISTINCT comment) AS count
-ORDER BY
-  count DESC,
-  friendId ASC
-LIMIT 10
-\end{lstlisting}
-
-\subsection*{Relational algebra expression}
-
-\begin{flalign*}
-\text{Cannot convert to expression.}
-\end{flalign*}
-
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
-\text{Cannot visualize tree.}
-}
-
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
-Cannot visualize incremental tree.
+\begin{forest} for tree={align=center}
+[
+	{$\topp{10}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment, \_e4, person} \rangle$
+			}
+[
+	{$\expandout{comment}{person}{Person}{\_e4}{HAS\_CREATOR}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment, \_e4, person} \rangle$
+			}
+[
+	{$\expandin{\_e1}{comment}{Comment}{\_e3}{REPLY\_OF}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1, \_e3, comment} \rangle$
+			}
+[
+	{$\expandin{start}{\_e1}{}{\_e2}{HAS\_CREATOR}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start, \_e2, \_e1} \rangle$
+			}
+[
+	{$\getvertices{start}{Person}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{start} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
 }
 

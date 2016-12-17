@@ -15,7 +15,6 @@ import relalg.RelalgContainer
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import relalg.VertexVariable
 
 class SchemaInferencer {
 

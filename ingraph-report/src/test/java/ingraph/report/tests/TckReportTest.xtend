@@ -1,6 +1,7 @@
 package ingraph.report.tests
 
 import com.google.common.collect.Lists
+import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
 import ingraph.report.feature.Scenario
@@ -36,15 +37,17 @@ class TckReportTest extends IngraphReportTest {
 				\section{«feature.name.escape»}
 
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
-					«val query = scenario.steps.filter(typeof(WhenStep)).map[desc].join»
+					«val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join»
 					«IF 
 						scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
-						!query.contains("CREATE ") &&
-						!query.contains("MERGE ") &&
-						!query.contains("REMOVE ") &&
-						!query.contains("SET ") &&
-						!query.contains("DELETE ")	
+						!querySpecification.contains("CREATE ") &&
+						!querySpecification.contains("MERGE ") &&
+						!querySpecification.contains("REMOVE ") &&
+						!querySpecification.contains("SET ") &&
+						!querySpecification.contains("DELETE ")	
 					»
+					«val cypher = Cypher2Relalg.processString(querySpecification.toString)»
+					
 					\subsection{«scenario.name.escape»}
 
 					\subsubsection*{Query specification}
@@ -56,16 +59,16 @@ class TckReportTest extends IngraphReportTest {
 					\subsubsection*{Relational algebra expression}
 
 					\begin{flalign*}
-					& «scenario.steps.filter(typeof(WhenStep)).map[desc].join.expression» &
+					& «cypher.expression» &
 					\end{flalign*}
 
 					\subsubsection*{Relational algebra tree}
 
-					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualize»
+					«cypher.visualize»
 
 					\subsubsection*{Relational algebra tree for incremental queries}
 
-					«scenario.steps.filter(typeof(WhenStep)).map[desc].join.visualizeWithTransformations»
+					«cypher.visualizeWithTransformations»
 					«ENDIF»
 				«ENDFOR»
 			«ENDFOR»

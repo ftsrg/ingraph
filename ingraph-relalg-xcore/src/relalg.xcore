@@ -168,7 +168,7 @@ class SortOperator extends UnaryOperator {
 
 class SortEntry {
 	refers Variable variable
-	OrderDirection orderDirection
+	OrderDirection direction
 }
 
 class TopOperator extends UnaryOperator {

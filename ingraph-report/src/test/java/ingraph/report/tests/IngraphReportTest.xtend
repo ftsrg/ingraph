@@ -9,9 +9,9 @@ import ingraph.relalg2tex.RelalgTreeSerializer
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
-import java.util.Comparator
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import relalg.RelalgContainer
 
 class IngraphReportTest {
 
@@ -57,9 +57,8 @@ class IngraphReportTest {
         .replaceAll('''_''', '''\\_''')
     }
 
-    def expression(CharSequence s) {
+    def expression(RelalgContainer container) {
         try {
-            val container = Cypher2Relalg.processString(s.toString)
             expressionSerializer.serialize(container.addSchemaInformation).toString
         } catch (Exception e) {
             e.printStackTrace
@@ -67,9 +66,8 @@ class IngraphReportTest {
         }
     }
 
-    def visualize(CharSequence s) {
+    def visualize(RelalgContainer container) {
         try {
-            val container = Cypher2Relalg.processString(s.toString)
             treeSerializer.serialize(container.addSchemaInformation)
         } catch (Exception e) {
             e.printStackTrace
@@ -77,9 +75,8 @@ class IngraphReportTest {
         }
     }
 
-    def visualizeWithTransformations(CharSequence s) {
+    def visualizeWithTransformations(RelalgContainer container) {
         try {
-            val container = Cypher2Relalg.processString(s.toString)
             treeSerializer.serialize(container.transformToRete.addSchemaInformation)
         } catch (Exception e) {
             e.printStackTrace
@@ -92,6 +89,7 @@ class IngraphReportTest {
         val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
 
         println(querySpecification)
+        val cypher = Cypher2Relalg.processString(querySpecification.toString)
 
         '''
             \section{«query»}
@@ -105,17 +103,17 @@ class IngraphReportTest {
             \subsection*{Relational algebra expression}
             
             \begin{flalign*}
-            «querySpecification.expression»
+            «cypher.expression»
             \end{flalign*}
             
             \subsection*{Relational algebra tree}
             \adjustbox{max width=\textwidth}{%
-            «querySpecification.visualize»
+            «cypher.visualize»
             }
             
             \subsection*{Relational algebra tree for incremental queries}
             \adjustbox{max width=\textwidth}{%
-            «querySpecification.visualizeWithTransformations»
+            «cypher.visualizeWithTransformations»
             }
             
         '''

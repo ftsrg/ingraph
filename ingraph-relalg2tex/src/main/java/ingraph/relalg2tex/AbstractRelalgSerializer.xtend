@@ -24,17 +24,22 @@ import relalg.ExpandOperator
 import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
+import relalg.GroupingOperator
 import relalg.IntegerLiteral
 import relalg.JoinOperator
 import relalg.LabelSetStatus
 import relalg.LeftOuterJoinOperator
+import relalg.MaxHops
 import relalg.NamedElement
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.SelectionOperator
+import relalg.SortEntry
+import relalg.SortOperator
 import relalg.StringLiteral
+import relalg.TopOperator
 import relalg.TransitiveClosureOperator
 import relalg.UnaryArithmeticOperator
 import relalg.UnaryLogicalExpression
@@ -44,7 +49,6 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
-import relalg.MaxHops
 
 abstract class AbstractRelalgSerializer {
 
@@ -147,23 +151,9 @@ abstract class AbstractRelalgSerializer {
         }
     }
 	
-	def dispatch operatorToTex(TransitiveClosureOperator op) {
-		#[
-			'''\transitiveclosure«op.direction.directionToTex»''' + //
-			'''{«op.sourceVertexVariable.escapedName»}''' + //
-			'''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
-			'''«op.edgeVariable.toTexParameterWithLabels»'''
-		]
-	}
-
-	def dispatch operatorToTex(SelectionOperator op) {
-		#[
-			'''\selection{''' +
-			'''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.conditionToTex»}«ENDIF»''' +
-			'''}'''
-		]
-	}
-
+	/**
+     * nullaryOperator
+     */
 	def dispatch operatorToTex(GetEdgesOperator op) {
 		#[
 			'''\getedges''' + '''«op.sourceVertexVariable.toTexParameterWithLabels»''' +
@@ -176,18 +166,51 @@ abstract class AbstractRelalgSerializer {
 			'''\getvertices«op.vertexVariable.toTexParameterWithLabels»'''
 		]
 	}
+	
+    /**
+     * unaryOperator
+     */	 
+    def dispatch operatorToTex(GroupingOperator op) {
+        #['''\grouping{TODO}''']
+    }
+
+    def dispatch operatorToTex(ProductionOperator op) {
+        throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
+    }
 
 	def dispatch operatorToTex(ProjectionOperator op) {
 		#['''\projection{«op.variables.map[expression].variableList»}''']
 	}
 
+    def dispatch operatorToTex(SelectionOperator op) {
+        #[
+            '''\selection{''' +
+            '''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.conditionToTex»}«ENDIF»''' +
+            '''}'''
+        ]
+    }
+
+    def dispatch operatorToTex(SortOperator op) {
+        #['''\sort{«op.entries.map[entryToTex].join(", ")»}''']
+    }
+    
+    def dispatch operatorToTex(TopOperator op) {
+        #['''\topp{«op.limit»}{«op.skip»}''']
+    }
+
+    def dispatch operatorToTex(TransitiveClosureOperator op) {
+        #[
+            '''\transitiveclosure«op.direction.directionToTex»''' + //
+            '''{«op.sourceVertexVariable.escapedName»}''' + //
+            '''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
+            '''«op.edgeVariable.toTexParameterWithLabels»'''
+        ]
+    }
+
 	def dispatch operatorToTex(UnwindOperator op) {
 		#['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
 	}
 
-	def dispatch operatorToTex(ProductionOperator op) {
-		throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
-	}
 
 	/**
 	 * binaryOperator
@@ -236,11 +259,22 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def escape(String s) {
 		s //
-        ?.replace('''"''', "")//
-		?.replace(''' ''', '''\ ''') //
-		?.replace('''\''', '''\backslash{}''') //
-		?.replace('''_''', '''\_''') //
+        .replace('''"''', "")//
+		.replace(''' ''', '''\ ''') //
+		.replace('''\''', '''\backslash{}''') //
+		.replace('''_''', '''\_''') //
 	}
+
+    /**
+     * sort entry to TeX
+     */
+    def entryToTex(SortEntry entry) {
+        val direction = switch (entry.direction) {
+            case ASCENDING: "asc"
+            case DESCENDING: "desc" 
+        }
+        '''\«direction» \atom{«entry.variable.escapedName»}'''
+    }
 
 	/**
 	 * list
