@@ -1,6 +1,4 @@
 apply plugin: 'org.xtext.xtend'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 
 dependencies {
 	compile project(':ingraph-relalg-xcore')
