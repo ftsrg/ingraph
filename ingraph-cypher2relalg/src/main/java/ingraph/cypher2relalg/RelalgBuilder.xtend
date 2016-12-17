@@ -33,10 +33,8 @@ import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StartsWith
-import org.slizaa.neo4j.opencypher.openCypher.Statement
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
-import org.slizaa.neo4j.opencypher.openCypher.Where
 import relalg.ArithmeticComparisonOperator
 import relalg.AttributeVariable
 import relalg.BinaryLogicalOperator
@@ -52,12 +50,12 @@ import relalg.MaxHopsType
 import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgFactory
+import relalg.StringComparisonOperator
 import relalg.UnaryLogicalOperator
 import relalg.UnaryNodeLogicalOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.StringComparisonOperator
 
 class RelalgBuilder {
 
@@ -82,7 +80,6 @@ class RelalgBuilder {
 
 //		println(PrettyPrinter.format(cypher))
         val statement = cypher.statement
-        // legacy_builder_by_szarnyasg(statement)
         topLevelContainer.rootExpression = buildRelalg(statement)
 
         topLevelContainer
@@ -550,44 +547,4 @@ class RelalgBuilder {
 //	def dispatch buildRelalg(Cypher rule) {
 //		println(String::format("received unsupported cypher element: %s", rule.class.toString()))
 //	}
-    protected def void legacy_builder_by_szarnyasg(Statement statement) {
-        if (statement instanceof SingleQuery) {
-            val clauses = statement.clauses
-
-            clauses.filter(typeof(Match)).forEach [
-                val element = it.pattern.patterns.get(0) as PatternElement
-                val variableName = element.nodepattern.variable.name
-
-                val vertexVariable = vertexVariableFactory.createElement(variableName)
-            ]
-            clauses.filter(typeof(Where)).forEach[]
-            clauses.filter(typeof(Return)).forEach [
-                val distinct = it.distinct
-                val body = it.body as ReturnItems
-                val all = body.all
-                val order = body.order
-                val skip = body.skip
-                val limit = body.limit
-
-                body.items.forEach [
-                    // RETURN expression AS alias, ...
-                    val expression = it.expression
-                    val alias = it.alias
-
-                    switch expression {
-                        VariableRef: {
-                            println('''variableref: «expression.variableRef.name»''')
-                        }
-                        ExpressionNodeLabelsAndPropertyLookup: {
-                            println('''lookup: «expression.propertyLookups.get(0).propertyKeyName»''')
-                        }
-                        default: {
-                            println('''Return item «it» not supported''')
-                        }
-                    }
-                    println
-                ]
-            ]
-        }
-    }
 }
