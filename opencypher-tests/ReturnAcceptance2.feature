@@ -49,7 +49,7 @@ Feature: ReturnAcceptance2
     Given an empty graph
     And having executed:
       """
-      CREATE ()-[:T]->()
+      CREATE ()-[:T {p: 0}]->()
       """
     When executing query:
       """
@@ -59,7 +59,7 @@ Feature: ReturnAcceptance2
       """
     Then a EntityNotFound should be raised at runtime: DeletedEntityAccess
 
-  Scenario: Fail when returning type of deleted relationships
+  Scenario: Do not fail when returning type of deleted relationships
     Given an empty graph
     And having executed:
       """
@@ -71,7 +71,11 @@ Feature: ReturnAcceptance2
       DELETE r
       RETURN type(r)
       """
-    Then a EntityNotFound should be raised at runtime: DeletedEntityAccess
+    Then the result should be:
+      | type(r) |
+      | 'T'     |
+    And the side effects should be:
+      | -relationships | 1 |
 
   Scenario: Accept valid Unicode literal
     Given any graph

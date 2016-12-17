@@ -164,6 +164,19 @@ Feature: TypeConversionFunctions
       | [2, 2, null] |
     And no side effects
 
+  Scenario: `toInteger()` on a complex-typed expression
+    Given any graph
+    And parameters are:
+      | param | 1 |
+    When executing query:
+      """
+      RETURN toInteger(1 - {param}) AS result
+      """
+    Then the result should be:
+      | result |
+      | 0      |
+    And no side effects
+
   Scenario Outline: `toInteger()` failing on invalid arguments
     Given an empty graph
     And having executed:
@@ -373,3 +386,31 @@ Feature: TypeConversionFunctions
       | n       |
       | r       |
       | p       |
+
+  Scenario: `toString()` should accept potentially correct types 1
+    Given any graph
+    When executing query:
+      """
+      UNWIND ['male', 'female', null] AS gen
+      RETURN coalesce(toString(gen), 'x') AS result
+      """
+    Then the result should be:
+      | result   |
+      | 'male'   |
+      | 'female' |
+      | 'x'      |
+    And no side effects
+
+  Scenario: `toString()` should accept potentially correct types 2
+    Given any graph
+    When executing query:
+      """
+      UNWIND ['male', 'female', null] AS gen
+      RETURN toString(coalesce(gen, 'x')) AS result
+      """
+    Then the result should be:
+      | result   |
+      | 'male'   |
+      | 'female' |
+      | 'x'      |
+    And no side effects
