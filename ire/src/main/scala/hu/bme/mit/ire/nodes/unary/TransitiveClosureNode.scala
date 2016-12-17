@@ -14,7 +14,10 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
                             val edge: Int
                            ) extends UnaryNode with SingleForwarder {
 
-  val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[Vector[Long]]]]
+  type Path = Vector[Long]
+  val Path = scala.collection.immutable.Vector
+
+  val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[Path]]]
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
 
   def onChangeSet(changeSet: ChangeSet): Unit = {
@@ -31,34 +34,53 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
     var newPathsBuilder = new VectorBuilder[Tuple]
 
-    for (source <- reachableFrom.getOrElse(sourceId, Set.empty).toStream #::: Stream(sourceId)) {
-      if (!reachableVertices.contains(source)) {
-        reachableVertices(source) = new mutable.HashMap
-      }
+    if (!reachableVertices.contains(sourceId)) {
+      reachableVertices(sourceId) = new mutable.HashMap
+    }
 
-      for (target <- reachableVertices.getOrElse(targetId, Map.empty).keys.toStream #::: Stream(targetId)) {
-        if (!reachableFrom.contains(target)) {
-          reachableFrom(target) = new mutable.HashSet
+    if (!reachableFrom.contains(targetId)) {
+      reachableFrom(targetId) = new mutable.HashSet
+    }
+
+    val pathsToSource = pathsToSourceVertex(sourceId)
+    val pathsFromTarget = pathsFromTargetVertex(targetId)
+    for(pathToSourceVertex <- pathsToSource; pathFromTargetVertex <- pathsFromTarget){
+      if(areDistinctPaths(pathToSourceVertex._2, pathFromTargetVertex._2)){
+        if (!reachableVertices(pathToSourceVertex._1).contains(pathFromTargetVertex._1)) {
+          reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) = new mutable.MutableList
         }
-        reachableFrom(target) += source
 
-        if (!reachableVertices(source).contains(target)) {
-          reachableVertices(source)(target) = new mutable.MutableList
-        }
+        reachableFrom(pathFromTargetVertex._1) += pathToSourceVertex._1
 
-        for (sourcePath <- reachableVertices(source).getOrElse(sourceId, mutable.MutableList(Vector()))) {
-          for (targetPath <- reachableVertices.getOrElse(targetId, mutable.HashMap()).getOrElse(target, mutable.MutableList(Vector()))) {
-            val path = sourcePath ++ Vector(edgeId) ++ targetPath
-
-            reachableVertices(source)(target) += path
-
-            newPathsBuilder += tuple(source, target, path)
-          }
-        }
+        val path = pathToSourceVertex._2 ++ Vector(edgeId) ++ pathFromTargetVertex._2
+        reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) += path
+        newPathsBuilder += tuple(pathToSourceVertex._1, pathFromTargetVertex._1, path)
       }
     }
 
     newPathsBuilder.result
+  }
+
+  private def pathsToSourceVertex(sourceId: Long) = {
+    reachableFrom.getOrElse(sourceId, Set.empty).flatMap(startVertex => reachableVertices(startVertex)(sourceId).map(path => (startVertex, path))).toList ++ List((sourceId, Path()))
+  }
+
+  private def pathsFromTargetVertex(targetId: Long) = {
+    reachableVertices.getOrElse(targetId, Map.empty).flatMap(entry => entry._2.map(path => (entry._1, path))).toList ++ List((targetId, Path()))
+  }
+
+  private def areDistinctPaths(p1: Path, p2: Path): Boolean = {
+    if(p1.isEmpty || p2.isEmpty)
+      return true
+
+    val pathHash: mutable.HashSet[Long] = mutable.HashSet(p1: _*)
+
+    for(edge <- p2){
+      if(pathHash.contains(edge))
+        return false
+    }
+
+    true
   }
 
   private def removePathsWithEdge(inputTuple: Tuple): Vector[Tuple] = {

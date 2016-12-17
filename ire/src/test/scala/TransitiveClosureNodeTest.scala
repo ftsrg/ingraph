@@ -82,6 +82,27 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
   }
 
   "A TransitiveClosureNode" must {
+    "include directed cycles" in {
+      val changeSet = ChangeSet(
+        positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
+      )
+
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
+
+      transitiveClosure ! changeSet
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 2, Vector(100)), tuple(1, 3, Vector(100, 101)), tuple(2, 3, Vector(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(3, 102, 1)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(2, 2, Vector(101, 102, 100)), tuple(2, 1, Vector(101, 102)), tuple(1, 1, Vector(100, 101, 102)), tuple(3, 2, Vector(102, 100)), tuple(3, 3, Vector(102, 100, 101)), tuple(3, 1, Vector(102)))
+      ))
+    }
+  }
+
+  "A TransitiveClosureNode" must {
     "not do anything in case of non-present vertices or edges" in {
       val changeSet = ChangeSet(
         positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -102,4 +123,5 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       expectNoMsg
     }
   }
+
 }
