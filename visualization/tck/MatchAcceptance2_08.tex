@@ -1,32 +1,34 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a},~\var{b},~\var{c}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b, c} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e15, b, \_e16, c} \rangle$
+			}
 [
-{$\expandout{b}{c}{}{\_e2}{FRIEND}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b, \_e2, c} \rangle$
-}
+	{$\expandout{b}{c}{}{\_e16}{FRIEND}{0}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e15, b, \_e16, c} \rangle$
+			}
 [
-{$\expandout{a}{b}{}{\_e1}{CONTAINS}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b} \rangle$
-}
+	{$\expandout{a}{b}{}{\_e15}{CONTAINS}{0}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e15, b} \rangle$
+			}
 [
-{$\getvertices{a}{}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -34,5 +36,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

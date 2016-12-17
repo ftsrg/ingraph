@@ -14,6 +14,13 @@ Numerous algorithms were proposed for incremental pattern matching. Mostly, thes
 
 %Rete has many improved versions (\eg Rete II, Rete III, Rete-NT), however, unlike the original algorithm, these are not publicly available. In this paper, we discuss the Rete algorithm, one of the most used incremental pattern matching algorithms. Experimenting with improved versions or alternative approaches is subject to future work.
 
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.50]{trainbenchmark-instance-model}
+	\caption{Example railway instance model as a labeled graph}
+	\label{fig:trainbenchmark-instance-model}
+\end{figure}
+
 \section{Overview of Rete Networks}
 \label{sec:rete}
 
@@ -45,8 +52,7 @@ In the following, we discuss Rete nodes in detail. For unary and binary nodes, w
 
 %\fig{rete/input-node}{Graphical notation of an input node}{\retescale}
 
-\emph{Input nodes} %(\autoref{fig:rete/input-node})
-provide the relations for each label of the graph. For example, the input node for the $\mathsf{requires}$ edge label of example the graph (\autoref{fig:trainbenchmark-instance-model}) returns tuples that are currently in the $\mathit{requires}$ relation: $ \left\{ \tuple{2, d, 6}, \tuple{4, f, 7} \right\} $. This input node is also responsible for propagating changes to worker nodes in the network:
+\emph{Input nodes} provide the relations for each label of the graph. For example, the input node for the $\mathsf{requires}$ edge label of example the graph (\autoref{fig:trainbenchmark-instance-model}) returns tuples that are currently in the $\mathit{requires}$ relation: $ \left\{ \tuple{2, d, 6}, \tuple{4, f, 7} \right\} $. This input node is also responsible for propagating changes to worker nodes in the network:
 
 \begin{itemize}
 	\item If a $\mathsf{requires}$ edge `t' is inserted from vertex 2 to 5, the input node sends a positive update message to its subscriber nodes with the change set $ \left\{ \tuple{2, t, 4} \right\} $.
@@ -59,8 +65,7 @@ The relations contained by input nodes can be defined with nullary operators (\a
 
 %\fig{rete/unary-node}{Graphical notation of a unary node}{\retescale}
 
-\emph{Unary nodes} %(\autoref{fig:rete/unary-node})
-have one input slot. They filter or transform the tuples of the parent node according to certain criteria. In the following, the relation representing the input tuples is denoted with $r$, the relation representing the output tuples is denoted with $t$, and the operator processing the input is denoted with $\alpha$:
+\emph{Unary nodes} have one input slot. They filter or transform the tuples of the parent node according to certain criteria. In the following, the relation representing the input tuples is denoted with $r$, the relation representing the output tuples is denoted with $t$, and the operator processing the input is denoted with $\alpha$:
 \begin{align*}
 t = \op{\alpha}{r}.
 \end{align*}

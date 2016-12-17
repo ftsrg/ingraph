@@ -1,51 +1,61 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a},~\var{b},~\var{c}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b, c} \rangle$
+			}
 [
-{$\join \{\var{b}\}$ \\
-\footnotesize $\color{gray} \langle \var{a, r, b, r2, c} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, r, b, r2, c} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a, r, b} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, r, b} \rangle$
+			}
 [
-{$\expandboth{a}{b}{}{r}{}$ \\
-\footnotesize $\color{gray} \langle \var{a, r, b} \rangle$
-}
+	{$\expandboth{a}{b}{}{r}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, r, b} \rangle$
+			}
 [
-{$\getvertices{a}{}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
-{$\selection{\mathtt{TODO}}$ \\
-\footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$
-}
+	{$\selection{\var{r} \neq \var{r2}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b, r2, c} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b, r2, c} \rangle$
+			}
 [
-{$\expandboth{b}{c}{}{r2}{}$ \\
-\footnotesize $\color{gray} \langle \var{b, r2, c} \rangle$
-}
+	{$\expandboth{b}{c}{}{r2}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b, r2, c} \rangle$
+			}
 [
-{$\getvertices{b}{}$ \\
-\footnotesize $\color{gray} \langle \var{b} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{b}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -54,5 +64,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

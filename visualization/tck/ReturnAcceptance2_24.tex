@@ -1,33 +1,38 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\duplicateelimination$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\sort{\desc \var{id}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id} \rangle$
+			}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\duplicateelimination$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-}
+	{$\projection{\var{n.id}\assign \var{id}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{id} \rangle$
+			}
 [
-{$\getvertices{n}{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
+[
+	{$\getvertices{n}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
 ]
 ]
 ]
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

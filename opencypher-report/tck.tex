@@ -1121,7 +1121,7 @@ RETURN n['nam' + 'e'] AS value
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{n}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big)\Big)
+& \projection{\var{n}\assign \var{value}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big)\Big)
  &
 \end{flalign*}
 
@@ -1129,7 +1129,7 @@ RETURN n['nam' + 'e'] AS value
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{n}}$
+	{$\projection{\var{n}\assign \var{value}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{n} \rangle$
@@ -1156,7 +1156,7 @@ RETURN n['nam' + 'e'] AS value
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{n}}$
+	{$\projection{\var{n}\assign \var{value}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{n} \rangle$
@@ -2857,7 +2857,7 @@ RETURN n.value AS n, m.value AS m
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{n.value},~\var{m.value}} \Big(\alldifferent{} \Big(\getvertices{n}{} \join \getvertices{m}{}\Big)\Big)
+& \projection{\var{n.value}\assign \var{n},~\var{m.value}\assign \var{m}} \Big(\alldifferent{} \Big(\getvertices{n}{} \join \getvertices{m}{}\Big)\Big)
  &
 \end{flalign*}
 
@@ -2865,7 +2865,7 @@ RETURN n.value AS n, m.value AS m
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{n.value},~\var{m.value}}$
+	{$\projection{\var{n.value}\assign \var{n},~\var{m.value}\assign \var{m}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{value, value} \rangle$
@@ -2906,7 +2906,7 @@ RETURN n.value AS n, m.value AS m
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{n.value},~\var{m.value}}$
+	{$\projection{\var{n.value}\assign \var{n},~\var{m.value}\assign \var{m}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{value, value} \rangle$
@@ -2980,7 +2980,7 @@ RETURN a
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a}} \Big(\selection{\var{a.name} = \literal{''Andres''}} \Big(\alldifferent{} \Big(\expandboth{\_e27}{a}{}{rel}{X}{1}{1} \Big(\getvertices{\_e27}{}\Big)\Big)\Big)\Big)
+& \projection{\var{a}} \Big(\selection{\var{a.name} = \literal{''Andres''}} \Big(\alldifferent{} \Big(\expandboth{\_e155}{a}{}{rel}{X}{1}{1} \Big(\getvertices{\_e155}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -2997,25 +2997,25 @@ RETURN a
 	{$\selection{\var{a.name} = \literal{''Andres''}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
-	{$\expandboth{\_e27}{a}{}{rel}{X}{1}{1}$
+	{$\expandboth{\_e155}{a}{}{rel}{X}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
-	{$\getvertices{\_e27}{}$
+	{$\getvertices{\_e155}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27} \rangle$
+			$\color{gray} \langle \var{\_e155} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -3038,25 +3038,25 @@ RETURN a
 	{$\selection{\var{a.name} = \literal{''Andres''}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
-	{$\expandboth{\_e27}{a}{}{rel}{X}{1}{1}$
+	{$\expandboth{\_e155}{a}{}{rel}{X}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27, rel, a} \rangle$
+			$\color{gray} \langle \var{\_e155, rel, a} \rangle$
 			}
 [
-	{$\getvertices{\_e27}{}$
+	{$\getvertices{\_e155}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e27} \rangle$
+			$\color{gray} \langle \var{\_e155} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -3403,7 +3403,7 @@ RETURN x
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{x}} \Big(\alldifferent{} \Big(\expandout{\_e28}{x}{}{rel}{KNOWS}{1}{1} \Big(\getvertices{\_e28}{}\Big)\Big)\Big)
+& \projection{\var{x}} \Big(\alldifferent{} \Big(\expandout{\_e156}{x}{}{rel}{KNOWS}{1}{1} \Big(\getvertices{\_e156}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -3420,19 +3420,19 @@ RETURN x
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28, rel, x} \rangle$
+			$\color{gray} \langle \var{\_e156, rel, x} \rangle$
 			}
 [
-	{$\expandout{\_e28}{x}{}{rel}{KNOWS}{1}{1}$
+	{$\expandout{\_e156}{x}{}{rel}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28, rel, x} \rangle$
+			$\color{gray} \langle \var{\_e156, rel, x} \rangle$
 			}
 [
-	{$\getvertices{\_e28}{}$
+	{$\getvertices{\_e156}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28} \rangle$
+			$\color{gray} \langle \var{\_e156} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -3454,19 +3454,19 @@ RETURN x
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28, rel, x} \rangle$
+			$\color{gray} \langle \var{\_e156, rel, x} \rangle$
 			}
 [
-	{$\expandout{\_e28}{x}{}{rel}{KNOWS}{1}{1}$
+	{$\expandout{\_e156}{x}{}{rel}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28, rel, x} \rangle$
+			$\color{gray} \langle \var{\_e156, rel, x} \rangle$
 			}
 [
-	{$\getvertices{\_e28}{}$
+	{$\getvertices{\_e156}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e28} \rangle$
+			$\color{gray} \langle \var{\_e156} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -4614,7 +4614,7 @@ RETURN r
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r}} \Big(\alldifferent{} \Big(\expandout{\_e29}{\_e30}{}{r}{}{1}{1} \Big(\getvertices{\_e29}{}\Big)\Big)\Big)
+& \projection{\var{r}} \Big(\alldifferent{} \Big(\expandout{\_e157}{\_e158}{}{r}{}{1}{1} \Big(\getvertices{\_e157}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -4631,19 +4631,19 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29, r, \_e30} \rangle$
+			$\color{gray} \langle \var{\_e157, r, \_e158} \rangle$
 			}
 [
-	{$\expandout{\_e29}{\_e30}{}{r}{}{1}{1}$
+	{$\expandout{\_e157}{\_e158}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29, r, \_e30} \rangle$
+			$\color{gray} \langle \var{\_e157, r, \_e158} \rangle$
 			}
 [
-	{$\getvertices{\_e29}{}$
+	{$\getvertices{\_e157}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29} \rangle$
+			$\color{gray} \langle \var{\_e157} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -4665,19 +4665,19 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29, r, \_e30} \rangle$
+			$\color{gray} \langle \var{\_e157, r, \_e158} \rangle$
 			}
 [
-	{$\expandout{\_e29}{\_e30}{}{r}{}{1}{1}$
+	{$\expandout{\_e157}{\_e158}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29, r, \_e30} \rangle$
+			$\color{gray} \langle \var{\_e157, r, \_e158} \rangle$
 			}
 [
-	{$\getvertices{\_e29}{}$
+	{$\getvertices{\_e157}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e29} \rangle$
+			$\color{gray} \langle \var{\_e157} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -4771,7 +4771,7 @@ RETURN a, b, c
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a},~\var{b},~\var{c}} \Big(\alldifferent{} \Big(\expandout{b}{c}{}{\_e34}{FRIEND}{0}{1} \Big(\expandout{a}{b}{}{\_e33}{CONTAINS}{0}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
+& \projection{\var{a},~\var{b},~\var{c}} \Big(\alldifferent{} \Big(\expandout{b}{c}{}{\_e162}{FRIEND}{0}{1} \Big(\expandout{a}{b}{}{\_e161}{CONTAINS}{0}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -4788,19 +4788,19 @@ RETURN a, b, c
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b, \_e34, c} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b, \_e162, c} \rangle$
 			}
 [
-	{$\expandout{b}{c}{}{\_e34}{FRIEND}{0}{1}$
+	{$\expandout{b}{c}{}{\_e162}{FRIEND}{0}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b, \_e34, c} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b, \_e162, c} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e33}{CONTAINS}{0}{1}$
+	{$\expandout{a}{b}{}{\_e161}{CONTAINS}{0}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -4829,19 +4829,19 @@ RETURN a, b, c
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b, \_e34, c} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b, \_e162, c} \rangle$
 			}
 [
-	{$\expandout{b}{c}{}{\_e34}{FRIEND}{0}{1}$
+	{$\expandout{b}{c}{}{\_e162}{FRIEND}{0}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b, \_e34, c} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b, \_e162, c} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e33}{CONTAINS}{0}{1}$
+	{$\expandout{a}{b}{}{\_e161}{CONTAINS}{0}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e33, b} \rangle$
+			$\color{gray} \langle \var{a, \_e161, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -5035,7 +5035,7 @@ RETURN foo
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{foo}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big) \join \alldifferent{} \Big(\expandout{\_e36}{foo}{}{\_e38}{KNOWS}{1}{1} \Big(\expandout{a}{\_e36}{}{\_e37}{KNOWS}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
+& \projection{\var{foo}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big) \join \alldifferent{} \Big(\expandout{\_e164}{foo}{}{\_e166}{KNOWS}{1}{1} \Big(\expandout{a}{\_e164}{}{\_e165}{KNOWS}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -5052,7 +5052,7 @@ RETURN foo
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -5072,19 +5072,19 @@ RETURN foo
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
-	{$\expandout{\_e36}{foo}{}{\_e38}{KNOWS}{1}{1}$
+	{$\expandout{\_e164}{foo}{}{\_e166}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
-	{$\expandout{a}{\_e36}{}{\_e37}{KNOWS}{1}{1}$
+	{$\expandout{a}{\_e164}{}{\_e165}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -5114,7 +5114,7 @@ RETURN foo
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -5134,19 +5134,19 @@ RETURN foo
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
-	{$\expandout{\_e36}{foo}{}{\_e38}{KNOWS}{1}{1}$
+	{$\expandout{\_e164}{foo}{}{\_e166}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36, \_e38, foo} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164, \_e166, foo} \rangle$
 			}
 [
-	{$\expandout{a}{\_e36}{}{\_e37}{KNOWS}{1}{1}$
+	{$\expandout{a}{\_e164}{}{\_e165}{KNOWS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e37, \_e36} \rangle$
+			$\color{gray} \langle \var{a, \_e165, \_e164} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -5250,7 +5250,7 @@ RETURN r
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{\_e39}{}{r}{}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{r}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{\_e167}{}{r}{}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -5267,7 +5267,7 @@ RETURN r
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -5287,13 +5287,13 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
-	{$\expandout{a}{\_e39}{}{r}{}{2}{}$
+	{$\expandout{a}{\_e167}{}{r}{}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -5322,7 +5322,7 @@ RETURN r
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -5342,13 +5342,13 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
-	{$\expandout{a}{\_e39}{}{r}{}{2}{}$
+	{$\expandout{a}{\_e167}{}{r}{}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e39} \rangle$
+			$\color{gray} \langle \var{a, r, \_e167} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -5839,7 +5839,7 @@ RETURN b
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{b}} \Big(\alldifferent{} \Big(\expandout{a}{b}{}{\_e41}{T}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)
+& \projection{\var{b}} \Big(\alldifferent{} \Big(\expandout{a}{b}{}{\_e169}{T}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -5856,13 +5856,13 @@ RETURN b
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e41, b} \rangle$
+			$\color{gray} \langle \var{a, \_e169, b} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e41}{T}{1}{1}$
+	{$\expandout{a}{b}{}{\_e169}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e41, b} \rangle$
+			$\color{gray} \langle \var{a, \_e169, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -5890,13 +5890,13 @@ RETURN b
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e41, b} \rangle$
+			$\color{gray} \langle \var{a, \_e169, b} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e41}{T}{1}{1}$
+	{$\expandout{a}{b}{}{\_e169}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e41, b} \rangle$
+			$\color{gray} \langle \var{a, \_e169, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -6127,7 +6127,7 @@ RETURN n, x
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{n},~\var{x}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big) \join \alldifferent{} \Big(\expandout{n}{x}{}{\_e42}{NOT\_EXIST}{1}{1} \Big(\getvertices{n}{}\Big)\Big)\Big)
+& \projection{\var{n},~\var{x}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big) \join \alldifferent{} \Big(\expandout{n}{x}{}{\_e170}{NOT\_EXIST}{1}{1} \Big(\getvertices{n}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -6144,7 +6144,7 @@ RETURN n, x
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -6164,13 +6164,13 @@ RETURN n, x
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
-	{$\expandout{n}{x}{}{\_e42}{NOT\_EXIST}{1}{1}$
+	{$\expandout{n}{x}{}{\_e170}{NOT\_EXIST}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
 	{$\getvertices{n}{}$
@@ -6199,7 +6199,7 @@ RETURN n, x
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -6219,13 +6219,13 @@ RETURN n, x
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
-	{$\expandout{n}{x}{}{\_e42}{NOT\_EXIST}{1}{1}$
+	{$\expandout{n}{x}{}{\_e170}{NOT\_EXIST}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e42, x} \rangle$
+			$\color{gray} \langle \var{n, \_e170, x} \rangle$
 			}
 [
 	{$\getvertices{n}{}$
@@ -6324,7 +6324,7 @@ RETURN r
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r}} \Big(\alldifferent{} \Big(\expandout{\_e45}{\_e46}{B}{r}{}{1}{1} \Big(\getvertices{\_e45}{A}\Big)\Big)\Big)
+& \projection{\var{r}} \Big(\alldifferent{} \Big(\expandout{\_e173}{\_e174}{B}{r}{}{1}{1} \Big(\getvertices{\_e173}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -6341,19 +6341,19 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45, r, \_e46} \rangle$
+			$\color{gray} \langle \var{\_e173, r, \_e174} \rangle$
 			}
 [
-	{$\expandout{\_e45}{\_e46}{B}{r}{}{1}{1}$
+	{$\expandout{\_e173}{\_e174}{B}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45, r, \_e46} \rangle$
+			$\color{gray} \langle \var{\_e173, r, \_e174} \rangle$
 			}
 [
-	{$\getvertices{\_e45}{A}$
+	{$\getvertices{\_e173}{A}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45} \rangle$
+			$\color{gray} \langle \var{\_e173} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -6375,19 +6375,19 @@ RETURN r
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45, r, \_e46} \rangle$
+			$\color{gray} \langle \var{\_e173, r, \_e174} \rangle$
 			}
 [
-	{$\expandout{\_e45}{\_e46}{B}{r}{}{1}{1}$
+	{$\expandout{\_e173}{\_e174}{B}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45, r, \_e46} \rangle$
+			$\color{gray} \langle \var{\_e173, r, \_e174} \rangle$
 			}
 [
-	{$\getvertices{\_e45}{A}$
+	{$\getvertices{\_e173}{A}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e45} \rangle$
+			$\color{gray} \langle \var{\_e173} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -6624,7 +6624,7 @@ RETURN a.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a.name}} \Big(\alldifferent{} \Big(\expandout{\_e51}{a}{}{\_e53}{B}{1}{1} \Big(\expandout{a}{\_e51}{}{\_e52}{A}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
+& \projection{\var{a.name}} \Big(\alldifferent{} \Big(\expandout{\_e179}{a}{}{\_e181}{B}{1}{1} \Big(\expandout{a}{\_e179}{}{\_e180}{A}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -6641,19 +6641,19 @@ RETURN a.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51, \_e53} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179, \_e181} \rangle$
 			}
 [
-	{$\expandout{\_e51}{a}{}{\_e53}{B}{1}{1}$
+	{$\expandout{\_e179}{a}{}{\_e181}{B}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51, \_e53} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179, \_e181} \rangle$
 			}
 [
-	{$\expandout{a}{\_e51}{}{\_e52}{A}{1}{1}$
+	{$\expandout{a}{\_e179}{}{\_e180}{A}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -6682,19 +6682,19 @@ RETURN a.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51, \_e53} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179, \_e181} \rangle$
 			}
 [
-	{$\expandout{\_e51}{a}{}{\_e53}{B}{1}{1}$
+	{$\expandout{\_e179}{a}{}{\_e181}{B}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51, \_e53} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179, \_e181} \rangle$
 			}
 [
-	{$\expandout{a}{\_e51}{}{\_e52}{A}{1}{1}$
+	{$\expandout{a}{\_e179}{}{\_e180}{A}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e52, \_e51} \rangle$
+			$\color{gray} \langle \var{a, \_e180, \_e179} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -6722,7 +6722,7 @@ RETURN a.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a.name}} \Big(\alldifferent{} \Big(\expandout{a}{b}{}{\_e54}{A}{1}{1} \Big(\getvertices{a}{}\Big) \join \expandout{b}{a}{}{\_e55}{B}{1}{1} \Big(\getvertices{b}{}\Big)\Big)\Big)
+& \projection{\var{a.name}} \Big(\alldifferent{} \Big(\expandout{a}{b}{}{\_e182}{A}{1}{1} \Big(\getvertices{a}{}\Big) \join \expandout{b}{a}{}{\_e183}{B}{1}{1} \Big(\getvertices{b}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -6739,19 +6739,19 @@ RETURN a.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b, \_e55} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b, \_e183} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b, \_e55} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b, \_e183} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e54}{A}{1}{1}$
+	{$\expandout{a}{b}{}{\_e182}{A}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -6762,10 +6762,10 @@ RETURN a.name
 ]
 ]
 [
-	{$\expandout{b}{a}{}{\_e55}{B}{1}{1}$
+	{$\expandout{b}{a}{}{\_e183}{B}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{b, \_e55, a} \rangle$
+			$\color{gray} \langle \var{b, \_e183, a} \rangle$
 			}
 [
 	{$\getvertices{b}{}$
@@ -6794,19 +6794,19 @@ RETURN a.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b, \_e55} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b, \_e183} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b, \_e55} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b, \_e183} \rangle$
 			}
 [
-	{$\expandout{a}{b}{}{\_e54}{A}{1}{1}$
+	{$\expandout{a}{b}{}{\_e182}{A}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e54, b} \rangle$
+			$\color{gray} \langle \var{a, \_e182, b} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -6817,10 +6817,10 @@ RETURN a.name
 ]
 ]
 [
-	{$\expandout{b}{a}{}{\_e55}{B}{1}{1}$
+	{$\expandout{b}{a}{}{\_e183}{B}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{b, \_e55, a} \rangle$
+			$\color{gray} \langle \var{b, \_e183, a} \rangle$
 			}
 [
 	{$\getvertices{b}{}$
@@ -7148,7 +7148,7 @@ RETURN r2 AS rel
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r2}} \Big(\alldifferent{} \Big(\expandout{\_e56}{\_e57}{}{r1}{}{1}{1} \Big(\getvertices{\_e56}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{\_e58}{\_e59}{}{r2}{}{1}{1} \Big(\getvertices{\_e58}{}\Big)\Big)\Big)
+& \projection{\var{r2}\assign \var{rel}} \Big(\alldifferent{} \Big(\expandout{\_e184}{\_e185}{}{r1}{}{1}{1} \Big(\getvertices{\_e184}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{\_e186}{\_e187}{}{r2}{}{1}{1} \Big(\getvertices{\_e186}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7156,7 +7156,7 @@ RETURN r2 AS rel
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{r2}}$
+	{$\projection{\var{r2}\assign \var{rel}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{r2} \rangle$
@@ -7165,25 +7165,25 @@ RETURN r2 AS rel
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57, \_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185, \_e186, r2, \_e187} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185} \rangle$
 			}
 [
-	{$\expandout{\_e56}{\_e57}{}{r1}{}{1}{1}$
+	{$\expandout{\_e184}{\_e185}{}{r1}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185} \rangle$
 			}
 [
-	{$\getvertices{\_e56}{}$
+	{$\getvertices{\_e184}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56} \rangle$
+			$\color{gray} \langle \var{\_e184} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7192,19 +7192,19 @@ RETURN r2 AS rel
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e186, r2, \_e187} \rangle$
 			}
 [
-	{$\expandout{\_e58}{\_e59}{}{r2}{}{1}{1}$
+	{$\expandout{\_e186}{\_e187}{}{r2}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e186, r2, \_e187} \rangle$
 			}
 [
-	{$\getvertices{\_e58}{}$
+	{$\getvertices{\_e186}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58} \rangle$
+			$\color{gray} \langle \var{\_e186} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7218,7 +7218,7 @@ RETURN r2 AS rel
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{r2}}$
+	{$\projection{\var{r2}\assign \var{rel}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{r2} \rangle$
@@ -7227,25 +7227,25 @@ RETURN r2 AS rel
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57, \_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185, \_e186, r2, \_e187} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185} \rangle$
 			}
 [
-	{$\expandout{\_e56}{\_e57}{}{r1}{}{1}{1}$
+	{$\expandout{\_e184}{\_e185}{}{r1}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56, r1, \_e57} \rangle$
+			$\color{gray} \langle \var{\_e184, r1, \_e185} \rangle$
 			}
 [
-	{$\getvertices{\_e56}{}$
+	{$\getvertices{\_e184}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e56} \rangle$
+			$\color{gray} \langle \var{\_e184} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7254,19 +7254,19 @@ RETURN r2 AS rel
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e186, r2, \_e187} \rangle$
 			}
 [
-	{$\expandout{\_e58}{\_e59}{}{r2}{}{1}{1}$
+	{$\expandout{\_e186}{\_e187}{}{r2}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58, r2, \_e59} \rangle$
+			$\color{gray} \langle \var{\_e186, r2, \_e187} \rangle$
 			}
 [
-	{$\getvertices{\_e58}{}$
+	{$\getvertices{\_e186}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e58} \rangle$
+			$\color{gray} \langle \var{\_e186} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7291,7 +7291,7 @@ RETURN r2 AS rel
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r2}} \Big(\alldifferent{} \Big(\expandout{\_e60}{\_e61}{}{r1}{}{1}{1} \Big(\getvertices{\_e60}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{\_e62}{\_e63}{}{r2}{}{1}{1} \Big(\getvertices{\_e62}{}\Big)\Big)\Big)
+& \projection{\var{r2}\assign \var{rel}} \Big(\alldifferent{} \Big(\expandout{\_e188}{\_e189}{}{r1}{}{1}{1} \Big(\getvertices{\_e188}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{\_e190}{\_e191}{}{r2}{}{1}{1} \Big(\getvertices{\_e190}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7299,7 +7299,7 @@ RETURN r2 AS rel
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{r2}}$
+	{$\projection{\var{r2}\assign \var{rel}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{r2} \rangle$
@@ -7308,25 +7308,25 @@ RETURN r2 AS rel
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61, \_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189, \_e190, r2, \_e191} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189} \rangle$
 			}
 [
-	{$\expandout{\_e60}{\_e61}{}{r1}{}{1}{1}$
+	{$\expandout{\_e188}{\_e189}{}{r1}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189} \rangle$
 			}
 [
-	{$\getvertices{\_e60}{}$
+	{$\getvertices{\_e188}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60} \rangle$
+			$\color{gray} \langle \var{\_e188} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7335,19 +7335,19 @@ RETURN r2 AS rel
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e190, r2, \_e191} \rangle$
 			}
 [
-	{$\expandout{\_e62}{\_e63}{}{r2}{}{1}{1}$
+	{$\expandout{\_e190}{\_e191}{}{r2}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e190, r2, \_e191} \rangle$
 			}
 [
-	{$\getvertices{\_e62}{}$
+	{$\getvertices{\_e190}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62} \rangle$
+			$\color{gray} \langle \var{\_e190} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7361,7 +7361,7 @@ RETURN r2 AS rel
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{r2}}$
+	{$\projection{\var{r2}\assign \var{rel}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{r2} \rangle$
@@ -7370,25 +7370,25 @@ RETURN r2 AS rel
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61, \_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189, \_e190, r2, \_e191} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189} \rangle$
 			}
 [
-	{$\expandout{\_e60}{\_e61}{}{r1}{}{1}{1}$
+	{$\expandout{\_e188}{\_e189}{}{r1}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60, r1, \_e61} \rangle$
+			$\color{gray} \langle \var{\_e188, r1, \_e189} \rangle$
 			}
 [
-	{$\getvertices{\_e60}{}$
+	{$\getvertices{\_e188}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e60} \rangle$
+			$\color{gray} \langle \var{\_e188} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7397,19 +7397,19 @@ RETURN r2 AS rel
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e190, r2, \_e191} \rangle$
 			}
 [
-	{$\expandout{\_e62}{\_e63}{}{r2}{}{1}{1}$
+	{$\expandout{\_e190}{\_e191}{}{r2}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62, r2, \_e63} \rangle$
+			$\color{gray} \langle \var{\_e190, r2, \_e191} \rangle$
 			}
 [
-	{$\getvertices{\_e62}{}$
+	{$\getvertices{\_e190}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e62} \rangle$
+			$\color{gray} \langle \var{\_e190} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7461,7 +7461,7 @@ RETURN a2, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a2},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{\_e64}{\_e65}{}{r}{}{1}{1} \Big(\getvertices{\_e64}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a2}{b2}{}{r}{}{1}{1} \Big(\getvertices{a2}{}\Big)\Big)\Big)
+& \projection{\var{a2},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{\_e192}{\_e193}{}{r}{}{1}{1} \Big(\getvertices{\_e192}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a2}{b2}{}{r}{}{1}{1} \Big(\getvertices{a2}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7478,25 +7478,25 @@ RETURN a2, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65, a2, b2} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193, a2, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193} \rangle$
 			}
 [
-	{$\expandout{\_e64}{\_e65}{}{r}{}{1}{1}$
+	{$\expandout{\_e192}{\_e193}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193} \rangle$
 			}
 [
-	{$\getvertices{\_e64}{}$
+	{$\getvertices{\_e192}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64} \rangle$
+			$\color{gray} \langle \var{\_e192} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7540,25 +7540,25 @@ RETURN a2, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65, a2, b2} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193, a2, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193} \rangle$
 			}
 [
-	{$\expandout{\_e64}{\_e65}{}{r}{}{1}{1}$
+	{$\expandout{\_e192}{\_e193}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64, r, \_e65} \rangle$
+			$\color{gray} \langle \var{\_e192, r, \_e193} \rangle$
 			}
 [
-	{$\getvertices{\_e64}{}$
+	{$\getvertices{\_e192}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e64} \rangle$
+			$\color{gray} \langle \var{\_e192} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -7604,7 +7604,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e66}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e194}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7621,19 +7621,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e66}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e194}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -7683,19 +7683,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e66}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e194}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e66} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e194} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -7747,7 +7747,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e67}{}{r}{}{1}{1} \Big(\getvertices{a1}{X}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{X}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e195}{}{r}{}{1}{1} \Big(\getvertices{a1}{X}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{X}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7764,19 +7764,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e67}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e195}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195} \rangle$
 			}
 [
 	{$\getvertices{a1}{X}$
@@ -7826,19 +7826,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e67}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e195}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e67} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e195} \rangle$
 			}
 [
 	{$\getvertices{a1}{X}$
@@ -7890,7 +7890,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e68}{}{r}{}{1}{1} \Big(\getvertices{a1}{X \land Y}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{X \land Y}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e196}{}{r}{}{1}{1} \Big(\getvertices{a1}{X \land Y}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{X \land Y}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -7907,19 +7907,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e68}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e196}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196} \rangle$
 			}
 [
 	{$\getvertices{a1}{X \land Y}$
@@ -7969,19 +7969,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e68}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e196}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e68} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e196} \rangle$
 			}
 [
 	{$\getvertices{a1}{X \land Y}$
@@ -8033,7 +8033,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e69}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e197}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -8050,19 +8050,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e69}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1}$
+	{$\expandout{a1}{\_e197}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8112,19 +8112,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e69}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1}$
+	{$\expandout{a1}{\_e197}{}{r}{CONTRADICTING LABEL CONSTRAINTS}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e69} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e197} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8175,7 +8175,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e70}{}{r}{T}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{T}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e198}{}{r}{T}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandout{a1}{b2}{}{r}{T}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -8192,19 +8192,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e70}{}{r}{T}{1}{1}$
+	{$\expandout{a1}{\_e198}{}{r}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8254,19 +8254,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e70}{}{r}{T}{1}{1}$
+	{$\expandout{a1}{\_e198}{}{r}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e70} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e198} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8396,7 +8396,7 @@ RETURN a1, r, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e76}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandin{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e204}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \alldifferent{} \Big(\expandin{a1}{b2}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -8413,19 +8413,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e76}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e204}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8475,19 +8475,19 @@ RETURN a1, r, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e76}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e204}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e76} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e204} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8540,7 +8540,7 @@ RETURN a1, r, b2, a2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a1},~\var{r},~\var{b2},~\var{a2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e77}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \selection{\var{a1} = \var{a2}} \Big(\alldifferent{} \Big(\expandin{a2}{b2}{}{r}{}{1}{1} \Big(\getvertices{a2}{}\Big)\Big)\Big)\Big)
+& \projection{\var{a1},~\var{r},~\var{b2},~\var{a2}} \Big(\alldifferent{} \Big(\expandout{a1}{\_e205}{}{r}{}{1}{1} \Big(\getvertices{a1}{}\Big)\Big) \join \selection{\var{a1} = \var{a2}} \Big(\alldifferent{} \Big(\expandin{a2}{b2}{}{r}{}{1}{1} \Big(\getvertices{a2}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -8557,19 +8557,19 @@ RETURN a1, r, b2, a2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77, a2, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205, a2, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e77}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e205}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8626,19 +8626,19 @@ RETURN a1, r, b2, a2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77, a2, b2} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205, a2, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205} \rangle$
 			}
 [
-	{$\expandout{a1}{\_e77}{}{r}{}{1}{1}$
+	{$\expandout{a1}{\_e205}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a1, r, \_e77} \rangle$
+			$\color{gray} \langle \var{a1, r, \_e205} \rangle$
 			}
 [
 	{$\getvertices{a1}{}$
@@ -8696,7 +8696,7 @@ RETURN foo.bar AS x
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \topp{4}{} \Big(\sort{\desc \atom{x}} \Big(\projection{\var{foo.bar}} \Big(\alldifferent{} \Big(\getvertices{foo}{}\Big)\Big)\Big)\Big)
+& \topp{4}{} \Big(\sort{\desc \var{x}} \Big(\projection{\var{foo.bar}\assign \var{x}} \Big(\alldifferent{} \Big(\getvertices{foo}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -8710,13 +8710,13 @@ RETURN foo.bar AS x
 			$\color{gray} \langle \var{bar} \rangle$
 			}
 [
-	{$\sort{\desc \atom{x}}$
+	{$\sort{\desc \var{x}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{bar} \rangle$
 			}
 [
-	{$\projection{\var{foo.bar}}$
+	{$\projection{\var{foo.bar}\assign \var{x}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{bar} \rangle$
@@ -8751,13 +8751,13 @@ RETURN foo.bar AS x
 			$\color{gray} \langle \var{bar} \rangle$
 			}
 [
-	{$\sort{\desc \atom{x}}$
+	{$\sort{\desc \var{x}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{bar} \rangle$
 			}
 [
-	{$\projection{\var{foo.bar}}$
+	{$\projection{\var{foo.bar}\assign \var{x}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{bar} \rangle$
@@ -9076,7 +9076,7 @@ RETURN r.prop
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r.prop}} \Big(\alldifferent{} \Big(\expandout{\_e81}{\_e82}{}{r}{}{1}{1} \Big(\getvertices{\_e81}{}\Big)\Big)\Big)
+& \projection{\var{r.prop}} \Big(\alldifferent{} \Big(\expandout{\_e209}{\_e210}{}{r}{}{1}{1} \Big(\getvertices{\_e209}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -9093,19 +9093,19 @@ RETURN r.prop
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81, r, \_e82} \rangle$
+			$\color{gray} \langle \var{\_e209, r, \_e210} \rangle$
 			}
 [
-	{$\expandout{\_e81}{\_e82}{}{r}{}{1}{1}$
+	{$\expandout{\_e209}{\_e210}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81, r, \_e82} \rangle$
+			$\color{gray} \langle \var{\_e209, r, \_e210} \rangle$
 			}
 [
-	{$\getvertices{\_e81}{}$
+	{$\getvertices{\_e209}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81} \rangle$
+			$\color{gray} \langle \var{\_e209} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -9127,19 +9127,19 @@ RETURN r.prop
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81, r, \_e82} \rangle$
+			$\color{gray} \langle \var{\_e209, r, \_e210} \rangle$
 			}
 [
-	{$\expandout{\_e81}{\_e82}{}{r}{}{1}{1}$
+	{$\expandout{\_e209}{\_e210}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81, r, \_e82} \rangle$
+			$\color{gray} \langle \var{\_e209, r, \_e210} \rangle$
 			}
 [
-	{$\getvertices{\_e81}{}$
+	{$\getvertices{\_e209}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e81} \rangle$
+			$\color{gray} \langle \var{\_e209} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -9160,7 +9160,7 @@ RETURN a AS foo, r AS bar
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a},~\var{r}} \Big(\alldifferent{} \Big(\expandout{a}{\_e83}{}{r}{}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)
+& \projection{\var{a}\assign \var{foo},~\var{r}\assign \var{bar}} \Big(\alldifferent{} \Big(\expandout{a}{\_e211}{}{r}{}{1}{1} \Big(\getvertices{a}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -9168,7 +9168,7 @@ RETURN a AS foo, r AS bar
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a},~\var{r}}$
+	{$\projection{\var{a}\assign \var{foo},~\var{r}\assign \var{bar}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a, r} \rangle$
@@ -9177,13 +9177,13 @@ RETURN a AS foo, r AS bar
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e83} \rangle$
+			$\color{gray} \langle \var{a, r, \_e211} \rangle$
 			}
 [
-	{$\expandout{a}{\_e83}{}{r}{}{1}{1}$
+	{$\expandout{a}{\_e211}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e83} \rangle$
+			$\color{gray} \langle \var{a, r, \_e211} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -9202,7 +9202,7 @@ RETURN a AS foo, r AS bar
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a},~\var{r}}$
+	{$\projection{\var{a}\assign \var{foo},~\var{r}\assign \var{bar}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a, r} \rangle$
@@ -9211,13 +9211,13 @@ RETURN a AS foo, r AS bar
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e83} \rangle$
+			$\color{gray} \langle \var{a, r, \_e211} \rangle$
 			}
 [
-	{$\expandout{a}{\_e83}{}{r}{}{1}{1}$
+	{$\expandout{a}{\_e211}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, r, \_e83} \rangle$
+			$\color{gray} \langle \var{a, r, \_e211} \rangle$
 			}
 [
 	{$\getvertices{a}{}$
@@ -9314,7 +9314,7 @@ RETURN r.bar
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{r.bar}} \Big(\alldifferent{} \Big(\expandout{\_e84}{\_e85}{}{r}{}{1}{1} \Big(\getvertices{\_e84}{}\Big)\Big)\Big)
+& \projection{\var{r.bar}} \Big(\alldifferent{} \Big(\expandout{\_e212}{\_e213}{}{r}{}{1}{1} \Big(\getvertices{\_e212}{}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -9331,19 +9331,19 @@ RETURN r.bar
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84, r, \_e85} \rangle$
+			$\color{gray} \langle \var{\_e212, r, \_e213} \rangle$
 			}
 [
-	{$\expandout{\_e84}{\_e85}{}{r}{}{1}{1}$
+	{$\expandout{\_e212}{\_e213}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84, r, \_e85} \rangle$
+			$\color{gray} \langle \var{\_e212, r, \_e213} \rangle$
 			}
 [
-	{$\getvertices{\_e84}{}$
+	{$\getvertices{\_e212}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84} \rangle$
+			$\color{gray} \langle \var{\_e212} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -9365,19 +9365,19 @@ RETURN r.bar
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84, r, \_e85} \rangle$
+			$\color{gray} \langle \var{\_e212, r, \_e213} \rangle$
 			}
 [
-	{$\expandout{\_e84}{\_e85}{}{r}{}{1}{1}$
+	{$\expandout{\_e212}{\_e213}{}{r}{}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84, r, \_e85} \rangle$
+			$\color{gray} \langle \var{\_e212, r, \_e213} \rangle$
 			}
 [
-	{$\getvertices{\_e84}{}$
+	{$\getvertices{\_e212}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e84} \rangle$
+			$\color{gray} \langle \var{\_e212} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -9723,7 +9723,7 @@ RETURN n, m
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{n},~\var{m}} \Big(\alldifferent{} \Big(\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e90}{T}{1}{1} \Big(\getvertices{n}{A \land B \land C \land D \land E \land F \land G \land H \land I \land J \land K \land L \land M}\Big)\Big)\Big)
+& \projection{\var{n},~\var{m}} \Big(\alldifferent{} \Big(\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e218}{T}{1}{1} \Big(\getvertices{n}{A \land B \land C \land D \land E \land F \land G \land H \land I \land J \land K \land L \land M}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -9740,13 +9740,13 @@ RETURN n, m
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e90, m} \rangle$
+			$\color{gray} \langle \var{n, \_e218, m} \rangle$
 			}
 [
-	{$\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e90}{T}{1}{1}$
+	{$\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e218}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e90, m} \rangle$
+			$\color{gray} \langle \var{n, \_e218, m} \rangle$
 			}
 [
 	{$\getvertices{n}{A \land B \land C \land D \land E \land F \land G \land H \land I \land J \land K \land L \land M}$
@@ -9774,13 +9774,13 @@ RETURN n, m
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e90, m} \rangle$
+			$\color{gray} \langle \var{n, \_e218, m} \rangle$
 			}
 [
-	{$\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e90}{T}{1}{1}$
+	{$\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e218}{T}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{n, \_e90, m} \rangle$
+			$\color{gray} \langle \var{n, \_e218, m} \rangle$
 			}
 [
 	{$\getvertices{n}{A \land B \land C \land D \land E \land F \land G \land H \land I \land J \land K \land L \land M}$
@@ -10622,7 +10622,7 @@ RETURN b
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{b}} \Big(\alldifferent{} \Big(\getvertices{a}{Single}\Big) \join \alldifferent{} \Big(\expandboth{a}{b}{}{\_e98}{}{3}{} \Big(\getvertices{a}{Single}\Big)\Big)\Big)
+& \projection{\var{b}} \Big(\alldifferent{} \Big(\getvertices{a}{Single}\Big) \join \alldifferent{} \Big(\expandboth{a}{b}{}{\_e226}{}{3}{} \Big(\getvertices{a}{Single}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -10639,7 +10639,7 @@ RETURN b
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -10659,13 +10659,13 @@ RETURN b
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
-	{$\expandboth{a}{b}{}{\_e98}{}{3}{}$
+	{$\expandboth{a}{b}{}{\_e226}{}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
 	{$\getvertices{a}{Single}$
@@ -10694,7 +10694,7 @@ RETURN b
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -10714,13 +10714,13 @@ RETURN b
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
-	{$\expandboth{a}{b}{}{\_e98}{}{3}{}$
+	{$\expandboth{a}{b}{}{\_e226}{}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e98, b} \rangle$
+			$\color{gray} \langle \var{a, \_e226, b} \rangle$
 			}
 [
 	{$\getvertices{a}{Single}$
@@ -12394,7 +12394,7 @@ RETURN a AS ColumnName
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big)\Big)
+& \projection{\var{a}\assign \var{ColumnName}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big)\Big)
  &
 \end{flalign*}
 
@@ -12402,7 +12402,7 @@ RETURN a AS ColumnName
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a}}$
+	{$\projection{\var{a}\assign \var{ColumnName}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a} \rangle$
@@ -12429,7 +12429,7 @@ RETURN a AS ColumnName
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a}}$
+	{$\projection{\var{a}\assign \var{ColumnName}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a} \rangle$
@@ -13123,7 +13123,7 @@ RETURN DISTINCT n.id AS id
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \sort{\desc \atom{id}} \Big(\duplicateelimination \Big(\projection{\var{n.id}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big)\Big)\Big)\Big)
+& \sort{\desc \var{id}} \Big(\duplicateelimination \Big(\projection{\var{n.id}\assign \var{id}} \Big(\alldifferent{} \Big(\getvertices{n}{}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -13131,7 +13131,7 @@ RETURN DISTINCT n.id AS id
 
 \begin{forest} for tree={align=center}
 [
-	{$\sort{\desc \atom{id}}$
+	{$\sort{\desc \var{id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -13143,7 +13143,7 @@ RETURN DISTINCT n.id AS id
 			$\color{gray} \langle \var{id} \rangle$
 			}
 [
-	{$\projection{\var{n.id}}$
+	{$\projection{\var{n.id}\assign \var{id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -13172,7 +13172,7 @@ RETURN DISTINCT n.id AS id
 
 \begin{forest} for tree={align=center}
 [
-	{$\sort{\desc \atom{id}}$
+	{$\sort{\desc \var{id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -13184,7 +13184,7 @@ RETURN DISTINCT n.id AS id
 			$\color{gray} \langle \var{id} \rangle$
 			}
 [
-	{$\projection{\var{n.id}}$
+	{$\projection{\var{n.id}\assign \var{id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -13289,7 +13289,7 @@ RETURN a.id AS a, a.id
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a.id},~\var{a.id}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big)\Big)
+& \projection{\var{a.id}\assign \var{a},~\var{a.id}} \Big(\alldifferent{} \Big(\getvertices{a}{}\Big)\Big)
  &
 \end{flalign*}
 
@@ -13297,7 +13297,7 @@ RETURN a.id AS a, a.id
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a.id},~\var{a.id}}$
+	{$\projection{\var{a.id}\assign \var{a},~\var{a.id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -13324,7 +13324,7 @@ RETURN a.id AS a, a.id
 
 \begin{forest} for tree={align=center}
 [
-	{$\projection{\var{a.id},~\var{a.id}}$
+	{$\projection{\var{a.id}\assign \var{a},~\var{a.id}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id} \rangle$
@@ -15487,7 +15487,7 @@ RETURN b AS a
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big)\Big) \union \projection{\var{b}} \Big(\alldifferent{} \Big(\getvertices{b}{B}\Big)\Big)
+& \projection{\var{a}\assign \var{a}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big)\Big) \union \projection{\var{b}\assign \var{a}} \Big(\alldifferent{} \Big(\getvertices{b}{B}\Big)\Big)
  &
 \end{flalign*}
 
@@ -15501,7 +15501,7 @@ RETURN b AS a
 			$\color{gray} \langle \var{a} \rangle$
 			}
 [
-	{$\projection{\var{a}}$
+	{$\projection{\var{a}\assign \var{a}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a} \rangle$
@@ -15522,7 +15522,7 @@ RETURN b AS a
 ]
 ]
 [
-	{$\projection{\var{b}}$
+	{$\projection{\var{b}\assign \var{a}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{b} \rangle$
@@ -15556,7 +15556,7 @@ RETURN b AS a
 			$\color{gray} \langle \var{a} \rangle$
 			}
 [
-	{$\projection{\var{a}}$
+	{$\projection{\var{a}\assign \var{a}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{a} \rangle$
@@ -15577,7 +15577,7 @@ RETURN b AS a
 ]
 ]
 [
-	{$\projection{\var{b}}$
+	{$\projection{\var{b}\assign \var{a}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{b} \rangle$
@@ -15956,7 +15956,7 @@ RETURN a, b2
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{a},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a}{b1}{}{\_e121}{X}{1}{1} \Big(\getvertices{a}{S}\Big)\Big) \join \alldifferent{} \Big(\expandout{a}{b2}{}{\_e122}{Y}{1}{1} \Big(\getvertices{a}{S}\Big)\Big)\Big)
+& \projection{\var{a},~\var{b2}} \Big(\alldifferent{} \Big(\expandout{a}{b1}{}{\_e249}{X}{1}{1} \Big(\getvertices{a}{S}\Big)\Big) \join \alldifferent{} \Big(\expandout{a}{b2}{}{\_e250}{Y}{1}{1} \Big(\getvertices{a}{S}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -15973,19 +15973,19 @@ RETURN a, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1, \_e250, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1} \rangle$
 			}
 [
-	{$\expandout{a}{b1}{}{\_e121}{X}{1}{1}$
+	{$\expandout{a}{b1}{}{\_e249}{X}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1} \rangle$
 			}
 [
 	{$\getvertices{a}{S}$
@@ -16000,13 +16000,13 @@ RETURN a, b2
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e250, b2} \rangle$
 			}
 [
-	{$\expandout{a}{b2}{}{\_e122}{Y}{1}{1}$
+	{$\expandout{a}{b2}{}{\_e250}{Y}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e250, b2} \rangle$
 			}
 [
 	{$\getvertices{a}{S}$
@@ -16035,19 +16035,19 @@ RETURN a, b2
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1, \_e250, b2} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1} \rangle$
 			}
 [
-	{$\expandout{a}{b1}{}{\_e121}{X}{1}{1}$
+	{$\expandout{a}{b1}{}{\_e249}{X}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e121, b1} \rangle$
+			$\color{gray} \langle \var{a, \_e249, b1} \rangle$
 			}
 [
 	{$\getvertices{a}{S}$
@@ -16062,13 +16062,13 @@ RETURN a, b2
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e250, b2} \rangle$
 			}
 [
-	{$\expandout{a}{b2}{}{\_e122}{Y}{1}{1}$
+	{$\expandout{a}{b2}{}{\_e250}{Y}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e122, b2} \rangle$
+			$\color{gray} \langle \var{a, \_e250, b2} \rangle$
 			}
 [
 	{$\getvertices{a}{S}$
@@ -16173,7 +16173,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e125}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e253}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16190,7 +16190,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16210,13 +16210,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e125}{LIKES}{0}{}$
+	{$\expandout{a}{c}{}{\_e253}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16245,7 +16245,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16265,13 +16265,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e125}{LIKES}{0}{}$
+	{$\expandout{a}{c}{}{\_e253}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e125, c} \rangle$
+			$\color{gray} \langle \var{a, \_e253, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16300,7 +16300,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e126}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e254}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16317,7 +16317,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16337,13 +16337,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e126}{LIKES}{1}{}$
+	{$\expandout{a}{c}{}{\_e254}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16372,7 +16372,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16392,13 +16392,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e126}{LIKES}{1}{}$
+	{$\expandout{a}{c}{}{\_e254}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e126, c} \rangle$
+			$\color{gray} \langle \var{a, \_e254, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16427,7 +16427,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e127}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e255}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16444,7 +16444,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16464,13 +16464,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e127}{LIKES}{2}{}$
+	{$\expandout{a}{c}{}{\_e255}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16499,7 +16499,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16519,13 +16519,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e127}{LIKES}{2}{}$
+	{$\expandout{a}{c}{}{\_e255}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e127, c} \rangle$
+			$\color{gray} \langle \var{a, \_e255, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16554,7 +16554,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e128}{LIKES}{0}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e256}{LIKES}{0}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16571,7 +16571,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16591,13 +16591,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e128}{LIKES}{0}{2}$
+	{$\expandout{a}{c}{}{\_e256}{LIKES}{0}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16626,7 +16626,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16646,13 +16646,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e128}{LIKES}{0}{2}$
+	{$\expandout{a}{c}{}{\_e256}{LIKES}{0}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e128, c} \rangle$
+			$\color{gray} \langle \var{a, \_e256, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16681,7 +16681,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e129}{LIKES}{1}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e257}{LIKES}{1}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16698,7 +16698,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16718,13 +16718,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e129}{LIKES}{1}{2}$
+	{$\expandout{a}{c}{}{\_e257}{LIKES}{1}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16753,7 +16753,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16773,13 +16773,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e129}{LIKES}{1}{2}$
+	{$\expandout{a}{c}{}{\_e257}{LIKES}{1}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e129, c} \rangle$
+			$\color{gray} \langle \var{a, \_e257, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16808,7 +16808,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e130}{LIKES}{0}{0} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e258}{LIKES}{0}{0} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16825,7 +16825,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16845,13 +16845,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e130}{LIKES}{0}{0}$
+	{$\expandout{a}{c}{}{\_e258}{LIKES}{0}{0}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16880,7 +16880,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16900,13 +16900,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e130}{LIKES}{0}{0}$
+	{$\expandout{a}{c}{}{\_e258}{LIKES}{0}{0}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e130, c} \rangle$
+			$\color{gray} \langle \var{a, \_e258, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -16935,7 +16935,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e131}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e259}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -16952,7 +16952,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -16972,13 +16972,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e131}{LIKES}{1}{1}$
+	{$\expandout{a}{c}{}{\_e259}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17007,7 +17007,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17027,13 +17027,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e131}{LIKES}{1}{1}$
+	{$\expandout{a}{c}{}{\_e259}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e131, c} \rangle$
+			$\color{gray} \langle \var{a, \_e259, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17062,7 +17062,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e132}{LIKES}{2}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e260}{LIKES}{2}{2} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17079,7 +17079,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17099,13 +17099,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e132}{LIKES}{2}{2}$
+	{$\expandout{a}{c}{}{\_e260}{LIKES}{2}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17134,7 +17134,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17154,13 +17154,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e132}{LIKES}{2}{2}$
+	{$\expandout{a}{c}{}{\_e260}{LIKES}{2}{2}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e132, c} \rangle$
+			$\color{gray} \langle \var{a, \_e260, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17189,7 +17189,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e133}{LIKES}{2}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e261}{LIKES}{2}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17206,7 +17206,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17226,13 +17226,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e133}{LIKES}{2}{1}$
+	{$\expandout{a}{c}{}{\_e261}{LIKES}{2}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17261,7 +17261,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17281,13 +17281,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e133}{LIKES}{2}{1}$
+	{$\expandout{a}{c}{}{\_e261}{LIKES}{2}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e133, c} \rangle$
+			$\color{gray} \langle \var{a, \_e261, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17316,7 +17316,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e134}{LIKES}{1}{0} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e262}{LIKES}{1}{0} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17333,7 +17333,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17353,13 +17353,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e134}{LIKES}{1}{0}$
+	{$\expandout{a}{c}{}{\_e262}{LIKES}{1}{0}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17388,7 +17388,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17408,13 +17408,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e134}{LIKES}{1}{0}$
+	{$\expandout{a}{c}{}{\_e262}{LIKES}{1}{0}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e134, c} \rangle$
+			$\color{gray} \langle \var{a, \_e262, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17515,7 +17515,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e138}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e266}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17532,7 +17532,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17552,13 +17552,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e138}{LIKES}{0}{}$
+	{$\expandout{a}{c}{}{\_e266}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17587,7 +17587,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17607,13 +17607,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e138}{LIKES}{0}{}$
+	{$\expandout{a}{c}{}{\_e266}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e138, c} \rangle$
+			$\color{gray} \langle \var{a, \_e266, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17642,7 +17642,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e139}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e267}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17659,7 +17659,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17679,13 +17679,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e139}{LIKES}{1}{}$
+	{$\expandout{a}{c}{}{\_e267}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17714,7 +17714,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17734,13 +17734,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e139}{LIKES}{1}{}$
+	{$\expandout{a}{c}{}{\_e267}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e139, c} \rangle$
+			$\color{gray} \langle \var{a, \_e267, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17769,7 +17769,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e140}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{a}{c}{}{\_e268}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17786,7 +17786,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17806,13 +17806,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e140}{LIKES}{2}{}$
+	{$\expandout{a}{c}{}{\_e268}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17841,7 +17841,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17861,13 +17861,13 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
-	{$\expandout{a}{c}{}{\_e140}{LIKES}{2}{}$
+	{$\expandout{a}{c}{}{\_e268}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e140, c} \rangle$
+			$\color{gray} \langle \var{a, \_e268, c} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17896,7 +17896,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e141}{c}{}{\_e143}{LIKES}{1}{1} \Big(\expandout{a}{\_e141}{}{\_e142}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e269}{c}{}{\_e271}{LIKES}{1}{1} \Big(\expandout{a}{\_e269}{}{\_e270}{LIKES}{0}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -17913,7 +17913,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17933,19 +17933,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
-	{$\expandout{\_e141}{c}{}{\_e143}{LIKES}{1}{1}$
+	{$\expandout{\_e269}{c}{}{\_e271}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e141}{}{\_e142}{LIKES}{0}{}$
+	{$\expandout{a}{\_e269}{}{\_e270}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -17975,7 +17975,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -17995,19 +17995,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
-	{$\expandout{\_e141}{c}{}{\_e143}{LIKES}{1}{1}$
+	{$\expandout{\_e269}{c}{}{\_e271}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141, \_e143, c} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269, \_e271, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e141}{}{\_e142}{LIKES}{0}{}$
+	{$\expandout{a}{\_e269}{}{\_e270}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e142, \_e141} \rangle$
+			$\color{gray} \langle \var{a, \_e270, \_e269} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18037,7 +18037,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e144}{c}{}{\_e146}{LIKES}{0}{} \Big(\expandout{a}{\_e144}{}{\_e145}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e272}{c}{}{\_e274}{LIKES}{0}{} \Big(\expandout{a}{\_e272}{}{\_e273}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18054,7 +18054,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18074,19 +18074,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
-	{$\expandout{\_e144}{c}{}{\_e146}{LIKES}{0}{}$
+	{$\expandout{\_e272}{c}{}{\_e274}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e144}{}{\_e145}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e272}{}{\_e273}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18116,7 +18116,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18136,19 +18136,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
-	{$\expandout{\_e144}{c}{}{\_e146}{LIKES}{0}{}$
+	{$\expandout{\_e272}{c}{}{\_e274}{LIKES}{0}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144, \_e146, c} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272, \_e274, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e144}{}{\_e145}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e272}{}{\_e273}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e145, \_e144} \rangle$
+			$\color{gray} \langle \var{a, \_e273, \_e272} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18178,7 +18178,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e147}{c}{}{\_e149}{LIKES}{1}{1} \Big(\expandout{a}{\_e147}{}{\_e148}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e275}{c}{}{\_e277}{LIKES}{1}{1} \Big(\expandout{a}{\_e275}{}{\_e276}{LIKES}{1}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18195,7 +18195,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18215,19 +18215,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
-	{$\expandout{\_e147}{c}{}{\_e149}{LIKES}{1}{1}$
+	{$\expandout{\_e275}{c}{}{\_e277}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e147}{}{\_e148}{LIKES}{1}{}$
+	{$\expandout{a}{\_e275}{}{\_e276}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18257,7 +18257,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18277,19 +18277,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
-	{$\expandout{\_e147}{c}{}{\_e149}{LIKES}{1}{1}$
+	{$\expandout{\_e275}{c}{}{\_e277}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147, \_e149, c} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275, \_e277, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e147}{}{\_e148}{LIKES}{1}{}$
+	{$\expandout{a}{\_e275}{}{\_e276}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e148, \_e147} \rangle$
+			$\color{gray} \langle \var{a, \_e276, \_e275} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18319,7 +18319,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e150}{c}{}{\_e152}{LIKES}{1}{} \Big(\expandout{a}{\_e150}{}{\_e151}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e278}{c}{}{\_e280}{LIKES}{1}{} \Big(\expandout{a}{\_e278}{}{\_e279}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18336,7 +18336,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18356,19 +18356,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
-	{$\expandout{\_e150}{c}{}{\_e152}{LIKES}{1}{}$
+	{$\expandout{\_e278}{c}{}{\_e280}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e150}{}{\_e151}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e278}{}{\_e279}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18398,7 +18398,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18418,19 +18418,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
-	{$\expandout{\_e150}{c}{}{\_e152}{LIKES}{1}{}$
+	{$\expandout{\_e278}{c}{}{\_e280}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150, \_e152, c} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278, \_e280, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e150}{}{\_e151}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e278}{}{\_e279}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e151, \_e150} \rangle$
+			$\color{gray} \langle \var{a, \_e279, \_e278} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18460,7 +18460,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e153}{c}{}{\_e155}{LIKES}{1}{1} \Big(\expandout{a}{\_e153}{}{\_e154}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e281}{c}{}{\_e283}{LIKES}{1}{1} \Big(\expandout{a}{\_e281}{}{\_e282}{LIKES}{2}{} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18477,7 +18477,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18497,19 +18497,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
-	{$\expandout{\_e153}{c}{}{\_e155}{LIKES}{1}{1}$
+	{$\expandout{\_e281}{c}{}{\_e283}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e153}{}{\_e154}{LIKES}{2}{}$
+	{$\expandout{a}{\_e281}{}{\_e282}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18539,7 +18539,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18559,19 +18559,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
-	{$\expandout{\_e153}{c}{}{\_e155}{LIKES}{1}{1}$
+	{$\expandout{\_e281}{c}{}{\_e283}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153, \_e155, c} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281, \_e283, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e153}{}{\_e154}{LIKES}{2}{}$
+	{$\expandout{a}{\_e281}{}{\_e282}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e154, \_e153} \rangle$
+			$\color{gray} \langle \var{a, \_e282, \_e281} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18601,7 +18601,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e156}{c}{}{\_e158}{LIKES}{2}{} \Big(\expandout{a}{\_e156}{}{\_e157}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e284}{c}{}{\_e286}{LIKES}{2}{} \Big(\expandout{a}{\_e284}{}{\_e285}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18618,7 +18618,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18638,19 +18638,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
-	{$\expandout{\_e156}{c}{}{\_e158}{LIKES}{2}{}$
+	{$\expandout{\_e284}{c}{}{\_e286}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e156}{}{\_e157}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e284}{}{\_e285}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18680,7 +18680,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18700,19 +18700,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
-	{$\expandout{\_e156}{c}{}{\_e158}{LIKES}{2}{}$
+	{$\expandout{\_e284}{c}{}{\_e286}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156, \_e158, c} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284, \_e286, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e156}{}{\_e157}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e284}{}{\_e285}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e157, \_e156} \rangle$
+			$\color{gray} \langle \var{a, \_e285, \_e284} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18742,7 +18742,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e159}{c}{}{\_e161}{LIKES}{3}{} \Big(\expandout{a}{\_e159}{}{\_e160}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e287}{c}{}{\_e289}{LIKES}{3}{} \Big(\expandout{a}{\_e287}{}{\_e288}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18759,7 +18759,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18779,19 +18779,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
-	{$\expandout{\_e159}{c}{}{\_e161}{LIKES}{3}{}$
+	{$\expandout{\_e287}{c}{}{\_e289}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e159}{}{\_e160}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e287}{}{\_e288}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18821,7 +18821,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18841,19 +18841,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
-	{$\expandout{\_e159}{c}{}{\_e161}{LIKES}{3}{}$
+	{$\expandout{\_e287}{c}{}{\_e289}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159, \_e161, c} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287, \_e289, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e159}{}{\_e160}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e287}{}{\_e288}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e160, \_e159} \rangle$
+			$\color{gray} \langle \var{a, \_e288, \_e287} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18883,7 +18883,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e162}{c}{}{\_e164}{LIKES}{3}{} \Big(\expandin{a}{\_e162}{}{\_e163}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e290}{c}{}{\_e292}{LIKES}{3}{} \Big(\expandin{a}{\_e290}{}{\_e291}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -18900,7 +18900,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18920,19 +18920,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
-	{$\expandout{\_e162}{c}{}{\_e164}{LIKES}{3}{}$
+	{$\expandout{\_e290}{c}{}{\_e292}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
-	{$\expandin{a}{\_e162}{}{\_e163}{LIKES}{1}{1}$
+	{$\expandin{a}{\_e290}{}{\_e291}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -18962,7 +18962,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -18982,19 +18982,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
-	{$\expandout{\_e162}{c}{}{\_e164}{LIKES}{3}{}$
+	{$\expandout{\_e290}{c}{}{\_e292}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162, \_e164, c} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290, \_e292, c} \rangle$
 			}
 [
-	{$\expandin{a}{\_e162}{}{\_e163}{LIKES}{1}{1}$
+	{$\expandin{a}{\_e290}{}{\_e291}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e163, \_e162} \rangle$
+			$\color{gray} \langle \var{a, \_e291, \_e290} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -19024,7 +19024,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandboth{\_e165}{c}{}{\_e167}{LIKES}{3}{} \Big(\expandout{a}{\_e165}{}{\_e166}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandboth{\_e293}{c}{}{\_e295}{LIKES}{3}{} \Big(\expandout{a}{\_e293}{}{\_e294}{LIKES}{1}{1} \Big(\getvertices{a}{A}\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -19041,7 +19041,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19061,19 +19061,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
-	{$\expandboth{\_e165}{c}{}{\_e167}{LIKES}{3}{}$
+	{$\expandboth{\_e293}{c}{}{\_e295}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e165}{}{\_e166}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e293}{}{\_e294}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -19103,7 +19103,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19123,19 +19123,19 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
-	{$\expandboth{\_e165}{c}{}{\_e167}{LIKES}{3}{}$
+	{$\expandboth{\_e293}{c}{}{\_e295}{LIKES}{3}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165, \_e167, c} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293, \_e295, c} \rangle$
 			}
 [
-	{$\expandout{a}{\_e165}{}{\_e166}{LIKES}{1}{1}$
+	{$\expandout{a}{\_e293}{}{\_e294}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, \_e166, \_e165} \rangle$
+			$\color{gray} \langle \var{a, \_e294, \_e293} \rangle$
 			}
 [
 	{$\getvertices{a}{A}$
@@ -19165,7 +19165,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e170}{c}{}{r}{LIKES}{2}{} \Big(\expandout{\_e168}{\_e170}{}{\_e171}{LIKES}{1}{1} \Big(\expandout{p}{\_e168}{}{\_e169}{LIKES}{1}{} \Big(\getvertices{p}{}\Big)\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e298}{c}{}{r}{LIKES}{2}{} \Big(\expandout{\_e296}{\_e298}{}{\_e299}{LIKES}{1}{1} \Big(\expandout{p}{\_e296}{}{\_e297}{LIKES}{1}{} \Big(\getvertices{p}{}\Big)\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -19182,7 +19182,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{a, p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19202,25 +19202,25 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e170}{c}{}{r}{LIKES}{2}{}$
+	{$\expandout{\_e298}{c}{}{r}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e168}{\_e170}{}{\_e171}{LIKES}{1}{1}$
+	{$\expandout{\_e296}{\_e298}{}{\_e299}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298} \rangle$
 			}
 [
-	{$\expandout{p}{\_e168}{}{\_e169}{LIKES}{1}{}$
+	{$\expandout{p}{\_e296}{}{\_e297}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296} \rangle$
 			}
 [
 	{$\getvertices{p}{}$
@@ -19251,7 +19251,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{a, p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19271,25 +19271,25 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e170}{c}{}{r}{LIKES}{2}{}$
+	{$\expandout{\_e298}{c}{}{r}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e168}{\_e170}{}{\_e171}{LIKES}{1}{1}$
+	{$\expandout{\_e296}{\_e298}{}{\_e299}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168, \_e171, \_e170} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296, \_e299, \_e298} \rangle$
 			}
 [
-	{$\expandout{p}{\_e168}{}{\_e169}{LIKES}{1}{}$
+	{$\expandout{p}{\_e296}{}{\_e297}{LIKES}{1}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e169, \_e168} \rangle$
+			$\color{gray} \langle \var{p, \_e297, \_e296} \rangle$
 			}
 [
 	{$\getvertices{p}{}$
@@ -19320,7 +19320,7 @@ RETURN c.name
 \subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e174}{c}{}{r}{LIKES}{1}{1} \Big(\expandout{\_e172}{\_e174}{}{\_e175}{LIKES}{2}{} \Big(\expandout{p}{\_e172}{}{\_e173}{LIKES}{1}{1} \Big(\getvertices{p}{}\Big)\Big)\Big)\Big)\Big)
+& \projection{\var{c.name}} \Big(\alldifferent{} \Big(\getvertices{a}{A}\Big) \join \alldifferent{} \Big(\expandout{\_e302}{c}{}{r}{LIKES}{1}{1} \Big(\expandout{\_e300}{\_e302}{}{\_e303}{LIKES}{2}{} \Big(\expandout{p}{\_e300}{}{\_e301}{LIKES}{1}{1} \Big(\getvertices{p}{}\Big)\Big)\Big)\Big)\Big)
  &
 \end{flalign*}
 
@@ -19337,7 +19337,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{a, p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19357,25 +19357,25 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e174}{c}{}{r}{LIKES}{1}{1}$
+	{$\expandout{\_e302}{c}{}{r}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e172}{\_e174}{}{\_e175}{LIKES}{2}{}$
+	{$\expandout{\_e300}{\_e302}{}{\_e303}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302} \rangle$
 			}
 [
-	{$\expandout{p}{\_e172}{}{\_e173}{LIKES}{1}{1}$
+	{$\expandout{p}{\_e300}{}{\_e301}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300} \rangle$
 			}
 [
 	{$\getvertices{p}{}$
@@ -19406,7 +19406,7 @@ RETURN c.name
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{a, p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{a, p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
 	{$\alldifferent{}$
@@ -19426,25 +19426,25 @@ RETURN c.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e174}{c}{}{r}{LIKES}{1}{1}$
+	{$\expandout{\_e302}{c}{}{r}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174, r, c} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302, r, c} \rangle$
 			}
 [
-	{$\expandout{\_e172}{\_e174}{}{\_e175}{LIKES}{2}{}$
+	{$\expandout{\_e300}{\_e302}{}{\_e303}{LIKES}{2}{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172, \_e175, \_e174} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300, \_e303, \_e302} \rangle$
 			}
 [
-	{$\expandout{p}{\_e172}{}{\_e173}{LIKES}{1}{1}$
+	{$\expandout{p}{\_e300}{}{\_e301}{LIKES}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{p, \_e173, \_e172} \rangle$
+			$\color{gray} \langle \var{p, \_e301, \_e300} \rangle$
 			}
 [
 	{$\getvertices{p}{}$

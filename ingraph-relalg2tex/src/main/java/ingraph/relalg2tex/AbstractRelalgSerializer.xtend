@@ -49,6 +49,7 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
+import relalg.ReturnableElement
 
 abstract class AbstractRelalgSerializer {
 
@@ -179,7 +180,7 @@ abstract class AbstractRelalgSerializer {
     }
 
 	def dispatch operatorToTex(ProjectionOperator op) {
-		#['''\projection{«op.variables.map[expression].variableList»}''']
+		#['''\projection{«op.variables.returnableElementList»}''']
 	}
 
     def dispatch operatorToTex(SelectionOperator op) {
@@ -273,14 +274,16 @@ abstract class AbstractRelalgSerializer {
             case ASCENDING: "asc"
             case DESCENDING: "desc" 
         }
-        '''\«direction» \atom{«entry.variable.escapedName»}'''
+        '''\«direction» \var{«entry.variable.escapedName»}'''
     }
 
 	/**
 	 * list
 	 */
-	def variableList(List<Expression> variables) {
-		'''«variables.map[convertExpression(it)].join(",~")»'''
+	def returnableElementList(List<ReturnableElement> elements) {
+		'''«elements.map[
+		    convertExpression(expression) + if (alias == null) "" else '''\assign \var{«alias»}''' 
+		].join(",~")»'''
 	}
 
 	def edgeVariableList(EList<EdgeVariable> edgeVariables) {

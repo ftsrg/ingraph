@@ -47,35 +47,15 @@ class TckReportTest extends IngraphReportTest {
 						!querySpecification.contains("SET ") &&
 						!querySpecification.contains("DELETE ")	
 					»
-					«var RelalgContainer cypher = null»
+					«var RelalgContainer container = null»
 					«try {
-					    cypher = Cypher2Relalg.processString(querySpecification.toString)
+					    container = Cypher2Relalg.processString(querySpecification.toString)
 					    ''''''
 					} catch (Exception e) {
 					    e.printStackTrace
                     }»
 					
-					\subsection{«scenario.name.escape»}
-
-					\subsubsection*{Query specification}
-
-					\begin{lstlisting}
-					«scenario.steps.filter(typeof(WhenStep)).map[desc].join»
-					\end{lstlisting}
-
-					\subsubsection*{Relational algebra expression}
-
-					\begin{flalign*}
-					& «cypher.expression» &
-					\end{flalign*}
-
-					\subsubsection*{Relational algebra tree}
-
-					«cypher.visualize»
-
-					\subsubsection*{Relational algebra tree for incremental queries}
-
-					«cypher.visualizeWithTransformations»
+					«section(container, scenario.name.escape, querySpecification)»
 					«ENDIF»
 				«ENDFOR»
 			«ENDFOR»

@@ -1,42 +1,48 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{n},~\var{x}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, x} \rangle$
+			}
 [
-{$\join \{\var{n}\}$ \\
-\footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, \_e24, x} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
 [
-{$\getvertices{n}{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, \_e24, x} \rangle$
+			}
 [
-{$\expandout{n}{x}{}{\_e1}{NOT\_EXIST}$ \\
-\footnotesize $\color{gray} \langle \var{n, \_e1, x} \rangle$
-}
+	{$\expandout{n}{x}{}{\_e24}{NOT\_EXIST}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, \_e24, x} \rangle$
+			}
 [
-{$\getvertices{n}{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -44,5 +50,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

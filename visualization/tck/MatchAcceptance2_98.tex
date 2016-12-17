@@ -1,33 +1,31 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{n},~\var{m}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, m} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, \_e72, m} \rangle$
+			}
 [
-{$\expandout{n}{m}{Z\landY\landX\landW\landV\landU}{\_e1}{T}$ \\
-\footnotesize $\color{gray} \langle \var{n, \_e1, m} \rangle$
-}
+	{$\expandout{n}{m}{Z \land Y \land X \land W \land V \land U}{\_e72}{T}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, \_e72, m} \rangle$
+			}
 [
-{$\getvertices{n}{A:B:C:D:E:F:G:H:I:J:K:L:M}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{A \land B \land C \land D \land E \land F \land G \land H \land I \land J \land K \land L \land M}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

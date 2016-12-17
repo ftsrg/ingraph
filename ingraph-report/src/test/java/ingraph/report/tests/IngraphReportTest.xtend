@@ -6,11 +6,13 @@ import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.report.feature.WhenStep
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import relalg.RelalgContainer
 
 class IngraphReportTest {
@@ -29,6 +31,8 @@ class IngraphReportTest {
         val doc = '''
             \chapter{«chapterTitle»}
             \label{chp:«directoryName»}
+            
+            \section{Queries}
             
             «FOR fileName : fileNames»
                 «val query = FilenameUtils.removeExtension(fileName)»
@@ -89,38 +93,39 @@ class IngraphReportTest {
         val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
 
         println(querySpecification)
-        var RelalgContainer cypher = null
+        var RelalgContainer container = null
         try {
-            cypher = Cypher2Relalg.processString(querySpecification.toString)
+            container = Cypher2Relalg.processString(querySpecification.toString)
         } catch (Exception e) {
             e.printStackTrace
         }
 
+        section(container, query, querySpecification)
+    }
+
+    def section(RelalgContainer container, String name, String listing) {
         '''
-            \section{«query»}
-            
-            \subsection*{Query specification}
-            
-            \begin{lstlisting}
-            «querySpecification»
-            \end{lstlisting}
-            
-            \subsection*{Relational algebra expression}
-            
-            \begin{flalign*}
-            «cypher.expression»
-            \end{flalign*}
-            
-            \subsection*{Relational algebra tree}
-            \adjustbox{max width=\textwidth}{%
-            «cypher.visualize»
-            }
-            
-            \subsection*{Relational algebra tree for incremental queries}
-            \adjustbox{max width=\textwidth}{%
-            «cypher.visualizeWithTransformations»
-            }
-            
+        \subsection{«name»}
+
+        \subsubsection*{Query specification}
+
+        \begin{lstlisting}
+        «listing»
+        \end{lstlisting}
+
+        \subsubsection*{Relational algebra expression}
+
+        \begin{flalign*}
+        & «container.expression» &
+        \end{flalign*}
+
+        \subsubsection*{Relational algebra tree}
+
+        «container.visualize»
+
+        \subsubsection*{Relational algebra tree for incremental queries}
+
+        «container.visualizeWithTransformations»
         '''
     }
 

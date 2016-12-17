@@ -1,28 +1,31 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\topp{2}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-}
+	{$\projection{\var{n}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
 [
-{$\getvertices{n}{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
+[
+	{$\getvertices{n}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
 ]
 ]
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

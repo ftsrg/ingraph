@@ -1,32 +1,34 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			}
 [
-{$\selection{\mathtt{TODO}}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$
-}
+	{$\selection{\var{a.name} = \literal{''Andres''}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e162, rel, a} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e162, rel, a} \rangle$
+			}
 [
-{$\expandboth{\_e1}{a}{}{rel}{X}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, rel, a} \rangle$
-}
+	{$\expandboth{\_e162}{a}{}{rel}{X}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e162, rel, a} \rangle$
+			}
 [
-{$\getvertices{\_e1}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{\_e162}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e162} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -34,5 +36,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

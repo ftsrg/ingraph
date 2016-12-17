@@ -1,47 +1,55 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{r2}\assign \var{rel}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{r2} \rangle$
+			}
 [
-{$\join \{\}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, r1, \_e2, \_e3, r2, \_e4} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e42, r1, \_e43, \_e44, r2, \_e45} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, r1, \_e2} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e42, r1, \_e43} \rangle$
+			}
 [
-{$\expandout{\_e1}{\_e2}{}{r1}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, r1, \_e2} \rangle$
-}
+	{$\expandout{\_e42}{\_e43}{}{r1}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e42, r1, \_e43} \rangle$
+			}
 [
-{$\getvertices{\_e1}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{\_e42}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e42} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e3, r2, \_e4} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e44, r2, \_e45} \rangle$
+			}
 [
-{$\expandout{\_e3}{\_e4}{}{r2}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e3, r2, \_e4} \rangle$
-}
+	{$\expandout{\_e44}{\_e45}{}{r2}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e44, r2, \_e45} \rangle$
+			}
 [
-{$\getvertices{\_e3}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e3} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{\_e44}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e44} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -49,5 +57,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

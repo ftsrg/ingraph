@@ -1,9 +1,11 @@
 \chapter{LDBC Social Network Benchmark}
 \label{chp:ldbc-snb}
 
-\section{query-3}
+\section{Queries}
 
-\subsection*{Query specification}
+\subsection{query-3}
+
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q3. Friends within 2 steps that recently traveled to countries X and Y. Find top 20 friends and friends of friends of a given Person who have made a post or a comment in the foreign CountryX and CountryY within a specified period of DurationInDays after a startDate. Sorted results descending by total number of posts.
@@ -40,25 +42,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-4}
 
-\section{query-4}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q4. New Topics. Given a start Person, find the top 10 most popular Tags (by total number of posts with the tag) that are attached to Posts that were created by that Person's friends within a given time interval.
@@ -78,25 +77,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-5}
 
-\section{query-5}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q5. New groups. Given a start Person, find the top 20 Forums the friends and friends of friends of that Person joined after a given Date. Sort results descending by the number of Posts in each Forum that were created by any of these Persons.
@@ -115,25 +111,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-6}
 
-\section{query-6}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q6. Tag co-occurrence. Given a start Person and some Tag, find the other Tags that occur together with this Tag on Posts that were created by Person's friends and friends of friends. Return top 10 Tags, sorted descending by the count of Posts that were created by these Persons, which contain both this Tag and the given Tag.
@@ -155,25 +148,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-7}
 
-\section{query-7}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q7. Recent likes. For the specified Person get the most recent likes of any of the person's posts, and the latency between the corresponding post and the like. Flag Likes from outside the direct connections. Return top 20 Likes, ordered descending by creation date of the like.
@@ -198,25 +188,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-8}
 
-\section{query-8}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q8. Most recent replies. This query retrieves the 20 most recent reply comments to all the posts and comments of Person, ordered descending by creation date.
@@ -234,14 +221,15 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\topp{10}{} \Big(\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}} \Big(\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e16}{HAS\_CREATOR}{1}{1} \Big(\expandin{\_e13}{comment}{Comment}{\_e15}{REPLY\_OF}{1}{1} \Big(\expandin{start}{\_e13}{}{\_e14}{HAS\_CREATOR}{1}{1} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
+& \topp{10}{} \Big(\sort{\desc \var{commentCreationDate}, \asc \var{commentId}} \Big(\projection{\var{person.id}\assign \var{personId},~\var{person.firstName}\assign \var{personFirstName},~\var{person.lastName}\assign \var{personLastName},~\var{comment.id}\assign \var{commentId},~\var{comment.creationDate}\assign \var{commentCreationDate},~\var{comment.content}\assign \var{commentContent}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1} \Big(\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1} \Big(\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
+ &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -250,13 +238,13 @@ LIMIT 10
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
 			}
 [
-	{$\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}}$
+	{$\sort{\desc \var{commentCreationDate}, \asc \var{commentId}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
 			}
 [
-	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
+	{$\projection{\var{person.id}\assign \var{personId},~\var{person.firstName}\assign \var{personFirstName},~\var{person.lastName}\assign \var{personLastName},~\var{comment.id}\assign \var{commentId},~\var{comment.creationDate}\assign \var{commentCreationDate},~\var{comment.content}\assign \var{commentContent}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
@@ -265,25 +253,25 @@ LIMIT 10
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment, \_e16, person} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
 			}
 [
-	{$\expandout{comment}{person}{Person}{\_e16}{HAS\_CREATOR}{1}{1}$
+	{$\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment, \_e16, person} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
 			}
 [
-	{$\expandin{\_e13}{comment}{Comment}{\_e15}{REPLY\_OF}{1}{1}$
+	{$\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment} \rangle$
 			}
 [
-	{$\expandin{start}{\_e13}{}{\_e14}{HAS\_CREATOR}{1}{1}$
+	{$\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114} \rangle$
 			}
 [
 	{$\getvertices{start}{Person}$
@@ -301,10 +289,9 @@ LIMIT 10
 ]
 ;
 \end{forest}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -313,13 +300,13 @@ LIMIT 10
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
 			}
 [
-	{$\sort{\desc \atom{commentCreationDate}, \asc \atom{commentId}}$
+	{$\sort{\desc \var{commentCreationDate}, \asc \var{commentId}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
 			}
 [
-	{$\projection{\var{person.id},~\var{person.firstName},~\var{person.lastName},~\var{comment.id},~\var{comment.creationDate},~\var{comment.content}}$
+	{$\projection{\var{person.id}\assign \var{personId},~\var{person.firstName}\assign \var{personFirstName},~\var{person.lastName}\assign \var{personLastName},~\var{comment.id}\assign \var{commentId},~\var{comment.creationDate}\assign \var{commentCreationDate},~\var{comment.content}\assign \var{commentContent}}$
 			\\
 			\footnotesize
 			$\color{gray} \langle \var{id, firstName, lastName, id, creationDate, content} \rangle$
@@ -328,25 +315,25 @@ LIMIT 10
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment, \_e16, person} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
 			}
 [
-	{$\expandout{comment}{person}{Person}{\_e16}{HAS\_CREATOR}{1}{1}$
+	{$\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment, \_e16, person} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
 			}
 [
-	{$\expandin{\_e13}{comment}{Comment}{\_e15}{REPLY\_OF}{1}{1}$
+	{$\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13, \_e15, comment} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment} \rangle$
 			}
 [
-	{$\expandin{start}{\_e13}{}{\_e14}{HAS\_CREATOR}{1}{1}$
+	{$\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e14, \_e13} \rangle$
+			$\color{gray} \langle \var{start, \_e115, \_e114} \rangle$
 			}
 [
 	{$\getvertices{start}{Person}$
@@ -364,11 +351,9 @@ LIMIT 10
 ]
 ;
 \end{forest}
-}
+\subsection{query-10}
 
-\section{query-10}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q10. Friend recommendation. Find top 10 friends of a friend who posts much about the interests of Person and little about not interesting topics for the user. The search is restricted by the candidate's horoscopeSign. Returns friends for whom the difference between the total number of their posts about the interests of the specified user and the total number of their posts about topics that are not interests of the user, is as large as possible. Sort the result descending by this difference.
@@ -402,25 +387,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-11}
 
-\section{query-11}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q11. Job referral. Find top 10 friends of the specified Person, or a friend of her friend (excluding the specified person), who has long worked in a company in a specified Country. Sort ascending by start date, and then ascending by person identifier.
@@ -442,25 +424,22 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
+\subsection{query-12}
 
-\section{query-12}
-
-\subsection*{Query specification}
+\subsubsection*{Query specification}
 
 \begin{lstlisting}
 // Q12. Expert Search. Find friends of a Person who have replied the most to posts with a tag in a given TagCategory. Return top 20 persons, sorted descending by number of replies.
@@ -481,19 +460,16 @@ ORDER BY
 LIMIT 10
 \end{lstlisting}
 
-\subsection*{Relational algebra expression}
+\subsubsection*{Relational algebra expression}
 
 \begin{flalign*}
-\text{Cannot convert to expression.}
+& \text{Cannot convert to expression.} &
 \end{flalign*}
 
-\subsection*{Relational algebra tree}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree}
+
 \text{Cannot visualize tree.}
-}
 
-\subsection*{Relational algebra tree for incremental queries}
-\adjustbox{max width=\textwidth}{%
+\subsubsection*{Relational algebra tree for incremental queries}
+
 Cannot visualize incremental tree.
-}
-

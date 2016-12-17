@@ -1,47 +1,55 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a},~\var{b2}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b2} \rangle$
+			}
 [
-{$\join \{\var{a}\}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b1, \_e2, b2} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e7, b1, \_e8, b2} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b1} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e7, b1} \rangle$
+			}
 [
-{$\expandout{a}{b1}{}{\_e1}{X}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e1, b1} \rangle$
-}
+	{$\expandout{a}{b1}{}{\_e7}{X}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e7, b1} \rangle$
+			}
 [
-{$\getvertices{a}{S}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{S}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e2, b2} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e8, b2} \rangle$
+			}
 [
-{$\expandout{a}{b2}{}{\_e2}{Y}$ \\
-\footnotesize $\color{gray} \langle \var{a, \_e2, b2} \rangle$
-}
+	{$\expandout{a}{b2}{}{\_e8}{Y}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, \_e8, b2} \rangle$
+			}
 [
-{$\getvertices{a}{S}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{S}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -49,5 +57,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

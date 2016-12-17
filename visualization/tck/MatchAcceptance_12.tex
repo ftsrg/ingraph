@@ -1,32 +1,34 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{n},~\var{x}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, x} \rangle$
+			}
 [
-{$\selection{\mathtt{TODO}}$ \\
-\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
-}
+	{$\selection{\var{n.animal} = \var{x.animal}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, rel, x} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, rel, x} \rangle$
+			}
 [
-{$\expandout{n}{x}{}{rel}{}$ \\
-\footnotesize $\color{gray} \langle \var{n, rel, x} \rangle$
-}
+	{$\expandout{n}{x}{}{rel}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, rel, x} \rangle$
+			}
 [
-{$\getvertices{n}{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -34,5 +36,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

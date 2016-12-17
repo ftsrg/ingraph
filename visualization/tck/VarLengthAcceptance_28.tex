@@ -1,50 +1,60 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{c.name}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{name} \rangle$
+			}
 [
-{$\join \{\}$ \\
-\footnotesize $\color{gray} \langle \var{a, p, \_e1, \_e1, \_e2, \_e2, r, c} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, p, \_e125, \_e124, \_e127, \_e126, r, c} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			}
 [
-{$\getvertices{a}{A}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{A}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{p, \_e1, \_e1, \_e2, \_e2, r, c} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{p, \_e125, \_e124, \_e127, \_e126, r, c} \rangle$
+			}
 [
-{$\expandout{\_e2}{c}{}{r}{LIKES}$ \\
-\footnotesize $\color{gray} \langle \var{p, \_e1, \_e1, \_e2, \_e2, r, c} \rangle$
-}
+	{$\expandout{\_e126}{c}{}{r}{LIKES}{2}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{p, \_e125, \_e124, \_e127, \_e126, r, c} \rangle$
+			}
 [
-{$\expandout{\_e1}{\_e2}{}{\_e2}{LIKES}$ \\
-\footnotesize $\color{gray} \langle \var{p, \_e1, \_e1, \_e2, \_e2} \rangle$
-}
+	{$\expandout{\_e124}{\_e126}{}{\_e127}{LIKES}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{p, \_e125, \_e124, \_e127, \_e126} \rangle$
+			}
 [
-{$\expandout{p}{\_e1}{}{\_e1}{LIKES}$ \\
-\footnotesize $\color{gray} \langle \var{p, \_e1, \_e1} \rangle$
-}
+	{$\expandout{p}{\_e124}{}{\_e125}{LIKES}{1}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{p, \_e125, \_e124} \rangle$
+			}
 [
-{$\getvertices{p}{}$ \\
-\footnotesize $\color{gray} \langle \var{p} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{p}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{p} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -54,5 +64,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

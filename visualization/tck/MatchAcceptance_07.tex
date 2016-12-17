@@ -1,32 +1,34 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			}
 [
-{$\selection{\mathtt{TODO}}$ \\
-\footnotesize $\color{gray} \langle \var{node, r, a} \rangle$
-}
+	{$\selection{\var{r.name} = \literal{''monkey''}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{node, r, a} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{node, r, a} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{node, r, a} \rangle$
+			}
 [
-{$\expandout{node}{a}{}{r}{KNOWS}$ \\
-\footnotesize $\color{gray} \langle \var{node, r, a} \rangle$
-}
+	{$\expandout{node}{a}{}{r}{KNOWS}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{node, r, a} \rangle$
+			}
 [
-{$\getvertices{node}{}$ \\
-\footnotesize $\color{gray} \langle \var{node} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{node}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{node} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -34,5 +36,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

@@ -1,33 +1,31 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{r}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{r} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e9, r, \_e10} \rangle$
+			}
 [
-{$\expandout{\_e1}{\_e2}{}{r}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1, r, \_e2} \rangle$
-}
+	{$\expandout{\_e9}{\_e10}{}{r}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e9, r, \_e10} \rangle$
+			}
 [
-{$\getvertices{\_e1}{}$ \\
-\footnotesize $\color{gray} \langle \var{\_e1} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{\_e9}{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{\_e9} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

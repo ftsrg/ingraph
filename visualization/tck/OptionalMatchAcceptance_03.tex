@@ -1,46 +1,54 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{m}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{m} \rangle$
+			}
 [
-{$\join \{\var{n}\}$ \\
-\footnotesize $\color{gray} \langle \var{n, r, m} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, r, m} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			}
 [
-{$\getvertices{n}{Single}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{Single}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
-{$\selection{\mathtt{TODO}}$ \\
-\footnotesize $\color{gray} \langle \var{n, r, m} \rangle$
-}
+	{$\selection{\var{m.prop} = \literal{42}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, r, m} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{n, r, m} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, r, m} \rangle$
+			}
 [
-{$\expandboth{n}{m}{}{r}{}$ \\
-\footnotesize $\color{gray} \langle \var{n, r, m} \rangle$
-}
+	{$\expandboth{n}{m}{}{r}{}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n, r, m} \rangle$
+			}
 [
-{$\getvertices{n}{Single}$ \\
-\footnotesize $\color{gray} \langle \var{n} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{n}{Single}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{n} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -49,5 +57,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}

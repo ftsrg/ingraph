@@ -1,57 +1,69 @@
-\documentclass[varwidth=100cm,convert={density=120}]{standalone}
-\usepackage[active,tightpage]{preview}
-
-\input{../inputs/relalg-packages}
-\input{../inputs/relalg-commands}
-
-\begin{document}
-\begin{preview}
 \begin{forest} for tree={align=center}
 [
-{$\projection{}$ \\
-\footnotesize $\color{gray} \langle \var{} \rangle$
-}
+	{$\projection{\var{a},~\var{b},~\var{r}}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b, r} \rangle$
+			}
 [
-{$\join \{\var{a}, \var{b}\}$ \\
-\footnotesize $\color{gray} \langle \var{a, b, r} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b, r} \rangle$
+			}
 [
-{$\join \{\}$ \\
-\footnotesize $\color{gray} \langle \var{a, b} \rangle$
-}
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a, b} \rangle$
+			}
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			}
 [
-{$\getvertices{a}{NotThere}$ \\
-\footnotesize $\color{gray} \langle \var{a} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{a}{NotThere}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{a} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{b} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b} \rangle$
+			}
 [
-{$\getvertices{b}{B}$ \\
-\footnotesize $\color{gray} \langle \var{b} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{b}{B}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
 [
-{$\alldifferent{}$ \\
-\footnotesize $\color{gray} \langle \var{b, r, a} \rangle$
-}
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b, r, a} \rangle$
+			}
 [
-{$\expandout{b}{a}{NotThere}{r}{NOR\_THIS}$ \\
-\footnotesize $\color{gray} \langle \var{b, r, a} \rangle$
-}
+	{$\expandout{b}{a}{NotThere}{r}{NOR\_THIS}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b, r, a} \rangle$
+			}
 [
-{$\getvertices{b}{B}$ \\
-\footnotesize $\color{gray} \langle \var{b} \rangle$
-},tier=input,for tree={blue,densely dashed}
+	{$\getvertices{b}{B}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{b} \rangle$
+			},tier=input,for tree={blue,densely dashed}
 ]
 ]
 ]
@@ -59,5 +71,3 @@
 ]
 ;
 \end{forest}
-\end{preview}
-\end{document}
