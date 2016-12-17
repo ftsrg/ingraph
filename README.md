@@ -89,9 +89,9 @@ dependencies {
 
 * **Problem:** during the `generateXtext` task, you get the following error:
 
-```
-java.lang.IllegalArgumentException: The 'no null' constraint is violated
-```
+  ```
+  java.lang.IllegalArgumentException: The 'no null' constraint is violated
+  ```
 
 * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
 
