@@ -10,10 +10,10 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	protected final RelalgContainer container
-	
+
 	new(RelalgContainer container) {
-		this.container = container	
-	} 
+		this.container = container
+	}
 
 	// ensure that we generate unique names in the compiler
 	static var n = 1;

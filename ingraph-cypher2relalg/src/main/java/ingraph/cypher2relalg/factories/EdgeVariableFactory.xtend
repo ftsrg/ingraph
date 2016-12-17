@@ -5,11 +5,11 @@ import relalg.RelalgContainer
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 
 class EdgeVariableFactory extends VariableFactory<EdgeVariable> {
-	
+
 	new(RelalgContainer container) {
 		super(container)
 	}
-	
+
 	override createSpecificNamedElement() {
 		createEdgeVariable
 	}

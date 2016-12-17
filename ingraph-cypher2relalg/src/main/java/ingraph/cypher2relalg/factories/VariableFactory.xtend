@@ -18,7 +18,7 @@ abstract class VariableFactory<TVariable extends Variable> extends NamedElementF
 	new(RelalgContainer container) {
 		super(container)
 	}
-	
+
 	override createElement(String elementName) {
 		val e = super.createElement(elementName)
 		if (elementName == null) {

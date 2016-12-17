@@ -142,11 +142,11 @@ class RelalgBuilder {
             trimmer
         }
 
-        val order = returnBody.order        
+        val order = returnBody.order
         val op2 = if (order != null) {
             val sortEntries = order.orderBy.map[
                 val sortDirection = if (sort.startsWith("ASC")) OrderDirection.ASCENDING else OrderDirection.DESCENDING
-                
+
                 val sortVariableName = (expression as VariableRef).variableRef.name
                 val sortVariable = vertexVariableFactory.createElement(sortVariableName)
                 createSortEntry => [
@@ -156,7 +156,7 @@ class RelalgBuilder {
             ]
             createSortOperator => [
                 entries.addAll(sortEntries)
-                input = op1                
+                input = op1
             ]
         } else {
             op1
@@ -172,8 +172,8 @@ class RelalgBuilder {
             ]
         } else {
             op2
-        } 
-        
+        }
+
         op3
     }
 
@@ -188,7 +188,7 @@ class RelalgBuilder {
     /*
      * MATCH clause is compiled as follows:
      * (the lower elements being the input for the upper ones)
-     * 
+     *
      * - Selection as built from the where clause
      * - Left outer join of the patterns extracted from the where clause (is any)
      * - AllDifferentOperator on the edges in the patternParts
@@ -259,7 +259,7 @@ class RelalgBuilder {
             container = topLevelContainer
         ]
     }
-   
+
     def dispatch LogicalExpression buildRelalgLogicalExpression(
         org.slizaa.neo4j.opencypher.openCypher.Expression e,
         EList<Operator> joins
@@ -284,7 +284,7 @@ class RelalgBuilder {
                     case StartsWith: StringComparisonOperator.STARTS_WITH
                     case EndsWith: StringComparisonOperator.ENDS_WITH
                     case Contains: StringComparisonOperator.CONTAINS
-                    default: null                                  
+                    default: null
                 }
                 val expression = switch it {
                     case StartsWith: (it as StartsWith).expression
@@ -292,7 +292,7 @@ class RelalgBuilder {
                     case Contains: (it as StartsWith).expression
                     default: null
                 }
-                
+
 //                if (sco != null) {
 //                    if (it instanceof StringConstant) {
 //                        val ro = it.value
@@ -303,7 +303,7 @@ class RelalgBuilder {
 //                            container = topLevelContainer
 //                        ]
 //                    }
-//                }                
+//                }
             ]
             null
         }
@@ -483,7 +483,7 @@ class RelalgBuilder {
 
     /*
      * This will create the relational algebraic representation of a patternElement.
-     * 
+     *
      * This was factored out to handle PatternElement and RelationshipsPattern in the same code
      */
     def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {

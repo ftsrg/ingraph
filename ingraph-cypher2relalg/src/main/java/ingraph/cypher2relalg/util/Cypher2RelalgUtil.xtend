@@ -76,7 +76,7 @@ class Cypher2RelalgUtil {
 			edgeVariable.edgeLabelSet.status = if (edgeVariable.edgeLabelSet.edgeLabels.empty) {
 					LabelSetStatus.EMPTY
 				} else {
-					LabelSetStatus.NON_EMPTY	
+					LabelSetStatus.NON_EMPTY
 				}
 		} else {
 			// we had a previous labelset
@@ -89,26 +89,26 @@ class Cypher2RelalgUtil {
 					intersection.add(label)
 				}
 			]
-			
+
 			/*
 			 * a tiny optimization: if a set has the same number of element
 			 * before and after intersecting with an other set, it is the same.
-			 * 
+			 *
 			 * So we need to replace labelset only if their size changed
 			 */
-			
+
 			if (edgeVariable.edgeLabelSet.edgeLabels.size != intersection.size) {
 				edgeVariable.edgeLabelSet.edgeLabels.clear
 				edgeVariable.edgeLabelSet.edgeLabels.addAll(intersection)
 			}
-			
+
 			edgeVariable.edgeLabelSet.status = if (edgeVariable.edgeLabelSet.edgeLabels.empty) {
 					warning('''Contradicting labelset constraints found for edge variable «edgeVariable.name»''')
 					LabelSetStatus.CONTRADICTING
 				} else {
-					LabelSetStatus.NON_EMPTY	
+					LabelSetStatus.NON_EMPTY
 				}
-			
+
 		}
 	}
 

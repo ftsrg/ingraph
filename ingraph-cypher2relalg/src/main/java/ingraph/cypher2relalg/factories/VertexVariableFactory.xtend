@@ -5,11 +5,11 @@ import relalg.RelalgContainer
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 
 class VertexVariableFactory extends VariableFactory<VertexVariable> {
-	
+
 	new(RelalgContainer container) {
 		super(container)
 	}
-	
+
 	override createSpecificNamedElement() {
 		createVertexVariable
 	}
