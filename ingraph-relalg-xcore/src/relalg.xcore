@@ -255,6 +255,14 @@ class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression
 	refers ComparableExpression rightOperand
 }
 
+// string comparisons evaluate to true/false, hence they are logical expressions
+class StringComparisonExpression extends BinaryExpression, LogicalExpression {
+    StringComparisonOperator operator
+    refers ComparableExpression leftOperand
+    refers StringLiteral rightOperand
+}
+
+
 // not sure what we will make of this
 abstract class StringExpression extends ComparableExpression {
 }
@@ -353,6 +361,14 @@ enum ArithmeticComparisonOperator {
 	LESS_THAN
 	,
 	LESS_THAN_OR_EQUAL
+}
+
+enum StringComparisonOperator {
+    STARTS_WITH
+    ,
+    ENDS_WITH
+    ,
+    CONTAINS
 }
 
 enum UnaryArithmeticOperator {

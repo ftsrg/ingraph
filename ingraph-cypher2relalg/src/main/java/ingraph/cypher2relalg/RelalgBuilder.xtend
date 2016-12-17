@@ -10,7 +10,9 @@ import ingraph.cypher2relalg.util.IngraphLogger
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.slizaa.neo4j.opencypher.openCypher.Contains
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.EndsWith
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
@@ -30,6 +32,7 @@ import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
+import org.slizaa.neo4j.opencypher.openCypher.StartsWith
 import org.slizaa.neo4j.opencypher.openCypher.Statement
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
@@ -47,14 +50,14 @@ import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
 import relalg.MaxHopsType
 import relalg.Operator
+import relalg.OrderDirection
 import relalg.RelalgFactory
 import relalg.UnaryLogicalOperator
 import relalg.UnaryNodeLogicalOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.OrderDirection
-import ingraph.cypher2relalg.factories.VariableFactory
+import relalg.StringComparisonOperator
 
 class RelalgBuilder {
 
@@ -259,22 +262,53 @@ class RelalgBuilder {
             container = topLevelContainer
         ]
     }
-
+   
     def dispatch LogicalExpression buildRelalgLogicalExpression(
         org.slizaa.neo4j.opencypher.openCypher.Expression e,
         EList<Operator> joins
     ) {
-        switch e.operator ?: e.operator.toLowerCase {
-            case "not":
-                createUnaryLogicalExpression => [
-                    operator = UnaryLogicalOperator.NOT
-                    leftOperand = buildRelalgLogicalExpression(e.left, joins)
-                    container = topLevelContainer
-                ]
-            default: {
-                unsupported("TODO: " + e.operator)
-                null
+        val parts = e.expression3Parts
+        if (parts.empty) {
+            switch e.operator ?: e.operator.toLowerCase {
+                case "not":
+                    createUnaryLogicalExpression => [
+                        operator = UnaryLogicalOperator.NOT
+                        leftOperand = buildRelalgLogicalExpression(e.left, joins)
+                        container = topLevelContainer
+                    ]
+                default: {
+                    unsupported("TODO: " + e.operator)
+                    null
+                }
             }
+        } else {
+            parts.forEach[
+                val sco = switch it {
+                    case StartsWith: StringComparisonOperator.STARTS_WITH
+                    case EndsWith: StringComparisonOperator.ENDS_WITH
+                    case Contains: StringComparisonOperator.CONTAINS
+                    default: null                                  
+                }
+                val expression = switch it {
+                    case StartsWith: (it as StartsWith).expression
+                    case EndsWith: (it as StartsWith).expression
+                    case Contains: (it as StartsWith).expression
+                    default: null
+                }
+                
+//                if (sco != null) {
+//                    if (it instanceof StringConstant) {
+//                        val ro = it.value
+//                        createStringComparisonExpression => [
+//                            operator = sco
+//                            leftOperand = createAttributeVariable => [name = expression.variable.name]
+//                            rightOperand = createStringLiteral => [value = ro]
+//                            container = topLevelContainer
+//                        ]
+//                    }
+//                }                
+            ]
+            null
         }
     }
 
@@ -488,7 +522,7 @@ class RelalgBuilder {
             else
                 createMaxHops() => [
                     maxHopsType = if(range.upper != null) MaxHopsType.LIMITED else MaxHopsType.UNLIMITED;
-                    hops = if(range.upper != null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
+                    hops = if (range.upper != null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
                 ]
         ]
 
