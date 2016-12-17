@@ -556,36 +556,4 @@ class RelalgBuilder {
             ]
         }
     }
-
-// VIATRA Queries
-//
-// // we shouldn't register a full XMI resource factory for relalg models
-// Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("relalg", new XMIResourceFactoryImpl())
-//
-// val resourceSet = new ResourceSetImpl
-// val resource = resourceSet.createResource(URI.createFileURI("file:/queryplan.relalg"))
-//
-// resource.contents.add(cypher)
-//
-// val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(
-// new EMFScope(resourceSet))
-//
-// println("NodeVariables")
-// val nodeVariables = engine.getMatcher(NodeVariablesQuerySpecification.instance).allMatches
-// nodeVariables.forEach [
-// println(it)
-// ]
-//
-// println("EdgeVariables")
-// val edgeVariables = engine.getMatcher(EdgeVariablesQuerySpecification.instance).allMatches
-// edgeVariables.forEach [
-// println(it)
-// ]
-// val singleQuery = cypher.statement as SingleQuery
-// singleQuery.clauses.filter(typeof(Match)).forEach [
-// println(PrettyPrinter.prettyPrint(it))
-// ]
-// singleQuery.clauses.filter(typeof(Return)).forEach [
-// println(PrettyPrinter.prettyPrint(it))
-// ]
 }
