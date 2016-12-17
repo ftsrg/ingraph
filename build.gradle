@@ -67,10 +67,15 @@ subprojects {
 
 ext {
   emfVersion = '2.10.1'
+  ireVersion = '0.1.0'
   junitVersion = '4.12'
   scalaVersion = '2.11.8'
   viatraVersion = '1.5.0-SNAPSHOT'
   viatraDseVersion = '0.15.0-SNAPSHOT'
+  scalaTestScalaVersion = '2.11'
+  scalaTestVersion = '3.0.0'
+  scalaVersion = '2.11.8'
+  slizaaVersion = '1.0.0-SNAPSHOT'
   xtendVersion = '2.10.0'
   xtextVersion = '2.10.0'
   xtextGradlePluginVersion = '1.0.12'

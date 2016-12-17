@@ -1,12 +1,10 @@
 apply plugin: 'org.xtext.xtend'
-apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 
 dependencies {
-	compile group: 'org.slizaa.neo4j.opencypher', name: 'org.slizaa.neo4j.opencypher', version: '1.0.0-SNAPSHOT'
-	testCompile "org.eclipse.xtext:org.eclipse.xtext.junit4:${xtextVersion}"
-	testCompile "org.eclipse.xtext:org.eclipse.xtext.xbase.junit:${xtextVersion}"
-	compile "org.eclipse.xtext:org.eclipse.xtext:${xtextVersion}"
-	compile "org.eclipse.xtext:org.eclipse.xtext.xbase:${xtextVersion}"
+	compile group: 'org.slizaa.neo4j.opencypher', name: 'org.slizaa.neo4j.opencypher', version: slizaaVersion
+
+    // This dependency is required as the org.slizaa.neo4j.opencypher:org.slizaa.neo4j.opencypher artifacts
+    // if built by Tycho and hence does not provide transitive dependencies.
+    // For details, see http://wiki.eclipse.org/Tycho/How_Tos/Dependency_on_pom-first_artifacts#Pom-first_dependencies_of_manifest-first_projects_are_not_fully_transitive
+    compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext', version: xtextVersion
 }

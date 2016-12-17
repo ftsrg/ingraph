@@ -1,7 +1,4 @@
 apply plugin: 'org.xtext.xtend'
-apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 
 dependencies {
 	compile project(':ingraph-optimization-transformations')

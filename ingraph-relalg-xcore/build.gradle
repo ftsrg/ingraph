@@ -4,13 +4,11 @@ plugins {
 
 apply plugin: 'org.xtext.xtend'
 apply from: "${rootDir}/gradle/source-layout-xcore.gradle"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 	compile "org.eclipse.xtext:org.eclipse.xtext.xbase:${xtextVersion}"
 	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:+'
+  testCompile group: 'junit', name: 'junit', version: junitVersion
 
 	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.ecore.xcore:+'
 	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:+'
