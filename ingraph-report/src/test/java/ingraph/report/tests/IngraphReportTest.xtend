@@ -89,7 +89,12 @@ class IngraphReportTest {
         val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
 
         println(querySpecification)
-        val cypher = Cypher2Relalg.processString(querySpecification.toString)
+        var RelalgContainer cypher = null
+        try {
+            cypher = Cypher2Relalg.processString(querySpecification.toString)
+        } catch (Exception e) {
+            e.printStackTrace
+        }
 
         '''
             \section{«query»}

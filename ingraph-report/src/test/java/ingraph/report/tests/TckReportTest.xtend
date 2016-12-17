@@ -16,6 +16,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
+import relalg.RelalgContainer
 
 class TckReportTest extends IngraphReportTest {
 
@@ -46,7 +47,12 @@ class TckReportTest extends IngraphReportTest {
 						!querySpecification.contains("SET ") &&
 						!querySpecification.contains("DELETE ")	
 					»
-					«val cypher = Cypher2Relalg.processString(querySpecification.toString)»
+					«var RelalgContainer cypher = null»
+					«try {
+					    cypher = Cypher2Relalg.processString(querySpecification.toString)
+					} catch (Exception e) {
+					    e.printStackTrace
+                    }»
 					
 					\subsection{«scenario.name.escape»}
 
