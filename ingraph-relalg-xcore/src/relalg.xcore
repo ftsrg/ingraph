@@ -315,83 +315,60 @@ class IntegerLiteral extends NumberLiteral {
 /* enums */
 enum Direction {
 	BOTH
-	,
 	IN
-	,
 	OUT
 }
 
 enum OrderDirection {
 	ASCENDING
-	,
 	DESCENDING
 }
 
 enum BinaryArithmeticOperator {
 	PLUS
-	,
 	MINUS
-	,
 	MULTIPLICATION
-	,
 	DIVISION
-	,
 	MOD
-	,
 	POWER
 }
 
 enum ArithmeticComparisonOperator {
 	EQUAL_TO
-	,
 	NOT_EQUAL_TO
-	,
 	GREATER_THAN
-	,
 	GREATER_THAN_OR_EQUAL
-	,
 	LESS_THAN
-	,
 	LESS_THAN_OR_EQUAL
 }
 
 enum UnaryArithmeticOperator {
 	MINUS
-	,
 	PLUS
 }
 
 enum BinaryLogicalOperator {
 	AND
-	,
 	OR
-	,
 	XOR
 }
 
 enum UnaryLogicalOperator {
 	NOT
-	,
 	IS_NULL
-	,
 	IS_NOT_NULL
 }
 
 enum UnaryNodeLogicalOperator {
 	IS_NULL
-	,
 	IS_NOT_NULL
 }
 
 enum AggregationType {
 	COUNT
-	,
 	SUM
-	,
 	AVG
-	,
 	MAX
-	,
 	MIN
 }
 
@@ -415,7 +392,6 @@ enum AggregationType {
 enum LabelSetStatus {
 	/** Each edge and vertex satisfies an empty labelset constraint */
 	EMPTY
-	,
 	/**
 	 * Theoretically, a non-empty labelset constraint is satisfiable,
 	 * but matching semantics differ for different variables:
@@ -423,7 +399,6 @@ enum LabelSetStatus {
 	 *  2. an edge must have *one* of the labels
 	 */
 	NON_EMPTY
-	,
 	/**
 	 * A labelset constraint might be non-satisfiable,
 	 * in case it is a combination of multiple  labelset constraints.
