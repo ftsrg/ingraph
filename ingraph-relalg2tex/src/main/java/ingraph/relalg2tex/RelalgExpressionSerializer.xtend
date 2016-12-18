@@ -34,12 +34,15 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 	}
 	
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operator» \Big(«op.input.children»\Big)
+		'''«op.operator»
+		\Big(«op.input.children»\Big)
 		'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.leftInput.children» «op.operator» «op.rightInput.children»
+		'''«op.leftInput.children»
+		«op.operator»
+		«op.rightInput.children»
 		'''
 	}
 

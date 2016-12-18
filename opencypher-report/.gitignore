@@ -96,5 +96,3 @@ sympy-plots-for-*.tex/
 
 *.soc
 /out
-
-do-not-include-acceptance-tests.tex

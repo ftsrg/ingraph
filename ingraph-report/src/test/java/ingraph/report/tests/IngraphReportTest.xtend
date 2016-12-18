@@ -39,7 +39,7 @@ class IngraphReportTest {
                 «toSection(directoryName, query)»
             «ENDFOR»
         '''
-        FileUtils.writeStringToFile(new File('''../opencypher-report/«directoryName».tex'''), doc,
+        FileUtils.writeStringToFile(new File('''../opencypher-report/appendix/«directoryName».tex'''), doc,
             Charset.defaultCharset())
     }
 
@@ -117,21 +117,26 @@ class IngraphReportTest {
 
         \begin{align*}
         \begin{autobreak}
+        r =
         «container.expression»
         \end{autobreak}
         \end{align*}
 
         \subsubsection*{Relational algebra tree}
 
+        \begin{center}
         \adjustbox{max width=\textwidth}{%
         «container.visualize»
         }
+        \end{center}
 
         \subsubsection*{Relational algebra tree for incremental queries}
 
+        \begin{center}
         \adjustbox{max width=\textwidth}{%
         «container.visualizeWithTransformations»
         }
+        \end{center}
         '''
     }
 

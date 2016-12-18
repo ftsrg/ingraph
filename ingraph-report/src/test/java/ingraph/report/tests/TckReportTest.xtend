@@ -60,7 +60,7 @@ class TckReportTest extends IngraphReportTest {
 				«ENDFOR»
 			«ENDFOR»
 			'''
-		FileUtils.writeStringToFile(new File("../opencypher-report/tck.tex"), doc, Charset.defaultCharset())
+		FileUtils.writeStringToFile(new File("../opencypher-report/appendix/tck.tex"), doc, Charset.defaultCharset())
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {
