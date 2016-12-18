@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
@@ -13,9 +13,6 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
                             val trg: Int,
                             val edge: Int
                            ) extends UnaryNode with SingleForwarder {
-
-  type Path = Vector[Long]
-  val Path = scala.collection.immutable.Vector
 
   val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[Path]]]
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
@@ -94,22 +91,22 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
       return Vector.empty
     }
 
-    for (source <- reachableFrom.getOrElse(sourceId, Set.empty).toStream #::: Stream(sourceId)) {
-      for (target <- reachableVertices.getOrElse(targetId, Map.empty).keys.toStream #::: Stream(targetId)) {
-        val containingPaths = reachableVertices(source)(target).filter(_.contains(edgeId))
-        removedPathsBuilder ++= containingPaths.map(tuple(source, target, _))
+    val sourceVertices = reachableFrom.getOrElse(sourceId, Set.empty) ++ Set(sourceId)
+    val targetVertices = reachableVertices.getOrElse(targetId, Map.empty).keySet ++ Set(targetId)
+    for (source <- sourceVertices; target <- targetVertices) {
+      val containingPaths = reachableVertices(source)(target).filter(_.contains(edgeId))
+      removedPathsBuilder ++= containingPaths.map(tuple(source, target, _))
 
-        reachableVertices(source)(target) = reachableVertices(source)(target).diff(containingPaths)
-        if(reachableVertices(source)(target).isEmpty){
-          reachableFrom(target) -= source
-          if(reachableFrom(target).isEmpty){
-            reachableFrom.remove(target)
-          }
+      reachableVertices(source)(target) = reachableVertices(source)(target).diff(containingPaths)
+      if(reachableVertices(source)(target).isEmpty){
+        reachableFrom(target) -= source
+        if(reachableFrom(target).isEmpty){
+          reachableFrom.remove(target)
+        }
 
-          reachableVertices(source).remove(target)
-          if(reachableVertices(source).isEmpty){
-            reachableVertices.remove(source)
-          }
+        reachableVertices(source).remove(target)
+        if(reachableVertices(source).isEmpty){
+          reachableVertices.remove(source)
         }
       }
     }

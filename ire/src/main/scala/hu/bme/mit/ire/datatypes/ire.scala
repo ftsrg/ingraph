@@ -7,6 +7,9 @@ package object datatypes {
   type Mask = IndexedSeq[Int]
   type Indexer = mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
 
+  type Path = Vector[Long]
+  val Path = scala.collection.immutable.Vector
+
   object Slot extends Enumeration {
     type Slot = Value
     val Primary, Secondary = Value
