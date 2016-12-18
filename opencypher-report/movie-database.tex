@@ -14,13 +14,18 @@ RETURN a.name, a.birthplace
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{a.name},~\var{a.birthplace}} \Big(\alldifferent{} \Big(\expandin{m}{a}{Actor}{\_e339}{ACTS\_IN}{1}{1} \Big(\getvertices{m}{Movie}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{a.name},~\var{a.birthplace}} \Big(\alldifferent{} \Big(\expandin{m}{a}{Actor}{\_e362}{ACTS\_IN}{1}{1} \Big(\getvertices{m}{Movie}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{a.name},~\var{a.birthplace}}$
@@ -32,13 +37,13 @@ RETURN a.name, a.birthplace
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{m, \_e339, a} \rangle$
+			$\color{gray} \langle \var{m, \_e362, a} \rangle$
 			}
 [
-	{$\expandin{m}{a}{Actor}{\_e339}{ACTS\_IN}{1}{1}$
+	{$\expandin{m}{a}{Actor}{\_e362}{ACTS\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{m, \_e339, a} \rangle$
+			$\color{gray} \langle \var{m, \_e362, a} \rangle$
 			}
 [
 	{$\getvertices{m}{Movie}$
@@ -52,9 +57,11 @@ RETURN a.name, a.birthplace
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{a.name},~\var{a.birthplace}}$
@@ -66,13 +73,13 @@ RETURN a.name, a.birthplace
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{m, \_e339, a} \rangle$
+			$\color{gray} \langle \var{m, \_e362, a} \rangle$
 			}
 [
-	{$\expandin{m}{a}{Actor}{\_e339}{ACTS\_IN}{1}{1}$
+	{$\expandin{m}{a}{Actor}{\_e362}{ACTS\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{m, \_e339, a} \rangle$
+			$\color{gray} \langle \var{m, \_e362, a} \rangle$
 			}
 [
 	{$\getvertices{m}{Movie}$
@@ -86,6 +93,7 @@ RETURN a.name, a.birthplace
 ]
 ;
 \end{forest}
+}
 \subsection{query-2}
 
 \subsubsection*{Query specification}
@@ -98,17 +106,23 @@ ORDER BY count(*) DESC LIMIT 10;
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-3}
 
 \subsubsection*{Query specification}
@@ -123,17 +137,23 @@ ORDER BY movie_count DESC LIMIT 5;
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-4}
 
 \subsubsection*{Query specification}
@@ -148,17 +168,23 @@ ORDER BY length(movies) DESC LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-5}
 
 \subsubsection*{Query specification}
@@ -177,17 +203,23 @@ ORDER BY length(directed) DESC, acted DESC
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-6}
 
 \subsubsection*{Query specification}
@@ -206,17 +238,23 @@ ORDER BY length(directed) DESC, acted DESC
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-7}
 
 \subsubsection*{Query specification}
@@ -235,17 +273,23 @@ ORDER BY length(directed) DESC, acted DESC
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-8}
 
 \subsubsection*{Query specification}
@@ -258,13 +302,20 @@ RETURN f.name, m.title, r.stars, r.comment
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{f.name},~\var{m.title},~\var{r.stars},~\var{r.comment}} \Big(\selection{\var{r.stars} > \literal{3}} \Big(\alldifferent{} \Big(\expandout{f}{m}{Movie}{r}{RATED}{1}{1} \Big(\expandboth{u}{f}{Person}{\_e349}{FRIEND}{1}{1} \Big(\getvertices{u}{User}\Big)\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{f.name},~\var{m.title},~\var{r.stars},~\var{r.comment}} \Big(\selection{\var{r.stars} > \literal{3}} \Big(\alldifferent{} \Big(\expandout{f}{m}{Movie}{r}{RATED}{1}{1} \Big(\expandboth{u}{f}{Person}{\_e372}{FRIEND}{1}{1} \Big(\getvertices{u}{User}
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{f.name},~\var{m.title},~\var{r.stars},~\var{r.comment}}$
@@ -276,25 +327,25 @@ RETURN f.name, m.title, r.stars, r.comment
 	{$\selection{\var{r.stars} > \literal{3}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
 	{$\expandout{f}{m}{Movie}{r}{RATED}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
-	{$\expandboth{u}{f}{Person}{\_e349}{FRIEND}{1}{1}$
+	{$\expandboth{u}{f}{Person}{\_e372}{FRIEND}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f} \rangle$
 			}
 [
 	{$\getvertices{u}{User}$
@@ -310,9 +361,11 @@ RETURN f.name, m.title, r.stars, r.comment
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{f.name},~\var{m.title},~\var{r.stars},~\var{r.comment}}$
@@ -324,25 +377,25 @@ RETURN f.name, m.title, r.stars, r.comment
 	{$\selection{\var{r.stars} > \literal{3}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
 	{$\expandout{f}{m}{Movie}{r}{RATED}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f, r, m} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f, r, m} \rangle$
 			}
 [
-	{$\expandboth{u}{f}{Person}{\_e349}{FRIEND}{1}{1}$
+	{$\expandboth{u}{f}{Person}{\_e372}{FRIEND}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{u, \_e349, f} \rangle$
+			$\color{gray} \langle \var{u, \_e372, f} \rangle$
 			}
 [
 	{$\getvertices{u}{User}$
@@ -358,6 +411,7 @@ RETURN f.name, m.title, r.stars, r.comment
 ]
 ;
 \end{forest}
+}
 \subsection{query-9}
 
 \subsubsection*{Query specification}
@@ -372,17 +426,23 @@ ORDER BY count(*) desc LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-10}
 
 \subsubsection*{Query specification}
@@ -395,13 +455,19 @@ RETURN m.title, r.stars, r.comment
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{m.title},~\var{r.stars},~\var{r.comment}} \Big(\selection{\var{r.stars} > \literal{3}} \Big(\alldifferent{} \Big(\expandout{u}{m}{Movie}{r}{RATED}{1}{1} \Big(\getvertices{u}{User}\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{m.title},~\var{r.stars},~\var{r.comment}} \Big(\selection{\var{r.stars} > \literal{3}} \Big(\alldifferent{} \Big(\expandout{u}{m}{Movie}{r}{RATED}{1}{1} \Big(\getvertices{u}{User}
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{m.title},~\var{r.stars},~\var{r.comment}}$
@@ -440,9 +506,11 @@ RETURN m.title, r.stars, r.comment
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{m.title},~\var{r.stars},~\var{r.comment}}$
@@ -481,6 +549,7 @@ RETURN m.title, r.stars, r.comment
 ]
 ;
 \end{forest}
+}
 \subsection{query-11}
 
 \subsubsection*{Query specification}
@@ -493,17 +562,23 @@ ORDER BY AVG(r.stars) DESC, count(*) DESC
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-12}
 
 \subsubsection*{Query specification}
@@ -515,13 +590,17 @@ RETURN tom
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{tom}} \Big(\alldifferent{} \Big(\getvertices{tom}{}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{tom}} \Big(\alldifferent{} \Big(\getvertices{tom}{}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom}}$
@@ -546,9 +625,11 @@ RETURN tom
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom}}$
@@ -573,6 +654,7 @@ RETURN tom
 ]
 ;
 \end{forest}
+}
 \subsection{query-13}
 
 \subsubsection*{Query specification}
@@ -584,13 +666,17 @@ RETURN cloudAtlas
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{cloudAtlas}} \Big(\alldifferent{} \Big(\getvertices{cloudAtlas}{}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{cloudAtlas}} \Big(\alldifferent{} \Big(\getvertices{cloudAtlas}{}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{cloudAtlas}}$
@@ -615,9 +701,11 @@ RETURN cloudAtlas
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{cloudAtlas}}$
@@ -642,6 +730,7 @@ RETURN cloudAtlas
 ]
 ;
 \end{forest}
+}
 \subsection{query-14}
 
 \subsubsection*{Query specification}
@@ -654,13 +743,18 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \topp{10}{} \Big(\projection{\var{people.name}} \Big(\alldifferent{} \Big(\getvertices{people}{Person}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\topp{10}{} \Big(\projection{\var{people.name}} \Big(\alldifferent{} \Big(\getvertices{people}{Person}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -692,9 +786,11 @@ LIMIT 10
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -726,6 +822,7 @@ LIMIT 10
 ]
 ;
 \end{forest}
+}
 \subsection{query-15}
 
 \subsubsection*{Query specification}
@@ -738,13 +835,18 @@ RETURN nineties.title
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{nineties.title}} \Big(\selection{\var{nineties.released} > \literal{1990} \land \var{nineties.released} < \literal{2000}} \Big(\alldifferent{} \Big(\getvertices{nineties}{Movie}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{nineties.title}} \Big(\selection{\var{nineties.released} > \literal{1990} \land \var{nineties.released} < \literal{2000}} \Big(\alldifferent{} \Big(\getvertices{nineties}{Movie}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{nineties.title}}$
@@ -776,9 +878,11 @@ RETURN nineties.title
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{nineties.title}}$
@@ -810,6 +914,7 @@ RETURN nineties.title
 ]
 ;
 \end{forest}
+}
 \subsection{query-16}
 
 \subsubsection*{Query specification}
@@ -821,13 +926,18 @@ RETURN tom, tomHanksMovies
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{tom},~\var{tomHanksMovies}} \Big(\alldifferent{} \Big(\expandout{tom}{tomHanksMovies}{}{\_e353}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{tom},~\var{tomHanksMovies}} \Big(\alldifferent{} \Big(\expandout{tom}{tomHanksMovies}{}{\_e376}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom},~\var{tomHanksMovies}}$
@@ -839,13 +949,13 @@ RETURN tom, tomHanksMovies
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e353, tomHanksMovies} \rangle$
+			$\color{gray} \langle \var{tom, \_e376, tomHanksMovies} \rangle$
 			}
 [
-	{$\expandout{tom}{tomHanksMovies}{}{\_e353}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{tomHanksMovies}{}{\_e376}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e353, tomHanksMovies} \rangle$
+			$\color{gray} \langle \var{tom, \_e376, tomHanksMovies} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -859,9 +969,11 @@ RETURN tom, tomHanksMovies
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom},~\var{tomHanksMovies}}$
@@ -873,13 +985,13 @@ RETURN tom, tomHanksMovies
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e353, tomHanksMovies} \rangle$
+			$\color{gray} \langle \var{tom, \_e376, tomHanksMovies} \rangle$
 			}
 [
-	{$\expandout{tom}{tomHanksMovies}{}{\_e353}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{tomHanksMovies}{}{\_e376}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e353, tomHanksMovies} \rangle$
+			$\color{gray} \langle \var{tom, \_e376, tomHanksMovies} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -893,6 +1005,7 @@ RETURN tom, tomHanksMovies
 ]
 ;
 \end{forest}
+}
 \subsection{query-17}
 
 \subsubsection*{Query specification}
@@ -904,13 +1017,18 @@ RETURN directors.name
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{directors.name}} \Big(\alldifferent{} \Big(\expandin{cloudAtlas}{directors}{}{\_e354}{DIRECTED}{1}{1} \Big(\getvertices{cloudAtlas}{}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{directors.name}} \Big(\alldifferent{} \Big(\expandin{cloudAtlas}{directors}{}{\_e377}{DIRECTED}{1}{1} \Big(\getvertices{cloudAtlas}{}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{directors.name}}$
@@ -922,13 +1040,13 @@ RETURN directors.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{cloudAtlas, \_e354, directors} \rangle$
+			$\color{gray} \langle \var{cloudAtlas, \_e377, directors} \rangle$
 			}
 [
-	{$\expandin{cloudAtlas}{directors}{}{\_e354}{DIRECTED}{1}{1}$
+	{$\expandin{cloudAtlas}{directors}{}{\_e377}{DIRECTED}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{cloudAtlas, \_e354, directors} \rangle$
+			$\color{gray} \langle \var{cloudAtlas, \_e377, directors} \rangle$
 			}
 [
 	{$\getvertices{cloudAtlas}{}$
@@ -942,9 +1060,11 @@ RETURN directors.name
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{directors.name}}$
@@ -956,13 +1076,13 @@ RETURN directors.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{cloudAtlas, \_e354, directors} \rangle$
+			$\color{gray} \langle \var{cloudAtlas, \_e377, directors} \rangle$
 			}
 [
-	{$\expandin{cloudAtlas}{directors}{}{\_e354}{DIRECTED}{1}{1}$
+	{$\expandin{cloudAtlas}{directors}{}{\_e377}{DIRECTED}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{cloudAtlas, \_e354, directors} \rangle$
+			$\color{gray} \langle \var{cloudAtlas, \_e377, directors} \rangle$
 			}
 [
 	{$\getvertices{cloudAtlas}{}$
@@ -976,6 +1096,7 @@ RETURN directors.name
 ]
 ;
 \end{forest}
+}
 \subsection{query-18}
 
 \subsubsection*{Query specification}
@@ -987,13 +1108,19 @@ RETURN coActors.name
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{coActors.name}} \Big(\alldifferent{} \Big(\expandin{m}{coActors}{}{\_e356}{ACTED\_IN}{1}{1} \Big(\expandout{tom}{m}{}{\_e355}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{coActors.name}} \Big(\alldifferent{} \Big(\expandin{m}{coActors}{}{\_e379}{ACTED\_IN}{1}{1} \Big(\expandout{tom}{m}{}{\_e378}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{coActors.name}}$
@@ -1005,19 +1132,19 @@ RETURN coActors.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m, \_e356, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m, \_e379, coActors} \rangle$
 			}
 [
-	{$\expandin{m}{coActors}{}{\_e356}{ACTED\_IN}{1}{1}$
+	{$\expandin{m}{coActors}{}{\_e379}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m, \_e356, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m, \_e379, coActors} \rangle$
 			}
 [
-	{$\expandout{tom}{m}{}{\_e355}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{m}{}{\_e378}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -1032,9 +1159,11 @@ RETURN coActors.name
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{coActors.name}}$
@@ -1046,19 +1175,19 @@ RETURN coActors.name
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m, \_e356, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m, \_e379, coActors} \rangle$
 			}
 [
-	{$\expandin{m}{coActors}{}{\_e356}{ACTED\_IN}{1}{1}$
+	{$\expandin{m}{coActors}{}{\_e379}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m, \_e356, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m, \_e379, coActors} \rangle$
 			}
 [
-	{$\expandout{tom}{m}{}{\_e355}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{m}{}{\_e378}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e355, m} \rangle$
+			$\color{gray} \langle \var{tom, \_e378, m} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -1073,6 +1202,7 @@ RETURN coActors.name
 ]
 ;
 \end{forest}
+}
 \subsection{query-19}
 
 \subsubsection*{Query specification}
@@ -1084,17 +1214,23 @@ RETURN people.name, Type(relatedTo), relatedTo
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-20}
 
 \subsubsection*{Query specification}
@@ -1106,13 +1242,19 @@ RETURN DISTINCT hollywood
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \duplicateelimination \Big(\projection{\var{hollywood}} \Big(\alldifferent{} \Big(\expandboth{bacon}{hollywood}{}{\_e358}{}{1}{4} \Big(\getvertices{bacon}{Person}\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\duplicateelimination \Big(\projection{\var{hollywood}} \Big(\alldifferent{} \Big(\expandboth{bacon}{hollywood}{}{\_e381}{}{1}{4} \Big(\getvertices{bacon}{Person}
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -1130,13 +1272,13 @@ RETURN DISTINCT hollywood
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bacon, \_e358, hollywood} \rangle$
+			$\color{gray} \langle \var{bacon, \_e381, hollywood} \rangle$
 			}
 [
-	{$\expandboth{bacon}{hollywood}{}{\_e358}{}{1}{4}$
+	{$\expandboth{bacon}{hollywood}{}{\_e381}{}{1}{4}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bacon, \_e358, hollywood} \rangle$
+			$\color{gray} \langle \var{bacon, \_e381, hollywood} \rangle$
 			}
 [
 	{$\getvertices{bacon}{Person}$
@@ -1151,9 +1293,11 @@ RETURN DISTINCT hollywood
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\duplicateelimination$
@@ -1171,13 +1315,13 @@ RETURN DISTINCT hollywood
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bacon, \_e358, hollywood} \rangle$
+			$\color{gray} \langle \var{bacon, \_e381, hollywood} \rangle$
 			}
 [
-	{$\expandboth{bacon}{hollywood}{}{\_e358}{}{1}{4}$
+	{$\expandboth{bacon}{hollywood}{}{\_e381}{}{1}{4}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bacon, \_e358, hollywood} \rangle$
+			$\color{gray} \langle \var{bacon, \_e381, hollywood} \rangle$
 			}
 [
 	{$\getvertices{bacon}{Person}$
@@ -1192,6 +1336,7 @@ RETURN DISTINCT hollywood
 ]
 ;
 \end{forest}
+}
 \subsection{query-21}
 
 \subsubsection*{Query specification}
@@ -1205,17 +1350,23 @@ RETURN p
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-22}
 
 \subsubsection*{Query specification}
@@ -1229,17 +1380,23 @@ RETURN cocoActors.name AS Recommended, count(*) AS Strength ORDER BY Strength DE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-23}
 
 \subsubsection*{Query specification}
@@ -1252,13 +1409,22 @@ RETURN tom, m, coActors, m2, cruise
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{tom},~\var{m},~\var{coActors},~\var{m2},~\var{cruise}} \Big(\alldifferent{} \Big(\expandin{m}{coActors}{}{\_e364}{ACTED\_IN}{1}{1} \Big(\expandout{tom}{m}{}{\_e363}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}\Big)\Big) \join \expandin{m2}{cruise}{Person}{\_e366}{ACTED\_IN}{1}{1} \Big(\expandout{coActors}{m2}{}{\_e365}{ACTED\_IN}{1}{1} \Big(\getvertices{coActors}{}\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{tom},~\var{m},~\var{coActors},~\var{m2},~\var{cruise}} \Big(\alldifferent{} \Big(\expandin{m}{coActors}{}{\_e388}{ACTED\_IN}{1}{1} \Big(\expandout{tom}{m}{}{\_e387}{ACTED\_IN}{1}{1} \Big(\getvertices{tom}{Person}
+\Big)
+\Big)
+ \join \expandin{m2}{cruise}{Person}{\_e390}{ACTED\_IN}{1}{1} \Big(\expandout{coActors}{m2}{}{\_e389}{ACTED\_IN}{1}{1} \Big(\getvertices{coActors}{}
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom},~\var{m},~\var{coActors},~\var{m2},~\var{cruise}}$
@@ -1270,25 +1436,25 @@ RETURN tom, m, coActors, m2, cruise
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
-	{$\expandin{m}{coActors}{}{\_e364}{ACTED\_IN}{1}{1}$
+	{$\expandin{m}{coActors}{}{\_e388}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors} \rangle$
 			}
 [
-	{$\expandout{tom}{m}{}{\_e363}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{m}{}{\_e387}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -1300,16 +1466,16 @@ RETURN tom, m, coActors, m2, cruise
 ]
 ]
 [
-	{$\expandin{m2}{cruise}{Person}{\_e366}{ACTED\_IN}{1}{1}$
+	{$\expandin{m2}{cruise}{Person}{\_e390}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
-	{$\expandout{coActors}{m2}{}{\_e365}{ACTED\_IN}{1}{1}$
+	{$\expandout{coActors}{m2}{}{\_e389}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{coActors, \_e365, m2} \rangle$
+			$\color{gray} \langle \var{coActors, \_e389, m2} \rangle$
 			}
 [
 	{$\getvertices{coActors}{}$
@@ -1325,9 +1491,11 @@ RETURN tom, m, coActors, m2, cruise
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{tom},~\var{m},~\var{coActors},~\var{m2},~\var{cruise}}$
@@ -1339,25 +1507,25 @@ RETURN tom, m, coActors, m2, cruise
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
-	{$\expandin{m}{coActors}{}{\_e364}{ACTED\_IN}{1}{1}$
+	{$\expandin{m}{coActors}{}{\_e388}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m, \_e364, coActors} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m, \_e388, coActors} \rangle$
 			}
 [
-	{$\expandout{tom}{m}{}{\_e363}{ACTED\_IN}{1}{1}$
+	{$\expandout{tom}{m}{}{\_e387}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{tom, \_e363, m} \rangle$
+			$\color{gray} \langle \var{tom, \_e387, m} \rangle$
 			}
 [
 	{$\getvertices{tom}{Person}$
@@ -1369,16 +1537,16 @@ RETURN tom, m, coActors, m2, cruise
 ]
 ]
 [
-	{$\expandin{m2}{cruise}{Person}{\_e366}{ACTED\_IN}{1}{1}$
+	{$\expandin{m2}{cruise}{Person}{\_e390}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{coActors, \_e365, m2, \_e366, cruise} \rangle$
+			$\color{gray} \langle \var{coActors, \_e389, m2, \_e390, cruise} \rangle$
 			}
 [
-	{$\expandout{coActors}{m2}{}{\_e365}{ACTED\_IN}{1}{1}$
+	{$\expandout{coActors}{m2}{}{\_e389}{ACTED\_IN}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{coActors, \_e365, m2} \rangle$
+			$\color{gray} \langle \var{coActors, \_e389, m2} \rangle$
 			}
 [
 	{$\getvertices{coActors}{}$
@@ -1394,3 +1562,4 @@ RETURN tom, m, coActors, m2, cruise
 ]
 ;
 \end{forest}
+}

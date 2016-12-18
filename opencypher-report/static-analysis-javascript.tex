@@ -21,13 +21,22 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{b}{list}{List}{\_e2}{statements}{1}{1} \Big(\expandout{bs}{b}{Block}{\_e1}{block}{1}{1} \Big(\getvertices{bs}{BlockStatement}\Big)\Big) \join \expandout{bs}{bsE}{End}{\_e3}{\_end}{1}{1} \Big(\getvertices{bs}{BlockStatement}\Big) \join \expandout{list}{listE}{End}{\_e4}{\_end}{1}{1} \Big(\getvertices{list}{List}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{b}{list}{List}{\_e2}{statements}{1}{1} \Big(\expandout{bs}{b}{Block}{\_e1}{block}{1}{1} \Big(\getvertices{bs}{BlockStatement}
+\Big)
+\Big)
+ \join \expandout{bs}{bsE}{End}{\_e3}{\_end}{1}{1} \Big(\getvertices{bs}{BlockStatement}
+\Big)
+ \join \expandout{list}{listE}{End}{\_e4}{\_end}{1}{1} \Big(\getvertices{list}{List}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -101,9 +110,11 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -177,6 +188,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{Boolean}
 
 \subsubsection*{Query specification}
@@ -192,13 +204,18 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralBooleanExpression} \join \expandout{ts}{tag}{Tag \land Boolean}{\_e5}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralBooleanExpression}
+ \join \expandout{ts}{tag}{Tag \land Boolean}{\_e5}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -237,9 +254,11 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -278,6 +297,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{CallExpressionNoParam}
 
 \subsubsection*{Query specification}
@@ -302,17 +322,293 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\selection{\neg \left( \var{call} IS NOT NULL \land \var{\_e19} IS NOT NULL \land \var{\_e20} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\expandin{\_e14}{fd}{FunctionDeclaration}{\_e16}{name}{1}{1} \Big(\expandout{\_e12}{\_e14}{BindingIdentifier}{\_e15}{node}{1}{1} \Big(\expandout{\_e10}{\_e12}{Declaration}{\_e13}{declarations}{1}{1} \Big(\expandin{\_e8}{\_e10}{Variable}{\_e11}{references}{1}{1} \Big(\expandin{\_e6}{\_e8}{Reference}{\_e9}{node}{1}{1} \Big(\expandout{call}{\_e6}{IdentifierExpression}{\_e7}{callee}{1}{1} \Big(\getvertices{call}{CallExpression}
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+ \join \expandout{call}{callE}{End}{\_e17}{\_end}{1}{1} \Big(\getvertices{call}{CallExpression}
+\Big)
+ \join \expandout{fd}{fdE}{End}{\_e18}{\_end}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}
+\Big)
+\Big)
+ \leftouterjoin \expandout{call}{\_e20}{}{\_e19}{arguments}{1}{1} \Big(\getvertices{call}{CallExpression}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
-\text{Cannot visualize tree.}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\selection{\neg \left( \var{call} IS NOT NULL \land \var{\_e19} IS NOT NULL \land \var{\_e20} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE, \_e19, \_e20} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE, \_e19, \_e20} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE} \rangle$
+			}
+[
+	{$\expandin{\_e14}{fd}{FunctionDeclaration}{\_e16}{name}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd} \rangle$
+			}
+[
+	{$\expandout{\_e12}{\_e14}{BindingIdentifier}{\_e15}{node}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14} \rangle$
+			}
+[
+	{$\expandout{\_e10}{\_e12}{Declaration}{\_e13}{declarations}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12} \rangle$
+			}
+[
+	{$\expandin{\_e8}{\_e10}{Variable}{\_e11}{references}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10} \rangle$
+			}
+[
+	{$\expandin{\_e6}{\_e8}{Reference}{\_e9}{node}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8} \rangle$
+			}
+[
+	{$\expandout{call}{\_e6}{IdentifierExpression}{\_e7}{callee}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+[
+	{$\expandout{call}{callE}{End}{\_e17}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e17, callE} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{fd}{fdE}{End}{\_e18}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{fd, \_e18, fdE} \rangle$
+			}
+[
+	{$\getvertices{fd}{FunctionDeclaration}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{fd} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+[
+	{$\expandout{call}{\_e20}{}{\_e19}{arguments}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e19, \_e20} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
-Cannot visualize incremental tree.
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\selection{\neg \left( \var{call} IS NOT NULL \land \var{\_e19} IS NOT NULL \land \var{\_e20} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE, \_e19, \_e20} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE, \_e19, \_e20} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE, \_e18, fdE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd, \_e17, callE} \rangle$
+			}
+[
+	{$\expandin{\_e14}{fd}{FunctionDeclaration}{\_e16}{name}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14, \_e16, fd} \rangle$
+			}
+[
+	{$\expandout{\_e12}{\_e14}{BindingIdentifier}{\_e15}{node}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12, \_e15, \_e14} \rangle$
+			}
+[
+	{$\expandout{\_e10}{\_e12}{Declaration}{\_e13}{declarations}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10, \_e13, \_e12} \rangle$
+			}
+[
+	{$\expandin{\_e8}{\_e10}{Variable}{\_e11}{references}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8, \_e11, \_e10} \rangle$
+			}
+[
+	{$\expandin{\_e6}{\_e8}{Reference}{\_e9}{node}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6, \_e9, \_e8} \rangle$
+			}
+[
+	{$\expandout{call}{\_e6}{IdentifierExpression}{\_e7}{callee}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e7, \_e6} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+]
+[
+	{$\expandout{call}{callE}{End}{\_e17}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e17, callE} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{fd}{fdE}{End}{\_e18}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{fd, \_e18, fdE} \rangle$
+			}
+[
+	{$\getvertices{fd}{FunctionDeclaration}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{fd} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+[
+	{$\expandout{call}{\_e20}{}{\_e19}{arguments}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call, \_e19, \_e20} \rangle$
+			}
+[
+	{$\getvertices{call}{CallExpression}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{call} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+}
 \subsection{CallExpressionParam}
 
 \subsubsection*{Query specification}
@@ -338,91 +634,109 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{\_e31}{params}{List}{\_e33}{items}{1}{1} \Big(\expandout{fd}{\_e31}{FormalParameters}{\_e32}{params}{1}{1} \Big(\expandin{\_e28}{fd}{FunctionDeclaration}{\_e30}{name}{1}{1} \Big(\expandout{\_e26}{\_e28}{BindingIdentifier}{\_e29}{node}{1}{1} \Big(\expandout{\_e24}{\_e26}{Declaration}{\_e27}{declarations}{1}{1} \Big(\expandin{\_e22}{\_e24}{Variable}{\_e25}{references}{1}{1} \Big(\expandin{\_e20}{\_e22}{Reference}{\_e23}{node}{1}{1} \Big(\expandout{callExp}{\_e20}{IdentifierExpression}{\_e21}{callee}{1}{1} \Big(\expandin{arguments}{callExp}{CallExpression}{\_e19}{arguments}{1}{1} \Big(\getvertices{arguments}{List}\Big)\Big)\Big)\Big)\Big)\Big)\Big)\Big)\Big) \join \expandout{callExp}{callExpE}{End}{\_e34}{\_end}{1}{1} \Big(\getvertices{callExp}{CallExpression}\Big) \join \expandout{fd}{fdE}{End}{\_e35}{\_end}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}\Big) \join \expandout{arguments}{argumentsE}{End}{\_e36}{\_end}{1}{1} \Big(\getvertices{arguments}{List}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{\_e33}{params}{List}{\_e35}{items}{1}{1} \Big(\expandout{fd}{\_e33}{FormalParameters}{\_e34}{params}{1}{1} \Big(\expandin{\_e30}{fd}{FunctionDeclaration}{\_e32}{name}{1}{1} \Big(\expandout{\_e28}{\_e30}{BindingIdentifier}{\_e31}{node}{1}{1} \Big(\expandout{\_e26}{\_e28}{Declaration}{\_e29}{declarations}{1}{1} \Big(\expandin{\_e24}{\_e26}{Variable}{\_e27}{references}{1}{1} \Big(\expandin{\_e22}{\_e24}{Reference}{\_e25}{node}{1}{1} \Big(\expandout{callExp}{\_e22}{IdentifierExpression}{\_e23}{callee}{1}{1} \Big(\expandin{arguments}{callExp}{CallExpression}{\_e21}{arguments}{1}{1} \Big(\getvertices{arguments}{List}
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+ \join \expandout{callExp}{callExpE}{End}{\_e36}{\_end}{1}{1} \Big(\getvertices{callExp}{CallExpression}
+\Big)
+ \join \expandout{fd}{fdE}{End}{\_e37}{\_end}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}
+\Big)
+ \join \expandout{arguments}{argumentsE}{End}{\_e38}{\_end}{1}{1} \Big(\getvertices{arguments}{List}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE} \rangle$
 			}
 [
-	{$\expandout{\_e31}{params}{List}{\_e33}{items}{1}{1}$
+	{$\expandout{\_e33}{params}{List}{\_e35}{items}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params} \rangle$
 			}
 [
-	{$\expandout{fd}{\_e31}{FormalParameters}{\_e32}{params}{1}{1}$
+	{$\expandout{fd}{\_e33}{FormalParameters}{\_e34}{params}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33} \rangle$
 			}
 [
-	{$\expandin{\_e28}{fd}{FunctionDeclaration}{\_e30}{name}{1}{1}$
+	{$\expandin{\_e30}{fd}{FunctionDeclaration}{\_e32}{name}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd} \rangle$
 			}
 [
-	{$\expandout{\_e26}{\_e28}{BindingIdentifier}{\_e29}{node}{1}{1}$
+	{$\expandout{\_e28}{\_e30}{BindingIdentifier}{\_e31}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30} \rangle$
 			}
 [
-	{$\expandout{\_e24}{\_e26}{Declaration}{\_e27}{declarations}{1}{1}$
+	{$\expandout{\_e26}{\_e28}{Declaration}{\_e29}{declarations}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28} \rangle$
 			}
 [
-	{$\expandin{\_e22}{\_e24}{Variable}{\_e25}{references}{1}{1}$
+	{$\expandin{\_e24}{\_e26}{Variable}{\_e27}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26} \rangle$
 			}
 [
-	{$\expandin{\_e20}{\_e22}{Reference}{\_e23}{node}{1}{1}$
+	{$\expandin{\_e22}{\_e24}{Reference}{\_e25}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24} \rangle$
 			}
 [
-	{$\expandout{callExp}{\_e20}{IdentifierExpression}{\_e21}{callee}{1}{1}$
+	{$\expandout{callExp}{\_e22}{IdentifierExpression}{\_e23}{callee}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22} \rangle$
 			}
 [
-	{$\expandin{arguments}{callExp}{CallExpression}{\_e19}{arguments}{1}{1}$
+	{$\expandin{arguments}{callExp}{CallExpression}{\_e21}{arguments}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp} \rangle$
 			}
 [
 	{$\getvertices{arguments}{List}$
@@ -441,10 +755,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{callExp}{callExpE}{End}{\_e34}{\_end}{1}{1}$
+	{$\expandout{callExp}{callExpE}{End}{\_e36}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{callExp, \_e34, callExpE} \rangle$
+			$\color{gray} \langle \var{callExp, \_e36, callExpE} \rangle$
 			}
 [
 	{$\getvertices{callExp}{CallExpression}$
@@ -456,10 +770,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{fd}{fdE}{End}{\_e35}{\_end}{1}{1}$
+	{$\expandout{fd}{fdE}{End}{\_e37}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e35, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e37, fdE} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -471,10 +785,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{arguments}{argumentsE}{End}{\_e36}{\_end}{1}{1}$
+	{$\expandout{arguments}{argumentsE}{End}{\_e38}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\getvertices{arguments}{List}$
@@ -488,87 +802,89 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE, \_e35, fdE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE, \_e37, fdE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params, \_e34, callExpE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params, \_e36, callExpE} \rangle$
 			}
 [
-	{$\expandout{\_e31}{params}{List}{\_e33}{items}{1}{1}$
+	{$\expandout{\_e33}{params}{List}{\_e35}{items}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31, \_e33, params} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33, \_e35, params} \rangle$
 			}
 [
-	{$\expandout{fd}{\_e31}{FormalParameters}{\_e32}{params}{1}{1}$
+	{$\expandout{fd}{\_e33}{FormalParameters}{\_e34}{params}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd, \_e32, \_e31} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd, \_e34, \_e33} \rangle$
 			}
 [
-	{$\expandin{\_e28}{fd}{FunctionDeclaration}{\_e30}{name}{1}{1}$
+	{$\expandin{\_e30}{fd}{FunctionDeclaration}{\_e32}{name}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e30, fd} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30, \_e32, fd} \rangle$
 			}
 [
-	{$\expandout{\_e26}{\_e28}{BindingIdentifier}{\_e29}{node}{1}{1}$
+	{$\expandout{\_e28}{\_e30}{BindingIdentifier}{\_e31}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28, \_e31, \_e30} \rangle$
 			}
 [
-	{$\expandout{\_e24}{\_e26}{Declaration}{\_e27}{declarations}{1}{1}$
+	{$\expandout{\_e26}{\_e28}{Declaration}{\_e29}{declarations}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26, \_e29, \_e28} \rangle$
 			}
 [
-	{$\expandin{\_e22}{\_e24}{Variable}{\_e25}{references}{1}{1}$
+	{$\expandin{\_e24}{\_e26}{Variable}{\_e27}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22, \_e25, \_e24} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24, \_e27, \_e26} \rangle$
 			}
 [
-	{$\expandin{\_e20}{\_e22}{Reference}{\_e23}{node}{1}{1}$
+	{$\expandin{\_e22}{\_e24}{Reference}{\_e25}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20, \_e23, \_e22} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22, \_e25, \_e24} \rangle$
 			}
 [
-	{$\expandout{callExp}{\_e20}{IdentifierExpression}{\_e21}{callee}{1}{1}$
+	{$\expandout{callExp}{\_e22}{IdentifierExpression}{\_e23}{callee}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp, \_e21, \_e20} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp, \_e23, \_e22} \rangle$
 			}
 [
-	{$\expandin{arguments}{callExp}{CallExpression}{\_e19}{arguments}{1}{1}$
+	{$\expandin{arguments}{callExp}{CallExpression}{\_e21}{arguments}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e19, callExp} \rangle$
+			$\color{gray} \langle \var{arguments, \_e21, callExp} \rangle$
 			}
 [
 	{$\getvertices{arguments}{List}$
@@ -587,10 +903,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{callExp}{callExpE}{End}{\_e34}{\_end}{1}{1}$
+	{$\expandout{callExp}{callExpE}{End}{\_e36}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{callExp, \_e34, callExpE} \rangle$
+			$\color{gray} \langle \var{callExp, \_e36, callExpE} \rangle$
 			}
 [
 	{$\getvertices{callExp}{CallExpression}$
@@ -602,10 +918,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{fd}{fdE}{End}{\_e35}{\_end}{1}{1}$
+	{$\expandout{fd}{fdE}{End}{\_e37}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e35, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e37, fdE} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -617,10 +933,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{arguments}{argumentsE}{End}{\_e36}{\_end}{1}{1}$
+	{$\expandout{arguments}{argumentsE}{End}{\_e38}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{arguments, \_e36, argumentsE} \rangle$
+			$\color{gray} \langle \var{arguments, \_e38, argumentsE} \rangle$
 			}
 [
 	{$\getvertices{arguments}{List}$
@@ -634,6 +950,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{ExpressionStatement}
 
 \subsubsection*{Query specification}
@@ -652,37 +969,45 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{es}{exp}{Expression}{\_e37}{expression}{1}{1} \Big(\getvertices{es}{ExpressionStatement}\Big) \join \expandout{es}{esE}{End}{\_e38}{\_end}{1}{1} \Big(\getvertices{es}{ExpressionStatement}\Big) \join \expandout{exp}{expE}{End}{\_e39}{\_end}{1}{1} \Big(\getvertices{exp}{Expression}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{es}{exp}{Expression}{\_e39}{expression}{1}{1} \Big(\getvertices{es}{ExpressionStatement}
+\Big)
+ \join \expandout{es}{esE}{End}{\_e40}{\_end}{1}{1} \Big(\getvertices{es}{ExpressionStatement}
+\Big)
+ \join \expandout{exp}{expE}{End}{\_e41}{\_end}{1}{1} \Big(\getvertices{exp}{Expression}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE, \_e41, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE, \_e41, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE} \rangle$
 			}
 [
-	{$\expandout{es}{exp}{Expression}{\_e37}{expression}{1}{1}$
+	{$\expandout{es}{exp}{Expression}{\_e39}{expression}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp} \rangle$
 			}
 [
 	{$\getvertices{es}{ExpressionStatement}$
@@ -693,10 +1018,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{es}{esE}{End}{\_e38}{\_end}{1}{1}$
+	{$\expandout{es}{esE}{End}{\_e40}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e38, esE} \rangle$
+			$\color{gray} \langle \var{es, \_e40, esE} \rangle$
 			}
 [
 	{$\getvertices{es}{ExpressionStatement}$
@@ -708,10 +1033,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{expE}{End}{\_e39}{\_end}{1}{1}$
+	{$\expandout{exp}{expE}{End}{\_e41}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{exp, \_e41, expE} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -725,33 +1050,35 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE, \_e41, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE, \_e41, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp, \_e38, esE} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp, \_e40, esE} \rangle$
 			}
 [
-	{$\expandout{es}{exp}{Expression}{\_e37}{expression}{1}{1}$
+	{$\expandout{es}{exp}{Expression}{\_e39}{expression}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e37, exp} \rangle$
+			$\color{gray} \langle \var{es, \_e39, exp} \rangle$
 			}
 [
 	{$\getvertices{es}{ExpressionStatement}$
@@ -762,10 +1089,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{es}{esE}{End}{\_e38}{\_end}{1}{1}$
+	{$\expandout{es}{esE}{End}{\_e40}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{es, \_e38, esE} \rangle$
+			$\color{gray} \langle \var{es, \_e40, esE} \rangle$
 			}
 [
 	{$\getvertices{es}{ExpressionStatement}$
@@ -777,10 +1104,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{expE}{End}{\_e39}{\_end}{1}{1}$
+	{$\expandout{exp}{expE}{End}{\_e41}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e39, expE} \rangle$
+			$\color{gray} \langle \var{exp, \_e41, expE} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -794,6 +1121,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{FunctionDeclaration}
 
 \subsubsection*{Query specification}
@@ -812,43 +1140,52 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{b}{list}{List}{\_e41}{statements}{1}{1} \Big(\expandout{fd}{b}{FunctionBody}{\_e40}{body}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}\Big)\Big) \join \expandout{fd}{fdE}{End}{\_e42}{\_end}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}\Big) \join \expandout{list}{listE}{End}{\_e43}{\_end}{1}{1} \Big(\getvertices{list}{List}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{b}{list}{List}{\_e43}{statements}{1}{1} \Big(\expandout{fd}{b}{FunctionBody}{\_e42}{body}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}
+\Big)
+\Big)
+ \join \expandout{fd}{fdE}{End}{\_e44}{\_end}{1}{1} \Big(\getvertices{fd}{FunctionDeclaration}
+\Big)
+ \join \expandout{list}{listE}{End}{\_e45}{\_end}{1}{1} \Big(\getvertices{list}{List}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE, \_e45, listE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE, \_e45, listE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE} \rangle$
 			}
 [
-	{$\expandout{b}{list}{List}{\_e41}{statements}{1}{1}$
+	{$\expandout{b}{list}{List}{\_e43}{statements}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list} \rangle$
 			}
 [
-	{$\expandout{fd}{b}{FunctionBody}{\_e40}{body}{1}{1}$
+	{$\expandout{fd}{b}{FunctionBody}{\_e42}{body}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -860,10 +1197,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{fd}{fdE}{End}{\_e42}{\_end}{1}{1}$
+	{$\expandout{fd}{fdE}{End}{\_e44}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e42, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e44, fdE} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -875,10 +1212,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{list}{listE}{End}{\_e43}{\_end}{1}{1}$
+	{$\expandout{list}{listE}{End}{\_e45}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{list, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{list, \_e45, listE} \rangle$
 			}
 [
 	{$\getvertices{list}{List}$
@@ -892,39 +1229,41 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE, \_e45, listE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE, \_e45, listE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list, \_e42, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list, \_e44, fdE} \rangle$
 			}
 [
-	{$\expandout{b}{list}{List}{\_e41}{statements}{1}{1}$
+	{$\expandout{b}{list}{List}{\_e43}{statements}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b, \_e41, list} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b, \_e43, list} \rangle$
 			}
 [
-	{$\expandout{fd}{b}{FunctionBody}{\_e40}{body}{1}{1}$
+	{$\expandout{fd}{b}{FunctionBody}{\_e42}{body}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e40, b} \rangle$
+			$\color{gray} \langle \var{fd, \_e42, b} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -936,10 +1275,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{fd}{fdE}{End}{\_e42}{\_end}{1}{1}$
+	{$\expandout{fd}{fdE}{End}{\_e44}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{fd, \_e42, fdE} \rangle$
+			$\color{gray} \langle \var{fd, \_e44, fdE} \rangle$
 			}
 [
 	{$\getvertices{fd}{FunctionDeclaration}$
@@ -951,10 +1290,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{list}{listE}{End}{\_e43}{\_end}{1}{1}$
+	{$\expandout{list}{listE}{End}{\_e45}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{list, \_e43, listE} \rangle$
+			$\color{gray} \langle \var{list, \_e45, listE} \rangle$
 			}
 [
 	{$\getvertices{list}{List}$
@@ -968,6 +1307,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{IfStatementAlternate}
 
 \subsubsection*{Query specification}
@@ -995,61 +1335,76 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{if}{consequent}{Node}{\_e45}{consequent}{1}{1} \Big(\expandin{test}{if}{IfStatement}{\_e44}{test}{1}{1} \Big(\getvertices{test}{Node}\Big)\Big) \join \expandout{if}{alternate}{Statement}{\_e46}{alternate}{1}{1} \Big(\getvertices{if}{IfStatement}\Big) \join \expandout{alternate}{alternateE}{End}{\_e47}{\_end}{1}{1} \Big(\getvertices{alternate}{Statement}\Big) \join \expandout{if}{ifE}{End}{\_e48}{\_end}{1}{1} \Big(\getvertices{if}{IfStatement}\Big) \join \expandout{test}{testE}{End}{\_e49}{\_end}{1}{1} \Big(\getvertices{test}{Node}\Big) \join \expandout{consequent}{consequentE}{End}{\_e50}{\_end}{1}{1} \Big(\getvertices{consequent}{Node}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{if}{consequent}{Node}{\_e47}{consequent}{1}{1} \Big(\expandin{test}{if}{IfStatement}{\_e46}{test}{1}{1} \Big(\getvertices{test}{Node}
+\Big)
+\Big)
+ \join \expandout{if}{alternate}{Statement}{\_e48}{alternate}{1}{1} \Big(\getvertices{if}{IfStatement}
+\Big)
+ \join \expandout{alternate}{alternateE}{End}{\_e49}{\_end}{1}{1} \Big(\getvertices{alternate}{Statement}
+\Big)
+ \join \expandout{if}{ifE}{End}{\_e50}{\_end}{1}{1} \Big(\getvertices{if}{IfStatement}
+\Big)
+ \join \expandout{test}{testE}{End}{\_e51}{\_end}{1}{1} \Big(\getvertices{test}{Node}
+\Big)
+ \join \expandout{consequent}{consequentE}{End}{\_e52}{\_end}{1}{1} \Big(\getvertices{consequent}{Node}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE, \_e52, consequentE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE, \_e52, consequentE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate} \rangle$
 			}
 [
-	{$\expandout{if}{consequent}{Node}{\_e45}{consequent}{1}{1}$
+	{$\expandout{if}{consequent}{Node}{\_e47}{consequent}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent} \rangle$
 			}
 [
-	{$\expandin{test}{if}{IfStatement}{\_e44}{test}{1}{1}$
+	{$\expandin{test}{if}{IfStatement}{\_e46}{test}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if} \rangle$
 			}
 [
 	{$\getvertices{test}{Node}$
@@ -1061,10 +1416,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{if}{alternate}{Statement}{\_e46}{alternate}{1}{1}$
+	{$\expandout{if}{alternate}{Statement}{\_e48}{alternate}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{if, \_e46, alternate} \rangle$
+			$\color{gray} \langle \var{if, \_e48, alternate} \rangle$
 			}
 [
 	{$\getvertices{if}{IfStatement}$
@@ -1076,10 +1431,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{alternate}{alternateE}{End}{\_e47}{\_end}{1}{1}$
+	{$\expandout{alternate}{alternateE}{End}{\_e49}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{alternate, \_e47, alternateE} \rangle$
+			$\color{gray} \langle \var{alternate, \_e49, alternateE} \rangle$
 			}
 [
 	{$\getvertices{alternate}{Statement}$
@@ -1091,10 +1446,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{if}{ifE}{End}{\_e48}{\_end}{1}{1}$
+	{$\expandout{if}{ifE}{End}{\_e50}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{if, \_e48, ifE} \rangle$
+			$\color{gray} \langle \var{if, \_e50, ifE} \rangle$
 			}
 [
 	{$\getvertices{if}{IfStatement}$
@@ -1106,10 +1461,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{test}{testE}{End}{\_e49}{\_end}{1}{1}$
+	{$\expandout{test}{testE}{End}{\_e51}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e49, testE} \rangle$
+			$\color{gray} \langle \var{test, \_e51, testE} \rangle$
 			}
 [
 	{$\getvertices{test}{Node}$
@@ -1121,10 +1476,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{consequent}{consequentE}{End}{\_e50}{\_end}{1}{1}$
+	{$\expandout{consequent}{consequentE}{End}{\_e52}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{consequent, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{consequent, \_e52, consequentE} \rangle$
 			}
 [
 	{$\getvertices{consequent}{Node}$
@@ -1138,57 +1493,59 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE, \_e52, consequentE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE, \_e52, consequentE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE, \_e49, testE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE, \_e51, testE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE, \_e48, ifE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE, \_e50, ifE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate, \_e47, alternateE} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate, \_e49, alternateE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent, \_e46, alternate} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent, \_e48, alternate} \rangle$
 			}
 [
-	{$\expandout{if}{consequent}{Node}{\_e45}{consequent}{1}{1}$
+	{$\expandout{if}{consequent}{Node}{\_e47}{consequent}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if, \_e45, consequent} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if, \_e47, consequent} \rangle$
 			}
 [
-	{$\expandin{test}{if}{IfStatement}{\_e44}{test}{1}{1}$
+	{$\expandin{test}{if}{IfStatement}{\_e46}{test}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e44, if} \rangle$
+			$\color{gray} \langle \var{test, \_e46, if} \rangle$
 			}
 [
 	{$\getvertices{test}{Node}$
@@ -1200,10 +1557,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{if}{alternate}{Statement}{\_e46}{alternate}{1}{1}$
+	{$\expandout{if}{alternate}{Statement}{\_e48}{alternate}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{if, \_e46, alternate} \rangle$
+			$\color{gray} \langle \var{if, \_e48, alternate} \rangle$
 			}
 [
 	{$\getvertices{if}{IfStatement}$
@@ -1215,10 +1572,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{alternate}{alternateE}{End}{\_e47}{\_end}{1}{1}$
+	{$\expandout{alternate}{alternateE}{End}{\_e49}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{alternate, \_e47, alternateE} \rangle$
+			$\color{gray} \langle \var{alternate, \_e49, alternateE} \rangle$
 			}
 [
 	{$\getvertices{alternate}{Statement}$
@@ -1230,10 +1587,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{if}{ifE}{End}{\_e48}{\_end}{1}{1}$
+	{$\expandout{if}{ifE}{End}{\_e50}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{if, \_e48, ifE} \rangle$
+			$\color{gray} \langle \var{if, \_e50, ifE} \rangle$
 			}
 [
 	{$\getvertices{if}{IfStatement}$
@@ -1245,10 +1602,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{test}{testE}{End}{\_e49}{\_end}{1}{1}$
+	{$\expandout{test}{testE}{End}{\_e51}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{test, \_e49, testE} \rangle$
+			$\color{gray} \langle \var{test, \_e51, testE} \rangle$
 			}
 [
 	{$\getvertices{test}{Node}$
@@ -1260,10 +1617,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{consequent}{consequentE}{End}{\_e50}{\_end}{1}{1}$
+	{$\expandout{consequent}{consequentE}{End}{\_e52}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{consequent, \_e50, consequentE} \rangle$
+			$\color{gray} \langle \var{consequent, \_e52, consequentE} \rangle$
 			}
 [
 	{$\getvertices{consequent}{Node}$
@@ -1277,6 +1634,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{IfStatementNoAlternate}
 
 \subsubsection*{Query specification}
@@ -1300,17 +1658,277 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\selection{\neg \left( \var{if} IS NOT NULL \land \var{\_e58} IS NOT NULL \land \var{\_e59} IS NOT NULL \right)} \Big(\alldifferent{} \Big(\expandout{if}{consequent}{Node}{\_e54}{consequent}{1}{1} \Big(\expandin{test}{if}{IfStatement}{\_e53}{test}{1}{1} \Big(\getvertices{test}{Node}
+\Big)
+\Big)
+ \join \expandout{if}{ifE}{End}{\_e55}{\_end}{1}{1} \Big(\getvertices{if}{IfStatement}
+\Big)
+ \join \expandout{test}{testE}{End}{\_e56}{\_end}{1}{1} \Big(\getvertices{test}{Node}
+\Big)
+ \join \expandout{consequent}{consequentE}{End}{\_e57}{\_end}{1}{1} \Big(\getvertices{consequent}{Node}
+\Big)
+\Big)
+ \leftouterjoin \expandout{if}{\_e59}{Statement}{\_e58}{alternate}{1}{1} \Big(\getvertices{if}{IfStatement}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
-\text{Cannot visualize tree.}
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\selection{\neg \left( \var{if} IS NOT NULL \land \var{\_e58} IS NOT NULL \land \var{\_e59} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE, \_e58, \_e59} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE, \_e58, \_e59} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE} \rangle$
+			}
+[
+	{$\expandout{if}{consequent}{Node}{\_e54}{consequent}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent} \rangle$
+			}
+[
+	{$\expandin{test}{if}{IfStatement}{\_e53}{test}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if} \rangle$
+			}
+[
+	{$\getvertices{test}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{if}{ifE}{End}{\_e55}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if, \_e55, ifE} \rangle$
+			}
+[
+	{$\getvertices{if}{IfStatement}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{test}{testE}{End}{\_e56}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e56, testE} \rangle$
+			}
+[
+	{$\getvertices{test}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{consequent}{consequentE}{End}{\_e57}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{consequent, \_e57, consequentE} \rangle$
+			}
+[
+	{$\getvertices{consequent}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{consequent} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+[
+	{$\expandout{if}{\_e59}{Statement}{\_e58}{alternate}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if, \_e58, \_e59} \rangle$
+			}
+[
+	{$\getvertices{if}{IfStatement}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
-Cannot visualize incremental tree.
+\adjustbox{max width=\textwidth}{%
+\begin{forest} for tree={align=center}
+[
+	{$\selection{\neg \left( \var{if} IS NOT NULL \land \var{\_e58} IS NOT NULL \land \var{\_e59} IS NOT NULL \right)}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE, \_e58, \_e59} \rangle$
+			}
+[
+	{$\leftouterjoin$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE, \_e58, \_e59} \rangle$
+			}
+[
+	{$\alldifferent{}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE, \_e57, consequentE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE, \_e56, testE} \rangle$
+			}
+[
+	{$\join$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent, \_e55, ifE} \rangle$
+			}
+[
+	{$\expandout{if}{consequent}{Node}{\_e54}{consequent}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if, \_e54, consequent} \rangle$
+			}
+[
+	{$\expandin{test}{if}{IfStatement}{\_e53}{test}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e53, if} \rangle$
+			}
+[
+	{$\getvertices{test}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{if}{ifE}{End}{\_e55}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if, \_e55, ifE} \rangle$
+			}
+[
+	{$\getvertices{if}{IfStatement}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{test}{testE}{End}{\_e56}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test, \_e56, testE} \rangle$
+			}
+[
+	{$\getvertices{test}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{test} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{consequent}{consequentE}{End}{\_e57}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{consequent, \_e57, consequentE} \rangle$
+			}
+[
+	{$\getvertices{consequent}{Node}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{consequent} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+[
+	{$\expandout{if}{\_e59}{Statement}{\_e58}{alternate}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if, \_e58, \_e59} \rangle$
+			}
+[
+	{$\getvertices{if}{IfStatement}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{if} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+}
 \subsection{Infinity}
 
 \subsubsection*{Query specification}
@@ -1326,25 +1944,30 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralInfinityExpression} \join \expandout{ts}{tag}{Tag \land Infinity}{\_e56}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralInfinityExpression}
+ \join \expandout{ts}{tag}{Tag \land Infinity}{\_e60}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e60, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e60, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralInfinityExpression}$
@@ -1354,10 +1977,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Infinity}{\_e56}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Infinity}{\_e60}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e60, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1371,21 +1994,23 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e60, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e60, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralInfinityExpression}$
@@ -1395,10 +2020,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Infinity}{\_e56}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Infinity}{\_e60}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e56, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e60, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1412,6 +2037,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{ListNoItem}
 
 \subsubsection*{Query specification}
@@ -1431,17 +2057,23 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{ListWithItem}
 
 \subsubsection*{Query specification}
@@ -1460,43 +2092,53 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{l}{first}{}{\_e58}{\_e59}{1}{1} \Big(\getvertices{l}{List}\Big) \join \expandout{l}{last}{}{\_e60}{last}{1}{1} \Big(\getvertices{l}{List}\Big) \join \expandout{l}{lE}{End}{\_e61}{\_end}{1}{1} \Big(\getvertices{l}{List}\Big) \join \expandout{last}{lastE}{End}{\_e62}{\_end}{1}{1} \Big(\getvertices{last}{}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{l}{first}{}{\_e62}{\_e63}{1}{1} \Big(\getvertices{l}{List}
+\Big)
+ \join \expandout{l}{last}{}{\_e64}{last}{1}{1} \Big(\getvertices{l}{List}
+\Big)
+ \join \expandout{l}{lE}{End}{\_e65}{\_end}{1}{1} \Big(\getvertices{l}{List}
+\Big)
+ \join \expandout{last}{lastE}{End}{\_e66}{\_end}{1}{1} \Big(\getvertices{last}{}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE, \_e66, lastE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE, \_e66, lastE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last} \rangle$
 			}
 [
-	{$\expandout{l}{first}{}{\_e58}{\_e59}{1}{1}$
+	{$\expandout{l}{first}{}{\_e62}{\_e63}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first} \rangle$
 			}
 [
 	{$\getvertices{l}{List}$
@@ -1507,25 +2149,10 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ]
 [
-	{$\expandout{l}{last}{}{\_e60}{last}{1}{1}$
+	{$\expandout{l}{last}{}{\_e64}{last}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e60, last} \rangle$
-			}
-[
-	{$\getvertices{l}{List}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{l} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-[
-	{$\expandout{l}{lE}{End}{\_e61}{\_end}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{l, \_e61, lE} \rangle$
+			$\color{gray} \langle \var{l, \_e64, last} \rangle$
 			}
 [
 	{$\getvertices{l}{List}$
@@ -1537,10 +2164,25 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ]
 [
-	{$\expandout{last}{lastE}{End}{\_e62}{\_end}{1}{1}$
+	{$\expandout{l}{lE}{End}{\_e65}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{last, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e65, lE} \rangle$
+			}
+[
+	{$\getvertices{l}{List}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{l} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{last}{lastE}{End}{\_e66}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{last, \_e66, lastE} \rangle$
 			}
 [
 	{$\getvertices{last}{}$
@@ -1554,39 +2196,41 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE, \_e66, lastE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE, \_e66, lastE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last, \_e61, lE} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last, \_e65, lE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first, \_e60, last} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first, \_e64, last} \rangle$
 			}
 [
-	{$\expandout{l}{first}{}{\_e58}{\_e59}{1}{1}$
+	{$\expandout{l}{first}{}{\_e62}{\_e63}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e58, first} \rangle$
+			$\color{gray} \langle \var{l, \_e62, first} \rangle$
 			}
 [
 	{$\getvertices{l}{List}$
@@ -1597,25 +2241,10 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ]
 [
-	{$\expandout{l}{last}{}{\_e60}{last}{1}{1}$
+	{$\expandout{l}{last}{}{\_e64}{last}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{l, \_e60, last} \rangle$
-			}
-[
-	{$\getvertices{l}{List}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{l} \rangle$
-			},tier=input,for tree={blue,densely dashed}
-]
-]
-]
-[
-	{$\expandout{l}{lE}{End}{\_e61}{\_end}{1}{1}$
-			\\
-			\footnotesize
-			$\color{gray} \langle \var{l, \_e61, lE} \rangle$
+			$\color{gray} \langle \var{l, \_e64, last} \rangle$
 			}
 [
 	{$\getvertices{l}{List}$
@@ -1627,10 +2256,25 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ]
 [
-	{$\expandout{last}{lastE}{End}{\_e62}{\_end}{1}{1}$
+	{$\expandout{l}{lE}{End}{\_e65}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{last, \_e62, lastE} \rangle$
+			$\color{gray} \langle \var{l, \_e65, lE} \rangle$
+			}
+[
+	{$\getvertices{l}{List}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{l} \rangle$
+			},tier=input,for tree={blue,densely dashed}
+]
+]
+]
+[
+	{$\expandout{last}{lastE}{End}{\_e66}{\_end}{1}{1}$
+			\\
+			\footnotesize
+			$\color{gray} \langle \var{last, \_e66, lastE} \rangle$
 			}
 [
 	{$\getvertices{last}{}$
@@ -1644,6 +2288,7 @@ MERGE (lastE) -[:`_normal`]-> (lE)
 ]
 ;
 \end{forest}
+}
 \subsection{LiteralX}
 
 \subsubsection*{Query specification}
@@ -1655,25 +2300,29 @@ MERGE (le)    -[:`_normal`]-> (leE)
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{le}{leE}{End}{\_e63}{\_end}{1}{1} \Big(\getvertices{le}{Literal}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{le}{leE}{End}{\_e67}{\_end}{1}{1} \Big(\getvertices{le}{Literal}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{le, \_e63, leE} \rangle$
+			$\color{gray} \langle \var{le, \_e67, leE} \rangle$
 			}
 [
-	{$\expandout{le}{leE}{End}{\_e63}{\_end}{1}{1}$
+	{$\expandout{le}{leE}{End}{\_e67}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{le, \_e63, leE} \rangle$
+			$\color{gray} \langle \var{le, \_e67, leE} \rangle$
 			}
 [
 	{$\getvertices{le}{Literal}$
@@ -1686,21 +2335,23 @@ MERGE (le)    -[:`_normal`]-> (leE)
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{le, \_e63, leE} \rangle$
+			$\color{gray} \langle \var{le, \_e67, leE} \rangle$
 			}
 [
-	{$\expandout{le}{leE}{End}{\_e63}{\_end}{1}{1}$
+	{$\expandout{le}{leE}{End}{\_e67}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{le, \_e63, leE} \rangle$
+			$\color{gray} \langle \var{le, \_e67, leE} \rangle$
 			}
 [
 	{$\getvertices{le}{Literal}$
@@ -1713,6 +2364,7 @@ MERGE (le)    -[:`_normal`]-> (leE)
 ]
 ;
 \end{forest}
+}
 \subsection{LogicalOr}
 
 \subsubsection*{Query specification}
@@ -1735,55 +2387,65 @@ MERGE (exp)-[:`_type`]->(btag)
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \selection{\var{exp.operator} = \literal{''LogicalOr''}} \Big(\alldifferent{} \Big(\expandout{right}{rtag}{Tag}{\_e67}{\_type}{1}{1} \Big(\expandout{exp}{right}{Expression}{\_e66}{right}{1}{1} \Big(\expandin{left}{exp}{BinaryExpression}{\_e65}{left}{1}{1} \Big(\expandin{ltag}{left}{Expression}{\_e64}{\_type}{1}{1} \Big(\getvertices{ltag}{Tag}\Big)\Big)\Big)\Big) \join \expandout{ts}{btag}{Tag \land Boolean}{\_e68}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\selection{\var{exp.operator} = \literal{''LogicalOr''}} \Big(\alldifferent{} \Big(\expandout{right}{rtag}{Tag}{\_e71}{\_type}{1}{1} \Big(\expandout{exp}{right}{Expression}{\_e70}{right}{1}{1} \Big(\expandin{left}{exp}{BinaryExpression}{\_e69}{left}{1}{1} \Big(\expandin{ltag}{left}{Expression}{\_e68}{\_type}{1}{1} \Big(\getvertices{ltag}{Tag}
+\Big)
+\Big)
+\Big)
+\Big)
+ \join \expandout{ts}{btag}{Tag \land Boolean}{\_e72}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\selection{\var{exp.operator} = \literal{''LogicalOr''}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
-	{$\expandout{right}{rtag}{Tag}{\_e67}{\_type}{1}{1}$
+	{$\expandout{right}{rtag}{Tag}{\_e71}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag} \rangle$
 			}
 [
-	{$\expandout{exp}{right}{Expression}{\_e66}{right}{1}{1}$
+	{$\expandout{exp}{right}{Expression}{\_e70}{right}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right} \rangle$
 			}
 [
-	{$\expandin{left}{exp}{BinaryExpression}{\_e65}{left}{1}{1}$
+	{$\expandin{left}{exp}{BinaryExpression}{\_e69}{left}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp} \rangle$
 			}
 [
-	{$\expandin{ltag}{left}{Expression}{\_e64}{\_type}{1}{1}$
+	{$\expandin{ltag}{left}{Expression}{\_e68}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left} \rangle$
 			}
 [
 	{$\getvertices{ltag}{Tag}$
@@ -1797,10 +2459,10 @@ MERGE (exp)-[:`_type`]->(btag)
 ]
 ]
 [
-	{$\expandout{ts}{btag}{Tag \land Boolean}{\_e68}{\_instance}{1}{1}$
+	{$\expandout{ts}{btag}{Tag \land Boolean}{\_e72}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ts, \_e72, btag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1815,51 +2477,53 @@ MERGE (exp)-[:`_type`]->(btag)
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\selection{\var{exp.operator} = \literal{''LogicalOr''}}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag, ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag, ts, \_e72, btag} \rangle$
 			}
 [
-	{$\expandout{right}{rtag}{Tag}{\_e67}{\_type}{1}{1}$
+	{$\expandout{right}{rtag}{Tag}{\_e71}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right, \_e67, rtag} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right, \_e71, rtag} \rangle$
 			}
 [
-	{$\expandout{exp}{right}{Expression}{\_e66}{right}{1}{1}$
+	{$\expandout{exp}{right}{Expression}{\_e70}{right}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp, \_e66, right} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp, \_e70, right} \rangle$
 			}
 [
-	{$\expandin{left}{exp}{BinaryExpression}{\_e65}{left}{1}{1}$
+	{$\expandin{left}{exp}{BinaryExpression}{\_e69}{left}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left, \_e65, exp} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left, \_e69, exp} \rangle$
 			}
 [
-	{$\expandin{ltag}{left}{Expression}{\_e64}{\_type}{1}{1}$
+	{$\expandin{ltag}{left}{Expression}{\_e68}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ltag, \_e64, left} \rangle$
+			$\color{gray} \langle \var{ltag, \_e68, left} \rangle$
 			}
 [
 	{$\getvertices{ltag}{Tag}$
@@ -1873,10 +2537,10 @@ MERGE (exp)-[:`_type`]->(btag)
 ]
 ]
 [
-	{$\expandout{ts}{btag}{Tag \land Boolean}{\_e68}{\_instance}{1}{1}$
+	{$\expandout{ts}{btag}{Tag \land Boolean}{\_e72}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e68, btag} \rangle$
+			$\color{gray} \langle \var{ts, \_e72, btag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1891,6 +2555,7 @@ MERGE (exp)-[:`_type`]->(btag)
 ]
 ;
 \end{forest}
+}
 \subsection{Null}
 
 \subsubsection*{Query specification}
@@ -1906,25 +2571,30 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralNullExpression} \join \expandout{ts}{tag}{Tag \land Null}{\_e69}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralNullExpression}
+ \join \expandout{ts}{tag}{Tag \land Null}{\_e73}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e73, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e73, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralNullExpression}$
@@ -1934,10 +2604,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Null}{\_e69}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Null}{\_e73}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e73, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1951,21 +2621,23 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e73, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e73, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralNullExpression}$
@@ -1975,10 +2647,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Null}{\_e69}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Null}{\_e73}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e69, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e73, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -1992,6 +2664,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{Numeric}
 
 \subsubsection*{Query specification}
@@ -2007,25 +2680,30 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralNumericExpression} \join \expandout{ts}{tag}{Tag \land Number}{\_e70}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralNumericExpression}
+ \join \expandout{ts}{tag}{Tag \land Number}{\_e74}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralNumericExpression}$
@@ -2035,10 +2713,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Number}{\_e70}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Number}{\_e74}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e74, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2052,21 +2730,23 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralNumericExpression}$
@@ -2076,10 +2756,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land Number}{\_e70}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land Number}{\_e74}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e70, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e74, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2093,6 +2773,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{Read}
 
 \subsubsection*{Query specification}
@@ -2108,37 +2789,44 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{r}{ide}{IdentifierExpression}{\_e72}{node}{1}{1} \Big(\expandout{v}{r}{Reference}{\_e71}{references}{1}{1} \Big(\getvertices{v}{Variable}\Big)\Big) \join \expandout{v}{tag}{Tag}{\_e73}{\_type}{1}{1} \Big(\getvertices{v}{Variable}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{r}{ide}{IdentifierExpression}{\_e76}{node}{1}{1} \Big(\expandout{v}{r}{Reference}{\_e75}{references}{1}{1} \Big(\getvertices{v}{Variable}
+\Big)
+\Big)
+ \join \expandout{v}{tag}{Tag}{\_e77}{\_type}{1}{1} \Big(\getvertices{v}{Variable}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide, \_e77, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide, \_e77, tag} \rangle$
 			}
 [
-	{$\expandout{r}{ide}{IdentifierExpression}{\_e72}{node}{1}{1}$
+	{$\expandout{r}{ide}{IdentifierExpression}{\_e76}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide} \rangle$
 			}
 [
-	{$\expandout{v}{r}{Reference}{\_e71}{references}{1}{1}$
+	{$\expandout{v}{r}{Reference}{\_e75}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2150,10 +2838,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{v}{tag}{Tag}{\_e73}{\_type}{1}{1}$
+	{$\expandout{v}{tag}{Tag}{\_e77}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e77, tag} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2167,33 +2855,35 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide, \_e77, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide, \_e77, tag} \rangle$
 			}
 [
-	{$\expandout{r}{ide}{IdentifierExpression}{\_e72}{node}{1}{1}$
+	{$\expandout{r}{ide}{IdentifierExpression}{\_e76}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r, \_e72, ide} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r, \_e76, ide} \rangle$
 			}
 [
-	{$\expandout{v}{r}{Reference}{\_e71}{references}{1}{1}$
+	{$\expandout{v}{r}{Reference}{\_e75}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e71, r} \rangle$
+			$\color{gray} \langle \var{v, \_e75, r} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2205,10 +2895,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{v}{tag}{Tag}{\_e73}{\_type}{1}{1}$
+	{$\expandout{v}{tag}{Tag}{\_e77}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e73, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e77, tag} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2222,6 +2912,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{RegExp}
 
 \subsubsection*{Query specification}
@@ -2237,25 +2928,30 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralRegExpExpression} \join \expandout{ts}{tag}{Tag \land RegExp}{\_e74}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralRegExpExpression}
+ \join \expandout{ts}{tag}{Tag \land RegExp}{\_e78}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e78, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e78, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralRegExpExpression}$
@@ -2265,10 +2961,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land RegExp}{\_e74}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land RegExp}{\_e78}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e78, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2282,21 +2978,23 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e78, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e78, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralRegExpExpression}$
@@ -2306,10 +3004,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land RegExp}{\_e74}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land RegExp}{\_e78}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e74, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e78, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2323,6 +3021,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{String}
 
 \subsubsection*{Query specification}
@@ -2338,25 +3037,30 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{lit}{LiteralStringExpression} \join \expandout{ts}{tag}{Tag \land String}{\_e75}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{lit}{LiteralStringExpression}
+ \join \expandout{ts}{tag}{Tag \land String}{\_e79}{\_instance}{1}{1} \Big(\getvertices{ts}{TypeSystem}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e79, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e79, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralStringExpression}$
@@ -2366,10 +3070,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land String}{\_e75}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land String}{\_e79}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e79, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2383,21 +3087,23 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e79, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{lit, ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{lit, ts, \_e79, tag} \rangle$
 			}
 [
 	{$\getvertices{lit}{LiteralStringExpression}$
@@ -2407,10 +3113,10 @@ MERGE
 			},tier=input,for tree={blue,densely dashed}
 ]
 [
-	{$\expandout{ts}{tag}{Tag \land String}{\_e75}{\_instance}{1}{1}$
+	{$\expandout{ts}{tag}{Tag \land String}{\_e79}{\_instance}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{ts, \_e75, tag} \rangle$
+			$\color{gray} \langle \var{ts, \_e79, tag} \rangle$
 			}
 [
 	{$\getvertices{ts}{TypeSystem}$
@@ -2424,6 +3130,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{TypeSystem}
 
 \subsubsection*{Query specification}
@@ -2460,17 +3167,23 @@ MERGE (ts)-[:`_instance`]->(:Tag:`Infinity`)
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{VariableDeclarationStatement}
 
 \subsubsection*{Query specification}
@@ -2494,55 +3207,67 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{vdor}{exp}{Expression}{\_e78}{init}{1}{1} \Big(\expandout{vdion}{vdor}{VariableDeclarator}{\_e77}{declarators}{1}{1} \Big(\expandout{vds}{vdion}{VariableDeclaration}{\_e76}{declaration}{1}{1} \Big(\getvertices{vds}{VariableDeclarationStatement}\Big)\Big)\Big) \join \expandout{vds}{vdsE}{End}{\_e79}{\_end}{1}{1} \Big(\getvertices{vds}{VariableDeclarationStatement}\Big) \join \expandout{vdion}{vdionE}{End}{\_e80}{\_end}{1}{1} \Big(\getvertices{vdion}{VariableDeclaration}\Big) \join \expandout{exp}{expE}{End}{\_e81}{\_end}{1}{1} \Big(\getvertices{exp}{Expression}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{vdor}{exp}{Expression}{\_e82}{init}{1}{1} \Big(\expandout{vdion}{vdor}{VariableDeclarator}{\_e81}{declarators}{1}{1} \Big(\expandout{vds}{vdion}{VariableDeclaration}{\_e80}{declaration}{1}{1} \Big(\getvertices{vds}{VariableDeclarationStatement}
+\Big)
+\Big)
+\Big)
+ \join \expandout{vds}{vdsE}{End}{\_e83}{\_end}{1}{1} \Big(\getvertices{vds}{VariableDeclarationStatement}
+\Big)
+ \join \expandout{vdion}{vdionE}{End}{\_e84}{\_end}{1}{1} \Big(\getvertices{vdion}{VariableDeclaration}
+\Big)
+ \join \expandout{exp}{expE}{End}{\_e85}{\_end}{1}{1} \Big(\getvertices{exp}{Expression}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE, \_e85, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE, \_e85, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE} \rangle$
 			}
 [
-	{$\expandout{vdor}{exp}{Expression}{\_e78}{init}{1}{1}$
+	{$\expandout{vdor}{exp}{Expression}{\_e82}{init}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp} \rangle$
 			}
 [
-	{$\expandout{vdion}{vdor}{VariableDeclarator}{\_e77}{declarators}{1}{1}$
+	{$\expandout{vdion}{vdor}{VariableDeclarator}{\_e81}{declarators}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor} \rangle$
 			}
 [
-	{$\expandout{vds}{vdion}{VariableDeclaration}{\_e76}{declaration}{1}{1}$
+	{$\expandout{vds}{vdion}{VariableDeclaration}{\_e80}{declaration}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion} \rangle$
 			}
 [
 	{$\getvertices{vds}{VariableDeclarationStatement}$
@@ -2555,10 +3280,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{vds}{vdsE}{End}{\_e79}{\_end}{1}{1}$
+	{$\expandout{vds}{vdsE}{End}{\_e83}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e79, vdsE} \rangle$
+			$\color{gray} \langle \var{vds, \_e83, vdsE} \rangle$
 			}
 [
 	{$\getvertices{vds}{VariableDeclarationStatement}$
@@ -2570,10 +3295,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{vdion}{vdionE}{End}{\_e80}{\_end}{1}{1}$
+	{$\expandout{vdion}{vdionE}{End}{\_e84}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vdion, \_e80, vdionE} \rangle$
+			$\color{gray} \langle \var{vdion, \_e84, vdionE} \rangle$
 			}
 [
 	{$\getvertices{vdion}{VariableDeclaration}$
@@ -2585,10 +3310,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{expE}{End}{\_e81}{\_end}{1}{1}$
+	{$\expandout{exp}{expE}{End}{\_e85}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{exp, \_e85, expE} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -2602,51 +3327,53 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE, \_e85, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE, \_e85, expE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE, \_e80, vdionE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE, \_e84, vdionE} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp, \_e79, vdsE} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp, \_e83, vdsE} \rangle$
 			}
 [
-	{$\expandout{vdor}{exp}{Expression}{\_e78}{init}{1}{1}$
+	{$\expandout{vdor}{exp}{Expression}{\_e82}{init}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor, \_e78, exp} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor, \_e82, exp} \rangle$
 			}
 [
-	{$\expandout{vdion}{vdor}{VariableDeclarator}{\_e77}{declarators}{1}{1}$
+	{$\expandout{vdion}{vdor}{VariableDeclarator}{\_e81}{declarators}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion, \_e77, vdor} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion, \_e81, vdor} \rangle$
 			}
 [
-	{$\expandout{vds}{vdion}{VariableDeclaration}{\_e76}{declaration}{1}{1}$
+	{$\expandout{vds}{vdion}{VariableDeclaration}{\_e80}{declaration}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e76, vdion} \rangle$
+			$\color{gray} \langle \var{vds, \_e80, vdion} \rangle$
 			}
 [
 	{$\getvertices{vds}{VariableDeclarationStatement}$
@@ -2659,10 +3386,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{vds}{vdsE}{End}{\_e79}{\_end}{1}{1}$
+	{$\expandout{vds}{vdsE}{End}{\_e83}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vds, \_e79, vdsE} \rangle$
+			$\color{gray} \langle \var{vds, \_e83, vdsE} \rangle$
 			}
 [
 	{$\getvertices{vds}{VariableDeclarationStatement}$
@@ -2674,10 +3401,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{vdion}{vdionE}{End}{\_e80}{\_end}{1}{1}$
+	{$\expandout{vdion}{vdionE}{End}{\_e84}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{vdion, \_e80, vdionE} \rangle$
+			$\color{gray} \langle \var{vdion, \_e84, vdionE} \rangle$
 			}
 [
 	{$\getvertices{vdion}{VariableDeclaration}$
@@ -2689,10 +3416,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{expE}{End}{\_e81}{\_end}{1}{1}$
+	{$\expandout{exp}{expE}{End}{\_e85}{\_end}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e81, expE} \rangle$
+			$\color{gray} \langle \var{exp, \_e85, expE} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -2706,6 +3433,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{VariableDeclarator}
 
 \subsubsection*{Query specification}
@@ -2724,37 +3452,44 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{vd}{exp}{Expression}{\_e83}{init}{1}{1} \Big(\expandin{bi}{vd}{VariableDeclarator}{\_e82}{binding}{1}{1} \Big(\getvertices{bi}{BindingIdentifier}\Big)\Big) \join \expandout{exp}{tag}{Tag}{\_e84}{\_type}{1}{1} \Big(\getvertices{exp}{Expression}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{vd}{exp}{Expression}{\_e87}{init}{1}{1} \Big(\expandin{bi}{vd}{VariableDeclarator}{\_e86}{binding}{1}{1} \Big(\getvertices{bi}{BindingIdentifier}
+\Big)
+\Big)
+ \join \expandout{exp}{tag}{Tag}{\_e88}{\_type}{1}{1} \Big(\getvertices{exp}{Expression}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp, \_e88, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp, \_e88, tag} \rangle$
 			}
 [
-	{$\expandout{vd}{exp}{Expression}{\_e83}{init}{1}{1}$
+	{$\expandout{vd}{exp}{Expression}{\_e87}{init}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp} \rangle$
 			}
 [
-	{$\expandin{bi}{vd}{VariableDeclarator}{\_e82}{binding}{1}{1}$
+	{$\expandin{bi}{vd}{VariableDeclarator}{\_e86}{binding}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd} \rangle$
 			}
 [
 	{$\getvertices{bi}{BindingIdentifier}$
@@ -2766,10 +3501,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{tag}{Tag}{\_e84}{\_type}{1}{1}$
+	{$\expandout{exp}{tag}{Tag}{\_e88}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{exp, \_e88, tag} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -2783,33 +3518,35 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp, \_e88, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp, \_e88, tag} \rangle$
 			}
 [
-	{$\expandout{vd}{exp}{Expression}{\_e83}{init}{1}{1}$
+	{$\expandout{vd}{exp}{Expression}{\_e87}{init}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd, \_e83, exp} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd, \_e87, exp} \rangle$
 			}
 [
-	{$\expandin{bi}{vd}{VariableDeclarator}{\_e82}{binding}{1}{1}$
+	{$\expandin{bi}{vd}{VariableDeclarator}{\_e86}{binding}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bi, \_e82, vd} \rangle$
+			$\color{gray} \langle \var{bi, \_e86, vd} \rangle$
 			}
 [
 	{$\getvertices{bi}{BindingIdentifier}$
@@ -2821,10 +3558,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{exp}{tag}{Tag}{\_e84}{\_type}{1}{1}$
+	{$\expandout{exp}{tag}{Tag}{\_e88}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{exp, \_e84, tag} \rangle$
+			$\color{gray} \langle \var{exp, \_e88, tag} \rangle$
 			}
 [
 	{$\getvertices{exp}{Expression}$
@@ -2838,6 +3575,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{Write}
 
 \subsubsection*{Query specification}
@@ -2853,37 +3591,44 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\expandout{r}{bid}{BindingIdentifier}{\_e86}{node}{1}{1} \Big(\expandout{v}{r}{Reference}{\_e85}{references}{1}{1} \Big(\getvertices{v}{Variable}\Big)\Big) \join \expandout{bid}{tag}{Tag}{\_e87}{\_type}{1}{1} \Big(\getvertices{bid}{BindingIdentifier}\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\expandout{r}{bid}{BindingIdentifier}{\_e90}{node}{1}{1} \Big(\expandout{v}{r}{Reference}{\_e89}{references}{1}{1} \Big(\getvertices{v}{Variable}
+\Big)
+\Big)
+ \join \expandout{bid}{tag}{Tag}{\_e91}{\_type}{1}{1} \Big(\getvertices{bid}{BindingIdentifier}
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid, \_e91, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid, \_e91, tag} \rangle$
 			}
 [
-	{$\expandout{r}{bid}{BindingIdentifier}{\_e86}{node}{1}{1}$
+	{$\expandout{r}{bid}{BindingIdentifier}{\_e90}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid} \rangle$
 			}
 [
-	{$\expandout{v}{r}{Reference}{\_e85}{references}{1}{1}$
+	{$\expandout{v}{r}{Reference}{\_e89}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2895,10 +3640,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{bid}{tag}{Tag}{\_e87}{\_type}{1}{1}$
+	{$\expandout{bid}{tag}{Tag}{\_e91}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{bid, \_e91, tag} \rangle$
 			}
 [
 	{$\getvertices{bid}{BindingIdentifier}$
@@ -2912,33 +3657,35 @@ MERGE
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid, \_e91, tag} \rangle$
 			}
 [
 	{$\join$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid, \_e91, tag} \rangle$
 			}
 [
-	{$\expandout{r}{bid}{BindingIdentifier}{\_e86}{node}{1}{1}$
+	{$\expandout{r}{bid}{BindingIdentifier}{\_e90}{node}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r, \_e86, bid} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r, \_e90, bid} \rangle$
 			}
 [
-	{$\expandout{v}{r}{Reference}{\_e85}{references}{1}{1}$
+	{$\expandout{v}{r}{Reference}{\_e89}{references}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{v, \_e85, r} \rangle$
+			$\color{gray} \langle \var{v, \_e89, r} \rangle$
 			}
 [
 	{$\getvertices{v}{Variable}$
@@ -2950,10 +3697,10 @@ MERGE
 ]
 ]
 [
-	{$\expandout{bid}{tag}{Tag}{\_e87}{\_type}{1}{1}$
+	{$\expandout{bid}{tag}{Tag}{\_e91}{\_type}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{bid, \_e87, tag} \rangle$
+			$\color{gray} \langle \var{bid, \_e91, tag} \rangle$
 			}
 [
 	{$\getvertices{bid}{BindingIdentifier}$
@@ -2967,6 +3714,7 @@ MERGE
 ]
 ;
 \end{forest}
+}
 \subsection{generatecalls}
 
 \subsubsection*{Query specification}
@@ -2991,17 +3739,23 @@ MERGE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{getlastcommithash}
 
 \subsubsection*{Query specification}
@@ -3013,13 +3767,18 @@ RETURN c.hash as commitHash
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \projection{\var{c.hash}\assign \var{commitHash}} \Big(\alldifferent{} \Big(\expandout{\_e99}{c}{Commit}{\_e100}{lastCommit}{1}{1} \Big(\getvertices{\_e99}{MetaInfo}\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\projection{\var{c.hash}\assign \var{commitHash}} \Big(\alldifferent{} \Big(\expandout{\_e103}{c}{Commit}{\_e104}{lastCommit}{1}{1} \Big(\getvertices{\_e103}{MetaInfo}
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{c.hash}\assign \var{commitHash}}$
@@ -3031,19 +3790,19 @@ RETURN c.hash as commitHash
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99, \_e100, c} \rangle$
+			$\color{gray} \langle \var{\_e103, \_e104, c} \rangle$
 			}
 [
-	{$\expandout{\_e99}{c}{Commit}{\_e100}{lastCommit}{1}{1}$
+	{$\expandout{\_e103}{c}{Commit}{\_e104}{lastCommit}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99, \_e100, c} \rangle$
+			$\color{gray} \langle \var{\_e103, \_e104, c} \rangle$
 			}
 [
-	{$\getvertices{\_e99}{MetaInfo}$
+	{$\getvertices{\_e103}{MetaInfo}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99} \rangle$
+			$\color{gray} \langle \var{\_e103} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -3051,9 +3810,11 @@ RETURN c.hash as commitHash
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\projection{\var{c.hash}\assign \var{commitHash}}$
@@ -3065,19 +3826,19 @@ RETURN c.hash as commitHash
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99, \_e100, c} \rangle$
+			$\color{gray} \langle \var{\_e103, \_e104, c} \rangle$
 			}
 [
-	{$\expandout{\_e99}{c}{Commit}{\_e100}{lastCommit}{1}{1}$
+	{$\expandout{\_e103}{c}{Commit}{\_e104}{lastCommit}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99, \_e100, c} \rangle$
+			$\color{gray} \langle \var{\_e103, \_e104, c} \rangle$
 			}
 [
-	{$\getvertices{\_e99}{MetaInfo}$
+	{$\getvertices{\_e103}{MetaInfo}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{\_e99} \rangle$
+			$\color{gray} \langle \var{\_e103} \rangle$
 			},tier=input,for tree={blue,densely dashed}
 ]
 ]
@@ -3085,6 +3846,7 @@ RETURN c.hash as commitHash
 ]
 ;
 \end{forest}
+}
 \subsection{removefile}
 
 \subsubsection*{Query specification}
@@ -3107,17 +3869,23 @@ DETACH DELETE
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{setcommithash}
 
 \subsubsection*{Query specification}
@@ -3129,17 +3897,23 @@ SET c.hash = {commithash}
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{typing}
 
 \subsubsection*{Query specification}
@@ -3295,13 +4069,16 @@ SET
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \alldifferent{} \Big(\getvertices{exp}{LiteralNumericExpression}\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\alldifferent{} \Big(\getvertices{exp}{LiteralNumericExpression}
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -3319,9 +4096,11 @@ SET
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\alldifferent{}$
@@ -3339,6 +4118,7 @@ SET
 ]
 ;
 \end{forest}
+}
 \subsection{unusedfunctions}
 
 \subsubsection*{Query specification}
@@ -3374,14 +4154,20 @@ RETURN DISTINCT
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}

@@ -44,17 +44,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-4}
 
 \subsubsection*{Query specification}
@@ -79,17 +85,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-5}
 
 \subsubsection*{Query specification}
@@ -113,17 +125,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-6}
 
 \subsubsection*{Query specification}
@@ -150,17 +168,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-7}
 
 \subsubsection*{Query specification}
@@ -190,17 +214,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-8}
 
 \subsubsection*{Query specification}
@@ -223,13 +253,22 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \topp{10}{} \Big(\sort{\desc \var{commentCreationDate}, \asc \var{commentId}} \Big(\projection{\var{person.id}\assign \var{personId},~\var{person.firstName}\assign \var{personFirstName},~\var{person.lastName}\assign \var{personLastName},~\var{comment.id}\assign \var{commentId},~\var{comment.creationDate}\assign \var{commentCreationDate},~\var{comment.content}\assign \var{commentContent}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1} \Big(\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1} \Big(\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1} \Big(\getvertices{start}{Person}\Big)\Big)\Big)\Big)\Big)\Big)\Big)
- &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\topp{10}{} \Big(\sort{\desc \var{commentCreationDate}, \asc \var{commentId}} \Big(\projection{\var{person.id}\assign \var{personId},~\var{person.firstName}\assign \var{personFirstName},~\var{person.lastName}\assign \var{personLastName},~\var{comment.id}\assign \var{commentId},~\var{comment.creationDate}\assign \var{commentCreationDate},~\var{comment.content}\assign \var{commentContent}} \Big(\alldifferent{} \Big(\expandout{comment}{person}{Person}{\_e135}{HAS\_CREATOR}{1}{1} \Big(\expandin{\_e132}{comment}{Comment}{\_e134}{REPLY\_OF}{1}{1} \Big(\expandin{start}{\_e132}{}{\_e133}{HAS\_CREATOR}{1}{1} \Big(\getvertices{start}{Person}
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\Big)
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -253,25 +292,25 @@ LIMIT 10
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment, \_e135, person} \rangle$
 			}
 [
-	{$\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1}$
+	{$\expandout{comment}{person}{Person}{\_e135}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment, \_e135, person} \rangle$
 			}
 [
-	{$\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1}$
+	{$\expandin{\_e132}{comment}{Comment}{\_e134}{REPLY\_OF}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment} \rangle$
 			}
 [
-	{$\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1}$
+	{$\expandin{start}{\_e132}{}{\_e133}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132} \rangle$
 			}
 [
 	{$\getvertices{start}{Person}$
@@ -289,9 +328,11 @@ LIMIT 10
 ]
 ;
 \end{forest}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 \begin{forest} for tree={align=center}
 [
 	{$\topp{10}{}$
@@ -315,25 +356,25 @@ LIMIT 10
 	{$\alldifferent{}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment, \_e135, person} \rangle$
 			}
 [
-	{$\expandout{comment}{person}{Person}{\_e117}{HAS\_CREATOR}{1}{1}$
+	{$\expandout{comment}{person}{Person}{\_e135}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment, \_e117, person} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment, \_e135, person} \rangle$
 			}
 [
-	{$\expandin{\_e114}{comment}{Comment}{\_e116}{REPLY\_OF}{1}{1}$
+	{$\expandin{\_e132}{comment}{Comment}{\_e134}{REPLY\_OF}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114, \_e116, comment} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132, \_e134, comment} \rangle$
 			}
 [
-	{$\expandin{start}{\_e114}{}{\_e115}{HAS\_CREATOR}{1}{1}$
+	{$\expandin{start}{\_e132}{}{\_e133}{HAS\_CREATOR}{1}{1}$
 			\\
 			\footnotesize
-			$\color{gray} \langle \var{start, \_e115, \_e114} \rangle$
+			$\color{gray} \langle \var{start, \_e133, \_e132} \rangle$
 			}
 [
 	{$\getvertices{start}{Person}$
@@ -351,6 +392,7 @@ LIMIT 10
 ]
 ;
 \end{forest}
+}
 \subsection{query-10}
 
 \subsubsection*{Query specification}
@@ -389,17 +431,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-11}
 
 \subsubsection*{Query specification}
@@ -426,17 +474,23 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
 \subsection{query-12}
 
 \subsubsection*{Query specification}
@@ -462,14 +516,20 @@ LIMIT 10
 
 \subsubsection*{Relational algebra expression}
 
-\begin{flalign*}
-& \text{Cannot convert to expression.} &
-\end{flalign*}
+\begin{align*}
+\begin{autobreak}
+\text{Cannot convert to expression.}
+\end{autobreak}
+\end{align*}
 
 \subsubsection*{Relational algebra tree}
 
+\adjustbox{max width=\textwidth}{%
 \text{Cannot visualize tree.}
+}
 
 \subsubsection*{Relational algebra tree for incremental queries}
 
+\adjustbox{max width=\textwidth}{%
 Cannot visualize incremental tree.
+}
