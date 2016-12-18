@@ -130,4 +130,53 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
     }
   }
 
+  "A TransitiveClosureNode" must {
+    "discard paths with same edge twice" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(1, 100, 2), tuple(2, 101, 3)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 2, Path(100)), tuple(1, 3, Path(100, 101)), tuple(2, 3, Path(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(3, 102, 1)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(2, 2, Path(101, 102, 100)), tuple(2, 1, Path(101, 102)), tuple(1, 1, Path(100, 101, 102)), tuple(3, 2, Path(102, 100)), tuple(3, 3, Path(102, 100, 101)), tuple(3, 1, Path(102)))
+      ))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(2, 103, 4)))
+      expectMsg(ChangeSet(
+        positive = Vector(Vector(2, 4, Path(101, 102, 100, 103)), Vector(1, 4, Path(100, 103)), Vector(3, 4, Path(102, 100, 103)), Vector(2, 4, Path(103)))
+      ))
+    }
+  }
+
+  "A TransitiveClosureNode" must {
+    "include paths going through same vertex more times" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureNode(echoActor ! _, src, trg, edge)))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(1, 100, 2), tuple(2, 101, 1)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 2, Path(100)), tuple(1, 1, Path(100, 101)), tuple(2, 2, Path(101, 100)), tuple(2, 1, Path(101)))
+      ))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(2, 102, 1)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 1, Path(100, 102)), tuple(2, 1, Path(101, 100, 102)), tuple(2, 2, Path(102, 100)), tuple(2, 1, Path(102, 100, 101)), tuple(2, 1, Path(102)))
+      ))
+
+      transitiveClosure ! ChangeSet(positive = Vector(tuple(2, 103, 3)))
+      expectMsg(ChangeSet(
+        positive = Vector(tuple(1, 3, Path(100, 103)), tuple(2, 3, Path(102, 100, 103)), tuple(2, 3, Path(101, 100, 103)), tuple(2, 3, Path(103)))
+      ))
+
+      transitiveClosure ! ChangeSet(negative = Vector(tuple(2, 101, 1)))
+      expectMsg(ChangeSet(
+        negative = Vector(tuple(1, 1, Path(100, 101)), tuple(2, 2, Path(101, 100)), tuple(2, 1, Path(101)), tuple(2, 1, Path(101, 100, 102)), tuple(2, 1, Path(102, 100, 101)), tuple(2, 3, Path(101, 100, 103)))
+      ))
+    }
+  }
+
 }
