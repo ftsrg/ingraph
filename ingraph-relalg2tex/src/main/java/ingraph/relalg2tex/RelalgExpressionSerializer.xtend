@@ -25,17 +25,22 @@ class RelalgExpressionSerializer extends AbstractRelalgSerializer {
 
 	/**
 	 * children
+	 * we add newlines intentionally to allow the autobreak package
+	 * to break the expressions to multiple lines
 	 */
 	def dispatch CharSequence children(NullaryOperator op) {
-		'''«op.operator»'''
+		'''«op.operator»
+		'''
 	}
 	
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operator» \Big(«op.input.children»\Big)'''
+		'''«op.operator» \Big(«op.input.children»\Big)
+		'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.leftInput.children» «op.operator» «op.rightInput.children»'''
+		'''«op.leftInput.children» «op.operator» «op.rightInput.children»
+		'''
 	}
 
 }

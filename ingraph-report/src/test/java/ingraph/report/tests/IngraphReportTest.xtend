@@ -115,17 +115,23 @@ class IngraphReportTest {
 
         \subsubsection*{Relational algebra expression}
 
-        \begin{flalign*}
-        & «container.expression» &
-        \end{flalign*}
+        \begin{align*}
+        \begin{autobreak}
+        «container.expression»
+        \end{autobreak}
+        \end{align*}
 
         \subsubsection*{Relational algebra tree}
 
+        \adjustbox{max width=\textwidth}{%
         «container.visualize»
+        }
 
         \subsubsection*{Relational algebra tree for incremental queries}
 
+        \adjustbox{max width=\textwidth}{%
         «container.visualizeWithTransformations»
+        }
         '''
     }
 

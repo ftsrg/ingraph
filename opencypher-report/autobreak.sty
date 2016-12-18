@@ -1,0 +1,264 @@
+%%
+%% This is file `autobreak.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% autobreak.dtx  (with options: `package')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2016 by Takahiro Ueda <tueda@nikhef.nl>
+%% 
+%% This file may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.3 of this license
+%% or (at your option) any later version. The latest version of this
+%% license is in:
+%% 
+%%   http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%% 
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{autobreak}%
+  [2016/07/03 v0.2 simple line breaking of long formulae]
+\newtoks\everybeforeautobreak
+\newtoks\everyafterautobreak
+\newtoks\@autobreak@alltoks
+\newtoks\@autobreak@linetoks
+\newdimen\@autobreak@lhswidth
+\newdimen\@autobreak@rhswidth
+\newdimen\@autobreak@maxlhswidth
+\newdimen\@autobreak@realmaxlhswidth
+\newdimen\@autobreak@maxrhswidth
+\begingroup
+  \catcode`\^^M=\active
+  \gdef\@autobreak@newlinechar{^^M}
+\endgroup
+\newif\if@autobreak@invalidlayout
+\@autobreak@invalidlayoutfalse
+\AtEndDocument{%
+  \if@autobreak@invalidlayout
+    \if@filesw
+      \PackageWarningNoLine{autobreak}{Layout may have changed.
+        \MessageBreak Rerun to get layout correct}%
+    \else
+      \PackageWarningNoLine{autobreak}{Layout may be wrong}%
+    \fi
+  \fi
+}
+\def\@autobreak@getmaxlhswidth#1{%
+  \@ifundefined{@autobreak@w@#1}{%
+    \z@
+  }{%
+    \@nameuse{@autobreak@w@#1}%
+  }%
+}
+\def\@autobreak@setmaxlhswidth#1#2{%
+  \global\@namedef{@autobreak@w@#1}{#2}%
+}
+\newcounter{@autobreak@eqnindex}
+  \newcounter{@autobreak@subeqnindex}[@autobreak@eqnindex]%
+\def\@autobreak@loadmaxlhswidth{%
+  \stepcounter{@autobreak@eqnindex}%
+  \@autobreak@maxlhswidth=%
+    \@autobreak@getmaxlhswidth{\arabic{@autobreak@eqnindex}}%
+  \@autobreak@realmaxlhswidth=\z@
+}
+\def\@autobreak@savemaxlhswidth{%
+  \ifnum\arabic{@autobreak@subeqnindex}>0
+    \ifdim\@autobreak@maxlhswidth=\@autobreak@realmaxlhswidth
+    \else
+      \global\@autobreak@invalidlayouttrue
+    \fi
+    \ifnum\arabic{@autobreak@subeqnindex}>1
+      \if@filesw
+        \@ifundefined{@autobreak@auxinited}{%
+          \immediate\write\@mainaux{%
+            \string\providecommand
+              \string\@autobreak@setmaxlhswidth[2]{}%
+          }%
+          \gdef\@autobreak@auxinited{}%
+        }{}%
+        \immediate\write\@auxout{%
+          \string\@autobreak@setmaxlhswidth%
+            {\arabic{@autobreak@eqnindex}}%
+            {\the\@autobreak@realmaxlhswidth}%
+        }%
+      \fi
+    \fi
+  \fi
+}
+\RequirePackage{amsmath}
+\newif\if@autobreak@newlinedef
+\@autobreak@newlinedeffalse
+\begingroup
+  \catcode`\^^M=\active
+  \gdef\@autobreak@newlinedef{%
+    \def^^M{ }%
+    \@autobreak@newlinedeftrue
+  }
+\endgroup
+\def\collect@body#1{%
+  \@envbody={\expandafter#1\expandafter{\the\@envbody}}%
+  \edef\process@envbody{%
+    \the\@envbody\noexpand\end{\@currenvir}%
+  }%
+  \@envbody=\@emptytoks
+  \def\begin@stack{b}%
+  \begingroup
+    \if@autobreak@newlinedef
+      \catcode`\^^M=\active
+    \fi
+    \expandafter\let\csname\@currenvir\endcsname=\collect@@body
+    \edef\process@envbody{%
+      \expandafter\noexpand\csname\@currenvir\endcsname
+    }%
+    \process@envbody
+}
+\let\@autobreak@oldstart@align=\start@align
+\def\start@align{%
+  \@autobreak@loadmaxlhswidth
+  \@autobreak@newlinedef
+  \@autobreak@oldstart@align
+}
+\let\@autobreak@oldendalign=\endalign
+\def\endalign{%
+  \@autobreak@savemaxlhswidth
+  \@autobreak@oldendalign
+}
+\newenvironment{autobreak}{%
+  \if@autobreak@newlinedef
+  \else
+    \PackageError{autobreak}{%
+      autobreak is not allowed here
+    }{%
+      Use autobreak inside align.
+    }%
+  \fi
+  \stepcounter{@autobreak@subeqnindex}%
+  \collect@body\@autobreak
+}{}
+\def\@autobreak#1#2#3{%
+  \end{autobreak}%
+  \@autobreak@init
+  \def\@tempa{\expandafter\@autobreak@scanline
+    \@autobreak@newlinechar#1}%
+  \expandafter\@tempa\@autobreak@newlinechar\@autobreak@end
+}
+\def\@autobreak@init{%
+  \@autobreak@alltoks={}%
+  \@autobreak@linetoks={}%
+  \@autobreak@lhswidth=\z@
+}
+\def\@autobreak@end{%
+  \expandafter\@autobreak@addtoks\expandafter\@autobreak@alltoks
+    \expandafter{\the\@autobreak@linetoks}%
+  \the\@autobreak@alltoks
+}
+\begingroup
+  \catcode`\^^M=\active
+  \gdef\@autobreak@scanline#1^^M{\@autobreak@scanline@{#1}}
+\endgroup
+\def\@autobreak@scanline@#1{%
+  \@autobreak@ifnextpunct{%
+    \@autobreak@scanline@gobble{#1}%
+  }{%
+    \@autobreak@scanline@@{#1}%
+  }%
+}
+\def\@autobreak@ifnextpunct#1#2{%
+  \@ifnextchar.{%
+    #1%
+  }{%
+    \@ifnextchar,{%
+      #1%
+    }{%
+      \@ifnextchar;{%
+        #1%
+      }{%
+        \@ifnextchar:{%
+          #1%
+        }{%
+          #2%
+        }%
+      }%
+    }%
+  }%
+}
+\def\@autobreak@scanline@gobble#1#2{%
+  \@autobreak@ifnextpunct{%
+    \@autobreak@scanline@gobble{#1#2}%
+  }{%
+    \@autobreak@scanline@@{#1#2}%
+  }%
+}
+\def\@autobreak@scanline@@#1{%
+  \@autobreak@processline{#1}%
+  \@ifnextchar\@autobreak@end{}{%
+    \@autobreak@scanline@@@
+  }%
+}
+\IfFileExists{catchfile.sty}{
+  \RequirePackage{catchfile}
+  \def\@autobreak@scanline@@@{%
+    \@ifnextchar\input{%
+      \@autobreak@scanline@input
+    }{%
+      \@autobreak@scanline
+    }%
+  }
+}{
+  \def\@autobreak@scanline@@@{%
+    \@ifnextchar\input{%
+      \PackageWarning{autobreak}{%
+        Cannot handle new lines in a file via \protect\input,
+        \MessageBreak which requires the catchfile package
+      }%
+    }%
+    \@autobreak@scanline
+  }
+}
+\def\@autobreak@scanline@input#1#2{%
+  \CatchFileDef\@tempa{#2}{\catcode`\^^M=\active}%
+  \expandafter\@autobreak@scanline\@tempa
+}
+\def\@autobreak@processline#1{%
+  \ifdim\@autobreak@lhswidth=\z@
+    \@autobreak@settowidth\@autobreak@lhswidth{#1{}}%
+    \ifdim\@autobreak@lhswidth>\z@
+      \ifdim\@autobreak@lhswidth>\@autobreak@maxlhswidth
+        \ifdim\@autobreak@maxlhswidth>\z@
+          \global\@autobreak@invalidlayouttrue
+        \fi
+        \global\@autobreak@maxlhswidth=\@autobreak@lhswidth
+      \fi
+      \ifdim\@autobreak@lhswidth>\@autobreak@realmaxlhswidth
+        \global\@autobreak@realmaxlhswidth=\@autobreak@lhswidth
+      \fi
+      \@autobreak@maxrhswidth=\linewidth
+      \advance\@autobreak@maxrhswidth by -\@autobreak@maxlhswidth
+      \@autobreak@alltoks={#1{}&}%
+    \fi
+  \else
+    \@autobreak@settowidth\@autobreak@rhswidth
+      {{}\the\@autobreak@linetoks#1\the\everybeforeautobreak}%
+    \ifdim\@autobreak@rhswidth>\@autobreak@maxrhswidth
+      \edef\@tempa{\the\@autobreak@linetoks\the\everybeforeautobreak}%
+      \expandafter\@autobreak@addtoks\expandafter\@autobreak@alltoks
+        \expandafter{\@tempa\notag\\&}%
+      \@autobreak@linetoks=\everyafterautobreak
+    \fi
+    \@autobreak@addtoks\@autobreak@linetoks{#1}%
+  \fi
+}
+\def\@autobreak@addtoks#1#2{%
+  #1=\expandafter{\the#1#2}%
+}
+\def\@autobreak@settowidth#1#2{%
+  \settowidth#1{$\displaystyle#2$}%
+}
+\endinput
+%%
+%% End of file `autobreak.sty'.
