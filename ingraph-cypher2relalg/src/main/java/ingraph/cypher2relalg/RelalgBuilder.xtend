@@ -7,6 +7,7 @@ import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.IngraphLogger
+import ingraph.cypher2relalg.util.Validator
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -97,13 +98,38 @@ class RelalgBuilder {
     def dispatch Operator buildRelalg(SingleQuery q) {
         val clauses = q.clauses
 
-        val singleQuery_MatchList = clauses.filter(typeof(Match)).map[buildRelalg(it)]
-        val content = buildLeftDeepTree(typeof(JoinOperator), singleQuery_MatchList?.iterator)
+        // do some checks on the MATCH clauses
+        Validator.checkMatchClauseSequence(clauses.filter(typeof(Match)), logger)
+
+        /*
+         * We compile all MATCH clauses and attach to a (left outer) join operator.
+         * The first one will not be used, but its rightOperand will be extracted, though.
+         */
+        val singleQuery_MatchList = clauses.filter(typeof(Match)).map[
+            val mapIt = it
+            val joinOp = if (mapIt.optional) {
+                createLeftOuterJoinOperator
+            } else {
+                createJoinOperator
+            }
+            joinOp => [
+                rightInput = buildRelalg(mapIt)
+            ]
+        ]
+
+        /*
+         * The compiled form of the first MATCH clause is on the rightInput
+         * of the first join operator.
+         *
+         * This join operator is in fact, unnecessary.
+         */
+        val content = chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
 
         val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
 
         if (singleQuery_returnClauseList == null || singleQuery_returnClauseList.empty) {
-            content
+            unsupported('''We received no RETURN clauses but a node retrieval query must end with exactly one. However, node creating queries can skip RETURN clause, but they are not supported yet.''')
+            null
         } else if (singleQuery_returnClauseList.length == 1) {
             singleQuery_returnClauseList.
                 head
