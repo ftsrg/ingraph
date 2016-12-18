@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e # exit with nonzero exit code if anything fails
+
 SLIZAA_COMMIT_ID=664a6df2b8c86344d13956fcd27efadde470371f
 
 cd "$( cd "$( dirname "$0" )" && pwd )/../../"
