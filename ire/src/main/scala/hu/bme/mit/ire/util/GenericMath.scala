@@ -19,7 +19,7 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => a + b
         case b: Long   => a + b
       }
-    case a: Int    =>
+    case a: Int =>
       b match {
         case b: Float  => a + b
         case b: Double => a + b
@@ -51,7 +51,7 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => a - b
         case b: Long   => a - b
       }
-    case a: Int    =>
+    case a: Int =>
       b match {
         case b: Float  => a - b
         case b: Double => a - b
@@ -83,7 +83,7 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => a / b
         case b: Long   => a / b
       }
-    case a: Int    =>
+    case a: Int =>
       b match {
         case b: Float  => a / b
         case b: Double => a / b
@@ -115,7 +115,7 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
-    case a: Int    =>
+    case a: Int =>
       b match {
         case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
