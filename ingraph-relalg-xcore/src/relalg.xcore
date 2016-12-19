@@ -91,7 +91,7 @@ abstract class Operator {
 }
 
 class Cardinality {
-	Double value
+	double value
 }
 
 /* Nullary operators */
@@ -139,11 +139,11 @@ enum MaxHopsType {
 
 class MaxHops {
 	MaxHopsType maxHopsType
-	Integer hops
+	int hops
 }
 
 class ExpandOperator extends NavigationOperator {
-	Integer minHops
+	int minHops
 	refers MaxHops maxHops
 }
 
@@ -172,8 +172,8 @@ class SortEntry {
 }
 
 class TopOperator extends UnaryOperator {
-	Integer skip
-	Integer limit
+	int skip
+	int limit
 }
 
 class GroupingOperator extends UnaryOperator {
@@ -218,7 +218,7 @@ class AntiJoinOperator extends AbstractJoinOperator {
 }
 
 class UnionOperator extends CommutativeBinaryOperator, AssociativeBinaryOperator {
-	Boolean bag // set or bag union
+	boolean bag // set or bag union
 }
 
 /* expression */
@@ -305,11 +305,11 @@ abstract class NumberLiteral extends Literal, ArithmeticExpression {
 }
 
 class DoubleLiteral extends NumberLiteral {
-	Double value
+	double value
 }
 
 class IntegerLiteral extends NumberLiteral {
-	Integer value
+	int value
 }
 
 /* enums */
