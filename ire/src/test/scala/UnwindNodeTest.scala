@@ -1,9 +1,7 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
-import hu.bme.mit.ire.nodes.binary.UnionNode
+import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.UnwindNode
-import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender

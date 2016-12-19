@@ -4,7 +4,7 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-import scala.collection.{GenSetLike, SetLike, mutable}
+import scala.collection.mutable
 
 class AntiJoinNode(override val next: (ReteMessage) => Unit,
                    override val primaryMask: Mask,
