@@ -1,9 +1,9 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.ire.datatypes.Path
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.TransitiveClosureNode
 import hu.bme.mit.ire.util.TestUtil._
-import hu.bme.mit.ire.datatypes.Path
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender

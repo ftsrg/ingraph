@@ -1,7 +1,7 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{MinNode, UnwindNode}
+import hu.bme.mit.ire.nodes.unary.MinNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
