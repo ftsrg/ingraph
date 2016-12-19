@@ -32,8 +32,10 @@ jar {
   from sourceSets.main.allScala
 }
 
-ext.scalaVersion = "2.12.1"
-ext.akkaVersion = "2.4.14"
+ext {
+  scalaVersion = "2.12.1"
+  akkaVersion = "2.4.14"
+}
 
 dependencies {
   compile "org.scala-lang:scala-library:$scalaVersion"
