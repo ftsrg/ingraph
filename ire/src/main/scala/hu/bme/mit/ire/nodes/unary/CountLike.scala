@@ -3,15 +3,14 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.ChangeSet
 
-
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 trait CountLike {
-  val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
+  val counts = new mutable.HashMap[Tuple, Int].withDefault(d => 0)
 
   def maintainCount(changeSet: ChangeSet, aggregationKeys: Vector[Int]): ChangeSet = {
-    val oldValues = new mutable.HashMap[Vector[Any], Int]
+    val oldValues = new mutable.HashMap[Tuple, Int]
 
     for (tuple <- changeSet.positive;
          key = aggregationKeys.map(tuple(_))) {

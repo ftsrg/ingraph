@@ -8,10 +8,10 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 trait SumLike {
-  val sums = new mutable.HashMap[Vector[Any], Any].withDefault(d => 0)
+  val sums = new mutable.HashMap[Tuple, Any].withDefault(d => 0)
 
   def maintainSum(changeSet: ChangeSet, aggregationKeys: Vector[Int], sumKey: Int): ChangeSet = {
-    val oldValues = new mutable.HashMap[Vector[Any], Any]
+    val oldValues = new mutable.HashMap[Tuple, Any]
 
     for (tuple <- changeSet.positive;
          key = aggregationKeys.map(tuple(_))) {
