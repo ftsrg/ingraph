@@ -53,10 +53,10 @@ subprojects {
       repo = 'maven'
       name = 'ingraph'
       userOrg = 'ftsrg'
-      licenses = ['Apache-2.0']
+      licenses = ['EPL-1.0']
       vcsUrl = 'https://github.com/FTSRG/ingraph.git'
       version {
-        name = '0.1.0'
+        name = '0.2.0'
         desc = 'Initial version'
         released = new Date()
       }
