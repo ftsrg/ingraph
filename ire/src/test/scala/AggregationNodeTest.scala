@@ -2,7 +2,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{CountNode, SumNode}
+import hu.bme.mit.ire.nodes.unary.{AverageNode, CountNode, SumNode}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.concurrent.duration.Duration
@@ -72,6 +72,19 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       assertNextChangeset(key = 1, positive = Some(2.1f), negative = Some(1))
       counter ! ChangeSet(positive = Vector(ragnar))
       assertNextChangeset(key = 1, positive = Some(2.9), negative = Some(2.1f))
+    }
+  }
+
+  "Average" should {
+    "average with complex keys" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val counter = system.actorOf(Props(new AverageNode(echoActor ! _, Vector(3), 4))) // sex, sum for height
+      counter ! ChangeSet(positive = Vector(odin))
+      assertNextChangeset(key = 1, positive = Some(1))
+      counter ! ChangeSet(positive = Vector(thor))
+      assertNextChangeset(key = 1, positive = Some(2.1f/2), negative = Some(1))
+      counter ! ChangeSet(positive = Vector(ragnar))
+      assertNextChangeset(key = 1, positive = Some(2.9/3), negative = Some(2.1f/2))
     }
   }
 

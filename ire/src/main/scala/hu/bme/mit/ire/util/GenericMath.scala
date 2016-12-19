@@ -6,96 +6,128 @@ object GenericMath extends Ordering[Any] {
   def plus(a: Any, b: Any): Any = a match {
     case a: Float =>
       b match {
-        case b: Float => a + b
+        case b: Float  => a + b
         case b: Double => a + b
-        case b: Int => a + b
-        case b: Long => a + b
+        case b: Int    => a + b
+        case b: Long   => a + b
       }
 
     case a: Double =>
       b match {
-        case b: Float => a + b
+        case b: Float  => a + b
         case b: Double => a + b
-        case b: Int => a + b
-        case b: Long => a + b
+        case b: Int    => a + b
+        case b: Long   => a + b
       }
-    case a: Int =>
+    case a: Int    =>
       b match {
-        case b: Float => a + b
+        case b: Float  => a + b
         case b: Double => a + b
-        case b: Int => a + b
-        case b: Long => a + b
+        case b: Int    => a + b
+        case b: Long   => a + b
       }
     case a: Long =>
       b match {
-        case b: Float => a + b
+        case b: Float  => a + b
         case b: Double => a + b
-        case b: Int => a + b
-        case b: Long => a + b
+        case b: Int    => a + b
+        case b: Long   => a + b
       }
   }
 
   def minus(a: Any, b: Any): Any = a match {
     case a: Float =>
       b match {
-        case b: Float => a - b
+        case b: Float  => a - b
         case b: Double => a - b
-        case b: Int => a - b
-        case b: Long => a - b
+        case b: Int    => a - b
+        case b: Long   => a - b
       }
 
     case a: Double =>
       b match {
-        case b: Float => a - b
+        case b: Float  => a - b
         case b: Double => a - b
-        case b: Int => a - b
-        case b: Long => a - b
+        case b: Int    => a - b
+        case b: Long   => a - b
       }
-    case a: Int =>
+    case a: Int    =>
       b match {
-        case b: Float => a - b
+        case b: Float  => a - b
         case b: Double => a - b
-        case b: Int => a - b
-        case b: Long => a - b
+        case b: Int    => a - b
+        case b: Long   => a - b
       }
     case a: Long =>
       b match {
-        case b: Float => a - b
+        case b: Float  => a - b
         case b: Double => a - b
-        case b: Int => a - b
-        case b: Long => a - b
+        case b: Int    => a - b
+        case b: Long   => a - b
+      }
+  }
+
+  def divide(a: Any, b: Any): Any = a match {
+    case a: Float =>
+      b match {
+        case b: Float  => a / b
+        case b: Double => a / b
+        case b: Int    => a / b
+        case b: Long   => a / b
+      }
+
+    case a: Double =>
+      b match {
+        case b: Float  => a / b
+        case b: Double => a / b
+        case b: Int    => a / b
+        case b: Long   => a / b
+      }
+    case a: Int    =>
+      b match {
+        case b: Float  => a / b
+        case b: Double => a / b
+        case b: Int    => a / b
+        case b: Long   => a / b
+      }
+    case a: Long =>
+      b match {
+        case b: Float  => a / b
+        case b: Double => a / b
+        case b: Int    => a / b
+        case b: Long   => a / b
       }
   }
 
   override def compare(a: Any, b: Any): Int = a match {
     case a: Float =>
       b match {
-        case b: Float => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
 
     case a: Double =>
       b match {
-        case b: Float => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
-    case a: Int =>
+    case a: Int    =>
       b match {
-        case b: Float => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
     case a: Long =>
       b match {
-        case b: Float => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Float  => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Double => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Int => if (a > b) 1 else  if (a < b) -1 else 0
-        case b: Long => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
+        case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
   }
 }
