@@ -1,10 +1,10 @@
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{MinNode, UnwindNode}
+import hu.bme.mit.ire.nodes.unary.MaxNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
-class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class MaxNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
@@ -15,8 +15,8 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
 
   import hu.bme.mit.ire.util.TestUtil._
 
-  "Min" must {
-    "do simple min 0" in {
+  "Max" must {
+    "do simple max 0" in {
       val changeSet = ChangeSet(
         positive = Vector(
           tuple("a", 1),
@@ -26,17 +26,17 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
         )
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val min = system.actorOf(Props(new MinNode(echoActor ! _,Vector(0), 1)))
+      val max = system.actorOf(Props(new MaxNode(echoActor ! _,Vector(0), 1)))
 
-      min ! changeSet
+      max ! changeSet
       expectMsg(ChangeSet(positive = Vector(
-        tuple("a", 1), tuple("b", 3)
+        tuple("a", 2), tuple("b", 3)
       )))
 
-      min ! ChangeSet(negative = Vector(tuple("a", 1)))
+      max ! ChangeSet(negative = Vector(tuple("a", 2)))
       expectMsg(ChangeSet(
         positive = Vector(tuple("a", 1.1)),
-        negative = Vector(tuple("a", 1))
+        negative = Vector(tuple("a", 2))
       ))
     }
   }

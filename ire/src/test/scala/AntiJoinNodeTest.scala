@@ -52,7 +52,7 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       joiner ! Secondary(secondary)
       joiner ! Primary(primary)
       expectMsg(ChangeSet(positive = Vector(tuple(1, 2))))
-println("2nd 2ndary")
+
       joiner ! Secondary(ChangeSet(positive = Vector(tuple(2, 8), tuple(3, 9))))
       expectMsg(ChangeSet(negative = Vector(tuple(1, 2))))
     }
