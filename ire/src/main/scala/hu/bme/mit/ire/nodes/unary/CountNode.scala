@@ -9,40 +9,12 @@ import scala.collection.mutable
 
 // the CountNode follows the COUNT(*) semantics, i.e. you do not have to specify the attribute to count
 class CountNode(override val next: (ReteMessage) => Unit,
-                val keys: Vector[Int]) extends UnaryNode with SingleForwarder {
-  val counts = new mutable.HashMap[Vector[Any], Int].withDefault(d => 0)
+                val aggregationKeys: Vector[Int]) extends UnaryNode with CountLike with SingleForwarder {
+
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
-    val oldValues = new mutable.HashMap[Vector[Any], Int]
-
-    for (tuple <- changeSet.positive;
-         key = keys.map(tuple(_))) {
-      if (!oldValues.contains(key)) {
-        oldValues(key) = counts(key)
-      }
-      counts(key) += 1
-    }
-
-    for (tuple <- changeSet.negative;
-         key = keys.map(tuple(_))) {
-      if (!oldValues.contains(key)) {
-        oldValues(key) = counts(key)
-      }
-      counts(key) -= 1
-    }
-
-
-    val positive = new VectorBuilder[Tuple]
-    val negative = new VectorBuilder[Tuple]
-    for ((key, oldValue) <- oldValues) {
-      if (oldValue != 0) {
-        negative += key :+ oldValues(key)
-      }
-      if (counts(key) != 0) {
-        positive += key :+ counts(key)
-      }
-    }
-
-    forward(ChangeSet(positive = positive.result(), negative = negative.result()))
+    val newChangeSet = maintainCount(changeSet, aggregationKeys)
+    forward(newChangeSet)
   }
+
 }
