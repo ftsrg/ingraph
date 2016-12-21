@@ -1,4 +1,1 @@
-MATCH (m:Movie { rating: 4 })
-WITH *
-MATCH (n)
-RETURN toFloat(n.rating) AS float
+RETURN toInteger(1 - {param}) AS result

@@ -1,6 +1,7 @@
 package ingraph.report.tests
 
 import org.junit.Test
+import ingraph.report.tests.IngraphReportTest
 
 class TrainBenchmarkReportTest extends IngraphReportTest {
 

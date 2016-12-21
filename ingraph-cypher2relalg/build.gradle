@@ -10,4 +10,15 @@ dependencies {
 	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
 	compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
 	testCompile group: 'junit', name: 'junit', version: junitVersion
+	//testCompile group: 'io.takari.junit', name: 'takari-cpsuite', version: '1.2.7'
+	testCompile group: 'com.googlecode.junit-toolbox', name: 'junit-toolbox', version: '1.5'
+}
+
+task regression(type: Test) {
+	doFirst{ println("Running regression tests") }
+	scanForTestClasses = false
+	useJUnit {
+	  includeCategories 'ingraph.cypher2relalg.tck.RegressionTests'
+	}
+	testLogging.showStandardStreams = true
 }

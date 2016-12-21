@@ -1,1 +1,2 @@
-RETURN toString(1 < 0) AS bool
+MATCH (m:Movie)
+RETURN toString(m.watched)

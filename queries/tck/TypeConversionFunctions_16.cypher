@@ -1,4 +1,2 @@
-MATCH (m:Movie { rating: 4 })
-WITH *
-MATCH (n)
-RETURN toString(n.rating)
+WITH ['1', '2', 'foo'] AS numbers
+RETURN [n IN numbers | toFloat(n)] AS float_numbers

@@ -1,2 +1,2 @@
-WITH $expr AS expr, $idx AS idx
-RETURN expr[toString(idx)] AS value
+MATCH (n {name: 'Apa'})
+RETURN n['nam' + 'e'] AS value

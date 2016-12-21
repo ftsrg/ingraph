@@ -1,2 +1,2 @@
-WITH [1, 2, 3] AS numbers
-RETURN [n IN numbers | toString(n)] AS string_numbers
+UNWIND ['male', 'female', null] AS gen
+RETURN toString(coalesce(gen, 'x')) AS result

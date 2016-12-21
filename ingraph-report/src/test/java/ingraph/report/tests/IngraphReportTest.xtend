@@ -6,13 +6,12 @@ import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
-import ingraph.report.feature.WhenStep
+import ingraph.report.tests.util.NaturalOrderComparator
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import relalg.RelalgContainer
 
 class IngraphReportTest {

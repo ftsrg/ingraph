@@ -1,2 +1,1 @@
-WITH $expr AS expr, $idx AS idx
-RETURN expr[idx] AS value
+RETURN 3 IN [1, 2, 3][0..1] AS r

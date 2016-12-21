@@ -1,2 +1,4 @@
-MATCH (m:Movie)
-RETURN toString(m.watched)
+MATCH (m:Movie { rating: 4 })
+WITH *
+MATCH (n)
+RETURN toString(n.rating)

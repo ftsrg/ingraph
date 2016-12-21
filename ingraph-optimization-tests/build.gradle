@@ -4,4 +4,6 @@ dependencies {
 	compile project(':ingraph-optimization-transformations')
 	compile project(':ingraph-cypher2relalg')
 	compile project(':ingraph-relalg2tex')
+
+	testCompile group: 'junit', name: 'junit', version: junitVersion
 }

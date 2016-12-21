@@ -1,1 +1,2 @@
-RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
+UNWIND ['male', 'female', null] AS gen
+RETURN coalesce(toString(gen), 'x') AS result

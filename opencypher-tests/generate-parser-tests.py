@@ -15,15 +15,17 @@ def indent(lines):
 filenames = glob.glob('*.feature')
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
-    test_file = open("../ingraph-cypher2relalg/src-test/ingraph/cypher2relalg/tck/%sParserTest.xtend" % filename_without_extension, "w")
+    test_file = open("../ingraph-cypher2relalg/src/test/java/ingraph/cypher2relalg/tck/tests/%sParserTest.xtend" % filename_without_extension, "w")
 
-    test_header = """package ingraph.cypher2relalg.tck
-
-import org.junit.Test
+    test_header = """package ingraph.cypher2relalg.tck.tests
 
 import ingraph.cypher2relalg.Cypher2Relalg
+import ingraph.cypher2relalg.tck.FailingTests
+import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import org.junit.Test
+import org.junit.experimental.categories.Category
 
 class %sParserTest {
     """ % filename_without_extension
@@ -58,6 +60,7 @@ class %sParserTest {
     /*
     %s*/
     @Test
+    @Category(FailingTests)
     def void test%s() {
         val cypher = CypherParser.parseString('''
         %s

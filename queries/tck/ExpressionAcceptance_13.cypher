@@ -1,2 +1,2 @@
 WITH $expr AS expr, $idx AS idx
-RETURN expr[idx]
+RETURN expr[toInteger(idx)] AS value

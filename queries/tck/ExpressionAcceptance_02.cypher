@@ -1,2 +1,1 @@
-MATCH (n {name: 'Apa'})
-RETURN n['nam' + 'e'] AS value
+RETURN 3 IN [[1, 2, 3]][0] AS r

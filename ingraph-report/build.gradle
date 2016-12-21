@@ -7,22 +7,26 @@ dependencies {
 	compile project(':ingraph-cypher2relalg')
 	compile project(':ingraph-relalg2tex')
 	compile project(':ingraph-optimization-transformations')
-	
 
 	compile "org.eclipse.xtext:org.eclipse.xtext.xbase:${xtextVersion}"
 	testCompile "org.eclipse.xtext:org.eclipse.xtext.junit4:${xtextVersion}"
 	testCompile "org.eclipse.xtext:org.eclipse.xtext.xbase.junit:${xtextVersion}"
 }
 configurations {
-	mwe2 {
-		extendsFrom compile
-	}
+	mwe2 { extendsFrom compile }
 }
 
 dependencies {
 	mwe2 "org.eclipse.emf:org.eclipse.emf.mwe2.launch:2.8.3"
 	mwe2 "org.eclipse.xtext:org.eclipse.xtext.xtext.generator:${xtextVersion}"
 	compile group: 'commons-io', name: 'commons-io', version: '2.4'
+}
+
+task report(type: Test) {
+	doFirst{ println("Generating report") }
+	scanForTestClasses = false
+	include "ingraph.report.tests/**"
+	testLogging.showStandardStreams = true
 }
 
 task generateXtextLanguage(type: JavaExec) {

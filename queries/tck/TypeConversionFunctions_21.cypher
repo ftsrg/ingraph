@@ -1,2 +1,1 @@
-WITH [1, 2, 3] AS numbers
-RETURN [n IN numbers | toString(n)] AS string_numbers
+RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list

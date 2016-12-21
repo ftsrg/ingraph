@@ -1,1 +1,2 @@
-RETURN [1, 2, 3][0] AS value
+WITH [[1, 2, 3]] AS list
+RETURN 3 IN list[0] AS r
