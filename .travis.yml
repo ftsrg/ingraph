@@ -14,7 +14,7 @@ install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra latexmk
 script:
-  - ./gradlew check --continue || true
+  - ./gradlew regression --continue
   - cd opencypher-report
   - make
   - cd ..
