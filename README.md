@@ -78,22 +78,28 @@ dependencies {
 
 #### Troubleshooting
 
-* **Problem:** during import, you may encounter the following error:
+* Gradle error
+  * **Problem:** during import, you may encounter the following error:
 
   ```
   Synchronize Gradle builds with workspace failed due to an unexpected error.
   Unsupported method: HierarchicalEclipseProject.getIdentifier().
   ```
-* **Solution:** click **Previous** and set the **Gradle wrapper**'s version manually to 3.0 (in our experience, 3.1 and 3.2 do not work).
+  * **Solution:** click **Previous** and set the **Gradle wrapper**'s version manually to 3.0 (in our experience, 3.1 and 3.2 do not work).
 
-* **Problem:** during the `generateXtext` task, you get the following error:
+* Xtext generation error
+  * **Problem:** during the `generateXtext` task, you get the following error:
 
-  ```
-  java.lang.IllegalArgumentException: The 'no null' constraint is violated
-  ```
-* **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
+    ```
+    java.lang.IllegalArgumentException: The 'no null' constraint is violated
+    ```
+  * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
 
-* **Problem:** there are errors about duplicate classes for Xtend files.
+* Duplicate definitions:
+* **Problem:** there are errors about duplicate definitions for Xtend classes, for example:
+    ```
+    The type CudOperationsTest is already defined in CudOperationsTest.java.
+    ```
 * **Solution:** run the `scripts/clean-build-dir.sh` script.
 
 #### How to run the tests
