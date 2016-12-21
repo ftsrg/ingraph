@@ -24,9 +24,6 @@ dependencies {
 
 task report(type: Test) {
 	doFirst{ println("Generating report") }
-	scanForTestClasses = false
-	include "ingraph.report.tests/**"
-	testLogging.showStandardStreams = true
 }
 
 task generateXtextLanguage(type: JavaExec) {
