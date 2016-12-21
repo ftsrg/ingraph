@@ -18,7 +18,6 @@ task regressionTests(type: Test) {
 	useJUnit {
 	  includeCategories 'ingraph.cypher2relalg.tck.RegressionTests'
 	}
-	testLogging.showStandardStreams = true
 }
 
 task failingTests(type: Test) {
@@ -27,5 +26,4 @@ task failingTests(type: Test) {
 	useJUnit {
 	  includeCategories 'ingraph.cypher2relalg.tck.FailingTests'
 	}
-	testLogging.showStandardStreams = true
 }
