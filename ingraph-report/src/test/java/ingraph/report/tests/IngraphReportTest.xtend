@@ -126,7 +126,7 @@ class IngraphReportTest {
 			«ELSE»
 			\begin{align*}
 			\begin{autobreak}
-			«expression»
+			r = «expression»
 			\end{autobreak}
 			\end{align*}
 			«ENDIF»
