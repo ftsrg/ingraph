@@ -89,7 +89,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling upper and lower bounded variable length match 1
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_06() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -104,7 +104,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling upper and lower bounded variable length match 2
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_07() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -119,7 +119,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling symmetrically bounded variable length match, bounds are zero
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_08() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -134,7 +134,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling symmetrically bounded variable length match, bounds are one
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_09() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -149,7 +149,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling symmetrically bounded variable length match, bounds are two
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_10() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -164,7 +164,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling upper and lower bounded variable length match, empty interval 1
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_11() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -179,7 +179,7 @@ class VarLengthAcceptanceParserTest {
     Scenario: Handling upper and lower bounded variable length match, empty interval 2
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testVarLengthAcceptance_12() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)

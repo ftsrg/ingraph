@@ -1,12 +1,8 @@
 package ingraph.cypher2relalg.tck;
 
-import org.junit.runner.RunWith;
+import org.junit.experimental.categories.Categories;
 
-import com.googlecode.junittoolbox.SuiteClasses;
-import com.googlecode.junittoolbox.WildcardPatternSuite;
-
-@RunWith(WildcardPatternSuite.class)
-@SuiteClasses("**/*Test.class")
-public class RegressionTestsSuite {
+@Categories.IncludeCategory(RegressionTests.class)
+public class RegressionTestsSuite extends IngraphParserTestSuite {
 
 }

@@ -39,7 +39,7 @@ class WhereAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testWhereAcceptance_02() {
         val cypher = CypherParser.parseString('''
         MATCH (n:Label)

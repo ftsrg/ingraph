@@ -1,14 +1,6 @@
 #!/bin/bash
+
 set -e # exit with nonzero exit code if anything fails
-
-# clear and re-create the out directory
-rm -rf out || exit 0
-mkdir out
-
-# run our compile script, discussed above
-cp -r site/* out/ || true
-cp opencypher-report/opencypher-report.pdf out/pub/ || true
-cp -r ingraph-cypher2relalg/build/reports/tests/test/ out/ || true
 
 # go to the out directory and create a *new* Git repo
 cd out

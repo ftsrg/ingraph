@@ -18,7 +18,9 @@ You can also use the [`scripts/get-slizaa.sh`](scripts/get-slizaa.sh) to run the
 
 ## Generated artifacts
 
-* [Test summary](http://docs.inf.mit.bme.hu/ingraph/test/)
+These artifacts are automatcially generated for the last commit:
+* [Regression tests](http://docs.inf.mit.bme.hu/ingraph/regression-tests/)
+* [Failing tests](http://docs.inf.mit.bme.hu/ingraph/failing-tests/)
 * [Technical report on compliance with the OpenCypher TCK](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf)
 
 ## User's guide

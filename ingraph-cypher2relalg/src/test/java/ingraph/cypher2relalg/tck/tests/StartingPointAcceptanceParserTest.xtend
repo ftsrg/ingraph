@@ -21,7 +21,7 @@ class StartingPointAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testStartingPointAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (n)
@@ -43,7 +43,7 @@ class StartingPointAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testStartingPointAcceptance_02() {
         val cypher = CypherParser.parseString('''
         MATCH (n:Animal)
@@ -63,7 +63,7 @@ class StartingPointAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testStartingPointAcceptance_03() {
         val cypher = CypherParser.parseString('''
         MATCH (n)

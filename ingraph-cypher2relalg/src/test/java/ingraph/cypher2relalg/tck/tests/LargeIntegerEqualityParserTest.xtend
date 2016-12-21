@@ -14,7 +14,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Does not lose precision
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_01() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label)
@@ -28,7 +28,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Handling inlined equality of large integer
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_02() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label {id: 4611686018427387905})
@@ -42,7 +42,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Handling explicit equality of large integer
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_03() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label)
@@ -57,7 +57,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Handling inlined equality of large integer, non-equal values
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_04() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label {id : 4611686018427387900})
@@ -71,7 +71,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Handling explicit equality of large integer, non-equal values
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_05() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label)

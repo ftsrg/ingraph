@@ -14,7 +14,7 @@ class OptionalMatchAcceptanceParserTest {
     Scenario: Return null when no matches due to inline label predicate
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOptionalMatchAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (n:Single)
@@ -45,7 +45,7 @@ class OptionalMatchAcceptanceParserTest {
     Scenario: Respect predicates on the OPTIONAL MATCH
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOptionalMatchAcceptance_03() {
         val cypher = CypherParser.parseString('''
         MATCH (n:Single)
@@ -61,7 +61,7 @@ class OptionalMatchAcceptanceParserTest {
     Scenario: Returning label predicate on null node
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOptionalMatchAcceptance_04() {
         val cypher = CypherParser.parseString('''
         MATCH (n:Single)
@@ -206,7 +206,7 @@ class OptionalMatchAcceptanceParserTest {
     Scenario: Optionally matching self-loops
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOptionalMatchAcceptance_13() {
         val cypher = CypherParser.parseString('''
         MATCH (a:B)

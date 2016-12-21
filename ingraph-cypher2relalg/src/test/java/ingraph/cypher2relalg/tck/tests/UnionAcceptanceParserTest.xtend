@@ -19,7 +19,7 @@ class UnionAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testUnionAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)

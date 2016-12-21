@@ -21,7 +21,7 @@ class ComparabilityParserTest {
       | param | 'foo' |
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testComparability_01() {
         val cypher = CypherParser.parseString('''
         MATCH (b)
@@ -43,7 +43,7 @@ class ComparabilityParserTest {
       | param | 'foo' |
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testComparability_02() {
         val cypher = CypherParser.parseString('''
         MATCH (b)

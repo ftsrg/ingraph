@@ -59,7 +59,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_03() {
         val cypher = CypherParser.parseString('''
         MATCH (n), (m)
@@ -80,7 +80,7 @@ class MatchAcceptanceParserTest {
       | param | 'bar' |
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_04() {
         val cypher = CypherParser.parseString('''
         MATCH (a)-[r]->(b)
@@ -100,7 +100,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_05() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[rel:X]-(a)
@@ -120,7 +120,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_06() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
@@ -140,7 +140,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_07() {
         val cypher = CypherParser.parseString('''
         MATCH (node)-[r:KNOWS]->(a)
@@ -161,7 +161,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_08() {
         val cypher = CypherParser.parseString('''
         MATCH (n)
@@ -181,7 +181,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_09() {
         val cypher = CypherParser.parseString('''
         MATCH (n1)-[rel:KNOWS]->(n2)
@@ -202,7 +202,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_10() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[rel:KNOWS]->(x)
@@ -247,7 +247,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_12() {
         val cypher = CypherParser.parseString('''
         MATCH (n)-[rel]->(x)
@@ -267,7 +267,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_13() {
         val cypher = CypherParser.parseString('''
         MATCH (a)-[r {name: 'r'}]-(b)
@@ -286,7 +286,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_14() {
         val cypher = CypherParser.parseString('''
         MATCH (a)-[r {name: 'r1'}]-(b)
@@ -358,7 +358,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_17() {
         val cypher = CypherParser.parseString('''
         MATCH (n)
@@ -494,7 +494,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_24() {
         val cypher = CypherParser.parseString('''
         MATCH (a)-[r:REL*2..2]->(b:End)
@@ -513,7 +513,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_25() {
         val cypher = CypherParser.parseString('''
         MATCH (a)-[r:REL*2..2]-(b:End)
@@ -532,7 +532,7 @@ class MatchAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testMatchAcceptance_26() {
         val cypher = CypherParser.parseString('''
         MATCH (a:Start)-[r:REL*2..2]-(b)

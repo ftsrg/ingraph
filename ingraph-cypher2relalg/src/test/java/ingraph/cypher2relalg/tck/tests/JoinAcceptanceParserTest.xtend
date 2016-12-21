@@ -22,7 +22,7 @@ class JoinAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testJoinAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
@@ -44,7 +44,7 @@ class JoinAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testJoinAcceptance_02() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
