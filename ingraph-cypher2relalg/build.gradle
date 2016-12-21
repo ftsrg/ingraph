@@ -21,7 +21,7 @@ task regressionTests(type: Test) {
 	testLogging.showStandardStreams = true
 }
 
-task regressionTests(type: Test) {
+task failingTests(type: Test) {
 	doFirst{ println("Running failing tests") }
 	scanForTestClasses = false
 	useJUnit {
