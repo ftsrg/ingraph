@@ -15,14 +15,11 @@ install:
   - sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra latexmk
 script:
   - ./gradlew regressionTests --continue
-  - cp -r ingraph-cypher2relalg/build/reports/tests/test/ out/regression-tests
-  - ./gradlew failingTests
-  - cp -r ingraph-cypher2relalg/build/reports/tests/test/ out/failing-tests
+  - ./gradlew failingTests --continue || true
   - ./gradlew report --continue || true
   - cd opencypher-report
   - make
   - cd ..
-  - cp opencypher-report/opencypher-report.pdf out/pub/
   - scripts/deploy.sh
 notifications:
   slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
