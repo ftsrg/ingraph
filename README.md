@@ -92,6 +92,7 @@ dependencies {
 * Xtext generation error
 
   * **Problem:** during the `generateXtext` task, you get the following error:
+
     ```
     java.lang.IllegalArgumentException: The 'no null' constraint is violated
     ```
