@@ -104,7 +104,7 @@ dependencies {
     ```
     The type CudOperationsTest is already defined in CudOperationsTest.java.
     ```
-  * **Solution:** run the `scripts/clean-build-dir.sh` script.
+  * **Solution:** run the `scripts/clean-build-dirs.sh` script.
 
 #### How to run the tests
 
