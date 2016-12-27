@@ -21,7 +21,6 @@ import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
-import relalg.Expression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.GroupingOperator
@@ -35,6 +34,7 @@ import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
+import relalg.ReturnableElement
 import relalg.SelectionOperator
 import relalg.SortEntry
 import relalg.SortOperator
@@ -49,7 +49,6 @@ import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
-import relalg.ReturnableElement
 
 abstract class AbstractRelalgSerializer {
 
@@ -149,6 +148,7 @@ abstract class AbstractRelalgSerializer {
         switch hops.maxHopsType {
             case LIMITED: hops.hops.toString
             case UNLIMITED: ""
+            default: throw new UnsupportedOperationException('''MaxHopsType «hops.maxHopsType» not supported.''')
         }
     }
 	
@@ -243,15 +243,10 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def directionToTex(Direction direction) {
 		switch direction {
-			case BOTH: {
-				'''both'''
-			}
-			case IN: {
-				'''in'''
-			}
-			case OUT: {
-				'''out'''
-			}
+			case BOTH: '''both'''
+			case IN: '''in'''
+			case OUT: '''out'''
+			default: throw new UnsupportedOperationException('''Direction «direction» not supported.''')
 		}
 	}
 
@@ -272,7 +267,8 @@ abstract class AbstractRelalgSerializer {
     def entryToTex(SortEntry entry) {
         val direction = switch (entry.direction) {
             case ASCENDING: "asc"
-            case DESCENDING: "desc" 
+            case DESCENDING: "desc"
+            default: throw new UnsupportedOperationException('''SortEntry «entry.direction» not supported.''') 
         }
         '''\«direction» \var{«entry.variable.escapedName»}'''
     }
@@ -331,6 +327,7 @@ abstract class AbstractRelalgSerializer {
 			case LESS_THAN: '''<'''
 			case LESS_THAN_OR_EQUAL: '''\leq'''
 			case NOT_EQUAL_TO: '''\neq'''
+			default: throw new UnsupportedOperationException('''SortEntry «op» not supported.''')
 		}
 	}
 
@@ -339,19 +336,22 @@ abstract class AbstractRelalgSerializer {
 			case AND: '''\land'''
 			case OR: '''\lor'''
 			case XOR: '''\lxor'''
+			default: throw new UnsupportedOperationException('''BinaryLogicalOperator «op» not supported.''')
 		}
 	}
 
 	def convert(UnaryLogicalOperator op) {
 		switch (op) {
 			case NOT: '''\neg'''
+			default: throw new UnsupportedOperationException('''UnaryLogicalOperator «op» not supported.''')
 		}
 	}
 
 	def convert(UnaryNodeLogicalOperator op) {
 		switch (op) {
-			case IS_NULL: '''IS NULL'''
-			case IS_NOT_NULL: '''IS NOT NULL'''
+			case IS_NULL: "IS NULL".escape
+			case IS_NOT_NULL: "IS NOT NULL".escape
+			default: throw new UnsupportedOperationException('''UnaryNodeLogicalOperator «op» not supported.''')
 		}
 	}
 
@@ -363,6 +363,7 @@ abstract class AbstractRelalgSerializer {
 			case MULTIPLICATION: '''\cdot'''
 			case PLUS: '''+'''
 			case POWER: '''^'''
+			default: throw new UnsupportedOperationException('''BinaryArithmeticOperator «op» not supported.''')
 		}
 	}
 
@@ -370,6 +371,7 @@ abstract class AbstractRelalgSerializer {
 		switch (op) {
 			case MINUS: '''-'''
 			case PLUS: ''''''
+			default: throw new UnsupportedOperationException('''UnaryArithmeticOperator «op» not supported.''')
 		}
 	}
 
