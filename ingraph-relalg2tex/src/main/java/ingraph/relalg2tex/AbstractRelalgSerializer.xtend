@@ -147,7 +147,7 @@ abstract class AbstractRelalgSerializer {
     def CharSequence hopsToString(MaxHops hops) {
         switch hops.maxHopsType {
             case LIMITED: hops.hops.toString
-            case UNLIMITED: ""
+            case UNLIMITED: '''\infty'''
             default: throw new UnsupportedOperationException('''MaxHopsType «hops.maxHopsType» not supported.''')
         }
     }

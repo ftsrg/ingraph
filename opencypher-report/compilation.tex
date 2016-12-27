@@ -40,17 +40,21 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 		& \lstinline+(<v>v</v>:types)+ & $\getvertices{v}{types}$ \\ \cline{2-3}
 
 		% expand operators
-		& \lstinline+<v>p</v>-[<v>e</v>:<v>labels</v>]-(<v>w</v>:types...)+ & \multirow{2}{*}{$\expandboth{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$} \\ \cline{2-2}
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>]- (<v>w</v>:types...)+ & \multirow{2}{*}{$\expandboth{v}{w}{types}{E}{labels}{1}{1} (\atom{p})$} \\ \cline{2-2}
 
-		& \lstinline+<v>p</v><-[<v>e</v>:<v>labels</v>]->(<v>w</v>:types...)+ & \\ \cline{2-3}
+		& \lstinline+<v>v</v><-[<v>E</v>:<v>labels</v>]->(<v>w</v>:types...)+ & \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>e</v>:<v>labels</v>]->(<v>w</v>:types...)+ & $\expandout{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>]->(<v>w</v>:types...)+ & $\expandout{v}{w}{types}{E}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v><-[<v>e</v>:<v>labels</v>]-(<v>w</v>:types...)+ & $\expandin{v}{w}{types}{e}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>v</v><-[<v>E</v>:<v>labels</v>]- (<v>w</v>:types...)+ & $\expandin{v}{w}{types}{E}{labels}{1}{1} (\atom{p})$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>E</v>:<v>labels</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{max}(\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>*<v>min</v>..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{max}(\atom{p})$ \\ \cline{2-3}
 
-		& \lstinline+<v>p</v>-[<v>E</v>:<v>labels</v>*]->(<v>w</v>:<v>t2</v>)+ & $\transitiveclosureout{v}{w}{types}{E}{labels}(\atom{p})$ \\ \cline{2-3}
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>*<v>min</v>..]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{min}{\infty}(\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>*..<v>max</v>]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{1}{max}(\atom{p})$ \\ \cline{2-3}
+
+		& \lstinline+<v>v</v> -[<v>E</v>:<v>labels</v>*]->(<v>w</v>:<v>t2</v>)+ & $\expandout{v}{w}{types}{E}{labels}{1}{\infty}(\atom{p})$ \\ \cline{2-3}
 
 		\hline \multicolumn{3}{|l|}{Combining and filtering pattern matches } \\ \cline{2-3}
 
