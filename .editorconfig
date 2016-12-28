@@ -1,14 +1,20 @@
 root = true
 
 [*]
+charset = utf-8
+end_of_line = lf
 insert_final_newline = true
 max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.{java,xtend}]
+[*.java]
 indent_size = 4
 indent_style = tab
 
-[build.gradle]
+[*.{scala,xtend}]
+indent_size = 2
+indent_style = space
+
+[*.gradle]
 indent_size = 2
 indent_style = space
