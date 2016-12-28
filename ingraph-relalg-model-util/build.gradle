@@ -1,7 +1,8 @@
 apply plugin: 'org.xtext.xtend'
 
 dependencies {
-	compile project(':ingraph-relalg-xcore')
+  compile project(':ingraph-relalg-xcore')
 
-	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+  testCompile group: 'junit', name: 'junit', version: junitVersion
 }

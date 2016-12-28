@@ -97,6 +97,7 @@ abstract class AbstractRelalgSerializer {
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
 			«IF config.standaloneDocument»
+				% !TeX program = pdflatex
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 

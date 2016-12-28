@@ -87,6 +87,7 @@ class ReturnableElement {
 abstract class Operator {
 	String description
 	refers Variable[] schema
+	refers Variable[] detailedSchema
 	contains Cardinality cardinality
 }
 
@@ -124,6 +125,7 @@ class SelectionOperator extends UnaryOperator {
 
 class ProjectionOperator extends UnaryOperator {
 	contains ReturnableElement[] variables
+	int[] tupleElements
 }
 
 abstract class NavigationOperator extends UnaryOperator {
@@ -206,6 +208,7 @@ abstract class AssociativeBinaryOperator extends BinaryOperator {
 
 abstract class AbstractJoinOperator extends BinaryOperator {
 	refers Variable[] commonVariables
+	int[] commonVariableIndices
 }
 
 class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {

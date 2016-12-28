@@ -39,9 +39,14 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 			[
 			««« $ first line \\ second line $	
 			{«op.operator»$
-			\\
-			\footnotesize
+			«IF !op.schema.isEmpty»
+			\\ \footnotesize
 			$\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
+			«ENDIF»
+			«IF !op.detailedSchema.isEmpty»
+      \\ \footnotesize
+      $\color{orange} \langle \var{«op.detailedSchema.map[ name.escape ].join(', ')»} \rangle$
+      «ENDIF»
 			«IF config.includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
             '''«op?.children»''' + // invoke children
             '''

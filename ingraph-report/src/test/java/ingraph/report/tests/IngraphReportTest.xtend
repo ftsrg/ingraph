@@ -16,148 +16,164 @@ import relalg.RelalgContainer
 
 class IngraphReportTest {
 
-    protected extension SchemaInferencer inferencer = new SchemaInferencer
-    protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
-    protected val treeSerializer = new RelalgTreeSerializer
-    protected val config = RelalgSerializerConfig.builder.build
-    protected val expressionSerializer = new RelalgExpressionSerializer(config)
+	protected extension SchemaInferencer inferencer = new SchemaInferencer
+	protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
-    def toChapter(String directoryName, String chapterTitle) {
-		val fileNames = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).map[name].
-		    toList
-		Collections.sort(fileNames, new NaturalOrderComparator());
+	protected val treeSerializerConfig = RelalgSerializerConfig.builder.includeCommonVariables(true).build
 
-		val doc = '''
-		    \chapter{«chapterTitle»}
-		    \label{chp:«directoryName»}
+	protected val treeSerializer = new RelalgTreeSerializer(treeSerializerConfig)
+	protected val expressionSerializer = new RelalgExpressionSerializer
 
-		    \section{Queries}
+	def toChapter(String directoryName, String chapterTitle) {
+	val fileNames = FileUtils.listFiles(new File('''../queries/«directoryName»'''), #["cypher"], false).map[name].
+		toList
+	Collections.sort(fileNames, new NaturalOrderComparator());
 
-		    «FOR fileName : fileNames»
-				«val query = FilenameUtils.removeExtension(fileName)»
-				«toSection(directoryName, query)»
-		    «ENDFOR»
-		'''
-		FileUtils.writeStringToFile(new File('''../opencypher-report/appendix/«directoryName».tex'''), doc,
-		    Charset.defaultCharset())
-    }
+	val doc = '''
+		\chapter{«chapterTitle»}
+		\label{chp:«directoryName»}
 
-    /**
-     * Drops indentation and quotes.
-     */
-    def cleanup(String s) {
-		s //
-		.replaceAll('''"""''', "") // """
-		.replaceAll("'''", "") // '''
-		.replaceAll("\n      ", "\n") // indentation
-		.replaceAll("^\n", "") // newline at the start
-		.replaceAll("\n$", "") // newline at the end
-    }
+		\section{Queries}
 
-    def escape(String s) {
-		s //
-		.replaceAll('''#''', '''\\#''') //
-		.replaceAll('''_''', '''\\_''')
-    }
+		«FOR fileName : fileNames»
+		«val query = FilenameUtils.removeExtension(fileName)»
+		«toSection(directoryName, query)»
+		«ENDFOR»
+	'''
+	FileUtils.writeStringToFile(new File('''../opencypher-report/appendix/«directoryName».tex'''), doc,
+		Charset.defaultCharset())
+	}
 
-    def expression(RelalgContainer container) {
+	/**
+	 * Drops indentation and quotes.
+	 */
+	def cleanup(String s) {
+	s //
+	.replaceAll('''"""''', "") // """
+	.replaceAll("'''", "") // '''
+	.replaceAll("\n		", "\n") // indentation
+	.replaceAll("^\n", "") // newline at the start
+	.replaceAll("\n$", "") // newline at the end
+	}
+
+	def escape(String s) {
+	s //
+	.replaceAll('''#''', '''\\#''') //
+	.replaceAll('''_''', '''\\_''')
+	}
+
+	def expression(RelalgContainer container) {
+	try {
+		expressionSerializer.serialize(container.addSchemaInformation).toString
+	} catch (Exception e) {
+		e.printStackTrace
+		null
+	}
+	}
+
+	def visualize(RelalgContainer container) {
+	try {
+		treeSerializer.serialize(container.addSchemaInformation)
+	} catch (Exception e) {
+		e.printStackTrace
+		null
+	}
+	}
+
+	def visualizeWithTransformations(RelalgContainer container) {
 		try {
-		    expressionSerializer.serialize(container.addSchemaInformation).toString
+			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
 		} catch (Exception e) {
-		    e.printStackTrace
-		    null
+			e.printStackTrace
+			null
 		}
-    }
+	}
 
-    def visualize(RelalgContainer container) {
-		try {
-		    treeSerializer.serialize(container.addSchemaInformation)
-		} catch (Exception e) {
-		    e.printStackTrace
-		    null
-		}
-    }
+	def toSection(String directoryName, String query) {
+	val fileName = '''../queries/«directoryName»/«query».cypher'''
+	val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
 
-    def visualizeWithTransformations(RelalgContainer container) {
-		try {
-		    treeSerializer.serialize(container.transformToRete.addSchemaInformation)
-		} catch (Exception e) {
-		    e.printStackTrace
-		    null
-		}
-    }
+	println(querySpecification)
+	var RelalgContainer container = null
+	try {
+		container = Cypher2Relalg.processString(querySpecification.toString)
+	} catch (Exception e) {
+		e.printStackTrace
+	}
 
-    def toSection(String directoryName, String query) {
-		val fileName = '''../queries/«directoryName»/«query».cypher'''
-		val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
+	section(container, query, querySpecification)
+	}
 
-		println(querySpecification)
-		var RelalgContainer container = null
-		try {
-		    container = Cypher2Relalg.processString(querySpecification.toString)
-		} catch (Exception e) {
-		    e.printStackTrace
-		}
+	def section(RelalgContainer container, String name, String listing) {
+	'''
+	\subsection{«name»}
 
-		section(container, query, querySpecification)
-    }
+	\subsubsection*{Query specification}
 
-    def section(RelalgContainer container, String name, String listing) {
-		'''
-		\subsection{«name»}
+	\begin{lstlisting}
+	«listing»
+	\end{lstlisting}
 
-		\subsubsection*{Query specification}
+	«IF container == null»
+	\subsubsection*{Cannot parse query}
+	Cannot parse query. This is probably a limitation in our current parser and not an error in the query specification.
 
-		\begin{lstlisting}
-		«listing»
-		\end{lstlisting}
+	«ELSE»
+«««	start of subsubsections for expression
+	\subsubsection*{Relational algebra expression}
 
-		«IF container == null»
-		\subsubsection*{Cannot parse query}
-		Cannot parse query. This is probably a limitation in our current parser and not an error in the query specification.
+	«val expression = container.expression»
+	«IF expression == null»
+	Cannot visualize expression.
+	«ELSE»
+	\begin{align*}
+	\begin{autobreak}
+	r = «expression»
+	\end{autobreak}
+	\end{align*}
+	«ENDIF»
 
-		«ELSE»
-			\subsubsection*{Relational algebra expression}
+	\subsubsection*{Relational algebra tree}
 
-			«val expression = container.expression»
-			«IF expression == null»
-			Cannot visualize expression.
-			«ELSE»
-			\begin{align*}
-			\begin{autobreak}
-			r = «expression»
-			\end{autobreak}
-			\end{align*}
-			«ENDIF»
+	«val basicTree = container.visualize»
+	«IF basicTree == null»
+	Cannot visualize tree.
+	«ELSE»
+	\begin{center}
+	\adjustbox{max width=\textwidth}{%
+	«basicTree»
+	}
+	\end{center}
+	«ENDIF»
 
-		\subsubsection*{Relational algebra tree}
+	\subsubsection*{Incremental relational algebra tree}
 
-			«val basicTree = container.visualize»
-			«IF basicTree == null»
-			Cannot visualize tree.
-			«ELSE»
-			\begin{center}
-			\adjustbox{max width=\textwidth}{%
-			«basicTree»
-			}
-			\end{center}
-			«ENDIF»
+	«val incrementalTree = container.visualizeWithTransformations»
+	«IF incrementalTree == null»
+	Cannot visualize incremental tree.
+	«ELSE»
+	\begin{center}
+	\adjustbox{max width=\textwidth}{%
+	«incrementalTree»
+	}
+	\end{center}
+	«ENDIF»
 
-		\subsubsection*{Relational algebra tree for incremental queries}
+	\subsubsection*{Incremental relational algebra tree with tuples}
 
-			«val incrementalTree = container.visualizeWithTransformations»
-			«IF incrementalTree == null»
-			Cannot visualize incremental tree.
-			«ELSE»
-			\begin{center}
-			\adjustbox{max width=\textwidth}{%
-			«incrementalTree»
-			}
-			\end{center}
-
-			«ENDIF»
-		«ENDIF»
-		'''
-    }
+	«val incrementalTreeTuples = container.visualizeWithTransformations»
+	«IF incrementalTreeTuples == null»
+	Cannot visualize incremental tree with tuples.
+	«ELSE»
+	\begin{center}
+	\adjustbox{max width=\textwidth}{%
+	«incrementalTreeTuples»
+	}
+	\end{center}
+	«ENDIF»
+«««	end of subsubsections for expression
+	«ENDIF»
+	'''
+	}
 
 }
