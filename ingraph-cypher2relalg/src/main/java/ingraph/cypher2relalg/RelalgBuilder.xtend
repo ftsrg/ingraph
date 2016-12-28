@@ -14,8 +14,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionMulDiv
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionPlusMinus
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
@@ -34,7 +37,9 @@ import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import relalg.ArithmeticComparisonOperator
+import relalg.ArithmeticExpression
 import relalg.AttributeVariable
+import relalg.BinaryArithmeticOperator
 import relalg.BinaryLogicalOperator
 import relalg.ComparableExpression
 import relalg.Direction
@@ -45,6 +50,7 @@ import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
 import relalg.MaxHopsType
+import relalg.NumberLiteral
 import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgFactory
@@ -360,18 +366,7 @@ class RelalgBuilder {
     }
 
     def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {
-        try {
-            val n = Integer.parseInt(e.value)
-            createIntegerLiteral => [
-                value = n
-                container = topLevelContainer
-            ]
-        } catch (NumberFormatException ex) {
-            createDoubleLiteral => [
-                value = Double.parseDouble(e.value)
-                container = topLevelContainer
-            ]
-        }
+        buildRelalgNumberLiteral(e)
     }
 
     def dispatch ComparableExpression buildRelalgComparableElement(StringConstant e) {
@@ -383,6 +378,18 @@ class RelalgBuilder {
 
     def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
         buildRelalgVariable(e)
+    }
+
+    def dispatch ComparableExpression buildRelalgComparableElement(ExpressionPlusMinus e) {
+        buildRelalgArithmeticExpression(e)
+    }
+
+    def dispatch ComparableExpression buildRelalgComparableElement(ExpressionMulDiv e) {
+        buildRelalgArithmeticExpression(e)
+    }
+
+    def dispatch ComparableExpression buildRelalgComparableElement(ExpressionPower e) {
+        buildRelalgArithmeticExpression(e)
     }
 
     def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
@@ -407,6 +414,49 @@ class RelalgBuilder {
 
     def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
         buildRelalgVariable(e)
+    }
+
+    def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {
+        createArithmeticOperationExpression => [
+            operator = switch e.operator {
+                case "+": BinaryArithmeticOperator.PLUS
+                case "-": BinaryArithmeticOperator.MINUS
+            }
+            leftOperand = buildRelalgArithmeticExpression(e.left)
+            rightOperand = buildRelalgArithmeticExpression(e.right)
+            container = topLevelContainer
+        ]
+
+    }
+
+    def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionMulDiv e) {
+        createArithmeticOperationExpression => [
+            operator = switch e.operator {
+                case "*": BinaryArithmeticOperator.MULTIPLICATION
+                case "/": BinaryArithmeticOperator.DIVISION
+                case "%": BinaryArithmeticOperator.MOD
+            }
+            leftOperand = buildRelalgArithmeticExpression(e.left)
+            rightOperand = buildRelalgArithmeticExpression(e.right)
+            container = topLevelContainer
+        ]
+
+    }
+
+    def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPower e) {
+        createArithmeticOperationExpression => [
+            operator = switch e.operator {
+                case "^": BinaryArithmeticOperator.POWER
+            }
+            leftOperand = buildRelalgArithmeticExpression(e.left)
+            rightOperand = buildRelalgArithmeticExpression(e.right)
+            container = topLevelContainer
+        ]
+
+    }
+
+    def dispatch ArithmeticExpression buildRelalgArithmeticExpression(NumberConstant e) {
+        buildRelalgNumberLiteral(e)
     }
 
     def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
@@ -452,6 +502,21 @@ class RelalgBuilder {
                 unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
                 null
             }
+        }
+    }
+
+    def NumberLiteral buildRelalgNumberLiteral(NumberConstant e) {
+        try {
+            val n = Integer.parseInt(e.value)
+            createIntegerLiteral => [
+                value = n
+                container = topLevelContainer
+            ]
+        } catch (NumberFormatException ex) {
+            createDoubleLiteral => [
+                value = Double.parseDouble(e.value)
+                container = topLevelContainer
+            ]
         }
     }
 

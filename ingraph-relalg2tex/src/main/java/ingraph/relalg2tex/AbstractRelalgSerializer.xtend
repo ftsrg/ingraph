@@ -10,6 +10,7 @@ import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticComparisonOperator
+import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
 import relalg.BinaryArithmeticOperator
 import relalg.BinaryLogicalExpression
@@ -416,6 +417,10 @@ abstract class AbstractRelalgSerializer {
 	}
 
 	def dispatch String convertExpression(ArithmeticComparisonExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+	}
+
+	def dispatch String convertExpression(ArithmeticOperationExpression exp) {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
 	}
 
