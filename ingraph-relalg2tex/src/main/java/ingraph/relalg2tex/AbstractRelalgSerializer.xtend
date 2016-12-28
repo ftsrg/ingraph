@@ -343,16 +343,16 @@ abstract class AbstractRelalgSerializer {
 	def convert(UnaryLogicalOperator op) {
 		switch (op) {
 			case NOT: '''\neg'''
-			case IS_NULL: " IS NULL".escape
-			case IS_NOT_NULL: " IS NOT NULL".escape
+			case IS_NOT_NULL: RelNullHandler.isNotNull
+			case IS_NULL: RelNullHandler.isNull
 			default: throw new UnsupportedOperationException('''UnaryLogicalOperator «op» not supported.''')
 		}
 	}
 
 	def convert(UnaryNodeLogicalOperator op) {
 		switch (op) {
-			case IS_NULL: " IS NULL".escape
-			case IS_NOT_NULL: " IS NOT NULL".escape
+			case IS_NOT_NULL: RelNullHandler.isNotNull
+			case IS_NULL: RelNullHandler.isNull
 			default: throw new UnsupportedOperationException('''UnaryNodeLogicalOperator «op» not supported.''')
 		}
 	}
