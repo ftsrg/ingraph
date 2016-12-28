@@ -3,6 +3,7 @@ package hu.bme.mit.ire.util
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.ActorRef
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
@@ -62,5 +63,23 @@ trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B] {
       })
     })
     (b1.result(), b2.result())
+  }
+}
+
+object SizeCounter {
+  def countDeeper(containers: Iterable[Iterable[Tuple]]*): Long = {
+    println(containers)
+    var sum = 0L
+    for {
+      hashmap <- containers
+      set: Iterable[Tuple] <- hashmap
+      tuple: Tuple <- set
+    }
+      sum += tuple.size
+    sum
+  }
+
+  def count(containers: Iterable[Iterable[Any]]*): Long = {
+    containers.map(tuples => tuples.foldLeft(0)(_ + _.size)).sum
   }
 }

@@ -3,6 +3,7 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
@@ -14,6 +15,8 @@ abstract class ExtremeNode(override val next: (ReteMessage) => Unit,
                           ) extends UnaryNode with SingleForwarder {
   val data = new mutable.HashMap[Vector[Any], mutable.SortedSet[Tuple]]()
   implicit val order : Ordering[Tuple]
+
+  override def onSizeRequest(): Long = SizeCounter.count(data.values)
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
 

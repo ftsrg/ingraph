@@ -5,6 +5,7 @@ import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 abstract class ProjectionImpl(val mask: Mask) extends UnaryNode {
+  override def onSizeRequest() = 0
   override def onChangeSet(changeSet: ChangeSet) = {
     forward(ChangeSet(
       changeSet.positive.map(t => mask.map(i => t(i))),

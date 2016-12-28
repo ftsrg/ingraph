@@ -6,6 +6,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 class DuplicateEliminationNode(override val next: (ReteMessage) => Unit,
                                val condition: (Tuple) => Boolean) extends UnaryNode with SingleForwarder {
+  override def onSizeRequest(): Long = 0
   def onChangeSet(changeSet: ChangeSet): Unit = {
     // TODO
   }

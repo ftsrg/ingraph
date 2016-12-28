@@ -3,11 +3,13 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.GenericMath
+import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
 
 class AverageNode(override val next: (ReteMessage) => Unit,
                   val aggregationKeys: Vector[Int],
                   val sumKey: Int) extends UnaryNode with SumLike with CountLike with SingleForwarder {
+
+  override def onSizeRequest(): Long = SizeCounter.count(counts.keys, sums.keys)
 
   def average(sums: Vector[Tuple], counts: Vector[Tuple]): Vector[Tuple] = {
     for ( (sum, count) <- (sums zip counts) )

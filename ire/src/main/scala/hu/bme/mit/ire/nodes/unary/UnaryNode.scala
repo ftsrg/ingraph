@@ -25,5 +25,9 @@ abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor wit
     case terminator: TerminatorMessage => handleTerminator(terminator)
     case Primary | Secondary =>
       throw new UnsupportedOperationException(s"$name received Beta-wrapped message")
+    case _:SizeRequest => sender() ! onSizeRequest()
+    case _ => throw new UnsupportedOperationException(s"$name received unknown message")
   }
+
+  def onSizeRequest(): Long
 }

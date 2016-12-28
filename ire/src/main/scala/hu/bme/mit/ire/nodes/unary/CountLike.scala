@@ -8,7 +8,6 @@ import scala.collection.mutable
 
 trait CountLike {
   val counts = new mutable.HashMap[Tuple, Int].withDefault(d => 0)
-
   def maintainCount(changeSet: ChangeSet, aggregationKeys: Vector[Int]): ChangeSet = {
     val oldValues = new mutable.HashMap[Tuple, Int]
 

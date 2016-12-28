@@ -3,6 +3,7 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
@@ -12,6 +13,8 @@ class CollectNode(override val next: (ReteMessage) => Unit,
                   val aggregationKeys: Vector[Int],
                   val collectKey: Int) extends UnaryNode with SingleForwarder {
   val collections = new mutable.HashMap[Tuple, ListBuffer[Any]].withDefault(d => new ListBuffer())
+
+  override def onSizeRequest(): Long = SizeCounter.count(collections.values)
 
   def maintainCollections(changeSet: ChangeSet, aggregationKeys: Vector[Int], collectKey: Int): ChangeSet = {
     val oldValues = new mutable.HashMap[Tuple, ListBuffer[Any]]

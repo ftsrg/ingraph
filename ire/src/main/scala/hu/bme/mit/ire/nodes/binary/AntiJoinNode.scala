@@ -3,6 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
@@ -14,6 +15,9 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
   val primaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
   val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
   val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
+
+  override def onSizeRequest(): Long = SizeCounter.count(
+    primaryIndexer.values, secondaryTuples, secondaryProjectedTuples)
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val resultPositive = for {

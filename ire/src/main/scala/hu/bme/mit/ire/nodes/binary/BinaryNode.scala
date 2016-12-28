@@ -67,8 +67,11 @@ abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor wi
 
       }
     }
+    case _: SizeRequest => sender() ! onSizeRequest()
     case other: ReteMessage =>
       throw new UnsupportedOperationException(
         s"$name received raw message, needs to be wrapped as Primary or Secondary")
   }
+
+  def onSizeRequest(): Long
 }

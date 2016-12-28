@@ -3,6 +3,7 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.SizeCounter
 import hu.bme.mit.ire.util.TestUtil._
 
 import scala.collection.immutable.VectorBuilder
@@ -16,6 +17,8 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
   val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[Path]]]
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
+
+  override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
 
   def onChangeSet(changeSet: ChangeSet): Unit = {
     forward(ChangeSet(

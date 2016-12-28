@@ -11,6 +11,8 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryMask: Mask)
   extends JoinNodeBase with SingleForwarder {
 
+  override def onSizeRequest(): Long = 0
+
   override def onPrimary(changeSet: ChangeSet): Unit = {
   }
 

@@ -3,6 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
@@ -17,6 +18,8 @@ abstract class JoinNodeBase extends BinaryNode {
 
   val primaryMaskInverse:   Mask = Vector.range(0, primaryTupleWidth  ) filter (i => !primaryMask.contains(i)  )
   val secondaryMaskInverse: Mask = Vector.range(0, secondaryTupleWidth) filter (i => !secondaryMask.contains(i))
+
+  override def onSizeRequest(): Long = SizeCounter.countDeeper(primaryIndexer.values, secondaryIndexer.values)
 
   def extract(tuple: Tuple, mask: Mask): Tuple = {
     mask.map(i => tuple(i))

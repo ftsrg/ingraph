@@ -3,12 +3,15 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
 class UnionNode(override val next: (ReteMessage) => Unit) extends BinaryNode with SingleForwarder {
 
   val result = mutable.Set[Tuple]()
+
+  override def onSizeRequest(): Long = SizeCounter.count(result)
 
   def onPrimary(changeSet: ChangeSet) {
     onUpdate(changeSet)
