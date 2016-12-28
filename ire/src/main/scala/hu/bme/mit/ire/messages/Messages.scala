@@ -19,3 +19,5 @@ case class ExpectTerminator(terminatorID: Int, messageID: Int, promise: Promise[
 case class Pause(messageID: Int) extends ReteMessage()
 
 case class Resume(messageID: Int) extends ReteMessage()
+
+case class SizeRequest()
