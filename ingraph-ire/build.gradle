@@ -17,7 +17,7 @@ dependencies {
     compile project(':ingraph-relalg-xcore')
     compile project(':ingraph-tinkerpop')
     compile project(':ingraph-optimization-transformations')
-	compile project(':ingraph-cypher2relalg')
+    compile project(':ingraph-cypher2relalg')
     compile group: 'hu.bme.mit', name: 'ire', version: ireVersion
     testCompile group: 'org.scalatest', name: "scalatest_$scalaTestScalaVersion", version: scalaTestVersion
     testRuntime 'org.pegdown:pegdown:1.6.0'
