@@ -9,7 +9,7 @@ import relalg.RelalgContainer
 class IntegrationTest extends FlatSpec {
   val modelPath = "../trainbenchmark/models/railway-repair-1-tinkerpop.graphml"
   case class TestCase(name: String, network: RelalgContainer, expectedResultSize: Int)
-
+  
 //  Vector(
 //    TestCase("PosLength", TrainBenchmarkUtil.posLength(), 95),
 //    TestCase("RouteSensor", TrainBenchmarkUtil.routeSensor(), 18),
