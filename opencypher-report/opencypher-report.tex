@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_GB
 % !TeX program = pdflatex
-\documentclass[]{report}
+\documentclass{report}
 
 \input{../visualization/inputs/relalg-packages}
 \input{../visualization/inputs/relalg-commands}
@@ -11,7 +11,6 @@
 
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-%\usepackage[figurename=Fig.]{caption}
 \usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage{microtype}
@@ -25,6 +24,13 @@
 \usepackage{todonotes}
 \usepackage{adjustbox}
 \usepackage{autobreak}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\subsectionmark}[1]{\def\subsectiontitle{: #1}}
+\fancyhead[L]{\nouppercase{\rightmark \subsectiontitle}}
+\fancyhead[R]{\thepage}
 
 \input{commands}
 \input{listings}
@@ -56,12 +62,12 @@
 	% do nothing
 }{
 	\appendix
-	\input{appendix/tck}
-	\input{appendix/fraud-detection}
-	\input{appendix/ldbc-snb}
-	\input{appendix/movie-database}
-	\input{appendix/static-analysis-java}
-	\input{appendix/static-analysis-javascript}
+%	\input{appendix/tck}
+%	\input{appendix/fraud-detection}
+%	\input{appendix/ldbc-snb}
+%	\input{appendix/movie-database}
+%	\input{appendix/static-analysis-java}
+%	\input{appendix/static-analysis-javascript}
 	\input{appendix/trainbenchmark}
 }
 
