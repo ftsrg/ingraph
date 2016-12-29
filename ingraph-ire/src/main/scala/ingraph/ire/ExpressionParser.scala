@@ -8,6 +8,15 @@ object ExpressionParser {
     expression match {
       case exp: BinaryExpression =>
         exp match {
+          case exp: BinaryLogicalExpression =>
+            val left: (TupleType => Boolean) = parse(exp.getLeftOperand)
+            val right: (TupleType => Boolean) = parse(exp.getRightOperand)
+            import BinaryLogicalOperator._
+            exp.getOperator match {
+              case AND => (t: TupleType) => left(t) && right(t)
+              case OR => (t: TupleType) => left(t) || right(t)
+              case XOR => (t: TupleType) => left(t) ^ right(t)
+            }
           case exp: ArithmeticComparisonExpression =>
             def left: (TupleType) => Any = parseComparable(exp.getLeftOperand, _)
             def right: (TupleType) => Any = parseComparable(exp.getRightOperand, _)
