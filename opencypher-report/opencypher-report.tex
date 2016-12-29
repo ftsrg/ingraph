@@ -24,12 +24,14 @@
 \usepackage{todonotes}
 \usepackage{adjustbox}
 \usepackage{autobreak}
+\usepackage{xstring}
 
 \pagestyle{fancy}
 \fancyhf{}
 
 \renewcommand{\subsectionmark}[1]{\def\subsectiontitle{: #1}}
-\fancyhead[L]{\nouppercase{\rightmark \subsectiontitle}}
+%\fancyhead[L]{\nouppercase{\rightmark \subsectiontitle}}
+\fancyhead[L]{\nouppercase{\rightmark}} % \StrLeft{\subsectiontitle}{50}}}
 \fancyhead[R]{\thepage}
 
 \input{commands}
