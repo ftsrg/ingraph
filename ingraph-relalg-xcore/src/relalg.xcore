@@ -376,14 +376,12 @@ enum AggregationType {
 }
 
 /**
- * Indicates if the labelset represented is theoretically satisfiable or not
- * 
- * An EMP
+ * Indicates if the labelset represented is theoretically satisfiable or not.
  * 
  * If it is undefined, it matches every labels.
- * If it is defined, but empty, matching semantics differs.
- * Indicates if this labelset is theoretically satisfiable (true)
- * or non-satisfiable (false).
+ * If it is defined, but empty, matching semantics differs:
+ *  1. a vertex must have *all* of the labels
+ *  2. an edge must have *one* of the labels
  *
  * A labelset can be non-satisfiable (false, also known as contradicting) if,
  * for the same edge variable edge1, the following labelset constraints
