@@ -6,6 +6,16 @@ import relalg._
 object ExpressionParser {
   def parse(expression: Expression): (TupleType) => Boolean =
     expression match {
+      case exp: UnaryExpression =>
+        exp match {
+          case exp: UnaryLogicalExpression =>
+            val operand: (TupleType => Boolean) = parse(exp.getLeftOperand)
+            import UnaryLogicalOperator._
+            exp.getOperator match {
+              case NOT => (t: TupleType) => !operand(t)
+            }
+        }
+
       case exp: BinaryExpression =>
         exp match {
           case exp: BinaryLogicalExpression =>

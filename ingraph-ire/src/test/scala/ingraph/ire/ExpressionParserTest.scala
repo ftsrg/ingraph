@@ -26,13 +26,20 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Map("n" -> rocks)))
     }
 
-   "parse logical expressions" in {
+   "parse binary logical expressions" in {
       val cond = getCondition("""MATCH (n) WHERE (1=1 and n=2) or (n="emfrocks" xor 2=3) RETURN n""")
       val func = ExpressionParser.parse(cond)
       assert(func(Map("n" -> 2)))
       assert(!func(Map("n" -> 1)))
       assert(func(Map("n" -> rocks)))
       assert(!func(Map("n" -> s"not $rocks")))
+    }
+
+    "parse unary logical expressions" in {
+      val cond1 = getCondition("""MATCH (n) WHERE not n=2 RETURN n""")
+      val func1 = ExpressionParser.parse(cond1)
+      assert(!func1(Map("n" -> 2)))
+      assert(func1(Map("n" -> 1)))
     }
   }
 
