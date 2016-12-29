@@ -1,28 +1,26 @@
 package ingraph.ire
 
+import ingraph.cypher2relalg.Cypher2Relalg
+import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg.util.SchemaInferencer
 import org.scalatest.FlatSpec
-import relalg.ArithmeticComparisonOperator
+import relalg._
 import relalg.impl.{ArithmeticComparisonExpressionImpl, AttributeVariableImpl, StringLiteralImpl}
-import relalg.RelalgFactory
 
 class ExpressionParserTest extends FlatSpec {
-  
-  "equal to" should "be parsed" in {
-    val factory = RelalgFactory.eINSTANCE
-    
-    val exp = factory.createArithmeticComparisonExpression
-    val left = factory.createStringLiteral
-    left.setValue("emfsucks")
-    exp.setLeftOperand(left)
+  def getCondition(query: String): LogicalExpression = {
 
-    val right = factory.createAttributeVariable
-    right.setName("test")
-    exp.setRightOperand(right)
-
-    exp.setOperator(ArithmeticComparisonOperator.EQUAL_TO)
-    val func = ExpressionParser.parse(exp)
-    assert(func(Map("test" -> "emfsucks")))
-    assert(!func(Map("test" -> "emfrocks")))
+    val relalg = Cypher2Relalg.processString(query)
+    relalg.getRootExpression
+      .asInstanceOf[ProjectionOperator].getInput
+      .asInstanceOf[SelectionOperator].getCondition
   }
-  
+
+  "equal to" should "be parsed" in {
+    val cond = getCondition("""MATCH (n) WHERE n="emfsucks" RETURN n""")
+    val func = ExpressionParser.parse(cond)
+    assert(func(Map("n" -> "\"emfsucks\"")))
+    assert(!func(Map("n" -> "\"emfrocks\"")))
+  }
+
 }
