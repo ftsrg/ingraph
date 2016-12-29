@@ -20,6 +20,8 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionPlusMinus
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
+import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
+import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.NumberConstant
@@ -284,6 +286,22 @@ class RelalgBuilder {
       operator = BinaryLogicalOperator.XOR
       leftOperand = buildRelalgLogicalExpression(e.left, joins)
       rightOperand = buildRelalgLogicalExpression(e.right, joins)
+      container = topLevelContainer
+    ]
+  }
+
+  def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
+    createUnaryNodeLogicalExpression => [
+      operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+      leftOperand = buildRelalgVariable(e.left)
+      container = topLevelContainer
+    ]
+  }
+
+  def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
+    createUnaryNodeLogicalExpression => [
+      operator = UnaryNodeLogicalOperator.IS_NULL
+      leftOperand = buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }

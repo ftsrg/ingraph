@@ -280,11 +280,12 @@ class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
   refers LogicalExpression leftOperand
 }
 
-// for conditions like "nodeVariable IS NULL"
-// possibly later ElementVariable can be generalized
+// for conditions like "vertexVariable IS NULL" or
+// "edgeVariable.attribute IS NOT NULL"
+// TODO: possibly later this can be generalized and merged with UnaryLogicalExpression
 class UnaryNodeLogicalExpression extends UnaryExpression, LogicalExpression {
   UnaryNodeLogicalOperator operator
-  refers ElementVariable leftOperand
+  refers Variable leftOperand
 }
 
 abstract class ComparableExpression extends Expression {
