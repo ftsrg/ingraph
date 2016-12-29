@@ -1,9 +1,9 @@
-% fancyhdr.sty version 3.8
+% fancyhdr.sty version 3.2
 % Fancy headers and footers for LaTeX.
 % Piet van Oostrum, 
-% [Formerly] Dept of Computer and Information Sciences, University of Utrecht,
-% Email: piet@vanoostrum.org
-% WWW: http://www.pietvanoostrum.com
+% Dept of Computer and Information Sciences, University of Utrecht,
+% Padualaan 14, P.O. Box 80.089, 3508 TB Utrecht, The Netherlands
+% Telephone: +31 30 2532180. Email: piet@cs.uu.nl
 % ========================================================================
 % LICENCE:
 % This file may be distributed under the terms of the LaTeX Project Public
@@ -144,44 +144,6 @@
 % version 3.2
 % reset \everypar (the real one) in \fancy@reset because spanish.ldf does
 % strange things with \everypar between << and >>.
-
-% Aug 20, 2016
-% version 3.3
-% Replace `\@ifundefined{chapter}' with `\ifx\chapter\@undefined'
-% because the former subtly make \chapter equal to \relax, which may be
-% undesirable in some cases.
-
-% Aug 21, 2016
-% version 3.4
-% Replace \rm by \normalfont\rmfamily
-% and \sl by \normalfont\slshape
-
-% Aug 21, 2016
-% version 3.5
-% Don't define \footruleskip if it is already defined
-
-% Aug. 27, 2016
-% version 3.6
-% Added a \ProvidesPackage line.
-% Updated contact information.
-
-% Aug. 28, 2016
-% version 3.7
-% Removed \normalfont from default values, as every field is already
-% initialised with \normalfont.
-% Set \hsize to \headwidth in header/footer.
-
-% Sept. 6, 2016
-% version 3.8
-% Reset \\, \raggedleft, \raggedright and \centering to their default values
-%   to avoid a clash with the tabu package.
-% Move the redefinition of \@makecol to \begin{document} to avoid a clash
-%   with the footmisc package (and maybe others)
-% Define a working \iffootnote command
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NeedsTeXFormat{LaTeX2e}[1995/06/01]%
-\ProvidesPackage{fancyhdr}[2016/09/06 3.8 Extensive control of page headers and footers]%
 
 \def\ifancy@mpty#1{\def\temp@a{#1}\ifx\temp@a\@empty}
 
@@ -337,9 +299,7 @@
 \newlength{\f@ncyO@orf}
 \newcommand{\headrulewidth}{0.4pt}
 \newcommand{\footrulewidth}{0pt}
-%% Memoir also define \footruleskip. 
-%% Don't define \footruleskip if it is already defined
-\@ifundefined{footruleskip}{\newcommand{\footruleskip}{.3\normalbaselineskip}}{}
+\newcommand{\footruleskip}{.3\normalbaselineskip}
 
 % Fancyplain stuff shouldn't be used anymore (rather
 % \fancypagestyle{plain} should be used), but it must be present for
@@ -358,20 +318,9 @@
 % verbatim crosses a page boundary)
 % It also defines a \nouppercase command that disables \uppercase and
 % \Makeuppercase. It can only be used in the headers and footers.
-% \set \hsize to \headwidth (helps for multicol)
-% reset \\ \raggedleft \raggedright and \centering to their default values (for tabu)
-\let\fnch@raggedleft\raggedleft
-\let\fnch@raggedright\raggedright
-\let\fnch@centering\centering
 \let\fnch@everypar\everypar% save real \everypar because of spanish.ldf
-
 \def\fancy@reset{\fnch@everypar{}\restorecr\endlinechar=13
- \let\\\@normalcr
- \let\raggedleft\fnch@raggedleft
- \let\raggedright\fnch@raggedright
- \let\centering\fnch@centering
  \def\baselinestretch{1}%
- \hsize=\headwidth
  \def\nouppercase##1{{\let\uppercase\relax\let\MakeUppercase\relax
      \expandafter\let\csname MakeUppercase \endcsname\relax##1}}%
  \ifx\undefined\@newbaseline% NFSS not present; 2.09 or 2e
@@ -388,13 +337,13 @@
 % lefthead empty on ``plain'' pages, \rightmark on even, \leftmark on odd pages
 % evenhead empty on ``plain'' pages, \leftmark on even, \rightmark on odd pages
 \if@twoside
-  \fancyhead[el,or]{\fancyplain{}{\slshape\rightmark}}
-  \fancyhead[er,ol]{\fancyplain{}{\slshape\leftmark}}
+  \fancyhead[el,or]{\fancyplain{}{\sl\rightmark}}
+  \fancyhead[er,ol]{\fancyplain{}{\sl\leftmark}}
 \else
-  \fancyhead[l]{\fancyplain{}{\slshape\rightmark}}
-  \fancyhead[r]{\fancyplain{}{\slshape\leftmark}}
+  \fancyhead[l]{\fancyplain{}{\sl\rightmark}}
+  \fancyhead[r]{\fancyplain{}{\sl\leftmark}}
 \fi
-\fancyfoot[c]{\rmfamily\thepage} % page number
+\fancyfoot[c]{\rm\thepage} % page number
 
 % Use box 0 as a temp box and dimen 0 as temp dimen. 
 % This can be done, because this code will always
@@ -447,18 +396,15 @@
 % the version 1 documentation) will still work.
 %
 \@ifundefined{MakeUppercase}{\def\MakeUppercase{\uppercase}}{}%
-\ifx\chapter\@undefined
-\def\sectionmark##1{\markboth
+\@ifundefined{chapter}{\def\sectionmark##1{\markboth
 {\MakeUppercase{\ifnum \c@secnumdepth>\z@
  \thesection\hskip 1em\relax \fi ##1}}{}}%
 \def\subsectionmark##1{\markright {\ifnum \c@secnumdepth >\@ne
- \thesubsection\hskip 1em\relax \fi ##1}}%
-\else
-\def\chaptermark##1{\markboth {\MakeUppercase{\ifnum \c@secnumdepth>\m@ne
+ \thesubsection\hskip 1em\relax \fi ##1}}}%
+{\def\chaptermark##1{\markboth {\MakeUppercase{\ifnum \c@secnumdepth>\m@ne
  \@chapapp\ \thechapter. \ \fi ##1}}{}}%
 \def\sectionmark##1{\markright{\MakeUppercase{\ifnum \c@secnumdepth >\z@
- \thesection. \ \fi ##1}}}%
-\fi
+ \thesection. \ \fi ##1}}}}%
 %\csname ps@headings\endcsname % use \ps@headings defaults if they exist
 \ps@@fancy
 \gdef\ps@fancy{\@fancyplainfalse\ps@@fancy}%
@@ -527,20 +473,13 @@
   \fancy@gbl\let\fancy@Oorf\hss
   \fancy@gbl\let\fancy@Oerf\hss}
 
-% Redefine \@makecol so that we can capture if there are top/bottom floats, footnotes
-%  or if we are on a float page.
-% Because of a clash with the footmisc package we do this at \begin{document}}
-
-\newif\iffnch@footnote
-\AtBeginDocument{%
+\newif\iffootnote
 \let\latex@makecol\@makecol
-\def\@makecol{\ifvoid\footins\fnch@footnotefalse\else\fnch@footnotetrue\fi
-\let\topfloat\@toplist\let\botfloat\@botlist\latex@makecol}%
-}
-\newcommand\iftopfloat[2]{\ifx\topfloat\empty #2\else #1\fi}%
-\newcommand\ifbotfloat[2]{\ifx\botfloat\empty #2\else #1\fi}%
-\newcommand\iffloatpage[2]{\if@fcolmade #1\else #2\fi}%
-\newcommand\iffootnote[2]{\iffnch@footnote #1\else #2\fi}%
+\def\@makecol{\ifvoid\footins\footnotetrue\else\footnotefalse\fi
+\let\topfloat\@toplist\let\botfloat\@botlist\latex@makecol}
+\def\iftopfloat#1#2{\ifx\topfloat\empty #2\else #1\fi}
+\def\ifbotfloat#1#2{\ifx\botfloat\empty #2\else #1\fi}
+\def\iffloatpage#1#2{\if@fcolmade #1\else #2\fi}
 
 \newcommand{\fancypagestyle}[2]{%
   \@namedef{ps@#1}{\let\fancy@gbl\relax#2\relax\ps@fancy}}
