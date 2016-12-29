@@ -6,12 +6,12 @@ import relalg.AttributeVariable
 
 class AttributeVariableFactory extends VariableFactory<AttributeVariable> {
 
-	new(RelalgContainer container) {
-		super(container)
-	}
+  new(RelalgContainer container) {
+    super(container)
+  }
 
-	override createSpecificNamedElement() {
-		createAttributeVariable
-	}
+  override createSpecificNamedElement() {
+    createAttributeVariable
+  }
 
 }

@@ -6,19 +6,19 @@ import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 
 class EdgeVariableFactory extends VariableFactory<EdgeVariable> {
 
-	new(RelalgContainer container) {
-		super(container)
-	}
+  new(RelalgContainer container) {
+    super(container)
+  }
 
-	override createSpecificNamedElement() {
-		createEdgeVariable
-	}
+  override createSpecificNamedElement() {
+    createEdgeVariable
+  }
 
-	def createElement(RelationshipDetail rd) {
-		if (rd.variable != null) {
-			createElement(rd.variable.name)
-		} else {
-			createDontCareElement(rd)
-		}
-	}
+  def createElement(RelationshipDetail rd) {
+    if (rd.variable != null) {
+      createElement(rd.variable.name)
+    } else {
+      createDontCareElement(rd)
+    }
+  }
 }
