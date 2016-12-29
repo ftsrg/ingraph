@@ -1,17 +1,20 @@
 package ingraph.cypher2relalg.trainbenchmark
 
 import ingraph.cypher2relalg.Cypher2Relalg
+import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
 import java.io.IOException
 import org.junit.Test
-import ingraph.cypherparser.CypherParser
+import ingraph.relalg.util.SchemaInferencer
 
 class TrainBenchmarkCypher2RelalgTest {
 
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
 		CypherUtil.save(cypher, "../ingraph-cypxmi/trainbenchmark/" + query)
-		Cypher2Relalg.processCypher(cypher)
+		val relalg = Cypher2Relalg.processCypher(cypher)
+		val si = new SchemaInferencer
+		si.inferSchema(relalg.rootExpression)
 	}
 
 	@Test

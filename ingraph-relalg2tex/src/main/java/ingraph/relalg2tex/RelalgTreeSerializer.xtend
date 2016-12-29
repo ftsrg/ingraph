@@ -1,11 +1,15 @@
 package ingraph.relalg2tex
 
+import java.util.List
+import relalg.AttributeVariable
 import relalg.BinaryOperator
 import relalg.Cardinality
+import relalg.ElementVariable
 import relalg.GetEdgesOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.UnaryOperator
+import relalg.Variable
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -41,11 +45,11 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 			{«op.operator»$
 			«IF !op.schema.isEmpty»
 			\\ \footnotesize
-			$\color{gray} \langle \var{«op.schema.map[ name.escape ].join(', ')»} \rangle$
+			$\color{gray} «serializeSchema(op.schema)» \rangle$
 			«ENDIF»
 			«IF !op.detailedSchema.isEmpty»
       \\ \footnotesize
-      $\color{orange} \langle \var{«op.detailedSchema.map[ name.escape ].join(', ')»} \rangle$
+      $\color{orange} «serializeSchema(op.detailedSchema)» \rangle$
       «ENDIF»
 			«IF config.includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
             '''«op?.children»''' + // invoke children
@@ -54,6 +58,18 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
             ]
             «««		«ENDIF»
 		'''
+    }
+    
+    def serializeSchema(List<Variable> schema) {
+      '''\langle \var{«schema.map[ serializeVariable.escape ].join(', ')»}'''
+    }
+
+    def dispatch serializeVariable(ElementVariable variable) {
+      '''«variable.name»'''
+    }
+    
+    def dispatch serializeVariable(AttributeVariable variable) {
+      '''«variable.element.name».«variable.name»'''
     }
 
     /**

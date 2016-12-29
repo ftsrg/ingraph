@@ -151,7 +151,7 @@ class RelalgBuilder {
 
         val trimmer = createProjectionOperator => [
             input = content
-            variables.addAll(returnBody.items.map [
+            elements.addAll(returnBody.items.map [
                 val mapIt = it
                 createReturnableElement => [
                     expression = buildRelalgExpression(mapIt.expression)

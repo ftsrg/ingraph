@@ -38,7 +38,7 @@ object EngineFactory extends App {
               case op: SelectionOperator =>
                 newLocal(Props(new Checker(expr.child, ExpressionParser.parse(op.getCondition))))
               case op: ProjectionOperator =>
-                val variables = op.getVariables.map(_.getAlias)
+                val variables = op.getElements.map(_.getAlias)
                 newLocal(Props(new Trimmer(expr.child, variables)))
               case op: DuplicateEliminationOperator => newLocal(Props(new Checker(expr.child, (r: TupleType) => true)))
               case op: AllDifferentOperator =>

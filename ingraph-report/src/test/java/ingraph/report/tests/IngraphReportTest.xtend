@@ -3,6 +3,7 @@ package ingraph.report.tests
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.SchemaInferencer
+import ingraph.relalg.util.TupleInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
@@ -16,7 +17,8 @@ import relalg.RelalgContainer
 
 class IngraphReportTest {
 
-	protected extension SchemaInferencer inferencer = new SchemaInferencer
+	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
+	protected extension TupleInferencer tupleInferencer = new TupleInferencer
 	protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
 	protected val treeSerializerConfig = RelalgSerializerConfig.builder.includeCommonVariables(true).build
@@ -58,13 +60,15 @@ class IngraphReportTest {
 
 	def escape(String s) {
 	s //
-	.replaceAll('''#''', '''\\#''') //
-	.replaceAll('''_''', '''\\_''')
+	.replaceAll('''#''', ''' no.''') //
+	.replaceAll('''_''', '''\_''') //
+	.replaceAll('''`''', "'") //
 	}
 
 	def expression(RelalgContainer container) {
 	try {
-		expressionSerializer.serialize(container.addSchemaInformation).toString
+	  container.addSchemaInformation
+		expressionSerializer.serialize(container).toString
 	} catch (Exception e) {
 		e.printStackTrace
 		null
@@ -73,7 +77,9 @@ class IngraphReportTest {
 
 	def visualize(RelalgContainer container) {
 	try {
-		treeSerializer.serialize(container.addSchemaInformation)
+	  container.addSchemaInformation
+	  container.addDetailedSchemaInformation
+		treeSerializer.serialize(container)
 	} catch (Exception e) {
 		e.printStackTrace
 		null
@@ -82,7 +88,10 @@ class IngraphReportTest {
 
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
-			treeSerializer.serialize(container.transformToRete.addSchemaInformation)
+		  container.transformToRete
+		  container.addSchemaInformation
+      container.addDetailedSchemaInformation
+			treeSerializer.serialize(container)
 		} catch (Exception e) {
 			e.printStackTrace
 			null
@@ -106,7 +115,7 @@ class IngraphReportTest {
 
 	def section(RelalgContainer container, String name, String listing) {
 	'''
-	\subsection{«name»}
+	\subsection{«name.escape»}
 
 	\subsubsection*{Query specification}
 

@@ -182,7 +182,7 @@ abstract class AbstractRelalgSerializer {
     }
 
 	def dispatch operatorToTex(ProjectionOperator op) {
-		#['''\projection{«op.variables.returnableElementList»}''']
+		#['''\projection{«op.elements.returnableElementList»}''']
 	}
 
     def dispatch operatorToTex(SelectionOperator op) {
@@ -255,9 +255,9 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * escape
 	 */
-	def escape(String s) {
-		s //
-        .replace('''"''', "")//
+	def escape(CharSequence s) {
+		s.toString //
+    .replace('''"''', "")//
 		.replace('''\''', '''\backslash{}''') //
 		.replace('''_''', '''\_''') //
 		.replace(''' ''', '''\ ''') //

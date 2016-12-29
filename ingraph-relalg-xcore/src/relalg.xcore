@@ -124,7 +124,7 @@ class SelectionOperator extends UnaryOperator {
 }
 
 class ProjectionOperator extends UnaryOperator {
-	contains ReturnableElement[] variables
+	contains ReturnableElement[] elements
 	int[] tupleElements
 }
 

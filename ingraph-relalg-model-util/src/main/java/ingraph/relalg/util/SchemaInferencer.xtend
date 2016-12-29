@@ -16,6 +16,14 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 
+/**
+ * Infers the basic schema of the operators in the relational algebra tree.
+ * 
+ * Uses a bottom-up approach: it uses recursion / dispatch methods to reach the (unary) input nodes,
+ * then each method returns with the inferred schema.
+ * 
+ * For example, a join node concatenates the schema of its input nodes (left/right) and removes the 
+ */
 class SchemaInferencer {
 
   val boolean includeEdges
@@ -57,17 +65,19 @@ class SchemaInferencer {
     val schema = op.getInput.inferSchema
 
     // check if all projected variables are in the schema
-    op.variables.filter(AttributeVariable).forEach [
-      if (!schema.contains(it.element))
+    op.elements.map[expression].filter(AttributeVariable).forEach [
+      if (!schema.contains(it.element)) {
         throw new IllegalStateException("Attribute " + it.name +
           " cannot be projected as its vertex/edge variable does not exists.")
+      }
     ]
-    op.variables.filter(ElementVariable).forEach [
-      if (!schema.contains(it))
+    op.elements.map[expression].filter(ElementVariable).forEach [
+      if (!schema.contains(it)) {
         throw new IllegalStateException("Variable " + it.name + " is not part of the schema in projection operator.")
+      }
     ]
 
-    op.defineSchema(op.variables.map [
+    op.defineSchema(op.elements.map [
       if (expression instanceof Variable) {
         expression as Variable
       }
@@ -92,7 +102,8 @@ class SchemaInferencer {
   def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
     val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
     val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
-    op.defineSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
+    val s = Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema))
+    op.defineSchema(s)
 
     // calculate common variables
     leftInputSchema.retainAll(rightInputSchema)
@@ -102,31 +113,6 @@ class SchemaInferencer {
   }
 
   def dispatch List<Variable> inferSchema(UnionOperator op) {
-    // The openCypher acceptance test and the Neo4j code contradict each other:
-    // OpenCypher
-    // https://github.com/opencypher/openCypher/blob/master/tck/features/UnionAcceptance.feature
-    // Scenario: Should be able to create text output from union queries
-    // Given an empty graph
-    // And having executed:
-    // """
-    // CREATE (:A), (:B)
-    // """
-    // When executing query:
-    // """
-    // MATCH (a:A)
-    // RETURN a AS a
-    // UNION
-    // MATCH (b:B)
-    // RETURN b AS a
-    // """
-    // Then the result should be:
-    // | a    |
-    // | (:A) |
-    // | (:B) |
-    // And no side effects
-    // Neo4j
-    // https://github.com/neo4j/neo4j/blob/3.1/community/cypher/spec-suite-tools/src/test/scala/cypher/feature/steps/SpecSuiteErrorHandler.scala#L166
-    // All sub queries in an UNION must have the same column names
     op.getLeftInput.inferSchema
     op.getRightInput.inferSchema
 
@@ -138,6 +124,7 @@ class SchemaInferencer {
    * defineSchema
    */
   def defineSchema(Operator op, List<Variable> schema) {
+    // EObjectEList.addAll() removes duplicates
     op.schema.addAll(schema)
     schema
   }

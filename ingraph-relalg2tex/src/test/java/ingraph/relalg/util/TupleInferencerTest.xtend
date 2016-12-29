@@ -41,7 +41,7 @@ class TupleInferencerTest {
 
     val getVertices = createGetVerticesOperator => [vertexVariable = personVariable]
     val selection = createSelectionOperator => [input = getVertices; condition = ageComparison]
-    val projection = createProjectionOperator => [input = selection; variables.add(returnedNameAttribute)]
+    val projection = createProjectionOperator => [input = selection; elements.add(returnedNameAttribute)]
     val production = createProductionOperator => [input = projection]
 
     container.rootExpression = production
@@ -50,7 +50,7 @@ class TupleInferencerTest {
     container.addSchemaInformation
     container.addDetailedSchemaInformation
     container.inferTuples
-    container.serialize
+    container.serialize("../visualization/sandbox/tuple-inferencer-test")
   }
 
 }
