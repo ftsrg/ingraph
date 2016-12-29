@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rm disable-appendix.tex
+rm -f disable-appendix.tex
