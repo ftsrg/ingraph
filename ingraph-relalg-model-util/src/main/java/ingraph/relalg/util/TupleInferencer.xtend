@@ -6,7 +6,6 @@ import java.util.List
 import relalg.ArithmeticComparisonExpression
 import relalg.AttributeVariable
 import relalg.BinaryOperator
-import relalg.ExpandOperator
 import relalg.Expression
 import relalg.GroupingOperator
 import relalg.NullaryOperator
@@ -17,6 +16,7 @@ import relalg.SelectionOperator
 import relalg.SortOperator
 import relalg.UnaryLogicalExpression
 import relalg.UnaryOperator
+import relalg.UnwindOperator
 import relalg.Variable
 
 class TupleInferencer {
@@ -43,52 +43,19 @@ class TupleInferencer {
   }
 
   // unary operators
-  def dispatch List<Variable> inferDetailedSchema(ProjectionOperator op, List<? extends Variable> extraVariables) {
-    val List<AttributeVariable> newExtraVariables = Lists.newArrayList(
-      op.elements.map[expression].filter(AttributeVariable))
+  def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<? extends Variable> extraVariables) {
+    val newExtraVariables = extractUnaryOperatorExtraVariables(op)
 
-    op.defineDetailedSchema(newExtraVariables)
-    op.input.inferDetailedSchema(newExtraVariables)
-  }
-
-  def dispatch List<Variable> inferDetailedSchema(ExpandOperator op, List<? extends Variable> extraVariables) {
-    op.input.inferDetailedSchema(#[])
-    // TODO add all attributes used in the expression
-    op.defineDetailedSchema(#[])
-  }
-
-  def dispatch List<Variable> inferDetailedSchema(GroupingOperator op, List<? extends Variable> extraVariables) {
-    op.input.inferDetailedSchema(#[])
-    // TODO add all attributes used in the grouping op
-    op.defineDetailedSchema(#[])
-  }
-
-  def dispatch List<Variable> inferDetailedSchema(SelectionOperator op, List<? extends Variable> extraVariables) {
-    val attributesInCondition = getAttributes(op.condition)
-    val inputExtraVariables = union(extraVariables, attributesInCondition)
-
+    val inputExtraVariables = union(extraVariables, newExtraVariables)
     op.defineDetailedSchema(inputExtraVariables)
     op.input.inferDetailedSchema(inputExtraVariables)
   }
 
-  def dispatch List<Variable> inferDetailedSchema(SortOperator op, List<? extends Variable> extraVariables) {
-    val attributesForSort = op.entries.map[variable]
-    
-    op.input.inferDetailedSchema(union(extraVariables, attributesForSort))
-    op.defineDetailedSchema(extraVariables)
-  }
-
-  // rest of the unary operators - just pass on the schema
-  def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<? extends Variable> extraVariables) {
-    op.input.inferDetailedSchema(#[])
-    op.defineDetailedSchema(#[])
-  }
-
   // binary operators
   def dispatch List<Variable> inferDetailedSchema(BinaryOperator op, List<? extends Variable> extraVariables) {
+    op.defineDetailedSchema(extraVariables)
     op.leftInput.inferDetailedSchema(extraVariables)
     op.rightInput.inferDetailedSchema(extraVariables)
-    op.defineDetailedSchema(extraVariables)
   }
 
   /**
@@ -128,5 +95,32 @@ class TupleInferencer {
    */
   def <T> union(List<? extends T> list1, List<? extends T> list2) {
     Lists.newArrayList(Iterables.concat(list1, list2))
+  }
+  
+  /**
+   * extract extra variables required by unary operators
+   */
+  def dispatch extractUnaryOperatorExtraVariables(ProjectionOperator op) {
+    op.elements.map[expression].filter(AttributeVariable).toList
+  }
+
+  def dispatch extractUnaryOperatorExtraVariables(GroupingOperator op) {
+    op.entries.map[variable]  }
+
+  def dispatch extractUnaryOperatorExtraVariables(SelectionOperator op) {
+    getAttributes(op.condition)
+  }
+
+  def dispatch extractUnaryOperatorExtraVariables(SortOperator op) {
+    op.entries.map[variable]
+  }
+
+  def dispatch extractUnaryOperatorExtraVariables(UnwindOperator op) {
+    #[op.sourceVariable]
+  }
+  
+  // rest of the unary operators - no extra requirements
+  def dispatch extractUnaryOperatorExtraVariables(UnaryOperator op) {
+    #[]
   }
 }
