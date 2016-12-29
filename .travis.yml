@@ -22,7 +22,7 @@ script:
   - cd ..
   - scripts/deploy.sh
 notifications:
-  slack: bme-db-lab:egojac3QB9DyjtDvzHiNIaqo
+  slack: ftsrg:ll9rntRuEyb9KC9z5cWAQSh
   email: false
   on_success: change
   on_failure: always
