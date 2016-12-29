@@ -23,7 +23,7 @@ class RelalgSerializerConfig {
 	boolean standaloneDocument
 
 	/**
-	 * whether to include mutual variables for joins and antijoins
+	 * whether to include common variables for joins and antijoins
 	 */
 	boolean includeCommonVariables
 

@@ -94,7 +94,7 @@ class SchemaInferencer {
     val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
     op.defineSchema(Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema)))
 
-    // calculate the mutual variables
+    // calculate common variables
     leftInputSchema.retainAll(rightInputSchema)
     op.commonVariables.addAll(leftInputSchema)
 
