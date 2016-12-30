@@ -49,7 +49,6 @@ class TupleInferencerTest {
     // act
     container.addSchemaInformation
     container.addDetailedSchemaInformation
-    container.inferTuples
     container.serialize("../visualization/sandbox/tuple-inferencer-test")
   }
 

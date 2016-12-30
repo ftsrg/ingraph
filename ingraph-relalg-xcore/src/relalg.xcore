@@ -208,6 +208,8 @@ abstract class AssociativeBinaryOperator extends BinaryOperator {
 
 abstract class AbstractJoinOperator extends BinaryOperator {
   refers Variable[] commonVariables
+  int[] leftMask
+  int[] rightMask
   int[] commonVariableIndices
 }
 

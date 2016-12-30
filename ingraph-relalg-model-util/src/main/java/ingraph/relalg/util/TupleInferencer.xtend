@@ -3,6 +3,7 @@ package ingraph.relalg.util
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import java.util.List
+import relalg.AbstractJoinOperator
 import relalg.ArithmeticComparisonExpression
 import relalg.AttributeVariable
 import relalg.BinaryOperator
@@ -16,33 +17,30 @@ import relalg.SelectionOperator
 import relalg.SortOperator
 import relalg.UnaryLogicalExpression
 import relalg.UnaryOperator
+import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.Variable
 
 class TupleInferencer {
 
+  extension SchemaToMap schemaToMap = new SchemaToMap
   var RelalgContainer container
-
-  def inferTuples(RelalgContainer container) {
-    // TODO
-  }
 
   def addDetailedSchemaInformation(RelalgContainer container) {
     val rootExpression = container.getRootExpression
     this.container = container // TODO ugly hack
     rootExpression.inferDetailedSchema(#[])
+    rootExpression.traverse([calculateTuples])
     container
   }
 
   /**
-   * inferSchema
+   * inferDetailedSchema
    */
-  // nullary operators
   def dispatch List<Variable> inferDetailedSchema(NullaryOperator op, List<? extends Variable> extraVariables) {
     op.defineDetailedSchema(extraVariables)
   }
 
-  // unary operators
   def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<? extends Variable> extraVariables) {
     val newExtraVariables = extractUnaryOperatorExtraVariables(op)
 
@@ -51,7 +49,6 @@ class TupleInferencer {
     op.input.inferDetailedSchema(inputExtraVariables)
   }
 
-  // binary operators
   def dispatch List<Variable> inferDetailedSchema(BinaryOperator op, List<? extends Variable> extraVariables) {
     op.defineDetailedSchema(extraVariables)
     op.leftInput.inferDetailedSchema(extraVariables)
@@ -123,4 +120,58 @@ class TupleInferencer {
   def dispatch extractUnaryOperatorExtraVariables(UnaryOperator op) {
     #[]
   }
+  
+  /**
+   * traverse tree and apply a visitor method
+   */
+  def dispatch void traverse(NullaryOperator op, (Operator) => void visitor) {
+    visitor.apply(op)
+  }
+  
+  def dispatch void traverse(UnaryOperator op, (Operator) => void visitor) {
+    op.input.traverse(visitor)
+    
+    visitor.apply(op)
+  }
+  
+  def dispatch void traverse(BinaryOperator op, (Operator) => void visitor) {
+    op.leftInput.traverse(visitor)
+    op.rightInput.traverse(visitor)
+    
+    visitor.apply(op)
+  }
+  
+  /**
+   * calculateTuples
+   */
+  def dispatch void calculateTuples(NullaryOperator op) {
+    // do nothing
+  }
+  
+  def dispatch void calculateTuples(UnaryOperator op) {
+    // do nothing    
+  }
+  
+  def dispatch void calculateTuples(AbstractJoinOperator op) {
+    //val indices = op.schemaToMap
+    
+    op.leftMask.clear
+    op.rightMask.clear
+    
+    val leftIndices = op.leftInput.schemaToMap
+    val rightIndices = op.rightInput.schemaToMap
+    
+    op.commonVariables.forEach[ variable |
+      op.leftMask.add(leftIndices.get(variable))
+      op.rightMask.add(rightIndices.get(variable))
+    ]
+  }
+  
+  def dispatch void calculateTuples(UnionOperator op) {
+    // do nothing
+  }
+  
+  
+  
+  
 }

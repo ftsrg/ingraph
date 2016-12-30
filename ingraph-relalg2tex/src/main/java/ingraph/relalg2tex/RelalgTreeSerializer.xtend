@@ -10,6 +10,7 @@ import relalg.NullaryOperator
 import relalg.Operator
 import relalg.UnaryOperator
 import relalg.Variable
+import relalg.AbstractJoinOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -33,16 +34,14 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     /**
      * toNode
      */
-    def CharSequence toNode(
-        Operator op) {
-        '''
-		«««		Optimization: an AllDifferent operator with a single edge variable is not useful at all.
-«««		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
-«««			«toNode((expression as AllDifferentOperator).getInput)»
-«««		«ELSE»
-			[
-			««« $ first line \\ second line $	
-			{«op.operator»$
+    def CharSequence toNode(Operator op) {
+//		Optimization: an AllDifferent operator with a single edge variable is not useful at all.
+//		«IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
+//			«toNode((expression as AllDifferentOperator).getInput)»
+//		«ELSE»
+      '''
+  		[
+      {«op.operator»
 			«IF !op.schema.isEmpty»
 			\\ \footnotesize
 			$\color{gray} «serializeSchema(op.schema)» \rangle$
@@ -51,13 +50,17 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
       \\ \footnotesize
       $\color{orange} «serializeSchema(op.detailedSchema)» \rangle$
       «ENDIF»
-			«IF config.includeCardinality && op.cardinality != null» \\ \footnotesize \# «op.cardinality.formatCardinality»«ENDIF»}''' +
-            '''«op?.children»''' + // invoke children
-            '''
-            «IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
-            ]
-            «««		«ENDIF»
-		'''
+      «IF op instanceof AbstractJoinOperator && !op.detailedSchema.isEmpty && config.includeCommonVariables»
+      \\ \footnotesize
+      $\color{orange}
+        \langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
+        \langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
+      «ENDIF»
+      «IF config.includeCardinality && op.cardinality != null»
+			\\ \footnotesize \# «op.cardinality.formatCardinality»
+			«ENDIF»}«op?.children» ««« process children nodes
+      «IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
+      ]'''
     }
     
     def serializeSchema(List<Variable> schema) {
@@ -113,7 +116,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
      * operator
      */
     override operator(Operator op) {
-        '''$«op?.operatorToTex.join('''$\\$''')»'''
+        '''$«op?.operatorToTex.join('''$\\$''')»$'''
     }
 
 }
