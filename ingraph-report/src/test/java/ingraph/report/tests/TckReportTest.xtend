@@ -64,7 +64,9 @@ class TckReportTest extends IngraphReportTest {
 	}
   
   def unindent(String querySpecification) {
-    querySpecification.replaceAll('''^      ''', '''''').replaceAll('''\n      ''', '''\n''')
+    querySpecification //
+      .replaceAll("^      ", "") //
+      .replaceAll("\n      ", "\n") //
   }
 
 	def processFile(File file, ResourceSet resourceSet) {
