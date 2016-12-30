@@ -1,37 +1,49 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.TupleType
+import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.relalg.util.SchemaToMap
 import relalg._
 
 object ExpressionParser {
-  def parse(expression: Expression): (TupleType) => Boolean =
+  def parse(expression: Expression, lookup: Map[Variable, Integer]): (Tuple) => Boolean =
     expression match {
       case exp: UnaryLogicalExpression =>
-        val operand: (TupleType => Boolean) = parse(exp.getLeftOperand)
+        val operand: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
         import UnaryLogicalOperator._
         exp.getOperator match {
-          case NOT => (t: TupleType) => !operand(t)
+          case NOT => (t: Tuple) => !operand(t)
         }
 
       case exp: BinaryLogicalExpression =>
-        val left: (TupleType => Boolean) = parse(exp.getLeftOperand)
-        val right: (TupleType => Boolean) = parse(exp.getRightOperand)
+        val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
+        val right: (Tuple => Boolean) = parse(exp.getRightOperand, lookup)
         import BinaryLogicalOperator._
         exp.getOperator match {
-          case AND => (t: TupleType) => left(t) && right(t)
-          case OR => (t: TupleType) => left(t) || right(t)
-          case XOR => (t: TupleType) => left(t) ^ right(t)
+          case AND => (t: Tuple) => left(t) && right(t)
+          case OR => (t: Tuple) => left(t) || right(t)
+          case XOR => (t: Tuple) => left(t) ^ right(t)
         }
 
+      case exp: ArithmeticOperationExpression =>
+        import BinaryArithmeticOperator._
+        val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
+        val right: (Tuple => Boolean) = parse(exp.getRightOperand, lookup)
+        exp.getOperator match {
+          case PLUS => (t: Tuple) => left(t)
+          case MINUS => (t: Tuple) => left(t)
+          case MULTIPLICATION => (t: Tuple) => left(t)
+          case DIVISION => (t: Tuple) => left(t)
+          case POWER => (t: Tuple) => left(t)
+        }
       case exp: ArithmeticComparisonExpression =>
-        def left: (TupleType) => Any = parseComparable(exp.getLeftOperand, _)
+        def left: (Tuple) => Any = parseComparable(exp.getLeftOperand, _, lookup)
 
-        def right: (TupleType) => Any = parseComparable(exp.getRightOperand, _)
+        def right: (Tuple) => Any = parseComparable(exp.getRightOperand, _, lookup)
         import ArithmeticComparisonOperator._
         exp.getOperator match {
-          case EQUAL_TO => (t: TupleType) => left(t) == right(t)
-          case NOT_EQUAL_TO => (t: TupleType) => left(t) != right(t)
-          case LESS_THAN_OR_EQUAL => (t: TupleType) =>
+          case EQUAL_TO => (t: Tuple) => left(t) == right(t)
+          case NOT_EQUAL_TO => (t: Tuple) => left(t) != right(t)
+          case LESS_THAN_OR_EQUAL => (t: Tuple) =>
             left(t) match {
               case l: Double => right(t) match {
                 case r: Double => l <= r
@@ -42,7 +54,7 @@ object ExpressionParser {
                 case r: Integer => l <= r
               }
             }
-          case LESS_THAN => (t: TupleType) =>
+          case LESS_THAN => (t: Tuple) =>
             left(t) match {
               case l: Double => right(t) match {
                 case r: Double => l < r
@@ -53,7 +65,7 @@ object ExpressionParser {
                 case r: Integer => l < r
               }
             }
-          case GREATER_THAN_OR_EQUAL => (t: TupleType) =>
+          case GREATER_THAN_OR_EQUAL => (t: Tuple) =>
             left(t) match {
               case l: Double => right(t) match {
                 case r: Double => l >= r
@@ -64,7 +76,7 @@ object ExpressionParser {
                 case r: Integer => l >= r
               }
             }
-          case GREATER_THAN => (t: TupleType) =>
+          case GREATER_THAN => (t: Tuple) =>
             left(t) match {
               case l: Double => right(t) match {
                 case r: Double => l > r
@@ -79,12 +91,12 @@ object ExpressionParser {
     }
 
 
-  private def parseComparable(cmp: ComparableExpression, tuple: TupleType) = cmp match {
+  private def parseComparable(cmp: ComparableExpression, tuple: Tuple, lookup: Map[Variable, Integer]) = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
-    case cmp: AttributeVariable => tuple(cmp.getElement.getName + "_" + cmp.getName)
-    case cmp: Variable => tuple(cmp.getName)
+    case cmp: AttributeVariable =>  tuple(lookup(cmp)) //TODO
+    case cmp: Variable => tuple(lookup(cmp)) //TODO
   }
 
 }

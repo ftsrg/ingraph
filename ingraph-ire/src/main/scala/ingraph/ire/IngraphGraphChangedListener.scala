@@ -3,44 +3,49 @@ package ingraph.ire
 import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
-import hu.bme.mit.ire.{ChangeSet, Transaction, TupleType}
+import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.Transaction
 import ingraph.ire.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
+import relalg.GetEdgesOperator
 
 import scala.collection.JavaConversions._
+import scala.collection.immutable.ListMap
 import scala.collection.mutable
 
 class IngraphGraphChangedListener(
-                                  vertexConverters: Map[String, mutable.Set[String]],
-                                  edgeConverters: Map[String, mutable.Set[EdgeTransformer]],
+                                  vertexConverters: Map[String, mutable.Set[Tuple2[String, Vector[String]]]],
+                                  edgeConverters: Map[String, mutable.Set[GetEdgesOperator]],
                                   inputLookup: Map[String, (ChangeSet) => Unit]
                                 ) extends GraphChangedListener with IdParser {
-  val vertices = mutable.HashMap[String, Set[TupleType]]()
-  val edges = mutable.HashMap[String, Set[TupleType]]()
+  val vertices = mutable.HashMap[String, Set[Tuple]]()
+  val edges = mutable.HashMap[String, Set[Tuple]]()
 
   override def idParser(obj: Any): Any = obj
   var transaction: Transaction = _
 
-  def elementToNode(element: Element, nick: String): TupleType =
-    Map[Any,Any](nick -> idParser(element.id)) ++
-      element.keys.map(k => s"${nick}_$k" -> element.value(k))
+  def elementToNode(element: Element, required: Vector[String]): Tuple =
+    Vector(idParser(element.id)) ++
+      required.map(key => element.property(key))
 
-  def edgeToTupleType(edge: Edge, transformer: EdgeTransformer): TupleType =
-    elementToNode(edge, transformer.nick) +
-      (transformer.source -> idParser(edge.outVertex.id)) + (transformer.target -> idParser(edge.inVertex.id)) ++
-      elementToNode(edge.outVertex, transformer.source) ++
-      elementToNode(edge.inVertex, transformer.target)
+  def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple = {
+    val nick = operator.getEdgeVariable.getName
+    operator.getSourceVertexVariable
+    println(Vector(edge.inVertex.id, edge.id, edge.outVertex().id) ++ operator.getDetailedSchema.map(variable => variable.getName))
+    Vector()
+  }
 
   override def vertexAdded(vertex: Vertex): Unit = {
-    for (nickSet <- vertexConverters.get(vertex.label);
-         nick <- nickSet)
-      transaction.add(nick, elementToNode(vertex, nick))
+    for (set <- vertexConverters.get(vertex.label);
+    (nick, vector) <- set)
+      transaction.add(nick, elementToNode(vertex, vector))
   }
 
   override def edgeAdded(edge: Edge): Unit = {
-    for (transformerSet <- edgeConverters.get(edge.label);
-         transformer <- transformerSet)
-      transaction.add(transformer.nick, edgeToTupleType(edge, transformer))
+    for (set <- edgeConverters.get(edge.label);
+         operator <- set)
+      transaction.add(operator.getEdgeVariable.getName, edgeToTupleType(edge, operator))
   }
 
   override def vertexPropertyChanged(vertex: Vertex, key: String, oldValue: scala.Any, setValue: scala.Any): Unit = ???

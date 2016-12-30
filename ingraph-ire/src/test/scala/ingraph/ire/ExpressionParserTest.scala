@@ -2,44 +2,57 @@ package ingraph.ire
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.util.SchemaInferencer
+import ingraph.relalg.util.{SchemaInferencer, SchemaToMap}
 import org.scalatest.{FlatSpec, WordSpec}
 import relalg._
 import relalg.impl.{ArithmeticComparisonExpressionImpl, AttributeVariableImpl, StringLiteralImpl}
 
 class ExpressionParserTest extends WordSpec {
-  def getCondition(query: String): LogicalExpression = {
+  def getSelectionOperator(query: String): SelectionOperator = {
 
     val relalg = Cypher2Relalg.processString(query)
     relalg.getRootExpression
       .asInstanceOf[ProjectionOperator].getInput
-      .asInstanceOf[SelectionOperator].getCondition
+      .asInstanceOf[SelectionOperator]
   }
 
-  val rocks = "\"emfrocks\""
+  import EngineFactory._
 
+  val rocks = "\"emfrocks\""
   "ExpressionParser" should {
     "parse equal to" in {
-      val cond = getCondition("""MATCH (n) WHERE n="emfsucks" RETURN n""")
-      val func = ExpressionParser.parse(cond)
-      assert(func(Map("n" -> "\"emfsucks\"")))
-      assert(!func(Map("n" -> rocks)))
+      val op = getSelectionOperator("""MATCH (n) WHERE n="emfsucks" RETURN n""")
+      val lookup = new SchemaToMap().schemaToMap(op)
+      print(lookup)
+      val func = ExpressionParser.parse(op.getCondition, lookup)
+      assert(func(Vector("\"emfsucks\"")))
+      assert(!func(Vector(rocks)))
     }
 
    "parse binary logical expressions" in {
-      val cond = getCondition("""MATCH (n) WHERE (1=1 and n=2) or (n="emfrocks" xor 2=3) RETURN n""")
-      val func = ExpressionParser.parse(cond)
-      assert(func(Map("n" -> 2)))
-      assert(!func(Map("n" -> 1)))
-      assert(func(Map("n" -> rocks)))
-      assert(!func(Map("n" -> s"not $rocks")))
+      val op = getSelectionOperator("""MATCH (n) WHERE (1=1 and n=2) or (n="emfrocks" xor 2=3) RETURN n""")
+      val lookup = new SchemaToMap().schemaToMap(op)
+      val func = ExpressionParser.parse(op.getCondition, lookup)
+      assert(func(Vector(2)))
+      assert(!func(Vector(1)))
+      assert(func(Vector(rocks)))
+      assert(!func(Vector(s"not $rocks")))
     }
 
     "parse unary logical expressions" in {
-      val cond1 = getCondition("""MATCH (n) WHERE not n=2 RETURN n""")
-      val func1 = ExpressionParser.parse(cond1)
-      assert(!func1(Map("n" -> 2)))
-      assert(func1(Map("n" -> 1)))
+      val op = getSelectionOperator("""MATCH (n) WHERE not n=2 RETURN n""")
+      val lookup = new SchemaToMap().schemaToMap(op)
+      val func = ExpressionParser.parse(op.getCondition, lookup)
+      assert(!func(Vector(2)))
+      assert(func(Vector(1)))
+    }
+
+    "parse arithmetic operations" in {
+      val op = getSelectionOperator("""MATCH (n) WHERE n=2^2*1+2-2 RETURN n""")
+      val lookup = new SchemaToMap().schemaToMap(op)
+      val func = ExpressionParser.parse(op.getCondition, lookup)
+      assert(!func(Vector(2)))
+      assert(func(Vector(1)))
     }
   }
 
