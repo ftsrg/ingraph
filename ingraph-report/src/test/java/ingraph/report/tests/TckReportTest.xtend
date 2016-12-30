@@ -38,7 +38,7 @@ class TckReportTest extends IngraphReportTest {
 				\section{«feature.name.escape»}
 
 				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
-					«val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join»
+					«val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent»
 					«IF 
 						scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
 						!querySpecification.contains("CREATE ") &&
@@ -62,6 +62,10 @@ class TckReportTest extends IngraphReportTest {
 			'''
 		FileUtils.writeStringToFile(new File("../opencypher-report/appendix/tck.tex"), doc, Charset.defaultCharset())
 	}
+  
+  def unindent(String querySpecification) {
+    querySpecification.replaceAll('''^      ''', '''''').replaceAll('''\n      ''', '''\n''')
+  }
 
 	def processFile(File file, ResourceSet resourceSet) {
 		val resource = resourceSet.createResource(URI.createURI(file.absolutePath))
