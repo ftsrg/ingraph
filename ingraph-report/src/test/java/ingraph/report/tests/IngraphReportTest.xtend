@@ -117,7 +117,7 @@ class IngraphReportTest {
 	'''
 	\subsection{«name.escape»}
 
-	\subsubsection*{Query specification}
+	\subsubsection*«header("Query specification", name)»
 
 	\begin{lstlisting}
 	«listing»
@@ -129,7 +129,7 @@ class IngraphReportTest {
 
 	«ELSE»
 «««	start of subsubsections for expression
-	\subsubsection*{Relational algebra expression}
+	\subsubsection*«header("Relational algebra expression", name)»
 
 	«val expression = container.expression»
 	«IF expression == null»
@@ -142,7 +142,7 @@ class IngraphReportTest {
 	\end{align*}
 	«ENDIF»
 
-	\subsubsection*{Relational algebra tree}
+	\subsubsection*«header("Relational algebra tree", name)»
 
 	«val basicTree = container.visualize»
 	«IF basicTree == null»
@@ -155,7 +155,7 @@ class IngraphReportTest {
 	\end{center}
 	«ENDIF»
 
-	\subsubsection*{Incremental relational algebra tree}
+	\subsubsection*«header("Incremental relational algebra tree", name)»
 
 	«val incrementalTree = container.visualizeWithTransformations»
 	«IF incrementalTree == null»
@@ -168,7 +168,7 @@ class IngraphReportTest {
 	\end{center}
 	«ENDIF»
 
-	\subsubsection*{Incremental relational algebra tree with tuples}
+	\subsubsection*«header("Incremental relational algebra tree with tuples", name)»
 
 	«val incrementalTreeTuples = container.visualizeWithTransformations»
 	«IF incrementalTreeTuples == null»
@@ -184,5 +184,9 @@ class IngraphReportTest {
 	«ENDIF»
 	'''
 	}
+  
+  def header(String title, String query) {
+    '''{«title» \textcolor{gray}{(«query»)}}'''
+  }
 
 }
