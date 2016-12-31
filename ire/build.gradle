@@ -1,0 +1,76 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+    classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+  }
+}
+
+plugins {
+  id "com.github.maiflai.scalatest" version "0.14"
+  id "com.jfrog.bintray" version "1.7.1"
+}
+
+apply plugin: "scala"
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: "me.champeau.gradle.jmh"
+apply plugin: "maven-publish"
+
+group = "hu.bme.mit"
+version = "0.2.0"
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+jar {
+  from sourceSets.main.allScala
+}
+
+ext {
+  scalaVersion = "2.12.1"
+  akkaVersion = "2.4.14"
+}
+
+dependencies {
+  compile "org.scala-lang:scala-library:$scalaVersion"
+  compile "com.typesafe.akka:akka-actor_2.12:$akkaVersion"
+  compile "org.openjdk.jmh:jmh-core:1.16"
+
+  testCompile "com.typesafe.akka:akka-testkit_2.12:$akkaVersion"
+  testCompile "org.scalatest:scalatest_2.12:3.0.1"
+  testRuntime 'org.pegdown:pegdown:1.6.0'
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publish = true
+  override = true
+  pkg {
+    repo = 'maven'
+    name = 'ire'
+    userOrg = 'ftsrg'
+    licenses = ['EPL-1.0']
+    vcsUrl = 'https://github.com/FTSRG/ire.git'
+    version {
+      name = '0.2.0'
+      desc = 'Initial version'
+      released = new Date()
+    }
+  }
+  publications = ['mavenJava']
+}
