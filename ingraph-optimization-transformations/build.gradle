@@ -1,14 +1,10 @@
-apply plugin: 'org.xtext.xtend'
+plugins { id "org.xtext.xtend" version "1.0.15" }
 
 dependencies {
-	compile project(':ingraph-relalg-model-util')
-	compile project(':ingraph-optimization-patterns')
-	compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
-	compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
-	compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: viatraDseVersion
-	compile "org.eclipse.emf:org.eclipse.emf.common:${emfVersion}"
-	compile "org.eclipse.emf:org.eclipse.emf.ecore.xmi:${emfVersion}"
-	compile "org.eclipse.emf:org.eclipse.emf.ecore:${emfVersion}"
-	compile "org.eclipse.emf:org.eclipse.emf.edit:${emfVersion}"
-	compile "org.eclipse.birt.runtime:org.eclipse.emf.ecore.change:2.10.0.v20150123-0348"
+  compile project(':ingraph-relalg-model-util')
+  compile project(':ingraph-optimization-patterns')
+
+  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+  compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
+  compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: viatraDseVersion
 }

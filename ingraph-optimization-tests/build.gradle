@@ -1,9 +1,9 @@
-apply plugin: 'org.xtext.xtend'
+plugins { id "org.xtext.xtend" version "1.0.15" }
 
 dependencies {
-	compile project(':ingraph-optimization-transformations')
-	compile project(':ingraph-cypher2relalg')
-	compile project(':ingraph-relalg2tex')
+  compile project(':ingraph-optimization-transformations')
+  compile project(':ingraph-cypher2relalg')
+  compile project(':ingraph-relalg2tex')
 
-	testCompile group: 'junit', name: 'junit', version: junitVersion
+  testCompile group: 'junit', name: 'junit', version: junitVersion
 }

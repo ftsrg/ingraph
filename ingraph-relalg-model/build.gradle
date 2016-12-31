@@ -1,42 +1,47 @@
 plugins {
-    id "org.xtext.builder" version "1.0.0"
+  id "org.xtext.builder" version "1.0.15"
+  id "org.xtext.xtend" version "1.0.15"
 }
 
-apply plugin: 'org.xtext.xtend'
-apply from: "${rootDir}/gradle/source-layout-xcore.gradle"
+ext {
+  xcoreVersion = "1.3.1"
+  xcoreLibVersion = "1.1.100"
+  ecoreVersion = "2.12.0"
+  ecoreXtextVersion = "1.2.0"
+}
 
 dependencies {
-	compile "org.eclipse.xtext:org.eclipse.xtext.xbase:${xtextVersion}"
-	compile 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:+'
+  compile "org.eclipse.xtext:org.eclipse.xtext.xbase:$xtextVersion"
+  compile "org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:$xcoreLibVersion"
   testCompile group: 'junit', name: 'junit', version: junitVersion
 
-	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.ecore.xcore:+'
-	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:+'
-	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.codegen.ecore:+'
-	xtextLanguages 'org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:+'
-	xtextLanguages "org.eclipse.xtext:org.eclipse.xtext.ecore:${xtextVersion}"
+  xtextLanguages "org.eclipse.emf:org.eclipse.emf.ecore.xcore:$xcoreVersion"
+  xtextLanguages "org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:$xcoreLibVersion"
+  xtextLanguages "org.eclipse.emf:org.eclipse.emf.codegen.ecore:$ecoreVersion"
+  xtextLanguages "org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:$ecoreXtextVersion"
+  xtextLanguages "org.eclipse.xtext:org.eclipse.xtext.ecore:$xtextVersion"
 }
 
 sourceSets {
-	main {
-		resources {
-			exclude '**/*.xcore'
-		}
-	}
+  main {
+    resources {
+      exclude '**/*.xcore'
+    }
+  }
 }
 
 xtext {
-	version = "${xtextVersion}"
-	languages {
-		ecore {
-			setup = 'org.eclipse.xtext.ecore.EcoreSupport'
-		}
-		codegen {
-			setup = 'org.eclipse.emf.codegen.ecore.xtext.GenModelSupport'
-		}
-		xcore {
-			setup = 'org.eclipse.emf.ecore.xcore.XcoreStandaloneSetup'
-			generator.outlet.producesJava = true
-		}
-	}
+  version = "$xtextVersion"
+  languages {
+    ecore {
+      setup = 'org.eclipse.xtext.ecore.EcoreSupport'
+    }
+    codegen {
+      setup = 'org.eclipse.emf.codegen.ecore.xtext.GenModelSupport'
+    }
+    xcore {
+      setup = 'org.eclipse.emf.ecore.xcore.XcoreStandaloneSetup'
+      generator.outlet.producesJava = true
+    }
+  }
 }

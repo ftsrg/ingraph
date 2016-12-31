@@ -1,4 +1,4 @@
-apply plugin: 'org.xtext.xtend'
+plugins { id "org.xtext.xtend" version "1.0.15" }
 
 dependencies {
   compile project(':ingraph-relalg-model')

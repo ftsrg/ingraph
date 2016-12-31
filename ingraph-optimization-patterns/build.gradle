@@ -1,8 +1,12 @@
 dependencies {
-	compile project(':ingraph-relalg-model')
-	compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
+  compile project(':ingraph-relalg-model')
+  compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
 }
 
 sourceSets {
-	main { java { srcDirs = ['src', 'src-gen'] } }
+  main {
+    java {
+      srcDirs = ['src', 'src-gen']
+    }
+  }
 }
