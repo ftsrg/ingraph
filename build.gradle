@@ -26,7 +26,7 @@ subprojects {
     maven { url "https://repo.eclipse.org/content/groups/viatra2" }
   }
 
-  //configurations.all { exclude group: 'asm' }
+  configurations.all { exclude group: 'asm' }
 
   buildscript {
     repositories {
