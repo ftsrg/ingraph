@@ -38,6 +38,8 @@ class TupleInferencer {
    * inferDetailedSchema
    */
   def dispatch List<Variable> inferDetailedSchema(NullaryOperator op, List<? extends Variable> extraVariables) {
+    op.extraVariables.clear
+    op.extraVariables.addAll(extraVariables)
     op.defineDetailedSchema(extraVariables)
   }
 
@@ -153,8 +155,8 @@ class TupleInferencer {
   }
   
   def dispatch void calculateTuples(AbstractJoinOperator op) {
-    //val indices = op.schemaToMap
-    
+    // this is required for cases where the inferencing is invoked multiple times
+    // TODO maybe we should just throw and exception for multiple executions
     op.leftMask.clear
     op.rightMask.clear
     

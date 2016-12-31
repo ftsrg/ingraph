@@ -97,6 +97,7 @@ class Cardinality {
 
 /* Nullary operators */
 abstract class NullaryOperator extends Operator {
+  refers Variable[] extraVariables
 }
 
 class GetVerticesOperator extends NullaryOperator {
@@ -210,7 +211,6 @@ abstract class AbstractJoinOperator extends BinaryOperator {
   refers Variable[] commonVariables
   int[] leftMask
   int[] rightMask
-  int[] commonVariableIndices
 }
 
 class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
