@@ -92,7 +92,7 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 1. Build the projects from command line with the following command:
 
   ```bash
-  ./gradlew build eclipse
+  ./gradlew clean build eclipse -x test
   ```
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
 1. To fix the Scala projects (**ire** and **ingraph-ire**), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
