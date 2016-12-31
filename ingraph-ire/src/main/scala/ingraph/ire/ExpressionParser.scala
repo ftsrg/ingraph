@@ -9,7 +9,7 @@ object ExpressionParser {
     expression match {
       case exp: UnaryLogicalExpression =>
         val operand: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
-        import UnaryLogicalOperator._
+        import UnaryLogicalOperatorType._
         exp.getOperator match {
           case NOT => (t: Tuple) => !operand(t)
         }
@@ -17,7 +17,7 @@ object ExpressionParser {
       case exp: BinaryLogicalExpression =>
         val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
         val right: (Tuple => Boolean) = parse(exp.getRightOperand, lookup)
-        import BinaryLogicalOperator._
+        import BinaryLogicalOperatorType._
         exp.getOperator match {
           case AND => (t: Tuple) => left(t) && right(t)
           case OR => (t: Tuple) => left(t) || right(t)
@@ -25,7 +25,7 @@ object ExpressionParser {
         }
 
       case exp: ArithmeticOperationExpression =>
-        import BinaryArithmeticOperator._
+        import BinaryArithmeticOperatorType._
         val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
         val right: (Tuple => Boolean) = parse(exp.getRightOperand, lookup)
         exp.getOperator match {
@@ -39,7 +39,7 @@ object ExpressionParser {
         def left: (Tuple) => Any = parseComparable(exp.getLeftOperand, _, lookup)
 
         def right: (Tuple) => Any = parseComparable(exp.getRightOperand, _, lookup)
-        import ArithmeticComparisonOperator._
+        import ArithmeticComparisonOperatorType._
         exp.getOperator match {
           case EQUAL_TO => (t: Tuple) => left(t) == right(t)
           case NOT_EQUAL_TO => (t: Tuple) => left(t) != right(t)

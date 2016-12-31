@@ -1,7 +1,7 @@
 package ingraph.relalg2tex.optimization
 
-import relalg.BinaryLogicalOperator
 import relalg.RelalgFactory
+import relalg.BinaryLogicalOperatorType
 
 class TestModelFactory {
 	
@@ -13,7 +13,7 @@ class TestModelFactory {
 		val l = createBooleanLiteral => [value = true]
 		val r = createBooleanLiteral => [value = false]
 		val condition = createBinaryLogicalExpression => [
-			operator = BinaryLogicalOperator.AND
+			operator = BinaryLogicalOperatorType.AND
 			leftOperand = l
 			rightOperand = r
 		]

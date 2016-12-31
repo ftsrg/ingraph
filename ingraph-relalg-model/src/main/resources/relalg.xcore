@@ -243,19 +243,19 @@ abstract class BinaryExpression extends Expression {
 
 // arithmetic operations evaluate to a number, hence they are arithmetic expressins
 class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
-  BinaryArithmeticOperator operator
+  BinaryArithmeticOperatorType operator
   refers ArithmeticExpression leftOperand
   refers ArithmeticExpression rightOperand
 }
 
 class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
-  UnaryArithmeticOperator operator
+  UnaryArithmeticOperatorType operator
   refers ArithmeticExpression leftOperand
 }
 
 // arithmetic comparisons evaluate to true/false, hence they are logical expressions
 class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression {
-  ArithmeticComparisonOperator operator
+  ArithmeticComparisonOperatorType operator
   refers ComparableExpression leftOperand
   refers ComparableExpression rightOperand
 }
@@ -272,13 +272,13 @@ class Parameter extends ComparableExpression {
 }
 
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
-  BinaryLogicalOperator operator
+  BinaryLogicalOperatorType operator
   refers LogicalExpression leftOperand
   refers LogicalExpression rightOperand
 }
 
 class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
-  UnaryLogicalOperator operator
+  UnaryLogicalOperatorType operator
   refers LogicalExpression leftOperand
 }
 
@@ -286,7 +286,7 @@ class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 // "edgeVariable.attribute IS NOT NULL"
 // TODO: possibly later this can be generalized and merged with UnaryLogicalExpression
 class UnaryNodeLogicalExpression extends UnaryExpression, LogicalExpression {
-  UnaryNodeLogicalOperator operator
+  UnaryNodeLogicalOperatorType operator
   refers Variable leftOperand
 }
 
@@ -330,7 +330,7 @@ enum OrderDirection {
   DESCENDING
 }
 
-enum BinaryArithmeticOperator {
+enum BinaryArithmeticOperatorType {
   PLUS
   MINUS
   MULTIPLICATION
@@ -339,7 +339,7 @@ enum BinaryArithmeticOperator {
   POWER
 }
 
-enum ArithmeticComparisonOperator {
+enum ArithmeticComparisonOperatorType {
   EQUAL_TO
   NOT_EQUAL_TO
   GREATER_THAN
@@ -348,24 +348,24 @@ enum ArithmeticComparisonOperator {
   LESS_THAN_OR_EQUAL
 }
 
-enum UnaryArithmeticOperator {
+enum UnaryArithmeticOperatorType {
   MINUS
   PLUS
 }
 
-enum BinaryLogicalOperator {
+enum BinaryLogicalOperatorType {
   AND
   OR
   XOR
 }
 
-enum UnaryLogicalOperator {
+enum UnaryLogicalOperatorType {
   NOT
   IS_NULL
   IS_NOT_NULL
 }
 
-enum UnaryNodeLogicalOperator {
+enum UnaryNodeLogicalOperatorType {
   IS_NULL
   IS_NOT_NULL
 }

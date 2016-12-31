@@ -38,11 +38,8 @@ import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
-import relalg.ArithmeticComparisonOperator
 import relalg.ArithmeticExpression
 import relalg.AttributeVariable
-import relalg.BinaryArithmeticOperator
-import relalg.BinaryLogicalOperator
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.EdgeVariable
@@ -56,11 +53,14 @@ import relalg.NumberLiteral
 import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgFactory
-import relalg.UnaryLogicalOperator
-import relalg.UnaryNodeLogicalOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
+import relalg.BinaryArithmeticOperatorType
+import relalg.ArithmeticComparisonOperatorType
+import relalg.BinaryLogicalOperatorType
+import relalg.UnaryLogicalOperatorType
+import relalg.UnaryNodeLogicalOperatorType
 
 class RelalgBuilder {
 
@@ -265,7 +265,7 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e, EList<Operator> joins) {
     createBinaryLogicalExpression => [
-      operator = BinaryLogicalOperator.AND
+      operator = BinaryLogicalOperatorType.AND
       leftOperand = buildRelalgLogicalExpression(e.left, joins)
       rightOperand = buildRelalgLogicalExpression(e.right, joins)
       container = topLevelContainer
@@ -274,7 +274,7 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionOr e, EList<Operator> joins) {
     createBinaryLogicalExpression => [
-      operator = BinaryLogicalOperator.OR
+      operator = BinaryLogicalOperatorType.OR
       leftOperand = buildRelalgLogicalExpression(e.left, joins)
       rightOperand = buildRelalgLogicalExpression(e.right, joins)
       container = topLevelContainer
@@ -283,7 +283,7 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionXor e, EList<Operator> joins) {
     createBinaryLogicalExpression => [
-      operator = BinaryLogicalOperator.XOR
+      operator = BinaryLogicalOperatorType.XOR
       leftOperand = buildRelalgLogicalExpression(e.left, joins)
       rightOperand = buildRelalgLogicalExpression(e.right, joins)
       container = topLevelContainer
@@ -292,7 +292,7 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
     createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+      operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
       leftOperand = buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
@@ -300,7 +300,7 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
     createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperator.IS_NULL
+      operator = UnaryNodeLogicalOperatorType.IS_NULL
       leftOperand = buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
@@ -313,7 +313,7 @@ class RelalgBuilder {
     switch e.operator.toLowerCase {
       case "not":
         createUnaryLogicalExpression => [
-          operator = UnaryLogicalOperator.NOT
+          operator = UnaryLogicalOperatorType.NOT
           leftOperand = buildRelalgLogicalExpression(e.left, joins)
           container = topLevelContainer
         ]
@@ -334,7 +334,7 @@ class RelalgBuilder {
     val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
 
     relationshipVariableExpressions.add(createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+      operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
       leftOperand = buildVertexVariable(e.nodePattern)
       container = topLevelContainer
     ])
@@ -343,7 +343,7 @@ class RelalgBuilder {
       e.chain.map [
         val mapIt = it
         createUnaryNodeLogicalExpression => [
-          operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+          operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
           leftOperand = buildEdgeVariable(mapIt.relationshipPattern.detail)
           container = topLevelContainer
         ]
@@ -353,7 +353,7 @@ class RelalgBuilder {
       e.chain.map [
         val mapIt = it
         createUnaryNodeLogicalExpression => [
-          operator = UnaryNodeLogicalOperator.IS_NOT_NULL
+          operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
           leftOperand = buildVertexVariable(mapIt.nodePattern)
           container = topLevelContainer
         ]
@@ -362,20 +362,20 @@ class RelalgBuilder {
 
     joins.add(buildRelalg(e))
 
-    buildLeftDeepTree(BinaryLogicalOperator.AND, relationshipVariableExpressions.iterator, topLevelContainer)
+    buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator, topLevelContainer)
   }
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e, EList<Operator> joins) {
     // FIXME: add type check to ensure that the operands are comparable
     createArithmeticComparisonExpression => [
       operator = switch e.operator {
-        case "=": ArithmeticComparisonOperator.EQUAL_TO
+        case "=": ArithmeticComparisonOperatorType.EQUAL_TO
         case "!=",
-        case "<>": ArithmeticComparisonOperator.NOT_EQUAL_TO
-        case "<": ArithmeticComparisonOperator.LESS_THAN
-        case "<=": ArithmeticComparisonOperator.LESS_THAN_OR_EQUAL
-        case ">": ArithmeticComparisonOperator.GREATER_THAN
-        case ">=": ArithmeticComparisonOperator.GREATER_THAN_OR_EQUAL
+        case "<>": ArithmeticComparisonOperatorType.NOT_EQUAL_TO
+        case "<": ArithmeticComparisonOperatorType.LESS_THAN
+        case "<=": ArithmeticComparisonOperatorType.LESS_THAN_OR_EQUAL
+        case ">": ArithmeticComparisonOperatorType.GREATER_THAN
+        case ">=": ArithmeticComparisonOperatorType.GREATER_THAN_OR_EQUAL
       }
       leftOperand = buildRelalgComparableElement(e.left)
       rightOperand = buildRelalgComparableElement(e.right)
@@ -437,8 +437,8 @@ class RelalgBuilder {
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {
     createArithmeticOperationExpression => [
       operator = switch e.operator {
-        case "+": BinaryArithmeticOperator.PLUS
-        case "-": BinaryArithmeticOperator.MINUS
+        case "+": BinaryArithmeticOperatorType.PLUS
+        case "-": BinaryArithmeticOperatorType.MINUS
       }
       leftOperand = buildRelalgArithmeticExpression(e.left)
       rightOperand = buildRelalgArithmeticExpression(e.right)
@@ -450,9 +450,9 @@ class RelalgBuilder {
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionMulDiv e) {
     createArithmeticOperationExpression => [
       operator = switch e.operator {
-        case "*": BinaryArithmeticOperator.MULTIPLICATION
-        case "/": BinaryArithmeticOperator.DIVISION
-        case "%": BinaryArithmeticOperator.MOD
+        case "*": BinaryArithmeticOperatorType.MULTIPLICATION
+        case "/": BinaryArithmeticOperatorType.DIVISION
+        case "%": BinaryArithmeticOperatorType.MOD
       }
       leftOperand = buildRelalgArithmeticExpression(e.left)
       rightOperand = buildRelalgArithmeticExpression(e.right)
@@ -464,7 +464,7 @@ class RelalgBuilder {
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPower e) {
     createArithmeticOperationExpression => [
       operator = switch e.operator {
-        case "^": BinaryArithmeticOperator.POWER
+        case "^": BinaryArithmeticOperatorType.POWER
       }
       leftOperand = buildRelalgArithmeticExpression(e.left)
       rightOperand = buildRelalgArithmeticExpression(e.right)

@@ -3,8 +3,8 @@ package ingraph.relalg.util
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Test
-import relalg.ArithmeticComparisonOperator
 import relalg.RelalgFactory
+import relalg.ArithmeticComparisonOperatorType
 
 class TupleInferencerTest {
 
@@ -34,7 +34,7 @@ class TupleInferencerTest {
     val returnedNameAttribute = createReturnableElement => [expression = personNameAttribute; alias = "name"]
 
     val ageComparison = createArithmeticComparisonExpression => [
-      operator = ArithmeticComparisonOperator.GREATER_THAN
+      operator = ArithmeticComparisonOperatorType.GREATER_THAN
       leftOperand = personAgeAttribute
       rightOperand = number20Literal
     ]

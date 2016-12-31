@@ -5,7 +5,6 @@ import java.util.ArrayList
 import java.util.Iterator
 import java.util.List
 import org.eclipse.emf.common.util.EList
-import relalg.BinaryLogicalOperator
 import relalg.BinaryOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
@@ -21,6 +20,7 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
+import relalg.BinaryLogicalOperatorType
 
 class Cypher2RelalgUtil {
 
@@ -138,7 +138,7 @@ class Cypher2RelalgUtil {
     return retVal
   }
 
-  def LogicalExpression buildLeftDeepTree(BinaryLogicalOperator binaryLogicalOperator,
+  def LogicalExpression buildLeftDeepTree(BinaryLogicalOperatorType binaryLogicalOperator,
     Iterator<? extends LogicalExpression> i, RelalgContainer outerContainer) {
     var LogicalExpression retVal = null
 

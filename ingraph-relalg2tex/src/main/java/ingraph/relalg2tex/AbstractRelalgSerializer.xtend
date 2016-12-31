@@ -9,12 +9,9 @@ import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.ArithmeticComparisonExpression
-import relalg.ArithmeticComparisonOperator
 import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
-import relalg.BinaryArithmeticOperator
 import relalg.BinaryLogicalExpression
-import relalg.BinaryLogicalOperator
 import relalg.BinaryOperator
 import relalg.BooleanLiteral
 import relalg.Direction
@@ -42,14 +39,17 @@ import relalg.SortOperator
 import relalg.StringLiteral
 import relalg.TopOperator
 import relalg.TransitiveClosureOperator
-import relalg.UnaryArithmeticOperator
 import relalg.UnaryLogicalExpression
-import relalg.UnaryLogicalOperator
 import relalg.UnaryNodeLogicalExpression
-import relalg.UnaryNodeLogicalOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
+import relalg.BinaryArithmeticOperatorType
+import relalg.ArithmeticComparisonOperatorType
+import relalg.UnaryArithmeticOperatorType
+import relalg.BinaryLogicalOperatorType
+import relalg.UnaryLogicalOperatorType
+import relalg.UnaryNodeLogicalOperatorType
 
 abstract class AbstractRelalgSerializer {
 
@@ -321,7 +321,7 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * conversion for operators
 	 */
-	def convert(ArithmeticComparisonOperator op) {
+	def convert(ArithmeticComparisonOperatorType op) {
 		switch (op) {
 			case EQUAL_TO: '''='''
 			case GREATER_THAN: '''>'''
@@ -333,7 +333,7 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
-	def convert(BinaryLogicalOperator op) {
+	def convert(BinaryLogicalOperatorType op) {
 		switch (op) {
 			case AND: '''\land'''
 			case OR: '''\lor'''
@@ -342,7 +342,7 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
-	def convert(UnaryLogicalOperator op) {
+	def convert(UnaryLogicalOperatorType op) {
 		switch (op) {
 			case NOT: '''\neg'''
 			case IS_NOT_NULL: RelNullHandler.isNotNull
@@ -351,7 +351,7 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
-	def convert(UnaryNodeLogicalOperator op) {
+	def convert(UnaryNodeLogicalOperatorType op) {
 		switch (op) {
 			case IS_NOT_NULL: RelNullHandler.isNotNull
 			case IS_NULL: RelNullHandler.isNull
@@ -359,7 +359,7 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
-	def convert(BinaryArithmeticOperator op) {
+	def convert(BinaryArithmeticOperatorType op) {
 		switch (op) {
 			case DIVISION: '''/'''
 			case MINUS: '''-'''
@@ -371,7 +371,7 @@ abstract class AbstractRelalgSerializer {
 		}
 	}
 
-	def convert(UnaryArithmeticOperator op) {
+	def convert(UnaryArithmeticOperatorType op) {
 		switch (op) {
 			case MINUS: '''-'''
 			case PLUS: ''''''
