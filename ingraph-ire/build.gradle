@@ -19,6 +19,6 @@ dependencies {
     compile project(':ingraph-optimization-transformations')
     compile project(':ingraph-cypher2relalg')
     compile group: 'hu.bme.mit', name: 'ire', version: ireVersion
-    testCompile group: 'org.scalatest', name: "scalatest_$scalaTestScalaVersion", version: scalaTestVersion
+    testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
     testRuntime 'org.pegdown:pegdown:1.6.0'
 }

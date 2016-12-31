@@ -1,42 +1,5 @@
 # ire: an Incremental Relational Engine
 
-[![Build Status](https://travis-ci.org/FTSRG/ire.svg)](https://travis-ci.org/FTSRG/ire) [ ![Download](https://api.bintray.com/packages/ftsrg/maven/ire/images/download.svg) ](https://bintray.com/ftsrg/maven/ire/_latestVersion)
-
-## User's guide
-
-ire is released on [Bintray](https://bintray.com/ftsrg/maven/ire).
-
-For Maven or Gradle, use the following snippets.
-
-### Maven
-
-```xml
-<dependency>
-  <groupId>hu.bme.mit</groupId>
-  <artifactId>ire</artifactId>
-  <version>0.1.0</version>
-</dependency>
-
-<repositories>
-  <repository>
-    <id>ftsrg</id>
-    <url>https://dl.bintray.com/ftsrg/maven</url>
-  </repository>
-</repositories>
-```
-
-### Gradle
-
-```groovy
-repositories {
-	maven { url "https://dl.bintray.com/ftsrg/maven" }
-}
-
-dependencies {
-	compile 'hu.bme.mit:ire:0.1.0'
-}
-```
-
 ## Contributor's guide
 
 To build the project, issue the following command:

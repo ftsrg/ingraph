@@ -1,9 +1,0 @@
-language: scala
-scala:
-   - 2.11.6
-jdk:
-  - oraclejdk8
-notifications:
-  on_success: change
-  on_failure: always
-  slack: ftsrg:kBB5J2ll0basRWtBnFPLvpes
