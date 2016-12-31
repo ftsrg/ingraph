@@ -27,7 +27,7 @@ These artifacts are automatcially generated for the last commit:
 
 For a high-level overview, see the [ingraph website](http://docs.inf.mit.bme.hu/ingraph/).
 
-ingraph is released on [Bintray](https://bintray.com/ftsrg/maven/ire).
+ingraph is released on [Bintray](https://bintray.com/ftsrg/maven/ingraph).
 
 For Maven or Gradle, use the following snippets.
 
