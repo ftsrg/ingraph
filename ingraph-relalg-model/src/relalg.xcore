@@ -1,6 +1,6 @@
 @Ecore(nsURI="http://ingraph/relalg")
 @GenModel(bundleManifest="false",
-  modelDirectory="ingraph-relalg-xcore/build/xcore/main",
+  modelDirectory="ingraph-relalg-model/build/xcore/main",
   complianceLevel="8.0")
 package relalg
 

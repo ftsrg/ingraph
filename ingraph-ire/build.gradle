@@ -14,7 +14,7 @@ jar {
 }
 
 dependencies {
-    compile project(':ingraph-relalg-xcore')
+    compile project(':ingraph-relalg-model')
     compile project(':ingraph-tinkerpop')
     compile project(':ingraph-optimization-transformations')
     compile project(':ingraph-cypher2relalg')

@@ -5,7 +5,7 @@ Bundle-SymbolicName: ingraph-optimization-patterns;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: ingraph.optimization.patterns,
  ingraph.optimization.patterns.util
-Require-Bundle: ingraph-relalg-xcore;bundle-version="1.0.0",
+Require-Bundle: ingraph-relalg-model;bundle-version="1.0.0",
  org.eclipse.viatra.query.runtime;bundle-version="1.4.0",
  org.eclipse.xtext.xbase.lib;bundle-version="2.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

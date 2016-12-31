@@ -139,7 +139,7 @@ Running Xtend JUnit tests from a Gradle project is tricky. If you encounter a `C
 
 #### How to update the relational algebra model
 
-Go to `ingraph-relalg-xcore` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `build/xcore/main` directory manually.
+Go to `ingraph-relalg-model` project, navigate to the `src/main/resources` directory and open the `relalg.xcore` file. The code is regenerated on every save operation. If there are errors in the generated code, it's worth deleting the `build/xcore/main` directory manually.
 
 #### How to update the grammars for parsing the Cucumber tests
 

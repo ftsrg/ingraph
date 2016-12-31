@@ -5,7 +5,7 @@
 -->
 
 <plugin
-      id="ingraph-relalg-xcore"
+      id="ingraph-relalg-model"
       version="1.0.0">
 
    <requires>
