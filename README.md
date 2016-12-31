@@ -62,28 +62,21 @@ dependencies {
 
 ## Contributor's Guide
 
-The ingraph project is implemented in Java, Scala and Xtend. We use both Eclipse and IntelliJ IDEA for development. According to our experience, Eclipse has a superior editor for Xtend, while IntelliJ has better support for Scala.
+The ingraph project is implemented in Java, Scala and Xtend. The development team uses both Eclipse and IntelliJ IDEA, so both of the are supported. According to our experience, Eclipse has a superior editor for Xtend, while IntelliJ has better support for Scala.
 
 ### Eclipse
 
-1. _If_ you build the projects from command line, use the following command:
+#### Prerequisites
 
-  ```
-  ./gradlew build eclipse
-  ```
-1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
+1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution.
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/).
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
-1. The latest editions of the Scala IDE (currently 4.15) only support Scala 2.11, hence we need to install 2.12 seperately.
+1. The latest editions of the Scala IDE (currently 4.15) only support Scala 2.11, hence you need to install 2.12 separately.
   * Download and install [Scala 2.12](https://www.scala-lang.org/download/).
   * Set your Scala distribution [for the Scala IDE](http://scala-ide.org/blog/scala-installations.html#BYOS).
     * Go to **Window** | **Preferences** | **Scala** | **Installations**, click **Add**, browse the directory for the Scala JARs, name the installation as `Scala` and click **OK**.
     * :bulb: On Ubuntu-based systems, the Scala JARs are located in `/usr/share/scala/lib`.
-1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
-1. To fix the Scala projects (**ire** and **ingraph-ire**), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
-1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
-1. You may have to clean the workspace once.
 
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has all the required dependencies. If you start from another Eclipse flavor/distribution, you should install the missing plug-ins:
 
@@ -94,12 +87,23 @@ The ingraph project is implemented in Java, Scala and Xtend. We use both Eclipse
   * **Xtext SDK**
   * **EMF - Eclipse Modeling Framework Xcore SDK**
 
+#### Importing the projects
+
+1. Build the projects from command line with the following command:
+
+  ```bash
+  ./gradlew build eclipse
+  ```
+1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
+1. To fix the Scala projects (**ire** and **ingraph-ire**), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
+
 ### IntelliJ IDEA
 
-* Install the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
+* Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala)
+* Install the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support)
 * Import the projects using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
 * After importing, add the Scala SDK (version 2.12) to the module. (If you did not
-use Scala before, download it from IntelliJ).
+use Scala before, download it from the dialog box provided by IntelliJ).
 
 ### Troubleshooting
 
