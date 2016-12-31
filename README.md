@@ -62,14 +62,7 @@ dependencies {
 
 ## Contributor's Guide
 
-The ingraph project is implemented in Java, Scala and Xtend. We use both Eclipse and IntelliJ for development.
-
-* IntelliJ IDEA with the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
-  * Import using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
-  * After importing, add the Scala SDK (version 2.12) to the module. (If you did not use Scala before, download it from IntelliJ).
-* [Eclipse Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/) with the . Do not forget to
-
-According to our experience, Eclipse has a superior editor for Xtend, while IntelliJ has better support for Scala.
+The ingraph project is implemented in Java, Scala and Xtend. We use both Eclipse and IntelliJ IDEA for development. According to our experience, Eclipse has a superior editor for Xtend, while IntelliJ has better support for Scala.
 
 ### Eclipse
 
@@ -95,9 +88,16 @@ According to our experience, Eclipse has a superior editor for Xtend, while Inte
   * **Xtext SDK**
   * **EMF - Eclipse Modeling Framework Xcore SDK**
 
-### IntelliJ
+### IntelliJ IDEA
 
-#### Troubleshooting
+* Install the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
+* Import the projects using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
+* After importing, add the Scala SDK (version 2.12) to the module. (If you did not
+use Scala before, download it from IntelliJ).
+
+### Troubleshooting
+
+#### Eclipse
 
 * Gradle error
   * **Problem:** during import, you may encounter the following error:
@@ -125,10 +125,10 @@ According to our experience, Eclipse has a superior editor for Xtend, while Inte
     ```
   * **Solution:** run the `scripts/clean-build-dirs.sh` script.
 
-* `NoClassDefFoundError` for scala code:
+* `NoClassDefFoundError` for Scala code:
   * **Problem:** The code compiles, but IntelliJ shows the following error when running the tests:
 
-      > java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
+    > java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
 
   * **Solution:** update the Scala SDK in your project to 2.12.
 
