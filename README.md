@@ -56,15 +56,32 @@ repositories {
 }
 
 dependencies {
-	compile 'ingraph:ingraph-...:0.1.0'
+	compile 'ingraph:ingraph-...:0.2.0'
 }
 ```
 
 ## Contributor's Guide
 
+The ingraph project is implemented in Java, Scala and Xtend. We use both Eclipse and IntelliJ for development.
+
+* IntelliJ IDEA with the [Scala plug-in](https://plugins.jetbrains.com/plugin/?id=1347)
+  * Import using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
+  * After importing, add the Scala SDK (version 2.12) to the module. (If you did not use Scala before, download it from IntelliJ).
+* [Eclipse Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/) with the . Do not forget to
+
+According to our experience, Eclipse has a superior editor for Xtend, while IntelliJ has better support for Scala.
+
 ### Eclipse
 
-1. It is recommended to start with the latest version (currently, [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
+1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution. :notebook_with_decorative_cover:
+1. Install the following plug-ins for Scala:
+  * [Scala IDE](http://scala-ide.org/).
+  * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
+1. The latest editions of the Scala IDE (currently 4.15) only support Scala 2.11, hence we need to install 2.12 seperately.
+  * Download and install [Scala 2.12](https://www.scala-lang.org/download/).
+  * Set your Scala distribution [for the Scala IDE](http://scala-ide.org/blog/scala-installations.html#BYOS).
+    * Go to **Window** | **Preferences** | **Scala** | **Installations**, click **Add**, browse the directory for the Scala JARs, name the installation as `Scala` and click **OK**.
+    * :bulb: On Ubuntu-based systems, the Scala JARs are located in `/usr/share/scala/lib`.
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
 1. Go to the **ingraph** parent project, right click and choose **Gradle** | **Refresh Gradle Project**. (_This is required for Buildship to notice the Xcore source files that were just generated._)
 1. You may have to clean the workspace once.
@@ -73,10 +90,12 @@ dependencies {
 
 * From the Marketplace:
   * If you do not have Buildship: go to the **Eclipse Marketplace**, install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
-* From the update site of your Eclipse release (e.g. the Oxygen update site).
+* From the update site of your Eclipse release (e.g. the Oxygen update site):
   * **Xtend IDE**
   * **Xtext SDK**
   * **EMF - Eclipse Modeling Framework Xcore SDK**
+
+### IntelliJ
 
 #### Troubleshooting
 
@@ -105,6 +124,14 @@ dependencies {
     The type CudOperationsTest is already defined in CudOperationsTest.java.
     ```
   * **Solution:** run the `scripts/clean-build-dirs.sh` script.
+
+* `NoClassDefFoundError` for scala code:
+  * **Problem:** The code compiles, but IntelliJ shows the following error when running the tests:
+
+      > java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
+
+  * **Solution:** update the Scala SDK in your project to 2.12.
+
 
 #### How to run the tests
 
