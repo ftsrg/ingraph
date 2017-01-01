@@ -18,33 +18,35 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
   "Unwind" must {
     "do simple unwind 0" in {
       val changeSet = ChangeSet(
-        positive = Vector(
-          tuple("x", List(1,2,3), "y"),
-          tuple("w", List(), "z")
+        positive = tupleBag(
+          tuple("x", cypherList(1, 2, 3), "y"),
+          tuple("w", cypherList(), "z")
         ),
-        negative = Vector(
-          tuple("a", Vector(1, 2), "b"),
-          tuple("c", Vector(), "d")
+        negative = tupleBag(
+          tuple("a", cypherList(1, 2), "b"),
+          tuple("c", cypherList(), "d")
         )
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
 
       unwind ! changeSet
-      expectMsg(ChangeSet(positive = Vector(
-        tuple("x", 1, "y"),
-        tuple("x", 2, "y"),
-        tuple("x", 3, "y")
-      ), negative = Vector(
-        tuple("a", 1, "b"),
-        tuple("a", 2, "b")
-      )
+      expectMsg(ChangeSet(
+        positive = tupleBag(
+          tuple("x", 1, "y"),
+          tuple("x", 2, "y"),
+          tuple("x", 3, "y")
+        ),
+        negative = tupleBag(
+          tuple("a", 1, "b"),
+          tuple("a", 2, "b")
+        )
       ))
     }
 
     "do simple unwind 1" in {
       val changeSet = ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple("x", List(1,2,3), "y"),
           tuple("w", List(4,5), "z")
         )
@@ -53,13 +55,14 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
 
       unwind ! changeSet
-      expectMsg(ChangeSet(positive = Vector(
-        tuple("x", 1, "y"),
-        tuple("x", 2, "y"),
-        tuple("x", 3, "y"),
-        tuple("w", 4, "z"),
-        tuple("w", 5, "z")
-      )
+      expectMsg(ChangeSet(
+        positive = tupleBag(
+          tuple("x", 1, "y"),
+          tuple("x", 2, "y"),
+          tuple("x", 3, "y"),
+          tuple("w", 4, "z"),
+          tuple("w", 5, "z")
+        )
       ))
     }
   }

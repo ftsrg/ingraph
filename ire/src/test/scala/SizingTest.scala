@@ -22,29 +22,26 @@ class SizingTest extends WordSpec with TimeLimits {
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
     val forwarder = newLocal(Props(new SelectionNode(production, a => true)))
-    val joiner = newLocal(Props(new JoinNode(forwarder, 2, 2, Vector(0), Vector(0))), "joiner")
+    val joiner = newLocal(Props(new JoinNode(forwarder, 2, 2, mask(0), mask(0))), "joiner")
   }
 
   "SizeCounter" should {
     "count" in {
       val data = mutable.HashMap[Tuple, Int]()
-      data(Vector(5, 6, 7)) = 8
-      data(Vector(5, 6, 9)) = 10
+      data(tuple(5, 6, 7)) = 8
+      data(tuple(5, 6, 9)) = 10
       assert(SizeCounter.count(data.keys) == 6)
     }
 
     "count deeper" in {
       val data: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
-      data.addBinding(Vector(2, 3), Vector(3, 4))
-      data.addBinding(Vector(2, 3), Vector(3, 5))
-      data.addBinding(Vector(2, 3), Vector(3, 6))
-      data.addBinding(Vector(3, 2), Vector(2, 5))
+      data.addBinding(tuple(2, 3), tuple(3, 4))
+      data.addBinding(tuple(2, 3), tuple(3, 5))
+      data.addBinding(tuple(2, 3), tuple(3, 6))
+      data.addBinding(tuple(3, 2), tuple(2, 5))
       assert(SizeCounter.countDeeper(data.values) == 8)
     }
   }
-
-
-
 
   "measuring size" {
     val input = new TransactionFactory(10)

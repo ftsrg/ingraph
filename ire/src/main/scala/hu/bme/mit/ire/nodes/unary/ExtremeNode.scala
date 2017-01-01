@@ -9,7 +9,7 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 abstract class ExtremeNode(override val next: (ReteMessage) => Unit,
-                           val aggregationKeys: Vector[Int],
+                           val aggregationKeys: Mask,
                            val extremeKey: Int,
                            override val expectedTerminatorCount: Int = 1
                           ) extends UnaryNode with SingleForwarder {

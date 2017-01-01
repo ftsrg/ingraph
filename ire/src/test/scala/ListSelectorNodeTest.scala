@@ -2,6 +2,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.MapperNode
+import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class ListSelectorNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
@@ -13,14 +14,10 @@ class ListSelectorNodeTest(_system: ActorSystem) extends TestKit(_system) with I
     TestKit.shutdownActorSystem(system)
   }
 
-  import hu.bme.mit.ire.util.TestUtil._
-
   "ListSelector" must {
     "do select items in lists 0" in {
       val changeSet = ChangeSet(
-        positive = Vector(
-          tuple(List("a","b","c"))
-        )
+        positive = tupleBag(tuple(List("a","b","c")))
       )
 
       val function = (n: Any) => n match {
@@ -30,7 +27,7 @@ class ListSelectorNodeTest(_system: ActorSystem) extends TestKit(_system) with I
       val listSelector = system.actorOf(Props(new MapperNode(echoActor ! _, function, 0)))
 
       listSelector ! changeSet
-      expectMsg(ChangeSet(positive = Vector(tuple("b"))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple("b"))))
     }
   }
 }

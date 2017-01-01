@@ -10,13 +10,13 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 class CollectNode(override val next: (ReteMessage) => Unit,
-                  val aggregationKeys: Vector[Int],
+                  val aggregationKeys: Mask,
                   val collectKey: Int) extends UnaryNode with SingleForwarder {
   val collections = new mutable.HashMap[Tuple, ListBuffer[Any]].withDefault(d => new ListBuffer())
 
   override def onSizeRequest(): Long = SizeCounter.count(collections.values)
 
-  def maintainCollections(changeSet: ChangeSet, aggregationKeys: Vector[Int], collectKey: Int): ChangeSet = {
+  def maintainCollections(changeSet: ChangeSet, aggregationKeys: Mask, collectKey: Int): ChangeSet = {
     val oldValues = new mutable.HashMap[Tuple, ListBuffer[Any]]
 
     for (tuple <- changeSet.positive;

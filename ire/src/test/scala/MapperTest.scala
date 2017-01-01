@@ -16,7 +16,10 @@ class MapperTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSen
 
   "MapperNode" must {
     "map values" in {
-      val changeSet = ChangeSet(positive=Vector(tuple(0, "something")), negative=Vector(tuple(0, "something else")))
+      val changeSet = ChangeSet(
+        positive = tupleBag(tuple(0, "something")),
+        negative = tupleBag(tuple(0, "something else"))
+      )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val function = (n: Any) => n match {
         case s: String => s.length
@@ -25,8 +28,8 @@ class MapperTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSen
 
       checker ! changeSet
       expectMsg(ChangeSet(
-        positive = Vector(tuple(0, "something".length)),
-        negative = Vector(tuple(0, "something else".length))
+        positive = tupleBag(tuple(0, "something".length)),
+        negative = tupleBag(tuple(0, "something else".length))
       ))
     }
   }
