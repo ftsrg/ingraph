@@ -57,8 +57,46 @@ class EdgeLabelSet extends LabelSet {
   refers EdgeLabel[] edgeLabels // the edge must have *one* of these labels
 }
 
+/**
+ * VariableExpression is a generic container for a variable to make it easy
+ * to include into expressions.
+ *
+ * Various sub-types like VariableComparableExpression, VariableArithmeticExpression
+ * exists to allow type-safe building of expressions. However keep in mind, that
+ * it is not guaranteed that the variable will hold a value that is e.g.
+ * comparable in case of a VariableComparableExpression.
+ * Type check is always needed in query execution time!
+ */
+class VariableExpression extends Expression {
+	refers Variable variable
+}
+
+/**
+ * Container for a variable to be placed in comparable position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class VariableComparableExpression extends VariableExpression, ComparableExpression {
+}
+
+/**
+ * Container for a variable to be placed in arithmetic expression position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class VariableStringExpression extends VariableExpression, StringExpression {
+}
+
+/**
+ * Container for a variable to be placed in arithmetic expression position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class VariableArithmeticExpression extends VariableExpression, ArithmeticExpression {
+}
+
 /* Variables */
-abstract class Variable extends Atom, NamedElement, ComparableExpression {
+abstract class Variable extends Atom, NamedElement {
   boolean dontCare = "false"
 }
 

@@ -50,6 +50,7 @@ import relalg.UnaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryNodeLogicalOperatorType
+import relalg.VariableExpression
 
 abstract class AbstractRelalgSerializer {
 
@@ -405,6 +406,10 @@ abstract class AbstractRelalgSerializer {
 	/**
 	 * convertExpression
 	 */
+  def dispatch convertExpression(VariableExpression ve) {
+    convertExpression(ve.variable)
+  }
+
 	def dispatch String convertExpression(BinaryLogicalExpression exp) {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
 	}

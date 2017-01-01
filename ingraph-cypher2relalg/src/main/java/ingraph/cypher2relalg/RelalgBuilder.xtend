@@ -395,7 +395,10 @@ class RelalgBuilder {
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
-    buildRelalgVariable(e)
+    createVariableComparableExpression => [
+      variable = buildRelalgVariable(e)
+      container = topLevelContainer
+    ]
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(ExpressionPlusMinus e) {
@@ -414,7 +417,10 @@ class RelalgBuilder {
     val x = buildRelalgVariable(e)
     // as AttributeVariable
     if (x instanceof AttributeVariable) {
-      x as AttributeVariable
+      createVariableComparableExpression => [
+        variable = x
+        container = topLevelContainer
+      ]
     } else {
       unsupported('''Unsupported type received: «x.class.name»''')
       null
