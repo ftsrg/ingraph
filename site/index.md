@@ -28,6 +28,8 @@ ingraph is suited for the following technical challenges:
 * Global analytical graph patterns
 * Evaluating queries over a runtime (live) model
 
+We also plan to include stream processing features (e.g. defining windows), but currently we focus on implementing basic pattern matching features.
+
 ### Not suited for
 
 ingraph is not efficient/expressive enough for the following technical challenges:
@@ -41,23 +43,24 @@ Currently, the ingraph project is not mature enough for production use. Instead,
 
 Candidates for primary use cases of incremental openCypher queries are:
 
-* Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf))
-* Static analysis of source code repositories ([technical report](pub/stein-daniel-static-analysis.pdf))
+* Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid) (to appear in January 2017))
+* Static analysis of source code repositories ([thesis work](pub/stein-daniel-msc.pdf))
 * Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
 * Model simulation and analysis of runtime models
 
-Incremental openCypher queries could also be beneficial for:
+Incremental openCypher queries can also be beneficial for:
 
 * Recommendation engines ([Neo4j white paper](https://neo4j.com/resources/recommendations-business-white-paper/))
+* Stream processing ([real-time urban monitoring](http://link.springer.com/chapter/10.1007/978-3-642-41338-4_12))
 
 # Publications
 
-* G. Szárnyas, J. Marton: [Formalizing openCypher Graph Queries in Relational Algebra](pub/btw2017-opencypher.pdf) (submitted to BTW 2017)
-* G. Szárnyas, J. Maginecz, D. Varró: Evaluation of Optimization Strategies for Incremental Graph Queries (Periodica Polytechnica 2017, accepted)
-* J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
+* J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
+* G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid) (Software and Systems Modeling Journal, 2016) - to appear in January 2017
+* G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://inf.mit.bme.hu/research/publications/evaluation-optimization-strategies-incremental-graph-queries) (Periodica Polytechnica 2017) - to appear in January 2017
 
-# Related projects
+# Related projects on GitHub
 
-* [ingraph on GitHub](https://github.com/FTSRG/ingraph)
-* ingraph uses [ire](https://github.com/FTSRG/ire), an incremental relational query engine
+* [ingraph](https://github.com/FTSRG/ingraph)
+* [Train Benchmark](https://github.com/FTSRG/trainbenchmark), a benchmark framework for continuous model validation
