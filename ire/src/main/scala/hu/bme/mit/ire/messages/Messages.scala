@@ -7,7 +7,7 @@ import scala.concurrent.Promise
 
 class ReteMessage() {}
 
-case class ChangeSet(positive: Vector[Tuple] = Vector(), negative: Vector[Tuple] = Vector())
+case class ChangeSet(positive: Iterable[Tuple] = Vector(), negative: Iterable[Tuple] = Vector())
   extends ReteMessage()
 
 case class ExpectMoreTerminators(id: Int, inputs: Iterable[ReteMessage => Unit])

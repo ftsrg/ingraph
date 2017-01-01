@@ -15,19 +15,19 @@ object Utils {
     in.drop(1).toLong
   }
 
-  /**
-    * Produces permutations based on the change set, e.g.
-    * {+ <1, 2>, <3, 4>} -> {{+ <1, 2>, <3, 4>}, {+ <3, 4>, <1, 2>}}
-    * @param cs
-    * @return
-    */
-  def changeSetPermutations(cs: ChangeSet) = {
-    val values = for (
-      pos <- cs.positive.permutations;
-      neg <- cs.negative.permutations
-    ) yield ChangeSet(pos, neg)
-    values.toSeq
-  }
+//  /**
+//    * Produces permutations based on the change set, e.g.
+//    * {+ <1, 2>, <3, 4>} -> {{+ <1, 2>, <3, 4>}, {+ <3, 4>, <1, 2>}}
+//    * @param cs
+//    * @return
+//    */
+//  def changeSetPermutations(cs: ChangeSet) = {
+//    val values = for (
+//      pos <- Vector(cs.positive).permutations;
+//      neg <- Vector(cs.negative).permutations
+//    ) yield ChangeSet(pos, neg)
+//    values.toSeq
+//  }
 
   object conversions {
     implicit def toSendingFunction(base: ActorRef): ReteMessage => Unit = base ! _

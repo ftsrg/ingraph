@@ -11,7 +11,7 @@ class AverageNode(override val next: (ReteMessage) => Unit,
 
   override def onSizeRequest(): Long = SizeCounter.count(counts.keys, sums.keys)
 
-  def average(sums: Vector[Tuple], counts: Vector[Tuple]): Vector[Tuple] = {
+  def average(sums: Iterable[Tuple], counts: Iterable[Tuple]): Iterable[Tuple] = {
     for ( (sum, count) <- (sums zip counts) )
       yield sum.slice(0, sum.size - 1) :+ GenericMath.divide(sum.last, count.last)
   }

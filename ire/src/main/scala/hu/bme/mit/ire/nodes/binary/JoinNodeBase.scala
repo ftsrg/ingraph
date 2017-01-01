@@ -32,7 +32,7 @@ abstract class JoinNodeBase extends BinaryNode {
       otherTuple ++ extract(tuple, secondaryMaskInverse)
   }
 
-  def joinTuples(tuples: Vector[Tuple], otherIndexer: Indexer, slotMask: Mask, slot: Slot): Vector[Tuple] = {
+  def joinTuples(tuples: Iterable[Tuple], otherIndexer: Indexer, slotMask: Mask, slot: Slot): Iterable[Tuple] = {
     for {
       tuple <- tuples
       joinAttributes = slotMask.map(i => tuple(i))
@@ -43,8 +43,8 @@ abstract class JoinNodeBase extends BinaryNode {
 
   def join(delta: ChangeSet, slotIndexer: Indexer, otherIndexer: Indexer, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
     // join the tuples based on the other slot's indexer
-    val joinedPositiveTuples: Vector[Tuple] = joinTuples(delta.positive, otherIndexer, slotMask, slot)
-    val joinedNegativeTuples: Vector[Tuple] = joinTuples(delta.negative, otherIndexer, slotMask, slot)
+    val joinedPositiveTuples: Iterable[Tuple] = joinTuples(delta.positive, otherIndexer, slotMask, slot)
+    val joinedNegativeTuples: Iterable[Tuple] = joinTuples(delta.negative, otherIndexer, slotMask, slot)
 
     // maintain the content of the slot's indexer
     for (tuple <- delta.positive) slotIndexer.addBinding   (extract(tuple, slotMask), tuple)
