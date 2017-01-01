@@ -58,15 +58,15 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
       )
 
-//      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-//        positive = tupleBag(
-//          tuple(5, 6, 7, 8),
-//          tuple(10, 11, 7, 8)
-//        )
-//      )
-//      ): _*
-//      )
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(
+          tuple(5, 6, 7, 8),
+          tuple(10, 11, 7, 8)
+        )
+      )
+      ): _*
+      )
     }
     "do join 2" in {
       val primaryTupleWidth = 2
@@ -98,23 +98,23 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-//      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4))))
-//
-//      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-//
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
-//
-//      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
-//      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
-//
-//      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
-//      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
-//
-//      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
-//
-//      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4))))
+
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+
+      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
+
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
+
+      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
     "do parallel joins" in {

@@ -59,15 +59,15 @@ import org.scalatest.{BeforeAndAfterAll, Ignore, Matchers, WordSpecLike}
       )
       )
 
-//      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-//        positive = tupleBag(
-//          tuple(5, 6, 7, 8),
-//          tuple(10, 11, 7, 8)
-//        )
-//      )
-//      ): _*
-//      )
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(
+          tuple(5, 6, 7, 8),
+          tuple(10, 11, 7, 8)
+        )
+      )
+      ): _*
+      )
     }
     "do left outer join 2" in {
       val primaryTupleWidth = 2
@@ -109,27 +109,27 @@ import org.scalatest.{BeforeAndAfterAll, Ignore, Matchers, WordSpecLike}
 
       joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
 
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
-//        tuple(2, 4, 5),
-//        tuple(3, 4, 5)
-//      ))): _*)
-//
-//      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
-//      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
-//
-//      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
-//      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
-//
-//      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(
-//        tuple(2, 4, 5),
-//        tuple(3, 4, 5)
-//      ))): _*)
-//
-//      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-//      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
-//        tuple(2, 4, 5), tuple(3, 4, 5)
-//      ))): _*)
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
+        tuple(2, 4, 5),
+        tuple(3, 4, 5)
+      ))): _*)
+
+      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
+
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
+
+      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(
+        tuple(2, 4, 5),
+        tuple(3, 4, 5)
+      ))): _*)
+
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
+        tuple(2, 4, 5), tuple(3, 4, 5)
+      ))): _*)
     }
   }
 
