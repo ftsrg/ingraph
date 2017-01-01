@@ -38,7 +38,7 @@ abstract class TrainbenchmarkQuery {
     println(Await.result(x, timeout))
   }
 
-  def getResults(): Set[Tuple] = {
+  def getResults(): Iterable[Tuple] = {
     log.info("termination started")
     val res = Await.result(terminator.send(), timeout)
     log.info("termination finished")

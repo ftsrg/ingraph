@@ -4,6 +4,7 @@ import scala.collection.mutable
 
 package object datatypes {
   type Tuple = IndexedSeq[Any]
+  type TupleBag = Iterable[Tuple] //mutable.Map[Tuple, Integer]
   type Mask = IndexedSeq[Int]
   type CypherList = IndexedSeq[Any] // TODO Cypher is not a good name on this level of abstraction
   type Indexer = mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
