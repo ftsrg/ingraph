@@ -95,7 +95,7 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
   ./gradlew clean build eclipse -x test
   ```
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
-1. To fix the Scala projects (**ire** and **ingraph-ire**), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
+1. To fix the Scala projects (`ire` and `ingraph-ire`), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
 
 ### IntelliJ IDEA
 
@@ -127,11 +127,14 @@ use Scala before, download it from the dialog box provided by IntelliJ).
     ```
   * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
 
+#### IntelliJ
+
 * `NoClassDefFoundError` for Scala code:
-  * **Problem:** The code compiles, but IntelliJ shows the following error when running the tests:
+  * **Problem:** The code compiles, but running the errors results in the following error:
 
-    > java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
-
+    ```
+    java.lang.NoClassDefFoundError: akka/testkit/ImplicitSender$class
+    ```
   * **Solution:** update the Scala SDK in your project to 2.12.
 
 
@@ -145,13 +148,13 @@ Go to `ingraph-relalg-model` project, navigate to the `src/main/resources` direc
 
 #### How to update the grammars for parsing the Cucumber tests
 
-Go to the **ingraph-report** project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
+Go to the `ingraph-report` project, navigate to the `src/main/java` source folder, and right click the `ingraph.report` package's `GenerateFeature.mwe2` file and choose **Run As** | **MWE2 Workflow** and ignore the warning message.
 
 #### Opening `cypxmi` models
 
 If you want to investigate the generated Xtext models, generate the `cypxmi` files using the provided unit tests.
 
-To open them, you have to import the [org.slizaa.neo4j.opencypher](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
+To open them, you have to import the [`org.slizaa.neo4j.opencypher`](https://github.com/slizaa/slizaa-opencypher-xtext/tree/master/plugins/org.slizaa.neo4j.opencypher) project from the [slizaa-opencypher-xtext](https://github.com/slizaa/slizaa-opencypher-xtext) repository. You should use the **Sample Reflective Ecore Model Editor** for opening these models (and make that editor the default for the `cypxmi` files).
 
 ### IntelliJ IDEA
 
