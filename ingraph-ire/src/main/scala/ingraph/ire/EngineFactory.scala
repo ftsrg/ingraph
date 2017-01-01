@@ -17,14 +17,16 @@ import scala.collection.mutable
 
 object EngineFactory extends App {
 
-  implicit def emfConversion[E](list: EList[E]): IndexedSeq[E] = {
-    for (v <- 0 until list.size)
+  implicit def emfConversion[E](list: EList[E]): Vector[E] = {
+    val l = for (v <- 0 until list.size)
       yield list.get(v)
+    l.toVector
   }
 
-  implicit def emfToIntConversion(list: EList[Integer]): IndexedSeq[Int] = {
-    for (v <- 0 until list.size)
+  implicit def emfToIntConversion(list: EList[Integer]): Vector[Int] = {
+    var l = for (v <- 0 until list.size)
       yield list.get(v).toInt
+    l.toVector
   }
 
   implicit def guavaToScala[K, V](map: ImmutableMap[K, V]): Map[K, V] = {
@@ -58,7 +60,7 @@ object EngineFactory extends App {
                 newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
               case op: ProjectionOperator =>
-                newLocal(Props(new ProjectionNode(expr.child, op.getTupleElements)))
+                newLocal(Props(new ProjectionNode(expr.child, emfToIntConversion(op.getTupleElements))))
               case op: DuplicateEliminationOperator => newLocal(Props(new SelectionNode(expr.child, (r: Tuple) => true)))
               case op: AllDifferentOperator =>
                 val indices = Vector(0) // TODO
@@ -81,15 +83,16 @@ object EngineFactory extends App {
           case op: BinaryOperator =>
             val node: ActorRef = op match {
               case op: AntiJoinOperator =>
-                newLocal(Props(new AntiJoinNode(expr.child, op.getLeftMask, op.getRightMask)))
+                newLocal(Props(new AntiJoinNode(expr.child, emfToIntConversion(op.getLeftMask), emfToIntConversion(op.getRightMask))))
               case op: JoinOperator =>
                 val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new JoinNode(
                     expr.child,
                     op.getLeftInput.getDetailedSchema.length,
                     op.getRightInput.getDetailedSchema.length,
-                    op.getLeftMask,
-                    op.getRightMask)))
+                    emfToIntConversion(op.getLeftMask),
+                    emfToIntConversion(op.getRightMask)
+                )))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)
             remaining += ForwardConnection(op.getRightInput, node.secondary)
