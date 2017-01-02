@@ -38,8 +38,11 @@ import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import relalg.ArithmeticComparisonOperatorType
 import relalg.ArithmeticExpression
 import relalg.AttributeVariable
+import relalg.BinaryArithmeticOperatorType
+import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.EdgeVariable
@@ -53,14 +56,11 @@ import relalg.NumberLiteral
 import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgFactory
+import relalg.UnaryLogicalOperatorType
+import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
-import relalg.BinaryArithmeticOperatorType
-import relalg.ArithmeticComparisonOperatorType
-import relalg.BinaryLogicalOperatorType
-import relalg.UnaryLogicalOperatorType
-import relalg.UnaryNodeLogicalOperatorType
 
 class RelalgBuilder {
 
@@ -476,11 +476,17 @@ class RelalgBuilder {
       rightOperand = buildRelalgArithmeticExpression(e.right)
       container = topLevelContainer
     ]
-
   }
 
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(NumberConstant e) {
     buildRelalgNumberLiteral(e)
+  }
+
+  def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionNodeLabelsAndPropertyLookup e) {
+    createVariableArithmeticExpression => [
+      variable = buildRelalgVariable(e)
+      container = topLevelContainer
+    ]
   }
 
   def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
