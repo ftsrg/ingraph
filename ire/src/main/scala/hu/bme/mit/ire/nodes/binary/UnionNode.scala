@@ -7,9 +7,10 @@ import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
-class UnionNode(override val next: (ReteMessage) => Unit) extends BinaryNode with SingleForwarder {
+class UnionNode(override val next: (ReteMessage) => Unit,
+                val bag: Boolean) extends BinaryNode with SingleForwarder {
 
-  val result = mutable.Set[Tuple]()
+  val result = mutable.ListBuffer[Tuple]()
 
   override def onSizeRequest(): Long = SizeCounter.count(result)
 
@@ -22,21 +23,25 @@ class UnionNode(override val next: (ReteMessage) => Unit) extends BinaryNode wit
   }
 
   def onUpdate(changeSet: ChangeSet) {
-    val positive = changeSet.positive
-    val negative = changeSet.negative
-
-    val forwardPositive = for {
-      tuple <- positive if !result.contains(tuple)
-    } yield tuple
-
-    val forwardNegative = for {
-      tuple <- negative if !result.contains(tuple)
-    } yield tuple
-
-    result ++= forwardPositive
-    result --= forwardNegative
-
-    forward(ChangeSet(forwardPositive, forwardNegative))
+    if (bag) { // bag semantics
+      forward(changeSet)
+    } else { // set semantics
+      val positive = changeSet.positive
+      val negative = changeSet.negative
+  
+      val forwardPositive = for {
+        tuple <- positive if !result.contains(tuple)
+      } yield tuple
+  
+      val forwardNegative = for {
+        tuple <- negative if !result.contains(tuple)
+      } yield tuple
+  
+      result ++= forwardPositive
+      result --= forwardNegative
+  
+      forward(ChangeSet(forwardPositive, forwardNegative))
+    }
   }
 
 }

@@ -5,7 +5,7 @@ import hu.bme.mit.ire.messages.ReteMessage
 import hu.bme.mit.ire.util.GenericMath
 
 class MaxNode(override val next: (ReteMessage) => Unit,
-              override val aggregationKeys: Vector[Int],
+              override val aggregationKeys: Mask,
               override val extremeKey: Int,
               override val expectedTerminatorCount: Int = 1)
   extends ExtremeNode(next, aggregationKeys, extremeKey, expectedTerminatorCount) {

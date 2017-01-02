@@ -28,6 +28,7 @@ class TupleInferencerTest {
     ]
 
     val personAgeAttribute = createAttributeVariable => [element = personVariable; name = "age"]
+    val personAgeExpression = createVariableComparableExpression => [variable = personAgeAttribute]
     val personNameAttribute = createAttributeVariable => [element = personVariable; name = "name"]
     val number20Literal = createIntegerLiteral => [value = 20]
 
@@ -35,7 +36,7 @@ class TupleInferencerTest {
 
     val ageComparison = createArithmeticComparisonExpression => [
       operator = ArithmeticComparisonOperatorType.GREATER_THAN
-      leftOperand = personAgeAttribute
+      leftOperand = personAgeExpression
       rightOperand = number20Literal
     ]
 

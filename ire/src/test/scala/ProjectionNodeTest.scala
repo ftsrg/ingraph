@@ -17,16 +17,16 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
   "Projection" must {
     "select the values" in {
       val changes = ChangeSet(
-        positive = Vector(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)),
-        negative = Vector(tuple(-0, -1, -2, -3), tuple(-10, -11, -12, -13))
+        positive = tupleBag(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)),
+        negative = tupleBag(tuple(-0, -1, -2, -3), tuple(-10, -11, -12, -13))
       )
-      val selectionVector = Vector(0, 2)
+      val selectionMask = mask(0, 2)
       val expectedChanges = ChangeSet(
-        positive = Vector(tuple(15, 17), tuple(4, 6)),
-        negative = Vector(tuple(-0, -2), tuple(-10, -12))
+        positive = tupleBag(tuple(15, 17), tuple(4, 6)),
+        negative = tupleBag(tuple(-0, -2), tuple(-10, -12))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val selector = system.actorOf(Props(new ProjectionNode(echoActor ! _, selectionVector)), name = "testSelector")
+      val selector = system.actorOf(Props(new ProjectionNode(echoActor ! _, selectionMask)), name = "testSelector")
 
       selector ! changes
       expectMsg(expectedChanges)
@@ -34,28 +34,30 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
       expectMsg(expectedChanges)
     }
 
-    val changeSet = ChangeSet(positive = Vector(tuple(0, "something")),
-      negative = Vector(tuple(0, "something else")))
+    val changeSet = ChangeSet(
+      positive = tupleBag(tuple(0, "something")),
+      negative = tupleBag(tuple(0, "something else"))
+    )
 
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, Vector(1, 0)))) // swap attributes
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1, 0)))) // swap attributes
 
       checker ! changeSet
       expectMsg(ChangeSet(
-        positive = Vector(tuple("something", 0)),
-        negative = Vector(tuple("something else", 0))
+        positive = tupleBag(tuple("something", 0)),
+        negative = tupleBag(tuple("something else", 0))
       ))
     }
 
     "do projection with lesser length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, Vector(1))))
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1))))
 
       checker ! changeSet
       expectMsg(ChangeSet(
-        positive = Vector(tuple("something")),
-        negative = Vector(tuple("something else"))
+        positive = tupleBag(tuple("something")),
+        negative = tupleBag(tuple("something else"))
       ))
     }
   }

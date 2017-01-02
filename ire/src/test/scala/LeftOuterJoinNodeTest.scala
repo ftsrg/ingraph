@@ -18,16 +18,19 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
   "LeftOuterJoin" must {
     "left outer join the values" in {
       val primaryChangeSet = ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
       val secondaryChangeSet = ChangeSet(
-        positive = Vector(tuple(0, 15, 16, 13), tuple(1, 15, 16, 14))
+        positive = tupleBag(
+          tuple(0, 15, 16, 13),
+          tuple(1, 15, 16, 14)
+        )
       )
       val secondSecondaryChangeSet = ChangeSet(
-        positive = Vector(tuple(20, 4, 5, 33))
+        positive = tupleBag(tuple(20, 4, 5, 33))
       )
 
       val primaryTupleWidth = 4
@@ -39,7 +42,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
       joiner ! Primary(primaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
         )
@@ -47,21 +50,21 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
       joiner ! Secondary(secondaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18, 0, 13),
           tuple(15, 16, 17, 18, 1, 14)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(15, 16, 17, 18, null, null)
         )
       ))
 
       joiner ! Secondary(secondSecondaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(4, 5, 6, 7, 20, 33)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(4, 5, 6, 7, null, null)
         )
       ))
@@ -69,16 +72,16 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
     "does not produce update in case of pairless secondary update" in {
       val primaryChangeSet = ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
       val secondaryChangeSet = ChangeSet(
-        positive = Vector(tuple(0, 18, 19, 13))
+        positive = tupleBag(tuple(0, 18, 19, 13))
       )
       val secondaryNegativeChangeSet = ChangeSet(
-        negative = Vector(tuple(0, 18, 19, 13))
+        negative = tupleBag(tuple(0, 18, 19, 13))
       )
 
       val primaryTupleWidth = 4
@@ -90,7 +93,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
       joiner ! Primary(primaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
         )
@@ -112,39 +115,44 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(5, 6, 7),
           tuple(10, 11, 7)
         )))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(5, 6, 7, null),
           tuple(10, 11, 7, null)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(7, 8))))
+      joiner ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(7, 8))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(5, 6, 7, 8),
           tuple(10, 11, 7, 8)
         ),
-        negative = Vector(tuple(5, 6, 7, null), tuple(10, 11, 7, null))
+        negative = tupleBag(
+          tuple(5, 6, 7, null),
+          tuple(10, 11, 7, null)
+        )
       )): _*)
     }
 
     "primary negative updates" in {
       val primaryChangeSet = ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
       val secondaryChangeSet = ChangeSet(
-        positive = Vector(tuple(0, 15, 16, 13))
+        positive = tupleBag(tuple(0, 15, 16, 13))
       )
       val primaryNegativeChangeSet = ChangeSet(
-        negative = Vector(
+        negative = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
@@ -159,7 +167,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
       joiner ! Primary(primaryChangeSet)
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
         )
@@ -167,17 +175,17 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
       joiner ! Secondary(secondaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18, 0, 13)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(15, 16, 17, 18, null, null)
         )
       ))
 
       joiner ! Primary(primaryNegativeChangeSet)
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        negative = Vector(
+        negative = tupleBag(
           tuple(4, 5, 6, 7, null, null),
           tuple(15, 16, 17, 18, 0, 13)
         )
@@ -192,63 +200,75 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
+      joiner ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2, 4), tuple(3, 4))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 5), tuple(4, 6))))
+      joiner ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(4, 5), tuple(4, 6))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(2, 4, 5),
           tuple(2, 4, 6),
           tuple(3, 4, 5),
           tuple(3, 4, 6)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 5))))
+      joiner ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(4, 5))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        negative = Vector(
+        negative = tupleBag(
           tuple(2, 4, 5),
           tuple(3, 4, 5)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 6))))
+      joiner ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(4, 6))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(2, 4, 6),
           tuple(3, 4, 6)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 7))))
+      joiner ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(4, 7))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(2, 4, 7),
           tuple(3, 4, 7)
         ),
-        negative = Vector(
+        negative = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
         )
       )): _*)
 
-      joiner ! Primary(ChangeSet(negative = Vector(tuple(2, 4), tuple(3, 4))))
+      joiner ! Primary(ChangeSet(
+        negative = tupleBag(tuple(2, 4), tuple(3, 4))
+      ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        negative = Vector(
+        negative = tupleBag(
           tuple(2, 4, 7),
           tuple(3, 4, 7)
         )

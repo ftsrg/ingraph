@@ -23,8 +23,8 @@ object Utils {
     */
   def changeSetPermutations(cs: ChangeSet) = {
     val values = for (
-      pos <- cs.positive.permutations;
-      neg <- cs.negative.permutations
+      pos <- cs.positive.toVector.permutations;
+      neg <- cs.negative.toVector.permutations
     ) yield ChangeSet(pos, neg)
     values.toSeq
   }

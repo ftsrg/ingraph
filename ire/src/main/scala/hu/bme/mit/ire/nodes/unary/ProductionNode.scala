@@ -13,7 +13,7 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
 
   val receivedTerminatorCount = mutable.Map.empty[Int, Int]
   val results = new mutable.HashSet[Tuple]
-  val terminatorPromises = mutable.Map.empty[Int, Promise[Set[Tuple]]]
+  val terminatorPromises = mutable.Map.empty[Int, Promise[Iterable[Tuple]]]
   val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
   val listeners = new mutable.ListBuffer[ChangeListener]
   var t0 = System.nanoTime()

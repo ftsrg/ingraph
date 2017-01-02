@@ -10,7 +10,7 @@ import scala.collection.mutable
 trait SumLike {
   val sums = new mutable.HashMap[Tuple, Any].withDefault(d => 0)
 
-  def maintainSum(changeSet: ChangeSet, aggregationKeys: Vector[Int], sumKey: Int): ChangeSet = {
+  def maintainSum(changeSet: ChangeSet, aggregationKeys: Mask, sumKey: Int): ChangeSet = {
     val oldValues = new mutable.HashMap[Tuple, Any]
 
     for (tuple <- changeSet.positive;

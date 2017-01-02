@@ -18,7 +18,9 @@ class SelectionTest(_system: ActorSystem) extends TestKit(_system) with Implicit
 
   "Selection" must {
     "check the condition properly" in {
-      val changeSet = ChangeSet(Vector(tuple(0, "something"), tuple(0, "something else")))
+      val changeSet = ChangeSet(
+        positive = tupleBag(tuple(0, "something"), tuple(0, "something else"))
+      )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val condition = (n: Tuple) => {
         n(1) == "something"
@@ -26,27 +28,35 @@ class SelectionTest(_system: ActorSystem) extends TestKit(_system) with Implicit
       val checker = system.actorOf(Props(new SelectionNode(echoActor ! _, condition)))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = Vector(tuple(0, "something"))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(0, "something"))))
     }
   }
   "EqualityChecker" must {
     "check equality properly" in {
-      val changeSet = ChangeSet(Vector(tuple(0, 2, 1), tuple(0, 0, 0), tuple(0, 2, 0)))
+      val changeSet = ChangeSet(
+        positive = tupleBag(tuple(0, 2, 1), tuple(0, 0, 0), tuple(0, 2, 0))
+      )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val equalityChecker = system.actorOf(Props(new EqualityNode(echoActor ! _, 0, Vector(1, 2))))
+      val equalityChecker = system.actorOf(Props(new EqualityNode(echoActor ! _, 0, mask(1, 2))))
 
       equalityChecker ! changeSet
-      expectMsg(ChangeSet(Vector(tuple(0, 0, 0))))
+      expectMsg(ChangeSet(
+        positive = tupleBag(tuple(0, 0, 0))
+      ))
     }
   }
   "InequalityChecker" must {
     "check inequality properly" in {
-      val changeSet = ChangeSet(Vector(tuple(0, 2, 1), tuple(0, 3, 0), tuple(0, 0, 0)))
+      val changeSet = ChangeSet(
+        positive = tupleBag(tuple(0, 2, 1), tuple(0, 3, 0), tuple(0, 0, 0))
+      )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val inequalityChecker = system.actorOf(Props(new InequalityNode(echoActor ! _, 0, Vector(1, 2))))
+      val inequalityChecker = system.actorOf(Props(new InequalityNode(echoActor ! _, 0, mask(1, 2))))
 
       inequalityChecker ! changeSet
-      expectMsg(ChangeSet(Vector(tuple(0, 2, 1))))
+      expectMsg(ChangeSet(
+        positive = tupleBag(tuple(0, 2, 1))
+      ))
     }
   }
 }

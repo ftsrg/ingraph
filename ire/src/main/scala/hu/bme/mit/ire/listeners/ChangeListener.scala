@@ -18,5 +18,5 @@ abstract class ChangeListener {
     negative.clear()
   }
 
-  def listener(positive: List[Tuple], negative: List[Tuple])
+  def listener(positive: Iterable[Tuple], negative: Iterable[Tuple])
 }

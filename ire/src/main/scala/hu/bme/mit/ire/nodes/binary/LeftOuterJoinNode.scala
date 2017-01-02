@@ -33,8 +33,8 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
     forward(combineChangeSets(positiveUpdatesChangeSet, negativeUpdatesChangeSet))
   }
 
-  private def calculatePrimaryPositive(inputTuple: Tuple): Vector[Tuple] = {
-    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
+  private def calculatePrimaryPositive(inputTuple: Tuple): Iterable[Tuple] = {
+    val joinedPositiveTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
     val joinAttributesTuple = extract(inputTuple, primaryMask)
 
     primaryIndexer.addBinding(joinAttributesTuple, inputTuple)
@@ -47,7 +47,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
     joinedPositiveTuples
   }
 
-  private def calculatePrimaryNegative(inputTuple: Tuple): Vector[Tuple] = {
+  private def calculatePrimaryNegative(inputTuple: Tuple): Iterable[Tuple] = {
     val joinAttributesTuple = extract(inputTuple, primaryMask)
 
     primaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
@@ -61,7 +61,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
-    val joinedPositiveTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedPositiveTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
 
@@ -76,7 +76,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
-    val joinedNegativeTuples: Vector[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
+    val joinedNegativeTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
     var positiveTuples: Vector[Tuple] = Vector()
 
     val joinAttributesTuple = extract(inputTuple, secondaryMask)

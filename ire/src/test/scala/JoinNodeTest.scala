@@ -6,6 +6,7 @@ import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import scala.collection.immutable.Vector
 
 class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -19,13 +20,13 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
   "Join" must {
     "join the values" in {
       val primaryChangeSet = ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
       val secondaryChangeSet = ChangeSet(
-        positive = Vector(tuple(0, 15, 16, 13))
+        positive = tupleBag(tuple(0, 15, 16, 13))
       )
       val primaryTupleWidth = 4
       val secondaryTupleWidth = 4
@@ -37,7 +38,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       joiner ! Primary(primaryChangeSet)
       joiner ! Secondary(secondaryChangeSet)
       expectMsg(ChangeSet(
-        positive = Vector(tuple(15, 16, 17, 18, 0, 13))
+        positive = tupleBag(tuple(15, 16, 17, 18, 0, 13))
       ))
     }
 
@@ -50,16 +51,16 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(5, 6, 7),
           tuple(10, 11, 7)
         )
       )
       )
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(7, 8))))
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(5, 6, 7, 8),
           tuple(10, 11, 7, 8)
         )
@@ -76,7 +77,7 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(ChangeSet(
-        positive = Vector(
+        positive = tupleBag(
           tuple(1, 5),
           tuple(2, 6)
         )
@@ -84,10 +85,10 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
 
       joiner ! Secondary(ChangeSet(
-        positive = Vector(tuple(5, 10))
+        positive = tupleBag(tuple(5, 10))
       )
       )
-      expectMsg(ChangeSet(positive = Vector(tuple(1, 5, 10))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 5, 10))))
     }
     "do join new 1" in {
       val primaryTupleWidth = 2
@@ -97,23 +98,23 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(positive = Vector(tuple(2, 4), tuple(3, 4))))
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 5))))
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
 
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Primary(ChangeSet(negative = Vector(tuple(3, 4))))
-      expectMsg(ChangeSet(negative = Vector(tuple(3, 4, 5))))
+      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
 
-      joiner ! Primary(ChangeSet(positive = Vector(tuple(3, 4))))
-      expectMsg(ChangeSet(positive = Vector(tuple(3, 4, 5))))
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
 
-      joiner ! Secondary(ChangeSet(negative = Vector(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Secondary(ChangeSet(positive = Vector(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = Vector(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
     "do parallel joins" in {
@@ -125,16 +126,16 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, 2, 2, primaryMask, secondaryMask,
         hashFunction = (n: Tuple) => n(0).hashCode())))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(0, 2))))
-      forkingJoiner ! Secondary(ChangeSet(positive = Vector(tuple(1, 3))))
+      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
 
-      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(0, 2))))
-      forkingJoiner ! Primary(ChangeSet(positive = Vector(tuple(1, 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 2))))
 
-      joinerB ! Secondary(ChangeSet(positive = Vector(tuple(1, 3))))
-      expectMsg(ChangeSet(positive = Vector(tuple(1, 2, 3, 3))))
-      joinerA ! Secondary(ChangeSet(positive = Vector(tuple(0, 3))))
-      expectMsg(ChangeSet(positive = Vector(tuple(0, 2, 2, 3))))
+      joinerB ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2, 3, 3))))
+      joinerA ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 3))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(0, 2, 2, 3))))
     }
   }
 }
