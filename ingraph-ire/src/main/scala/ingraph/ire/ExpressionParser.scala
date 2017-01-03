@@ -97,6 +97,7 @@ object ExpressionParser {
     case cmp: StringLiteral => cmp.getValue
     case cmp: AttributeVariable =>  tuple(lookup(cmp)) //TODO
     case cmp: Variable => tuple(lookup(cmp)) //TODO
+    case cmp: VariableComparableExpression => tuple(lookup(cmp.getVariable))
   }
 
 }
