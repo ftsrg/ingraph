@@ -5,7 +5,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.nodes.binary.JoinNode
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.trainbenchmark._
-import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.WordSpec
 import org.scalatest.concurrent.TimeLimits
@@ -34,7 +34,7 @@ class SizingTest extends WordSpec with TimeLimits {
     }
 
     "count deeper" in {
-      val data: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+      val data: Indexer = new BufferMultimap[Tuple, Tuple]
       data.addBinding(tuple(2, 3), tuple(3, 4))
       data.addBinding(tuple(2, 3), tuple(3, 5))
       data.addBinding(tuple(2, 3), tuple(3, 6))

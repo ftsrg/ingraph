@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 
 import scala.collection.mutable
 
@@ -12,7 +12,7 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
                    override val secondaryMask: Mask)
   extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
-  val primaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+  val primaryIndexer: Indexer = new BufferMultimap[Tuple, Tuple]
   val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
   val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
 
@@ -48,8 +48,8 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
     val sMinusDeltaS = secondaryTuples -- changeSet.negative
     val sMinusDeltaSProjected = sMinusDeltaS.map(tuple => extract(tuple, secondaryMask))
 
-    val x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toSet
-    val y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toSet
+    val x = leftJoin(primaryIndexer.values, secondaryProjectedTuples, primaryMask).toBuffer
+    val y = leftJoin(primaryIndexer.values, sMinusDeltaSProjected, primaryMask).toBuffer
     val resultPositive = x -- y
 
     // maintain the content of the slot's indexer
@@ -76,7 +76,7 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
     } yield extract(tuple, secondaryMask)
   }
 
-  def leftJoin(leftTuples: Iterable[collection.Set[Tuple]], rightTuples: collection.Set[Tuple], leftMask: Mask): Iterable[Tuple] = {
+  def leftJoin(leftTuples: Iterable[Iterable[Tuple]], rightTuples: collection.Set[Tuple], leftMask: Mask): Iterable[Tuple] = {
     val result = for {
       leftTupleSets <- leftTuples
       leftTuple <- leftTupleSets

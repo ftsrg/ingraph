@@ -1,5 +1,7 @@
 package hu.bme.mit.ire
 
+import hu.bme.mit.ire.util.BufferMultimap
+
 import scala.collection.mutable
 
 package object datatypes {
@@ -8,7 +10,7 @@ package object datatypes {
   //type Mask = IndexedSeq[Int]
   type Mask = Vector[Int]
   type CypherList = IndexedSeq[Any] // TODO Cypher is not a good name on this level of abstraction
-  type Indexer = mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+  type Indexer = BufferMultimap[Tuple, Tuple]
 
   type Path = Vector[Long]
   val Path = scala.collection.immutable.Vector

@@ -4,6 +4,7 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.TestUtil._
 
 import scala.collection.mutable
@@ -15,7 +16,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryMask: Mask)
   extends JoinNodeBase with SingleForwarder {
 
-  val pairlessTuples = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+  val pairlessTuples = new BufferMultimap[Tuple, Tuple]
 
   override def onSizeRequest(): Long = 0
 

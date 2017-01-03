@@ -137,5 +137,30 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       joinerA ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 3))))
       expectMsg(ChangeSet(positive = tupleBag(tuple(0, 2, 2, 3))))
     }
+
+    "have bag behavior" in {
+      val primaryTupleWidth = 2
+      val secondaryTupleWidth = 2
+      val primaryMask = mask(1)
+      val secondaryMask = mask(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(2, 4), tuple(3, 4))))
+
+      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
+        tuple(2, 4, 5), tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+
+      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(2, 4))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple(2, 4, 5))))
+
+      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(2, 4))))
+      expectMsg(ChangeSet(negative = tupleBag(tuple(2, 4, 5))))
+
+      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4))))
+      expectMsg(ChangeSet(positive = tupleBag(tuple(2, 4, 5))))
+    }
   }
 }

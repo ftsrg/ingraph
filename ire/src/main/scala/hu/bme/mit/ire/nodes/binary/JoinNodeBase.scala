@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 
 import scala.collection.mutable
 
@@ -13,10 +13,10 @@ abstract class JoinNodeBase extends BinaryNode {
   val primaryMask: Mask
   val secondaryMask: Mask
 
-  val primaryIndexer:   Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
-  val secondaryIndexer: Indexer = new mutable.HashMap[Tuple, mutable.Set[Tuple]] with mutable.MultiMap[Tuple, Tuple]
+  val primaryIndexer = new BufferMultimap[Tuple, Tuple]
+  val secondaryIndexer = new BufferMultimap[Tuple, Tuple]
 
-  val primaryMaskInverse:   Mask = Vector.range(0, primaryTupleWidth  ) filter (i => !primaryMask.contains(i)  )
+  val primaryMaskInverse: Mask = Vector.range(0, primaryTupleWidth) filter (i => !primaryMask.contains(i))
   val secondaryMaskInverse: Mask = Vector.range(0, secondaryTupleWidth) filter (i => !secondaryMask.contains(i))
 
   override def onSizeRequest(): Long = SizeCounter.countDeeper(primaryIndexer.values, secondaryIndexer.values)
@@ -47,8 +47,10 @@ abstract class JoinNodeBase extends BinaryNode {
     val joinedNegativeTuples: TupleBag = joinTuples(delta.negative, otherIndexer, slotMask, slot)
 
     // maintain the content of the slot's indexer
-    for (tuple <- delta.positive) slotIndexer.addBinding   (extract(tuple, slotMask), tuple)
-    for (tuple <- delta.negative) slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
+    for (tuple <- delta.positive)
+      slotIndexer.addBinding(extract(tuple, slotMask), tuple)
+    for (tuple <- delta.negative)
+      slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
 
     forward(ChangeSet(joinedPositiveTuples, joinedNegativeTuples))
   }
