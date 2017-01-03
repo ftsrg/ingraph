@@ -2,7 +2,7 @@
 
 Based on the [Standardisation scope of Cypher](https://github.com/opencypher/openCypher/blob/master/docs/standardisation-scope.adoc) document.
 
-See also the [Standard construct](standard-constructs.md) document.
+See also the [Standard constructs](standard-constructs.md) document.
 
 ## Standard vs. legacy features
 
