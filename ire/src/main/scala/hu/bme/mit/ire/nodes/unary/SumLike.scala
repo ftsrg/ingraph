@@ -18,7 +18,7 @@ trait SumLike {
       if (!oldValues.contains(key)) {
         oldValues(key) = sums(key)
       }
-      sums(key) = GenericMath.plus(sums(key), tuple(sumKey))
+      sums(key) = GenericMath.add(sums(key), tuple(sumKey))
     }
 
     for (tuple <- changeSet.negative;
@@ -26,7 +26,7 @@ trait SumLike {
       if (!oldValues.contains(key)) {
         oldValues(key) = sums(key)
       }
-      sums(key) = GenericMath.minus(sums(key), tuple(sumKey))
+      sums(key) = GenericMath.subtract(sums(key), tuple(sumKey))
     }
 
     val positive = new VectorBuilder[Tuple]

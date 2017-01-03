@@ -49,11 +49,11 @@ class ExpressionParserTest extends WordSpec {
     }
 
     "parse arithmetic operations" in {
-      val op = getSelectionOperator("""MATCH (n) WHERE n=2^2*1+2-2 RETURN n""")
+      val op = getSelectionOperator("""MATCH (n) WHERE n=2^2*1+2-4%5 RETURN n""")
       val lookup = new SchemaToMap().schemaToMap(op)
       val func = ExpressionParser.parse(op.getCondition, lookup)
-      assert(!func(Vector(2)))
-      assert(func(Vector(1)))
+      assert(func(Vector(2)))
+      assert(!func(Vector(1)))
     }
   }
 

@@ -24,18 +24,6 @@ object ExpressionParser {
           case OR => (t: Tuple) => left(t) || right(t)
           case XOR => (t: Tuple) => left(t) ^ right(t)
         }
-
-      case exp: ArithmeticOperationExpression =>
-        import BinaryArithmeticOperatorType._
-        val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
-        val right: (Tuple => Boolean) = parse(exp.getRightOperand, lookup)
-        exp.getOperator match {
-          case PLUS => (t: Tuple) => left(t)
-          case MINUS => (t: Tuple) => left(t)
-          case MULTIPLICATION => (t: Tuple) => left(t)
-          case DIVISION => (t: Tuple) => left(t)
-          case POWER => (t: Tuple) => left(t)
-        }
       case exp: ArithmeticComparisonExpression =>
         def left: (Tuple) => Any = parseComparable(exp.getLeftOperand, _, lookup)
 
@@ -52,13 +40,26 @@ object ExpressionParser {
     }
 
 
-  private def parseComparable(cmp: ComparableExpression, tuple: Tuple, lookup: Map[Variable, Integer]) = cmp match {
+  private def parseComparable(cmp: ComparableExpression, tuple: Tuple, lookup: Map[Variable, Integer]): Any = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
     case cmp: AttributeVariable =>  tuple(lookup(cmp)) //TODO
     case cmp: Variable => tuple(lookup(cmp)) //TODO
     case cmp: VariableComparableExpression => tuple(lookup(cmp.getVariable))
+    case exp: ArithmeticOperationExpression =>
+      // TODO: currently the emf tree is parsed on every function call
+      val left = parseComparable(exp.getLeftOperand, tuple, lookup)
+      val right = parseComparable(exp.getRightOperand, tuple, lookup)
+      import BinaryArithmeticOperatorType._
+      exp.getOperator match {
+        case PLUS => GenericMath.add(left, right)
+        case MINUS => GenericMath.subtract(left, right)
+        case MULTIPLICATION => GenericMath.multiply(left, right)
+        case DIVISION => GenericMath.divide(left, right)
+        case POWER => GenericMath.power(left, right)
+        case MOD => GenericMath.mod(left, right)
+      }
   }
 
 }
