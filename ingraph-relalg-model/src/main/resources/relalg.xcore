@@ -270,6 +270,16 @@ abstract class Expression {
   String text
 }
 
+abstract class CaseExpression extends Expression {
+
+}
+
+class SimpleCaseExpression extends Expression {
+  refers Expression test
+  refers WhenThen[] whenThens
+  refers Expression ^default
+}
+
 abstract class ArithmeticExpression extends ComparableExpression {
 }
 
@@ -354,6 +364,11 @@ class DoubleLiteral extends NumberLiteral {
 
 class IntegerLiteral extends NumberLiteral {
   int value
+}
+
+class WhenThen {
+  refers Expression value
+  refers Expression result
 }
 
 /* enums */
