@@ -1,6 +1,7 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.util.GenericMath
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 
@@ -43,50 +44,10 @@ object ExpressionParser {
         exp.getOperator match {
           case EQUAL_TO => (t: Tuple) => left(t) == right(t)
           case NOT_EQUAL_TO => (t: Tuple) => left(t) != right(t)
-          case LESS_THAN_OR_EQUAL => (t: Tuple) =>
-            left(t) match {
-              case l: Double => right(t) match {
-                case r: Double => l <= r
-                case r: Integer => l <= r
-              }
-              case l: Integer => right(t) match {
-                case r: Double => l <= r
-                case r: Integer => l <= r
-              }
-            }
-          case LESS_THAN => (t: Tuple) =>
-            left(t) match {
-              case l: Double => right(t) match {
-                case r: Double => l < r
-                case r: Integer => l < r
-              }
-              case l: Integer => right(t) match {
-                case r: Double => l < r
-                case r: Integer => l < r
-              }
-            }
-          case GREATER_THAN_OR_EQUAL => (t: Tuple) =>
-            left(t) match {
-              case l: Double => right(t) match {
-                case r: Double => l >= r
-                case r: Integer => l >= r
-              }
-              case l: Integer => right(t) match {
-                case r: Double => l >= r
-                case r: Integer => l >= r
-              }
-            }
-          case GREATER_THAN => (t: Tuple) =>
-            left(t) match {
-              case l: Double => right(t) match {
-                case r: Double => l > r
-                case r: Integer => l > r
-              }
-              case l: Integer => right(t) match {
-                case r: Double => l > r
-                case r: Integer => l > r
-              }
-            }
+          case LESS_THAN_OR_EQUAL => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
+          case LESS_THAN => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
+          case GREATER_THAN_OR_EQUAL => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
+          case GREATER_THAN => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
         }
     }
 
