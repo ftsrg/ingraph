@@ -465,12 +465,12 @@ class RelalgBuilder {
     val distinct = invocation.distinct
     val parameters = invocation.parameter
     
-    if (CypherFunctions.aggregation.contains(functionName)) {
-            
-      
-      println("aggregation")
-      println(parameters.get(0))
-    }
+//    if (CypherFunctions.aggregation.contains(functionName)) {
+//            
+//      
+//      println("aggregation")
+//      println(parameters.get(0))
+//    }
     
     null
   }
