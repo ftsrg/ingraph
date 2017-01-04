@@ -6,7 +6,7 @@ package relalg
 
 class RelalgContainer {
   String name
-  refers Operator rootExpression
+  contains Operator rootExpression
   contains NamedElement[] elements opposite ^namedElementContainer
   contains Expression[] expressions opposite ^container
 }
