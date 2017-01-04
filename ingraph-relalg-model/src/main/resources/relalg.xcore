@@ -276,8 +276,8 @@ abstract class CaseExpression extends Expression {
 
 class SimpleCaseExpression extends Expression {
   refers Expression test
-  refers WhenThen[] whenThens
-  refers Expression ^default
+  refers Case[] cases
+  refers Expression default_
 }
 
 abstract class ArithmeticExpression extends ComparableExpression {
@@ -366,9 +366,9 @@ class IntegerLiteral extends NumberLiteral {
   int value
 }
 
-class WhenThen {
-  refers Expression value
-  refers Expression result
+class Case {
+  refers Expression when
+  refers Expression then
 }
 
 /* enums */

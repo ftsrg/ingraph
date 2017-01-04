@@ -11,6 +11,7 @@ import ingraph.cypher2relalg.util.Validator
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
@@ -434,6 +435,28 @@ class RelalgBuilder {
 
   def dispatch Expression buildRelalgExpression(VariableRef e) {
     buildRelalgVariable(e)
+  }
+
+  def dispatch Expression buildRelalgExpression(CaseExpression e) {
+  	if (!(e.expression instanceof CaseExpression)) {
+  		throw new UnsupportedOperationException("Outer CaseExpressions should contain a CaseExpression")
+  	}
+  	
+  	val caseExpression = e.expression as CaseExpression
+    val simpleCaseExpression = createSimpleCaseExpression
+  	// CASE test
+  	simpleCaseExpression.test = buildRelalgExpression(caseExpression.caseExpression)
+  	
+  	// WHEN when THEN then
+  	caseExpression.caseAlternatives.forEach[
+  		val whenExpression = buildRelalgExpression(when)
+  		val thenExpression = buildRelalgExpression(then)
+  		val case_ = createCase => [when = whenExpression; then = thenExpression]
+  		simpleCaseExpression.cases.add(case_)  		
+  	]
+  	// ELSE elseExpression
+    simpleCaseExpression.default_ = buildRelalgArithmeticExpression(caseExpression.elseExpression)
+  	simpleCaseExpression
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
