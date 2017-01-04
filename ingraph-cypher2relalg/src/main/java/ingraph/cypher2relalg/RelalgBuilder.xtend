@@ -137,7 +137,7 @@ class RelalgBuilder {
 
     val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
 
-    if (singleQuery_returnClauseList == null || singleQuery_returnClauseList.empty) {
+    if (singleQuery_returnClauseList === null || singleQuery_returnClauseList.empty) {
       unsupported('''We received no RETURN clauses but a node retrieval query must end with exactly one. However, node creating queries can skip RETURN clause, but they are not supported yet.''')
       null
     } else if (singleQuery_returnClauseList.length == 1) {
@@ -237,7 +237,7 @@ class RelalgBuilder {
       input = buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator)
     ]
 
-    if (m.where != null) {
+    if (m.where !== null) {
       // left outer joins extracted from the patterns in the where clause
       val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
 
@@ -592,7 +592,7 @@ class RelalgBuilder {
 
   def dispatch Operator buildRelalg(PatternPart p) {
     // TODO: handle variable assignment
-    if (p.^var != null) {
+    if (p.^var !== null) {
       unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
     }
     // pass through variable assignment body to buildRelalg(PatternElement e)
@@ -636,16 +636,16 @@ class RelalgBuilder {
         Direction.BOTH
       else if(isLeftArrow) Direction.IN else Direction.OUT;
       targetVertexVariable = patternElementChain_VertexVariable;
-      minHops = if(range == null) 1 else Integer.valueOf(ec.relationshipPattern.detail.range.lower)
-      maxHops = if (range == null)
+      minHops = if(range === null) 1 else Integer.valueOf(ec.relationshipPattern.detail.range.lower)
+      maxHops = if (range === null)
         createMaxHops() => [
           maxHopsType = MaxHopsType.LIMITED
           hops = 1
         ]
       else
         createMaxHops() => [
-          maxHopsType = if(range.upper != null) MaxHopsType.LIMITED else MaxHopsType.UNLIMITED;
-          hops = if(range.upper != null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
+          maxHopsType = if(range.upper !== null) MaxHopsType.LIMITED else MaxHopsType.UNLIMITED;
+          hops = if(range.upper !== null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
         ]
     ]
 

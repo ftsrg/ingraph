@@ -22,7 +22,7 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
   def createElement(String elementName) {
     val variableName = elementName ?: generateName
 
-    if (elements.get(variableName) == null) {
+    if (elements.get(variableName) === null) {
       val variable = createSpecificNamedElement => [
         name = variableName
         it.namedElementContainer = this.container
@@ -37,7 +37,7 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
   }
 
   def hasElement(String elementName) {
-    return (elements.get(elementName) != null)
+    return (elements.get(elementName) !== null)
   }
 
   def generateName() {

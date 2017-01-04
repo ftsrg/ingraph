@@ -15,7 +15,7 @@ class VertexVariableFactory extends VariableFactory<VertexVariable> {
   }
 
   def createElement(NodePattern rd) {
-    if (rd.variable != null) {
+    if (rd.variable !== null) {
       createElement(rd.variable.name)
     } else {
       createDontCareElement(rd)

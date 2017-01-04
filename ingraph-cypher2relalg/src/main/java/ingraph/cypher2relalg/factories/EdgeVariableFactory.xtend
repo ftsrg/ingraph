@@ -15,7 +15,7 @@ class EdgeVariableFactory extends VariableFactory<EdgeVariable> {
   }
 
   def createElement(RelationshipDetail rd) {
-    if (rd.variable != null) {
+    if (rd.variable !== null) {
       createElement(rd.variable.name)
     } else {
       createDontCareElement(rd)

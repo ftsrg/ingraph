@@ -189,7 +189,7 @@ abstract class AbstractRelalgSerializer {
     def dispatch operatorToTex(SelectionOperator op) {
         #[
             '''\selection{''' +
-            '''«IF op.condition != null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.conditionToTex»}«ENDIF»''' +
+            '''«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.escape.conditionToTex»}«ENDIF»''' +
             '''}'''
         ]
     }
@@ -284,7 +284,7 @@ abstract class AbstractRelalgSerializer {
 	 */
 	def returnableElementList(List<ReturnableElement> elements) {
 		'''«elements.map[
-		    convertExpression(expression) + if (alias == null) "" else '''\assign \var{«alias»}''' 
+		    convertExpression(expression) + if (alias === null) "" else '''\assign \var{«alias»}''' 
 		].join(",~")»'''
 	}
 

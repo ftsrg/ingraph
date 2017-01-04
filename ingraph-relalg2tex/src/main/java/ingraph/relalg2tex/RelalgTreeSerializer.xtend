@@ -56,7 +56,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
         \langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
         \langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
       «ENDIF»
-      «IF config.includeCardinality && op.cardinality != null»
+      «IF config.includeCardinality && op.cardinality !== null»
 			\\ \footnotesize \# «op.cardinality.formatCardinality»
 			«ENDIF»}«op?.children» ««« process children nodes
       «IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
