@@ -5,7 +5,8 @@ import org.scalatest.FlatSpec
 
 import scala.io.Source
 
-
+// in Eclipse / ScalaTest, open the run configuration, go to the Arguments tab and set the
+// Working directory to Other: ${workspace_loc:ingraph}
 class IntegrationTest extends FlatSpec {
   val modelPath = "../trainbenchmark/models/railway-repair-1-tinkerpop.graphml"
   def queryPath(query: String): String = s"queries/trainbenchmark/$query.cypher"
