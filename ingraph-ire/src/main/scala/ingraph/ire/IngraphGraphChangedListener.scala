@@ -3,15 +3,13 @@ package ingraph.ire
 import java.util
 
 import com.tinkerpop.blueprints.util.wrappers.event.listener.GraphChangedListener
+import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.Transaction
-import ingraph.ire.EngineFactory.EdgeTransformer
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 import relalg.GetEdgesOperator
 
 import scala.collection.JavaConversions._
-import scala.collection.immutable.ListMap
 import scala.collection.mutable
 
 class IngraphGraphChangedListener(

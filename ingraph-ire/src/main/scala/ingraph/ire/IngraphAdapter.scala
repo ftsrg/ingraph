@@ -24,7 +24,7 @@ class IngraphAdapter(plan: String) {
         relalg2Rete.transformToRete(
           Cypher2Relalg.processString(plan))))
 
-  val engine = EngineFactory.createQueryEngine(retePlan.getRootExpression.asInstanceOf[ProductionOperator])
+  val engine = EngineFactory.createQueryEngine(retePlan.getRootExpression)
 
   private val listener = new IngraphGraphChangedListener(
     engine.vertexConverters.toMap, engine.edgeConverters.toMap, engine.inputLookup) with LongIdParser

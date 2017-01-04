@@ -1,9 +1,7 @@
 package ingraph.ire
 
-import org.scalatest.FlatSpec
 import hu.bme.mit.ire.TransactionFactory
-import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
-import relalg.RelalgContainer
+import org.scalatest.FlatSpec
 
 import scala.io.Source
 

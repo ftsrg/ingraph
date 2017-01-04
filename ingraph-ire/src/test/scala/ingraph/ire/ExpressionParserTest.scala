@@ -1,11 +1,9 @@
 package ingraph.ire
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.util.{SchemaInferencer, SchemaToMap, TupleInferencer}
-import org.scalatest.{FlatSpec, WordSpec}
+import org.scalatest.WordSpec
 import relalg._
-import relalg.impl.{ArithmeticComparisonExpressionImpl, AttributeVariableImpl, StringLiteralImpl}
 
 class ExpressionParserTest extends WordSpec {
   val tupleInferencer = new TupleInferencer
@@ -22,12 +20,11 @@ class ExpressionParserTest extends WordSpec {
   val rocks = "\"emfrocks\""
   "ExpressionParser" should {
     "parse equal to" in {
-      val op = getSelectionOperator("""MATCH (n) WHERE n="emfsucks" RETURN n""")
+      val op = getSelectionOperator("""MATCH (n) WHERE n.something="emfsucks" RETURN n.something""")
       val lookup = new SchemaToMap().schemaToMap(op)
-      print(lookup)
       val func = ExpressionParser.parse(op.getCondition, lookup)
-      assert(func(Vector("\"emfsucks\"")))
-      assert(!func(Vector(rocks)))
+      assert(func(Vector(0, "\"emfsucks\"")))
+      assert(!func(Vector(1, rocks)))
     }
 
    "parse binary logical expressions" in {

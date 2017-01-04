@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode}
+import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, ProjectionNode, SelectionNode}
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.Utils.conversions._
@@ -15,7 +15,7 @@ import relalg._
 
 import scala.collection.mutable
 
-object EngineFactory extends App {
+object EngineFactory {
 
   implicit def emfConversion[E](list: EList[E]): Vector[E] = {
     val l = for (v <- 0 until list.size)
@@ -39,16 +39,20 @@ object EngineFactory extends App {
     scalaMap.toMap
   }
 
+  val schemaToMap = new SchemaToMap()
+
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
-  def createQueryEngine(plan: ProductionOperator) =
+  def createQueryEngine(plan: Operator) =
     new TrainbenchmarkQuery {
       override val production = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
+
       val vertexConverters = new mutable.HashMap[String, mutable.Set[Tuple2[String, Vector[String]]]] with mutable.MultiMap[String, Tuple2[String, Vector[String]]]
       val edgeConverters  = new mutable.HashMap[String, mutable.Set[GetEdgesOperator]] with mutable.MultiMap[String, GetEdgesOperator]
-      remaining += ForwardConnection(plan.getInput, production)
+
+      remaining += ForwardConnection(plan, production)
 
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
@@ -60,7 +64,8 @@ object EngineFactory extends App {
                 newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
               case op: ProjectionOperator =>
-                newLocal(Props(new ProjectionNode(expr.child, emfToIntConversion(op.getTupleElements))))
+                val lookup = schemaToMap.schemaToMap(op)
+                newLocal(Props(new ProjectionNode(expr.child, op.getElements.map(lookup.get(_).toInt))))
               case op: DuplicateEliminationOperator => newLocal(Props(new SelectionNode(expr.child, (r: Tuple) => true)))
               case op: AllDifferentOperator =>
                 val indices = Vector(0) // TODO
@@ -93,6 +98,15 @@ object EngineFactory extends App {
                     emfToIntConversion(op.getLeftMask),
                     emfToIntConversion(op.getRightMask)
                 )))
+              case op: LeftOuterJoinOperator =>
+                val names = op.getCommonVariables.map(_.getName)
+                newLocal(Props(new LeftOuterJoinNode(
+                  expr.child,
+                  op.getLeftInput.getDetailedSchema.length,
+                  op.getRightInput.getDetailedSchema.length,
+                  emfToIntConversion(op.getLeftMask),
+                  emfToIntConversion(op.getRightMask)
+                )))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)
             remaining += ForwardConnection(op.getRightInput, node.secondary)
@@ -100,7 +114,7 @@ object EngineFactory extends App {
           case op: GetVerticesOperator =>
             val nick = op.getVertexVariable.getName
             val label= op.getVertexVariable.getVertexLabelSet.getVertexLabels.get(0).getName // TODO fix this for multiple labels
-            vertexConverters.addBinding(label, (nick, op.getDetailedSchema.map(_.getName).toVector))
+            vertexConverters.addBinding(label, (nick, op.getDetailedSchema.map(_.getName)))
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName

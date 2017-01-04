@@ -2,17 +2,23 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.GenericMath
-import ingraph.relalg.util.SchemaToMap
 import relalg._
 
 object ExpressionParser {
   def parse(expression: Expression, lookup: Map[Variable, Integer]): (Tuple) => Boolean =
     expression match {
       case exp: UnaryLogicalExpression =>
-        val operand: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
         import UnaryLogicalOperatorType._
         exp.getOperator match {
-          case NOT => (t: Tuple) => !operand(t)
+          case NOT => (t: Tuple) =>
+            val operand: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
+            !operand(t)
+          case IS_NULL =>
+            def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
+            left(_) == null
+          case IS_NOT_NULL =>
+            def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
+            left(_) != null
         }
 
       case exp: BinaryLogicalExpression =>
