@@ -151,15 +151,16 @@ class RelalgBuilder {
 
   def UnaryOperator buildRelalgReturn(Return r, Operator content) {
     // FIXME: add * handling
-    val returnBody = r.body as ReturnItems
+    val returnBody = r.body
 
     val trimmer = createProjectionOperator => [
       input = content
-      elements.addAll(returnBody.items.map [
-        val mapIt = it
-        createReturnableElement => [
-          expression = buildRelalgExpression(mapIt.expression)
-          alias = mapIt.alias?.name
+      elements.addAll(returnBody.returnItems.map [ returnItems |
+        returnItems.items.map [ returnItem |
+          createReturnableElement => [
+            expression = buildRelalgExpression(returnItem.expression)
+            alias = returnItem.alias?.name
+          ]
         ]
       ])
     // variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as relalg.Variable])
@@ -174,47 +175,38 @@ class RelalgBuilder {
       trimmer
     }
 
-//    val order = returnBody.order
-//    val op2 = if (order != null) {
-//      val sortEntries = order.orderBy.map[
-//        val sortDirection = if (sort.startsWith("ASC")) OrderDirection.ASCENDING else OrderDirection.DESCENDING
-//
-//        val sortVariableName = (expression as VariableRef).variableRef.name
-//        val sortVariable = vertexVariableFactory.createElement(sortVariableName)
-//        createSortEntry => [
-//          direction = sortDirection
-//          variable = sortVariable
-//        ]
-//      ]
-//      createSortOperator => [
-//        entries.addAll(sortEntries)
-//        input = op1
-//      ]
-//    } else {
-//      op1
-//    }
-//
-//    val skip = returnBody.skip
-//    val limit = returnBody.limit
-//    val op3 = if (skip != null || limit != null) {
-//      createTopOperator => [
-////        skip = skip?.skip.expressionToInteger
-////        limit = limit?.limit.expressionToInteger
-//        input = op2
-//      ]
-//    } else {
-//      op2
-//    }
-//
-//    op3
-    op1
+    val order = returnBody.order
+    val skip = returnBody.skip
+    val limit = returnBody.limit
+    val op2 = if (order !== null) {
+      val sortEntries = order.orderBy.map[
+        val sortDirection = if (sort.startsWith("DESC")) OrderDirection.DESCENDING else OrderDirection.ASCENDING
+
+        val sortVariableName = (expression as VariableRef).variableRef.name
+        val sortVariable = vertexVariableFactory.createElement(sortVariableName)
+        createSortEntry => [
+          direction = sortDirection
+          variable = sortVariable
+        ]
+      ]
+      createSortOperator => [
+        entries.addAll(sortEntries)
+        input = op1
+        skip = skip?.skip.expressionToSkipLimitConstant
+        limit = limit?.limit.expressionToSkipLimitConstant
+      ]
+    } else {
+      op1
+    }
+
+    op2
   }
 
-  def Integer expressionToInteger(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
+  def Integer expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
     if (expression instanceof NumberConstant) {
       Integer.parseInt(expression.value)
     } else {
-      null
+      -1
     }
   }
 
