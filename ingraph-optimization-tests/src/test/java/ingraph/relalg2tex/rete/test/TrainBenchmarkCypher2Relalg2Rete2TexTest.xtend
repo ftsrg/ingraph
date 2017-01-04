@@ -20,7 +20,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 		val container = Cypher2Relalg.processCypher(cypher)
 		
 		container.transformToRete
-		RelalgUtil.save(container, "queries-models/" + query)
+		RelalgUtil.save(container, "query-models/" + query)
 		//drawer.serialize(container, "queries/" + query)
 	}
 	
