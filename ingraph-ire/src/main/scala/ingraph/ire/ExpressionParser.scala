@@ -20,6 +20,15 @@ object ExpressionParser {
             def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
             left(_) != null
         }
+      case exp: UnaryNodeLogicalExpression =>
+        import UnaryNodeLogicalOperatorType._
+        def left: (Tuple) => Any = parseVariable(exp.getLeftOperand, _, lookup)
+        exp.getOperator match {
+          case IS_NULL =>
+            left(_) == null
+          case IS_NOT_NULL =>
+            left(_) != null
+        }
 
       case exp: BinaryLogicalExpression =>
         val left: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
@@ -45,6 +54,8 @@ object ExpressionParser {
         }
     }
 
+  private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
+    tuple(lookup(variable))
 
   private def parseComparable(cmp: ComparableExpression, tuple: Tuple, lookup: Map[Variable, Integer]): Any = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
