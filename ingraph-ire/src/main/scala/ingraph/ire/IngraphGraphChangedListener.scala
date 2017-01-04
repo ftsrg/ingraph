@@ -9,7 +9,6 @@ import hu.bme.mit.ire.messages.ChangeSet
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
 import relalg.GetEdgesOperator
 
-import scala.collection.JavaConversions._
 import scala.collection.mutable
 
 class IngraphGraphChangedListener(
@@ -25,14 +24,10 @@ class IngraphGraphChangedListener(
 
   def elementToNode(element: Element, required: Vector[String]): Tuple =
     Vector(idParser(element.id)) ++
-      required.map(key => element.property(key))
+      required.tail.map(key => element.value(key).asInstanceOf[Any])
 
-  def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple = {
-    val nick = operator.getEdgeVariable.getName
-    operator.getSourceVertexVariable
-    println(Vector(edge.inVertex.id, edge.id, edge.outVertex().id) ++ operator.getDetailedSchema.map(variable => variable.getName))
-    Vector()
-  }
+  def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple =
+    Vector(idParser(edge.outVertex.id), idParser(edge.id), idParser(edge.inVertex.id))
 
   override def vertexAdded(vertex: Vertex): Unit = {
     for (set <- vertexConverters.get(vertex.label);
