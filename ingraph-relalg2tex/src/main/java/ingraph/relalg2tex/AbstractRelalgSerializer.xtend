@@ -51,6 +51,7 @@ import relalg.BinaryLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryNodeLogicalOperatorType
 import relalg.VariableExpression
+import relalg.FunctionExpression
 
 abstract class AbstractRelalgSerializer {
 
@@ -411,6 +412,10 @@ abstract class AbstractRelalgSerializer {
 	 */
   def dispatch convertExpression(VariableExpression ve) {
     convertExpression(ve.variable)
+  }
+
+  def dispatch convertExpression(FunctionExpression fe) {
+    '''«fe.functor» \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
   }
 
 	def dispatch String convertExpression(BinaryLogicalExpression exp) {

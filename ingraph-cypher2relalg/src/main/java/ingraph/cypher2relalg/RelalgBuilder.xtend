@@ -36,7 +36,6 @@ import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
-import org.slizaa.neo4j.opencypher.openCypher.ReturnItems
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
@@ -63,6 +62,9 @@ import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
+import ingraph.emf.util.PrettyPrinter
+import relalg.function.Function
+import relalg.FunctionExpression
 
 class RelalgBuilder {
 
@@ -85,7 +87,7 @@ class RelalgBuilder {
   def build(Cypher cypher) {
     EcoreUtil.resolveAll(cypher)
 
-//    println(PrettyPrinter.format(cypher))
+    println(PrettyPrinter.format(cypher))
     val statement = cypher.statement
     topLevelContainer.rootExpression = buildRelalg(statement)
 
@@ -427,8 +429,22 @@ class RelalgBuilder {
     relalgParameter
   }
 
+  def dispatch ComparableExpression buildRelalgComparableElement(FunctionInvocation fi) {
+    val fe = createFunctionComparableExpression => [
+      container = topLevelContainer
+    ]
+    
+    populateFunctionExpression(fe, fi)
+    
+    fe
+  }
+
   def dispatch Expression buildRelalgExpression(VariableRef e) {
     buildRelalgVariable(e)
+  }
+
+  def dispatch Expression buildRelalgExpression(NumberConstant e) {
+    buildRelalgArithmeticExpression(e)
   }
 
   def dispatch Expression buildRelalgExpression(CaseExpression e) {
@@ -453,19 +469,14 @@ class RelalgBuilder {
   	simpleCaseExpression
   }
 
-  def dispatch Expression buildRelalgExpression(FunctionInvocation invocation) {
-    val functionName = invocation.functionName.name
-    val distinct = invocation.distinct
-    val parameters = invocation.parameter
+  def dispatch Expression buildRelalgExpression(FunctionInvocation fi) {
+    val fe = createFunctionExpression => [
+      container = topLevelContainer
+    ]
     
-//    if (CypherFunctions.aggregation.contains(functionName.toLowerCase)) {
-//            
-//      
-//      println("aggregation")
-//      println(parameters.get(0))
-//    }
+    populateFunctionExpression(fe, fi)
     
-    null
+    fe
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
@@ -519,6 +530,16 @@ class RelalgBuilder {
       variable = buildRelalgVariable(e)
       container = topLevelContainer
     ]
+  }
+
+  def dispatch ArithmeticExpression buildRelalgArithmeticExpression(FunctionInvocation fi) {
+    val fe = createFunctionArithmeticExpression => [
+      container = topLevelContainer
+    ]
+    
+    populateFunctionExpression(fe, fi)
+    
+    fe
   }
 
   def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
@@ -660,6 +681,11 @@ class RelalgBuilder {
       vertexVariable.ensureLabel(vertexLabelFactory.createElement(it.labelName))
     ]
     vertexVariable
+  }
+
+  def void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi) {
+      fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
+      fe.arguments.addAll(fi.parameter.map[buildRelalgExpression(it)])
   }
 
 //  def dispatch buildRelalg(Cypher rule) {

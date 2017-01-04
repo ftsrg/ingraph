@@ -5,6 +5,7 @@ import java.util.ArrayList
 import java.util.Iterator
 import java.util.List
 import org.eclipse.emf.common.util.EList
+import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.EdgeLabel
 import relalg.EdgeVariable
@@ -20,7 +21,6 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
-import relalg.BinaryLogicalOperatorType
 
 class Cypher2RelalgUtil {
 

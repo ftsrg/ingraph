@@ -4,6 +4,8 @@
   complianceLevel="8.0")
 package relalg
 
+type Function wraps relalg.function.Function
+
 class RelalgContainer {
   String name
   contains Operator rootExpression
@@ -71,18 +73,6 @@ class VariableExpression extends Expression {
 	refers Variable variable
 }
 
-abstract class FunctionExpression extends NamedElement {
-  refers Expression[] arguments
-}
-
-class FunctionComparableExpression extends FunctionExpression, ComparableExpression {
-	
-}
-
-class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpression {
-	
-}
-
 /**
  * Container for a variable to be placed in comparable position.
  *
@@ -92,7 +82,7 @@ class VariableComparableExpression extends VariableExpression, ComparableExpress
 }
 
 /**
- * Container for a variable to be placed in arithmetic expression position.
+ * Container for a variable to be placed in string expression position.
  *
  * Note: type check is always needed in query execution time!
  */
@@ -106,6 +96,38 @@ class VariableStringExpression extends VariableExpression, StringExpression {
  */
 class VariableArithmeticExpression extends VariableExpression, ArithmeticExpression {
 }
+
+/**
+ * FunctionExpression is a generic container for a function call descriptor,
+ * i.e. the functor and its argument expressions.
+ *
+ * Various sub-types like FunctionComparableExpression, FunctionArithmeticExpression
+ * exists to allow type-safe building of expressions. However keep in mind, that
+ * it is not guaranteed that it will refer to a function that is e.g.
+ * comparable in case of a FunctionComparableExpression.
+ * Type check is always needed in query execution time!
+ */
+class FunctionExpression extends Expression {
+  Function functor
+  refers Expression[] arguments
+}
+
+/**
+ * Container for a function call to be placed in comparable position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class FunctionComparableExpression extends FunctionExpression, ComparableExpression {
+}
+
+/**
+ * Container for a function call to be placed in arithmetic expression position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpression {
+}
+
 
 /* Variables */
 abstract class Variable extends Atom, NamedElement {
