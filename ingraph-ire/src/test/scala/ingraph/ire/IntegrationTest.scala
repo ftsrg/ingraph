@@ -18,13 +18,13 @@ class IntegrationTest extends FlatSpec {
     TestCase("SwitchMonitored",   1, 0),
     TestCase("SwitchSet",         1, 5),
     //
-    TestCase("PosLength",         2, 208), 
+    TestCase("PosLength",         2, 208),
     TestCase("RouteSensor",       2, 33),
     TestCase("SemaphoreNeighbor", 2, 6),
     TestCase("SwitchMonitored",   2, 2),
-    TestCase("SwitchSet",         2, 8)    
+    TestCase("SwitchSet",         2, 8)
   ).foreach(
-    t => t.name should "work" in {
+    t => s"${t.name}-size-${t.size}" should "work" in {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString
       val adapter = new IngraphAdapter(query)
       val tf = new TransactionFactory(16)
