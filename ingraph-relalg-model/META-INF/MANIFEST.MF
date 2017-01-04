@@ -3,6 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ingraph-relalg-model
 Bundle-SymbolicName: ingraph-relalg-model;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Export-Package: relalg,
- relalg.impl,
- relalg.util
+Bundle-ClassPath: .,
+ build/xcore/main/

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><plugin>
+  <extension id="ingraph.optimization.patterns.ParentOperator" point="org.eclipse.viatra.query.runtime.queryspecification">
+    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.ParentOperator" id="ingraph.optimization.patterns.ParentOperator">
+      <query-specification fqn="ingraph.optimization.patterns.parentOperator"/>
+    </group>
+  </extension>
   <extension id="ingraph.optimization.patterns.Relalg2Rete" point="org.eclipse.viatra.query.runtime.queryspecification">
     <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.Relalg2Rete" id="ingraph.optimization.patterns.Relalg2Rete">
       <query-specification fqn="ingraph.optimization.patterns.expandVertex"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperator"/>
-    </group>
-  </extension>
-  <extension id="ingraph.optimization.patterns.ParentOperator" point="org.eclipse.viatra.query.runtime.queryspecification">
-    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.ParentOperator" id="ingraph.optimization.patterns.ParentOperator">
-      <query-specification fqn="ingraph.optimization.patterns.parentOperator"/>
     </group>
   </extension>
   <extension id="ingraph.optimization.patterns.TrivialOptimizations" point="org.eclipse.viatra.query.runtime.queryspecification">

@@ -162,7 +162,7 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
       		new Equality(body, var__virtual_0_, var_condition);
       		// 	// condition: leftOperand AND rightOperand	BinaryLogicalExpression.operator(condition, ::AND)
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new ConstantValue(body, var__virtual_1_, getEnumLiteral("http://ingraph/relalg", "BinaryLogicalOperator", "AND").getInstance());
+      		new ConstantValue(body, var__virtual_1_, getEnumLiteral("http://ingraph/relalg", "BinaryLogicalOperatorType", "AND").getInstance());
       		new TypeConstraint(body, new FlatTuple(var_condition), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
       		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
       		new TypeConstraint(body, new FlatTuple(var_condition, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "operator")));
