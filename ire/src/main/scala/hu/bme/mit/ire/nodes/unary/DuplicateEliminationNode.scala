@@ -25,8 +25,6 @@ class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends
       }
     }
     
-    println(forwardPositive)
-    
     changeSet.negative.foreach { tuple =>
       val oldCount = tuples(tuple)
       val newCount = oldCount - 1

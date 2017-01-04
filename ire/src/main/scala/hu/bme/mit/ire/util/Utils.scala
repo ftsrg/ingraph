@@ -67,17 +67,8 @@ trait IterableMultiMap[A, B] extends mutable.MultiMap[A, B] {
 }
 
 object SizeCounter {
-  def countDeeper(containers: Iterable[Iterable[Tuple]]*): Long = {
-    println(containers)
-    var sum = 0L
-    for {
-      hashmap <- containers
-      set: Iterable[Tuple] <- hashmap
-      tuple: Tuple <- set
-    }
-      sum += tuple.size
-    sum
-  }
+  def countDeeper(containers: Iterable[Iterable[Tuple]]*): Long =
+    containers.map(hashmap => hashmap.foldLeft(0)((sum, set) => sum + set.foldLeft(0)(_ + _.size))).sum
 
   def count(containers: Iterable[Iterable[Any]]*): Long = {
     containers.map(tuples => tuples.foldLeft(0)(_ + _.size)).sum

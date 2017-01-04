@@ -16,8 +16,8 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
   val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
   val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
 
-  override def onSizeRequest(): Long = SizeCounter.count(
-    primaryIndexer.values, secondaryTuples, secondaryProjectedTuples)
+  override def onSizeRequest(): Long = SizeCounter.countDeeper(
+    primaryIndexer.values) + SizeCounter.count(secondaryTuples, secondaryProjectedTuples)
 
   def onPrimary(changeSet: ChangeSet): Unit = {
     val resultPositive = for {

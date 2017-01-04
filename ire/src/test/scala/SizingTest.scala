@@ -41,18 +41,17 @@ class SizingTest extends WordSpec with TimeLimits {
       data.addBinding(tuple(3, 2), tuple(2, 5))
       assert(SizeCounter.countDeeper(data.values) == 8)
     }
-  }
 
-  "measuring size" {
-    val input = new TransactionFactory(10)
-    val query = new TestQuery1
-    input.subscribe(query.inputLookup)
-    val tran0 = input.newBatchTransaction()
-    tran0.add("testval", tuple(5, 5))
-    tran0.add("testval", tuple(5, 6))
-    tran0.add("testval", tuple(5, 7))
-    tran0.close()
-    println(query.getCounts)
-    0
+    "measure size" in {
+      val input = new TransactionFactory(10)
+      val query = new TestQuery1
+      input.subscribe(query.inputLookup)
+      val tran0 = input.newBatchTransaction()
+      tran0.add("testval", tuple(5, 5))
+      tran0.add("testval", tuple(5, 6))
+      tran0.add("testval", tuple(5, 7))
+      tran0.close()
+      assert(query.getCounts == 12)
+    }
   }
 }
