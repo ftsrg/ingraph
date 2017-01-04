@@ -174,39 +174,40 @@ class RelalgBuilder {
       trimmer
     }
 
-    val order = returnBody.order
-    val op2 = if (order != null) {
-      val sortEntries = order.orderBy.map[
-        val sortDirection = if (sort.startsWith("ASC")) OrderDirection.ASCENDING else OrderDirection.DESCENDING
-
-        val sortVariableName = (expression as VariableRef).variableRef.name
-        val sortVariable = vertexVariableFactory.createElement(sortVariableName)
-        createSortEntry => [
-          direction = sortDirection
-          variable = sortVariable
-        ]
-      ]
-      createSortOperator => [
-        entries.addAll(sortEntries)
-        input = op1
-      ]
-    } else {
-      op1
-    }
-
-    val skip = returnBody.skip
-    val limit = returnBody.limit
-    val op3 = if (skip != null || limit != null) {
-      createTopOperator => [
-//        skip = skip?.skip.expressionToInteger
-//        limit = limit?.limit.expressionToInteger
-        input = op2
-      ]
-    } else {
-      op2
-    }
-
-    op3
+//    val order = returnBody.order
+//    val op2 = if (order != null) {
+//      val sortEntries = order.orderBy.map[
+//        val sortDirection = if (sort.startsWith("ASC")) OrderDirection.ASCENDING else OrderDirection.DESCENDING
+//
+//        val sortVariableName = (expression as VariableRef).variableRef.name
+//        val sortVariable = vertexVariableFactory.createElement(sortVariableName)
+//        createSortEntry => [
+//          direction = sortDirection
+//          variable = sortVariable
+//        ]
+//      ]
+//      createSortOperator => [
+//        entries.addAll(sortEntries)
+//        input = op1
+//      ]
+//    } else {
+//      op1
+//    }
+//
+//    val skip = returnBody.skip
+//    val limit = returnBody.limit
+//    val op3 = if (skip != null || limit != null) {
+//      createTopOperator => [
+////        skip = skip?.skip.expressionToInteger
+////        limit = limit?.limit.expressionToInteger
+//        input = op2
+//      ]
+//    } else {
+//      op2
+//    }
+//
+//    op3
+    op1
   }
 
   def Integer expressionToInteger(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {

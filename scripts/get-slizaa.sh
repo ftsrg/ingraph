@@ -2,7 +2,7 @@
 
 set -e # exit with nonzero exit code if anything fails
 
-SLIZAA_COMMIT_ID=664a6df2b8c86344d13956fcd27efadde470371f
+SLIZAA_COMMIT_ID=ab5b7e8b6e73e437a7edddf961cc6a9aa990a0fb
 
 cd "$( cd "$( dirname "$0" )" && pwd )/../../"
 git clone https://github.com/slizaa/slizaa-opencypher-xtext/ || true
