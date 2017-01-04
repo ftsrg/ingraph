@@ -178,7 +178,7 @@ class RelalgBuilder {
     val order = returnBody.order
     val skip = returnBody.skip
     val limit = returnBody.limit
-    val op2 = if (order !== null) {
+    val op2 = if (order !== null) { // TODO skip/limit should result in a SortSkipLimit operator even if there is no ORDER BY clause
       val sortEntries = order.orderBy.map[
         val sortDirection = if (sort.startsWith("DESC")) OrderDirection.DESCENDING else OrderDirection.ASCENDING
 
