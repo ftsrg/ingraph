@@ -71,6 +71,18 @@ class VariableExpression extends Expression {
 	refers Variable variable
 }
 
+abstract class FunctionExpression extends NamedElement {
+  refers Expression[] arguments
+}
+
+class FunctionComparableExpression extends FunctionExpression, ComparableExpression {
+	
+}
+
+class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpression {
+	
+}
+
 /**
  * Container for a variable to be placed in comparable position.
  *
@@ -204,6 +216,8 @@ class EdgeVariableSet { // TODO - we should think about this a bit more
 }
 
 class SortOperator extends UnaryOperator {
+  int skip
+  int limit
   contains SortEntry[] entries
 }
 
@@ -213,8 +227,6 @@ class SortEntry {
 }
 
 class TopOperator extends UnaryOperator {
-  int skip
-  int limit
 }
 
 class GroupingOperator extends UnaryOperator {

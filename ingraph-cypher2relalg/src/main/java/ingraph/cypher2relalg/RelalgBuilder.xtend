@@ -21,6 +21,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionPlusMinus
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
+import org.slizaa.neo4j.opencypher.openCypher.FunctionInvocation
 import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.Match
@@ -197,8 +198,8 @@ class RelalgBuilder {
     val limit = returnBody.limit
     val op3 = if (skip != null || limit != null) {
       createTopOperator => [
-        skip = skip?.skip.expressionToInteger
-        limit = limit?.limit.expressionToInteger
+//        skip = skip?.skip.expressionToInteger
+//        limit = limit?.limit.expressionToInteger
         input = op2
       ]
     } else {
@@ -457,6 +458,21 @@ class RelalgBuilder {
   	// ELSE elseExpression
     simpleCaseExpression.default_ = buildRelalgArithmeticExpression(caseExpression.elseExpression)
   	simpleCaseExpression
+  }
+
+  def dispatch Expression buildRelalgExpression(FunctionInvocation invocation) {
+    val functionName = invocation.functionName.name
+    val distinct = invocation.distinct
+    val parameters = invocation.parameter
+    
+    if (CypherFunctions.aggregation.contains(functionName)) {
+            
+      
+      println("aggregation")
+      println(parameters.get(0))
+    }
+    
+    null
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {

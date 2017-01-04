@@ -198,9 +198,9 @@ abstract class AbstractRelalgSerializer {
         #['''\sort{«op.entries.map[entryToTex].join(", ")»}''']
     }
     
-    def dispatch operatorToTex(TopOperator op) {
-        #['''\topp{«op.limit»}{«op.skip»}''']
-    }
+//    def dispatch operatorToTex(TopOperator op) {
+//        #['''\topp{«op.limit»}{«op.skip»}''']
+//    }
 
     def dispatch operatorToTex(TransitiveClosureOperator op) {
         #[
