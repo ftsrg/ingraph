@@ -21,6 +21,8 @@ script:
   - make
   - cd ..
   - scripts/deploy.sh
+  - ./gradlew :ire:test --continue
+  - ./gradlew :ingraph-ire:test --continue
 notifications:
   slack: ftsrg:ll9rntRuEyb9KC9z5cWAQShn
   email: false
