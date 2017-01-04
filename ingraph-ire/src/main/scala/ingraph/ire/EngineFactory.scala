@@ -65,7 +65,8 @@ object EngineFactory {
 
               case op: ProjectionOperator =>
                 val lookup = schemaToMap.schemaToMap(op)
-                newLocal(Props(new ProjectionNode(expr.child, op.getElements.map(lookup.get(_).toInt))))
+                val mask = op.getElements.map(element => lookup.get(element.getExpression).toInt)
+                newLocal(Props(new ProjectionNode(expr.child, mask)))
               case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
               case op: AllDifferentOperator =>
                 val indices = Vector(0) // TODO
