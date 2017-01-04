@@ -6,7 +6,7 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
-import hu.bme.mit.ire.nodes.unary.{ProductionNode, ProjectionNode, SelectionNode}
+import hu.bme.mit.ire.nodes.unary.{DuplicateEliminationNode, ProductionNode, ProjectionNode, SelectionNode}
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.relalg.util.SchemaToMap
@@ -66,7 +66,7 @@ object EngineFactory {
               case op: ProjectionOperator =>
                 val lookup = schemaToMap.schemaToMap(op)
                 newLocal(Props(new ProjectionNode(expr.child, op.getElements.map(lookup.get(_).toInt))))
-              case op: DuplicateEliminationOperator => newLocal(Props(new SelectionNode(expr.child, (r: Tuple) => true)))
+              case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
               case op: AllDifferentOperator =>
                 val indices = Vector(0) // TODO
                 def allDifferent(r: Tuple): Boolean = {
