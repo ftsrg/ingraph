@@ -433,9 +433,9 @@ class RelalgBuilder {
     val fe = createFunctionComparableExpression => [
       container = topLevelContainer
     ]
-    
+
     populateFunctionExpression(fe, fi)
-    
+
     fe
   }
 
@@ -448,34 +448,34 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(CaseExpression e) {
-  	if (!(e.expression instanceof CaseExpression)) {
-  		throw new UnsupportedOperationException("Outer CaseExpressions should contain a CaseExpression")
-  	}
-  	
-  	val caseExpression = e.expression as CaseExpression
+    if (!(e.expression instanceof CaseExpression)) {
+      throw new UnsupportedOperationException("Outer CaseExpressions should contain a CaseExpression")
+    }
+
+    val caseExpression = e.expression as CaseExpression
     val simpleCaseExpression = createSimpleCaseExpression
-  	// CASE test
-  	simpleCaseExpression.test = buildRelalgExpression(caseExpression.caseExpression)
-  	
-  	// WHEN when THEN then
-  	caseExpression.caseAlternatives.forEach[
-  		val whenExpression = buildRelalgExpression(when)
-  		val thenExpression = buildRelalgExpression(then)
-  		val case_ = createCase => [when = whenExpression; then = thenExpression]
-  		simpleCaseExpression.cases.add(case_)  		
-  	]
-  	// ELSE elseExpression
+    // CASE test
+    simpleCaseExpression.test = buildRelalgExpression(caseExpression.caseExpression)
+
+    // WHEN when THEN then
+    caseExpression.caseAlternatives.forEach[
+      val whenExpression = buildRelalgExpression(when)
+      val thenExpression = buildRelalgExpression(then)
+      val case_ = createCase => [when = whenExpression; then = thenExpression]
+      simpleCaseExpression.cases.add(case_)
+    ]
+    // ELSE elseExpression
     simpleCaseExpression.default_ = buildRelalgArithmeticExpression(caseExpression.elseExpression)
-  	simpleCaseExpression
+    simpleCaseExpression
   }
 
   def dispatch Expression buildRelalgExpression(FunctionInvocation fi) {
     val fe = createFunctionExpression => [
       container = topLevelContainer
     ]
-    
+
     populateFunctionExpression(fe, fi)
-    
+
     fe
   }
 
@@ -536,9 +536,9 @@ class RelalgBuilder {
     val fe = createFunctionArithmeticExpression => [
       container = topLevelContainer
     ]
-    
+
     populateFunctionExpression(fe, fi)
-    
+
     fe
   }
 
