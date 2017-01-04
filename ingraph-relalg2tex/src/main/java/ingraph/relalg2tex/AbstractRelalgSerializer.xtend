@@ -195,7 +195,10 @@ abstract class AbstractRelalgSerializer {
     }
 
     def dispatch operatorToTex(SortOperator op) {
-        #['''\sort{«op.entries.map[entryToTex].join(", ")»}''']
+        #[
+          '''«IF op.limit != -1 || op.skip != -1»\topp{«IF op.limit != -1»«op.limit»«ENDIF»}{«IF op.skip != -1»«op.skip»«ENDIF»}«ENDIF»''' +
+          '''\sort{«op.entries.map[entryToTex].join(", ")»}'''
+        ]
     }
     
 //    def dispatch operatorToTex(TopOperator op) {
