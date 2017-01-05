@@ -98,6 +98,14 @@ class VariableArithmeticExpression extends VariableExpression, ArithmeticExpress
 }
 
 /**
+ * Container for a variable to be placed in list expression position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class VariableListExpression extends ListExpression {
+}
+
+/**
  * FunctionExpression is a generic container for a function call descriptor,
  * i.e. the functor and its argument expressions.
  *
@@ -148,6 +156,9 @@ class EdgeVariable extends ElementVariable {
 
 class AttributeVariable extends Variable {
   refers ElementVariable element opposite attributes
+}
+
+class ListVariable extends Variable {
 }
 
 class ReturnableElement {
@@ -356,6 +367,11 @@ abstract class StringExpression extends ComparableExpression {
 }
 
 abstract class LogicalExpression extends Expression {
+}
+
+class ListExpression extends Expression {
+	refers Expression head
+	refers ListExpression tail
 }
 
 class Parameter extends ComparableExpression {
