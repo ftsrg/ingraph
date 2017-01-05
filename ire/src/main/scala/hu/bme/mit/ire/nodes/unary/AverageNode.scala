@@ -1,13 +1,16 @@
 package hu.bme.mit.ire.nodes.unary
 
-import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
+import hu.bme.mit.ire.datatypes.Mask
+import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.ReteMessage
+import hu.bme.mit.ire.util.GenericMath
+import hu.bme.mit.ire.util.SizeCounter
 
 class AverageNode(override val next: (ReteMessage) => Unit,
-                  val aggregationKeys: Mask,
-                  val sumKey: Int) extends UnaryNode with SumLike with CountLike with SingleForwarder {
+                  override val aggregationKeys: Mask,
+                  override val distinct: Boolean,
+                  val sumKey: Int) extends AggregationNode with SumLike with CountLike {
 
   override def onSizeRequest(): Long = SizeCounter.count(counts.keys, sums.keys)
 

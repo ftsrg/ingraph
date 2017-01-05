@@ -92,7 +92,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Sum" should {
     "sum with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new SumNode(echoActor ! _, mask(3), 4))) // sex, sum for height
+      val counter = system.actorOf(Props(new SumNode(echoActor ! _, mask(3), false, 4))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))
@@ -105,7 +105,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Average" should {
     "average with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new AverageNode(echoActor ! _, mask(3), 4))) // sex, sum for height
+      val counter = system.actorOf(Props(new AverageNode(echoActor ! _, mask(3), false, 4))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
       counter ! ChangeSet(positive = tupleBag(thor))

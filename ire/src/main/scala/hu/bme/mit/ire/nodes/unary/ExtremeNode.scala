@@ -8,11 +8,9 @@ import hu.bme.mit.ire.util.SizeCounter
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
-abstract class ExtremeNode(override val next: (ReteMessage) => Unit,
-                           val aggregationKeys: Mask,
-                           val extremeKey: Int,
-                           override val expectedTerminatorCount: Int = 1
-                          ) extends UnaryNode with SingleForwarder {
+abstract class ExtremeNode extends AggregationNode with SingleForwarder {
+  val extremeKey: Int
+  
   val data = new mutable.HashMap[Vector[Any], mutable.SortedSet[Tuple]]()
   implicit val order : Ordering[Tuple]
 

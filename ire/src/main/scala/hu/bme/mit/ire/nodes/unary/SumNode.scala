@@ -1,12 +1,14 @@
 package hu.bme.mit.ire.nodes.unary
 
-import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.datatypes.Mask
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.ReteMessage
 
 class SumNode(override val next: (ReteMessage) => Unit,
-              val aggregationKeys: Mask,
-              val sumKey: Int) extends UnaryNode with SumLike with SingleForwarder {
+              override val aggregationKeys: Mask,
+              override val distinct: Boolean,
+              val sumKey: Int) extends AggregationNode with SumLike with SingleForwarder {
 
   override def onSizeRequest() = 0
 

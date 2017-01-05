@@ -20,7 +20,7 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
         positive = tupleBag(tuple("a", 1), tuple("a", 2), tuple("a", 1.1), tuple("b", 3))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val min = system.actorOf(Props(new MinNode(echoActor ! _, mask(0), 1)))
+      val min = system.actorOf(Props(new MinNode(echoActor ! _, mask(0), false, 1)))
 
       min ! changeSet
       expectMsg(ChangeSet(
