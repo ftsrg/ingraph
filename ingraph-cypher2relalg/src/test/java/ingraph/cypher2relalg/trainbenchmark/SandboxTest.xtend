@@ -30,4 +30,15 @@ class SandboxTest {
         Cypher2Relalg.processCypher(cypher)
     }
 
+    @Test
+    def void test03() {
+        val cypher = CypherParser.parseString('''
+        MATCH (row)
+        //RETURN row
+        UNWIND row AS node
+        RETURN node.id
+        ''')
+        Cypher2Relalg.processCypher(cypher)
+    }
+
 }

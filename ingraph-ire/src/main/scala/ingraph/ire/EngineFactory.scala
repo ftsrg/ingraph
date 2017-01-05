@@ -62,6 +62,7 @@ object EngineFactory {
             case op: GroupingOperator =>
               op.getEntries.map { x => println(x.isDistinct) }
               ???
+
             case op: SelectionOperator =>
                 val variableLookup = new SchemaToMap().schemaToMap(op)
                 newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))

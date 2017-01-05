@@ -64,6 +64,7 @@ import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
 import relalg.function.Function
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
 
 class RelalgBuilder {
 
@@ -136,6 +137,9 @@ class RelalgBuilder {
      */
     val content = chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
 
+    //val singleQuery_unwindClauseList = 
+    clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]
+
     val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
 
     if (singleQuery_returnClauseList === null || singleQuery_returnClauseList.empty) {
@@ -147,6 +151,14 @@ class RelalgBuilder {
       unrecoverableError('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
       null
     }
+  }
+
+  def UnaryOperator buildRelalgUnwind(Unwind u, Operator content) {
+    val unwindOperator = createUnwindOperator => [
+      sourceVariable = buildRelalgVariable(u.expression)
+      targetVariable = null // TODO createElement => [ ]
+    ]
+    null
   }
 
   def UnaryOperator buildRelalgReturn(Return r, Operator content) {
