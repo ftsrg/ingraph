@@ -267,6 +267,7 @@ class GroupingEntry {
   AggregationType aggregationType
   refers Variable variable
   refers Variable aggregatedVariable
+  boolean distinct
 }
 
 class UnwindOperator extends UnaryOperator {
