@@ -20,7 +20,7 @@ class OrderByAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOrderByAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (n)
@@ -41,7 +41,7 @@ class OrderByAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOrderByAcceptance_02() {
         val cypher = CypherParser.parseString('''
         MATCH (n)
@@ -244,7 +244,7 @@ class OrderByAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOrderByAcceptance_14() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Person)
@@ -260,7 +260,7 @@ class OrderByAcceptanceParserTest {
     Scenario: ORDER BY with LIMIT 0 should not generate errors
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testOrderByAcceptance_15() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Person)
