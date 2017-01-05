@@ -556,6 +556,7 @@ class RelalgBuilder {
     ]
 
     populateFunctionExpression(fe, fi)
+    // TODO isnumeric
 
     fe
   }
