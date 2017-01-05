@@ -38,6 +38,7 @@ import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import relalg.ArithmeticComparisonOperatorType
 import relalg.ArithmeticExpression
@@ -64,7 +65,6 @@ import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
 import relalg.function.Function
-import org.slizaa.neo4j.opencypher.openCypher.Unwind
 
 class RelalgBuilder {
 
@@ -226,7 +226,7 @@ class RelalgBuilder {
     if (expression instanceof NumberConstant) {
       createSkipLimitValue => [value = Integer.parseInt(expression.value)]
     } else {
-      throw new UnsupportedOperationException('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
+      unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
     }
   }
 
@@ -467,7 +467,7 @@ class RelalgBuilder {
 
   def dispatch Expression buildRelalgExpression(CaseExpression e) {
     if (!(e.expression instanceof CaseExpression)) {
-      throw new UnsupportedOperationException("Outer CaseExpressions should contain a CaseExpression")
+      unsupported("Outer CaseExpressions should contain a CaseExpression")
     }
 
     val caseExpression = e.expression as CaseExpression
