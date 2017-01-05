@@ -4,7 +4,7 @@ The standard relational algebra does not offer operators for updating relations.
 
 As a possible extenson, the [assignment operation](http://codex.cs.yale.edu/avi/db-book/db5/slide-dir/ch2.pdf) `←`, as defined in the [Database System Concepts](http://codex.cs.yale.edu/avi/db-book/) book (Silberschatz, Korth, Sudarshan) allows to assign a new value to relations.
 
-`CREATE` and `DELETE` expressions may be expressed as `r ← r ∪ Δr` and `r ← r − \ Δr`.
+`CREATE` and `DELETE` expressions may be expressed as `r ← r ∪ Δr` and `r ← r − Δr`.
 
 ## Updates in Rete
 
