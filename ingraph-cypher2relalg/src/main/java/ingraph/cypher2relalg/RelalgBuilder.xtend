@@ -459,8 +459,8 @@ class RelalgBuilder {
 
     // WHEN when THEN then
     caseExpression.caseAlternatives.forEach[
-      val whenExpression = buildRelalgExpression(when)
-      val thenExpression = buildRelalgExpression(then)
+      val whenExpression = buildRelalgComparableElement(when)
+      val thenExpression = buildRelalgComparableElement(then)
       val case_ = createCase => [when = whenExpression; then = thenExpression]
       simpleCaseExpression.cases.add(case_)
     ]
