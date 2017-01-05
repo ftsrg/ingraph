@@ -8,6 +8,7 @@
     <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.Relalg2Rete" id="ingraph.optimization.patterns.Relalg2Rete">
       <query-specification fqn="ingraph.optimization.patterns.expandVertex"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.sortAndTopOperator"/>
     </group>
   </extension>
   <extension id="ingraph.optimization.patterns.TrivialOptimizations" point="org.eclipse.viatra.query.runtime.queryspecification">
