@@ -19,7 +19,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
@@ -69,7 +69,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_04() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Person)
@@ -88,7 +88,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_05() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r:R]->()
@@ -197,7 +197,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_11() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
@@ -216,7 +216,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_12() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r1]->()-[r2]->()
@@ -235,7 +235,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_13() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
@@ -255,7 +255,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_14() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
@@ -335,7 +335,7 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testFunctionsAcceptance_18() {
         val cypher = CypherParser.parseString('''
         MATCH (n:X)
