@@ -31,14 +31,13 @@ import relalg.Operator;
  * <p>Original source:
  * <code><pre>
  * parentOperator
- *           | 
+ *           |
  *           | input
  *           V
  *     expandOperator
  * 
- * // 2nd transformation
- * pattern
- * expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
+ * // 2nd transformation for eliminating expand operators
+ * pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
  * 	find parentOperator(parentOperator, expandOperator);
  * 	ExpandOperator(expandOperator);
  * }

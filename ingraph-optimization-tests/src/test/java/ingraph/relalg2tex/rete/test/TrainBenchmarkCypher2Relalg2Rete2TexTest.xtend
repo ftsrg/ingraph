@@ -52,5 +52,6 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 	@Test
 	def void testSemaphoreNeighbor() throws IOException {
 		process("SemaphoreNeighbor")
-	}	
+	}
+
 }

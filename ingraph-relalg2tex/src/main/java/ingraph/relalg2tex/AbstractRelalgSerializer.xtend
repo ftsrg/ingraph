@@ -9,9 +9,12 @@ import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.ArithmeticComparisonExpression
+import relalg.ArithmeticComparisonOperatorType
 import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
+import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalExpression
+import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.BooleanLiteral
 import relalg.Direction
@@ -19,6 +22,7 @@ import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.GroupingOperator
@@ -34,24 +38,21 @@ import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.ReturnableElement
 import relalg.SelectionOperator
+import relalg.SortAndTopOperator
 import relalg.SortEntry
 import relalg.SortOperator
 import relalg.StringLiteral
 import relalg.TopOperator
 import relalg.TransitiveClosureOperator
+import relalg.UnaryArithmeticOperatorType
 import relalg.UnaryLogicalExpression
+import relalg.UnaryLogicalOperatorType
 import relalg.UnaryNodeLogicalExpression
+import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnionOperator
 import relalg.UnwindOperator
-import relalg.VertexVariable
-import relalg.BinaryArithmeticOperatorType
-import relalg.ArithmeticComparisonOperatorType
-import relalg.UnaryArithmeticOperatorType
-import relalg.BinaryLogicalOperatorType
-import relalg.UnaryLogicalOperatorType
-import relalg.UnaryNodeLogicalOperatorType
 import relalg.VariableExpression
-import relalg.FunctionExpression
+import relalg.VertexVariable
 
 abstract class AbstractRelalgSerializer {
 
@@ -196,15 +197,25 @@ abstract class AbstractRelalgSerializer {
     }
 
     def dispatch operatorToTex(SortOperator op) {
-        #[
-          '''«IF op.limit != -1 || op.skip != -1»\topp{«IF op.limit != -1»«op.limit»«ENDIF»}{«IF op.skip != -1»«op.skip»«ENDIF»}«ENDIF»''' +
-          '''\sort{«op.entries.map[entryToTex].join(", ")»}'''
-        ]
+        #[ sortOperatorToTex(op) ]
     }
     
-//    def dispatch operatorToTex(TopOperator op) {
-//        #['''\topp{«op.limit»}{«op.skip»}''']
-//    }
+    def dispatch operatorToTex(TopOperator op) {
+        #[ topOperatorToTex(op) ]
+    }
+
+    def dispatch operatorToTex(SortAndTopOperator op) {
+        #[ topOperatorToTex(op) + sortOperatorToTex(op) ]
+    }
+    
+    def topOperatorToTex(TopOperator op) {
+      '''\topp{«if (op.limit !== null) op.limit.value else ""»}{«if (op.skip !== null) op.skip.value else ""»}'''.toString
+    }
+    
+    def sortOperatorToTex(SortOperator op) {
+      '''\sort{«op.entries.map[entryToTex].join(", ")»}'''.toString
+    }
+    
 
     def dispatch operatorToTex(TransitiveClosureOperator op) {
         #[

@@ -238,8 +238,6 @@ class EdgeVariableSet { // TODO - we should think about this a bit more
 }
 
 class SortOperator extends UnaryOperator {
-  int skip
-  int limit
   contains SortEntry[] entries
 }
 
@@ -249,6 +247,16 @@ class SortEntry {
 }
 
 class TopOperator extends UnaryOperator {
+  refers SkipLimitValue skip
+  refers SkipLimitValue limit
+}
+
+// for incremental queries to handle sort and top as a single operator
+class SortAndTopOperator extends SortOperator, TopOperator {
+}
+
+class SkipLimitValue {
+  int value
 }
 
 class GroupingOperator extends UnaryOperator {

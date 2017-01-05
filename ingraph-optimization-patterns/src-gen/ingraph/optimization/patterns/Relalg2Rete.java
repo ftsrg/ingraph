@@ -5,8 +5,10 @@ package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
+import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
@@ -21,6 +23,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>expandVertex</li>
  * <li>expandOperator</li>
+ * <li>sortAndTopOperator</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -47,6 +50,7 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   private Relalg2Rete() throws ViatraQueryException {
     querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorQuerySpecification.instance());
+    querySpecifications.add(SortAndTopOperatorQuerySpecification.instance());
   }
   
   public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
@@ -63,5 +67,13 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   
   public ExpandOperatorMatcher getExpandOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
     return ExpandOperatorMatcher.on(engine);
+  }
+  
+  public SortAndTopOperatorQuerySpecification getSortAndTopOperator() throws ViatraQueryException {
+    return SortAndTopOperatorQuerySpecification.instance();
+  }
+  
+  public SortAndTopOperatorMatcher getSortAndTopOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return SortAndTopOperatorMatcher.on(engine);
   }
 }

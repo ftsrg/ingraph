@@ -49,6 +49,7 @@ import relalg.Direction
 import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.Expression
+import relalg.FunctionExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
@@ -62,9 +63,7 @@ import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VertexVariable
-import ingraph.emf.util.PrettyPrinter
 import relalg.function.Function
-import relalg.FunctionExpression
 
 class RelalgBuilder {
 
@@ -87,7 +86,7 @@ class RelalgBuilder {
   def build(Cypher cypher) {
     EcoreUtil.resolveAll(cypher)
 
-    println(PrettyPrinter.format(cypher))
+//    println(PrettyPrinter.format(cypher))
     val statement = cypher.statement
     topLevelContainer.rootExpression = buildRelalg(statement)
 
@@ -117,13 +116,13 @@ class RelalgBuilder {
      * We compile all MATCH clauses and attach to a (left outer) join operator.
      * The first one will not be used, but its rightOperand will be extracted, though.
      */
-    val singleQuery_MatchList = clauses.filter(typeof(Match)).map[
+    val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
       val mapIt = it
       val joinOp = if (mapIt.optional) {
-        createLeftOuterJoinOperator
-      } else {
-        createJoinOperator
-      }
+          createLeftOuterJoinOperator
+        } else {
+          createJoinOperator
+        }
       joinOp => [
         rightInput = buildRelalg(mapIt)
       ]
@@ -132,7 +131,7 @@ class RelalgBuilder {
     /*
      * The compiled form of the first MATCH clause is on the rightInput
      * of the first join operator.
-     *
+     * 
      * This join operator is in fact, unnecessary.
      */
     val content = chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
@@ -143,8 +142,7 @@ class RelalgBuilder {
       unsupported('''We received no RETURN clauses but a node retrieval query must end with exactly one. However, node creating queries can skip RETURN clause, but they are not supported yet.''')
       null
     } else if (singleQuery_returnClauseList.length == 1) {
-      singleQuery_returnClauseList.
-        head
+      singleQuery_returnClauseList.head
     } else {
       unrecoverableError('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
       null
@@ -158,7 +156,7 @@ class RelalgBuilder {
     val trimmer = createProjectionOperator => [
       input = content
       elements.addAll(
-        returnBody.returnItems.get(0).items.map[ returnItem |
+        returnBody.returnItems.get(0).items.map [ returnItem |
           createReturnableElement => [
             expression = buildRelalgExpression(returnItem.expression)
             alias = returnItem.alias?.name
@@ -170,52 +168,60 @@ class RelalgBuilder {
 
     // add duplicate-elimination operator if return DISTINCT was specified
     val op1 = if (r.distinct) {
-      createDuplicateEliminationOperator => [
-        input = trimmer
-      ]
-    } else {
-      trimmer
-    }
+        createDuplicateEliminationOperator => [
+          input = trimmer
+        ]
+      } else {
+        trimmer
+      }
 
     val order = returnBody.order
+    val op2 = if (order !== null) {
+        val sortEntries = order.orderBy.map [
+          val sortDirection = if(sort !== null && sort.startsWith("DESC")) OrderDirection.
+              DESCENDING else OrderDirection.ASCENDING
+
+          val sortVariable = buildRelalgVariable(expression)
+          createSortEntry => [
+            direction = sortDirection
+            variable = sortVariable
+          ]
+        ]
+        createSortOperator => [
+          entries.addAll(sortEntries)
+          input = op1
+        ]
+      } else {
+        op1
+      }
+
     val skip = returnBody.skip
     val limit = returnBody.limit
-    val op2 = if (order !== null) { // TODO skip/limit should result in a SortSkipLimit operator even if there is no ORDER BY clause
-      val sortEntries = order.orderBy.map[
-        val sortDirection = if (sort.startsWith("DESC")) OrderDirection.DESCENDING else OrderDirection.ASCENDING
-
-        val sortVariableName = (expression as VariableRef).variableRef.name
-        val sortVariable = vertexVariableFactory.createElement(sortVariableName)
-        createSortEntry => [
-          direction = sortDirection
-          variable = sortVariable
+    val op3 = if (skip !== null || limit !== null) {
+        createTopOperator => [
+          skip = skip?.skip?.expressionToSkipLimitConstant
+          limit = limit?.limit?.expressionToSkipLimitConstant
+          input = op2
         ]
-      ]
-      createSortOperator => [
-        entries.addAll(sortEntries)
-        input = op1
-        skip = skip?.skip.expressionToSkipLimitConstant
-        limit = limit?.limit.expressionToSkipLimitConstant
-      ]
-    } else {
-      op1
-    }
+      } else {
+        op2
+      }
 
-    op2
+    op3
   }
 
-  def Integer expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
+  def expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
     if (expression instanceof NumberConstant) {
-      Integer.parseInt(expression.value)
+      createSkipLimitValue => [value = Integer.parseInt(expression.value)]
     } else {
-      -1
+      throw new UnsupportedOperationException('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
     }
   }
 
   /*
    * MATCH clause is compiled as follows:
    * (the lower elements being the input for the upper ones)
-   *
+   * 
    * - Selection as built from the where clause
    * - Left outer join of the patterns extracted from the where clause (is any)
    * - AllDifferentOperator on the edges in the patternParts
@@ -458,7 +464,7 @@ class RelalgBuilder {
     simpleCaseExpression.test = buildRelalgExpression(caseExpression.caseExpression)
 
     // WHEN when THEN then
-    caseExpression.caseAlternatives.forEach[
+    caseExpression.caseAlternatives.forEach [
       val whenExpression = buildRelalgComparableElement(when)
       val thenExpression = buildRelalgComparableElement(then)
       val case_ = createCase => [when = whenExpression; then = thenExpression]
@@ -622,7 +628,7 @@ class RelalgBuilder {
 
   /*
    * This will create the relational algebraic representation of a patternElement.
-   *
+   * 
    * This was factored out to handle PatternElement and RelationshipsPattern in the same code
    */
   def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
@@ -684,8 +690,8 @@ class RelalgBuilder {
   }
 
   def void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi) {
-      fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
-      fe.arguments.addAll(fi.parameter.map[buildRelalgExpression(it)])
+    fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
+    fe.arguments.addAll(fi.parameter.map[buildRelalgExpression(it)])
   }
 
 //  def dispatch buildRelalg(Cypher rule) {
