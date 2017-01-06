@@ -67,26 +67,26 @@ object EngineFactory {
                 val variableLookup = new SchemaToMap().schemaToMap(op)
                 newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
-              case op: ProjectionOperator =>
-                val lookup = schemaToMap.schemaToMap(op)
-                val mask = op.getElements.map(element => lookup.get(element.getExpression).toInt)
-                newLocal(Props(new ProjectionNode(expr.child, mask)))
-              case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
-              case op: AllDifferentOperator =>
-                val indices = Vector(0) // TODO
-                def allDifferent(r: Tuple): Boolean = {
-                  val seen = mutable.HashSet[Any]()
-                  for (value <- indices.map(r(_))) {
-                    if (seen(value)) {
-                      return false
-                    } else {
-                      seen += value
-                    }
+            case op: ProjectionOperator =>
+              val lookup = schemaToMap.schemaToMap(op)
+              val mask = op.getElements.map(element => lookup.get(element.getExpression).toInt)
+              newLocal(Props(new ProjectionNode(expr.child, mask)))
+            case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
+            case op: AllDifferentOperator =>
+              val indices = Vector(0) // TODO
+              def allDifferent(r: Tuple): Boolean = {
+                val seen = mutable.HashSet[Any]()
+                for (value <- indices.map(r(_))) {
+                  if (seen(value)) {
+                    return false
+                  } else {
+                    seen += value
                   }
-                  true
                 }
+                true
+              }
 
-                newLocal(Props(new SelectionNode(expr.child, allDifferent)))
+              newLocal(Props(new SelectionNode(expr.child, allDifferent)))
             }
             remaining += ForwardConnection(op.getInput, node)
 
