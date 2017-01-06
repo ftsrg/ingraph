@@ -59,6 +59,7 @@ import relalg.MaxHopsType
 import relalg.NumberLiteral
 import relalg.Operator
 import relalg.OrderDirection
+import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryNodeLogicalOperatorType
@@ -75,15 +76,43 @@ class RelalgBuilder {
 
   // this will be returned and will hold the result of the compilation
   // never rename this to container as that name will collide with the Expression.container field name
-  val topLevelContainer = createRelalgContainer
+  val RelalgContainer topLevelContainer
 
-  extension ElementVariableUtil elementVariableUtil = new ElementVariableUtil(topLevelContainer)
+  extension ElementVariableUtil elementVariableUtil
 
-  val vertexVariableFactory = new VertexVariableFactory(topLevelContainer)
-  val edgeVariableFactory = new EdgeVariableFactory(topLevelContainer)
+  val VertexVariableFactory vertexVariableFactory
+  val EdgeVariableFactory edgeVariableFactory
 
-  val vertexLabelFactory = new VertexLabelFactory(topLevelContainer)
-  val edgeLabelFactory = new EdgeLabelFactory(topLevelContainer)
+  val VertexLabelFactory vertexLabelFactory
+  val EdgeLabelFactory edgeLabelFactory
+
+  // default constructor, the only public one
+  new() {
+    this.topLevelContainer = createRelalgContainer
+    this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
+    this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+    this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
+    this.edgeLabelFactory = new EdgeLabelFactory(this.topLevelContainer)
+
+    this.elementVariableUtil = new ElementVariableUtil(this.topLevelContainer)
+  }
+
+  /**
+   * Constructor that allows propagating the topLevelContainer and the labelfactories,
+   * but creates new factories for variables.
+   *
+   * Use this to create separate builder for each SingleQuery.
+   */
+  protected new(RelalgContainer topLevelContainer, VertexLabelFactory vertexLabelFactory, EdgeLabelFactory edgeLabelFactory) {
+    this.topLevelContainer = topLevelContainer
+
+    this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
+    this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+    this.vertexLabelFactory = vertexLabelFactory
+    this.edgeLabelFactory = edgeLabelFactory
+
+    this.elementVariableUtil = new ElementVariableUtil(this.topLevelContainer)
+  }
 
   def build(Cypher cypher) {
     EcoreUtil.resolveAll(cypher)
@@ -108,7 +137,27 @@ class RelalgBuilder {
     chainBinaryOperatorsLeft(queryListHead, queryListTail)
   }
 
+  /**
+   * Builds the relational algebra expression for a single query by spawning a new builder
+   * with the same top-level container, but with own factories for variables.
+   */
   def dispatch Operator buildRelalg(SingleQuery q) {
+    /*
+     *  we create a new instance of the RelalgBuilder to use separate factories
+     *  for each singleQuery, but we retain the top-level container
+     *  not to break the containment hierarchy and the labelfactories.
+     */
+    val builder = new RelalgBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory)
+    builder._buildRelalgSingleQuery(q)
+  }
+
+  /**
+   * This is the workhorse for building the relational algebra expression for a single query.
+   *
+   * It should not be called to build more than one single query as
+   * the variables produced for re-used names would collide.
+   */
+  def protected Operator _buildRelalgSingleQuery(SingleQuery q) {
     val clauses = q.clauses
 
     // do some checks on the MATCH clauses
