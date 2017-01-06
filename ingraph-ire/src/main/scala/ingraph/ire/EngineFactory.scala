@@ -64,8 +64,8 @@ object EngineFactory {
               ???
 
             case op: SelectionOperator =>
-                val variableLookup = new SchemaToMap().schemaToMap(op)
-                newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
+              val variableLookup = new SchemaToMap().schemaToMap(op)
+              newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
             case op: ProjectionOperator =>
               val lookup = schemaToMap.schemaToMap(op)
