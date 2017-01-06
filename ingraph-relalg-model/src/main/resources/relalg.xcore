@@ -369,9 +369,29 @@ abstract class StringExpression extends ComparableExpression {
 abstract class LogicalExpression extends Expression {
 }
 
+/**
+ * ListExpression respresents a list of expressions (of type Expression).
+ *
+ * The empty list is an instance of the EmptyListExpression.
+ *
+ * The non-empty list is composed of a head (exactly one element, always non-null Java value)
+ * and a tail, which, again is a list (of type ListExpression).
+ *
+ * If we denote the empty list by [] (which, again, is of the type EmptyListExpression),
+ * and the non-empty list by [ head | tail ],
+ * then the list <1, 2, 3> is represented as:
+ * [ 1 | [ 2 | [ 3 | [] ] ] ]
+ */
 class ListExpression extends Expression {
 	refers Expression head
 	refers ListExpression tail
+}
+
+/**
+ * An instance of this type represents the empty list.
+ * It's head and tail attribute should never be used!
+ */
+class EmptyListExpression extends ListExpression {
 }
 
 class Parameter extends ComparableExpression {

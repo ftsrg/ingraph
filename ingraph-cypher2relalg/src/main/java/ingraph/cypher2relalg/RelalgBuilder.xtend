@@ -15,6 +15,7 @@ import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
+import org.slizaa.neo4j.opencypher.openCypher.ExpressionList
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionMulDiv
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
@@ -499,6 +500,30 @@ class RelalgBuilder {
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
     buildRelalgVariable(e)
+  }
+
+  def dispatch Expression buildRelalgExpression(ExpressionList el) {
+    val emptyList = createEmptyListExpression => [
+      head = null
+      tail = null
+      container = topLevelContainer
+    ]
+    // the tail of the first expression will be the list that was built
+    val first = createListExpression => [
+      tail = emptyList
+    ]
+    var recent = first
+
+    for (e: el.expressions) {
+      recent.tail = createListExpression => [
+        head = buildRelalgExpression(e)
+        tail = emptyList
+        container = topLevelContainer
+      ]
+      recent = recent.tail
+    }
+
+    first.tail
   }
 
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {

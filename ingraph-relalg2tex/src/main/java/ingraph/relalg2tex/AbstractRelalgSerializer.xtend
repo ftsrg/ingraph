@@ -21,6 +21,7 @@ import relalg.Direction
 import relalg.DuplicateEliminationOperator
 import relalg.EdgeVariable
 import relalg.ElementVariable
+import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.FunctionExpression
 import relalg.GetEdgesOperator
@@ -30,6 +31,7 @@ import relalg.IntegerLiteral
 import relalg.JoinOperator
 import relalg.LabelSetStatus
 import relalg.LeftOuterJoinOperator
+import relalg.ListExpression
 import relalg.MaxHops
 import relalg.NamedElement
 import relalg.Operator
@@ -427,6 +429,20 @@ abstract class AbstractRelalgSerializer {
 
   def dispatch convertExpression(FunctionExpression fe) {
     '''«fe.functor» \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
+  }
+
+  def dispatch convertExpression(EmptyListExpression fe) {
+    '''\left[ \right]'''
+  }
+
+  def dispatch convertExpression(ListExpression fe) {
+    var retVal = '''\left['''
+
+    for(var i = fe; !(i instanceof EmptyListExpression); i = i.tail) {
+      retVal += ''' «i.head.convertExpression»«IF !(i.tail instanceof EmptyListExpression)»,«ENDIF»'''
+    }
+
+    retVal + ''' \right]'''
   }
 
 	def dispatch String convertExpression(BinaryLogicalExpression exp) {
