@@ -39,8 +39,26 @@ class IngraphLogger {
     log(Level.WARNING, msg)
   }
 
+  def warning(String msg, Throwable e) {
+    log(Level.WARNING, msg)
+    log(Level.WARNING, e)
+  }
+
+  def warning(Throwable e) {
+    log(Level.WARNING, e)
+  }
+
   def error(String msg) {
     log(Level.SEVERE, msg)
+  }
+
+  def error(String msg, Throwable e) {
+    log(Level.SEVERE, msg)
+    log(Level.SEVERE, e)
+  }
+
+  def error(Throwable e) {
+    log(Level.SEVERE, e)
   }
 
   /**
@@ -65,5 +83,10 @@ class IngraphLogger {
   def log(Level level, String msg) {
     records.add(new LogRecord(level, msg))
     logger.log(level, msg)
+  }
+
+  def log(Level level, Throwable e) {
+    records.add(new LogRecord(level, e.toString))
+    logger.log(level, e.toString)
   }
 }
