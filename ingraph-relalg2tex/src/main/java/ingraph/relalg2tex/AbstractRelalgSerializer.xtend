@@ -274,11 +274,17 @@ abstract class AbstractRelalgSerializer {
 	 * escape
 	 */
 	def escape(CharSequence s) {
-		s.toString //
-    .replace('''"''', "")//
-		.replace('''\''', '''\backslash{}''') //
-		.replace('''_''', '''\_''') //
-		.replace(''' ''', '''\ ''') //
+		s.toString
+		.replace('\b', '''\b''')
+		.replace('\f', '''\f''')
+		.replace('\n', '''\n''')
+		.replace('\r', '''\r''')
+		.replace('\t', '''\t''')
+		.replace('''{''', '''\string{''')
+		.replace('''}''', '''\string}''')
+		.replaceAll('''\\(?!string[{}])''', '''\\backslash{}''')
+		.replace('''_''', '''\_''')
+		.replace(''' ''', '''\ ''')
 	}
 
     /**

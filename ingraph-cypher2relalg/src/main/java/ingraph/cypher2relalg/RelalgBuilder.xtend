@@ -2,6 +2,7 @@ package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.IngraphLogger
+import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -642,7 +643,7 @@ class RelalgBuilder {
 
   def buildRelalgStringLiteral(StringConstant e) {
     createStringLiteral => [
-      value = e.value
+      value = StringUtil.unescapeCypherString(e.value, logger)
       container = topLevelContainer
     ]
   }
