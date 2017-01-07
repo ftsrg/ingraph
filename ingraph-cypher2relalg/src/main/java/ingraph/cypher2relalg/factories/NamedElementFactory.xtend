@@ -17,7 +17,8 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 
   // ensure that we generate unique names in the compiler
   static var n = 1;
-  @Accessors val elements = new HashMap<String, TNamedElement>
+  @Accessors(PUBLIC_GETTER)
+  val elements = new HashMap<String, TNamedElement>
 
   def createElement(String elementName) {
     val variableName = elementName ?: generateName

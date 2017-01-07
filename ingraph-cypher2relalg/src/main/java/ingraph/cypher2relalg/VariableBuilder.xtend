@@ -38,7 +38,7 @@ import relalg.RelalgFactory
 import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
-
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * This is the variable builder component of
@@ -53,7 +53,9 @@ class VariableBuilder {
 
   extension ElementVariableUtil elementVariableUtil
 
+  @Accessors(PUBLIC_GETTER)
   val VertexVariableFactory vertexVariableFactory
+  @Accessors(PUBLIC_GETTER)
   val EdgeVariableFactory edgeVariableFactory
 
   val VertexLabelFactory vertexLabelFactory

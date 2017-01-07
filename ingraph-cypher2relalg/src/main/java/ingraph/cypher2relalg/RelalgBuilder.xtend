@@ -202,11 +202,41 @@ class RelalgBuilder {
   }
 
   def UnaryOperator buildRelalgReturn(Return r, Operator content) {
-    // FIXME: add * handling
+    // FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
+    // but it should be w/o .get(0)
     val returnBody = r.body
 
     val trimmer = createProjectionOperator => [
       input = content
+      if ("*".equals(returnBody.returnItems.get(0).all)) {
+        // add the non-dontCare vertex variables to the return list sorted by variable name
+        val vEl = variableBuilder.vertexVariableFactory.elements
+        vEl.keySet.sort.forEach[ key |
+          val variable = vEl.get(key)
+          if (!variable.dontCare) {
+            elements.add(
+              createReturnableElement => [
+                expression = variable
+              ]
+            )
+          }
+        ]
+        // add the non-dontCare edge variables to the return list sorted by variable name
+        val eEl = variableBuilder.edgeVariableFactory.elements
+        eEl.keySet.sort.forEach[ key |
+          val variable = eEl.get(key)
+          if (!variable.dontCare) {
+            elements.add(
+              createReturnableElement => [
+                expression = variable
+              ]
+            )
+          }
+        ]
+        if (elements.empty) {
+          warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
+        }
+      }
       elements.addAll(
         returnBody.returnItems.get(0).items.map [ returnItem |
           createReturnableElement => [
@@ -215,8 +245,10 @@ class RelalgBuilder {
           ]
         ]
       )
-    // variables.addAll(returnBody.items.map[buildRelalgComparableElement(it.expression) as relalg.Variable])
     ]
+    if (trimmer.elements.empty) {
+      unrecoverableError('''RETURN clause processed and resulted in no columns values to return''')
+    }
 
     // add duplicate-elimination operator if return DISTINCT was specified
     val op1 = if (r.distinct) {
