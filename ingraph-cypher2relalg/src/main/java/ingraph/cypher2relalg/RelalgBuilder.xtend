@@ -442,10 +442,7 @@ class RelalgBuilder {
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(StringConstant e) {
-    createStringLiteral => [
-      value = e.value
-      container = topLevelContainer
-    ]
+    buildRelalgStringLiteral(e)
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
@@ -502,6 +499,10 @@ class RelalgBuilder {
 
   def dispatch Expression buildRelalgExpression(NumberConstant e) {
     buildRelalgArithmeticExpression(e)
+  }
+
+  def dispatch Expression buildRelalgExpression(StringConstant e) {
+    buildRelalgStringLiteral(e)
   }
 
   def dispatch Expression buildRelalgExpression(CaseExpression e) {
@@ -637,6 +638,13 @@ class RelalgBuilder {
         container = topLevelContainer
       ]
     }
+  }
+
+  def buildRelalgStringLiteral(StringConstant e) {
+    createStringLiteral => [
+      value = e.value
+      container = topLevelContainer
+    ]
   }
 
   def dispatch Operator buildRelalg(PatternPart p) {
