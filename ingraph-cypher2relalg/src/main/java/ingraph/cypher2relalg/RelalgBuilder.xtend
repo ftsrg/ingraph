@@ -115,6 +115,7 @@ class RelalgBuilder {
 
   def dispatch Operator buildRelalg(RegularQuery q) {
     val queryListHead = buildRelalg(q.singleQuery)
+    // use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
     val queryListTail = q.union?.map [
       val mapIt = it
       createUnionOperator => [
@@ -156,6 +157,7 @@ class RelalgBuilder {
      * We compile all MATCH clauses and attach to a (left outer) join operator.
      * The first one will not be used, but its rightOperand will be extracted, though.
      */
+    // use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
     val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
       val mapIt = it
       val joinOp = if (mapIt.optional) {
@@ -179,6 +181,7 @@ class RelalgBuilder {
     //val singleQuery_unwindClauseList =
     clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]
 
+    // use of lazy map OK as only its head is retrieved once and only once - jmarton, 2017-01-07
     val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
 
     if (singleQuery_returnClauseList === null || singleQuery_returnClauseList.empty) {
@@ -238,6 +241,7 @@ class RelalgBuilder {
         }
       }
       elements.addAll(
+        // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
         returnBody.returnItems.get(0).items.map [ returnItem |
           createReturnableElement => [
             expression = buildRelalgExpression(returnItem.expression)
@@ -261,6 +265,7 @@ class RelalgBuilder {
 
     val order = returnBody.order
     val op2 = if (order !== null) {
+        // use of lazy map OK as passed to addAll and used only once - jmarton, 2017-01-07
         val sortEntries = order.orderBy.map [
           val sortDirection = if(sort !== null && sort.startsWith("DESC")) OrderDirection.
               DESCENDING else OrderDirection.ASCENDING
@@ -314,6 +319,7 @@ class RelalgBuilder {
   def dispatch Operator buildRelalg(Match m) {
     // FIXME: handle OPTIONAL
     // handle comma-separated patternParts in the MATCH clause
+    // use of lazy map OK as passed to buildLeftDeepTree and used only once - jmarton, 2017-01-07
     val pattern_PatternPartList = m.pattern.patterns.map[buildRelalg(it)]
 
     // they are natural joined together
@@ -427,6 +433,7 @@ class RelalgBuilder {
     ])
 
     relationshipVariableExpressions.addAll(
+      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
       e.chain.map [
         val mapIt = it
         createUnaryNodeLogicalExpression => [
@@ -437,6 +444,7 @@ class RelalgBuilder {
       ]
     )
     relationshipVariableExpressions.addAll(
+      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
       e.chain.map [
         val mapIt = it
         createUnaryNodeLogicalExpression => [
@@ -706,6 +714,7 @@ class RelalgBuilder {
     val patternElement_GetVerticesOperator = createGetVerticesOperator => [
       vertexVariable = variableBuilder.buildVertexVariable(n)
     ]
+    // use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
     val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
     chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
@@ -743,6 +752,7 @@ class RelalgBuilder {
 
   def void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi) {
     fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
+    // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
     fe.arguments.addAll(fi.parameter.map[buildRelalgExpression(it)])
   }
 
