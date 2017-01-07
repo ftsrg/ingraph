@@ -1,11 +1,6 @@
 package ingraph.cypher2relalg
 
-import ingraph.cypher2relalg.factories.EdgeLabelFactory
-import ingraph.cypher2relalg.factories.EdgeVariableFactory
-import ingraph.cypher2relalg.factories.VertexLabelFactory
-import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
-import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.Validator
 import org.eclipse.emf.common.util.BasicEList
@@ -34,7 +29,6 @@ import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
-import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
@@ -48,7 +42,6 @@ import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
-import relalg.EdgeVariable
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.FunctionExpression
@@ -64,10 +57,15 @@ import relalg.RelalgFactory
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnaryOperator
-import relalg.Variable
-import relalg.VertexVariable
 import relalg.function.Function
 
+/**
+ * This is the main class of the openCypher to relational algebra compiler.
+ *
+ * Its main entry point is the {@link #build(Cypher) build} method.
+ * As a helper class to manage the whole process of openCypher parsing and compilation,
+ * you might want to see the helper methods in the {@link Cypher2Relalg} class.
+ */
 class RelalgBuilder {
 
   extension RelalgFactory factory = RelalgFactory.eINSTANCE
@@ -77,41 +75,26 @@ class RelalgBuilder {
   // this will be returned and will hold the result of the compilation
   // never rename this to container as that name will collide with the Expression.container field name
   val RelalgContainer topLevelContainer
-
-  extension ElementVariableUtil elementVariableUtil
-
-  val VertexVariableFactory vertexVariableFactory
-  val EdgeVariableFactory edgeVariableFactory
-
-  val VertexLabelFactory vertexLabelFactory
-  val EdgeLabelFactory edgeLabelFactory
+  val VariableBuilder variableBuilder
 
   // default constructor, the only public one
   new() {
     this.topLevelContainer = createRelalgContainer
-    this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
-    this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-    this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
-    this.edgeLabelFactory = new EdgeLabelFactory(this.topLevelContainer)
-
-    this.elementVariableUtil = new ElementVariableUtil(this.topLevelContainer)
+    this.variableBuilder = new VariableBuilder(this.topLevelContainer, logger)
   }
 
   /**
-   * Constructor that allows propagating the topLevelContainer and the labelfactories,
-   * but creates new factories for variables.
+   * Constructor that allows propagating the topLevelContainer and the
+   * variable builder instance.
    *
-   * Use this to create separate builder for each SingleQuery.
+   * Use this to create separate builder for each SingleQuery,
+   * and usually you might want to pass a clone of your variable builder created using its
+   * {@link VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
+   * call.
    */
-  protected new(RelalgContainer topLevelContainer, VertexLabelFactory vertexLabelFactory, EdgeLabelFactory edgeLabelFactory) {
+  protected new(RelalgContainer topLevelContainer, VariableBuilder variableBuilder) {
     this.topLevelContainer = topLevelContainer
-
-    this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
-    this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-    this.vertexLabelFactory = vertexLabelFactory
-    this.edgeLabelFactory = edgeLabelFactory
-
-    this.elementVariableUtil = new ElementVariableUtil(this.topLevelContainer)
+    this.variableBuilder = variableBuilder
   }
 
   def build(Cypher cypher) {
@@ -143,11 +126,11 @@ class RelalgBuilder {
    */
   def dispatch Operator buildRelalg(SingleQuery q) {
     /*
-     *  we create a new instance of the RelalgBuilder to use separate factories
-     *  for each singleQuery, but we retain the top-level container
-     *  not to break the containment hierarchy and the labelfactories.
+     * we create a new instance of the RelalgBuilder to use separate variable factories
+     * for each singleQuery, but we retain the the label factories as well as
+     * top-level container not to break the containment hierarchy and .
      */
-    val builder = new RelalgBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory)
+    val builder = new RelalgBuilder(topLevelContainer, variableBuilder.cloneBuilderWithNewVariableFactories)
     builder._buildRelalgSingleQuery(q)
   }
 
@@ -204,8 +187,9 @@ class RelalgBuilder {
   }
 
   def UnaryOperator buildRelalgUnwind(Unwind u, Operator content) {
+    // FIXME: The value of the local variable unwindOperator is not used
     val unwindOperator = createUnwindOperator => [
-      sourceVariable = buildRelalgVariable(u.expression)
+      sourceVariable = variableBuilder.buildRelalgVariable(u.expression)
       targetVariable = null // TODO createElement => [ ]
     ]
     null
@@ -243,7 +227,7 @@ class RelalgBuilder {
           val sortDirection = if(sort !== null && sort.startsWith("DESC")) OrderDirection.
               DESCENDING else OrderDirection.ASCENDING
 
-          val sortVariable = buildRelalgVariable(expression)
+          val sortVariable = variableBuilder.buildRelalgVariable(expression)
           createSortEntry => [
             direction = sortDirection
             variable = sortVariable
@@ -358,7 +342,7 @@ class RelalgBuilder {
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
     createUnaryNodeLogicalExpression => [
       operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
-      leftOperand = buildRelalgVariable(e.left)
+      leftOperand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }
@@ -366,7 +350,7 @@ class RelalgBuilder {
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
     createUnaryNodeLogicalExpression => [
       operator = UnaryNodeLogicalOperatorType.IS_NULL
-      leftOperand = buildRelalgVariable(e.left)
+      leftOperand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }
@@ -400,7 +384,7 @@ class RelalgBuilder {
 
     relationshipVariableExpressions.add(createUnaryNodeLogicalExpression => [
       operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
-      leftOperand = buildVertexVariable(e.nodePattern)
+      leftOperand = variableBuilder.buildVertexVariable(e.nodePattern)
       container = topLevelContainer
     ])
 
@@ -409,7 +393,7 @@ class RelalgBuilder {
         val mapIt = it
         createUnaryNodeLogicalExpression => [
           operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
-          leftOperand = buildEdgeVariable(mapIt.relationshipPattern.detail)
+          leftOperand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
           container = topLevelContainer
         ]
       ]
@@ -419,7 +403,7 @@ class RelalgBuilder {
         val mapIt = it
         createUnaryNodeLogicalExpression => [
           operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
-          leftOperand = buildVertexVariable(mapIt.nodePattern)
+          leftOperand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
           container = topLevelContainer
         ]
       ]
@@ -461,7 +445,7 @@ class RelalgBuilder {
 
   def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
     createVariableComparableExpression => [
-      variable = buildRelalgVariable(e)
+      variable = variableBuilder.buildRelalgVariable(e)
       container = topLevelContainer
     ]
   }
@@ -479,7 +463,7 @@ class RelalgBuilder {
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
-    val x = buildRelalgVariable(e)
+    val x = variableBuilder.buildRelalgVariable(e)
     // as AttributeVariable
     if (x instanceof AttributeVariable) {
       createVariableComparableExpression => [
@@ -508,7 +492,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(VariableRef e) {
-    buildRelalgVariable(e)
+    variableBuilder.buildRelalgVariable(e)
   }
 
   def dispatch Expression buildRelalgExpression(NumberConstant e) {
@@ -548,7 +532,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-    buildRelalgVariable(e)
+    variableBuilder.buildRelalgVariable(e)
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionList el) {
@@ -619,7 +603,7 @@ class RelalgBuilder {
 
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionNodeLabelsAndPropertyLookup e) {
     createVariableArithmeticExpression => [
-      variable = buildRelalgVariable(e)
+      variable = variableBuilder.buildRelalgVariable(e)
       container = topLevelContainer
     ]
   }
@@ -633,52 +617,6 @@ class RelalgBuilder {
     // TODO isnumeric
 
     fe
-  }
-
-  def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
-    val ev = buildRelalgVariable(e.left)
-    switch ev {
-      VertexVariable: {
-        if (e.propertyLookups.length == 1) {
-          ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
-        } else {
-          unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
-          null
-        }
-      }
-      EdgeVariable: {
-        if (e.propertyLookups.length == 1) {
-          ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
-        } else {
-          unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
-          null
-        }
-      }
-      default: {
-        unrecoverableError('''Unsupported type received: «ev.class.name»''')
-        null
-      }
-    }
-  }
-
-  def dispatch Variable buildRelalgVariable(VariableRef varRef) {
-    switch varRef {
-      case vertexVariableFactory.hasElement(varRef.variableRef.name) &&
-        edgeVariableFactory.hasElement(varRef.variableRef.name): {
-        unrecoverableError('''Variable name ambigous: «varRef.variableRef.name»''')
-        null
-      }
-      case vertexVariableFactory.hasElement(varRef.variableRef.name): {
-        vertexVariableFactory.createElement(varRef.variableRef.name)
-      }
-      case edgeVariableFactory.hasElement(varRef.variableRef.name): {
-        edgeVariableFactory.createElement(varRef.variableRef.name)
-      }
-      default: {
-        unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
-        null
-      }
-    }
   }
 
   def NumberLiteral buildRelalgNumberLiteral(NumberConstant e) {
@@ -720,7 +658,7 @@ class RelalgBuilder {
    */
   def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
     val patternElement_GetVerticesOperator = createGetVerticesOperator => [
-      vertexVariable = buildVertexVariable(n)
+      vertexVariable = variableBuilder.buildVertexVariable(n)
     ]
     val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
@@ -728,8 +666,8 @@ class RelalgBuilder {
   }
 
   def dispatch Operator buildRelalg(PatternElementChain ec) {
-    val patternElementChain_VertexVariable = buildVertexVariable(ec.nodePattern)
-    val patternElementChain_EdgeVariable = buildEdgeVariable(ec.relationshipPattern.detail)
+    val patternElementChain_VertexVariable = variableBuilder.buildVertexVariable(ec.nodePattern)
+    val patternElementChain_EdgeVariable = variableBuilder.buildEdgeVariable(ec.relationshipPattern.detail)
 
     val isLeftArrow = ec.relationshipPattern.incoming
     val isRightArrow = ec.relationshipPattern.outgoing
@@ -755,25 +693,6 @@ class RelalgBuilder {
         ]
     ]
 
-  }
-
-  def buildEdgeVariable(RelationshipDetail r) {
-    val edgeVariable = edgeVariableFactory.createElement(r)
-
-    // add labels to the variable
-    edgeVariable.combineLabelSet(r.types?.relTypeName, edgeLabelFactory)
-
-    edgeVariable
-  }
-
-  protected def VertexVariable buildVertexVariable(NodePattern n) {
-    val vertexVariable = vertexVariableFactory.createElement(n)
-
-    // add labels to the variable
-    n.nodeLabels?.nodeLabels?.forEach [
-      vertexVariable.ensureLabel(vertexLabelFactory.createElement(it.labelName))
-    ]
-    vertexVariable
   }
 
   def void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi) {
