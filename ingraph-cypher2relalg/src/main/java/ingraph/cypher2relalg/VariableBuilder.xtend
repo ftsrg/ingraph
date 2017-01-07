@@ -7,38 +7,22 @@ import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.IngraphLogger
+import java.util.ArrayList
+import java.util.List
+import org.eclipse.emf.common.util.EList
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import relalg.EdgeLabel
 import relalg.EdgeVariable
+import relalg.LabelSetStatus
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.Variable
-import relalg.VertexVariable
-import relalg.LabelSetStatus
-import ingraph.cypher2relalg.factories.EdgeLabelFactory
-import java.util.ArrayList
-import java.util.Iterator
-import java.util.List
-import org.eclipse.emf.common.util.EList
-import relalg.BinaryLogicalOperatorType
-import relalg.BinaryOperator
-import relalg.EdgeLabel
-import relalg.EdgeVariable
-import relalg.ExpandOperator
-import relalg.GetVerticesOperator
-import relalg.JoinOperator
-import relalg.LabelSetStatus
-import relalg.LeftOuterJoinOperator
-import relalg.LogicalExpression
-import relalg.Operator
-import relalg.RelalgContainer
-import relalg.RelalgFactory
-import relalg.UnionOperator
 import relalg.VertexLabel
 import relalg.VertexVariable
-import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * This is the variable builder component of
