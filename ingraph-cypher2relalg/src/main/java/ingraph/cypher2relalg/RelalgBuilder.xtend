@@ -171,12 +171,12 @@ class RelalgBuilder {
     /*
      * The compiled form of the first MATCH clause is on the rightInput
      * of the first join operator.
-     * 
+     *
      * This join operator is in fact, unnecessary.
      */
     val content = chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
 
-    //val singleQuery_unwindClauseList = 
+    //val singleQuery_unwindClauseList =
     clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]
 
     val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
@@ -273,7 +273,7 @@ class RelalgBuilder {
   /*
    * MATCH clause is compiled as follows:
    * (the lower elements being the input for the upper ones)
-   * 
+   *
    * - Selection as built from the where clause
    * - Left outer join of the patterns extracted from the where clause (is any)
    * - AllDifferentOperator on the edges in the patternParts
@@ -667,7 +667,7 @@ class RelalgBuilder {
 
   /*
    * This will create the relational algebraic representation of a patternElement.
-   * 
+   *
    * This was factored out to handle PatternElement and RelationshipsPattern in the same code
    */
   def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {

@@ -7,29 +7,29 @@ import org.eclipse.xtend.lib.annotations.Data
 @Buildable
 class RelalgSerializerConfig {
 
-	/**
-	 * whether to include cardinality information in the serializer (for trees)
-	 */
-	boolean includeCardinality
+  /**
+   * whether to include cardinality information in the serializer (for trees)
+   */
+  boolean includeCardinality
 
-	/**
-	 * whether to use parentheses for expressions)
-	 */
-	boolean parentheses
+  /**
+   * whether to use parentheses for expressions)
+   */
+  boolean parentheses
 
-	/**
-	 * whether to generate a standalone TeX document
-	 */
-	boolean standaloneDocument
+  /**
+   * whether to generate a standalone TeX document
+   */
+  boolean standaloneDocument
 
-	/**
-	 * whether to include common variables for joins and antijoins
-	 */
-	boolean includeCommonVariables
+  /**
+   * whether to include common variables for joins and antijoins
+   */
+  boolean includeCommonVariables
 
-	/**
-	 * whether to output TeX serialization to the console
-	 */
-	boolean consoleOutput
+  /**
+   * whether to output TeX serialization to the console
+   */
+  boolean consoleOutput
 
 }

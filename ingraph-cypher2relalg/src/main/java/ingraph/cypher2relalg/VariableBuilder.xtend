@@ -50,7 +50,7 @@ class VariableBuilder {
   extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
 
   val RelalgContainer topLevelContainer
-  
+
   extension ElementVariableUtil elementVariableUtil
 
   val VertexVariableFactory vertexVariableFactory
@@ -99,7 +99,7 @@ class VariableBuilder {
 
     this.elementVariableUtil = new ElementVariableUtil(this.topLevelContainer)
   }
-  
+
   /**
    * Creates a new VariableBuilder instance that has new variable factory instances
    * but retains label factories and the topLevelContainer.
