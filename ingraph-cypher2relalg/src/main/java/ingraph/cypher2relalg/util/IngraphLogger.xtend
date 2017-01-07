@@ -10,7 +10,7 @@ import java.util.logging.ConsoleHandler
 /**
  * This is a wrapper over java.util.logging.Logger
  *
- * The main difference is that IngraphLogger instances are not provide by any factory.
+ * The main difference is that IngraphLogger instances are not provided by any factory.
  * Under the hood, it forwards logging messages to a java.util.logging.Logger
  * provided upon object instantiation by name or by passing the Logger instance itself.
  */
@@ -24,7 +24,7 @@ class IngraphLogger {
     this.name = loggerName
     this.logger = Logger.getLogger(name)
     /*
-     *  FIXME: for multiple runs in a single JVM, we should not add more than 1 ConsoleHandler
+     *  FIXME: for multiple runs in a single JVM, we should not to add more than 1 ConsoleHandler
      */
 
     this.logger.addHandler(new ConsoleHandler)

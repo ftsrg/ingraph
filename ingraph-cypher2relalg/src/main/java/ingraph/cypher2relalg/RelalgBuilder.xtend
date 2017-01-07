@@ -77,15 +77,20 @@ class RelalgBuilder {
   val RelalgContainer topLevelContainer
   val VariableBuilder variableBuilder
 
-  // default constructor, the only public one
+  /**
+   * Constructs a new RelalgBuilder object and initialize its state.
+   *
+   * For the internals, it creates a new EMF container and a fresh variable builder
+   * with new variable and label factories.
+   */
   new() {
     this.topLevelContainer = createRelalgContainer
     this.variableBuilder = new VariableBuilder(this.topLevelContainer, logger)
   }
 
   /**
-   * Constructor that allows propagating the topLevelContainer and the
-   * variable builder instance.
+   * Constructor that allows passing the topLevelContainer and the
+   * variable builder instance to be used.
    *
    * Use this to create separate builder for each SingleQuery,
    * and usually you might want to pass a clone of your variable builder created using its
