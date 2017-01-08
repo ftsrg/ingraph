@@ -79,6 +79,10 @@ public enum Function {
   TOLOWER       (FunctionCategory.STRING,        STRING,       STRING,    1), // lower( original )
   TOUPPER       (FunctionCategory.STRING,        STRING,       STRING,    1), // upper( original )
 
+  STARTS_WITH   (FunctionCategory.STRING,        STRING,       STRING,    2), // expression STARTS WITH expression
+  ENDS_WITH     (FunctionCategory.STRING,        STRING,       STRING,    2), // expression   ENDS WITH expression
+  CONTAINS      (FunctionCategory.STRING,        STRING,       STRING,    2), // expression CONTAINS    expression
+
   SPLIT         (FunctionCategory.STRING,        STRING,       LIST_TYPE, 1), // split( original, splitPattern )
 
   ACOS          (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // acos( expression )

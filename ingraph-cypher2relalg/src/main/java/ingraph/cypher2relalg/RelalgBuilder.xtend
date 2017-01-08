@@ -8,7 +8,9 @@ import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
+import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.EndsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionList
@@ -33,6 +35,7 @@ import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
+import org.slizaa.neo4j.opencypher.openCypher.StartsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
@@ -46,6 +49,7 @@ import relalg.Direction
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.FunctionExpression
+import relalg.FunctionLogicalExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
@@ -476,6 +480,47 @@ class RelalgBuilder {
       rightOperand = buildRelalgComparableElement(e.right)
       container = topLevelContainer
     ]
+  }
+
+  def dispatch LogicalExpression buildRelalgLogicalExpression(StartsWithExpression e, EList<Operator> joins) {
+    _processInfixStringOperations(e)
+  }
+
+  def dispatch LogicalExpression buildRelalgLogicalExpression(EndsWithExpression e, EList<Operator> joins) {
+    _processInfixStringOperations(e)
+  }
+
+  def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
+    _processInfixStringOperations(e)
+  }
+
+  /**
+   * Processes STARTS WITH, ENDS WITH and CONTAINS to create a function invocation from them. 
+   */
+  def FunctionLogicalExpression _processInfixStringOperations(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
+    val fe = createFunctionLogicalExpression => [
+      container = topLevelContainer
+    ]
+    switch e {
+      StartsWithExpression: {
+        fe.functor = Function.STARTS_WITH
+        fe.arguments.add(buildRelalgExpression(e.left))
+        fe.arguments.add(buildRelalgExpression(e.right))
+      }
+      EndsWithExpression: {
+        fe.functor = Function.ENDS_WITH
+        fe.arguments.add(buildRelalgExpression(e.left))
+        fe.arguments.add(buildRelalgExpression(e.right))
+      }
+      ContainsExpression: {
+        fe.functor = Function.CONTAINS
+        fe.arguments.add(buildRelalgExpression(e.left))
+        fe.arguments.add(buildRelalgExpression(e.right))
+      }
+      default: unsupported('''Unsupported type received as infix string operation: «e.class.name»''')
+    }
+
+    fe
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {

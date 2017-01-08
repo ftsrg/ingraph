@@ -136,6 +136,13 @@ class FunctionComparableExpression extends FunctionExpression, ComparableExpress
 class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpression {
 }
 
+/**
+ * Container for a function call to be placed in logical expression position.
+ *
+ * Note: type check is always needed in query execution time!
+ */
+class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
+}
 
 /* Variables */
 abstract class Variable extends Atom, NamedElement {
