@@ -49,7 +49,6 @@ import relalg.Direction
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.FunctionExpression
-import relalg.FunctionLogicalExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
@@ -482,45 +481,40 @@ class RelalgBuilder {
     ]
   }
 
+  /**
+   * Processes STARTS WITH create a function invocation: STARTS_WITH(string, prefixString)
+   */
   def dispatch LogicalExpression buildRelalgLogicalExpression(StartsWithExpression e, EList<Operator> joins) {
-    _processInfixStringOperations(e)
-  }
-
-  def dispatch LogicalExpression buildRelalgLogicalExpression(EndsWithExpression e, EList<Operator> joins) {
-    _processInfixStringOperations(e)
-  }
-
-  def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
-    _processInfixStringOperations(e)
+    createFunctionLogicalExpression => [
+      functor = Function.STARTS_WITH
+      arguments.add(buildRelalgExpression(e.left))
+      arguments.add(buildRelalgExpression(e.right))
+      container = topLevelContainer
+    ]
   }
 
   /**
-   * Processes STARTS WITH, ENDS WITH and CONTAINS to create a function invocation from them. 
+   * Processes ENDS WITH create a function invocation: ENDS_WITH(string, postfixString)
    */
-  def FunctionLogicalExpression _processInfixStringOperations(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
-    val fe = createFunctionLogicalExpression => [
+  def dispatch LogicalExpression buildRelalgLogicalExpression(EndsWithExpression e, EList<Operator> joins) {
+    createFunctionLogicalExpression => [
+      functor = Function.ENDS_WITH
+      arguments.add(buildRelalgExpression(e.left))
+      arguments.add(buildRelalgExpression(e.right))
       container = topLevelContainer
     ]
-    switch e {
-      StartsWithExpression: {
-        fe.functor = Function.STARTS_WITH
-        fe.arguments.add(buildRelalgExpression(e.left))
-        fe.arguments.add(buildRelalgExpression(e.right))
-      }
-      EndsWithExpression: {
-        fe.functor = Function.ENDS_WITH
-        fe.arguments.add(buildRelalgExpression(e.left))
-        fe.arguments.add(buildRelalgExpression(e.right))
-      }
-      ContainsExpression: {
-        fe.functor = Function.CONTAINS
-        fe.arguments.add(buildRelalgExpression(e.left))
-        fe.arguments.add(buildRelalgExpression(e.right))
-      }
-      default: unsupported('''Unsupported type received as infix string operation: «e.class.name»''')
-    }
+  }
 
-    fe
+  /**
+   * Processes CONTAINS create a function invocation: CONTAINS(string, middleString)
+   */
+  def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
+    createFunctionLogicalExpression => [
+      functor = Function.CONTAINS
+      arguments.add(buildRelalgExpression(e.left))
+      arguments.add(buildRelalgExpression(e.right))
+      container = topLevelContainer
+    ]
   }
 
   def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {

@@ -79,9 +79,9 @@ public enum Function {
   TOLOWER       (FunctionCategory.STRING,        STRING,       STRING,    1), // lower( original )
   TOUPPER       (FunctionCategory.STRING,        STRING,       STRING,    1), // upper( original )
 
-  STARTS_WITH   (FunctionCategory.STRING,        STRING,       STRING,    2), // expression STARTS WITH expression
-  ENDS_WITH     (FunctionCategory.STRING,        STRING,       STRING,    2), // expression   ENDS WITH expression
-  CONTAINS      (FunctionCategory.STRING,        STRING,       STRING,    2), // expression CONTAINS    expression
+  STARTS_WITH   (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // STARTS_WITH(string, prefixString)
+  ENDS_WITH     (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // ENDS_WITH(string, postfixString)
+  CONTAINS      (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // CONTAINS(string, middleString)
 
   SPLIT         (FunctionCategory.STRING,        STRING,       LIST_TYPE, 1), // split( original, splitPattern )
 
