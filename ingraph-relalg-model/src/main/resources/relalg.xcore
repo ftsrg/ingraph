@@ -145,7 +145,7 @@ class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
 }
 
 /* Variables */
-abstract class Variable extends Atom, NamedElement {
+abstract class Variable extends NamedElement {
   boolean dontCare = "false"
 }
 

@@ -239,4 +239,43 @@ class VariableBuilder {
 
     }
   }
+
+  /**
+   * Builds or resolves the appropriate variable and then packs it into a VariableExpression.
+   *
+   * This builder method ensures that the new VariableEpression instance
+   * is registered to the container registered with this builder.
+   */
+  def dispatch buildVariableExpression(Variable v) {
+    createVariableExpression => [
+      variable = v
+      container = topLevelContainer
+    ]
+  }
+
+  /**
+   * Builds or resolves the appropriate variable and then packs it into a VariableExpression.
+   *
+   * This builder method ensures that the new VariableEpression instance
+   * is registered to the container registered with this builder.
+   */
+  def dispatch buildVariableExpression(VariableRef v) {
+    createVariableExpression => [
+      variable = buildRelalgVariable(v)
+      container = topLevelContainer
+    ]
+  }
+
+  /**
+   * Builds or resolves the appropriate variable and then packs it into a VariableExpression.
+   *
+   * This builder method ensures that the new eVariableEpression instance
+   * is registered to the container registered with this builder.
+   */
+  def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup v) {
+    createVariableExpression => [
+      variable = buildRelalgVariable(v)
+      container = topLevelContainer
+    ]
+  }
 }

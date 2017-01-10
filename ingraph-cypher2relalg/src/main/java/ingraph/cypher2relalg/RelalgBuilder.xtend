@@ -222,7 +222,7 @@ class RelalgBuilder {
           if (!variable.dontCare) {
             elements.add(
               createReturnableElement => [
-                expression = variable
+                expression = variableBuilder.buildVariableExpression(variable)
               ]
             )
           }
@@ -234,7 +234,7 @@ class RelalgBuilder {
           if (!variable.dontCare) {
             elements.add(
               createReturnableElement => [
-                expression = variable
+                expression = variableBuilder.buildVariableExpression(variable)
               ]
             )
           }
@@ -574,7 +574,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(VariableRef e) {
-    variableBuilder.buildRelalgVariable(e)
+    variableBuilder.buildVariableExpression(e)
   }
 
   def dispatch Expression buildRelalgExpression(NumberConstant e) {
@@ -618,7 +618,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-    variableBuilder.buildRelalgVariable(e)
+    variableBuilder.buildVariableExpression(e)
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionList el) {
