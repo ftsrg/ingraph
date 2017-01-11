@@ -127,7 +127,13 @@ class RelalgBuilder {
       ]
     ]
 
-    chainBinaryOperatorsLeft(queryListHead, queryListTail)
+    val result = chainBinaryOperatorsLeft(queryListHead, queryListTail)
+
+    if (!Validator.checkIfUnionQueryColumnNamesMatch(result, logger)) {
+      unrecoverableError('''All sub queries of a UNION query must have the same column aliases.''')
+    }
+
+    result
   }
 
   /**
