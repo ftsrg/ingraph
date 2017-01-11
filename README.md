@@ -127,6 +127,18 @@ use Scala before, download it from the dialog box provided by IntelliJ).
     ```
   * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
 
+  * **Problem:**
+
+    ```
+    ERROR:Ecore cannot be resolved. (file:/.../ingraph-relalg-model/src/main/resources/relalg.xcore line : 1 column : 2)
+    ERROR:GenModel cannot be resolved. (file:/.../ingraph-relalg-model/src/main/resources/relalg.xcore line : 2 column : 2)
+    ERROR:A generic type in this context must refer to a classifier or a type parameter (file:/.../ingraph-relalg-model/src/main/resources/relalg.xcore line : 10 column : null)
+    ERROR:A generic type in this context must refer to a classifier or a type parameter (file:/.../ingraph-relalg-model/src/main/resources/relalg.xcore line : 17 column : null)
+    ERROR:The default value literal 'false' must be a valid literal of the attribute's type (file:/.../ingraph-relalg-model/src/main/resources/relalg.xcore line : 149 column : null)
+    ```
+
+  * **Solution:** include the `clean` task, i.e. run `./gradlew clean build`
+
 #### IntelliJ
 
 * `NoClassDefFoundError` for Scala code:
