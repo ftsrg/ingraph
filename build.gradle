@@ -68,6 +68,7 @@ ext {
   emfVersion = '2.10.1'
   ireVersion = '0.2.0'
   junitVersion = '4.12'
+  log4jVersion = '1.2.17'
   scalaShortVersion = '2.12'
   scalaVersion = '2.12.1'
   viatraVersion = '1.5.0-SNAPSHOT'
