@@ -15,6 +15,8 @@ import relalg.RelalgContainer
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.VariableExpression
+import javax.lang.model.element.VariableElement
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -77,15 +79,19 @@ class SchemaInferencer {
       }
     ]
 
-    op.defineSchema(op.elements.map [
-      if (expression instanceof Variable) {
-        expression as Variable
+    val elementVariables = op.elements.map [
+      if (expression instanceof VariableExpression) {
+        (expression as VariableExpression).variable
+      } else {
+        throw new UnsupportedOperationException("Schema should only contain variable expressions, but found instead: " + expression)
       }
-    ])
+    ]
+    op.defineSchema(elementVariables)
   }
 
   def dispatch List<Variable> inferSchema(ExpandOperator op) {
     val schema = Lists.newArrayList(op.getInput.inferSchema)
+    
     if (includeEdges) {
       schema.add(op.edgeVariable)
     }
@@ -102,8 +108,8 @@ class SchemaInferencer {
   def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
     val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
     val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
-    val s = Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema))
-    op.defineSchema(s)
+    val schema = Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema))
+    op.defineSchema(schema)
 
     // calculate common variables
     leftInputSchema.retainAll(rightInputSchema)
@@ -123,7 +129,7 @@ class SchemaInferencer {
   /**
    * defineSchema
    */
-  def defineSchema(Operator op, List<Variable> schema) {
+  def defineSchema(Operator op, List<Variable> schema) {   
     // EObjectEList.addAll() removes duplicates
     op.schema.addAll(schema)
     schema

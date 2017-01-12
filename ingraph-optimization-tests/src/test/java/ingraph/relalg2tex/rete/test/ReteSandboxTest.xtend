@@ -12,21 +12,21 @@ import org.junit.Test
 
 class ReteSandboxTest {
 
-  protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
-  protected extension TupleInferencer tupleInferencer = new TupleInferencer
-  protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+  extension SchemaInferencer schemaInferencer = new SchemaInferencer
+  extension TupleInferencer tupleInferencer = new TupleInferencer
+  extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
   val config = RelalgSerializerConfig.builder.consoleOutput(false).build
   val drawer = new RelalgTreeSerializer(config)
 
-  def process(String query) {
-    val cypher = CypherParser.parseFile("trainbenchmark/" + query)
-    val container = Cypher2Relalg.processCypher(cypher)
-
-    container.transformToRete
-    RelalgUtil.save(container, "query-models/" + query)
-  // drawer.serialize(container, "queries/" + query)
-  }
+//  def process(String query) {
+//    val cypher = CypherParser.parseFile("trainbenchmark/" + query)
+//    val container = Cypher2Relalg.processCypher(cypher)
+//
+//    container.transformToRete
+//    RelalgUtil.save(container, "query-models/" + query)
+//  // drawer.serialize(container, "queries/" + query)
+//  }
 
   @Test
   def void test01() {
