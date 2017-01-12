@@ -17,13 +17,13 @@ class ExpressionParserTest extends WordSpec {
 
   import EngineFactory._
 
-  val rocks = "\"emfrocks\""
+  val rocks = "emfrocks"
   "ExpressionParser" should {
     "parse equal to" in {
       val op = getSelectionOperator("""MATCH (n) WHERE n.something="emfsucks" RETURN n.something""")
       val lookup = new SchemaToMap().schemaToMap(op)
       val func = ExpressionParser.parse(op.getCondition, lookup)
-      assert(func(Vector(0, "\"emfsucks\"")))
+      assert(func(Vector(0, "emfsucks")))
       assert(!func(Vector(1, rocks)))
     }
 
