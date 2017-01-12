@@ -20,8 +20,8 @@ object ExpressionParser {
             def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
             left(_) != null
         }
-      case exp: UnaryNodeLogicalExpression =>
-        import UnaryNodeLogicalOperatorType._
+      case exp: UnaryGraphObjectLogicalExpression =>
+        import UnaryGraphObjectLogicalOperatorType._
         def left: (Tuple) => Any = parseVariable(exp.getLeftOperand, _, lookup)
         exp.getOperator match {
           case IS_NULL =>
