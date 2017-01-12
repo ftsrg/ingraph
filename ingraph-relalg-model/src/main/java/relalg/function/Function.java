@@ -67,6 +67,7 @@ public enum Function {
   PROPERTIES    (FunctionCategory.SCALAR,        ELEMENT,      MAP,       1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
   SIZE          (FunctionCategory.SCALAR,        LIST_TYPE,    INTEGER,   1), // size( list ), size( pattern expression )
   TYPE          (FunctionCategory.SCALAR,        RELATIONSHIP, STRING,    1), // type( relationship )
+  ID            (FunctionCategory.SCALAR,        ELEMENT,      INTEGER,   1), // id( property-container )
 
   LEFT          (FunctionCategory.STRING,        STRING,       STRING,    2), // left( original, length )
   RIGHT         (FunctionCategory.STRING,        STRING,       STRING,    2), // right( original, length )
