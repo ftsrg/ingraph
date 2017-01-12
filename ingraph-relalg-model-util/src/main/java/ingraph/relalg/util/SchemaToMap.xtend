@@ -13,10 +13,8 @@ class SchemaToMap {
       mapBuilder.put(op.detailedSchema.get(i), i)
     }
     
-    val m = mapBuilder.build
-    println(m)
-    
-    return m
+    val map = mapBuilder.build
+    return map
   }
 
 }
