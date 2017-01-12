@@ -20,6 +20,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.Variable
+import relalg.VariableExpression
 
 class TupleInferencer {
 
@@ -80,8 +81,12 @@ class TupleInferencer {
     getAttributes(expression.leftOperand)
   }
 
-  def dispatch List<AttributeVariable> getAttributes(AttributeVariable expression) {
-    #[expression]
+  def dispatch List<AttributeVariable> getAttributes(VariableExpression expression) {
+    if (expression.variable instanceof AttributeVariable) {
+      #[expression.variable as AttributeVariable]
+    } else {
+      #[]
+    }
   }
 
   // default branch: no attributes

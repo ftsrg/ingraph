@@ -16,30 +16,36 @@ class ReteSandboxTest {
   extension TupleInferencer tupleInferencer = new TupleInferencer
   extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
-  val config = RelalgSerializerConfig.builder.consoleOutput(false).build
+  val config = RelalgSerializerConfig.builder.consoleOutput(false).standaloneDocument(true).build
   val drawer = new RelalgTreeSerializer(config)
 
-//  def process(String query) {
-//    val cypher = CypherParser.parseFile("trainbenchmark/" + query)
-//    val container = Cypher2Relalg.processCypher(cypher)
-//
-//    container.transformToRete
+  def process(String query, String cypher) {
+    val container = Cypher2Relalg.processString(cypher)
+    container.transformToRete
+    container.addSchemaInformation
+    container.addDetailedSchemaInformation
+    
 //    RelalgUtil.save(container, "query-models/" + query)
-//  // drawer.serialize(container, "queries/" + query)
-//  }
+    drawer.serialize(container, "queries/" + query)
+  }
 
   @Test
   def void test01() {
-    val cypher = CypherParser.parseString('''
+    process("test01", '''
       MATCH (p:Person)
       RETURN p.name AS name
       ORDER BY p.name
       LIMIT 1
     ''')
-    val container = Cypher2Relalg.processCypher(cypher)
-    container.transformToRete
-    container.addSchemaInformation
-    container.addDetailedSchemaInformation
+  }
+  
+  @Test
+  def void test02() {
+    process("test02", '''
+      MATCH (n)
+      WHERE n.something="emfsucks"
+      RETURN n.something
+    ''')
   }
 
 }

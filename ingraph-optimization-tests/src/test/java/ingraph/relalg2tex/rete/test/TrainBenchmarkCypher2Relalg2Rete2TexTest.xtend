@@ -16,7 +16,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
   extension TupleInferencer tupleInferencer = new TupleInferencer
   extension SchemaInferencer schemaInferencer = new SchemaInferencer
-	val config = RelalgSerializerConfig.builder.consoleOutput(false).build
+	val config = RelalgSerializerConfig.builder.standaloneDocument(true).consoleOutput(false).build
 	val drawer = new RelalgTreeSerializer(config)
 	
 	def process(String query) {
@@ -27,7 +27,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 		container.addSchemaInformation
 		container.addDetailedSchemaInformation
 		RelalgUtil.save(container, "query-models/" + query)
-		//drawer.serialize(container, "queries/" + query)
+		drawer.serialize(container, "queries/" + query)
 	}
 	
 	@Test

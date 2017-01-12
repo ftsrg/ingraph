@@ -16,7 +16,6 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
-import javax.lang.model.element.VariableElement
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.

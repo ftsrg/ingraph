@@ -12,7 +12,11 @@ class SchemaToMap {
     for (i : 0 ..< op.detailedSchema.length) {
       mapBuilder.put(op.detailedSchema.get(i), i)
     }
-    mapBuilder.build
+    
+    val m = mapBuilder.build
+    println(m)
+    
+    return m
   }
 
 }
