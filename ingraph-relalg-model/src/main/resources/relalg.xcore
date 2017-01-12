@@ -15,7 +15,7 @@ class RelalgContainer {
 
 abstract class NamedElement {
   String name
-  refers RelalgContainer ^namedElementContainer opposite elements
+  refers RelalgContainer namedElementContainer opposite elements
 }
 
 abstract class Label extends NamedElement {

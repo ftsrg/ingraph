@@ -30,14 +30,14 @@ class TestModelFactory {
 	public def testModel2() {
 		val ctr = createRelalgContainer
 		
-		val v1 = createVertexVariable => [ name = "v1"; container = ctr ]
-		val v2 = createVertexVariable => [ name = "v2"; container = ctr ]
-		val v3 = createVertexVariable => [ name = "v3"; container = ctr ]
-		val v4 = createVertexVariable => [ name = "v4"; container = ctr ]
+		val v1 = createVertexVariable => [ name = "v1"; namedElementContainer = ctr ]
+		val v2 = createVertexVariable => [ name = "v2"; namedElementContainer = ctr ]
+		val v3 = createVertexVariable => [ name = "v3"; namedElementContainer = ctr ]
+		val v4 = createVertexVariable => [ name = "v4"; namedElementContainer = ctr ]
 		
-		val eA = createEdgeVariable => [ name = "a"; container = ctr ]
-		val eB = createEdgeVariable => [ name = "b"; container = ctr ]
-		val eC = createEdgeVariable => [ name = "c"; container = ctr ]
+		val eA = createEdgeVariable => [ name = "a"; namedElementContainer = ctr ]
+		val eB = createEdgeVariable => [ name = "b"; namedElementContainer = ctr ]
+		val eC = createEdgeVariable => [ name = "c"; namedElementContainer = ctr ]
 		
 		val a = createGetEdgesOperator => [ 
 			edgeVariable = eA
@@ -76,8 +76,8 @@ class TestModelFactory {
 		val leftLabel = createVertexLabel => [ name = "l" ]
 		val rightLabel = createVertexLabel => [ name = "r" ]
 		
-		val v1 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(leftLabel); container = ctr ]
-		val v2 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(rightLabel); container = ctr ]
+		val v1 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(leftLabel); namedElementContainer = ctr ]
+		val v2 = createVertexVariable => [ name = "v"; vertexLabelSet.vertexLabels.add(rightLabel); namedElementContainer = ctr ]
 		
 		val leftOp = createGetVerticesOperator => [ vertexVariable = v1 ]
 		val rightOp = createGetVerticesOperator => [ vertexVariable = v2 ]
