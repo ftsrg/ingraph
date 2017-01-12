@@ -366,7 +366,7 @@ class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpressi
 
 class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
   UnaryArithmeticOperatorType operator
-  refers ArithmeticExpression leftOperand
+  refers ArithmeticExpression operand
 }
 
 // arithmetic comparisons evaluate to true/false, hence they are logical expressions
@@ -384,7 +384,7 @@ abstract class LogicalExpression extends Expression {
 }
 
 /**
- * ListExpression respresents a list of expressions (of type Expression).
+ * ListExpression represents a list of expressions (of type Expression).
  *
  * The empty list is an instance of the EmptyListExpression.
  *
@@ -420,7 +420,7 @@ class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
 
 class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
   UnaryLogicalOperatorType operator
-  refers LogicalExpression leftOperand
+  refers LogicalExpression operand
 }
 
 // for conditions like "vertexVariable IS NULL" or
@@ -428,7 +428,7 @@ class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 // TODO: possibly later this can be generalized and merged with UnaryLogicalExpression
 class UnaryGraphObjectLogicalExpression extends UnaryExpression, LogicalExpression {
   UnaryGraphObjectLogicalOperatorType operator
-  refers Variable leftOperand
+  refers Variable operand
 }
 
 abstract class ComparableExpression extends Expression {

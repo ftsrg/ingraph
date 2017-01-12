@@ -456,11 +456,11 @@ abstract class AbstractRelalgSerializer {
   }
 
   def dispatch String convertExpression(UnaryLogicalExpression exp) {
-    '''«exp.operator.convert» \left( «exp.leftOperand.convertExpression» \right)'''
+    '''«exp.operator.convert» \left( «exp.operand.convertExpression» \right)'''
   }
 
   def dispatch String convertExpression(UnaryGraphObjectLogicalExpression exp) {
-    '''«exp.getLeftOperand.convertExpression» «exp.getOperator.convert»'''
+    '''«exp.operand.convertExpression» «exp.getOperator.convert»'''
   }
 
   def dispatch String convertExpression(ArithmeticComparisonExpression exp) {

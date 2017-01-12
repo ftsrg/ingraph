@@ -78,7 +78,7 @@ class TupleInferencer {
   }
 
   def dispatch List<AttributeVariable> getAttributes(UnaryLogicalExpression expression) {
-    getAttributes(expression.leftOperand)
+    getAttributes(expression.operand)
   }
 
   def dispatch List<AttributeVariable> getAttributes(VariableExpression expression) {

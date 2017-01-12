@@ -395,7 +395,7 @@ class RelalgBuilder {
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
     createUnaryGraphObjectLogicalExpression => [
       operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-      leftOperand = variableBuilder.buildRelalgVariable(e.left)
+      operand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }
@@ -403,7 +403,7 @@ class RelalgBuilder {
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
     createUnaryGraphObjectLogicalExpression => [
       operator = UnaryGraphObjectLogicalOperatorType.IS_NULL
-      leftOperand = variableBuilder.buildRelalgVariable(e.left)
+      operand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }
@@ -416,7 +416,7 @@ class RelalgBuilder {
       case "not":
         createUnaryLogicalExpression => [
           operator = UnaryLogicalOperatorType.NOT
-          leftOperand = buildRelalgLogicalExpression(e.left, joins)
+          operand = buildRelalgLogicalExpression(e.left, joins)
           container = topLevelContainer
         ]
       default: {
@@ -437,7 +437,7 @@ class RelalgBuilder {
 
     relationshipVariableExpressions.add(createUnaryGraphObjectLogicalExpression => [
       operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-      leftOperand = variableBuilder.buildVertexVariable(e.nodePattern)
+      operand = variableBuilder.buildVertexVariable(e.nodePattern)
       container = topLevelContainer
     ])
 
@@ -447,7 +447,7 @@ class RelalgBuilder {
         val mapIt = it
         createUnaryGraphObjectLogicalExpression => [
           operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-          leftOperand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
+          operand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
           container = topLevelContainer
         ]
       ]
@@ -458,7 +458,7 @@ class RelalgBuilder {
         val mapIt = it
         createUnaryGraphObjectLogicalExpression => [
           operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-          leftOperand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
+          operand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
           container = topLevelContainer
         ]
       ]
