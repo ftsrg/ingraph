@@ -42,7 +42,7 @@ import relalg.Operator;
  *   getVerticesOperator
  * 
  * 
- * // 1st transformation for eliminating expand operators
+ * // [1] transformation for eliminating expand operators connected to a getVerticesOperator
  * pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
  * 	find parentOperator(parentOperator, expandOperator);
  * 	ExpandOperator.input(expandOperator, getVerticesOperator);

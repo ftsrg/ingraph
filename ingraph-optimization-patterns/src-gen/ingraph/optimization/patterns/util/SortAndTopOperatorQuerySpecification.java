@@ -144,7 +144,7 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
       		   new ExportedParameter(body, var_topOperator, parameter_pTopOperator),
       		   new ExportedParameter(body, var_topLevelContainer, parameter_pTopLevelContainer)
       		));
-      		//  //, parentOperator : Operator) {//  find parentOperator(parentOperator, topOperator);  RelalgContainer.rootExpression(topLevelContainer, topOperator)
+      		//   RelalgContainer.rootExpression(topLevelContainer, topOperator)
       		new TypeConstraint(body, new FlatTuple(var_topLevelContainer), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "RelalgContainer")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
       		new TypeConstraint(body, new FlatTuple(var_topLevelContainer, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "RelalgContainer", "rootExpression")));

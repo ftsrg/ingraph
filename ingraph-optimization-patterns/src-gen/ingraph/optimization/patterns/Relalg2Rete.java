@@ -5,9 +5,11 @@ package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
+import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
@@ -24,6 +26,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * <li>expandVertex</li>
  * <li>expandOperator</li>
  * <li>sortAndTopOperator</li>
+ * <li>leftOuterJoinAndSelection</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -51,6 +54,7 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
     querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorQuerySpecification.instance());
     querySpecifications.add(SortAndTopOperatorQuerySpecification.instance());
+    querySpecifications.add(LeftOuterJoinAndSelectionQuerySpecification.instance());
   }
   
   public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
@@ -75,5 +79,13 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   
   public SortAndTopOperatorMatcher getSortAndTopOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
     return SortAndTopOperatorMatcher.on(engine);
+  }
+  
+  public LeftOuterJoinAndSelectionQuerySpecification getLeftOuterJoinAndSelection() throws ViatraQueryException {
+    return LeftOuterJoinAndSelectionQuerySpecification.instance();
+  }
+  
+  public LeftOuterJoinAndSelectionMatcher getLeftOuterJoinAndSelection(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return LeftOuterJoinAndSelectionMatcher.on(engine);
   }
 }

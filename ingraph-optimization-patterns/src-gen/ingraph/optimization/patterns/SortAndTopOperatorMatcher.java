@@ -31,9 +31,9 @@ import relalg.TopOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * container              //parentOperator
+ * container
  *           |
- *           | rootExpression   input
+ *           | rootExpression
  *           V
  *      topOperator (skips/limits a given amount of tuples)
  *           |
@@ -41,8 +41,8 @@ import relalg.TopOperator;
  *           V
  *      sortOperator (orders the tuples according to some variables and asc/desc directions)
  * 
- * pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) { //, parentOperator : Operator) {
- * //  find parentOperator(parentOperator, topOperator);
+ * // [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
+ * pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) {
  *   RelalgContainer.rootExpression(topLevelContainer, topOperator);
  *   TopOperator.input(topOperator, sortOperator);
  * }

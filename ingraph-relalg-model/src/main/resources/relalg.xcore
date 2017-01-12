@@ -312,10 +312,14 @@ abstract class AbstractJoinOperator extends BinaryOperator {
   int[] rightMask
 }
 
-class JoinOperator extends AbstractJoinOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+// abstract class for operator that implement an equijoin-like operation (
+abstract class EquiJoinLikeOperator extends AbstractJoinOperator {
 }
 
-class LeftOuterJoinOperator extends AbstractJoinOperator {
+class LeftOuterJoinOperator extends EquiJoinLikeOperator {
+}
+
+class JoinOperator extends EquiJoinLikeOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
 }
 
 class AntiJoinOperator extends AbstractJoinOperator {

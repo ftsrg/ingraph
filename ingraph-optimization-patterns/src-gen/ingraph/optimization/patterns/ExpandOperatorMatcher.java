@@ -36,7 +36,7 @@ import relalg.Operator;
  *           V
  *     expandOperator
  * 
- * // 2nd transformation for eliminating expand operators
+ * // [2] (run after [1]) transformation for eliminating the remaining expand operators
  * pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
  * 	find parentOperator(parentOperator, expandOperator);
  * 	ExpandOperator(expandOperator);

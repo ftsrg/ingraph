@@ -14,7 +14,7 @@ import "http://ingraph/relalg";
   getVerticesOperator
 
 */
-// 1st transformation for eliminating expand operators
+// [1] transformation for eliminating expand operators connected to a getVerticesOperator
 pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
@@ -28,16 +28,16 @@ pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator :
           V
     expandOperator
 */
-// 2nd transformation for eliminating expand operators
+// [2] (run after [1]) transformation for eliminating the remaining expand operators
 pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	ExpandOperator(expandOperator);
 }
 
 /*
-      container              //parentOperator
+      container
           |
-          | rootExpression   //*input
+          | rootExpression
           V
      topOperator (skips/limits a given amount of tuples)
           |
@@ -45,8 +45,44 @@ pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operato
           V
      sortOperator (orders the tuples according to some variables and asc/desc directions)
 */
-pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) { //, parentOperator : Operator) {
-//  find parentOperator(parentOperator, topOperator);
+// [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
+pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) {
   RelalgContainer.rootExpression(topLevelContainer, topOperator);
   TopOperator.input(topOperator, sortOperator);
+}
+
+/*
+       parentOperator
+            |
+            | *input
+            V
+       selectionOperator.condition = NOT(...)
+            |
+            | *input
+            V
+     leftOuterJoinOperator
+        |         |
+       /           \
+      /             \
+     | leftInput     | rightInput
+     V               V
+   leftInputOp...  getEdgesOperator
+*/
+// [4] (run after [2])
+// transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
+pattern leftOuterJoinAndSelection(
+  parentOperator : Operator,
+  selectionOperator : SelectionOperator,
+  leftOuterJoinOperator: LeftOuterJoinOperator,
+  leftInputOperator: Operator,
+  getEdgesOperator: GetEdgesOperator,
+  conditionInternalExpression : LogicalExpression
+) {
+  find parentOperator(parentOperator, selectionOperator);
+  SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
+  SelectionOperator.condition(selectionOperator, condition);
+  UnaryLogicalExpression.operator(condition, ::NOT);
+  UnaryLogicalExpression.leftOperand(condition, conditionInternalExpression);
+  LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
+  LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, getEdgesOperator);
 }

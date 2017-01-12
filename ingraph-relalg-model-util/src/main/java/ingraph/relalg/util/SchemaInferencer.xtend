@@ -3,9 +3,10 @@ package ingraph.relalg.util
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import java.util.List
-import relalg.AbstractJoinOperator
+import relalg.AntiJoinOperator
 import relalg.AttributeVariable
 import relalg.ElementVariable
+import relalg.EquiJoinLikeOperator
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
@@ -104,7 +105,7 @@ class SchemaInferencer {
   }
 
   // binary operators
-  def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
+  def dispatch List<Variable> inferSchema(EquiJoinLikeOperator op) {
     val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
     val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
     val schema = Lists.newArrayList(Iterables.concat(leftInputSchema, rightInputSchema))
@@ -116,6 +117,19 @@ class SchemaInferencer {
 
     op.schema
   }
+  
+  def dispatch List<Variable> inferSchema(AntiJoinOperator op) {
+    val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
+    val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
+    op.defineSchema(leftInputSchema)
+
+    // calculate common variables
+    leftInputSchema.retainAll(rightInputSchema)
+    op.commonVariables.addAll(leftInputSchema)
+
+    op.schema
+  }
+  
 
   def dispatch List<Variable> inferSchema(UnionOperator op) {
     op.getLeftInput.inferSchema

@@ -2,6 +2,7 @@ package ingraph.optimization.transformations.relalg2rete
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
+import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
@@ -18,7 +19,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	def log(String log) {
-		//println(log)
+		println(log)
 	}
 
 	def transformToRete(RelalgContainer container) {
@@ -27,11 +28,12 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
+		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		return container
 	}
 
 	/**
-	 * Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
+	 * [1] Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
 	 */
 	protected def expandVertexRule() {
 		createRule() //
@@ -51,7 +53,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	/**
-	 * Replace a single expand operator with a GetEdgesOperator and a JoinOperator
+	 * [2] Replace a single expand operator with a GetEdgesOperator and a JoinOperator
 	 */
 	protected def expandOperatorRule() {
 		createRule() //
@@ -75,7 +77,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 	
   /**
-   * Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator
+   * [3] Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator
    */
   protected def sortAndTopOperatorRule() {
     createRule() //
@@ -93,8 +95,34 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
       ]
       
       topLevelContainer.rootExpression = sortAndTopOperator
-//      changeOperator(parentOperator, topOperator, sortAndTopOperator)
     ].build
-  }	
+  }
+  
+
+  /**
+   * [4] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
+   */
+  protected def leftOuterAndSelectionRule() {
+    createRule() //
+    .precondition(LeftOuterJoinAndSelectionMatcher.querySpecification) //
+    .action [ //
+      val parentOperator = parentOperator
+      val selectionOperator = selectionOperator
+      val leftOuterJoinOperator = leftOuterJoinOperator
+      val leftInputOperator = leftInputOperator
+      val conditionInternalExpression = conditionInternalExpression
+      val getEdgesOperator = getEdgesOperator
+      // TODO check conditionInternalExpression
+      log('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
+
+      val antiJoinOperator = createAntiJoinOperator => [
+        leftInput = leftInputOperator
+        rightInput = getEdgesOperator
+      ]
+      
+      changeOperator(parentOperator, selectionOperator, antiJoinOperator)
+    ].build
+  } 
+
 
 }
