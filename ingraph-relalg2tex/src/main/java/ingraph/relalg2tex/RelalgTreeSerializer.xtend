@@ -11,6 +11,7 @@ import relalg.Operator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.AbstractJoinOperator
+import relalg.ListVariable
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -73,6 +74,10 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
   def dispatch serializeVariable(AttributeVariable variable) {
     '''«variable.element.name».«variable.name»'''
+  }
+  
+  def dispatch serializeVariable(ListVariable variable) {
+    '''«variable.name»'''
   }
 
   /**

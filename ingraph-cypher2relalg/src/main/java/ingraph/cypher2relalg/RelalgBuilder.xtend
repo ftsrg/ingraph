@@ -59,9 +59,9 @@ import relalg.OrderDirection
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryLogicalOperatorType
-import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.function.Function
+import relalg.UnaryGraphObjectLogicalOperatorType
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -393,16 +393,16 @@ class RelalgBuilder {
   }
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
-    createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
+    createUnaryGraphObjectLogicalExpression => [
+      operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
       leftOperand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
   }
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
-    createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperatorType.IS_NULL
+    createUnaryGraphObjectLogicalExpression => [
+      operator = UnaryGraphObjectLogicalOperatorType.IS_NULL
       leftOperand = variableBuilder.buildRelalgVariable(e.left)
       container = topLevelContainer
     ]
@@ -435,8 +435,8 @@ class RelalgBuilder {
     // TODO: add the pattern itself as an outer join
     val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
 
-    relationshipVariableExpressions.add(createUnaryNodeLogicalExpression => [
-      operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
+    relationshipVariableExpressions.add(createUnaryGraphObjectLogicalExpression => [
+      operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
       leftOperand = variableBuilder.buildVertexVariable(e.nodePattern)
       container = topLevelContainer
     ])
@@ -445,8 +445,8 @@ class RelalgBuilder {
       // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
       e.chain.map [
         val mapIt = it
-        createUnaryNodeLogicalExpression => [
-          operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
+        createUnaryGraphObjectLogicalExpression => [
+          operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
           leftOperand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
           container = topLevelContainer
         ]
@@ -456,8 +456,8 @@ class RelalgBuilder {
       // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
       e.chain.map [
         val mapIt = it
-        createUnaryNodeLogicalExpression => [
-          operator = UnaryNodeLogicalOperatorType.IS_NOT_NULL
+        createUnaryGraphObjectLogicalExpression => [
+          operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
           leftOperand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
           container = topLevelContainer
         ]

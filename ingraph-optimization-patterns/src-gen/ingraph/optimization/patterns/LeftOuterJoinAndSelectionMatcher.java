@@ -18,7 +18,6 @@ import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
 import relalg.GetEdgesOperator;
 import relalg.LeftOuterJoinOperator;
-import relalg.LogicalExpression;
 import relalg.Operator;
 import relalg.SelectionOperator;
 
@@ -56,14 +55,16 @@ import relalg.SelectionOperator;
  *   selectionOperator : SelectionOperator,
  *   leftOuterJoinOperator: LeftOuterJoinOperator,
  *   leftInputOperator: Operator,
- *   getEdgesOperator: GetEdgesOperator,
- *   conditionInternalExpression : LogicalExpression
+ *   getEdgesOperator: GetEdgesOperator
  * ) {
  *   find parentOperator(parentOperator, selectionOperator);
  *   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
  *   SelectionOperator.condition(selectionOperator, condition);
  *   UnaryLogicalExpression.operator(condition, ::NOT);
  *   UnaryLogicalExpression.leftOperand(condition, conditionInternalExpression);
+ *   
+ *   find variablesInLogicalExpression(conditionInternalExpression);
+ *   
  *   LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
  *   LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, getEdgesOperator);
  * }
@@ -113,8 +114,6 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   private final static int POSITION_GETEDGESOPERATOR = 4;
   
-  private final static int POSITION_CONDITIONINTERNALEXPRESSION = 5;
-  
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(LeftOuterJoinAndSelectionMatcher.class);
   
   /**
@@ -136,12 +135,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @return matches represented as a LeftOuterJoinAndSelectionMatch object.
    * 
    */
-  public Collection<LeftOuterJoinAndSelectionMatch> getAllMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
-    return rawGetAllMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression});
+  public Collection<LeftOuterJoinAndSelectionMatch> getAllMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+    return rawGetAllMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator});
   }
   
   /**
@@ -152,12 +150,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @return a match represented as a LeftOuterJoinAndSelectionMatch object, or null if no match is found.
    * 
    */
-  public LeftOuterJoinAndSelectionMatch getOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
-    return rawGetOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression});
+  public LeftOuterJoinAndSelectionMatch getOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+    return rawGetOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator});
   }
   
   /**
@@ -168,12 +165,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
-    return rawHasMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression});
+  public boolean hasMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+    return rawHasMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator});
   }
   
   /**
@@ -183,12 +179,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
-    return rawCountMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression});
+  public int countMatches(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+    return rawCountMatches(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator});
   }
   
   /**
@@ -198,12 +193,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression, final IMatchProcessor<? super LeftOuterJoinAndSelectionMatch> processor) {
-    rawForEachMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression}, processor);
+  public void forEachMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final IMatchProcessor<? super LeftOuterJoinAndSelectionMatch> processor) {
+    rawForEachMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator}, processor);
   }
   
   /**
@@ -214,13 +208,12 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression, final IMatchProcessor<? super LeftOuterJoinAndSelectionMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression}, processor);
+  public boolean forOneArbitraryMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final IMatchProcessor<? super LeftOuterJoinAndSelectionMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator}, processor);
   }
   
   /**
@@ -232,12 +225,11 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
    * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
-   * @param pConditionInternalExpression the fixed value of pattern parameter conditionInternalExpression, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public LeftOuterJoinAndSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
-    return LeftOuterJoinAndSelectionMatch.newMatch(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator, pConditionInternalExpression);
+  public LeftOuterJoinAndSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+    return LeftOuterJoinAndSelectionMatch.newMatch(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator);
   }
   
   /**
@@ -274,14 +266,13 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
+  public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
     return rawAccumulateAllValuesOfparentOperator(new Object[]{
     null, 
     pSelectionOperator, 
     pLeftOuterJoinOperator, 
     pLeftInputOperator, 
-    pGetEdgesOperator, 
-    pConditionInternalExpression
+    pGetEdgesOperator
     });
   }
   
@@ -319,14 +310,13 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<SelectionOperator> getAllValuesOfselectionOperator(final Operator pParentOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
+  public Set<SelectionOperator> getAllValuesOfselectionOperator(final Operator pParentOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
     return rawAccumulateAllValuesOfselectionOperator(new Object[]{
     pParentOperator, 
     null, 
     pLeftOuterJoinOperator, 
     pLeftInputOperator, 
-    pGetEdgesOperator, 
-    pConditionInternalExpression
+    pGetEdgesOperator
     });
   }
   
@@ -364,14 +354,13 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
+  public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
     return rawAccumulateAllValuesOfleftOuterJoinOperator(new Object[]{
     pParentOperator, 
     pSelectionOperator, 
     null, 
     pLeftInputOperator, 
-    pGetEdgesOperator, 
-    pConditionInternalExpression
+    pGetEdgesOperator
     });
   }
   
@@ -409,14 +398,13 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfleftInputOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression) {
+  public Set<Operator> getAllValuesOfleftInputOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final GetEdgesOperator pGetEdgesOperator) {
     return rawAccumulateAllValuesOfleftInputOperator(new Object[]{
     pParentOperator, 
     pSelectionOperator, 
     pLeftOuterJoinOperator, 
     null, 
-    pGetEdgesOperator, 
-    pConditionInternalExpression
+    pGetEdgesOperator
     });
   }
   
@@ -454,58 +442,12 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<GetEdgesOperator> getAllValuesOfgetEdgesOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final LogicalExpression pConditionInternalExpression) {
+  public Set<GetEdgesOperator> getAllValuesOfgetEdgesOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator) {
     return rawAccumulateAllValuesOfgetEdgesOperator(new Object[]{
     pParentOperator, 
     pSelectionOperator, 
     pLeftOuterJoinOperator, 
     pLeftInputOperator, 
-    null, 
-    pConditionInternalExpression
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for conditionInternalExpression.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<LogicalExpression> rawAccumulateAllValuesOfconditionInternalExpression(final Object[] parameters) {
-    Set<LogicalExpression> results = new HashSet<LogicalExpression>();
-    rawAccumulateAllValues(POSITION_CONDITIONINTERNALEXPRESSION, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for conditionInternalExpression.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<LogicalExpression> getAllValuesOfconditionInternalExpression() {
-    return rawAccumulateAllValuesOfconditionInternalExpression(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for conditionInternalExpression.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<LogicalExpression> getAllValuesOfconditionInternalExpression(final LeftOuterJoinAndSelectionMatch partialMatch) {
-    return rawAccumulateAllValuesOfconditionInternalExpression(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for conditionInternalExpression.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<LogicalExpression> getAllValuesOfconditionInternalExpression(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
-    return rawAccumulateAllValuesOfconditionInternalExpression(new Object[]{
-    pParentOperator, 
-    pSelectionOperator, 
-    pLeftOuterJoinOperator, 
-    pLeftInputOperator, 
-    pGetEdgesOperator, 
     null
     });
   }
@@ -513,7 +455,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   @Override
   protected LeftOuterJoinAndSelectionMatch tupleToMatch(final Tuple t) {
     try {
-    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (GetEdgesOperator) t.get(POSITION_GETEDGESOPERATOR), (LogicalExpression) t.get(POSITION_CONDITIONINTERNALEXPRESSION));
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (GetEdgesOperator) t.get(POSITION_GETEDGESOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -523,7 +465,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatch(final Object[] match) {
     try {
-    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR], (LogicalExpression) match[POSITION_CONDITIONINTERNALEXPRESSION]);
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -533,7 +475,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR], (LogicalExpression) match[POSITION_CONDITIONINTERNALEXPRESSION]);
+    	return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

@@ -75,14 +75,30 @@ pattern leftOuterJoinAndSelection(
   selectionOperator : SelectionOperator,
   leftOuterJoinOperator: LeftOuterJoinOperator,
   leftInputOperator: Operator,
-  getEdgesOperator: GetEdgesOperator,
-  conditionInternalExpression : LogicalExpression
+  getEdgesOperator: GetEdgesOperator
 ) {
   find parentOperator(parentOperator, selectionOperator);
   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
   SelectionOperator.condition(selectionOperator, condition);
   UnaryLogicalExpression.operator(condition, ::NOT);
   UnaryLogicalExpression.leftOperand(condition, conditionInternalExpression);
+  
+  find variablesInLogicalExpression(conditionInternalExpression);
+  
   LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
   LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, getEdgesOperator);
+}
+
+pattern variablesInLogicalExpression(expression : Expression) {
+  BinaryLogicalExpression.operator(expression, ::AND);
+  
+  find leftDeepTreeNodes+(expression, expression2);
+  
+  BinaryLogicalExpression.rightOperand(expression2, notNull);
+  UnaryGraphObjectLogicalExpression.operator(notNull, ::IS_NOT_NULL);
+}
+
+pattern leftDeepTreeNodes(parent : BinaryLogicalExpression, child : BinaryLogicalExpression) {
+  BinaryLogicalExpression.leftOperand(parent, child);
+  BinaryLogicalExpression(child);
 }

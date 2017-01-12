@@ -49,12 +49,12 @@ import relalg.TransitiveClosureOperator
 import relalg.UnaryArithmeticOperatorType
 import relalg.UnaryLogicalExpression
 import relalg.UnaryLogicalOperatorType
-import relalg.UnaryNodeLogicalExpression
-import relalg.UnaryNodeLogicalOperatorType
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VariableExpression
 import relalg.VertexVariable
+import relalg.UnaryGraphObjectLogicalOperatorType
+import relalg.UnaryGraphObjectLogicalExpression
 
 abstract class AbstractRelalgSerializer {
 
@@ -375,7 +375,7 @@ abstract class AbstractRelalgSerializer {
     }
   }
 
-  def convert(UnaryNodeLogicalOperatorType op) {
+  def convert(UnaryGraphObjectLogicalOperatorType op) {
     switch (op) {
       case IS_NOT_NULL: RelNullHandler.isNotNull
       case IS_NULL: RelNullHandler.isNull
@@ -459,8 +459,8 @@ abstract class AbstractRelalgSerializer {
     '''«exp.operator.convert» \left( «exp.leftOperand.convertExpression» \right)'''
   }
 
-  def dispatch String convertExpression(UnaryNodeLogicalExpression exp) {
-    '''«exp.leftOperand.convertExpression» «exp.operator.convert»'''
+  def dispatch String convertExpression(UnaryGraphObjectLogicalExpression exp) {
+    '''«exp.getLeftOperand.convertExpression» «exp.getOperator.convert»'''
   }
 
   def dispatch String convertExpression(ArithmeticComparisonExpression exp) {

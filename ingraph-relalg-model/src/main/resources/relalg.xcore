@@ -149,7 +149,10 @@ abstract class Variable extends NamedElement {
   boolean dontCare = "false"
 }
 
-abstract class ElementVariable extends Variable {
+abstract class GraphObjectVariable extends Variable {
+}
+
+abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
 }
 
@@ -161,7 +164,7 @@ class EdgeVariable extends ElementVariable {
   contains EdgeLabelSet edgeLabelSet // the edge must have *one* of these labels
 }
 
-class AttributeVariable extends Variable {
+class AttributeVariable extends GraphObjectVariable {
   refers ElementVariable element opposite attributes
 }
 
@@ -423,8 +426,8 @@ class UnaryLogicalExpression extends UnaryExpression, LogicalExpression {
 // for conditions like "vertexVariable IS NULL" or
 // "edgeVariable.attribute IS NOT NULL"
 // TODO: possibly later this can be generalized and merged with UnaryLogicalExpression
-class UnaryNodeLogicalExpression extends UnaryExpression, LogicalExpression {
-  UnaryNodeLogicalOperatorType operator
+class UnaryGraphObjectLogicalExpression extends UnaryExpression, LogicalExpression {
+  UnaryGraphObjectLogicalOperatorType operator
   refers Variable leftOperand
 }
 
@@ -508,7 +511,7 @@ enum UnaryLogicalOperatorType {
   IS_NOT_NULL
 }
 
-enum UnaryNodeLogicalOperatorType {
+enum UnaryGraphObjectLogicalOperatorType {
   IS_NULL
   IS_NOT_NULL
 }

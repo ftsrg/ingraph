@@ -7,7 +7,6 @@ import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import relalg.GetEdgesOperator;
 import relalg.LeftOuterJoinOperator;
-import relalg.LogicalExpression;
 import relalg.Operator;
 import relalg.SelectionOperator;
 
@@ -26,13 +25,12 @@ public abstract class LeftOuterJoinAndSelectionProcessor implements IMatchProces
    * @param pLeftOuterJoinOperator the value of pattern parameter leftOuterJoinOperator in the currently processed match
    * @param pLeftInputOperator the value of pattern parameter leftInputOperator in the currently processed match
    * @param pGetEdgesOperator the value of pattern parameter getEdgesOperator in the currently processed match
-   * @param pConditionInternalExpression the value of pattern parameter conditionInternalExpression in the currently processed match
    * 
    */
-  public abstract void process(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator, final LogicalExpression pConditionInternalExpression);
+  public abstract void process(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator);
   
   @Override
   public void process(final LeftOuterJoinAndSelectionMatch match) {
-    process(match.getParentOperator(), match.getSelectionOperator(), match.getLeftOuterJoinOperator(), match.getLeftInputOperator(), match.getGetEdgesOperator(), match.getConditionInternalExpression());
+    process(match.getParentOperator(), match.getSelectionOperator(), match.getLeftOuterJoinOperator(), match.getLeftInputOperator(), match.getGetEdgesOperator());
   }
 }

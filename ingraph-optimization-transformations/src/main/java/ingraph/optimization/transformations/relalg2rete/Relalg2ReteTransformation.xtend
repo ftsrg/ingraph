@@ -110,9 +110,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
       val selectionOperator = selectionOperator
       val leftOuterJoinOperator = leftOuterJoinOperator
       val leftInputOperator = leftInputOperator
-      val conditionInternalExpression = conditionInternalExpression
       val getEdgesOperator = getEdgesOperator
-      // TODO check conditionInternalExpression
       log('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
 
       val antiJoinOperator = createAntiJoinOperator => [

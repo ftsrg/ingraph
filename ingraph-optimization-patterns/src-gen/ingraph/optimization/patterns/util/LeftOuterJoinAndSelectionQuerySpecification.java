@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatch;
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.VariablesInLogicalExpressionQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +75,7 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
   
   @Override
   public LeftOuterJoinAndSelectionMatch newMatch(final Object... parameters) {
-    return LeftOuterJoinAndSelectionMatch.newMatch((relalg.Operator) parameters[0], (relalg.SelectionOperator) parameters[1], (relalg.LeftOuterJoinOperator) parameters[2], (relalg.Operator) parameters[3], (relalg.GetEdgesOperator) parameters[4], (relalg.LogicalExpression) parameters[5]);
+    return LeftOuterJoinAndSelectionMatch.newMatch((relalg.Operator) parameters[0], (relalg.SelectionOperator) parameters[1], (relalg.LeftOuterJoinOperator) parameters[2], (relalg.Operator) parameters[3], (relalg.GetEdgesOperator) parameters[4]);
   }
   
   /**
@@ -116,9 +117,7 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
     
     private final PParameter parameter_pGetEdgesOperator = new PParameter("getEdgesOperator", "relalg.GetEdgesOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "GetEdgesOperator")), PParameterDirection.INOUT);
     
-    private final PParameter parameter_pConditionInternalExpression = new PParameter("conditionInternalExpression", "relalg.LogicalExpression", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "LogicalExpression")), PParameterDirection.INOUT);
-    
-    private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pSelectionOperator, parameter_pLeftOuterJoinOperator, parameter_pLeftInputOperator, parameter_pGetEdgesOperator, parameter_pConditionInternalExpression);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pSelectionOperator, parameter_pLeftOuterJoinOperator, parameter_pLeftInputOperator, parameter_pGetEdgesOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -127,7 +126,7 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("parentOperator","selectionOperator","leftOuterJoinOperator","leftInputOperator","getEdgesOperator","conditionInternalExpression");
+      return Arrays.asList("parentOperator","selectionOperator","leftOuterJoinOperator","leftInputOperator","getEdgesOperator");
     }
     
     @Override
@@ -147,21 +146,19 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
       		PVariable var_leftOuterJoinOperator = body.getOrCreateVariableByName("leftOuterJoinOperator");
       		PVariable var_leftInputOperator = body.getOrCreateVariableByName("leftInputOperator");
       		PVariable var_getEdgesOperator = body.getOrCreateVariableByName("getEdgesOperator");
-      		PVariable var_conditionInternalExpression = body.getOrCreateVariableByName("conditionInternalExpression");
       		PVariable var_condition = body.getOrCreateVariableByName("condition");
+      		PVariable var_conditionInternalExpression = body.getOrCreateVariableByName("conditionInternalExpression");
       		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
       		new TypeConstraint(body, new FlatTuple(var_leftInputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		new TypeConstraint(body, new FlatTuple(var_getEdgesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetEdgesOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_conditionInternalExpression), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_selectionOperator, parameter_pSelectionOperator),
       		   new ExportedParameter(body, var_leftOuterJoinOperator, parameter_pLeftOuterJoinOperator),
       		   new ExportedParameter(body, var_leftInputOperator, parameter_pLeftInputOperator),
-      		   new ExportedParameter(body, var_getEdgesOperator, parameter_pGetEdgesOperator),
-      		   new ExportedParameter(body, var_conditionInternalExpression, parameter_pConditionInternalExpression)
+      		   new ExportedParameter(body, var_getEdgesOperator, parameter_pGetEdgesOperator)
       		));
       		//   find parentOperator(parentOperator, selectionOperator)
       		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_selectionOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
@@ -187,7 +184,9 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
       		PVariable var__virtual_4_ = body.getOrCreateVariableByName(".virtual{4}");
       		new TypeConstraint(body, new FlatTuple(var_condition, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryLogicalExpression", "leftOperand")));
       		new Equality(body, var__virtual_4_, var_conditionInternalExpression);
-      		//   LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator)
+      		//     find variablesInLogicalExpression(conditionInternalExpression)
+      		new PositivePatternCall(body, new FlatTuple(var_conditionInternalExpression), VariablesInLogicalExpressionQuerySpecification.instance().getInternalQueryRepresentation());
+      		//     LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator)
       		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
       		PVariable var__virtual_5_ = body.getOrCreateVariableByName(".virtual{5}");
       		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator, var__virtual_5_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
