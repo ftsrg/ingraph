@@ -52,6 +52,15 @@ class ExpressionParserTest extends WordSpec {
       assert(func(Vector(2)))
       assert(!func(Vector(1)))
     }
+
+    "parse complicated routesensor expression" in {
+      val op = getSelectionOperator("""MATCH (n) WHERE n.a is null and n.e is not null RETURN n""")
+      val lookup = new SchemaToMap().schemaToMap(op)
+      println(lookup)
+      val func = ExpressionParser.parse(op.getCondition, lookup)
+      assert(func(Vector(null, 1)))
+      assert(!func(Vector(1, 1)))
+    }
   }
 
 }
