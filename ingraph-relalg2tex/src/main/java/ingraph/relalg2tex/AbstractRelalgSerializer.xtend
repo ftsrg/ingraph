@@ -23,6 +23,7 @@ import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
+import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
@@ -38,7 +39,6 @@ import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
-import relalg.ReturnableElement
 import relalg.SelectionOperator
 import relalg.SortAndTopOperator
 import relalg.SortEntry
@@ -47,14 +47,14 @@ import relalg.StringLiteral
 import relalg.TopOperator
 import relalg.TransitiveClosureOperator
 import relalg.UnaryArithmeticOperatorType
+import relalg.UnaryGraphObjectLogicalExpression
+import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalExpression
 import relalg.UnaryLogicalOperatorType
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VariableExpression
 import relalg.VertexVariable
-import relalg.UnaryGraphObjectLogicalOperatorType
-import relalg.UnaryGraphObjectLogicalExpression
 
 abstract class AbstractRelalgSerializer {
 
@@ -302,9 +302,9 @@ abstract class AbstractRelalgSerializer {
   /**
    * list
    */
-  def returnableElementList(List<ReturnableElement> elements) {
+  def returnableElementList(List<ExpressionVariable> elements) {
     '''«elements.map[
-      convertExpression(expression) + if (alias === null) "" else '''\assign \var{«alias»}'''
+      convertExpression(expression) + if (dontCare || hasInferredName) "" else '''\assign \var{«name»}'''
     ].join(",~")»'''
   }
 

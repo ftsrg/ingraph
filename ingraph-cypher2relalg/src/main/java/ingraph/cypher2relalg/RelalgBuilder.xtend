@@ -58,10 +58,10 @@ import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.function.Function
-import relalg.UnaryGraphObjectLogicalOperatorType
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -227,9 +227,9 @@ class RelalgBuilder {
           val variable = vEl.get(key)
           if (!variable.dontCare) {
             elements.add(
-              createReturnableElement => [
-                expression = variableBuilder.buildVariableExpression(variable)
-              ]
+              variableBuilder.buildExpressionVariable(
+                variableBuilder.buildVariableExpression(variable)
+              )
             )
           }
         ]
@@ -239,9 +239,9 @@ class RelalgBuilder {
           val variable = eEl.get(key)
           if (!variable.dontCare) {
             elements.add(
-              createReturnableElement => [
-                expression = variableBuilder.buildVariableExpression(variable)
-              ]
+              variableBuilder.buildExpressionVariable(
+                variableBuilder.buildVariableExpression(variable)
+              )
             )
           }
         ]
@@ -252,10 +252,10 @@ class RelalgBuilder {
       elements.addAll(
         // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
         returnBody.returnItems.get(0).items.map [ returnItem |
-          createReturnableElement => [
-            expression = buildRelalgExpression(returnItem.expression)
-            alias = returnItem.alias?.name
-          ]
+          variableBuilder.buildExpressionVariable(
+            returnItem.alias?.name
+          , buildRelalgExpression(returnItem.expression)
+          )
         ]
       )
     ]

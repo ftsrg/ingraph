@@ -171,8 +171,11 @@ class AttributeVariable extends GraphObjectVariable {
 class ListVariable extends Variable {
 }
 
-class ReturnableElement {
-  String alias
+/**
+ * Represents a named expression like returned elements.
+ */
+class ExpressionVariable extends Variable {
+  boolean hasInferredName
   refers Expression expression
 }
 
@@ -218,7 +221,7 @@ class SelectionOperator extends UnaryOperator {
 }
 
 class ProjectionOperator extends UnaryOperator {
-  contains ReturnableElement[] elements
+  refers ExpressionVariable[] elements
   int[] tupleElements
 }
 

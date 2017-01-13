@@ -2,8 +2,8 @@ package ingraph.cypher2relalg.util
 
 import relalg.AttributeVariable
 import relalg.Expression
+import relalg.ExpressionVariable
 import relalg.NamedElement
-import relalg.ReturnableElement
 import relalg.VariableExpression
 
 /**
@@ -15,9 +15,9 @@ import relalg.VariableExpression
  */
 class ExpressionNameInferencer {
   static var n=0;
-  def dispatch static String inferName(ReturnableElement e, IngraphLogger logger) {
-    if (e.alias != null) {
-      e.alias
+  def dispatch static String inferName(ExpressionVariable e, IngraphLogger logger) {
+    if (!e.dontCare) {
+      e.name
     } else {
       inferName(e.expression, logger)
     }

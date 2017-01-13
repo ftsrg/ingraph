@@ -2,10 +2,12 @@ package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
+import ingraph.cypher2relalg.factories.ExpressionVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
+import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.IngraphLogger
 import java.util.ArrayList
 import java.util.List
@@ -17,6 +19,8 @@ import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import relalg.EdgeLabel
 import relalg.EdgeVariable
+import relalg.Expression
+import relalg.ExpressionVariable
 import relalg.LabelSetStatus
 import relalg.RelalgContainer
 import relalg.RelalgFactory
@@ -41,6 +45,8 @@ class VariableBuilder {
   val VertexVariableFactory vertexVariableFactory
   @Accessors(PUBLIC_GETTER)
   val EdgeVariableFactory edgeVariableFactory
+  @Accessors(PUBLIC_GETTER)
+  val ExpressionVariableFactory expressionVariableFactory
 
   val VertexLabelFactory vertexLabelFactory
   val EdgeLabelFactory edgeLabelFactory
@@ -58,6 +64,7 @@ class VariableBuilder {
 
     this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
     this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+    this.expressionVariableFactory = new ExpressionVariableFactory(this.topLevelContainer)
     this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
     this.edgeLabelFactory = new EdgeLabelFactory(this.topLevelContainer)
 
@@ -80,6 +87,7 @@ class VariableBuilder {
 
     this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
     this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+    this.expressionVariableFactory = new ExpressionVariableFactory(this.topLevelContainer)
     this.vertexLabelFactory = vertexLabelFactory
     this.edgeLabelFactory = edgeLabelFactory
 
@@ -122,6 +130,8 @@ class VariableBuilder {
 
   def dispatch Variable buildRelalgVariable(VariableRef varRef) {
     switch varRef {
+      // TODO: expression variables from return has the highest priority in name resolution for order by,
+      // but they don't play a role when building later return items
       case vertexVariableFactory.hasElement(varRef.variableRef.name) &&
         edgeVariableFactory.hasElement(varRef.variableRef.name): {
         unrecoverableError('''Variable name ambigous: «varRef.variableRef.name»''')
@@ -157,6 +167,19 @@ class VariableBuilder {
       vertexVariable.ensureLabel(vertexLabelFactory.createElement(it.labelName))
     ]
     vertexVariable
+  }
+
+  def ExpressionVariable buildExpressionVariable(String name, Expression expression) {
+    expressionVariableFactory.createElement(name, expression) => [
+      hasInferredName = false
+    ]
+  }
+
+  def ExpressionVariable buildExpressionVariable(Expression expression) {
+    val name = ExpressionNameInferencer.inferName(expression, logger)
+    buildExpressionVariable(name, expression) => [
+      hasInferredName = true
+    ]
   }
 
   def protected ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
