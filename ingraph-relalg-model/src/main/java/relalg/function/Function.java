@@ -15,6 +15,8 @@ import static relalg.function.CypherType.RELATIONSHIP;
 import static relalg.function.CypherType.STRING;
 
 public enum Function {
+  //                                             input         output     min.
+  //             category                        type          type      arity
   COLLECT       (FunctionCategory.AGGREGATION,   ANY,          LIST_TYPE, 1),
 
   AVG           (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
