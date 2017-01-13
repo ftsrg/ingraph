@@ -61,7 +61,7 @@ import relalg.SelectionOperator;
  *   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
  *   SelectionOperator.condition(selectionOperator, condition);
  *   UnaryLogicalExpression.operator(condition, ::NOT);
- *   UnaryLogicalExpression.leftOperand(condition, conditionInternalExpression);
+ *   UnaryLogicalExpression.operand(condition, conditionInternalExpression);
  *   
  *   find variablesInLogicalExpression(conditionInternalExpression);
  *   

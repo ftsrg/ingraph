@@ -179,10 +179,10 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
       		PVariable var__virtual_3_ = body.getOrCreateVariableByName(".virtual{3}");
       		new TypeConstraint(body, new FlatTuple(var_condition, var__virtual_3_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryLogicalExpression", "operator")));
       		new Equality(body, var__virtual_3_, var__virtual_2_);
-      		//   UnaryLogicalExpression.leftOperand(condition, conditionInternalExpression)
+      		//   UnaryLogicalExpression.operand(condition, conditionInternalExpression)
       		new TypeConstraint(body, new FlatTuple(var_condition), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "UnaryLogicalExpression")));
       		PVariable var__virtual_4_ = body.getOrCreateVariableByName(".virtual{4}");
-      		new TypeConstraint(body, new FlatTuple(var_condition, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryLogicalExpression", "leftOperand")));
+      		new TypeConstraint(body, new FlatTuple(var_condition, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryLogicalExpression", "operand")));
       		new Equality(body, var__virtual_4_, var_conditionInternalExpression);
       		//     find variablesInLogicalExpression(conditionInternalExpression)
       		new PositivePatternCall(body, new FlatTuple(var_conditionInternalExpression), VariablesInLogicalExpressionQuerySpecification.instance().getInternalQueryRepresentation());

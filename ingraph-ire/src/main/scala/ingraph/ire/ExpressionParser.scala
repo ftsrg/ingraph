@@ -11,18 +11,18 @@ object ExpressionParser {
         import UnaryLogicalOperatorType._
         exp.getOperator match {
           case NOT => (t: Tuple) =>
-            val operand: (Tuple => Boolean) = parse(exp.getLeftOperand, lookup)
+            val operand: (Tuple => Boolean) = parse(exp.getOperand, lookup)
             !operand(t)
           case IS_NULL =>
-            def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
+            def left: (Tuple) => Any = parseComparable(exp.getOperand.asInstanceOf[ComparableExpression], _, lookup)
             left(_) == null
           case IS_NOT_NULL =>
-            def left: (Tuple) => Any = parseComparable(exp.getLeftOperand.asInstanceOf[ComparableExpression], _, lookup)
+            def left: (Tuple) => Any = parseComparable(exp.getOperand.asInstanceOf[ComparableExpression], _, lookup)
             left(_) != null
         }
       case exp: UnaryGraphObjectLogicalExpression =>
         import UnaryGraphObjectLogicalOperatorType._
-        def left: (Tuple) => Any = parseVariable(exp.getLeftOperand, _, lookup)
+        def left: (Tuple) => Any = parseVariable(exp.getOperand, _, lookup)
         exp.getOperator match {
           case IS_NULL =>
             left(_) == null
