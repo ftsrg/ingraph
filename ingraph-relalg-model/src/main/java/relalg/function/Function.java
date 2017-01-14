@@ -14,103 +14,117 @@ import static relalg.function.CypherType.PATH;
 import static relalg.function.CypherType.RELATIONSHIP;
 import static relalg.function.CypherType.STRING;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Function {
-  //                                             input         output     min.
-  //             category                        type          type      arity
-  COLLECT       (FunctionCategory.AGGREGATION,   ANY,          LIST_TYPE, 1),
+  //                                             input            output     min.
+  //             category                        types            type      arity
+  AVG           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  COUNT         (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  MAX           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  MIN           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  SUM           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
 
-  AVG           (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
-  COUNT         (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
-  MAX           (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
-  MIN           (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
-  SUM           (FunctionCategory.AGGREGATION,   NUMBER,       NUMBER,    1),
+  STDDEV        (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
+  STDDEVP       (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
+  PERCENTILECONT(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
+  PERCENTILEDISC(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
 
-  STDDEV        (FunctionCategory.STATISTICAL,   NUMBER,       NUMBER,    1),
-  STDDEVP       (FunctionCategory.STATISTICAL,   NUMBER,       NUMBER,    1),
-  PERCENTILECONT(FunctionCategory.STATISTICAL,   NUMBER,       NUMBER,    1),
-  PERCENTILEDISC(FunctionCategory.STATISTICAL,   NUMBER,       NUMBER,    1),
+  TOBOOLEAN     (FunctionCategory.CONVERSION,    l(ANY),          BOOLEAN,   1),
+  TOINTEGER     (FunctionCategory.CONVERSION,    l(ANY),          INTEGER,   1),
+  TOINT         (FunctionCategory.CONVERSION,    l(ANY),          INTEGER,   1), // toInt( expression )
+  TOFLOAT       (FunctionCategory.CONVERSION,    l(ANY),          FLOAT,     1), // toFloat( expression )
+  TOSTRING      (FunctionCategory.STRING,        l(ANY),          STRING,    1), // toString( expression )
 
-  TOBOOLEAN     (FunctionCategory.CONVERSION,    ANY,          BOOLEAN,   1),
-  TOINTEGER     (FunctionCategory.CONVERSION,    ANY,          INTEGER,   1),
-  TOINT         (FunctionCategory.CONVERSION,    ANY,          INTEGER,   1), // toInt( expression )
-  TOFLOAT       (FunctionCategory.CONVERSION,    ANY,          FLOAT,     1), // toFloat( expression )
-  TOSTRING      (FunctionCategory.STRING,        ANY,          STRING,    1), // toString( expression )
+  RELATIONSHIPS (FunctionCategory.LIST,          l(PATH),         LIST_TYPE, 1), // relationships( path )
+  TAIL          (FunctionCategory.LIST,          l(LIST_TYPE),    LIST_TYPE, 1), // tail( expression )
+  KEYS          (FunctionCategory.LIST,          l(ELEMENT),      LIST_TYPE, 1), // keys( property-container )
+  LABELS        (FunctionCategory.LIST,          l(NODE),         LIST_TYPE, 1), // labels( node )
+  NODES         (FunctionCategory.LIST,          l(PATH),         LIST_TYPE, 1), // nodes( path )
+  RANGE         (FunctionCategory.LIST,          l(INTEGER,
+		                                           INTEGER,
+		                                           INTEGER),      LIST_TYPE, 1), // range( start, end [, step] )
 
-  RELATIONSHIPS (FunctionCategory.LIST,          PATH,         LIST_TYPE, 1), // relationships( path )
-  TAIL          (FunctionCategory.LIST,          LIST_TYPE,    LIST_TYPE, 1), // tail( expression )
-  KEYS          (FunctionCategory.LIST,          ELEMENT,      LIST_TYPE, 1), // keys( property-container )
-  LABELS        (FunctionCategory.LIST,          NODE,         LIST_TYPE, 1), // labels( node )
-  NODES         (FunctionCategory.LIST,          PATH,         LIST_TYPE, 1), // nodes( path )
-  RANGE         (FunctionCategory.LIST,          INTEGER,      LIST_TYPE, 1), // range( start, end [, step] )
+  E             (FunctionCategory.LOGARITHMIC,   l(NONE),         FLOAT,     0), // e()
+  EXP           (FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,     1), // e( expression )
+  LOG           (FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,     1), // log( expression )
+  LOG10         (FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,     1), // log10( expression )
+  SQRT          (FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,     1), // sqrt( expression )
 
-  E             (FunctionCategory.LOGARITHMIC,   NONE,         FLOAT,     0), // e()
-  EXP           (FunctionCategory.LOGARITHMIC,   NUMBER,       FLOAT,     1), // e( expression )
-  LOG           (FunctionCategory.LOGARITHMIC,   NUMBER,       FLOAT,     1), // log( expression )
-  LOG10         (FunctionCategory.LOGARITHMIC,   NUMBER,       FLOAT,     1), // log10( expression )
-  SQRT          (FunctionCategory.LOGARITHMIC,   NUMBER,       FLOAT,     1), // sqrt( expression )
+  ABS           (FunctionCategory.NUMERIC,       l(NUMBER),       NUMBER,    1), // abs( expression )
 
-  ABS           (FunctionCategory.NUMERIC,       NUMBER,       NUMBER,    1), // abs( expression )
+  CEIL          (FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,   1), // ceil( expression )
+  FLOOR         (FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,   1), // floor( expression )
+  ROUND         (FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,   1), // round( expression )
+  SIGN          (FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,   1), // sign( expression )
 
-  CEIL          (FunctionCategory.NUMERIC,       NUMBER,       INTEGER,   1), // ceil( expression )
-  FLOOR         (FunctionCategory.NUMERIC,       NUMBER,       INTEGER,   1), // floor( expression )
-  ROUND         (FunctionCategory.NUMERIC,       NUMBER,       INTEGER,   1), // round( expression )
-  SIGN          (FunctionCategory.NUMERIC,       NUMBER,       INTEGER,   1), // sign( expression )
+  RAND          (FunctionCategory.NUMERIC,       l(NONE),         FLOAT,     0), // rand()
 
-  RAND          (FunctionCategory.NUMERIC,       NONE,         FLOAT,     0), // rand()
+  EXISTS        (FunctionCategory.PREDICATE,     l(ANY),          BOOLEAN,   1),
 
-  EXISTS        (FunctionCategory.PREDICATE,     ANY,          BOOLEAN,   1),
+  COALESCE      (FunctionCategory.SCALAR,        l(ANY),          ANY,       1), // coalesce( expression [, expression]* )
+  STARTNODE     (FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,      1), // startNode( relationship )
+  ENDNODE       (FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,      1), // endNode( relationship )
+  HEAD          (FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,       1), // head( expression )
+  LAST          (FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,       1), // last( expression )
+  LENGTH        (FunctionCategory.SCALAR,        l(ANY),          INTEGER,   1), // length( path ), length( string )
+  PROPERTIES    (FunctionCategory.SCALAR,        l(ELEMENT),      MAP,       1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
+  SIZE          (FunctionCategory.SCALAR,        l(LIST_TYPE),    INTEGER,   1), // size( list ), size( pattern expression )
+  TYPE          (FunctionCategory.SCALAR,        l(RELATIONSHIP), STRING,    1), // type( relationship )
+  ID            (FunctionCategory.SCALAR,        l(ELEMENT),      INTEGER,   1), // id( property-container )
 
-  COALESCE      (FunctionCategory.SCALAR,        ANY,          ANY,       1), // coalesce( expression [, expression]* )
-  STARTNODE     (FunctionCategory.SCALAR,        RELATIONSHIP, NODE,      1), // startNode( relationship )
-  ENDNODE       (FunctionCategory.SCALAR,        RELATIONSHIP, NODE,      1), // endNode( relationship )
-  HEAD          (FunctionCategory.SCALAR,        LIST_TYPE,    ANY,       1), // head( expression )
-  LAST          (FunctionCategory.SCALAR,        LIST_TYPE,    ANY,       1), // last( expression )
-  LENGTH        (FunctionCategory.SCALAR,        ANY,          INTEGER,   1), // length( path ), length( string )
-  PROPERTIES    (FunctionCategory.SCALAR,        ELEMENT,      MAP,       1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
-  SIZE          (FunctionCategory.SCALAR,        LIST_TYPE,    INTEGER,   1), // size( list ), size( pattern expression )
-  TYPE          (FunctionCategory.SCALAR,        RELATIONSHIP, STRING,    1), // type( relationship )
-  ID            (FunctionCategory.SCALAR,        ELEMENT,      INTEGER,   1), // id( property-container )
+  LEFT          (FunctionCategory.STRING,        l(STRING,
+		                                           INTEGER),      STRING,    2), // left( original, length )
+  RIGHT         (FunctionCategory.STRING,        l(STRING,
+		                                           INTEGER),      STRING,    2), // right( original, length )
+  LTRIM         (FunctionCategory.STRING,        l(STRING),       STRING,    1), // ltrim( original )
+  RTRIM         (FunctionCategory.STRING,        l(STRING),       STRING,    1), // rtrim( original )
+  TRIM          (FunctionCategory.STRING,        l(STRING),       STRING,    1), // trim( original )
+  REPLACE       (FunctionCategory.STRING,        l(STRING,
+		                                           STRING,
+		                                           STRING),       STRING,    3), // replace( original, search, replace )
+  REVERSE       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // reverse( original )
+  SUBSTRING     (FunctionCategory.STRING,        l(STRING,
+		                                           STRING,
+		                                           INTEGER),      STRING,    2), // substring( original, start [, length] )
+  TOLOWER       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // lower( original )
+  TOUPPER       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // upper( original )
 
-  LEFT          (FunctionCategory.STRING,        STRING,       STRING,    2), // left( original, length )
-  RIGHT         (FunctionCategory.STRING,        STRING,       STRING,    2), // right( original, length )
-  LTRIM         (FunctionCategory.STRING,        STRING,       STRING,    1), // ltrim( original )
-  RTRIM         (FunctionCategory.STRING,        STRING,       STRING,    1), // rtrim( original )
-  TRIM          (FunctionCategory.STRING,        STRING,       STRING,    1), // trim( original )
-  REPLACE       (FunctionCategory.STRING,        STRING,       STRING,    3), // replace( original, search, replace )
-  REVERSE       (FunctionCategory.STRING,        STRING,       STRING,    1), // reverse( original )
-  SUBSTRING     (FunctionCategory.STRING,        ANY,          STRING,    2), // substring( original, start [, length] )
-  TOLOWER       (FunctionCategory.STRING,        STRING,       STRING,    1), // lower( original )
-  TOUPPER       (FunctionCategory.STRING,        STRING,       STRING,    1), // upper( original )
+  STARTS_WITH   (FunctionCategory.STRING,        l(STRING,
+		                                           STRING),       BOOLEAN,   2), // STARTS_WITH(string, prefixString)
+  ENDS_WITH     (FunctionCategory.STRING,        l(STRING,
+		                                           STRING),       BOOLEAN,   2), // ENDS_WITH(string, postfixString)
+  CONTAINS      (FunctionCategory.STRING,        l(STRING,
+		                                           STRING),       BOOLEAN,   2), // CONTAINS(string, middleString)
 
-  STARTS_WITH   (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // STARTS_WITH(string, prefixString)
-  ENDS_WITH     (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // ENDS_WITH(string, postfixString)
-  CONTAINS      (FunctionCategory.STRING,        STRING,       BOOLEAN,   2), // CONTAINS(string, middleString)
+  SPLIT         (FunctionCategory.STRING,        l(STRING,
+		                                           STRING),       LIST_TYPE, 2), // split( original, splitPattern )
 
-  SPLIT         (FunctionCategory.STRING,        STRING,       LIST_TYPE, 1), // split( original, splitPattern )
+  ACOS          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // acos( expression )
+  ASIN          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // asin( expression )
+  ATAN          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // atan( expression )
+  ATAN2         (FunctionCategory.TRIGONOMETRIC, l(NUMBER,
+		                                           NUMBER),       FLOAT,     2), // atan2( expression1, expression2 )
+  COS           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // cos( expression )
+  COT           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // cot( expression )
+  SIN           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // sin( expression )
+  TAN           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // tan( expression )
 
-  ACOS          (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // acos( expression )
-  ASIN          (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // asin( expression )
-  ATAN          (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // atan( expression )
-  ATAN2         (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     2), // atan2( expression1, expression2 )
-  COS           (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // cos( expression )
-  COT           (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // cot( expression )
-  SIN           (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // sin( expression )
-  TAN           (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // tan( expression )
+  DEGREES       (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // degrees( expression )
+  RADIANS       (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // radians( expression )
 
-  DEGREES       (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // degrees( expression )
-  RADIANS       (FunctionCategory.TRIGONOMETRIC, NUMBER,       FLOAT,     1), // radians( expression )
-
-  PI            (FunctionCategory.TRIGONOMETRIC, NONE,         FLOAT,     0), // pi()
+  PI            (FunctionCategory.TRIGONOMETRIC, l(NONE),         FLOAT,     0), // pi()
 ;
 
   private final FunctionCategory category;
-  private final CypherType inputType;
+  private final List<CypherType> inputTypes;
   private final CypherType outputType;
   private final int minimumArity;
 
-  Function(final FunctionCategory category, final CypherType inputType, final CypherType outputType, final int minimumArity) {
+  Function(final FunctionCategory category, final List<CypherType> inputTypes, final CypherType outputType, final int minimumArity) {
     this.category = category;
-    this.inputType = inputType;
+    this.inputTypes = inputTypes;
     this.outputType = outputType;
     this.minimumArity = minimumArity;
   }
@@ -119,8 +133,8 @@ public enum Function {
     return this.category;
   }
 
-  public CypherType getInputType() {
-	return inputType;
+  public List<CypherType> getInputTypes() {
+  return inputTypes;
   }
 
   public CypherType getOutputType() {
@@ -129,6 +143,10 @@ public enum Function {
 
   public int getMinimumArity() {
     return minimumArity;
+  }
+
+  public static List<CypherType> l(CypherType... l) {
+    return Arrays.asList(l);
   }
 
 }
