@@ -105,7 +105,7 @@ class TupleInferencer {
    * extract extra variables required by unary operators
    */
   def dispatch extractUnaryOperatorExtraVariables(ProjectionOperator op) {
-    op.elements.map[expression].filter(AttributeVariable).toList
+    op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
   }
 
   def dispatch extractUnaryOperatorExtraVariables(GroupingOperator op) {
