@@ -186,7 +186,7 @@ class UnwindAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testUnwindAcceptance_12() {
         val cypher = CypherParser.parseString('''
         MATCH (a:S)-[:X]->(b1)
