@@ -36,10 +36,10 @@ See also the [Standard constructs](standard-constructs.md) document.
 
 #### Summary
 
-* The [`FOREACH`](https://neo4j.com/docs/developer-manual/current/cypher/#query-foreach) clause is not included (I guess it is quite difficult to implement).
-* The [`CREATE UNIQUE`](https://neo4j.com/docs/developer-manual/current/cypher/#query-create-unique) construct is not included in openCypher, as indexing and constraints are not in the scope of OpenCypher.
+* The [`FOREACH`](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-foreach) clause is not included (I guess it is quite difficult to implement).
+* The [`CREATE UNIQUE`](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-create-unique) construct is not included in openCypher, as indexing and constraints are not in the scope of OpenCypher.
 * The `START` clause is deprecated since Neo4j 2.x.
-* [`LOAD CSV`](https://neo4j.com/docs/developer-manual/current/cypher/#query-load-csv) is not included, as it is more of a technical detail.
+* [`LOAD CSV`](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-load-csv) is not included, as it is more of a technical detail.
 
 ### Sub-clauses
 
@@ -125,18 +125,18 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 
 #### Standard
 
-* [List comprehensions](https://neo4j.com/docs/developer-manual/current/cypher/#_list_comprehension)
+* [List comprehensions](https://neo4j.com/docs/developer-manual/3.0/cypher/#_list_comprehension)
 * [Pattern comprehensions](https://github.com/neo4j/neo4j/commit/c067fd918c23aebb156f4cec268e134b1f61c08e#diff-726176c1183002e63d5bb9361f5e1c52R114)
 * Parameters with new syntax (`$`)
 * Literals
-* [Aggregation functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-clause)
+* [Aggregation functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-clause)
   * `avg()`
   * `collect()`
   * `count()`
   * `max()`
   * `min()`
   * `sum()`
-* [Statistical functions](https://neo4j.com/docs/developer-manual/current/cypher/#_statistics)
+* [Statistical functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#_statistics)
   * `stdDev()`
   * `stdDevP()`
 
@@ -144,11 +144,11 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 
 * Parameters with old syntax (`{}`)
 * `CASE`
-* [List functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-list)
+* [List functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-list)
   * `extract`
   * `filter`
   * `reduce`
-* [Predicate functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-predicates)
+* [Predicate functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-predicates)
   * `any`
   * `all`
   * `none`
@@ -156,19 +156,19 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 
 #### Summary
 
-* [`CASE`](https://neo4j.com/docs/developer-manual/current/cypher/#query-syntax-case), implements a switch-case construct. This would be difficult to implement in a generic way.
-* [`extract`](https://neo4j.com/docs/developer-manual/current/cypher/#functions-extract) extracts a single property from a list of nodes/relationships. [Why was it excluded from the standard?]
-* [`filter`](https://neo4j.com/docs/developer-manual/current/cypher/#functions-filter) performs a filtering according to a boolean predicate. [Why was it excluded from the standard?]
-* [`reduce`](https://neo4j.com/docs/developer-manual/current/cypher/#functions-reduce) is not standard as it has very high expressive power.
-* Note that the [`exists` function](https://neo4j.com/docs/developer-manual/current/cypher/#query-function) is standard (listed in the [Functions](#Functions) section).
+* [`CASE`](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-syntax-case), implements a switch-case construct. This would be difficult to implement in a generic way.
+* [`extract`](https://neo4j.com/docs/developer-manual/3.0/cypher/#functions-extract) extracts a single property from a list of nodes/relationships. [Why was it excluded from the standard?]
+* [`filter`](https://neo4j.com/docs/developer-manual/3.0/cypher/#functions-filter) performs a filtering according to a boolean predicate. [Why was it excluded from the standard?]
+* [`reduce`](https://neo4j.com/docs/developer-manual/3.0/cypher/#functions-reduce) is not standard as it has very high expressive power.
+* Note that the [`exists` function](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-function) is standard (listed in the [Functions](#Functions) section).
 
 ### Functions
 
 #### Standard
 
-* [Predicate functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-predicates)
+* [Predicate functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-predicates)
   * `exists()`
-* [Scalar functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-scalar)
+* [Scalar functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-scalar)
   * `coalesce()`
   * `endNode()`
   * `head()`
@@ -179,27 +179,27 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
   * `startNode()`
   * `type()`
   * `toFloat()`
-* [List functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-list)
+* [List functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-list)
   * `relationships()`
   * `tail()`
   * `keys()`
   * `labels()`
   * `nodes()`
   * `range()`
-* [Numeric functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-numeric)
+* [Numeric functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-numeric)
   * `abs()`
   * `ceil()`
   * `floor()`
   * `rand()`
   * `round()`
   * `sign()`
-* [Logarithmic functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-logarithmic)
+* [Logarithmic functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-logarithmic)
   * `e()`
   * `exp()`
   * `log()`
   * `log10()`
   * `sqrt()`
-* [Trigonometric functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-trigonometric)
+* [Trigonometric functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-trigonometric)
   * `acos()`
   * `asin()`
   * `atan()`
@@ -211,7 +211,7 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
   * `radians()`
   * `sin()`
   * `tan()`
-* [String functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-string)
+* [String functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-string)
   * `left()`
   * `lTrim()`
   * `trim()`
@@ -224,7 +224,7 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
   * `toLower()`
   * `toString()`
   * `toUpper()`
-* [Statistical functions](https://neo4j.com/docs/developer-manual/current/cypher/#_statistics)
+* [Statistical functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#_statistics)
   * `percentileCont()`
   * `percentileDisc()`
 * Not included in Cypher:
@@ -233,16 +233,19 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 
 #### Legacy
 
-* [Scalar functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-scalar)
+* [Scalar functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-scalar)
   * `timestamp()`
   * `id()`
-* [List functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-list)
+* [List functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-list)
   * `rels()` (called `relationships` in Cypher)
-* [Trigonometric functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-trigonometric)
+* [Trigonometric functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-trigonometric)
   * `haversin()`
-* [String functions](https://neo4j.com/docs/developer-manual/current/cypher/#query-functions-string)
+* [String functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-string)
   * `lower()`
   * `upper()`
+* [Shortesth path functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-shortest-path). Note that these functions expect a pattern and return a path (`shortestPath()`) or a collection of paths (`allShortestPaths()`).
+  * `shortestPath()`
+  * `allShortestPaths()`
 * Not included in Cypher:
   * `distance()`
   * `point()`
