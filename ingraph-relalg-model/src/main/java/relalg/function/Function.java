@@ -149,4 +149,7 @@ public enum Function {
     return Arrays.asList(l);
   }
 
+  public boolean isAggregation() {
+	return category == FunctionCategory.AGGREGATION;
+  }
 }

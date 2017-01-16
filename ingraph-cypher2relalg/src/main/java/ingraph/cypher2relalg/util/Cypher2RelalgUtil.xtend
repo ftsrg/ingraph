@@ -1,18 +1,31 @@
 package ingraph.cypher2relalg.util
 
 import java.util.Iterator
+import java.util.LinkedList
 import java.util.List
+import java.util.Set
+import relalg.ArithmeticOperationExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
+import relalg.EmptyListExpression
 import relalg.ExpandOperator
+import relalg.Expression
+import relalg.ExpressionVariable
+import relalg.FunctionExpression
 import relalg.GetVerticesOperator
+import relalg.GraphObjectVariable
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
+import relalg.ListExpression
+import relalg.Literal
 import relalg.LogicalExpression
 import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.UnaryArithmeticOperationExpression
 import relalg.UnionOperator
+import relalg.Variable
+import relalg.VariableExpression
 
 class Cypher2RelalgUtil {
 
@@ -102,5 +115,60 @@ class Cypher2RelalgUtil {
     }
 
     lastAlgebraExpression
+  }
+
+  /**
+   * Finds the variables in expression e that are outside of grouping functions
+   * and appends them to the groupingVariables set.
+   *
+   * This is not multithreaded-safe, so don't put it in map, forEach etc. call.
+   *
+   * @param e the expression to process
+   * @param groupingVariables set holding the grouping variables. This set will be extended in-place.
+   * @param seenAggregate indicates if previously we have seen any aggregate function
+   *
+   * @return boolean value indicating if there were an aggregate function. It can be expressed as: "seenAggregate || (e contains aggregate function call)"
+   */
+  def accumulateGroupingVariables(Expression e, Set<Variable> groupingVariables, boolean seenAggregate) {
+    var effectivelySeenAggregate = seenAggregate
+    val fifo = new LinkedList<Expression>
+
+    fifo.add(e)
+    while (!fifo.empty) {
+      val el = fifo.removeFirst
+      switch (el) {
+        VariableExpression: {
+          switch (myVar: el.variable) {
+            GraphObjectVariable: groupingVariables.add(myVar)
+            ExpressionVariable: fifo.add(myVar.expression)
+          }
+        }
+        ArithmeticOperationExpression: {
+          fifo.add(el.leftOperand)
+          fifo.add(el.rightOperand)
+        }
+        UnaryArithmeticOperationExpression: {
+          fifo.add(el.operand)
+        }
+        Literal: {}
+        FunctionExpression: {
+          if (el.functor.isAggregation) {
+            effectivelySeenAggregate = true
+          } else {
+            fifo.addAll(el.arguments)
+          }
+        }
+        EmptyListExpression: {}
+        ListExpression: {
+          fifo.add(el.head)
+          fifo.add(el.tail)
+        }
+        default: {
+          unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
+        }
+      }
+    }
+
+    effectivelySeenAggregate
   }
 }

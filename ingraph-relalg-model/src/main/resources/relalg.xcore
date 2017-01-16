@@ -284,14 +284,7 @@ class SkipLimitValue {
 }
 
 class GroupingOperator extends UnaryOperator {
-  contains GroupingEntry[] entries
-}
-
-class GroupingEntry {
-  AggregationType aggregationType
-  refers Variable variable
-  refers Variable aggregatedVariable
-  boolean distinct
+  refers Variable[] entries
 }
 
 class UnwindOperator extends UnaryOperator {

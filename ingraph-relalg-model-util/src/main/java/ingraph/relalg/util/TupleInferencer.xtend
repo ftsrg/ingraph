@@ -109,7 +109,8 @@ class TupleInferencer {
   }
 
   def dispatch extractUnaryOperatorExtraVariables(GroupingOperator op) {
-    op.entries.map[variable]  }
+    op.entries
+  }
 
   def dispatch extractUnaryOperatorExtraVariables(SelectionOperator op) {
     getAttributes(op.condition)

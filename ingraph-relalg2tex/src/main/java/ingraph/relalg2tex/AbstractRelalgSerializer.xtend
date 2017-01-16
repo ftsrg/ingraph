@@ -179,7 +179,7 @@ abstract class AbstractRelalgSerializer {
    * unaryOperator
    */
   def dispatch operatorToTex(GroupingOperator op) {
-    #['''\grouping{TODO}''']
+    #['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
   }
 
   def dispatch operatorToTex(ProductionOperator op) {

@@ -4,6 +4,7 @@ import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
+import java.util.HashSet
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -61,6 +62,7 @@ import relalg.RelalgFactory
 import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
+import relalg.Variable
 import relalg.function.Function
 
 /**
@@ -261,6 +263,21 @@ class RelalgBuilder {
     ]
     if (trimmer.elements.empty) {
       unrecoverableError('''RETURN clause processed and resulted in no columns values to return''')
+    } else {
+      // let's see if there is a need for grouping
+      var seenAggregate = false
+      val groupingVariables = new HashSet<Variable>
+      for (el: trimmer.elements) {
+        seenAggregate = cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables, seenAggregate)
+      }
+      if (seenAggregate) {
+        // put a grouping operator under the projection operator
+        val trimmerInput = trimmer.input
+        trimmer.input = createGroupingOperator => [
+          input = trimmerInput
+          entries.addAll(groupingVariables)
+        ]
+      }
     }
 
     // add duplicate-elimination operator if return DISTINCT was specified
