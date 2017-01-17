@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
+import org.slizaa.neo4j.opencypher.openCypher.Count
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.EndsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
@@ -640,6 +641,13 @@ class RelalgBuilder {
     fe
   }
 
+  def dispatch Expression buildRelalgExpression(Count fi) {
+    createFunctionExpression => [
+      functor = Function.COUNT_OBJECTS
+      container = topLevelContainer
+    ]
+  }
+
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
     variableBuilder.buildVariableExpression(e)
   }
@@ -726,6 +734,13 @@ class RelalgBuilder {
     // TODO isnumeric
 
     fe
+  }
+
+  def dispatch ArithmeticExpression buildRelalgArithmeticExpression(Count fi) {
+    createFunctionArithmeticExpression => [
+      functor = Function.COUNT_OBJECTS
+      container = topLevelContainer
+    ]
   }
 
   def NumberLiteral buildRelalgNumberLiteral(NumberConstant e) {

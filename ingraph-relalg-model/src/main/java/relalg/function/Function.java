@@ -22,6 +22,7 @@ public enum Function {
   //             category                        types            type      arity
   AVG           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   COUNT         (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  COUNT_OBJECTS (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1), // count(*)
   MAX           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   MIN           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   SUM           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
