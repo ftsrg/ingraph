@@ -107,6 +107,17 @@ use Scala before, download it from the dialog box provided by IntelliJ).
 
 ### Troubleshooting
 
+#### General debug mode
+
+For the modules that support it, you can define environment variables to enable debug mode:
+
+* `DEBUG=1` or `DEBUG_INGRAPH=1` enables debug mode for all modules
+* `DEBUG_<MODULENAME>=1` (e.g. `DEBUG_INGRAPH_CYPHER2RELALG=1`) enables debug mode for that particular module
+
+Currently, these modules have support:
+
+* `ingraph-cypher2relalg`
+
 #### Eclipse
 
 * Gradle error

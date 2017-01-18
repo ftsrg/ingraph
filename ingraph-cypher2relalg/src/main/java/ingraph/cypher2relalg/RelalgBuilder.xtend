@@ -4,6 +4,7 @@ import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
+import ingraph.emf.util.PrettyPrinter
 import java.util.HashSet
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -112,7 +113,9 @@ class RelalgBuilder {
   def build(Cypher cypher) {
     EcoreUtil.resolveAll(cypher)
 
-//    println(PrettyPrinter.format(cypher))
+    if (Cypher2RelalgConfig.isDebugMode) {
+      println(PrettyPrinter.format(cypher))
+    }
     val statement = cypher.statement
     topLevelContainer.rootExpression = buildRelalg(statement)
 
