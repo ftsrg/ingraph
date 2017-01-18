@@ -3,6 +3,8 @@ package ingraph.ire
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
+import relalg.function.{CypherType, FunctionCategory}
+
 
 object ExpressionParser {
   def parse(expression: Expression, lookup: Map[Variable, Integer]): (Tuple) => Boolean =
@@ -57,13 +59,14 @@ object ExpressionParser {
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
     tuple(lookup(variable))
 
-  private def parseComparable(cmp: ComparableExpression, tuple: Tuple, lookup: Map[Variable, Integer]): Any = cmp match {
+  private def parseComparable(cmp: Expression, tuple: Tuple, lookup: Map[Variable, Integer]): Any = cmp match {
     case cmp: DoubleLiteral => cmp.getValue
     case cmp: IntegerLiteral => cmp.getValue
     case cmp: StringLiteral => cmp.getValue
     case cmp: AttributeVariable =>  tuple(lookup(cmp)) //TODO
     case cmp: Variable => tuple(lookup(cmp)) //TODO
     case cmp: VariableComparableExpression => tuple(lookup(cmp.getVariable))
+    case cmp: VariableExpression => tuple(lookup(cmp.getVariable))
     case exp: ArithmeticOperationExpression =>
       // TODO: currently the emf tree is parsed on every function call
       val left = parseComparable(exp.getLeftOperand, tuple, lookup)
@@ -77,6 +80,21 @@ object ExpressionParser {
         case POWER => GenericMath.power(left, right)
         case MOD => GenericMath.mod(left, right)
       }
+    case cmp: FunctionExpression =>
+      cmp.getArguments.size() match {
+        case 0 => FunctionLookup.fun0(cmp.getFunctor)()
+        case 1 =>
+          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
+          FunctionLookup.fun1(cmp.getFunctor)(first)
+        case 2 =>
+          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
+          val second = parseComparable(cmp.getArguments.get(1), tuple, lookup)
+          FunctionLookup.fun2(cmp.getFunctor)(first, second)
+        case 3 =>
+          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
+          val second = parseComparable(cmp.getArguments.get(1), tuple, lookup)
+          val third = parseComparable(cmp.getArguments.get(2), tuple, lookup)
+          FunctionLookup.fun3(cmp.getFunctor)(first, second, third)
+      }
   }
-
 }
