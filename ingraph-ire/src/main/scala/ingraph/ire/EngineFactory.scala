@@ -17,27 +17,7 @@ import scala.collection.mutable
 
 object EngineFactory {
 
-  implicit def emfConversion[E](list: EList[E]): Vector[E] = {
-    val l = for (v <- 0 until list.size)
-      yield list.get(v)
-    l.toVector
-  }
-
-  implicit def emfToIntConversion(list: EList[Integer]): Vector[Int] = {
-    var l = for (v <- 0 until list.size)
-      yield list.get(v).toInt
-    l.toVector
-  }
-
-  implicit def guavaToScala[K, V](map: ImmutableMap[K, V]): Map[K, V] = {
-    val iterator = map.entrySet().iterator()
-    val scalaMap = new mutable.HashMap[K, V]()
-    while (iterator.hasNext) {
-      val entry = iterator.next()
-      scalaMap(entry.getKey) = entry.getValue
-    }
-    scalaMap.toMap
-  }
+  import Conversions._
 
   val schemaToMap = new SchemaToMap()
 
@@ -93,15 +73,15 @@ object EngineFactory {
           case op: BinaryOperator =>
             val node: ActorRef = op match {
               case op: AntiJoinOperator =>
-                newLocal(Props(new AntiJoinNode(expr.child, emfToIntConversion(op.getLeftMask), emfToIntConversion(op.getRightMask))))
+                newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
               case op: JoinOperator =>
                 val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new JoinNode(
                     expr.child,
                     op.getLeftInput.getDetailedSchema.length,
                     op.getRightInput.getDetailedSchema.length,
-                    emfToIntConversion(op.getLeftMask),
-                    emfToIntConversion(op.getRightMask)
+                    emfToInt(op.getLeftMask),
+                    emfToInt(op.getRightMask)
                 )))
               case op: LeftOuterJoinOperator =>
                 val names = op.getCommonVariables.map(_.getName)
@@ -109,8 +89,8 @@ object EngineFactory {
                   expr.child,
                   op.getLeftInput.getDetailedSchema.length,
                   op.getRightInput.getDetailedSchema.length,
-                  emfToIntConversion(op.getLeftMask),
-                  emfToIntConversion(op.getRightMask)
+                  emfToInt(op.getLeftMask),
+                  emfToInt(op.getRightMask)
                 )))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)

@@ -14,8 +14,7 @@ class ExpressionParserTest extends WordSpec {
       .asInstanceOf[ProjectionOperator].getInput
       .asInstanceOf[SelectionOperator]
   }
-
-  import EngineFactory._
+  import Conversions._
 
   val rocks = "emfrocks"
   "ExpressionParser" should {
