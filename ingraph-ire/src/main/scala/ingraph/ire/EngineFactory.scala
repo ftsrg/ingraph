@@ -40,7 +40,6 @@ object EngineFactory {
           case op: UnaryOperator =>
             val node: ActorRef = op match {
             case op: GroupingOperator =>
-              op.getEntries.map { x => println(x.isDistinct) }
               ???
 
             case op: SelectionOperator =>
