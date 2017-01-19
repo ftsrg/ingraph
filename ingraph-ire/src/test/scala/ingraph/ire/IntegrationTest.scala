@@ -25,7 +25,7 @@ class IntegrationTest extends FlatSpec {
     TestCase("SwitchSet",         2, 8)
   ).foreach(
     t => s"${t.name}-size-${t.size}" should "work" in {
-      val query = Source.fromFile(queryPath(t.name)).getLines().mkString
+      val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
       val adapter = new IngraphAdapter(query)
       val tf = new TransactionFactory(16)
       tf.subscribe(adapter.engine.inputLookup)
