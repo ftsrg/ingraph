@@ -27,8 +27,8 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
     container.transformToRete
     container.addSchemaInformation
     container.addDetailedSchemaInformation
-    RelalgUtil.save(container, "query-models/" + query)
-    drawer.serialize(container, "queries/" + query)
+    //RelalgUtil.save(container, "query-models/" + query)
+    drawer.serialize(container, "trainbenchmark/" + query + "-rete")
   }
 
   @Test

@@ -811,21 +811,34 @@ class RelalgBuilder {
 
     createExpandOperator() => [
       edgeVariable = patternElementChain_EdgeVariable;
-      direction = if (isLeftArrow && isRightArrow || ! (isLeftArrow || isRightArrow))
-        Direction.BOTH
-      else if(isLeftArrow) Direction.IN else Direction.OUT;
-      targetVertexVariable = patternElementChain_VertexVariable;
-      minHops = if(range === null) 1 else Integer.valueOf(ec.relationshipPattern.detail.range.lower)
-      maxHops = if (range === null)
+      direction =
+        if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
+          Direction.BOTH
+        else if (isLeftArrow) Direction.IN else Direction.OUT;
+          targetVertexVariable = patternElementChain_VertexVariable;
+      
+      minHops = if (range?.lower === null) {
+          1
+        } else {
+          Integer.valueOf(range.lower)
+        }
+      maxHops = if (range === null) {
         createMaxHops() => [
           maxHopsType = MaxHopsType.LIMITED
           hops = 1
         ]
-      else
-        createMaxHops() => [
-          maxHopsType = if(range.upper !== null) MaxHopsType.LIMITED else MaxHopsType.UNLIMITED;
-          hops = if(range.upper !== null) Integer.valueOf(ec.relationshipPattern.detail.range.upper);
-        ]
+      } else {
+        if (range.upper === null) {
+          createMaxHops() => [
+            maxHopsType = MaxHopsType.UNLIMITED
+          ]          
+        } else {
+          createMaxHops() => [
+            maxHopsType = MaxHopsType.LIMITED
+            hops = Integer.valueOf(ec.relationshipPattern.detail.range.upper)
+          ]
+        }
+      }
     ]
 
   }

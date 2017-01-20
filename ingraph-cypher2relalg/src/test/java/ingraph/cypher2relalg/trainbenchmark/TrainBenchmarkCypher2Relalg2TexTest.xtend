@@ -9,13 +9,13 @@ import ingraph.relalg2tex.RelalgSerializerConfig
 
 class TrainBenchmarkCypher2Relalg2TexTest {
 	
-	val config = RelalgSerializerConfig.builder.consoleOutput(false).build
+	val config = RelalgSerializerConfig.builder.standaloneDocument(true).consoleOutput(false).build
 	val drawer = new RelalgTreeSerializer(config)
 	
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
 		val expression = Cypher2Relalg.processCypher(cypher)
-		drawer.serialize(expression, "queries/" + query)
+		drawer.serialize(expression, "trainbenchmark/" + query + "-search")
 	}
 	
 	@Test
