@@ -1,17 +1,20 @@
 package ingraph.relalg2tex
 
 import java.util.List
+import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
 import relalg.BinaryOperator
 import relalg.Cardinality
 import relalg.ElementVariable
+import relalg.Expression
+import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
+import relalg.ListVariable
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.UnaryOperator
 import relalg.Variable
-import relalg.AbstractJoinOperator
-import relalg.ListVariable
+import relalg.VariableListExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -79,6 +82,21 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
   def dispatch serializeVariable(ListVariable variable) {
     '''«variable.name»'''
   }
+
+  def dispatch serializeVariable(ExpressionVariable variable) {
+    '''«serializeExpression(variable.expression)»'''
+  }
+  
+  //
+  
+  def dispatch serializeExpression(VariableListExpression expression) {
+    '''«expression.variable.name»[]'''
+  }
+  
+  def dispatch serializeExpression(Expression expression) {
+    throw new UnsupportedOperationException('''Cannot serialize expression «expression»''')
+  }
+
 
   /**
    * children

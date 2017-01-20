@@ -6,7 +6,9 @@
   </extension>
   <extension id="ingraph.optimization.patterns.Relalg2Rete" point="org.eclipse.viatra.query.runtime.queryspecification">
     <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.Relalg2Rete" id="ingraph.optimization.patterns.Relalg2Rete">
-      <query-specification fqn="ingraph.optimization.patterns.expandVertex"/>
+      <query-specification fqn="ingraph.optimization.patterns.defaultExpandOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.expandVertexA"/>
+      <query-specification fqn="ingraph.optimization.patterns.expandVertexB"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.sortAndTopOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.leftOuterJoinAndSelection"/>

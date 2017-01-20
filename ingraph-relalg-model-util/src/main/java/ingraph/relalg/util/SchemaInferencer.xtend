@@ -13,6 +13,8 @@ import relalg.GetVerticesOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
+import relalg.RelalgFactory
+import relalg.TransitiveClosureOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
@@ -28,6 +30,7 @@ import relalg.VariableExpression
  */
 class SchemaInferencer {
 
+  extension RelalgFactory factory = RelalgFactory.eINSTANCE
   val boolean includeEdges
   var RelalgContainer container
 
@@ -94,6 +97,20 @@ class SchemaInferencer {
     
     if (includeEdges) {
       schema.add(op.edgeVariable)
+    }
+    schema.add(op.targetVertexVariable)
+    op.defineSchema(schema)
+  }
+  
+  def dispatch List<Variable> inferSchema(TransitiveClosureOperator op) {
+    val schema = Lists.newArrayList(op.getInput.inferSchema)
+    
+    val listExpressionVariable = createExpressionVariable => [
+      expression = op.listVariable
+    ]
+    
+    if (includeEdges) {
+      schema.add(listExpressionVariable)
     }
     schema.add(op.targetVertexVariable)
     op.defineSchema(schema)

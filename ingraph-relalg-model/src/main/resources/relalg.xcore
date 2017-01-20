@@ -102,7 +102,7 @@ class VariableArithmeticExpression extends VariableExpression, ArithmeticExpress
  *
  * Note: type check is always needed in query execution time!
  */
-class VariableListExpression extends ListExpression {
+class VariableListExpression extends VariableExpression, ListExpression {
 }
 
 /**
@@ -243,10 +243,11 @@ class MaxHops {
 
 class ExpandOperator extends NavigationOperator {
   int minHops
-  refers MaxHops maxHops
+  contains MaxHops maxHops
 }
 
 class TransitiveClosureOperator extends NavigationOperator {
+  contains VariableListExpression listVariable
 }
 
 class DuplicateEliminationOperator extends UnaryOperator {

@@ -1,7 +1,8 @@
 package ingraph.optimization.transformations.relalg2rete
 
 import ingraph.optimization.patterns.ExpandOperatorMatcher
-import ingraph.optimization.patterns.ExpandVertexMatcher
+import ingraph.optimization.patterns.ExpandVertexAMatcher
+import ingraph.optimization.patterns.ExpandVertexBMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
@@ -25,7 +26,8 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	def transformToRete(RelalgContainer container) {
 	  log("Transforming relational algebra expression to Rete network")
 		val statements = register(container)
-		statements.fireWhilePossible(expandVertexRule)
+    statements.fireWhilePossible(expandVertexARule)
+    statements.fireWhilePossible(expandVertexBRule)
 		statements.fireWhilePossible(expandOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
@@ -33,14 +35,14 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	/**
-	 * [1] Replace the GetVertexOperator + ExpandOperator pairs with a single GetEdgesOperator
+	 * [1.A] Replace the GetVertexOperator + default 1..1 ExpandOperator pairs with a single GetEdgesOperator
 	 */
-	protected def expandVertexRule() {
+	protected def expandVertexARule() {
 		createRule() //
-		.precondition(ExpandVertexMatcher.querySpecification) //
+		.precondition(ExpandVertexAMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
+			log('''expandVertexARule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				sourceVertexVariable = expandOperator.source
@@ -51,6 +53,35 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			changeOperator(parentOperator, expandOperator, getEdgesOperator)
 		].build
 	}
+	
+	/**
+   * [1.B] Replace the GetVertexOperator + non-default ExpandOperator pairs with a GetEdgesOperator and a TransitiveClosureOperator
+   */
+  protected def expandVertexBRule() {
+    createRule() //
+    .precondition(ExpandVertexBMatcher.querySpecification) //
+    .action [ //
+      val expandOperator = expandOperator
+      log('''expandVertexBRule fired for «expandOperator.edgeVariable.name»''')
+
+      val getEdgesOperator = createGetEdgesOperator => [
+        sourceVertexVariable = expandOperator.source
+        targetVertexVariable = expandOperator.target
+        edgeVariable = expandOperator.edgeVariable
+      ]
+      val transitiveClosureOperator = createTransitiveClosureOperator => [
+        sourceVertexVariable = expandOperator.source
+        targetVertexVariable = expandOperator.target
+        edgeVariable = expandOperator.edgeVariable
+        
+        val edgeVariable = edgeVariable
+        listVariable = createVariableListExpression => [ variable = edgeVariable ]
+        input = getEdgesOperator
+      ]
+
+      changeOperator(parentOperator, expandOperator, transitiveClosureOperator)
+    ].build
+  }
 
 	/**
 	 * [2] Replace a single expand operator with a GetEdgesOperator and a JoinOperator

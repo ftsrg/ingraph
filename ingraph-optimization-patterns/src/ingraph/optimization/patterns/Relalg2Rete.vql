@@ -14,11 +14,27 @@ import "http://ingraph/relalg";
   getVerticesOperator
 
 */
-// [1] transformation for eliminating expand operators connected to a getVerticesOperator
-pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+pattern defaultExpandOperator(expandOperator : ExpandOperator) {
+  ExpandOperator.minHops(expandOperator, 1);
+  ExpandOperator.maxHops(expandOperator, maxHops);
+  MaxHops.maxHopsType(maxHops, ::LIMITED);
+  MaxHops.hops(maxHops, 1);
+}
+
+// [1a] transformation for eliminating expand operators connected to a getVerticesOperator
+pattern expandVertexA(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
+	find defaultExpandOperator(expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
 	GetVerticesOperator(getVerticesOperator);
+}
+
+// [1b] transformation for eliminating expand operators connected to a getVerticesOperator
+pattern expandVertexB(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+  find parentOperator(parentOperator, expandOperator);
+  neg find defaultExpandOperator(expandOperator);
+  ExpandOperator.input(expandOperator, getVerticesOperator);
+  GetVerticesOperator(getVerticesOperator);
 }
 
 /*
@@ -31,7 +47,7 @@ pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator :
 // [2] (run after [1]) transformation for eliminating the remaining expand operators
 pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
-	ExpandOperator(expandOperator);
+	find defaultExpandOperator(expandOperator);
 }
 
 /*

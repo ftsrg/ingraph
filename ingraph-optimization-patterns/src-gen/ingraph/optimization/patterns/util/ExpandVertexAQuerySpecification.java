@@ -4,8 +4,9 @@
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
-import ingraph.optimization.patterns.ExpandVertexMatch;
-import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.ExpandVertexAMatch;
+import ingraph.optimization.patterns.ExpandVertexAMatcher;
+import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -31,15 +32,15 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.queries.QueryInitializa
 import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
 
 /**
- * A pattern-specific query specification that can instantiate ExpandVertexMatcher in a type-safe way.
+ * A pattern-specific query specification that can instantiate ExpandVertexAMatcher in a type-safe way.
  * 
- * @see ExpandVertexMatcher
- * @see ExpandVertexMatch
+ * @see ExpandVertexAMatcher
+ * @see ExpandVertexAMatch
  * 
  */
 @SuppressWarnings("all")
-public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQuerySpecification<ExpandVertexMatcher> {
-  private ExpandVertexQuerySpecification() {
+public final class ExpandVertexAQuerySpecification extends BaseGeneratedEMFQuerySpecification<ExpandVertexAMatcher> {
+  private ExpandVertexAQuerySpecification() {
     super(GeneratedPQuery.INSTANCE);
   }
   
@@ -48,7 +49,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static ExpandVertexQuerySpecification instance() throws ViatraQueryException {
+  public static ExpandVertexAQuerySpecification instance() throws ViatraQueryException {
     try{
     	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
@@ -57,35 +58,35 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   }
   
   @Override
-  protected ExpandVertexMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandVertexMatcher.on(engine);
+  protected ExpandVertexAMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandVertexAMatcher.on(engine);
   }
   
   @Override
-  public ExpandVertexMatcher instantiate() throws ViatraQueryException {
-    return ExpandVertexMatcher.create();
+  public ExpandVertexAMatcher instantiate() throws ViatraQueryException {
+    return ExpandVertexAMatcher.create();
   }
   
   @Override
-  public ExpandVertexMatch newEmptyMatch() {
-    return ExpandVertexMatch.newEmptyMatch();
+  public ExpandVertexAMatch newEmptyMatch() {
+    return ExpandVertexAMatch.newEmptyMatch();
   }
   
   @Override
-  public ExpandVertexMatch newMatch(final Object... parameters) {
-    return ExpandVertexMatch.newMatch((relalg.GetVerticesOperator) parameters[0], (relalg.ExpandOperator) parameters[1], (relalg.Operator) parameters[2]);
+  public ExpandVertexAMatch newMatch(final Object... parameters) {
+    return ExpandVertexAMatch.newMatch((relalg.GetVerticesOperator) parameters[0], (relalg.ExpandOperator) parameters[1], (relalg.Operator) parameters[2]);
   }
   
   /**
-   * Inner class allowing the singleton instance of {@link ExpandVertexQuerySpecification} to be created 
+   * Inner class allowing the singleton instance of {@link ExpandVertexAQuerySpecification} to be created 
    * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link ExpandVertexQuerySpecification#instance()}.
+   * 	but rather at the first call to {@link ExpandVertexAQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
    */
   private static class LazyHolder {
-    private final static ExpandVertexQuerySpecification INSTANCE = new ExpandVertexQuerySpecification();
+    private final static ExpandVertexAQuerySpecification INSTANCE = new ExpandVertexAQuerySpecification();
     
     /**
      * Statically initializes the query specification <b>after</b> the field {@link #INSTANCE} is assigned.
@@ -103,7 +104,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
   }
   
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
-    private final static ExpandVertexQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
+    private final static ExpandVertexAQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
     private final PParameter parameter_pGetVerticesOperator = new PParameter("getVerticesOperator", "relalg.GetVerticesOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "GetVerticesOperator")), PParameterDirection.INOUT);
     
@@ -115,7 +116,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
     
     @Override
     public String getFullyQualifiedName() {
-      return "ingraph.optimization.patterns.expandVertex";
+      return "ingraph.optimization.patterns.expandVertexA";
     }
     
     @Override
@@ -148,6 +149,8 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       		));
       		// 	find parentOperator(parentOperator, expandOperator)
       		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_expandOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		// 	find defaultExpandOperator(expandOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");

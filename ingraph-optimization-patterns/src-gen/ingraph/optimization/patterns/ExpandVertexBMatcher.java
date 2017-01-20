@@ -3,8 +3,8 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.ExpandVertexMatch;
-import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
+import ingraph.optimization.patterns.ExpandVertexBMatch;
+import ingraph.optimization.patterns.util.ExpandVertexBQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,42 +21,32 @@ import relalg.GetVerticesOperator;
 import relalg.Operator;
 
 /**
- * Generated pattern matcher API of the ingraph.optimization.patterns.expandVertex pattern,
+ * Generated pattern matcher API of the ingraph.optimization.patterns.expandVertexB pattern,
  * providing pattern-specific query methods.
  * 
  * <p>Use the pattern matcher on a given model via {@link #on(ViatraQueryEngine)},
  * e.g. in conjunction with {@link ViatraQueryEngine#on(Notifier)}.
  * 
- * <p>Matches of the pattern will be represented as {@link ExpandVertexMatch}.
+ * <p>Matches of the pattern will be represented as {@link ExpandVertexBMatch}.
  * 
  * <p>Original source:
  * <code><pre>
- * parentOperator
- *           |
- *           | input
- *           V
- *     expandOperator
- *           |
- *           | input
- *           V
- *   getVerticesOperator
- * 
- * 
- * // [1] transformation for eliminating expand operators connected to a getVerticesOperator
- * pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
- * 	find parentOperator(parentOperator, expandOperator);
- * 	ExpandOperator.input(expandOperator, getVerticesOperator);
- * 	GetVerticesOperator(getVerticesOperator);
+ * // [1b] transformation for eliminating expand operators connected to a getVerticesOperator
+ * pattern expandVertexB(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+ *   find parentOperator(parentOperator, expandOperator);
+ *   neg find defaultExpandOperator(expandOperator);
+ *   ExpandOperator.input(expandOperator, getVerticesOperator);
+ *   GetVerticesOperator(getVerticesOperator);
  * }
  * </pre></code>
  * 
- * @see ExpandVertexMatch
- * @see ExpandVertexProcessor
- * @see ExpandVertexQuerySpecification
+ * @see ExpandVertexBMatch
+ * @see ExpandVertexBProcessor
+ * @see ExpandVertexBQuerySpecification
  * 
  */
 @SuppressWarnings("all")
-public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
+public class ExpandVertexBMatcher extends BaseMatcher<ExpandVertexBMatch> {
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
    * If the pattern matcher is already constructed in the engine, only a light-weight reference is returned.
@@ -65,11 +55,11 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @throws ViatraQueryException if an error occurs during pattern matcher creation
    * 
    */
-  public static ExpandVertexMatcher on(final ViatraQueryEngine engine) throws ViatraQueryException {
+  public static ExpandVertexBMatcher on(final ViatraQueryEngine engine) throws ViatraQueryException {
     // check if matcher already exists
-    ExpandVertexMatcher matcher = engine.getExistingMatcher(querySpecification());
+    ExpandVertexBMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (ExpandVertexMatcher)engine.getMatcher(querySpecification());
+    	matcher = (ExpandVertexBMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -80,8 +70,8 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @noreference This method is for internal matcher initialization by the framework, do not call it manually.
    * 
    */
-  public static ExpandVertexMatcher create() throws ViatraQueryException {
-    return new ExpandVertexMatcher();
+  public static ExpandVertexBMatcher create() throws ViatraQueryException {
+    return new ExpandVertexBMatcher();
   }
   
   private final static int POSITION_GETVERTICESOPERATOR = 0;
@@ -90,7 +80,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   
   private final static int POSITION_PARENTOPERATOR = 2;
   
-  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandVertexMatcher.class);
+  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(ExpandVertexBMatcher.class);
   
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
@@ -100,7 +90,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @throws ViatraQueryException if an error occurs during pattern matcher creation
    * 
    */
-  private ExpandVertexMatcher() throws ViatraQueryException {
+  private ExpandVertexBMatcher() throws ViatraQueryException {
     super(querySpecification());
   }
   
@@ -109,10 +99,10 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @param pGetVerticesOperator the fixed value of pattern parameter getVerticesOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
-   * @return matches represented as a ExpandVertexMatch object.
+   * @return matches represented as a ExpandVertexBMatch object.
    * 
    */
-  public Collection<ExpandVertexMatch> getAllMatches(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  public Collection<ExpandVertexBMatch> getAllMatches(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     return rawGetAllMatches(new Object[]{pGetVerticesOperator, pExpandOperator, pParentOperator});
   }
   
@@ -122,10 +112,10 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @param pGetVerticesOperator the fixed value of pattern parameter getVerticesOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
-   * @return a match represented as a ExpandVertexMatch object, or null if no match is found.
+   * @return a match represented as a ExpandVertexBMatch object, or null if no match is found.
    * 
    */
-  public ExpandVertexMatch getOneArbitraryMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  public ExpandVertexBMatch getOneArbitraryMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     return rawGetOneArbitraryMatch(new Object[]{pGetVerticesOperator, pExpandOperator, pParentOperator});
   }
   
@@ -162,7 +152,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator, final IMatchProcessor<? super ExpandVertexMatch> processor) {
+  public void forEachMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator, final IMatchProcessor<? super ExpandVertexBMatch> processor) {
     rawForEachMatch(new Object[]{pGetVerticesOperator, pExpandOperator, pParentOperator}, processor);
   }
   
@@ -176,7 +166,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator, final IMatchProcessor<? super ExpandVertexMatch> processor) {
+  public boolean forOneArbitraryMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator, final IMatchProcessor<? super ExpandVertexBMatch> processor) {
     return rawForOneArbitraryMatch(new Object[]{pGetVerticesOperator, pExpandOperator, pParentOperator}, processor);
   }
   
@@ -190,8 +180,8 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @return the (partial) match object.
    * 
    */
-  public ExpandVertexMatch newMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
-    return ExpandVertexMatch.newMatch(pGetVerticesOperator, pExpandOperator, pParentOperator);
+  public ExpandVertexBMatch newMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    return ExpandVertexBMatch.newMatch(pGetVerticesOperator, pExpandOperator, pParentOperator);
   }
   
   /**
@@ -219,7 +209,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<GetVerticesOperator> getAllValuesOfgetVerticesOperator(final ExpandVertexMatch partialMatch) {
+  public Set<GetVerticesOperator> getAllValuesOfgetVerticesOperator(final ExpandVertexBMatch partialMatch) {
     return rawAccumulateAllValuesOfgetVerticesOperator(partialMatch.toArray());
   }
   
@@ -261,7 +251,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<ExpandOperator> getAllValuesOfexpandOperator(final ExpandVertexMatch partialMatch) {
+  public Set<ExpandOperator> getAllValuesOfexpandOperator(final ExpandVertexBMatch partialMatch) {
     return rawAccumulateAllValuesOfexpandOperator(partialMatch.toArray());
   }
   
@@ -303,7 +293,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfparentOperator(final ExpandVertexMatch partialMatch) {
+  public Set<Operator> getAllValuesOfparentOperator(final ExpandVertexBMatch partialMatch) {
     return rawAccumulateAllValuesOfparentOperator(partialMatch.toArray());
   }
   
@@ -321,9 +311,9 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   }
   
   @Override
-  protected ExpandVertexMatch tupleToMatch(final Tuple t) {
+  protected ExpandVertexBMatch tupleToMatch(final Tuple t) {
     try {
-    	return ExpandVertexMatch.newMatch((GetVerticesOperator) t.get(POSITION_GETVERTICESOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return ExpandVertexBMatch.newMatch((GetVerticesOperator) t.get(POSITION_GETVERTICESOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -331,9 +321,9 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   }
   
   @Override
-  protected ExpandVertexMatch arrayToMatch(final Object[] match) {
+  protected ExpandVertexBMatch arrayToMatch(final Object[] match) {
     try {
-    	return ExpandVertexMatch.newMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return ExpandVertexBMatch.newMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -341,9 +331,9 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
   }
   
   @Override
-  protected ExpandVertexMatch arrayToMatchMutable(final Object[] match) {
+  protected ExpandVertexBMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return ExpandVertexMatch.newMutableMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return ExpandVertexBMatch.newMutableMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -355,7 +345,7 @@ public class ExpandVertexMatcher extends BaseMatcher<ExpandVertexMatch> {
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static IQuerySpecification<ExpandVertexMatcher> querySpecification() throws ViatraQueryException {
-    return ExpandVertexQuerySpecification.instance();
+  public static IQuerySpecification<ExpandVertexBMatcher> querySpecification() throws ViatraQueryException {
+    return ExpandVertexBQuerySpecification.instance();
   }
 }

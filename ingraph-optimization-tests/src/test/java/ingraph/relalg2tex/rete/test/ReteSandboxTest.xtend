@@ -2,6 +2,7 @@ package ingraph.relalg2tex.rete.test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg.util.SchemaInferencer
 import ingraph.relalg.util.TupleInferencer
 import ingraph.relalg2tex.RelalgSerializerConfig
@@ -23,6 +24,8 @@ class ReteSandboxTest {
 
     containerSearchBased.addSchemaInformation
     drawer.serialize(containerSearchBased, "sandbox/" + query + "-search")
+    
+    RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
     
     val containerRete = Cypher2Relalg.processString(cypher)
     containerRete.transformToRete
@@ -52,6 +55,13 @@ class ReteSandboxTest {
     ''')
   }
 
+
+  @Ignore
+  @Test
+  def void testNoRangePath() {
+    process("test-NoRange-path", '''MATCH p=(n)-[:REL]->(m) RETURN n, m''')
+  }
+
   @Test
   def void testNoRange() {
     process("test-NoRange", '''MATCH (n)-[:REL]->(m) RETURN n, m''')
@@ -75,6 +85,19 @@ class ReteSandboxTest {
   @Test
   def void testRangeSpecifiedMinSpecifiedMax() {
     process("test-Range-SpecifiedMin-SpecifiedMax", '''MATCH (n)-[:REL*3..5]->(m) RETURN n, m''')
+  }
+  
+  @Test
+  def void testSimple() {
+    process("test-Simple",
+    '''
+    MATCH
+      (a {name: 'a'})-[:REL]->(x),
+      (d {name: 'd'})-[:REL]->(y),
+      ( (x)-[r:REL*]->(y) )
+    RETURN r
+    '''
+    );
   }
 
 }

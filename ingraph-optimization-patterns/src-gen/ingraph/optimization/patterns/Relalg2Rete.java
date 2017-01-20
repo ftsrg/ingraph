@@ -3,14 +3,18 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.DefaultExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandOperatorMatcher;
-import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.ExpandVertexAMatcher;
+import ingraph.optimization.patterns.ExpandVertexBMatcher;
 import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.VariablesInLogicalExpressionMatcher;
+import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
-import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandVertexAQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandVertexBQuerySpecification;
 import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
@@ -27,7 +31,9 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
- * <li>expandVertex</li>
+ * <li>defaultExpandOperator</li>
+ * <li>expandVertexA</li>
+ * <li>expandVertexB</li>
  * <li>expandOperator</li>
  * <li>sortAndTopOperator</li>
  * <li>leftOuterJoinAndSelection</li>
@@ -57,7 +63,9 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   private static Relalg2Rete INSTANCE;
   
   private Relalg2Rete() throws ViatraQueryException {
-    querySpecifications.add(ExpandVertexQuerySpecification.instance());
+    querySpecifications.add(DefaultExpandOperatorQuerySpecification.instance());
+    querySpecifications.add(ExpandVertexAQuerySpecification.instance());
+    querySpecifications.add(ExpandVertexBQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorQuerySpecification.instance());
     querySpecifications.add(SortAndTopOperatorQuerySpecification.instance());
     querySpecifications.add(LeftOuterJoinAndSelectionQuerySpecification.instance());
@@ -65,12 +73,28 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
     querySpecifications.add(LeftDeepTreeNodesQuerySpecification.instance());
   }
   
-  public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
-    return ExpandVertexQuerySpecification.instance();
+  public DefaultExpandOperatorQuerySpecification getDefaultExpandOperator() throws ViatraQueryException {
+    return DefaultExpandOperatorQuerySpecification.instance();
   }
   
-  public ExpandVertexMatcher getExpandVertex(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandVertexMatcher.on(engine);
+  public DefaultExpandOperatorMatcher getDefaultExpandOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return DefaultExpandOperatorMatcher.on(engine);
+  }
+  
+  public ExpandVertexAQuerySpecification getExpandVertexA() throws ViatraQueryException {
+    return ExpandVertexAQuerySpecification.instance();
+  }
+  
+  public ExpandVertexAMatcher getExpandVertexA(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandVertexAMatcher.on(engine);
+  }
+  
+  public ExpandVertexBQuerySpecification getExpandVertexB() throws ViatraQueryException {
+    return ExpandVertexBQuerySpecification.instance();
+  }
+  
+  public ExpandVertexBMatcher getExpandVertexB(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandVertexBMatcher.on(engine);
   }
   
   public ExpandOperatorQuerySpecification getExpandOperator() throws ViatraQueryException {
