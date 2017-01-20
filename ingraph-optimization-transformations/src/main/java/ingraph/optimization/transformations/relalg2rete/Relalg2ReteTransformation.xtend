@@ -70,6 +70,9 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
         edgeVariable = expandOperator.edgeVariable
       ]
       val transitiveClosureOperator = createTransitiveClosureOperator => [
+        minHops = expandOperator.minHops
+        maxHops = expandOperator.maxHops
+        
         sourceVertexVariable = expandOperator.source
         targetVertexVariable = expandOperator.target
         edgeVariable = expandOperator.edgeVariable

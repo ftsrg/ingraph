@@ -226,6 +226,8 @@ class ProjectionOperator extends UnaryOperator {
 }
 
 abstract class NavigationOperator extends UnaryOperator {
+  int minHops
+  contains MaxHops maxHops  
   Direction direction
   refers VertexVariable sourceVertexVariable
   refers EdgeVariable edgeVariable
@@ -242,8 +244,6 @@ class MaxHops {
 }
 
 class ExpandOperator extends NavigationOperator {
-  int minHops
-  contains MaxHops maxHops
 }
 
 class TransitiveClosureOperator extends NavigationOperator {

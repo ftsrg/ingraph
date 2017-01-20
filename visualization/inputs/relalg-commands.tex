@@ -35,7 +35,7 @@
 %%%%%%%%%% unary operators %%%%%%%%%%
 \newcommand{\nagivationbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
 
-\newcommand{\kleenestar}{\,\,\ast}
+\newcommand{\kleenestar}{\ast}
 
 % expand operators
 \newcommand{\expandedgevariable}[4]{
@@ -63,13 +63,13 @@
 
 % transitive closure operators
 \newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
-\newcommand{\transitiveclosureboth}[5]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \left[ \edgevariable{#4}{#5} \right]}
+\newcommand{\transitiveclosureboth}[7]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 \newcommand{\transitiveclosureoutop}{\oplus \updownarrow}
-\newcommand{\transitiveclosureout}[5]{\transitiveclosureoutop \nagivationbody{#1}{#2}{#3} \left[ \edgevariable{#4}{#5} \right]}
+\newcommand{\transitiveclosureout}[7]{\transitiveclosureoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 \newcommand{\transitiveclosureinop}{\oplus \updownarrow}
-\newcommand{\transitiveclosurein}[5]{\transitiveclosureinop \nagivationbody{#1}{#2}{#3} \left[ \edgevariable{#4}{#5} \right]}
+\newcommand{\transitiveclosurein}[7]{\transitiveclosureinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 %
 \newcommand{\alldifferentop}{\not\fallingdotseq}

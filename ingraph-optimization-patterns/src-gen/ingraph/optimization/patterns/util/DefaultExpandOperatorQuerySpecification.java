@@ -141,12 +141,12 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
       		new ConstantValue(body, var__virtual_0_, 1);
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ExpandOperator", "minHops")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationOperator", "minHops")));
       		new Equality(body, var__virtual_1_, var__virtual_0_);
       		//   ExpandOperator.maxHops(expandOperator, maxHops)
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ExpandOperator", "maxHops")));
+      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationOperator", "maxHops")));
       		new Equality(body, var__virtual_2_, var_maxHops);
       		//   MaxHops.maxHopsType(maxHops, ::LIMITED)
       		PVariable var__virtual_3_ = body.getOrCreateVariableByName(".virtual{3}");

@@ -224,7 +224,8 @@ abstract class AbstractRelalgSerializer {
       '''\transitiveclosure«op.direction.directionToTex»''' + //
       '''{«op.sourceVertexVariable.escapedName»}''' + //
       '''«op.targetVertexVariable.toTexParameterWithLabels»''' + //
-      '''«op.edgeVariable.toTexParameterWithLabels»'''
+      '''«op.edgeVariable.toTexParameterWithLabels»''' + //
+      '''{«op.minHops»}{«op.maxHops.hopsToString»}'''
     ]
   }
 
