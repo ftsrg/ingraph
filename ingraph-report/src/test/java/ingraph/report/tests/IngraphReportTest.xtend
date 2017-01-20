@@ -75,10 +75,9 @@ class IngraphReportTest {
 	}
 	}
 
-	def visualize(RelalgContainer container) {
+	def visualizeTree(RelalgContainer container) {
 	try {
 	  container.addSchemaInformation
-	  container.addDetailedSchemaInformation
 		treeSerializer.serialize(container)
 	} catch (Exception e) {
 		e.printStackTrace
@@ -144,7 +143,7 @@ class IngraphReportTest {
 
 	\subsubsection*«header("Relational algebra tree", name)»
 
-	«val basicTree = container.visualize»
+	«val basicTree = container.visualizeTree»
 	«IF basicTree == null»
 	Cannot visualize tree.
 	«ELSE»
