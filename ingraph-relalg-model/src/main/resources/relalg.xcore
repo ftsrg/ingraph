@@ -225,7 +225,7 @@ class ProjectionOperator extends UnaryOperator {
   int[] tupleElements
 }
 
-abstract class NavigationOperator extends UnaryOperator {
+abstract class NavigationOperator extends Operator {
   int minHops
   contains MaxHops maxHops  
   Direction direction
@@ -243,10 +243,18 @@ class MaxHops {
   int hops
 }
 
-class ExpandOperator extends NavigationOperator {
+class ExpandOperator extends UnaryOperator, NavigationOperator {
 }
 
-class TransitiveClosureOperator extends NavigationOperator {
+
+class TernaryOperator {
+  contains Operator leftInput
+  contains Operator middleInput
+  contains Operator rightInput
+}
+
+class PathOperator extends TernaryOperator, NavigationOperator {
+  PathSemantics semantics
   contains VariableListExpression listVariable
 }
 

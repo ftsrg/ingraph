@@ -1,0 +1,94 @@
+% !TeX program = pdflatex
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../../../ingraph/visualization/inputs/relalg-packages}
+\input{../../../ingraph/visualization/inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+  [
+{$\duplicateelimination$
+  \\ \footnotesize
+  $\color{gray} \langle \var{semaphore, route, swP, sw, sw.currentPosition, swP.position} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{semaphore, route, swP, sw, sw.currentPosition, swP.position} \rangle$
+}
+  [
+{$\projection{\var{semaphore},~\var{route},~\var{swP},~\var{sw},~\var{sw.currentPosition}\assign \var{currentPosition},~\var{swP.position}\assign \var{position}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{semaphore, route, swP, sw, sw.currentPosition, swP.position} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{semaphore, route, swP, sw, sw.currentPosition, swP.position} \rangle$
+}
+  [
+{$\selection{\var{semaphore.signal} = \literal{'GO'} \land \var{sw.currentPosition} \neq \var{swP.position}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw, sw.currentPosition, swP.position} \rangle$
+}
+  [
+{$\alldifferent{}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw, sw.currentPosition, swP.position} \rangle$
+}
+  [
+{$\join\{\var{swP}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e1, semaphore, \_e2, swP, \_e3, sw, sw.currentPosition, swP.position} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{4} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{route}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e1, semaphore, \_e2, swP} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e1, semaphore, \_e2, swP, swP.position} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{0} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\getedgesi{route}{Route}{semaphore}{Semaphore}$\\$\getedgesii{\_e1}{entry}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e1, semaphore} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e1, semaphore} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+  [
+{$\getedgesi{route}{Route}{swP}{SwitchPosition}$\\$\getedgesii{\_e2}{follows}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route, \_e2, swP} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route, \_e2, swP, swP.position} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{swP}{SwitchPosition}{sw}{Switch}$\\$\getedgesii{\_e3}{target}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{swP, \_e3, sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{swP, \_e3, sw, sw.currentPosition} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

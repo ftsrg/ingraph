@@ -1,0 +1,66 @@
+% !TeX program = pdflatex
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../../../ingraph/visualization/inputs/relalg-packages}
+\input{../../../ingraph/visualization/inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+  [
+{$\duplicateelimination$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw} \rangle$
+}
+  [
+{$\projection{\var{sw}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw} \rangle$
+}
+  [
+{$\antijoin\{\var{sw}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{0} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\alldifferent{}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw} \rangle$
+}
+  [
+{$\getvertices{sw}{Switch}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{sw}{Switch}{\_e13}{Sensor}$\\$\getedgesii{\_e12}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sw, \_e12, \_e13} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sw, \_e12, \_e13} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

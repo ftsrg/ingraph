@@ -55,7 +55,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 	
 	/**
-   * [1.B] Replace the GetVertexOperator + non-default ExpandOperator pairs with a GetEdgesOperator and a TransitiveClosureOperator
+   * [1.B] Replace the GetVertexOperator + non-default ExpandOperator pairs with a GetEdgesOperator and a PathOperator
    */
   protected def expandVertexBRule() {
     createRule() //
@@ -69,7 +69,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
         targetVertexVariable = expandOperator.target
         edgeVariable = expandOperator.edgeVariable
       ]
-      val transitiveClosureOperator = createTransitiveClosureOperator => [
+      val pathOperator = createPathOperator => [
         minHops = expandOperator.minHops
         maxHops = expandOperator.maxHops
         
@@ -79,10 +79,13 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
         
         val edgeVariable = edgeVariable
         listVariable = createVariableListExpression => [ variable = edgeVariable ]
-        input = getEdgesOperator
+        
+        leftInput = null
+        middleInput = getEdgesOperator
+        rightInput = null
       ]
 
-      changeOperator(parentOperator, expandOperator, transitiveClosureOperator)
+      changeOperator(parentOperator, expandOperator, pathOperator)
     ].build
   }
 

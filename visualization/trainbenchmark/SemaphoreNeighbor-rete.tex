@@ -1,0 +1,174 @@
+% !TeX program = pdflatex
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../../../ingraph/visualization/inputs/relalg-packages}
+\input{../../../ingraph/visualization/inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+  [
+{$\duplicateelimination$
+  \\ \footnotesize
+  $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor2, te1, te2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{semaphore, route1, route2, sensor1, sensor2, te1, te2} \rangle$
+}
+  [
+{$\projection{\var{semaphore},~\var{route1},~\var{route2},~\var{sensor1},~\var{sensor2},~\var{te1},~\var{te2}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{semaphore, route1, route2, sensor1, sensor2, te1, te2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{semaphore, route1, route2, sensor1, sensor2, te1, te2} \rangle$
+}
+  [
+{$\selection{\neg \left( \var{semaphore} \neq \relnull \land \var{\_e22} \neq \relnull \land \var{route2} \neq \relnull \right) \land \var{route1} \neq \var{route2}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21, \_e22} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21, \_e22} \rangle$
+}
+  [
+{$\leftouterjoin\{\var{semaphore}, \var{route2}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21, \_e22} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21, \_e22} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 11} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\alldifferent{}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21} \rangle$
+}
+  [
+{$\join\{\var{sensor2}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2, route2, \_e21} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{10} \rangle :
+\langle \var{2} \rangle$
+}
+  [
+{$\join\{\var{te2}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2, \_e20, sensor2} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{8} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{te1}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18, \_e19, te2} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{5} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{sensor1}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1, te1, \_e18} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{4} \rangle :
+\langle \var{2} \rangle$
+}
+  [
+{$\join\{\var{route1}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore, \_e17, sensor1} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore, \_e17, sensor1} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{0} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\getedgesi{route1}{Route}{semaphore}{Semaphore}$\\$\getedgesii{\_e16}{exit}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e16, semaphore} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e16, semaphore} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+  [
+{$\getedgesi{route1}{Route}{sensor1}{Sensor}$\\$\getedgesii{\_e17}{gathers}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route1, \_e17, sensor1} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route1, \_e17, sensor1} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{te1}{}{sensor1}{Sensor}$\\$\getedgesii{\_e18}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{te1, \_e18, sensor1} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{te1, \_e18, sensor1} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{te1}{}{te2}{}$\\$\getedgesii{\_e19}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{te1, \_e19, te2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{te1, \_e19, te2} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{te2}{}{sensor2}{Sensor}$\\$\getedgesii{\_e20}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{te2, \_e20, sensor2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{te2, \_e20, sensor2} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{route2}{Route}{sensor2}{Sensor}$\\$\getedgesii{\_e21}{gathers}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route2, \_e21, sensor2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route2, \_e21, sensor2} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+  [
+{$\getedgesi{route2}{Route}{semaphore}{Semaphore}$\\$\getedgesii{\_e22}{entry}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{route2, \_e22, semaphore} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{route2, \_e22, semaphore} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

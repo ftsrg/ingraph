@@ -45,7 +45,6 @@ import relalg.SortEntry
 import relalg.SortOperator
 import relalg.StringLiteral
 import relalg.TopOperator
-import relalg.TransitiveClosureOperator
 import relalg.UnaryArithmeticOperatorType
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryGraphObjectLogicalOperatorType
@@ -55,6 +54,7 @@ import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VariableExpression
 import relalg.VertexVariable
+import relalg.PathOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -219,7 +219,7 @@ abstract class AbstractRelalgSerializer {
   }
 
 
-  def dispatch operatorToTex(TransitiveClosureOperator op) {
+  def dispatch operatorToTex(PathOperator op) {
     #[
       '''\transitiveclosure«op.direction.directionToTex»''' + //
       '''{«op.sourceVertexVariable.escapedName»}''' + //

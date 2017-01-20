@@ -38,13 +38,13 @@ class TupleInferencer {
   /**
    * inferDetailedSchema
    */
-  def dispatch List<Variable> inferDetailedSchema(NullaryOperator op, List<? extends Variable> extraVariables) {
+  def dispatch List<Variable> inferDetailedSchema(NullaryOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.clear
     op.extraVariables.addAll(extraVariables)
     op.defineDetailedSchema(extraVariables)
   }
 
-  def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<? extends Variable> extraVariables) {
+  def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<AttributeVariable> extraVariables) {
     val newExtraVariables = extractUnaryOperatorExtraVariables(op)
 
     val inputExtraVariables = union(extraVariables, newExtraVariables)
@@ -52,10 +52,18 @@ class TupleInferencer {
     op.input.inferDetailedSchema(inputExtraVariables)
   }
 
-  def dispatch List<Variable> inferDetailedSchema(BinaryOperator op, List<? extends Variable> extraVariables) {
+  def dispatch List<Variable> inferDetailedSchema(BinaryOperator op, List<AttributeVariable> extraVariables) {
     op.defineDetailedSchema(extraVariables)
-    op.leftInput.inferDetailedSchema(extraVariables)
-    op.rightInput.inferDetailedSchema(extraVariables)
+    
+    val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
+    val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
+    
+    // remove duplicates as we only need each extra variable once
+    // choosing "right\left" over "left\right" is an arbitrary decision - studying, benchmarking and optimizing this is subject to future work
+    rightExtraVariables.removeAll(leftExtraVariables)
+    
+    op.leftInput.inferDetailedSchema(leftExtraVariables)
+    op.rightInput.inferDetailedSchema(rightExtraVariables)
   }
 
   /**
@@ -102,30 +110,30 @@ class TupleInferencer {
   }
   
   /**
-   * extract extra variables required by unary operators
+   * extract extra attributes required by unary operators
    */
-  def dispatch extractUnaryOperatorExtraVariables(ProjectionOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
     op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
   }
 
-  def dispatch extractUnaryOperatorExtraVariables(GroupingOperator op) {
-    op.entries
-  }
+//  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
+//    op.entries // TODO this does not belong here
+//  }
 
-  def dispatch extractUnaryOperatorExtraVariables(SelectionOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
     getAttributes(op.condition)
   }
 
-  def dispatch extractUnaryOperatorExtraVariables(SortOperator op) {
-    op.entries.map[variable]
-  }
-
-  def dispatch extractUnaryOperatorExtraVariables(UnwindOperator op) {
-    #[op.sourceVariable]
-  }
+//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
+//    op.entries.map[variable]
+//  }
+//
+//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
+//    #[op.sourceVariable]
+//  }
   
   // rest of the unary operators - no extra requirements
-  def dispatch extractUnaryOperatorExtraVariables(UnaryOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
     #[]
   }
   

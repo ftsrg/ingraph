@@ -1,0 +1,238 @@
+% !TeX program = pdflatex
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../../../ingraph/visualization/inputs/relalg-packages}
+\input{../../../ingraph/visualization/inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+  [
+{$\projection{\var{sensor},~\var{segment1},~\var{segment2},~\var{segment3},~\var{segment4},~\var{segment5},~\var{segment6}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{sensor, segment1, segment2, segment3, segment4, segment5, segment6} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{sensor, segment1, segment2, segment3, segment4, segment5, segment6} \rangle$
+}
+  [
+{$\alldifferent{}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46, \_e47} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46, \_e47} \rangle$
+}
+  [
+{$\join\{\var{sensor}, \var{segment6}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46, \_e47} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46, \_e47} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 12} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\join\{\var{sensor}, \var{segment5}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45, \_e46} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 10} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\join\{\var{sensor}, \var{segment4}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44, \_e45} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 8} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\join\{\var{sensor}, \var{segment3}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43, \_e44} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 6} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\join\{\var{sensor}, \var{segment2}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6, \_e43} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2, 4} \rangle :
+\langle \var{2, 0} \rangle$
+}
+  [
+{$\join\{\var{segment1}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{0} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\getedgesi{segment1}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e37}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e37, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e37, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+  [
+{$\join\{\var{segment5}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5, \_e42, segment6} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{8} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{segment4}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4, \_e41, segment5} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{6} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{segment3}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e38, segment2, \_e39, segment3, \_e40, segment4} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{4} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\join\{\var{segment2}\}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e38, segment2, \_e39, segment3} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e38, segment2, \_e39, segment3} \rangle$
+\\ \footnotesize
+$\color{orange}
+\langle \var{2} \rangle :
+\langle \var{0} \rangle$
+}
+  [
+{$\getedgesi{segment1}{Segment}{segment2}{Segment}$\\$\getedgesii{\_e38}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment1, \_e38, segment2} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment1, \_e38, segment2} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+  [
+{$\getedgesi{segment2}{Segment}{segment3}{Segment}$\\$\getedgesii{\_e39}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment2, \_e39, segment3} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment2, \_e39, segment3} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment3}{Segment}{segment4}{Segment}$\\$\getedgesii{\_e40}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment3, \_e40, segment4} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment3, \_e40, segment4} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment4}{Segment}{segment5}{Segment}$\\$\getedgesii{\_e41}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment4, \_e41, segment5} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment4, \_e41, segment5} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment5}{Segment}{segment6}{Segment}$\\$\getedgesii{\_e42}{connectsTo}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment5, \_e42, segment6} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment5, \_e42, segment6} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+  [
+{$\getedgesi{segment2}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e43}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment2, \_e43, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment2, \_e43, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment3}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e44}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment3, \_e44, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment3, \_e44, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment4}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e45}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment4, \_e45, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment4, \_e45, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment5}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e46}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment5, \_e46, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment5, \_e46, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+  [
+{$\getedgesi{segment6}{Segment}{sensor}{Sensor}$\\$\getedgesii{\_e47}{monitoredBy}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment6, \_e47, sensor} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment6, \_e47, sensor} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}

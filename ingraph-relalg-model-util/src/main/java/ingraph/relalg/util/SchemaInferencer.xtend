@@ -14,11 +14,11 @@ import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
-import relalg.TransitiveClosureOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.PathOperator
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -102,11 +102,11 @@ class SchemaInferencer {
     op.defineSchema(schema)
   }
   
-  def dispatch List<Variable> inferSchema(TransitiveClosureOperator op) {
-    val schema = Lists.newArrayList(op.getInput.inferSchema)
+  def dispatch List<Variable> inferSchema(PathOperator op) {
+    val schema = Lists.newArrayList(op.getMiddleInput.inferSchema)
     
     val listExpressionVariable = createExpressionVariable => [
-      expression = op.listVariable
+      expression = op.getListVariable
     ]
     
     if (includeEdges) {

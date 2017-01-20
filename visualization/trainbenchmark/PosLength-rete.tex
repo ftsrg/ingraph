@@ -1,0 +1,54 @@
+% !TeX program = pdflatex
+\documentclass[varwidth=100cm,convert={density=120}]{standalone}
+\usepackage[active,tightpage]{preview}
+
+\input{../../../ingraph/visualization/inputs/relalg-packages}
+\input{../../../ingraph/visualization/inputs/relalg-commands}
+
+\begin{document}
+\begin{preview}
+\begin{forest} for tree={align=center}
+  [
+{$\duplicateelimination$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment, segment.length} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment, segment.length} \rangle$
+}
+  [
+{$\projection{\var{segment},~\var{segment.length}\assign \var{length}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment, segment.length} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment, segment.length} \rangle$
+}
+  [
+{$\selection{\var{segment.length} \leq \literal{0}}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment, segment.length} \rangle$
+}
+  [
+{$\alldifferent{}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment, segment.length} \rangle$
+}
+  [
+{$\getvertices{segment}{Segment}$
+  \\ \footnotesize
+  $\color{gray} \langle \var{segment} \rangle$
+\\ \footnotesize
+$\color{orange} \langle \var{segment, segment.length} \rangle$
+}     ,tier=input,for tree={blue,densely dashed}
+]
+]
+]
+]
+]
+;
+\end{forest}
+\end{preview}
+\end{document}
