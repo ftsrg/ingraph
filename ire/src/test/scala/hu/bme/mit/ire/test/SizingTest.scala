@@ -1,4 +1,7 @@
+package hu.bme.mit.ire.test
+
 import akka.actor.{ActorRef, Props, actorRef2Scala}
+import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.{Indexer, Tuple}
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
@@ -9,8 +12,8 @@ import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.WordSpec
 import org.scalatest.concurrent.TimeLimits
-
 import scala.collection.mutable
+import scala.Vector
 
 class SizingTest extends WordSpec with TimeLimits {
 

@@ -1,3 +1,5 @@
+package hu.bme.mit.ire.test
+
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.TransactionFactory

@@ -1,3 +1,5 @@
+package hu.bme.mit.ire.test
+
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
@@ -7,9 +9,9 @@ import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils.conversions._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-
 import scala.concurrent.Await
 import scala.concurrent.duration.{Duration, _}
+import akka.actor.actorRef2Scala
 
 class TerminatorTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {

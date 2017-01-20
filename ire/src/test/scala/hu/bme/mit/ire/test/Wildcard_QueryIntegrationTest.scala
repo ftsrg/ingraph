@@ -1,4 +1,7 @@
+package hu.bme.mit.ire.test
+
 import akka.actor.{ActorRef, Props, actorRef2Scala}
+import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
@@ -6,6 +9,7 @@ import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.TimeLimits
+import scala.Vector
 
 class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
 

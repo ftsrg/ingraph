@@ -1,6 +1,7 @@
+package hu.bme.mit.ire.test
+
 import hu.bme.mit.ire.util.IterableMultiMap
 import org.scalatest.WordSpec
-
 import scala.collection.mutable
 
 class IterableMultiMapTest extends WordSpec {
