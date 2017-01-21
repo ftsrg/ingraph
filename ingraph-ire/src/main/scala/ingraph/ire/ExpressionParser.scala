@@ -16,10 +16,10 @@ object ExpressionParser {
             val operand: (Tuple => Boolean) = parse(exp.getOperand, lookup)
             !operand(t)
           case IS_NULL =>
-            def left: (Tuple) => Any = parseComparable(exp.getOperand.asInstanceOf[ComparableExpression], _, lookup)
+            def left: (Tuple) => Any = parseValue(exp.getOperand.asInstanceOf[ComparableExpression], lookup)
             left(_) == null
           case IS_NOT_NULL =>
-            def left: (Tuple) => Any = parseComparable(exp.getOperand.asInstanceOf[ComparableExpression], _, lookup)
+            def left: (Tuple) => Any = parseValue(exp.getOperand.asInstanceOf[ComparableExpression], lookup)
             left(_) != null
         }
       case exp: UnaryGraphObjectLogicalExpression =>
@@ -42,9 +42,9 @@ object ExpressionParser {
           case XOR => (t: Tuple) => left(t) ^ right(t)
         }
       case exp: ArithmeticComparisonExpression =>
-        def left: (Tuple) => Any = parseComparable(exp.getLeftOperand, _, lookup)
+        def left: (Tuple) => Any = parseValue(exp.getLeftOperand, lookup)
 
-        def right: (Tuple) => Any = parseComparable(exp.getRightOperand, _, lookup)
+        def right: (Tuple) => Any = parseValue(exp.getRightOperand, lookup)
         import ArithmeticComparisonOperatorType._
         exp.getOperator match {
           case EQUAL_TO => (t: Tuple) => left(t) == right(t)
@@ -59,42 +59,41 @@ object ExpressionParser {
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
     tuple(lookup(variable))
 
-  private def parseComparable(cmp: Expression, tuple: Tuple, lookup: Map[Variable, Integer]): Any = cmp match {
-    case cmp: DoubleLiteral => cmp.getValue
-    case cmp: IntegerLiteral => cmp.getValue
-    case cmp: StringLiteral => cmp.getValue
-    case cmp: AttributeVariable =>  tuple(lookup(cmp)) //TODO
-    case cmp: Variable => tuple(lookup(cmp)) //TODO
-    case cmp: VariableComparableExpression => tuple(lookup(cmp.getVariable))
-    case cmp: VariableExpression => tuple(lookup(cmp.getVariable))
+  private def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
+    case cmp: DoubleLiteral => _ => cmp.getValue
+    case cmp: IntegerLiteral => - => cmp.getValue
+    case cmp: StringLiteral => _ => cmp.getValue
+    case cmp: AttributeVariable =>  tuple => tuple(lookup(cmp))
+    case cmp: Variable => tuple => tuple(lookup(cmp))
+    case cmp: VariableComparableExpression => tuple => tuple(lookup(cmp.getVariable))
+    case cmp: VariableExpression => tuple => tuple(lookup(cmp.getVariable))
     case exp: ArithmeticOperationExpression =>
-      // TODO: currently the emf tree is parsed on every function call
-      val left = parseComparable(exp.getLeftOperand, tuple, lookup)
-      val right = parseComparable(exp.getRightOperand, tuple, lookup)
+      val left = parseValue(exp.getLeftOperand, lookup)
+      val right = parseValue(exp.getRightOperand, lookup)
       import BinaryArithmeticOperatorType._
       exp.getOperator match {
-        case PLUS => GenericMath.add(left, right)
-        case MINUS => GenericMath.subtract(left, right)
-        case MULTIPLICATION => GenericMath.multiply(left, right)
-        case DIVISION => GenericMath.divide(left, right)
-        case POWER => GenericMath.power(left, right)
-        case MOD => GenericMath.mod(left, right)
+        case PLUS => tuple => GenericMath.add(left(tuple), right(tuple))
+        case MINUS => tuple => GenericMath.subtract(left(tuple), right(tuple))
+        case MULTIPLICATION => tuple => GenericMath.multiply(left(tuple), right(tuple))
+        case DIVISION => tuple => GenericMath.divide(left(tuple), right(tuple))
+        case POWER => tuple => GenericMath.power(left(tuple), right(tuple))
+        case MOD => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
     case cmp: FunctionExpression =>
       cmp.getArguments.size() match {
-        case 0 => FunctionLookup.fun0(cmp.getFunctor)()
+        case 0 => tuple => FunctionLookup.fun0(cmp.getFunctor)()
         case 1 =>
-          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
-          FunctionLookup.fun1(cmp.getFunctor)(first)
+          val first = parseValue(cmp.getArguments.get(0), lookup)
+          tuple => FunctionLookup.fun1(cmp.getFunctor)(first(tuple))
         case 2 =>
-          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
-          val second = parseComparable(cmp.getArguments.get(1), tuple, lookup)
-          FunctionLookup.fun2(cmp.getFunctor)(first, second)
+          val first = parseValue(cmp.getArguments.get(0), lookup)
+          val second = parseValue(cmp.getArguments.get(1), lookup)
+          tuple => FunctionLookup.fun2(cmp.getFunctor)(first(tuple), second(tuple))
         case 3 =>
-          val first = parseComparable(cmp.getArguments.get(0), tuple, lookup)
-          val second = parseComparable(cmp.getArguments.get(1), tuple, lookup)
-          val third = parseComparable(cmp.getArguments.get(2), tuple, lookup)
-          FunctionLookup.fun3(cmp.getFunctor)(first, second, third)
+          val first = parseValue(cmp.getArguments.get(0), lookup)
+          val second = parseValue(cmp.getArguments.get(1), lookup)
+          val third = parseValue(cmp.getArguments.get(2), lookup)
+          tuple => FunctionLookup.fun3(cmp.getFunctor)(first(tuple), second(tuple), third(tuple))
       }
   }
 }
