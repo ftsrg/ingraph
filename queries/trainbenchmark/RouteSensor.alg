@@ -10,6 +10,6 @@ ExpandOut(edgeVar=_e3:monitoredBy, vertexVar=sensor:Sensor)   |
  |                                                            |
 ExpandOut(edgeVar=_e2:target, vertexVar=sw:Switch)            |
  |                                                            |
-ExpandOut(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition) ExpandOut(edgeVar=:gathers, vertexVar=sensor:Sensor)
+ExpandOut(edgeVar=_e1:follows, vertexVar=swP:SwitchPosition) ExpandOut(edgeVar=:requires, vertexVar=sensor:Sensor)
  |                                                            |
 GetVertices(vertexVar=route:Route)                           GetVertices(vertexVar=route:Route)
