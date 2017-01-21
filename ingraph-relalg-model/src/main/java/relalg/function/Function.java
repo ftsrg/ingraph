@@ -153,4 +153,18 @@ public enum Function {
   public boolean isAggregation() {
 	return category == FunctionCategory.AGGREGATION;
   }
+
+  /**
+   * Indicate if the function might provide a numeric results.
+   *
+   * For certain functions e.g. cosine (cos), this is obvious, but a list head returns ANY,
+   * and whether it is numeric or not depends on the content of the list
+   */
+  public boolean mightBeNumericValued() {
+	return outputType == NUMBER
+	    || outputType == INTEGER
+	    || outputType == FLOAT
+	    || outputType == ANY
+	    ;
+  }
 }

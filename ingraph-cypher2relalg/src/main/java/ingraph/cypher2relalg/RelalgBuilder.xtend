@@ -734,7 +734,9 @@ class RelalgBuilder {
     ]
 
     populateFunctionExpression(fe, fi)
-    // TODO isnumeric
+    if (!fe.functor.mightBeNumericValued) {
+      warning('''Expected numeric valued function, found «fe.functor» with output type «fe.functor.outputType»''')
+    }
 
     fe
   }
