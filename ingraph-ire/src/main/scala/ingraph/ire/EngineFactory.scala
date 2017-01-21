@@ -47,7 +47,7 @@ object EngineFactory {
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
             case op: ProjectionOperator =>
-              val lookup = schemaToMap.schemaToMap(op)
+              val lookup = schemaToMap.schemaToMap(op.getInput)
               val mask = op.getDetailedSchema.map(element => lookup.get(element).toInt)
               newLocal(Props(new ProjectionNode(expr.child, mask)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
