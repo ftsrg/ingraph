@@ -7,7 +7,7 @@ import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
-import relalg.GetEdgesOperator
+import relalg.{AttributeVariable, GetEdgesOperator, Variable, VertexVariable}
 
 import scala.collection.mutable
 
@@ -21,13 +21,22 @@ class IngraphGraphChangedListener(
 
   override def idParser(obj: Any): Any = obj
   var transaction: Transaction = _
+  import Conversions._
 
   def elementToNode(element: Element, required: Vector[String]): Tuple =
     Vector(idParser(element.id)) ++
       required.tail.map(key => element.value(key).asInstanceOf[Any])
 
-  def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple =
-    Vector(idParser(edge.outVertex.id), idParser(edge.id), idParser(edge.inVertex.id))
+  def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple = {
+    Vector(idParser(edge.outVertex.id), idParser(edge.id), idParser(edge.inVertex.id)) ++
+      operator.getDetailedSchema.drop(3).map(
+      a =>
+        if (a.asInstanceOf[AttributeVariable].getElement == operator.getSourceVertexVariable)
+          edge.outVertex().value(a.getName).asInstanceOf[Any]
+        else
+          edge.inVertex().value(a.getName).asInstanceOf[Any]
+    )
+  }
 
   override def vertexAdded(vertex: Vertex): Unit = {
     for (set <- vertexConverters.get(vertex.label);

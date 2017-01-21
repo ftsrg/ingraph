@@ -74,7 +74,6 @@ object EngineFactory {
               case op: AntiJoinOperator =>
                 newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
               case op: JoinOperator =>
-                val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new JoinNode(
                     expr.child,
                     op.getLeftInput.getDetailedSchema.length,
@@ -83,7 +82,6 @@ object EngineFactory {
                     emfToInt(op.getRightMask)
                 )))
               case op: LeftOuterJoinOperator =>
-                val names = op.getCommonVariables.map(_.getName)
                 newLocal(Props(new LeftOuterJoinNode(
                   expr.child,
                   op.getLeftInput.getDetailedSchema.length,
