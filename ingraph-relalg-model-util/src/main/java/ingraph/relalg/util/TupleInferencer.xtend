@@ -21,6 +21,7 @@ import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.BinaryLogicalExpression
 
 class TupleInferencer {
 
@@ -78,6 +79,10 @@ class TupleInferencer {
   /**
    * getAttributes
    */
+  def dispatch List<AttributeVariable> getAttributes(UnaryLogicalExpression expression) {
+    getAttributes(expression.operand)
+  }
+  
   def dispatch List<AttributeVariable> getAttributes(ArithmeticComparisonExpression expression) {
     Lists.newArrayList(Iterables.concat(
       getAttributes(expression.leftOperand),
@@ -85,8 +90,11 @@ class TupleInferencer {
     ))
   }
 
-  def dispatch List<AttributeVariable> getAttributes(UnaryLogicalExpression expression) {
-    getAttributes(expression.operand)
+  def dispatch List<AttributeVariable> getAttributes(BinaryLogicalExpression expression) {
+    Lists.newArrayList(Iterables.concat(
+      getAttributes(expression.leftOperand),
+      getAttributes(expression.rightOperand)
+    ))
   }
 
   def dispatch List<AttributeVariable> getAttributes(VariableExpression expression) {
