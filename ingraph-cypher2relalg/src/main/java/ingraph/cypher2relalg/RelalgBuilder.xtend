@@ -66,6 +66,7 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
+import java.util.Arrays
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -300,10 +301,10 @@ class RelalgBuilder {
           val sortDirection = if(sort !== null && sort.startsWith("DESC")) OrderDirection.
               DESCENDING else OrderDirection.ASCENDING
 
-          val sortVariable = variableBuilder.buildRelalgVariable(expression)
+          val sortExpression = buildRelalgExpression(expression)
           createSortEntry => [
             direction = sortDirection
-            variable = sortVariable
+            expression = sortExpression
           ]
         ]
         createSortOperator => [
@@ -604,10 +605,6 @@ class RelalgBuilder {
     variableBuilder.buildVariableExpression(e)
   }
 
-  def dispatch Expression buildRelalgExpression(NumberConstant e) {
-    buildRelalgArithmeticExpression(e)
-  }
-
   def dispatch Expression buildRelalgExpression(StringConstant e) {
     buildRelalgStringLiteral(e)
   }
@@ -677,6 +674,20 @@ class RelalgBuilder {
     }
 
     first.tail
+  }
+
+  /**
+   * Catch-all to pass on calls to more-specific methods
+   */
+  def dispatch Expression buildRelalgExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
+    switch (e) {
+      NumberConstant
+    , ExpressionPlusMinus
+    , ExpressionMulDiv
+    , ExpressionPower
+      : buildRelalgArithmeticExpression(e)
+      default: throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e).toString()»''')
+    }
   }
 
   def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {

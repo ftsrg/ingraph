@@ -297,7 +297,7 @@ abstract class AbstractRelalgSerializer {
       case DESCENDING: "desc"
       default: throw new UnsupportedOperationException('''SortEntry «entry.direction» not supported.''')
     }
-    '''\«direction» \var{«entry.variable.escapedName»}'''
+    '''\«direction» \var{«entry.expression.convertExpression»}'''
   }
 
   /**

@@ -277,7 +277,7 @@ class SortOperator extends UnaryOperator {
 }
 
 class SortEntry {
-  refers Variable variable
+  refers Expression expression
   OrderDirection direction
 }
 
