@@ -23,10 +23,11 @@ import relalg.PathOperator
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
  * 
- * Uses a bottom-up approach: it uses recursion / dispatch methods to reach the (unary) input nodes,
+ * This inferencing uses a bottom-up approach:
+ * first it uses recursion / dispatch methods to reach the (unary) input nodes,
  * then each method returns with the inferred schema.
  * 
- * For example, a join node concatenates the schema of its input nodes (left/right) and removes the 
+ * For example, a join node concatenates the schema of its input nodes (left/right) and removes the duplicate attributes. 
  */
 class SchemaInferencer {
 

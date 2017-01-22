@@ -11,6 +11,8 @@ class RelalgContainer {
   contains Operator rootExpression
   contains NamedElement[] elements opposite ^namedElementContainer
   contains Expression[] expressions opposite ^container
+  boolean schemaInferencingCompleted = "false"
+  boolean tupleInferencingCompleted = "false"
 }
 
 abstract class NamedElement {
@@ -247,7 +249,7 @@ class ExpandOperator extends UnaryOperator, NavigationOperator {
 }
 
 
-class TernaryOperator {
+abstract class TernaryOperator extends Operator {
   contains Operator leftInput
   contains Operator middleInput
   contains Operator rightInput
