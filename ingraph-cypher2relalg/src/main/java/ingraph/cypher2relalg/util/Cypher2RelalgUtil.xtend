@@ -41,7 +41,7 @@ class Cypher2RelalgUtil {
     var Operator retVal = null
 
     // build a left deep tree of Joins from the match clauses
-    if (i?.hasNext) {
+    if (i != null && i.hasNext) {
       for (retVal = i.next; i.hasNext;) {
         val nextAE = switch (binaryOperatorType) {
           case typeof(JoinOperator): createJoinOperator
@@ -66,7 +66,7 @@ class Cypher2RelalgUtil {
     var LogicalExpression retVal = null
 
     // build a left deep tree of logical expressions with AND/OR
-    if (i?.hasNext) {
+    if (i != null && i.hasNext) {
       for (retVal = i.next; i.hasNext;) {
         val nextAE = createBinaryLogicalExpression => [
           operator = binaryLogicalOperator

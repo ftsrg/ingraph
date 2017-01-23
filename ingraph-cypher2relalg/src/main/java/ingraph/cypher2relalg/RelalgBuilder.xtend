@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
+import java.util.Arrays
 import java.util.HashSet
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
@@ -66,7 +67,6 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
-import java.util.Arrays
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.

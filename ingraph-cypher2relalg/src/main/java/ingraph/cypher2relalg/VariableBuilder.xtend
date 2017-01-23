@@ -5,7 +5,6 @@ import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.ExpressionVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
-import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.IngraphLogger
@@ -35,7 +34,6 @@ import relalg.VertexVariable
 class VariableBuilder {
   extension RelalgFactory factory = RelalgFactory.eINSTANCE
   extension IngraphLogger logger = new IngraphLogger(VariableBuilder.name)
-  extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
 
   val RelalgContainer topLevelContainer
 
