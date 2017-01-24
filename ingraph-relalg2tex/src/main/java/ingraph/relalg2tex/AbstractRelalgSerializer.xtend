@@ -36,6 +36,7 @@ import relalg.ListExpression
 import relalg.MaxHops
 import relalg.NamedElement
 import relalg.Operator
+import relalg.PathOperator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
@@ -54,7 +55,6 @@ import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VariableExpression
 import relalg.VertexVariable
-import relalg.PathOperator
 
 abstract class AbstractRelalgSerializer {
 
@@ -297,7 +297,7 @@ abstract class AbstractRelalgSerializer {
       case DESCENDING: "desc"
       default: throw new UnsupportedOperationException('''SortEntry «entry.direction» not supported.''')
     }
-    '''\«direction» \var{«entry.expression.convertExpression»}'''
+    '''\«direction» «entry.expression.convertExpression»'''
   }
 
   /**
@@ -425,6 +425,14 @@ abstract class AbstractRelalgSerializer {
 
   def dispatch convertExpression(AttributeVariable attributeVariable) {
     '''\var{«attributeVariable.element.name».«attributeVariable.escapedName»}'''
+  }
+
+  def dispatch convertExpression(ExpressionVariable expVariable) {
+    if (expVariable.hasInferredName) {
+      convertExpression(expVariable.expression)
+    } else {
+      '''\var{«expVariable.escapedName»}'''
+    }
   }
 
   /**

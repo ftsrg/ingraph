@@ -301,7 +301,12 @@ class RelalgBuilder {
           val sortDirection = if(sort !== null && sort.startsWith("DESC")) OrderDirection.
               DESCENDING else OrderDirection.ASCENDING
 
-          val sortExpression = buildRelalgExpression(expression)
+          val sortExpression = switch expression {
+            // for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
+            ExpressionNodeLabelsAndPropertyLookup: variableBuilder.buildVariableExpression(expression, true)
+            VariableRef: variableBuilder.buildVariableExpression(expression, true)
+            default: buildRelalgExpression(expression)
+          }
           createSortEntry => [
             direction = sortDirection
             expression = sortExpression
@@ -602,7 +607,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(VariableRef e) {
-    variableBuilder.buildVariableExpression(e)
+    variableBuilder.buildVariableExpression(e, false)
   }
 
   def dispatch Expression buildRelalgExpression(StringConstant e) {
@@ -649,7 +654,7 @@ class RelalgBuilder {
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-    variableBuilder.buildVariableExpression(e)
+    variableBuilder.buildVariableExpression(e, false)
   }
 
   def dispatch Expression buildRelalgExpression(ExpressionList el) {
@@ -829,7 +834,7 @@ class RelalgBuilder {
           Direction.BOTH
         else if (isLeftArrow) Direction.IN else Direction.OUT;
           targetVertexVariable = patternElementChain_VertexVariable;
-      
+
       minHops = if (range?.lower === null) {
           1
         } else {
@@ -844,7 +849,7 @@ class RelalgBuilder {
         if (range.upper === null) {
           createMaxHops() => [
             maxHopsType = MaxHopsType.UNLIMITED
-          ]          
+          ]
         } else {
           createMaxHops() => [
             maxHopsType = MaxHopsType.LIMITED

@@ -16,6 +16,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLoo
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import relalg.AttributeVariable
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.Expression
@@ -24,6 +25,7 @@ import relalg.LabelSetStatus
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.Variable
+import relalg.VariableExpression
 import relalg.VertexLabel
 import relalg.VertexVariable
 
@@ -100,8 +102,7 @@ class VariableBuilder {
     new VariableBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory, logger)
   }
 
-  def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
-    val ev = buildRelalgVariable(e.left)
+  protected def AttributeVariable buildPropertyLookupHelper(Variable ev, ExpressionNodeLabelsAndPropertyLookup e) {
     switch ev {
       VertexVariable: {
         if (e.propertyLookups.length == 1) {
@@ -126,10 +127,13 @@ class VariableBuilder {
     }
   }
 
+  def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
+    val ev = buildRelalgVariable(e.left)
+    buildPropertyLookupHelper(ev, e)
+  }
+
   def dispatch Variable buildRelalgVariable(VariableRef varRef) {
     switch varRef {
-      // TODO: expression variables from return has the highest priority in name resolution for order by,
-      // but they don't play a role when building later return items
       case vertexVariableFactory.hasElement(varRef.variableRef.name) &&
         edgeVariableFactory.hasElement(varRef.variableRef.name): {
         unrecoverableError('''Variable name ambigous: «varRef.variableRef.name»''')
@@ -145,6 +149,35 @@ class VariableBuilder {
         unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
         null
       }
+    }
+  }
+
+  def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
+    if (expressionVariableFactory.hasElement(varRef.variableRef.name)) {
+      expressionVariableFactory.createElement(varRef.variableRef.name)
+    } else {
+      buildRelalgVariable(varRef)
+    }
+  }
+
+  /**
+   * Expression variables from return has the highest priority in name resolution for order by,
+   * but they don't play a role when building later return items.
+   *
+   * These "*Extended" methods take Expression variables into account for name resolution.
+   */
+  def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
+    val ev = buildRelalgVariableExtended(e.left)
+    if (ev instanceof ExpressionVariable) {
+      val evx = ev.expression
+      if (evx instanceof VariableExpression) {
+        buildPropertyLookupHelper(evx.variable, e)
+      } else {
+        unrecoverableError('''Property lookup attempt on an expression of type «ev.expression.class.name»''')
+        null
+      }
+    } else {
+      buildPropertyLookupHelper(ev, e)
     }
   }
 
@@ -280,9 +313,9 @@ class VariableBuilder {
    * This builder method ensures that the new VariableEpression instance
    * is registered to the container registered with this builder.
    */
-  def dispatch buildVariableExpression(VariableRef v) {
+  def dispatch buildVariableExpression(VariableRef v, boolean useExpressionVariables) {
     createVariableExpression => [
-      variable = buildRelalgVariable(v)
+      variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
       container = topLevelContainer
     ]
   }
@@ -293,9 +326,9 @@ class VariableBuilder {
    * This builder method ensures that the new eVariableEpression instance
    * is registered to the container registered with this builder.
    */
-  def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup v) {
+  def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup v, boolean useExpressionVariables) {
     createVariableExpression => [
-      variable = buildRelalgVariable(v)
+      variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
       container = topLevelContainer
     ]
   }
