@@ -78,7 +78,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
   def dispatch serializeVariable(AttributeVariable variable) {
     '''«variable.element.name».«variable.name»'''
   }
-  
+
   def dispatch serializeVariable(ListVariable variable) {
     '''«variable.name»'''
   }
@@ -86,13 +86,13 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
   def dispatch serializeVariable(ExpressionVariable variable) {
     '''«serializeExpression(variable.expression)»'''
   }
-  
+
   //
-  
+
   def dispatch serializeExpression(VariableListExpression expression) {
     '''«expression.variable.name»[]'''
   }
-  
+
   def dispatch serializeExpression(Expression expression) {
     throw new UnsupportedOperationException('''Cannot serialize expression «expression»''')
   }
