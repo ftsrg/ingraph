@@ -28,6 +28,7 @@ import relalg.Variable
 import relalg.VariableExpression
 import relalg.VertexLabel
 import relalg.VertexVariable
+import java.util.Collection
 
 /**
  * This is the variable builder component of
@@ -45,8 +46,16 @@ class VariableBuilder {
   val VertexVariableFactory vertexVariableFactory
   @Accessors(PUBLIC_GETTER)
   val EdgeVariableFactory edgeVariableFactory
+  /**
+   * Chain means that these are chained from the previous return-items.
+   */
   @Accessors(PUBLIC_GETTER)
-  val ExpressionVariableFactory expressionVariableFactory
+  val ExpressionVariableFactory expressionVariableFactoryChain
+  /**
+   * Extended below practically means they are created from the aliased return items.
+   */
+  @Accessors(PUBLIC_GETTER)
+  val ExpressionVariableFactory expressionVariableFactoryExtended
 
   val VertexLabelFactory vertexLabelFactory
   val EdgeLabelFactory edgeLabelFactory
@@ -64,7 +73,8 @@ class VariableBuilder {
 
     this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
     this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-    this.expressionVariableFactory = new ExpressionVariableFactory(this.topLevelContainer)
+    this.expressionVariableFactoryChain = new ExpressionVariableFactory(this.topLevelContainer)
+    this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
     this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
     this.edgeLabelFactory = new EdgeLabelFactory(this.topLevelContainer)
 
@@ -80,14 +90,19 @@ class VariableBuilder {
    * {@link #cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
    * call instead.
    */
-  protected new(RelalgContainer topLevelContainer, VertexLabelFactory vertexLabelFactory, EdgeLabelFactory edgeLabelFactory, IngraphLogger logger) {
+  protected new(RelalgContainer topLevelContainer, VertexLabelFactory vertexLabelFactory, EdgeLabelFactory edgeLabelFactory, Collection<ExpressionVariable> expressionVariableChain, IngraphLogger logger) {
     this.logger=logger
 
     this.topLevelContainer = topLevelContainer
 
     this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
     this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-    this.expressionVariableFactory = new ExpressionVariableFactory(this.topLevelContainer)
+    this.expressionVariableFactoryChain = new ExpressionVariableFactory(this.topLevelContainer)
+    // FIXME: actual edgeVariables and vertexVariables should be extracted from the ExpressionVariable
+    //        and be put right in the corresponding factories 
+    // only those with explicit name are chained, because expressions with inferred names can't be referenced
+    expressionVariableChain.forEach[ if (!it.hasInferredName) { expressionVariableFactoryChain.elements.put(it.name, it) } ]
+    this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
     this.vertexLabelFactory = vertexLabelFactory
     this.edgeLabelFactory = edgeLabelFactory
 
@@ -99,7 +114,7 @@ class VariableBuilder {
    * but retains label factories and the topLevelContainer.
    */
   def cloneBuilderWithNewVariableFactories() {
-    new VariableBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory, logger)
+    new VariableBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory, expressionVariableFactoryExtended.elements.values,  logger)
   }
 
   protected def AttributeVariable buildPropertyLookupHelper(Variable ev, ExpressionNodeLabelsAndPropertyLookup e) {
@@ -153,8 +168,8 @@ class VariableBuilder {
   }
 
   def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
-    if (expressionVariableFactory.hasElement(varRef.variableRef.name)) {
-      expressionVariableFactory.createElement(varRef.variableRef.name)
+    if (expressionVariableFactoryExtended.hasElement(varRef.variableRef.name)) {
+      expressionVariableFactoryExtended.createElement(varRef.variableRef.name)
     } else {
       buildRelalgVariable(varRef)
     }
@@ -201,7 +216,7 @@ class VariableBuilder {
   }
 
   def ExpressionVariable buildExpressionVariable(String name, Expression expression) {
-    expressionVariableFactory.createElement(name, expression) => [
+    expressionVariableFactoryExtended.createElement(name, expression) => [
       hasInferredName = false
     ]
   }
