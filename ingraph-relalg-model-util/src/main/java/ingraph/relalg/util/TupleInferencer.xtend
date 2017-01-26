@@ -5,7 +5,6 @@ import com.google.common.collect.Lists
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
-import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.RelalgContainer
@@ -19,6 +18,7 @@ class TupleInferencer {
   extension RelalgTreeVisitor treeVisitor = new RelalgTreeVisitor
   extension SchemaToMap schemaToMap = new SchemaToMap
   extension VariableExtractor variableExtractor = new VariableExtractor
+  extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
   var RelalgContainer container
 
   def addDetailedSchemaInformation(RelalgContainer container) {
@@ -38,30 +38,39 @@ class TupleInferencer {
    * inferDetailedSchema
    */
   def dispatch void inferDetailedSchema(NullaryOperator op, List<AttributeVariable> extraVariables) {
-    op.defineDetailedSchema(extraVariables)
+    val detailedSchema = union(op.schema, extraVariables)
+    op.defineDetailedSchema(detailedSchema)
   }
 
   def dispatch void inferDetailedSchema(UnaryOperator op, List<AttributeVariable> extraVariables) {
     val newExtraVariables = extractUnaryOperatorExtraVariables(op)
-    val inputExtraVariables = union(extraVariables, newExtraVariables)
     
-    op.defineDetailedSchema(inputExtraVariables)
+    val inputExtraVariables = union(extraVariables, newExtraVariables)
     op.input.inferDetailedSchema(inputExtraVariables)
+    
+    val detailedSchema = union(op.schema, inputExtraVariables)
+    op.defineDetailedSchema(detailedSchema)
   }
 
-  def dispatch void inferDetailedSchema(BinaryOperator op, List<AttributeVariable> extraVariables) {
+  def dispatch void inferDetailedSchema(UnionOperator op, List<AttributeVariable> extraVariables) {
+    throw new UnsupportedOperationException("Union not yet supported")
+  }
+
+  def dispatch void inferDetailedSchema(AbstractJoinOperator op, List<AttributeVariable> extraVariables) {
     val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
     val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
 
     // remove duplicates as we only need each extra variable once
-    // choosing "right\left" over "left\right" is an arbitrary decision - studying, benchmarking and optimizing this is subject to future work
+    // we choose "right\left" as it works for both equijoin and antijoin operators,
+    // as extra attributes that are available from both the left and right input
     rightExtraVariables.removeAll(leftExtraVariables)
 
-    val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
-
-    op.defineDetailedSchema(orderedExtraVariables)    
+    //val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
     op.leftInput.inferDetailedSchema(leftExtraVariables)
     op.rightInput.inferDetailedSchema(rightExtraVariables)
+    
+    val schema = calculateJoinAttributes(op, op.getLeftInput.detailedSchema, op.getRightInput.detailedSchema)
+    op.defineDetailedSchema(schema)
   }
 
   def dispatch void inferDetailedSchema(TernaryOperator op, List<AttributeVariable> extraVariables) {
@@ -76,28 +85,31 @@ class TupleInferencer {
     rightExtraVariables.removeAll(leftExtraVariables)
     rightExtraVariables.removeAll(middleExtraVariables)
 
-    op.defineDetailedSchema(extraVariables)
-
     op.leftInput.inferDetailedSchema(leftExtraVariables)
     op.middleInput.inferDetailedSchema(middleExtraVariables)
     op.rightInput.inferDetailedSchema(rightExtraVariables)
+
+    val detailedSchema = Lists.newArrayList(Iterables.concat(
+      op.getLeftInput.detailedSchema,
+      op.getMiddleInput.detailedSchema,
+      op.getRightInput.detailedSchema
+    ))
+    op.defineDetailedSchema(detailedSchema)
   }
   
   /**
    * defineSchema
    */
-  def void defineDetailedSchema(Operator op, List<? extends Variable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
-    
-    op.detailedSchema.addAll(op.schema)
-    op.detailedSchema.addAll(extraVariables)
+  def void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
+    op.detailedSchema.addAll(detailedSchema)
   }
 
   /**
    * shorthand for creating the union of two lists
    */
-  def <T> union(List<? extends T> list1, List<? extends T> list2) {
-    Lists.newArrayList(Iterables.concat(list1, list2))
+  def <T> union(List<? extends T>... lists) {
+  	lists.forEach[]
+    Lists.newArrayList(Iterables.concat(lists))
   }
   
   /**
