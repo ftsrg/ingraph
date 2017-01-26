@@ -10,4 +10,4 @@ cd slizaa-opencypher-xtext
 git fetch
 git checkout $SLIZAA_COMMIT_ID
 echo "Building slizaa-opencypher-xtext in quiet mode (only prints to console for the Xtext generator and in case of errors)"
-mvn clean install -q -DskipTests
+time mvn clean install -q -DskipTests
