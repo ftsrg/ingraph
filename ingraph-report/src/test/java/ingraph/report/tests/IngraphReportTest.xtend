@@ -14,6 +14,7 @@ import java.util.Collections
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import relalg.RelalgContainer
+import org.eclipse.emf.ecore.util.EcoreUtil
 
 class IngraphReportTest {
 
@@ -67,8 +68,9 @@ class IngraphReportTest {
 
 	def expression(RelalgContainer container) {
 	try {
-	  container.addSchemaInformation
-		expressionSerializer.serialize(container).toString
+		val container2 = EcoreUtil.copy(container)
+	  container2.addSchemaInformation
+		expressionSerializer.serialize(container2).toString
 	} catch (Exception e) {
 		e.printStackTrace
 		null
@@ -77,8 +79,9 @@ class IngraphReportTest {
 
 	def visualizeTree(RelalgContainer container) {
 	try {
-	  container.addSchemaInformation
-		treeSerializer.serialize(container)
+	  val treeContainer = EcoreUtil.copy(container)
+	  treeContainer.addSchemaInformation
+		treeSerializer.serialize(treeContainer)
 	} catch (Exception e) {
 		e.printStackTrace
 		null
@@ -87,10 +90,11 @@ class IngraphReportTest {
 
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
-		  container.transformToRete
-		  container.addSchemaInformation
-      container.addDetailedSchemaInformation
-			treeSerializer.serialize(container)
+		  val container2 = EcoreUtil.copy(container)
+		  container2.transformToRete
+		  container2.addSchemaInformation
+      container2.addDetailedSchemaInformation
+			treeSerializer.serialize(container2)
 		} catch (Exception e) {
 			e.printStackTrace
 			null
@@ -163,19 +167,6 @@ class IngraphReportTest {
 	\begin{center}
 	\adjustbox{max width=\textwidth}{%
 	«incrementalTree»
-	}
-	\end{center}
-	«ENDIF»
-
-	\subsubsection*«header("Incremental relational algebra tree with tuples", name)»
-
-	«val incrementalTreeTuples = container.visualizeWithTransformations»
-	«IF incrementalTreeTuples == null»
-	Cannot visualize incremental tree with tuples.
-	«ELSE»
-	\begin{center}
-	\adjustbox{max width=\textwidth}{%
-	«incrementalTreeTuples»
 	}
 	\end{center}
 	«ENDIF»
