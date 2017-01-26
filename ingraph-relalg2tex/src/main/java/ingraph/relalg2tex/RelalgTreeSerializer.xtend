@@ -50,9 +50,9 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
       \\ \footnotesize
       $\color{gray} «serializeSchema(op.schema)» \rangle$
       «ENDIF»
-      «IF !op.detailedSchema.isEmpty»
+      «IF !op.extraVariables.isEmpty»
     \\ \footnotesize
-    $\color{orange} «serializeSchema(op.detailedSchema)» \rangle$
+    $\color{orange} «serializeSchema(op.extraVariables)» \rangle$
     «ENDIF»
     «IF op instanceof AbstractJoinOperator && !op.detailedSchema.isEmpty && config.includeCommonVariables»
     \\ \footnotesize

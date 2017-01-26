@@ -22,51 +22,75 @@ class TupleInferencer {
   var RelalgContainer container
 
   def addDetailedSchemaInformation(RelalgContainer container) {
-    val rootExpression = container.getRootExpression
-    this.container = container // TODO ugly hack
-    rootExpression.inferDetailedSchema(#[])
-    rootExpression.traverse([calculateTuples])
+    if (container.tupleInferencingCompleted) {
+      throw new IllegalStateException("Tuple inferencing on relalg container was already performed")
+    } else {
+      container.tupleInferencingCompleted = true
+    }
+
+    this.container = container
+    container.rootExpression.inferDetailedSchema(#[])
+    container.rootExpression.traverse([calculateTuples])
     container
   }
 
   /**
    * inferDetailedSchema
    */
-  def dispatch List<Variable> inferDetailedSchema(NullaryOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.clear
-    op.extraVariables.addAll(extraVariables)
+  def dispatch void inferDetailedSchema(NullaryOperator op, List<AttributeVariable> extraVariables) {
     op.defineDetailedSchema(extraVariables)
   }
 
-  def dispatch List<Variable> inferDetailedSchema(UnaryOperator op, List<AttributeVariable> extraVariables) {
+  def dispatch void inferDetailedSchema(UnaryOperator op, List<AttributeVariable> extraVariables) {
     val newExtraVariables = extractUnaryOperatorExtraVariables(op)
-
     val inputExtraVariables = union(extraVariables, newExtraVariables)
+    
     op.defineDetailedSchema(inputExtraVariables)
     op.input.inferDetailedSchema(inputExtraVariables)
   }
 
-  def dispatch List<Variable> inferDetailedSchema(BinaryOperator op, List<AttributeVariable> extraVariables) {
-    op.defineDetailedSchema(extraVariables)
-    
+  def dispatch void inferDetailedSchema(BinaryOperator op, List<AttributeVariable> extraVariables) {
     val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
     val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
-    
+
     // remove duplicates as we only need each extra variable once
     // choosing "right\left" over "left\right" is an arbitrary decision - studying, benchmarking and optimizing this is subject to future work
     rightExtraVariables.removeAll(leftExtraVariables)
-    
+
+    val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
+
+    op.defineDetailedSchema(orderedExtraVariables)    
     op.leftInput.inferDetailedSchema(leftExtraVariables)
     op.rightInput.inferDetailedSchema(rightExtraVariables)
   }
 
+  def dispatch void inferDetailedSchema(TernaryOperator op, List<AttributeVariable> extraVariables) {
+    val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
+    val middleExtraVariables = extraVariables.filter[op.middleInput.schema.contains(it.element)].toList
+    val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
+
+    // remove duplicates as we only need each extra variable once
+    // see the related comment in inferDetailedSchema for BinaryOperators
+    middleExtraVariables.removeAll(leftExtraVariables)
+    
+    rightExtraVariables.removeAll(leftExtraVariables)
+    rightExtraVariables.removeAll(middleExtraVariables)
+
+    op.defineDetailedSchema(extraVariables)
+
+    op.leftInput.inferDetailedSchema(leftExtraVariables)
+    op.middleInput.inferDetailedSchema(middleExtraVariables)
+    op.rightInput.inferDetailedSchema(rightExtraVariables)
+  }
+  
   /**
    * defineSchema
    */
-  def defineDetailedSchema(Operator op, List<? extends Variable> extraVariables) {
+  def void defineDetailedSchema(Operator op, List<? extends Variable> extraVariables) {
+    op.extraVariables.addAll(extraVariables)
+    
     op.detailedSchema.addAll(op.schema)
     op.detailedSchema.addAll(extraVariables)
-    op.detailedSchema
   }
 
   /**
@@ -88,11 +112,6 @@ class TupleInferencer {
   }
   
   def dispatch void calculateTuples(AbstractJoinOperator op) {
-    // this is required for cases where the inferencing is invoked multiple times
-    // TODO maybe we should just throw and exception for multiple executions
-    op.leftMask.clear
-    op.rightMask.clear
-    
     val leftIndices = op.leftInput.schemaToMap
     val rightIndices = op.rightInput.schemaToMap
     

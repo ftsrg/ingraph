@@ -44,9 +44,14 @@ class SchemaInferencer {
   }
 
   def addSchemaInformation(RelalgContainer container) {
-    val rootExpression = container.getRootExpression
-    this.container = container // TODO ugly hack
-    rootExpression.inferSchema
+    if (container.schemaInferencingCompleted) {
+      throw new IllegalStateException("Schema inferencing on relalg container was already performed")
+    } else {
+      container.schemaInferencingCompleted = true
+    }
+     
+    this.container = container
+    container.rootExpression.inferSchema
     container
   }
 
