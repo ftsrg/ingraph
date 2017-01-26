@@ -15,7 +15,7 @@ import relalg.Variable
 
 class TupleInferencer {
 
-  extension RelalgTreeVisitor treeVisitor = new RelalgTreeVisitor
+  extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
   extension SchemaToMap schemaToMap = new SchemaToMap
   extension VariableExtractor variableExtractor = new VariableExtractor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator

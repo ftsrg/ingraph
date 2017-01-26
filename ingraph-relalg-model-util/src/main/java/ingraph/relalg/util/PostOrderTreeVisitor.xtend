@@ -6,7 +6,7 @@ import relalg.Operator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 
-class RelalgTreeVisitor {
+class PostOrderTreeVisitor {
   
   /**
    * traverse tree and apply a visitor method

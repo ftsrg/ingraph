@@ -1,5 +1,6 @@
 package ingraph.relalg.util
 
+import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -30,6 +31,7 @@ import relalg.VariableExpression
 class SchemaInferencer {
 
   extension RelalgFactory factory = RelalgFactory.eINSTANCE
+  extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
   val boolean includeEdges
   var RelalgContainer container
@@ -50,7 +52,7 @@ class SchemaInferencer {
     }
      
     this.container = container
-    container.rootExpression.inferSchema
+    container.rootExpression.traverse([inferSchema])
     container
   }
 
@@ -72,7 +74,7 @@ class SchemaInferencer {
 
   // unary operators
   def dispatch List<Variable> inferSchema(ProjectionOperator op) {
-    val schema = op.getInput.inferSchema
+    val schema = op.input.schema
 
     // check if all projected variables are in the schema
     op.elements.map[expression].filter(AttributeVariable).forEach [
@@ -97,8 +99,8 @@ class SchemaInferencer {
     op.defineSchema(elementVariables)
   }
 
-  def dispatch List<Variable> inferSchema(ExpandOperator op) {
-    val schema = Lists.newArrayList(op.getInput.inferSchema)
+  def dispatch List<Variable> inferSchema(ExpandOperator op) {    
+    val schema = Lists.newArrayList(op.input.schema)
     
     if (includeEdges) {
       schema.add(op.edgeVariable)
@@ -106,30 +108,17 @@ class SchemaInferencer {
     schema.add(op.targetVertexVariable)
     op.defineSchema(schema)
   }
-  
-  def dispatch List<Variable> inferSchema(PathOperator op) {
-    val schema = Lists.newArrayList(op.getMiddleInput.inferSchema)
-    
-    val listExpressionVariable = createExpressionVariable => [
-      expression = op.getListVariable
-    ]
-    
-    if (includeEdges) {
-      schema.add(listExpressionVariable)
-    }
-    schema.add(op.targetVertexVariable)
-    op.defineSchema(schema)
-  }
 
   // rest of the unary operators
   def dispatch List<Variable> inferSchema(UnaryOperator op) {
-    op.defineSchema(op.getInput.inferSchema)
+    val schema = Lists.newArrayList(op.input.schema)
+    op.defineSchema(schema)
   }
 
   // binary operators
   def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
-    val leftInputSchema = Lists.newArrayList(op.getLeftInput.inferSchema)
-    val rightInputSchema = Lists.newArrayList(op.getRightInput.inferSchema)
+    val leftInputSchema = Lists.newArrayList(op.leftInput.schema)
+    val rightInputSchema = Lists.newArrayList(op.rightInput.schema)
     val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
     op.defineSchema(schema)
 
@@ -141,11 +130,27 @@ class SchemaInferencer {
   }
 
   def dispatch List<Variable> inferSchema(UnionOperator op) {
-    op.getLeftInput.inferSchema
-    op.getRightInput.inferSchema
-
     // we only keep the left schema
     op.defineSchema(op.getLeftInput.schema)
+  }
+
+  // ternary operators
+  def dispatch List<Variable> inferSchema(PathOperator op) {
+    val schema = Lists.newArrayList(Iterables.concat(
+      op.leftInput.schema,
+      op.middleInput.schema,
+      op.rightInput.schema  
+    ))
+    
+    val listExpressionVariable = createExpressionVariable => [
+      expression = op.getListVariable
+    ]
+    
+    if (includeEdges) {
+      schema.add(listExpressionVariable)
+    }
+    schema.add(op.targetVertexVariable)
+    op.defineSchema(schema)
   }
 
   /**
