@@ -19,6 +19,7 @@ class TupleInferencer {
   extension SchemaToMap schemaToMap = new SchemaToMap
   extension VariableExtractor variableExtractor = new VariableExtractor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
+  extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
   var RelalgContainer container
 
   def addDetailedSchemaInformation(RelalgContainer container) {
@@ -102,14 +103,6 @@ class TupleInferencer {
    */
   def void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
     op.detailedSchema.addAll(detailedSchema)
-  }
-
-  /**
-   * shorthand for creating the union of two lists
-   */
-  def <T> union(List<? extends T>... lists) {
-  	lists.forEach[]
-    Lists.newArrayList(Iterables.concat(lists))
   }
   
   /**
