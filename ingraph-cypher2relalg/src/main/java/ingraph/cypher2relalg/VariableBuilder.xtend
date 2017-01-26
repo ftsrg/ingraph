@@ -98,10 +98,21 @@ class VariableBuilder {
     this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
     this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
     this.expressionVariableFactoryChain = new ExpressionVariableFactory(this.topLevelContainer)
-    // FIXME: actual edgeVariables and vertexVariables should be extracted from the ExpressionVariable
-    //        and be put right in the corresponding factories 
-    // only those with explicit name are chained, because expressions with inferred names can't be referenced
-    expressionVariableChain.forEach[ if (!it.hasInferredName) { expressionVariableFactoryChain.elements.put(it.name, it) } ]
+    // Actual edgeVariables and vertexVariables are extracted from the ExpressionVariable
+    //        and put right in the corresponding factories' element list
+    expressionVariableChain.forEach[
+      val f_it = it
+      if (!f_it.hasInferredName) { // only those with actual name or alias can be re-used in the next context
+        switch f_ite: f_it.expression {
+          VariableExpression: switch v: f_ite.variable {
+            VertexVariable: vertexVariableFactory.elements.put(f_it.name, v)
+            EdgeVariable: edgeVariableFactory.elements.put(f_it.name, v)
+            default: expressionVariableFactoryChain.elements.put(f_it.name, f_it)
+          }
+          default: expressionVariableFactoryChain.elements.put(f_it.name, f_it)
+        }
+      }
+    ]
     this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
     this.vertexLabelFactory = vertexLabelFactory
     this.edgeLabelFactory = edgeLabelFactory
