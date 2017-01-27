@@ -136,7 +136,7 @@ Currently, these modules have support:
     ```
     java.lang.IllegalArgumentException: The 'no null' constraint is violated
     ```
-  * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `pkill -f gradle`
+  * **Solution:** [terminate the Gradle daemon](https://github.com/xtext/xtext-gradle-plugin/issues/58#issue-167052300), e.g. use `./gradlew --stop`. If the problem persists, you might want to [disable Gradle daemons](https://docs.gradle.org/current/userguide/gradle_daemon.html#sec:disabling_the_daemon).
 
   * **Problem:**
 
