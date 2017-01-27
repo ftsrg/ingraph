@@ -1,7 +1,12 @@
-package ingraph.relalg.util
+package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
+import ingraph.relalg.calculators.JoinAttributeCalculator
+import ingraph.relalg.calculators.ListUnionCalculator
+import ingraph.relalg.calculators.MaskCalculator
+import ingraph.relalg.calculators.VariableExtractor
+import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
@@ -16,10 +21,10 @@ import relalg.Variable
 class TupleInferencer {
 
   extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
-  extension SchemaToMap schemaToMap = new SchemaToMap
   extension VariableExtractor variableExtractor = new VariableExtractor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
   extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
+  extension MaskCalculator maskCalculator = new MaskCalculator
   var RelalgContainer container
 
   def addDetailedSchemaInformation(RelalgContainer container) {
@@ -104,34 +109,5 @@ class TupleInferencer {
   def void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
     op.detailedSchema.addAll(detailedSchema)
   }
-  
-  /**
-   * calculateTuples
-   */
-  def dispatch void calculateTuples(NullaryOperator op) {
-    // do nothing
-  }
-  
-  def dispatch void calculateTuples(UnaryOperator op) {
-    // do nothing    
-  }
-  
-  def dispatch void calculateTuples(AbstractJoinOperator op) {
-    val leftIndices = op.leftInput.schemaToMap
-    val rightIndices = op.rightInput.schemaToMap
-    
-    op.commonVariables.forEach[ variable |
-      op.leftMask.add(leftIndices.get(variable))
-      op.rightMask.add(rightIndices.get(variable))
-    ]
-  }
-  
-  def dispatch void calculateTuples(UnionOperator op) {
-    // do nothing
-  }
-  
-  def dispatch void calculateTuples(TernaryOperator op) {
-    // TODO do something
-  }  
   
 }

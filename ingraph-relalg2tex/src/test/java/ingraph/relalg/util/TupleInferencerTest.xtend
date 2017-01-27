@@ -1,10 +1,12 @@
 package ingraph.relalg.util
 
+import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.TupleInferencer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Test
-import relalg.RelalgFactory
 import relalg.ArithmeticComparisonOperatorType
+import relalg.RelalgFactory
 
 class TupleInferencerTest {
 

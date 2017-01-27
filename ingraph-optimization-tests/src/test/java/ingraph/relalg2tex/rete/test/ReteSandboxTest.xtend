@@ -2,9 +2,9 @@ package ingraph.relalg2tex.rete.test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.TupleInferencer
 import ingraph.relalg.util.RelalgUtil
-import ingraph.relalg.util.SchemaInferencer
-import ingraph.relalg.util.TupleInferencer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Ignore

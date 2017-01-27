@@ -1,4 +1,4 @@
-package ingraph.relalg.util
+package ingraph.relalg.calculators
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
@@ -11,10 +11,7 @@ import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
 
 class ExpressionToAttributes {
- 
-  /**
-   * getAttributes
-   */
+
   def dispatch List<AttributeVariable> getAttributes(UnaryLogicalExpression expression) {
     getAttributes(expression.operand)
   }

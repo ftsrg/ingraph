@@ -3,9 +3,9 @@ package ingraph.cypher2relalg.trainbenchmark
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.inferencers.SchemaInferencer
 import java.io.IOException
 import org.junit.Test
-import ingraph.relalg.util.SchemaInferencer
 
 class TrainBenchmarkCypher2RelalgTest {
 

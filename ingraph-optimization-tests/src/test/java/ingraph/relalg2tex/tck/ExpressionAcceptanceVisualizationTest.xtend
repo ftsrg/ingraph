@@ -3,7 +3,7 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.util.SchemaInferencer
+import ingraph.relalg.inferencers.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class ExpressionAcceptanceVisualizationTest {
@@ -12,15 +12,65 @@ class ExpressionAcceptanceVisualizationTest {
     extension SchemaInferencer inferencer = new SchemaInferencer
     
     /*
-    Scenario: Execute n[0]
+    Scenario: IN should work with nested list subscripting
     */
     @Test
     def void testExpressionAcceptance_01() {
         val container = Cypher2Relalg.processString('''
-        RETURN [1, 2, 3][0] AS value
+        WITH [[1, 2, 3]] AS list
+        RETURN 3 IN list[0] AS r
         ''')
         container.addSchemaInformation
         serializer.serialize(container, "tck/ExpressionAcceptance_01")
+    }
+
+    /*
+    Scenario: IN should work with nested literal list subscripting
+    */
+    @Test
+    def void testExpressionAcceptance_02() {
+        val container = Cypher2Relalg.processString('''
+        RETURN 3 IN [[1, 2, 3]][0] AS r
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/ExpressionAcceptance_02")
+    }
+
+    /*
+    Scenario: IN should work with list slices
+    */
+    @Test
+    def void testExpressionAcceptance_03() {
+        val container = Cypher2Relalg.processString('''
+        WITH [1, 2, 3] AS list
+        RETURN 3 IN list[0..1] AS r
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/ExpressionAcceptance_03")
+    }
+
+    /*
+    Scenario: IN should work with literal list slices
+    */
+    @Test
+    def void testExpressionAcceptance_04() {
+        val container = Cypher2Relalg.processString('''
+        RETURN 3 IN [1, 2, 3][0..1] AS r
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/ExpressionAcceptance_04")
+    }
+
+    /*
+    Scenario: Execute n[0]
+    */
+    @Test
+    def void testExpressionAcceptance_05() {
+        val container = Cypher2Relalg.processString('''
+        RETURN [1, 2, 3][0] AS value
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/ExpressionAcceptance_05")
     }
 
     /*
@@ -31,13 +81,13 @@ class ExpressionAcceptanceVisualizationTest {
       """
     */
     @Test
-    def void testExpressionAcceptance_02() {
+    def void testExpressionAcceptance_06() {
         val container = Cypher2Relalg.processString('''
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_02")
+        serializer.serialize(container, "tck/ExpressionAcceptance_06")
     }
 
     /*
@@ -47,13 +97,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 'name'        |
     */
     @Test
-    def void testExpressionAcceptance_04() {
+    def void testExpressionAcceptance_08() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_04")
+        serializer.serialize(container, "tck/ExpressionAcceptance_08")
     }
 
     /*
@@ -63,13 +113,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 'name'        |
     */
     @Test
-    def void testExpressionAcceptance_06() {
+    def void testExpressionAcceptance_10() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_06")
+        serializer.serialize(container, "tck/ExpressionAcceptance_10")
     }
 
     /*
@@ -79,13 +129,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 0       |
     */
     @Test
-    def void testExpressionAcceptance_07() {
+    def void testExpressionAcceptance_11() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_07")
+        serializer.serialize(container, "tck/ExpressionAcceptance_11")
     }
 
     /*
@@ -94,13 +144,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx | 0 |
     */
     @Test
-    def void testExpressionAcceptance_08() {
+    def void testExpressionAcceptance_12() {
         val container = Cypher2Relalg.processString('''
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_08")
+        serializer.serialize(container, "tck/ExpressionAcceptance_12")
     }
 
     /*
@@ -110,13 +160,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 0       |
     */
     @Test
-    def void testExpressionAcceptance_09() {
+    def void testExpressionAcceptance_13() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_09")
+        serializer.serialize(container, "tck/ExpressionAcceptance_13")
     }
 
     /*
@@ -126,13 +176,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 0             |
     */
     @Test
-    def void testExpressionAcceptance_10() {
+    def void testExpressionAcceptance_14() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_10")
+        serializer.serialize(container, "tck/ExpressionAcceptance_14")
     }
 
     /*
@@ -142,13 +192,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 12.3          |
     */
     @Test
-    def void testExpressionAcceptance_11() {
+    def void testExpressionAcceptance_15() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_11")
+        serializer.serialize(container, "tck/ExpressionAcceptance_15")
     }
 
     /*
@@ -158,13 +208,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 'name'  |
     */
     @Test
-    def void testExpressionAcceptance_12() {
+    def void testExpressionAcceptance_16() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_12")
+        serializer.serialize(container, "tck/ExpressionAcceptance_16")
     }
 
     /*
@@ -174,13 +224,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | ['Apa'] |
     */
     @Test
-    def void testExpressionAcceptance_13() {
+    def void testExpressionAcceptance_17() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_13")
+        serializer.serialize(container, "tck/ExpressionAcceptance_17")
     }
 
     /*
@@ -190,13 +240,13 @@ class ExpressionAcceptanceVisualizationTest {
       | idx  | 0   |
     */
     @Test
-    def void testExpressionAcceptance_14() {
+    def void testExpressionAcceptance_18() {
         val container = Cypher2Relalg.processString('''
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/ExpressionAcceptance_14")
+        serializer.serialize(container, "tck/ExpressionAcceptance_18")
     }
 
 }

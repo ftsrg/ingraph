@@ -1,7 +1,9 @@
-package ingraph.relalg.util
+package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
+import ingraph.relalg.calculators.JoinAttributeCalculator
+import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
@@ -22,7 +24,7 @@ import relalg.VariableExpression
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
  * 
- * This inferencing uses a bottom-up approach:
+ * This inferencing uses a postorder traversal (action are applied from the bottom to the top) 
  * first it uses recursion / dispatch methods to reach the (unary) input nodes,
  * then each method returns with the inferred schema.
  * 

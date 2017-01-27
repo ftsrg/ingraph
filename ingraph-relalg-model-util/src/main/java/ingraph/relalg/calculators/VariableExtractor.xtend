@@ -1,4 +1,4 @@
-package ingraph.relalg.util
+package ingraph.relalg.calculators
 
 import java.util.List
 import relalg.AttributeVariable

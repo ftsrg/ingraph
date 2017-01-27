@@ -1,4 +1,4 @@
-package ingraph.relalg.util
+package ingraph.relalg.calculators
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists

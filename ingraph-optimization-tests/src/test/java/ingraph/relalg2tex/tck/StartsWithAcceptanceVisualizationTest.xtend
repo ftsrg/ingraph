@@ -3,7 +3,7 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.util.SchemaInferencer
+import ingraph.relalg.inferencers.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class StartsWithAcceptanceVisualizationTest {
@@ -342,6 +342,54 @@ class StartsWithAcceptanceVisualizationTest {
         ''')
         container.addSchemaInformation
         serializer.serialize(container, "tck/StartsWithAcceptance_21")
+    }
+
+    /*
+    Scenario: Handling non-string operands for STARTS WITH
+    */
+    @Test
+    def void testStartsWithAcceptance_22() {
+        val container = Cypher2Relalg.processString('''
+        WITH [1, 3.14, true, [], {}, null] AS operands
+        UNWIND operands AS op1
+        UNWIND operands AS op2
+        WITH op1 STARTS WITH op2 AS v
+        RETURN v, count(*)
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/StartsWithAcceptance_22")
+    }
+
+    /*
+    Scenario: Handling non-string operands for CONTAINS
+    */
+    @Test
+    def void testStartsWithAcceptance_23() {
+        val container = Cypher2Relalg.processString('''
+        WITH [1, 3.14, true, [], {}, null] AS operands
+        UNWIND operands AS op1
+        UNWIND operands AS op2
+        WITH op1 STARTS WITH op2 AS v
+        RETURN v, count(*)
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/StartsWithAcceptance_23")
+    }
+
+    /*
+    Scenario: Handling non-string operands for ENDS WITH
+    */
+    @Test
+    def void testStartsWithAcceptance_24() {
+        val container = Cypher2Relalg.processString('''
+        WITH [1, 3.14, true, [], {}, null] AS operands
+        UNWIND operands AS op1
+        UNWIND operands AS op2
+        WITH op1 STARTS WITH op2 AS v
+        RETURN v, count(*)
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/StartsWithAcceptance_24")
     }
 
 }

@@ -3,7 +3,7 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.util.SchemaInferencer
+import ingraph.relalg.inferencers.SchemaInferencer
 import ingraph.relalg2tex.RelalgTreeSerializer
 
 class TypeConversionFunctionsVisualizationTest {
@@ -157,6 +157,21 @@ class TypeConversionFunctionsVisualizationTest {
     }
 
     /*
+    Scenario: `toInteger()` on a complex-typed expression
+    Given any graph
+    And parameters are:
+      | param | 1 |
+    */
+    @Test
+    def void testTypeConversionFunctions_11() {
+        val container = Cypher2Relalg.processString('''
+        RETURN toInteger(1 - {param}) AS result
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/TypeConversionFunctions_11")
+    }
+
+    /*
     Scenario: `toFloat()`
     Given an empty graph
     And having executed:
@@ -165,7 +180,7 @@ class TypeConversionFunctionsVisualizationTest {
       """
     */
     @Test
-    def void testTypeConversionFunctions_11() {
+    def void testTypeConversionFunctions_12() {
         val container = Cypher2Relalg.processString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
@@ -173,7 +188,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toFloat(n.rating) AS float
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_11")
+        serializer.serialize(container, "tck/TypeConversionFunctions_12")
     }
 
     /*
@@ -181,13 +196,13 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_12() {
+    def void testTypeConversionFunctions_13() {
         val container = Cypher2Relalg.processString('''
         WITH [3.4, 3] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_12")
+        serializer.serialize(container, "tck/TypeConversionFunctions_13")
     }
 
     /*
@@ -195,13 +210,13 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_13() {
+    def void testTypeConversionFunctions_14() {
         val container = Cypher2Relalg.processString('''
         WITH 'foo' AS foo_string, '' AS empty_string
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_13")
+        serializer.serialize(container, "tck/TypeConversionFunctions_14")
     }
 
     /*
@@ -209,13 +224,13 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_14() {
+    def void testTypeConversionFunctions_15() {
         val container = Cypher2Relalg.processString('''
         WITH [3.4, 3, '5'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_14")
+        serializer.serialize(container, "tck/TypeConversionFunctions_15")
     }
 
     /*
@@ -223,13 +238,13 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_15() {
+    def void testTypeConversionFunctions_16() {
         val container = Cypher2Relalg.processString('''
         WITH ['1', '2', 'foo'] AS numbers
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_15")
+        serializer.serialize(container, "tck/TypeConversionFunctions_16")
     }
 
     /*
@@ -241,7 +256,7 @@ class TypeConversionFunctionsVisualizationTest {
       """
     */
     @Test
-    def void testTypeConversionFunctions_16() {
+    def void testTypeConversionFunctions_17() {
         val container = Cypher2Relalg.processString('''
         MATCH (m:Movie { rating: 4 })
         WITH *
@@ -249,7 +264,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(n.rating)
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_16")
+        serializer.serialize(container, "tck/TypeConversionFunctions_17")
     }
 
     /*
@@ -261,13 +276,13 @@ class TypeConversionFunctionsVisualizationTest {
       """
     */
     @Test
-    def void testTypeConversionFunctions_17() {
+    def void testTypeConversionFunctions_18() {
         val container = Cypher2Relalg.processString('''
         MATCH (m:Movie)
         RETURN toString(m.watched)
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_17")
+        serializer.serialize(container, "tck/TypeConversionFunctions_18")
     }
 
     /*
@@ -275,12 +290,12 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_18() {
+    def void testTypeConversionFunctions_19() {
         val container = Cypher2Relalg.processString('''
         RETURN toString(1 < 0) AS bool
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_18")
+        serializer.serialize(container, "tck/TypeConversionFunctions_19")
     }
 
     /*
@@ -288,12 +303,12 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_19() {
+    def void testTypeConversionFunctions_20() {
         val container = Cypher2Relalg.processString('''
         RETURN toString(true) AS bool
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_19")
+        serializer.serialize(container, "tck/TypeConversionFunctions_20")
     }
 
     /*
@@ -301,12 +316,12 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_20() {
+    def void testTypeConversionFunctions_21() {
         val container = Cypher2Relalg.processString('''
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_20")
+        serializer.serialize(container, "tck/TypeConversionFunctions_21")
     }
 
     /*
@@ -314,13 +329,41 @@ class TypeConversionFunctionsVisualizationTest {
     Given any graph
     */
     @Test
-    def void testTypeConversionFunctions_21() {
+    def void testTypeConversionFunctions_22() {
         val container = Cypher2Relalg.processString('''
         WITH [1, 2, 3] AS numbers
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
         container.addSchemaInformation
-        serializer.serialize(container, "tck/TypeConversionFunctions_21")
+        serializer.serialize(container, "tck/TypeConversionFunctions_22")
+    }
+
+    /*
+    Scenario: `toString()` should accept potentially correct types 1
+    Given any graph
+    */
+    @Test
+    def void testTypeConversionFunctions_23() {
+        val container = Cypher2Relalg.processString('''
+        UNWIND ['male', 'female', null] AS gen
+        RETURN coalesce(toString(gen), 'x') AS result
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/TypeConversionFunctions_23")
+    }
+
+    /*
+    Scenario: `toString()` should accept potentially correct types 2
+    Given any graph
+    */
+    @Test
+    def void testTypeConversionFunctions_24() {
+        val container = Cypher2Relalg.processString('''
+        UNWIND ['male', 'female', null] AS gen
+        RETURN toString(coalesce(gen, 'x')) AS result
+        ''')
+        container.addSchemaInformation
+        serializer.serialize(container, "tck/TypeConversionFunctions_24")
     }
 
 }

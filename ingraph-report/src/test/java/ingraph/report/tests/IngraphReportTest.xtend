@@ -2,8 +2,8 @@ package ingraph.report.tests
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.util.SchemaInferencer
-import ingraph.relalg.util.TupleInferencer
+import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.TupleInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
@@ -13,8 +13,8 @@ import java.nio.charset.Charset
 import java.util.Collections
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import relalg.RelalgContainer
 import org.eclipse.emf.ecore.util.EcoreUtil
+import relalg.RelalgContainer
 
 class IngraphReportTest {
 
