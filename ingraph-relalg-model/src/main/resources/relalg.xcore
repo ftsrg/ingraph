@@ -13,6 +13,7 @@ class RelalgContainer {
   contains Expression[] expressions opposite ^container
   boolean schemaInferencingCompleted = "false"
   boolean tupleInferencingCompleted = "false"
+  boolean detailedSchemaInferencingCompleted = "false"
 }
 
 abstract class NamedElement {
@@ -185,7 +186,7 @@ class ExpressionVariable extends Variable {
 abstract class Operator {
   String description
   refers Variable[] schema
-  //refers Variable[] extraVariables
+  refers Variable[] extraVariables
   refers Variable[] detailedSchema
   contains Cardinality cardinality
 }

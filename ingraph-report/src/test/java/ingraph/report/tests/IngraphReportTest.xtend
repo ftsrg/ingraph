@@ -2,8 +2,8 @@ package ingraph.report.tests
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg.inferencers.DetailedSchemaInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg.inferencers.TupleInferencer
 import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
@@ -15,11 +15,13 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
 
 class IngraphReportTest {
 
 	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
-	protected extension TupleInferencer tupleInferencer = new TupleInferencer
+	protected extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
+  protected extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
 	protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
 	protected val treeSerializerConfig = RelalgSerializerConfig.builder.includeCommonVariables(true).build
@@ -93,6 +95,7 @@ class IngraphReportTest {
 		  val container2 = EcoreUtil.copy(container)
 		  container2.transformToRete
 		  container2.addSchemaInformation
+		  container2.addExtraAttributes
       container2.addDetailedSchemaInformation
 			treeSerializer.serialize(container2)
 		} catch (Exception e) {

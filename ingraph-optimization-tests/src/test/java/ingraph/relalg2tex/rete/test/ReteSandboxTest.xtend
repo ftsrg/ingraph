@@ -2,18 +2,20 @@ package ingraph.relalg2tex.rete.test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg.inferencers.DetailedSchemaInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg.inferencers.TupleInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.RelalgTreeSerializer
 import org.junit.Ignore
 import org.junit.Test
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
 
 class ReteSandboxTest {
 
   extension SchemaInferencer schemaInferencer = new SchemaInferencer
-  extension TupleInferencer tupleInferencer = new TupleInferencer
+  extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
+  extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
   extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 
   val config = RelalgSerializerConfig.builder.consoleOutput(false).standaloneDocument(true).build
@@ -30,6 +32,7 @@ class ReteSandboxTest {
     val containerRete = Cypher2Relalg.processString(cypher)
     containerRete.transformToRete
     containerRete.addSchemaInformation
+    containerRete.addExtraAttributes
     containerRete.addDetailedSchemaInformation
     drawer.serialize(containerRete, "sandbox/" + query + "-rete")
   }

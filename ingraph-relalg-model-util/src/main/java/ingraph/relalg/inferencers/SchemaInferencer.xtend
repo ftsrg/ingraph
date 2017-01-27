@@ -48,7 +48,7 @@ class SchemaInferencer {
 
   def addSchemaInformation(RelalgContainer container) {
     if (container.schemaInferencingCompleted) {
-      throw new IllegalStateException("Schema inferencing on relalg container was already performed")
+      throw new IllegalStateException("SchemaInferencer on relalg container was already executed")
     } else {
       container.schemaInferencingCompleted = true
     }
