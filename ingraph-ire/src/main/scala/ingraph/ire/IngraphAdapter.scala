@@ -10,19 +10,23 @@ import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
 import hu.bme.mit.ire.Transaction
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.util.{SchemaInferencer, TupleInferencer}
 import relalg.ProductionOperator
 import relalg.RelalgContainer
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
+import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.DetailedSchemaInferencer
 
 class IngraphAdapter(plan: String) {
   private val relalg2Rete = new Relalg2ReteTransformation
   private val schemaInferencer = new SchemaInferencer
-  private val tupleInferencer = new TupleInferencer
-  private val retePlan = tupleInferencer
-    .addDetailedSchemaInformation(
+  private val extraAttributeInferencer = new ExtraAttributeInferencer
+  private val detailedSchemaInferencer = new DetailedSchemaInferencer
+  private val retePlan =
+      detailedSchemaInferencer.addDetailedSchemaInformation(
+      extraAttributeInferencer.addExtraAttributes(
       schemaInferencer.addSchemaInformation(
-        relalg2Rete.transformToRete(
-          Cypher2Relalg.processString(plan))))
+        relalg2Rete.transformToRete(Cypher2Relalg.processString(plan))
+      )))
 
   val engine = EngineFactory.createQueryEngine(retePlan.getRootExpression)
 
