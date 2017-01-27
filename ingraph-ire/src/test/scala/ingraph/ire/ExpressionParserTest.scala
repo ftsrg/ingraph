@@ -1,15 +1,13 @@
 package ingraph.ire
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.util.{SchemaInferencer, SchemaToMap, TupleInferencer}
+import ingraph.relalg.util.SchemaToMap
 import org.scalatest.WordSpec
 import relalg._
 
 class ExpressionParserTest extends WordSpec {
-  val tupleInferencer = new TupleInferencer
-  val schemaInferencer = new SchemaInferencer
   def getSelectionOperator(query: String): SelectionOperator = {
-    val relalg = tupleInferencer.addDetailedSchemaInformation(schemaInferencer.addSchemaInformation(Cypher2Relalg.processString(query)))
+    val relalg = Inferencer(Cypher2Relalg.processString(query))
     relalg.getRootExpression
       .asInstanceOf[ProjectionOperator].getInput
       .asInstanceOf[SelectionOperator]
