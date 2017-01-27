@@ -46,7 +46,7 @@ class DetailedSchemaInferencer {
   }
 
   def dispatch void inferDetailedSchema(UnaryOperator op) {
-    val detailedSchema = union(op.schema, op.input.extraVariables)
+    val detailedSchema = op.input.detailedSchema
     op.defineDetailedSchema(detailedSchema)
   }
 
