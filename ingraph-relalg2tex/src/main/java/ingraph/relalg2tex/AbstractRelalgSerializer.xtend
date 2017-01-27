@@ -443,7 +443,7 @@ abstract class AbstractRelalgSerializer {
   }
 
   def dispatch convertExpression(FunctionExpression fe) {
-    '''«fe.functor.toString.escape» \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
+    '''«fe.functor.lowerCaseName.escape» \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
   }
 
   def dispatch convertExpression(EmptyListExpression fe) {

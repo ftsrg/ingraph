@@ -130,6 +130,10 @@ public enum Function {
     this.minimumArity = minimumArity;
   }
 
+  public String getLowerCaseName() {
+	return this.toString().toLowerCase();
+  }
+
   public FunctionCategory getCategory() {
     return this.category;
   }
