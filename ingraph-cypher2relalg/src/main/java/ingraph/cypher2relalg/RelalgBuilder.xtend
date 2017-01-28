@@ -1,6 +1,7 @@
 package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
+import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
@@ -282,7 +283,8 @@ class RelalgBuilder {
         val trimmerInput = trimmer.input
         trimmer.input = createGroupingOperator => [
           input = trimmerInput
-          entries.addAll(groupingVariables)
+          // order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
+          entries.addAll(groupingVariables.sortBy[ExpressionNameInferencer.inferName(it, logger) + '##' + it.class.name])
         ]
       }
     }
