@@ -17,6 +17,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableListExpression
+import relalg.ProjectionOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -50,13 +51,17 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     '''
       [
     {«op.operator»
-      «IF !op.basicSchema.isEmpty»
-      \\ \footnotesize
-      $\color{gray} «serializeSchema(op.basicSchema)» \rangle$
-      «ENDIF»
-      «IF !op.fullSchema.isEmpty»
+    «IF !op.basicSchema.isEmpty»
     \\ \footnotesize
-    $\color{orange} «serializeSchema(op.fullSchema)» \rangle$
+    $\color{gray} «serializeSchema(op.basicSchema)» $
+    «ENDIF»
+    «IF !op.fullSchema.isEmpty»
+    \\ \footnotesize
+    $\color{orange} «serializeSchema(op.fullSchema)» $
+    «IF op instanceof ProjectionOperator»
+    \\ \footnotesize
+    $\color{orange} \langle \var{«op.tupleIndices.join(", ")»} \rangle $
+    «ENDIF»
     «ENDIF»
     «IF op instanceof AbstractJoinOperator && !op.fullSchema.isEmpty && config.includeCommonVariables»
     \\ \footnotesize
@@ -72,7 +77,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
   }
 
   def serializeSchema(List<Variable> schema) {
-    '''\langle \var{«schema.map[ serializeVariable.escape ].join(', ')»}'''
+    '''\langle \var{«schema.map[ serializeVariable.escape ].join(', ')»} \rangle'''
   }
 
   def dispatch serializeVariable(ElementVariable variable) {

@@ -226,7 +226,7 @@ class SelectionOperator extends UnaryOperator {
 
 class ProjectionOperator extends UnaryOperator {
   refers ExpressionVariable[] elements
-  int[] tupleElements
+  int[] tupleIndices
 }
 
 abstract class NavigationOperator extends Operator {

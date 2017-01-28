@@ -48,7 +48,7 @@ object EngineFactory {
 
             case op: ProjectionOperator =>
               val lookup = schemaToMap.schemaToMap(op.getInput)
-              val mask = op.getDetailedSchema.map(element => lookup.get(element).toInt)
+              val mask = op.getTupleIndices
               newLocal(Props(new ProjectionNode(expr.child, mask)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
@@ -76,16 +76,16 @@ object EngineFactory {
               case op: JoinOperator =>
                 newLocal(Props(new JoinNode(
                     expr.child,
-                    op.getLeftInput.getDetailedSchema.length,
-                    op.getRightInput.getDetailedSchema.length,
+                    op.getLeftInput.getFullSchema.length,
+                    op.getRightInput.getFullSchema.length,
                     emfToInt(op.getLeftMask),
                     emfToInt(op.getRightMask)
                 )))
               case op: LeftOuterJoinOperator =>
                 newLocal(Props(new LeftOuterJoinNode(
                   expr.child,
-                  op.getLeftInput.getDetailedSchema.length,
-                  op.getRightInput.getDetailedSchema.length,
+                  op.getLeftInput.getFullSchema.length,
+                  op.getRightInput.getFullSchema.length,
                   emfToInt(op.getLeftMask),
                   emfToInt(op.getRightMask)
                 )))
@@ -96,7 +96,7 @@ object EngineFactory {
           case op: GetVerticesOperator =>
             val nick = op.getVertexVariable.getName
             val label= op.getVertexVariable.getVertexLabelSet.getVertexLabels.get(0).getName // TODO fix this for multiple labels
-            vertexConverters.addBinding(label, (nick, op.getDetailedSchema.map(_.getName)))
+            vertexConverters.addBinding(label, (nick, op.getFullSchema.map(_.getName)))
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName

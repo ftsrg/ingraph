@@ -58,14 +58,14 @@ class BasicSchemaInferencer {
 
   // nullary operators
   private def dispatch List<Variable> fillBasicSchema(GetVerticesOperator op) {
-    op.defineSchema(#[op.vertexVariable])
+    op.defineBasicSchema(#[op.vertexVariable])
   }
 
   private def dispatch List<Variable> fillBasicSchema(GetEdgesOperator op) {
     if (includeEdges) {
-      op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
+      op.defineBasicSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
     } else {
-      op.defineSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
+      op.defineBasicSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
     }
   }
 
@@ -93,7 +93,7 @@ class BasicSchemaInferencer {
         throw new UnsupportedOperationException("Schema should only contain variable expressions, but found instead: " + expression)
       }
     ]
-    op.defineSchema(elementVariables)
+    op.defineBasicSchema(elementVariables)
   }
 
   private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {    
@@ -103,13 +103,13 @@ class BasicSchemaInferencer {
       schema.add(op.edgeVariable)
     }
     schema.add(op.targetVertexVariable)
-    op.defineSchema(schema)
+    op.defineBasicSchema(schema)
   }
 
   // rest of the unary operators
   private def dispatch List<Variable> fillBasicSchema(UnaryOperator op) {
     val schema = Lists.newArrayList(op.input.basicSchema)
-    op.defineSchema(schema)
+    op.defineBasicSchema(schema)
   }
 
   // binary operators
@@ -117,7 +117,7 @@ class BasicSchemaInferencer {
     val leftInputSchema = Lists.newArrayList(op.leftInput.basicSchema)
     val rightInputSchema = Lists.newArrayList(op.rightInput.basicSchema)
     val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
-    op.defineSchema(schema)
+    op.defineBasicSchema(schema)
 
     // calculate common variables
     leftInputSchema.retainAll(rightInputSchema)
@@ -128,7 +128,7 @@ class BasicSchemaInferencer {
 
   private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
     // we only keep the left schema
-    op.defineSchema(op.getLeftInput.basicSchema)
+    op.defineBasicSchema(op.getLeftInput.basicSchema)
   }
 
   // ternary operators
@@ -147,16 +147,16 @@ class BasicSchemaInferencer {
       schema.add(listExpressionVariable)
     }
     schema.add(op.targetVertexVariable)
-    op.defineSchema(schema)
+    op.defineBasicSchema(schema)
   }
 
   /**
    * defineSchema
    */
-  private def defineSchema(Operator op, List<Variable> schema) {   
+  private def defineBasicSchema(Operator op, List<Variable> basicSchema) {   
     // EObjectEList.addAll() removes duplicates
-    op.basicSchema.addAll(schema)
-    schema
+    op.basicSchema.addAll(basicSchema)
+    basicSchema
   }
 
 }

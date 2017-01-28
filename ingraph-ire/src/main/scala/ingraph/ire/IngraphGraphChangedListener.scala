@@ -29,7 +29,7 @@ class IngraphGraphChangedListener(
 
   def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple = {
     Vector(idParser(edge.outVertex.id), idParser(edge.id), idParser(edge.inVertex.id)) ++
-      operator.getDetailedSchema.drop(3).map(
+      operator.getFullSchema.drop(3).map(
       a =>
         if (a.asInstanceOf[AttributeVariable].getElement == operator.getSourceVertexVariable)
           edge.outVertex().value(a.getName).asInstanceOf[Any]

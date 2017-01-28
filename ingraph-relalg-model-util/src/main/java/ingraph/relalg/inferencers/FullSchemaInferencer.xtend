@@ -59,30 +59,30 @@ class FullSchemaInferencer {
   }
 
   private def dispatch void fillFullSchema(AbstractJoinOperator op) {
-    val schema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
-    op.defineDetailedSchema(schema)
+    val fullSchema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
+    op.defineDetailedSchema(fullSchema)
   }
 
   private def dispatch void fillFullSchema(TernaryOperator op) {
-    val detailedSchema = Lists.newArrayList(Iterables.concat(
+    val fullSchema = Lists.newArrayList(Iterables.concat(
       op.getLeftInput.fullSchema,
       op.getMiddleInput.fullSchema,
       op.getRightInput.fullSchema
     ))
-    op.defineDetailedSchema(detailedSchema)
+    op.defineDetailedSchema(fullSchema)
   }
   
   /**
    * defineSchema
    */
-  private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> detailedSchema) {
+  private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+    op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
     
-    
-    op.fullSchema.addAll(detailedSchema)
+    op.fullSchema.addAll(fullSchema)
   }
 
-  private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
-    op.fullSchema.addAll(detailedSchema)
+  private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
+    op.fullSchema.addAll(fullSchema)
   }
 
 }
