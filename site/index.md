@@ -34,7 +34,7 @@ We also plan to include stream processing features (e.g. defining windows), but 
 
 ingraph is not efficient/expressive enough for the following technical challenges:
 
-* Queries that are evaluated only once (i.e. batch processing, daily analysis)
+* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis)
 * Graph analytics involving PageRank, community detection, etc.
 
 Currently, the ingraph project is not mature enough for production use. Instead, it should be used in prototypes and performance experiments.
@@ -57,7 +57,7 @@ Incremental openCypher queries can also be beneficial for:
 
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 * J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
-* G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid) (Software and Systems Modeling Journal, 2016) - to appear in January 2017
+* G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](http://link.springer.com/article/10.1007/s10270-016-0571-8) (Software and Systems Modeling Journal, 2017)
 * G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://inf.mit.bme.hu/research/publications/evaluation-optimization-strategies-incremental-graph-queries) (Periodica Polytechnica 2017) - to appear in January 2017
 
 # Related projects on GitHub
