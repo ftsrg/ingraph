@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class ReturnAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Allow addition
@@ -26,7 +26,7 @@ class ReturnAcceptanceVisualizationTest {
         WHERE a.id = 1337
         RETURN a.version + 5
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_01")
     }
 
@@ -49,7 +49,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n
         LIMIT 2
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_02")
     }
 
@@ -73,7 +73,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP 2
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_03")
     }
 
@@ -99,7 +99,7 @@ class ReturnAcceptanceVisualizationTest {
         ORDER BY n.name ASC
         SKIP $skipAmount
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_04")
     }
 
@@ -124,7 +124,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP 2
         LIMIT 2
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_05")
     }
 
@@ -152,7 +152,7 @@ class ReturnAcceptanceVisualizationTest {
         SKIP $s
         LIMIT $l
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_06")
     }
 
@@ -174,7 +174,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN n.division, max(n.age)
         ORDER BY max(n.age)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_07")
     }
 
@@ -195,7 +195,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT a
         ORDER BY a.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_08")
     }
 
@@ -213,7 +213,7 @@ class ReturnAcceptanceVisualizationTest {
         MATCH (a)
         RETURN a AS ColumnName
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_09")
     }
 
@@ -232,7 +232,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN DISTINCT b
         ORDER BY b.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_10")
     }
 
@@ -245,7 +245,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 12 / 4 * 3 - 2 * 4
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_11")
     }
 
@@ -258,7 +258,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 12 / 4 * (3 - 2 * 4)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_12")
     }
 
@@ -277,7 +277,7 @@ class ReturnAcceptanceVisualizationTest {
         RETURN a, count(*)
         ORDER BY count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_13")
     }
 
@@ -290,7 +290,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN abs(-1)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_14")
     }
 
@@ -303,7 +303,7 @@ class ReturnAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN size([1, 2, 3]) AS n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ReturnAcceptance_15")
     }
 

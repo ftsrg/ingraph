@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class FunctionsAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Run coalesce
@@ -25,7 +25,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_01")
     }
 
@@ -40,7 +40,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_02")
     }
 
@@ -54,7 +54,7 @@ class FunctionsAcceptanceVisualizationTest {
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_03")
     }
 
@@ -72,7 +72,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_04")
     }
 
@@ -90,7 +90,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_05")
     }
 
@@ -103,7 +103,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_06")
     }
 
@@ -116,7 +116,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN properties(null)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_07")
     }
 
@@ -129,7 +129,7 @@ class FunctionsAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN reverse('raksO')
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_08")
     }
 
@@ -149,7 +149,7 @@ class FunctionsAcceptanceVisualizationTest {
         WHERE exists(n['prop'])
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_09")
     }
 
@@ -175,7 +175,7 @@ class FunctionsAcceptanceVisualizationTest {
         LIMIT 100
         RETURN percentileDisc(0.90, deg), deg
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_10")
     }
 
@@ -193,7 +193,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_11")
     }
 
@@ -211,7 +211,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_12")
     }
 
@@ -230,7 +230,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_13")
     }
 
@@ -249,7 +249,7 @@ class FunctionsAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_14")
     }
 
@@ -268,7 +268,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [r, 1] AS list
         RETURN type(list[0])
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_15")
     }
 
@@ -287,7 +287,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_16")
     }
 
@@ -306,7 +306,7 @@ class FunctionsAcceptanceVisualizationTest {
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_17")
     }
 
@@ -324,7 +324,7 @@ class FunctionsAcceptanceVisualizationTest {
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/FunctionsAcceptance_18")
     }
 

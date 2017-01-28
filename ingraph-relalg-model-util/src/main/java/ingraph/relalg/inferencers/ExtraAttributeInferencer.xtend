@@ -11,45 +11,45 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 
+/**
+ * Infers extra attributes, for example, a projection or a selection may need extra attributes.
+ */
 class ExtraAttributeInferencer {
 
   extension VariableExtractor variableExtractor = new VariableExtractor
   extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
-  var RelalgContainer container
 
-  def addExtraAttributes(RelalgContainer container) {
-    if (container.tupleInferencingCompleted) {
+  def inferExtraAttributes(RelalgContainer container) {
+    if (!container.basicSchemaInferred) {
+      throw new IllegalStateException("BasicSchemaInferencer must be executed before ExtraAttributeInferencer")
+    } else if (container.extraAttributesInferred) {
       throw new IllegalStateException("ExtraAttributeInferencer on relalg container was already executed")
     } else {
-      container.tupleInferencingCompleted = true
+      container.extraAttributesInferred = true
     }
 
-    this.container = container
-    container.rootExpression.inferExtraAttributes(#[])
+    container.rootExpression.fillExtraAttributes(#[])
     container
   }
 
-  /**
-   * inferDetailedSchema
-   */
-  def dispatch void inferExtraAttributes(NullaryOperator op, List<AttributeVariable> extraVariables) {
+  private def dispatch void fillExtraAttributes(NullaryOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
   }
 
-  def dispatch void inferExtraAttributes(UnaryOperator op, List<AttributeVariable> extraVariables) {
+  private def dispatch void fillExtraAttributes(UnaryOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
     val newExtraVariables = extractUnaryOperatorExtraVariables(op)
     
     val inputExtraVariables = union(extraVariables, newExtraVariables)
-    op.input.inferExtraAttributes(inputExtraVariables)
+    op.input.fillExtraAttributes(inputExtraVariables)
   }
 
-  def dispatch void inferExtraAttributes(UnionOperator op, List<AttributeVariable> extraVariables) {
+  private def dispatch void fillExtraAttributes(UnionOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
     throw new UnsupportedOperationException("Union not yet supported")
   }
 
-  def dispatch void inferExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraVariables) {
+  private def dispatch void fillExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
     val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
     val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
@@ -60,11 +60,11 @@ class ExtraAttributeInferencer {
     rightExtraVariables.removeAll(leftExtraVariables)
 
     //val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
-    op.leftInput.inferExtraAttributes(leftExtraVariables)
-    op.rightInput.inferExtraAttributes(rightExtraVariables)
+    op.leftInput.fillExtraAttributes(leftExtraVariables)
+    op.rightInput.fillExtraAttributes(rightExtraVariables)
   }
 
-  def dispatch void inferExtraAttributes(TernaryOperator op, List<AttributeVariable> extraVariables) {
+  private def dispatch void fillExtraAttributes(TernaryOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
     val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
     val middleExtraVariables = extraVariables.filter[op.middleInput.schema.contains(it.element)].toList
@@ -77,9 +77,9 @@ class ExtraAttributeInferencer {
     rightExtraVariables.removeAll(leftExtraVariables)
     rightExtraVariables.removeAll(middleExtraVariables)
 
-    op.leftInput.inferExtraAttributes(leftExtraVariables)
-    op.middleInput.inferExtraAttributes(middleExtraVariables)
-    op.rightInput.inferExtraAttributes(rightExtraVariables)
+    op.leftInput.fillExtraAttributes(leftExtraVariables)
+    op.middleInput.fillExtraAttributes(middleExtraVariables)
+    op.rightInput.fillExtraAttributes(rightExtraVariables)
   }
   
 }

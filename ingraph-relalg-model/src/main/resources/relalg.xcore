@@ -11,9 +11,9 @@ class RelalgContainer {
   contains Operator rootExpression
   contains NamedElement[] elements opposite ^namedElementContainer
   contains Expression[] expressions opposite ^container
-  boolean schemaInferencingCompleted = "false"
-  boolean tupleInferencingCompleted = "false"
-  boolean detailedSchemaInferencingCompleted = "false"
+  boolean basicSchemaInferred = "false"
+  boolean extraAttributesInferred = "false"
+  boolean fullSchemaInferred = "false"
 }
 
 abstract class NamedElement {

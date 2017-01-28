@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class UnionAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Should be able to create text output from union queries
@@ -28,7 +28,7 @@ class UnionAcceptanceVisualizationTest {
         MATCH (b:B)
         RETURN b AS a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/UnionAcceptance_01")
     }
 
@@ -43,7 +43,7 @@ class UnionAcceptanceVisualizationTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/UnionAcceptance_02")
     }
 
@@ -58,7 +58,7 @@ class UnionAcceptanceVisualizationTest {
         UNION
         RETURN 2 AS x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/UnionAcceptance_03")
     }
 
@@ -75,7 +75,7 @@ class UnionAcceptanceVisualizationTest {
         UNION
         RETURN 2 AS x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/UnionAcceptance_04")
     }
 
@@ -92,7 +92,7 @@ class UnionAcceptanceVisualizationTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/UnionAcceptance_05")
     }
 

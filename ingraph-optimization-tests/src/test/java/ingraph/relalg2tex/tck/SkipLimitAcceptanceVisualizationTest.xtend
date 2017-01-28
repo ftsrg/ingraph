@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class SkipLimitAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: SKIP with an expression that does not depend on variables
@@ -27,7 +27,7 @@ class SkipLimitAcceptanceVisualizationTest {
         WITH count(*) AS count
         RETURN count > 0 AS nonEmpty
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/SkipLimitAcceptance_01")
     }
 
@@ -46,7 +46,7 @@ class SkipLimitAcceptanceVisualizationTest {
         WITH n LIMIT toInteger(ceil(1.7))
         RETURN count(*) AS count
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/SkipLimitAcceptance_02")
     }
 

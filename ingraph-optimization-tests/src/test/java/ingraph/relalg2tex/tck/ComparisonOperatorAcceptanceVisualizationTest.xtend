@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class ComparisonOperatorAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Handling numerical ranges 1
@@ -27,7 +27,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_01")
     }
 
@@ -47,7 +47,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_02")
     }
 
@@ -67,7 +67,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_03")
     }
 
@@ -87,7 +87,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_04")
     }
 
@@ -107,7 +107,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_05")
     }
 
@@ -127,7 +127,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_06")
     }
 
@@ -147,7 +147,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_07")
     }
 
@@ -167,7 +167,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_08")
     }
 
@@ -186,7 +186,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_09")
     }
 
@@ -210,7 +210,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ComparisonOperatorAcceptance_10")
     }
 

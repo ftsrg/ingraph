@@ -1,8 +1,8 @@
 package ingraph.relalg.util
 
-import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import org.junit.Test
@@ -12,10 +12,13 @@ import relalg.RelalgFactory
 class InferencerTest {
 
   val RelalgSerializerConfig config = RelalgSerializerConfig.builder.consoleOutput(true).standaloneDocument(true).build
+
   extension RelalgTreeSerializer serializer = new RelalgTreeSerializer(config)
-  extension SchemaInferencer schemaInferencer = new SchemaInferencer
-  extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
-  extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
+  
+  extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
+  extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+  extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+
   extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
   @Test
@@ -55,9 +58,9 @@ class InferencerTest {
     container.rootExpression = production
 
     // act
-    container.addSchemaInformation
-    container.addExtraAttributes
-    container.addDetailedSchemaInformation
+    container.inferBasicSchema
+    container.inferExtraAttributes
+    container.inferFullSchema
     container.serialize("../visualization/sandbox/inferencer-test")
   }
 

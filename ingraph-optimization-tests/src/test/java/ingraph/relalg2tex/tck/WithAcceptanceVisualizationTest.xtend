@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class WithAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Passing on pattern nodes
@@ -27,7 +27,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_01")
     }
 
@@ -50,7 +50,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_02")
     }
 
@@ -70,7 +70,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (b)
         RETURN a, b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_03")
     }
 
@@ -93,7 +93,7 @@ class WithAcceptanceVisualizationTest {
         WHERE property = b.prop
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_04")
     }
 
@@ -117,7 +117,7 @@ class WithAcceptanceVisualizationTest {
         WHERE b.id = property
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_05")
     }
 
@@ -142,7 +142,7 @@ class WithAcceptanceVisualizationTest {
         WHERE b.id = idToUse
         RETURN DISTINCT b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_06")
     }
 
@@ -164,7 +164,7 @@ class WithAcceptanceVisualizationTest {
         WHERE a.name = 'B'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_07")
     }
 
@@ -189,7 +189,7 @@ class WithAcceptanceVisualizationTest {
         WHERE relCount > 1
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_08")
     }
 
@@ -211,7 +211,7 @@ class WithAcceptanceVisualizationTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_09")
     }
 
@@ -233,7 +233,7 @@ class WithAcceptanceVisualizationTest {
         ORDER BY a.bar
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_10")
     }
 
@@ -255,7 +255,7 @@ class WithAcceptanceVisualizationTest {
         WHERE a.bar = 'B'
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_11")
     }
 
@@ -277,7 +277,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-[r]->(b)
         RETURN a, r, b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_12")
     }
 
@@ -293,7 +293,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (a)-->(b)
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_13")
     }
 
@@ -307,7 +307,7 @@ class WithAcceptanceVisualizationTest {
         WITH {foo: {bar: 'baz'}} AS nestedMap
         RETURN nestedMap.foo.bar
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_14")
     }
 
@@ -329,7 +329,7 @@ class WithAcceptanceVisualizationTest {
         MATCH (m:B), (n)-->(x:X)
         RETURN *
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_15")
     }
 
@@ -349,7 +349,7 @@ class WithAcceptanceVisualizationTest {
         WHERE n.prop = 42
         RETURN count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_16")
     }
 
@@ -382,7 +382,7 @@ class WithAcceptanceVisualizationTest {
         WHERE otherPerson.name <> 'NotOther'
         RETURN count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/WithAcceptance_17")
     }
 

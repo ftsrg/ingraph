@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class OptionalMatchAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Return null when no matches due to inline label predicate
@@ -21,7 +21,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (n)-[r]-(m:NonExistent)
         RETURN r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_01")
     }
 
@@ -36,7 +36,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         WHERE m:NonExistent
         RETURN r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_02")
     }
 
@@ -51,7 +51,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         WHERE m.prop = 42
         RETURN m
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_03")
     }
 
@@ -65,7 +65,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (n)-[r:TYPE]-(m)
         RETURN m:TYPE
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_04")
     }
 
@@ -82,7 +82,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         MATCH (x)-->(d)
         RETURN d
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_05")
     }
 
@@ -97,7 +97,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         MATCH (b:B)
         RETURN a, b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_06")
     }
 
@@ -111,7 +111,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_07")
     }
 
@@ -125,7 +125,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (x)-->(b)
         RETURN x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_08")
     }
 
@@ -145,7 +145,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-->(b:Y)
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_09")
     }
 
@@ -159,7 +159,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH p = (a)-[:X]->(b)
         RETURN p
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_10")
     }
 
@@ -173,7 +173,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[*]->(b)
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_11")
     }
 
@@ -187,7 +187,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[*3..]-(b)
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_12")
     }
 
@@ -201,7 +201,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r]-(a)
         RETURN r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_13")
     }
 
@@ -216,7 +216,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[r]->(a)
         RETURN r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_14")
     }
 
@@ -230,7 +230,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-[*]->(x)
         RETURN x
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_15")
     }
 
@@ -244,7 +244,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH p = (a)-[*]->(b)
         RETURN p
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_16")
     }
 
@@ -258,7 +258,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_17")
     }
 
@@ -272,7 +272,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (a)-->(b)-->(c)
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_18")
     }
 
@@ -287,7 +287,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (x)-[r]->(b)
         RETURN x, r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_19")
     }
 
@@ -304,7 +304,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (b)-[r:NOR_THIS]->(a)
         RETURN a, b, r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_20")
     }
 
@@ -320,7 +320,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (b)-[r:NOR_THIS]->(a)
         RETURN a, b, r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_21")
     }
 
@@ -340,7 +340,7 @@ class OptionalMatchAcceptanceVisualizationTest {
         OPTIONAL MATCH (n:DoesNotExist)
         RETURN collect(DISTINCT n.property) AS a, collect(DISTINCT f.property) AS b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatchAcceptance_22")
     }
 

@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class ExpressionAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: IN should work with nested list subscripting
@@ -20,7 +20,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH [[1, 2, 3]] AS list
         RETURN 3 IN list[0] AS r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_01")
     }
 
@@ -32,7 +32,7 @@ class ExpressionAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 3 IN [[1, 2, 3]][0] AS r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_02")
     }
 
@@ -45,7 +45,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH [1, 2, 3] AS list
         RETURN 3 IN list[0..1] AS r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_03")
     }
 
@@ -57,7 +57,7 @@ class ExpressionAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 3 IN [1, 2, 3][0..1] AS r
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_04")
     }
 
@@ -69,7 +69,7 @@ class ExpressionAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN [1, 2, 3][0] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_05")
     }
 
@@ -86,7 +86,7 @@ class ExpressionAcceptanceVisualizationTest {
         MATCH (n {name: 'Apa'})
         RETURN n['nam' + 'e'] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_06")
     }
 
@@ -102,7 +102,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_08")
     }
 
@@ -118,7 +118,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toString(idx)] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_10")
     }
 
@@ -134,7 +134,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_11")
     }
 
@@ -149,7 +149,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH ['Apa'] AS expr
         RETURN expr[$idx] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_12")
     }
 
@@ -165,7 +165,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[toInteger(idx)] AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_13")
     }
 
@@ -181,7 +181,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_14")
     }
 
@@ -197,7 +197,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_15")
     }
 
@@ -213,7 +213,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_16")
     }
 
@@ -229,7 +229,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_17")
     }
 
@@ -245,7 +245,7 @@ class ExpressionAcceptanceVisualizationTest {
         WITH $expr AS expr, $idx AS idx
         RETURN expr[idx]
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ExpressionAcceptance_18")
     }
 

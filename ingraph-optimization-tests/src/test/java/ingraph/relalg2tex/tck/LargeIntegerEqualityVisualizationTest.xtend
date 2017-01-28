@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class LargeIntegerEqualityVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Does not lose precision
@@ -20,7 +20,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label)
         RETURN p.id
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/LargeIntegerEquality_01")
     }
 
@@ -33,7 +33,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/LargeIntegerEquality_02")
     }
 
@@ -47,7 +47,7 @@ class LargeIntegerEqualityVisualizationTest {
         WHERE p.id = 4611686018427387905
         RETURN p.id
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/LargeIntegerEquality_03")
     }
 
@@ -60,7 +60,7 @@ class LargeIntegerEqualityVisualizationTest {
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/LargeIntegerEquality_04")
     }
 
@@ -74,7 +74,7 @@ class LargeIntegerEqualityVisualizationTest {
         WHERE p.id = 4611686018427387900
         RETURN p.id
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/LargeIntegerEquality_05")
     }
 

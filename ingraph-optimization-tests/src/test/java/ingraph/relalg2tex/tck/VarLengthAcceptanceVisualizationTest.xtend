@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class VarLengthAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Handling unbounded variable length match
@@ -21,7 +21,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_01")
     }
 
@@ -35,7 +35,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_02")
     }
 
@@ -49,7 +49,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_03")
     }
 
@@ -63,7 +63,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_04")
     }
 
@@ -77,7 +77,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_05")
     }
 
@@ -91,7 +91,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_06")
     }
 
@@ -105,7 +105,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_07")
     }
 
@@ -119,7 +119,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..0]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_08")
     }
 
@@ -133,7 +133,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..1]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_09")
     }
 
@@ -147,7 +147,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_10")
     }
 
@@ -161,7 +161,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..1]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_11")
     }
 
@@ -175,7 +175,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..0]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_12")
     }
 
@@ -189,7 +189,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..0]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_13")
     }
 
@@ -203,7 +203,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..1]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_14")
     }
 
@@ -217,7 +217,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*..2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_15")
     }
 
@@ -231,7 +231,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0..]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_16")
     }
 
@@ -245,7 +245,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1..]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_17")
     }
 
@@ -259,7 +259,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2..]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_18")
     }
 
@@ -273,7 +273,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*0]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_19")
     }
 
@@ -287,7 +287,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*0]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_20")
     }
 
@@ -301,7 +301,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*1]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_21")
     }
 
@@ -315,7 +315,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*1]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_22")
     }
 
@@ -329,7 +329,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES*2]->()-[:LIKES]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_23")
     }
 
@@ -343,7 +343,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_24")
     }
 
@@ -365,7 +365,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_25")
     }
 
@@ -393,7 +393,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)<-[:LIKES]-()-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_26")
     }
 
@@ -423,7 +423,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (a)-[:LIKES]->()<-[:LIKES*3]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_27")
     }
 
@@ -445,7 +445,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (p)-[:LIKES*1]->()-[:LIKES]->()-[r:LIKES*2]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_28")
     }
 
@@ -467,7 +467,7 @@ class VarLengthAcceptanceVisualizationTest {
         MATCH (p)-[:LIKES]->()-[:LIKES*2]->()-[r:LIKES]->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/VarLengthAcceptance_29")
     }
 

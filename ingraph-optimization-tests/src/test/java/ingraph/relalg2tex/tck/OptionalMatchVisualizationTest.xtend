@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class OptionalMatchVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Satisfies the open world assumption, relationships between same nodes
@@ -28,7 +28,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatch_01")
     }
 
@@ -48,7 +48,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatch_02")
     }
 
@@ -69,7 +69,7 @@ class OptionalMatchVisualizationTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/OptionalMatch_03")
     }
 

@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class StartingPointAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Find all nodes
@@ -27,7 +27,7 @@ class StartingPointAcceptanceVisualizationTest {
         MATCH (n)
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartingPointAcceptance_01")
     }
 
@@ -48,7 +48,7 @@ class StartingPointAcceptanceVisualizationTest {
         MATCH (n:Animal)
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartingPointAcceptance_02")
     }
 
@@ -68,7 +68,7 @@ class StartingPointAcceptanceVisualizationTest {
         WHERE n.prop = 2
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartingPointAcceptance_03")
     }
 

@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class LiteralsVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Return an integer
@@ -19,7 +19,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 1 AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_01")
     }
 
@@ -31,7 +31,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN 1.0 AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_02")
     }
 
@@ -43,7 +43,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN -1e-9 AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_03")
     }
 
@@ -55,7 +55,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN true AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_04")
     }
 
@@ -67,7 +67,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN '' AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_05")
     }
 
@@ -79,7 +79,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN "" AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_06")
     }
 
@@ -91,7 +91,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN null AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_07")
     }
 
@@ -103,7 +103,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN [] AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_08")
     }
 
@@ -115,7 +115,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN [0, 1, 2] AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_09")
     }
 
@@ -127,7 +127,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN {} AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_10")
     }
 
@@ -139,7 +139,7 @@ class LiteralsVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Literals_11")
     }
 

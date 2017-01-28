@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class StartsWithAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Finding exact matches
@@ -21,7 +21,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_01")
     }
 
@@ -35,7 +35,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_02")
     }
 
@@ -49,7 +49,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_03")
     }
 
@@ -63,7 +63,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH 'AB'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_04")
     }
 
@@ -78,7 +78,7 @@ class StartsWithAcceptanceVisualizationTest {
         AND a.name ENDS WITH 'f'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_05")
     }
 
@@ -92,7 +92,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH ''
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_06")
     }
 
@@ -106,7 +106,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS 'CD'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_07")
     }
 
@@ -126,7 +126,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_08")
     }
 
@@ -146,7 +146,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_09")
     }
 
@@ -166,7 +166,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_10")
     }
 
@@ -186,7 +186,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_11")
     }
 
@@ -206,7 +206,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_12")
     }
 
@@ -226,7 +226,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_13")
     }
 
@@ -240,7 +240,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name STARTS WITH null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_14")
     }
 
@@ -254,7 +254,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name STARTS WITH null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_15")
     }
 
@@ -268,7 +268,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name ENDS WITH null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_16")
     }
 
@@ -282,7 +282,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name ENDS WITH null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_17")
     }
 
@@ -296,7 +296,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE a.name CONTAINS null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_18")
     }
 
@@ -310,7 +310,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name CONTAINS null
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_19")
     }
 
@@ -326,7 +326,7 @@ class StartsWithAcceptanceVisualizationTest {
         AND a.name ENDS WITH 'EF'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_20")
     }
 
@@ -340,7 +340,7 @@ class StartsWithAcceptanceVisualizationTest {
         WHERE NOT a.name CONTAINS 'b'
         RETURN a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_21")
     }
 
@@ -356,7 +356,7 @@ class StartsWithAcceptanceVisualizationTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_22")
     }
 
@@ -372,7 +372,7 @@ class StartsWithAcceptanceVisualizationTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_23")
     }
 
@@ -388,7 +388,7 @@ class StartsWithAcceptanceVisualizationTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/StartsWithAcceptance_24")
     }
 

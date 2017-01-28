@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class ListComprehensionVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Returning a list comprehension
@@ -27,7 +27,7 @@ class ListComprehensionVisualizationTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ListComprehension_01")
     }
 
@@ -48,7 +48,7 @@ class ListComprehensionVisualizationTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ListComprehension_02")
     }
 
@@ -69,7 +69,7 @@ class ListComprehensionVisualizationTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/ListComprehension_03")
     }
 

@@ -22,13 +22,13 @@ for filename in filenames:
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class %sVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     """ % filename_without_extension
 
     test_file.write(test_header)
@@ -64,7 +64,7 @@ class %sVisualizationTest {
         val container = Cypher2Relalg.processString('''
         %s
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/%s_%02d")
     }
 """ % (scenario, filename_without_extension, i, indent(query), filename_without_extension, i)

@@ -2,9 +2,9 @@ package ingraph.relalg2tex.rete.test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
@@ -13,10 +13,10 @@ import org.junit.Test
 
 class ReteSandboxTest {
 
-  extension SchemaInferencer schemaInferencer = new SchemaInferencer
-  extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
-  extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
   extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+  extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
+  extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+  extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
   val config = RelalgSerializerConfig.builder.consoleOutput(false).standaloneDocument(true).build
   val drawer = new RelalgTreeSerializer(config)
@@ -24,16 +24,16 @@ class ReteSandboxTest {
   def process(String query, String cypher) {
     val containerSearchBased = Cypher2Relalg.processString(cypher)
 
-    containerSearchBased.addSchemaInformation
+    containerSearchBased.inferBasicSchema
     drawer.serialize(containerSearchBased, "sandbox/" + query + "-search")
     
     RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
     
     val containerRete = Cypher2Relalg.processString(cypher)
     containerRete.transformToRete
-    containerRete.addSchemaInformation
-    containerRete.addExtraAttributes
-    containerRete.addDetailedSchemaInformation
+    containerRete.inferBasicSchema
+    containerRete.inferExtraAttributes
+    containerRete.inferFullSchema
     drawer.serialize(containerRete, "sandbox/" + query + "-rete")
   }
 

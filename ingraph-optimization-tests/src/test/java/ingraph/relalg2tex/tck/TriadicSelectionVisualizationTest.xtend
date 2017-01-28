@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class TriadicSelectionVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Handling triadic friend of a friend
@@ -21,7 +21,7 @@ class TriadicSelectionVisualizationTest {
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_01")
     }
 
@@ -37,7 +37,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_02")
     }
 
@@ -53,7 +53,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_03")
     }
 
@@ -69,7 +69,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_04")
     }
 
@@ -85,7 +85,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_05")
     }
 
@@ -101,7 +101,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_06")
     }
 
@@ -117,7 +117,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_07")
     }
 
@@ -133,7 +133,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_08")
     }
 
@@ -149,7 +149,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_09")
     }
 
@@ -165,7 +165,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_10")
     }
 
@@ -181,7 +181,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_11")
     }
 
@@ -197,7 +197,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_12")
     }
 
@@ -213,7 +213,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_13")
     }
 
@@ -229,7 +229,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_14")
     }
 
@@ -245,7 +245,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_15")
     }
 
@@ -261,7 +261,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_16")
     }
 
@@ -277,7 +277,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_17")
     }
 
@@ -293,7 +293,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_18")
     }
 
@@ -309,7 +309,7 @@ class TriadicSelectionVisualizationTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TriadicSelection_19")
     }
 

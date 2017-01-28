@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class TernaryLogicAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: The inverse of a null is a null
@@ -19,7 +19,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN NOT null AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TernaryLogicAcceptance_01")
     }
 
@@ -31,7 +31,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN null IS NULL AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TernaryLogicAcceptance_02")
     }
 
@@ -43,7 +43,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN null IS NOT NULL AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TernaryLogicAcceptance_03")
     }
 
@@ -55,7 +55,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN null = null AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TernaryLogicAcceptance_04")
     }
 
@@ -67,7 +67,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN null <> null AS value
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/TernaryLogicAcceptance_05")
     }
 

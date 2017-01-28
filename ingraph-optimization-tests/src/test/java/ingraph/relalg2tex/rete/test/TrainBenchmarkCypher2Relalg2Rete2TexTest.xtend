@@ -3,9 +3,9 @@ package ingraph.relalg2tex.rete.test
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import java.io.IOException
@@ -14,9 +14,10 @@ import org.junit.Test
 class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 
   extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
-  extension SchemaInferencer schemaInferencer = new SchemaInferencer
-  extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
-  extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
+  extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
+  extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+  extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+
   val config = RelalgSerializerConfig.builder.standaloneDocument(true).consoleOutput(false).
     includeCommonVariables(true).build
   val drawer = new RelalgTreeSerializer(config)
@@ -26,9 +27,9 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
     val container = Cypher2Relalg.processCypher(cypher)
 
     container.transformToRete
-    container.addSchemaInformation
-    container.addExtraAttributes
-    container.addDetailedSchemaInformation
+    container.inferBasicSchema
+    container.inferExtraAttributes
+    container.inferFullSchema
     //RelalgUtil.save(container, "query-models/" + query)
     drawer.serialize(container, "trainbenchmark/" + query + "-rete")
   }

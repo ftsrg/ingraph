@@ -16,50 +16,53 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 
-class DetailedSchemaInferencer {
+/**
+ * Inferences the full schema, including extra attributes.
+ */
+class FullSchemaInferencer {
 
   extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
   extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
   extension MaskCalculator maskCalculator = new MaskCalculator
-  var RelalgContainer container
 
-  def addDetailedSchemaInformation(RelalgContainer container) {
-    if (container.detailedSchemaInferencingCompleted) {
-      throw new IllegalStateException("DetailedSchemaInferencer on relalg container was already executed")
+  def inferFullSchema(RelalgContainer container) {
+    if (!container.extraAttributesInferred) {
+      throw new IllegalStateException("ExtraAttributeInferencer must be executed before FullSchemaInferencer")
+    } else if (container.fullSchemaInferred) {
+      throw new IllegalStateException("FullSchemaInferencer on relalg container was already executed")
     } else {
-      container.detailedSchemaInferencingCompleted = true
+      container.fullSchemaInferred = true
     }
 
-    this.container = container
-    container.rootExpression.traverse([inferDetailedSchema])
+    container.rootExpression.traverse([fillFullSchema])
     container.rootExpression.traverse([calculateTuples])
     container
   }
 
   /**
-   * inferDetailedSchema
+   * fillFullSchema
    */
-  def dispatch void inferDetailedSchema(NullaryOperator op) {
+  private def dispatch void fillFullSchema(NullaryOperator op) {
     val detailedSchema = union(op.schema, op.extraVariables)
     op.defineDetailedSchema(detailedSchema)
   }
 
-  def dispatch void inferDetailedSchema(UnaryOperator op) {
+  private def dispatch void fillFullSchema(UnaryOperator op) {
     val detailedSchema = op.input.detailedSchema
     op.defineDetailedSchema(detailedSchema)
   }
 
-  def dispatch void inferDetailedSchema(UnionOperator op) {
+  private def dispatch void fillFullSchema(UnionOperator op) {
     throw new UnsupportedOperationException("Union not yet supported")
   }
 
-  def dispatch void inferDetailedSchema(AbstractJoinOperator op) {
+  private def dispatch void fillFullSchema(AbstractJoinOperator op) {
     val schema = calculateJoinAttributes(op, op.getLeftInput.detailedSchema, op.getRightInput.detailedSchema)
     op.defineDetailedSchema(schema)
   }
 
-  def dispatch void inferDetailedSchema(TernaryOperator op) {
+  private def dispatch void fillFullSchema(TernaryOperator op) {
     val detailedSchema = Lists.newArrayList(Iterables.concat(
       op.getLeftInput.detailedSchema,
       op.getMiddleInput.detailedSchema,

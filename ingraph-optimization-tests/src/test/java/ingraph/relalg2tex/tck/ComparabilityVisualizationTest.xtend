@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class ComparabilityVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Fail when comparing nodes to parameters
@@ -28,7 +28,7 @@ class ComparabilityVisualizationTest {
         WHERE b = $param
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Comparability_01")
     }
 
@@ -49,7 +49,7 @@ class ComparabilityVisualizationTest {
         WHERE $param = b
         RETURN b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Comparability_02")
     }
 
@@ -68,7 +68,7 @@ class ComparabilityVisualizationTest {
         WHERE a = a.val
         RETURN count(a)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Comparability_03")
     }
 
@@ -86,7 +86,7 @@ class ComparabilityVisualizationTest {
         MATCH (a)-[b]->()
         RETURN a = b
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Comparability_04")
     }
 
@@ -104,7 +104,7 @@ class ComparabilityVisualizationTest {
         MATCH (a)-[b]->()
         RETURN b = a
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/Comparability_05")
     }
 

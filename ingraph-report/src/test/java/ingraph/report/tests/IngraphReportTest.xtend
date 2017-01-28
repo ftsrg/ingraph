@@ -2,9 +2,9 @@ package ingraph.report.tests
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgExpressionSerializer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
@@ -19,10 +19,10 @@ import relalg.RelalgContainer
 
 class IngraphReportTest {
 
-	protected extension SchemaInferencer schemaInferencer = new SchemaInferencer
-	protected extension ExtraAttributeInferencer tupleInferencer = new ExtraAttributeInferencer
-  protected extension DetailedSchemaInferencer detailedSchemaInferencer = new DetailedSchemaInferencer
-	protected extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+  extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+  extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
+  extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+  extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	protected val treeSerializerConfig = RelalgSerializerConfig.builder.includeCommonVariables(true).build
 
@@ -71,7 +71,7 @@ class IngraphReportTest {
 	def expression(RelalgContainer container) {
 	try {
 		val container2 = EcoreUtil.copy(container)
-	  container2.addSchemaInformation
+	  container2.inferBasicSchema
 		expressionSerializer.serialize(container2).toString
 	} catch (Exception e) {
 		e.printStackTrace
@@ -82,7 +82,7 @@ class IngraphReportTest {
 	def visualizeTree(RelalgContainer container) {
 	try {
 	  val treeContainer = EcoreUtil.copy(container)
-	  treeContainer.addSchemaInformation
+	  treeContainer.inferBasicSchema
 		treeSerializer.serialize(treeContainer)
 	} catch (Exception e) {
 		e.printStackTrace
@@ -94,9 +94,9 @@ class IngraphReportTest {
 		try {
 		  val container2 = EcoreUtil.copy(container)
 		  container2.transformToRete
-		  container2.addSchemaInformation
-		  container2.addExtraAttributes
-      container2.addDetailedSchemaInformation
+		  container2.inferBasicSchema
+		  container2.inferExtraAttributes
+      container2.inferFullSchema
 			treeSerializer.serialize(container2)
 		} catch (Exception e) {
 			e.printStackTrace

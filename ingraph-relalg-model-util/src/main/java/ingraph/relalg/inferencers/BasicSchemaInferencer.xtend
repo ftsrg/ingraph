@@ -30,43 +30,38 @@ import relalg.VariableExpression
  * 
  * For example, a join node concatenates the schema of its input nodes (left/right) and removes the duplicate attributes. 
  */
-class SchemaInferencer {
+class BasicSchemaInferencer {
 
   extension RelalgFactory factory = RelalgFactory.eINSTANCE
   extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
   extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
   val boolean includeEdges
-  var RelalgContainer container
 
   new() {
-    this.includeEdges = true
+    this(true)
   }
 
   new(boolean includeEdges) {
     this.includeEdges = includeEdges
   }
 
-  def addSchemaInformation(RelalgContainer container) {
-    if (container.schemaInferencingCompleted) {
-      throw new IllegalStateException("SchemaInferencer on relalg container was already executed")
+  def inferBasicSchema(RelalgContainer container) {
+    if (container.basicSchemaInferred) {
+      throw new IllegalStateException("BasicSchemaInferencer on relalg container was already executed")
     } else {
-      container.schemaInferencingCompleted = true
+      container.basicSchemaInferred = true
     }
-     
-    this.container = container
-    container.rootExpression.traverse([inferSchema])
+
+    container.rootExpression.traverse([fillBasicSchema])
     container
   }
 
-  /**
-   * inferSchema
-   */
   // nullary operators
-  def dispatch List<Variable> inferSchema(GetVerticesOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(GetVerticesOperator op) {
     op.defineSchema(#[op.vertexVariable])
   }
 
-  def dispatch List<Variable> inferSchema(GetEdgesOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(GetEdgesOperator op) {
     if (includeEdges) {
       op.defineSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
     } else {
@@ -75,7 +70,7 @@ class SchemaInferencer {
   }
 
   // unary operators
-  def dispatch List<Variable> inferSchema(ProjectionOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(ProjectionOperator op) {
     val schema = op.input.schema
 
     // check if all projected variables are in the schema
@@ -101,7 +96,7 @@ class SchemaInferencer {
     op.defineSchema(elementVariables)
   }
 
-  def dispatch List<Variable> inferSchema(ExpandOperator op) {    
+  private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {    
     val schema = Lists.newArrayList(op.input.schema)
     
     if (includeEdges) {
@@ -112,13 +107,13 @@ class SchemaInferencer {
   }
 
   // rest of the unary operators
-  def dispatch List<Variable> inferSchema(UnaryOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(UnaryOperator op) {
     val schema = Lists.newArrayList(op.input.schema)
     op.defineSchema(schema)
   }
 
   // binary operators
-  def dispatch List<Variable> inferSchema(AbstractJoinOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(AbstractJoinOperator op) {
     val leftInputSchema = Lists.newArrayList(op.leftInput.schema)
     val rightInputSchema = Lists.newArrayList(op.rightInput.schema)
     val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
@@ -131,13 +126,13 @@ class SchemaInferencer {
     op.schema
   }
 
-  def dispatch List<Variable> inferSchema(UnionOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
     // we only keep the left schema
     op.defineSchema(op.getLeftInput.schema)
   }
 
   // ternary operators
-  def dispatch List<Variable> inferSchema(PathOperator op) {
+  private def dispatch List<Variable> fillBasicSchema(PathOperator op) {
     val schema = Lists.newArrayList(Iterables.concat(
       op.leftInput.schema,
       op.middleInput.schema,
@@ -158,7 +153,7 @@ class SchemaInferencer {
   /**
    * defineSchema
    */
-  def defineSchema(Operator op, List<Variable> schema) {   
+  private def defineSchema(Operator op, List<Variable> schema) {   
     // EObjectEList.addAll() removes duplicates
     op.schema.addAll(schema)
     schema

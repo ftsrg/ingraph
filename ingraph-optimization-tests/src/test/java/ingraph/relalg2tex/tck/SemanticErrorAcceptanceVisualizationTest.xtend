@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class SemanticErrorAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Handling property access on the Any type
@@ -20,7 +20,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[0]).prop
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/SemanticErrorAcceptance_01")
     }
 
@@ -33,7 +33,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         WITH [{prop: 0}, 1] AS list
         RETURN (list[1]).prop
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/SemanticErrorAcceptance_02")
     }
 
@@ -45,7 +45,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN range(2, 8, 0)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/SemanticErrorAcceptance_04")
     }
 

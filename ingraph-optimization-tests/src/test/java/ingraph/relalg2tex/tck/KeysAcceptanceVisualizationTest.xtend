@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class KeysAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Using `keys()` on a single node, non-empty result
@@ -26,7 +26,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_01")
     }
 
@@ -46,7 +46,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_02")
     }
 
@@ -65,7 +65,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_03")
     }
 
@@ -84,7 +84,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_04")
     }
 
@@ -103,7 +103,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_05")
     }
 
@@ -122,7 +122,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_06")
     }
 
@@ -141,7 +141,7 @@ class KeysAcceptanceVisualizationTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_07")
     }
 
@@ -154,7 +154,7 @@ class KeysAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_08")
     }
 
@@ -169,7 +169,7 @@ class KeysAcceptanceVisualizationTest {
         val container = Cypher2Relalg.processString('''
         RETURN keys($param) AS k
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/KeysAcceptance_09")
     }
 

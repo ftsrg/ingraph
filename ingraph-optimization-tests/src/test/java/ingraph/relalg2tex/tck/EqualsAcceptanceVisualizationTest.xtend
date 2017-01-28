@@ -3,13 +3,13 @@ package ingraph.relalg2tex.tck
 import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.inferencers.SchemaInferencer
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class EqualsAcceptanceVisualizationTest {
 
     val RelalgTreeSerializer serializer = new RelalgTreeSerializer
-    extension SchemaInferencer inferencer = new SchemaInferencer
+    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
     Scenario: Number-typed integer comparison
@@ -28,7 +28,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/EqualsAcceptance_01")
     }
 
@@ -49,7 +49,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/EqualsAcceptance_02")
     }
 
@@ -70,7 +70,7 @@ class EqualsAcceptanceVisualizationTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/EqualsAcceptance_03")
     }
 
@@ -91,7 +91,7 @@ class EqualsAcceptanceVisualizationTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/EqualsAcceptance_04")
     }
 
@@ -112,7 +112,7 @@ class EqualsAcceptanceVisualizationTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        container.addSchemaInformation
+        container.inferBasicSchema
         serializer.serialize(container, "tck/EqualsAcceptance_05")
     }
 
