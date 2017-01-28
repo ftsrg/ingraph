@@ -1,15 +1,15 @@
 package ingraph.relalg.util
 
 import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
 import ingraph.relalg2tex.RelalgSerializerConfig
-import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import org.junit.Test
 import relalg.ArithmeticComparisonOperatorType
 import relalg.RelalgFactory
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 
-class TupleInferencerTest {
+class InferencerTest {
 
   val RelalgSerializerConfig config = RelalgSerializerConfig.builder.consoleOutput(true).standaloneDocument(true).build
   extension RelalgTreeSerializer serializer = new RelalgTreeSerializer(config)
@@ -58,7 +58,7 @@ class TupleInferencerTest {
     container.addSchemaInformation
     container.addExtraAttributes
     container.addDetailedSchemaInformation
-    container.serialize("../visualization/sandbox/tuple-inferencer-test")
+    container.serialize("../visualization/sandbox/inferencer-test")
   }
 
 }

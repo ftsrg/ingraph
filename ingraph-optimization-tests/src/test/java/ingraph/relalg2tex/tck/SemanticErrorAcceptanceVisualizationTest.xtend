@@ -4,7 +4,7 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 
 class SemanticErrorAcceptanceVisualizationTest {
 

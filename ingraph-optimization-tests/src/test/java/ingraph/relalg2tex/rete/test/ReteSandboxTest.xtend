@@ -3,13 +3,13 @@ package ingraph.relalg2tex.rete.test
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.RelalgSerializerConfig
-import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import org.junit.Ignore
 import org.junit.Test
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 
 class ReteSandboxTest {
 

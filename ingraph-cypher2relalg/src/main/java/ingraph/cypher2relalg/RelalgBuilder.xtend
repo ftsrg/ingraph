@@ -67,6 +67,8 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
+import org.slizaa.neo4j.opencypher.openCypher.ShortestPath
+import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -788,9 +790,16 @@ class RelalgBuilder {
 
   def dispatch Operator buildRelalg(PatternPart p) {
     // TODO: handle variable assignment
+    if (p.part instanceof ShortestPath) {
+      
+    }
+    if (p.part instanceof AllShortestPath) {
+      
+    }
     if (p.^var !== null) {
       unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
     }
+    
     // pass through variable assignment body to buildRelalg(PatternElement e)
     buildRelalg(p.part)
   }

@@ -1,7 +1,7 @@
 package ingraph.relalg2tex.optimization
 
 import ingraph.optimization.transformations.reteoptimization.ReteOptimization
-import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import org.junit.Test
 
 class DseOptimizationTest {

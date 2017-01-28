@@ -1,5 +1,7 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.serializers
 
+import ingraph.relalg2tex.RelalgSerializerConfig
+import ingraph.relalg2tex.StringEscaper
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
@@ -8,15 +10,17 @@ import relalg.Cardinality
 import relalg.ElementVariable
 import relalg.Expression
 import relalg.ExpressionVariable
-import relalg.GetEdgesOperator
 import relalg.ListVariable
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableListExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
+
+  extension StringEscaper stringEscaper = new StringEscaper
 
   new() {
     super()
@@ -119,22 +123,20 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
       «op.rightInput.toNode»
     '''
   }
+  
+  def dispatch children(TernaryOperator op) {
+    '''
+
+      «op.leftInput.toNode»
+      «op.middleInput.toNode»
+      «op.rightInput.toNode»
+    '''
+  }
 
   def formatCardinality(Cardinality cardinality) {
-    return String.format("%.02f", cardinality?.value)
+    return String.format("%.02f", cardinality.value)
   }
-
-  /**
-   * operatorToTeX
-   */
-  override dispatch operatorToTex(
-    GetEdgesOperator op) {
-    #[
-      '''\getedgesi«op.sourceVertexVariable.toTexParameterWithLabels»«op.targetVertexVariable.toTexParameterWithLabels»''',
-      '''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''
-    ]
-  }
-
+  
   /**
    * operator
    */

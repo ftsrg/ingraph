@@ -3,10 +3,11 @@ package ingraph.report.tests
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.DetailedSchemaInferencer
+import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg2tex.RelalgExpressionSerializer
 import ingraph.relalg2tex.RelalgSerializerConfig
-import ingraph.relalg2tex.RelalgTreeSerializer
+import ingraph.relalg2tex.serializers.RelalgExpressionSerializer
+import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import ingraph.report.tests.util.NaturalOrderComparator
 import java.io.File
 import java.nio.charset.Charset
@@ -15,7 +16,6 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 
 class IngraphReportTest {
 

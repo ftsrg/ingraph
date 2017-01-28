@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.trainbenchmark
+package ingraph.cypher2relalg.tck.sandbox
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
@@ -34,9 +34,35 @@ class SandboxTest {
     def void test03() {
         val cypher = CypherParser.parseString('''
         MATCH (row)
-        //RETURN row
         UNWIND row AS node
         RETURN node.id
+        ''')
+        Cypher2Relalg.processCypher(cypher)
+    }
+
+    @Test
+    def void test04() {
+        val cypher = CypherParser.parseString('''
+        MATCH p=(a)-[r]->(b)
+        RETURN a, r, b
+        ''')
+        Cypher2Relalg.processCypher(cypher)
+    }
+
+    @Test
+    def void test05() {
+        val cypher = CypherParser.parseString('''
+        MATCH p=shortestPath((a)-[r]->(b))
+        RETURN a, r, b
+        ''')
+        Cypher2Relalg.processCypher(cypher)
+    }
+
+    @Test
+    def void test06() {
+        val cypher = CypherParser.parseString('''
+        MATCH p=allShortestPaths((a)-[r]->(b))
+        RETURN a, r, b
         ''')
         Cypher2Relalg.processCypher(cypher)
     }
