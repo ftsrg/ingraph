@@ -3,7 +3,7 @@ package ingraph.relalg.util
 import ingraph.relalg.inferencers.DetailedSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg2tex.RelalgSerializerConfig
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import org.junit.Test
 import relalg.ArithmeticComparisonOperatorType

@@ -1,8 +1,8 @@
 package ingraph.relalg2tex.serializers
 
 import ingraph.relalg2tex.OperatorToTex
-import ingraph.relalg2tex.RelalgSerializerConfig
 import ingraph.relalg2tex.StringEscaper
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils

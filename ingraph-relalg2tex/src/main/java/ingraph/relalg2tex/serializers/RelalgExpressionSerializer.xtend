@@ -1,6 +1,6 @@
 package ingraph.relalg2tex.serializers
 
-import ingraph.relalg2tex.RelalgSerializerConfig
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator

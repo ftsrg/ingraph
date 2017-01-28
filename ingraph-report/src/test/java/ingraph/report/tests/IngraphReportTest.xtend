@@ -5,7 +5,7 @@ import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformatio
 import ingraph.relalg.inferencers.DetailedSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.SchemaInferencer
-import ingraph.relalg2tex.RelalgSerializerConfig
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgExpressionSerializer
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import ingraph.report.tests.util.NaturalOrderComparator

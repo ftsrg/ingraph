@@ -1,4 +1,4 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.config
 
 import de.oehme.xtend.contrib.Buildable
 import org.eclipse.xtend.lib.annotations.Data

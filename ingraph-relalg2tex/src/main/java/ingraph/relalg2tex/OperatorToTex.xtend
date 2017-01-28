@@ -1,13 +1,11 @@
 package ingraph.relalg2tex
 
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
-import relalg.ArithmeticComparisonOperatorType
-import relalg.BinaryArithmeticOperatorType
-import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.Direction
 import relalg.DuplicateEliminationOperator
@@ -29,9 +27,6 @@ import relalg.SortAndTopOperator
 import relalg.SortEntry
 import relalg.SortOperator
 import relalg.TopOperator
-import relalg.UnaryArithmeticOperatorType
-import relalg.UnaryGraphObjectLogicalOperatorType
-import relalg.UnaryLogicalOperatorType
 import relalg.UnionOperator
 import relalg.UnwindOperator
 import relalg.VertexVariable
