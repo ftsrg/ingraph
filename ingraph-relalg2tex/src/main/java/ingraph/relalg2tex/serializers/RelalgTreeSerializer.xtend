@@ -141,7 +141,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
    * operator
    */
   override operator(Operator op) {
-    '''$«op?.operatorToTex.join('''$\\$''')»$'''
+    '''$«op?.convertOperator.join('''$\\$''')»$'''
   }
 
 }

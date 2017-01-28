@@ -1,6 +1,5 @@
 package ingraph.relalg2tex.serializers
 
-import ingraph.relalg2tex.OperatorToTex
 import ingraph.relalg2tex.StringEscaper
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import java.io.File
@@ -9,21 +8,21 @@ import org.apache.commons.io.FileUtils
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.RelalgContainer
+import ingraph.relalg2tex.OperatorConverter
 
 abstract class AbstractRelalgSerializer {
 
   protected val RelalgSerializerConfig config
-  protected val extension OperatorToTex operatorToTex
+  protected val extension OperatorConverter operatorToTex
   protected val extension StringEscaper stringEscaper = new StringEscaper
 
   protected new() {
-    this.config = RelalgSerializerConfig.builder.build
-    this.operatorToTex = new OperatorToTex(config)
+    this(RelalgSerializerConfig.builder.build)
   }
 
   protected new(RelalgSerializerConfig config) {
     this.config = config
-    this.operatorToTex = new OperatorToTex(config)
+    this.operatorToTex = new OperatorConverter(config)
   }
 
 
@@ -75,7 +74,7 @@ abstract class AbstractRelalgSerializer {
   def abstract CharSequence serializeBody(Operator expression)
 
   def operator(Operator op) {
-    op.operatorToTex.join("")
+    op.convertOperator.join("")
   }
 
 }

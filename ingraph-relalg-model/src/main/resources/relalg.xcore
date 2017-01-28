@@ -152,6 +152,7 @@ abstract class Variable extends NamedElement {
   boolean dontCare = "false"
 }
 
+/* common superclass for vertices, edges and attributes */
 abstract class GraphObjectVariable extends Variable {
 }
 

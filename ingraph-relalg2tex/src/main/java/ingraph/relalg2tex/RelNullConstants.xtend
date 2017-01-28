@@ -1,6 +1,6 @@
 package ingraph.relalg2tex
 
-class RelNullHandler {
+class RelNullConstants {
 
   public static final String relNull = '''\relnull'''
   public static final String isNotNull = '''\neq «relNull»'''

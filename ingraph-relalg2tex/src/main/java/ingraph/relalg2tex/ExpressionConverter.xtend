@@ -19,7 +19,7 @@ import relalg.VariableExpression
 class ExpressionConverter {
   
   extension StringEscaper stringEscaper = new StringEscaper
-  extension OperatorConverter operatorConverter = new OperatorConverter
+  extension OperatorTypeConverter operatorConverter = new OperatorTypeConverter
 
   def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
     '''\literal{«integerLiteral.value.toString»}'''
@@ -80,7 +80,7 @@ class ExpressionConverter {
   }
 
   def dispatch CharSequence convertExpression(ArithmeticComparisonExpression exp) {
-    '''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+    '''«exp.leftOperand.convertExpression» «exp.operator.convertOperatorType» «exp.rightOperand.convertExpression»'''
   }
 
   def dispatch CharSequence convertExpression(ArithmeticOperationExpression exp) {

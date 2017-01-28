@@ -2,7 +2,7 @@ package ingraph.cypher2relalg.trainbenchmark
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
-import ingraph.relalg2tex.RelalgSerializerConfig
+import ingraph.relalg2tex.config.RelalgSerializerConfig
 import ingraph.relalg2tex.serializers.RelalgTreeSerializer
 import java.io.IOException
 import org.junit.Test

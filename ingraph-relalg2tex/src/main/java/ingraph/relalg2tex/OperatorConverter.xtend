@@ -1,70 +1,172 @@
 package ingraph.relalg2tex
 
-import relalg.ArithmeticComparisonOperatorType
-import relalg.BinaryArithmeticOperatorType
-import relalg.BinaryLogicalOperatorType
-import relalg.UnaryArithmeticOperatorType
-import relalg.UnaryGraphObjectLogicalOperatorType
-import relalg.UnaryLogicalOperatorType
+import ingraph.relalg2tex.config.RelalgSerializerConfig
+import relalg.AbstractJoinOperator
+import relalg.AllDifferentOperator
+import relalg.AntiJoinOperator
+import relalg.BinaryOperator
+import relalg.DuplicateEliminationOperator
+import relalg.ExpandOperator
+import relalg.GetEdgesOperator
+import relalg.GetVerticesOperator
+import relalg.GroupingOperator
+import relalg.JoinOperator
+import relalg.LeftOuterJoinOperator
+import relalg.PathOperator
+import relalg.ProductionOperator
+import relalg.ProjectionOperator
+import relalg.SelectionOperator
+import relalg.SortAndTopOperator
+import relalg.SortOperator
+import relalg.TopOperator
+import relalg.UnionOperator
+import relalg.UnwindOperator
 
 class OperatorConverter {
+  
+  extension MiscConverters miscConverters = new MiscConverters
+  extension StringEscaper stringEscaper = new StringEscaper
+  extension ElementConverter elementConverter = new ElementConverter
+  extension ExpressionConverter expressionConverter = new ExpressionConverter
+  protected RelalgSerializerConfig config
 
-  def convert(ArithmeticComparisonOperatorType op) {
-    switch (op) {
-      case EQUAL_TO: '''='''
-      case GREATER_THAN: '''>'''
-      case GREATER_THAN_OR_EQUAL: '''\geq'''
-      case LESS_THAN: '''<'''
-      case LESS_THAN_OR_EQUAL: '''\leq'''
-      case NOT_EQUAL_TO: '''\neq'''
-      default: throw new UnsupportedOperationException('''SortEntry «op» not supported.''')
-    }
+  new(RelalgSerializerConfig config) {
+    this.config = config
   }
 
-  def convert(BinaryLogicalOperatorType op) {
-    switch (op) {
-      case AND: '''\land'''
-      case OR: '''\lor'''
-      case XOR: '''\lxor'''
-      default: throw new UnsupportedOperationException('''BinaryLogicalOperator «op» not supported.''')
-    }
+  def dispatch convertOperator(AllDifferentOperator op) {
+    #['''\alldifferent{«op.edgeVariables.edgeVariableList»}''']
   }
 
-  def convert(UnaryLogicalOperatorType op) {
-    switch (op) {
-      case NOT: '''\neg'''
-      case IS_NOT_NULL: RelNullHandler.isNotNull
-      case IS_NULL: RelNullHandler.isNull
-      default: throw new UnsupportedOperationException('''UnaryLogicalOperator «op» not supported.''')
-    }
+  def dispatch convertOperator(BinaryOperator op) {
+    #['''\«binaryOperator(op)»''']
   }
 
-  def convert(UnaryGraphObjectLogicalOperatorType op) {
-    switch (op) {
-      case IS_NOT_NULL: RelNullHandler.isNotNull
-      case IS_NULL: RelNullHandler.isNull
-      default: throw new UnsupportedOperationException('''UnaryNodeLogicalOperator «op» not supported.''')
-    }
+  def dispatch convertOperator(DuplicateEliminationOperator op) {
+    #['''\duplicateelimination''']
   }
 
-  def convert(BinaryArithmeticOperatorType op) {
-    switch (op) {
-      case DIVISION: '''/'''
-      case MINUS: '''-'''
-      case MOD: '''\mod'''
-      case MULTIPLICATION: '''\cdot'''
-      case PLUS: '''+'''
-      case POWER: '''^'''
-      default: throw new UnsupportedOperationException('''BinaryArithmeticOperator «op» not supported.''')
-    }
+  def dispatch convertOperator(ExpandOperator op) {
+    #[
+      '''\expand«op.direction.convertDirection»''' + //
+      '''{«op.sourceVertexVariable.escapedName»}''' + //
+      '''«op.targetVertexVariable.convertElement»''' + //
+      '''«op.edgeVariable.convertElement»''' + //
+      '''{«op.minHops»}{«op.maxHops.hopsToString»}'''
+    ]
   }
 
-  def convert(UnaryArithmeticOperatorType op) {
-    switch (op) {
-      case MINUS: '''-'''
-      case PLUS: ''''''
-      default: throw new UnsupportedOperationException('''UnaryArithmeticOperator «op» not supported.''')
-    }
+  def dispatch convertOperator(GetVerticesOperator op) {
+    #[
+      '''\getvertices«op.vertexVariable.convertElement»'''
+    ]
   }
+
+  /**
+   * UnaryOperators
+   */
+  def dispatch convertOperator(GroupingOperator op) {
+    #['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
+  }
+
+  def dispatch convertOperator(ProductionOperator op) {
+    throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
+  }
+
+  def dispatch convertOperator(ProjectionOperator op) {
+    #['''\projection{«op.elements.returnableElementList»}''']
+  }
+
+  def dispatch convertOperator(SelectionOperator op) {
+    #[
+      '''\selection{''' +
+      '''«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»''' +
+      '''}'''
+    ]
+  }
+
+  def dispatch convertOperator(SortOperator op) {
+    #[ sortOperatorToTex(op) ]
+  }
+
+  def dispatch convertOperator(TopOperator op) {
+    #[ topOperatorToTex(op) ]
+  }
+
+  def dispatch convertOperator(SortAndTopOperator op) {
+    #[ topOperatorToTex(op) + sortOperatorToTex(op) ]
+  }
+
+  def topOperatorToTex(TopOperator op) {
+    '''\topp{«if (op.limit !== null) op.limit.value else ""»}{«if (op.skip !== null) op.skip.value else ""»}'''.toString
+  }
+
+  def sortOperatorToTex(SortOperator op) {
+    '''\sort{«op.entries.map[entryToTex].join(", ")»}'''.toString
+  }
+  
+  
+  def dispatch convertOperator(PathOperator op) {
+    #[
+      '''\transitiveclosure«op.direction.convertDirection»''' + //
+      '''{«op.sourceVertexVariable.escapedName»}''' + //
+      '''«op.targetVertexVariable.convertElement»''' + //
+      '''«op.edgeVariable.convertElement»''' + //
+      '''{«op.minHops»}{«op.maxHops.hopsToString»}'''
+    ]
+  }
+
+  def dispatch convertOperator(UnwindOperator op) {
+    #['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
+  }
+
+  /**
+   * operatorToTeX
+   */
+  def dispatch convertOperator(GetEdgesOperator op) {
+    #[
+      '''\getedges''' +
+      '''«op.sourceVertexVariable.convertElement»''' +
+      '''«op.targetVertexVariable.convertElement»''' +
+      '''«op.edgeVariable.convertElement»'''
+    ]
+  }
+
+//  override dispatch operatorToTex(GetEdgesOperator op) {
+//    #[
+//      '''\getedgesi«op.sourceVertexVariable.toTexParameterWithLabels»«op.targetVertexVariable.toTexParameterWithLabels»''',
+//      '''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''
+//    ]
+//  }
+  
+  /**
+   * BinaryOperators
+   */
+  def dispatch binaryOperator(AbstractJoinOperator operator) {
+    '''«operator.joinOperator»''' +
+    '''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
+  }
+
+  def dispatch binaryOperator(UnionOperator operator) {
+    '''union'''
+  }
+
+  /** JoinLikeOperators */
+  def dispatch joinOperator(JoinOperator operator) {
+    '''join'''
+  }
+
+  def dispatch joinOperator(AntiJoinOperator operator) {
+    '''antijoin'''
+  }
+
+  def dispatch joinOperator(LeftOuterJoinOperator operator) {
+    '''leftouterjoin'''
+  }
+
+  /**
+   * TernaryOperators
+   */
+//  def dispatch
 
 }
