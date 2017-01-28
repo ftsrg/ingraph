@@ -50,15 +50,15 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     '''
       [
     {«op.operator»
-      «IF !op.schema.isEmpty»
+      «IF !op.basicSchema.isEmpty»
       \\ \footnotesize
-      $\color{gray} «serializeSchema(op.schema)» \rangle$
+      $\color{gray} «serializeSchema(op.basicSchema)» \rangle$
       «ENDIF»
-      «IF !op.detailedSchema.isEmpty»
+      «IF !op.fullSchema.isEmpty»
     \\ \footnotesize
-    $\color{orange} «serializeSchema(op.detailedSchema)» \rangle$
+    $\color{orange} «serializeSchema(op.fullSchema)» \rangle$
     «ENDIF»
-    «IF op instanceof AbstractJoinOperator && !op.detailedSchema.isEmpty && config.includeCommonVariables»
+    «IF op instanceof AbstractJoinOperator && !op.fullSchema.isEmpty && config.includeCommonVariables»
     \\ \footnotesize
     $\color{orange}
     \langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :

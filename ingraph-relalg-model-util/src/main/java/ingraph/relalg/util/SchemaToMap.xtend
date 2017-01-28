@@ -9,8 +9,8 @@ class SchemaToMap {
   // TODO this might need some caching as it can be invoked millions of times from IRE 
   def schemaToMap(Operator op) {
     val mapBuilder = new ImmutableMap.Builder<Variable, Integer>()
-    for (i : 0 ..< op.detailedSchema.length) {
-      mapBuilder.put(op.detailedSchema.get(i), i)
+    for (i : 0 ..< op.fullSchema.length) {
+      mapBuilder.put(op.fullSchema.get(i), i)
     }
     
     val map = mapBuilder.build

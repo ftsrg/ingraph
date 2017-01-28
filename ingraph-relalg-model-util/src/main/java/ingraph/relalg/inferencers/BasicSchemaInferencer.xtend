@@ -71,7 +71,7 @@ class BasicSchemaInferencer {
 
   // unary operators
   private def dispatch List<Variable> fillBasicSchema(ProjectionOperator op) {
-    val schema = op.input.schema
+    val schema = op.input.basicSchema
 
     // check if all projected variables are in the schema
     op.elements.map[expression].filter(AttributeVariable).forEach [
@@ -97,7 +97,7 @@ class BasicSchemaInferencer {
   }
 
   private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {    
-    val schema = Lists.newArrayList(op.input.schema)
+    val schema = Lists.newArrayList(op.input.basicSchema)
     
     if (includeEdges) {
       schema.add(op.edgeVariable)
@@ -108,14 +108,14 @@ class BasicSchemaInferencer {
 
   // rest of the unary operators
   private def dispatch List<Variable> fillBasicSchema(UnaryOperator op) {
-    val schema = Lists.newArrayList(op.input.schema)
+    val schema = Lists.newArrayList(op.input.basicSchema)
     op.defineSchema(schema)
   }
 
   // binary operators
   private def dispatch List<Variable> fillBasicSchema(AbstractJoinOperator op) {
-    val leftInputSchema = Lists.newArrayList(op.leftInput.schema)
-    val rightInputSchema = Lists.newArrayList(op.rightInput.schema)
+    val leftInputSchema = Lists.newArrayList(op.leftInput.basicSchema)
+    val rightInputSchema = Lists.newArrayList(op.rightInput.basicSchema)
     val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
     op.defineSchema(schema)
 
@@ -123,20 +123,20 @@ class BasicSchemaInferencer {
     leftInputSchema.retainAll(rightInputSchema)
     op.commonVariables.addAll(leftInputSchema)
 
-    op.schema
+    op.basicSchema
   }
 
   private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
     // we only keep the left schema
-    op.defineSchema(op.getLeftInput.schema)
+    op.defineSchema(op.getLeftInput.basicSchema)
   }
 
   // ternary operators
   private def dispatch List<Variable> fillBasicSchema(PathOperator op) {
     val schema = Lists.newArrayList(Iterables.concat(
-      op.leftInput.schema,
-      op.middleInput.schema,
-      op.rightInput.schema  
+      op.leftInput.basicSchema,
+      op.middleInput.basicSchema,
+      op.rightInput.basicSchema  
     ))
     
     val listExpressionVariable = createExpressionVariable => [
@@ -155,7 +155,7 @@ class BasicSchemaInferencer {
    */
   private def defineSchema(Operator op, List<Variable> schema) {   
     // EObjectEList.addAll() removes duplicates
-    op.schema.addAll(schema)
+    op.basicSchema.addAll(schema)
     schema
   }
 

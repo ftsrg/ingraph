@@ -10,6 +10,7 @@ import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.TernaryOperator
 import relalg.UnaryOperator
@@ -44,12 +45,12 @@ class FullSchemaInferencer {
    * fillFullSchema
    */
   private def dispatch void fillFullSchema(NullaryOperator op) {
-    val detailedSchema = union(op.schema, op.extraVariables)
+    val detailedSchema = union(op.basicSchema, op.extraVariables)
     op.defineDetailedSchema(detailedSchema)
   }
 
   private def dispatch void fillFullSchema(UnaryOperator op) {
-    val detailedSchema = op.input.detailedSchema
+    val detailedSchema = op.input.fullSchema
     op.defineDetailedSchema(detailedSchema)
   }
 
@@ -58,15 +59,15 @@ class FullSchemaInferencer {
   }
 
   private def dispatch void fillFullSchema(AbstractJoinOperator op) {
-    val schema = calculateJoinAttributes(op, op.getLeftInput.detailedSchema, op.getRightInput.detailedSchema)
+    val schema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
     op.defineDetailedSchema(schema)
   }
 
   private def dispatch void fillFullSchema(TernaryOperator op) {
     val detailedSchema = Lists.newArrayList(Iterables.concat(
-      op.getLeftInput.detailedSchema,
-      op.getMiddleInput.detailedSchema,
-      op.getRightInput.detailedSchema
+      op.getLeftInput.fullSchema,
+      op.getMiddleInput.fullSchema,
+      op.getRightInput.fullSchema
     ))
     op.defineDetailedSchema(detailedSchema)
   }
@@ -74,8 +75,14 @@ class FullSchemaInferencer {
   /**
    * defineSchema
    */
-  def void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
-    op.detailedSchema.addAll(detailedSchema)
+  private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> detailedSchema) {
+    
+    
+    op.fullSchema.addAll(detailedSchema)
+  }
+
+  private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> detailedSchema) {
+    op.fullSchema.addAll(detailedSchema)
   }
 
 }

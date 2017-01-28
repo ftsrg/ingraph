@@ -51,8 +51,8 @@ class ExtraAttributeInferencer {
 
   private def dispatch void fillExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
-    val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
-    val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
+    val leftExtraVariables = extraVariables.filter[op.leftInput.basicSchema.contains(it.element)].toList
+    val rightExtraVariables = extraVariables.filter[op.rightInput.basicSchema.contains(it.element)].toList
 
     // remove duplicates as we only need each extra variable once
     // we choose "right\left" as it works for both equijoin and antijoin operators,
@@ -66,9 +66,9 @@ class ExtraAttributeInferencer {
 
   private def dispatch void fillExtraAttributes(TernaryOperator op, List<AttributeVariable> extraVariables) {
     op.extraVariables.addAll(extraVariables)
-    val leftExtraVariables = extraVariables.filter[op.leftInput.schema.contains(it.element)].toList
-    val middleExtraVariables = extraVariables.filter[op.middleInput.schema.contains(it.element)].toList
-    val rightExtraVariables = extraVariables.filter[op.rightInput.schema.contains(it.element)].toList
+    val leftExtraVariables = extraVariables.filter[op.leftInput.basicSchema.contains(it.element)].toList
+    val middleExtraVariables = extraVariables.filter[op.middleInput.basicSchema.contains(it.element)].toList
+    val rightExtraVariables = extraVariables.filter[op.rightInput.basicSchema.contains(it.element)].toList
 
     // remove duplicates as we only need each extra variable once
     // see the related comment in inferDetailedSchema for BinaryOperators
