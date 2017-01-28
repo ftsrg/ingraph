@@ -11,6 +11,7 @@ import java.util.HashSet
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
+import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
 import org.slizaa.neo4j.opencypher.openCypher.Count
@@ -39,6 +40,7 @@ import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.ShortestPath
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StartsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
@@ -68,8 +70,6 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
-import org.slizaa.neo4j.opencypher.openCypher.ShortestPath
-import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
