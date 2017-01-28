@@ -7,8 +7,8 @@ import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
 import hu.bme.mit.ire.Transaction
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.inferencers.{DetailedSchemaInferencer, ExtraAttributeInferencer, SchemaInferencer}
 import relalg.RelalgContainer
+import ingraph.relalg.inferencers.OneStepSchemaInferencer
 
 class IngraphAdapter(plan: String) {
   private val retePlan = Inferencer(Cypher2Relalg.processString(plan))
@@ -29,13 +29,8 @@ class IngraphAdapter(plan: String) {
 
 object Inferencer {
   val relalg2rete = new Relalg2ReteTransformation
-  val schemaInferencer = new SchemaInferencer
-  val tupleInferencer = new ExtraAttributeInferencer
-  val detailedSchemaInferencer = new DetailedSchemaInferencer
+  val oneStepSchemaInferencer = new OneStepSchemaInferencer
 
   def apply(relalg: RelalgContainer): RelalgContainer =
-    detailedSchemaInferencer.addDetailedSchemaInformation(
-      tupleInferencer.addExtraAttributes(
-        schemaInferencer.addSchemaInformation(
-          relalg2rete.transformToRete(relalg))))
+    oneStepSchemaInferencer.inferCompleteSchema(relalg2rete.transformToRete(relalg))
 }
