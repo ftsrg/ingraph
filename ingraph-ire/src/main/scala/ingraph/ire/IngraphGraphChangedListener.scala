@@ -27,6 +27,18 @@ class IngraphGraphChangedListener(
     Vector(idParser(element.id)) ++
       required.tail.map(key => element.value(key).asInstanceOf[Any])
 
+  def edgeTypeFilter(edge: Edge, operator: GetEdgesOperator): Boolean = {
+    if (operator.getSourceVertexVariable.getVertexLabelSet != null) {
+      val sourceNames = operator.getSourceVertexVariable.getVertexLabelSet.getVertexLabels.map(f => f.getName)
+      if (!sourceNames.contains(edge.outVertex().label())) return false
+    }
+    if (operator.getTargetVertexVariable.getVertexLabelSet != null) {
+      val targetNames = operator.getTargetVertexVariable.getVertexLabelSet.getVertexLabels.map(f => f.getName)
+      if (!targetNames.contains(edge.inVertex().label())) return false
+    }
+    true
+  }
+
   def edgeToTupleType(edge: Edge, operator: GetEdgesOperator): Tuple = {
     Vector(idParser(edge.outVertex.id), idParser(edge.id), idParser(edge.inVertex.id)) ++
       operator.getFullSchema.drop(3).map(
@@ -47,7 +59,8 @@ class IngraphGraphChangedListener(
   override def edgeAdded(edge: Edge): Unit = {
     for (set <- edgeConverters.get(edge.label);
          operator <- set)
-      transaction.add(operator.getEdgeVariable.getName, edgeToTupleType(edge, operator))
+      if (edgeTypeFilter(edge, operator))
+        transaction.add(operator.getEdgeVariable.getName, edgeToTupleType(edge, operator))
   }
 
   override def vertexPropertyChanged(vertex: Vertex, key: String, oldValue: scala.Any, setValue: scala.Any): Unit = ???
