@@ -189,13 +189,18 @@ class RelalgBuilder {
       ]
     ]
 
-    /*
-     * The compiled form of the first MATCH clause is on the rightInput
-     * of the first join operator.
-     *
-     * This join operator is in fact, unnecessary.
-     */
-    val content = chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
+    // if there is no match clause or the first is already an "OPTIONAL MATCH", we include the dual source
+    val content = if (singleQuery_MatchList.empty || singleQuery_MatchList.head instanceof LeftOuterJoinOperator) {
+      chainBinaryOperatorsLeft(createDualObjectSourceOperator, singleQuery_MatchList)
+    } else {
+      /*
+       * The compiled form of the first MATCH clause is on the rightInput
+       * of the first join operator.
+       *
+       * This join operator is in fact, unnecessary.
+       */
+      chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
+    }
 
     //val singleQuery_unwindClauseList =
     clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]

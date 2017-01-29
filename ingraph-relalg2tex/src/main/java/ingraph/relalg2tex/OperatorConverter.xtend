@@ -5,6 +5,7 @@ import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
 import relalg.BinaryOperator
+import relalg.DualObjectSourceOperator
 import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
@@ -59,6 +60,12 @@ class OperatorConverter {
   def dispatch convertOperator(GetVerticesOperator op) {
     #[
       '''\getvertices«op.vertexVariable.convertElement»'''
+    ]
+  }
+
+  def dispatch convertOperator(DualObjectSourceOperator op) {
+    #[
+      '''\var{DualGraphObjectSource}'''
     ]
   }
 

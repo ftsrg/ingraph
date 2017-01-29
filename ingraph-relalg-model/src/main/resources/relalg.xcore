@@ -204,6 +204,12 @@ class GetVerticesOperator extends NullaryOperator {
   refers VertexVariable vertexVariable
 }
 
+/**
+ * Dual graph object source, that should always return a single tuple, i.e. ()
+ */
+class DualObjectSourceOperator extends NullaryOperator {
+}
+
 // (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
 class GetEdgesOperator extends NullaryOperator {
   refers VertexVariable sourceVertexVariable
