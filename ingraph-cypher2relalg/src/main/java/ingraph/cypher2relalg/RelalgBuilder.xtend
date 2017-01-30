@@ -31,6 +31,7 @@ import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
+import org.slizaa.neo4j.opencypher.openCypher.NullConstant
 import org.slizaa.neo4j.opencypher.openCypher.NumberConstant
 import org.slizaa.neo4j.opencypher.openCypher.Parameter
 import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
@@ -700,6 +701,9 @@ class RelalgBuilder {
     , ExpressionMulDiv
     , ExpressionPower
       : buildRelalgArithmeticExpression(e)
+    , NullConstant: createNullLiteral => [
+        container = topLevelContainer
+      ]
       default: throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e).toString()»''')
     }
   }

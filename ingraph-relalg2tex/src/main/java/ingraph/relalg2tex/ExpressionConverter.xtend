@@ -11,6 +11,7 @@ import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.IntegerLiteral
 import relalg.ListExpression
+import relalg.NullLiteral
 import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
@@ -89,6 +90,10 @@ class ExpressionConverter {
 
   def dispatch CharSequence convertExpression(BooleanLiteral exp) {
     '''\mathtt{«if (exp.value) "true" else "false"»}'''
+  }
+
+  def dispatch CharSequence convertExpression(NullLiteral x) {
+    RelNullConstants.relNull
   }
 
   def dispatch CharSequence convertExpression(Void x) {
