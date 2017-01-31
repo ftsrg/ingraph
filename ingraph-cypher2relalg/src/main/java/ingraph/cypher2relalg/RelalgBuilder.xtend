@@ -47,6 +47,7 @@ import org.slizaa.neo4j.opencypher.openCypher.StartsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.ArithmeticComparisonOperatorType
 import relalg.ArithmeticExpression
 import relalg.AttributeVariable
@@ -172,6 +173,10 @@ class RelalgBuilder {
 
     // do some checks on the MATCH clauses
     Validator.checkMatchClauseSequence(clauses.filter(typeof(Match)), logger)
+    // we don't support WITH yet (coming soon)
+    if (!clauses.filter(typeof(With)).empty) {
+      unsupported('Support for single queries having WITH cluse are coming soon.')
+    }
 
     /*
      * We compile all MATCH clauses and attach to a (left outer) join operator.
