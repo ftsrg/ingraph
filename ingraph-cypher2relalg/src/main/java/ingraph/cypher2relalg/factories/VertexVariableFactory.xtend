@@ -1,8 +1,8 @@
 package ingraph.cypher2relalg.factories
 
-import relalg.VertexVariable
-import relalg.RelalgContainer
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
+import relalg.RelalgContainer
+import relalg.VertexVariable
 
 class VertexVariableFactory extends VariableFactory<VertexVariable> {
 
@@ -11,7 +11,9 @@ class VertexVariableFactory extends VariableFactory<VertexVariable> {
   }
 
   override createSpecificNamedElement() {
-    createVertexVariable
+    createVertexVariable => [
+      vertexLabelSet = createVertexLabelSet
+    ]
   }
 
   def createElement(NodePattern rd) {

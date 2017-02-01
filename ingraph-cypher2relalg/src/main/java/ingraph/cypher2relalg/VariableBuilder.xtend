@@ -240,9 +240,6 @@ class VariableBuilder {
   }
 
   def protected ensureLabel(VertexVariable vertexVariable, VertexLabel label) {
-    if (vertexVariable.vertexLabelSet == null) {
-      vertexVariable.vertexLabelSet = createVertexLabelSet
-    }
     if (!vertexVariable.vertexLabelSet.vertexLabels.contains(label)) {
       vertexVariable.vertexLabelSet => [
         vertexLabels.add(label)
@@ -260,9 +257,8 @@ class VariableBuilder {
       return
     }
 
-    if (edgeVariable.edgeLabelSet == null) {
-      // no previous labelset was in effect
-      edgeVariable.edgeLabelSet = createEdgeLabelSet
+    if (edgeVariable.edgeLabelSet.status == LabelSetStatus.EMPTY) {
+      // no previous labelset constraint was in effect
       labels.forEach [
         val label = edgeLabelFactory.createElement(it)
         if (!edgeVariable.edgeLabelSet.edgeLabels.contains(label)) {
@@ -275,7 +271,7 @@ class VariableBuilder {
           LabelSetStatus.NON_EMPTY
         }
     } else {
-      // we had a previous labelset
+      // we had a previous, non-empty labelset
       // we combine (intersect) the labelset received with the previous one
       val List<EdgeLabel> intersection = new ArrayList<EdgeLabel>
 
