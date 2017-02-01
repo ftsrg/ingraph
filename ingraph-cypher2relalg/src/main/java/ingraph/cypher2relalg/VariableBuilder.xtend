@@ -9,6 +9,7 @@ import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.IngraphLogger
 import java.util.ArrayList
+import java.util.Collection
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -28,7 +29,6 @@ import relalg.Variable
 import relalg.VariableExpression
 import relalg.VertexLabel
 import relalg.VertexVariable
-import java.util.Collection
 
 /**
  * This is the variable builder component of
@@ -246,18 +246,6 @@ class VariableBuilder {
     if (!vertexVariable.vertexLabelSet.vertexLabels.contains(label)) {
       vertexVariable.vertexLabelSet => [
         vertexLabels.add(label)
-        status = LabelSetStatus.NON_EMPTY
-      ]
-    }
-  }
-
-  def protected ensureLabel(EdgeVariable edgeVariable, EdgeLabel label) {
-    if (edgeVariable.edgeLabelSet == null) {
-      edgeVariable.edgeLabelSet = createEdgeLabelSet
-    }
-    if (!edgeVariable.edgeLabelSet.edgeLabels.contains(label)) {
-      edgeVariable.edgeLabelSet => [
-        edgeLabels.add(label) // TODO this is not correct, see #10
         status = LabelSetStatus.NON_EMPTY
       ]
     }
