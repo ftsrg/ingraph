@@ -120,6 +120,9 @@ Currently, these modules have support:
 
 #### Eclipse
 
+* Xtend classes do not compile
+  * **Problem:** Xtend classes do not compile due to character encoding errors.
+  * **Solution:** change the character encoding to **UTF-8** (preferably for the whole workspace, in **Window** | **Preferences** | **General** | **Workspace** | **Text file encoding**).
 * Gradle error
   * **Problem:** during import, you may encounter the following error:
 
