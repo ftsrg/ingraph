@@ -32,54 +32,54 @@ class ExtraAttributeInferencer {
     container
   }
 
-  private def dispatch void fillExtraAttributes(NullaryOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
+  private def dispatch void fillExtraAttributes(NullaryOperator op, List<AttributeVariable> extraAttributes) {
+    op.extraAttributes.addAll(extraAttributes)
   }
 
-  private def dispatch void fillExtraAttributes(UnaryOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
-    val newExtraVariables = extractUnaryOperatorExtraVariables(op)
+  private def dispatch void fillExtraAttributes(UnaryOperator op, List<AttributeVariable> extraAttributes) {
+    op.extraAttributes.addAll(extraAttributes)
+    val newExtraAttributes = extractUnaryOperatorExtraAttributes(op)
     
-    val inputExtraVariables = union(extraVariables, newExtraVariables)
-    op.input.fillExtraAttributes(inputExtraVariables)
+    val inputExtraAttributes = union(extraAttributes, newExtraAttributes)
+    op.input.fillExtraAttributes(inputExtraAttributes)
   }
 
-  private def dispatch void fillExtraAttributes(UnionOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
+  private def dispatch void fillExtraAttributes(UnionOperator op, List<AttributeVariable> extraAttributes) {
+    op.extraAttributes.addAll(extraAttributes)
     throw new UnsupportedOperationException("Union not yet supported")
   }
 
-  private def dispatch void fillExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
-    val leftExtraVariables = extraVariables.filter[op.leftInput.basicSchema.contains(it.element)].toList
-    val rightExtraVariables = extraVariables.filter[op.rightInput.basicSchema.contains(it.element)].toList
+  private def dispatch void fillExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraAttributes) {
+    op.extraAttributes.addAll(extraAttributes)
+    val leftExtraAttributes = extraAttributes.filter[op.leftInput.basicSchema.contains(it.element)].toList
+    val rightExtraAttributes = extraAttributes.filter[op.rightInput.basicSchema.contains(it.element)].toList
 
     // remove duplicates as we only need each extra variable once
     // we choose "right\left" as it works for both equijoin and antijoin operators,
     // as extra attributes that are available from both the left and right input
-    rightExtraVariables.removeAll(leftExtraVariables)
+    rightExtraAttributes.removeAll(leftExtraAttributes)
 
-    //val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
-    op.leftInput.fillExtraAttributes(leftExtraVariables)
-    op.rightInput.fillExtraAttributes(rightExtraVariables)
+    //val orderedExtraAttributes = union(leftExtraAttributes, rightExtraAttributes)
+    op.leftInput.fillExtraAttributes(leftExtraAttributes)
+    op.rightInput.fillExtraAttributes(rightExtraAttributes)
   }
 
-  private def dispatch void fillExtraAttributes(TernaryOperator op, List<AttributeVariable> extraVariables) {
-    op.extraVariables.addAll(extraVariables)
-    val leftExtraVariables = extraVariables.filter[op.leftInput.basicSchema.contains(it.element)].toList
-    val middleExtraVariables = extraVariables.filter[op.middleInput.basicSchema.contains(it.element)].toList
-    val rightExtraVariables = extraVariables.filter[op.rightInput.basicSchema.contains(it.element)].toList
+  private def dispatch void fillExtraAttributes(TernaryOperator op, List<AttributeVariable> extraAttributes) {
+    op.extraAttributes.addAll(extraAttributes)
+    val leftExtraAttributes = extraAttributes.filter[op.leftInput.basicSchema.contains(it.element)].toList
+    val middleExtraAttributes = extraAttributes.filter[op.middleInput.basicSchema.contains(it.element)].toList
+    val rightExtraAttributes = extraAttributes.filter[op.rightInput.basicSchema.contains(it.element)].toList
 
     // remove duplicates as we only need each extra variable once
     // see the related comment in inferDetailedSchema for BinaryOperators
-    middleExtraVariables.removeAll(leftExtraVariables)
+    middleExtraAttributes.removeAll(leftExtraAttributes)
     
-    rightExtraVariables.removeAll(leftExtraVariables)
-    rightExtraVariables.removeAll(middleExtraVariables)
+    rightExtraAttributes.removeAll(leftExtraAttributes)
+    rightExtraAttributes.removeAll(middleExtraAttributes)
 
-    op.leftInput.fillExtraAttributes(leftExtraVariables)
-    op.middleInput.fillExtraAttributes(middleExtraVariables)
-    op.rightInput.fillExtraAttributes(rightExtraVariables)
+    op.leftInput.fillExtraAttributes(leftExtraAttributes)
+    op.middleInput.fillExtraAttributes(middleExtraAttributes)
+    op.rightInput.fillExtraAttributes(rightExtraAttributes)
   }
   
 }

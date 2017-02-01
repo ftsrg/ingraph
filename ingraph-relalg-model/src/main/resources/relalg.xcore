@@ -187,7 +187,7 @@ class ExpressionVariable extends Variable {
 abstract class Operator {
   String description
   refers Variable[] basicSchema
-  refers Variable[] extraVariables
+  refers Variable[] extraAttributes
   refers Variable[] fullSchema
   contains Cardinality cardinality
 }

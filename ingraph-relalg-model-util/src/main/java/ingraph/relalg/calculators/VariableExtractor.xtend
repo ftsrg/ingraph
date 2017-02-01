@@ -14,28 +14,28 @@ class VariableExtractor {
   /**
    * extract extra attributes required by unary operators
    */
-  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraAttributes(ProjectionOperator op) {
     op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
   }
 
-//  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
+//  def dispatch List<AttributeVariable> extractUnaryOperatorExtraAttributes(GroupingOperator op) {
 //    op.entries // TODO this does not belong here
 //  }
 
-  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraAttributes(SelectionOperator op) {
     getAttributes(op.condition)
   }
 
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
+//  def dispatch List<? extends Variable> extractUnaryOperatorExtraAttributes(SortOperator op) {
 //    op.entries.map[variable]
 //  }
 //
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
+//  def dispatch List<? extends Variable> extractUnaryOperatorExtraAttributes(UnwindOperator op) {
 //    #[op.sourceVariable]
 //  }
   
   // rest of the unary operators - no extra requirements
-  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
+  def dispatch List<AttributeVariable> extractUnaryOperatorExtraAttributes(UnaryOperator op) {
     #[]
   }
 

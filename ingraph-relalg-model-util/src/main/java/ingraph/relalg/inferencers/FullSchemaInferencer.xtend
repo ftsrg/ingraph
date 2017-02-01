@@ -45,7 +45,7 @@ class FullSchemaInferencer {
    * fillFullSchema
    */
   private def dispatch void fillFullSchema(NullaryOperator op) {
-    val detailedSchema = union(op.basicSchema, op.extraVariables)
+    val detailedSchema = union(op.basicSchema, op.extraAttributes)
     op.defineDetailedSchema(detailedSchema)
   }
 
