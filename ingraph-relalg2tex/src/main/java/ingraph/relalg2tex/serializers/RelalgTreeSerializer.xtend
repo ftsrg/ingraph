@@ -1,5 +1,6 @@
 package ingraph.relalg2tex.serializers
 
+import ingraph.relalg.util.GetContainer
 import ingraph.relalg2tex.StringEscaper
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import java.util.List
@@ -13,15 +14,16 @@ import relalg.ExpressionVariable
 import relalg.ListVariable
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableListExpression
-import relalg.ProjectionOperator
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
   extension StringEscaper stringEscaper = new StringEscaper
+  extension GetContainer getContainer = new GetContainer
 
   new() {
     super()
@@ -51,15 +53,15 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     '''
       [
     {«op.operator»
-    «IF !op.basicSchema.isEmpty»
+    «IF op.getContainer.basicSchemaInferred»
     \\ \footnotesize
     $\color{gray} «serializeSchema(op.basicSchema)» $
     «ENDIF»
-    «IF !op.extraAttributes.isEmpty»
+    «IF op.getContainer.extraAttributesInferred»
     \\ \footnotesize
     $\color{blue} «serializeSchema(op.extraAttributes)» $
     «ENDIF»
-    «IF !op.fullSchema.isEmpty»
+    «IF op.getContainer.fullSchemaInferred»
     \\ \footnotesize
     $\color{orange} «serializeSchema(op.fullSchema)» $
     «IF op instanceof ProjectionOperator»
@@ -67,7 +69,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     $\color{orange} \langle \var{«op.tupleIndices.join(", ")»} \rangle $
     «ENDIF»
     «ENDIF»
-    «IF op instanceof AbstractJoinOperator && !op.fullSchema.isEmpty && config.includeCommonVariables»
+    «IF op instanceof AbstractJoinOperator && op.getContainer.fullSchemaInferred && config.includeCommonVariables»
     \\ \footnotesize
     $\color{orange}
     \langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
