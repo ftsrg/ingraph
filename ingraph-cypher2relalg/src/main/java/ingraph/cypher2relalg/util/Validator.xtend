@@ -7,22 +7,23 @@ import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
+import org.slizaa.neo4j.opencypher.openCypher.Clause
+import org.slizaa.neo4j.opencypher.openCypher.With
+import org.slizaa.neo4j.opencypher.openCypher.Return
 
 class Validator {
   /**
-   * Some checks for a single query's MATCH clauses.
+   * Some checks for a single subquery's MATCH clauses.
    *
    * Note: pass all the MATCH clauses in sequence to allow for proper checking.
    *
    * Checks performed:
-   * - Currently we support only single queries having at least 1 MATCH caluse
+   * - Currently we support only sub queries having at least 1 MATCH clause
    * - It is invalid to have MATCH after OPTIONAL MATCH.
    */
   def static void checkMatchClauseSequence(Iterable<Match> singleQuery_MatchList, IngraphLogger logger) {
     val head = singleQuery_MatchList?.head
-    if (head == null) {
-      logger.unsupported('''Currently we support only single queries having at least 1 MATCH caluse''')
-    } else {
+    if (head != null) {
       var seenOptionalMatch = false
       for (Match o : singleQuery_MatchList) {
         if (o.optional) {
@@ -31,6 +32,27 @@ class Validator {
           logger.unrecoverableError('It is invalid to have MATCH after OPTIONAL MATCH.')
         }
       }
+    }
+  }
+
+  /**
+   * Some checks for a single query's clauses
+   *
+   * Checks performed:
+   * - we currently support only the following clauses: MATCH, WITH, RETURN
+   * - last clause must be a RETURN clause
+   */
+  def static void checkSingleQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
+    for (Clause c: clauses) {
+      if ( ! (c instanceof Match
+       || c instanceof With
+       || c instanceof Return
+      )) {
+        logger.unsupported('''Currently we only support MATCH, WITH and RETURN clauses in a single query. Found: «c.class.name».''')
+      }
+    }
+    if ( ! (clauses.last instanceof Return)) {
+      logger.unsupported('''Last clause of a single query must be RETURN, but found «clauses.last.class.name» instead.''')
     }
   }
 

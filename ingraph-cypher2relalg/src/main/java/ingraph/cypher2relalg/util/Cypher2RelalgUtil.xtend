@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.util
 
+import java.util.ArrayList
 import java.util.Iterator
 import java.util.LinkedList
 import java.util.List
@@ -7,6 +8,7 @@ import java.util.Set
 import relalg.ArithmeticOperationExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
+import relalg.DuplicateEliminationOperator
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
@@ -14,15 +16,20 @@ import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GetVerticesOperator
 import relalg.GraphObjectVariable
+import relalg.GroupingOperator
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.ListExpression
 import relalg.Literal
 import relalg.LogicalExpression
 import relalg.Operator
+import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.SortOperator
+import relalg.TopOperator
 import relalg.UnaryArithmeticOperationExpression
+import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
@@ -170,5 +177,46 @@ class Cypher2RelalgUtil {
     }
 
     effectivelySeenAggregate
+  }
+
+  /**
+   * Inject the given Left Outer Join operator just above the content
+   * into operator tree. Content will become the rightInput of the left outer join operator.
+   * @param op A operator tree of the form
+   *        TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
+   * @param lojo A Left Outer Join operator instance to be injected.
+   */
+  def validateAndInjectLOJO(Operator op, LeftOuterJoinOperator lojo) {
+    // we find the parent node of content and also validate the sequence in a pass
+    var UnaryOperator parent = null
+    var currentOperator = op
+    val unaryOperatorTreeSeen = new ArrayList<String>
+    val pattern = #[
+      new UnaryOperator0or1Pattern(TopOperator, true)
+    , new UnaryOperator0or1Pattern(SortOperator, true)
+    , new UnaryOperator0or1Pattern(DuplicateEliminationOperator, true)
+    , new UnaryOperator0or1Pattern(ProjectionOperator, false)
+    , new UnaryOperator0or1Pattern(GroupingOperator, true)
+    ]
+    for (p: pattern) {
+      if (currentOperator instanceof UnaryOperator) {
+        if (p.opc.isInstance(currentOperator)) {
+          unaryOperatorTreeSeen.add(currentOperator.class.name)
+          parent = currentOperator
+          currentOperator = currentOperator.input
+        } else if (!p.optional) {
+          unrecoverableError('''So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and we reached «currentOperator.class.name». This does not match what we expected: «pattern.join(' ')»''')
+        }
+      } else {
+        unrecoverableError('''«UnaryOperator.name» expected, found «currentOperator.class.name» instead.''')
+      }
+    }
+    if (parent === null) {
+      unrecoverableError('''This should never happen: after validation, we found parent to be null, but reached this point...''')
+    } else {
+      lojo.rightInput = parent.input
+      parent.input = lojo
+    }
+    op
   }
 }

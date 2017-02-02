@@ -8,11 +8,13 @@ import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
 import java.util.Arrays
 import java.util.HashSet
+import java.util.List
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
+import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
 import org.slizaa.neo4j.opencypher.openCypher.Count
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
@@ -41,6 +43,7 @@ import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.ReturnBody
 import org.slizaa.neo4j.opencypher.openCypher.ShortestPath
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
 import org.slizaa.neo4j.opencypher.openCypher.StartsWithExpression
@@ -153,30 +156,63 @@ class RelalgBuilder {
    * with the same top-level container, but with own factories for variables.
    */
   def dispatch Operator buildRelalg(SingleQuery q) {
-    /*
-     * we create a new instance of the RelalgBuilder to use separate variable factories
-     * for each singleQuery, but we retain the the label factories as well as
-     * top-level container not to break the containment hierarchy and .
+    val clauses = q.clauses
+    val EList<Operator> ops = new BasicEList<Operator>()
+
+    // Do some checks on the clauses of the single query
+    Validator.checkSingleQueryClauseSequence(clauses, logger)
+
+    /**
+     * Process each subquery.
+     *
+     * A subquery has the form (MATCH*)(WITH|RETURN)
      */
-    val builder = new RelalgBuilder(topLevelContainer, variableBuilder.cloneBuilderWithNewVariableFactories)
-    builder._buildRelalgSingleQuery(q)
+    var from = 0
+    for (var i = 0; i < clauses.length; i++) {
+      val current = clauses.get(i)
+      if (current instanceof With || current instanceof Return) {
+        // [fromX, toX) is the range of clauses that form a subquery
+        val fromX = from
+        val toX = i + 1
+        /*
+         * we create a new instance of the RelalgBuilder to use separate variable factories
+         * for each subQuery, but we retain the the label factories as well as
+         * top-level container not to break the containment hierarchy and separate variable namespaces.
+         */
+        // FIXME: chain "return" variables forward to the next builder
+        val builder = new RelalgBuilder(topLevelContainer, variableBuilder.cloneBuilderWithNewVariableFactories)
+        ops.add(
+          builder._buildRelalgSubQuery(clauses.subList(fromX, toX))
+        )
+        from = i + 1
+      }
+    }
+
+    /*
+     * Chain subqueries together.
+     * A single subquery was compiled to the following operator tree:
+     *  TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
+     * When we chain them together, the left outer join should be injected just above the content,
+     * and its right input should be content, its left input should be the chain built so far.
+     */
+    var chainSoFar = ops.head
+    for (op: ops.tail) {
+      val lojo = createLeftOuterJoinOperator
+      lojo.leftInput = chainSoFar
+      chainSoFar = validateAndInjectLOJO(op, lojo)
+    }
+    chainSoFar
   }
 
   /**
-   * This is the workhorse for building the relational algebra expression for a single query.
+   * This is the workhorse for building the relational algebra expression for a single subquery.
    *
-   * It should not be called to build more than one single query as
+   * It should not be called to build more than one single subquery as
    * the variables produced for re-used names would collide.
    */
-  def protected Operator _buildRelalgSingleQuery(SingleQuery q) {
-    val clauses = q.clauses
-
+  def protected Operator _buildRelalgSubQuery(List<Clause> clauses) {
     // do some checks on the MATCH clauses
     Validator.checkMatchClauseSequence(clauses.filter(typeof(Match)), logger)
-    // we don't support WITH yet (coming soon)
-    if (!clauses.filter(typeof(With)).empty) {
-      unsupported('Support for single queries having WITH cluse are coming soon.')
-    }
 
     /*
      * We compile all MATCH clauses and attach to a (left outer) join operator.
@@ -211,18 +247,7 @@ class RelalgBuilder {
     //val singleQuery_unwindClauseList =
     clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]
 
-    // use of lazy map OK as only its head is retrieved once and only once - jmarton, 2017-01-07
-    val singleQuery_returnClauseList = clauses.filter(typeof(Return)).map[buildRelalgReturn(it, content)]
-
-    if (singleQuery_returnClauseList === null || singleQuery_returnClauseList.empty) {
-      unsupported('''We received no RETURN clauses but a node retrieval query must end with exactly one. However, node creating queries can skip RETURN clause, but they are not supported yet.''')
-      null
-    } else if (singleQuery_returnClauseList.length == 1) {
-      singleQuery_returnClauseList.head
-    } else {
-      unrecoverableError('''More than one return clauses received. We received actually «singleQuery_returnClauseList.length».''')
-      null
-    }
+    buildRelalgReturn(clauses.last, content)
   }
 
   def UnaryOperator buildRelalgUnwind(Unwind u, Operator content) {
@@ -234,11 +259,13 @@ class RelalgBuilder {
     null
   }
 
-  def UnaryOperator buildRelalgReturn(Return r, Operator content) {
+  /**
+   * Process the common part of a RETURN and a WITH clause,
+   * i.e. the distinct flag and the ReturnBody.
+   */
+  def UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content) {
     // FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
     // but it should be w/o .get(0)
-    val returnBody = r.body
-
     val trimmer = createProjectionOperator => [
       input = content
       if ("*".equals(returnBody.returnItems.get(0).all)) {
@@ -301,7 +328,7 @@ class RelalgBuilder {
     }
 
     // add duplicate-elimination operator if return DISTINCT was specified
-    val op1 = if (r.distinct) {
+    val op1 = if (distinct) {
         createDuplicateEliminationOperator => [
           input = trimmer
         ]
@@ -348,6 +375,17 @@ class RelalgBuilder {
       }
 
     op3
+  }
+
+  def dispatch UnaryOperator buildRelalgReturn(Return r, Operator content) {
+    buildRelalgReturnBody(r.distinct, r.body, content)
+  }
+
+  def dispatch UnaryOperator buildRelalgReturn(With w, Operator content) {
+    if (w.where !== null) {
+      unsupported('''WHERE clause in WITH is unsupported.''')
+    }
+    buildRelalgReturnBody(w.distint, w.returnBody, content)
   }
 
   def expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
