@@ -55,6 +55,10 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     \\ \footnotesize
     $\color{gray} «serializeSchema(op.basicSchema)» $
     «ENDIF»
+    «IF !op.extraAttributes.isEmpty»
+    \\ \footnotesize
+    $\color{blue} «serializeSchema(op.extraAttributes)» $
+    «ENDIF»
     «IF !op.fullSchema.isEmpty»
     \\ \footnotesize
     $\color{orange} «serializeSchema(op.fullSchema)» $
