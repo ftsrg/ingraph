@@ -406,7 +406,6 @@ class RelalgBuilder {
    * - natural join of comma-separated patternParts in the MATCH clause
    */
   def dispatch Operator buildRelalg(Match m) {
-    // FIXME: handle OPTIONAL
     // handle comma-separated patternParts in the MATCH clause
     // use of lazy map OK as passed to buildLeftDeepTree and used only once - jmarton, 2017-01-07
     val pattern_PatternPartList = m.pattern.patterns.map[buildRelalg(it)]
@@ -512,7 +511,6 @@ class RelalgBuilder {
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(RelationshipsPattern e, EList<Operator> joins) {
     // We add all the variables in the pattern as a NOT NULL expression
-    // TODO: add the pattern itself as an outer join
     val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
 
     relationshipVariableExpressions.add(createUnaryGraphObjectLogicalExpression => [
