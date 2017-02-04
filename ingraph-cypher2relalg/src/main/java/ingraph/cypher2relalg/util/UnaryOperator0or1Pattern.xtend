@@ -18,6 +18,13 @@ class UnaryOperator0or1Pattern {
     this.optional = optional
   }
 
+  /**
+   * Indicate if this pattern element is mandatory, i.e. NOT optional.
+   */
+  def isMandatory() {
+    !optional
+  }
+
   override toString() {
     opc.name + if (optional) { '?' } else { '' }
   }

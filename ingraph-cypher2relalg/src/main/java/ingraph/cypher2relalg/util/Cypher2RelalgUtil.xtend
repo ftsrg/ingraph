@@ -199,16 +199,22 @@ class Cypher2RelalgUtil {
     , new UnaryOperator0or1Pattern(GroupingOperator, true)
     ]
     for (p: pattern) {
-      if (currentOperator instanceof UnaryOperator) {
-        if (p.opc.isInstance(currentOperator)) {
+      if (p.opc.isInstance(currentOperator)) {
+        if (currentOperator instanceof UnaryOperator) {
           unaryOperatorTreeSeen.add(currentOperator.class.name)
           parent = currentOperator
           currentOperator = currentOperator.input
-        } else if (!p.optional) {
-          unrecoverableError('''So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and we reached «currentOperator.class.name». This does not match what we expected: «pattern.join(' ')»''')
+        } else {
+          unrecoverableError('''Static error in the compiler!'''
+                           +''' We support a chain of «UnaryOperator.name» for pattern matching.'''
+                           +''' So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
+                           +''' This does not match what we expected: «pattern.join(' ')»'''
+                            )
         }
-      } else {
-        unrecoverableError('''«UnaryOperator.name» expected, found «currentOperator.class.name» instead.''')
+      } else if (p.mandatory) {
+        unrecoverableError('''So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
+                         +''' This does not match what we expected: «pattern.join(' ')»'''
+                          )
       }
     }
     if (parent === null) {
