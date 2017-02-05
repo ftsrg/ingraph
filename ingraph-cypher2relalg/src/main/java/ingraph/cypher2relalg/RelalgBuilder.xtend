@@ -168,6 +168,7 @@ class RelalgBuilder {
      * A subquery has the form (MATCH*)(WITH|RETURN)
      */
     var from = 0
+    var variableBuilderChain = variableBuilder
     for (var i = 0; i < clauses.length; i++) {
       val current = clauses.get(i)
       if (current instanceof With || current instanceof Return) {
@@ -180,7 +181,8 @@ class RelalgBuilder {
          * top-level container not to break the containment hierarchy and separate variable namespaces.
          */
         // FIXME: chain "return" variables forward to the next builder
-        val builder = new RelalgBuilder(topLevelContainer, variableBuilder.cloneBuilderWithNewVariableFactories)
+        variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
+        val builder = new RelalgBuilder(topLevelContainer, variableBuilderChain)
         ops.add(
           builder._buildRelalgSubQuery(clauses.subList(fromX, toX))
         )
