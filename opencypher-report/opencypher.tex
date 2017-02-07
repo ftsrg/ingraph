@@ -7,7 +7,7 @@
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[label=lst:example, caption={Get people who are both actors and directors and acted in a movie with Clint Eastwood.}]
 MATCH (a1)-[:ACTS_IN]->(:Movie)<-[:ACTS_IN]-(a2:Actor:Director)
-WHERE a1.name = "Clint Eastwood"
+WHERE a1.name = 'Clint Eastwood'
 RETURN a2
 \end{lstlisting}
 \end{minipage}
