@@ -593,7 +593,7 @@ class RelalgBuilder {
   }
 
   /**
-   * Processes CONTAINS create a function invocation: CONTAINS(string, middleString)
+   * Processes CONTAINS by creating a function invocation: CONTAINS(string, middleString)
    */
   def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
     createFunctionLogicalExpression => [
