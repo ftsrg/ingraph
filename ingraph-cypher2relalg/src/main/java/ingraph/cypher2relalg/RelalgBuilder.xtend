@@ -29,6 +29,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionPlusMinus
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
 import org.slizaa.neo4j.opencypher.openCypher.FunctionInvocation
+import org.slizaa.neo4j.opencypher.openCypher.InCollectionExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.Match
@@ -597,6 +598,18 @@ class RelalgBuilder {
   def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
     createFunctionLogicalExpression => [
       functor = Function.CONTAINS
+      arguments.add(buildRelalgExpression(e.left))
+      arguments.add(buildRelalgExpression(e.right))
+      container = topLevelContainer
+    ]
+  }
+
+  /**
+   * Processes IN by creating a function invocation: IN_COLLECTION(ANY, LIST expression)
+   */
+  def dispatch LogicalExpression buildRelalgLogicalExpression(InCollectionExpression e, EList<Operator> joins) {
+    createFunctionLogicalExpression => [
+      functor = Function.IN_COLLECTION
       arguments.add(buildRelalgExpression(e.left))
       arguments.add(buildRelalgExpression(e.right))
       container = topLevelContainer

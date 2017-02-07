@@ -63,6 +63,8 @@ public enum Function {
   RAND          (FunctionCategory.NUMERIC,       l(NONE),         FLOAT,     0), // rand()
 
   EXISTS        (FunctionCategory.PREDICATE,     l(ANY),          BOOLEAN,   1),
+  IN_COLLECTION (FunctionCategory.PREDICATE,     l(ANY,
+		                                           LIST_TYPE),    BOOLEAN,   2),
 
   COALESCE      (FunctionCategory.SCALAR,        l(ANY),          ANY,       1), // coalesce( expression [, expression]* )
   STARTNODE     (FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,      1), // startNode( relationship )
