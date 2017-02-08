@@ -64,6 +64,8 @@ We also adapted graph-specific operators from~\cite{DBLP:conf/edbt/HolschG16}\fo
 
 The \getverticestext nullary operator $\getvertices{v}{t_1 \land \ldots \land t_n}$ returns a graph relation of a single attribute $v$ that contains the ID of all vertices that have \emph{all} of labels $t_1, \ldots, t_n$.
 
+The \getedgestext operator $\getedges{src}{srcTypes}{trg}{trgTypes}{e}{labels}$ operator returns a relation of three attributes. Each row represents an edge and its vertices: the source vertex $\mathtt{src}$ (with all types of $\mathsf{srcTypes}$), the edge $\mathtt{e}$ (with a single label of $\mathtt{labels}$) and the target vertex $\mathtt{trg}$ (with all types of $\mathsf{trgTypes}$).
+
 \subsection{Unary Operators}
 \label{sec:unary-operators}
 
