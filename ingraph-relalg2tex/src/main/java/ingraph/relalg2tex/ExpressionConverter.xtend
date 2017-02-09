@@ -36,7 +36,7 @@ class ExpressionConverter {
   }
 
   def dispatch CharSequence convertExpression(AttributeVariable attributeVariable) {
-    '''\var{«attributeVariable.element.name».«attributeVariable.escapedName»}'''
+    '''\var{«attributeVariable.element.escapedName».«attributeVariable.escapedName»}'''
   }
 
   def dispatch CharSequence convertExpression(ExpressionVariable expVariable) {
