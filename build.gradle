@@ -9,8 +9,8 @@ allprojects {
 
 subprojects {
   apply plugin: 'java'
-  apply plugin: 'maven-publish'
   apply plugin: 'com.jfrog.bintray'
+  apply plugin: 'maven-publish'
 
   jar {
     from sourceSets.main.allJava
@@ -48,18 +48,6 @@ subprojects {
     key = System.getenv('BINTRAY_KEY')
     publish = true
     override = true
-    pkg {
-      repo = 'maven'
-      name = 'ingraph'
-      userOrg = 'ftsrg'
-      licenses = ['EPL-1.0']
-      vcsUrl = 'https://github.com/FTSRG/ingraph.git'
-      version {
-        name = '0.2.0'
-        desc = 'Initial version'
-        released = new Date()
-      }
-    }
     publications = ['mavenJava']
   }
 }
