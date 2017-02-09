@@ -202,7 +202,7 @@ To deploy the artifacts in your local Maven repository, issue `gradle publishToM
 
 ### Deploying to Bintray
 
-To upload the artifacts to [Bintray](https://bintray.com/ftsrg/maven/ire), use the following commands:
+To upload the artifacts to [Bintray](https://bintray.com/ftsrg/maven/ingraph), get your [Bintray API key](https://bintray.com/profile/edit/) and use the following commands:
 
 ```
 # set your username (e.g. szarnyasg)
