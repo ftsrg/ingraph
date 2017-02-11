@@ -155,9 +155,9 @@ class IngraphReportTest {
 	Cannot visualize tree.
 	«ELSE»
 	\begin{center}
-	\adjustbox{max width=\textwidth}{%
+	\begin{adjustbox}{max width=\textwidth}
 	«basicTree»
-	}
+	\end{adjustbox}
 	\end{center}
 	«ENDIF»
 
@@ -168,9 +168,9 @@ class IngraphReportTest {
 	Cannot visualize incremental tree.
 	«ELSE»
 	\begin{center}
-	\adjustbox{max width=\textwidth}{%
+	\begin{adjustbox}{max width=\textwidth}
 	«incrementalTree»
-	}
+	\end{adjustbox}
 	\end{center}
 	«ENDIF»
 «««	end of subsubsections for expression
