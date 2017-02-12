@@ -12,7 +12,7 @@ import java.util.List
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
+import org.slizaa.neo4j.opencypher.openCypher.AllShortestPaths
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
@@ -860,7 +860,7 @@ class RelalgBuilder {
     if (p.part instanceof ShortestPath) {
       
     }
-    if (p.part instanceof AllShortestPath) {
+    if (p.part instanceof AllShortestPaths) {
       
     }
     if (p.^var !== null) {
