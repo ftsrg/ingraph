@@ -103,7 +103,7 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
         }
         case None => reteMessage match {
           case pause: Pause => ternaryPause = Some(pause)
-          case cs: ChangeSet => onSecondary(cs); //printForwarding(cs)
+          case cs: ChangeSet => onTernary(cs); //printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
 
