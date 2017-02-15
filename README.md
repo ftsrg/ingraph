@@ -70,10 +70,10 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution.
 1. Install the following plug-ins for Scala:
-  * [Scala IDE](http://scala-ide.org/).
+  * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
 1. The latest editions of the Scala IDE (currently 4.15) only support Scala 2.11, hence you need to install 2.12 separately.
-  * Download and install [Scala 2.12](https://www.scala-lang.org/download/).
+  * Download and install [Scala 2.12](https://www.scala-lang.org/download/) (The archive is enough, no need for the installer).
   * Set your Scala distribution [for the Scala IDE](http://scala-ide.org/blog/scala-installations.html#BYOS).
     * Go to **Window** | **Preferences** | **Scala** | **Installations**, click **Add**, browse the directory for the Scala JARs, name the installation as `Scala` and click **OK**.
     * :bulb: On Ubuntu-based systems, the Scala JARs are located in `/usr/share/scala/lib`.
