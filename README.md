@@ -153,6 +153,26 @@ Currently, these modules have support:
 
   * **Solution:** include the `clean` task, i.e. run `./gradlew clean build`
 
+* Scala code does not compile
+
+  * **Problem:** "... not built due to errors in dependent project(s): ..."
+
+  * **Solution:** clean the workspace.
+
+  * **Problem:** java.lang.RuntimeException: Underlying compilation unit is not a Scala Compilation unit. This is most probably caused by disabled JDT weaving. Run `Scala -> Run Setup Diagnostics` to enable it.
+
+  * **Solution:** install all components from the Scala IDE's workspace and restart Eclipse.
+
+* VIATRA project does not compile
+
+  * **Problem:** Compile errors
+
+  * **Solution:** Add VIATRA nature to the project: **right click** | **Configure** | **Convert to VIATRA Query Project**.
+
+  * **Problem:** "Error executing EValidator"
+
+  * **Solution:** Add plug-in nature to the project: **right click** | **Configure** | **Convert to Plug-in Projects...**.
+
 #### IntelliJ
 
 * `NoClassDefFoundError` for Scala code:
