@@ -25,6 +25,12 @@
 \usepackage{adjustbox}
 \usepackage{autobreak}
 \usepackage{xstring}
+\usepackage{lineno}
+\usepackage{accsupp}
+
+\renewcommand{\thelinenumber}{
+	\BeginAccSupp{ActualText={}}\arabic{linenumber}\EndAccSupp{}%
+}
 
 \pagestyle{fancy}
 \fancyhf{}
