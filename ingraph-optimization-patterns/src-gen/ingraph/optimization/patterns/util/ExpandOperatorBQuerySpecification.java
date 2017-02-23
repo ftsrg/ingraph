@@ -4,8 +4,8 @@
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
-import ingraph.optimization.patterns.ExpandOperatorMatch;
-import ingraph.optimization.patterns.ExpandOperatorMatcher;
+import ingraph.optimization.patterns.ExpandOperatorBMatch;
+import ingraph.optimization.patterns.ExpandOperatorBMatcher;
 import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
@@ -22,6 +22,7 @@ import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
+import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.NegativePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
@@ -30,15 +31,15 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.queries.QueryInitializa
 import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
 
 /**
- * A pattern-specific query specification that can instantiate ExpandOperatorMatcher in a type-safe way.
+ * A pattern-specific query specification that can instantiate ExpandOperatorBMatcher in a type-safe way.
  * 
- * @see ExpandOperatorMatcher
- * @see ExpandOperatorMatch
+ * @see ExpandOperatorBMatcher
+ * @see ExpandOperatorBMatch
  * 
  */
 @SuppressWarnings("all")
-public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuerySpecification<ExpandOperatorMatcher> {
-  private ExpandOperatorQuerySpecification() {
+public final class ExpandOperatorBQuerySpecification extends BaseGeneratedEMFQuerySpecification<ExpandOperatorBMatcher> {
+  private ExpandOperatorBQuerySpecification() {
     super(GeneratedPQuery.INSTANCE);
   }
   
@@ -47,7 +48,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static ExpandOperatorQuerySpecification instance() throws ViatraQueryException {
+  public static ExpandOperatorBQuerySpecification instance() throws ViatraQueryException {
     try{
     	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
@@ -56,35 +57,35 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
   }
   
   @Override
-  protected ExpandOperatorMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandOperatorMatcher.on(engine);
+  protected ExpandOperatorBMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandOperatorBMatcher.on(engine);
   }
   
   @Override
-  public ExpandOperatorMatcher instantiate() throws ViatraQueryException {
-    return ExpandOperatorMatcher.create();
+  public ExpandOperatorBMatcher instantiate() throws ViatraQueryException {
+    return ExpandOperatorBMatcher.create();
   }
   
   @Override
-  public ExpandOperatorMatch newEmptyMatch() {
-    return ExpandOperatorMatch.newEmptyMatch();
+  public ExpandOperatorBMatch newEmptyMatch() {
+    return ExpandOperatorBMatch.newEmptyMatch();
   }
   
   @Override
-  public ExpandOperatorMatch newMatch(final Object... parameters) {
-    return ExpandOperatorMatch.newMatch((relalg.ExpandOperator) parameters[0], (relalg.Operator) parameters[1]);
+  public ExpandOperatorBMatch newMatch(final Object... parameters) {
+    return ExpandOperatorBMatch.newMatch((relalg.ExpandOperator) parameters[0], (relalg.Operator) parameters[1]);
   }
   
   /**
-   * Inner class allowing the singleton instance of {@link ExpandOperatorQuerySpecification} to be created 
+   * Inner class allowing the singleton instance of {@link ExpandOperatorBQuerySpecification} to be created 
    * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link ExpandOperatorQuerySpecification#instance()}.
+   * 	but rather at the first call to {@link ExpandOperatorBQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
    */
   private static class LazyHolder {
-    private final static ExpandOperatorQuerySpecification INSTANCE = new ExpandOperatorQuerySpecification();
+    private final static ExpandOperatorBQuerySpecification INSTANCE = new ExpandOperatorBQuerySpecification();
     
     /**
      * Statically initializes the query specification <b>after</b> the field {@link #INSTANCE} is assigned.
@@ -102,7 +103,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
   }
   
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
-    private final static ExpandOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
+    private final static ExpandOperatorBQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
     private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "ExpandOperator")), PParameterDirection.INOUT);
     
@@ -112,7 +113,7 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
     
     @Override
     public String getFullyQualifiedName() {
-      return "ingraph.optimization.patterns.expandOperator";
+      return "ingraph.optimization.patterns.expandOperatorB";
     }
     
     @Override
@@ -140,10 +141,10 @@ public final class ExpandOperatorQuerySpecification extends BaseGeneratedEMFQuer
       		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
-      		// 	find parentOperator(parentOperator, expandOperator)
+      		//   find parentOperator(parentOperator, expandOperator)
       		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_expandOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	find defaultExpandOperator(expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//   neg find defaultExpandOperator(expandOperator)
+      		new NegativePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		bodies.add(body);
       	}
       	// to silence compiler error

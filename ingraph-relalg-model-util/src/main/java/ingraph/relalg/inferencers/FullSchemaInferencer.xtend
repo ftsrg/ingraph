@@ -55,7 +55,8 @@ class FullSchemaInferencer {
   }
 
   private def dispatch void fillFullSchema(UnionOperator op) {
-    throw new UnsupportedOperationException("Union not yet supported")
+    // TODO left/right inputs should be the same for their detailed schema
+    op.defineDetailedSchema(op.leftInput.fullSchema)
   }
 
   private def dispatch void fillFullSchema(AbstractJoinOperator op) {

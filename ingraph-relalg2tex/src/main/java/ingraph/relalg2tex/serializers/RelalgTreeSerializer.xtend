@@ -21,6 +21,7 @@ import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
 import relalg.VariableListExpression
+import relalg.FunctionExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
@@ -48,12 +49,8 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
    * toNode
    */
   def CharSequence toNode(Operator op) {
-//    Optimization: an AllDifferent operator with a single edge variable is not useful at all.
-//    «IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
-//      «toNode((expression as AllDifferentOperator).getInput)»
-//    «ELSE»
     '''
-      [
+    [
     {«op.operator»
     «IF op.getContainer.basicSchemaInferred»
     \\ \footnotesize
@@ -116,6 +113,10 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
   def dispatch serializeExpression(ExpressionVariable variable, Literal expression) {
     '''«variable.name»'''
+  }
+
+  def dispatch serializeExpression(ExpressionVariable variable, FunctionExpression expression) {
+    '''«expression.functor.name»(«expression.arguments.map[toString.escape].join(", ")»)'''
   }
 
   def dispatch serializeExpression(ExpressionVariable variable, Expression expression) {

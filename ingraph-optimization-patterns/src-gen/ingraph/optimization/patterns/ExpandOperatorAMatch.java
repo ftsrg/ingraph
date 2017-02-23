@@ -3,7 +3,7 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandOperatorAQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
@@ -13,27 +13,27 @@ import relalg.ExpandOperator;
 import relalg.Operator;
 
 /**
- * Pattern-specific match representation of the ingraph.optimization.patterns.expandOperator pattern,
- * to be used in conjunction with {@link ExpandOperatorMatcher}.
+ * Pattern-specific match representation of the ingraph.optimization.patterns.expandOperatorA pattern,
+ * to be used in conjunction with {@link ExpandOperatorAMatcher}.
  * 
  * <p>Class fields correspond to parameters of the pattern. Fields with value null are considered unassigned.
  * Each instance is a (possibly partial) substitution of pattern parameters,
  * usable to represent a match of the pattern in the result of a query,
  * or to specify the bound (fixed) input parameters when issuing a query.
  * 
- * @see ExpandOperatorMatcher
- * @see ExpandOperatorProcessor
+ * @see ExpandOperatorAMatcher
+ * @see ExpandOperatorAProcessor
  * 
  */
 @SuppressWarnings("all")
-public abstract class ExpandOperatorMatch extends BasePatternMatch {
+public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   private ExpandOperator fExpandOperator;
   
   private Operator fParentOperator;
   
   private static List<String> parameterNames = makeImmutableList("expandOperator", "parentOperator");
   
-  private ExpandOperatorMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  private ExpandOperatorAMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     this.fExpandOperator = pExpandOperator;
     this.fParentOperator = pParentOperator;
   }
@@ -79,12 +79,12 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   
   @Override
   public String patternName() {
-    return "ingraph.optimization.patterns.expandOperator";
+    return "ingraph.optimization.patterns.expandOperatorA";
   }
   
   @Override
   public List<String> parameterNames() {
-    return ExpandOperatorMatch.parameterNames;
+    return ExpandOperatorAMatch.parameterNames;
   }
   
   @Override
@@ -93,7 +93,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   }
   
   @Override
-  public ExpandOperatorMatch toImmutable() {
+  public ExpandOperatorAMatch toImmutable() {
     return isMutable() ? newMatch(fExpandOperator, fParentOperator) : this;
   }
   
@@ -120,7 +120,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   public boolean equals(final Object obj) {
     if (this == obj)
     	return true;
-    if (!(obj instanceof ExpandOperatorMatch)) { // this should be infrequent
+    if (!(obj instanceof ExpandOperatorAMatch)) { // this should be infrequent
     	if (obj == null) {
     		return false;
     	}
@@ -132,7 +132,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
     		return false;
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
-    ExpandOperatorMatch other = (ExpandOperatorMatch) obj;
+    ExpandOperatorAMatch other = (ExpandOperatorAMatch) obj;
     if (fExpandOperator == null) {if (other.fExpandOperator != null) return false;}
     else if (!fExpandOperator.equals(other.fExpandOperator)) return false;
     if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
@@ -141,9 +141,9 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
   }
   
   @Override
-  public ExpandOperatorQuerySpecification specification() {
+  public ExpandOperatorAQuerySpecification specification() {
     try {
-    	return ExpandOperatorQuerySpecification.instance();
+    	return ExpandOperatorAQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
      	// This cannot happen, as the match object can only be instantiated if the query specification exists
      	throw new IllegalStateException (ex);
@@ -157,7 +157,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
    * @return the empty match.
    * 
    */
-  public static ExpandOperatorMatch newEmptyMatch() {
+  public static ExpandOperatorAMatch newEmptyMatch() {
     return new Mutable(null, null);
   }
   
@@ -170,7 +170,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMutableMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  public static ExpandOperatorAMatch newMutableMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     return new Mutable(pExpandOperator, pParentOperator);
   }
   
@@ -183,11 +183,11 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
    * @return the (partial) match object.
    * 
    */
-  public static ExpandOperatorMatch newMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  public static ExpandOperatorAMatch newMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
     return new Immutable(pExpandOperator, pParentOperator);
   }
   
-  private static final class Mutable extends ExpandOperatorMatch {
+  private static final class Mutable extends ExpandOperatorAMatch {
     Mutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
       super(pExpandOperator, pParentOperator);
     }
@@ -198,7 +198,7 @@ public abstract class ExpandOperatorMatch extends BasePatternMatch {
     }
   }
   
-  private static final class Immutable extends ExpandOperatorMatch {
+  private static final class Immutable extends ExpandOperatorAMatch {
     Immutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
       super(pExpandOperator, pParentOperator);
     }

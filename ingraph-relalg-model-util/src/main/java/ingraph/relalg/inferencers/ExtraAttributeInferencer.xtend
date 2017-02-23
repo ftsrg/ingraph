@@ -46,7 +46,8 @@ class ExtraAttributeInferencer {
 
   private def dispatch void fillExtraAttributes(UnionOperator op, List<AttributeVariable> extraAttributes) {
     op.extraAttributes.addAll(extraAttributes)
-    throw new UnsupportedOperationException("Union not yet supported")
+    op.leftInput.fillExtraAttributes(extraAttributes)
+    op.rightInput.fillExtraAttributes(extraAttributes)
   }
 
   private def dispatch void fillExtraAttributes(AbstractJoinOperator op, List<AttributeVariable> extraAttributes) {

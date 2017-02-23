@@ -138,6 +138,7 @@ class BasicSchemaInferencer {
   }
 
   private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
+    // TODO I think this does the right thing but I am not sure - SzG
     if (op.leftInput.basicSchema.equals(op.rightInput.basicSchema)) {
       throw new IllegalStateException("All sub queries in a UNION must have the same column names")
     }
