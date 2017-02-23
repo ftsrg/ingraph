@@ -65,7 +65,7 @@ class OperatorConverter {
 
   def dispatch convertOperator(DualObjectSourceOperator op) {
     #[
-      '''\var{DualGraphObjectSource}'''
+      '''\var{Dual}'''
     ]
   }
 
