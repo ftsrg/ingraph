@@ -27,8 +27,7 @@ class ExpressionConverter {
   }
 
   def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
-    //'''\literal{\text{'«stringLiteral.value.toString.escape»'}}'''
-    '''\literal{'«stringLiteral.value.toString.escape»'}'''
+    '''\literal{"«stringLiteral.value.toString.escape»"}'''
   }
 
   def dispatch CharSequence convertExpression(ElementVariable elementVariable) {

@@ -61,7 +61,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     «ENDIF»
     «IF op.getContainer.extraAttributesInferred»
     \\ \footnotesize
-    $\color{blue} «serializeSchema(op.extraAttributes)» $
+    $\color{green} «serializeSchema(op.extraAttributes)» $
     «ENDIF»
     «IF op.getContainer.fullSchemaInferred»
     \\ \footnotesize
