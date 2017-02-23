@@ -12,12 +12,14 @@ import relalg.ElementVariable
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.ListVariable
+import relalg.Literal
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.Variable
+import relalg.VariableExpression
 import relalg.VariableListExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
@@ -99,17 +101,25 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
   }
 
   def dispatch serializeVariable(ExpressionVariable variable) {
-    '''«serializeExpression(variable.expression)»'''
+    '''«serializeExpression(variable, variable.expression)»'''
   }
 
   //
 
-  def dispatch serializeExpression(VariableListExpression expression) {
+  def dispatch serializeExpression(ExpressionVariable variable, VariableListExpression expression) {
     '''«expression.variable.name»[]'''
   }
 
-  def dispatch serializeExpression(Expression expression) {
-    throw new UnsupportedOperationException('''Cannot serialize expression «expression»''')
+  def dispatch serializeExpression(ExpressionVariable variable, VariableExpression expression) {
+    '''«expression.variable.name»'''
+  }
+
+  def dispatch serializeExpression(ExpressionVariable variable, Literal expression) {
+    '''«variable.name»'''
+  }
+
+  def dispatch serializeExpression(ExpressionVariable variable, Expression expression) {
+    throw new UnsupportedOperationException('''Cannot serialize ExpressionVariable «variable» with Expression «expression»''')
   }
 
 

@@ -23,18 +23,17 @@ class ReteSandboxTest {
 
   def process(String query, String cypher) {
     val containerSearchBased = Cypher2Relalg.processString(cypher)
-
-//    containerSearchBased.inferBasicSchema
+    containerSearchBased.inferBasicSchema
     drawer.serialize(containerSearchBased, "sandbox/" + query + "-search")
-    
     RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
-    
-    val containerRete = Cypher2Relalg.processString(cypher)
-    containerRete.transformToRete
-    containerRete.inferBasicSchema
-    containerRete.inferExtraAttributes
-    containerRete.inferFullSchema
-    drawer.serialize(containerRete, "sandbox/" + query + "-rete")
+        
+//    val containerRete = Cypher2Relalg.processString(cypher)
+//    containerRete.transformToRete
+//    containerRete.inferBasicSchema
+//    containerRete.inferExtraAttributes
+//    containerRete.inferFullSchema
+//    drawer.serialize(containerRete, "sandbox/" + query + "-rete")
+//    RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
   }
 
   @Test

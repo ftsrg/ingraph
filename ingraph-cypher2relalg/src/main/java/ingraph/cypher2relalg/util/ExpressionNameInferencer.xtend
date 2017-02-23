@@ -14,7 +14,7 @@ import relalg.VariableExpression
  * there should be some deterministic way to assign a name.
  */
 class ExpressionNameInferencer {
-  static var n=0;
+  static var n = 0
   def dispatch static String inferName(ExpressionVariable e, IngraphLogger logger) {
     if (!e.dontCare) {
       e.name
@@ -36,7 +36,7 @@ class ExpressionNameInferencer {
   }
 
   def dispatch static String inferName(Expression e, IngraphLogger logger) {
-    logger.warning('''Don't know kow to assign name to an expression of type «e.class.name», please assign an alias ot the corresponding return clause. For now, we return a generated unique name.''')
+    logger.warning('''Don't know how to assign name to an expression of type «e.class.name», please assign an alias ot the corresponding return clause. For now, we return a generated unique name.''')
     '''_iname«n++»'''
   }
 }
