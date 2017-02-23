@@ -20,13 +20,13 @@ addons:
       - texlive-fonts-recommended
       - texlive-fonts-extra
       - texlive-latex-extra
+      - texlive-xetex
       - latexmk
       - lmodern
       - pgf
 
 # we use the install block to stop the build if any command fails
 install:
-  - scripts/get-slizaa.sh
   - ./gradlew assemble
 script:
   - ./gradlew regressionTests --continue
