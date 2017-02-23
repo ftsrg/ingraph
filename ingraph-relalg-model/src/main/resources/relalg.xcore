@@ -185,7 +185,6 @@ class ExpressionVariable extends Variable {
 
 /* Operators */
 abstract class Operator {
-  String description
   refers Variable[] basicSchema
   refers Variable[] extraAttributes
   refers Variable[] fullSchema
