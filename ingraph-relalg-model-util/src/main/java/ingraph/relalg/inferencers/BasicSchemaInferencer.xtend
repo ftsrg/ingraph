@@ -20,6 +20,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.DualObjectSourceOperator
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -57,6 +58,10 @@ class BasicSchemaInferencer {
   }
 
   // nullary operators
+  private def dispatch List<Variable> fillBasicSchema(DualObjectSourceOperator op) {
+    op.defineBasicSchema(#[])
+  }
+
   private def dispatch List<Variable> fillBasicSchema(GetVerticesOperator op) {
     op.defineBasicSchema(#[op.vertexVariable])
   }
