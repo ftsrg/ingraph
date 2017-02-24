@@ -55,7 +55,7 @@ class TckReportTest extends IngraphReportTest {
 					    e.printStackTrace
                     }»
 					
-					«section(container, scenario.name.escape, querySpecification)»
+					«subsection(container, scenario.name.escape, querySpecification)»
 					«ENDIF»
 				«ENDFOR»
 			«ENDFOR»
