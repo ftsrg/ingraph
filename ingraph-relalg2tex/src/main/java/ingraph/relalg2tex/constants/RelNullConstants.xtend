@@ -1,4 +1,4 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.constants
 
 class RelNullConstants {
 

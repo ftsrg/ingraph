@@ -25,6 +25,8 @@ class ReteSandboxTest {
     // search-based
     val containerSearchBased = Cypher2Relalg.processString(cypher)
     containerSearchBased.inferBasicSchema
+    containerSearchBased.inferExtraAttributes
+    containerSearchBased.inferFullSchema
     drawer.serialize(containerSearchBased, "sandbox/" + query + "-search")
     RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
 

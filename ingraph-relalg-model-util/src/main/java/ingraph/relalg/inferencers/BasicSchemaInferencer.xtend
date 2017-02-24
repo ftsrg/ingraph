@@ -23,6 +23,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import com.google.common.collect.ImmutableList
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -95,15 +96,19 @@ class BasicSchemaInferencer {
     ]
 
     // extract variables
-    val List<Variable> elementVariables = op.elements.map [
-      if (expression instanceof VariableExpression) {
-        (expression as VariableExpression).variable
-      } else if (it instanceof ExpressionVariable) {
-        it
-      } else {
-        throw new UnsupportedOperationException('''Schema should only contain variables, but found instead: «expression»''')
-      }
-    ]
+    val List<Variable> elementVariables = ImmutableList.copyOf(op.elements) 
+//    [ variable |
+//      if (variable.expression instanceof VariableExpression) {
+//        println("++ " + variable)
+//        (variable.expression as VariableExpression).variable
+//        
+//      } else if (variable instanceof ExpressionVariable) {
+//        println(">> " + variable)
+//        variable
+//      } else {
+//        throw new UnsupportedOperationException('''Projection elements should only contain expressionVariables, but found instead: «variable»''')
+//      }
+//    ]
     op.defineBasicSchema(elementVariables)
   }
 

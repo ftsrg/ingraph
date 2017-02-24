@@ -1,5 +1,6 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.converters
 
+import ingraph.relalg2tex.constants.RelNullConstants
 import relalg.ArithmeticComparisonOperatorType
 import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType

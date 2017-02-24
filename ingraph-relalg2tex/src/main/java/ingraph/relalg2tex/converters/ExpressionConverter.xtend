@@ -1,5 +1,6 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.converters
 
+import ingraph.relalg2tex.constants.RelNullConstants
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
@@ -23,11 +24,11 @@ class ExpressionConverter {
   extension OperatorTypeConverter operatorConverter = new OperatorTypeConverter
 
   def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
-    '''\literal{«integerLiteral.value.toString»}'''
+    '''\literal{«integerLiteral.value»}'''
   }
 
   def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
-    '''\literal{"«stringLiteral.value.toString.escape»"}'''
+    '''\literal{"«stringLiteral.value.escape»"}'''
   }
 
   def dispatch CharSequence convertExpression(ElementVariable elementVariable) {
@@ -48,7 +49,7 @@ class ExpressionConverter {
   
   def dispatch CharSequence convertExpression(VariableExpression ve) {
     convertExpression(ve.variable)
-  }  
+  }
 
   def dispatch CharSequence convertExpression(FunctionExpression fe) {
     '''«fe.functor.lowerCaseName.escape» \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''

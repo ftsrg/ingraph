@@ -12,6 +12,7 @@ import ingraph.report.tests.util.NaturalOrderComparator
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
+import java.util.List
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -40,14 +41,30 @@ class IngraphReportTest {
 
 		\section{Queries}
 
-		«FOR fileName : fileNames»
-		«val query = FilenameUtils.removeExtension(fileName)»
-		«toSection(directoryName, query)»
-		«ENDFOR»
+    «val section = processQueries(directoryName, fileNames)»
+    \progressbar[width=10cm, heighta=.3cm, filledcolor=green, emptycolor=red, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{
+      «String.format("%.02f", (compilingQueries as float)/totalQueries)»
+    }
+    «compilingQueries» of «totalQueries»
+    «section»
 	'''
 	FileUtils.writeStringToFile(new File('''../opencypher-report/appendix/«directoryName».tex'''), doc,
 		Charset.defaultCharset())
 	}
+
+  var totalQueries = 0
+  var compilingQueries = 0
+
+  def processQueries(String directoryName, List<String> fileNames) {
+    totalQueries = 0
+    compilingQueries = 0
+    '''
+    «FOR fileName : fileNames»
+      «val query = FilenameUtils.removeExtension(fileName)»
+      «toSubsection(directoryName, query)»
+    «ENDFOR»
+    '''
+  }
 
 	/**
 	 * Drops indentation and quotes.
@@ -104,22 +121,24 @@ class IngraphReportTest {
 		}
 	}
 
-	def toSection(String directoryName, String query) {
-	val fileName = '''../queries/«directoryName»/«query».cypher'''
-	val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
-
-	println(querySpecification)
-	var RelalgContainer container = null
-	try {
-		container = Cypher2Relalg.processString(querySpecification.toString)
-	} catch (Exception e) {
-		e.printStackTrace
+	def toSubsection(String directoryName, String query) {
+  	val fileName = '''../queries/«directoryName»/«query».cypher'''
+  	val querySpecification = FileUtils.readFileToString(new File(fileName), Charset.forName("UTF-8"))
+    
+    totalQueries++
+  	println(querySpecification)
+  	var RelalgContainer container = null
+  	try {
+  		container = Cypher2Relalg.processString(querySpecification.toString)
+  		compilingQueries++
+  	} catch (Exception e) {
+  		e.printStackTrace
+  	}
+  
+  	subsection(container, query, querySpecification)
 	}
 
-	section(container, query, querySpecification)
-	}
-
-	def section(RelalgContainer container, String name, String listing) {
+	def subsection(RelalgContainer container, String name, String listing) {
 	'''
 	\subsection{«name.escape»}
 

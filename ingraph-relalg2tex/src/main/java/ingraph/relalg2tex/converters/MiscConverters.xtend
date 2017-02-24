@@ -1,7 +1,6 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.converters
 
 import java.util.List
-import org.eclipse.emf.common.util.EList
 import relalg.Direction
 import relalg.EdgeVariable
 import relalg.ExpressionVariable
@@ -49,7 +48,8 @@ class MiscConverters {
 
   def returnableElementList(List<ExpressionVariable> elements) {
     '''«elements.map[
-      convertExpression(expression) + if (dontCare || hasInferredName) "" else '''\assign \var{«name»}'''
+      convertExpression(expression) + 
+      if (dontCare || hasInferredName) "" else '''\assign \var{«name»}'''
     ].join(",~")»'''
   }
 

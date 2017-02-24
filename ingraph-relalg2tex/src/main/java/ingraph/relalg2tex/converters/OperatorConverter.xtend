@@ -1,4 +1,4 @@
-package ingraph.relalg2tex
+package ingraph.relalg2tex.converters
 
 import ingraph.relalg2tex.config.RelalgSerializerConfig
 import relalg.AbstractJoinOperator

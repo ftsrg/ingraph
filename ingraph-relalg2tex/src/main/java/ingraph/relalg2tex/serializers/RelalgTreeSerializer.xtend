@@ -1,31 +1,19 @@
 package ingraph.relalg2tex.serializers
 
 import ingraph.relalg.util.GetContainer
-import ingraph.relalg2tex.StringEscaper
 import ingraph.relalg2tex.config.RelalgSerializerConfig
-import java.util.List
 import relalg.AbstractJoinOperator
-import relalg.AttributeVariable
 import relalg.BinaryOperator
 import relalg.Cardinality
-import relalg.ElementVariable
-import relalg.Expression
-import relalg.ExpressionVariable
-import relalg.ListVariable
-import relalg.Literal
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
-import relalg.Variable
-import relalg.VariableExpression
-import relalg.VariableListExpression
-import relalg.FunctionExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
-  extension StringEscaper stringEscaper = new StringEscaper
+  extension SchemaSerializer schemaSerializer = new SchemaSerializer
   extension GetContainer getContainer = new GetContainer
 
   new() {
@@ -80,49 +68,6 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     «IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
     ]'''
   }
-
-  def serializeSchema(List<Variable> schema) {
-    '''\langle \var{«schema.map[ serializeVariable.escape ].join(', ')»} \rangle'''
-  }
-
-  def dispatch serializeVariable(ElementVariable variable) {
-    '''«variable.name»'''
-  }
-
-  def dispatch serializeVariable(AttributeVariable variable) {
-    '''«variable.element.name».«variable.name»'''
-  }
-
-  def dispatch serializeVariable(ListVariable variable) {
-    '''«variable.name»'''
-  }
-
-  def dispatch serializeVariable(ExpressionVariable variable) {
-    '''«serializeExpression(variable, variable.expression)»'''
-  }
-
-  //
-
-  def dispatch serializeExpression(ExpressionVariable variable, VariableListExpression expression) {
-    '''«expression.variable.name»[]'''
-  }
-
-  def dispatch serializeExpression(ExpressionVariable variable, VariableExpression expression) {
-    '''«expression.variable.name»'''
-  }
-
-  def dispatch serializeExpression(ExpressionVariable variable, Literal expression) {
-    '''«variable.name»'''
-  }
-
-  def dispatch serializeExpression(ExpressionVariable variable, FunctionExpression expression) {
-    '''«expression.functor.name»(«expression.arguments.map[toString.escape].join(", ")»)'''
-  }
-
-  def dispatch serializeExpression(ExpressionVariable variable, Expression expression) {
-    throw new UnsupportedOperationException('''Cannot serialize ExpressionVariable «variable» with Expression «expression»''')
-  }
-
 
   /**
    * children
