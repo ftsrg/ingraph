@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Immutable from 'immutable';
 
-import Button from '../components/AddButton';
+import {Colors} from '../StyleProvider';
+import Button from '../components/Button';
 import QueryCard from '../components/QueryCard';
 
 class QuerySidebar extends React.Component {
@@ -26,7 +27,9 @@ class QuerySidebar extends React.Component {
     render() {
         return (
             <div style={styles.mainContainer}>
-                <Button label='Add query' handleClick={this.handleAddClick}/>
+                <Button style={styles.addButton} label='Add query' handleClick={this.handleAddClick}>
+                    <p style={styles.buttonText}>Add Query</p>
+                </Button>
                 {
                     this.props.queries.map(
                         (q, id) => {
@@ -50,14 +53,16 @@ const styles = {
     mainContainer: {
         width: '250px',
         flex: '0 0 250px',
-        backgroundColor: '#F5F5F5',
-        borderRight: '1px solid #DDDDDD',
+        backgroundColor: Colors.gray.normal,
+        borderRight: '1px solid ' + Colors.gray.dark,
     },
+    addButton: {
+        height: '40px',
+    },
+    buttonText: {
+        color: 'white',
+    }
 };
-
-// text color #444444
-// accent1  #FD756E
-// accent2  #0B74BA
 
 function mapStateToProps(state) {
     return {

@@ -9,5 +9,8 @@ export const Colors = {
         hover: 'hsl(0, 100%, 75%)',
         active: 'hsl(0, 100%, 80%)',
     },
-
+    gray: {
+        normal: 'hsl(0, 0%, 95%)',
+        dark: 'hsl(0, 0%, 90%)',
+    }
 };

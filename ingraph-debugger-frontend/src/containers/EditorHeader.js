@@ -1,34 +1,37 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import CodeMirror from 'react-codemirror';
+import {MdSave} from 'react-icons/lib/md';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
 import 'codemirror/mode/cypher/cypher';
 
-import SubmitButton from '../components/SubmitButton';
+import Button from '../components/Button';
 import {Colors} from '../StyleProvider';
 
 class EditorHeader extends React.Component {
 
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            definition: '',
+        };
     }
 
     handleChange = (newValue) => {
         this.setState({
-            modified: true,
-            modifiedQuery: newValue,
+            modified: newValue !== this.props.activeQuery.get('definition'),
+            definition: newValue,
         })
     };
 
     handleSave = () => {
         if (this.state.modified) {
             this.props.dispatch({
-                type: 'VALIDATE_QUERY_DEFINITION',
-                id: this.props.activeQuery.get('id'),
-                definition: 'Something'
+                type: 'REGISTER_QUERY_DEFINITION',
+                query: this.props.activeQuery,
+                definition: this.state.definition,
             })
         }
     };
@@ -51,18 +54,25 @@ class EditorHeader extends React.Component {
         return (
             <div style={styles.mainContainer}>
                 <div style={styles.editorContainer}>
-                    <CodeMirror value={this.props.activeQuery.get('definition')} options={options}
-                                onChange={this.handleChange}/>
+                    <CodeMirror value={this.state.definition} options={options} onChange={this.handleChange}/>
                 </div>
-                <SubmitButton handleClick={this.handleSave}/>
+                <Button
+                    style={styles.submitButton}
+                    enabled={this.state.modified}
+                    handleClick={this.handleSave}>
+                    <MdSave color="white" size={30} />
+                </Button>
             </div>
         )
     }
 
-    componentWillReceiveProps() {
-        this.setState({
-            modified: false,
-        })
+    componentWillReceiveProps(newProps) {
+        if (newProps.activeQuery) {
+            this.setState({
+                modified: false,
+                definition: newProps.activeQuery.get('definition'),
+            });
+        }
     }
 
     render() {
@@ -94,9 +104,10 @@ const styles = {
         textAlign: 'center',
     },
     submitButton: {
-        width: '200px',
         height: '100px',
-        backgroundColor: 'red'
+        width: '40px',
+        marginLeft: '10px',
+        borderRadius: '10px',
     },
 };
 

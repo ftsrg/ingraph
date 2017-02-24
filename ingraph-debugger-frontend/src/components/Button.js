@@ -3,54 +3,58 @@ import Radium from 'radium';
 
 import {Colors} from '../StyleProvider';
 
-class AddButton extends React.Component {
+class Button extends React.Component {
 
     handleClick = () => {
-        if (this.props.handleClick) {
+        if (this.props.handleClick && this.props.enabled) {
             this.props.handleClick();
         }
     };
 
     render() {
         return (
-            <div style={styles.mainContainer} onClick={this.handleClick}>
-                <p style={styles.label}>
-                    {this.props.label}
-                </p>
+            <div
+                style={[this.props.style, styles.mainContainer, (this.props.enabled ? styles.enabledState : styles.disabledState)]}
+                onClick={this.handleClick}>
+                    {this.props.children}
             </div>
         )
     }
 }
-AddButton.propTypes = {
-    label: React.PropTypes.string,
+Button.propTypes = {
+    enabled: React.PropTypes.bool,
+    style: React.PropTypes.string,
     handleClick: React.PropTypes.func,
+};
+Button.defaultProps = {
+    enabled: true,
 };
 
 const styles = {
     mainContainer: {
-        height: '40px',
-
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
 
+        transition: 'background-color 0.3s',
+    },
+    enabledState: {
         cursor: 'pointer',
         backgroundColor: Colors.secondary.normal,
-        borderBottom: '1px solid ' + Colors.secondary.border,
 
-        transition: 'background-color 0.3s',
         ':hover': {
-            transition: 'background-color 0.3s',
             backgroundColor: Colors.secondary.hover,
         },
         ':active': {
-            transition: 'background-color 0.3s',
             backgroundColor: Colors.secondary.active,
         }
+    },
+    disabledState: {
+        backgroundColor: Colors.gray.dark,
     },
     label: {
         color: 'white',
     }
 };
 
-export default Radium(AddButton);
+export default Radium(Button);

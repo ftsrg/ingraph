@@ -13,6 +13,7 @@ export default (state = initialState, action) => {
             return state.setIn(['queries', id],
                 Immutable.fromJS({
                     id: id,
+                    handleId: null,
                     name: 'Query #' + (state.get('queries').count() + 1),
                     definition: '',
                 })
