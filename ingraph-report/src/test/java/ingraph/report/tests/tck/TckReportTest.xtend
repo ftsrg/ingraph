@@ -1,22 +1,22 @@
-package ingraph.report.tests
+package ingraph.report.tests.tck
 
 import com.google.common.collect.Lists
-import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.report.FeatureStandaloneSetup
 import ingraph.report.feature.Feature
 import ingraph.report.feature.Scenario
 import ingraph.report.feature.ThenStep
 import ingraph.report.feature.WhenStep
+import ingraph.report.tests.IngraphReportTest
 import java.io.File
-import java.nio.charset.Charset
 import java.util.Collections
+import java.util.HashMap
 import java.util.List
+import java.util.Map
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.junit.Test
-import relalg.RelalgContainer
 
 class TckReportTest extends IngraphReportTest {
 
@@ -30,44 +30,29 @@ class TckReportTest extends IngraphReportTest {
 		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
 		Collections.sort(files)
 
-		val doc = '''
-			\chapter{TCK Acceptance Tests}
-			\label{chp:tck}
+    val Map<String, Map<String, String>> chapterQuerySpecifications = new HashMap
 
-			«FOR feature : files.map[processFile(resourceSet)]»
-				\section{«feature.name.escape»}
-
-				«FOR scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]»
-					«val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent»
-					«IF 
-						scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
-						!querySpecification.contains("CREATE ") &&
-						!querySpecification.contains("MERGE ") &&
-						!querySpecification.contains("REMOVE ") &&
-						!querySpecification.contains("SET ") &&
-						!querySpecification.contains("DELETE ")	
-					»
-					«var RelalgContainer container = null»
-					«try {
-					    container = Cypher2Relalg.processString(querySpecification.toString)
-					    ''''''
-					} catch (Exception e) {
-					    e.printStackTrace
-                    }»
-					
-					«subsection(container, scenario.name.escape, querySpecification)»
-					«ENDIF»
-				«ENDFOR»
-			«ENDFOR»
-			'''
-		FileUtils.writeStringToFile(new File("../opencypher-report/appendix/tck.tex"), doc, Charset.defaultCharset())
+    val features = files.map[ processFile(resourceSet) ]
+		for (feature : features) {
+        val querySpecifications = new HashMap<String, String>
+        for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]) {
+          val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
+          if (
+            scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
+            !querySpecification.contains("CREATE ") &&
+            !querySpecification.contains("MERGE ") &&
+            !querySpecification.contains("REMOVE ") &&
+            !querySpecification.contains("SET ") &&
+            !querySpecification.contains("DELETE ")) { 
+            querySpecifications.put(scenario.name.escape, querySpecification)
+          }
+        }
+        chapterQuerySpecifications.put(feature.name.escape, querySpecifications)
+		}
+ 
+		ch("tck", "TCK Acceptance Tests", chapterQuerySpecifications)
 	}
-  
-  def unindent(String querySpecification) {
-    querySpecification //
-      .replaceAll("^      ", "") //
-      .replaceAll("\n      ", "\n") //
-  }
+
 
 	def processFile(File file, ResourceSet resourceSet) {
 		val resource = resourceSet.createResource(URI.createURI(file.absolutePath))

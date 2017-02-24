@@ -1,8 +1,8 @@
-package ingraph.report.tests
+package ingraph.report.tests.directories
 
 import org.junit.Test
 
-class StaticAnalysisJavaTest extends IngraphReportTest {
+class StaticAnalysisJavaTest extends DirectoryTest {
 
 	@Test
 	def void generateChapter() {

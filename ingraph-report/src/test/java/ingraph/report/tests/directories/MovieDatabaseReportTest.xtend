@@ -1,8 +1,8 @@
-package ingraph.report.tests
+package ingraph.report.tests.directories
 
 import org.junit.Test
 
-class MovieDatabaseReportTest extends IngraphReportTest {
+class MovieDatabaseReportTest extends DirectoryTest {
 	
 	@Test
 	def void generateChapter() {

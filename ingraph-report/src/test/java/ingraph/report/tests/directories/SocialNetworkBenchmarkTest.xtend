@@ -1,8 +1,8 @@
-package ingraph.report.tests
+package ingraph.report.tests.directories
 
 import org.junit.Test
 
-class SocialNetworkBenchmarkTest extends IngraphReportTest {
+class SocialNetworkBenchmarkTest extends DirectoryTest {
 
 	@Test
 	def void generateChapter() {
