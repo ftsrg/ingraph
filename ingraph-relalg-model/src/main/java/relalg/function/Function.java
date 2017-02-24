@@ -87,6 +87,8 @@ public enum Function {
   REPLACE       (FunctionCategory.STRING,        l(STRING,
 		                                           STRING,
 		                                           STRING),       STRING,    3), // replace( original, search, replace )
+  REGEX_LIKE	(FunctionCategory.STRING,		l(STRING,
+		  											STRING),	BOOLEAN,	2), // string =~ pattern 
   REVERSE       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // reverse( original )
   SUBSTRING     (FunctionCategory.STRING,        l(STRING,
 		                                           STRING,

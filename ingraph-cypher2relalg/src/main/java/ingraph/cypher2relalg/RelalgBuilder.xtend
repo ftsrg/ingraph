@@ -41,6 +41,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
+import org.slizaa.neo4j.opencypher.openCypher.RegExpMatchingExpression
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
@@ -489,6 +490,22 @@ class RelalgBuilder {
       container = topLevelContainer
     ]
   }
+
+	def dispatch LogicalExpression buildRelalgLogicalExpression(
+		RegExpMatchingExpression e,
+		EList<Operator> joins
+	){
+		val fe = createFunctionLogicalExpression => [
+	      container = topLevelContainer
+	    ]
+	
+	    fe.functor = Function.REGEX_LIKE
+	   
+	    fe.arguments.add(buildRelalgExpression(e.left))
+	    fe.arguments.add(buildRelalgExpression(e.right))
+	    
+	    fe
+	}
 
   def dispatch LogicalExpression buildRelalgLogicalExpression(
     org.slizaa.neo4j.opencypher.openCypher.Expression e,
