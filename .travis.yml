@@ -33,7 +33,7 @@ script:
   - ./gradlew failingTests --continue || true
   - ./gradlew report --continue || true
   # only build and deploy the results if the build is performed on the master branch
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; cd opencypher-report && make && cd .. && scripts/deploy.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then cd opencypher-report && make && cd .. && scripts/deploy.sh; fi
   - ./gradlew :ire:test --continue
   - ./gradlew :ingraph-ire:test --continue
   - ./gradlew :ingraph-relalg2tex:test --continue
