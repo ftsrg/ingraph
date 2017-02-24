@@ -128,6 +128,11 @@ Currently, these modules have support:
 
 #### Eclipse
 
+* Character encoding issues on Windows
+
+  * **Problem:** character encoding issues in Xtend source files.
+  * **Solution:** go to **Window** | **Preferences** | **General** | **Workspace** and set **Text file encoding** | **UTF-8**
+
 * Xtend classes do not compile
   * **Problem:** Xtend classes do not compile due to character encoding errors.
   * **Solution:** change the character encoding to **UTF-8** (preferably for the whole workspace, in **Window** | **Preferences** | **General** | **Workspace** | **Text file encoding**).
