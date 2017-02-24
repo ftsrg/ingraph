@@ -69,6 +69,7 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 #### Prerequisites
 
 1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution.
+1. Go to the **Marketplace** (**Help** | **Eclipse Marketplace...**) and install the **EditorConfig** plug-in.
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
