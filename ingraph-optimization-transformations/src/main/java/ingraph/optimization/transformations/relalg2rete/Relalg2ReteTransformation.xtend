@@ -25,12 +25,17 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 	def transformToRete(RelalgContainer container) {
 		log("Transforming relational algebra expression to Rete network")
+		
+		if (container.incrementalPlan) {
+			throw new IllegalStateException("The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
+		}
 		val statements = register(container)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
 		statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
+		container.incrementalPlan = true
 		return container
 	}
 

@@ -17,7 +17,7 @@ import relalg.UnionOperator
 import relalg.Variable
 
 /**
- * Infers extra attributes, for example, a projection or a selection may need extra attributes.
+ * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
  */
 class ExtraVariableInferencer {
 
@@ -25,6 +25,10 @@ class ExtraVariableInferencer {
 	extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
 
 	def inferExtraVariables(RelalgContainer container) {
+		if (!container.incrementalPlan) {
+			throw new IllegalStateException("ExtraVariableInferencer must be executed on an incremental query plan")
+		}
+
 		if (!container.basicSchemaInferred) {
 			throw new IllegalStateException("BasicSchemaInferencer must be executed before ExtraVariableInferencer")
 		} else if (container.extraAttributesInferred) {
