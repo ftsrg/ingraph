@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class ComparabilityVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -29,7 +29,7 @@ class ComparabilityVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Comparability_01")
+        container.convert("tck/Comparability_01")
     }
 
     /*
@@ -50,7 +50,7 @@ class ComparabilityVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Comparability_02")
+        container.convert("tck/Comparability_02")
     }
 
     /*
@@ -69,7 +69,7 @@ class ComparabilityVisualizationTest {
         RETURN count(a)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Comparability_03")
+        container.convert("tck/Comparability_03")
     }
 
     /*
@@ -87,7 +87,7 @@ class ComparabilityVisualizationTest {
         RETURN a = b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Comparability_04")
+        container.convert("tck/Comparability_04")
     }
 
     /*
@@ -105,7 +105,7 @@ class ComparabilityVisualizationTest {
         RETURN b = a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Comparability_05")
+        container.convert("tck/Comparability_05")
     }
 
 }

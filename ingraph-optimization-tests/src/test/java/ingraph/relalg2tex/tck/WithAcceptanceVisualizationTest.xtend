@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class WithAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_01")
+        container.convert("tck/WithAcceptance_01")
     }
 
     /*
@@ -51,7 +51,7 @@ class WithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_02")
+        container.convert("tck/WithAcceptance_02")
     }
 
     /*
@@ -71,7 +71,7 @@ class WithAcceptanceVisualizationTest {
         RETURN a, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_03")
+        container.convert("tck/WithAcceptance_03")
     }
 
     /*
@@ -94,7 +94,7 @@ class WithAcceptanceVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_04")
+        container.convert("tck/WithAcceptance_04")
     }
 
     /*
@@ -118,7 +118,7 @@ class WithAcceptanceVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_05")
+        container.convert("tck/WithAcceptance_05")
     }
 
     /*
@@ -143,7 +143,7 @@ class WithAcceptanceVisualizationTest {
         RETURN DISTINCT b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_06")
+        container.convert("tck/WithAcceptance_06")
     }
 
     /*
@@ -165,7 +165,7 @@ class WithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_07")
+        container.convert("tck/WithAcceptance_07")
     }
 
     /*
@@ -190,7 +190,7 @@ class WithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_08")
+        container.convert("tck/WithAcceptance_08")
     }
 
     /*
@@ -212,7 +212,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_09")
+        container.convert("tck/WithAcceptance_09")
     }
 
     /*
@@ -234,7 +234,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_10")
+        container.convert("tck/WithAcceptance_10")
     }
 
     /*
@@ -256,7 +256,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_11")
+        container.convert("tck/WithAcceptance_11")
     }
 
     /*
@@ -278,7 +278,7 @@ class WithAcceptanceVisualizationTest {
         RETURN a, r, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_12")
+        container.convert("tck/WithAcceptance_12")
     }
 
     /*
@@ -294,7 +294,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_13")
+        container.convert("tck/WithAcceptance_13")
     }
 
     /*
@@ -308,7 +308,7 @@ class WithAcceptanceVisualizationTest {
         RETURN nestedMap.foo.bar
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_14")
+        container.convert("tck/WithAcceptance_14")
     }
 
     /*
@@ -330,7 +330,7 @@ class WithAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_15")
+        container.convert("tck/WithAcceptance_15")
     }
 
     /*
@@ -350,7 +350,7 @@ class WithAcceptanceVisualizationTest {
         RETURN count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_16")
+        container.convert("tck/WithAcceptance_16")
     }
 
     /*
@@ -383,7 +383,7 @@ class WithAcceptanceVisualizationTest {
         RETURN count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WithAcceptance_17")
+        container.convert("tck/WithAcceptance_17")
     }
 
 }

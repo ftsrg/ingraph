@@ -6,8 +6,8 @@ import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformatio
 import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
-import ingraph.relalg2tex.config.RelalgSerializerConfig
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import java.io.IOException
 import org.junit.Test
 
@@ -18,9 +18,9 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
   extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
   extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
-  val config = RelalgSerializerConfig.builder.standaloneDocument(true).consoleOutput(false).
+  val config = RelalgConverterConfig.builder.standaloneDocument(true).consoleOutput(false).
     includeCommonVariables(true).build
-  val drawer = new RelalgTreeSerializer(config)
+  val drawer = new Relalg2TexTreeConverter(config)
 
   def process(String query) {
     val cypher = CypherParser.parseFile("trainbenchmark/" + query)
@@ -31,7 +31,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
     container.inferExtraAttributes
     container.inferFullSchema
     //RelalgUtil.save(container, "query-models/" + query)
-    drawer.serialize(container, "trainbenchmark/" + query + "-rete")
+    drawer.convert(container, "trainbenchmark/" + query + "-rete")
   }
 
   @Test

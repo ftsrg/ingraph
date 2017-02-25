@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class VarLengthAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -22,7 +22,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_01")
+        container.convert("tck/VarLengthAcceptance_01")
     }
 
     /*
@@ -36,7 +36,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_02")
+        container.convert("tck/VarLengthAcceptance_02")
     }
 
     /*
@@ -50,7 +50,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_03")
+        container.convert("tck/VarLengthAcceptance_03")
     }
 
     /*
@@ -64,7 +64,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_04")
+        container.convert("tck/VarLengthAcceptance_04")
     }
 
     /*
@@ -78,7 +78,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_05")
+        container.convert("tck/VarLengthAcceptance_05")
     }
 
     /*
@@ -92,7 +92,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_06")
+        container.convert("tck/VarLengthAcceptance_06")
     }
 
     /*
@@ -106,7 +106,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_07")
+        container.convert("tck/VarLengthAcceptance_07")
     }
 
     /*
@@ -120,7 +120,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_08")
+        container.convert("tck/VarLengthAcceptance_08")
     }
 
     /*
@@ -134,7 +134,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_09")
+        container.convert("tck/VarLengthAcceptance_09")
     }
 
     /*
@@ -148,7 +148,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_10")
+        container.convert("tck/VarLengthAcceptance_10")
     }
 
     /*
@@ -162,7 +162,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_11")
+        container.convert("tck/VarLengthAcceptance_11")
     }
 
     /*
@@ -176,7 +176,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_12")
+        container.convert("tck/VarLengthAcceptance_12")
     }
 
     /*
@@ -190,7 +190,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_13")
+        container.convert("tck/VarLengthAcceptance_13")
     }
 
     /*
@@ -204,7 +204,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_14")
+        container.convert("tck/VarLengthAcceptance_14")
     }
 
     /*
@@ -218,7 +218,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_15")
+        container.convert("tck/VarLengthAcceptance_15")
     }
 
     /*
@@ -232,7 +232,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_16")
+        container.convert("tck/VarLengthAcceptance_16")
     }
 
     /*
@@ -246,7 +246,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_17")
+        container.convert("tck/VarLengthAcceptance_17")
     }
 
     /*
@@ -260,7 +260,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_18")
+        container.convert("tck/VarLengthAcceptance_18")
     }
 
     /*
@@ -274,7 +274,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_19")
+        container.convert("tck/VarLengthAcceptance_19")
     }
 
     /*
@@ -288,7 +288,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_20")
+        container.convert("tck/VarLengthAcceptance_20")
     }
 
     /*
@@ -302,7 +302,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_21")
+        container.convert("tck/VarLengthAcceptance_21")
     }
 
     /*
@@ -316,7 +316,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_22")
+        container.convert("tck/VarLengthAcceptance_22")
     }
 
     /*
@@ -330,7 +330,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_23")
+        container.convert("tck/VarLengthAcceptance_23")
     }
 
     /*
@@ -344,7 +344,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_24")
+        container.convert("tck/VarLengthAcceptance_24")
     }
 
     /*
@@ -366,7 +366,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_25")
+        container.convert("tck/VarLengthAcceptance_25")
     }
 
     /*
@@ -394,7 +394,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_26")
+        container.convert("tck/VarLengthAcceptance_26")
     }
 
     /*
@@ -424,7 +424,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_27")
+        container.convert("tck/VarLengthAcceptance_27")
     }
 
     /*
@@ -446,7 +446,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_28")
+        container.convert("tck/VarLengthAcceptance_28")
     }
 
     /*
@@ -468,7 +468,7 @@ class VarLengthAcceptanceVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/VarLengthAcceptance_29")
+        container.convert("tck/VarLengthAcceptance_29")
     }
 
 }

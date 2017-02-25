@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class PatternComprehensionVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class PatternComprehensionVisualizationTest {
         ORDER BY liker.time
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_01")
+        container.convert("tck/PatternComprehension_01")
     }
 
     /*
@@ -48,7 +48,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [p = (n)-->() | p] AS ps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_02")
+        container.convert("tck/PatternComprehension_02")
     }
 
     /*
@@ -69,7 +69,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [p = (n)-->(:B) | p]
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_03")
+        container.convert("tck/PatternComprehension_03")
     }
 
     /*
@@ -88,7 +88,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_04")
+        container.convert("tck/PatternComprehension_04")
     }
 
     /*
@@ -109,7 +109,7 @@ class PatternComprehensionVisualizationTest {
         RETURN ps, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_05")
+        container.convert("tck/PatternComprehension_05")
     }
 
     /*
@@ -128,7 +128,7 @@ class PatternComprehensionVisualizationTest {
         RETURN paths, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_06")
+        container.convert("tck/PatternComprehension_06")
     }
 
     /*
@@ -147,7 +147,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_07")
+        container.convert("tck/PatternComprehension_07")
     }
 
     /*
@@ -166,7 +166,7 @@ class PatternComprehensionVisualizationTest {
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_08")
+        container.convert("tck/PatternComprehension_08")
     }
 
     /*
@@ -185,7 +185,7 @@ class PatternComprehensionVisualizationTest {
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_09")
+        container.convert("tck/PatternComprehension_09")
     }
 
     /*
@@ -210,7 +210,7 @@ class PatternComprehensionVisualizationTest {
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_10")
+        container.convert("tck/PatternComprehension_10")
     }
 
     /*
@@ -231,7 +231,7 @@ class PatternComprehensionVisualizationTest {
         RETURN size([(a)-->() | 1]) AS length
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_11")
+        container.convert("tck/PatternComprehension_11")
     }
 
     /*
@@ -253,7 +253,7 @@ class PatternComprehensionVisualizationTest {
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_12")
+        container.convert("tck/PatternComprehension_12")
     }
 
     /*
@@ -275,7 +275,7 @@ class PatternComprehensionVisualizationTest {
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_13")
+        container.convert("tck/PatternComprehension_13")
     }
 
     /*
@@ -294,7 +294,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_14")
+        container.convert("tck/PatternComprehension_14")
     }
 
     /*
@@ -313,7 +313,7 @@ class PatternComprehensionVisualizationTest {
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/PatternComprehension_15")
+        container.convert("tck/PatternComprehension_15")
     }
 
 }

@@ -1,33 +1,32 @@
-package ingraph.relalg2tex.serializers
+package ingraph.relalg2tex.relalgconverters
 
-import ingraph.relalg2tex.config.RelalgSerializerConfig
-import ingraph.relalg2tex.converters.OperatorConverter
-import ingraph.relalg2tex.converters.StringEscaper
+import ingraph.relalg2tex.converters.elementconverters.OperatorConverter
+import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.RelalgContainer
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
-abstract class AbstractRelalgSerializer {
+abstract class AbstractRelalg2TexConverter {
 
-  protected val RelalgSerializerConfig config
+  protected val RelalgConverterConfig config
   protected val extension OperatorConverter operatorToTex
   protected val extension StringEscaper stringEscaper = new StringEscaper
 
   protected new() {
-    this(RelalgSerializerConfig.builder.build)
+    this(RelalgConverterConfig.builder.build)
   }
 
-  protected new(RelalgSerializerConfig config) {
+  protected new(RelalgConverterConfig config) {
     this.config = config
     this.operatorToTex = new OperatorConverter(config)
   }
 
-
-  def serialize(RelalgContainer container, String filename) {
-    val tex = serialize(container)
+  def convert(RelalgContainer container, String filename) {
+    val tex = convert(container)
 
     val file = new File("../visualization/" + filename + ".tex")
     FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
@@ -35,7 +34,7 @@ abstract class AbstractRelalgSerializer {
     tex
   }
 
-  def serialize(RelalgContainer container) {
+  def convert(RelalgContainer container) {
     val s = convertAlgebraExpression(container.rootExpression)
 
     if (config.consoleOutput) {
@@ -63,7 +62,7 @@ abstract class AbstractRelalgSerializer {
         \begin{document}
         \begin{preview}
       «ENDIF»
-      «serializeBody(expression)»
+      «convertBody(expression)»
       «IF config.standaloneDocument»
         \end{preview}
         \end{document}
@@ -71,7 +70,7 @@ abstract class AbstractRelalgSerializer {
     '''
   }
 
-  def abstract CharSequence serializeBody(Operator expression)
+  def abstract CharSequence convertBody(Operator expression)
 
   def operator(Operator op) {
     op.convertOperator.join("")

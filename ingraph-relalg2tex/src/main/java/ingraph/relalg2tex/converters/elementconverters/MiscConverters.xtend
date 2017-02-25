@@ -1,4 +1,4 @@
-package ingraph.relalg2tex.converters
+package ingraph.relalg2tex.converters.elementconverters
 
 import java.util.List
 import relalg.Direction

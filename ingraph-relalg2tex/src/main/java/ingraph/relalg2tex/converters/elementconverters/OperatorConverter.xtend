@@ -1,6 +1,5 @@
-package ingraph.relalg2tex.converters
+package ingraph.relalg2tex.converters.elementconverters
 
-import ingraph.relalg2tex.config.RelalgSerializerConfig
 import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
@@ -22,6 +21,7 @@ import relalg.SortOperator
 import relalg.TopOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class OperatorConverter {
   
@@ -29,9 +29,9 @@ class OperatorConverter {
   extension StringEscaper stringEscaper = new StringEscaper
   extension ElementConverter elementConverter = new ElementConverter
   extension ExpressionConverter expressionConverter = new ExpressionConverter
-  protected RelalgSerializerConfig config
+  protected RelalgConverterConfig config
 
-  new(RelalgSerializerConfig config) {
+  new(RelalgConverterConfig config) {
     this.config = config
   }
 

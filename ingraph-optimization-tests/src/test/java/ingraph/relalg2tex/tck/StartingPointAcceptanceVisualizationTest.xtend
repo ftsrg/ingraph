@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class StartingPointAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class StartingPointAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartingPointAcceptance_01")
+        container.convert("tck/StartingPointAcceptance_01")
     }
 
     /*
@@ -49,7 +49,7 @@ class StartingPointAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartingPointAcceptance_02")
+        container.convert("tck/StartingPointAcceptance_02")
     }
 
     /*
@@ -69,7 +69,7 @@ class StartingPointAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartingPointAcceptance_03")
+        container.convert("tck/StartingPointAcceptance_03")
     }
 
 }

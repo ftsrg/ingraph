@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class OrderByAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY n.prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_01")
+        container.convert("tck/OrderByAcceptance_01")
     }
 
     /*
@@ -48,7 +48,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY n.prop DESC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_02")
+        container.convert("tck/OrderByAcceptance_02")
     }
 
     /*
@@ -65,7 +65,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY rng
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_03")
+        container.convert("tck/OrderByAcceptance_03")
     }
 
     /*
@@ -85,7 +85,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY n + 2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_04")
+        container.convert("tck/OrderByAcceptance_04")
     }
 
     /*
@@ -108,7 +108,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY relevance, c.rank
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_05")
+        container.convert("tck/OrderByAcceptance_05")
     }
 
     /*
@@ -122,7 +122,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY bools
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_06")
+        container.convert("tck/OrderByAcceptance_06")
     }
 
     /*
@@ -136,7 +136,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY bools DESC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_07")
+        container.convert("tck/OrderByAcceptance_07")
     }
 
     /*
@@ -150,7 +150,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY strings
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_08")
+        container.convert("tck/OrderByAcceptance_08")
     }
 
     /*
@@ -164,7 +164,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY strings DESC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_09")
+        container.convert("tck/OrderByAcceptance_09")
     }
 
     /*
@@ -178,7 +178,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY ints
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_10")
+        container.convert("tck/OrderByAcceptance_10")
     }
 
     /*
@@ -192,7 +192,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY ints DESC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_11")
+        container.convert("tck/OrderByAcceptance_11")
     }
 
     /*
@@ -206,7 +206,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY floats
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_12")
+        container.convert("tck/OrderByAcceptance_12")
     }
 
     /*
@@ -220,7 +220,7 @@ class OrderByAcceptanceVisualizationTest {
         ORDER BY floats DESC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_13")
+        container.convert("tck/OrderByAcceptance_13")
     }
 
     /*
@@ -240,7 +240,7 @@ class OrderByAcceptanceVisualizationTest {
         LIMIT 1
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_14")
+        container.convert("tck/OrderByAcceptance_14")
     }
 
     /*
@@ -255,7 +255,7 @@ class OrderByAcceptanceVisualizationTest {
         LIMIT 0
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_15")
+        container.convert("tck/OrderByAcceptance_15")
     }
 
     /*
@@ -272,7 +272,7 @@ class OrderByAcceptanceVisualizationTest {
         LIMIT $limit
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/OrderByAcceptance_16")
+        container.convert("tck/OrderByAcceptance_16")
     }
 
 }

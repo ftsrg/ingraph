@@ -23,11 +23,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class %sVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     """ % filename_without_extension
 
@@ -65,7 +65,7 @@ class %sVisualizationTest {
         %s
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/%s_%02d")
+        container.convert("tck/%s_%02d")
     }
 """ % (scenario, filename_without_extension, i, indent(query), filename_without_extension, i)
         test_file.write(test_case)

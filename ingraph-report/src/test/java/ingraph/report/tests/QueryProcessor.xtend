@@ -5,17 +5,16 @@ import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformatio
 import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
-import ingraph.relalg2tex.config.RelalgSerializerConfig
-import ingraph.relalg2tex.serializers.RelalgExpressionSerializer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.tests.escape.Escaper
-import java.util.HashMap
+import java.util.ArrayList
 import java.util.List
 import java.util.Map
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
-import java.util.ArrayList
+import ingraph.relalg2tex.relalgconverters.Relalg2TexExpressionConverter
 
 class QueryProcessor {
   
@@ -25,9 +24,9 @@ class QueryProcessor {
   extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
   extension Escaper escaper = new Escaper
 
-  protected val treeSerializerConfig = RelalgSerializerConfig.builder.includeCommonVariables(true).build
-  protected val treeSerializer = new RelalgTreeSerializer(treeSerializerConfig)
-  protected val expressionSerializer = new RelalgExpressionSerializer
+  protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).build
+  protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
+  protected val expressionConverter = new Relalg2TexExpressionConverter
 
   @Accessors(PUBLIC_GETTER) var totalQueries = 0
   @Accessors(PUBLIC_GETTER) var compilingQueries = 0
@@ -118,7 +117,7 @@ class QueryProcessor {
     try {
       val container2 = EcoreUtil.copy(container)
       container2.inferBasicSchema
-      expressionSerializer.serialize(container2).toString
+      expressionConverter.convert(container2).toString
     } catch (Exception e) {
       e.printStackTrace
       null
@@ -129,7 +128,7 @@ class QueryProcessor {
     try {
       val treeContainer = EcoreUtil.copy(container)
       treeContainer.inferBasicSchema
-      treeSerializer.serialize(treeContainer)
+      treeSerializer.convert(treeContainer)
     } catch (Exception e) {
       e.printStackTrace
       null
@@ -143,7 +142,7 @@ class QueryProcessor {
       container2.inferBasicSchema
       container2.inferExtraAttributes
       container2.inferFullSchema
-      treeSerializer.serialize(container2)
+      treeSerializer.convert(container2)
     } catch (Exception e) {
       e.printStackTrace
       null

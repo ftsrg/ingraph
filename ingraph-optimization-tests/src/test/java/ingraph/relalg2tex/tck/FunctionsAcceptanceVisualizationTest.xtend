@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class FunctionsAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -26,7 +26,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN coalesce(a.title, a.name)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_01")
+        container.convert("tck/FunctionsAcceptance_01")
     }
 
     /*
@@ -41,7 +41,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_02")
+        container.convert("tck/FunctionsAcceptance_02")
     }
 
     /*
@@ -55,7 +55,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN count(item) AS item
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_03")
+        container.convert("tck/FunctionsAcceptance_03")
     }
 
     /*
@@ -73,7 +73,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN properties(p) AS m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_04")
+        container.convert("tck/FunctionsAcceptance_04")
     }
 
     /*
@@ -91,7 +91,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN properties(r) AS m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_05")
+        container.convert("tck/FunctionsAcceptance_05")
     }
 
     /*
@@ -104,7 +104,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_06")
+        container.convert("tck/FunctionsAcceptance_06")
     }
 
     /*
@@ -117,7 +117,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN properties(null)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_07")
+        container.convert("tck/FunctionsAcceptance_07")
     }
 
     /*
@@ -130,7 +130,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN reverse('raksO')
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_08")
+        container.convert("tck/FunctionsAcceptance_08")
     }
 
     /*
@@ -150,7 +150,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_09")
+        container.convert("tck/FunctionsAcceptance_09")
     }
 
     /*
@@ -176,7 +176,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN percentileDisc(0.90, deg), deg
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_10")
+        container.convert("tck/FunctionsAcceptance_10")
     }
 
     /*
@@ -194,7 +194,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN type(r)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_11")
+        container.convert("tck/FunctionsAcceptance_11")
     }
 
     /*
@@ -212,7 +212,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN type(r1), type(r2)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_12")
+        container.convert("tck/FunctionsAcceptance_12")
     }
 
     /*
@@ -231,7 +231,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN type(r)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_13")
+        container.convert("tck/FunctionsAcceptance_13")
     }
 
     /*
@@ -250,7 +250,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN type(r)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_14")
+        container.convert("tck/FunctionsAcceptance_14")
     }
 
     /*
@@ -269,7 +269,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN type(list[0])
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_15")
+        container.convert("tck/FunctionsAcceptance_15")
     }
 
     /*
@@ -288,7 +288,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN labels(list[0]) AS l
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_16")
+        container.convert("tck/FunctionsAcceptance_16")
     }
 
     /*
@@ -307,7 +307,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN labels(list[1]) AS l
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_17")
+        container.convert("tck/FunctionsAcceptance_17")
     }
 
     /*
@@ -325,7 +325,7 @@ class FunctionsAcceptanceVisualizationTest {
         RETURN n, EXIsTS(n.prop) AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/FunctionsAcceptance_18")
+        container.convert("tck/FunctionsAcceptance_18")
     }
 
 }

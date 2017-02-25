@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class SemanticErrorAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -21,7 +21,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         RETURN (list[0]).prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/SemanticErrorAcceptance_01")
+        container.convert("tck/SemanticErrorAcceptance_01")
     }
 
     /*
@@ -34,7 +34,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         RETURN (list[1]).prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/SemanticErrorAcceptance_02")
+        container.convert("tck/SemanticErrorAcceptance_02")
     }
 
     /*
@@ -46,7 +46,7 @@ class SemanticErrorAcceptanceVisualizationTest {
         RETURN range(2, 8, 0)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/SemanticErrorAcceptance_04")
+        container.convert("tck/SemanticErrorAcceptance_04")
     }
 
 }

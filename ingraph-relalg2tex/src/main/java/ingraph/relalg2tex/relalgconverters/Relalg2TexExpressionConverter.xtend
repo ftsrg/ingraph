@@ -1,23 +1,23 @@
-package ingraph.relalg2tex.serializers
+package ingraph.relalg2tex.relalgconverters
 
-import ingraph.relalg2tex.config.RelalgSerializerConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
-class RelalgExpressionSerializer extends AbstractRelalgSerializer {
+class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 
   new() {
     super()
   }
 
-  new(RelalgSerializerConfig config) {
+  new(RelalgConverterConfig config) {
     super(config)
   }
 
-  override serializeBody(Operator expression) {
+  override convertBody(Operator expression) {
     '''
       «IF config.standaloneDocument»$$«ENDIF»
       «children(expression)»

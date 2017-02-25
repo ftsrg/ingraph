@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class TernaryLogicAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -20,7 +20,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         RETURN NOT null AS value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TernaryLogicAcceptance_01")
+        container.convert("tck/TernaryLogicAcceptance_01")
     }
 
     /*
@@ -32,7 +32,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         RETURN null IS NULL AS value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TernaryLogicAcceptance_02")
+        container.convert("tck/TernaryLogicAcceptance_02")
     }
 
     /*
@@ -44,7 +44,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         RETURN null IS NOT NULL AS value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TernaryLogicAcceptance_03")
+        container.convert("tck/TernaryLogicAcceptance_03")
     }
 
     /*
@@ -56,7 +56,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         RETURN null = null AS value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TernaryLogicAcceptance_04")
+        container.convert("tck/TernaryLogicAcceptance_04")
     }
 
     /*
@@ -68,7 +68,7 @@ class TernaryLogicAcceptanceVisualizationTest {
         RETURN null <> null AS value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TernaryLogicAcceptance_05")
+        container.convert("tck/TernaryLogicAcceptance_05")
     }
 
 }

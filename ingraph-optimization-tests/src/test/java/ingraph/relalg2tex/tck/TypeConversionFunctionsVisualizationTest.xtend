@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class TypeConversionFunctionsVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -21,7 +21,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toBoolean('true') AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_01")
+        container.convert("tck/TypeConversionFunctions_01")
     }
 
     /*
@@ -35,7 +35,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toBoolean(b) AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_02")
+        container.convert("tck/TypeConversionFunctions_02")
     }
 
     /*
@@ -49,7 +49,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toBoolean(s) AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_03")
+        container.convert("tck/TypeConversionFunctions_03")
     }
 
     /*
@@ -63,7 +63,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toBoolean(things) AS b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_04")
+        container.convert("tck/TypeConversionFunctions_04")
     }
 
     /*
@@ -83,7 +83,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toInteger(n.age) AS age
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_05")
+        container.convert("tck/TypeConversionFunctions_05")
     }
 
     /*
@@ -97,7 +97,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toInteger(weight)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_06")
+        container.convert("tck/TypeConversionFunctions_06")
     }
 
     /*
@@ -111,7 +111,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_07")
+        container.convert("tck/TypeConversionFunctions_07")
     }
 
     /*
@@ -125,7 +125,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_08")
+        container.convert("tck/TypeConversionFunctions_08")
     }
 
     /*
@@ -139,7 +139,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_09")
+        container.convert("tck/TypeConversionFunctions_09")
     }
 
     /*
@@ -153,7 +153,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_10")
+        container.convert("tck/TypeConversionFunctions_10")
     }
 
     /*
@@ -168,7 +168,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toInteger(1 - {param}) AS result
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_11")
+        container.convert("tck/TypeConversionFunctions_11")
     }
 
     /*
@@ -188,7 +188,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toFloat(n.rating) AS float
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_12")
+        container.convert("tck/TypeConversionFunctions_12")
     }
 
     /*
@@ -202,7 +202,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_13")
+        container.convert("tck/TypeConversionFunctions_13")
     }
 
     /*
@@ -216,7 +216,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_14")
+        container.convert("tck/TypeConversionFunctions_14")
     }
 
     /*
@@ -230,7 +230,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_15")
+        container.convert("tck/TypeConversionFunctions_15")
     }
 
     /*
@@ -244,7 +244,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_16")
+        container.convert("tck/TypeConversionFunctions_16")
     }
 
     /*
@@ -264,7 +264,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(n.rating)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_17")
+        container.convert("tck/TypeConversionFunctions_17")
     }
 
     /*
@@ -282,7 +282,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(m.watched)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_18")
+        container.convert("tck/TypeConversionFunctions_18")
     }
 
     /*
@@ -295,7 +295,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(1 < 0) AS bool
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_19")
+        container.convert("tck/TypeConversionFunctions_19")
     }
 
     /*
@@ -308,7 +308,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(true) AS bool
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_20")
+        container.convert("tck/TypeConversionFunctions_20")
     }
 
     /*
@@ -321,7 +321,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_21")
+        container.convert("tck/TypeConversionFunctions_21")
     }
 
     /*
@@ -335,7 +335,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_22")
+        container.convert("tck/TypeConversionFunctions_22")
     }
 
     /*
@@ -349,7 +349,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN coalesce(toString(gen), 'x') AS result
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_23")
+        container.convert("tck/TypeConversionFunctions_23")
     }
 
     /*
@@ -363,7 +363,7 @@ class TypeConversionFunctionsVisualizationTest {
         RETURN toString(coalesce(gen, 'x')) AS result
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TypeConversionFunctions_24")
+        container.convert("tck/TypeConversionFunctions_24")
     }
 
 }

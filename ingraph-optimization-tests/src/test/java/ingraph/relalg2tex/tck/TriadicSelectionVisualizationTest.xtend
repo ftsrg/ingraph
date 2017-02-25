@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class TriadicSelectionVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -22,7 +22,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_01")
+        container.convert("tck/TriadicSelection_01")
     }
 
     /*
@@ -38,7 +38,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_02")
+        container.convert("tck/TriadicSelection_02")
     }
 
     /*
@@ -54,7 +54,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_03")
+        container.convert("tck/TriadicSelection_03")
     }
 
     /*
@@ -70,7 +70,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_04")
+        container.convert("tck/TriadicSelection_04")
     }
 
     /*
@@ -86,7 +86,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_05")
+        container.convert("tck/TriadicSelection_05")
     }
 
     /*
@@ -102,7 +102,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_06")
+        container.convert("tck/TriadicSelection_06")
     }
 
     /*
@@ -118,7 +118,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_07")
+        container.convert("tck/TriadicSelection_07")
     }
 
     /*
@@ -134,7 +134,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_08")
+        container.convert("tck/TriadicSelection_08")
     }
 
     /*
@@ -150,7 +150,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_09")
+        container.convert("tck/TriadicSelection_09")
     }
 
     /*
@@ -166,7 +166,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_10")
+        container.convert("tck/TriadicSelection_10")
     }
 
     /*
@@ -182,7 +182,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_11")
+        container.convert("tck/TriadicSelection_11")
     }
 
     /*
@@ -198,7 +198,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_12")
+        container.convert("tck/TriadicSelection_12")
     }
 
     /*
@@ -214,7 +214,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_13")
+        container.convert("tck/TriadicSelection_13")
     }
 
     /*
@@ -230,7 +230,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_14")
+        container.convert("tck/TriadicSelection_14")
     }
 
     /*
@@ -246,7 +246,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_15")
+        container.convert("tck/TriadicSelection_15")
     }
 
     /*
@@ -262,7 +262,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_16")
+        container.convert("tck/TriadicSelection_16")
     }
 
     /*
@@ -278,7 +278,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_17")
+        container.convert("tck/TriadicSelection_17")
     }
 
     /*
@@ -294,7 +294,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_18")
+        container.convert("tck/TriadicSelection_18")
     }
 
     /*
@@ -310,7 +310,7 @@ class TriadicSelectionVisualizationTest {
         RETURN c.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/TriadicSelection_19")
+        container.convert("tck/TriadicSelection_19")
     }
 
 }

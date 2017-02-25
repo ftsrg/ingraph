@@ -5,10 +5,10 @@ import org.eclipse.xtend.lib.annotations.Data
 
 @Data
 @Buildable
-class RelalgSerializerConfig {
+class RelalgConverterConfig {
 
   /**
-   * whether to include cardinality information in the serializer (for trees)
+   * whether to include cardinality information in the converter (for trees)
    */
   boolean includeCardinality
 
@@ -28,7 +28,7 @@ class RelalgSerializerConfig {
   boolean includeCommonVariables
 
   /**
-   * whether to output TeX serialization to the console
+   * whether to output the generated TeX code to the console
    */
   boolean consoleOutput
 

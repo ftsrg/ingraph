@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class EqualsAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -29,7 +29,7 @@ class EqualsAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/EqualsAcceptance_01")
+        container.convert("tck/EqualsAcceptance_01")
     }
 
     /*
@@ -50,7 +50,7 @@ class EqualsAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/EqualsAcceptance_02")
+        container.convert("tck/EqualsAcceptance_02")
     }
 
     /*
@@ -71,7 +71,7 @@ class EqualsAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/EqualsAcceptance_03")
+        container.convert("tck/EqualsAcceptance_03")
     }
 
     /*
@@ -92,7 +92,7 @@ class EqualsAcceptanceVisualizationTest {
         RETURN count(b)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/EqualsAcceptance_04")
+        container.convert("tck/EqualsAcceptance_04")
     }
 
     /*
@@ -113,7 +113,7 @@ class EqualsAcceptanceVisualizationTest {
         RETURN count(b)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/EqualsAcceptance_05")
+        container.convert("tck/EqualsAcceptance_05")
     }
 
 }

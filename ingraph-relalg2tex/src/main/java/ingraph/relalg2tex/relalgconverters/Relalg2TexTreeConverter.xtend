@@ -1,7 +1,7 @@
-package ingraph.relalg2tex.serializers
+package ingraph.relalg2tex.relalgconverters
 
 import ingraph.relalg.util.GetContainer
-import ingraph.relalg2tex.config.RelalgSerializerConfig
+import ingraph.relalg2tex.converters.elementconverters.SchemaConverter
 import relalg.AbstractJoinOperator
 import relalg.BinaryOperator
 import relalg.Cardinality
@@ -10,21 +10,22 @@ import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
-class RelalgTreeSerializer extends AbstractRelalgSerializer {
+class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
-  extension SchemaSerializer schemaSerializer = new SchemaSerializer
+  extension SchemaConverter schemaConverter = new SchemaConverter
   extension GetContainer getContainer = new GetContainer
 
   new() {
     super()
   }
 
-  new(RelalgSerializerConfig config) {
+  new(RelalgConverterConfig config) {
     super(config)
   }
 
-  override serializeBody(Operator expression) {
+  override convertBody(Operator expression) {
     '''
       \begin{forest} for tree={align=center}
       «toNode(expression)»
@@ -42,15 +43,15 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     {«op.operator»
     «IF op.getContainer.basicSchemaInferred»
     \\ \footnotesize
-    $\color{gray} «serializeSchema(op.basicSchema)» $
+    $\color{gray} «convertSchema(op.basicSchema)» $
     «ENDIF»
     «IF op.getContainer.extraAttributesInferred»
     \\ \footnotesize
-    $\color{violet} «serializeSchema(op.extraAttributes)» $
+    $\color{violet} «convertSchema(op.extraAttributes)» $
     «ENDIF»
     «IF op.getContainer.fullSchemaInferred»
     \\ \footnotesize
-    $\color{orange} «serializeSchema(op.fullSchema)» $
+    $\color{orange} «convertSchema(op.fullSchema)» $
     «IF op instanceof ProjectionOperator»
     \\ \footnotesize
     $\color{orange} \langle \var{«op.tupleIndices.join(", ")»} \rangle $

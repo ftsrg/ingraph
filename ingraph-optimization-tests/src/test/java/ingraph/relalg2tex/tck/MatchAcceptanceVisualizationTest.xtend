@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class MatchAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -26,7 +26,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_01")
+        container.convert("tck/MatchAcceptance_01")
     }
 
     /*
@@ -44,7 +44,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_02")
+        container.convert("tck/MatchAcceptance_02")
     }
 
     /*
@@ -64,7 +64,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n.value AS n, m.value AS m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_03")
+        container.convert("tck/MatchAcceptance_03")
     }
 
     /*
@@ -85,7 +85,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_04")
+        container.convert("tck/MatchAcceptance_04")
     }
 
     /*
@@ -104,7 +104,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_05")
+        container.convert("tck/MatchAcceptance_05")
     }
 
     /*
@@ -123,7 +123,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_06")
+        container.convert("tck/MatchAcceptance_06")
     }
 
     /*
@@ -142,7 +142,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_07")
+        container.convert("tck/MatchAcceptance_07")
     }
 
     /*
@@ -162,7 +162,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_08")
+        container.convert("tck/MatchAcceptance_08")
     }
 
     /*
@@ -180,7 +180,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n1, n2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_09")
+        container.convert("tck/MatchAcceptance_09")
     }
 
     /*
@@ -200,7 +200,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_10")
+        container.convert("tck/MatchAcceptance_10")
     }
 
     /*
@@ -218,7 +218,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_11")
+        container.convert("tck/MatchAcceptance_11")
     }
 
     /*
@@ -244,7 +244,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n, x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_12")
+        container.convert("tck/MatchAcceptance_12")
     }
 
     /*
@@ -262,7 +262,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_13")
+        container.convert("tck/MatchAcceptance_13")
     }
 
     /*
@@ -282,7 +282,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a, b, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_14")
+        container.convert("tck/MatchAcceptance_14")
     }
 
     /*
@@ -305,7 +305,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_15")
+        container.convert("tck/MatchAcceptance_15")
     }
 
     /*
@@ -329,7 +329,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_16")
+        container.convert("tck/MatchAcceptance_16")
     }
 
     /*
@@ -350,7 +350,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_17")
+        container.convert("tck/MatchAcceptance_17")
     }
 
     /*
@@ -368,7 +368,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_18")
+        container.convert("tck/MatchAcceptance_18")
     }
 
     /*
@@ -386,7 +386,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_19")
+        container.convert("tck/MatchAcceptance_19")
     }
 
     /*
@@ -405,7 +405,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_20")
+        container.convert("tck/MatchAcceptance_20")
     }
 
     /*
@@ -424,7 +424,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_21")
+        container.convert("tck/MatchAcceptance_21")
     }
 
     /*
@@ -442,7 +442,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN relationships(p)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_22")
+        container.convert("tck/MatchAcceptance_22")
     }
 
     /*
@@ -460,7 +460,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN relationships(p)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_23")
+        container.convert("tck/MatchAcceptance_23")
     }
 
     /*
@@ -478,7 +478,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_24")
+        container.convert("tck/MatchAcceptance_24")
     }
 
     /*
@@ -496,7 +496,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_25")
+        container.convert("tck/MatchAcceptance_25")
     }
 
     /*
@@ -514,7 +514,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_26")
+        container.convert("tck/MatchAcceptance_26")
     }
 
     /*
@@ -532,7 +532,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_27")
+        container.convert("tck/MatchAcceptance_27")
     }
 
     /*
@@ -550,7 +550,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN a, b, length(p) AS l
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_28")
+        container.convert("tck/MatchAcceptance_28")
     }
 
     /*
@@ -568,7 +568,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_29")
+        container.convert("tck/MatchAcceptance_29")
     }
 
     /*
@@ -583,7 +583,7 @@ class MatchAcceptanceVisualizationTest {
         RETURN n SKIP 0
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance_30")
+        container.convert("tck/MatchAcceptance_30")
     }
 
 }

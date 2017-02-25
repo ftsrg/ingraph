@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class WhereAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -27,7 +27,7 @@ class WhereAcceptanceVisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WhereAcceptance_01")
+        container.convert("tck/WhereAcceptance_01")
     }
 
     /*
@@ -46,7 +46,7 @@ class WhereAcceptanceVisualizationTest {
         RETURN n.prop AS prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/WhereAcceptance_02")
+        container.convert("tck/WhereAcceptance_02")
     }
 
 }

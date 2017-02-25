@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class SkipLimitAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class SkipLimitAcceptanceVisualizationTest {
         RETURN count > 0 AS nonEmpty
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/SkipLimitAcceptance_01")
+        container.convert("tck/SkipLimitAcceptance_01")
     }
 
     /*
@@ -47,7 +47,7 @@ class SkipLimitAcceptanceVisualizationTest {
         RETURN count(*) AS count
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/SkipLimitAcceptance_02")
+        container.convert("tck/SkipLimitAcceptance_02")
     }
 
 }

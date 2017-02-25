@@ -6,8 +6,8 @@ import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
-import ingraph.relalg2tex.config.RelalgSerializerConfig
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Ignore
 import org.junit.Test
 
@@ -18,8 +18,8 @@ class ReteSandboxTest {
   extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
   extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
-  val config = RelalgSerializerConfig.builder.consoleOutput(false).standaloneDocument(true).build
-  val drawer = new RelalgTreeSerializer(config)
+  val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
+  val drawer = new Relalg2TexTreeConverter(config)
 
   def process(String query, String cypher) {
     // search-based
@@ -27,7 +27,7 @@ class ReteSandboxTest {
     containerSearchBased.inferBasicSchema
     containerSearchBased.inferExtraAttributes
     containerSearchBased.inferFullSchema
-    drawer.serialize(containerSearchBased, "sandbox/" + query + "-search")
+    drawer.convert(containerSearchBased, "sandbox/" + query + "-search")
     RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
 
     // Rete
@@ -36,7 +36,7 @@ class ReteSandboxTest {
     containerRete.inferBasicSchema
     containerRete.inferExtraAttributes
     containerRete.inferFullSchema
-    drawer.serialize(containerRete, "sandbox/" + query + "-rete")
+    drawer.convert(containerRete, "sandbox/" + query + "-rete")
     RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
   }
 

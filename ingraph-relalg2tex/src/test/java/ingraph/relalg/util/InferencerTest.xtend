@@ -3,17 +3,17 @@ package ingraph.relalg.util
 import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
-import ingraph.relalg2tex.config.RelalgSerializerConfig
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Test
 import relalg.ArithmeticComparisonOperatorType
 import relalg.RelalgFactory
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class InferencerTest {
 
-  val RelalgSerializerConfig config = RelalgSerializerConfig.builder.consoleOutput(true).standaloneDocument(true).build
+  val RelalgConverterConfig config = RelalgConverterConfig.builder.consoleOutput(true).standaloneDocument(true).build
 
-  extension RelalgTreeSerializer serializer = new RelalgTreeSerializer(config)
+  extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter(config)
   
   extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
   extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
@@ -61,7 +61,7 @@ class InferencerTest {
     container.inferBasicSchema
     container.inferExtraAttributes
     container.inferFullSchema
-    container.serialize("../visualization/sandbox/inferencer-test")
+    container.convert("../visualization/sandbox/inferencer-test")
   }
 
 }
