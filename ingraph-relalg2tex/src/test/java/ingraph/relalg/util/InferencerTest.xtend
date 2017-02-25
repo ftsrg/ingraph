@@ -1,13 +1,13 @@
 package ingraph.relalg.util
 
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Test
 import relalg.ArithmeticComparisonOperatorType
 import relalg.RelalgFactory
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class InferencerTest {
 
@@ -16,7 +16,7 @@ class InferencerTest {
 	extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter(config)
 	
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE

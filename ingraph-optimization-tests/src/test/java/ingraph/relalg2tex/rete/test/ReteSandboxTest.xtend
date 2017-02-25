@@ -3,19 +3,19 @@ package ingraph.relalg2tex.rete.test
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Ignore
 import org.junit.Test
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class ReteSandboxTest {
 
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
@@ -43,31 +43,39 @@ class ReteSandboxTest {
 	@Test
 	def void t1() {
 		process("t1", '''
-		MATCH
-		(x:X)-[:ASD]->(person:Person)-[:KNOWS*1..2]-(friend:Person),
-		(friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
-		WHERE NOT(person = friend)
-		MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
-		WHERE NOT(commonTag = knownTag)
-		WITH DISTINCT commonTag, knownTag, friend
-		MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
-		WHERE (commonPost)-[:HAS_CREATOR]->(friend)
-		RETURN
-		commonTag.name AS tagName,
-		count(commonPost) AS postCount
-		ORDER BY
-		postCount DESC,
-		tagName ASC
-		LIMIT 10
+			MATCH
+			(x:X)-[:ASD]->(person:Person)-[:KNOWS*1..2]-(friend:Person),
+			(friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
+			WHERE NOT(person = friend)
+			MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
+			WHERE NOT(commonTag = knownTag)
+			WITH DISTINCT commonTag, knownTag, friend
+			MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
+			WHERE (commonPost)-[:HAS_CREATOR]->(friend)
+			RETURN
+			commonTag.name AS tagName,
+			count(commonPost) AS postCount
+			ORDER BY
+			postCount DESC,
+			tagName ASC
+			LIMIT 10
 		''')
 	}
 
 	@Test
 	def void t2() {
 		process("t2", '''
-		MATCH (n)
-		RETURN n.division, count(*)
-		ORDER BY count(*) DESC, n.division ASC
+			MATCH (n)
+			RETURN n.division, count(*)
+			ORDER BY count(*) DESC, n.division ASC
+		''')
+	}
+	
+	@Test
+	def void t3() {
+		process("t3", '''
+			MATCH (n)-[r]-()
+			RETURN type(r), labels(n), keys(n), keys(r), properties(n), properties(r)
 		''')
 	}
 

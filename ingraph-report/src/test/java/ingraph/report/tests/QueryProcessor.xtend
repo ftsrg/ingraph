@@ -3,7 +3,6 @@ package ingraph.report.tests
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg.inferencers.ExtraAttributeInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
@@ -15,12 +14,13 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
 import ingraph.relalg2tex.relalgconverters.Relalg2TexExpressionConverter
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class QueryProcessor {
 	
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 	extension Escaper escaper = new Escaper
 

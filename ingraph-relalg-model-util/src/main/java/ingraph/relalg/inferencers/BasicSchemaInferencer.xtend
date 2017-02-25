@@ -1,5 +1,6 @@
 package ingraph.relalg.inferencers
 
+import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
@@ -11,7 +12,6 @@ import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
-import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -22,8 +22,6 @@ import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import relalg.VariableExpression
-import com.google.common.collect.ImmutableList
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
