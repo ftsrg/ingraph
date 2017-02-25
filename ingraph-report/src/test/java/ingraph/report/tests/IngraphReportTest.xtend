@@ -32,7 +32,7 @@ abstract class IngraphReportTest {
       doc +=
       '''
         \section{«sectionTitle»}
-  
+
         \progressbar[width=10cm, heighta=.3cm, filledcolor=green, emptycolor=red, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«compilingQueryRatio»}
         «qp.compilingQueries» of «qp.totalQueries»
         

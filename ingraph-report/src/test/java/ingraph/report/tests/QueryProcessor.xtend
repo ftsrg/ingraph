@@ -51,63 +51,63 @@ class QueryProcessor {
   }
 
   def subsection(RelalgContainer container, String name, String listing) {
-    '''
-      \subsection{«name.escape»}
-    
-      \subsubsection*«header("Query specification", name)»
-    
-      \begin{lstlisting}
-      «listing»
-      \end{lstlisting}
-    
-      «IF container == null»
-      \subsubsection*{Cannot parse query}
-      Cannot parse query. This is probably a limitation in our current parser and not an error in the query specification.
-    
-      «ELSE»
-    ««« start of subsubsections for expression
-      \subsubsection*«header("Relational algebra expression", name)»
-    
-      «val expression = container.expression»
-      «IF expression == null»
-      Cannot visualize expression.
-      «ELSE»
-      \begin{align*}
-      \begin{autobreak}
-      r = «expression»
-      \end{autobreak}
-      \end{align*}
-      «ENDIF»
-    
-      \subsubsection*«header("Relational algebra tree", name)»
-    
-      «val basicTree = container.visualizeTree»
-      «IF basicTree == null»
-      Cannot visualize tree.
-      «ELSE»
-      \begin{center}
-      \begin{adjustbox}{max width=\textwidth}
-      «basicTree»
-      \end{adjustbox}
-      \end{center}
-      «ENDIF»
-    
-      \subsubsection*«header("Incremental relational algebra tree", name)»
-    
-      «val incrementalTree = container.visualizeWithTransformations»
-      «IF incrementalTree == null»
-      Cannot visualize incremental tree.
-      «ELSE»
-      \begin{center}
-      \begin{adjustbox}{max width=\textwidth}
-      «incrementalTree»
-      \end{adjustbox}
-      \end{center}
-      «ENDIF»
-    ««« end of subsubsections for expression
-      «ENDIF»
-    '''
-    }
+  '''
+  \subsection{«name.escape»}
+
+  \subsubsection*«header("Query specification", name)»
+
+  \begin{lstlisting}
+  «listing»
+  \end{lstlisting}
+
+  «IF container == null»
+  \subsubsection*{Cannot parse query}
+  Cannot parse query. This is probably a limitation in our current parser and not an error in the query specification.
+
+  «ELSE»
+««« start of subsubsections for expression
+  \subsubsection*«header("Relational algebra expression", name)»
+
+  «val expression = container.expression»
+  «IF expression == null»
+  Cannot visualize expression.
+  «ELSE»
+  \begin{align*}
+  \begin{autobreak}
+  r = «expression»
+  \end{autobreak}
+  \end{align*}
+  «ENDIF»
+
+  \subsubsection*«header("Relational algebra tree", name)»
+
+  «val basicTree = container.visualizeTree»
+  «IF basicTree == null»
+  Cannot visualize tree.
+  «ELSE»
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  «basicTree»
+  \end{adjustbox}
+  \end{center}
+  «ENDIF»
+
+  \subsubsection*«header("Incremental relational algebra tree", name)»
+
+  «val incrementalTree = container.visualizeWithTransformations»
+  «IF incrementalTree == null»
+  Cannot visualize incremental tree.
+  «ELSE»
+  \begin{center}
+  \begin{adjustbox}{max width=\textwidth}
+  «incrementalTree»
+  \end{adjustbox}
+  \end{center}
+  «ENDIF»
+  ««« end of subsubsections for expression
+  «ENDIF»
+  '''
+  }
   
   def header(String title, String query) {
     '''{«title» \textcolor{gray}{(«query»)}}'''
