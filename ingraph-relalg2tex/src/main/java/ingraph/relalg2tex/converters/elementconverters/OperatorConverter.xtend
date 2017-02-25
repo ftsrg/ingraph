@@ -24,120 +24,120 @@ import relalg.UnwindOperator
 import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class OperatorConverter {
-  
-  extension MiscConverters miscConverters = new MiscConverters
-  extension StringEscaper stringEscaper = new StringEscaper
-  extension ElementConverter elementConverter = new ElementConverter
-  extension ExpressionConverter expressionConverter = new ExpressionConverter
-  protected RelalgConverterConfig config
+	
+	extension MiscConverters miscConverters = new MiscConverters
+	extension StringEscaper stringEscaper = new StringEscaper
+	extension ElementConverter elementConverter = new ElementConverter
+	extension ExpressionConverter expressionConverter = new ExpressionConverter
+	protected RelalgConverterConfig config
 
-  new(RelalgConverterConfig config) {
-    this.config = config
-  }
+	new(RelalgConverterConfig config) {
+		this.config = config
+	}
 
-  def dispatch convertOperator(AllDifferentOperator op) {
-    #['''\alldifferent{«op.edgeVariables.edgeVariableList»}''']
-  }
+	def dispatch convertOperator(AllDifferentOperator op) {
+		#['''\alldifferent{«op.edgeVariables.edgeVariableList»}''']
+	}
 
-  def dispatch convertOperator(BinaryOperator op) {
-    #['''\«binaryOperator(op)»''']
-  }
+	def dispatch convertOperator(BinaryOperator op) {
+		#['''\«binaryOperator(op)»''']
+	}
 
-  def dispatch convertOperator(DuplicateEliminationOperator op) {
-    #['''\duplicateelimination''']
-  }
+	def dispatch convertOperator(DuplicateEliminationOperator op) {
+		#['''\duplicateelimination''']
+	}
 
-  def dispatch convertOperator(ExpandOperator op) {
-    #[
-      '''\expand«op.direction.convertDirection»''' + //
-      '''{«op.sourceVertexVariable.escapedName»}''' + //
-      '''«op.targetVertexVariable.convertElement»''' + //
-      '''«op.edgeVariable.convertElement»''' + //
-      '''{«op.minHops»}{«op.maxHops.hopsToString»}'''
-    ]
-  }
+	def dispatch convertOperator(ExpandOperator op) {
+		#[
+			'''\expand«op.direction.convertDirection»''' + //
+			'''{«op.sourceVertexVariable.escapedName»}''' + //
+			'''«op.targetVertexVariable.convertElement»''' + //
+			'''«op.edgeVariable.convertElement»''' + //
+			'''{«op.minHops»}{«op.maxHops.hopsToString»}'''
+		]
+	}
 
-  def dispatch convertOperator(GetVerticesOperator op) {
-    #[
-      '''\getvertices«op.vertexVariable.convertElement»'''
-    ]
-  }
+	def dispatch convertOperator(GetVerticesOperator op) {
+		#[
+			'''\getvertices«op.vertexVariable.convertElement»'''
+		]
+	}
 
-  def dispatch convertOperator(DualObjectSourceOperator op) {
-    #[
-      '''\var{Dual}'''
-    ]
-  }
+	def dispatch convertOperator(DualObjectSourceOperator op) {
+		#[
+			'''\var{Dual}'''
+		]
+	}
 
-  /**
-   * UnaryOperators
-   */
-  def dispatch convertOperator(GroupingOperator op) {
-    #['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
-  }
+	/**
+	 * UnaryOperators
+	 */
+	def dispatch convertOperator(GroupingOperator op) {
+		#['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
+	}
 
-  def dispatch convertOperator(ProductionOperator op) {
-    throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
-  }
+	def dispatch convertOperator(ProductionOperator op) {
+		throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
+	}
 
-  def dispatch convertOperator(ProjectionOperator op) {
-    #['''\projection{«op.elements.returnableElementList»}''']
-  }
+	def dispatch convertOperator(ProjectionOperator op) {
+		#['''\projection{«op.elements.returnableElementList»}''']
+	}
 
-  def dispatch convertOperator(SelectionOperator op) {
-    #[
-      '''\selection{''' +
-      '''«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»''' +
-      '''}'''
-    ]
-  }
+	def dispatch convertOperator(SelectionOperator op) {
+		#[
+			'''\selection{''' +
+			'''«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»''' +
+			'''}'''
+		]
+	}
 
-  def dispatch convertOperator(SortOperator op) {
-    #[ sortOperatorToTex(op) ]
-  }
+	def dispatch convertOperator(SortOperator op) {
+		#[ sortOperatorToTex(op) ]
+	}
 
-  def dispatch convertOperator(TopOperator op) {
-    #[ topOperatorToTex(op) ]
-  }
+	def dispatch convertOperator(TopOperator op) {
+		#[ topOperatorToTex(op) ]
+	}
 
-  def dispatch convertOperator(SortAndTopOperator op) {
-    #[ topOperatorToTex(op) + sortOperatorToTex(op) ]
-  }
+	def dispatch convertOperator(SortAndTopOperator op) {
+		#[ topOperatorToTex(op) + sortOperatorToTex(op) ]
+	}
 
-  def topOperatorToTex(TopOperator op) {
-    '''\topp{«if (op.limit !== null) op.limit.value else ""»}{«if (op.skip !== null) op.skip.value else ""»}'''.toString
-  }
+	def topOperatorToTex(TopOperator op) {
+		'''\topp{«if (op.limit !== null) op.limit.value else ""»}{«if (op.skip !== null) op.skip.value else ""»}'''.toString
+	}
 
-  def sortOperatorToTex(SortOperator op) {
-    '''\sort{«op.entries.map[entryToTex].join(", ")»}'''.toString
-  }
-  
-  
-  def dispatch convertOperator(PathOperator op) {
-    #[
-      '''\transitiveclosure«op.direction.convertDirection»''' + //
-      '''{«op.sourceVertexVariable.escapedName»}''' + //
-      '''«op.targetVertexVariable.convertElement»''' + //
-      '''«op.edgeVariable.convertElement»''' + //
-      '''{«op.minHops»}{«op.maxHops.hopsToString»}'''
-    ]
-  }
+	def sortOperatorToTex(SortOperator op) {
+		'''\sort{«op.entries.map[entryToTex].join(", ")»}'''.toString
+	}
+	
+	
+	def dispatch convertOperator(PathOperator op) {
+		#[
+			'''\transitiveclosure«op.direction.convertDirection»''' + //
+			'''{«op.sourceVertexVariable.escapedName»}''' + //
+			'''«op.targetVertexVariable.convertElement»''' + //
+			'''«op.edgeVariable.convertElement»''' + //
+			'''{«op.minHops»}{«op.maxHops.hopsToString»}'''
+		]
+	}
 
-  def dispatch convertOperator(UnwindOperator op) {
-    #['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
-  }
+	def dispatch convertOperator(UnwindOperator op) {
+		#['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
+	}
 
-  /**
-   * operatorToTeX
-   */
-  def dispatch convertOperator(GetEdgesOperator op) {
-    #[
-      '''\getedges''' +
-      '''«op.sourceVertexVariable.convertElement»''' +
-      '''«op.targetVertexVariable.convertElement»''' +
-      '''«op.edgeVariable.convertElement»'''
-    ]
-  }
+	/**
+	 * operatorToTeX
+	 */
+	def dispatch convertOperator(GetEdgesOperator op) {
+		#[
+			'''\getedges''' +
+			'''«op.sourceVertexVariable.convertElement»''' +
+			'''«op.targetVertexVariable.convertElement»''' +
+			'''«op.edgeVariable.convertElement»'''
+		]
+	}
 
 //  override dispatch operatorToTex(GetEdgesOperator op) {
 //    #[
@@ -145,35 +145,35 @@ class OperatorConverter {
 //      '''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''
 //    ]
 //  }
-  
-  /**
-   * BinaryOperators
-   */
-  def dispatch binaryOperator(AbstractJoinOperator operator) {
-    '''«operator.joinOperator»''' +
-    '''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
-  }
+	
+	/**
+	 * BinaryOperators
+	 */
+	def dispatch binaryOperator(AbstractJoinOperator operator) {
+		'''«operator.joinOperator»''' +
+		'''«IF config.includeCommonVariables»\{«operator.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
+	}
 
-  def dispatch binaryOperator(UnionOperator operator) {
-    '''union'''
-  }
+	def dispatch binaryOperator(UnionOperator operator) {
+		'''union'''
+	}
 
-  /** JoinLikeOperators */
-  def dispatch joinOperator(JoinOperator operator) {
-    '''join'''
-  }
+	/** JoinLikeOperators */
+	def dispatch joinOperator(JoinOperator operator) {
+		'''join'''
+	}
 
-  def dispatch joinOperator(AntiJoinOperator operator) {
-    '''antijoin'''
-  }
+	def dispatch joinOperator(AntiJoinOperator operator) {
+		'''antijoin'''
+	}
 
-  def dispatch joinOperator(LeftOuterJoinOperator operator) {
-    '''leftouterjoin'''
-  }
+	def dispatch joinOperator(LeftOuterJoinOperator operator) {
+		'''leftouterjoin'''
+	}
 
-  /**
-   * TernaryOperators
-   */
+	/**
+	 * TernaryOperators
+	 */
 //  def dispatch
 
 }

@@ -10,7 +10,7 @@ import ingraph.relalg.inferencers.BasicSchemaInferencer
 
 class TrainBenchmarkCypher2RelalgTest {
 
-  extension BasicSchemaInferencer si = new BasicSchemaInferencer
+	extension BasicSchemaInferencer si = new BasicSchemaInferencer
 
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)

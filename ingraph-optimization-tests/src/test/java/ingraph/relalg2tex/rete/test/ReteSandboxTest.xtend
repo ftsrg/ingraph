@@ -13,137 +13,137 @@ import org.junit.Test
 
 class ReteSandboxTest {
 
-  extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
-  extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-  extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
-  extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
+	extension ExtraAttributeInferencer extraAttributeInferencer = new ExtraAttributeInferencer
+	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
-  val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
-  val drawer = new Relalg2TexTreeConverter(config)
+	val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
+	val drawer = new Relalg2TexTreeConverter(config)
 
-  def process(String query, String cypher) {
-    // search-based
-    val containerSearchBased = Cypher2Relalg.processString(cypher)
-    containerSearchBased.inferBasicSchema
-    containerSearchBased.inferExtraAttributes
-    containerSearchBased.inferFullSchema
-    drawer.convert(containerSearchBased, "sandbox/" + query + "-search")
-    RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
+	def process(String query, String cypher) {
+		// search-based
+		val containerSearchBased = Cypher2Relalg.processString(cypher)
+		containerSearchBased.inferBasicSchema
+		containerSearchBased.inferExtraAttributes
+		containerSearchBased.inferFullSchema
+		drawer.convert(containerSearchBased, "sandbox/" + query + "-search")
+		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
 
-    // Rete
-    val containerRete = Cypher2Relalg.processString(cypher)
-    containerRete.transformToRete
-    containerRete.inferBasicSchema
-    containerRete.inferExtraAttributes
-    containerRete.inferFullSchema
-    drawer.convert(containerRete, "sandbox/" + query + "-rete")
-    RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
-  }
+		// Rete
+		val containerRete = Cypher2Relalg.processString(cypher)
+		containerRete.transformToRete
+		containerRete.inferBasicSchema
+		containerRete.inferExtraAttributes
+		containerRete.inferFullSchema
+		drawer.convert(containerRete, "sandbox/" + query + "-rete")
+		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
+	}
 
-  @Test
-  def void t1() {
-    process("t1", '''
-    MATCH
-    (x:X)-[:ASD]->(person:Person)-[:KNOWS*1..2]-(friend:Person),
-    (friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
-    WHERE NOT(person = friend)
-    MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
-    WHERE NOT(commonTag = knownTag)
-    WITH DISTINCT commonTag, knownTag, friend
-    MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
-    WHERE (commonPost)-[:HAS_CREATOR]->(friend)
-    RETURN
-    commonTag.name AS tagName,
-    count(commonPost) AS postCount
-    ORDER BY
-    postCount DESC,
-    tagName ASC
-    LIMIT 10
-    ''')
-  }
+	@Test
+	def void t1() {
+		process("t1", '''
+		MATCH
+		(x:X)-[:ASD]->(person:Person)-[:KNOWS*1..2]-(friend:Person),
+		(friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
+		WHERE NOT(person = friend)
+		MATCH (friendPost)-[:HAS_TAG]->(commonTag:Tag)
+		WHERE NOT(commonTag = knownTag)
+		WITH DISTINCT commonTag, knownTag, friend
+		MATCH (commonTag)<-[:HAS_TAG]-(commonPost:Post)-[:HAS_TAG]->(knownTag)
+		WHERE (commonPost)-[:HAS_CREATOR]->(friend)
+		RETURN
+		commonTag.name AS tagName,
+		count(commonPost) AS postCount
+		ORDER BY
+		postCount DESC,
+		tagName ASC
+		LIMIT 10
+		''')
+	}
 
-  @Test
-  def void t2() {
-    process("t2", '''
-    MATCH (n)
-    RETURN n.division, count(*)
-    ORDER BY count(*) DESC, n.division ASC
-    ''')
-  }
+	@Test
+	def void t2() {
+		process("t2", '''
+		MATCH (n)
+		RETURN n.division, count(*)
+		ORDER BY count(*) DESC, n.division ASC
+		''')
+	}
 
-  @Test
-  def void test() {
-  	process("test", '''
-    	RETURN 1 AS x
-    	UNION
-    	RETURN 2 AS x
-  	''')
-  }
+	@Test
+	def void test() {
+		process("test", '''
+			RETURN 1 AS x
+			UNION
+			RETURN 2 AS x
+		''')
+	}
 
-  @Ignore
-  @Test
-  def void test01() {
-    process("test01", '''
-      MATCH (p:Person)
-      RETURN p.name AS name
-      ORDER BY p.name
-      LIMIT 1
-    ''')
-  }
-  
-  @Ignore
-  @Test
-  def void test02() {
-    process("test02", '''
-      MATCH (n)
-      WHERE n.something="emfsucks"
-      RETURN n.something
-    ''')
-  }
+	@Ignore
+	@Test
+	def void test01() {
+		process("test01", '''
+			MATCH (p:Person)
+			RETURN p.name AS name
+			ORDER BY p.name
+			LIMIT 1
+		''')
+	}
+	
+	@Ignore
+	@Test
+	def void test02() {
+		process("test02", '''
+			MATCH (n)
+			WHERE n.something="emfsucks"
+			RETURN n.something
+		''')
+	}
 
 
-  @Ignore
-  @Test
-  def void testNoRangePath() {
-    process("test-NoRange-path", '''MATCH p=(n)-[:REL]->(m) RETURN n, m''')
-  }
+	@Ignore
+	@Test
+	def void testNoRangePath() {
+		process("test-NoRange-path", '''MATCH p=(n)-[:REL]->(m) RETURN n, m''')
+	}
 
-  @Test
-  def void testNoRange() {
-    process("test-NoRange", '''MATCH (n)-[:REL]->(m) RETURN n, m''')
-  }
+	@Test
+	def void testNoRange() {
+		process("test-NoRange", '''MATCH (n)-[:REL]->(m) RETURN n, m''')
+	}
 
-  @Test
-  def void testRangeDefaultMinDefaultMax() {
-    process("test-Range-DefaultMin-DefaultMax", '''MATCH (n)-[:REL*..]->(m) RETURN n, m''')
-  }
+	@Test
+	def void testRangeDefaultMinDefaultMax() {
+		process("test-Range-DefaultMin-DefaultMax", '''MATCH (n)-[:REL*..]->(m) RETURN n, m''')
+	}
 
-  @Test
-  def void testRangeDefaultMinSpecifiedMax() {
-    process("test-Range-DefaultMin-SpecifiedMax", '''MATCH (n)-[:REL*..5]->(m) RETURN n, m''')
-  }
+	@Test
+	def void testRangeDefaultMinSpecifiedMax() {
+		process("test-Range-DefaultMin-SpecifiedMax", '''MATCH (n)-[:REL*..5]->(m) RETURN n, m''')
+	}
 
-  @Test
-  def void testRangeSpecifiedMinDefaultMax() {
-    process("test-Range-SpecifiedMin-DefaultMax", '''MATCH (n)-[:REL*3..]->(m) RETURN n, m''')
-  }
+	@Test
+	def void testRangeSpecifiedMinDefaultMax() {
+		process("test-Range-SpecifiedMin-DefaultMax", '''MATCH (n)-[:REL*3..]->(m) RETURN n, m''')
+	}
 
-  @Test
-  def void testRangeSpecifiedMinSpecifiedMax() {
-    process("test-Range-SpecifiedMin-SpecifiedMax", '''MATCH (n)-[:REL*3..5]->(m) RETURN n, m''')
-  }
-  
-  @Test
-  def void testSimple() {
-    process("test-Simple",
-    '''
-    MATCH
-      (a {name: 'a'})-[:REL]->(x),
-      (d {name: 'd'})-[:REL]->(y),
-      ( (x)-[r:REL*]->(y) )
-    RETURN r
-    '''
-    );
-  }
+	@Test
+	def void testRangeSpecifiedMinSpecifiedMax() {
+		process("test-Range-SpecifiedMin-SpecifiedMax", '''MATCH (n)-[:REL*3..5]->(m) RETURN n, m''')
+	}
+	
+	@Test
+	def void testSimple() {
+		process("test-Simple",
+		'''
+		MATCH
+			(a {name: 'a'})-[:REL]->(x),
+			(d {name: 'd'})-[:REL]->(y),
+			( (x)-[r:REL*]->(y) )
+		RETURN r
+		'''
+		);
+	}
 
 }

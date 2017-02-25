@@ -14,9 +14,9 @@ import relalg.RelalgContainer
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 	new() {
-	  val logger = Logger.getRootLogger
-	  logger.setLevel(Level.ERROR)
-	  ViatraQueryLoggingUtil.setExternalLogger(logger) 
+		val logger = Logger.getRootLogger
+		logger.setLevel(Level.ERROR)
+		ViatraQueryLoggingUtil.setExternalLogger(logger) 
 	}
 
 	def log(String log) {
@@ -24,11 +24,11 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	def transformToRete(RelalgContainer container) {
-	  log("Transforming relational algebra expression to Rete network")
+		log("Transforming relational algebra expression to Rete network")
 		val statements = register(container)
-    statements.fireWhilePossible(expandVertexRule)
-    statements.fireWhilePossible(expandOperatorARule)
-    statements.fireWhilePossible(expandOperatorBRule)
+		statements.fireWhilePossible(expandVertexRule)
+		statements.fireWhilePossible(expandOperatorARule)
+		statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		return container
@@ -80,90 +80,90 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 	
 	 
-  /**
-   * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
-   */
-  protected def expandOperatorBRule() {
-    createRule() //
-    .precondition(ExpandOperatorBMatcher.querySpecification) //
-    .action [ //
-      val expandOperator = expandOperator
-      log('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
+	/**
+	 * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
+	 */
+	protected def expandOperatorBRule() {
+		createRule() //
+		.precondition(ExpandOperatorBMatcher.querySpecification) //
+		.action [ //
+			val expandOperator = expandOperator
+			log('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
 
-      val getEdgesOperator = createGetEdgesOperator => [
-        sourceVertexVariable = expandOperator.source
-        targetVertexVariable = expandOperator.target
-        edgeVariable = expandOperator.edgeVariable
-      ]
-      val sourceVertexOperator = expandOperator.input
-      val targetVertexOperator = createGetVerticesOperator => [
-        vertexVariable = expandOperator.targetVertexVariable        
-      ]
-      val pathOperator = createPathOperator => [
-        minHops = expandOperator.minHops
-        maxHops = expandOperator.maxHops
+			val getEdgesOperator = createGetEdgesOperator => [
+				sourceVertexVariable = expandOperator.source
+				targetVertexVariable = expandOperator.target
+				edgeVariable = expandOperator.edgeVariable
+			]
+			val sourceVertexOperator = expandOperator.input
+			val targetVertexOperator = createGetVerticesOperator => [
+				vertexVariable = expandOperator.targetVertexVariable        
+			]
+			val pathOperator = createPathOperator => [
+				minHops = expandOperator.minHops
+				maxHops = expandOperator.maxHops
 
-        sourceVertexVariable = expandOperator.source
-        targetVertexVariable = expandOperator.target
-        edgeVariable = expandOperator.edgeVariable
+				sourceVertexVariable = expandOperator.source
+				targetVertexVariable = expandOperator.target
+				edgeVariable = expandOperator.edgeVariable
 
-        val edgeVariable = edgeVariable
-        listVariable = createVariableListExpression => [ variable = edgeVariable ]
+				val edgeVariable = edgeVariable
+				listVariable = createVariableListExpression => [ variable = edgeVariable ]
 
-        leftInput = sourceVertexOperator
-        middleInput = getEdgesOperator
-        rightInput = targetVertexOperator
-      ]
+				leftInput = sourceVertexOperator
+				middleInput = getEdgesOperator
+				rightInput = targetVertexOperator
+			]
 
-      changeOperator(parentOperator, expandOperator, pathOperator)
-    ].build
-  }
+			changeOperator(parentOperator, expandOperator, pathOperator)
+		].build
+	}
 	
-  /**
-   * [3] Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator
-   */
-  protected def sortAndTopOperatorRule() {
-    createRule() //
-    .precondition(SortAndTopOperatorMatcher.querySpecification) //
-    .action [ //
-      val sortOperator = sortOperator
-      val topOperator = topOperator
-      log('''sortAndTopOperatorRule fired for «sortOperator» and «topOperator»''')
+	/**
+	 * [3] Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator
+	 */
+	protected def sortAndTopOperatorRule() {
+		createRule() //
+		.precondition(SortAndTopOperatorMatcher.querySpecification) //
+		.action [ //
+			val sortOperator = sortOperator
+			val topOperator = topOperator
+			log('''sortAndTopOperatorRule fired for «sortOperator» and «topOperator»''')
 
-      val sortAndTopOperator = createSortAndTopOperator => [
-        entries.addAll(sortOperator.entries)
-        skip = topOperator.skip
-        limit = topOperator.limit
-        input = sortOperator.input
-      ]
-      
-      topLevelContainer.rootExpression = sortAndTopOperator
-    ].build
-  }
-  
+			val sortAndTopOperator = createSortAndTopOperator => [
+				entries.addAll(sortOperator.entries)
+				skip = topOperator.skip
+				limit = topOperator.limit
+				input = sortOperator.input
+			]
+			
+			topLevelContainer.rootExpression = sortAndTopOperator
+		].build
+	}
+	
 
-  /**
-   * [4] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
-   */
-  protected def leftOuterAndSelectionRule() {
-    createRule() //
-    .precondition(LeftOuterJoinAndSelectionMatcher.querySpecification) //
-    .action [ //
-      val parentOperator = parentOperator
-      val selectionOperator = selectionOperator
-      val leftOuterJoinOperator = leftOuterJoinOperator
-      val leftInputOperator = leftInputOperator
-      val getEdgesOperator = getEdgesOperator
-      log('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
+	/**
+	 * [4] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
+	 */
+	protected def leftOuterAndSelectionRule() {
+		createRule() //
+		.precondition(LeftOuterJoinAndSelectionMatcher.querySpecification) //
+		.action [ //
+			val parentOperator = parentOperator
+			val selectionOperator = selectionOperator
+			val leftOuterJoinOperator = leftOuterJoinOperator
+			val leftInputOperator = leftInputOperator
+			val getEdgesOperator = getEdgesOperator
+			log('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
 
-      val antiJoinOperator = createAntiJoinOperator => [
-        leftInput = leftInputOperator
-        rightInput = getEdgesOperator
-      ]
-      
-      changeOperator(parentOperator, selectionOperator, antiJoinOperator)
-    ].build
-  } 
+			val antiJoinOperator = createAntiJoinOperator => [
+				leftInput = leftInputOperator
+				rightInput = getEdgesOperator
+			]
+			
+			changeOperator(parentOperator, selectionOperator, antiJoinOperator)
+		].build
+	} 
 
 
 }

@@ -7,25 +7,25 @@ import relalg.ListVariable
 
 class VariableConverter {
  
-  /**
-   * convertVariable
-   */
-  def dispatch convertVariable(ElementVariable variable) {
-    '''«variable.name»'''
-  }
+	/**
+	 * convertVariable
+	 */
+	def dispatch convertVariable(ElementVariable variable) {
+		'''«variable.name»'''
+	}
 
-  def dispatch convertVariable(AttributeVariable variable) {
-    '''«variable.element.name».«variable.name»'''
-  }
+	def dispatch convertVariable(AttributeVariable variable) {
+		'''«variable.element.name».«variable.name»'''
+	}
 
-  def dispatch convertVariable(ListVariable variable) {
-    '''«variable.name»'''
-  }
+	def dispatch convertVariable(ListVariable variable) {
+		'''«variable.name»'''
+	}
 
-  def dispatch convertVariable(ExpressionVariable variable) {
-    //'''«convertExpression(variable, variable.expression)»'''
-    '''«variable.name»'''
-  }
+	def dispatch convertVariable(ExpressionVariable variable) {
+		//'''«convertExpression(variable, variable.expression)»'''
+		'''«variable.name»'''
+	}
 
 //
 //  def dispatch convertExpression(ExpressionVariable variable, VariableListExpression expression) {

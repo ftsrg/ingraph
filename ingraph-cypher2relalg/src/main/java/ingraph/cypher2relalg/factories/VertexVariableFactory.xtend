@@ -6,21 +6,21 @@ import relalg.VertexVariable
 
 class VertexVariableFactory extends VariableFactory<VertexVariable> {
 
-  new(RelalgContainer container) {
-    super(container)
-  }
+	new(RelalgContainer container) {
+		super(container)
+	}
 
-  override createSpecificNamedElement() {
-    createVertexVariable => [
-      vertexLabelSet = createVertexLabelSet
-    ]
-  }
+	override createSpecificNamedElement() {
+		createVertexVariable => [
+			vertexLabelSet = createVertexLabelSet
+		]
+	}
 
-  def createElement(NodePattern rd) {
-    if (rd.variable !== null) {
-      createElement(rd.variable.name)
-    } else {
-      createDontCareElement(rd)
-    }
-  }
+	def createElement(NodePattern rd) {
+		if (rd.variable !== null) {
+			createElement(rd.variable.name)
+		} else {
+			createDontCareElement(rd)
+		}
+	}
 }

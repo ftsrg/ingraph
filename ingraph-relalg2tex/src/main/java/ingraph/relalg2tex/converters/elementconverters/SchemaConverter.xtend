@@ -5,11 +5,11 @@ import relalg.Variable
 
 class SchemaConverter {
  
-  extension VariableConverter variableConverter = new VariableConverter
-  extension StringEscaper stringEscaper = new StringEscaper
+	extension VariableConverter variableConverter = new VariableConverter
+	extension StringEscaper stringEscaper = new StringEscaper
 
-  def convertSchema(List<Variable> schema) {
-    '''\langle \var{«schema.map[ convertVariable.escape ].join(', ')»} \rangle'''
-  } 
-  
+	def convertSchema(List<Variable> schema) {
+		'''\langle \var{«schema.map[ convertVariable.escape ].join(', ')»} \rangle'''
+	} 
+	
 }

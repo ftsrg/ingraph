@@ -8,24 +8,24 @@ import relalg.UnaryOperator
  * particular operator can occur 0 or 1 times, i.e. this is the ? from regular expressions.
  */
 class UnaryOperator0or1Pattern {
-  @Accessors(PUBLIC_GETTER)
-  val Class<? extends UnaryOperator> opc
-  @Accessors(PUBLIC_GETTER)
-  val boolean optional
+	@Accessors(PUBLIC_GETTER)
+	val Class<? extends UnaryOperator> opc
+	@Accessors(PUBLIC_GETTER)
+	val boolean optional
 
-  new(Class<? extends UnaryOperator> opc, boolean optional) {
-    this.opc = opc
-    this.optional = optional
-  }
+	new(Class<? extends UnaryOperator> opc, boolean optional) {
+		this.opc = opc
+		this.optional = optional
+	}
 
-  /**
-   * Indicate if this pattern element is mandatory, i.e. NOT optional.
-   */
-  def isMandatory() {
-    !optional
-  }
+	/**
+	 * Indicate if this pattern element is mandatory, i.e. NOT optional.
+	 */
+	def isMandatory() {
+		!optional
+	}
 
-  override toString() {
-    opc.name + if (optional) { '?' } else { '' }
-  }
+	override toString() {
+		opc.name + if (optional) { '?' } else { '' }
+	}
 }

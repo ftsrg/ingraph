@@ -12,21 +12,21 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
 abstract class DirectoryTest extends IngraphReportTest {
-  
-  def toChapter(String directoryName, String chapterTitle) {
-    val directoryPath = '''../queries/«directoryName»/'''
-    val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
-    Collections.sort(fileNames, new NaturalOrderComparator());
-   
-    val sectionQuerySpecifications = new HashMap<String, String>
-    for (fileName : fileNames) {
-        val queryName = FilenameUtils.removeExtension(fileName)
-        val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
-        sectionQuerySpecifications.put(queryName, querySpecification)
-    }
-    
-    val Map<String, Map<String, String>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionQuerySpecifications)
-    ch(directoryName, chapterTitle, chapterQuerySpecifications)
-  }
-  
+	
+	def toChapter(String directoryName, String chapterTitle) {
+		val directoryPath = '''../queries/«directoryName»/'''
+		val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
+		Collections.sort(fileNames, new NaturalOrderComparator());
+	 
+		val sectionQuerySpecifications = new HashMap<String, String>
+		for (fileName : fileNames) {
+				val queryName = FilenameUtils.removeExtension(fileName)
+				val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
+				sectionQuerySpecifications.put(queryName, querySpecification)
+		}
+		
+		val Map<String, Map<String, String>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionQuerySpecifications)
+		ch(directoryName, chapterTitle, chapterQuerySpecifications)
+	}
+	
 }

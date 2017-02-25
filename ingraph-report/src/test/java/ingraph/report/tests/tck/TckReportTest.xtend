@@ -30,25 +30,25 @@ class TckReportTest extends IngraphReportTest {
 		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
 		Collections.sort(files)
 
-    val Map<String, Map<String, String>> chapterQuerySpecifications = new HashMap
+		val Map<String, Map<String, String>> chapterQuerySpecifications = new HashMap
 
-    val features = files.map[ processFile(resourceSet) ]
+		val features = files.map[ processFile(resourceSet) ]
 		for (feature : features) {
-        val querySpecifications = new HashMap<String, String>
-        for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]) {
-          val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
+				val querySpecifications = new HashMap<String, String>
+				for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]) {
+					val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
 
-          if (
-            scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
-            !querySpecification.contains("CREATE ") &&
-            !querySpecification.contains("MERGE ") &&
-            !querySpecification.contains("REMOVE ") &&
-            !querySpecification.contains("SET ") &&
-            !querySpecification.contains("DELETE ")) { 
-            querySpecifications.put(scenario.name.escape, querySpecification)
-          }
-        }
-        chapterQuerySpecifications.put(feature.name.escape, querySpecifications)
+					if (
+						scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
+						!querySpecification.contains("CREATE ") &&
+						!querySpecification.contains("MERGE ") &&
+						!querySpecification.contains("REMOVE ") &&
+						!querySpecification.contains("SET ") &&
+						!querySpecification.contains("DELETE ")) { 
+						querySpecifications.put(scenario.name.escape, querySpecification)
+					}
+				}
+				chapterQuerySpecifications.put(feature.name.escape, querySpecifications)
 		}
  
 		ch("tck", "TCK Acceptance Tests", chapterQuerySpecifications)

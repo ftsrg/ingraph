@@ -7,11 +7,11 @@ insert_final_newline = true
 max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.java]
+[*.{java,xtend}]
 indent_size = 4
 indent_style = tab
 
-[*.{scala,xtend,xcore}]
+[*.{scala,xcore}]
 indent_size = 2
 indent_style = space
 

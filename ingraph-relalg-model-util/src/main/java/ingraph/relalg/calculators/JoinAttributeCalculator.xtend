@@ -8,13 +8,13 @@ import relalg.EquiJoinLikeOperator
 import relalg.Variable
 
 class JoinAttributeCalculator {
-  
-  def dispatch calculateJoinAttributes(EquiJoinLikeOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
-    Lists.newArrayList(Iterables.concat(leftSchema, rightSchema))
-  }
-  
-  def dispatch calculateJoinAttributes(AntiJoinOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
-    leftSchema
-  }
-  
+	
+	def dispatch calculateJoinAttributes(EquiJoinLikeOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
+		Lists.newArrayList(Iterables.concat(leftSchema, rightSchema))
+	}
+	
+	def dispatch calculateJoinAttributes(AntiJoinOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
+		leftSchema
+	}
+	
 }

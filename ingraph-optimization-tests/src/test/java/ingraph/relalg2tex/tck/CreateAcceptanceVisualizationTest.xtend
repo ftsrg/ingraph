@@ -8,7 +8,7 @@ import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 
 class CreateAcceptanceVisualizationTest {
 
-    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
-    extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
-    
+		extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
+		extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
+		
 }

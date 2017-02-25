@@ -19,86 +19,86 @@ import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
 
 class ExpressionConverter {
-  
-  extension StringEscaper stringEscaper = new StringEscaper
-  extension OperatorTypeConverter operatorConverter = new OperatorTypeConverter
+	
+	extension StringEscaper stringEscaper = new StringEscaper
+	extension OperatorTypeConverter operatorConverter = new OperatorTypeConverter
 
-  def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
-    '''\literal{«integerLiteral.value»}'''
-  }
+	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
+		'''\literal{«integerLiteral.value»}'''
+	}
 
-  def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
-    '''\literal{"«stringLiteral.value.escape»"}'''
-  }
+	def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
+		'''\literal{"«stringLiteral.value.escape»"}'''
+	}
 
-  def dispatch CharSequence convertExpression(ElementVariable elementVariable) {
-    '''\var{«elementVariable.escapedName»}'''
-  }
+	def dispatch CharSequence convertExpression(ElementVariable elementVariable) {
+		'''\var{«elementVariable.escapedName»}'''
+	}
 
-  def dispatch CharSequence convertExpression(AttributeVariable attributeVariable) {
-    '''\var{«attributeVariable.element.escapedName».«attributeVariable.escapedName»}'''
-  }
+	def dispatch CharSequence convertExpression(AttributeVariable attributeVariable) {
+		'''\var{«attributeVariable.element.escapedName».«attributeVariable.escapedName»}'''
+	}
 
-  def dispatch CharSequence convertExpression(ExpressionVariable expVariable) {
-    if (expVariable.hasInferredName) {
-      convertExpression(expVariable.expression)
-    } else {
-      '''\var{«expVariable.escapedName»}'''
-    }
-  }
-  
-  def dispatch CharSequence convertExpression(VariableExpression ve) {
-    convertExpression(ve.variable)
-  }
+	def dispatch CharSequence convertExpression(ExpressionVariable expVariable) {
+		if (expVariable.hasInferredName) {
+			convertExpression(expVariable.expression)
+		} else {
+			'''\var{«expVariable.escapedName»}'''
+		}
+	}
+	
+	def dispatch CharSequence convertExpression(VariableExpression ve) {
+		convertExpression(ve.variable)
+	}
 
-  def dispatch CharSequence convertExpression(FunctionExpression fe) {
-    '''\literal{«fe.functor.lowerCaseName.escape»} \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
-  }
+	def dispatch CharSequence convertExpression(FunctionExpression fe) {
+		'''\literal{«fe.functor.lowerCaseName.escape»} \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
+	}
 
-  def dispatch CharSequence convertExpression(EmptyListExpression fe) {
-    '''\left[ \right]'''
-  }
+	def dispatch CharSequence convertExpression(EmptyListExpression fe) {
+		'''\left[ \right]'''
+	}
 
-  def dispatch CharSequence convertExpression(ListExpression fe) {
-    var retVal = '''\left['''
+	def dispatch CharSequence convertExpression(ListExpression fe) {
+		var retVal = '''\left['''
 
-    for(var i = fe; !(i instanceof EmptyListExpression); i = i.tail) {
-      retVal += ''' «i.head.convertExpression»«IF !(i.tail instanceof EmptyListExpression)»,«ENDIF»'''
-    }
+		for(var i = fe; !(i instanceof EmptyListExpression); i = i.tail) {
+			retVal += ''' «i.head.convertExpression»«IF !(i.tail instanceof EmptyListExpression)»,«ENDIF»'''
+		}
 
-    retVal + ''' \right]'''
-  }
+		retVal + ''' \right]'''
+	}
 
-  def dispatch CharSequence convertExpression(BinaryLogicalExpression exp) {
-    '''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
-  }
+	def dispatch CharSequence convertExpression(BinaryLogicalExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+	}
 
-  def dispatch CharSequence convertExpression(UnaryLogicalExpression exp) {
-    '''«exp.operator.convert» \left( «exp.operand.convertExpression» \right)'''
-  }
+	def dispatch CharSequence convertExpression(UnaryLogicalExpression exp) {
+		'''«exp.operator.convert» \left( «exp.operand.convertExpression» \right)'''
+	}
 
-  def dispatch CharSequence convertExpression(UnaryGraphObjectLogicalExpression exp) {
-    '''«exp.operand.convertExpression» «exp.getOperator.convert»'''
-  }
+	def dispatch CharSequence convertExpression(UnaryGraphObjectLogicalExpression exp) {
+		'''«exp.operand.convertExpression» «exp.getOperator.convert»'''
+	}
 
-  def dispatch CharSequence convertExpression(ArithmeticComparisonExpression exp) {
-    '''«exp.leftOperand.convertExpression» «exp.operator.convertOperatorType» «exp.rightOperand.convertExpression»'''
-  }
+	def dispatch CharSequence convertExpression(ArithmeticComparisonExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convertOperatorType» «exp.rightOperand.convertExpression»'''
+	}
 
-  def dispatch CharSequence convertExpression(ArithmeticOperationExpression exp) {
-    '''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
-  }
+	def dispatch CharSequence convertExpression(ArithmeticOperationExpression exp) {
+		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+	}
 
-  def dispatch CharSequence convertExpression(BooleanLiteral exp) {
-    '''\mathtt{«if (exp.value) "true" else "false"»}'''
-  }
+	def dispatch CharSequence convertExpression(BooleanLiteral exp) {
+		'''\mathtt{«if (exp.value) "true" else "false"»}'''
+	}
 
-  def dispatch CharSequence convertExpression(NullLiteral x) {
-    RelNullConstants.relNull
-  }
+	def dispatch CharSequence convertExpression(NullLiteral x) {
+		RelNullConstants.relNull
+	}
 
-  def dispatch CharSequence convertExpression(Void x) {
-    '''Void:null'''
-  }
+	def dispatch CharSequence convertExpression(Void x) {
+		'''Void:null'''
+	}
 
 }
