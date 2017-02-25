@@ -1,28 +1,19 @@
 package ingraph.relalg2tex.serializers
 
 import ingraph.relalg.util.GetContainer
-import ingraph.relalg2tex.StringEscaper
 import ingraph.relalg2tex.config.RelalgSerializerConfig
-import java.util.List
 import relalg.AbstractJoinOperator
-import relalg.AttributeVariable
 import relalg.BinaryOperator
 import relalg.Cardinality
-import relalg.ElementVariable
-import relalg.Expression
-import relalg.ExpressionVariable
-import relalg.ListVariable
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
-import relalg.Variable
-import relalg.VariableListExpression
 
 class RelalgTreeSerializer extends AbstractRelalgSerializer {
 
-  extension StringEscaper stringEscaper = new StringEscaper
+  extension SchemaSerializer schemaSerializer = new SchemaSerializer
   extension GetContainer getContainer = new GetContainer
 
   new() {
@@ -46,12 +37,8 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
    * toNode
    */
   def CharSequence toNode(Operator op) {
-//    Optimization: an AllDifferent operator with a single edge variable is not useful at all.
-//    «IF (expression instanceof AllDifferentOperator) && (expression as AllDifferentOperator).edgeVariables.length <= 1»
-//      «toNode((expression as AllDifferentOperator).getInput)»
-//    «ELSE»
     '''
-      [
+    [
     {«op.operator»
     «IF op.getContainer.basicSchemaInferred»
     \\ \footnotesize
@@ -59,7 +46,7 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     «ENDIF»
     «IF op.getContainer.extraAttributesInferred»
     \\ \footnotesize
-    $\color{blue} «serializeSchema(op.extraAttributes)» $
+    $\color{violet} «serializeSchema(op.extraAttributes)» $
     «ENDIF»
     «IF op.getContainer.fullSchemaInferred»
     \\ \footnotesize
@@ -81,37 +68,6 @@ class RelalgTreeSerializer extends AbstractRelalgSerializer {
     «IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
     ]'''
   }
-
-  def serializeSchema(List<Variable> schema) {
-    '''\langle \var{«schema.map[ serializeVariable.escape ].join(', ')»} \rangle'''
-  }
-
-  def dispatch serializeVariable(ElementVariable variable) {
-    '''«variable.name»'''
-  }
-
-  def dispatch serializeVariable(AttributeVariable variable) {
-    '''«variable.element.name».«variable.name»'''
-  }
-
-  def dispatch serializeVariable(ListVariable variable) {
-    '''«variable.name»'''
-  }
-
-  def dispatch serializeVariable(ExpressionVariable variable) {
-    '''«serializeExpression(variable.expression)»'''
-  }
-
-  //
-
-  def dispatch serializeExpression(VariableListExpression expression) {
-    '''«expression.variable.name»[]'''
-  }
-
-  def dispatch serializeExpression(Expression expression) {
-    throw new UnsupportedOperationException('''Cannot serialize expression «expression»''')
-  }
-
 
   /**
    * children

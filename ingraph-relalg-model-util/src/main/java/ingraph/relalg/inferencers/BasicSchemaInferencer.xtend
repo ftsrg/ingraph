@@ -1,5 +1,6 @@
 package ingraph.relalg.inferencers
 
+import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import ingraph.relalg.calculators.JoinAttributeCalculator
@@ -7,8 +8,10 @@ import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
+import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -20,6 +23,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import com.google.common.collect.ImmutableList
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -57,6 +61,10 @@ class BasicSchemaInferencer {
   }
 
   // nullary operators
+  private def dispatch List<Variable> fillBasicSchema(DualObjectSourceOperator op) {
+    op.defineBasicSchema(#[])
+  }
+
   private def dispatch List<Variable> fillBasicSchema(GetVerticesOperator op) {
     op.defineBasicSchema(#[op.vertexVariable])
   }
@@ -74,25 +82,33 @@ class BasicSchemaInferencer {
     val schema = op.input.basicSchema
 
     // check if all projected variables are in the schema
-    op.elements.map[expression].filter(AttributeVariable).forEach [
-      if (!schema.contains(it.element)) {
-        throw new IllegalStateException("Attribute " + it.name +
-          " cannot be projected as its vertex/edge variable does not exists.")
-      }
-    ]
+    // 1) vertices and edges
     op.elements.map[expression].filter(ElementVariable).forEach [
       if (!schema.contains(it)) {
-        throw new IllegalStateException("Variable " + it.name + " is not part of the schema in projection operator.")
+        throw new IllegalStateException('''Variable «it.name» is not part of the schema in projection operator.''')
+      }
+    ]
+    // 2) attributes
+    op.elements.map[expression].filter(AttributeVariable).forEach [
+      if (!schema.contains(it.element)) {
+        throw new IllegalStateException('''Attribute «it.name» cannot be projected as its vertex/edge variable does not exists.''')
       }
     ]
 
-    val elementVariables = op.elements.map [
-      if (expression instanceof VariableExpression) {
-        (expression as VariableExpression).variable
-      } else {
-        throw new UnsupportedOperationException("Schema should only contain variable expressions, but found instead: " + expression)
-      }
-    ]
+    // extract variables
+    val List<Variable> elementVariables = ImmutableList.copyOf(op.elements) 
+//    [ variable |
+//      if (variable.expression instanceof VariableExpression) {
+//        println("++ " + variable)
+//        (variable.expression as VariableExpression).variable
+//        
+//      } else if (variable instanceof ExpressionVariable) {
+//        println(">> " + variable)
+//        variable
+//      } else {
+//        throw new UnsupportedOperationException('''Projection elements should only contain expressionVariables, but found instead: «variable»''')
+//      }
+//    ]
     op.defineBasicSchema(elementVariables)
   }
 
@@ -127,8 +143,12 @@ class BasicSchemaInferencer {
   }
 
   private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
+    // TODO I think this does the right thing but I am not sure - SzG
+    if (op.leftInput.basicSchema.equals(op.rightInput.basicSchema)) {
+      throw new IllegalStateException("All sub queries in a UNION must have the same column names")
+    }
     // we only keep the left schema
-    op.defineBasicSchema(op.getLeftInput.basicSchema)
+    op.defineBasicSchema(op.leftInput.basicSchema)
   }
 
   // ternary operators
@@ -140,7 +160,7 @@ class BasicSchemaInferencer {
     ))
     
     val listExpressionVariable = createExpressionVariable => [
-      expression = op.getListVariable
+      expression = op.listVariable
     ]
     
     if (includeEdges) {
@@ -154,8 +174,9 @@ class BasicSchemaInferencer {
    * defineSchema
    */
   private def defineBasicSchema(Operator op, List<Variable> basicSchema) {   
-    // EObjectEList.addAll() removes duplicates
-    op.basicSchema.addAll(basicSchema)
+    // EObjectEList.addAll() would remove duplicates anyways, but we use Guava to explicitly remove duplicates (while preserving iteration order)
+    val uniqueList = ImmutableSet.copyOf(basicSchema).asList()
+    op.basicSchema.addAll(uniqueList)
     basicSchema
   }
 

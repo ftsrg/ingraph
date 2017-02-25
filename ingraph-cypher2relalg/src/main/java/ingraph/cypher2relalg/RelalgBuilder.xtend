@@ -12,7 +12,7 @@ import java.util.List
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.slizaa.neo4j.opencypher.openCypher.AllShortestPath
+import org.slizaa.neo4j.opencypher.openCypher.AllShortestPaths
 import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
@@ -41,6 +41,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
+import org.slizaa.neo4j.opencypher.openCypher.RegExpMatchingExpression
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
@@ -490,6 +491,22 @@ class RelalgBuilder {
     ]
   }
 
+	def dispatch LogicalExpression buildRelalgLogicalExpression(
+		RegExpMatchingExpression e,
+		EList<Operator> joins
+	){
+		val fe = createFunctionLogicalExpression => [
+	      container = topLevelContainer
+	    ]
+	
+	    fe.functor = Function.REGEX_LIKE
+	   
+	    fe.arguments.add(buildRelalgExpression(e.left))
+	    fe.arguments.add(buildRelalgExpression(e.right))
+	    
+	    fe
+	}
+
   def dispatch LogicalExpression buildRelalgLogicalExpression(
     org.slizaa.neo4j.opencypher.openCypher.Expression e,
     EList<Operator> joins
@@ -860,7 +877,7 @@ class RelalgBuilder {
     if (p.part instanceof ShortestPath) {
       
     }
-    if (p.part instanceof AllShortestPath) {
+    if (p.part instanceof AllShortestPaths) {
       
     }
     if (p.^var !== null) {

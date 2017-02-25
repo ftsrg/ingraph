@@ -1,8 +1,8 @@
 package ingraph.optimization.transformations.relalg2rete
 
-import ingraph.optimization.patterns.ExpandOperatorMatcher
-import ingraph.optimization.patterns.ExpandVertexAMatcher
-import ingraph.optimization.patterns.ExpandVertexBMatcher
+import ingraph.optimization.patterns.ExpandOperatorAMatcher
+import ingraph.optimization.patterns.ExpandOperatorBMatcher
+import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
@@ -26,23 +26,23 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	def transformToRete(RelalgContainer container) {
 	  log("Transforming relational algebra expression to Rete network")
 		val statements = register(container)
-    statements.fireWhilePossible(expandVertexARule)
-    statements.fireWhilePossible(expandVertexBRule)
-		statements.fireWhilePossible(expandOperatorRule)
+    statements.fireWhilePossible(expandVertexRule)
+    statements.fireWhilePossible(expandOperatorARule)
+    statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		return container
 	}
 
 	/**
-	 * [1.A] Replace the GetVertexOperator + default 1..1 ExpandOperator pairs with a single GetEdgesOperator
+	 * [1] Replace the GetVertexOperator + default 1..1 ExpandOperator pairs with a single GetEdgesOperator
 	 */
-	protected def expandVertexARule() {
+	protected def expandVertexRule() {
 		createRule() //
-		.precondition(ExpandVertexAMatcher.querySpecification) //
+		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandVertexARule fired for «expandOperator.edgeVariable.name»''')
+			log('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				sourceVertexVariable = expandOperator.source
@@ -53,51 +53,17 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			changeOperator(parentOperator, expandOperator, getEdgesOperator)
 		].build
 	}
-	
-	/**
-   * [1.B] Replace the GetVertexOperator + non-default ExpandOperator pairs with a GetEdgesOperator and a PathOperator
-   */
-  protected def expandVertexBRule() {
-    createRule() //
-    .precondition(ExpandVertexBMatcher.querySpecification) //
-    .action [ //
-      val expandOperator = expandOperator
-      log('''expandVertexBRule fired for «expandOperator.edgeVariable.name»''')
 
-      val getEdgesOperator = createGetEdgesOperator => [
-        sourceVertexVariable = expandOperator.source
-        targetVertexVariable = expandOperator.target
-        edgeVariable = expandOperator.edgeVariable
-      ]
-      val pathOperator = createPathOperator => [
-        minHops = expandOperator.minHops
-        maxHops = expandOperator.maxHops
-        
-        sourceVertexVariable = expandOperator.source
-        targetVertexVariable = expandOperator.target
-        edgeVariable = expandOperator.edgeVariable
-        
-        val edgeVariable = edgeVariable
-        listVariable = createVariableListExpression => [ variable = edgeVariable ]
-        
-        leftInput = null
-        middleInput = getEdgesOperator
-        rightInput = null
-      ]
-
-      changeOperator(parentOperator, expandOperator, pathOperator)
-    ].build
-  }
 
 	/**
-	 * [2] Replace a single expand operator with a GetEdgesOperator and a JoinOperator
+	 * [2.A] Replace a default expand operator with a GetEdgesOperator and a JoinOperator
 	 */
-	protected def expandOperatorRule() {
+	protected def expandOperatorARule() {
 		createRule() //
-		.precondition(ExpandOperatorMatcher.querySpecification) //
+		.precondition(ExpandOperatorAMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandOperatorRule fired for «expandOperator.edgeVariable.name»''')
+			log('''expandOperatorARule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				sourceVertexVariable = expandOperator.source
@@ -112,6 +78,46 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			changeOperator(parentOperator, expandOperator, joinOperator)
 		].build
 	}
+	
+	 
+  /**
+   * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
+   */
+  protected def expandOperatorBRule() {
+    createRule() //
+    .precondition(ExpandOperatorBMatcher.querySpecification) //
+    .action [ //
+      val expandOperator = expandOperator
+      log('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
+
+      val getEdgesOperator = createGetEdgesOperator => [
+        sourceVertexVariable = expandOperator.source
+        targetVertexVariable = expandOperator.target
+        edgeVariable = expandOperator.edgeVariable
+      ]
+      val sourceVertexOperator = expandOperator.input
+      val targetVertexOperator = createGetVerticesOperator => [
+        vertexVariable = expandOperator.targetVertexVariable        
+      ]
+      val pathOperator = createPathOperator => [
+        minHops = expandOperator.minHops
+        maxHops = expandOperator.maxHops
+
+        sourceVertexVariable = expandOperator.source
+        targetVertexVariable = expandOperator.target
+        edgeVariable = expandOperator.edgeVariable
+
+        val edgeVariable = edgeVariable
+        listVariable = createVariableListExpression => [ variable = edgeVariable ]
+
+        leftInput = sourceVertexOperator
+        middleInput = getEdgesOperator
+        rightInput = targetVertexOperator
+      ]
+
+      changeOperator(parentOperator, expandOperator, pathOperator)
+    ].build
+  }
 	
   /**
    * [3] Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator

@@ -4,17 +4,17 @@
 package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.DefaultExpandOperatorMatcher;
-import ingraph.optimization.patterns.ExpandOperatorMatcher;
-import ingraph.optimization.patterns.ExpandVertexAMatcher;
-import ingraph.optimization.patterns.ExpandVertexBMatcher;
+import ingraph.optimization.patterns.ExpandOperatorAMatcher;
+import ingraph.optimization.patterns.ExpandOperatorBMatcher;
+import ingraph.optimization.patterns.ExpandVertexMatcher;
 import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.VariablesInLogicalExpressionMatcher;
 import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
-import ingraph.optimization.patterns.util.ExpandOperatorQuerySpecification;
-import ingraph.optimization.patterns.util.ExpandVertexAQuerySpecification;
-import ingraph.optimization.patterns.util.ExpandVertexBQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandOperatorAQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandOperatorBQuerySpecification;
+import ingraph.optimization.patterns.util.ExpandVertexQuerySpecification;
 import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
@@ -32,9 +32,9 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>defaultExpandOperator</li>
- * <li>expandVertexA</li>
- * <li>expandVertexB</li>
- * <li>expandOperator</li>
+ * <li>expandVertex</li>
+ * <li>expandOperatorA</li>
+ * <li>expandOperatorB</li>
  * <li>sortAndTopOperator</li>
  * <li>leftOuterJoinAndSelection</li>
  * <li>variablesInLogicalExpression</li>
@@ -64,9 +64,9 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   
   private Relalg2Rete() throws ViatraQueryException {
     querySpecifications.add(DefaultExpandOperatorQuerySpecification.instance());
-    querySpecifications.add(ExpandVertexAQuerySpecification.instance());
-    querySpecifications.add(ExpandVertexBQuerySpecification.instance());
-    querySpecifications.add(ExpandOperatorQuerySpecification.instance());
+    querySpecifications.add(ExpandVertexQuerySpecification.instance());
+    querySpecifications.add(ExpandOperatorAQuerySpecification.instance());
+    querySpecifications.add(ExpandOperatorBQuerySpecification.instance());
     querySpecifications.add(SortAndTopOperatorQuerySpecification.instance());
     querySpecifications.add(LeftOuterJoinAndSelectionQuerySpecification.instance());
     querySpecifications.add(VariablesInLogicalExpressionQuerySpecification.instance());
@@ -81,28 +81,28 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
     return DefaultExpandOperatorMatcher.on(engine);
   }
   
-  public ExpandVertexAQuerySpecification getExpandVertexA() throws ViatraQueryException {
-    return ExpandVertexAQuerySpecification.instance();
+  public ExpandVertexQuerySpecification getExpandVertex() throws ViatraQueryException {
+    return ExpandVertexQuerySpecification.instance();
   }
   
-  public ExpandVertexAMatcher getExpandVertexA(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandVertexAMatcher.on(engine);
+  public ExpandVertexMatcher getExpandVertex(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandVertexMatcher.on(engine);
   }
   
-  public ExpandVertexBQuerySpecification getExpandVertexB() throws ViatraQueryException {
-    return ExpandVertexBQuerySpecification.instance();
+  public ExpandOperatorAQuerySpecification getExpandOperatorA() throws ViatraQueryException {
+    return ExpandOperatorAQuerySpecification.instance();
   }
   
-  public ExpandVertexBMatcher getExpandVertexB(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandVertexBMatcher.on(engine);
+  public ExpandOperatorAMatcher getExpandOperatorA(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandOperatorAMatcher.on(engine);
   }
   
-  public ExpandOperatorQuerySpecification getExpandOperator() throws ViatraQueryException {
-    return ExpandOperatorQuerySpecification.instance();
+  public ExpandOperatorBQuerySpecification getExpandOperatorB() throws ViatraQueryException {
+    return ExpandOperatorBQuerySpecification.instance();
   }
   
-  public ExpandOperatorMatcher getExpandOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return ExpandOperatorMatcher.on(engine);
+  public ExpandOperatorBMatcher getExpandOperatorB(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandOperatorBMatcher.on(engine);
   }
   
   public SortAndTopOperatorQuerySpecification getSortAndTopOperator() throws ViatraQueryException {

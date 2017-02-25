@@ -21,20 +21,12 @@ pattern defaultExpandOperator(expandOperator : ExpandOperator) {
   MaxHops.hops(maxHops, 1);
 }
 
-// [1a] transformation for eliminating expand operators connected to a getVerticesOperator
-pattern expandVertexA(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+// [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
+pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	find defaultExpandOperator(expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
 	GetVerticesOperator(getVerticesOperator);
-}
-
-// [1b] transformation for eliminating expand operators connected to a getVerticesOperator
-pattern expandVertexB(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
-  find parentOperator(parentOperator, expandOperator);
-  neg find defaultExpandOperator(expandOperator);
-  ExpandOperator.input(expandOperator, getVerticesOperator);
-  GetVerticesOperator(getVerticesOperator);
 }
 
 /*
@@ -44,10 +36,16 @@ pattern expandVertexB(getVerticesOperator : GetVerticesOperator, expandOperator 
           V
     expandOperator
 */
-// [2] (run after [1]) transformation for eliminating the remaining expand operators
-pattern expandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
+// [2a] transformation for eliminating the remaining default expand operators
+pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operator) {
 	find parentOperator(parentOperator, expandOperator);
 	find defaultExpandOperator(expandOperator);
+}
+
+// [2b] transformation for eliminating the remaining non-default expand operators
+pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
+  find parentOperator(parentOperator, expandOperator);
+  neg find defaultExpandOperator(expandOperator);
 }
 
 /*

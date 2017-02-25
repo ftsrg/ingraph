@@ -1,7 +1,7 @@
 DOCUMENT=opencypher-report
 
 all: clean
-	latexmk --pdf $(DOCUMENT)
+	latexmk -xelatex -quiet $(DOCUMENT)
 
 clean:
 	echo Cleaning temporary files and PDF...

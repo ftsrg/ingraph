@@ -69,11 +69,12 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 #### Prerequisites
 
 1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution.
+1. Go to the **Marketplace** (**Help** | **Eclipse Marketplace...**) and install the **EditorConfig** plug-in.
 1. Install the following plug-ins for Scala:
-  * [Scala IDE](http://scala-ide.org/).
+  * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
 1. The latest editions of the Scala IDE (currently 4.15) only support Scala 2.11, hence you need to install 2.12 separately.
-  * Download and install [Scala 2.12](https://www.scala-lang.org/download/).
+  * Download and install [Scala 2.12](https://www.scala-lang.org/download/) (The archive is enough, no need for the installer).
   * Set your Scala distribution [for the Scala IDE](http://scala-ide.org/blog/scala-installations.html#BYOS).
     * Go to **Window** | **Preferences** | **Scala** | **Installations**, click **Add**, browse the directory for the Scala JARs, name the installation as `Scala` and click **OK**.
     * :bulb: On Ubuntu-based systems, the Scala JARs are located in `/usr/share/scala/lib`.
@@ -97,6 +98,14 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**. (This is required for the VIATRA projects, as they require custom natures to work properly.)
 1. To fix the Scala projects (`ire` and `ingraph-ire`), go to each one and change the Scala library to 2.12: project **Properties** | **Java Build Path** | **Libraries**, **Remove** the previous one, click **Add Library...** | **Scala Library** | **Next** and pick the one for **2.12**.
 
+#### Using VIATRA
+
+1. Go to **Window** | **Preferences** | **VIATRA** | **Query Explorer** and make sure that the **Dynamic EMF mode** is _turned on_ (it is turned off by default).
+1. Open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
+1. Use the old **Query Explorer** and do not load the model by clicking the green play button, instead click to the downward pointing triangle and click **Load Resource**.
+1. Open the `vql` query specification.
+1. Click the green play button to load the query.
+
 ### IntelliJ IDEA
 
 * Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala)
@@ -119,6 +128,11 @@ Currently, these modules have support:
 * `ingraph-cypher2relalg`
 
 #### Eclipse
+
+* Character encoding issues on Windows
+
+  * **Problem:** character encoding issues in Xtend source files.
+  * **Solution:** go to **Window** | **Preferences** | **General** | **Workspace** and set **Text file encoding** | **UTF-8**
 
 * Xtend classes do not compile
   * **Problem:** Xtend classes do not compile due to character encoding errors.
@@ -152,6 +166,26 @@ Currently, these modules have support:
     ```
 
   * **Solution:** include the `clean` task, i.e. run `./gradlew clean build`
+
+* Scala code does not compile
+
+  * **Problem:** "... not built due to errors in dependent project(s): ..."
+
+  * **Solution:** clean the workspace.
+
+  * **Problem:** java.lang.RuntimeException: Underlying compilation unit is not a Scala Compilation unit. This is most probably caused by disabled JDT weaving. Run `Scala -> Run Setup Diagnostics` to enable it.
+
+  * **Solution:** install all components from the Scala IDE's workspace and restart Eclipse.
+
+* VIATRA project does not compile
+
+  * **Problem:** Compile errors
+
+  * **Solution:** Add VIATRA nature to the project: **right click** | **Configure** | **Convert to VIATRA Query Project**.
+
+  * **Problem:** "Error executing EValidator"
+
+  * **Solution:** Add plug-in nature to the project: **right click** | **Configure** | **Convert to Plug-in Projects...**.
 
 #### IntelliJ
 

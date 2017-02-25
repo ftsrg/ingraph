@@ -55,7 +55,8 @@ class FullSchemaInferencer {
   }
 
   private def dispatch void fillFullSchema(UnionOperator op) {
-    throw new UnsupportedOperationException("Union not yet supported")
+    // TODO left/right inputs should be the same for their detailed schema
+    op.defineDetailedSchema(op.leftInput.fullSchema)
   }
 
   private def dispatch void fillFullSchema(AbstractJoinOperator op) {
@@ -76,6 +77,7 @@ class FullSchemaInferencer {
    * defineSchema
    */
   private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+    // TODO this projects "-1" if a literal value was assigned to the variables
     op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
     
     op.fullSchema.addAll(fullSchema)

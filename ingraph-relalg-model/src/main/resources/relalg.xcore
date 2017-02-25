@@ -185,7 +185,6 @@ class ExpressionVariable extends Variable {
 
 /* Operators */
 abstract class Operator {
-  String description
   refers Variable[] basicSchema
   refers Variable[] extraAttributes
   refers Variable[] fullSchema
@@ -290,8 +289,8 @@ class SortEntry {
 }
 
 class TopOperator extends UnaryOperator {
-  refers SkipLimitValue skip
-  refers SkipLimitValue limit
+  contains SkipLimitValue skip
+  contains SkipLimitValue limit
 }
 
 // for incremental queries to handle sort and top as a single operator

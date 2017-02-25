@@ -1,14 +1,14 @@
 package ingraph.relalg2tex.serializers
 
-import ingraph.relalg2tex.StringEscaper
 import ingraph.relalg2tex.config.RelalgSerializerConfig
+import ingraph.relalg2tex.converters.OperatorConverter
+import ingraph.relalg2tex.converters.StringEscaper
 import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils
 import relalg.Operator
 import relalg.ProductionOperator
 import relalg.RelalgContainer
-import ingraph.relalg2tex.OperatorConverter
 
 abstract class AbstractRelalgSerializer {
 
