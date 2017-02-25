@@ -37,6 +37,7 @@ class TckReportTest extends IngraphReportTest {
         val querySpecifications = new HashMap<String, String>
         for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]) {
           val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
+
           if (
             scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].isEmpty &&
             !querySpecification.contains("CREATE ") &&

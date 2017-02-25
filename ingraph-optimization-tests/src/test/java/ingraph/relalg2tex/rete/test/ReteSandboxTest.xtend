@@ -41,8 +41,8 @@ class ReteSandboxTest {
   }
 
   @Test
-  def void t() {
-    process("t", '''
+  def void t1() {
+    process("t1", '''
     MATCH
     (x:X)-[:ASD]->(person:Person)-[:KNOWS*1..2]-(friend:Person),
     (friend)<-[:HAS_CREATOR]-(friendPost:Post)-[:HAS_TAG]->(knownTag:Tag)
@@ -59,6 +59,15 @@ class ReteSandboxTest {
     postCount DESC,
     tagName ASC
     LIMIT 10
+    ''')
+  }
+
+  @Test
+  def void t2() {
+    process("t2", '''
+    MATCH (n)
+    RETURN n.division, count(*)
+    ORDER BY count(*) DESC, n.division ASC
     ''')
   }
 

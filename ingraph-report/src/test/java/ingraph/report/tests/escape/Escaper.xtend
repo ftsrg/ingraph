@@ -20,8 +20,9 @@ class Escaper {
 
   def unindent(String s) {
     s //
-      .replaceAll("^      ", "") //
-      .replaceAll("\n      ", "\n") //
+      .replaceAll('''^\s*''', "") //
+      .replaceAll('''\n\s*''', "\n") //
+      .replaceAll('''\n$''', "") //
   }
 
 }
