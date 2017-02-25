@@ -731,7 +731,7 @@ class RelalgBuilder {
 
 	def dispatch Expression buildRelalgExpression(Count fi) {
 		createFunctionExpression => [
-			functor = Function.COUNT_OBJECTS
+			functor = Function.COUNT_ALL
 			container = topLevelContainer
 		]
 	}
@@ -845,7 +845,7 @@ class RelalgBuilder {
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(Count fi) {
 		createFunctionArithmeticExpression => [
-			functor = Function.COUNT_OBJECTS
+			functor = Function.COUNT_ALL
 			container = topLevelContainer
 		]
 	}
