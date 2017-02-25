@@ -9,8 +9,9 @@ type Function wraps relalg.function.Function
 class RelalgContainer {
   String name
   contains Operator rootExpression
-  contains NamedElement[] elements opposite ^namedElementContainer
+  contains NamedElement[] elements opposite namedElementContainer
   contains Expression[] expressions opposite ^container
+  boolean incrementalPlan = "false"
   boolean basicSchemaInferred = "false"
   boolean extraAttributesInferred = "false"
   boolean fullSchemaInferred = "false"
