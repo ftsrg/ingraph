@@ -59,7 +59,7 @@ class InferencerTest {
 
 		// act
 		container.inferBasicSchema
-		container.inferExtraAttributes
+		container.inferExtraVariables
 		container.inferFullSchema
 		container.convert("../visualization/sandbox/inferencer-test")
 	}

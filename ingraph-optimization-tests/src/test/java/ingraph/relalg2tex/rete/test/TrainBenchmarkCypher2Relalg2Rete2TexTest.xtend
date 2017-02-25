@@ -15,7 +15,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
+	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	val config = RelalgConverterConfig.builder.standaloneDocument(true).consoleOutput(false).
@@ -28,7 +28,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest {
 
 		container.transformToRete
 		container.inferBasicSchema
-		container.inferExtraAttributes
+		container.inferExtraVariables
 		container.inferFullSchema
 		//RelalgUtil.save(container, "query-models/" + query)
 		drawer.convert(container, "trainbenchmark/" + query + "-rete")

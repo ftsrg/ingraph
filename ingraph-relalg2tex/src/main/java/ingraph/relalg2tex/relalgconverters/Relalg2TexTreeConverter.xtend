@@ -1,6 +1,5 @@
 package ingraph.relalg2tex.relalgconverters
 
-import ingraph.relalg.util.GetContainer
 import ingraph.relalg2tex.converters.elementconverters.SchemaConverter
 import relalg.AbstractJoinOperator
 import relalg.BinaryOperator
@@ -11,11 +10,12 @@ import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg.util.ContainerExtractor
 
 class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
 	extension SchemaConverter schemaConverter = new SchemaConverter
-	extension GetContainer getContainer = new GetContainer
+	extension ContainerExtractor containerExtractor = new ContainerExtractor
 
 	new() {
 		super()
@@ -41,15 +41,15 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 		'''
 		[
 		{«op.operator»
-		«IF op.getContainer.basicSchemaInferred»
+		«IF op.extractContainer.basicSchemaInferred»
 		\\ \footnotesize
 		$\color{gray} «convertSchema(op.basicSchema)» $
 		«ENDIF»
-		«IF op.getContainer.extraAttributesInferred»
+		«IF op.extractContainer.extraAttributesInferred»
 		\\ \footnotesize
 		$\color{violet} «convertSchema(op.extraAttributes)» $
 		«ENDIF»
-		«IF op.getContainer.fullSchemaInferred»
+		«IF op.extractContainer.fullSchemaInferred»
 		\\ \footnotesize
 		$\color{orange} «convertSchema(op.fullSchema)» $
 		«IF op instanceof ProjectionOperator»
@@ -57,7 +57,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 		$\color{orange} \langle \var{«op.tupleIndices.join(", ")»} \rangle $
 		«ENDIF»
 		«ENDIF»
-		«IF op instanceof AbstractJoinOperator && op.getContainer.fullSchemaInferred && config.includeCommonVariables»
+		«IF op instanceof AbstractJoinOperator && op.extractContainer.fullSchemaInferred && config.includeCommonVariables»
 		\\ \footnotesize
 		$\color{orange}
 		\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :

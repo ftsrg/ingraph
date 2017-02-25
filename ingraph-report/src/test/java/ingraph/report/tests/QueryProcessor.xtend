@@ -20,7 +20,7 @@ class QueryProcessor {
 	
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
+	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 	extension Escaper escaper = new Escaper
 
@@ -139,7 +139,7 @@ class QueryProcessor {
 			val container2 = EcoreUtil.copy(container)
 			container2.transformToRete
 			container2.inferBasicSchema
-			container2.inferExtraAttributes
+			container2.inferExtraVariables
 			container2.inferFullSchema
 			treeSerializer.convert(container2)
 		} catch (Exception e) {

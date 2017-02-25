@@ -24,7 +24,7 @@ class ExtraVariableInferencer {
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
 
-	def inferExtraAttributes(RelalgContainer container) {
+	def inferExtraVariables(RelalgContainer container) {
 		if (!container.basicSchemaInferred) {
 			throw new IllegalStateException("BasicSchemaInferencer must be executed before ExtraVariableInferencer")
 		} else if (container.extraAttributesInferred) {
@@ -37,62 +37,62 @@ class ExtraVariableInferencer {
 		container
 	}
 
-	private def dispatch void fillExtraVariables(NullaryOperator op, List<Variable> extraAttributes) {
-		op.extraAttributes.addAll(extraAttributes)
+	private def dispatch void fillExtraVariables(NullaryOperator op, List<Variable> extraVariables) {
+		op.extraAttributes.addAll(extraVariables)
 	}
 
-	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraAttributes) {
-		op.extraAttributes.addAll(extraAttributes)
-		val newExtraAttributes = extractUnaryOperatorExtraAttributes(op)
+	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
+		op.extraAttributes.addAll(extraVariables)
+		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
 		
-		val inputExtraAttributes = union(extraAttributes, newExtraAttributes)
-		op.input.fillExtraVariables(inputExtraAttributes)
+		val inputExtraVariables = union(extraVariables, newExtraVariables)
+		op.input.fillExtraVariables(inputExtraVariables)
 	}
 
-	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraAttributes) {
-		op.extraAttributes.addAll(extraAttributes)
-		op.leftInput.fillExtraVariables(extraAttributes)
-		op.rightInput.fillExtraVariables(extraAttributes)
+	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
+		op.extraAttributes.addAll(extraVariables)
+		op.leftInput.fillExtraVariables(extraVariables)
+		op.rightInput.fillExtraVariables(extraVariables)
 	}
 
-	private def propagateTo(List<Variable> extraAttributes, Operator inputOp) {
+	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
 	  val inputSchema = inputOp.basicSchema
-	  val attributes = extraAttributes.filter(AttributeVariable).filter[inputSchema.contains(it.element)]
-	  val functions = extraAttributes.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+	  val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains(it.element)]
+	  val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
 	  Iterables.concat(attributes, functions).toList
 	}
 
-	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraAttributes) {
-		op.extraAttributes.addAll(extraAttributes)
-		val leftExtraAttributes = extraAttributes.propagateTo(op.leftInput)
-		val rightExtraAttributes = extraAttributes.propagateTo(op.rightInput)
+	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {
+		op.extraAttributes.addAll(extraVariables)
+		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
+		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)
 
 		// remove duplicates as we only need each extra variable once
 		// we choose "right\left" as it works for both equijoin and antijoin operators,
 		// as extra attributes that are available from both the left and right input
-		rightExtraAttributes.removeAll(leftExtraAttributes)
+		rightExtraVariables.removeAll(leftExtraVariables)
 
-		//val orderedExtraAttributes = union(leftExtraAttributes, rightExtraAttributes)
-		op.leftInput.fillExtraVariables(leftExtraAttributes)
-		op.rightInput.fillExtraVariables(rightExtraAttributes)
+		//val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
+		op.leftInput.fillExtraVariables(leftExtraVariables)
+		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}
 
-	private def dispatch void fillExtraVariables(TernaryOperator op, List<Variable> extraAttributes) {
-		op.extraAttributes.addAll(extraAttributes)
-		val leftExtraAttributes = extraAttributes.propagateTo(op.leftInput)
-		val middleExtraAttributes = extraAttributes.propagateTo(op.middleInput)
-		val rightExtraAttributes = extraAttributes.propagateTo(op.rightInput)
+	private def dispatch void fillExtraVariables(TernaryOperator op, List<Variable> extraVariables) {
+		op.extraAttributes.addAll(extraVariables)
+		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
+		val middleExtraVariables = extraVariables.propagateTo(op.middleInput)
+		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)
 
 		// remove duplicates as we only need each extra variable once
 		// see the related comment in inferDetailedSchema for BinaryOperators
-		middleExtraAttributes.removeAll(leftExtraAttributes)
+		middleExtraVariables.removeAll(leftExtraVariables)
 		
-		rightExtraAttributes.removeAll(leftExtraAttributes)
-		rightExtraAttributes.removeAll(middleExtraAttributes)
+		rightExtraVariables.removeAll(leftExtraVariables)
+		rightExtraVariables.removeAll(middleExtraVariables)
 
-		op.leftInput.fillExtraVariables(leftExtraAttributes)
-		op.middleInput.fillExtraVariables(middleExtraAttributes)
-		op.rightInput.fillExtraVariables(rightExtraAttributes)
+		op.leftInput.fillExtraVariables(leftExtraVariables)
+		op.middleInput.fillExtraVariables(middleExtraVariables)
+		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}
 	
 }

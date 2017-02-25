@@ -15,7 +15,7 @@ class ReteSandboxTest {
 
 	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
+	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
@@ -25,7 +25,7 @@ class ReteSandboxTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(cypher)
 		containerSearchBased.inferBasicSchema
-		containerSearchBased.inferExtraAttributes
+		containerSearchBased.inferExtraVariables
 		containerSearchBased.inferFullSchema
 		drawer.convert(containerSearchBased, "sandbox/" + query + "-search")
 		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
@@ -34,7 +34,7 @@ class ReteSandboxTest {
 		val containerRete = Cypher2Relalg.processString(cypher)
 		containerRete.transformToRete
 		containerRete.inferBasicSchema
-		containerRete.inferExtraAttributes
+		containerRete.inferExtraVariables
 		containerRete.inferFullSchema
 		drawer.convert(containerRete, "sandbox/" + query + "-rete")
 		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
