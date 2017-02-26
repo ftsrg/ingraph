@@ -1,4 +1,4 @@
-package ingraph.ire
+package ingraph.expressionparser
 
 import org.scalatest.WordSpec
 

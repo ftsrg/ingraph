@@ -1,4 +1,4 @@
-package ingraph.ire
+package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.GenericMath
@@ -61,7 +61,7 @@ object ExpressionParser {
 
   private def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
-    case cmp: IntegerLiteral => - => cmp.getValue
+    case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
     case cmp: AttributeVariable =>  tuple => tuple(lookup(cmp))
     case cmp: Variable => tuple => tuple(lookup(cmp))

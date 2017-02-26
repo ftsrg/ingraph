@@ -1,5 +1,6 @@
 package ingraph.optimization.transformations.reteoptimization
 
+import ingraph.expressionparser.ExpressionParser
 import ingraph.optimization.patterns.AssociativeOperatorMatcher
 import ingraph.optimization.patterns.CascadableSelectionMatcher
 import ingraph.optimization.patterns.CommutativeOperatorMatcher
@@ -112,8 +113,8 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule()//
 		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
 		.action [
-			System.err.println("constantFolding fired")
-		]
+			ExpressionParser.parse(e, null)
+		].build
 	}
 
 }

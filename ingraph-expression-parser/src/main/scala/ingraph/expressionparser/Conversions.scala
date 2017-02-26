@@ -1,4 +1,4 @@
-package ingraph.ire
+package ingraph.expressionparser
 
 import com.google.common.collect.ImmutableMap
 import org.eclipse.emf.common.util.EList

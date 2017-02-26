@@ -1,4 +1,4 @@
-package ingraph.ire
+package ingraph.expressionparser
 
 import hu.bme.mit.ire.util.GenericMath
 import relalg.function.{CypherType, FunctionCategory}

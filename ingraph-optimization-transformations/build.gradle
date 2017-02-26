@@ -4,6 +4,7 @@ apply plugin: "eclipse"
 
 dependencies {
   compile project(':ingraph-transformations')
+  compile project(':ingraph-expression-parser')
 
   compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
   compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
