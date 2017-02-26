@@ -78,6 +78,10 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
   * Set your Scala distribution [for the Scala IDE](http://scala-ide.org/blog/scala-installations.html#BYOS).
     * Go to **Window** | **Preferences** | **Scala** | **Installations**, click **Add**, browse the directory for the Scala JARs, name the installation as `Scala` and click **OK**.
     * :bulb: On Ubuntu-based systems, the Scala JARs are located in `/usr/share/scala/lib`.
+1. If you would like to edit VIATRA patterns (for optimization):
+  * Go to **Help** | **Install New Software..**
+  * Add the <http://download.eclipse.org/viatra/updates/milestone> update site (press <kbd>RETURN</kbd>).
+  * Install the **VIATRA Core** components.
 
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has all the required dependencies. If you start from another Eclipse flavor/distribution, you should install the missing plug-ins:
 
@@ -135,9 +139,15 @@ Currently, these modules have support:
   * **Solution:** go to **Window** | **Preferences** | **General** | **Workspace** and set **Text file encoding** | **UTF-8**
 
 * Xtend classes do not compile
+
   * **Problem:** Xtend classes do not compile due to character encoding errors.
   * **Solution:** change the character encoding to **UTF-8** (preferably for the whole workspace, in **Window** | **Preferences** | **General** | **Workspace** | **Text file encoding**).
+
+  * **Problem:** Xtend classes cannot resolve imports
+  * **Solution:** avoid mixing Xtend code with other languages in a single project, e.g. do not mix Xtend and Scala, or Xtend and Java source files.
+
 * Gradle error
+
   * **Problem:** during import, you may encounter the following error:
 
     ```
