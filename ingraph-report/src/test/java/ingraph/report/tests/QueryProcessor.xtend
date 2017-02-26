@@ -3,8 +3,10 @@ package ingraph.report.tests
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.BasicSchemaInferencer
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.tests.escape.Escaper
 import java.util.ArrayList
@@ -13,8 +15,6 @@ import java.util.Map
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
-import ingraph.relalg2tex.relalgconverters.Relalg2TexExpressionConverter
-import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class QueryProcessor {
 	

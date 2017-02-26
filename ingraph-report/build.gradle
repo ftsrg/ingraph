@@ -5,6 +5,7 @@ apply plugin: 'idea'
 
 dependencies {
   compile project(':ingraph-cypher2relalg')
+  compile project(':ingraph-relalg2rete')
   compile project(':ingraph-relalg2tex')
   compile project(':ingraph-optimization-transformations')
 
