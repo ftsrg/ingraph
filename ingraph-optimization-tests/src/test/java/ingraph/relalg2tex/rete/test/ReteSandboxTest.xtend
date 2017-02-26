@@ -3,13 +3,13 @@ package ingraph.relalg2tex.rete.test
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.BasicSchemaInferencer
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Ignore
 import org.junit.Test
-import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class ReteSandboxTest {
 

@@ -4,7 +4,7 @@ apply plugin: "eclipse"
 
 dependencies {
   compile project(':ingraph-cypher-parser')
-  compile project(':ingraph-relalg-model')
+  compile project(':ingraph-patterns')
   compile project(':ingraph-relalg-model-util')
   testCompile project(':ingraph-relalg2tex')
 

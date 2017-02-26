@@ -5,6 +5,8 @@ import relalg.function.{CypherType, FunctionCategory}
 
 import scala.util.Random
 
+// if a function has optional arguments, we implement it for each possible number of arguments,
+// e.g. substring( original, start [, length] ) is implemented both as a fun2 and a fun3
 object FunctionLookup {
   import Conversions._
   import collection.JavaConverters._

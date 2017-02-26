@@ -3,7 +3,8 @@ plugins { id "org.xtext.xtend" version "1.0.15" }
 apply plugin: "eclipse"
 
 dependencies {
-  compile project(':ingraph-transformations')
+  compile project(':ingraph-patterns')
+  compile project(':ingraph-relalg-model-util')
 
   compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
   compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion

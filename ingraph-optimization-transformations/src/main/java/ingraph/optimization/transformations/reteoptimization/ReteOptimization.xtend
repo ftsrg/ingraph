@@ -3,16 +3,16 @@ package ingraph.optimization.transformations.reteoptimization
 import ingraph.optimization.patterns.AssociativeOperatorMatcher
 import ingraph.optimization.patterns.CascadableSelectionMatcher
 import ingraph.optimization.patterns.CommutativeOperatorMatcher
+import ingraph.optimization.patterns.FoldableConstantExpressionMatcher
 import ingraph.optimization.patterns.SwappableSelectionMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.eclipse.viatra.dse.api.DesignSpaceExplorer
+import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
 import org.eclipse.viatra.dse.api.Objectives
 import org.eclipse.viatra.dse.api.Strategies
+import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import relalg.RelalgContainer
 import relalg.RelalgPackage
-import org.eclipse.viatra.dse.solutionstore.SolutionStore
-import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
-import ingraph.optimization.patterns.FoldableConstantExpressionMatcher
 
 class ReteOptimization extends AbstractRelalgTransformation {
 

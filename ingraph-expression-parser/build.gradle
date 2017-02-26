@@ -10,6 +10,7 @@ jar {
 
 dependencies {
   compile project(':ingraph-cypher2relalg')
+  compile project(':ingraph-relalg2rete')
   compile project(':ingraph-relalg-model-util')
   compile project(':ire')
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
