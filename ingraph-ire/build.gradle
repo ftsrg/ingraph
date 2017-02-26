@@ -2,11 +2,6 @@ plugins {
   id "com.github.maiflai.scalatest" version "0.14"
 }
 
-repositories {
-  jcenter()
-  maven { url "https://dl.bintray.com/ftsrg/maven" }
-}
-
 apply plugin: "scala"
 
 jar {
