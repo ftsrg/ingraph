@@ -33,7 +33,8 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
     }
   }
 
-  val data = mutable.TreeMap[Tuple, Int]().withDefault(t => 0)
+  // TODO TreeMap is a Scala 2.12 feature
+  val data: Map[Tuple, Int] = null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0) 
 
   def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(t(_))
 
@@ -58,13 +59,13 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
     // TODO maybe checking the changed elements against the lowest forwarded element would speed thins up
     val prevTop = getTopN()
     for (tuple <- changeSet.positive) {
-      data(tuple) += 1
+//      data(tuple) += 1
     }
     for (tuple <- changeSet.negative) {
       if (data(tuple) > 1) {
-        data(tuple) -= 1
+//        data(tuple) -= 1
       } else {
-        data.remove(tuple)
+//        data.remove(tuple)
       }
     }
     val topN = getTopN()
