@@ -14,6 +14,10 @@ import org.eclipse.viatra.dse.api.Strategies
 import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import relalg.RelalgContainer
 import relalg.RelalgPackage
+import scala.collection.immutable.Vector
+import scala.collection.immutable.Map
+import scala.collection.immutable.HashMap
+import relalg.Variable
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -23,6 +27,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		statements.fireAllCurrent(swappableSelectionsRule)
 		statements.fireAllCurrent(associativeOperatorRule)
 		statements.fireAllCurrent(commutativeOperatorRule)
+		statements.fireAllCurrent(constantFoldingRule)
 		return container
 	}
 
@@ -113,7 +118,9 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		createRule()//
 		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
 		.action [
-			ExpressionParser.parse(e, null)
+			System.err.println("FIRE!")
+			val x = ExpressionParser.parse(e, new HashMap<Variable, Integer>())(new Vector<Object>(1,1,1))
+			println(x)
 		].build
 	}
 
