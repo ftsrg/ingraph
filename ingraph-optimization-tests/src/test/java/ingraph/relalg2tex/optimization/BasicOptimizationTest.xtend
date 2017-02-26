@@ -3,6 +3,7 @@ package ingraph.relalg2tex.optimization
 import ingraph.optimization.transformations.reteoptimization.ReteOptimization
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Test
+import ingraph.relalg.util.RelalgUtil
 
 class BasicOptimizationTest {
 
@@ -14,6 +15,7 @@ class BasicOptimizationTest {
 	def void test1() {
 		// arrange
 		val ctr = testModel1
+		RelalgUtil.save(ctr, "testModel1")
 		println(ctr.convert)
 
 		// act

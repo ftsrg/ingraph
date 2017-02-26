@@ -8,5 +8,6 @@ dependencies {
   compile project(':ingraph-relalg2rete')
   compile project(':ingraph-relalg2tex')
 
+  compile group: 'com.google.guava', name: 'guava', version: guavaVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
