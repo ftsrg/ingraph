@@ -38,3 +38,14 @@ AssociativeOperator(op1 : JoinOperator, op2 : JoinOperator, a : Operator, b : Op
 	JoinOperator.leftInput(op1, a);
 	JoinOperator.rightInput(op1, b);
 }
+
+pattern FoldableConstantExpression(e, v1: Literal, v2: Literal) {
+	ArithmeticOperationExpression.leftOperand(e, v1);
+	ArithmeticOperationExpression.rightOperand(e, v2);
+} or {
+	ArithmeticComparisonExpression.leftOperand(e, v1);
+	ArithmeticComparisonExpression.rightOperand(e, v2);
+} or {
+	BinaryLogicalExpression.leftOperand(e, v1);
+	BinaryLogicalExpression.rightOperand(e, v2);
+}

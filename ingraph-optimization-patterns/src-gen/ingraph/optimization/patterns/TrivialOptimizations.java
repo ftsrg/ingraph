@@ -6,10 +6,12 @@ package ingraph.optimization.patterns;
 import ingraph.optimization.patterns.AssociativeOperatorMatcher;
 import ingraph.optimization.patterns.CascadableSelectionMatcher;
 import ingraph.optimization.patterns.CommutativeOperatorMatcher;
+import ingraph.optimization.patterns.FoldableConstantExpressionMatcher;
 import ingraph.optimization.patterns.SwappableSelectionMatcher;
 import ingraph.optimization.patterns.util.AssociativeOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.CascadableSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.CommutativeOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.FoldableConstantExpressionQuerySpecification;
 import ingraph.optimization.patterns.util.SwappableSelectionQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
@@ -27,6 +29,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * <li>SwappableSelection</li>
  * <li>CommutativeOperator</li>
  * <li>AssociativeOperator</li>
+ * <li>FoldableConstantExpression</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -55,6 +58,7 @@ public final class TrivialOptimizations extends BaseGeneratedPatternGroup {
     querySpecifications.add(SwappableSelectionQuerySpecification.instance());
     querySpecifications.add(CommutativeOperatorQuerySpecification.instance());
     querySpecifications.add(AssociativeOperatorQuerySpecification.instance());
+    querySpecifications.add(FoldableConstantExpressionQuerySpecification.instance());
   }
   
   public CascadableSelectionQuerySpecification getCascadableSelection() throws ViatraQueryException {
@@ -87,5 +91,13 @@ public final class TrivialOptimizations extends BaseGeneratedPatternGroup {
   
   public AssociativeOperatorMatcher getAssociativeOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
     return AssociativeOperatorMatcher.on(engine);
+  }
+  
+  public FoldableConstantExpressionQuerySpecification getFoldableConstantExpression() throws ViatraQueryException {
+    return FoldableConstantExpressionQuerySpecification.instance();
+  }
+  
+  public FoldableConstantExpressionMatcher getFoldableConstantExpression(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return FoldableConstantExpressionMatcher.on(engine);
   }
 }

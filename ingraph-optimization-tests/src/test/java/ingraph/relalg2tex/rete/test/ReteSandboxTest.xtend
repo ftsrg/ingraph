@@ -153,5 +153,10 @@ class ReteSandboxTest {
 		'''
 		);
 	}
+	
+	  @Test
+  def void constantFolding() {
+  	process('test-constant-folding', '''MATCH (n) WHERE 1=1 RETURN n''')
+  }
 
 }

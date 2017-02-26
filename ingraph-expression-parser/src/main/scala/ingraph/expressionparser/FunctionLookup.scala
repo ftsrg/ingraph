@@ -1,7 +1,6 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.util.GenericMath
-import org.apache.commons.lang3.StringUtils
 import relalg.function.{CypherType, FunctionCategory}
 
 import scala.util.Random

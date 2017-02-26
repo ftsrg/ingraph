@@ -12,6 +12,7 @@ import relalg.RelalgContainer
 import relalg.RelalgPackage
 import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
+import ingraph.optimization.patterns.FoldableConstantExpressionMatcher
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -105,6 +106,14 @@ class ReteOptimization extends AbstractRelalgTransformation {
 			op1.leftInput = b
 			op1.rightInput = c
 		].build
+	}
+	
+	def constantFoldingRule() {
+		createRule()//
+		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
+		.action [
+			System.err.println("constantFolding fired")
+		]
 	}
 
 }

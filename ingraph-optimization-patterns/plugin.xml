@@ -22,6 +22,7 @@
       <query-specification fqn="ingraph.optimization.patterns.SwappableSelection"/>
       <query-specification fqn="ingraph.optimization.patterns.CommutativeOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.AssociativeOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.FoldableConstantExpression"/>
     </group>
   </extension>
 </plugin>
