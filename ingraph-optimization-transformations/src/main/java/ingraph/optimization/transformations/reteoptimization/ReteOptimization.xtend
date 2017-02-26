@@ -1,6 +1,6 @@
 package ingraph.optimization.transformations.reteoptimization
 
-import ingraph.expressionparser.ExpressionParser
+import ingraph.expressionparser.wrapper.ExpressionParserWrapper
 import ingraph.optimization.patterns.AssociativeOperatorMatcher
 import ingraph.optimization.patterns.CascadableSelectionMatcher
 import ingraph.optimization.patterns.CommutativeOperatorMatcher
@@ -14,10 +14,9 @@ import org.eclipse.viatra.dse.api.Strategies
 import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import relalg.RelalgContainer
 import relalg.RelalgPackage
-import scala.collection.immutable.Vector
-import scala.collection.immutable.Map
-import scala.collection.immutable.HashMap
 import relalg.Variable
+import scala.collection.immutable.HashMap
+import scala.collection.immutable.Vector
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -119,7 +118,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
 		.action [
 			System.err.println("FIRE!")
-			val x = ExpressionParser.parse(e, new HashMap<Variable, Integer>())(new Vector<Object>(1,1,1))
+			val x = ExpressionParserWrapper.parse(e, new HashMap<Variable, Integer>())(new Vector<Object>(1,1,1))
 			println(x)
 		].build
 	}

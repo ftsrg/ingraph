@@ -13,6 +13,7 @@ dependencies {
   compile project(':ingraph-relalg2rete')
   compile project(':ingraph-relalg-model-util')
   compile project(':ire')
+  compile "org.scala-lang:scala-library:$scalaVersion"
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testRuntime group: 'org.pegdown', name: 'pegdown', version: '1.6.0'
 }
