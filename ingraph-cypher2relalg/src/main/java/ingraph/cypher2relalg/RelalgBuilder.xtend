@@ -764,6 +764,18 @@ class RelalgBuilder {
 		first.tail
 	}
 
+	def dispatch Expression buildRelalgExpression(ExpressionComparison e) {
+		// there should be no join clauses added when we build
+		// a logical expression outside the WHERE clause
+		val dummyJoins = new BasicEList<Operator>
+		val logicalExp = buildRelalgLogicalExpression(e, dummyJoins)
+		if (dummyJoins.size > 0) {
+			unrecoverableError('''Joins found when building a logical expression in generic expression position.''')
+		}
+
+		logicalExp
+	}
+
 	/**
 	 * Catch-all to pass on calls to more-specific methods
 	 */
@@ -774,7 +786,12 @@ class RelalgBuilder {
 		, ExpressionMulDiv
 		, ExpressionPower
 			: buildRelalgArithmeticExpression(e)
-		, NullConstant: createNullLiteral => [
+		, NullConstant
+		  /*
+		   * Note: before introducing the dispatch member buildRelalgExpression(ExpressionComparison e)
+		   * this somehow caught control when e was of type ExpressionComparisonImpl
+		   */
+			: createNullLiteral => [
 				container = topLevelContainer
 			]
 			default: throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e).toString()»''')

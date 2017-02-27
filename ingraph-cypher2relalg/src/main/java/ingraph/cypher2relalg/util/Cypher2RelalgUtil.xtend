@@ -5,7 +5,9 @@ import java.util.Iterator
 import java.util.LinkedList
 import java.util.List
 import java.util.Set
+import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticOperationExpression
+import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.DuplicateEliminationOperator
@@ -169,6 +171,14 @@ class Cypher2RelalgUtil {
 				ListExpression: {
 					fifo.add(el.head)
 					fifo.add(el.tail)
+				}
+				BinaryLogicalExpression: {
+					fifo.add(el.leftOperand)
+					fifo.add(el.rightOperand)
+				}
+				ArithmeticComparisonExpression: {
+					fifo.add(el.leftOperand)
+					fifo.add(el.rightOperand)
 				}
 				default: {
 					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
