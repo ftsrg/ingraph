@@ -1,19 +1,25 @@
 package hu.bme.mit.ire.nodes.unary
 
-import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.{Mask, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
+import java.util.Comparator
+import java.util.TreeMap
 
 import scala.collection.immutable.VectorBuilder
-import scala.collection.mutable
+
+import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.ReteMessage
+import hu.bme.mit.ire.util.GenericMath
+import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.datatypes.Mask
+import hu.bme.mit.ire.datatypes.Tuple
 
 class SkipSortNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int, selectionMask: Mask,
                    limit: Int, ascendingOrder: Vector[Boolean])
   extends UnaryNode with SingleForwarder {
 
-  implicit val order = new Ordering[Tuple] {
+  //implicit val order = new Ordering[Tuple] {
+  val comparator = new Comparator[Tuple] {
     override def compare(x: Tuple, y: Tuple): Int = {
       for ((x, y, ascending) <- (keyLookup(x), keyLookup(y), ascendingOrder).zipped) {
         val cmp = GenericMath.compare(x, y)
@@ -33,8 +39,9 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
     }
   }
 
-  // TODO TreeMap is a Scala 2.12 feature
-  val data: Map[Tuple, Int] = null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0) 
+  // we can use Scala Tree once we migrate to 2.12
+  val data: java.util.Map[Tuple, Int] = new TreeMap(comparator)
+  //null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0) 
 
   def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(t(_))
 
@@ -44,10 +51,14 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
 
   def getTopN(): Vector[Tuple] = {
     var total = 0
-    val iterator: Iterator[(Tuple, Int)] = data.iterator
+    //val iterator: Iterator[(Tuple, Int)] = data.iterator
+    val iterator = data.entrySet.iterator
     val builder = new VectorBuilder[Tuple]
     while (total < limit && iterator.hasNext) {
-      val (tuple, count) = iterator.next()
+//      val (tuple, count) = iterator.next()
+      val entry = iterator.next
+      val tuple = entry.getKey
+      val count = entry.getValue
       for (i <- 0 until Math.min(count, limit - total))
         builder += tuple
       total += count
@@ -56,17 +67,26 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
   }
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
-    // TODO maybe checking the changed elements against the lowest forwarded element would speed thins up
+    // TODO maybe checking the changed elements against the lowest forwarded element would speed things up
     val prevTop = getTopN()
     for (tuple <- changeSet.positive) {
 //      data(tuple) += 1
+      val count : Int = Some(data.get(tuple)).getOrElse(0)
+      data.put(tuple, count + 1)
     }
-    for (tuple <- changeSet.negative) {
-      if (data(tuple) > 1) {
+    for (tuple <- changeSet.negative) {      
+//      if (data(tuple) > 1) {
 //        data(tuple) -= 1
-      } else {
+//      } else {
 //        data.remove(tuple)
+//      }
+      val count = data.get(tuple)
+      if (count >  1) {
+        data.put(tuple, count - 1)
+      } else {
+        data.remove(tuple)
       }
+      
     }
     val topN = getTopN()
     if (topN != prevTop) {
@@ -74,5 +94,7 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
     }
   }
 
-  override def onSizeRequest(): Long = SizeCounter.count(data.keys)
+  // TODO we can simplify this in 2.12
+//  override def onSizeRequest(): Long = SizeCounter.count(data.keys)
+  override def onSizeRequest(): Long = SizeCounter.count(data.keySet)
 }
