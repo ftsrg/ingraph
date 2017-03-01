@@ -4,7 +4,9 @@ import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{AverageNode, CollectNode, CountNode, SumNode}
+import hu.bme.mit.ire.nodes.unary.{CollectNode, CountNode, SumNode}
+im}
+import hu.bme.mit.ire.nodes.unary.aggregation.SumNodee.mit.ire.nodes.unary.aggregation.AverageNodee.mit.ire.nodes.unary.aggregation.CollectNodebme.mit.ire.nodes.unary.aggregation.CountNode
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import scala.concurrent.duration.Duration

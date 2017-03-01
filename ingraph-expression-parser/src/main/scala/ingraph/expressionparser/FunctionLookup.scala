@@ -5,6 +5,8 @@ import scala.util.Random
 import hu.bme.mit.ire.util.GenericMath
 import relalg.function.CypherType
 import relalg.function.FunctionCategory
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation
+import org.apache.commons.math3.stat.descriptive.rank.Percentile
 
 // if a function has optional arguments, we implement it for each possible number of arguments,
 // e.g. substring( original, start [, length] ) is implemented both as a fun2 and a fun3
@@ -17,7 +19,7 @@ object FunctionLookup {
     def unapply(arg: relalg.function.Function): Option[Tuple2[FunctionCategory, List[CypherType]]] =
       Some(arg.getCategory, arg.getInputTypes.asScala.toList)
   }
-
+  
   //  cmp.getFunctor match {
   //    case RelalgFunction(_, CypherType.ANY) =>
   //
@@ -96,12 +98,6 @@ object FunctionLookup {
       case NODES => (path) => ???
 
       case EXISTS => (patternOrProperty) => ???
-
-      case STDDEV => (x) => ???
-      case STDDEVP => (x) => ???
-
-      case PERCENTILECONT => (x) => ???
-      case PERCENTILEDISC => (x) => ???
     }
   }
 
@@ -118,7 +114,7 @@ object FunctionLookup {
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
       case ENDS_WITH => (string, substring) => string.endsWith(substring)
-      case CONTAINS => (string, substring) => string.contains(substring)
+      case CONTAINS => (string, substring) => string.contains(substring)      
     }
   }
 

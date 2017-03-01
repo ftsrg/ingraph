@@ -3,7 +3,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.MaxNode
+import hu.bme.mit.ire.nodes.unary.aggregation.MaxNode
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.actorRef2Scala

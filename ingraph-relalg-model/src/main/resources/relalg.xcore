@@ -539,6 +539,8 @@ enum AggregationType {
   AVG
   MAX
   MIN
+  STDDEV
+  STDDEVP
 }
 
 /**

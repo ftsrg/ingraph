@@ -15,6 +15,6 @@ dependencies {
   compile project(':ingraph-relalg-model')
   compile project(':ingraph-tinkerpop')
   compile project(':ire')
-  testCompile group: 'org.scalatest', name: 'scalatest_$scalaShortVersion', version: scalaTestVersion
+  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }

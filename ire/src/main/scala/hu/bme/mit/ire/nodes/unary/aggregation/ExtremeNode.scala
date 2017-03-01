@@ -1,10 +1,9 @@
-package hu.bme.mit.ire.nodes.unary
+package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.util.SizeCounter
-
 import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 

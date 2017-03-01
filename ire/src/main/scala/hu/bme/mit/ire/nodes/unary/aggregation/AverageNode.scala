@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.nodes.unary
+package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Tuple

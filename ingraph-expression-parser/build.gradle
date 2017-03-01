@@ -14,7 +14,6 @@ dependencies {
   compile project(':ingraph-relalg-model-util')
   compile project(':ire')
   compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
-  compile group: 'org.apache.commons', name: 'commons-math3', version: commonsMathVersion
-  testCompile group: 'org.scalatest', name: 'scalatest_$scalaShortVersion', version: scalaTestVersion
+  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }
