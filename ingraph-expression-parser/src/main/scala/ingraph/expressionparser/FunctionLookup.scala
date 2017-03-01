@@ -31,7 +31,6 @@ object FunctionLookup {
     }
   }
 
-
   def fun1(function: Function): (Any) => Any = {
     /* don't do this at home */
     implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
@@ -49,7 +48,8 @@ object FunctionLookup {
       case LAST => (list) => list.asInstanceOf[Iterable[Any]].last
       case LENGTH => (list) => list.asInstanceOf[Iterable[Any]].length
       case SIZE => (list) => list.asInstanceOf[List[Any]].size
-      
+      case COALESCE => (list) => list.asInstanceOf[Iterable[Any]] find { _ != null } // TODO this might return null or None :-/
+
       case LOG => (x) => Math.log(x)
       case LOG10 => (x) => Math.log10(x)
       case SQRT => (x) => Math.sqrt(x)
@@ -79,10 +79,29 @@ object FunctionLookup {
       case COT => (x) => Math.tanh(x)
       case SIN => (x) => Math.sin(x)
       case TAN => (x) => Math.tan(x)
-      
+
       case DEGREES => (x) => x.asInstanceOf[Double] / 180.0 * Math.PI
       case RADIANS => (x) => x.asInstanceOf[Double] * Math.PI / 180.0
-      
+
+      case STARTNODE => (edge) => ???
+      case ENDNODE => (edge) => ???
+
+      case PROPERTIES => (graphObject) => ???
+      case TYPE => (edge) => ???
+
+      case KEYS => (graphObject) => ???
+      case LABELS => (vertex) => ???
+
+      case RELATIONSHIPS => (path) => ???
+      case NODES => (path) => ???
+
+      case EXISTS => (patternOrProperty) => ???
+
+      case STDDEV => (x) => ???
+      case STDDEVP => (x) => ???
+
+      case PERCENTILECONT => (x) => ???
+      case PERCENTILEDISC => (x) => ???
     }
   }
 
@@ -112,6 +131,5 @@ object FunctionLookup {
       case RANGE => (start, end, step) => start.asInstanceOf[Int] to end by step
     }
   }
-
 
 }
