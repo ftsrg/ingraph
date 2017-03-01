@@ -1,17 +1,17 @@
 package ingraph.expressionparser
 
-import hu.bme.mit.ire.util.GenericMath
-import relalg.function.{CypherType, FunctionCategory}
-
 import scala.util.Random
+
+import hu.bme.mit.ire.util.GenericMath
+import relalg.function.CypherType
+import relalg.function.FunctionCategory
 
 // if a function has optional arguments, we implement it for each possible number of arguments,
 // e.g. substring( original, start [, length] ) is implemented both as a fun2 and a fun3
 object FunctionLookup {
-  import Conversions._
-  import collection.JavaConverters._
-  import relalg.function.Function._
   import relalg.function.Function
+  import relalg.function.Function._
+  import collection.JavaConverters._
 
   object RelalgFunction {
     def unapply(arg: relalg.function.Function): Option[Tuple2[FunctionCategory, List[CypherType]]] =
@@ -44,11 +44,12 @@ object FunctionLookup {
       case TOFLOAT => (x) => GenericMath.toDouble(x)
       case TOSTRING => (x) => x.toString
 
-      case TAIL => (x) => x.asInstanceOf[Iterable[Any]].tail
-      case HEAD => (x) => x.asInstanceOf[Iterable[Any]].head
-      case LAST => (x) => x.asInstanceOf[Iterable[Any]].last
-      case LENGTH => (x) => x.asInstanceOf[Iterable[Any]].length
-
+      case TAIL => (list) => list.asInstanceOf[Iterable[Any]].tail
+      case HEAD => (list) => list.asInstanceOf[List[Any]].headOption.orElse(null)
+      case LAST => (list) => list.asInstanceOf[Iterable[Any]].last
+      case LENGTH => (list) => list.asInstanceOf[Iterable[Any]].length
+      case SIZE => (list) => list.asInstanceOf[List[Any]].size
+      
       case LOG => (x) => Math.log(x)
       case LOG10 => (x) => Math.log10(x)
       case SQRT => (x) => Math.sqrt(x)
@@ -63,13 +64,13 @@ object FunctionLookup {
       case ROUND => (x) => Math.round(x)
       case SIGN => (x) => Math.signum(x)
 
-      case LTRIM => (x) => x.replaceAll("^\\s+", "")
-      case RTRIM => (x) => x.replaceAll("\\s+$", "")
-      case TRIM => (x) => x.trim
+      case LTRIM => (original) => original.replaceAll("^\\s+", "")
+      case RTRIM => (original) => original.replaceAll("\\s+$", "")
+      case TRIM => (original) => original.trim
 
-      case REVERSE => (x) => new java.lang.String(x).reverse
-      case TOLOWER => (x) => x.toLowerCase
-      case TOUPPER => (x) => x.toUpperCase
+      case REVERSE => (original) => new java.lang.String(original).reverse
+      case TOLOWER => (original) => original.toLowerCase
+      case TOUPPER => (original) => original.toUpperCase
 
       case ACOS => (x) => Math.acos(x)
       case ASIN => (x) => Math.asin(x)
@@ -81,6 +82,7 @@ object FunctionLookup {
       
       case DEGREES => (x) => x.asInstanceOf[Double] / 180.0 * Math.PI
       case RADIANS => (x) => x.asInstanceOf[Double] * Math.PI / 180.0
+      
     }
   }
 
@@ -88,13 +90,16 @@ object FunctionLookup {
     implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
-      case LEFT => (x, y) => x.substring(0, y)
-      case RIGHT => (x, y) => x.substring(x.length - y, x.length)
-      case STARTS_WITH => (x, y) => x.startsWith(y)
-      case ENDS_WITH => (x, y) => x.endsWith(y)
-      case CONTAINS => (x, y) => x.contains(y)
-      case SPLIT => (x, y) => x.split(y)
-      case SUBSTRING => (x, y) => x.substring(y)
+      case LEFT => (original, length) => original.substring(0, length)
+      case RIGHT => (original, length) => original.substring(original.length - length, original.length)
+      case SPLIT => (original, splitPattern) => original.split(splitPattern)
+      case SUBSTRING => (original, start) => original.substring(start)
+      case RANGE => (start, end) => start.asInstanceOf[Int] to end
+
+      // these are not define as functions in openCypher, but it's reasonable to treat them as such
+      case STARTS_WITH => (string, substring) => string.startsWith(substring)
+      case ENDS_WITH => (string, substring) => string.endsWith(substring)
+      case CONTAINS => (string, substring) => string.contains(substring)
     }
   }
 
@@ -102,8 +107,9 @@ object FunctionLookup {
     implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
-      case REPLACE => (x, y, z) => x.replace(y, z)
-      case SUBSTRING => (x, y, z) => x.substring(y, z)
+      case REPLACE => (original, search, replace) => original.replace(search, replace)
+      case SUBSTRING => (original, start, length) => original.substring(start, length)
+      case RANGE => (start, end, step) => start.asInstanceOf[Int] to end by step
     }
   }
 
