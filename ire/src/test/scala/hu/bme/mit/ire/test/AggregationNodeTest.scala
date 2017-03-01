@@ -1,16 +1,27 @@
 package hu.bme.mit.ire.test
 
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import scala.concurrent.duration.Duration
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Matchers
+import org.scalatest.WordSpecLike
+
+import akka.actor.ActorSystem
+import akka.actor.Props
+import akka.actor.actorRef2Scala
+import akka.testkit.ImplicitSender
+import akka.testkit.TestActors
+import akka.testkit.TestKit
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{CollectNode, CountNode, SumNode}
-im}
-import hu.bme.mit.ire.nodes.unary.aggregation.SumNodee.mit.ire.nodes.unary.aggregation.AverageNodee.mit.ire.nodes.unary.aggregation.CollectNodebme.mit.ire.nodes.unary.aggregation.CountNode
-import hu.bme.mit.ire.util.TestUtil._
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import scala.concurrent.duration.Duration
-import akka.actor.actorRef2Scala
+import hu.bme.mit.ire.nodes.unary.aggregation.AverageNode
+import hu.bme.mit.ire.nodes.unary.aggregation.CollectNode
+import hu.bme.mit.ire.nodes.unary.aggregation.CountNode
+import hu.bme.mit.ire.nodes.unary.aggregation.SumNode
+import hu.bme.mit.ire.util.TestUtil.cypherList
+import hu.bme.mit.ire.util.TestUtil.mask
+import hu.bme.mit.ire.util.TestUtil.tuple
+import hu.bme.mit.ire.util.TestUtil.tupleBag
 
 class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
