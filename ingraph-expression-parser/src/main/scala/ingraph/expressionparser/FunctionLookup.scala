@@ -63,11 +63,11 @@ object FunctionLookup {
       case ROUND => (x) => Math.round(x)
       case SIGN => (x) => Math.signum(x)
 
-      case RTRIM => (x) => ???
-      case LTRIM => (x) => ???
+      case LTRIM => (x) => x.replaceAll("^\\s+", "")
+      case RTRIM => (x) => x.replaceAll("\\s+$", "")
       case TRIM => (x) => x.trim
 
-      case REVERSE => (x) => ???
+      case REVERSE => (x) => new java.lang.String(x).reverse
       case TOLOWER => (x) => x.toLowerCase
       case TOUPPER => (x) => x.toUpperCase
 
@@ -78,6 +78,9 @@ object FunctionLookup {
       case COT => (x) => Math.tanh(x)
       case SIN => (x) => Math.sin(x)
       case TAN => (x) => Math.tan(x)
+      
+      case DEGREES => (x) => x.asInstanceOf[Double] / 180.0 * Math.PI
+      case RADIANS => (x) => x.asInstanceOf[Double] * Math.PI / 180.0
     }
   }
 
