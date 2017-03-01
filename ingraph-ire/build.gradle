@@ -1,8 +1,8 @@
 plugins {
-  id "com.github.maiflai.scalatest" version "0.14"
+  id 'com.github.maiflai.scalatest' version '0.14'
 }
 
-apply plugin: "scala"
+apply plugin: 'scala'
 
 jar {
   from sourceSets.main.allScala
@@ -15,6 +15,6 @@ dependencies {
   compile project(':ingraph-relalg-model')
   compile project(':ingraph-tinkerpop')
   compile project(':ire')
-  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
-  testRuntime 'org.pegdown:pegdown:1.6.0'
+  testCompile group: 'org.scalatest', name: 'scalatest_$scalaShortVersion', version: scalaTestVersion
+  testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }

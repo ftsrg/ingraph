@@ -1,8 +1,8 @@
 plugins {
-  id "com.github.maiflai.scalatest" version "0.14"
+  id 'com.github.maiflai.scalatest' version '0.14'
 }
 
-apply plugin: "scala"
+apply plugin: 'scala'
 
 jar {
   from sourceSets.main.allScala
@@ -13,7 +13,8 @@ dependencies {
   compile project(':ingraph-relalg2rete')
   compile project(':ingraph-relalg-model-util')
   compile project(':ire')
-  compile "org.scala-lang:scala-library:$scalaVersion"
-  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
-  testRuntime group: 'org.pegdown', name: 'pegdown', version: '1.6.0'
+  compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+  compile group: 'org.apache.commons', name: 'commons-math3', version: commonsMathVersion
+  testCompile group: 'org.scalatest', name: 'scalatest_$scalaShortVersion', version: scalaTestVersion
+  testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }

@@ -1,25 +1,25 @@
 plugins {
-  id "org.xtext.builder" version "1.0.15"
-  id "org.xtext.xtend" version "1.0.15"
+  id 'org.xtext.builder' version '1.0.15'
+  id 'org.xtext.xtend' version '1.0.15'
 }
 
 ext {
-  xcoreVersion = "1.3.1"
-  xcoreLibVersion = "1.1.100"
-  ecoreVersion = "2.12.0"
-  ecoreXtextVersion = "1.2.0"
+  xcoreVersion = '1.3.1'
+  xcoreLibVersion = '1.1.100'
+  ecoreVersion = '2.12.0'
+  ecoreXtextVersion = '1.2.0'
 }
 
 dependencies {
-  compile "org.eclipse.xtext:org.eclipse.xtext.xbase:$xtextVersion"
-  compile "org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:$xcoreLibVersion"
+  compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase', version: xtextVersion
+  compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xcore.lib', version: xcoreLibVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion
 
-  xtextLanguages "org.eclipse.emf:org.eclipse.emf.ecore.xcore:$xcoreVersion"
-  xtextLanguages "org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:$xcoreLibVersion"
-  xtextLanguages "org.eclipse.emf:org.eclipse.emf.codegen.ecore:$ecoreVersion"
-  xtextLanguages "org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:$ecoreXtextVersion"
-  xtextLanguages "org.eclipse.xtext:org.eclipse.xtext.ecore:$xtextVersion"
+  xtextLanguages group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xcore', version: xcoreVersion
+  xtextLanguages group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xcore.lib', version: xcoreLibVersion
+  xtextLanguages group: 'org.eclipse.emf', name: 'org.eclipse.emf.codegen.ecore', version: ecoreVersion
+  xtextLanguages group: 'org.eclipse.emf', name: 'org.eclipse.emf.codegen.ecore.xtext', version: ecoreXtextVersion
+  xtextLanguages group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.ecore', version: xtextVersion
 }
 
 sourceSets {
@@ -31,7 +31,7 @@ sourceSets {
 }
 
 xtext {
-  version = "$xtextVersion"
+  version = xtextVersion
   languages {
     ecore {
       setup = 'org.eclipse.xtext.ecore.EcoreSupport'
