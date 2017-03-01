@@ -28,7 +28,7 @@ abstract class VariableFactory<TVariable extends Variable> extends NamedElementF
 	}
 
 	def createDontCareElement(EObject eo) {
-		if (dontCareElementNames.get(eo)==null) {
+		if (dontCareElementNames.get(eo) == null) {
 			dontCareElementNames.put(eo, generateName)
 		}
 		createElement(dontCareElementNames.get(eo)) => [

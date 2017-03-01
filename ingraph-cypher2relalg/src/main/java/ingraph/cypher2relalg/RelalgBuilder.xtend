@@ -935,7 +935,7 @@ class RelalgBuilder {
 		val isLeftArrow = ec.relationshipPattern.incoming
 		val isRightArrow = ec.relationshipPattern.outgoing
 
-		val range = ec.relationshipPattern.detail.range
+		val range = ec.relationshipPattern.detail?.range
 
 		createExpandOperator() => [
 			edgeVariable = patternElementChain_EdgeVariable;

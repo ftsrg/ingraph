@@ -211,7 +211,7 @@ class VariableBuilder {
 		val edgeVariable = edgeVariableFactory.createElement(r)
 
 		// add labels to the variable
-		edgeVariable.combineLabelSet(r.types?.relTypeName, edgeLabelFactory)
+		edgeVariable.combineLabelSet(r?.types?.relTypeName, edgeLabelFactory)
 
 		edgeVariable
 	}

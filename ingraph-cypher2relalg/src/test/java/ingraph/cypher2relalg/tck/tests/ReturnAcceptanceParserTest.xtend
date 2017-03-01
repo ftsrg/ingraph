@@ -234,7 +234,7 @@ class ReturnAcceptanceParserTest {
 			"""
 		*/
 		@Test
-		@Category(FailingTests)
+		@Category(RegressionTests)
 		def void testReturnAcceptance_10() {
 				val cypher = CypherParser.parseString('''
 				MATCH (a)-->(b)
