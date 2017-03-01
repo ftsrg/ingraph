@@ -35,7 +35,7 @@ abstract class IngraphReportTest {
 				
 				Progress:
 				
-				\progressbar[width=10cm, heighta=.3cm, filledcolor=green, emptycolor=red, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«sectionCompilingQueryRatio»}
+				\progressbar[width=10cm, heighta=.3cm, filledcolor=gray, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«sectionCompilingQueryRatio»}
 				«sectionCompilingQueries» of «sectionTotalQueries»
 				
 			'''
@@ -52,7 +52,7 @@ abstract class IngraphReportTest {
 		doc += '''
 			Total progress:
 			
-			\progressbar[width=10cm, heighta=.3cm, filledcolor=gray, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»}
+			\progressbar[width=10cm, heighta=.3cm, filledcolor=green, emptycolor=red, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»}
 			«chapterCompilingQueries» of «chapterTotalQueries»
 		'''
 		doc += sections
