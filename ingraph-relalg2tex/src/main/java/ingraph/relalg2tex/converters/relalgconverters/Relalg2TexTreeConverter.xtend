@@ -42,34 +42,35 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	def CharSequence toNode(Operator op) {
 		'''
 		[
-		{«op.operator»
-		«IF op.extractContainer.basicSchemaInferred»
-		\\ \footnotesize
-		$\color{gray} «op.basicSchema.convertSchema» $
-		«ENDIF»
-		«IF op.extractContainer.extraAttributesInferred»
-		\\ \footnotesize
-		$\color{violet} «op.extraAttributes.convertSchema» $
-		«ENDIF»
-		«IF op.extractContainer.fullSchemaInferred»
-		\\ \footnotesize
-		$\color{orange} «op.fullSchema.convertSchema» $
-		«IF op instanceof ProjectionOperator»
-		\\ \footnotesize
-		$\color{orange} «op.tupleIndices.convertTuple»$
-		«ENDIF»
-		«ENDIF»
-		«IF op instanceof AbstractJoinOperator && op.extractContainer.fullSchemaInferred && config.includeCommonVariables»
-		\\ \footnotesize
-		$\color{orange}
-		\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
-		\langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
-		«ENDIF»
-		«IF config.includeCardinality && op.cardinality !== null»
-			\\ \footnotesize \# «op.cardinality.formatCardinality»
-			«ENDIF»}«op?.children» ««« process children nodes
-		«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
-		]'''
+			{«op.operator»
+			«IF op.extractContainer.basicSchemaInferred»
+			\\ \footnotesize
+			$\color{gray} «op.basicSchema.convertSchema» $
+			«ENDIF»
+			«IF op.extractContainer.extraAttributesInferred»
+			\\ \footnotesize
+			$\color{violet} «op.extraAttributes.convertSchema» $
+			«ENDIF»
+			«IF op.extractContainer.fullSchemaInferred»
+			\\ \footnotesize
+			$\color{orange} «op.fullSchema.convertSchema» $
+			«IF op instanceof ProjectionOperator»
+			\\ \footnotesize
+			$\color{orange} «op.tupleIndices.convertTuple»$
+			«ENDIF»
+			«ENDIF»
+			«IF op instanceof AbstractJoinOperator && op.extractContainer.fullSchemaInferred && config.includeCommonVariables»
+			\\ \footnotesize
+			$\color{orange}
+			\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
+			\langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
+			«ENDIF»
+			«IF config.includeCardinality && op.cardinality !== null»
+				\\ \footnotesize \# «op.cardinality.formatCardinality»
+			«ENDIF»
+			}«op?.children»«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
+		]
+		'''
 	}
 
 	/**
@@ -81,14 +82,14 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
 	def dispatch children(UnaryOperator op) {
 		'''
-
-			«op.input?.toNode»
+		
+		  «op.input?.toNode»
 		'''
 	}
 
 	def dispatch children(BinaryOperator op) {
 		'''
-
+		
 			«op.leftInput.toNode»
 			«op.rightInput.toNode»
 		'''
@@ -96,7 +97,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	
 	def dispatch children(TernaryOperator op) {
 		'''
-
+		
 			«op.leftInput.toNode»
 			«op.middleInput.toNode»
 			«op.rightInput.toNode»

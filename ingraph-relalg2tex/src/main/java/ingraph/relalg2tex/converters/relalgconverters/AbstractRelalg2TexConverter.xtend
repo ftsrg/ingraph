@@ -52,7 +52,7 @@ abstract class AbstractRelalg2TexConverter {
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
 			«IF config.standaloneDocument»
-				% !TeX program = pdflatex
+				% !TeX program = xelatex
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 
