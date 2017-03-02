@@ -3,10 +3,10 @@
  */
 package ingraph.report.feature.impl;
 
+import org.eclipse.emf.ecore.EClass;
+
 import ingraph.report.feature.AsA;
 import ingraph.report.feature.FeaturePackage;
-
-import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->

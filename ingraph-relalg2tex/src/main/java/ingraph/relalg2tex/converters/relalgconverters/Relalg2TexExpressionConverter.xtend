@@ -1,4 +1,4 @@
-package ingraph.relalg2tex.relalgconverters
+package ingraph.relalg2tex.converters.relalgconverters
 
 import relalg.BinaryOperator
 import relalg.NullaryOperator

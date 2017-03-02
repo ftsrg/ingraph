@@ -3,7 +3,7 @@ package ingraph.cypher2relalg.trainbenchmark
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import java.io.IOException
 import org.junit.Test
 

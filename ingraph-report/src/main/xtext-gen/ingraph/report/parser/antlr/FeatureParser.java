@@ -3,11 +3,13 @@
  */
 package ingraph.report.parser.antlr;
 
-import com.google.inject.Inject;
-import ingraph.report.parser.antlr.internal.InternalFeatureParser;
-import ingraph.report.services.FeatureGrammarAccess;
 import org.eclipse.xtext.parser.antlr.AbstractAntlrParser;
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
+
+import com.google.inject.Inject;
+
+import ingraph.report.parser.antlr.internal.InternalFeatureParser;
+import ingraph.report.services.FeatureGrammarAccess;
 
 public class FeatureParser extends AbstractAntlrParser {
 

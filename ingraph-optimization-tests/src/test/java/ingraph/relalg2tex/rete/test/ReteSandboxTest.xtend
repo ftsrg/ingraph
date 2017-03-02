@@ -8,7 +8,7 @@ import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Ignore
 import org.junit.Test
 

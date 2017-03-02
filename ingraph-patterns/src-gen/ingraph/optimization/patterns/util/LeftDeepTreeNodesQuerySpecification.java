@@ -3,12 +3,10 @@
  */
 package ingraph.optimization.patterns.util;
 
-import com.google.common.collect.Sets;
-import ingraph.optimization.patterns.LeftDeepTreeNodesMatch;
-import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
@@ -27,6 +25,11 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameterDirection;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.QueryInitializationException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
+
+import com.google.common.collect.Sets;
+
+import ingraph.optimization.patterns.LeftDeepTreeNodesMatch;
+import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
 
 /**
  * A pattern-specific query specification that can instantiate LeftDeepTreeNodesMatcher in a type-safe way.

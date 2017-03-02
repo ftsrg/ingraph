@@ -3,8 +3,9 @@
  */
 package ingraph.optimization.patterns.util;
 
-import ingraph.optimization.patterns.CascadableSelectionMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
+
+import ingraph.optimization.patterns.CascadableSelectionMatch;
 import relalg.LogicalExpression;
 import relalg.Operator;
 import relalg.SelectionOperator;

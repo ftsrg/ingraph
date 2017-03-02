@@ -3,15 +3,13 @@
  */
 package ingraph.report.feature.impl;
 
-import ingraph.report.feature.ExampleCell;
-import ingraph.report.feature.FeaturePackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import ingraph.report.feature.ExampleCell;
+import ingraph.report.feature.FeaturePackage;
 
 /**
  * <!-- begin-user-doc -->

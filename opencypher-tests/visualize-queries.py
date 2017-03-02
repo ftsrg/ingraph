@@ -23,7 +23,7 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class %sVisualizationTest {
 

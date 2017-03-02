@@ -3,6 +3,12 @@
  */
 package ingraph.report.feature.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import ingraph.report.feature.AbstractScenario;
 import ingraph.report.feature.AndStep;
 import ingraph.report.feature.AsA;
@@ -23,13 +29,6 @@ import ingraph.report.feature.ScenarioWithOutline;
 import ingraph.report.feature.Step;
 import ingraph.report.feature.ThenStep;
 import ingraph.report.feature.WhenStep;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->

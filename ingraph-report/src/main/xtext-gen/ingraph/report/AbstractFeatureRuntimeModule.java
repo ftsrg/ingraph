@@ -3,19 +3,8 @@
  */
 package ingraph.report;
 
-import com.google.inject.Binder;
-import com.google.inject.Provider;
-import com.google.inject.name.Names;
-import ingraph.report.generator.FeatureGenerator;
-import ingraph.report.parser.antlr.FeatureAntlrTokenFileProvider;
-import ingraph.report.parser.antlr.FeatureParser;
-import ingraph.report.parser.antlr.internal.InternalFeatureLexer;
-import ingraph.report.scoping.FeatureScopeProvider;
-import ingraph.report.serializer.FeatureSemanticSequencer;
-import ingraph.report.serializer.FeatureSyntacticSequencer;
-import ingraph.report.services.FeatureGrammarAccess;
-import ingraph.report.validation.FeatureValidator;
 import java.util.Properties;
+
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.generator.IGenerator2;
@@ -49,6 +38,20 @@ import org.eclipse.xtext.serializer.sequencer.ISemanticSequencer;
 import org.eclipse.xtext.serializer.sequencer.ISyntacticSequencer;
 import org.eclipse.xtext.service.DefaultRuntimeModule;
 import org.eclipse.xtext.service.SingletonBinding;
+
+import com.google.inject.Binder;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
+
+import ingraph.report.generator.FeatureGenerator;
+import ingraph.report.parser.antlr.FeatureAntlrTokenFileProvider;
+import ingraph.report.parser.antlr.FeatureParser;
+import ingraph.report.parser.antlr.internal.InternalFeatureLexer;
+import ingraph.report.scoping.FeatureScopeProvider;
+import ingraph.report.serializer.FeatureSemanticSequencer;
+import ingraph.report.serializer.FeatureSyntacticSequencer;
+import ingraph.report.services.FeatureGrammarAccess;
+import ingraph.report.validation.FeatureValidator;
 
 /**
  * Manual modifications go to {@link FeatureRuntimeModule}.

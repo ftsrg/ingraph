@@ -3,8 +3,9 @@
  */
 package ingraph.optimization.patterns.util;
 
-import ingraph.optimization.patterns.ExpandVertexMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
+
+import ingraph.optimization.patterns.ExpandVertexMatch;
 import relalg.ExpandOperator;
 import relalg.GetVerticesOperator;
 import relalg.Operator;

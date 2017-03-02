@@ -6,8 +6,8 @@ import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.relalgconverters.Relalg2TexExpressionConverter
-import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.tests.escape.Escaper
 import java.util.ArrayList
 import java.util.List

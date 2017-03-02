@@ -3,8 +3,9 @@
  */
 package ingraph.optimization.patterns.util;
 
-import ingraph.optimization.patterns.SortAndTopOperatorMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
+
+import ingraph.optimization.patterns.SortAndTopOperatorMatch;
 import relalg.RelalgContainer;
 import relalg.SortOperator;
 import relalg.TopOperator;

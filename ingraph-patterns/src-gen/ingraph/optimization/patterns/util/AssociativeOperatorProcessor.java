@@ -3,8 +3,9 @@
  */
 package ingraph.optimization.patterns.util;
 
-import ingraph.optimization.patterns.AssociativeOperatorMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
+
+import ingraph.optimization.patterns.AssociativeOperatorMatch;
 import relalg.JoinOperator;
 import relalg.Operator;
 
