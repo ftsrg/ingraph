@@ -78,6 +78,9 @@ class FullSchemaInferencer {
 	 */
 	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
 		// TODO this projects "-1" if a literal value was assigned to the variables
+		println(op.basicSchema)
+		println(fullSchema)
+		
 		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
 		
 		op.fullSchema.addAll(fullSchema)

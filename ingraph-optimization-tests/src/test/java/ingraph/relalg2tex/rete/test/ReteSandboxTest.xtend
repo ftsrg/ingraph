@@ -28,8 +28,6 @@ class ReteSandboxTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(cypher)
 		containerSearchBased.inferBasicSchema
-		containerSearchBased.inferExtraVariables
-		containerSearchBased.inferFullSchema
 		drawer.convert(containerSearchBased, "sandbox/" + query + "-search")
 		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-search")
 
@@ -154,6 +152,17 @@ class ReteSandboxTest {
 					(d {name: 'd'})-[:REL]->(y),
 					( (x)-[r:REL*]->(y) )
 				RETURN r
+			'''
+		);
+	}
+
+	@Test
+	def void posLength() {
+		process(
+			"posLength",
+			'''
+				MATCH (n)
+				RETURN n.length
 			'''
 		);
 	}

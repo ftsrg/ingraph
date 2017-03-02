@@ -1,6 +1,5 @@
 package ingraph.relalg.inferencers
 
-import com.google.common.collect.ImmutableList
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
@@ -12,6 +11,7 @@ import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -22,6 +22,7 @@ import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.VariableExpression
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -94,25 +95,19 @@ class BasicSchemaInferencer {
 		]
 
 		// extract variables
-		val List<Variable> elementVariables = ImmutableList.copyOf(op.elements) 
-//    [ variable |
-//      if (variable.expression instanceof VariableExpression) {
-//        println("++ " + variable)
-//        (variable.expression as VariableExpression).variable
-//        
-//      } else if (variable instanceof ExpressionVariable) {
-//        println(">> " + variable)
-//        variable
-//      } else {
-//        throw new UnsupportedOperationException('''Projection elements should only contain expressionVariables, but found instead: «variable»''')
-//      }
-//    ]
+		val List<Variable> elementVariables = op.elements.map [ expressionVariable |
+			if (expressionVariable.expression instanceof VariableExpression) {
+				(expressionVariable.expression as VariableExpression).variable
+			} else { //if (expressionVariable instanceof ExpressionVariable) {
+				expressionVariable
+			} 
+		]
 		op.defineBasicSchema(elementVariables)
 	}
 
-	private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {    
+	private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.basicSchema)
-		
+
 		if (includeEdges) {
 			schema.add(op.edgeVariable)
 		}
@@ -154,13 +149,13 @@ class BasicSchemaInferencer {
 		val schema = Lists.newArrayList(Iterables.concat(
 			op.leftInput.basicSchema,
 			op.middleInput.basicSchema,
-			op.rightInput.basicSchema  
+			op.rightInput.basicSchema
 		))
-		
+
 		val listExpressionVariable = createExpressionVariable => [
 			expression = op.listVariable
 		]
-		
+
 		if (includeEdges) {
 			schema.add(listExpressionVariable)
 		}
@@ -171,7 +166,7 @@ class BasicSchemaInferencer {
 	/**
 	 * defineSchema
 	 */
-	private def defineBasicSchema(Operator op, List<Variable> basicSchema) {   
+	private def defineBasicSchema(Operator op, List<Variable> basicSchema) {
 		// EObjectEList.addAll() would remove duplicates anyways, but we use Guava to explicitly remove duplicates (while preserving iteration order)
 		val uniqueList = ImmutableSet.copyOf(basicSchema).asList()
 		op.basicSchema.addAll(uniqueList)
