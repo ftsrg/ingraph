@@ -810,6 +810,10 @@ class RelalgBuilder {
 		]
 
 	}
+	
+	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ParenthesizedExpression e) {
+		buildRelalgArithmeticExpression(e.expression)
+	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionMulDiv e) {
 		createArithmeticOperationExpression => [
