@@ -43,7 +43,7 @@ Currently, the ingraph project is not mature enough for production use. Instead,
 
 Candidates for primary use cases of incremental openCypher queries are:
 
-* Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid) (to appear in January 2017))
+* Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid))
 * Static analysis of source code repositories ([thesis work](pub/stein-daniel-msc.pdf))
 * Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
 * Model simulation and analysis of runtime models
@@ -58,7 +58,7 @@ Incremental openCypher queries can also be beneficial for:
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 * J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](http://link.springer.com/article/10.1007/s10270-016-0571-8) (Software and Systems Modeling Journal, 2017)
-* G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://inf.mit.bme.hu/research/publications/evaluation-optimization-strategies-incremental-graph-queries) (Periodica Polytechnica 2017) - to appear in January 2017
+* G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://inf.mit.bme.hu/research/publications/evaluation-optimization-strategies-incremental-graph-queries) (Periodica Polytechnica 2017) - to appear in 2017
 
 # Related projects on GitHub
 
