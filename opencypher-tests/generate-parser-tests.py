@@ -24,6 +24,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -65,10 +66,11 @@ class %sParserTest {
         val cypher = CypherParser.parseString('''
         %s
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/%s")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/%s")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/%s")
     }
-""" % (scenario, test_name, indent(query), test_name)
+""" % (scenario, test_name, indent(query), test_name, test_name)
         test_file.write(test_case)
 
     test_footer = """

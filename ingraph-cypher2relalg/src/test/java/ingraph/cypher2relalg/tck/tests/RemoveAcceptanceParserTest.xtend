@@ -5,9 +5,10 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
 class RemoveAcceptanceParserTest {
-		
+    
 }
