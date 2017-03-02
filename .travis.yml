@@ -25,6 +25,9 @@ addons:
       - lmodern
       - pgf
 
+before_install:
+  # we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
+  - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
   - ./gradlew assemble
