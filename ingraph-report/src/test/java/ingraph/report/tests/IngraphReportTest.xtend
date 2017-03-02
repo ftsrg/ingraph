@@ -10,7 +10,7 @@ abstract class IngraphReportTest {
 
 	protected extension Escaper escaper = new Escaper
 
-	def printChapter(String chapterName, String chapterTitle, Map<String, Map<String, String>> chapterQuerySpecifications) {
+	def printChapter(String chapterName, String chapterTitle, Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
 		var doc = '''
 			\chapter{«chapterTitle»}
 			\label{chp:«chapterName»}
@@ -52,7 +52,7 @@ abstract class IngraphReportTest {
 		doc += '''
 			Total progress:
 			
-			\progressbar[width=10cm, heighta=.3cm, filledcolor=green, emptycolor=red, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»}
+			\progressbar[width=10cm, heighta=.3cm, filledcolor=OliveGreen, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»}
 			«chapterCompilingQueries» of «chapterTotalQueries»
 		'''
 		doc += sections

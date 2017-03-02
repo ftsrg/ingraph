@@ -2,6 +2,9 @@
 % !TeX program = xelatex
 \documentclass{report}
 
+% we have to load xcolor first, see http://tex.stackexchange.com/questions/99049/latex-error-option-clash-for-package-xcolor-even-if-i-put-listings-before
+\usepackage[dvipsnames]{xcolor}
+
 \input{../visualization/inputs/relalg-packages}
 \input{../visualization/inputs/relalg-commands}
 
@@ -11,7 +14,6 @@
 
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage{microtype}
 \usepackage[math]{blindtext}

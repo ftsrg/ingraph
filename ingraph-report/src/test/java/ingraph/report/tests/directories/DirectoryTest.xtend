@@ -10,6 +10,8 @@ import java.util.HashMap
 import java.util.Map
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import ingraph.report.tests.TestQuery
+import java.util.LinkedList
 
 abstract class DirectoryTest extends IngraphReportTest {
 	
@@ -18,14 +20,15 @@ abstract class DirectoryTest extends IngraphReportTest {
 		val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
 		Collections.sort(fileNames, new NaturalOrderComparator());
 	 
-		val sectionQuerySpecifications = new HashMap<String, String>
+		val sectionTestQueries = new LinkedList<TestQuery>
 		for (fileName : fileNames) {
-				val queryName = FilenameUtils.removeExtension(fileName)
-				val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
-				sectionQuerySpecifications.put(queryName, querySpecification)
+			val queryName = FilenameUtils.removeExtension(fileName)
+			val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
+			val testQuery = TestQuery.builder.queryName(queryName).querySpecification(querySpecification).build
+			sectionTestQueries.add(testQuery)
 		}
 		
-		val Map<String, Map<String, String>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionQuerySpecifications)
+		val Map<String, Iterable<TestQuery>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionTestQueries)
 		printChapter(directoryName, chapterTitle, chapterQuerySpecifications)
 	}
 	
