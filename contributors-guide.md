@@ -46,8 +46,8 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 #### Prerequisites
 
-* Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala)
-* Install the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support)
+* Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
+* Install the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support).
 * Currently, VIATRA is not supported in IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
 
 #### Importing the projects

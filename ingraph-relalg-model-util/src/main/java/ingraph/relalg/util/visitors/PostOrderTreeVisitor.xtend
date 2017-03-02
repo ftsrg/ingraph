@@ -7,7 +7,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 
 /**
- * traverse a relalg tree and applies a visitor method
+ * Traverses a relational algebra tree and applies a visitor method on each operator node.
  */
 class PostOrderTreeVisitor {
 	

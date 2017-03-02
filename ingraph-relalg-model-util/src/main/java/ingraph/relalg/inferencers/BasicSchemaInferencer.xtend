@@ -11,7 +11,6 @@ import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
-import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -31,7 +30,8 @@ import relalg.VariableExpression
  * first it uses recursion / dispatch methods to reach the (unary) input nodes,
  * then each method returns with the inferred schema.
  * 
- * For example, a join node concatenates the schema of its input nodes (left/right) and removes the duplicate attributes. 
+ * For example, a join node concatenates the schema of its input nodes (left/right) and removes
+ * duplicate attributes. 
  */
 class BasicSchemaInferencer {
 

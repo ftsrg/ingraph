@@ -5,7 +5,7 @@ import relalg.LabelSetStatus
 import relalg.VertexVariable
 
 /**
-	* Convert ElementVariable to string, including the labels
+	* Convert ElementVariable to string, including labels.
 	*/
 class ElementConverter {
 

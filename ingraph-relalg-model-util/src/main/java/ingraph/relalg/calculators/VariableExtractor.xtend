@@ -20,7 +20,7 @@ class VariableExtractor {
  	val metaFunctions = #[Function.KEYS, Function.LABELS, Function.TYPE, Function.PROPERTIES]
  
 	/**
-	 * extract extra attributes required by unary operators
+	 * Extract extra attributes required by unary operators.
 	 */
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
 		val functions = op.elements.map[expression].filter(FunctionExpression).filter[metaFunctions.contains(functor)].map[ 
