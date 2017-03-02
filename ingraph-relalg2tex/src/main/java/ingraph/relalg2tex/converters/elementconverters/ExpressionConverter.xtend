@@ -17,6 +17,7 @@ import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
+import relalg.DoubleLiteral
 
 class ExpressionConverter {
 	
@@ -25,6 +26,10 @@ class ExpressionConverter {
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''
+	}
+	
+	def dispatch CharSequence convertExpression(DoubleLiteral doubleLiteral) {
+		'''\literal{«doubleLiteral.value»}'''
 	}
 
 	def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
