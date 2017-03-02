@@ -2,16 +2,15 @@ package ingraph.report.tests.directories
 
 import com.google.common.collect.ImmutableMap
 import ingraph.report.tests.IngraphReportTest
+import ingraph.report.tests.TestQuery
 import ingraph.report.tests.util.NaturalOrderComparator
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
-import java.util.HashMap
+import java.util.LinkedList
 import java.util.Map
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import ingraph.report.tests.TestQuery
-import java.util.LinkedList
 
 abstract class DirectoryTest extends IngraphReportTest {
 	

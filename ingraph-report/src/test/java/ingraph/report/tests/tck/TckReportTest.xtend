@@ -14,8 +14,6 @@ import java.nio.charset.Charset
 import java.util.Collections
 import java.util.LinkedHashMap
 import java.util.LinkedList
-import java.util.List
-import java.util.Map
 import org.apache.commons.io.FileUtils
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
@@ -35,20 +33,12 @@ class TckReportTest extends IngraphReportTest {
 		val injector = new FeatureStandaloneSetup().createInjectorAndDoEMFRegistration()
 		val resourceSet = injector.getInstance(typeof(XtextResourceSet))
 
-		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
+		val files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
 		Collections.sort(files)
 
-		val Map<String, Iterable<TestQuery>> chapterQuerySpecifications = new LinkedHashMap
-
-//		val Map<File, Feature> features = new LinkedHashMap<File, Feature>
-//		files.forEach[
-//			features.put(it, it.processFile(resourceSet))
-//		]
-		val Map<File, Feature> features = newLinkedHashMap(files.map[it -> it.processFile(resourceSet)])
-
-		for (featureEntry : features.entrySet) {
-			val file = featureEntry.key
-			val feature = featureEntry.value
+		val chapterTestQueries = new LinkedHashMap<String, Iterable<TestQuery>>
+		for (file : files) {
+			val feature = file.processFile(resourceSet)
 
 			val testQueries = new LinkedList<TestQuery>
 			for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter [
@@ -73,10 +63,10 @@ class TckReportTest extends IngraphReportTest {
 					testQueries.add(testQuery)
 				}
 			}
-			chapterQuerySpecifications.put(feature.name.escape, testQueries)
+			chapterTestQueries.put(feature.name.escape, testQueries)
 		}
 
-		printChapter("tck", "TCK Acceptance Tests", chapterQuerySpecifications)
+		printChapter("tck", "TCK Acceptance Tests", chapterTestQueries)
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {
