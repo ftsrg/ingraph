@@ -167,6 +167,20 @@ class ReteSandboxTest {
 		);
 	}
 
+	@Test
+	def void testSnbQ9() {
+		process(
+			"Q9",
+			'''
+			MATCH (:Person)-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(message)
+			WHERE message.creationDate < "x"
+			RETURN DISTINCT message, friend
+			ORDER BY message.creationDate DESC, message.id ASC
+			LIMIT 20
+			'''
+		)
+	}
+
 
 	@Test
 	def void test1() {
