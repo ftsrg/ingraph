@@ -288,18 +288,18 @@ class SortEntry {
   refers Expression expression
   OrderDirection direction
 }
-
+/**
+ * This stands for the SKIP n LIMIT m clause.
+ *
+ * Expressions in skip and limit may not contain variable references.
+ */
 class TopOperator extends UnaryOperator {
-  contains SkipLimitValue skip
-  contains SkipLimitValue limit
+  refers Expression skip
+  refers Expression limit
 }
 
 // for incremental queries to handle sort and top as a single operator
 class SortAndTopOperator extends SortOperator, TopOperator {
-}
-
-class SkipLimitValue {
-  int value
 }
 
 class GroupingOperator extends UnaryOperator {
@@ -423,10 +423,6 @@ class ListExpression extends Expression {
 class EmptyListExpression extends ListExpression {
 }
 
-class Parameter extends ComparableExpression {
-  String name
-}
-
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
   BinaryLogicalOperatorType operator
   refers LogicalExpression leftOperand
@@ -475,6 +471,9 @@ class IntegerLiteral extends NumberLiteral {
 }
 
 class NullLiteral extends NumberLiteral, StringLiteral {
+}
+
+class Parameter extends NamedElement, Atom {
 }
 
 class Case {

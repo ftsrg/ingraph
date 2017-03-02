@@ -6,6 +6,7 @@ import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
 import relalg.BinaryLogicalExpression
 import relalg.BooleanLiteral
+import relalg.DoubleLiteral
 import relalg.ElementVariable
 import relalg.EmptyListExpression
 import relalg.ExpressionVariable
@@ -13,11 +14,11 @@ import relalg.FunctionExpression
 import relalg.IntegerLiteral
 import relalg.ListExpression
 import relalg.NullLiteral
+import relalg.Parameter
 import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
-import relalg.DoubleLiteral
 
 class ExpressionConverter {
 	
@@ -34,6 +35,10 @@ class ExpressionConverter {
 
 	def dispatch CharSequence convertExpression(StringLiteral stringLiteral) {
 		'''\literal{"«stringLiteral.value.escape»"}'''
+	}
+
+	def dispatch CharSequence convertExpression(Parameter p) {
+		'''\var{\$«p.name»}'''
 	}
 
 	def dispatch CharSequence convertExpression(ElementVariable elementVariable) {

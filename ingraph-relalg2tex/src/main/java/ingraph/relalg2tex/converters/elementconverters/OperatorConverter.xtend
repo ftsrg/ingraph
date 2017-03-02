@@ -105,7 +105,7 @@ class OperatorConverter {
 	}
 
 	def topOperatorToTex(TopOperator op) {
-		'''\topp{«if (op.limit !== null) op.limit.value else ""»}{«if (op.skip !== null) op.skip.value else ""»}'''.toString
+		'''\topp{«if (op.limit !== null) op.limit.convertExpression else ""»}{«if (op.skip !== null) op.skip.convertExpression else ""»}'''.toString
 	}
 
 	def sortOperatorToTex(SortOperator op) {

@@ -393,10 +393,10 @@ class RelalgBuilder {
 	}
 
 	def expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
-		if (expression instanceof NumberConstant) {
-			createSkipLimitValue => [value = Integer.parseInt(expression.value)]
-		} else {
-			unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
+		switch expression {
+			NumberConstant: buildRelalgNumberLiteral(expression)
+			Parameter: buildRelalgParameter(expression)
+			default: unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
 		}
 	}
 
@@ -674,11 +674,6 @@ class RelalgBuilder {
 		}
 	}
 
-	def dispatch ComparableExpression buildRelalgComparableElement(Parameter p) {
-		val relalgParameter = createParameter => [name = p.parameter]
-		relalgParameter
-	}
-
 	def dispatch ComparableExpression buildRelalgComparableElement(FunctionInvocation fi) {
 		val fe = createFunctionComparableExpression => [
 			container = topLevelContainer
@@ -889,6 +884,13 @@ class RelalgBuilder {
 	def buildRelalgStringLiteral(StringConstant e) {
 		createStringLiteral => [
 			value = StringUtil.unescapeCypherString(e.value, logger)
+			container = topLevelContainer
+		]
+	}
+
+	def buildRelalgParameter(Parameter expression) {
+		createParameter => [
+			name = expression.parameter
 			container = topLevelContainer
 		]
 	}
