@@ -1,2 +1,2 @@
 MATCH (a)
-RETURN a.bar
+RETURN a.prop + 1 AS foo

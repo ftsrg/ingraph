@@ -1,3 +1,2 @@
-MATCH (n)
-WHERE n.foo = 'bar'
+OPTIONAL MATCH (n)
 RETURN n

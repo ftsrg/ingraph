@@ -22,9 +22,9 @@ class TriadicSelectionParserTest {
         MATCH (a:A)-[:KNOWS]->(b)-->(c)
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_01")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_01")
     }
 
     /*
@@ -40,9 +40,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_02")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_02")
     }
 
     /*
@@ -58,9 +58,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_03")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_03")
     }
 
     /*
@@ -76,9 +76,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_04")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_04")
     }
 
     /*
@@ -94,9 +94,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_05")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_05")
     }
 
     /*
@@ -112,9 +112,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_06")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_06")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_06")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_06")
     }
 
     /*
@@ -130,9 +130,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_07")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_07")
     }
 
     /*
@@ -148,9 +148,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_08")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_08")
     }
 
     /*
@@ -166,9 +166,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_09")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_09")
     }
 
     /*
@@ -184,9 +184,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_10")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_10")
     }
 
     /*
@@ -202,9 +202,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_11")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_11")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_11")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_11")
     }
 
     /*
@@ -220,9 +220,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_12")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_12")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_12")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_12")
     }
 
     /*
@@ -238,9 +238,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_13")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_13")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_13")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_13")
     }
 
     /*
@@ -256,9 +256,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_14")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_14")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_14")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_14")
     }
 
     /*
@@ -274,9 +274,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_15")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_15")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_15")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_15")
     }
 
     /*
@@ -292,9 +292,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_16")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_16")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_16")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_16")
     }
 
     /*
@@ -310,9 +310,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_17")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_17")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_17")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_17")
     }
 
     /*
@@ -328,9 +328,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_18")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_18")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_18")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_18")
     }
 
     /*
@@ -346,9 +346,9 @@ class TriadicSelectionParserTest {
         WITH c WHERE r IS NOT NULL
         RETURN c.name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TriadicSelection_19")
+        CypherUtil.save(cypher, "cypher-asts/tck/TriadicSelection_19")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TriadicSelection_19")
+        RelalgUtil.save(container, "relalg-models/tck/TriadicSelection_19")
     }
 
 }

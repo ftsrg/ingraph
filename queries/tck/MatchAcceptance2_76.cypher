@@ -1,3 +1,2 @@
-MATCH p = (n:Movie)--(m)
-RETURN p
-LIMIT 1
+MATCH path = (n)-->(m)--(o)--(p)
+RETURN path

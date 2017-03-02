@@ -1,3 +1,4 @@
-MATCH (:Root {name: 'x'})-->(i:Child)
-WHERE i.id > 'te'
-RETURN i
+MATCH p = ()-[*]->()
+WITH count(*) AS count, p AS p
+WITH nodes(p) AS nodes
+RETURN *

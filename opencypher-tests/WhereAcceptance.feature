@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,17 +33,3 @@ Feature: WhereAcceptance
       | n             |
       | ({name: 'a'}) |
     And no side effects
-
-  Scenario: Fail when trying to compare strings and numbers
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:Label {prop: '15'})
-      """
-    When executing query:
-      """
-      MATCH (n:Label)
-      WHERE n.prop < 10
-      RETURN n.prop AS prop
-      """
-    Then a TypeError should be raised at runtime: IncomparableValues

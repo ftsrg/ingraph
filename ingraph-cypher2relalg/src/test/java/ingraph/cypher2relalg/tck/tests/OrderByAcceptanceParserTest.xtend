@@ -28,9 +28,9 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS prop
         ORDER BY n.prop
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_01")
     }
 
     /*
@@ -50,9 +50,9 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS prop
         ORDER BY n.prop DESC
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_02")
     }
 
     /*
@@ -69,9 +69,9 @@ class OrderByAcceptanceParserTest {
         RETURN p
         ORDER BY rng
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_03")
     }
 
     /*
@@ -91,9 +91,9 @@ class OrderByAcceptanceParserTest {
         RETURN n.prop AS n
         ORDER BY n + 2
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_04")
     }
 
     /*
@@ -116,9 +116,9 @@ class OrderByAcceptanceParserTest {
         RETURN c.rank AS rank
         ORDER BY relevance, c.rank
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_05")
     }
 
     /*
@@ -132,9 +132,9 @@ class OrderByAcceptanceParserTest {
         RETURN bools
         ORDER BY bools
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_06")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_06")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_06")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_06")
     }
 
     /*
@@ -148,9 +148,9 @@ class OrderByAcceptanceParserTest {
         RETURN bools
         ORDER BY bools DESC
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_07")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_07")
     }
 
     /*
@@ -164,9 +164,9 @@ class OrderByAcceptanceParserTest {
         RETURN strings
         ORDER BY strings
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_08")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_08")
     }
 
     /*
@@ -180,9 +180,9 @@ class OrderByAcceptanceParserTest {
         RETURN strings
         ORDER BY strings DESC
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_09")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_09")
     }
 
     /*
@@ -196,9 +196,9 @@ class OrderByAcceptanceParserTest {
         RETURN ints
         ORDER BY ints
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_10")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_10")
     }
 
     /*
@@ -212,9 +212,9 @@ class OrderByAcceptanceParserTest {
         RETURN ints
         ORDER BY ints DESC
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_11")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_11")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_11")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_11")
     }
 
     /*
@@ -228,9 +228,9 @@ class OrderByAcceptanceParserTest {
         RETURN floats
         ORDER BY floats
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_12")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_12")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_12")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_12")
     }
 
     /*
@@ -244,9 +244,9 @@ class OrderByAcceptanceParserTest {
         RETURN floats
         ORDER BY floats DESC
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_13")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_13")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_13")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_13")
     }
 
     /*
@@ -266,9 +266,9 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT 1
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_14")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_14")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_14")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_14")
     }
 
     /*
@@ -283,9 +283,9 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT 0
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_15")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_15")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_15")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_15")
     }
 
     /*
@@ -302,9 +302,9 @@ class OrderByAcceptanceParserTest {
         ORDER BY p.name
         LIMIT $limit
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OrderByAcceptance_16")
+        CypherUtil.save(cypher, "cypher-asts/tck/OrderByAcceptance_16")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OrderByAcceptance_16")
+        RelalgUtil.save(container, "relalg-models/tck/OrderByAcceptance_16")
     }
 
 }

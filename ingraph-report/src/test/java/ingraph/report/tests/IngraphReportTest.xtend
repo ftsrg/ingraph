@@ -10,7 +10,7 @@ abstract class IngraphReportTest {
 
 	protected extension Escaper escaper = new Escaper
 
-	def ch(String chapterName, String chapterTitle, Map<String, Map<String, String>> chapterQuerySpecifications) {
+	def printChapter(String chapterName, String chapterTitle, Map<String, Map<String, String>> chapterQuerySpecifications) {
 		var doc = '''
 			\chapter{«chapterTitle»}
 			\label{chp:«chapterName»}

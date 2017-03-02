@@ -1,2 +1,2 @@
-MATCH p = (n)-->(m)--(o)
-RETURN p
+MATCH (a)
+RETURN a.prop

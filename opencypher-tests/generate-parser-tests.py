@@ -12,7 +12,7 @@ def indent(lines):
     padding = '        '
     return ('\n' + padding).join(lines.split('\n'))
 
-filenames = glob.glob('*.feature')
+filenames = sorted(glob.glob('*.feature'))
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
     test_file = open("../ingraph-cypher2relalg/src/test/java/ingraph/cypher2relalg/tck/tests/%sParserTest.xtend" % filename_without_extension, "w")

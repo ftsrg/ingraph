@@ -29,9 +29,9 @@ class UnionAcceptanceParserTest {
         MATCH (b:B)
         RETURN b AS a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnionAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnionAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_01")
     }
 
     /*
@@ -46,9 +46,9 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnionAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnionAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_02")
     }
 
     /*
@@ -63,9 +63,9 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnionAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnionAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_03")
     }
 
     /*
@@ -82,9 +82,9 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnionAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnionAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_04")
     }
 
     /*
@@ -101,9 +101,9 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnionAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnionAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_05")
     }
 
 }

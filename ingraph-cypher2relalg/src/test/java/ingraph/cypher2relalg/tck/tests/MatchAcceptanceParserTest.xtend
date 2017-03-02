@@ -26,9 +26,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a:Label1)<--(:Label2)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_01")
     }
 
     /*
@@ -46,9 +46,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a:Label1)<--(:Label2)--()
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_02")
     }
 
     /*
@@ -68,9 +68,9 @@ class MatchAcceptanceParserTest {
         MATCH (n), (m)
         RETURN n.value AS n, m.value AS m
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_03")
     }
 
     /*
@@ -91,9 +91,9 @@ class MatchAcceptanceParserTest {
         WHERE r.foo = $param
         RETURN b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_04")
     }
 
     /*
@@ -112,9 +112,9 @@ class MatchAcceptanceParserTest {
         WHERE a.name = 'Andres'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_05")
     }
 
     /*
@@ -133,9 +133,9 @@ class MatchAcceptanceParserTest {
         WITH a.name AS a
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_06")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_06")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_06")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_06")
     }
 
     /*
@@ -154,9 +154,9 @@ class MatchAcceptanceParserTest {
         WHERE r.name = 'monkey'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_07")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_07")
     }
 
     /*
@@ -176,9 +176,9 @@ class MatchAcceptanceParserTest {
         WITH n.name AS n
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_08")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_08")
     }
 
     /*
@@ -196,9 +196,9 @@ class MatchAcceptanceParserTest {
         MATCH (n1)-[rel:KNOWS]->(n2)
         RETURN n1, n2
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_09")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_09")
     }
 
     /*
@@ -218,9 +218,9 @@ class MatchAcceptanceParserTest {
         MATCH ()-[rel:KNOWS]->(x)
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_10")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_10")
     }
 
     /*
@@ -238,9 +238,9 @@ class MatchAcceptanceParserTest {
         MATCH (n)-->(a)-->(b)
         RETURN b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_11")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_11")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_11")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_11")
     }
 
     /*
@@ -266,9 +266,9 @@ class MatchAcceptanceParserTest {
         WHERE n.animal = x.animal
         RETURN n, x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_12")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_12")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_12")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_12")
     }
 
     /*
@@ -286,9 +286,9 @@ class MatchAcceptanceParserTest {
         MATCH (a)-[r {name: 'r'}]-(b)
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_13")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_13")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_13")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_13")
     }
 
     /*
@@ -308,9 +308,9 @@ class MatchAcceptanceParserTest {
         WHERE r <> r2
         RETURN a, b, c
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_14")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_14")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_14")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_14")
     }
 
     /*
@@ -333,9 +333,9 @@ class MatchAcceptanceParserTest {
         WHERE type(r) = 'KNOWS'
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_15")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_15")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_15")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_15")
     }
 
     /*
@@ -359,9 +359,9 @@ class MatchAcceptanceParserTest {
         WHERE type(r) = 'KNOWS' OR type(r) = 'HATES'
         RETURN r
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_16")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_16")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_16")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_16")
     }
 
     /*
@@ -382,9 +382,9 @@ class MatchAcceptanceParserTest {
         WHERE n.p1 = 12 OR n.p2 = 13
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_17")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_17")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_17")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_17")
     }
 
     /*
@@ -402,9 +402,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a {name: 'A'})-->(b)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_18")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_18")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_18")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_18")
     }
 
     /*
@@ -422,9 +422,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a {name: 'A'})-[rel1]->(b)-[rel2]->(c)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_19")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_19")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_19")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_19")
     }
 
     /*
@@ -443,9 +443,9 @@ class MatchAcceptanceParserTest {
         WHERE length(p) = 10
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_20")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_20")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_20")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_20")
     }
 
     /*
@@ -464,9 +464,9 @@ class MatchAcceptanceParserTest {
         WHERE length(p) = 1
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_21")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_21")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_21")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_21")
     }
 
     /*
@@ -484,9 +484,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a)-[:REL*2..2]->(b:End)
         RETURN relationships(p)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_22")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_22")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_22")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_22")
     }
 
     /*
@@ -504,9 +504,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a:Start)-[:REL*2..2]->(b)
         RETURN relationships(p)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_23")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_23")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_23")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_23")
     }
 
     /*
@@ -524,9 +524,9 @@ class MatchAcceptanceParserTest {
         MATCH (a)-[r:REL*2..2]->(b:End)
         RETURN r
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_24")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_24")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_24")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_24")
     }
 
     /*
@@ -544,9 +544,9 @@ class MatchAcceptanceParserTest {
         MATCH (a)-[r:REL*2..2]-(b:End)
         RETURN r
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_25")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_25")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_25")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_25")
     }
 
     /*
@@ -564,9 +564,9 @@ class MatchAcceptanceParserTest {
         MATCH (a:Start)-[r:REL*2..2]-(b)
         RETURN r
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_26")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_26")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_26")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_26")
     }
 
     /*
@@ -584,9 +584,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (n {name: 'A'})-[:KNOWS*1..2]->(x)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_27")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_27")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_27")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_27")
     }
 
     /*
@@ -604,9 +604,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a)-[*0..1]->(b)
         RETURN a, b, length(p) AS l
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_28")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_28")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_28")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_28")
     }
 
     /*
@@ -624,9 +624,9 @@ class MatchAcceptanceParserTest {
         MATCH p = (a {name: 'A'})-[:KNOWS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_29")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_29")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_29")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_29")
     }
 
     /*
@@ -641,9 +641,9 @@ class MatchAcceptanceParserTest {
         WHERE 1 = 0
         RETURN n SKIP 0
         ''')
-        CypherUtil.save(cypher, "cypher-asts/MatchAcceptance_30")
+        CypherUtil.save(cypher, "cypher-asts/tck/MatchAcceptance_30")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/MatchAcceptance_30")
+        RelalgUtil.save(container, "relalg-models/tck/MatchAcceptance_30")
     }
 
 }

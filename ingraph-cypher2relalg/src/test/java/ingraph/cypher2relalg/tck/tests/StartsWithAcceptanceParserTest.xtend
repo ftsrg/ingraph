@@ -22,9 +22,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH 'ABCDEF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_01")
     }
 
     /*
@@ -38,9 +38,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH 'ABC'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_02")
     }
 
     /*
@@ -54,9 +54,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH 'DEF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_03")
     }
 
     /*
@@ -70,9 +70,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH 'AB'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_04")
     }
 
     /*
@@ -87,9 +87,9 @@ class StartsWithAcceptanceParserTest {
         AND a.name ENDS WITH 'f'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_05")
     }
 
     /*
@@ -103,9 +103,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH ''
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_06")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_06")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_06")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_06")
     }
 
     /*
@@ -119,9 +119,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS 'CD'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_07")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_07")
     }
 
     /*
@@ -141,9 +141,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_08")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_08")
     }
 
     /*
@@ -163,9 +163,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_09")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_09")
     }
 
     /*
@@ -185,9 +185,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_10")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_10")
     }
 
     /*
@@ -207,9 +207,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_11")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_11")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_11")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_11")
     }
 
     /*
@@ -229,9 +229,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS ' '
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_12")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_12")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_12")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_12")
     }
 
     /*
@@ -251,9 +251,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS '\n'
         RETURN a.name AS name
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_13")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_13")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_13")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_13")
     }
 
     /*
@@ -267,9 +267,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name STARTS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_14")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_14")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_14")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_14")
     }
 
     /*
@@ -283,9 +283,9 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name STARTS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_15")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_15")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_15")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_15")
     }
 
     /*
@@ -299,9 +299,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name ENDS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_16")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_16")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_16")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_16")
     }
 
     /*
@@ -315,9 +315,9 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name ENDS WITH null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_17")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_17")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_17")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_17")
     }
 
     /*
@@ -331,9 +331,9 @@ class StartsWithAcceptanceParserTest {
         WHERE a.name CONTAINS null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_18")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_18")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_18")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_18")
     }
 
     /*
@@ -347,9 +347,9 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name CONTAINS null
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_19")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_19")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_19")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_19")
     }
 
     /*
@@ -365,9 +365,9 @@ class StartsWithAcceptanceParserTest {
         AND a.name ENDS WITH 'EF'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_20")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_20")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_20")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_20")
     }
 
     /*
@@ -381,9 +381,9 @@ class StartsWithAcceptanceParserTest {
         WHERE NOT a.name CONTAINS 'b'
         RETURN a
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_21")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_21")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_21")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_21")
     }
 
     /*
@@ -399,9 +399,9 @@ class StartsWithAcceptanceParserTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_22")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_22")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_22")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_22")
     }
 
     /*
@@ -417,9 +417,9 @@ class StartsWithAcceptanceParserTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_23")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_23")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_23")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_23")
     }
 
     /*
@@ -435,9 +435,9 @@ class StartsWithAcceptanceParserTest {
         WITH op1 STARTS WITH op2 AS v
         RETURN v, count(*)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/StartsWithAcceptance_24")
+        CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_24")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/StartsWithAcceptance_24")
+        RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_24")
     }
 
 }

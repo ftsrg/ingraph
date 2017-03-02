@@ -1,3 +1,3 @@
-MATCH (a {name: 'A'}), (c {name: 'C'})
-MATCH (a)-->(b)
-RETURN a, b, c
+MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
+MATCH (a)-->(x), (b)-->(x), (c)-->(x)
+RETURN x

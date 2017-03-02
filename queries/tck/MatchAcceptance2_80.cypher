@@ -1,2 +1,2 @@
-MATCH topRoute = (:Start)<-[:CONNECTED_TO]-()-[:CONNECTED_TO*3..3]-(:End)
-RETURN topRoute
+MATCH (a)-[r]->()
+RETURN a AS foo, r AS bar

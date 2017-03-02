@@ -28,9 +28,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_01")
     }
 
     /*
@@ -50,9 +50,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_02")
     }
 
     /*
@@ -72,9 +72,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_03")
     }
 
     /*
@@ -94,9 +94,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_04")
     }
 
     /*
@@ -116,9 +116,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_05")
     }
 
     /*
@@ -138,9 +138,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_06")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_06")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_06")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_06")
     }
 
     /*
@@ -160,9 +160,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_07")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_07")
     }
 
     /*
@@ -182,9 +182,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_08")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_08")
     }
 
     /*
@@ -203,9 +203,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_09")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_09")
     }
 
     /*
@@ -229,9 +229,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ComparisonOperatorAcceptance_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ComparisonOperatorAcceptance_10")
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_10")
     }
 
 }

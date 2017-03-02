@@ -29,9 +29,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OptionalMatch_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OptionalMatch_01")
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_01")
     }
 
     /*
@@ -51,9 +51,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OptionalMatch_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OptionalMatch_02")
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_02")
     }
 
     /*
@@ -74,9 +74,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "cypher-asts/OptionalMatch_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/OptionalMatch_03")
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_03")
     }
 
 }

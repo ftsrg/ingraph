@@ -1,5 +1,4 @@
-#
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,53 +16,46 @@
 
 Feature: Comparability
 
-  Scenario: Fail when comparing nodes to parameters
+  Scenario: Comparing strings and integers using > in an AND'd predicate
     Given an empty graph
     And having executed:
       """
-      CREATE ()
+      CREATE (root:Root)-[:T]->(:Child {id: 0}),
+             (root)-[:T]->(:Child {id: 'xx'}),
+             (root)-[:T]->(:Child)
       """
-    And parameters are:
-      | param | 'foo' |
     When executing query:
       """
-      MATCH (b)
-      WHERE b = $param
-      RETURN b
+      MATCH (:Root)-->(i:Child)
+      WHERE exists(i.id) AND i.id > 'x'
+      RETURN i.id
       """
-    Then a TypeError should be raised at compile time: IncomparableValues
+    Then the result should be:
+      | i.id |
+      | 'xx' |
+    And no side effects
 
-  Scenario: Fail when comparing parameters to nodes
+  Scenario: Comparing strings and integers using > in a OR'd predicate
     Given an empty graph
     And having executed:
       """
-      CREATE ()
-      """
-    And parameters are:
-      | param | 'foo' |
-    When executing query:
-      """
-      MATCH (b)
-      WHERE $param = b
-      RETURN b
-      """
-    Then a TypeError should be raised at compile time: IncomparableValues
-
-  Scenario: Comparing nodes to properties
-    Given an empty graph
-    And having executed:
-      """
-      CREATE ({val: 17})
+      CREATE (root:Root)-[:T]->(:Child {id: 0}),
+             (root)-[:T]->(:Child {id: 'xx'}),
+             (root)-[:T]->(:Child)
       """
     When executing query:
       """
-      MATCH (a)
-      WHERE a = a.val
-      RETURN count(a)
+      MATCH (:Root)-->(i:Child)
+      WHERE NOT exists(i.id) OR i.id > 'x'
+      RETURN i.id
       """
-    Then a TypeError should be raised at compile time: IncomparableValues
+    Then the result should be:
+      | i.id |
+      | 'xx' |
+      | null |
+    And no side effects
 
-  Scenario: Fail when comparing nodes to relationships
+  Scenario Outline: Comparing across types yields null, except numbers
     Given an empty graph
     And having executed:
       """
@@ -71,20 +63,24 @@ Feature: Comparability
       """
     When executing query:
       """
-      MATCH (a)-[b]->()
-      RETURN a = b
+      MATCH p = (n)-[r]->()
+      WITH [n, r, p, '', 1, 3.14, true, null, [], {}] AS types
+      UNWIND range(0, size(types) - 1) AS i
+      UNWIND range(0, size(types) - 1) AS j
+      WITH types[i] AS lhs, types[j] AS rhs
+      WHERE i <> j
+      WITH lhs, rhs, lhs <operator> rhs AS result
+      WHERE result
+      RETURN lhs, rhs
       """
-    Then a TypeError should be raised at compile time: IncomparableValues
+    Then the result should be:
+      | lhs   | rhs   |
+      | <lhs> | <rhs> |
+    And no side effects
 
-  Scenario: Fail when comparing relationships to nodes
-    Given an empty graph
-    And having executed:
-      """
-      CREATE ()-[:T]->()
-      """
-    When executing query:
-      """
-      MATCH (a)-[b]->()
-      RETURN b = a
-      """
-    Then a TypeError should be raised at compile time: IncomparableValues
+    Examples:
+      | operator | lhs  | rhs  |
+      | <        | 1    | 3.14 |
+      | <=       | 1    | 3.14 |
+      | >=       | 3.14 | 1    |
+      | >        | 3.14 | 1    |

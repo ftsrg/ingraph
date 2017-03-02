@@ -10,6 +10,7 @@ import ingraph.report.tests.IngraphReportTest
 import java.io.File
 import java.util.Collections
 import java.util.HashMap
+import java.util.LinkedHashMap
 import java.util.List
 import java.util.Map
 import org.apache.commons.io.FileUtils
@@ -30,12 +31,13 @@ class TckReportTest extends IngraphReportTest {
 		val List<File> files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
 		Collections.sort(files)
 
-		val Map<String, Map<String, String>> chapterQuerySpecifications = new HashMap
+		val Map<String, Map<String, String>> chapterQuerySpecifications = new LinkedHashMap
 
 		val features = files.map[ processFile(resourceSet) ]
 		for (feature : features) {
-				val querySpecifications = new HashMap<String, String>
+				val querySpecifications = new LinkedHashMap
 				for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter[!name.contains("Fail")]) {
+					
 					val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
 
 					if (
@@ -51,7 +53,7 @@ class TckReportTest extends IngraphReportTest {
 				chapterQuerySpecifications.put(feature.name.escape, querySpecifications)
 		}
  
-		ch("tck", "TCK Acceptance Tests", chapterQuerySpecifications)
+		printChapter("tck", "TCK Acceptance Tests", chapterQuerySpecifications)
 	}
 
 

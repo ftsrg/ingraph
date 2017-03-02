@@ -1,2 +1,3 @@
-MATCH p = (b)<--(a)
-RETURN p
+MATCH (n)
+OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
+RETURN n, x

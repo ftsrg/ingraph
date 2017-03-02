@@ -1,2 +1,2 @@
-MATCH (a {name: 'A'})-[*]->(x)
-RETURN x
+MATCH p = ({name: 'A'})-[:KNOWS*..]->()
+RETURN p

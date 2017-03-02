@@ -1,2 +1,2 @@
-MATCH p = ({prop: 'a'})<--({prop: 'b'})
+MATCH p=(n)<-->(k)<-->(n)
 RETURN p

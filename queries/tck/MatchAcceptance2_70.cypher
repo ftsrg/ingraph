@@ -1,3 +1,2 @@
-MATCH (n)
-WITH n.prop AS n2
-RETURN n2.prop
+MATCH (a:Artist)-[:WORKED_WITH* {year: 1988}]->(b:Artist)
+RETURN *

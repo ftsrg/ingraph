@@ -1,2 +1,4 @@
-MATCH (a)-[:A]->(b), (b)-[:B]->(a)
-RETURN a.name
+OPTIONAL MATCH (a:Label)
+WITH a
+MATCH (a)-->(b)
+RETURN b

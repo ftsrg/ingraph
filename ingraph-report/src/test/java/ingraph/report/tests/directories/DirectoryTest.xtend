@@ -26,7 +26,7 @@ abstract class DirectoryTest extends IngraphReportTest {
 		}
 		
 		val Map<String, Map<String, String>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionQuerySpecifications)
-		ch(directoryName, chapterTitle, chapterQuerySpecifications)
+		printChapter(directoryName, chapterTitle, chapterQuerySpecifications)
 	}
 	
 }

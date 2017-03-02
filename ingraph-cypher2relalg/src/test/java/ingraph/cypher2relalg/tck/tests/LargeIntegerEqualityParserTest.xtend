@@ -21,9 +21,9 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label)
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/LargeIntegerEquality_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/LargeIntegerEquality_01")
+        RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_01")
     }
 
     /*
@@ -36,9 +36,9 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label {id: 4611686018427387905})
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/LargeIntegerEquality_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/LargeIntegerEquality_02")
+        RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_02")
     }
 
     /*
@@ -52,9 +52,9 @@ class LargeIntegerEqualityParserTest {
         WHERE p.id = 4611686018427387905
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/LargeIntegerEquality_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/LargeIntegerEquality_03")
+        RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_03")
     }
 
     /*
@@ -67,9 +67,9 @@ class LargeIntegerEqualityParserTest {
         MATCH (p:Label {id : 4611686018427387900})
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/LargeIntegerEquality_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/LargeIntegerEquality_04")
+        RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_04")
     }
 
     /*
@@ -83,9 +83,9 @@ class LargeIntegerEqualityParserTest {
         WHERE p.id = 4611686018427387900
         RETURN p.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/LargeIntegerEquality_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/LargeIntegerEquality_05")
+        RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_05")
     }
 
 }

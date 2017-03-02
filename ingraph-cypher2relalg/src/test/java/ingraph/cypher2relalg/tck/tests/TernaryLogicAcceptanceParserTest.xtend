@@ -20,9 +20,9 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN NOT null AS value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TernaryLogicAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TernaryLogicAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_01")
     }
 
     /*
@@ -34,9 +34,9 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null IS NULL AS value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TernaryLogicAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TernaryLogicAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_02")
     }
 
     /*
@@ -48,9 +48,9 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null IS NOT NULL AS value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TernaryLogicAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TernaryLogicAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_03")
     }
 
     /*
@@ -62,9 +62,9 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null = null AS value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TernaryLogicAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TernaryLogicAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_04")
     }
 
     /*
@@ -76,9 +76,9 @@ class TernaryLogicAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null <> null AS value
         ''')
-        CypherUtil.save(cypher, "cypher-asts/TernaryLogicAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/TernaryLogicAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_05")
     }
 
 }

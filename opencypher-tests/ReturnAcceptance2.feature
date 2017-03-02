@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -117,20 +117,6 @@ Feature: ReturnAcceptance2
         ORDER BY a.age
       """
     Then a SyntaxError should be raised at compile time: UndefinedVariable
-
-  Scenario: Fail when ordering nodes
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (), ()
-      """
-    When executing query:
-      """
-      MATCH (n)
-      RETURN n
-        ORDER BY n
-      """
-    Then a TypeError should be raised at runtime: IncomparableValues
 
   Scenario: Ordering with aggregation
     Given an empty graph
@@ -351,7 +337,7 @@ Feature: ReturnAcceptance2
       | 3 |
     And no side effects
 
-  Scenario: Concatenating and returning the size of literal lists
+  Scenario: Returning nested expressions based on list property
     Given an empty graph
     And having executed:
       """

@@ -28,9 +28,9 @@ class ListComprehensionParserTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ListComprehension_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ListComprehension_01")
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_01")
     }
 
     /*
@@ -51,9 +51,9 @@ class ListComprehensionParserTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ListComprehension_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ListComprehension_02")
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_02")
     }
 
     /*
@@ -74,9 +74,9 @@ class ListComprehensionParserTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/ListComprehension_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/ListComprehension_03")
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_03")
     }
 
 }

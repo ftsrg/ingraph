@@ -1,2 +1,3 @@
 MATCH (n)
-RETURN count(DISTINCT {foo: n.list}) AS count
+WITH DISTINCT {foo: n.list} AS map
+RETURN count(*)

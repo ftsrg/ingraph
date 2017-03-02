@@ -1,4 +1,2 @@
-MATCH p = ()-[*]->()
-WITH count(*) AS count, p AS p
-WITH nodes(p) AS nodes
-RETURN *
+MATCH (a {name: 'A'})-[*]->(x)
+RETURN x

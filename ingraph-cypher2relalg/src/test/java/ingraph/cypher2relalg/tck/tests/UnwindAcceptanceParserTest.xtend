@@ -22,9 +22,9 @@ class UnwindAcceptanceParserTest {
         UNWIND [1, 2, 3] AS x
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_01")
     }
 
     /*
@@ -38,9 +38,9 @@ class UnwindAcceptanceParserTest {
         UNWIND range(1, 3) AS x
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_02")
     }
 
     /*
@@ -55,9 +55,9 @@ class UnwindAcceptanceParserTest {
         UNWIND (first + second) AS x
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_03")
     }
 
     /*
@@ -73,9 +73,9 @@ class UnwindAcceptanceParserTest {
         UNWIND rows AS x
         RETURN x
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_04")
     }
 
     /*
@@ -95,9 +95,9 @@ class UnwindAcceptanceParserTest {
         UNWIND rows AS node
         RETURN node.id
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_05")
     }
 
     /*
@@ -113,9 +113,9 @@ class UnwindAcceptanceParserTest {
         UNWIND x AS y
         RETURN y
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_07")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_07")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_07")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_07")
     }
 
     /*
@@ -129,9 +129,9 @@ class UnwindAcceptanceParserTest {
         UNWIND [] AS empty
         RETURN empty
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_08")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_08")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_08")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_08")
     }
 
     /*
@@ -145,9 +145,9 @@ class UnwindAcceptanceParserTest {
         UNWIND null AS nil
         RETURN nil
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_09")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_09")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_09")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_09")
     }
 
     /*
@@ -161,9 +161,9 @@ class UnwindAcceptanceParserTest {
         UNWIND [1, 1, 2, 2, 3, 3, 4, 4, 5, 5] AS duplicate
         RETURN duplicate
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_10")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_10")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_10")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_10")
     }
 
     /*
@@ -178,9 +178,9 @@ class UnwindAcceptanceParserTest {
         UNWIND list AS x
         RETURN *
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_11")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_11")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_11")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_11")
     }
 
     /*
@@ -206,9 +206,9 @@ class UnwindAcceptanceParserTest {
         MATCH (a)-[:Y]->(b2)
         RETURN a, b2
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_12")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_12")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_12")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_12")
     }
 
     /*
@@ -225,9 +225,9 @@ class UnwindAcceptanceParserTest {
         UNWIND zs AS z
         RETURN *
         ''')
-        CypherUtil.save(cypher, "cypher-asts/UnwindAcceptance_13")
+        CypherUtil.save(cypher, "cypher-asts/tck/UnwindAcceptance_13")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/UnwindAcceptance_13")
+        RelalgUtil.save(container, "relalg-models/tck/UnwindAcceptance_13")
     }
 
 }

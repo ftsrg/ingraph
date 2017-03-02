@@ -1,3 +1,3 @@
-MATCH (n)
-OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
-RETURN n, x
+MATCH (a)<--()<--(b)-->()-->(c)
+WHERE a:A
+RETURN c

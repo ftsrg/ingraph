@@ -1,2 +1,2 @@
-MATCH (n)-[r]->(m)
-RETURN [n, r, m] AS r
+MATCH p = ({prop: 'a'})<--({prop: 'b'})
+RETURN p

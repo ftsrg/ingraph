@@ -30,9 +30,9 @@ class JoinAcceptanceParserTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/JoinAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/JoinAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/JoinAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/JoinAcceptance_01")
     }
 
     /*
@@ -53,9 +53,9 @@ class JoinAcceptanceParserTest {
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "cypher-asts/JoinAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/JoinAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/JoinAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/JoinAcceptance_02")
     }
 
 }

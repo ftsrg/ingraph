@@ -1,2 +1,2 @@
-MATCH (a)
-RETURN count(a) > 0
+MATCH (a:Blue)-[r*]->(b:Green)
+RETURN count(r)

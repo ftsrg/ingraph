@@ -1,1 +1,2 @@
-RETURN {a: 1, b: 'foo'}
+MATCH (a)
+RETURN exists(a.id), a IS NOT NULL

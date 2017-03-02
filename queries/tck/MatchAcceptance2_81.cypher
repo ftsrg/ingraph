@@ -1,2 +1,2 @@
 MATCH (a)
-RETURN a.prop
+RETURN a.bar

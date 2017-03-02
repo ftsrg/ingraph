@@ -1,2 +1,2 @@
-MATCH (a)
-RETURN a.name, a.age, a.seasons
+MATCH ()-[r*0..1]-()
+RETURN last(r) AS l

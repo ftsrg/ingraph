@@ -29,9 +29,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/EqualsAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/EqualsAcceptance_01")
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_01")
     }
 
     /*
@@ -52,9 +52,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/EqualsAcceptance_02")
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_02")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/EqualsAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_02")
     }
 
     /*
@@ -75,9 +75,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/EqualsAcceptance_03")
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_03")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/EqualsAcceptance_03")
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_03")
     }
 
     /*
@@ -98,9 +98,9 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/EqualsAcceptance_04")
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_04")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/EqualsAcceptance_04")
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_04")
     }
 
     /*
@@ -121,9 +121,9 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "cypher-asts/EqualsAcceptance_05")
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_05")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/EqualsAcceptance_05")
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_05")
     }
 
 }

@@ -1,3 +1,3 @@
-MATCH (a)-[:ADMIN]-(b)
-WHERE a:A
-RETURN a.id, b.id
+MATCH (a), (b)
+WHERE a <> b
+RETURN a, b

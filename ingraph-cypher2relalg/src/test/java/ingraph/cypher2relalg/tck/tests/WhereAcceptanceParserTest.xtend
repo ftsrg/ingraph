@@ -27,30 +27,9 @@ class WhereAcceptanceParserTest {
         WHERE NOT(n.name = 'apa' AND false)
         RETURN n
         ''')
-        CypherUtil.save(cypher, "cypher-asts/WhereAcceptance_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/WhereAcceptance_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/WhereAcceptance_01")
-    }
-
-    /*
-    Scenario: Fail when trying to compare strings and numbers
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (:Label {prop: '15'})
-      """
-    */
-    @Test
-    @Category(FailingTests)
-    def void testWhereAcceptance_02() {
-        val cypher = CypherParser.parseString('''
-        MATCH (n:Label)
-        WHERE n.prop < 10
-        RETURN n.prop AS prop
-        ''')
-        CypherUtil.save(cypher, "cypher-asts/WhereAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/WhereAcceptance_02")
+        RelalgUtil.save(container, "relalg-models/tck/WhereAcceptance_01")
     }
 
 }

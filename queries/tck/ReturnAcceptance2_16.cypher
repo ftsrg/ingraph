@@ -1,2 +1,1 @@
-MATCH (n)
-RETURN n
+RETURN {a: 1, b: 'foo'}

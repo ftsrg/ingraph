@@ -1,4 +1,5 @@
-MATCH ()-[r1]->()
-WITH r1 AS r2
-MATCH ()-[r2]->()
-RETURN r2 AS rel
+MATCH ()-[r]->()
+WITH r
+LIMIT 1
+OPTIONAL MATCH (a2)-[r]->(b2)
+RETURN a2, r, b2

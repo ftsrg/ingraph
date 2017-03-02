@@ -33,9 +33,9 @@ class VarLengthAcceptance2ParserTest {
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
-        CypherUtil.save(cypher, "cypher-asts/VarLengthAcceptance2_01")
+        CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance2_01")
         val container = Cypher2Relalg.processCypher(cypher)
-        RelalgUtil.save(container, "relalg-models/VarLengthAcceptance2_01")
+        RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance2_01")
     }
 
 }
