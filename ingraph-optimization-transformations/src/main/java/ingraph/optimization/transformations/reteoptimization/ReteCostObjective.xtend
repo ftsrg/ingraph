@@ -1,8 +1,7 @@
 package ingraph.optimization.transformations.reteoptimization
 
-import org.eclipse.viatra.dse.objectives.impl.BaseObjective
 import org.eclipse.viatra.dse.base.ThreadContext
-import ingraph.optimization.transformations.cost.ReteCostFunction
+import org.eclipse.viatra.dse.objectives.impl.BaseObjective
 import relalg.RelalgContainer
 
 class ReteCostObjective extends BaseObjective {

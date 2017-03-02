@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl
 import relalg.RelalgContainer
-import relalg.Operator
 
 class RelalgUtil {
 

@@ -1,17 +1,22 @@
 package ingraph.optimization.transformations.reteoptimization
 
+import ingraph.expressionparser.wrapper.ExpressionParserWrapper
 import ingraph.optimization.patterns.AssociativeOperatorMatcher
 import ingraph.optimization.patterns.CascadableSelectionMatcher
 import ingraph.optimization.patterns.CommutativeOperatorMatcher
+import ingraph.optimization.patterns.FoldableConstantExpressionMatcher
 import ingraph.optimization.patterns.SwappableSelectionMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.eclipse.viatra.dse.api.DesignSpaceExplorer
+import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
 import org.eclipse.viatra.dse.api.Objectives
 import org.eclipse.viatra.dse.api.Strategies
+import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import relalg.RelalgContainer
 import relalg.RelalgPackage
-import org.eclipse.viatra.dse.solutionstore.SolutionStore
-import org.eclipse.viatra.dse.api.DesignSpaceExplorer.DseLoggingLevel
+import relalg.Variable
+import scala.collection.immutable.HashMap
+import scala.collection.immutable.Vector
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
@@ -21,6 +26,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		statements.fireAllCurrent(swappableSelectionsRule)
 		statements.fireAllCurrent(associativeOperatorRule)
 		statements.fireAllCurrent(commutativeOperatorRule)
+		statements.fireAllCurrent(constantFoldingRule)
 		return container
 	}
 
@@ -104,6 +110,16 @@ class ReteOptimization extends AbstractRelalgTransformation {
 			op2.rightInput = op1
 			op1.leftInput = b
 			op1.rightInput = c
+		].build
+	}
+	
+	def constantFoldingRule() {
+		createRule()//
+		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
+		.action [
+			System.err.println("FIRE!")
+			val x = ExpressionParserWrapper.parse(e, new HashMap<Variable, Integer>())(new Vector<Object>(1,1,1))
+			println(x)
 		].build
 	}
 

@@ -310,7 +310,7 @@ class VariableBuilder {
 	 * This builder method ensures that the new VariableEpression instance
 	 * is registered to the container registered with this builder.
 	 */
-	def dispatch buildVariableExpression(Variable v) {
+	def buildVariableExpression(Variable v) {
 		createVariableExpression => [
 			variable = v
 			container = topLevelContainer

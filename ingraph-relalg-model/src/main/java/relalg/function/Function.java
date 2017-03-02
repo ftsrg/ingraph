@@ -29,8 +29,10 @@ public enum Function {
 
   STDDEV        (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
   STDDEVP       (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  PERCENTILECONT(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  PERCENTILEDISC(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
+  PERCENTILECONT(FunctionCategory.STATISTICAL,   l(NUMBER,
+                                                   FLOAT),        NUMBER,    2),
+  PERCENTILEDISC(FunctionCategory.STATISTICAL,   l(NUMBER,
+                                                   FLOAT),        NUMBER,    2),
 
   TOBOOLEAN     (FunctionCategory.CONVERSION,    l(ANY),          BOOLEAN,   1),
   TOINTEGER     (FunctionCategory.CONVERSION,    l(ANY),          INTEGER,   1),

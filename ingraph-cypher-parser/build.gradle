@@ -1,6 +1,4 @@
-plugins { id "org.xtext.xtend" version "1.0.15" }
-
-apply plugin: "eclipse"
+plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
   compile group: 'org.slizaa.neo4j.opencypher', name: 'org.slizaa.neo4j.opencypher', version: slizaaVersion

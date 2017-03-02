@@ -6,12 +6,12 @@ import org.apache.tinkerpop.gremlin.tinkergraph.structure.TinkerGraph
 import com.tinkerpop.blueprints.util.wrappers.event.EventGraph
 import hu.bme.mit.ire.Transaction
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import relalg.RelalgContainer
 import ingraph.relalg.inferencers.OneStepSchemaInferencer
+import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformationAndInferencer
 
 class IngraphAdapter(plan: String) {
-  private val retePlan = Inferencer(Cypher2Relalg.processString(plan))
+  private val retePlan = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(plan))
 
   val engine = EngineFactory.createQueryEngine(retePlan.getRootExpression)
 
@@ -25,12 +25,4 @@ class IngraphAdapter(plan: String) {
     val reader = graph.io(IoCore.graphml)
     reader.readGraph(path)
   }
-}
-
-object Inferencer {
-  val relalg2rete = new Relalg2ReteTransformation
-  val oneStepSchemaInferencer = new OneStepSchemaInferencer
-
-  def apply(relalg: RelalgContainer): RelalgContainer =
-    oneStepSchemaInferencer.inferCompleteSchema(relalg2rete.transformToRete(relalg))
 }

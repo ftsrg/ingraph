@@ -2,14 +2,15 @@ package ingraph.relalg2tex.rete.test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
+import ingraph.optimization.transformations.reteoptimization.ReteOptimization
 import ingraph.relalg.inferencers.BasicSchemaInferencer
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Ignore
 import org.junit.Test
-import ingraph.relalg.inferencers.ExtraVariableInferencer
 
 class ReteSandboxTest {
 
@@ -17,6 +18,8 @@ class ReteSandboxTest {
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
 	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+
+	extension ReteOptimization optimization = new ReteOptimization
 
 	val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).build
 	val drawer = new Relalg2TexTreeConverter(config)
@@ -38,6 +41,7 @@ class ReteSandboxTest {
 		containerRete.inferFullSchema
 		drawer.convert(containerRete, "sandbox/" + query + "-rete")
 		RelalgUtil.save(containerSearchBased, "query-models/" + query + "-rete")
+		return containerSearchBased
 	}
 
 	@Test
@@ -70,7 +74,7 @@ class ReteSandboxTest {
 			ORDER BY count(*) DESC, n.division ASC
 		''')
 	}
-	
+
 	@Test
 	def void t3() {
 		process("t3", '''
@@ -98,7 +102,7 @@ class ReteSandboxTest {
 			LIMIT 1
 		''')
 	}
-	
+
 	@Ignore
 	@Test
 	def void test02() {
@@ -108,7 +112,6 @@ class ReteSandboxTest {
 			RETURN n.something
 		''')
 	}
-
 
 	@Ignore
 	@Test
@@ -140,18 +143,38 @@ class ReteSandboxTest {
 	def void testRangeSpecifiedMinSpecifiedMax() {
 		process("test-Range-SpecifiedMin-SpecifiedMax", '''MATCH (n)-[:REL*3..5]->(m) RETURN n, m''')
 	}
-	
+
 	@Test
 	def void testSimple() {
-		process("test-Simple",
-		'''
-		MATCH
-			(a {name: 'a'})-[:REL]->(x),
-			(d {name: 'd'})-[:REL]->(y),
-			( (x)-[r:REL*]->(y) )
-		RETURN r
-		'''
+		process(
+			"test-Simple",
+			'''
+				MATCH
+					(a {name: 'a'})-[:REL]->(x),
+					(d {name: 'd'})-[:REL]->(y),
+					( (x)-[r:REL*]->(y) )
+				RETURN r
+			'''
 		);
+	}
+
+
+	@Test
+	def void test1() {
+		// arrange
+		//val ctr = process("hello", "MATCH (n) WHERE true = false RETURN n") // TODO the exception from this
+		val ctr = process("hello", "MATCH (n) WHERE 1 = 1 RETURN n")
+		RelalgUtil.save(ctr, "testModel1")
+//		println(ctr.convert)
+
+		// act
+		ctr.performSimpleOptimization
+//		println(ctr.convert)
+	}
+
+	@Test
+	def void constantFolding() {
+		process('test-constant-folding', '''MATCH (n) WHERE 1=1 RETURN n''')
 	}
 
 }

@@ -7,6 +7,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
+import java.util.Collection
 
 object Utils {
   def nop(id: String, b: AnyRef) = {}
@@ -73,4 +74,9 @@ object SizeCounter {
   def count(containers: Iterable[Iterable[Any]]*): Long = {
     containers.map(tuples => tuples.foldLeft(0)(_ + _.size)).sum
   }
+  
+  def count(containers: Collection[Tuple]): Long = {
+    containers.size
+  }
+  
 }

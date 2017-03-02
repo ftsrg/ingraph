@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList
 import relalg._
 
 import scala.collection.mutable
+import ingraph.expressionparser.ExpressionParser
 
 object EngineFactory {
 
