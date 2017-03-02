@@ -13,7 +13,7 @@ def indent(lines):
     return ('\n' + padding).join(lines.split('\n'))
 
 with open("failing-and-regression-tests.txt", "r") as file:
-    failing_and_regression_tests = file.read()
+    regression_tests = [ s for s in file.read().splitlines() if not s.startswith("#") ]
 
 filenames = sorted(glob.glob('*.feature'))
 for filename in filenames:
@@ -60,11 +60,11 @@ class %sParserTest {
             query_file.write(query + "\n")
 
         test_name = "%s_%02d" % (filename_without_extension, i)
-        scenario_name = "#%s: %s" % (filename, scenario.splitlines()[0])
-        if scenario_name in failing_and_regression_tests:
-            regression_or_failing = "Failing"
-        else:
+        scenario_name = "%s: %s" % (filename, scenario.splitlines()[0])
+        if scenario_name in regression_tests:
             regression_or_failing = "Regression"
+        else:
+            regression_or_failing = "Failing"
 
         test_case = """
     /*
