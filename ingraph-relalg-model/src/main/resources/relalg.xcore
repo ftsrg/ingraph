@@ -273,7 +273,7 @@ class DuplicateEliminationOperator extends UnaryOperator {
 
 class AllDifferentOperator extends UnaryOperator {
   refers EdgeVariable[] edgeVariables
-  contains EdgeVariableSet edgeVariableSets
+  contains EdgeVariableSet[] edgeVariableSets
 }
 
 class EdgeVariableSet { // TODO - we should think about this a bit more
