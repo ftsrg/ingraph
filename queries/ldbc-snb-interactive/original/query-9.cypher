@@ -3,7 +3,7 @@ MATCH (:Person {id:{1}})-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(message)
 WHERE message.creationDate < {2}
 RETURN DISTINCT
   message.id AS messageId,
-  CASE has(message.content)
+  CASE exists(message.content)
     WHEN true THEN message.content
     ELSE message.imageFile
   END AS messageContent,

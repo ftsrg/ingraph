@@ -1,4 +1,4 @@
-# LDBC Social Network Benchmark
+# LDBC Social Network Benchmark – Interactive workload
 
 The Cypher implementations are taken from the [LDBC specification v0.2.2](https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.2.2.pdf)
 
