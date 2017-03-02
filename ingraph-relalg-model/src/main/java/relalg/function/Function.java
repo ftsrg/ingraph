@@ -27,11 +27,11 @@ public enum Function {
   MIN           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   SUM           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
 
-  STDDEV        (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  STDDEVP       (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  PERCENTILECONT(FunctionCategory.STATISTICAL,   l(NUMBER,
+  STDDEV        (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  STDDEVP       (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  PERCENTILECONT(FunctionCategory.AGGREGATION,   l(NUMBER,
                                                    FLOAT),        NUMBER,    2),
-  PERCENTILEDISC(FunctionCategory.STATISTICAL,   l(NUMBER,
+  PERCENTILEDISC(FunctionCategory.AGGREGATION,   l(NUMBER,
                                                    FLOAT),        NUMBER,    2),
 
   TOBOOLEAN     (FunctionCategory.CONVERSION,    l(ANY),          BOOLEAN,   1),

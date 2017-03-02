@@ -534,16 +534,6 @@ enum UnaryGraphObjectLogicalOperatorType {
   IS_NOT_NULL
 }
 
-enum AggregationType {
-  COUNT
-  SUM
-  AVG
-  MAX
-  MIN
-  STDDEV
-  STDDEVP
-}
-
 /**
  * Indicates if the labelset represented is theoretically satisfiable or not.
  *
