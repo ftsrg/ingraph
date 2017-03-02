@@ -83,7 +83,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	def dispatch children(UnaryOperator op) {
 		'''
 		
-		  «op.input?.toNode»
+			«op.input?.toNode»
 		'''
 	}
 
