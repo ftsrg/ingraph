@@ -3,15 +3,12 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
-import ingraph.optimization.patterns.util.SortAndTopOperatorProcessor;
-import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import relalg.RelalgContainer;
 import relalg.SortOperator;
 import relalg.TopOperator;

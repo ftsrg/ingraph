@@ -1,1 +1,0 @@
-RETURN size([[], []] + [[]]) AS l

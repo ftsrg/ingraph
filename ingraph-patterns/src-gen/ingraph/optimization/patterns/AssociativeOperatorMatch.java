@@ -3,15 +3,12 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.util.AssociativeOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
-import ingraph.optimization.patterns.util.AssociativeOperatorProcessor;
-import ingraph.optimization.patterns.util.AssociativeOperatorQuerySpecification;
 import relalg.JoinOperator;
 import relalg.Operator;
 

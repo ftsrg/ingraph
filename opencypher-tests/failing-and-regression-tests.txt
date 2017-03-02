@@ -1,0 +1,764 @@
+AggregationAcceptance.feature: Scenario: Support multiple divisions in aggregate function
+#AggregationAcceptance.feature: Scenario: Support column renaming for aggregates as well
+#AggregationAcceptance.feature: Scenario: Aggregates inside normal functions
+#AggregationAcceptance.feature: Scenario: Handle aggregates inside non-aggregate expressions
+#AggregationAcceptance.feature: Scenario: Count nodes
+#AggregationAcceptance.feature: Scenario: Sort on aggregate function and normal property
+#AggregationAcceptance.feature: Scenario: Aggregate on property
+#AggregationAcceptance.feature: Scenario: Count non-null values
+#AggregationAcceptance.feature: Scenario: Sum non-null values
+#AggregationAcceptance.feature: Scenario: Handle aggregation on functions
+#AggregationAcceptance.feature: Scenario: Distinct on unbound node
+#AggregationAcceptance.feature: Scenario: Distinct on null
+#AggregationAcceptance.feature: Scenario: Collect distinct nulls
+#AggregationAcceptance.feature: Scenario: Collect distinct values mixed with nulls
+#AggregationAcceptance.feature: Scenario: Aggregate on list values
+#AggregationAcceptance.feature: Scenario: Aggregates in aggregates
+#AggregationAcceptance.feature: Scenario: Aggregates with arithmetics
+#AggregationAcceptance.feature: Scenario: Aggregates ordered by arithmetics
+#AggregationAcceptance.feature: Scenario: Multiple aggregates on same variable
+#AggregationAcceptance.feature: Scenario: Simple counting of nodes
+#AggregationAcceptance.feature: Scenario: Aggregation of named paths
+#AggregationAcceptance.feature: Scenario: Aggregation with `min()`
+#AggregationAcceptance.feature: Scenario: Handle subexpression in aggregation also occurring as standalone expression with nested aggregation in a literal map
+#AggregationAcceptance.feature: Scenario: Projection during aggregation in WITH before MERGE and after WITH with predicate
+#AggregationAcceptance.feature: Scenario: No overflow during summation
+#AggregationAcceptance.feature: Scenario: Counting with loops
+#AggregationAcceptance.feature: Scenario: `max()` should aggregate strings
+#AggregationAcceptance.feature: Scenario: `min()` should aggregate strings
+#ColumnNameAcceptance.feature: Scenario: Keeping used expression 1
+#ColumnNameAcceptance.feature: Scenario: Keeping used expression 2
+#ColumnNameAcceptance.feature: Scenario: Keeping used expression 3
+#ColumnNameAcceptance.feature: Scenario: Keeping used expression 4
+#Comparability.feature: Scenario: Comparing strings and integers using > in an AND'd predicate
+#Comparability.feature: Scenario: Comparing strings and integers using > in a OR'd predicate
+#ComparisonOperatorAcceptance.feature: Scenario: Handling numerical ranges 1
+#ComparisonOperatorAcceptance.feature: Scenario: Handling numerical ranges 2
+#ComparisonOperatorAcceptance.feature: Scenario: Handling numerical ranges 3
+#ComparisonOperatorAcceptance.feature: Scenario: Handling numerical ranges 4
+#ComparisonOperatorAcceptance.feature: Scenario: Handling string ranges 1
+#ComparisonOperatorAcceptance.feature: Scenario: Handling string ranges 2
+#ComparisonOperatorAcceptance.feature: Scenario: Handling string ranges 3
+#ComparisonOperatorAcceptance.feature: Scenario: Handling string ranges 4
+#ComparisonOperatorAcceptance.feature: Scenario: Handling empty range
+#ComparisonOperatorAcceptance.feature: Scenario: Handling long chains of operators
+#CreateAcceptance.feature: Scenario: Create a single node with multiple labels
+#CreateAcceptance.feature: Scenario: Combine MATCH and CREATE
+#CreateAcceptance.feature: Scenario: Combine MATCH, WITH and CREATE
+#CreateAcceptance.feature: Scenario: Newly-created nodes not visible to preceding MATCH
+#CreateAcceptance.feature: Scenario: Create a single node with properties
+#CreateAcceptance.feature: Scenario: Creating a node with null properties should not return those properties
+#CreateAcceptance.feature: Scenario: Creating a relationship with null properties should not return those properties
+#CreateAcceptance.feature: Scenario: Create a simple pattern
+#CreateAcceptance.feature: Scenario: Create a self loop
+#CreateAcceptance.feature: Scenario: Create a self loop using MATCH
+#CreateAcceptance.feature: Scenario: Create nodes and relationships
+#CreateAcceptance.feature: Scenario: Create a relationship with a property
+#CreateAcceptance.feature: Scenario: Create a relationship with the correct direction
+#CreateAcceptance.feature: Scenario: Create a relationship and an end node from a matched starting node
+#CreateAcceptance.feature: Scenario: Create a single node after a WITH
+#CreateAcceptance.feature: Scenario: Create a relationship with a reversed direction
+#CreateAcceptance.feature: Scenario: Create a pattern with multiple hops
+#CreateAcceptance.feature: Scenario: Create a pattern with multiple hops in the reverse direction
+#CreateAcceptance.feature: Scenario: Create a pattern with multiple hops in varying directions
+#CreateAcceptance.feature: Scenario: Create a pattern with multiple hops with multiple types and varying directions
+#CreateAcceptance.feature: Scenario: Nodes are not created when aliases are applied to variable names
+#CreateAcceptance.feature: Scenario: Only a single node is created when an alias is applied to a variable name
+#CreateAcceptance.feature: Scenario: Nodes are not created when aliases are applied to variable names multiple times
+#CreateAcceptance.feature: Scenario: Only a single node is created when an alias is applied to a variable name multiple times
+#CreateAcceptance.feature: Scenario: A bound node should be recognized after projection with WITH + WITH
+#CreateAcceptance.feature: Scenario: A bound node should be recognized after projection with WITH + UNWIND
+#CreateAcceptance.feature: Scenario: A bound node should be recognized after projection with WITH + MERGE node
+#CreateAcceptance.feature: Scenario: A bound node should be recognized after projection with WITH + MERGE pattern
+#CreateAcceptance.feature: Scenario: Fail when trying to create using an undirected relationship pattern
+#CreateAcceptance.feature: Scenario: Creating a pattern with multiple hops and changing directions
+#Create.feature: Scenario: Creating a node
+#Create.feature: Scenario: Creating two nodes
+#Create.feature: Scenario: Creating two nodes and a relationship
+#Create.feature: Scenario: Creating a node with a label
+#Create.feature: Scenario: Creating a node with a property
+#DeleteAcceptance.feature: Scenario: Delete nodes
+#DeleteAcceptance.feature: Scenario: Detach delete node
+#DeleteAcceptance.feature: Scenario: Delete relationships
+#DeleteAcceptance.feature: Scenario: Deleting connected nodes
+#DeleteAcceptance.feature: Scenario: Detach deleting connected nodes and relationships
+#DeleteAcceptance.feature: Scenario: Detach deleting paths
+#DeleteAcceptance.feature: Scenario: Undirected expand followed by delete and count
+#DeleteAcceptance.feature: Scenario: Undirected variable length expand followed by delete and count
+#DeleteAcceptance.feature: Scenario: Create and delete in same query
+#DeleteAcceptance.feature: Scenario: Delete optionally matched relationship
+#DeleteAcceptance.feature: Scenario: Delete on null node
+#DeleteAcceptance.feature: Scenario: Detach delete on null node
+#DeleteAcceptance.feature: Scenario: Delete on null path
+#DeleteAcceptance.feature: Scenario: Delete node from a list
+#DeleteAcceptance.feature: Scenario: Delete relationship from a list
+#DeleteAcceptance.feature: Scenario: Delete nodes from a map
+#DeleteAcceptance.feature: Scenario: Delete relationships from a map
+#DeleteAcceptance.feature: Scenario: Detach delete nodes from nested map/list
+#DeleteAcceptance.feature: Scenario: Delete relationships from nested map/list
+#DeleteAcceptance.feature: Scenario: Delete paths from nested map/list
+#DeleteAcceptance.feature: Scenario: Delete relationship with bidirectional matching
+#EqualsAcceptance.feature: Scenario: Number-typed integer comparison
+#EqualsAcceptance.feature: Scenario: Number-typed float comparison
+#EqualsAcceptance.feature: Scenario: Any-typed string comparison
+#EqualsAcceptance.feature: Scenario: Comparing nodes to nodes
+#EqualsAcceptance.feature: Scenario: Comparing relationships to relationships
+#ExpressionAcceptance.feature: Scenario: IN should work with nested list subscripting
+#ExpressionAcceptance.feature: Scenario: IN should work with nested literal list subscripting
+#ExpressionAcceptance.feature: Scenario: IN should work with list slices
+#ExpressionAcceptance.feature: Scenario: IN should work with literal list slices
+#ExpressionAcceptance.feature: Scenario: Execute n[0]
+#ExpressionAcceptance.feature: Scenario: Execute n['name'] in read queries
+#ExpressionAcceptance.feature: Scenario: Execute n['name'] in update queries
+#ExpressionAcceptance.feature: Scenario: Use dynamic property lookup based on parameters when there is no type information
+#ExpressionAcceptance.feature: Scenario: Use dynamic property lookup based on parameters when there is lhs type information
+#ExpressionAcceptance.feature: Scenario: Use dynamic property lookup based on parameters when there is rhs type information
+#ExpressionAcceptance.feature: Scenario: Use collection lookup based on parameters when there is no type information
+#ExpressionAcceptance.feature: Scenario: Use collection lookup based on parameters when there is lhs type information
+#ExpressionAcceptance.feature: Scenario: Use collection lookup based on parameters when there is rhs type information
+#ExpressionAcceptance.feature: Scenario: Fail at runtime when attempting to index with an Int into a Map
+#ExpressionAcceptance.feature: Scenario: Fail at runtime when trying to index into a map with a non-string
+#ExpressionAcceptance.feature: Scenario: Fail at runtime when attempting to index with a String into a Collection
+#ExpressionAcceptance.feature: Scenario: Fail at runtime when trying to index into a list with a list
+#ExpressionAcceptance.feature: Scenario: Fail at compile time when attempting to index with a non-integer into a list
+#ExpressionAcceptance.feature: Scenario: Fail at runtime when trying to index something which is not a map or collection
+#FunctionsAcceptance.feature: Scenario: Run coalesce
+#FunctionsAcceptance.feature: Scenario: Functions should return null if they get path containing unbound
+#FunctionsAcceptance.feature: Scenario: `split()`
+#FunctionsAcceptance.feature: Scenario: `properties()` on a node
+#FunctionsAcceptance.feature: Scenario: `properties()` on a relationship
+#FunctionsAcceptance.feature: Scenario: `properties()` on a map
+#FunctionsAcceptance.feature: Scenario: `properties()` failing on an integer literal
+#FunctionsAcceptance.feature: Scenario: `properties()` failing on a string literal
+#FunctionsAcceptance.feature: Scenario: `properties()` failing on a list of booleans
+#FunctionsAcceptance.feature: Scenario: `properties()` on null
+#FunctionsAcceptance.feature: Scenario: `reverse()`
+#FunctionsAcceptance.feature: Scenario: `exists()` with dynamic property lookup
+#FunctionsAcceptance.feature: Scenario: `percentileDisc()` failing in more involved query
+#FunctionsAcceptance.feature: Scenario: `type()`
+#FunctionsAcceptance.feature: Scenario: `type()` on two relationships
+#FunctionsAcceptance.feature: Scenario: `type()` on null relationship
+#FunctionsAcceptance.feature: Scenario: `type()` on mixed null and non-null relationships
+#FunctionsAcceptance.feature: Scenario: `type()` handling Any type
+#FunctionsAcceptance.feature: Scenario: `labels()` should accept type Any
+#FunctionsAcceptance.feature: Scenario: `labels()` failing on a path
+#FunctionsAcceptance.feature: Scenario: `labels()` failing on invalid arguments
+#FunctionsAcceptance.feature: Scenario: `exists()` is case insensitive
+#JoinAcceptance.feature: Scenario: Find friends of others
+#JoinAcceptance.feature: Scenario: Should only join when matching
+#KeysAcceptance.feature: Scenario: Using `keys()` on a single node, non-empty result
+#KeysAcceptance.feature: Scenario: Using `keys()` on multiple nodes, non-empty result
+#KeysAcceptance.feature: Scenario: Using `keys()` on a single node, empty result
+#KeysAcceptance.feature: Scenario: Using `keys()` on an optionally matched node
+#KeysAcceptance.feature: Scenario: Using `keys()` on a relationship, non-empty result
+#KeysAcceptance.feature: Scenario: Using `keys()` on a relationship, empty result
+#KeysAcceptance.feature: Scenario: Using `keys()` on an optionally matched relationship
+#KeysAcceptance.feature: Scenario: Using `keys()` on a literal map
+#KeysAcceptance.feature: Scenario: Using `keys()` on a parameter map
+#LabelsAcceptance.feature: Scenario: Adding a single label
+#LabelsAcceptance.feature: Scenario: Ignore space before colon
+#LabelsAcceptance.feature: Scenario: Adding multiple labels
+#LabelsAcceptance.feature: Scenario: Ignoring intermediate whitespace 1
+#LabelsAcceptance.feature: Scenario: Ignoring intermediate whitespace 2
+#LabelsAcceptance.feature: Scenario: Creating node without label
+#LabelsAcceptance.feature: Scenario: Creating node with two labels
+#LabelsAcceptance.feature: Scenario: Ignore space when creating node with labels
+#LabelsAcceptance.feature: Scenario: Create node with label in pattern
+#LabelsAcceptance.feature: Scenario: Fail when adding a new label predicate on a node that is already bound 1
+#LabelsAcceptance.feature: Scenario: Fail when adding new label predicate on a node that is already bound 2
+#LabelsAcceptance.feature: Scenario: Fail when adding new label predicate on a node that is already bound 3
+#LabelsAcceptance.feature: Scenario: Fail when adding new label predicate on a node that is already bound 4
+#LabelsAcceptance.feature: Scenario: Fail when adding new label predicate on a node that is already bound 5
+#LabelsAcceptance.feature: Scenario: Using `labels()` in return clauses
+#LabelsAcceptance.feature: Scenario: Removing a label
+#LabelsAcceptance.feature: Scenario: Removing a non-existent label
+#LargeCreateQuery.feature: Scenario: Generate the movie graph correctly
+#LargeCreateQuery.feature: Scenario: Many CREATE clauses
+#LargeIntegerEquality.feature: Scenario: Does not lose precision
+#LargeIntegerEquality.feature: Scenario: Handling inlined equality of large integer
+#LargeIntegerEquality.feature: Scenario: Handling explicit equality of large integer
+#LargeIntegerEquality.feature: Scenario: Handling inlined equality of large integer, non-equal values
+#LargeIntegerEquality.feature: Scenario: Handling explicit equality of large integer, non-equal values
+#ListComprehension.feature: Scenario: Returning a list comprehension
+#ListComprehension.feature: Scenario: Using a list comprehension in a WITH
+#ListComprehension.feature: Scenario: Using a list comprehension in a WHERE
+#Literals.feature: Scenario: Return an integer
+#Literals.feature: Scenario: Return a float
+#Literals.feature: Scenario: Return a float in exponent form
+#Literals.feature: Scenario: Return a boolean
+#Literals.feature: Scenario: Return a single-quoted string
+#Literals.feature: Scenario: Return a double-quoted string
+#Literals.feature: Scenario: Return null
+#Literals.feature: Scenario: Return an empty list
+#Literals.feature: Scenario: Return a nonempty list
+#Literals.feature: Scenario: Return an empty map
+#Literals.feature: Scenario: Return a nonempty map
+#MatchAcceptance2.feature: Scenario: Do not return non-existent nodes
+#MatchAcceptance2.feature: Scenario: Do not return non-existent relationships
+#MatchAcceptance2.feature: Scenario: Do not fail when evaluating predicates with illegal operations if the AND'ed predicate evaluates to false
+#MatchAcceptance2.feature: Scenario: Do not fail when evaluating predicates with illegal operations if the OR'd predicate evaluates to true
+#MatchAcceptance2.feature: Scenario: Aggregation with named paths
+#MatchAcceptance2.feature: Scenario: Zero-length variable length pattern in the middle of the pattern
+#MatchAcceptance2.feature: Scenario: Simple variable length pattern
+#MatchAcceptance2.feature: Scenario: Variable length relationship without lower bound
+#MatchAcceptance2.feature: Scenario: Variable length relationship without bounds
+#MatchAcceptance2.feature: Scenario: Returning bound nodes that are not part of the pattern
+#MatchAcceptance2.feature: Scenario: Two bound nodes pointing to the same node
+#MatchAcceptance2.feature: Scenario: Three bound nodes pointing to the same node
+#MatchAcceptance2.feature: Scenario: Three bound nodes pointing to the same node with extra connections
+#MatchAcceptance2.feature: Scenario: MATCH with OPTIONAL MATCH in longer pattern
+#MatchAcceptance2.feature: Scenario: Optionally matching named paths
+#MatchAcceptance2.feature: Scenario: Optionally matching named paths with single and variable length patterns
+#MatchAcceptance2.feature: Scenario: Optionally matching named paths with variable length patterns
+#MatchAcceptance2.feature: Scenario: Matching variable length patterns from a bound node
+#MatchAcceptance2.feature: Scenario: Excluding connected nodes
+#MatchAcceptance2.feature: Scenario: Do not fail when predicates on optionally matched and missed nodes are invalid
+#MatchAcceptance2.feature: Scenario: MATCH and OPTIONAL MATCH on same pattern
+#MatchAcceptance2.feature: Scenario: Matching using an undirected pattern
+#MatchAcceptance2.feature: Scenario: Matching all nodes
+#MatchAcceptance2.feature: Scenario: Comparing nodes for equality
+#MatchAcceptance2.feature: Scenario: Matching using self-referencing pattern returns no result
+#MatchAcceptance2.feature: Scenario: Variable length relationship in OPTIONAL MATCH
+#MatchAcceptance2.feature: Scenario: Matching using relationship predicate with multiples of the same type
+#MatchAcceptance2.feature: Scenario: ORDER BY with LIMIT
+#MatchAcceptance2.feature: Scenario: Simple node property predicate
+#MatchAcceptance2.feature: Scenario: Handling direction of named paths
+#MatchAcceptance2.feature: Scenario: Simple OPTIONAL MATCH on empty graph
+#MatchAcceptance2.feature: Scenario: OPTIONAL MATCH with previously bound nodes
+#MatchAcceptance2.feature: Scenario: `collect()` filtering nulls
+#MatchAcceptance2.feature: Scenario: Multiple anonymous nodes in a pattern
+#MatchAcceptance2.feature: Scenario: Matching a relationship pattern using a label predicate
+#MatchAcceptance2.feature: Scenario: Matching a relationship pattern using a label predicate on both sides
+#MatchAcceptance2.feature: Scenario: Matching nodes using multiple labels
+#MatchAcceptance2.feature: Scenario: Returning label predicate expression
+#MatchAcceptance2.feature: Scenario: Matching with many predicates and larger pattern
+#MatchAcceptance2.feature: Scenario: Matching using a simple pattern with label predicate
+#MatchAcceptance2.feature: Scenario: Matching disconnected patterns
+#MatchAcceptance2.feature: Scenario: Non-optional matches should not return nulls
+#MatchAcceptance2.feature: Scenario: Handling cyclic patterns
+#MatchAcceptance2.feature: Scenario: Handling cyclic patterns when separated into two parts
+#MatchAcceptance2.feature: Scenario: Handling fixed-length variable length pattern
+#MatchAcceptance2.feature: Scenario: Matching from null nodes should return no results owing to finding no matches
+#MatchAcceptance2.feature: Scenario: Matching from null nodes should return no results owing to matches being filtered out
+#MatchAcceptance2.feature: Scenario: Optionally matching from null nodes should return null
+#MatchAcceptance2.feature: Scenario: OPTIONAL MATCH returns null
+#MatchAcceptance2.feature: Scenario: Zero-length named path
+#MatchAcceptance2.feature: Scenario: Variable-length named path
+#MatchAcceptance2.feature: Scenario: Matching with aggregation
+#MatchAcceptance2.feature: Scenario: Matching using a relationship that is already bound
+#MatchAcceptance2.feature: Scenario: Matching using a relationship that is already bound, in conjunction with aggregation
+#MatchAcceptance2.feature: Scenario: Matching using a relationship that is already bound, in conjunction with aggregation and ORDER BY
+#MatchAcceptance2.feature: Scenario: Matching with LIMIT and optionally matching using a relationship that is already bound
+#MatchAcceptance2.feature: Scenario: Matching with LIMIT and optionally matching using a relationship and node that are both already bound
+#MatchAcceptance2.feature: Scenario: Matching with LIMIT, then matching again using a relationship and node that are both already bound along with an additional predicate
+#MatchAcceptance2.feature: Scenario: Matching with LIMIT and predicates, then matching again using a relationship and node that are both already bound along with a duplicate predicate
+#MatchAcceptance2.feature: Scenario: Matching twice with conflicting relationship types on same relationship
+#MatchAcceptance2.feature: Scenario: Matching twice with duplicate relationship types on same relationship
+#MatchAcceptance2.feature: Scenario: Matching relationships into a list and matching variable length using the list
+#MatchAcceptance2.feature: Scenario: Matching relationships into a list and matching variable length using the list, with bound nodes
+#MatchAcceptance2.feature: Scenario: Matching relationships into a list and matching variable length using the list, with bound nodes, wrong direction
+#MatchAcceptance2.feature: Scenario: Matching and optionally matching with bound nodes in reverse direction
+#MatchAcceptance2.feature: Scenario: Matching and optionally matching with unbound nodes and equality predicate in reverse direction
+#MatchAcceptance2.feature: Scenario: Fail when using property access on primitive type
+#MatchAcceptance2.feature: Scenario: Matching and returning ordered results, with LIMIT
+#MatchAcceptance2.feature: Scenario: Counting an empty graph
+#MatchAcceptance2.feature: Scenario: Matching variable length pattern with property predicate
+#MatchAcceptance2.feature: Scenario: Variable length pattern checking labels on endnodes
+#MatchAcceptance2.feature: Scenario: Variable length pattern with label predicate on both sides
+#MatchAcceptance2.feature: Scenario: Undirected named path
+#MatchAcceptance2.feature: Scenario: Named path with WITH
+#MatchAcceptance2.feature: Scenario: Named path with alternating directed/undirected relationships
+#MatchAcceptance2.feature: Scenario: Named path with multiple alternating directed/undirected relationships
+#MatchAcceptance2.feature: Scenario: Named path with undirected fixed variable length pattern
+#MatchAcceptance2.feature: Scenario: Returning a node property value
+#MatchAcceptance2.feature: Scenario: Returning a relationship property value
+#MatchAcceptance2.feature: Scenario: Projecting nodes and relationships
+#MatchAcceptance2.feature: Scenario: Missing node property should become null
+#MatchAcceptance2.feature: Scenario: Missing relationship property should become null
+#MatchAcceptance2.feature: Scenario: Returning multiple node property values
+#MatchAcceptance2.feature: Scenario: Adding a property and a literal in projection
+#MatchAcceptance2.feature: Scenario: Adding list properties in projection
+#MatchAcceptance2.feature: Scenario: Variable length relationship variables are lists of relationships
+#MatchAcceptance2.feature: Scenario: Variable length patterns and nulls
+#MatchAcceptance2.feature: Scenario: Projecting a list of nodes and relationships
+#MatchAcceptance2.feature: Scenario: Projecting a map of nodes and relationships
+#MatchAcceptance2.feature: Scenario: Respecting direction when matching existing path
+#MatchAcceptance2.feature: Scenario: Respecting direction when matching non-existent path
+#MatchAcceptance2.feature: Scenario: Respecting direction when matching non-existent path with multiple directions
+#MatchAcceptance2.feature: Scenario: Matching path with both directions should respect other directions
+#MatchAcceptance2.feature: Scenario: Matching path with multiple bidirectional relationships
+#MatchAcceptance2.feature: Scenario: Matching nodes with many labels
+#MatchAcceptance2.feature: Scenario: Matching longer variable length paths
+#MatchAcceptance2.feature: Scenario: Counting rows after MATCH, MERGE, OPTIONAL MATCH
+#MatchAcceptance2.feature: Scenario: Matching a self-loop
+#MatchAcceptance.feature: Scenario: Path query should return results in written order
+#MatchAcceptance.feature: Scenario: Longer path query should return results in written order
+#MatchAcceptance.feature: Scenario: Use multiple MATCH clauses to do a Cartesian product
+#MatchAcceptance.feature: Scenario: Use params in pattern matching predicates
+#MatchAcceptance.feature: Scenario: Filter out based on node prop name
+#MatchAcceptance.feature: Scenario: Honour the column name for RETURN items
+#MatchAcceptance.feature: Scenario: Filter based on rel prop name
+#MatchAcceptance.feature: Scenario: Cope with shadowed variables
+#MatchAcceptance.feature: Scenario: Get neighbours
+#MatchAcceptance.feature: Scenario: Get two related nodes
+#MatchAcceptance.feature: Scenario: Get related to related to
+#MatchAcceptance.feature: Scenario: Handle comparison between node properties
+#MatchAcceptance.feature: Scenario: Return two subgraphs with bound undirected relationship
+#MatchAcceptance.feature: Scenario: Return two subgraphs with bound undirected relationship and optional relationship
+#MatchAcceptance.feature: Scenario: Rel type function works as expected
+#MatchAcceptance.feature: Scenario: Walk alternative relationships
+#MatchAcceptance.feature: Scenario: Handle OR in the WHERE clause
+#MatchAcceptance.feature: Scenario: Return a simple path
+#MatchAcceptance.feature: Scenario: Return a three node path
+#MatchAcceptance.feature: Scenario: Do not return anything because path length does not match
+#MatchAcceptance.feature: Scenario: Pass the path length test
+#MatchAcceptance.feature: Scenario: Return relationships by fetching them from the path - starting from the end
+#MatchAcceptance.feature: Scenario: Return relationships by fetching them from the path
+#MatchAcceptance.feature: Scenario: Return relationships by collecting them as a list - wrong way
+#MatchAcceptance.feature: Scenario: Return relationships by collecting them as a list - undirected
+#MatchAcceptance.feature: Scenario: Return relationships by collecting them as a list
+#MatchAcceptance.feature: Scenario: Return a var length path
+#MatchAcceptance.feature: Scenario: Return a var length path of length zero
+#MatchAcceptance.feature: Scenario: Return a named var length path of length zero
+#MatchAcceptance.feature: Scenario: Accept skip zero
+#MatchingSelfRelationships.feature: Scenario: Undirected match in self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Undirected match in self-relationship graph, count
+#MatchingSelfRelationships.feature: Scenario: Undirected match of self-relationship in self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Undirected match of self-relationship in self-relationship graph, count
+#MatchingSelfRelationships.feature: Scenario: Undirected match on simple relationship graph
+#MatchingSelfRelationships.feature: Scenario: Undirected match on simple relationship graph, count
+#MatchingSelfRelationships.feature: Scenario: Directed match on self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Directed match on self-relationship graph, count
+#MatchingSelfRelationships.feature: Scenario: Directed match of self-relationship on self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Directed match of self-relationship on self-relationship graph, count
+#MatchingSelfRelationships.feature: Scenario: Counting undirected self-relationships in self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Counting distinct undirected self-relationships in self-relationship graph
+#MatchingSelfRelationships.feature: Scenario: Directed match of a simple relationship
+#MatchingSelfRelationships.feature: Scenario: Directed match of a simple relationship, count
+#MatchingSelfRelationships.feature: Scenario: Counting directed self-relationships
+#MatchingSelfRelationships.feature: Scenario: Mixing directed and undirected pattern parts with self-relationship, simple
+#MatchingSelfRelationships.feature: Scenario: Mixing directed and undirected pattern parts with self-relationship, count
+#MatchingSelfRelationships.feature: Scenario: Mixing directed and undirected pattern parts with self-relationship, undirected
+#MatchingSelfRelationships.feature: Scenario: Mixing directed and undirected pattern parts with self-relationship, undirected count
+#MergeIntoAcceptance.feature: Scenario: Updating one property with ON CREATE
+#MergeIntoAcceptance.feature: Scenario: Null-setting one property with ON CREATE
+#MergeIntoAcceptance.feature: Scenario: Copying properties from node with ON CREATE
+#MergeIntoAcceptance.feature: Scenario: Copying properties from node with ON MATCH
+#MergeIntoAcceptance.feature: Scenario: Copying properties from literal map with ON CREATE
+#MergeIntoAcceptance.feature: Scenario: Copying properties from literal map with ON MATCH
+#MergeNodeAcceptance.feature: Scenario: Merge node when no nodes exist
+#MergeNodeAcceptance.feature: Scenario: Merge node with label
+#MergeNodeAcceptance.feature: Scenario: Merge node with label add label on create
+#MergeNodeAcceptance.feature: Scenario: Merge node with label add property on create
+#MergeNodeAcceptance.feature: Scenario: Merge node with label when it exists
+#MergeNodeAcceptance.feature: Scenario: Merge node should create when it doesn't match, properties
+#MergeNodeAcceptance.feature: Scenario: Merge node should create when it doesn't match, properties and label
+#MergeNodeAcceptance.feature: Scenario: Merge node with prop and label
+#MergeNodeAcceptance.feature: Scenario: Merge node with label add label on match when it exists
+#MergeNodeAcceptance.feature: Scenario: Merge node with label add property on update when it exists
+#MergeNodeAcceptance.feature: Scenario: Merge node and set property on match
+#MergeNodeAcceptance.feature: Scenario: Should work when finding multiple elements
+#MergeNodeAcceptance.feature: Scenario: Should handle argument properly
+#MergeNodeAcceptance.feature: Scenario: Should handle arguments properly with only write clauses
+#MergeNodeAcceptance.feature: Scenario: Should be able to merge using property from match
+#MergeNodeAcceptance.feature: Scenario: Should be able to use properties from match in ON CREATE
+#MergeNodeAcceptance.feature: Scenario: Should be able to use properties from match in ON MATCH
+#MergeNodeAcceptance.feature: Scenario: Should be able to use properties from match in ON MATCH and ON CREATE
+#MergeNodeAcceptance.feature: Scenario: Should be able to set labels on match
+#MergeNodeAcceptance.feature: Scenario: Should be able to set labels on match and on create
+#MergeNodeAcceptance.feature: Scenario: Should support updates while merging
+#MergeNodeAcceptance.feature: Scenario: Merge must properly handle multiple labels
+#MergeNodeAcceptance.feature: Scenario: Merge followed by multiple creates
+#MergeNodeAcceptance.feature: Scenario: Unwind combined with merge
+#MergeNodeAcceptance.feature: Scenario: Merges should not be able to match on deleted nodes
+#MergeNodeAcceptance.feature: Scenario: ON CREATE on created nodes
+#MergeRelationshipAcceptance.feature: Scenario: Creating a relationship
+#MergeRelationshipAcceptance.feature: Scenario: Matching a relationship
+#MergeRelationshipAcceptance.feature: Scenario: Matching two relationships
+#MergeRelationshipAcceptance.feature: Scenario: Filtering relationships
+#MergeRelationshipAcceptance.feature: Scenario: Creating relationship when all matches filtered out
+#MergeRelationshipAcceptance.feature: Scenario: Matching incoming relationship
+#MergeRelationshipAcceptance.feature: Scenario: Creating relationship with property
+#MergeRelationshipAcceptance.feature: Scenario: Using ON CREATE on a node
+#MergeRelationshipAcceptance.feature: Scenario: Using ON CREATE on a relationship
+#MergeRelationshipAcceptance.feature: Scenario: Using ON MATCH on created node
+#MergeRelationshipAcceptance.feature: Scenario: Using ON MATCH on created relationship
+#MergeRelationshipAcceptance.feature: Scenario: Using ON MATCH on a relationship
+#MergeRelationshipAcceptance.feature: Scenario: Using ON CREATE and ON MATCH
+#MergeRelationshipAcceptance.feature: Scenario: Creating relationship using merged nodes
+#MergeRelationshipAcceptance.feature: Scenario: Mixing MERGE with CREATE
+#MergeRelationshipAcceptance.feature: Scenario: Introduce named paths 1
+#MergeRelationshipAcceptance.feature: Scenario: Introduce named paths 2
+#MergeRelationshipAcceptance.feature: Scenario: Use outgoing direction when unspecified
+#MergeRelationshipAcceptance.feature: Scenario: Match outgoing relationship when direction unspecified
+#MergeRelationshipAcceptance.feature: Scenario: Match both incoming and outgoing relationships when direction unspecified
+#MergeRelationshipAcceptance.feature: Scenario: Fail when imposing new predicates on a variable that is already bound
+#MergeRelationshipAcceptance.feature: Scenario: Using list properties via variable
+#MergeRelationshipAcceptance.feature: Scenario: Matching using list property
+#MergeRelationshipAcceptance.feature: Scenario: Using bound variables from other updating clause
+#MergeRelationshipAcceptance.feature: Scenario: UNWIND with multiple merges
+#MergeRelationshipAcceptance.feature: Scenario: Do not match on deleted entities
+#MergeRelationshipAcceptance.feature: Scenario: Do not match on deleted relationships
+#MergeRelationshipAcceptance.feature: Scenario: Aliasing of existing nodes 1
+#MergeRelationshipAcceptance.feature: Scenario: Aliasing of existing nodes 2
+#MergeRelationshipAcceptance.feature: Scenario: Double aliasing of existing nodes 1
+#MergeRelationshipAcceptance.feature: Scenario: Double aliasing of existing nodes 2
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on incorrect unicode literal
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on merging relationship with null property
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on merging node with null property
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on aggregation in WHERE
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on aggregation in ORDER BY after RETURN
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing on aggregation in ORDER BY after WITH
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when not aliasing expressions in WITH
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using undefined variable in pattern
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using undefined variable in SET
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using undefined variable in DELETE
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using a variable that is already bound in CREATE
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using a path variable that is already bound
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using a list as a node
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using a variable length relationship as a single relationship
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when UNION has different columns
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when mixing UNION and UNION ALL
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when creating without direction
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when creating with two directions
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when deleting a label
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when setting a list of maps as a property
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when multiple columns have the same name
+#MiscellaneousErrorAcceptance.feature: Scenario: Failing when using RETURN * without variables in scope
+#NullAcceptance.feature: Scenario: Ignore null when setting property
+#NullAcceptance.feature: Scenario: Ignore null when removing property
+#NullAcceptance.feature: Scenario: Ignore null when setting properties using an appending map
+#NullAcceptance.feature: Scenario: Ignore null when setting properties using an overriding map
+#NullAcceptance.feature: Scenario: Ignore null when setting label
+#NullAcceptance.feature: Scenario: Ignore null when removing label
+#NullAcceptance.feature: Scenario: Ignore null when deleting node
+#NullAcceptance.feature: Scenario: Ignore null when deleting relationship
+#OptionalMatchAcceptance.feature: Scenario: Return null when no matches due to inline label predicate
+#OptionalMatchAcceptance.feature: Scenario: Return null when no matches due to label predicate in WHERE
+#OptionalMatchAcceptance.feature: Scenario: Respect predicates on the OPTIONAL MATCH
+#OptionalMatchAcceptance.feature: Scenario: Returning label predicate on null node
+#OptionalMatchAcceptance.feature: Scenario: MATCH after OPTIONAL MATCH
+#OptionalMatchAcceptance.feature: Scenario: WITH after OPTIONAL MATCH
+#OptionalMatchAcceptance.feature: Scenario: Named paths in optional matches
+#OptionalMatchAcceptance.feature: Scenario: OPTIONAL MATCH and bound nodes
+#OptionalMatchAcceptance.feature: Scenario: OPTIONAL MATCH with labels on the optional end node
+#OptionalMatchAcceptance.feature: Scenario: Named paths inside optional matches with node predicates
+#OptionalMatchAcceptance.feature: Scenario: Variable length optional relationships
+#OptionalMatchAcceptance.feature: Scenario: Variable length optional relationships with length predicates
+#OptionalMatchAcceptance.feature: Scenario: Optionally matching self-loops
+#OptionalMatchAcceptance.feature: Scenario: Optionally matching self-loops without matches
+#OptionalMatchAcceptance.feature: Scenario: Variable length optional relationships with bound nodes
+#OptionalMatchAcceptance.feature: Scenario: Variable length optional relationships with bound nodes, no matches
+#OptionalMatchAcceptance.feature: Scenario: Longer pattern with bound nodes
+#OptionalMatchAcceptance.feature: Scenario: Longer pattern with bound nodes without matches
+#OptionalMatchAcceptance.feature: Scenario: Handling correlated optional matches; first does not match implies second does not match
+#OptionalMatchAcceptance.feature: Scenario: Handling optional matches between optionally matched entities
+#OptionalMatchAcceptance.feature: Scenario: Handling optional matches between nulls
+#OptionalMatchAcceptance.feature: Scenario: OPTIONAL MATCH and `collect()`
+#OptionalMatch.feature: Scenario: Satisfies the open world assumption, relationships between same nodes
+#OptionalMatch.feature: Scenario: Satisfies the open world assumption, single relationship
+#OptionalMatch.feature: Scenario: Satisfies the open world assumption, relationships between different nodes
+#OrderByAcceptance.feature: Scenario: ORDER BY should return results in ascending order
+#OrderByAcceptance.feature: Scenario: ORDER BY DESC should return results in descending order
+#OrderByAcceptance.feature: Scenario: ORDER BY of a column introduced in RETURN should return salient results in ascending order
+#OrderByAcceptance.feature: Scenario: Renaming columns before ORDER BY should return results in ascending order
+#OrderByAcceptance.feature: Scenario: Handle projections with ORDER BY - GH#4937
+#OrderByAcceptance.feature: Scenario: ORDER BY should order booleans in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY DESC should order booleans in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY should order strings in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY DESC should order strings in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY should order ints in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY DESC should order ints in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY should order floats in the expected order
+#OrderByAcceptance.feature: Scenario: ORDER BY DESC should order floats in the expected order
+#OrderByAcceptance.feature: Scenario: Handle ORDER BY with LIMIT 1
+#OrderByAcceptance.feature: Scenario: ORDER BY with LIMIT 0 should not generate errors
+#OrderByAcceptance.feature: Scenario: ORDER BY with negative parameter for LIMIT should not generate errors
+#OrderByAcceptance.feature: Scenario: ORDER BY with a negative LIMIT should fail with a syntax exception
+#PatternComprehension.feature: Scenario: Pattern comprehension and ORDER BY
+#PatternComprehension.feature: Scenario: Returning a pattern comprehension
+#PatternComprehension.feature: Scenario: Returning a pattern comprehension with label predicate
+#PatternComprehension.feature: Scenario: Returning a pattern comprehension with bound nodes
+#PatternComprehension.feature: Scenario: Using a pattern comprehension in a WITH
+#PatternComprehension.feature: Scenario: Using a variable-length pattern comprehension in a WITH
+#PatternComprehension.feature: Scenario: Using pattern comprehension in RETURN
+#PatternComprehension.feature: Scenario: Aggregating on pattern comprehension
+#PatternComprehension.feature: Scenario: Using pattern comprehension to test existence
+#PatternComprehension.feature: Scenario: Pattern comprehension inside list comprehension
+#PatternComprehension.feature: Scenario: Get node degree via size of pattern comprehension
+#PatternComprehension.feature: Scenario: Get node degree via size of pattern comprehension that specifies a relationship type
+#PatternComprehension.feature: Scenario: Get node degree via size of pattern comprehension that specifies multiple relationship types
+#PatternComprehension.feature: Scenario: Introducing new node variable in pattern comprehension
+#PatternComprehension.feature: Scenario: Introducing new relationship variable in pattern comprehension
+#RemoveAcceptance.feature: Scenario: Should ignore nulls
+#RemoveAcceptance.feature: Scenario: Remove a single label
+#RemoveAcceptance.feature: Scenario: Remove multiple labels
+#RemoveAcceptance.feature: Scenario: Remove a single node property
+#RemoveAcceptance.feature: Scenario: Remove multiple node properties
+#RemoveAcceptance.feature: Scenario: Remove a single relationship property
+#RemoveAcceptance.feature: Scenario: Remove multiple relationship properties
+#RemoveAcceptance.feature: Scenario: Remove a missing property should be a valid operation
+#ReturnAcceptance2.feature: Scenario: Fail when returning properties of deleted nodes
+#ReturnAcceptance2.feature: Scenario: Fail when returning labels of deleted nodes
+#ReturnAcceptance2.feature: Scenario: Fail when returning properties of deleted relationships
+#ReturnAcceptance2.feature: Scenario: Do not fail when returning type of deleted relationships
+#ReturnAcceptance2.feature: Scenario: Accept valid Unicode literal
+#ReturnAcceptance2.feature: Scenario: LIMIT 0 should return an empty result
+#ReturnAcceptance2.feature: Scenario: Fail when sorting on variable removed by DISTINCT
+#ReturnAcceptance2.feature: Scenario: Ordering with aggregation
+#ReturnAcceptance2.feature: Scenario: DISTINCT on nullable values
+#ReturnAcceptance2.feature: Scenario: Return all variables
+#ReturnAcceptance2.feature: Scenario: Setting and returning the size of a list property
+#ReturnAcceptance2.feature: Scenario: `sqrt()` returning float values
+#ReturnAcceptance2.feature: Scenario: Arithmetic expressions inside aggregation
+#ReturnAcceptance2.feature: Scenario: Matching and disregarding output, then matching again
+#ReturnAcceptance2.feature: Scenario: Returning a list property
+#ReturnAcceptance2.feature: Scenario: Returning a projected map
+#ReturnAcceptance2.feature: Scenario: Returning an expression
+#ReturnAcceptance2.feature: Scenario: Concatenating and returning the size of literal lists
+#ReturnAcceptance2.feature: Scenario: Returning nested expressions based on list property
+#ReturnAcceptance2.feature: Scenario: Limiting amount of rows when there are fewer left than the LIMIT argument
+#ReturnAcceptance2.feature: Scenario: `substring()` with default second argument
+#ReturnAcceptance2.feature: Scenario: Returning all variables with ordering
+#ReturnAcceptance2.feature: Scenario: Using aliased DISTINCT expression in ORDER BY
+#ReturnAcceptance2.feature: Scenario: Returned columns do not change from using ORDER BY
+#ReturnAcceptance2.feature: Scenario: Arithmetic expressions should propagate null values
+#ReturnAcceptance2.feature: Scenario: Indexing into nested literal lists
+#ReturnAcceptance2.feature: Scenario: Aliasing expressions
+#ReturnAcceptance2.feature: Scenario: Projecting an arithmetic expression with aggregation
+#ReturnAcceptance2.feature: Scenario: Multiple aliasing and backreferencing
+#ReturnAcceptance2.feature: Scenario: Aggregating by a list property has a correct definition of equality
+#ReturnAcceptance2.feature: Scenario: Reusing variable names
+#ReturnAcceptance2.feature: Scenario: Concatenating lists of same type
+#ReturnAcceptance2.feature: Scenario: Appending lists of same type
+#ReturnAcceptance2.feature: Scenario: DISTINCT inside aggregation should work with lists in maps
+#ReturnAcceptance2.feature: Scenario: Handling DISTINCT with lists in maps
+#ReturnAcceptance2.feature: Scenario: DISTINCT inside aggregation should work with nested lists in maps
+#ReturnAcceptance2.feature: Scenario: DISTINCT inside aggregation should work with nested lists of maps in maps
+#ReturnAcceptance.feature: Scenario: Allow addition
+#ReturnAcceptance.feature: Scenario: Limit to two hits
+#ReturnAcceptance.feature: Scenario: Start the result from the second row
+#ReturnAcceptance.feature: Scenario: Start the result from the second row by param
+#ReturnAcceptance.feature: Scenario: Get rows in the middle
+#ReturnAcceptance.feature: Scenario: Get rows in the middle by param
+#ReturnAcceptance.feature: Scenario: Sort on aggregated function
+#ReturnAcceptance.feature: Scenario: Support sort and distinct
+#ReturnAcceptance.feature: Scenario: Support column renaming
+#ReturnAcceptance.feature: Scenario: Support ordering by a property after being distinct-ified
+#ReturnAcceptance.feature: Scenario: Arithmetic precedence test
+#ReturnAcceptance.feature: Scenario: Arithmetic precedence with parenthesis test
+#ReturnAcceptance.feature: Scenario: Count star should count everything in scope
+#ReturnAcceptance.feature: Scenario: Absolute function
+#ReturnAcceptance.feature: Scenario: Return collection size
+#SemanticErrorAcceptance.feature: Scenario: Failing when returning an undefined variable
+#SemanticErrorAcceptance.feature: Scenario: Failing when comparing to an undefined variable
+#SemanticErrorAcceptance.feature: Scenario: Failing when using IN on a string literal
+#SemanticErrorAcceptance.feature: Scenario: Failing when using IN on an integer literal
+#SemanticErrorAcceptance.feature: Scenario: Failing when using IN on a float literal
+#SemanticErrorAcceptance.feature: Scenario: Failing when using IN on a boolean literal
+#SemanticErrorAcceptance.feature: Scenario: Failing when a node is used as a relationship
+#SemanticErrorAcceptance.feature: Scenario: Failing when a relationship is used as a node
+#SemanticErrorAcceptance.feature: Scenario: Failing when using `type()` on a node
+#SemanticErrorAcceptance.feature: Scenario: Failing when using `length()` on a node
+#SemanticErrorAcceptance.feature: Scenario: Failing when re-using a relationship in the same pattern
+#SemanticErrorAcceptance.feature: Scenario: Failing when using NOT on string literal
+#SemanticErrorAcceptance.feature: Scenario: Failing when using variable length relationship in CREATE
+#SemanticErrorAcceptance.feature: Scenario: Failing when using variable length relationship in MERGE
+#SemanticErrorAcceptance.feature: Scenario: Failing when using parameter as node predicate in MATCH
+#SemanticErrorAcceptance.feature: Scenario: Failing when using parameter as relationship predicate in MATCH
+#SemanticErrorAcceptance.feature: Scenario: Failing when using parameter as node predicate in MERGE
+#SemanticErrorAcceptance.feature: Scenario: Failing when using parameter as relationship predicate in MERGE
+#SemanticErrorAcceptance.feature: Scenario: Failing when deleting an integer expression
+#SemanticErrorAcceptance.feature: Scenario: Failing when using CREATE on a node that is already bound
+#SemanticErrorAcceptance.feature: Scenario: Failing when using MERGE on a node that is already bound
+#SemanticErrorAcceptance.feature: Scenario: Failing when using CREATE on a relationship that is already bound
+#SemanticErrorAcceptance.feature: Scenario: Failing when using MERGE on a relationship that is already bound
+#SemanticErrorAcceptance.feature: Scenario: Failing when using undefined variable in ON CREATE
+#SemanticErrorAcceptance.feature: Scenario: Failing when using undefined variable in ON MATCH
+#SemanticErrorAcceptance.feature: Scenario: Failing when using MATCH after OPTIONAL MATCH
+#SemanticErrorAcceptance.feature: Scenario: Failing when float value is too large
+#SemanticErrorAcceptance.feature: Scenario: Handling property access on the Any type
+#SemanticErrorAcceptance.feature: Scenario: Failing when performing property access on a non-map 1
+#SemanticErrorAcceptance.feature: Scenario: Failing when performing property access on a non-map 2
+#SemanticErrorAcceptance.feature: Scenario: Failing when checking existence of a non-property and non-pattern
+#SemanticErrorAcceptance.feature: Scenario: Bad arguments for `range()`
+#SemanticErrorAcceptance.feature: Scenario: Fail for invalid Unicode hyphen in subtraction
+#SemanticErrorAcceptance.feature: Scenario: Failing for `size()` on paths
+#SemanticErrorAcceptance.feature: Scenario: Failing when using aggregation in list comprehension
+#SemanticErrorAcceptance.feature: Scenario: Failing when using non-constants in SKIP
+#SemanticErrorAcceptance.feature: Scenario: Failing when using negative value in SKIP
+#SemanticErrorAcceptance.feature: Scenario: Failing when using non-constants in LIMIT
+#SemanticErrorAcceptance.feature: Scenario: Failing when using negative value in LIMIT
+#SemanticErrorAcceptance.feature: Scenario: Failing when using floating point in LIMIT
+#SemanticErrorAcceptance.feature: Scenario: Failing when creating relationship without type
+#SemanticErrorAcceptance.feature: Scenario: Failing when merging relationship without type
+#SemanticErrorAcceptance.feature: Scenario: Failing when merging relationship without type, no colon
+#SemanticErrorAcceptance.feature: Scenario: Failing when creating relationship with more than one type
+#SemanticErrorAcceptance.feature: Scenario: Failing when merging relationship with more than one type
+#SetAcceptance.feature: Scenario: Setting a node property to null removes the existing property
+#SetAcceptance.feature: Scenario: Setting a relationship property to null removes the existing property
+#SetAcceptance.feature: Scenario: Set a property
+#SetAcceptance.feature: Scenario: Set a property to an expression
+#SetAcceptance.feature: Scenario: Set a property by selecting the node using a simple expression
+#SetAcceptance.feature: Scenario: Set a property by selecting the relationship using a simple expression
+#SetAcceptance.feature: Scenario: Setting a property to null removes the property
+#SetAcceptance.feature: Scenario: Add a label to a node
+#SetAcceptance.feature: Scenario: Adding a list property
+#SetAcceptance.feature: Scenario: Concatenate elements onto a list property
+#SetAcceptance.feature: Scenario: Concatenate elements in reverse onto a list property
+#SetAcceptance.feature: Scenario: Overwrite values when using +=
+#SetAcceptance.feature: Scenario: Retain old values when using +=
+#SetAcceptance.feature: Scenario: Explicit null values in a map remove old values
+#SetAcceptance.feature: Scenario: Non-existent values in a property map are removed with SET =
+#SkipLimitAcceptance.feature: Scenario: SKIP with an expression that depends on variables should fail
+#SkipLimitAcceptance.feature: Scenario: LIMIT with an expression that depends on variables should fail
+#SkipLimitAcceptance.feature: Scenario: SKIP with an expression that does not depend on variables
+#SkipLimitAcceptance.feature: Scenario: LIMIT with an expression that does not depend on variables
+#StartingPointAcceptance.feature: Scenario: Find all nodes
+#StartingPointAcceptance.feature: Scenario: Find labelled nodes
+#StartingPointAcceptance.feature: Scenario: Find nodes by property
+#StartsWithAcceptance.feature: Scenario: Finding exact matches
+#StartsWithAcceptance.feature: Scenario: Finding beginning of string
+#StartsWithAcceptance.feature: Scenario: Finding end of string 1
+#StartsWithAcceptance.feature: Scenario: Finding end of string 2
+#StartsWithAcceptance.feature: Scenario: Finding middle of string
+#StartsWithAcceptance.feature: Scenario: Finding the empty string
+#StartsWithAcceptance.feature: Scenario: Finding when the middle is known
+#StartsWithAcceptance.feature: Scenario: Finding strings starting with whitespace
+#StartsWithAcceptance.feature: Scenario: Finding strings starting with newline
+#StartsWithAcceptance.feature: Scenario: Finding strings ending with newline
+#StartsWithAcceptance.feature: Scenario: Finding strings ending with whitespace
+#StartsWithAcceptance.feature: Scenario: Finding strings containing whitespace
+#StartsWithAcceptance.feature: Scenario: Finding strings containing newline
+#StartsWithAcceptance.feature: Scenario: No string starts with null
+#StartsWithAcceptance.feature: Scenario: No string does not start with null
+#StartsWithAcceptance.feature: Scenario: No string ends with null
+#StartsWithAcceptance.feature: Scenario: No string does not end with null
+#StartsWithAcceptance.feature: Scenario: No string contains null
+#StartsWithAcceptance.feature: Scenario: No string does not contain null
+#StartsWithAcceptance.feature: Scenario: Combining string operators
+#StartsWithAcceptance.feature: Scenario: NOT with CONTAINS
+#StartsWithAcceptance.feature: Scenario: Handling non-string operands for STARTS WITH
+#StartsWithAcceptance.feature: Scenario: Handling non-string operands for CONTAINS
+#StartsWithAcceptance.feature: Scenario: Handling non-string operands for ENDS WITH
+#SyntaxErrorAcceptance.feature: Scenario: Using a non-existent function
+#SyntaxErrorAcceptance.feature: Scenario: Using `rand()` in aggregations
+#SyntaxErrorAcceptance.feature: Scenario: Supplying invalid hexadecimal literal 1
+#SyntaxErrorAcceptance.feature: Scenario: Supplying invalid hexadecimal literal 2
+#TernaryLogicAcceptance.feature: Scenario: The inverse of a null is a null
+#TernaryLogicAcceptance.feature: Scenario: A literal null IS null
+#TernaryLogicAcceptance.feature: Scenario: A literal null is not IS NOT null
+#TernaryLogicAcceptance.feature: Scenario: It is unknown - i.e. null - if a null is equal to a null
+#TernaryLogicAcceptance.feature: Scenario: It is unknown - i.e. null - if a null is not equal to a null
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with different relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with superset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with implicit subset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with explicit subset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with same labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with different labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with implicit subset of labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is not a friend with implicit superset of labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with different relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with superset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with implicit subset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with explicit subset of relationship type
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with same labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with different labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with implicit subset of labels
+#TriadicSelection.feature: Scenario: Handling triadic friend of a friend that is a friend with implicit superset of labels
+#TypeConversionFunctions.feature: Scenario: `toBoolean()` on valid literal string
+#TypeConversionFunctions.feature: Scenario: `toBoolean()` on booleans
+#TypeConversionFunctions.feature: Scenario: `toBoolean()` on variables with valid string values
+#TypeConversionFunctions.feature: Scenario: `toBoolean()` on invalid strings
+#TypeConversionFunctions.feature: Scenario: `toInteger()`
+#TypeConversionFunctions.feature: Scenario: `toInteger()` on float
+#TypeConversionFunctions.feature: Scenario: `toInteger()` returning null on non-numerical string
+#TypeConversionFunctions.feature: Scenario: `toInteger()` handling mixed number types
+#TypeConversionFunctions.feature: Scenario: `toInteger()` handling Any type
+#TypeConversionFunctions.feature: Scenario: `toInteger()` on a list of strings
+#TypeConversionFunctions.feature: Scenario: `toInteger()` on a complex-typed expression
+#TypeConversionFunctions.feature: Scenario: `toFloat()`
+#TypeConversionFunctions.feature: Scenario: `toFloat()` on mixed number types
+#TypeConversionFunctions.feature: Scenario: `toFloat()` returning null on non-numerical string
+#TypeConversionFunctions.feature: Scenario: `toFloat()` handling Any type
+#TypeConversionFunctions.feature: Scenario: `toFloat()` on a list of strings
+#TypeConversionFunctions.feature: Scenario: `toString()`
+#TypeConversionFunctions.feature: Scenario: `toString()` handling boolean properties
+#TypeConversionFunctions.feature: Scenario: `toString()` handling inlined boolean
+#TypeConversionFunctions.feature: Scenario: `toString()` handling boolean literal
+#TypeConversionFunctions.feature: Scenario: `toString()` should work on Any type
+#TypeConversionFunctions.feature: Scenario: `toString()` on a list of integers
+#TypeConversionFunctions.feature: Scenario: `toString()` should accept potentially correct types 1
+#TypeConversionFunctions.feature: Scenario: `toString()` should accept potentially correct types 2
+#UnionAcceptance.feature: Scenario: Should be able to create text output from union queries
+#UnionAcceptance.feature: Scenario: Two elements, both unique, not distinct
+#UnionAcceptance.feature: Scenario: Two elements, both unique, distinct
+#UnionAcceptance.feature: Scenario: Three elements, two unique, distinct
+#UnionAcceptance.feature: Scenario: Three elements, two unique, not distinct
+#UnwindAcceptance.feature: Scenario: Unwinding a list
+#UnwindAcceptance.feature: Scenario: Unwinding a range
+#UnwindAcceptance.feature: Scenario: Unwinding a concatenation of lists
+#UnwindAcceptance.feature: Scenario: Unwinding a collected unwound expression
+#UnwindAcceptance.feature: Scenario: Unwinding a collected expression
+#UnwindAcceptance.feature: Scenario: Creating nodes from an unwound parameter list
+#UnwindAcceptance.feature: Scenario: Double unwinding a list of lists
+#UnwindAcceptance.feature: Scenario: Unwinding the empty list
+#UnwindAcceptance.feature: Scenario: Unwinding null
+#UnwindAcceptance.feature: Scenario: Unwinding list with duplicates
+#UnwindAcceptance.feature: Scenario: Unwind does not prune context
+#UnwindAcceptance.feature: Scenario: Unwind does not remove variables from scope
+#UnwindAcceptance.feature: Scenario: Multiple unwinds after each other
+#UnwindAcceptance.feature: Scenario: Unwind with merge
+#VarLengthAcceptance2.feature: Scenario: Handling relationships that are already bound in variable length paths
+#VarLengthAcceptance.feature: Scenario: Handling unbounded variable length match
+#VarLengthAcceptance.feature: Scenario: Handling explicitly unbounded variable length match
+#VarLengthAcceptance.feature: Scenario: Fail when asterisk operator is missing
+#VarLengthAcceptance.feature: Scenario: Handling single bounded variable length match 1
+#VarLengthAcceptance.feature: Scenario: Handling single bounded variable length match 2
+#VarLengthAcceptance.feature: Scenario: Handling single bounded variable length match 3
+#VarLengthAcceptance.feature: Scenario: Handling upper and lower bounded variable length match 1
+#VarLengthAcceptance.feature: Scenario: Handling upper and lower bounded variable length match 2
+#VarLengthAcceptance.feature: Scenario: Handling symmetrically bounded variable length match, bounds are zero
+#VarLengthAcceptance.feature: Scenario: Handling symmetrically bounded variable length match, bounds are one
+#VarLengthAcceptance.feature: Scenario: Handling symmetrically bounded variable length match, bounds are two
+#VarLengthAcceptance.feature: Scenario: Fail on negative bound
+#VarLengthAcceptance.feature: Scenario: Handling upper and lower bounded variable length match, empty interval 1
+#VarLengthAcceptance.feature: Scenario: Handling upper and lower bounded variable length match, empty interval 2
+#VarLengthAcceptance.feature: Scenario: Handling upper bounded variable length match, empty interval
+#VarLengthAcceptance.feature: Scenario: Handling upper bounded variable length match 1
+#VarLengthAcceptance.feature: Scenario: Handling upper bounded variable length match 2
+#VarLengthAcceptance.feature: Scenario: Handling lower bounded variable length match 1
+#VarLengthAcceptance.feature: Scenario: Handling lower bounded variable length match 2
+#VarLengthAcceptance.feature: Scenario: Handling lower bounded variable length match 3
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, zero length 1
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, zero length 2
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, single length 1
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, single length 2
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, longer 1
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, longer 2
+#VarLengthAcceptance.feature: Scenario: Handling a variable length relationship and a standard relationship in chain, longer 3
+#VarLengthAcceptance.feature: Scenario: Handling mixed relationship patterns and directions 1
+#VarLengthAcceptance.feature: Scenario: Handling mixed relationship patterns and directions 2
+#VarLengthAcceptance.feature: Scenario: Handling mixed relationship patterns 1
+#VarLengthAcceptance.feature: Scenario: Handling mixed relationship patterns 2
+#WhereAcceptance.feature: Scenario: NOT and false
+#WithAcceptance.feature: Scenario: Passing on pattern nodes
+#WithAcceptance.feature: Scenario: ORDER BY and LIMIT can be used
+#WithAcceptance.feature: Scenario: No dependencies between the query parts
+#WithAcceptance.feature: Scenario: Aliasing
+#WithAcceptance.feature: Scenario: Handle dependencies across WITH
+#WithAcceptance.feature: Scenario: Handle dependencies across WITH with SKIP
+#WithAcceptance.feature: Scenario: WHERE after WITH should filter results
+#WithAcceptance.feature: Scenario: WHERE after WITH can filter on top of an aggregation
+#WithAcceptance.feature: Scenario: ORDER BY on an aggregating key
+#WithAcceptance.feature: Scenario: ORDER BY a DISTINCT column
+#WithAcceptance.feature: Scenario: WHERE on a DISTINCT column
+#WithAcceptance.feature: Scenario: A simple pattern with one bound endpoint
+#WithAcceptance.feature: Scenario: Null handling
+#WithAcceptance.feature: Scenario: Nested maps
+#WithAcceptance.feature: Scenario: Connected components succeeding WITH
+#WithAcceptance.feature: Scenario: Single WITH using a predicate and aggregation
+#WithAcceptance.feature: Scenario: Multiple WITHs using a predicate and aggregation

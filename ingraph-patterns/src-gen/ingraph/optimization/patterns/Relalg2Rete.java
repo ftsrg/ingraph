@@ -3,10 +3,14 @@
  */
 package ingraph.optimization.patterns;
 
-import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
-import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
-import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
+import ingraph.optimization.patterns.DefaultExpandOperatorMatcher;
+import ingraph.optimization.patterns.ExpandOperatorAMatcher;
+import ingraph.optimization.patterns.ExpandOperatorBMatcher;
+import ingraph.optimization.patterns.ExpandVertexMatcher;
+import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
+import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
+import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
+import ingraph.optimization.patterns.VariablesInLogicalExpressionMatcher;
 import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandOperatorAQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandOperatorBQuerySpecification;
@@ -15,6 +19,9 @@ import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.VariablesInLogicalExpressionQuerySpecification;
+import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
+import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
+import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
  * A pattern group formed of all patterns defined in Relalg2Rete.vql.

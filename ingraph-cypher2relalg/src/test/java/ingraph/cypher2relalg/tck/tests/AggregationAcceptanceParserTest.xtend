@@ -21,7 +21,7 @@ class AggregationAcceptanceParserTest {
       """
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testAggregationAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (n)

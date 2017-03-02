@@ -3,15 +3,12 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
-import ingraph.optimization.patterns.util.LeftDeepTreeNodesProcessor;
-import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import relalg.BinaryLogicalExpression;
 
 /**

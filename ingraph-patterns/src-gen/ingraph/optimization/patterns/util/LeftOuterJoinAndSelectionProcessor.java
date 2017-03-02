@@ -3,9 +3,8 @@
  */
 package ingraph.optimization.patterns.util;
 
-import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
-
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatch;
+import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import relalg.GetEdgesOperator;
 import relalg.LeftOuterJoinOperator;
 import relalg.Operator;

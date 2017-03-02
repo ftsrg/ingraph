@@ -12,6 +12,9 @@ def indent(lines):
     padding = '        '
     return ('\n' + padding).join(lines.split('\n'))
 
+with open("failing-and-regression-tests.txt", "r") as file:
+    failing_and_regression_tests = file.read()
+
 filenames = sorted(glob.glob('*.feature'))
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
@@ -57,11 +60,17 @@ class %sParserTest {
             query_file.write(query + "\n")
 
         test_name = "%s_%02d" % (filename_without_extension, i)
+        scenario_name = "#%s: %s" % (filename, scenario.splitlines()[0])
+        if scenario_name in failing_and_regression_tests:
+            regression_or_failing = "Failing"
+        else:
+            regression_or_failing = "Regression"
+
         test_case = """
     /*
     %s*/
     @Test
-    @Category(FailingTests)
+    @Category(%sTests)
     def void test%s() {
         val cypher = CypherParser.parseString('''
         %s
@@ -70,7 +79,7 @@ class %sParserTest {
         val container = Cypher2Relalg.processCypher(cypher)
         RelalgUtil.save(container, "relalg-models/tck/%s")
     }
-""" % (scenario, test_name, indent(query), test_name, test_name)
+""" % (scenario, regression_or_failing, test_name, indent(query), test_name, test_name)
         test_file.write(test_case)
 
     test_footer = """

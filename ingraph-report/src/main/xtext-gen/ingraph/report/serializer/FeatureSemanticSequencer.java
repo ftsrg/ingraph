@@ -3,20 +3,7 @@
  */
 package ingraph.report.serializer;
 
-import java.util.Set;
-
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.xtext.Action;
-import org.eclipse.xtext.Parameter;
-import org.eclipse.xtext.ParserRule;
-import org.eclipse.xtext.serializer.ISerializationContext;
-import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
-import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
-import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
-
 import com.google.inject.Inject;
-
 import ingraph.report.feature.AndStep;
 import ingraph.report.feature.AsA;
 import ingraph.report.feature.Background;
@@ -34,6 +21,16 @@ import ingraph.report.feature.ScenarioWithOutline;
 import ingraph.report.feature.ThenStep;
 import ingraph.report.feature.WhenStep;
 import ingraph.report.services.FeatureGrammarAccess;
+import java.util.Set;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.xtext.Action;
+import org.eclipse.xtext.Parameter;
+import org.eclipse.xtext.ParserRule;
+import org.eclipse.xtext.serializer.ISerializationContext;
+import org.eclipse.xtext.serializer.acceptor.SequenceFeeder;
+import org.eclipse.xtext.serializer.sequencer.AbstractDelegatingSemanticSequencer;
+import org.eclipse.xtext.serializer.sequencer.ITransientValueService.ValueTransient;
 
 @SuppressWarnings("all")
 public class FeatureSemanticSequencer extends AbstractDelegatingSemanticSequencer {

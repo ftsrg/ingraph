@@ -1,1 +1,0 @@
-MERGE ({p: null})

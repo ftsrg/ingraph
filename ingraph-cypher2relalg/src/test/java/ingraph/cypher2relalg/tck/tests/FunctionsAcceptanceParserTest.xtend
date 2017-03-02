@@ -324,7 +324,7 @@ class FunctionsAcceptanceParserTest {
     }
 
     /*
-    Scenario: `labels()` should accept type Any
+    Scenario: `labels()` failing on invalid arguments
     Given an empty graph
     And having executed:
       """

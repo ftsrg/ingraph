@@ -3,11 +3,11 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.ParentOperatorMatcher;
+import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
-import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 
 /**
  * A pattern group formed of all patterns defined in ParentOperator.vql.

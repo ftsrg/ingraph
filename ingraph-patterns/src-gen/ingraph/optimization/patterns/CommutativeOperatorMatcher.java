@@ -3,12 +3,12 @@
  */
 package ingraph.optimization.patterns;
 
+import ingraph.optimization.patterns.CommutativeOperatorMatch;
+import ingraph.optimization.patterns.util.CommutativeOperatorQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
 import org.eclipse.viatra.query.runtime.api.IQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
@@ -16,9 +16,6 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseMatcher;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
-
-import ingraph.optimization.patterns.util.CommutativeOperatorProcessor;
-import ingraph.optimization.patterns.util.CommutativeOperatorQuerySpecification;
 import relalg.CommutativeBinaryOperator;
 import relalg.Operator;
 

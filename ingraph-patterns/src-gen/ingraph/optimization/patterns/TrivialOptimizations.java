@@ -3,15 +3,19 @@
  */
 package ingraph.optimization.patterns;
 
-import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
-import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
-import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-
+import ingraph.optimization.patterns.AssociativeOperatorMatcher;
+import ingraph.optimization.patterns.CascadableSelectionMatcher;
+import ingraph.optimization.patterns.CommutativeOperatorMatcher;
+import ingraph.optimization.patterns.FoldableConstantExpressionMatcher;
+import ingraph.optimization.patterns.SwappableSelectionMatcher;
 import ingraph.optimization.patterns.util.AssociativeOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.CascadableSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.CommutativeOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.FoldableConstantExpressionQuerySpecification;
 import ingraph.optimization.patterns.util.SwappableSelectionQuerySpecification;
+import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
+import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
+import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
  * A pattern group formed of all patterns defined in TrivialOptimizations.vql.

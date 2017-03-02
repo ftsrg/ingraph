@@ -3,30 +3,14 @@
  */
 package ingraph.report.feature.util;
 
+import ingraph.report.feature.*;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-import org.eclipse.emf.ecore.EObject;
 
-import ingraph.report.feature.AbstractScenario;
-import ingraph.report.feature.AndStep;
-import ingraph.report.feature.AsA;
-import ingraph.report.feature.Background;
-import ingraph.report.feature.Example;
-import ingraph.report.feature.ExampleCell;
-import ingraph.report.feature.ExampleRow;
-import ingraph.report.feature.Feature;
-import ingraph.report.feature.FeaturePackage;
-import ingraph.report.feature.FreeText;
-import ingraph.report.feature.GivenStep;
-import ingraph.report.feature.IWantTo;
-import ingraph.report.feature.InOrderTo;
-import ingraph.report.feature.NarrativeElement;
-import ingraph.report.feature.Scenario;
-import ingraph.report.feature.ScenarioWithOutline;
-import ingraph.report.feature.Step;
-import ingraph.report.feature.ThenStep;
-import ingraph.report.feature.WhenStep;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->

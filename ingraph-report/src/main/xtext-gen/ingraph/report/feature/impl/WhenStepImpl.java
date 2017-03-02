@@ -3,14 +3,16 @@
  */
 package ingraph.report.feature.impl;
 
+import ingraph.report.feature.FeaturePackage;
+import ingraph.report.feature.WhenStep;
+
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.util.EDataTypeEList;
 
-import ingraph.report.feature.FeaturePackage;
-import ingraph.report.feature.WhenStep;
+import org.eclipse.emf.ecore.EClass;
+
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 
 /**
  * <!-- begin-user-doc -->
