@@ -8,12 +8,12 @@ import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.report.tests.escape.Escaper
 import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
+import ingraph.report.tests.escape.TechReportEscaper
 
 class QueryProcessor {
 	
@@ -21,7 +21,7 @@ class QueryProcessor {
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
 	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
-	extension Escaper escaper = new Escaper
+	extension TechReportEscaper escaper = new TechReportEscaper
 
 	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).build
 	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
@@ -108,7 +108,7 @@ class QueryProcessor {
 	}
 	
 	def toHeader(String title, String queryName) {
-		'''{«title» \textcolor{gray}{(«queryName»)}}'''
+		'''{«title» \textcolor{gray}{(«queryName.escape»)}}'''
 	}
 
 	def expression(RelalgContainer container) {

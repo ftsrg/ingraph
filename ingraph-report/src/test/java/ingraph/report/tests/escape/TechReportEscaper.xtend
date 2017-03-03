@@ -1,6 +1,6 @@
 package ingraph.report.tests.escape
 
-class Escaper {
+class TechReportEscaper {
 
 	def escape(String s) {
 		s //

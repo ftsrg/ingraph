@@ -1,14 +1,14 @@
 package ingraph.report.tests
 
-import ingraph.report.tests.escape.Escaper
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Map
 import org.apache.commons.io.FileUtils
+import ingraph.report.tests.escape.TechReportEscaper
 
 abstract class IngraphReportTest {
 
-	protected extension Escaper escaper = new Escaper
+	protected extension TechReportEscaper escaper = new TechReportEscaper
 
 	def printChapter(String chapterName, String chapterTitle, Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
 		var doc = '''
