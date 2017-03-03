@@ -12,7 +12,8 @@ abstract class IngraphReportTest {
 
 	protected extension TechReportEscaper escaper = new TechReportEscaper
 
-	def printChapter(String chapterName, String chapterTitle, Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
+	def printChapter(String chapterName, String chapterTitle, String shortTitle, 
+		Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
 		var doc = '''
 			\chapter{«chapterTitle»}
 			\label{chp:«chapterName»}
@@ -35,8 +36,6 @@ abstract class IngraphReportTest {
 			sections += '''
 				\section{«sectionTitle»}
 				
-				Progress:
-				
 				\progressbar[width=10cm, heighta=.3cm, filledcolor=gray, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«sectionCompilingQueryRatio»}
 				«sectionCompilingQueries» of «sectionTotalQueries»
 				
@@ -52,15 +51,23 @@ abstract class IngraphReportTest {
 
 		val chapterCompilingQueryRatio = calculateCompilingQueryRation(chapterTotalQueries, chapterCompilingQueries)
 		doc += '''
-			Total progress:
-			
-			\progressbar[width=10cm, heighta=.3cm, filledcolor=OliveGreen, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»}
-			«chapterCompilingQueries» of «chapterTotalQueries»
+				\begin{tabular}{llr@{ of }l}
+				\input{appendix/progressbar-«chapterName»}
+				\end{tabular}
 		'''
 		doc += sections
 
-		FileUtils.writeStringToFile(new File('''../opencypher-report/appendix/«chapterName».tex'''), doc,
-			Charset.defaultCharset())
+		val progressbar = '''
+			«shortTitle» &
+			\progressbar[width=10cm, heighta=.3cm, filledcolor=OliveGreen, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»} &
+			«chapterCompilingQueries» &
+			«chapterTotalQueries» \\
+		'''
+
+		val appendixDir = "../opencypher-report/appendix/"
+		val charset = Charset.forName("UTF-8")
+		FileUtils.writeStringToFile(new File('''«appendixDir»progressbar-«chapterName».tex'''), progressbar, charset)
+		FileUtils.writeStringToFile(new File('''«appendixDir»chapter-«chapterName».tex'''), doc, charset)
 	}
 
 	protected def String calculateCompilingQueryRation(int sectionTotalQueries, int sectionCompilingQueries) {

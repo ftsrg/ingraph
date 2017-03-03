@@ -7,7 +7,7 @@ class SocialNetworkBenchmarkBiTest extends DirectoryTest {
 
 	@Test
 	def void generateChapter() {
-		toChapter("ldbc-snb-bi", "LDBC Social Network Benchmark -- Business Intelligence Workload")
+		toChapter("ldbc-snb-bi", "LDBC Social Network Benchmark -- Business Intelligence Workload", "LDBC SNB BI")
 	}
 
 }

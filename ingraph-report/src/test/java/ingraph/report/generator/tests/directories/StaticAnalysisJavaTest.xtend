@@ -7,7 +7,7 @@ class StaticAnalysisJavaTest extends DirectoryTest {
 
 	@Test
 	def void generateChapter() {
-		toChapter("static-analysis-java", "Static Analysis for Java")
+		toChapter("static-analysis-java", "Static Analysis for Java", "Static Analysis (Java)")
 	}
 
 }

@@ -30,6 +30,7 @@
 \usepackage{progressbar}
 \usepackage{lineno}
 \usepackage{accsupp}
+\usepackage{datetime}
 %\usepackage{tocstyle} % prevents numbers an titles from overlapping in ToC
 
 \renewcommand{\thelinenumber}{
@@ -40,7 +41,6 @@
 \fancyhf{}
 
 \renewcommand{\subsectionmark}[1]{\def\subsectiontitle{: #1}}
-%\fancyhead[L]{\nouppercase{\rightmark \subsectiontitle}}
 \fancyhead[L]{\nouppercase{\rightmark}} % \StrLeft{\subsectiontitle}{50}}}
 \fancyhead[R]{\thepage}
 
@@ -52,12 +52,41 @@
 % title page
 \title{openCypher Specification}
 \author{G\'abor Sz\'arnyas, J\'ozsef Marton}
-\usepackage[]{datetime}
-\date{\yyyymmdddate \today~\currenttime~GMT+0}
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+	\begin{center}
+		\includegraphics[width=60mm,keepaspectratio]{figures/bme-logo}\\
+		\vspace{0.3cm}
+		\textbf{Budapest University of Technology and Economics}\\
+		\textmd{Faculty of Electrical Engineering and Informatics}\\[5cm]
+		
+		\vspace{0.4cm}
+		{\huge \bfseries Formalization of openCypher queries in relational algebra}\\[0.8cm]
+		\vspace{0.5cm}
+		\textsc{\Large Technical Report}\\[4cm]
+		
+		{\Large Gábor Szárnyas, József Marton}\\
+
+		\IfFileExists{./disable-appendix}{}{
+			\vspace{2cm}
+			\begin{tabular}{llr@{ of }l}
+			\input{appendix/progressbar-tck}
+			\input{appendix/progressbar-fraud-detection}
+			\input{appendix/progressbar-ldbc-snb-interactive}
+			\input{appendix/progressbar-ldbc-snb-bi}
+			\input{appendix/progressbar-movie-database}
+			\input{appendix/progressbar-static-analysis-java}
+			\input{appendix/progressbar-static-analysis-javascript}
+			\input{appendix/progressbar-trainbenchmark}
+			\end{tabular}
+		}
+		
+		\vfill
+		{\large Generated on \yyyymmdddate \today~\currenttime~GMT+0.}
+	\end{center}		
+\end{titlepage}
 
 \tableofcontents
 
@@ -70,18 +99,16 @@
 \bibliographystyle{abbrv}
 \bibliography{bib}
 
-\IfFileExists{./disable-appendix}{
-	% do nothing
-}{
+\IfFileExists{./disable-appendix}{}{
 	\appendix
-	\input{appendix/tck}
-	\input{appendix/fraud-detection}
-	\input{appendix/ldbc-snb-interactive}
-	\input{appendix/ldbc-snb-bi}
-	\input{appendix/movie-database}
-	\input{appendix/static-analysis-java}
-	\input{appendix/static-analysis-javascript}
-	\input{appendix/trainbenchmark}
+	\input{appendix/chapter-tck}
+	\input{appendix/chapter-fraud-detection}
+	\input{appendix/chapter-ldbc-snb-interactive}
+	\input{appendix/chapter-ldbc-snb-bi}
+	\input{appendix/chapter-movie-database}
+	\input{appendix/chapter-static-analysis-java}
+	\input{appendix/chapter-static-analysis-javascript}
+	\input{appendix/chapter-trainbenchmark}
 }
 
 \end{document}

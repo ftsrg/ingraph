@@ -7,13 +7,16 @@ import java.io.File
 import java.nio.charset.Charset
 import java.util.Collections
 import java.util.LinkedList
-import java.util.Map
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
 abstract class DirectoryTest extends IngraphReportTest {
-	
+
 	def toChapter(String directoryName, String chapterTitle) {
+		toChapter(directoryName, chapterTitle, chapterTitle)
+	}
+
+	def toChapter(String directoryName, String chapterTitle, String shortTitle) {
 		val directoryPath = '''../queries/«directoryName»/'''
 		val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
 		Collections.sort(fileNames, new NaturalOrderComparator());
@@ -26,8 +29,8 @@ abstract class DirectoryTest extends IngraphReportTest {
 			sectionTestQueries.add(testQuery)
 		}
 		
-		val Map<String, Iterable<TestQuery>> chapterQuerySpecifications = ImmutableMap.of("Queries", sectionTestQueries)
-		printChapter(directoryName, chapterTitle, chapterQuerySpecifications)
+		val chapterQuerySpecifications = ImmutableMap.<String, Iterable<TestQuery>>of("Queries", sectionTestQueries)
+		printChapter(directoryName, chapterTitle, shortTitle, chapterQuerySpecifications)
 	}
 	
 }

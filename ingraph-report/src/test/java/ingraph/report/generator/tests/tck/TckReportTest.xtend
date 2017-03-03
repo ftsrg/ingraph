@@ -66,7 +66,8 @@ class TckReportTest extends IngraphReportTest {
 			chapterTestQueries.put(feature.name.escape, testQueries)
 		}
 
-		printChapter("tck", "TCK Acceptance Tests", chapterTestQueries)
+		val title = "TCK Acceptance Tests"
+		printChapter("tck", title, title, chapterTestQueries)
 	}
 
 	def processFile(File file, ResourceSet resourceSet) {
