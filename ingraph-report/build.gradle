@@ -28,10 +28,10 @@ task report(type: Test) {
 task generateXtextLanguage(type: JavaExec) {
   main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
   classpath = configurations.mwe2
-  inputs.file 'src/main/java/ingraph/report/GenerateFeature.mwe2'
-  inputs.file 'src/main/java/ingraph/report/Feature.xtext'
+  inputs.file 'src/main/java/ingraph/report/featuregrammar/GenerateFeature.mwe2'
+  inputs.file 'src/main/java/ingraph/report/featuregrammar/Feature.xtext'
   outputs.dir 'src/main/xtext-gen'
-  args += 'src/main/java/ingraph/report/GenerateFeature.mwe2'
+  args += 'src/main/java/ingraph/report/featuregrammar/GenerateFeature.mwe2'
   args += '-p'
   args += "rootPath=/${projectDir}/.."
 }
