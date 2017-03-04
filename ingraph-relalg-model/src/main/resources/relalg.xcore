@@ -212,6 +212,7 @@ class DualObjectSourceOperator extends NullaryOperator {
 
 // (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
 class GetEdgesOperator extends NullaryOperator {
+  boolean directed = "true"
   refers VertexVariable sourceVertexVariable
   refers EdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable

@@ -9,6 +9,7 @@ import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
+import relalg.Direction
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
@@ -50,6 +51,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			log('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
+				directed = expandOperator.direction != Direction.BOTH
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
@@ -71,6 +73,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			log('''expandOperatorARule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
+				directed = expandOperator.direction != Direction.BOTH
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
@@ -96,6 +99,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			log('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
+				directed = expandOperator.direction != Direction.BOTH
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable

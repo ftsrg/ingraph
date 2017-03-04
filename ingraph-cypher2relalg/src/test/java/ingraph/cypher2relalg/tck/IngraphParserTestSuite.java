@@ -51,8 +51,12 @@ import ingraph.cypher2relalg.tck.tests.VarLengthAcceptanceParserTest;
 import ingraph.cypher2relalg.tck.tests.WhereAcceptanceParserTest;
 import ingraph.cypher2relalg.tck.tests.WithAcceptanceParserTest;
 
-//To regenerate, use
-//ls -1 | sed "s/\.xtend\$/.class, /"
+/**
+ * Use this test suite to run Xtend tests from the Eclipse IDE.
+ *
+ * To regenerate, use the following command:
+ * ls -1 | sed "s/\.xtend\$/.class
+ */
 @RunWith(Categories.class)
 @Suite.SuiteClasses({ AggregationAcceptanceParserTest.class, ColumnNameAcceptanceParserTest.class,
 		ComparabilityParserTest.class, ComparisonOperatorAcceptanceParserTest.class, CreateAcceptanceParserTest.class,

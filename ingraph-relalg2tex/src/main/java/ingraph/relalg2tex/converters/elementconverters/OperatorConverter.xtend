@@ -127,25 +127,13 @@ class OperatorConverter {
 		#['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
 	}
 
-	/**
-	 * operatorToTeX
-	 */
 	def dispatch convertOperator(GetEdgesOperator op) {
 		#[
-			'''\getedges''' +
-			'''«op.sourceVertexVariable.convertElement»''' +
-			'''«op.targetVertexVariable.convertElement»''' +
-			'''«op.edgeVariable.convertElement»'''
+			'''\getedges«IF op.directed»directed«ELSE»undirected«ENDIF»''' +
+			'''«op.sourceVertexVariable.convertElement»«op.targetVertexVariable.convertElement»«op.edgeVariable.convertElement»'''
 		]
 	}
 
-//  override dispatch operatorToTex(GetEdgesOperator op) {
-//    #[
-//      '''\getedgesi«op.sourceVertexVariable.toTexParameterWithLabels»«op.targetVertexVariable.toTexParameterWithLabels»''',
-//      '''\getedgesii«op.edgeVariable.toTexParameterWithLabels»'''
-//    ]
-//  }
-	
 	/**
 	 * BinaryOperators
 	 */
@@ -158,7 +146,6 @@ class OperatorConverter {
 		'''union'''
 	}
 
-	/** JoinLikeOperators */
 	def dispatch joinOperator(JoinOperator operator) {
 		'''join'''
 	}
