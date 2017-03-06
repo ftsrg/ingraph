@@ -309,8 +309,7 @@ class GroupingOperator extends UnaryOperator {
 
 class UnwindOperator extends UnaryOperator {
   // UNWIND <sourceVariable> AS <targetVariable>
-  refers Variable sourceVariable
-  refers Variable targetVariable
+  refers ExpressionVariable element
 }
 
 /* Binary operators */

@@ -10,6 +10,7 @@ import relalg.UnionOperator
 import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.With
 import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
 
 class Validator {
 	/**
@@ -46,9 +47,10 @@ class Validator {
 		for (Clause c: clauses) {
 			if ( ! (c instanceof Match
 			 || c instanceof With
+			 || c instanceof Unwind
 			 || c instanceof Return
 			)) {
-				logger.unsupported('''Currently we only support MATCH, WITH and RETURN clauses in a single query. Found: «c.class.name».''')
+				logger.unsupported('''Currently we only support MATCH, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
 			}
 		}
 		if ( ! (clauses.last instanceof Return)) {

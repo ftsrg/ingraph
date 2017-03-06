@@ -249,18 +249,14 @@ class RelalgBuilder {
 		}
 
 		//val singleQuery_unwindClauseList =
-		clauses.filter(typeof(Unwind)).forEach[buildRelalgUnwind(it, content)]
-
-		buildRelalgReturn(clauses.last, content)
-	}
-
-	def UnaryOperator buildRelalgUnwind(Unwind u, Operator content) {
-		// FIXME: The value of the local variable unwindOperator is not used
-		val unwindOperator = createUnwindOperator => [
-			sourceVariable = variableBuilder.buildRelalgVariable(u.expression)
-			targetVariable = null // TODO createElement => [ ]
-		]
-		null
+		if (clauses.filter(typeof(Unwind)).head !== null)	{
+			val u0 = clauses.filter(typeof(Unwind)).head
+			val u2 = createUnwindOperator
+			u2.element = variableBuilder.expressionVariableFactoryExtended.createElement(u0.variable.name, buildRelalgExpression(u0.expression))
+			u2
+		} else {
+			buildRelalgReturn(clauses.last, content)
+		}
 	}
 
 	/**
