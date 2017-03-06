@@ -24,51 +24,13 @@
 %%%%%%%%%%%%%%%%%%%%% operator symbols %%%%%%%%%%%%%%%%%%%%%
 
 \iftoggle{textualoperators}{
-	% nullary operators
-	\newcommand{\getverticesop}{\bigcirc}
-	\newcommand{\getedgesopdirected}{\Uparrow}
-	\newcommand{\getedgesopundirected}{\Updownarrow}
-	
-	% unary operators
-	\newcommand{\expandbothop}{\updownarrow}
-	\newcommand{\expandoutop}{\uparrow}
-	\newcommand{\expandinop}{\downarrow}
-	\newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
-	\newcommand{\transitiveclosureoutop}{\oplus \updownarrow}
-	\newcommand{\transitiveclosureinop}{\oplus \updownarrow}
-	\newcommand{\alldifferentop}{\not\equiv}
-	\newcommand{\duplicateeliminationop}{\delta}
-	\newcommand{\sortop}{\tau}
-	\newcommand{\projectionop}{\pi}
-	\newcommand{\selectionop}{\sigma}
-	\newcommand{\renameop}{\rho}
-	\newcommand{\groupingop}{\gamma}
-	\newcommand{\topop}{\lambda}
-	\newcommand{\unwindop}{\omega}
-	
-	% binary operators
-	\newcommand{\joinop}{\bowtie}
-	\def\ojoin{\setbox0=\hbox{$\bowtie$}%
-		\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
-	\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
-	\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
-	\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
-	
-	\newcommand{\leftouterjoinop}{\leftouterjoin}
-	\newcommand{\antijoinop}{\, \triangleright \,}
-	\newcommand{\unionop}{\cup}
-	\newcommand{\bagunionop}{\uplus}
-	\newcommand{\minusop}{\setminus}
-	\newcommand{\intersectionop}{\cap}
-	\newcommand{\cartesianproductop}{\times}
-}{
-	\newcommand{\op}[1]{\textsc{#1}}
-	
+	\newcommand{\relalgop}[1]{\textsc{#1}}
+
 	% nullary operators
 	\newcommand{\getverticesop}{\relalgop{GetVertices}}
 	\newcommand{\getedgesopdirected}{\relalgop{GetEdges}}
 	\newcommand{\getedgesopundirected}{\relalgop{GetEdgesUndirected}}
-	
+
 	% unary operators
 	\newcommand{\expandbothop}{\relalgop{ExpandBoth}}
 	\newcommand{\expandoutop}{\relalgop{ExpandOut}}
@@ -85,19 +47,58 @@
 	\newcommand{\groupingop}{\relalgop{Grouping}}
 	\newcommand{\topop}{\relalgop{Top}}
 	\newcommand{\unwindop}{\relalgop{Unwind}}
-	
+
 	% binary operators
 	\newcommand{\joinop}{\relalgop{Join}}
-	\newcommand{\leftouterjoinop}{\relalgop{LeftOuterJoin}}
 	\newcommand{\antijoinop}{\relalgop{AntiJoin}}
+	\newcommand{\leftouterjoinop}{\relalgop{LeftOuterJoin}}
 	\newcommand{\unionop}{\relalgop{Union}}
 	\newcommand{\bagunionop}{\relalgop{BagUnion}}
 	\newcommand{\minusop}{\relalgop{Minus}}
 	\newcommand{\intersectionop}{\relalgop{Intersection}}
 	\newcommand{\cartesianproductop}{\relalgop{CartesianProduct}}
-	
+
 	% ternary operators
 	%\newcommand{}{}
+}{
+	% nullary operators
+	\newcommand{\getverticesop}{\bigcirc}
+	\newcommand{\getedgesopdirected}{\Uparrow}
+	\newcommand{\getedgesopundirected}{\Updownarrow}
+
+	% unary operators
+	\newcommand{\expandbothop}{\updownarrow}
+	\newcommand{\expandoutop}{\uparrow}
+	\newcommand{\expandinop}{\downarrow}
+	\newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
+	\newcommand{\transitiveclosureoutop}{\oplus \updownarrow}
+	\newcommand{\transitiveclosureinop}{\oplus \updownarrow}
+	\newcommand{\alldifferentop}{\not\equiv}
+	\newcommand{\duplicateeliminationop}{\delta}
+	\newcommand{\sortop}{\tau}
+	\newcommand{\projectionop}{\pi}
+	\newcommand{\selectionop}{\sigma}
+	\newcommand{\renameop}{\rho}
+	\newcommand{\groupingop}{\gamma}
+	\newcommand{\topop}{\lambda}
+	\newcommand{\unwindop}{\omega}
+
+	% binary operators
+	\newcommand{\joinop}{\bowtie}
+	\newcommand{\antijoinop}{\, \triangleright \,}
+
+	\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+		\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+	\def\leftouterjoinsymbol{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+	%\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+	%\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
+	\newcommand{\leftouterjoinop}{\leftouterjoinsymbol}
+	
+	\newcommand{\unionop}{\cup}
+	\newcommand{\bagunionop}{\uplus}
+	\newcommand{\minusop}{\setminus}
+	\newcommand{\intersectionop}{\cap}
+	\newcommand{\cartesianproductop}{\times}
 }
 
 %%%%%%%%%%%%%%%%%%%%% operator definitions %%%%%%%%%%%%%%%%%%%%%
@@ -161,8 +162,8 @@
 %%%%%%%%%% binary operators %%%%%%%%%%
 
 \newcommand{\join}{\joinop}
-\newcommand{\myleftouterjoin}{\leftouterjoinop}
 \newcommand{\antijoin}{\antijoinop}
+\newcommand{\leftouterjoin}{\leftouterjoinop}
 \newcommand{\union}{\unionop}
 \newcommand{\bagunion}{\bagunionop}
 \newcommand{\minus}{\minusop}
