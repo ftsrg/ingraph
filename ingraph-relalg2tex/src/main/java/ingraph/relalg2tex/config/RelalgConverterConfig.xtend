@@ -32,4 +32,9 @@ class RelalgConverterConfig {
 	 */
 	boolean consoleOutput
 
+	/**
+	 * whether to use textual notation for operators
+	 */
+	boolean textualOperators
+
 }

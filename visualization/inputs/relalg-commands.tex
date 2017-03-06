@@ -21,13 +21,91 @@
 
 % see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
 
-% nullary operators
+%%%%%%%%%%%%%%%%%%%%% operator symbols %%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\getverticesop}{\bigcirc}
+\iftoggle{textualoperators}{
+	% nullary operators
+	\newcommand{\getverticesop}{\bigcirc}
+	\newcommand{\getedgesopdirected}{\Uparrow}
+	\newcommand{\getedgesopundirected}{\Updownarrow}
+	
+	% unary operators
+	\newcommand{\expandbothop}{\updownarrow}
+	\newcommand{\expandoutop}{\uparrow}
+	\newcommand{\expandinop}{\downarrow}
+	\newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
+	\newcommand{\transitiveclosureoutop}{\oplus \updownarrow}
+	\newcommand{\transitiveclosureinop}{\oplus \updownarrow}
+	\newcommand{\alldifferentop}{\not\equiv}
+	\newcommand{\duplicateeliminationop}{\delta}
+	\newcommand{\sortop}{\tau}
+	\newcommand{\projectionop}{\pi}
+	\newcommand{\selectionop}{\sigma}
+	\newcommand{\renameop}{\rho}
+	\newcommand{\groupingop}{\gamma}
+	\newcommand{\topop}{\lambda}
+	\newcommand{\unwindop}{\omega}
+	
+	% binary operators
+	\newcommand{\joinop}{\bowtie}
+	\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+		\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+	\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+	\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+	\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
+	
+	\newcommand{\leftouterjoinop}{\leftouterjoin}
+	\newcommand{\antijoinop}{\, \triangleright \,}
+	\newcommand{\unionop}{\cup}
+	\newcommand{\bagunionop}{\uplus}
+	\newcommand{\minusop}{\setminus}
+	\newcommand{\intersectionop}{\cap}
+	\newcommand{\cartesianproductop}{\times}
+}{
+	\newcommand{\op}[1]{\textsc{#1}}
+	
+	% nullary operators
+	\newcommand{\getverticesop}{\relalgop{GetVertices}}
+	\newcommand{\getedgesopdirected}{\relalgop{GetEdges}}
+	\newcommand{\getedgesopundirected}{\relalgop{GetEdgesUndirected}}
+	
+	% unary operators
+	\newcommand{\expandbothop}{\relalgop{ExpandBoth}}
+	\newcommand{\expandoutop}{\relalgop{ExpandOut}}
+	\newcommand{\expandinop}{\relalgop{ExpandIn}}
+	\newcommand{\transitiveclosurebothop}{\relalgop{TransitiveClosureBoth}}
+	\newcommand{\transitiveclosureoutop}{\relalgop{TransitiveClosureOut}}
+	\newcommand{\transitiveclosureinop}{\relalgop{TransitiveClosureIn}}
+	\newcommand{\alldifferentop}{\relalgop{AllDifferent}}
+	\newcommand{\duplicateeliminationop}{\relalgop{DuplicateElimination}}
+	\newcommand{\sortop}{\relalgop{Sort}}
+	\newcommand{\projectionop}{\relalgop{Projection}}
+	\newcommand{\selectionop}{\relalgop{Selection}}
+	\newcommand{\renameop}{\relalgop{Rename}}
+	\newcommand{\groupingop}{\relalgop{Grouping}}
+	\newcommand{\topop}{\relalgop{Top}}
+	\newcommand{\unwindop}{\relalgop{Unwind}}
+	
+	% binary operators
+	\newcommand{\joinop}{\relalgop{Join}}
+	\newcommand{\leftouterjoinop}{\relalgop{LeftOuterJoin}}
+	\newcommand{\antijoinop}{\relalgop{AntiJoin}}
+	\newcommand{\unionop}{\relalgop{Union}}
+	\newcommand{\bagunionop}{\relalgop{BagUnion}}
+	\newcommand{\minusop}{\relalgop{Minus}}
+	\newcommand{\intersectionop}{\relalgop{Intersection}}
+	\newcommand{\cartesianproductop}{\relalgop{CartesianProduct}}
+	
+	% ternary operators
+	%\newcommand{}{}
+}
+
+%%%%%%%%%%%%%%%%%%%%% operator definitions %%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%% nullary operators %%%%%%%%%%
+
 \newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
 
-\newcommand{\getedgesopdirected}{\Uparrow}
-\newcommand{\getedgesopundirected}{\Updownarrow}
 \newcommand{\getedgesdirected}[6]{\getedgesopdirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 \newcommand{\getedgesundirected}[6]{\getedgesopundirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 
@@ -51,55 +129,26 @@
       {\kleenestar \atom{#3} \ldots \atom{#4}}
 	\right]}
 
-\newcommand{\expandbothop}{\updownarrow}
 \newcommand{\expandboth}[7]{\expandbothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
-
-\newcommand{\expandoutop}{\uparrow}
 \newcommand{\expandout}[7]{\expandoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
-
-\newcommand{\expandinop}{\downarrow}
 \newcommand{\expandin}[7]{\expandinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
 % transitive closure operators
-\newcommand{\transitiveclosurebothop}{\oplus \updownarrow}
 \newcommand{\transitiveclosureboth}[7]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
-\newcommand{\transitiveclosureoutop}{\oplus \updownarrow}
 \newcommand{\transitiveclosureout}[7]{\transitiveclosureoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
-\newcommand{\transitiveclosureinop}{\oplus \updownarrow}
 \newcommand{\transitiveclosurein}[7]{\transitiveclosureinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
-%
-\newcommand{\alldifferentop}{\not\equiv}
 \newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
-
-%
-\newcommand{\duplicateeliminationop}{\delta}
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
-
-% sort operator
-\newcommand{\sortop}{\tau}
 \newcommand{\sort}[1]{\sortop_{#1}}
-
-%
-\newcommand{\projectionop}{\pi}
 \newcommand{\projection}[1]{\projectionop_\atom{#1}}
-
-%
-\newcommand{\selectionop}{\sigma}
 \newcommand{\selection}[1]{\selectionop_\atom{#1}}
-
-%
-\newcommand{\renameop}{\rho}
 \newcommand{\rename}[1]{\renameop_\atom{#1}}
-
-%
-\newcommand{\groupingop}{\gamma}
 \newcommand{\grouping}[1]{\groupingop_\atom{#1}}
 
 % top/skip/limit operators
-\newcommand{\topop}{\lambda}
 \newcommand{\topp}[2]{\topop_{#1}^{#2}}
 \newcommand{\skipp}[1]{\topop^{#1}}
 \newcommand{\limit}[1]{\topop_{#1}}
@@ -107,37 +156,17 @@
 % see A Formal Presentation of MongoDB (Extended Version)
 % by Elena Botoeva, Diego Calvanese, Benjamin Cogrel, Martin Rezk, Guohui Xiao
 % https://arxiv.org/abs/1603.09291
-\newcommand{\unwindop}{\omega}
 \newcommand{\unwind}[2]{\unwindop_\atom{#1}^\atom{#2}}
 
 %%%%%%%%%% binary operators %%%%%%%%%%
 
-\newcommand{\joinop}{\bowtie}
 \newcommand{\join}{\joinop}
-
-\def\ojoin{\setbox0=\hbox{$\bowtie$}%
-	\rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
-\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
-\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
-\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
-
-\newcommand{\leftouterjoinop}{\leftouterjoin}
 \newcommand{\myleftouterjoin}{\leftouterjoinop}
-
-\newcommand{\antijoinop}{\, \triangleright \,}
 \newcommand{\antijoin}{\antijoinop}
-
-\newcommand{\unionop}{\cup}
 \newcommand{\union}{\unionop}
-
-\newcommand{\bagunionop}{\uplus}
 \newcommand{\bagunion}{\bagunionop}
-
-\newcommand{\minusop}{\setminus}
 \newcommand{\minus}{\minusop}
-
-\newcommand{\intersectionop}{\cap}
 \newcommand{\intersection}{\intersectionop}
-
-\newcommand{\cartesianproductop}{\times}
 \newcommand{\cartesianproduct}{\cartesianproduct}
+
+% ternary operators

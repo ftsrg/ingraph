@@ -57,6 +57,7 @@ abstract class AbstractRelalg2TexConverter {
 				\usepackage[active,tightpage]{preview}
 
 				\input{../../../ingraph/visualization/inputs/relalg-packages}
+				«IF config.textualOperators»\toggletrue{textualoperators}«ENDIF»
 				\input{../../../ingraph/visualization/inputs/relalg-commands}
 
 				\begin{document}
