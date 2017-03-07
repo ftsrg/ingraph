@@ -13,9 +13,13 @@ import hu.bme.mit.ire.util.SizeCounter
 import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Tuple
 
-class SkipSortNode(override val next: (ReteMessage) => Unit,
-                   tupleLength: Int, selectionMask: Mask,
-                   limit: Int, ascendingOrder: Vector[Boolean])
+// TODO implement skip
+class SortAndTopNode(override val next: (ReteMessage) => Unit,
+                   tupleLength: Int,
+                   selectionMask: Mask,
+                   skip: Int,
+                   limit: Int,
+                   ascendingOrder: Vector[Boolean])
   extends UnaryNode with SingleForwarder {
 
   //implicit val order = new Ordering[Tuple] {
@@ -43,10 +47,9 @@ class SkipSortNode(override val next: (ReteMessage) => Unit,
   val data: java.util.Map[Tuple, Int] = new TreeMap(comparator)
   //null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0) 
 
-  def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(t(_))
-
   val maskInverse: Mask = Vector.range(0, tupleLength).filter(i => !selectionMask.contains(i))
 
+  def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(t(_))
   def inverseKeyLookup(t: Tuple): Vector[Any] = maskInverse.map(t(_))
 
   def getTopN(): Vector[Tuple] = {

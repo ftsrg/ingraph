@@ -5,7 +5,7 @@ import org.scalatest.FlatSpec
 
 import scala.io.Source
 
-class IntegrationTest extends FlatSpec {
+class TrainBenchmarkIntegrationTest extends FlatSpec {
   
   def modelPath(size: Int) = s"src/test/resources/railway-repair-$size-tinkerpop.graphml"
   def queryPath(query: String): String = s"../queries/trainbenchmark/$query.cypher"
@@ -29,7 +29,7 @@ class IntegrationTest extends FlatSpec {
     t => s"${t.name}-size-${t.size}" should "work" in {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
       val adapter = new IngraphAdapter(query)
-      val tf = new TransactionFactory(16)
+      val tf = new TransactionFactory()
       tf.subscribe(adapter.engine.inputLookup)
       val tran = tf.newBatchTransaction()
 

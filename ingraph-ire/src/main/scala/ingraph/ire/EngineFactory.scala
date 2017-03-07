@@ -1,20 +1,30 @@
 package ingraph.ire
 
-import akka.actor.{ActorRef, Props}
+import scala.collection.mutable
+
+import org.eclipse.emf.common.util.EList
+
 import com.google.common.collect.ImmutableMap
+
+import akka.actor.ActorRef
+import akka.actor.Props
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
-import hu.bme.mit.ire.nodes.unary.{DuplicateEliminationNode, ProductionNode, ProjectionNode, SelectionNode}
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.ReteMessage
+import hu.bme.mit.ire.nodes.binary.AntiJoinNode
+import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.nodes.binary.LeftOuterJoinNode
+import hu.bme.mit.ire.nodes.unary.DuplicateEliminationNode
+import hu.bme.mit.ire.nodes.unary.ProductionNode
+import hu.bme.mit.ire.nodes.unary.ProjectionNode
+import hu.bme.mit.ire.nodes.unary.SelectionNode
+import hu.bme.mit.ire.nodes.unary.SortAndTopNode
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.Utils.conversions._
-import ingraph.relalg.util.SchemaToMap
-import org.eclipse.emf.common.util.EList
-import relalg._
-
-import scala.collection.mutable
 import ingraph.expressionparser.ExpressionParser
+import ingraph.relalg.util.SchemaToMap
+import relalg._
+import hu.bme.mit.ire.datatypes.Tuple
 
 object EngineFactory {
 
@@ -43,6 +53,17 @@ object EngineFactory {
             case op: GroupingOperator =>
               ???
 
+            case op: SortAndTopOperator =>
+              val variableLookup = new SchemaToMap().schemaToMap(op)
+              newLocal(Props(new SortAndTopNode(
+                  expr.child,
+                  op.getFullSchema().length,
+                  null,
+                  5, //ExpressionParser.parse(op.getSkip(), variableLookup),
+                  10, //ExpressionParser.parse(op.getLimit(), variableLookup),
+                  op.getEntries().map(_.getDirection() == null)
+              )))
+            
             case op: SelectionOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
