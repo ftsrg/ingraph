@@ -8,10 +8,10 @@ import relalg.MaxHops
 import relalg.SortEntry
 
 class MiscConverters {
-	
+
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	
+
 	def convertDirection(Direction direction) {
 		switch direction {
 			case BOTH: '''both'''
@@ -20,15 +20,15 @@ class MiscConverters {
 			default: throw new UnsupportedOperationException('''Direction «direction» not supported.''')
 		}
 	}
-	
+
 	def convertConditionString(String s) {
 		s.escape //
 			.replaceAll(''' XOR ''', ''' \\lxor ''') //
 			.replaceAll(''' AND ''', ''' \\land ''') //
 			.replaceAll(''' OR ''', ''' \\lor ''') //
-			.replaceAll(''' ''', '''~''') //
+			.replaceAll(''' ''', '''\ ''') //
 	}
-	
+
 	def CharSequence hopsToString(MaxHops hops) {
 		switch hops.maxHopsType {
 			case LIMITED: hops.hops.toString
@@ -48,13 +48,13 @@ class MiscConverters {
 
 	def returnableElementList(List<ExpressionVariable> elements) {
 		'''«elements.map[
-			convertExpression(expression) + 
+			convertExpression(expression) +
 			if (dontCare || hasInferredName) "" else '''\assign \var{«name»}'''
-		].join(",~")»'''
+		].join(", ")»'''
 	}
 
 	def edgeVariableList(List<EdgeVariable> edgeVariables) {
-		'''«edgeVariables.map["\\var{"+ escapedName + "}"].join(",~")»'''
+		'''«edgeVariables.map["\\var{"+ escapedName + "}"].join(", ")»'''
 	}
 
 }
