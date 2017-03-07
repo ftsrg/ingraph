@@ -77,6 +77,7 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
+import org.eclipse.xtext.xbase.lib.Functions.Function1
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -167,13 +168,17 @@ class RelalgBuilder {
 		/**
 		 * Process each subquery.
 		 *
-		 * A subquery has the form (MATCH*)(WITH|RETURN)
+		 * A subquery has the form (MATCH*)((WITH UNWIND?)|UNWIND|RETURN)
 		 */
 		var from = 0
 		var variableBuilderChain = variableBuilder
 		for (var i = 0; i < clauses.length; i++) {
 			val current = clauses.get(i)
-			if (current instanceof With || current instanceof Return) {
+			val next = if ( i+1 < clauses.length ) { clauses.get(i+1) }
+			if (current instanceof With && ! ( next instanceof Unwind )
+			 || current instanceof Unwind
+			 || current instanceof Return
+			) {
 				// [fromX, toX) is the range of clauses that form a subquery
 				val fromX = from
 				val toX = i + 1
@@ -216,7 +221,9 @@ class RelalgBuilder {
 	 */
 	def protected Operator _buildRelalgSubQuery(List<Clause> clauses) {
 		// do some checks on the MATCH clauses
-		Validator.checkMatchClauseSequence(clauses.filter(typeof(Match)), logger)
+		Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), logger)
+		// do some checks on the clause sequence of this subquery
+		Validator.checkSubQueryClauseSequence(clauses, logger)
 
 		/*
 		 * We compile all MATCH clauses and attach to a (left outer) join operator.
@@ -248,15 +255,23 @@ class RelalgBuilder {
 			chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
 		}
 
-		//val singleQuery_unwindClauseList =
-		if (clauses.filter(typeof(Unwind)).head !== null)	{
-			val u0 = clauses.filter(typeof(Unwind)).head
-			val u2 = createUnwindOperator
-			u2.element = variableBuilder.expressionVariableFactoryExtended.createElement(u0.variable.name, buildRelalgExpression(u0.expression))
-			u2
+		val singleQuery_returnOrWithClause = clauses.filter([ it instanceof With || it instanceof Return ]).head
+		val afterReturn = if (singleQuery_returnOrWithClause != null) {
+			buildRelalgReturn(singleQuery_returnOrWithClause, content)
 		} else {
-			buildRelalgReturn(clauses.last, content)
+			content
 		}
+		val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
+		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
+			val u0 = singleQuery_unwindClauseList
+			createUnwindOperator => [
+				element = variableBuilder.expressionVariableFactoryExtended.createElement(u0.variable.name, buildRelalgExpression(u0.expression))
+				input = afterReturn
+			]
+		} else {
+			afterReturn
+		}
+		afterUnwind
 	}
 
 	/**

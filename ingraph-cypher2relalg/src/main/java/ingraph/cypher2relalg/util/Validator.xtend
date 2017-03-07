@@ -19,10 +19,9 @@ class Validator {
 	 * Note: pass all the MATCH clauses in sequence to allow for proper checking.
 	 *
 	 * Checks performed:
-	 * - Currently we support only sub queries having at least 1 MATCH clause
 	 * - It is invalid to have MATCH after OPTIONAL MATCH.
 	 */
-	def static void checkMatchClauseSequence(Iterable<Match> singleQuery_MatchList, IngraphLogger logger) {
+	def static void checkSubQueryMatchClauseSequence(Iterable<Match> singleQuery_MatchList, IngraphLogger logger) {
 		val head = singleQuery_MatchList?.head
 		if (head != null) {
 			var seenOptionalMatch = false
@@ -37,18 +36,59 @@ class Validator {
 	}
 
 	/**
+	 * Some checks for a single subquery's clauses
+	 *
+	 * A subquery has the form (MATCH*)((WITH UNWIND?)|UNWIND|RETURN)
+	 *
+	 * Checks performed:
+	 * - it consists of only MATCH, WITH, UNWIND and RETURN clauses
+	 * - it ends with RETURN, WITH or UNWIND
+	 * - it has at most 1 of either RETURN or WITH
+	 * - it has at most 1 UNWIND
+	 * - it has at least one of WITH, UNWIND and RETURN
+	 */
+	def static void checkSubQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
+		var numReturnOrWith = 0
+		var numUnwind = 0
+		var numMatch = 0
+		for (Clause c: clauses) {
+			switch c {
+				Match: numMatch++
+				Unwind: numUnwind++
+				With, Return: numReturnOrWith++
+				default: logger.unsupported('''Currently we only support MATCH, WITH, UNWIND and RETURN clauses in a single subquery. Found: «c.class.name».''')
+			}
+		}
+		if ( ! (clauses.last instanceof Return
+		     || clauses.last instanceof With
+		     || clauses.last instanceof Unwind
+		)) {
+			logger.unsupported('''Last clause of a single subquery must be RETURN, WITH or UNWIND, but found «clauses.last.class.name» instead.''')
+		}
+		if ( numUnwind > 1 ) {
+			logger.unsupported('''At most 1 Unwind clause allowed in a subquery. Found «numUnwind».''')
+		}
+		if ( numReturnOrWith > 1 ) {
+			logger.unsupported('''At most 1 Return or With clause allowed in a subquery. Found «numReturnOrWith».''')
+		}
+		if ( numUnwind + numReturnOrWith < 1 ) {
+			logger.unsupported('''There mist be at least one of WITH, RETURN or UNWIND in a subquery, but none of them was found.''')
+		}
+	}
+
+	/**
 	 * Some checks for a single query's clauses
 	 *
 	 * Checks performed:
-	 * - we currently support only the following clauses: MATCH, WITH, RETURN
+	 * - we currently support only the following clauses: MATCH, WITH UNWIND?, UNWIND, RETURN
 	 * - last clause must be a RETURN clause
 	 */
 	def static void checkSingleQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
 		for (Clause c: clauses) {
 			if ( ! (c instanceof Match
-			 || c instanceof With
-			 || c instanceof Unwind
-			 || c instanceof Return
+			     || c instanceof With
+			     || c instanceof Unwind
+			     || c instanceof Return
 			)) {
 				logger.unsupported('''Currently we only support MATCH, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
 			}
