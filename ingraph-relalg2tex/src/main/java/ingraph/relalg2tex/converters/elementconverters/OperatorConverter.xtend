@@ -81,7 +81,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(ProjectionOperator op) {
-		#['''\projection{«op.elements.returnableElementList»}''']
+		#['''\projection{«op.elements.convertReturnableElementList»}''']
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {
@@ -124,7 +124,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		#['''\unwind{«op.sourceVariable.escapedName»}{«op.targetVariable.escapedName»}''']
+		#['''\unwind{«op.element.convertReturnableElement»}''']
 	}
 
 	def dispatch convertOperator(GetEdgesOperator op) {

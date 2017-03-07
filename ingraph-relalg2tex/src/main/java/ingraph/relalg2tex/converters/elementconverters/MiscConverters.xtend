@@ -46,11 +46,16 @@ class MiscConverters {
 		'''\«direction» «entry.expression.convertExpression»'''
 	}
 
-	def returnableElementList(List<ExpressionVariable> elements) {
+	def convertReturnableElementList(List<ExpressionVariable> elements) {
 		'''«elements.map[
-			convertExpression(expression) +
-			if (dontCare || hasInferredName) "" else '''\assign \var{«name»}'''
+			convertReturnableElement(it)
 		].join(", ")»'''
+	}
+
+	// FIXME: this should moved to VariableConverter. See #92
+	def convertReturnableElement(ExpressionVariable el) {
+		convertExpression(el.expression) +
+		  if (el.dontCare || el.hasInferredName) "" else '''\assign \var{«el.name»}'''
 	}
 
 	def edgeVariableList(List<EdgeVariable> edgeVariables) {

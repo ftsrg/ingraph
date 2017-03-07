@@ -22,6 +22,8 @@ class VariableConverter {
 		'''«variable.name»'''
 	}
 
+  // FIXME: how does this relate to MiscConverters.convertReturnableElement(ExpressionVariable)
+  // See #92
 	def dispatch convertVariable(ExpressionVariable variable) {
 		//'''«convertExpression(variable, variable.expression)»'''
 		'''«variable.name»'''
