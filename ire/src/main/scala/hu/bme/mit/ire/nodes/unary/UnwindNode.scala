@@ -15,7 +15,7 @@ class UnwindNode(override val next: (ReteMessage) => Unit,
     for {
       tuple <- tuples
       listElement <- tuple(index).asInstanceOf[Iterable[Any]]
-    } yield tuple.updated(index, listElement)
+    } yield tuple :+ listElement
   }
 
   def onChangeSet(changeSet: ChangeSet): Unit = {
