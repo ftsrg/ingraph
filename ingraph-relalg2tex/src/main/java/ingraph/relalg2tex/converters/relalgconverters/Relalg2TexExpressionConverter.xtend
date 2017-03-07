@@ -15,10 +15,14 @@ class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 
 	new(RelalgConverterConfig config) {
 		super(config)
+		if (config.textualOperators) {
+			throw new UnsupportedOperationException("Textual operators are not supported for expression converters.")
+		}
 	}
 
 	override convertBody(Operator expression) {
 		'''
+			«IF config.textualOperators»\togglefalse{textualoperators}«ENDIF»
 			«IF config.standaloneDocument»$$«ENDIF»
 			«children(expression)»
 			«IF config.standaloneDocument»$$«ENDIF»

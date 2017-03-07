@@ -29,6 +29,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
 	override convertBody(Operator expression) {
 		'''
+			«IF config.textualOperators»\toggletrue{textualoperators}«ELSE»\togglefalse{textualoperators}«ENDIF»
 			\begin{forest} for tree={align=center}
 			«toNode(expression)»
 			;
@@ -66,7 +67,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 			\langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
 			«ENDIF»
 			«IF config.includeCardinality && op.cardinality !== null»
-				\\ \footnotesize \# «op.cardinality.formatCardinality»
+			\\ \footnotesize \# «op.cardinality.formatCardinality»
 			«ENDIF»
 			}«op?.children»«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
 		]

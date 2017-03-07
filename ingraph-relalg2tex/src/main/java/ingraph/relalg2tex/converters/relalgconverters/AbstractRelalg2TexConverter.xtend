@@ -52,12 +52,13 @@ abstract class AbstractRelalg2TexConverter {
 	def dispatch CharSequence convertAlgebraExpression(Operator expression) {
 		'''
 			«IF config.standaloneDocument»
+				% !TeX spellcheck = en_GB
+				% !TeX encoding = UTF-8
 				% !TeX program = xelatex
 				\documentclass[varwidth=100cm,convert={density=120}]{standalone}
 				\usepackage[active,tightpage]{preview}
 
 				\input{../../../ingraph/visualization/inputs/relalg-packages}
-				«IF config.textualOperators»\toggletrue{textualoperators}«ENDIF»
 				\input{../../../ingraph/visualization/inputs/relalg-commands}
 
 				\begin{document}

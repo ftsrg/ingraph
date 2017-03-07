@@ -24,7 +24,7 @@ class QueryProcessor {
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 	extension TechReportEscaper escaper = new TechReportEscaper
 
-	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).build
+	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
 	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
 	protected val expressionConverter = new Relalg2TexExpressionConverter
 
