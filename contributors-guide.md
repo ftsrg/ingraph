@@ -8,11 +8,13 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 #### Prerequisites
 
-1. It is recommended to start with the latest version (currently [Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/)) **Eclipse IDE for Java and DSL Developers** distribution.
+1. It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and selecting **Eclipse IDE for Java and DSL Developers** distribution.
 1. Go to the **Marketplace** (**Help** | **Eclipse Marketplace...**) and install the **EditorConfig** plug-in.
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
+1. Install VIATRA 1.6.x Core from the [milestone update site](
+http://download.eclipse.org/viatra/updates/milestone).
 
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins:
 
@@ -21,6 +23,7 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
   * **Xtend IDE**
   * **Xtext SDK**
   * **EMF - Eclipse Modeling Framework Xcore SDK**
+
 
 #### Importing the projects
 
