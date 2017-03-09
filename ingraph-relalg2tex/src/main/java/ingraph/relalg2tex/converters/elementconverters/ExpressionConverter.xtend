@@ -4,6 +4,7 @@ import ingraph.relalg2tex.constants.RelNullConstants
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
+import relalg.BigIntegerLiteral
 import relalg.BinaryLogicalExpression
 import relalg.BooleanLiteral
 import relalg.DoubleLiteral
@@ -27,6 +28,10 @@ class ExpressionConverter {
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''
+	}
+	
+	def dispatch CharSequence convertExpression(BigIntegerLiteral bigintegerLiteral)	{
+		'''\literal{«bigintegerLiteral.value»}'''
 	}
 	
 	def dispatch CharSequence convertExpression(DoubleLiteral doubleLiteral) {

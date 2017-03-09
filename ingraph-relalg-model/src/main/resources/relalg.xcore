@@ -5,6 +5,7 @@
 package relalg
 
 type Function wraps relalg.function.Function
+type Bigint wraps java.math.BigInteger
 
 class RelalgContainer {
   String name
@@ -464,6 +465,10 @@ abstract class NumberLiteral extends Literal, ArithmeticExpression {
 
 class DoubleLiteral extends NumberLiteral {
   double value
+}
+
+class BigIntegerLiteral extends NumberLiteral {
+  Bigint value
 }
 
 class IntegerLiteral extends NumberLiteral {

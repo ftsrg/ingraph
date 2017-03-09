@@ -6,6 +6,7 @@ import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
+import java.math.BigInteger
 import java.util.Arrays
 import java.util.HashSet
 import java.util.List
@@ -77,7 +78,6 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.function.Function
-import org.eclipse.xtext.xbase.lib.Functions.Function1
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -884,11 +884,19 @@ class RelalgBuilder {
 				value = n
 				container = topLevelContainer
 			]
-		} catch (NumberFormatException ex) {
-			createDoubleLiteral => [
-				value = Double.parseDouble(e.value)
-				container = topLevelContainer
-			]
+		} catch (NumberFormatException ex1) {
+		  try	{
+		    val n = new BigInteger(e.value)
+		    createBigIntegerLiteral => [
+		      value = n
+		      container = topLevelContainer
+				]
+		  }	catch (NumberFormatException ex2)	{
+		    createDoubleLiteral => [
+		      value = Double.parseDouble(e.value)
+		      container = topLevelContainer
+				]
+		  }
 		}
 	}
 

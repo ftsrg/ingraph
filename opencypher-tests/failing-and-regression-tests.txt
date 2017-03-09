@@ -176,7 +176,7 @@ AggregationAcceptance.feature: Scenario: Support multiple divisions in aggregate
 #LargeCreateQuery.feature: Scenario: Many CREATE clauses
 #LargeIntegerEquality.feature: Scenario: Does not lose precision
 #LargeIntegerEquality.feature: Scenario: Handling inlined equality of large integer
-#LargeIntegerEquality.feature: Scenario: Handling explicit equality of large integer
+LargeIntegerEquality.feature: Scenario: Handling explicit equality of large integer
 #LargeIntegerEquality.feature: Scenario: Handling inlined equality of large integer, non-equal values
 #LargeIntegerEquality.feature: Scenario: Handling explicit equality of large integer, non-equal values
 #ListComprehension.feature: Scenario: Returning a list comprehension
