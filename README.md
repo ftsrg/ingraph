@@ -4,7 +4,7 @@
 
 [[report on openCypher TCK results]](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf) | [[regression tests]](http://docs.inf.mit.bme.hu/ingraph/tests/regressionTests/) | [[failing tests]](http://docs.inf.mit.bme.hu/ingraph/tests/failingTests/)
 
-[ingraph summary](http://docs.inf.mit.bme.hu/ingraph/)
+For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
 ## Pages
 
@@ -14,7 +14,7 @@
 
 ## Third-party dependencies
 
-For parsing openCypher queries, we use the [Slizaa](https://github.com/slizaa/slizaa-opencypher-xtext) Xtext grammar.
+For parsing queries, we use the [Slizaa openCypher Xtext grammar](https://github.com/slizaa/slizaa-opencypher-xtext).
 
 ## License
 
