@@ -1,1 +1,3 @@
-RETURN [false, true] + false AS foo
+MATCH (n)
+WITH DISTINCT {foo: n.list} AS map
+RETURN count(*)

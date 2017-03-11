@@ -1,4 +1,2 @@
-OPTIONAL MATCH (a)
-WITH a
-OPTIONAL MATCH (a)-->(b)
-RETURN b
+MATCH p = ()-[*0..]->()
+RETURN p

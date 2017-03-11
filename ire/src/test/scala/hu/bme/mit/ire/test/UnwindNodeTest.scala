@@ -36,13 +36,13 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
       unwind ! changeSet
       expectMsg(ChangeSet(
         positive = tupleBag(
-          tuple("x", 1, "y"),
-          tuple("x", 2, "y"),
-          tuple("x", 3, "y")
+          tuple("x", cypherList(1, 2, 3), "y", 1),
+          tuple("x", cypherList(1, 2, 3), "y", 2),
+          tuple("x", cypherList(1, 2, 3), "y", 3)
         ),
         negative = tupleBag(
-          tuple("a", 1, "b"),
-          tuple("a", 2, "b")
+          tuple("a", cypherList(1, 2), "b", 1),
+          tuple("a", cypherList(1, 2), "b", 2)
         )
       ))
     }
@@ -50,8 +50,8 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
     "do simple unwind 1" in {
       val changeSet = ChangeSet(
         positive = tupleBag(
-          tuple("x", List(1,2,3), "y"),
-          tuple("w", List(4,5), "z")
+          tuple("x", List(1, 2, 3), "y"),
+          tuple("w", List(4, 5), "z")
         )
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -60,11 +60,11 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
       unwind ! changeSet
       expectMsg(ChangeSet(
         positive = tupleBag(
-          tuple("x", 1, "y"),
-          tuple("x", 2, "y"),
-          tuple("x", 3, "y"),
-          tuple("w", 4, "z"),
-          tuple("w", 5, "z")
+          tuple("x", cypherList(1, 2, 3), "y", 1),
+          tuple("x", cypherList(1, 2, 3), "y", 2),
+          tuple("x", cypherList(1, 2, 3), "y", 3),
+          tuple("w", cypherList(4, 5),    "z", 4),
+          tuple("w", cypherList(4, 5),    "z", 5)
         )
       ))
     }

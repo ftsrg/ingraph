@@ -8,42 +8,42 @@ import relalg.RelalgContainer
 
 abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 
-  protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
-  protected final RelalgContainer container
+	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected final RelalgContainer container
 
-  new(RelalgContainer container) {
-    this.container = container
-  }
+	new(RelalgContainer container) {
+		this.container = container
+	}
 
-  // ensure that we generate unique names in the compiler
-  static var n = 1;
-  @Accessors(PUBLIC_GETTER)
-  val elements = new HashMap<String, TNamedElement>
+	// ensure that we generate unique names in the compiler
+	static var n = 1;
+	@Accessors(PUBLIC_GETTER)
+	val elements = new HashMap<String, TNamedElement>
 
-  def createElement(String elementName) {
-    val variableName = elementName ?: generateName
+	def createElement(String elementName) {
+		val variableName = elementName ?: generateName
 
-    if (elements.get(variableName) === null) {
-      val variable = createSpecificNamedElement => [
-        name = variableName
-        it.namedElementContainer = this.container
-      ]
-      elements.put(variableName, variable)
-    }
+		if (elements.get(variableName) === null) {
+			val variable = createSpecificNamedElement => [
+				name = variableName
+				it.namedElementContainer = this.container
+			]
+			elements.put(variableName, variable)
+		}
 
-    val element = elements.get(variableName)
-    //container.elements.add(element)
+		val element = elements.get(variableName)
+		//container.elements.add(element)
 
-    return element
-  }
+		return element
+	}
 
-  def hasElement(String elementName) {
-    return (elements.get(elementName) !== null)
-  }
+	def hasElement(String elementName) {
+		return (elements.get(elementName) !== null)
+	}
 
-  def generateName() {
-    '_e' + n++;
-  }
+	def generateName() {
+		'_e' + n++;
+	}
 
-  def TNamedElement createSpecificNamedElement()
+	def TNamedElement createSpecificNamedElement()
 }

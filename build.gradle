@@ -1,5 +1,5 @@
 plugins {
-  id "com.jfrog.bintray" version "1.7.1" apply false
+  id 'com.jfrog.bintray' version '1.7.1' apply false
 }
 
 allprojects {
@@ -9,8 +9,9 @@ allprojects {
 
 subprojects {
   apply plugin: 'java'
-  apply plugin: 'maven-publish'
+  apply plugin: 'eclipse'
   apply plugin: 'com.jfrog.bintray'
+  apply plugin: 'maven-publish'
 
   jar {
     from sourceSets.main.allJava
@@ -20,11 +21,10 @@ subprojects {
   targetCompatibility = 1.8
 
   repositories {
-    mavenLocal()
     jcenter()
-    maven { url "https://repo.eclipse.org/content/groups/acceleo" }
-    maven { url "https://repo.eclipse.org/content/groups/viatra2" }
-    maven { url "https://build.incquerylabs.com/nexus/content/repositories/viatra.staging/" }
+    maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
+    maven { url 'https://build.incquerylabs.com/nexus/content/repositories/viatra.staging/' }
+    maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
   }
 
   configurations.all { exclude group: 'asm' }
@@ -48,36 +48,26 @@ subprojects {
     key = System.getenv('BINTRAY_KEY')
     publish = true
     override = true
-    pkg {
-      repo = 'maven'
-      name = 'ingraph'
-      userOrg = 'ftsrg'
-      licenses = ['EPL-1.0']
-      vcsUrl = 'https://github.com/FTSRG/ingraph.git'
-      version {
-        name = '0.2.0'
-        desc = 'Initial version'
-        released = new Date()
-      }
-    }
     publications = ['mavenJava']
   }
 }
 
 ext {
   commonsIoVersion = '2.5'
+  commonsMathVersion = '3.6.1'
   emfVersion = '2.10.1'
   guavaVersion = '21.0'
-  ireVersion = '0.2.0'
+  jmhVersion = '1.17.5'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
-  scalaShortVersion = '2.12'
+  pegdownVersion = '1.6.0'
+  scalaShortVersion = '2.11'
+  scalaVersion = '2.11.8'
   scalaTestVersion = '3.0.1'
-  scalaVersion = '2.12.1'
   slizaaVersion = '1.0.0-SNAPSHOT'
-  viatraDseVersion = '0.16.0.M1'
-  viatraVersion = '1.6.0.M1'
+  viatraMinorVersion = '.0.M1'
+  viatraDseVersion = '0.16' + viatraMinorVersion
+  viatraVersion = '1.6' + viatraMinorVersion
   xtendVersion = '2.10.0'
-  xtextGradlePluginVersion = '1.0.12'
-  xtextVersion = '2.10.0'
+  xtextVersion = xtendVersion
 }

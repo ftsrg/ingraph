@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -28,8 +29,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_01")
     }
 
     /*
@@ -49,8 +51,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_02")
     }
 
     /*
@@ -71,8 +74,9 @@ class OptionalMatchParserTest {
         OPTIONAL MATCH (p)-[s:SUPPORTS]->(team)
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/OptionalMatch_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_03")
     }
 
 }

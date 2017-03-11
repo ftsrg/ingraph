@@ -1,3 +1,2 @@
-MATCH (:Root {name: 'x'})-->(i:Child)
-WHERE NOT exists(i.id) OR i.id > 'te'
-RETURN i
+MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
+RETURN a, b, c

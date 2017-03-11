@@ -1,1 +1,2 @@
-RETURN 1 + (2 - (3 * (4 / (5 ^ (6 % null))))) AS a
+MATCH (a)
+RETURN a.id AS a, a.id

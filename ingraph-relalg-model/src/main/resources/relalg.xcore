@@ -5,12 +5,14 @@
 package relalg
 
 type Function wraps relalg.function.Function
+type Bigint wraps java.math.BigInteger
 
 class RelalgContainer {
   String name
   contains Operator rootExpression
-  contains NamedElement[] elements opposite ^namedElementContainer
+  contains NamedElement[] elements opposite namedElementContainer
   contains Expression[] expressions opposite ^container
+  boolean incrementalPlan = "false"
   boolean basicSchemaInferred = "false"
   boolean extraAttributesInferred = "false"
   boolean fullSchemaInferred = "false"
@@ -185,7 +187,6 @@ class ExpressionVariable extends Variable {
 
 /* Operators */
 abstract class Operator {
-  String description
   refers Variable[] basicSchema
   refers Variable[] extraAttributes
   refers Variable[] fullSchema
@@ -212,6 +213,7 @@ class DualObjectSourceOperator extends NullaryOperator {
 
 // (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
 class GetEdgesOperator extends NullaryOperator {
+  boolean directed = "true"
   refers VertexVariable sourceVertexVariable
   refers EdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable
@@ -273,7 +275,7 @@ class DuplicateEliminationOperator extends UnaryOperator {
 
 class AllDifferentOperator extends UnaryOperator {
   refers EdgeVariable[] edgeVariables
-  contains EdgeVariableSet edgeVariableSets
+  contains EdgeVariableSet[] edgeVariableSets
 }
 
 class EdgeVariableSet { // TODO - we should think about this a bit more
@@ -288,18 +290,18 @@ class SortEntry {
   refers Expression expression
   OrderDirection direction
 }
-
+/**
+ * This stands for the SKIP n LIMIT m clause.
+ *
+ * Expressions in skip and limit may not contain variable references.
+ */
 class TopOperator extends UnaryOperator {
-  refers SkipLimitValue skip
-  refers SkipLimitValue limit
+  refers Expression skip
+  refers Expression limit
 }
 
 // for incremental queries to handle sort and top as a single operator
 class SortAndTopOperator extends SortOperator, TopOperator {
-}
-
-class SkipLimitValue {
-  int value
 }
 
 class GroupingOperator extends UnaryOperator {
@@ -308,8 +310,7 @@ class GroupingOperator extends UnaryOperator {
 
 class UnwindOperator extends UnaryOperator {
   // UNWIND <sourceVariable> AS <targetVariable>
-  refers Variable sourceVariable
-  refers Variable targetVariable
+  refers ExpressionVariable element
 }
 
 /* Binary operators */
@@ -423,10 +424,6 @@ class ListExpression extends Expression {
 class EmptyListExpression extends ListExpression {
 }
 
-class Parameter extends ComparableExpression {
-  String name
-}
-
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
   BinaryLogicalOperatorType operator
   refers LogicalExpression leftOperand
@@ -470,11 +467,18 @@ class DoubleLiteral extends NumberLiteral {
   double value
 }
 
+class BigIntegerLiteral extends NumberLiteral {
+  Bigint value
+}
+
 class IntegerLiteral extends NumberLiteral {
   int value
 }
 
 class NullLiteral extends NumberLiteral, StringLiteral {
+}
+
+class Parameter extends NamedElement, Atom {
 }
 
 class Case {
@@ -532,14 +536,6 @@ enum UnaryLogicalOperatorType {
 enum UnaryGraphObjectLogicalOperatorType {
   IS_NULL
   IS_NOT_NULL
-}
-
-enum AggregationType {
-  COUNT
-  SUM
-  AVG
-  MAX
-  MIN
 }
 
 /**

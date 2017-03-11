@@ -1,5 +1,5 @@
-MATCH ()-[r]->()
-WITH r
+MATCH (a1:X:Y)-[r]->()
+WITH r, a1
 LIMIT 1
-OPTIONAL MATCH (a2)-[r]->(b2)
-RETURN a2, r, b2
+MATCH (a1:Y)-[r]->(b2)
+RETURN a1, r, b2

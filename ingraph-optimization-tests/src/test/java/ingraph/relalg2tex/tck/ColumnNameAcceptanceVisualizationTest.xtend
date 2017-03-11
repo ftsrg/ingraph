@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class ColumnNameAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -21,7 +21,7 @@ class ColumnNameAcceptanceVisualizationTest {
         RETURN cOuNt( * )
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ColumnNameAcceptance_01")
+        container.convert("tck/ColumnNameAcceptance_01")
     }
 
     /*
@@ -34,7 +34,7 @@ class ColumnNameAcceptanceVisualizationTest {
         RETURN nOdEs( p )
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ColumnNameAcceptance_02")
+        container.convert("tck/ColumnNameAcceptance_02")
     }
 
     /*
@@ -47,7 +47,7 @@ class ColumnNameAcceptanceVisualizationTest {
         RETURN coUnt( dIstInct p )
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ColumnNameAcceptance_03")
+        container.convert("tck/ColumnNameAcceptance_03")
     }
 
     /*
@@ -60,7 +60,7 @@ class ColumnNameAcceptanceVisualizationTest {
         RETURN aVg(    n.aGe     )
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ColumnNameAcceptance_04")
+        container.convert("tck/ColumnNameAcceptance_04")
     }
 
 }

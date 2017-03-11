@@ -7,24 +7,24 @@ import relalg.RelalgFactory
 import relalg.RelalgContainer
 
 class ElementVariableUtil {
-  protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
-  protected final RelalgContainer container
+	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected final RelalgContainer container
 
-  val factories = new HashMap<ElementVariable, AttributeVariableFactory>
+	val factories = new HashMap<ElementVariable, AttributeVariableFactory>
 
-  new(RelalgContainer container) {
-    this.container = container
-  }
+	new(RelalgContainer container) {
+		this.container = container
+	}
 
-  def createAttribute(ElementVariable element, String attributeName) {
-    if (factories.get(element)==null) {
-      factories.put(element, new AttributeVariableFactory(container))
-    }
+	def createAttribute(ElementVariable element, String attributeName) {
+		if (factories.get(element)==null) {
+			factories.put(element, new AttributeVariableFactory(container))
+		}
 
-    val attribute = factories.get(element).createElement(attributeName) => [
-      it.element = element
-    ]
+		val attribute = factories.get(element).createElement(attributeName) => [
+			it.element = element
+		]
 
-    return attribute
-  }
+		return attribute
+	}
 }

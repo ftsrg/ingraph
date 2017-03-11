@@ -1,3 +1,2 @@
 MATCH (n)
-WITH DISTINCT {foo: n.list} AS map
-RETURN count(*)
+RETURN count(DISTINCT {foo: [{bar: n.list}, {baz: {apa: n.list}}]}) AS count

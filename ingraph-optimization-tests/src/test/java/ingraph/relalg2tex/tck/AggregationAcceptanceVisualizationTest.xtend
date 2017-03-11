@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class AggregationAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -27,7 +27,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(n) / 60 / 60 AS count
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_01")
+        container.convert("tck/AggregationAcceptance_01")
     }
 
     /*
@@ -46,7 +46,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(*) AS columnName
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_02")
+        container.convert("tck/AggregationAcceptance_02")
     }
 
     /*
@@ -65,7 +65,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN size(collect(a))
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_03")
+        container.convert("tck/AggregationAcceptance_03")
     }
 
     /*
@@ -79,7 +79,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_04")
+        container.convert("tck/AggregationAcceptance_04")
     }
 
     /*
@@ -98,7 +98,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN a, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_05")
+        container.convert("tck/AggregationAcceptance_05")
     }
 
     /*
@@ -120,7 +120,7 @@ class AggregationAcceptanceVisualizationTest {
         ORDER BY count(*) DESC, n.division ASC
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_06")
+        container.convert("tck/AggregationAcceptance_06")
     }
 
     /*
@@ -140,7 +140,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN n.x, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_07")
+        container.convert("tck/AggregationAcceptance_07")
     }
 
     /*
@@ -160,7 +160,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN n.y, count(n.x)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_08")
+        container.convert("tck/AggregationAcceptance_08")
     }
 
     /*
@@ -180,7 +180,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN n.y, sum(n.x)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_09")
+        container.convert("tck/AggregationAcceptance_09")
     }
 
     /*
@@ -199,7 +199,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN b, avg(length(p))
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_10")
+        container.convert("tck/AggregationAcceptance_10")
     }
 
     /*
@@ -213,7 +213,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(DISTINCT a)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_11")
+        container.convert("tck/AggregationAcceptance_11")
     }
 
     /*
@@ -231,7 +231,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(DISTINCT a.foo)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_12")
+        container.convert("tck/AggregationAcceptance_12")
     }
 
     /*
@@ -245,7 +245,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN collect(DISTINCT x) AS c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_13")
+        container.convert("tck/AggregationAcceptance_13")
     }
 
     /*
@@ -259,7 +259,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN collect(DISTINCT x) AS c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_14")
+        container.convert("tck/AggregationAcceptance_14")
     }
 
     /*
@@ -279,7 +279,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN DISTINCT a.color, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_15")
+        container.convert("tck/AggregationAcceptance_15")
     }
 
     /*
@@ -297,7 +297,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(*) * 10 AS c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_16")
+        container.convert("tck/AggregationAcceptance_16")
     }
 
     /*
@@ -316,7 +316,7 @@ class AggregationAcceptanceVisualizationTest {
         ORDER BY x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_17")
+        container.convert("tck/AggregationAcceptance_17")
     }
 
     /*
@@ -334,7 +334,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(n), collect(n)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_18")
+        container.convert("tck/AggregationAcceptance_18")
     }
 
     /*
@@ -353,7 +353,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_19")
+        container.convert("tck/AggregationAcceptance_19")
     }
 
     /*
@@ -376,7 +376,7 @@ class AggregationAcceptanceVisualizationTest {
         ORDER BY l
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_20")
+        container.convert("tck/AggregationAcceptance_20")
     }
 
     /*
@@ -399,7 +399,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_21")
+        container.convert("tck/AggregationAcceptance_21")
     }
 
     /*
@@ -419,7 +419,7 @@ class AggregationAcceptanceVisualizationTest {
         {y: count(b)} AS baz
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_22")
+        container.convert("tck/AggregationAcceptance_22")
     }
 
     /*
@@ -435,7 +435,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN sum(i)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_24")
+        container.convert("tck/AggregationAcceptance_24")
     }
 
     /*
@@ -453,7 +453,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN count(r)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_25")
+        container.convert("tck/AggregationAcceptance_25")
     }
 
     /*
@@ -467,7 +467,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN max(i)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_26")
+        container.convert("tck/AggregationAcceptance_26")
     }
 
     /*
@@ -481,7 +481,7 @@ class AggregationAcceptanceVisualizationTest {
         RETURN min(i)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/AggregationAcceptance_27")
+        container.convert("tck/AggregationAcceptance_27")
     }
 
 }

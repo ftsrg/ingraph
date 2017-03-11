@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class LiteralsVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -20,7 +20,7 @@ class LiteralsVisualizationTest {
         RETURN 1 AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_01")
+        container.convert("tck/Literals_01")
     }
 
     /*
@@ -32,7 +32,7 @@ class LiteralsVisualizationTest {
         RETURN 1.0 AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_02")
+        container.convert("tck/Literals_02")
     }
 
     /*
@@ -44,7 +44,7 @@ class LiteralsVisualizationTest {
         RETURN -1e-9 AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_03")
+        container.convert("tck/Literals_03")
     }
 
     /*
@@ -56,7 +56,7 @@ class LiteralsVisualizationTest {
         RETURN true AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_04")
+        container.convert("tck/Literals_04")
     }
 
     /*
@@ -68,7 +68,7 @@ class LiteralsVisualizationTest {
         RETURN '' AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_05")
+        container.convert("tck/Literals_05")
     }
 
     /*
@@ -80,7 +80,7 @@ class LiteralsVisualizationTest {
         RETURN "" AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_06")
+        container.convert("tck/Literals_06")
     }
 
     /*
@@ -92,7 +92,7 @@ class LiteralsVisualizationTest {
         RETURN null AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_07")
+        container.convert("tck/Literals_07")
     }
 
     /*
@@ -104,7 +104,7 @@ class LiteralsVisualizationTest {
         RETURN [] AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_08")
+        container.convert("tck/Literals_08")
     }
 
     /*
@@ -116,7 +116,7 @@ class LiteralsVisualizationTest {
         RETURN [0, 1, 2] AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_09")
+        container.convert("tck/Literals_09")
     }
 
     /*
@@ -128,7 +128,7 @@ class LiteralsVisualizationTest {
         RETURN {} AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_10")
+        container.convert("tck/Literals_10")
     }
 
     /*
@@ -140,7 +140,7 @@ class LiteralsVisualizationTest {
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/Literals_11")
+        container.convert("tck/Literals_11")
     }
 
 }

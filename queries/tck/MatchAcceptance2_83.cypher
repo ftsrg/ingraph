@@ -1,2 +1,2 @@
-MATCH (a)-[r]->()
-RETURN a AS foo, r AS bar
+MATCH (a)
+RETURN a.name, a.age, a.seasons

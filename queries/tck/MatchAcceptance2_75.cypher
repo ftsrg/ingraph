@@ -1,2 +1,2 @@
-MATCH (a:Blue)-[r*]->(b:Green)
-RETURN count(r)
+MATCH p = (n)-->(m)--(o)
+RETURN p

@@ -1,0 +1,9 @@
+plugins { id 'org.xtext.xtend' version '1.0.15' }
+
+dependencies {
+  compile project(':ingraph-transformations')
+
+  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+  compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
+  compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: viatraDseVersion
+}

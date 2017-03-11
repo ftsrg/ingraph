@@ -1,5 +1,4 @@
-MATCH (a1)-[r]->()
-WITH r, a1
-LIMIT 1
-OPTIONAL MATCH (a1)<-[r]-(b2)
-RETURN a1, r, b2
+MATCH (foo)
+RETURN foo.bar AS x
+ORDER BY x DESC
+LIMIT 4

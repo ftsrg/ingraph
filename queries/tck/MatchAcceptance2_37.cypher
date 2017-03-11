@@ -1,2 +1,2 @@
-MATCH (a)-->(b:Foo)
-RETURN b
+MATCH (a:A:B:C)
+RETURN a

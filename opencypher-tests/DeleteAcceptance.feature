@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -219,29 +219,6 @@ Feature: DeleteAcceptance
       """
     Then the result should be empty
     And no side effects
-
-  Scenario: Delete node from a list
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (u:User)
-      CREATE (u)-[:FRIEND]->()
-      CREATE (u)-[:FRIEND]->()
-      CREATE (u)-[:FRIEND]->()
-      CREATE (u)-[:FRIEND]->()
-      """
-    And parameters are:
-      | friendIndex | 1 |
-    When executing query:
-      """
-      MATCH (:User)-[:FRIEND]->(n)
-      WITH collect(n) AS friends
-      DETACH DELETE friends[$friendIndex]
-      """
-    Then the result should be empty
-    And the side effects should be:
-      | -nodes         | 1 |
-      | -relationships | 1 |
 
   Scenario: Delete node from a list
     Given an empty graph

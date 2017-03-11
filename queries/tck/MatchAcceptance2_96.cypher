@@ -1,2 +1,2 @@
-MATCH p = (n)<-->(k)<--(n)
-RETURN p
+MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
+RETURN m

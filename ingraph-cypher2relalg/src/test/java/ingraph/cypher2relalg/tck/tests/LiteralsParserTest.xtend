@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -19,8 +20,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN 1 AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_01")
     }
 
     /*
@@ -32,8 +34,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN 1.0 AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_02")
     }
 
     /*
@@ -45,8 +48,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN -1e-9 AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_03")
     }
 
     /*
@@ -58,8 +62,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN true AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_04")
     }
 
     /*
@@ -71,8 +76,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN '' AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_05")
     }
 
     /*
@@ -84,8 +90,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN "" AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_06")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_06")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_06")
     }
 
     /*
@@ -97,8 +104,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN null AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_07")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_07")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_07")
     }
 
     /*
@@ -110,8 +118,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN [] AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_08")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_08")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_08")
     }
 
     /*
@@ -123,8 +132,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN [0, 1, 2] AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_09")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_09")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_09")
     }
 
     /*
@@ -136,8 +146,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN {} AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_10")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_10")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_10")
     }
 
     /*
@@ -149,8 +160,9 @@ class LiteralsParserTest {
         val cypher = CypherParser.parseString('''
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/Literals_11")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/Literals_11")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/Literals_11")
     }
 
 }

@@ -1,1 +1,1 @@
-RETURN {a: 1, b: 'foo'}
+RETURN size([[], []] + [[]]) AS l

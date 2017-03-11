@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class UnionAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -29,7 +29,7 @@ class UnionAcceptanceVisualizationTest {
         RETURN b AS a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnionAcceptance_01")
+        container.convert("tck/UnionAcceptance_01")
     }
 
     /*
@@ -44,7 +44,7 @@ class UnionAcceptanceVisualizationTest {
         RETURN 2 AS x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnionAcceptance_02")
+        container.convert("tck/UnionAcceptance_02")
     }
 
     /*
@@ -59,7 +59,7 @@ class UnionAcceptanceVisualizationTest {
         RETURN 2 AS x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnionAcceptance_03")
+        container.convert("tck/UnionAcceptance_03")
     }
 
     /*
@@ -76,7 +76,7 @@ class UnionAcceptanceVisualizationTest {
         RETURN 2 AS x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnionAcceptance_04")
+        container.convert("tck/UnionAcceptance_04")
     }
 
     /*
@@ -93,7 +93,7 @@ class UnionAcceptanceVisualizationTest {
         RETURN 2 AS x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnionAcceptance_05")
+        container.convert("tck/UnionAcceptance_05")
     }
 
 }

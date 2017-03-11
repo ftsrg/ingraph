@@ -1,2 +1,2 @@
-MATCH (n)
-RETURN n
+MATCH (a)-->(b), (b)-->(b)
+RETURN b

@@ -1,2 +1,2 @@
 MATCH (n)
-RETURN count(DISTINCT {foo: n.list}) AS count
+RETURN count(DISTINCT {foo: [[n.list, n.list], [n.list, n.list]]}) AS count

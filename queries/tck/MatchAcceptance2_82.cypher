@@ -1,2 +1,2 @@
 MATCH ()-[r]->()
-RETURN r.prop
+RETURN r.bar

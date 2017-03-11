@@ -1,0 +1,111 @@
+\subsection[Support multiple divisions in aggregate function]{Support multiple divisions in aggregate function \textcolor{gray}{[regression test]}}
+
+\subsubsection*{Query specification \textcolor{gray}{(Support multiple divisions in aggregate function)}}
+
+\begin{lstlisting}
+MATCH (n)
+RETURN count(n) / 60 / 60 AS count
+\end{lstlisting}
+
+\subsubsection*{Relational algebra expression for search-based evaluation \textcolor{gray}{(Support multiple divisions in aggregate function)}}
+
+\togglefalse{textualoperators}
+\begin{align*}
+\begin{autobreak}
+r = \projection{\literal{count} \left( \var{n} \right) / \literal{60} / \literal{60}\assign \var{count}}
+		\Big(\leftouterjoin \antijoin \grouping{}
+				\Big(\alldifferent{}
+						\Big(\getvertices{n}{}
+						\Big)
+				\Big)
+		\Big)
+\end{autobreak}
+\end{align*}
+
+\subsubsection*{Relational algebra tree for search-based evaluation \textcolor{gray}{(Support multiple divisions in aggregate function)}}
+
+\toggletrue{textualoperators}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{forest} for tree={align=center}
+[
+	{$\projection{\literal{count} \left( \var{n} \right) / \literal{60} / \literal{60}\assign \var{count}}$
+	\\ \footnotesize
+	$\color{gray} \langle \var{count} \rangle $
+	}
+		[
+			{$\grouping{}$
+			\\ \footnotesize
+			$\color{gray} \langle \var{n} \rangle $
+			}
+				[
+					{$\alldifferent{}$
+					\\ \footnotesize
+					$\color{gray} \langle \var{n} \rangle $
+					}
+						[
+							{$\getvertices{n}{}$
+							\\ \footnotesize
+							$\color{gray} \langle \var{n} \rangle $
+							},tier=input,for tree={blue,densely dashed}
+						]
+				]
+		]
+]
+;
+\end{forest}
+\end{adjustbox}
+\end{center}
+
+\subsubsection*{Incremental relational algebra tree \textcolor{gray}{(Support multiple divisions in aggregate function)}}
+
+\toggletrue{textualoperators}
+\begin{center}
+\begin{adjustbox}{max width=\textwidth}
+\begin{forest} for tree={align=center}
+[
+	{$\projection{\literal{count} \left( \var{n} \right) / \literal{60} / \literal{60}\assign \var{count}}$
+	\\ \footnotesize
+	$\color{gray} \langle \var{count} \rangle $
+	\\ \footnotesize
+	$\color{violet} \langle \var{} \rangle $
+	\\ \footnotesize
+	$\color{orange} \langle \var{n} \rangle $
+	\\ \footnotesize
+	$\color{orange} [ \var{\#} ]$
+	}
+		[
+			{$\grouping{}$
+			\\ \footnotesize
+			$\color{gray} \langle \var{n} \rangle $
+			\\ \footnotesize
+			$\color{violet} \langle \var{} \rangle $
+			\\ \footnotesize
+			$\color{orange} \langle \var{n} \rangle $
+			}
+				[
+					{$\alldifferent{}$
+					\\ \footnotesize
+					$\color{gray} \langle \var{n} \rangle $
+					\\ \footnotesize
+					$\color{violet} \langle \var{} \rangle $
+					\\ \footnotesize
+					$\color{orange} \langle \var{n} \rangle $
+					}
+						[
+							{$\getvertices{n}{}$
+							\\ \footnotesize
+							$\color{gray} \langle \var{n} \rangle $
+							\\ \footnotesize
+							$\color{violet} \langle \var{} \rangle $
+							\\ \footnotesize
+							$\color{orange} \langle \var{n} \rangle $
+							},tier=input,for tree={blue,densely dashed}
+						]
+				]
+		]
+]
+;
+\end{forest}
+\end{adjustbox}
+\end{center}

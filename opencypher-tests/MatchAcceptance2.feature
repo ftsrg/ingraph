@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -81,34 +81,6 @@ Feature: MatchAcceptance2
       | (:TextNode {id: 'text'}) |
       | (:IntNode {id: 0})       |
     And no side effects
-
-  Scenario: Fail when comparing strings and integers using > in an AND'd predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (root:Root {name: 'x'})-[:T]->(child:Child {id: 0})
-      """
-    When executing query:
-      """
-      MATCH (:Root {name: 'x'})-->(i:Child)
-      WHERE i.id > 'te'
-      RETURN i
-      """
-    Then a TypeError should be raised at runtime: IncomparableValues
-
-  Scenario: Fail when comparing strings and integers using > in a OR'd predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (root:Root {name: 'x'})-[:T]->(child:Child {id: 0})
-      """
-    When executing query:
-      """
-      MATCH (:Root {name: 'x'})-->(i:Child)
-      WHERE NOT exists(i.id) OR i.id > 'te'
-      RETURN i
-      """
-    Then a TypeError should be raised at runtime: IncomparableValues
 
   Scenario: Aggregation with named paths
     Given an empty graph
@@ -799,23 +771,6 @@ Feature: MatchAcceptance2
     Then the result should be:
       | out.name   |
       | 'product1' |
-    And no side effects
-
-  Scenario: Returning label predicate expression
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (), (:Foo)
-      """
-    When executing query:
-      """
-      MATCH (n)
-      RETURN (n:Foo)
-      """
-    Then the result should be:
-      | (n:Foo) |
-      | true    |
-      | false   |
     And no side effects
 
   Scenario: Matching using a simple pattern with label predicate

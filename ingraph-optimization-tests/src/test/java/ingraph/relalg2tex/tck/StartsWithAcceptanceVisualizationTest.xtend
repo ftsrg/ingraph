@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class StartsWithAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -22,7 +22,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_01")
+        container.convert("tck/StartsWithAcceptance_01")
     }
 
     /*
@@ -36,7 +36,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_02")
+        container.convert("tck/StartsWithAcceptance_02")
     }
 
     /*
@@ -50,7 +50,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_03")
+        container.convert("tck/StartsWithAcceptance_03")
     }
 
     /*
@@ -64,7 +64,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_04")
+        container.convert("tck/StartsWithAcceptance_04")
     }
 
     /*
@@ -79,7 +79,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_05")
+        container.convert("tck/StartsWithAcceptance_05")
     }
 
     /*
@@ -93,7 +93,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_06")
+        container.convert("tck/StartsWithAcceptance_06")
     }
 
     /*
@@ -107,7 +107,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_07")
+        container.convert("tck/StartsWithAcceptance_07")
     }
 
     /*
@@ -127,7 +127,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_08")
+        container.convert("tck/StartsWithAcceptance_08")
     }
 
     /*
@@ -147,7 +147,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_09")
+        container.convert("tck/StartsWithAcceptance_09")
     }
 
     /*
@@ -167,7 +167,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_10")
+        container.convert("tck/StartsWithAcceptance_10")
     }
 
     /*
@@ -187,7 +187,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_11")
+        container.convert("tck/StartsWithAcceptance_11")
     }
 
     /*
@@ -207,7 +207,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_12")
+        container.convert("tck/StartsWithAcceptance_12")
     }
 
     /*
@@ -227,7 +227,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a.name AS name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_13")
+        container.convert("tck/StartsWithAcceptance_13")
     }
 
     /*
@@ -241,7 +241,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_14")
+        container.convert("tck/StartsWithAcceptance_14")
     }
 
     /*
@@ -255,7 +255,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_15")
+        container.convert("tck/StartsWithAcceptance_15")
     }
 
     /*
@@ -269,7 +269,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_16")
+        container.convert("tck/StartsWithAcceptance_16")
     }
 
     /*
@@ -283,7 +283,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_17")
+        container.convert("tck/StartsWithAcceptance_17")
     }
 
     /*
@@ -297,7 +297,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_18")
+        container.convert("tck/StartsWithAcceptance_18")
     }
 
     /*
@@ -311,7 +311,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_19")
+        container.convert("tck/StartsWithAcceptance_19")
     }
 
     /*
@@ -327,7 +327,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_20")
+        container.convert("tck/StartsWithAcceptance_20")
     }
 
     /*
@@ -341,7 +341,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_21")
+        container.convert("tck/StartsWithAcceptance_21")
     }
 
     /*
@@ -357,7 +357,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN v, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_22")
+        container.convert("tck/StartsWithAcceptance_22")
     }
 
     /*
@@ -373,7 +373,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN v, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_23")
+        container.convert("tck/StartsWithAcceptance_23")
     }
 
     /*
@@ -389,7 +389,7 @@ class StartsWithAcceptanceVisualizationTest {
         RETURN v, count(*)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/StartsWithAcceptance_24")
+        container.convert("tck/StartsWithAcceptance_24")
     }
 
 }

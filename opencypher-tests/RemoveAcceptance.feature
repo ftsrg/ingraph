@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,24 +106,6 @@ Feature: RemoveAcceptance
       | 1     |
     And the side effects should be:
       | -properties | 2 |
-
-  Scenario: Remove a single relationship property
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (a), (b), (a)-[:X {prop: 42}]->(b)
-      """
-    When executing query:
-      """
-      MATCH ()-[r]->()
-      REMOVE r.prop
-      RETURN exists(r.prop) AS still_there
-      """
-    Then the result should be:
-      | still_there |
-      | false       |
-    And the side effects should be:
-      | -properties | 1 |
 
   Scenario: Remove a single relationship property
     Given an empty graph

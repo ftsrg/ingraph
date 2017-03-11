@@ -72,7 +72,7 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 		& \breakable{
 			\lstinline+MATCH <v>p1</v>+ \\
 			\lstinline+OPTIONAL MATCH <v>p2</v>+
-		} & $\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right)~\myleftouterjoin~\alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$ \\ \cline{2-3}
+		} & $\alldifferent{\atom{edges~of~p1}} \left(\atom{p_1}\right)~\leftouterjoin~\alldifferent{\atom{edges~of~p2}} \left(\atom{p_2}\right)$ \\ \cline{2-3}
 
 		& \breakable{
 			\lstinline+MATCH <v>p</v>+ \\

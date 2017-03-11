@@ -3,18 +3,17 @@ package ingraph.cypher2relalg.trainbenchmark
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.inferencers.BasicSchemaInferencer
 import java.io.IOException
 import org.junit.Test
-import ingraph.relalg.inferencers.OneStepSchemaInferencer
-import ingraph.relalg.inferencers.BasicSchemaInferencer
 
 class TrainBenchmarkCypher2RelalgTest {
 
-  extension BasicSchemaInferencer si = new BasicSchemaInferencer
+	extension BasicSchemaInferencer si = new BasicSchemaInferencer
 
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
-		CypherUtil.save(cypher, "../ingraph-cypxmi/trainbenchmark/" + query)
+		CypherUtil.save(cypher, "cypher-asts/trainbenchmark/" + query)
 		val container = Cypher2Relalg.processCypher(cypher)
 		container.inferBasicSchema
 	}

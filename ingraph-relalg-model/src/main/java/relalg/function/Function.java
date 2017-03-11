@@ -22,15 +22,17 @@ public enum Function {
   //             category                        types            type      arity
   AVG           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   COUNT         (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
-  COUNT_OBJECTS (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1), // count(*)
+  COUNT_ALL     (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1), // count(*)
   MAX           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   MIN           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   SUM           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
 
-  STDDEV        (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  STDDEVP       (FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  PERCENTILECONT(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
-  PERCENTILEDISC(FunctionCategory.STATISTICAL,   l(NUMBER),       NUMBER,    1),
+  STDDEV        (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  STDDEVP       (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  PERCENTILECONT(FunctionCategory.AGGREGATION,   l(NUMBER,
+                                                   FLOAT),        NUMBER,    2),
+  PERCENTILEDISC(FunctionCategory.AGGREGATION,   l(NUMBER,
+                                                   FLOAT),        NUMBER,    2),
 
   TOBOOLEAN     (FunctionCategory.CONVERSION,    l(ANY),          BOOLEAN,   1),
   TOINTEGER     (FunctionCategory.CONVERSION,    l(ANY),          INTEGER,   1),
@@ -87,6 +89,8 @@ public enum Function {
   REPLACE       (FunctionCategory.STRING,        l(STRING,
 		                                           STRING,
 		                                           STRING),       STRING,    3), // replace( original, search, replace )
+  REGEX_LIKE	(FunctionCategory.STRING,		l(STRING,
+                                                   STRING),	BOOLEAN,	2), // string =~ pattern
   REVERSE       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // reverse( original )
   SUBSTRING     (FunctionCategory.STRING,        l(STRING,
 		                                           STRING,

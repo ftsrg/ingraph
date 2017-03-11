@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -22,15 +23,16 @@ class JoinAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testJoinAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/JoinAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/JoinAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/JoinAcceptance_01")
     }
 
     /*
@@ -44,15 +46,16 @@ class JoinAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testJoinAcceptance_02() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A), (b:B)
         WHERE a.id = b.id
         RETURN a, b
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/JoinAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/JoinAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/JoinAcceptance_02")
     }
 
 }

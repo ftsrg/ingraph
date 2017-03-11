@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -26,8 +27,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_01")
     }
 
     /*
@@ -47,8 +49,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_02")
     }
 
     /*
@@ -67,8 +70,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_03")
     }
 
     /*
@@ -87,8 +91,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(n) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_04")
     }
 
     /*
@@ -107,8 +112,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_05")
     }
 
     /*
@@ -127,8 +133,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_06")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_06")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_06")
     }
 
     /*
@@ -147,8 +154,9 @@ class KeysAcceptanceParserTest {
         UNWIND keys(r) AS x
         RETURN DISTINCT x AS theProps
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_07")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_07")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_07")
     }
 
     /*
@@ -161,8 +169,9 @@ class KeysAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_08")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_08")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_08")
     }
 
     /*
@@ -177,8 +186,9 @@ class KeysAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN keys($param) AS k
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/KeysAcceptance_09")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/KeysAcceptance_09")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/KeysAcceptance_09")
     }
 
 }

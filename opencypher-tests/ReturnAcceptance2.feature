@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -118,20 +118,6 @@ Feature: ReturnAcceptance2
       """
     Then a SyntaxError should be raised at compile time: UndefinedVariable
 
-  Scenario: Fail when ordering nodes
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (), ()
-      """
-    When executing query:
-      """
-      MATCH (n)
-      RETURN n
-        ORDER BY n
-      """
-    Then a TypeError should be raised at runtime: IncomparableValues
-
   Scenario: Ordering with aggregation
     Given an empty graph
     And having executed:
@@ -181,24 +167,6 @@ Feature: ReturnAcceptance2
       | p                   | a        | b  |
       | <(:Start)-[:T]->()> | (:Start) | () |
     And no side effects
-
-  Scenario: Setting and returning the size of a list property
-    Given an empty graph
-    And having executed:
-      """
-      CREATE ()
-      """
-    When executing query:
-      """
-      MATCH (n)
-      SET n.x = [1, 2, 3]
-      RETURN size(n.x)
-      """
-    Then the result should be:
-      | size(n.x) |
-      | 3         |
-    And the side effects should be:
-      | +properties | 1 |
 
   Scenario: Setting and returning the size of a list property
     Given an empty graph
@@ -351,7 +319,7 @@ Feature: ReturnAcceptance2
       | 3 |
     And no side effects
 
-  Scenario: Concatenating and returning the size of literal lists
+  Scenario: Returning nested expressions based on list property
     Given an empty graph
     And having executed:
       """

@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class KeysAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -27,7 +27,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_01")
+        container.convert("tck/KeysAcceptance_01")
     }
 
     /*
@@ -47,7 +47,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_02")
+        container.convert("tck/KeysAcceptance_02")
     }
 
     /*
@@ -66,7 +66,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_03")
+        container.convert("tck/KeysAcceptance_03")
     }
 
     /*
@@ -85,7 +85,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_04")
+        container.convert("tck/KeysAcceptance_04")
     }
 
     /*
@@ -104,7 +104,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_05")
+        container.convert("tck/KeysAcceptance_05")
     }
 
     /*
@@ -123,7 +123,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_06")
+        container.convert("tck/KeysAcceptance_06")
     }
 
     /*
@@ -142,7 +142,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN DISTINCT x AS theProps
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_07")
+        container.convert("tck/KeysAcceptance_07")
     }
 
     /*
@@ -155,7 +155,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN keys({name: 'Alice', age: 38, address: {city: 'London', residential: true}}) AS k
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_08")
+        container.convert("tck/KeysAcceptance_08")
     }
 
     /*
@@ -170,7 +170,7 @@ class KeysAcceptanceVisualizationTest {
         RETURN keys($param) AS k
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/KeysAcceptance_09")
+        container.convert("tck/KeysAcceptance_09")
     }
 
 }

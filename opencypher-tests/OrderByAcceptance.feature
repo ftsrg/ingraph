@@ -1,5 +1,5 @@
 #
-# Copyright 2016 "Neo Technology",
+# Copyright 2017 "Neo Technology",
 # Network Engine for Objects in Lund AB (http://neotechnology.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 Feature: OrderByAcceptance
 
   Background:
-    Given any graph
+    Given an empty graph
 
   Scenario: ORDER BY should return results in ascending order
     And having executed:

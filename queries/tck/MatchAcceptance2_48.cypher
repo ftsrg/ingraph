@@ -1,2 +1,4 @@
-MATCH (a)-[r*1..1]->(b)
-RETURN r
+OPTIONAL MATCH (a)
+WITH a
+OPTIONAL MATCH (a)-->(b)
+RETURN b

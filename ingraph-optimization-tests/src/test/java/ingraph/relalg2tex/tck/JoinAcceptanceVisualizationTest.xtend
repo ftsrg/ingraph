@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class JoinAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -30,7 +30,7 @@ class JoinAcceptanceVisualizationTest {
         RETURN a, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/JoinAcceptance_01")
+        container.convert("tck/JoinAcceptance_01")
     }
 
     /*
@@ -51,7 +51,7 @@ class JoinAcceptanceVisualizationTest {
         RETURN a, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/JoinAcceptance_02")
+        container.convert("tck/JoinAcceptance_02")
     }
 
 }

@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -32,8 +33,9 @@ class VarLengthAcceptance2ParserTest {
         MATCH p = (n)-[*0..1]-()-[r]-()-[*0..1]-(m)
         RETURN count(p) AS c
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/VarLengthAcceptance2_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance2_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance2_01")
     }
 
 }

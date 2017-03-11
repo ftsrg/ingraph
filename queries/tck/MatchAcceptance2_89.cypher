@@ -1,2 +1,2 @@
-MATCH ()-[r*0..1]-()
-RETURN last(r) AS l
+MATCH (n)-[r]->(m)
+RETURN {node1: n, rel: r, node2: m} AS m

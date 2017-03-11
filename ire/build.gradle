@@ -1,30 +1,30 @@
 buildscript {
   dependencies {
-    classpath "me.champeau.gradle:jmh-gradle-plugin:0.3.1"
+    classpath group: 'me.champeau.gradle', name: 'jmh-gradle-plugin', version: '0.3.1'
   }
 }
 
 plugins {
-  id "com.github.maiflai.scalatest" version "0.14"
+  id 'com.github.maiflai.scalatest' version '0.14'
 }
 
-apply plugin: "scala"
-apply plugin: "me.champeau.gradle.jmh"
+apply plugin: 'scala'
+apply plugin: 'me.champeau.gradle.jmh'
 
 jar {
   from sourceSets.main.allScala
 }
 
 ext {
-  akkaVersion = "2.4.16"
+  akkaVersion = '2.4.16'
 }
 
 dependencies {
-  compile "org.scala-lang:scala-library:$scalaVersion"
-  compile "com.typesafe.akka:akka-actor_$scalaShortVersion:$akkaVersion"
-  compile "org.openjdk.jmh:jmh-core:1.16"
-
-  testCompile "com.typesafe.akka:akka-testkit_$scalaShortVersion:$akkaVersion"
-  testCompile "org.scalatest:scalatest_$scalaShortVersion:$scalaTestVersion"
-  testRuntime 'org.pegdown:pegdown:1.6.0'
+  compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+  compile group: 'com.typesafe.akka', name: "akka-actor_$scalaShortVersion", version: akkaVersion
+  compile group: 'org.openjdk.jmh', name: 'jmh-core', version: jmhVersion
+  compile group: 'org.apache.commons', name: 'commons-math3', version: commonsMathVersion
+  testCompile group: 'com.typesafe.akka', name: "akka-testkit_$scalaShortVersion", version: akkaVersion
+  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
+  testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }

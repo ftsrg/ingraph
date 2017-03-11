@@ -12,7 +12,10 @@ def indent(lines):
     padding = '        '
     return ('\n' + padding).join(lines.split('\n'))
 
-filenames = glob.glob('*.feature')
+with open("failing-and-regression-tests.txt", "r") as file:
+    regression_tests = [ s for s in file.read().splitlines() if not s.startswith("#") ]
+
+filenames = sorted(glob.glob('*.feature'))
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
     test_file = open("../ingraph-cypher2relalg/src/test/java/ingraph/cypher2relalg/tck/tests/%sParserTest.xtend" % filename_without_extension, "w")
@@ -24,6 +27,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -56,19 +60,26 @@ class %sParserTest {
             query_file.write(query + "\n")
 
         test_name = "%s_%02d" % (filename_without_extension, i)
+        scenario_name = "%s: %s" % (filename, scenario.splitlines()[0])
+        if scenario_name in regression_tests:
+            regression_or_failing = "Regression"
+        else:
+            regression_or_failing = "Failing"
+
         test_case = """
     /*
     %s*/
     @Test
-    @Category(FailingTests)
+    @Category(%sTests)
     def void test%s() {
         val cypher = CypherParser.parseString('''
         %s
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/%s")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/%s")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/%s")
     }
-""" % (scenario, test_name, indent(query), test_name)
+""" % (scenario, regression_or_failing, test_name, indent(query), test_name, test_name)
         test_file.write(test_case)
 
     test_footer = """

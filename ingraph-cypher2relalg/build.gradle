@@ -1,10 +1,8 @@
-plugins { id "org.xtext.xtend" version "1.0.15" }
-
-apply plugin: "eclipse"
+plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
   compile project(':ingraph-cypher-parser')
-  compile project(':ingraph-relalg-model')
+  compile project(':ingraph-patterns')
   compile project(':ingraph-relalg-model-util')
   testCompile project(':ingraph-relalg2tex')
 
@@ -16,7 +14,7 @@ dependencies {
 }
 
 task regressionTests(type: Test) {
-  doFirst{ println("Running regression tests") }
+  doFirst{ println('Running regression tests') }
   scanForTestClasses = false
   useJUnit {
     includeCategories 'ingraph.cypher2relalg.tck.RegressionTests'
@@ -24,7 +22,7 @@ task regressionTests(type: Test) {
 }
 
 task failingTests(type: Test) {
-  doFirst{ println("Running failing tests") }
+  doFirst{ println('Running failing tests') }
   scanForTestClasses = false
   useJUnit {
     includeCategories 'ingraph.cypher2relalg.tck.FailingTests'

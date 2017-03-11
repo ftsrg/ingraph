@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class MatchAcceptance2VisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -22,7 +22,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_01")
+        container.convert("tck/MatchAcceptance2_01")
     }
 
     /*
@@ -36,7 +36,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_02")
+        container.convert("tck/MatchAcceptance2_02")
     }
 
     /*
@@ -59,7 +59,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN i
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_03")
+        container.convert("tck/MatchAcceptance2_03")
     }
 
     /*
@@ -82,45 +82,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN i
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_04")
-    }
-
-    /*
-    Scenario: Fail when comparing strings and integers using > in an AND'd predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (root:Root {name: 'x'})-[:T]->(child:Child {id: 0})
-      """
-    */
-    @Test
-    def void testMatchAcceptance2_05() {
-        val container = Cypher2Relalg.processString('''
-        MATCH (:Root {name: 'x'})-->(i:Child)
-        WHERE i.id > 'te'
-        RETURN i
-        ''')
-        container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_05")
-    }
-
-    /*
-    Scenario: Fail when comparing strings and integers using > in a OR'd predicate
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (root:Root {name: 'x'})-[:T]->(child:Child {id: 0})
-      """
-    */
-    @Test
-    def void testMatchAcceptance2_06() {
-        val container = Cypher2Relalg.processString('''
-        MATCH (:Root {name: 'x'})-->(i:Child)
-        WHERE NOT exists(i.id) OR i.id > 'te'
-        RETURN i
-        ''')
-        container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_06")
+        container.convert("tck/MatchAcceptance2_04")
     }
 
     /*
@@ -135,7 +97,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_07() {
+    def void testMatchAcceptance2_05() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ()-[*]->()
         WITH count(*) AS count, p AS p
@@ -143,7 +105,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_07")
+        container.convert("tck/MatchAcceptance2_05")
     }
 
     /*
@@ -159,13 +121,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_08() {
+    def void testMatchAcceptance2_06() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'})-[:CONTAINS*0..1]->(b)-[:FRIEND*0..1]->(c)
         RETURN a, b, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_08")
+        container.convert("tck/MatchAcceptance2_06")
     }
 
     /*
@@ -181,13 +143,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_09() {
+    def void testMatchAcceptance2_07() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'})-[*]->(x)
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_09")
+        container.convert("tck/MatchAcceptance2_07")
     }
 
     /*
@@ -202,13 +164,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_10() {
+    def void testMatchAcceptance2_08() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..2]->()
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_10")
+        container.convert("tck/MatchAcceptance2_08")
     }
 
     /*
@@ -223,13 +185,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_11() {
+    def void testMatchAcceptance2_09() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ({name: 'A'})-[:KNOWS*..]->()
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_11")
+        container.convert("tck/MatchAcceptance2_09")
     }
 
     /*
@@ -243,14 +205,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_12() {
+    def void testMatchAcceptance2_10() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'}), (c {name: 'C'})
         MATCH (a)-->(b)
         RETURN a, b, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_12")
+        container.convert("tck/MatchAcceptance2_10")
     }
 
     /*
@@ -267,14 +229,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_13() {
+    def void testMatchAcceptance2_11() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'}), (b {name: 'B'})
         MATCH (a)-->(x)<-->(b)
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_13")
+        container.convert("tck/MatchAcceptance2_11")
     }
 
     /*
@@ -293,14 +255,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_14() {
+    def void testMatchAcceptance2_12() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'}), (b {name: 'B'}), (c {name: 'C'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_14")
+        container.convert("tck/MatchAcceptance2_12")
     }
 
     /*
@@ -330,14 +292,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_15() {
+    def void testMatchAcceptance2_13() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'a'}), (b {name: 'b'}), (c {name: 'c'})
         MATCH (a)-->(x), (b)-->(x), (c)-->(x)
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_15")
+        container.convert("tck/MatchAcceptance2_13")
     }
 
     /*
@@ -351,14 +313,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_16() {
+    def void testMatchAcceptance2_14() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH (a)-[:KNOWS]->()-[:KNOWS]->(foo)
         RETURN foo
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_16")
+        container.convert("tck/MatchAcceptance2_14")
     }
 
     /*
@@ -371,7 +333,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_17() {
+    def void testMatchAcceptance2_15() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
@@ -379,7 +341,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN x, p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_17")
+        container.convert("tck/MatchAcceptance2_15")
     }
 
     /*
@@ -392,14 +354,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_18() {
+    def void testMatchAcceptance2_16() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'})
         OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_18")
+        container.convert("tck/MatchAcceptance2_16")
     }
 
     /*
@@ -412,7 +374,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_19() {
+    def void testMatchAcceptance2_17() {
         val container = Cypher2Relalg.processString('''
         MATCH (a {name: 'A'}), (x)
         WHERE x.name IN ['B', 'C']
@@ -420,7 +382,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN r, x, p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_19")
+        container.convert("tck/MatchAcceptance2_17")
     }
 
     /*
@@ -434,14 +396,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_20() {
+    def void testMatchAcceptance2_18() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A)
         MATCH (a)-[r*2]->()
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_20")
+        container.convert("tck/MatchAcceptance2_18")
     }
 
     /*
@@ -454,7 +416,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_21() {
+    def void testMatchAcceptance2_19() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A), (other:B)
         OPTIONAL MATCH (a)-[r]->(other)
@@ -462,7 +424,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN other
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_21")
+        container.convert("tck/MatchAcceptance2_19")
     }
 
     /*
@@ -475,7 +437,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_22() {
+    def void testMatchAcceptance2_20() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)-->(x0)
         OPTIONAL MATCH (x0)-->(x1)
@@ -483,7 +445,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN x0.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_22")
+        container.convert("tck/MatchAcceptance2_20")
     }
 
     /*
@@ -497,7 +459,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_23() {
+    def void testMatchAcceptance2_21() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-->(b)
         WHERE b:B
@@ -506,7 +468,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_23")
+        container.convert("tck/MatchAcceptance2_21")
     }
 
     /*
@@ -518,14 +480,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_24() {
+    def void testMatchAcceptance2_22() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[:ADMIN]-(b)
         WHERE a:A
         RETURN a.id, b.id
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_24")
+        container.convert("tck/MatchAcceptance2_22")
     }
 
     /*
@@ -537,13 +499,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_25() {
+    def void testMatchAcceptance2_23() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_25")
+        container.convert("tck/MatchAcceptance2_23")
     }
 
     /*
@@ -555,14 +517,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_26() {
+    def void testMatchAcceptance2_24() {
         val container = Cypher2Relalg.processString('''
         MATCH (a), (b)
         WHERE a <> b
         RETURN a, b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_26")
+        container.convert("tck/MatchAcceptance2_24")
     }
 
     /*
@@ -576,13 +538,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_27() {
+    def void testMatchAcceptance2_25() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-->(b), (b)-->(b)
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_27")
+        container.convert("tck/MatchAcceptance2_25")
     }
 
     /*
@@ -594,7 +556,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_28() {
+    def void testMatchAcceptance2_26() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A), (b:B)
         OPTIONAL MATCH (a)-[r*]-(b)
@@ -603,7 +565,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_28")
+        container.convert("tck/MatchAcceptance2_26")
     }
 
     /*
@@ -616,13 +578,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_29() {
+    def void testMatchAcceptance2_27() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[:T|:T]->(b)
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_29")
+        container.convert("tck/MatchAcceptance2_27")
     }
 
     /*
@@ -639,7 +601,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_30() {
+    def void testMatchAcceptance2_28() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A)-->(n)-->(m)
         RETURN n.x, count(*)
@@ -647,7 +609,7 @@ class MatchAcceptance2VisualizationTest {
         LIMIT 1000
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_30")
+        container.convert("tck/MatchAcceptance2_28")
     }
 
     /*
@@ -659,14 +621,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_31() {
+    def void testMatchAcceptance2_29() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         WHERE n.foo = 'bar'
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_31")
+        container.convert("tck/MatchAcceptance2_29")
     }
 
     /*
@@ -678,13 +640,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_32() {
+    def void testMatchAcceptance2_30() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (b)<--(a)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_32")
+        container.convert("tck/MatchAcceptance2_30")
     }
 
     /*
@@ -692,13 +654,13 @@ class MatchAcceptance2VisualizationTest {
     Given an empty graph
     */
     @Test
-    def void testMatchAcceptance2_33() {
+    def void testMatchAcceptance2_31() {
         val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (n)
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_33")
+        container.convert("tck/MatchAcceptance2_31")
     }
 
     /*
@@ -710,14 +672,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_34() {
+    def void testMatchAcceptance2_32() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_34")
+        container.convert("tck/MatchAcceptance2_32")
     }
 
     /*
@@ -729,14 +691,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_35() {
+    def void testMatchAcceptance2_33() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
         RETURN n, collect(x)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_35")
+        container.convert("tck/MatchAcceptance2_33")
     }
 
     /*
@@ -748,14 +710,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_36() {
+    def void testMatchAcceptance2_34() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)<--()<--(b)-->()-->(c)
         WHERE a:A
         RETURN c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_36")
+        container.convert("tck/MatchAcceptance2_34")
     }
 
     /*
@@ -769,13 +731,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_37() {
+    def void testMatchAcceptance2_35() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-->(b:Foo)
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_37")
+        container.convert("tck/MatchAcceptance2_35")
     }
 
     /*
@@ -790,13 +752,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_38() {
+    def void testMatchAcceptance2_36() {
         val container = Cypher2Relalg.processString('''
         MATCH (:A)-[r]->(:B)
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_38")
+        container.convert("tck/MatchAcceptance2_36")
     }
 
     /*
@@ -809,13 +771,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_39() {
+    def void testMatchAcceptance2_37() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A:B:C)
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_39")
+        container.convert("tck/MatchAcceptance2_37")
     }
 
     /*
@@ -827,13 +789,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_40() {
+    def void testMatchAcceptance2_38() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN (n:Foo)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_40")
+        container.convert("tck/MatchAcceptance2_38")
     }
 
     /*
@@ -857,7 +819,7 @@ class MatchAcceptance2VisualizationTest {
       | 2 | 1 |
     */
     @Test
-    def void testMatchAcceptance2_41() {
+    def void testMatchAcceptance2_39() {
         val container = Cypher2Relalg.processString('''
         MATCH (advertiser)-[:ADV_HAS_PRODUCT]->(out)-[:AP_HAS_VALUE]->(red)<-[:AA_HAS_VALUE]-(a)
         WHERE advertiser.id = $1
@@ -867,25 +829,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN out.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_41")
-    }
-
-    /*
-    Scenario: Returning label predicate expression
-    Given an empty graph
-    And having executed:
-      """
-      CREATE (), (:Foo)
-      """
-    */
-    @Test
-    def void testMatchAcceptance2_42() {
-        val container = Cypher2Relalg.processString('''
-        MATCH (n)
-        RETURN (n:Foo)
-        ''')
-        container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_42")
+        container.convert("tck/MatchAcceptance2_39")
     }
 
     /*
@@ -900,14 +844,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_43() {
+    def void testMatchAcceptance2_40() {
         val container = Cypher2Relalg.processString('''
         MATCH (n:Person)-->()
         WHERE n.name = 'Bob'
         RETURN n
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_43")
+        container.convert("tck/MatchAcceptance2_40")
     }
 
     /*
@@ -921,14 +865,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_44() {
+    def void testMatchAcceptance2_41() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-->(b)
         MATCH (c)-->(d)
         RETURN a, b, c, d
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_44")
+        container.convert("tck/MatchAcceptance2_41")
     }
 
     /*
@@ -946,7 +890,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_45() {
+    def void testMatchAcceptance2_42() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)--(b)--(c)--(d)--(a), (b)--(d)
         WHERE a.id = 1
@@ -954,7 +898,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN d
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_45")
+        container.convert("tck/MatchAcceptance2_42")
     }
 
     /*
@@ -969,13 +913,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_46() {
+    def void testMatchAcceptance2_43() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[:A]->()-[:B]->(a)
         RETURN a.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_46")
+        container.convert("tck/MatchAcceptance2_43")
     }
 
     /*
@@ -990,13 +934,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_47() {
+    def void testMatchAcceptance2_44() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[:A]->(b), (b)-[:B]->(a)
         RETURN a.name
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_47")
+        container.convert("tck/MatchAcceptance2_44")
     }
 
     /*
@@ -1008,13 +952,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_48() {
+    def void testMatchAcceptance2_45() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[r*1..1]->(b)
         RETURN r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_48")
+        container.convert("tck/MatchAcceptance2_45")
     }
 
     /*
@@ -1022,7 +966,7 @@ class MatchAcceptance2VisualizationTest {
     Given an empty graph
     */
     @Test
-    def void testMatchAcceptance2_49() {
+    def void testMatchAcceptance2_46() {
         val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (a)
         WITH a
@@ -1030,7 +974,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_49")
+        container.convert("tck/MatchAcceptance2_46")
     }
 
     /*
@@ -1042,7 +986,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_50() {
+    def void testMatchAcceptance2_47() {
         val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (a:Label)
         WITH a
@@ -1050,7 +994,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_50")
+        container.convert("tck/MatchAcceptance2_47")
     }
 
     /*
@@ -1058,7 +1002,7 @@ class MatchAcceptance2VisualizationTest {
     Given an empty graph
     */
     @Test
-    def void testMatchAcceptance2_51() {
+    def void testMatchAcceptance2_48() {
         val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (a)
         WITH a
@@ -1066,7 +1010,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_51")
+        container.convert("tck/MatchAcceptance2_48")
     }
 
     /*
@@ -1074,13 +1018,13 @@ class MatchAcceptance2VisualizationTest {
     Given an empty graph
     */
     @Test
-    def void testMatchAcceptance2_52() {
+    def void testMatchAcceptance2_49() {
         val container = Cypher2Relalg.processString('''
         OPTIONAL MATCH (a)
         RETURN a
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_52")
+        container.convert("tck/MatchAcceptance2_49")
     }
 
     /*
@@ -1092,13 +1036,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_53() {
+    def void testMatchAcceptance2_50() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (a)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_53")
+        container.convert("tck/MatchAcceptance2_50")
     }
 
     /*
@@ -1110,13 +1054,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_54() {
+    def void testMatchAcceptance2_51() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ()-[*0..]->()
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_54")
+        container.convert("tck/MatchAcceptance2_51")
     }
 
     /*
@@ -1128,13 +1072,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_55() {
+    def void testMatchAcceptance2_52() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         RETURN n.prop AS n, count(n) AS count
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_55")
+        container.convert("tck/MatchAcceptance2_52")
     }
 
     /*
@@ -1147,7 +1091,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_56() {
+    def void testMatchAcceptance2_53() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2
@@ -1155,7 +1099,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN r2 AS rel
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_56")
+        container.convert("tck/MatchAcceptance2_53")
     }
 
     /*
@@ -1168,7 +1112,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_57() {
+    def void testMatchAcceptance2_54() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r1]->()
         WITH r1 AS r2, count(*) AS c
@@ -1177,7 +1121,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN r2 AS rel
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_57")
+        container.convert("tck/MatchAcceptance2_54")
     }
 
     /*
@@ -1190,7 +1134,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_58() {
+    def void testMatchAcceptance2_55() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[r]->(b)
         WITH a, r, b, count(*) AS c
@@ -1200,7 +1144,7 @@ class MatchAcceptance2VisualizationTest {
         ORDER BY rel.id
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_58")
+        container.convert("tck/MatchAcceptance2_55")
     }
 
     /*
@@ -1212,7 +1156,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_59() {
+    def void testMatchAcceptance2_56() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r]->()
         WITH r
@@ -1221,7 +1165,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a2, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_59")
+        container.convert("tck/MatchAcceptance2_56")
     }
 
     /*
@@ -1233,7 +1177,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_60() {
+    def void testMatchAcceptance2_57() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r]->()
         WITH r, a1
@@ -1242,7 +1186,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_60")
+        container.convert("tck/MatchAcceptance2_57")
     }
 
     /*
@@ -1254,7 +1198,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_61() {
+    def void testMatchAcceptance2_58() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r]->()
         WITH r, a1
@@ -1263,7 +1207,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_61")
+        container.convert("tck/MatchAcceptance2_58")
     }
 
     /*
@@ -1275,7 +1219,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_62() {
+    def void testMatchAcceptance2_59() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1:X:Y)-[r]->()
         WITH r, a1
@@ -1284,7 +1228,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_62")
+        container.convert("tck/MatchAcceptance2_59")
     }
 
     /*
@@ -1296,7 +1240,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_63() {
+    def void testMatchAcceptance2_60() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r:T]->()
         WITH r, a1
@@ -1305,7 +1249,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_63")
+        container.convert("tck/MatchAcceptance2_60")
     }
 
     /*
@@ -1317,7 +1261,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_64() {
+    def void testMatchAcceptance2_61() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r:T]->() WITH r, a1
         LIMIT 1
@@ -1325,7 +1269,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_64")
+        container.convert("tck/MatchAcceptance2_61")
     }
 
     /*
@@ -1339,7 +1283,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_65() {
+    def void testMatchAcceptance2_62() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r1]->()-[r2]->()
         WITH [r1, r2] AS rs
@@ -1348,7 +1292,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN first, second
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_65")
+        container.convert("tck/MatchAcceptance2_62")
     }
 
     /*
@@ -1362,7 +1306,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_66() {
+    def void testMatchAcceptance2_63() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS first, b AS second
@@ -1371,7 +1315,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN first, second
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_66")
+        container.convert("tck/MatchAcceptance2_63")
     }
 
     /*
@@ -1385,7 +1329,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_67() {
+    def void testMatchAcceptance2_64() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[r1]->()-[r2]->(b)
         WITH [r1, r2] AS rs, a AS second, b AS first
@@ -1394,7 +1338,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN first, second
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_67")
+        container.convert("tck/MatchAcceptance2_64")
     }
 
     /*
@@ -1406,7 +1350,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_68() {
+    def void testMatchAcceptance2_65() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r]->()
         WITH r, a1
@@ -1415,7 +1359,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_68")
+        container.convert("tck/MatchAcceptance2_65")
     }
 
     /*
@@ -1427,7 +1371,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_69() {
+    def void testMatchAcceptance2_66() {
         val container = Cypher2Relalg.processString('''
         MATCH (a1)-[r]->()
         WITH r, a1
@@ -1437,7 +1381,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a1, r, b2, a2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_69")
+        container.convert("tck/MatchAcceptance2_66")
     }
 
     /*
@@ -1449,14 +1393,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_70() {
+    def void testMatchAcceptance2_67() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)
         WITH n.prop AS n2
         RETURN n2.prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_70")
+        container.convert("tck/MatchAcceptance2_67")
     }
 
     /*
@@ -1468,7 +1412,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_71() {
+    def void testMatchAcceptance2_68() {
         val container = Cypher2Relalg.processString('''
         MATCH (foo)
         RETURN foo.bar AS x
@@ -1476,7 +1420,7 @@ class MatchAcceptance2VisualizationTest {
         LIMIT 4
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_71")
+        container.convert("tck/MatchAcceptance2_68")
     }
 
     /*
@@ -1484,13 +1428,13 @@ class MatchAcceptance2VisualizationTest {
     Given an empty graph
     */
     @Test
-    def void testMatchAcceptance2_72() {
+    def void testMatchAcceptance2_69() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN count(a) > 0
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_72")
+        container.convert("tck/MatchAcceptance2_69")
     }
 
     /*
@@ -1504,13 +1448,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_73() {
+    def void testMatchAcceptance2_70() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:Artist)-[:WORKED_WITH* {year: 1988}]->(b:Artist)
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_73")
+        container.convert("tck/MatchAcceptance2_70")
     }
 
     /*
@@ -1524,7 +1468,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_74() {
+    def void testMatchAcceptance2_71() {
         val container = Cypher2Relalg.processString('''
         MATCH (a), (b)
         WHERE a.id = 0
@@ -1533,7 +1477,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN DISTINCT b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_74")
+        container.convert("tck/MatchAcceptance2_71")
     }
 
     /*
@@ -1548,13 +1492,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_75() {
+    def void testMatchAcceptance2_72() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:Blue)-[r*]->(b:Green)
         RETURN count(r)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_75")
+        container.convert("tck/MatchAcceptance2_72")
     }
 
     /*
@@ -1567,14 +1511,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_76() {
+    def void testMatchAcceptance2_73() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (n:Movie)--(m)
         RETURN p
         LIMIT 1
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_76")
+        container.convert("tck/MatchAcceptance2_73")
     }
 
     /*
@@ -1586,14 +1530,14 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_77() {
+    def void testMatchAcceptance2_74() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (a)
         WITH p
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_77")
+        container.convert("tck/MatchAcceptance2_74")
     }
 
     /*
@@ -1607,13 +1551,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_78() {
+    def void testMatchAcceptance2_75() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (n)-->(m)--(o)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_78")
+        container.convert("tck/MatchAcceptance2_75")
     }
 
     /*
@@ -1628,13 +1572,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_79() {
+    def void testMatchAcceptance2_76() {
         val container = Cypher2Relalg.processString('''
         MATCH path = (n)-->(m)--(o)--(p)
         RETURN path
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_79")
+        container.convert("tck/MatchAcceptance2_76")
     }
 
     /*
@@ -1651,13 +1595,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_80() {
+    def void testMatchAcceptance2_77() {
         val container = Cypher2Relalg.processString('''
         MATCH topRoute = (:Start)<-[:CONNECTED_TO]-()-[:CONNECTED_TO*3..3]-(:End)
         RETURN topRoute
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_80")
+        container.convert("tck/MatchAcceptance2_77")
     }
 
     /*
@@ -1669,13 +1613,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_81() {
+    def void testMatchAcceptance2_78() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a.prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_81")
+        container.convert("tck/MatchAcceptance2_78")
     }
 
     /*
@@ -1687,13 +1631,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_82() {
+    def void testMatchAcceptance2_79() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r]->()
         RETURN r.prop
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_82")
+        container.convert("tck/MatchAcceptance2_79")
     }
 
     /*
@@ -1706,13 +1650,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_83() {
+    def void testMatchAcceptance2_80() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)-[r]->()
         RETURN a AS foo, r AS bar
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_83")
+        container.convert("tck/MatchAcceptance2_80")
     }
 
     /*
@@ -1724,13 +1668,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_84() {
+    def void testMatchAcceptance2_81() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a.bar
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_84")
+        container.convert("tck/MatchAcceptance2_81")
     }
 
     /*
@@ -1742,13 +1686,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_85() {
+    def void testMatchAcceptance2_82() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r]->()
         RETURN r.bar
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_85")
+        container.convert("tck/MatchAcceptance2_82")
     }
 
     /*
@@ -1760,13 +1704,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_86() {
+    def void testMatchAcceptance2_83() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a.name, a.age, a.seasons
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_86")
+        container.convert("tck/MatchAcceptance2_83")
     }
 
     /*
@@ -1778,13 +1722,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_87() {
+    def void testMatchAcceptance2_84() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a.prop + 1 AS foo
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_87")
+        container.convert("tck/MatchAcceptance2_84")
     }
 
     /*
@@ -1796,13 +1740,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_88() {
+    def void testMatchAcceptance2_85() {
         val container = Cypher2Relalg.processString('''
         MATCH (a)
         RETURN a.prop2 + a.prop1 AS foo
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_88")
+        container.convert("tck/MatchAcceptance2_85")
     }
 
     /*
@@ -1815,13 +1759,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_89() {
+    def void testMatchAcceptance2_86() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r*0..1]-()
         RETURN last(r) AS l
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_89")
+        container.convert("tck/MatchAcceptance2_86")
     }
 
     /*
@@ -1833,7 +1777,7 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_90() {
+    def void testMatchAcceptance2_87() {
         val container = Cypher2Relalg.processString('''
         MATCH (a:A)
         OPTIONAL MATCH (a)-[:FOO]->(b:B)
@@ -1841,7 +1785,7 @@ class MatchAcceptance2VisualizationTest {
         RETURN a, b, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_90")
+        container.convert("tck/MatchAcceptance2_87")
     }
 
     /*
@@ -1854,13 +1798,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_91() {
+    def void testMatchAcceptance2_88() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)-[r]->(m)
         RETURN [n, r, m] AS r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_91")
+        container.convert("tck/MatchAcceptance2_88")
     }
 
     /*
@@ -1873,13 +1817,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_92() {
+    def void testMatchAcceptance2_89() {
         val container = Cypher2Relalg.processString('''
         MATCH (n)-[r]->(m)
         RETURN {node1: n, rel: r, node2: m} AS m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_92")
+        container.convert("tck/MatchAcceptance2_89")
     }
 
     /*
@@ -1892,13 +1836,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_93() {
+    def void testMatchAcceptance2_90() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ({prop: 'a'})-->({prop: 'b'})
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_93")
+        container.convert("tck/MatchAcceptance2_90")
     }
 
     /*
@@ -1911,13 +1855,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_94() {
+    def void testMatchAcceptance2_91() {
         val container = Cypher2Relalg.processString('''
         MATCH p = ({prop: 'a'})<--({prop: 'b'})
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_94")
+        container.convert("tck/MatchAcceptance2_91")
     }
 
     /*
@@ -1931,13 +1875,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_95() {
+    def void testMatchAcceptance2_92() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (n)-->(k)<--(n)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_95")
+        container.convert("tck/MatchAcceptance2_92")
     }
 
     /*
@@ -1951,13 +1895,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_96() {
+    def void testMatchAcceptance2_93() {
         val container = Cypher2Relalg.processString('''
         MATCH p = (n)<-->(k)<--(n)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_96")
+        container.convert("tck/MatchAcceptance2_93")
     }
 
     /*
@@ -1971,13 +1915,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_97() {
+    def void testMatchAcceptance2_94() {
         val container = Cypher2Relalg.processString('''
         MATCH p=(n)<-->(k)<-->(n)
         RETURN p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_97")
+        container.convert("tck/MatchAcceptance2_94")
     }
 
     /*
@@ -1991,13 +1935,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_98() {
+    def void testMatchAcceptance2_95() {
         val container = Cypher2Relalg.processString('''
         MATCH (n:A:B:C:D:E:F:G:H:I:J:K:L:M)-[:T]->(m:Z:Y:X:W:V:U)
         RETURN n, m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_98")
+        container.convert("tck/MatchAcceptance2_95")
     }
 
     /*
@@ -2016,13 +1960,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_99() {
+    def void testMatchAcceptance2_96() {
         val container = Cypher2Relalg.processString('''
         MATCH (n {prop: 'start'})-[:T*]->(m {prop: 'end'})
         RETURN m
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_99")
+        container.convert("tck/MatchAcceptance2_96")
     }
 
     /*
@@ -2035,13 +1979,13 @@ class MatchAcceptance2VisualizationTest {
       """
     */
     @Test
-    def void testMatchAcceptance2_101() {
+    def void testMatchAcceptance2_98() {
         val container = Cypher2Relalg.processString('''
         MATCH ()-[r]-()
         RETURN type(r) AS r
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/MatchAcceptance2_101")
+        container.convert("tck/MatchAcceptance2_98")
     }
 
 }

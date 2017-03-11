@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class ListComprehensionVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class ListComprehensionVisualizationTest {
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ListComprehension_01")
+        container.convert("tck/ListComprehension_01")
     }
 
     /*
@@ -49,7 +49,7 @@ class ListComprehensionVisualizationTest {
         RETURN p, c
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ListComprehension_02")
+        container.convert("tck/ListComprehension_02")
     }
 
     /*
@@ -70,7 +70,7 @@ class ListComprehensionVisualizationTest {
         RETURN b
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ListComprehension_03")
+        container.convert("tck/ListComprehension_03")
     }
 
 }

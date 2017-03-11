@@ -20,28 +20,28 @@ addons:
       - texlive-fonts-recommended
       - texlive-fonts-extra
       - texlive-latex-extra
+      - texlive-xetex
       - latexmk
       - lmodern
       - pgf
 
+before_install:
+  # we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
+  - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
-  - scripts/get-slizaa.sh
   - ./gradlew assemble
 script:
   - ./gradlew regressionTests --continue
   - ./gradlew failingTests --continue || true
-  - ./gradlew report --continue || true
-  - cd opencypher-report
-  - make
-  - cd ..
-  - scripts/deploy.sh
+  - ./gradlew report --continue --stacktrace || true
+  # only build and deploy the results if the build is performed on the master branch
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then cd opencypher-report; make || cat opencypher-report.log; cd ..; scripts/deploy.sh; fi
   - ./gradlew :ire:test --continue
   - ./gradlew :ingraph-ire:test --continue
   - ./gradlew :ingraph-relalg2tex:test --continue
 notifications:
-  slack:
-    rooms: ftsrg:ll9rntRuEyb9KC9z5cWAQShn
-    on_success: change
-    on_failure: always
+  slack: ftsrg:ll9rntRuEyb9KC9z5cWAQShn
   email: false
+  on_success: change
+  on_failure: always

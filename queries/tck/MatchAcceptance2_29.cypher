@@ -1,2 +1,3 @@
-MATCH (a)-[:T|:T]->(b)
-RETURN b
+MATCH (n)
+WHERE n.foo = 'bar'
+RETURN n

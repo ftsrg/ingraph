@@ -1,9 +1,14 @@
 % !TeX spellcheck = en_GB
-% !TeX program = pdflatex
+% !TeX encoding = UTF-8
+% !TeX program = xelatex
 \documentclass{report}
+
+% we have to load xcolor first, see http://tex.stackexchange.com/questions/99049/latex-error-option-clash-for-package-xcolor-even-if-i-put-listings-before
+\usepackage[dvipsnames]{xcolor}
 
 \input{../visualization/inputs/relalg-packages}
 \input{../visualization/inputs/relalg-commands}
+\togglefalse{textualoperators}
 
 %\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
 \usepackage[a4paper,margin=2.5cm]{geometry}
@@ -11,7 +16,6 @@
 
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage{microtype}
 \usepackage[math]{blindtext}
@@ -25,12 +29,20 @@
 \usepackage{adjustbox}
 \usepackage{autobreak}
 \usepackage{xstring}
+\usepackage{progressbar}
+\usepackage{lineno}
+\usepackage{accsupp}
+\usepackage{datetime}
+%\usepackage{tocstyle} % prevents numbers an titles from overlapping in ToC
+
+\renewcommand{\thelinenumber}{
+	\BeginAccSupp{ActualText={}}\arabic{linenumber}\EndAccSupp{}%
+}
 
 \pagestyle{fancy}
 \fancyhf{}
 
 \renewcommand{\subsectionmark}[1]{\def\subsectiontitle{: #1}}
-%\fancyhead[L]{\nouppercase{\rightmark \subsectiontitle}}
 \fancyhead[L]{\nouppercase{\rightmark}} % \StrLeft{\subsectiontitle}{50}}}
 \fancyhead[R]{\thepage}
 
@@ -42,12 +54,12 @@
 % title page
 \title{openCypher Specification}
 \author{G\'abor Sz\'arnyas, J\'ozsef Marton}
-\usepackage[]{datetime}
-\date{\yyyymmdddate \today~\currenttime~GMT+0}
 
 \begin{document}
 
-\maketitle
+%\input{minimal-sandbox}
+
+\input{titlepage}
 
 \tableofcontents
 
@@ -60,17 +72,16 @@
 \bibliographystyle{abbrv}
 \bibliography{bib}
 
-\IfFileExists{./disable-appendix}{
-	% do nothing
-}{
+\IfFileExists{./disable-appendix}{}{
 	\appendix
-	\input{appendix/tck}
-	\input{appendix/fraud-detection}
-	\input{appendix/ldbc-snb}
-	\input{appendix/movie-database}
-	\input{appendix/static-analysis-java}
-	\input{appendix/static-analysis-javascript}
-	\input{appendix/trainbenchmark}
+	\input{appendix/chapter-tck}
+	\input{appendix/chapter-fraud-detection}
+	\input{appendix/chapter-ldbc-snb-interactive}
+	\input{appendix/chapter-ldbc-snb-bi}
+	\input{appendix/chapter-movie-database}
+	\input{appendix/chapter-static-analysis-java}
+	\input{appendix/chapter-static-analysis-javascript}
+	\input{appendix/chapter-trainbenchmark}
 }
 
 \end{document}

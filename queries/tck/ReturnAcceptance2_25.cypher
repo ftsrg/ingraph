@@ -1,3 +1,1 @@
-MATCH (n)
-RETURN DISTINCT n
-ORDER BY n.id
+RETURN [[1]][0][0]

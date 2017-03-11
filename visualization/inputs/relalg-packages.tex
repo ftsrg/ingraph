@@ -9,9 +9,14 @@
 
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{stix}
 \usepackage{etoolbox}
+\usepackage{xspace}
+\newtoggle{textualoperators}
 
 \usepackage{tikz}
+% Using the forest package, there is a known issue that edges sometimes cut through child nodes.
+% See the package documentation on CTAN (https://www.ctan.org/pkg/forest), section 6.2. "Known bugs", "Edges cutting through sibling nodes":
+% While it would be possible to fix the situation after child alignment (at least for some child alignment methods), I have decided against that, since the distances between siblings would soon become too large. [...] The bottomline is, please use manual adjustment to fix such situations.
 \usepackage{forest}
+
 \tikzset{every node/.style={draw}}

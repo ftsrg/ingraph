@@ -7,7 +7,7 @@ import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import org.apache.tinkerpop.gremlin.structure.{Edge, Element, Vertex}
-import relalg.{AttributeVariable, GetEdgesOperator, Variable, VertexVariable}
+import relalg.{AttributeVariable, GetEdgesOperator, LabelSetStatus, Variable, VertexVariable}
 
 import scala.collection.mutable
 
@@ -28,11 +28,11 @@ class IngraphGraphChangedListener(
       required.tail.map(key => element.value(key).asInstanceOf[Any])
 
   def edgeTypeFilter(edge: Edge, operator: GetEdgesOperator): Boolean = {
-    if (operator.getSourceVertexVariable.getVertexLabelSet != null) {
+    if (operator.getSourceVertexVariable.getVertexLabelSet.getStatus != LabelSetStatus.EMPTY) {
       val sourceNames = operator.getSourceVertexVariable.getVertexLabelSet.getVertexLabels.map(f => f.getName)
       if (!sourceNames.contains(edge.outVertex().label())) return false
     }
-    if (operator.getTargetVertexVariable.getVertexLabelSet != null) {
+    if (operator.getTargetVertexVariable.getVertexLabelSet.getStatus != LabelSetStatus.EMPTY) {
       val targetNames = operator.getTargetVertexVariable.getVertexLabelSet.getVertexLabels.map(f => f.getName)
       if (!targetNames.contains(edge.inVertex().label())) return false
     }

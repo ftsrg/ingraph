@@ -1,2 +1,2 @@
-MATCH (:A)-[r]->(:B)
-RETURN r
+MATCH (n)
+RETURN (n:Foo)

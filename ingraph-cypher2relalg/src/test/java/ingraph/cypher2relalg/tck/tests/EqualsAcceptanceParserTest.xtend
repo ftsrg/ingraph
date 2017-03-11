@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -28,8 +29,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_01")
     }
 
     /*
@@ -50,8 +52,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_02")
     }
 
     /*
@@ -72,8 +75,9 @@ class EqualsAcceptanceParserTest {
         MATCH (n) WHERE toInteger(n.id) = expected
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_03")
     }
 
     /*
@@ -94,8 +98,9 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_04")
     }
 
     /*
@@ -116,8 +121,9 @@ class EqualsAcceptanceParserTest {
         WHERE a = b
         RETURN count(b)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/EqualsAcceptance_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/EqualsAcceptance_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/EqualsAcceptance_05")
     }
 
 }

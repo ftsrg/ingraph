@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -27,8 +28,9 @@ class ListComprehensionParserTest {
         MATCH p = (n)-->()
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_01")
     }
 
     /*
@@ -49,8 +51,9 @@ class ListComprehensionParserTest {
         WITH [x IN collect(p) | head(nodes(x))] AS p, count(n) AS c
         RETURN p, c
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_02")
     }
 
     /*
@@ -71,8 +74,9 @@ class ListComprehensionParserTest {
         WHERE n.prop IN [x IN labels(b) | lower(x)]
         RETURN b
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ListComprehension_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ListComprehension_03")
     }
 
 }

@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class UnwindAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -22,7 +22,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_01")
+        container.convert("tck/UnwindAcceptance_01")
     }
 
     /*
@@ -36,7 +36,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_02")
+        container.convert("tck/UnwindAcceptance_02")
     }
 
     /*
@@ -51,7 +51,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_03")
+        container.convert("tck/UnwindAcceptance_03")
     }
 
     /*
@@ -67,7 +67,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN x
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_04")
+        container.convert("tck/UnwindAcceptance_04")
     }
 
     /*
@@ -87,7 +87,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN node.id
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_05")
+        container.convert("tck/UnwindAcceptance_05")
     }
 
     /*
@@ -103,7 +103,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN y
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_07")
+        container.convert("tck/UnwindAcceptance_07")
     }
 
     /*
@@ -117,7 +117,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN empty
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_08")
+        container.convert("tck/UnwindAcceptance_08")
     }
 
     /*
@@ -131,7 +131,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN nil
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_09")
+        container.convert("tck/UnwindAcceptance_09")
     }
 
     /*
@@ -145,7 +145,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN duplicate
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_10")
+        container.convert("tck/UnwindAcceptance_10")
     }
 
     /*
@@ -160,7 +160,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_11")
+        container.convert("tck/UnwindAcceptance_11")
     }
 
     /*
@@ -186,7 +186,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN a, b2
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_12")
+        container.convert("tck/UnwindAcceptance_12")
     }
 
     /*
@@ -203,7 +203,7 @@ class UnwindAcceptanceVisualizationTest {
         RETURN *
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/UnwindAcceptance_13")
+        container.convert("tck/UnwindAcceptance_13")
     }
 
 }

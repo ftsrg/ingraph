@@ -1,2 +1,3 @@
 MATCH (a)
-RETURN a, count(a) + 3
+WITH a.a AS a, count(*) AS count
+RETURN count

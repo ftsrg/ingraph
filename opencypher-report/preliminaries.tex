@@ -64,7 +64,7 @@ We also adapted graph-specific operators from~\cite{DBLP:conf/edbt/HolschG16}\fo
 
 The \getverticestext nullary operator $\getvertices{v}{t_1 \land \ldots \land t_n}$ returns a graph relation of a single attribute $v$ that contains the ID of all vertices that have \emph{all} of labels $t_1, \ldots, t_n$.
 
-The \getedgestext operator $\getedges{src}{srcTypes}{trg}{trgTypes}{e}{labels}$ operator returns a relation of three attributes. Each row represents an edge and its vertices: the source vertex $\mathtt{src}$ (with all types of $\mathsf{srcTypes}$), the edge $\mathtt{e}$ (with a single label of $\mathtt{labels}$) and the target vertex $\mathtt{trg}$ (with all types of $\mathsf{trgTypes}$).
+The \getedgestext operator $\getedgesopdirected{src}{srcTypes}{trg}{trgTypes}{e}{labels}$ operator returns a relation of three attributes. Each row represents an edge and its vertices: the source vertex $\mathtt{src}$ (with all types of $\mathsf{srcTypes}$), the edge $\mathtt{e}$ (with a single label of $\mathtt{labels}$) and the target vertex $\mathtt{trg}$ (with all types of $\mathsf{trgTypes}$). \todo{add getedges operator directed}
 
 \subsection{Unary Operators}
 \label{sec:unary-operators}
@@ -112,8 +112,8 @@ The \antijointext operator $\antijoinop$ (also known as \emph{left anti semijoin
 $$ t = r \antijoin s = r \setminus \pi_{R} \left(r \join s\right), $$
 where $\pi_{R}$ denotes a projection operator, which only keeps the attributes of the schema over relation $r$. The antijoin operator is not commutative and not associative.
 
-The \leftouterjointext $\myleftouterjoin$ pads tuples from the left relation that did not match any from the right relation with $\relnull$ values and adds them to the result of the \jointext~\cite{DBLP:books/daglib/0015084}:
-$$ t = r \myleftouterjoin s = (r \join s) \union (r \antijoin s) \cartesianproductop \{\relnull, \ldots, \relnull\}, $$
+The \leftouterjointext $\leftouterjoin$ pads tuples from the left relation that did not match any from the right relation with $\relnull$ values and adds them to the result of the \jointext~\cite{DBLP:books/daglib/0015084}:
+$$ t = r \leftouterjoin s = (r \join s) \union (r \antijoin s) \cartesianproductop \{\relnull, \ldots, \relnull\}, $$
 
 where the constant relation $\{\relnull, \ldots, \relnull\}$ is on the schema $S \setminus R$.
 
@@ -149,7 +149,7 @@ Assuming that $x$ is an attribute of a graph relation, we use the notation $x.a$
 		&                    $r \bagunion s$                    &               \baguniontext               &    c, a     &   bag   &   bag   &       bag        &                     $\schema{r}$                     \\ \cline{2-8}
 		&               $r \cartesianproductop s$               &           \cartesianproducttext           &    c, a     &   set   &   bag   &       bag        &           $\schema{r} \append \schema{s}$            \\ \cline{2-8}
 		&                    $r \joinop s$                      &                 \jointext                 &    c, a     &   set   &   bag   &       bag        & $\schema{r} \append (\schema{s} \minus \schema{r}) $ \\ \cline{2-8}
-		&                $r \myleftouterjoin s$                 &            \leftouterjointext             &     $-$     &   set   &   bag   &       bag        & $\schema{r} \append (\schema{s} \minus \schema{r}) $ \\ \cline{2-8}
+		&                $r \leftouterjoin s$                 &            \leftouterjointext             &     $-$     &   set   &   bag   &       bag        & $\schema{r} \append (\schema{s} \minus \schema{r}) $ \\ \cline{2-8}
 		&                   $r \antijoinop s$                   &               \antijointext               &    c, a     &   set   &   bag   &       bag        &                     $\schema{r}$                     \\ \cline{1-8}
 	\end{tabular}
 	\caption{Properties of relational graph algebra operators. A unary operator $\alpha$ is idempotent~(i), iff $\alpha(x) = \alpha(\alpha(x))$ for all inputs. A binary operator $\beta$ is commutative~(c), iff $x~\beta~y = y~\beta~x$ and associative~(a), iff $(x~\beta~y)~\beta~z = x~\beta~(y~\beta~z)$.}

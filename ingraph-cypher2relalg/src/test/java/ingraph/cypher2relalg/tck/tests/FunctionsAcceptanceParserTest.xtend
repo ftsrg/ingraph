@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -19,14 +20,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
         RETURN coalesce(a.title, a.name)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_01")
     }
 
     /*
@@ -41,8 +43,9 @@ class FunctionsAcceptanceParserTest {
         OPTIONAL MATCH p = (a)-[r]->()
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_02")
     }
 
     /*
@@ -56,8 +59,9 @@ class FunctionsAcceptanceParserTest {
         UNWIND split('one1two', '1') AS item
         RETURN count(item) AS item
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_03")
     }
 
     /*
@@ -69,14 +73,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_04() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Person)
         RETURN properties(p) AS m
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_04")
     }
 
     /*
@@ -88,14 +93,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_05() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r:R]->()
         RETURN properties(r) AS m
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_05")
     }
 
     /*
@@ -108,8 +114,9 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_06")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_06")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_06")
     }
 
     /*
@@ -122,8 +129,9 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN properties(null)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_07")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_07")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_07")
     }
 
     /*
@@ -136,8 +144,9 @@ class FunctionsAcceptanceParserTest {
         val cypher = CypherParser.parseString('''
         RETURN reverse('raksO')
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_08")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_08")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_08")
     }
 
     /*
@@ -157,8 +166,9 @@ class FunctionsAcceptanceParserTest {
         WHERE exists(n['prop'])
         RETURN n
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_09")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_09")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_09")
     }
 
     /*
@@ -184,8 +194,9 @@ class FunctionsAcceptanceParserTest {
         LIMIT 100
         RETURN percentileDisc(0.90, deg), deg
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_10")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_10")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_10")
     }
 
     /*
@@ -197,14 +208,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_11() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_11")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_11")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_11")
     }
 
     /*
@@ -216,14 +228,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_12() {
         val cypher = CypherParser.parseString('''
         MATCH ()-[r1]->()-[r2]->()
         RETURN type(r1), type(r2)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_12")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_12")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_12")
     }
 
     /*
@@ -235,15 +248,16 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_13() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:NOT_THERE]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_13")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_13")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_13")
     }
 
     /*
@@ -255,15 +269,16 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_14() {
         val cypher = CypherParser.parseString('''
         MATCH (a)
         OPTIONAL MATCH (a)-[r:T]->()
         RETURN type(r)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_14")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_14")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_14")
     }
 
     /*
@@ -282,8 +297,9 @@ class FunctionsAcceptanceParserTest {
         WITH [r, 1] AS list
         RETURN type(list[0])
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_15")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_15")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_15")
     }
 
     /*
@@ -302,12 +318,13 @@ class FunctionsAcceptanceParserTest {
         WITH [a, 1] AS list
         RETURN labels(list[0]) AS l
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_16")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_16")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_16")
     }
 
     /*
-    Scenario: `labels()` should accept type Any
+    Scenario: `labels()` failing on invalid arguments
     Given an empty graph
     And having executed:
       """
@@ -322,8 +339,9 @@ class FunctionsAcceptanceParserTest {
         WITH [a, 1] AS list
         RETURN labels(list[1]) AS l
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_17")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_17")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_17")
     }
 
     /*
@@ -335,14 +353,15 @@ class FunctionsAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testFunctionsAcceptance_18() {
         val cypher = CypherParser.parseString('''
         MATCH (n:X)
         RETURN n, EXIsTS(n.prop) AS b
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/FunctionsAcceptance_18")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_18")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_18")
     }
 
 }

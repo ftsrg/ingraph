@@ -5,11 +5,11 @@ import relalg.RelalgContainer
 
 class EdgeLabelFactory extends NamedElementFactory<EdgeLabel> {
 
-  new(RelalgContainer container) {
-    super(container)
-  }
+	new(RelalgContainer container) {
+		super(container)
+	}
 
-  override createSpecificNamedElement() {
-    createEdgeLabel
-  }
+	override createSpecificNamedElement() {
+		createEdgeLabel
+	}
 }

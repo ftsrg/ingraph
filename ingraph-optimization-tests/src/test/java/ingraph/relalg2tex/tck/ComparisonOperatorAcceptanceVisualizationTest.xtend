@@ -4,11 +4,11 @@ import org.junit.Test
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg2tex.serializers.RelalgTreeSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 class ComparisonOperatorAcceptanceVisualizationTest {
 
-    val RelalgTreeSerializer serializer = new RelalgTreeSerializer
+    extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
     extension BasicSchemaInferencer inferencer = new BasicSchemaInferencer
     
     /*
@@ -28,7 +28,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_01")
+        container.convert("tck/ComparisonOperatorAcceptance_01")
     }
 
     /*
@@ -48,7 +48,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_02")
+        container.convert("tck/ComparisonOperatorAcceptance_02")
     }
 
     /*
@@ -68,7 +68,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_03")
+        container.convert("tck/ComparisonOperatorAcceptance_03")
     }
 
     /*
@@ -88,7 +88,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_04")
+        container.convert("tck/ComparisonOperatorAcceptance_04")
     }
 
     /*
@@ -108,7 +108,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_05")
+        container.convert("tck/ComparisonOperatorAcceptance_05")
     }
 
     /*
@@ -128,7 +128,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_06")
+        container.convert("tck/ComparisonOperatorAcceptance_06")
     }
 
     /*
@@ -148,7 +148,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_07")
+        container.convert("tck/ComparisonOperatorAcceptance_07")
     }
 
     /*
@@ -168,7 +168,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_08")
+        container.convert("tck/ComparisonOperatorAcceptance_08")
     }
 
     /*
@@ -187,7 +187,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN n.value
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_09")
+        container.convert("tck/ComparisonOperatorAcceptance_09")
     }
 
     /*
@@ -211,7 +211,7 @@ class ComparisonOperatorAcceptanceVisualizationTest {
         RETURN labels(m)
         ''')
         container.inferBasicSchema
-        serializer.serialize(container, "tck/ComparisonOperatorAcceptance_10")
+        container.convert("tck/ComparisonOperatorAcceptance_10")
     }
 
 }

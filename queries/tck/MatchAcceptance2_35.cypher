@@ -1,3 +1,2 @@
-MATCH (n)
-OPTIONAL MATCH (n)-[:NOT_EXIST]->(x)
-RETURN n, collect(x)
+MATCH (a)-->(b:Foo)
+RETURN b

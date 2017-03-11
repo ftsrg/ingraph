@@ -1,2 +1,2 @@
-MATCH (a)
-RETURN a.prop2 + a.prop1 AS foo
+MATCH (n)-[r]->(m)
+RETURN [n, r, m] AS r

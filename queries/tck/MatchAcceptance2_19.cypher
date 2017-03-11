@@ -1,4 +1,4 @@
-MATCH (a {name: 'A'}), (x)
-WHERE x.name IN ['B', 'C']
-OPTIONAL MATCH p = (a)-[r*]->(x)
-RETURN r, x, p
+MATCH (a:A), (other:B)
+OPTIONAL MATCH (a)-[r]->(other)
+WITH other WHERE r IS NULL
+RETURN other

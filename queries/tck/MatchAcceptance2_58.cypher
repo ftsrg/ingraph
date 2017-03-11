@@ -1,6 +1,5 @@
-MATCH (a)-[r]->(b)
-WITH a, r, b, count(*) AS c
-ORDER BY c
-MATCH (a)-[r]->(b)
-RETURN r AS rel
-ORDER BY rel.id
+MATCH (a1)-[r]->()
+WITH r, a1
+LIMIT 1
+MATCH (a1:X)-[r]->(b2)
+RETURN a1, r, b2

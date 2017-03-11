@@ -1,2 +1,2 @@
-MATCH path = (n)-->(m)--(o)--(p)
-RETURN path
+MATCH ()-[r]->()
+RETURN r.prop

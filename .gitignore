@@ -41,7 +41,7 @@ gen/
 xtend-gen
 generated/
 
-out/
+/out/
 .tmpBin/
 ingraph-cypxmi/
 internal/*.g

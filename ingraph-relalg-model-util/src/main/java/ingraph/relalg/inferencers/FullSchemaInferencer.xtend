@@ -22,67 +22,70 @@ import relalg.Variable
  */
 class FullSchemaInferencer {
 
-  extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
-  extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
-  extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
-  extension MaskCalculator maskCalculator = new MaskCalculator
+	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
+	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
+	extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
+	extension MaskCalculator maskCalculator = new MaskCalculator
 
-  def inferFullSchema(RelalgContainer container) {
-    if (!container.extraAttributesInferred) {
-      throw new IllegalStateException("ExtraAttributeInferencer must be executed before FullSchemaInferencer")
-    } else if (container.fullSchemaInferred) {
-      throw new IllegalStateException("FullSchemaInferencer on relalg container was already executed")
-    } else {
-      container.fullSchemaInferred = true
-    }
+	def inferFullSchema(RelalgContainer container) {
+		if (!container.extraAttributesInferred) {
+			throw new IllegalStateException("ExtraAttributeInferencer must be executed before FullSchemaInferencer")
+		} else if (container.fullSchemaInferred) {
+			throw new IllegalStateException("FullSchemaInferencer on relalg container was already executed")
+		} else {
+			container.fullSchemaInferred = true
+		}
 
-    container.rootExpression.traverse([fillFullSchema])
-    container.rootExpression.traverse([calculateTuples])
-    container
-  }
+		container.rootExpression.traverse([fillFullSchema])
+		container.rootExpression.traverse([calculateTuples])
+		container
+	}
 
-  /**
-   * fillFullSchema
-   */
-  private def dispatch void fillFullSchema(NullaryOperator op) {
-    val detailedSchema = union(op.basicSchema, op.extraAttributes)
-    op.defineDetailedSchema(detailedSchema)
-  }
+	/**
+	 * fillFullSchema
+	 */
+	private def dispatch void fillFullSchema(NullaryOperator op) {
+		val detailedSchema = union(op.basicSchema, op.extraAttributes)
+		op.defineDetailedSchema(detailedSchema)
+	}
 
-  private def dispatch void fillFullSchema(UnaryOperator op) {
-    val detailedSchema = op.input.fullSchema
-    op.defineDetailedSchema(detailedSchema)
-  }
+	private def dispatch void fillFullSchema(UnaryOperator op) {
+		val detailedSchema = op.input.fullSchema
+		op.defineDetailedSchema(detailedSchema)
+	}
 
-  private def dispatch void fillFullSchema(UnionOperator op) {
-    throw new UnsupportedOperationException("Union not yet supported")
-  }
+	private def dispatch void fillFullSchema(UnionOperator op) {
+		// TODO left/right inputs should be the same for their detailed schema
+		op.defineDetailedSchema(op.leftInput.fullSchema)
+	}
 
-  private def dispatch void fillFullSchema(AbstractJoinOperator op) {
-    val fullSchema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
-    op.defineDetailedSchema(fullSchema)
-  }
+	private def dispatch void fillFullSchema(AbstractJoinOperator op) {
+		val fullSchema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
+		op.defineDetailedSchema(fullSchema)
+	}
 
-  private def dispatch void fillFullSchema(TernaryOperator op) {
-    val fullSchema = Lists.newArrayList(Iterables.concat(
-      op.getLeftInput.fullSchema,
-      op.getMiddleInput.fullSchema,
-      op.getRightInput.fullSchema
-    ))
-    op.defineDetailedSchema(fullSchema)
-  }
-  
-  /**
-   * defineSchema
-   */
-  private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
-    op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
-    
-    op.fullSchema.addAll(fullSchema)
-  }
+	private def dispatch void fillFullSchema(TernaryOperator op) {
+		val fullSchema = Lists.newArrayList(Iterables.concat(
+			op.getLeftInput.fullSchema,
+			op.getMiddleInput.fullSchema,
+			op.getRightInput.fullSchema
+		))
+		op.defineDetailedSchema(fullSchema)
+	}
+	
+	/**
+	 * defineSchema
+	 */
+	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+		// this projects "-1" in a number of cases, e.g.
+		// - if a literal value was assigned to the variables
+		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
+		
+		op.fullSchema.addAll(fullSchema)
+	}
 
-  private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
-    op.fullSchema.addAll(fullSchema)
-  }
+	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
+		op.fullSchema.addAll(fullSchema)
+	}
 
 }

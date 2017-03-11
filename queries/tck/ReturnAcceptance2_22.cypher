@@ -1,1 +1,3 @@
-RETURN substring('0123456789', 1) AS s
+MATCH (n)
+RETURN DISTINCT n.id AS id
+ORDER BY id DESC

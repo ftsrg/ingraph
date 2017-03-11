@@ -21,7 +21,9 @@ class SkipSortNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
   "Sort" should {
     "count with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new SkipSortNode(echoActor ! _, 3, mask(0, 1), 2, Vector(true, false))))
+      val counter = system.actorOf(Props(
+          new SkipSortNode(echoActor ! _, 3, mask(0, 1), 2, Vector(true, false))
+      ))
 
       counter ! ChangeSet(positive = tupleBag(tuple(2, 3, 4), tuple(0, 2, 3), tuple(0, 3, 3), tuple(5, 6, 7)))
       expectMsg(ChangeSet(positive = tupleBag(tuple(0, 3, 3), tuple(0, 2, 3))))

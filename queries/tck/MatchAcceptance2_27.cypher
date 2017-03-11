@@ -1,2 +1,2 @@
-MATCH (a)-->(b), (b)-->(b)
+MATCH (a)-[:T|:T]->(b)
 RETURN b

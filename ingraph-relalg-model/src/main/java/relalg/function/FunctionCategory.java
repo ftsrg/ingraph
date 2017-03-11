@@ -8,7 +8,6 @@ public enum FunctionCategory {
   NUMERIC,
   PREDICATE,
   SCALAR,
-  STATISTICAL,
   STRING,
   TRIGONOMETRIC,
 }

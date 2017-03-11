@@ -6,23 +6,23 @@ import relalg.RelalgContainer
 
 class ExpressionVariableFactory extends VariableFactory<ExpressionVariable> {
 
-  new(RelalgContainer container) {
-    super(container)
-  }
+	new(RelalgContainer container) {
+		super(container)
+	}
 
-  override createSpecificNamedElement() {
-    createExpressionVariable
-  }
+	override createSpecificNamedElement() {
+		createExpressionVariable
+	}
 
-  def createElement(String name, Expression expression) {
-    if (name !== null) {
-      createElement(name) => [
-        it.expression = expression
-      ]
-    } else {
-      createDontCareElement(expression) => [
-        it.expression = expression
-      ]
-    }
-  }
+	def createElement(String name, Expression expression) {
+		if (name !== null) {
+			createElement(name) => [
+				it.expression = expression
+			]
+		} else {
+			createDontCareElement(expression) => [
+				it.expression = expression
+			]
+		}
+	}
 }

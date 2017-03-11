@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -19,7 +20,7 @@ class UnionAcceptanceParserTest {
       """
     */
     @Test
-    @Category(RegressionTests)
+    @Category(FailingTests)
     def void testUnionAcceptance_01() {
         val cypher = CypherParser.parseString('''
         MATCH (a:A)
@@ -28,8 +29,9 @@ class UnionAcceptanceParserTest {
         MATCH (b:B)
         RETURN b AS a
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_01")
     }
 
     /*
@@ -44,8 +46,9 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_02")
     }
 
     /*
@@ -60,8 +63,9 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_03")
     }
 
     /*
@@ -78,8 +82,9 @@ class UnionAcceptanceParserTest {
         UNION
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_04")
     }
 
     /*
@@ -96,8 +101,9 @@ class UnionAcceptanceParserTest {
         UNION ALL
         RETURN 2 AS x
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/UnionAcceptance_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_05")
     }
 
 }

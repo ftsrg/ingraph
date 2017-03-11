@@ -1,0 +1,118 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+/*
+    parentOperator
+          |
+          | *input
+          V
+    expandOperator
+          |
+          | input
+          V
+  getVerticesOperator
+
+*/
+pattern defaultExpandOperator(expandOperator : ExpandOperator) {
+  ExpandOperator.minHops(expandOperator, 1);
+  ExpandOperator.maxHops(expandOperator, maxHops);
+  MaxHops.maxHopsType(maxHops, ::LIMITED);
+  MaxHops.hops(maxHops, 1);
+}
+
+// [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
+pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+	find parentOperator(parentOperator, expandOperator);
+	find defaultExpandOperator(expandOperator);
+	ExpandOperator.input(expandOperator, getVerticesOperator);
+	GetVerticesOperator(getVerticesOperator);
+}
+
+/*
+    parentOperator
+          |
+          | *input
+          V
+    expandOperator
+*/
+// [2a] transformation for eliminating the remaining default expand operators
+pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operator) {
+	find parentOperator(parentOperator, expandOperator);
+	find defaultExpandOperator(expandOperator);
+}
+
+// [2b] transformation for eliminating the remaining non-default expand operators
+pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
+  find parentOperator(parentOperator, expandOperator);
+  neg find defaultExpandOperator(expandOperator);
+}
+
+/*
+      container
+          |
+          | rootExpression
+          V
+     topOperator (skips/limits a given amount of tuples)
+          |
+          | *input
+          V
+     sortOperator (orders the tuples according to some variables and asc/desc directions)
+*/
+// [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
+pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) {
+  RelalgContainer.rootExpression(topLevelContainer, topOperator);
+  TopOperator.input(topOperator, sortOperator);
+}
+
+/*
+       parentOperator
+            |
+            | *input
+            V
+       selectionOperator.condition = NOT(...)
+            |
+            | *input
+            V
+     leftOuterJoinOperator
+        |         |
+       /           \
+      /             \
+     | leftInput     | rightInput
+     V               V
+   leftInputOp...  getEdgesOperator
+*/
+// [4] (run after [2])
+// transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
+pattern leftOuterJoinAndSelection(
+  parentOperator : Operator,
+  selectionOperator : SelectionOperator,
+  leftOuterJoinOperator: LeftOuterJoinOperator,
+  leftInputOperator: Operator,
+  getEdgesOperator: GetEdgesOperator
+) {
+  find parentOperator(parentOperator, selectionOperator);
+  SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
+  SelectionOperator.condition(selectionOperator, condition);
+  UnaryLogicalExpression.operator(condition, ::NOT);
+  UnaryLogicalExpression.operand(condition, conditionInternalExpression);
+  
+  find variablesInLogicalExpression(conditionInternalExpression);
+  
+  LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
+  LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, getEdgesOperator);
+}
+
+pattern variablesInLogicalExpression(expression : Expression) {
+  BinaryLogicalExpression.operator(expression, ::AND);
+  
+  find leftDeepTreeNodes+(expression, expression2);
+  
+  BinaryLogicalExpression.rightOperand(expression2, notNull);
+  UnaryGraphObjectLogicalExpression.operator(notNull, ::IS_NOT_NULL);
+}
+
+pattern leftDeepTreeNodes(parent : BinaryLogicalExpression, child : BinaryLogicalExpression) {
+  BinaryLogicalExpression.leftOperand(parent, child);
+  BinaryLogicalExpression(child);
+}

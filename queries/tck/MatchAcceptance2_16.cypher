@@ -1,3 +1,3 @@
 MATCH (a {name: 'A'})
-OPTIONAL MATCH (a)-[:KNOWS]->()-[:KNOWS]->(foo)
-RETURN foo
+OPTIONAL MATCH p = (a)-->(b)-[*]->(c)
+RETURN p

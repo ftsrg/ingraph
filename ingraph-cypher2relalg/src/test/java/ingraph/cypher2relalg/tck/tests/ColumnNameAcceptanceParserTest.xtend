@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -20,8 +21,9 @@ class ColumnNameAcceptanceParserTest {
         MATCH (n)
         RETURN cOuNt( * )
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_01")
     }
 
     /*
@@ -34,8 +36,9 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN nOdEs( p )
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_02")
     }
 
     /*
@@ -48,8 +51,9 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN coUnt( dIstInct p )
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_03")
     }
 
     /*
@@ -62,8 +66,9 @@ class ColumnNameAcceptanceParserTest {
         MATCH p = (n)-->(b)
         RETURN aVg(    n.aGe     )
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ColumnNameAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_04")
     }
 
 }

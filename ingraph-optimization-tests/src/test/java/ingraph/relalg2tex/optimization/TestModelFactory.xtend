@@ -10,9 +10,16 @@ class TestModelFactory {
 	public def testModel1() {
 		val ctr = createRelalgContainer
 		
-		val l = createBooleanLiteral => [value = true]
-		val r = createBooleanLiteral => [value = false]
+		val l = createBooleanLiteral => [
+			container = ctr
+			value = true
+		]
+		val r = createBooleanLiteral => [
+			container = ctr
+			value = false
+		]
 		val condition = createBinaryLogicalExpression => [
+			container = ctr
 			operator = BinaryLogicalOperatorType.AND
 			leftOperand = l
 			rightOperand = r

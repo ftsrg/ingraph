@@ -1,2 +1,3 @@
-MATCH (n)
-RETURN (n:Foo)
+MATCH (n:Person)-->()
+WHERE n.name = 'Bob'
+RETURN n

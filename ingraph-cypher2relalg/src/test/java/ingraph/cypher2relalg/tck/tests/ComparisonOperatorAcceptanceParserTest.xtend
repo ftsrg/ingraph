@@ -5,6 +5,7 @@ import ingraph.cypher2relalg.tck.FailingTests
 import ingraph.cypher2relalg.tck.RegressionTests
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.util.RelalgUtil
 import org.junit.Test
 import org.junit.experimental.categories.Category
 
@@ -27,8 +28,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_01")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_01")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_01")
     }
 
     /*
@@ -48,8 +50,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_02")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_02")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_02")
     }
 
     /*
@@ -69,8 +72,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value < 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_03")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_03")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_03")
     }
 
     /*
@@ -90,8 +94,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 1 <= n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_04")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_04")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_04")
     }
 
     /*
@@ -111,8 +116,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_05")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_05")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_05")
     }
 
     /*
@@ -132,8 +138,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' < n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_06")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_06")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_06")
     }
 
     /*
@@ -153,8 +160,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value < 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_07")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_07")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_07")
     }
 
     /*
@@ -174,8 +182,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 'a' <= n.value <= 'c'
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_08")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_08")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_08")
     }
 
     /*
@@ -194,8 +203,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE 10 < n.value <= 3
         RETURN n.value
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_09")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_09")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_09")
     }
 
     /*
@@ -219,8 +229,9 @@ class ComparisonOperatorAcceptanceParserTest {
         WHERE n.prop1 < m.prop1 = n.prop2 <> m.prop2
         RETURN labels(m)
         ''')
-        CypherUtil.save(cypher, "../ingraph-cypxmi/tck/ComparisonOperatorAcceptance_10")
-        Cypher2Relalg.processCypher(cypher)
+        CypherUtil.save(cypher, "cypher-asts/tck/ComparisonOperatorAcceptance_10")
+        val container = Cypher2Relalg.processCypher(cypher)
+        RelalgUtil.save(container, "relalg-models/tck/ComparisonOperatorAcceptance_10")
     }
 
 }

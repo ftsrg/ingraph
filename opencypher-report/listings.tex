@@ -7,6 +7,29 @@
 \definecolor{keywordcolor}{RGB}{0,0,160}
 \definecolor{commentcolor}{RGB}{0,128,64}
 \definecolor{stringcolor}{RGB}{0,128,0}
+\definecolor{functioncolor}{RGB}{171,0,85}
+
+
+\lstdefinelanguage{cypher}
+{
+	morekeywords={
+		MATCH, OPTIONAL, WHERE, IS, NOT, AND, OR, XOR, RETURN, DISTINCT, ORDER, BY, ASC, ASCENDING, DESC, DESCENDING, UNWIND, AS, UNION, WITH, ALL, CREATE, DELETE, DETACH, REMOVE, SET, MERGE, SET, SKIP, LIMIT,
+		% string operators
+		STARTS, ENDS, CONTAINS,
+		% set operator
+		IN,
+		% some legacy rules
+		INDEX, DROP, UNIQUE, CONSTRAINT, EXPLAIN, PROFILE, START, CASE,
+		% some SQL-only keywords (for texts referencing SQL constructs)
+		GROUP, HAVING
+	},
+	sensitive=true,
+	morecomment=[l]{//},
+	morestring=[b]{"},
+	literate=*
+		{count(}{\textcolor{functioncolor}{count}(}{1},
+}
+
 \lstset{
 	numbers=left,
 	numberstyle=\scriptsize\ttfamily,
@@ -14,7 +37,7 @@
 	numbersep=5pt,
 	%
 	backgroundcolor=\color{lightgray},
-	basicstyle=\scriptsize\ttfamily, % print whole listing small
+	basicstyle=\small\ttfamily,
 	keywordstyle=\color{keywordcolor}\bfseries\ttfamily,
 	commentstyle=\color{commentcolor}\ttfamily,
 	stringstyle=\color{stringcolor}\ttfamily,
@@ -32,24 +55,8 @@
 	frame=tb,
 	framerule=0pt,
 	framexleftmargin=0.25em,
-	upquote=true
-}
-
-\lstdefinelanguage{cypher}
-{
-	morekeywords={
-		MATCH, OPTIONAL, WHERE, NOT, AND, OR, XOR, RETURN, DISTINCT, ORDER, BY, ASC, ASCENDING, DESC, DESCENDING, UNWIND, AS, UNION, WITH, ALL, CREATE, DELETE, DETACH, REMOVE, SET, MERGE, SET, SKIP, LIMIT,
-    % string operators
-    STARTS, ENDS, CONTAINS
-		% some legacy rules
-		INDEX, DROP, UNIQUE, CONSTRAINT, EXPLAIN, PROFILE, START, CASE,
-		% some SQL-only keywords
-		GROUP, HAVING,
-	},
-	sensitive=true,
-	morecomment=[l]{//},
-	morecomment=[s]{/*}{*/},
-	morestring=[b]{"},
+	tabsize=4,
+	language=Cypher,
 }
 
 \newcommand{\listingcypher}[2]{
@@ -59,20 +66,9 @@
 	\lstinputlisting[label=lst:#1, caption=#2.]{queries/#1.cyp}
 }
 
-\definecolor{relationship}{RGB}{171,0,85}
-\lstset{
-	basicstyle=\small\ttfamily,
-	tabsize=4,
-	morekeywords={Class, encapsulates, Feature},
+%\lstset{language=Cypher,
 %	literate=*
-%	{[:gathers]}{\textcolor{relationship}{[:gathers]}}{1}
-}
-
-
-\lstset{language=Cypher,
-	literate=*
-	{<v>}{\guillemotleft{}}{1}
-	{</v>}{\guillemotright{}}{1},
+%
 %	{<v>}{\guilsinglleft{}}{1}
 %	{</v>}{\guilsinglright{}}{1},
-}
+%5}
