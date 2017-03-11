@@ -8,22 +8,23 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 #### Prerequisites
 
-1. It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and selecting **Eclipse IDE for Java and DSL Developers** distribution.
-1. Go to the **Marketplace** (**Help** | **Eclipse Marketplace...**) and install the **EditorConfig** plug-in.
+It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and selecting **Eclipse IDE for Java and DSL Developers** distribution.
+
+:notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins from the update site of your Eclipse release (e.g. the Neon update site):
+
+* **Xtend IDE**
+* **Xtext SDK**
+* **EMF - Eclipse Modeling Framework Xcore SDK**
+
+Proceed with installing the required dependencies:
+
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
-1. Install VIATRA 1.6.x Core from the [milestone update site](
+1. Go to the **Help** | **Eclipse Marketplace...** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+1. Go to the **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
+1. Install **VIATRA Core** 1.6.x from the [milestone update site](
 http://download.eclipse.org/viatra/updates/milestone).
-
-:notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins:
-
-* For building Gradle projects, you need Buildship: go to the **Eclipse Marketplace** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
-* For Xtend, Xtext and Xcore, install the following components from the update site of your Eclipse release (e.g. the Oxygen update site):
-  * **Xtend IDE**
-  * **Xtext SDK**
-  * **EMF - Eclipse Modeling Framework Xcore SDK**
-
 
 #### Importing the projects
 
