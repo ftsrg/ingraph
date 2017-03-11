@@ -21,8 +21,8 @@ Proceed with installing the required dependencies:
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
-1. Go to the **Help** | **Eclipse Marketplace...** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
-1. Go to the **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
+1. Go to **Help** | **Eclipse Marketplace...** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+1. Go to **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
 1. Install **VIATRA Core** 1.6.x from the [milestone update site](
 http://download.eclipse.org/viatra/updates/milestone).
 
