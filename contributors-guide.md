@@ -13,7 +13,7 @@ It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins from the update site of your Eclipse release (e.g. the Neon update site):
 
 * **Xtend IDE**
-* **Xtext SDK**
+* **Xtext Complete SDK**
 * **EMF - Eclipse Modeling Framework Xcore SDK**
 
 Proceed with installing the required dependencies:
