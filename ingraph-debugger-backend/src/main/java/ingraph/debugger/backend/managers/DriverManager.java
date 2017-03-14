@@ -1,22 +1,31 @@
 package ingraph.debugger.backend.managers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 
-import neo4j.driver.reactive.Neo4jReactiveDriver;
-import neo4j.driver.reactive.Neo4jReactiveSession;
+import neo4j.driver.reactive.ReactiveDriver;
+import neo4j.driver.reactive.ReactiveSession;
 import neo4j.driver.reactive.data.ChangeSet;
+import neo4j.driver.reactive.data.RecordChangeSet;
+import neo4j.driver.testkit.EmbeddedTestkitDriver;
 
 public class DriverManager {
 
-	Neo4jReactiveDriver driver;
-	Neo4jReactiveSession session;
+	ReactiveDriver driver;
+	ReactiveSession session;
+	Map<UUID, StatementResult> statementStore;
 
 	public DriverManager() {
-		this.driver = new Neo4jReactiveDriver();
+		this.driver = new ReactiveDriver(new EmbeddedTestkitDriver());
 		this.session = driver.session();
+		this.statementStore = new HashMap<>();
 		
+		// Never ever do something like this in production
 		session.run(
 				"CREATE (TheMatrix:Movie {title:'The Matrix', released:1999, tagline:'Welcome to the Real World'})\n"
 						+ "CREATE (Keanu:Person {name:'Keanu Reeves', born:1964})\n"
@@ -429,13 +438,22 @@ public class DriverManager {
 						+ "  (JamesThompson)-[:REVIEWED {summary:'Fun, but a little far fetched', rating:65}]->(TheDaVinciCode)\n");
 	}
 
-	public String validate(String definition) {
+	public UUID register(String definition) {
 		UUID id = UUID.randomUUID();
 		try (Transaction t = session.beginTransaction()) {
-			ChangeSet cs = session.registerQuery(id.toString(), definition);
-			System.out.println(cs);
+			StatementResult sr = session.registerQuery(id.toString(), definition);
+			statementStore.put(id, sr);
 		}
-		return id.toString();
+		return id;
+	}
+	
+	public List<String> columns(UUID id) {
+		StatementResult statement = statementStore.get(id);
+		return statement.keys();
+	}
+
+	public RecordChangeSet deltaMap(UUID id) {
+		return session.getDeltas(id.toString());
 	}
 
 }

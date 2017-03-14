@@ -1,4 +1,4 @@
-package ingraph.debugger.backend.message.in;
+package ingraph.debugger.backend.messages.in;
 
 public class RegisterInMessage {
 	private String definition;

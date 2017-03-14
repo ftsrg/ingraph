@@ -8,9 +8,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 import ingraph.debugger.backend.managers.DriverManager;
 
 @ApplicationPath("/")
-public class BackendApplication extends ResourceConfig {
+public class Application extends ResourceConfig {
 
-	public BackendApplication() {	
+	public Application() {	
 		packages("ingraph.debugger.backend");
 		register(new AbstractBinder() {
 			@Override

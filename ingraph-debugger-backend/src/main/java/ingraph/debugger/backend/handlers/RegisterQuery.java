@@ -1,6 +1,7 @@
 package ingraph.debugger.backend.handlers;
 
 import java.net.HttpURLConnection;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -15,10 +16,10 @@ import org.neo4j.cypher.SyntaxException;
 import org.neo4j.graphdb.QueryExecutionException;
 
 import ingraph.debugger.backend.managers.DriverManager;
-import ingraph.debugger.backend.message.in.RegisterInMessage;
-import ingraph.debugger.backend.message.out.Letter;
-import ingraph.debugger.backend.message.out.RegisterOkBody;
-import ingraph.debugger.backend.message.out.RegisterParseErrorBody;
+import ingraph.debugger.backend.messages.in.RegisterInMessage;
+import ingraph.debugger.backend.messages.out.Letter;
+import ingraph.debugger.backend.messages.out.RegisterOkBody;
+import ingraph.debugger.backend.messages.out.RegisterParseErrorBody;
 
 @Path("api/register")
 public class RegisterQuery {
@@ -31,12 +32,12 @@ public class RegisterQuery {
 	public String registerGet() {
 		return "Seems ok...";
 	}
-	
+
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
 	public Letter registerPost(RegisterInMessage register) {
-		String sessionID = "";
+		UUID sessionID;
 
 		if (register.getDefinition() == null) {
 			throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_BAD_REQUEST)
@@ -44,18 +45,13 @@ public class RegisterQuery {
 		}
 
 		try {
-			sessionID = dms.validate(register.getDefinition());
+			sessionID = dms.register(register.getDefinition());
+			return new Letter(Letter.Status.OK, new RegisterOkBody(sessionID, dms.columns(sessionID), dms.deltaMap(sessionID)));
 		} catch (QueryExecutionException e) {
 			SyntaxException syntaxExc = (SyntaxException) e.getCause().getCause();
-			Letter resp = new Letter("PARSE_ERROR");
-			resp.setBody(new RegisterParseErrorBody(syntaxExc));
-			return resp;
+			return new Letter(Letter.Status.PARSE_ERROR, new RegisterParseErrorBody(syntaxExc));
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).build());
 		}
-
-		Letter resp = new Letter("OK");
-		resp.setBody(new RegisterOkBody(sessionID));
-		return resp;
 	}
 }
