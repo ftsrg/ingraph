@@ -160,6 +160,7 @@ abstract class GraphObjectVariable extends Variable {
 
 abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
+  refers PropertyList properties
 }
 
 class VertexVariable extends ElementVariable {
@@ -479,6 +480,24 @@ class NullLiteral extends NumberLiteral, StringLiteral {
 }
 
 class Parameter extends NamedElement, Atom {
+}
+
+/**
+ * This will hold the map-like construct that is used
+ * to represent vertex or edge constraints as well as
+ * "values" clause for DML operations.
+ */
+class PropertyList extends Expression {
+	contains PropertyListEntry[] entries
+}
+
+/**
+ * An entry has its name which corresponds to the attribute name
+ * and its value is an expression.
+ */
+class PropertyListEntry {
+	String key
+	refers Expression value
 }
 
 class Case {

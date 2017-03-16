@@ -33,6 +33,7 @@ import org.slizaa.neo4j.opencypher.openCypher.FunctionInvocation
 import org.slizaa.neo4j.opencypher.openCypher.InCollectionExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
+import org.slizaa.neo4j.opencypher.openCypher.MapLiteral
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.NullConstant
@@ -42,6 +43,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
+import org.slizaa.neo4j.opencypher.openCypher.Properties
 import org.slizaa.neo4j.opencypher.openCypher.RegExpMatchingExpression
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
@@ -947,6 +949,13 @@ class RelalgBuilder {
 		val patternElement_GetVerticesOperator = createGetVerticesOperator => [
 			vertexVariable = variableBuilder.buildVertexVariable(n)
 		]
+		// parse map-like constraints if given
+		if ( n.properties != null ) {
+		  // FIXME: attach to the VertexVariable if in a MATCH or CREATE context
+		  // otherwise, selection operators should be created, see #67
+		  val p = buildRelalgProperties(n.properties)
+		  patternElement_GetVerticesOperator.vertexVariable.properties = p
+		}
 		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
 		val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
@@ -1005,4 +1014,25 @@ class RelalgBuilder {
 //  def dispatch buildRelalg(Cypher rule) {
 //    println(String::format("received unsupported cypher element: %s", rule.class.toString()))
 //  }
+
+	def dispatch buildRelalgProperties(MapLiteral properties) {
+		val pList = createPropertyList => [
+		  container = topLevelContainer
+		]
+
+		properties.entries.forEach[ e |
+		  val le = createPropertyListEntry => [
+		    key = e.key
+		    value = buildRelalgExpression(e.value)
+		  ]
+		  pList.entries.add(le)
+		]
+
+		pList
+	}
+
+  def dispatch buildRelalgProperties(Properties properties) {
+    unsupported('''Parsing Properties type is unsupported.''')
+    null
+  }
 }
