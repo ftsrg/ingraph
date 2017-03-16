@@ -34,6 +34,14 @@ subprojects {
       jcenter()
     }
   }
+  
+  eclipse.classpath.file {
+    whenMerged { classpath ->
+      classpath.entries = classpath.entries.findAll { entry ->
+        !entry.path.contains('build/')
+      }
+    }
+  }
 
   publishing {
     publications {
@@ -49,16 +57,6 @@ subprojects {
     publish = true
     override = true
     publications = ['mavenJava']
-  }
-}
-
-configure(subprojects - project(':ingraph-relalg-model')) {
-  eclipse.classpath.file {
-    whenMerged { classpath ->
-      classpath.entries = classpath.entries.findAll { entry ->
-        !entry.path.contains('build/') && !entry.path.contains('xtend-gen')
-      }
-    }
   }
 }
 
