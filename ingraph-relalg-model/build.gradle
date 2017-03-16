@@ -30,6 +30,15 @@ sourceSets {
   }
 }
 
+eclipse.classpath.file {
+  whenMerged {
+    withXml { classpathXml ->
+      def classpathXmlNode = classpathXml.asNode()
+      classpathXmlNode.appendNode('classpathentry', [kind: 'src', path: 'build/xcore/main'])
+    }
+  }
+}
+
 xtext {
   version = xtextVersion
   languages {

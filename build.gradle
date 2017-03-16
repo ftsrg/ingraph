@@ -52,6 +52,16 @@ subprojects {
   }
 }
 
+configure(subprojects - project(':ingraph-relalg-model')) {
+  eclipse.classpath.file {
+    whenMerged { classpath ->
+      classpath.entries = classpath.entries.findAll { entry ->
+        !entry.path.contains('build/')
+      }
+    }
+  }
+}
+
 ext {
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
