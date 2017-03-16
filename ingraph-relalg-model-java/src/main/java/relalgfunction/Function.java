@@ -1,18 +1,18 @@
-package relalg.function;
+package relalgfunction;
 
-import static relalg.function.CypherType.ANY;
-import static relalg.function.CypherType.BOOLEAN;
-import static relalg.function.CypherType.ELEMENT;
-import static relalg.function.CypherType.FLOAT;
-import static relalg.function.CypherType.INTEGER;
-import static relalg.function.CypherType.LIST_TYPE;
-import static relalg.function.CypherType.MAP;
-import static relalg.function.CypherType.NODE;
-import static relalg.function.CypherType.NONE;
-import static relalg.function.CypherType.NUMBER;
-import static relalg.function.CypherType.PATH;
-import static relalg.function.CypherType.RELATIONSHIP;
-import static relalg.function.CypherType.STRING;
+import static relalgfunction.CypherType.ANY;
+import static relalgfunction.CypherType.BOOLEAN;
+import static relalgfunction.CypherType.ELEMENT;
+import static relalgfunction.CypherType.FLOAT;
+import static relalgfunction.CypherType.INTEGER;
+import static relalgfunction.CypherType.LIST_TYPE;
+import static relalgfunction.CypherType.MAP;
+import static relalgfunction.CypherType.NODE;
+import static relalgfunction.CypherType.NONE;
+import static relalgfunction.CypherType.NUMBER;
+import static relalgfunction.CypherType.PATH;
+import static relalgfunction.CypherType.RELATIONSHIP;
+import static relalgfunction.CypherType.STRING;
 
 import java.util.Arrays;
 import java.util.List;

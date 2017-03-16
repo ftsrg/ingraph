@@ -11,6 +11,7 @@ ext {
 }
 
 dependencies {
+  compile project(':ingraph-relalg-model-java')
   compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase', version: xtextVersion
   compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.ecore.xcore.lib', version: xcoreLibVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion
@@ -26,15 +27,6 @@ sourceSets {
   main {
     resources {
       exclude '**/*.xcore'
-    }
-  }
-}
-
-eclipse.classpath.file {
-  whenMerged {
-    withXml { classpathXml ->
-      def classpathXmlNode = classpathXml.asNode()
-      classpathXmlNode.appendNode('classpathentry', [kind: 'src', path: 'build/xcore/main'])
     }
   }
 }

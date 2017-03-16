@@ -77,7 +77,7 @@ import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
-import relalg.function.Function
+import relalgfunction.Function
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -509,12 +509,12 @@ class RelalgBuilder {
 		val fe = createFunctionLogicalExpression => [
 				container = topLevelContainer
 			]
-	
+
 			fe.functor = Function.REGEX_LIKE
-		 
+
 			fe.arguments.add(buildRelalgExpression(e.left))
 			fe.arguments.add(buildRelalgExpression(e.right))
-			
+
 			fe
 	}
 
@@ -816,7 +816,7 @@ class RelalgBuilder {
 		]
 
 	}
-	
+
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ParenthesizedExpression e) {
 		buildRelalgArithmeticExpression(e.expression)
 	}
@@ -917,15 +917,15 @@ class RelalgBuilder {
 	def dispatch Operator buildRelalg(PatternPart p) {
 		// TODO: handle variable assignment
 		if (p.part instanceof ShortestPath) {
-			
+
 		}
 		if (p.part instanceof AllShortestPaths) {
-			
+
 		}
 		if (p.^var !== null) {
 			unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
 		}
-		
+
 		// pass through variable assignment body to buildRelalg(PatternElement e)
 		buildRelalg(p.part)
 	}

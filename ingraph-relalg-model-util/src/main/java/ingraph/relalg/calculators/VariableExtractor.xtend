@@ -10,20 +10,20 @@ import relalg.SelectionOperator
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.function.Function
+import relalgfunction.Function
 
 class VariableExtractor {
 
 	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
  	extension RelalgFactory factory = RelalgFactory.eINSTANCE
- 
+
  	val metaFunctions = #[Function.KEYS, Function.LABELS, Function.TYPE, Function.PROPERTIES]
- 
+
 	/**
 	 * Extract extra attributes required by unary operators.
 	 */
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
-		val functions = op.elements.map[expression].filter(FunctionExpression).filter[metaFunctions.contains(functor)].map[ 
+		val functions = op.elements.map[expression].filter(FunctionExpression).filter[metaFunctions.contains(functor)].map[
 			val functionExpression = it
 			createExpressionVariable => [
 				namedElementContainer = functionExpression.container
@@ -50,7 +50,7 @@ class VariableExtractor {
 //  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
 //    #[op.sourceVariable]
 //  }
-	
+
 	// rest of the unary operators - no extra requirements
 	def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
 		#[]

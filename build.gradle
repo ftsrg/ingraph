@@ -56,7 +56,7 @@ configure(subprojects - project(':ingraph-relalg-model')) {
   eclipse.classpath.file {
     whenMerged { classpath ->
       classpath.entries = classpath.entries.findAll { entry ->
-        !entry.path.contains('build/')
+        !entry.path.contains('build/') && !entry.path.contains('xtend-gen')
       }
     }
   }

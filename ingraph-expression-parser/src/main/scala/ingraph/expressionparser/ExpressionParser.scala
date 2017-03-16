@@ -3,7 +3,7 @@ package ingraph.expressionparser
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
-import relalg.function.{CypherType, FunctionCategory}
+import relalgfunction.{CypherType, FunctionCategory}
 
 
 object ExpressionParser {

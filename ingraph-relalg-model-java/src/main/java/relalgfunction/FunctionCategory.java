@@ -1,4 +1,4 @@
-package relalg.function;
+package relalgfunction;
 
 public enum FunctionCategory {
   AGGREGATION,
