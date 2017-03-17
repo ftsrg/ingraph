@@ -172,24 +172,22 @@ class ReteSandboxTest {
 		process(
 			"Q9",
 			'''
-			MATCH (:Person)-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(message)
-			WHERE message.creationDate < "x"
-			RETURN DISTINCT message, friend
-			ORDER BY message.creationDate DESC, message.id ASC
-			LIMIT 20
+				MATCH (:Person)-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(message)
+				WHERE message.creationDate < "x"
+				RETURN DISTINCT message, friend
+				ORDER BY message.creationDate DESC, message.id ASC
+				LIMIT 20
 			'''
 		)
 	}
 
-
 	@Test
 	def void test1() {
 		// arrange
-		//val ctr = process("hello", "MATCH (n) WHERE true = false RETURN n") // TODO the exception from this
+		// val ctr = process("hello", "MATCH (n) WHERE true = false RETURN n") // TODO the exception from this
 		val ctr = process("hello", "MATCH (n) WHERE 1 = 1 RETURN n")
 		RelalgUtil.save(ctr, "testModel1")
 //		println(ctr.convert)
-
 		// act
 		ctr.performSimpleOptimization
 //		println(ctr.convert)
@@ -199,7 +197,7 @@ class ReteSandboxTest {
 	def void constantFolding() {
 		process('test-constant-folding', '''MATCH (n) WHERE 1=1 RETURN n''')
 	}
-	
+
 	@Test
 	def void undirectedEdges1() {
 		process('undirectedEdges-1', '''MATCH (n)-[r1:REL1]->(m)-[r2:REL2]-(o) RETURN n''')
@@ -208,6 +206,54 @@ class ReteSandboxTest {
 	@Test
 	def void undirectedEdges2() {
 		process('undirectedEdges-2', '''MATCH (n)-[r1:REL1]->(m)-[r2:REL2]-(o) RETURN n''')
+	}
+
+	@Test
+	def void ldbc4() {
+	  process('ldbc-4', '''
+		  MATCH (:Country {id: $country})<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person: Person)<-[:HAS_MODERATOR]-(forum:Forum)-[:IS_CONTAINER_OF]->(post:Post)-[:HAS_TAG]->(:Tag)-[:HAS_TYPE]->(:TagClass {id: $tagClass})
+		  RETURN forum.id, forum.title, forum.creationDate, person.id, count(post) AS count
+		  ORDER BY count DESC, forum.id ASC
+		  LIMIT 20
+	  ''')
+	}
+
+	@Test
+	def void ldbc5() {
+		process('ldbc-5', '''
+			MATCH (:Country {id: $country})<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person:Person)<-[:HAS_MEMBER]-(forum:Forum)
+			WITH forum, count(person) AS numberOfMembers
+			ORDER BY numberOfMembers DESC
+			LIMIT 100
+			MATCH (forum)-[:HAS_MEMBER]->(person:Person)<-[:HAS_CREATOR]-(post:Post)
+			RETURN person.id, person.firstName, person.lastName, person.creationDate, count(post) AS postCount
+			ORDER BY postCount DESC, person.id ASC
+			LIMIT 100
+		''')
+	}
+
+	@Test
+	def void ldbc6() {
+		process('ldbc-6', '''
+			MATCH (:Tag {id: $tag})<-[:HAS_TAG]-(message:Message)-[:HAS_CREATOR]->(person: Person),
+			  (message)<-[:LIKES]-(fan:Person),
+			  (message)<-[:REPLY_OF*]-(comment:Comment)
+			WITH person.id AS personId, count(message) AS postCount, count(comment) AS replyCount, count(fan) AS likeCount
+			RETURN personId, postCount, replyCount, likeCount, 1*postCount+2*replyCount+10*likeCount AS score
+			ORDER BY score DESC, personId ASC
+			LIMIT 100
+		''')
+	}
+
+	@Test
+	def void ldbc8() {
+		process('ldbc-8', '''
+			MATCH (tag:Tag {id: $tag})<-[:HAS_TAG]-(:Message)<-[:IN_REPLY_OF*]-(comment:Comment)-[:HAS_TAG]->(relatedTag:Tag)
+			WHERE NOT (comment)-[:HAS_TAG]->(tag)
+			RETURN relatedTag.name, count(comment) AS count
+			ORDER BY count DESC, relatedTag.name ASC
+			LIMIT 100
+		''')
 	}
 
 }

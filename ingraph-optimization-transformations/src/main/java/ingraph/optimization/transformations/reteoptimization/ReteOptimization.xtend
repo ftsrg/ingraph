@@ -75,7 +75,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 				condition = rightOperand
 				input = selectionOperator1
 			]
-			changeOperator(parentOperator, selectionOperator, selectionOperator2)
+			changeChildOperator(parentOperator, selectionOperator, selectionOperator2)
 		].build
 	}
 
@@ -87,7 +87,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 			selectionOperator1.input = selectionOperator2.input
 			selectionOperator2.input = selectionOperator1
 
-			changeOperator(parentOperator, selectionOperator1, selectionOperator2)
+			changeChildOperator(parentOperator, selectionOperator1, selectionOperator2)
 		].build
 	}
 

@@ -49,9 +49,9 @@ pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operat
 }
 
 /*
-      container
+    parentOperator
           |
-          | rootExpression
+          | *input
           V
      topOperator (skips/limits a given amount of tuples)
           |
@@ -60,8 +60,8 @@ pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operat
      sortOperator (orders the tuples according to some variables and asc/desc directions)
 */
 // [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
-pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) {
-  RelalgContainer.rootExpression(topLevelContainer, topOperator);
+pattern sortAndTopOperator(parentOperator : Operator, sortOperator : SortOperator, topOperator : TopOperator) {
+  find parentOperator(parentOperator, topOperator);
   TopOperator.input(topOperator, sortOperator);
 }
 

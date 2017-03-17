@@ -5,7 +5,7 @@ package ingraph.optimization.patterns.util;
 
 import ingraph.optimization.patterns.SortAndTopOperatorMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
-import relalg.RelalgContainer;
+import relalg.Operator;
 import relalg.SortOperator;
 import relalg.TopOperator;
 
@@ -19,15 +19,15 @@ import relalg.TopOperator;
 public abstract class SortAndTopOperatorProcessor implements IMatchProcessor<SortAndTopOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
+   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * @param pSortOperator the value of pattern parameter sortOperator in the currently processed match
    * @param pTopOperator the value of pattern parameter topOperator in the currently processed match
-   * @param pTopLevelContainer the value of pattern parameter topLevelContainer in the currently processed match
    * 
    */
-  public abstract void process(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer);
+  public abstract void process(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator);
   
   @Override
   public void process(final SortAndTopOperatorMatch match) {
-    process(match.getSortOperator(), match.getTopOperator(), match.getTopLevelContainer());
+    process(match.getParentOperator(), match.getSortOperator(), match.getTopOperator());
   }
 }

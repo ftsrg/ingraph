@@ -57,7 +57,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				edgeVariable = expandOperator.edgeVariable
 			]
 
-			changeOperator(parentOperator, expandOperator, getEdgesOperator)
+			changeChildOperator(parentOperator, expandOperator, getEdgesOperator)
 		].build
 	}
 
@@ -83,7 +83,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				rightInput = getEdgesOperator
 			]
 
-			changeOperator(parentOperator, expandOperator, joinOperator)
+			changeChildOperator(parentOperator, expandOperator, joinOperator)
 		].build
 	}
 	
@@ -124,7 +124,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				rightInput = targetVertexOperator
 			]
 
-			changeOperator(parentOperator, expandOperator, pathOperator)
+			changeChildOperator(parentOperator, expandOperator, pathOperator)
 		].build
 	}
 	
@@ -146,7 +146,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				input = sortOperator.input
 			]
 			
-			topLevelContainer.rootExpression = sortAndTopOperator
+			changeChildOperator(parentOperator, topOperator, sortAndTopOperator)
 		].build
 	}
 	
@@ -170,7 +170,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				rightInput = getEdgesOperator
 			]
 			
-			changeOperator(parentOperator, selectionOperator, antiJoinOperator)
+			changeChildOperator(parentOperator, selectionOperator, antiJoinOperator)
 		].build
 	} 
 

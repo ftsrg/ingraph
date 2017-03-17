@@ -32,7 +32,7 @@ abstract class AbstractRelalgTransformation {
 		return statements
 	}
 
-	protected def void changeOperator(Operator parentOperator, Operator currentOperator, Operator newOperator) {
+	protected def void changeChildOperator(Operator parentOperator, Operator currentOperator, Operator newOperator) {
 		switch parentOperator {
 			UnaryOperator: {
 				parentOperator.input = newOperator
