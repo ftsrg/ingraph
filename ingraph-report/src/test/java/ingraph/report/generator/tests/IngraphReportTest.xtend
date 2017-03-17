@@ -58,7 +58,7 @@ abstract class IngraphReportTest {
 		doc += sections
 
 		val progressbar = '''
-			«shortTitle» &
+			\hyperref[chp:«chapterName»]{«shortTitle»} &
 			\progressbar[width=10cm, heighta=.3cm, filledcolor=OliveGreen, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»} &
 			«chapterCompilingQueries» &
 			«chapterTotalQueries» \\
