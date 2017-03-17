@@ -132,7 +132,9 @@ class RelalgBuilder {
 			println(PrettyPrinter.format(cypher))
 		}
 		val statement = cypher.statement
-		topLevelContainer.rootExpression = buildRelalg(statement)
+		topLevelContainer.rootExpression = createProductionOperator => [
+			input = buildRelalg(statement)
+		]
 
 		topLevelContainer
 	}
