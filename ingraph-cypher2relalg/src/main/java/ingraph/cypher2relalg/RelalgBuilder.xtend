@@ -63,6 +63,7 @@ import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
+import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.FunctionExpression
@@ -948,14 +949,10 @@ class RelalgBuilder {
 	def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
 		val patternElement_GetVerticesOperator = createGetVerticesOperator => [
 			vertexVariable = variableBuilder.buildVertexVariable(n)
+			// parse map-like constraints if given
+			buildRelalgProperties(n.properties, vertexVariable)
 		]
-		// parse map-like constraints if given
-		if ( n.properties != null ) {
-		  // FIXME: attach to the VertexVariable if in a MATCH or CREATE context
-		  // otherwise, selection operators should be created, see #67
-		  val p = buildRelalgProperties(n.properties)
-		  patternElement_GetVerticesOperator.vertexVariable.properties = p
-		}
+
 		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
 		val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
@@ -963,8 +960,14 @@ class RelalgBuilder {
 	}
 
 	def dispatch Operator buildRelalg(PatternElementChain ec) {
-		val patternElementChain_VertexVariable = variableBuilder.buildVertexVariable(ec.nodePattern)
-		val patternElementChain_EdgeVariable = variableBuilder.buildEdgeVariable(ec.relationshipPattern.detail)
+		val patternElementChain_VertexVariable = variableBuilder.buildVertexVariable(ec.nodePattern) => [
+			// parse map-like constraints if given
+			buildRelalgProperties(ec.nodePattern.properties, it)
+		]
+		val patternElementChain_EdgeVariable = variableBuilder.buildEdgeVariable(ec.relationshipPattern.detail) => [
+			// parse map-like constraints if given
+			buildRelalgProperties(ec.relationshipPattern.detail.properties, it)
+		]
 
 		val isLeftArrow = ec.relationshipPattern.incoming
 		val isRightArrow = ec.relationshipPattern.outgoing
@@ -1015,24 +1018,34 @@ class RelalgBuilder {
 //    println(String::format("received unsupported cypher element: %s", rule.class.toString()))
 //  }
 
-	def dispatch buildRelalgProperties(MapLiteral properties) {
-		val pList = createPropertyList => [
-		  container = topLevelContainer
-		]
+	/**
+	 * Parse map-like constraints if given
+	 * and attach to the ElementVariable in certain cases.
+	 *
+	 * FIXME: attach to the VertexVariable if in a MATCH or CREATE context
+	 * otherwise, selection operators should be created, see #67
+	 */
+	def dispatch buildRelalgProperties(MapLiteral properties, ElementVariable ev) {
+		if (properties!==null) {
+			val pList = createPropertyList => [
+			  container = topLevelContainer
+			]
 
-		properties.entries.forEach[ e |
-		  val le = createPropertyListEntry => [
-		    key = e.key
-		    value = buildRelalgExpression(e.value)
-		  ]
-		  pList.entries.add(le)
-		]
+			properties.entries.forEach[ e |
+			  val le = createPropertyListEntry => [
+			    key = e.key
+			    value = buildRelalgExpression(e.value)
+			  ]
+			  pList.entries.add(le)
+			]
 
-		pList
+			ev.properties = pList
+		}
 	}
 
-  def dispatch buildRelalgProperties(Properties properties) {
-    unsupported('''Parsing Properties type is unsupported.''')
-    null
-  }
+	def dispatch buildRelalgProperties(Properties properties, ElementVariable ev) {
+		unsupported('''Parsing Properties type is unsupported.''')
+	}
+
+	def dispatch buildRelalgProperties(Void p, ElementVariable ev) {}
 }
