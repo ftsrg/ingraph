@@ -40,6 +40,8 @@ object EngineFactory {
         expr.parent match {
           case op: UnaryOperator =>
             val node: ActorRef = op match {
+            case op: ProductionOperator => production
+
             case op: GroupingOperator =>
               ???
 
