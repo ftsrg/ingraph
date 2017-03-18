@@ -912,7 +912,7 @@ public class FeatureGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//terminal fragment NL:
-	//	'\r'? '\n'?;
+	//	'\r'? '\n';
 	public TerminalRule getNLRule() {
 		return tNL;
 	}

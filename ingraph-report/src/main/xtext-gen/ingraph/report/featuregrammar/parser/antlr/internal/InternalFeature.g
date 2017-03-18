@@ -1198,7 +1198,7 @@ RULE_EXAMPLE_HEADING : 'Examples' RULE_SPACES ':' RULE_SPACES '\r'? '\n';
 
 fragment RULE_NNL : ~(('\r'|'\n'));
 
-fragment RULE_NL : '\r'? '\n'?;
+fragment RULE_NL : '\r'? '\n';
 
 fragment RULE_SPACES : (' '|'\t')*;
 
