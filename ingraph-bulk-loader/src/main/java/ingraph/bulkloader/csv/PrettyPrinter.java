@@ -23,11 +23,7 @@ public class PrettyPrinter {
 
 		List<String> formattedEntityList = record.fields() //
 				.stream() //
-				.map(pair -> String.format(
-						"%s=%s",
-						pair.key(),
-						toString(pair.value())
-					)) //
+				.map(pair -> String.format("%s=%s", pair.key(), toString(pair.value()))) //
 				.collect(Collectors.toList());
 
 		return String.format("<%s>", entityJoiner.join(formattedEntityList));

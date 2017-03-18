@@ -16,6 +16,10 @@ public class ColumnNameParser {
 
 		if (type == ColumnType.ID) {
 			name = ColumnConstants.INTERNAL_ID;
+		} else if (type == ColumnType.START_ID) {
+			name = ColumnConstants.INTERNAL_START_ID;
+		} else if (type == ColumnType.END_ID) {
+			name = ColumnConstants.INTERNAL_END_ID;
 		} else {
 			name = splitted[0];
 		}
