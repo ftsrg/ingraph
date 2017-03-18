@@ -260,7 +260,7 @@ class RelalgBuilder {
 		}
 
 		val singleQuery_returnOrWithClause = clauses.filter([ it instanceof With || it instanceof Return ]).head
-		val afterReturn = if (singleQuery_returnOrWithClause != null) {
+		val afterReturn = if (singleQuery_returnOrWithClause !== null) {
 			buildRelalgReturn(singleQuery_returnOrWithClause, content)
 		} else {
 			content
