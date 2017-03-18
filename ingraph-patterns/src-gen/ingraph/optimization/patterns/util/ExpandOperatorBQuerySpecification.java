@@ -141,8 +141,8 @@ public final class ExpandOperatorBQuerySpecification extends BaseGeneratedEMFQue
       		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
-      		//   find parentOperator(parentOperator, expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_expandOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//   find parentOperator(expandOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		//   neg find defaultExpandOperator(expandOperator)
       		new NegativePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		bodies.add(body);

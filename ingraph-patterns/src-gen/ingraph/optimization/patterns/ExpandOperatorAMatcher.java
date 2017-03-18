@@ -38,7 +38,7 @@ import relalg.Operator;
  * 
  * // [2a] transformation for eliminating the remaining default expand operators
  * pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operator) {
- * 	find parentOperator(parentOperator, expandOperator);
+ * 	find parentOperator(expandOperator, parentOperator);
  * 	find defaultExpandOperator(expandOperator);
  * }
  * </pre></code>

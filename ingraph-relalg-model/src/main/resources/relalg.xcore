@@ -309,6 +309,9 @@ class GroupingOperator extends UnaryOperator {
   refers Variable[] entries
 }
 
+class GroupingAndProjectionOperator extends GroupingOperator, ProjectionOperator {
+}
+
 class UnwindOperator extends UnaryOperator {
   // UNWIND <sourceVariable> AS <targetVariable>
   refers ExpressionVariable element

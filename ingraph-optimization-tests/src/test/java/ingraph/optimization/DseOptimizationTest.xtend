@@ -1,14 +1,8 @@
-package ingraph.relalg2tex.optimization
+package ingraph.optimization
 
-import ingraph.optimization.transformations.reteoptimization.ReteOptimization
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import org.junit.Test
 
-class DseOptimizationTest {
-
-	val extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter
-	val extension ReteOptimization optimization = new ReteOptimization
-	val extension TestModelFactory testModelFactory = new TestModelFactory
+class DseOptimizationTest extends OptimizationTest {
 
 	@Test
 	def void test1() {

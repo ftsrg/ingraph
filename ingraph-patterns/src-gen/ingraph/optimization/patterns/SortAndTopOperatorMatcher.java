@@ -41,9 +41,9 @@ import relalg.TopOperator;
  *           V
  *      sortOperator (orders the tuples according to some variables and asc/desc directions)
  * 
- * // [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
- * pattern sortAndTopOperator(parentOperator : Operator, sortOperator : SortOperator, topOperator : TopOperator) {
- *   find parentOperator(parentOperator, topOperator);
+ * // [3] transformation for combining adjacent sort and top operators to a single sortAndTop operator
+ * pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
+ *   find parentOperator(topOperator, parentOperator);
  *   TopOperator.input(topOperator, sortOperator);
  * }
  * </pre></code>
@@ -82,11 +82,11 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
     return new SortAndTopOperatorMatcher();
   }
   
-  private final static int POSITION_PARENTOPERATOR = 0;
+  private final static int POSITION_SORTOPERATOR = 0;
   
-  private final static int POSITION_SORTOPERATOR = 1;
+  private final static int POSITION_TOPOPERATOR = 1;
   
-  private final static int POSITION_TOPOPERATOR = 2;
+  private final static int POSITION_PARENTOPERATOR = 2;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(SortAndTopOperatorMatcher.class);
   
@@ -104,92 +104,176 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return matches represented as a SortAndTopOperatorMatch object.
    * 
    */
-  public Collection<SortAndTopOperatorMatch> getAllMatches(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator) {
-    return rawGetAllMatches(new Object[]{pParentOperator, pSortOperator, pTopOperator});
+  public Collection<SortAndTopOperatorMatch> getAllMatches(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return rawGetAllMatches(new Object[]{pSortOperator, pTopOperator, pParentOperator});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return a match represented as a SortAndTopOperatorMatch object, or null if no match is found.
    * 
    */
-  public SortAndTopOperatorMatch getOneArbitraryMatch(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator) {
-    return rawGetOneArbitraryMatch(new Object[]{pParentOperator, pSortOperator, pTopOperator});
+  public SortAndTopOperatorMatch getOneArbitraryMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return rawGetOneArbitraryMatch(new Object[]{pSortOperator, pTopOperator, pParentOperator});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator) {
-    return rawHasMatch(new Object[]{pParentOperator, pSortOperator, pTopOperator});
+  public boolean hasMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return rawHasMatch(new Object[]{pSortOperator, pTopOperator, pParentOperator});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator) {
-    return rawCountMatches(new Object[]{pParentOperator, pSortOperator, pTopOperator});
+  public int countMatches(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return rawCountMatches(new Object[]{pSortOperator, pTopOperator, pParentOperator});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator, final IMatchProcessor<? super SortAndTopOperatorMatch> processor) {
-    rawForEachMatch(new Object[]{pParentOperator, pSortOperator, pTopOperator}, processor);
+  public void forEachMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator, final IMatchProcessor<? super SortAndTopOperatorMatch> processor) {
+    rawForEachMatch(new Object[]{pSortOperator, pTopOperator, pParentOperator}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator, final IMatchProcessor<? super SortAndTopOperatorMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pParentOperator, pSortOperator, pTopOperator}, processor);
+  public boolean forOneArbitraryMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator, final IMatchProcessor<? super SortAndTopOperatorMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pSortOperator, pTopOperator, pParentOperator}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public SortAndTopOperatorMatch newMatch(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator) {
-    return SortAndTopOperatorMatch.newMatch(pParentOperator, pSortOperator, pTopOperator);
+  public SortAndTopOperatorMatch newMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return SortAndTopOperatorMatch.newMatch(pSortOperator, pTopOperator, pParentOperator);
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for sortOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  protected Set<SortOperator> rawAccumulateAllValuesOfsortOperator(final Object[] parameters) {
+    Set<SortOperator> results = new HashSet<SortOperator>();
+    rawAccumulateAllValues(POSITION_SORTOPERATOR, parameters, results);
+    return results;
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for sortOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SortOperator> getAllValuesOfsortOperator() {
+    return rawAccumulateAllValuesOfsortOperator(emptyArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for sortOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SortOperator> getAllValuesOfsortOperator(final SortAndTopOperatorMatch partialMatch) {
+    return rawAccumulateAllValuesOfsortOperator(partialMatch.toArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for sortOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<SortOperator> getAllValuesOfsortOperator(final TopOperator pTopOperator, final Operator pParentOperator) {
+    return rawAccumulateAllValuesOfsortOperator(new Object[]{
+    null, 
+    pTopOperator, 
+    pParentOperator
+    });
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for topOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  protected Set<TopOperator> rawAccumulateAllValuesOftopOperator(final Object[] parameters) {
+    Set<TopOperator> results = new HashSet<TopOperator>();
+    rawAccumulateAllValues(POSITION_TOPOPERATOR, parameters, results);
+    return results;
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for topOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<TopOperator> getAllValuesOftopOperator() {
+    return rawAccumulateAllValuesOftopOperator(emptyArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for topOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<TopOperator> getAllValuesOftopOperator(final SortAndTopOperatorMatch partialMatch) {
+    return rawAccumulateAllValuesOftopOperator(partialMatch.toArray());
+  }
+  
+  /**
+   * Retrieve the set of values that occur in matches for topOperator.
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * 
+   */
+  public Set<TopOperator> getAllValuesOftopOperator(final SortOperator pSortOperator, final Operator pParentOperator) {
+    return rawAccumulateAllValuesOftopOperator(new Object[]{
+    pSortOperator, 
+    null, 
+    pParentOperator
+    });
   }
   
   /**
@@ -228,92 +312,8 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
    */
   public Set<Operator> getAllValuesOfparentOperator(final SortOperator pSortOperator, final TopOperator pTopOperator) {
     return rawAccumulateAllValuesOfparentOperator(new Object[]{
-    null, 
     pSortOperator, 
-    pTopOperator
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<SortOperator> rawAccumulateAllValuesOfsortOperator(final Object[] parameters) {
-    Set<SortOperator> results = new HashSet<SortOperator>();
-    rawAccumulateAllValues(POSITION_SORTOPERATOR, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<SortOperator> getAllValuesOfsortOperator() {
-    return rawAccumulateAllValuesOfsortOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<SortOperator> getAllValuesOfsortOperator(final SortAndTopOperatorMatch partialMatch) {
-    return rawAccumulateAllValuesOfsortOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<SortOperator> getAllValuesOfsortOperator(final Operator pParentOperator, final TopOperator pTopOperator) {
-    return rawAccumulateAllValuesOfsortOperator(new Object[]{
-    pParentOperator, 
-    null, 
-    pTopOperator
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<TopOperator> rawAccumulateAllValuesOftopOperator(final Object[] parameters) {
-    Set<TopOperator> results = new HashSet<TopOperator>();
-    rawAccumulateAllValues(POSITION_TOPOPERATOR, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<TopOperator> getAllValuesOftopOperator() {
-    return rawAccumulateAllValuesOftopOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<TopOperator> getAllValuesOftopOperator(final SortAndTopOperatorMatch partialMatch) {
-    return rawAccumulateAllValuesOftopOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<TopOperator> getAllValuesOftopOperator(final Operator pParentOperator, final SortOperator pSortOperator) {
-    return rawAccumulateAllValuesOftopOperator(new Object[]{
-    pParentOperator, 
-    pSortOperator, 
+    pTopOperator, 
     null
     });
   }
@@ -321,7 +321,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   @Override
   protected SortAndTopOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return SortAndTopOperatorMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SortOperator) t.get(POSITION_SORTOPERATOR), (TopOperator) t.get(POSITION_TOPOPERATOR));
+    	return SortAndTopOperatorMatch.newMatch((SortOperator) t.get(POSITION_SORTOPERATOR), (TopOperator) t.get(POSITION_TOPOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -331,7 +331,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   @Override
   protected SortAndTopOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return SortAndTopOperatorMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR]);
+    	return SortAndTopOperatorMatch.newMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -341,7 +341,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   @Override
   protected SortAndTopOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return SortAndTopOperatorMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR]);
+    	return SortAndTopOperatorMatch.newMutableMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

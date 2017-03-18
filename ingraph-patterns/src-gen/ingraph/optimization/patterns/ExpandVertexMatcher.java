@@ -33,7 +33,7 @@ import relalg.Operator;
  * <code><pre>
  * // [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
  * pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
- * 	find parentOperator(parentOperator, expandOperator);
+ * 	find parentOperator(expandOperator, parentOperator);
  * 	find defaultExpandOperator(expandOperator);
  * 	ExpandOperator.input(expandOperator, getVerticesOperator);
  * 	GetVerticesOperator(getVerticesOperator);

@@ -11,6 +11,7 @@
       <query-specification fqn="ingraph.optimization.patterns.expandOperatorA"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperatorB"/>
       <query-specification fqn="ingraph.optimization.patterns.sortAndTopOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.groupingAndProjectionOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.leftOuterJoinAndSelection"/>
       <query-specification fqn="ingraph.optimization.patterns.variablesInLogicalExpression"/>
       <query-specification fqn="ingraph.optimization.patterns.leftDeepTreeNodes"/>

@@ -32,7 +32,7 @@ import relalg.Operator;
  * <code><pre>
  * // [2b] transformation for eliminating the remaining non-default expand operators
  * pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
- *   find parentOperator(parentOperator, expandOperator);
+ *   find parentOperator(expandOperator, parentOperator);
  *   neg find defaultExpandOperator(expandOperator);
  * }
  * </pre></code>

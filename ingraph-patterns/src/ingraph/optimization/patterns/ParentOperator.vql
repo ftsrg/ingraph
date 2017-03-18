@@ -2,7 +2,7 @@ package ingraph.optimization.patterns
 
 import "http://ingraph/relalg";
 
-pattern parentOperator(parentOperator : Operator, operator : Operator) {
+pattern parentOperator(operator : Operator, parentOperator : Operator) {
 	UnaryOperator.input(parentOperator, operator);
 } or {
 	BinaryOperator.leftInput(parentOperator, operator);

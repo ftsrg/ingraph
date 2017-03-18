@@ -1,4 +1,4 @@
-package ingraph.optimization.transformations.relalg2rete
+package ingraph.relalg2rete
 
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
 import ingraph.optimization.patterns.ExpandOperatorBMatcher
@@ -11,6 +11,7 @@ import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.Direction
 import relalg.RelalgContainer
+import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatcher
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
@@ -35,6 +36,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(expandOperatorARule)
 		statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
+		statements.fireWhilePossible(groupingAndProjectionOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		container.incrementalPlan = true
 		return container
@@ -129,7 +131,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 	
 	/**
-	 * [3] Replace a pair of TopOperator and SortOperator to a single SortAndTopOperator
+	 * [3] Replace an adjacent pair of SortOperator and TopOperator to a single SortAndTopOperator
 	 */
 	protected def sortAndTopOperatorRule() {
 		createRule() //
@@ -150,9 +152,30 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		].build
 	}
 	
+	/**
+	 * [4] Replace an adjacent pair of GroupingOperator and ProjectionOperator to a single GroupingAndProjectionOperator
+	 */
+	protected def groupingAndProjectionOperatorRule() {
+		createRule() //
+		.precondition(GroupingAndProjectionOperatorMatcher.querySpecification) //
+		.action [ //
+			val groupingOperator = groupingOperator
+			val projectionOperator = projectionOperator
+			log('''groupingAndProjectionOperator fired for «groupingOperator» and «projectionOperator»''')
+
+			val groupingAndProjectionOperator = createGroupingAndProjectionOperator => [
+				entries.addAll(groupingOperator.entries)
+				elements.addAll(projectionOperator.elements)
+				tupleIndices.addAll(projectionOperator.tupleIndices)
+			]
+			
+			changeChildOperator(parentOperator, projectionOperator, groupingAndProjectionOperator)
+		].build
+	}
+	
 
 	/**
-	 * [4] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
+	 * [5] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
 	 */
 	protected def leftOuterAndSelectionRule() {
 		createRule() //

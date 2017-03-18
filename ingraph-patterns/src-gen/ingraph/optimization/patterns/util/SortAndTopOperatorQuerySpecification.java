@@ -73,7 +73,7 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
   
   @Override
   public SortAndTopOperatorMatch newMatch(final Object... parameters) {
-    return SortAndTopOperatorMatch.newMatch((relalg.Operator) parameters[0], (relalg.SortOperator) parameters[1], (relalg.TopOperator) parameters[2]);
+    return SortAndTopOperatorMatch.newMatch((relalg.SortOperator) parameters[0], (relalg.TopOperator) parameters[1], (relalg.Operator) parameters[2]);
   }
   
   /**
@@ -105,13 +105,13 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static SortAndTopOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
-    
     private final PParameter parameter_pSortOperator = new PParameter("sortOperator", "relalg.SortOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "SortOperator")), PParameterDirection.INOUT);
     
     private final PParameter parameter_pTopOperator = new PParameter("topOperator", "relalg.TopOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "TopOperator")), PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pParentOperator, parameter_pSortOperator, parameter_pTopOperator);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
+    
+    private final List<PParameter> parameters = Arrays.asList(parameter_pSortOperator, parameter_pTopOperator, parameter_pParentOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -120,7 +120,7 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("parentOperator","sortOperator","topOperator");
+      return Arrays.asList("sortOperator","topOperator","parentOperator");
     }
     
     @Override
@@ -135,19 +135,19 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_sortOperator = body.getOrCreateVariableByName("sortOperator");
       		PVariable var_topOperator = body.getOrCreateVariableByName("topOperator");
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		new TypeConstraint(body, new FlatTuple(var_sortOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SortOperator")));
       		new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
       		   new ExportedParameter(body, var_sortOperator, parameter_pSortOperator),
-      		   new ExportedParameter(body, var_topOperator, parameter_pTopOperator)
+      		   new ExportedParameter(body, var_topOperator, parameter_pTopOperator),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
-      		//   find parentOperator(parentOperator, topOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_topOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//   find parentOperator(topOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_topOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		//   TopOperator.input(topOperator, sortOperator)
       		new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");

@@ -23,7 +23,7 @@ pattern defaultExpandOperator(expandOperator : ExpandOperator) {
 
 // [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
 pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
-	find parentOperator(parentOperator, expandOperator);
+	find parentOperator(expandOperator, parentOperator);
 	find defaultExpandOperator(expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
 	GetVerticesOperator(getVerticesOperator);
@@ -38,13 +38,13 @@ pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator :
 */
 // [2a] transformation for eliminating the remaining default expand operators
 pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operator) {
-	find parentOperator(parentOperator, expandOperator);
+	find parentOperator(expandOperator, parentOperator);
 	find defaultExpandOperator(expandOperator);
 }
 
 // [2b] transformation for eliminating the remaining non-default expand operators
 pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
-  find parentOperator(parentOperator, expandOperator);
+  find parentOperator(expandOperator, parentOperator);
   neg find defaultExpandOperator(expandOperator);
 }
 
@@ -55,14 +55,31 @@ pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operat
           V
      topOperator (skips/limits a given amount of tuples)
           |
-          | *input
+          | input
           V
      sortOperator (orders the tuples according to some variables and asc/desc directions)
 */
-// [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
-pattern sortAndTopOperator(parentOperator : Operator, sortOperator : SortOperator, topOperator : TopOperator) {
-  find parentOperator(parentOperator, topOperator);
+// [3] transformation for combining adjacent sort and top operators to a single sortAndTop operator
+pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
+  find parentOperator(topOperator, parentOperator);
   TopOperator.input(topOperator, sortOperator);
+}
+
+/*
+    parentOperator
+          |
+          | *input
+          V
+  projectionOperator
+          |
+          | input
+          V
+   groupingOperator
+*/
+// [4] transformation for combining adjacent grouping and projection operators to a single groupingAndProjection operator
+pattern groupingAndProjectionOperator(projectionOperator : ProjectionOperator, groupingOperator : GroupingOperator, parentOperator : Operator) {
+  find parentOperator(projectionOperator, parentOperator);
+  ProjectionOperator.input(projectionOperator, groupingOperator);
 }
 
 /*
@@ -82,7 +99,7 @@ pattern sortAndTopOperator(parentOperator : Operator, sortOperator : SortOperato
      V               V
    leftInputOp...  getEdgesOperator
 */
-// [4] (run after [2])
+// [5] (run after [2])
 // transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
 pattern leftOuterJoinAndSelection(
   parentOperator : Operator,
@@ -91,7 +108,7 @@ pattern leftOuterJoinAndSelection(
   leftInputOperator: Operator,
   getEdgesOperator: GetEdgesOperator
 ) {
-  find parentOperator(parentOperator, selectionOperator);
+  find parentOperator(selectionOperator, parentOperator);
   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
   SelectionOperator.condition(selectionOperator, condition);
   UnaryLogicalExpression.operator(condition, ::NOT);

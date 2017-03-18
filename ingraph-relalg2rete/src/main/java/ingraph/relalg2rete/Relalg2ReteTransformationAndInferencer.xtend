@@ -1,4 +1,4 @@
-package ingraph.optimization.transformations.relalg2rete
+package ingraph.relalg2rete
 
 import ingraph.relalg.inferencers.OneStepSchemaInferencer
 import relalg.RelalgContainer

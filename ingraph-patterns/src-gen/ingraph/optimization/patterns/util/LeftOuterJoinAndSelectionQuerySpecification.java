@@ -160,8 +160,8 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
       		   new ExportedParameter(body, var_leftInputOperator, parameter_pLeftInputOperator),
       		   new ExportedParameter(body, var_getEdgesOperator, parameter_pGetEdgesOperator)
       		));
-      		//   find parentOperator(parentOperator, selectionOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_selectionOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//   find parentOperator(selectionOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_selectionOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		//   SelectionOperator.input(selectionOperator, leftOuterJoinOperator)
       		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");

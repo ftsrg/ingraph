@@ -1,10 +1,10 @@
 package ingraph.report.generator
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
+import ingraph.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter

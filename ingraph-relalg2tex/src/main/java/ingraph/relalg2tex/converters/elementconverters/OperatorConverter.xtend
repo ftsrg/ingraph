@@ -1,5 +1,6 @@
 package ingraph.relalg2tex.converters.elementconverters
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import relalg.AbstractJoinOperator
 import relalg.AllDifferentOperator
 import relalg.AntiJoinOperator
@@ -9,6 +10,7 @@ import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
+import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
@@ -21,7 +23,6 @@ import relalg.SortOperator
 import relalg.TopOperator
 import relalg.UnionOperator
 import relalg.UnwindOperator
-import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class OperatorConverter {
 	
@@ -72,16 +73,20 @@ class OperatorConverter {
 	/**
 	 * UnaryOperators
 	 */
-	def dispatch convertOperator(GroupingOperator op) {
-		#['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
-	}
-
 	def dispatch convertOperator(ProductionOperator op) {
 		throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
 	}
 
+	def dispatch convertOperator(GroupingOperator op) {
+		#['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
+	}
+
 	def dispatch convertOperator(ProjectionOperator op) {
 		#['''\projection{«op.elements.convertReturnableElementList»}''']
+	}
+
+	def dispatch convertOperator(GroupingAndProjectionOperator op) {
+		#['''\grouping{«op.entries.map[convertExpression].join(", ")»} \projection{«op.elements.convertReturnableElementList»}''']
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {

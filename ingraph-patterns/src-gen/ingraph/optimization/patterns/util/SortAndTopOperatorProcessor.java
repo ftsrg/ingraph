@@ -19,15 +19,15 @@ import relalg.TopOperator;
 public abstract class SortAndTopOperatorProcessor implements IMatchProcessor<SortAndTopOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * @param pSortOperator the value of pattern parameter sortOperator in the currently processed match
    * @param pTopOperator the value of pattern parameter topOperator in the currently processed match
+   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * 
    */
-  public abstract void process(final Operator pParentOperator, final SortOperator pSortOperator, final TopOperator pTopOperator);
+  public abstract void process(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator);
   
   @Override
   public void process(final SortAndTopOperatorMatch match) {
-    process(match.getParentOperator(), match.getSortOperator(), match.getTopOperator());
+    process(match.getSortOperator(), match.getTopOperator(), match.getParentOperator());
   }
 }
