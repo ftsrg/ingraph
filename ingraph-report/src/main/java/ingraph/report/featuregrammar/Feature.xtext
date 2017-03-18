@@ -97,7 +97,7 @@ OptionalText returns ecore::EString:
 terminal EXAMPLE_HEADING: 'Examples' SPACES ':' SPACES '\r'? '\n';
 
 terminal fragment NNL: !('\r' | '\n');
-terminal fragment NL: '\r'? '\n'?;
+terminal fragment NL: '\r'? '\n';
 terminal fragment SPACES: (' '|'\t')*;
 terminal FEATURE_TEXT: ('Narrative:' | 'Feature:') NNL* NL;
 
