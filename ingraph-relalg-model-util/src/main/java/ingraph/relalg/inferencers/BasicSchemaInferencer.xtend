@@ -22,6 +22,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.GroupingAndProjectionOperator
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -104,6 +105,10 @@ class BasicSchemaInferencer {
 		]
 		op.defineBasicSchema(elementVariables)
 	}
+	
+//	private def dispatch List<Variable> fillBasicSchema(GroupingAndProjectionOperator op) {
+//		throw new UnsupportedOperationException("GroupingAndProjectionOperator not yet supported.")
+//	}
 
 	private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.basicSchema)

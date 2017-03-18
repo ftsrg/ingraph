@@ -13,7 +13,7 @@ class TrainBenchmarkCypher2Relalg2Rete2TexTest extends Cypher2Relalg2Rete2TexTes
 	}
 
 	def process(String query) {		
-		val querySpecification = FileUtils.readFileToString(new File('''../queries/trainbenchmark/«query».cypher'''), Charset.forName("UTF-8"))
+		val querySpecification = FileUtils.readFileToString(new File('''../queries/«directory()»/«query».cypher'''), Charset.forName("UTF-8"))
 		process(query, querySpecification)
 	}
 

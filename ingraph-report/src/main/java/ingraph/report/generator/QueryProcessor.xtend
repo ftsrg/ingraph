@@ -30,7 +30,7 @@ class QueryProcessor {
 
 	@Accessors(PUBLIC_GETTER) var totalQueries = 0
 	@Accessors(PUBLIC_GETTER) var compilingQueries = 0
-	@Accessors(PUBLIC_GETTER) var List<CharSequence> subsections = new ArrayList
+	@Accessors(PUBLIC_GETTER) val List<CharSequence> subsections = new ArrayList
 
 	def void processQueries(Iterable<TestQuery> testQueries) {
 		for (testQuery : testQueries) {

@@ -18,7 +18,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	new() {
 		val logger = Logger.getRootLogger
 		logger.setLevel(Level.ERROR)
-		ViatraQueryLoggingUtil.setExternalLogger(logger) 
+		ViatraQueryLoggingUtil.setExternalLogger(logger)
 	}
 
 	def log(String log) {
@@ -27,9 +27,10 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 	def transformToRete(RelalgContainer container) {
 		log("Transforming relational algebra expression to Rete network")
-		
+
 		if (container.incrementalPlan) {
-			throw new IllegalStateException("The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
+			throw new IllegalStateException(
+				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
 		}
 		val statements = register(container)
 		statements.fireWhilePossible(expandVertexRule)
@@ -63,7 +64,6 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		].build
 	}
 
-
 	/**
 	 * [2.A] Replace a default expand operator with a GetEdgesOperator and a JoinOperator
 	 */
@@ -88,8 +88,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			changeChildOperator(parentOperator, expandOperator, joinOperator)
 		].build
 	}
-	
-	 
+
 	/**
 	 * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
 	 */
@@ -108,7 +107,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			]
 			val sourceVertexOperator = expandOperator.input
 			val targetVertexOperator = createGetVerticesOperator => [
-				vertexVariable = expandOperator.targetVertexVariable        
+				vertexVariable = expandOperator.targetVertexVariable
 			]
 			val pathOperator = createPathOperator => [
 				minHops = expandOperator.minHops
@@ -119,7 +118,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				edgeVariable = expandOperator.edgeVariable
 
 				val edgeVariable = edgeVariable
-				listVariable = createVariableListExpression => [ variable = edgeVariable ]
+				listVariable = createVariableListExpression => [variable = edgeVariable]
 
 				leftInput = sourceVertexOperator
 				middleInput = getEdgesOperator
@@ -129,7 +128,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			changeChildOperator(parentOperator, expandOperator, pathOperator)
 		].build
 	}
-	
+
 	/**
 	 * [3] Replace an adjacent pair of SortOperator and TopOperator to a single SortAndTopOperator
 	 */
@@ -145,13 +144,14 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				entries.addAll(sortOperator.entries)
 				skip = topOperator.skip
 				limit = topOperator.limit
+
 				input = sortOperator.input
 			]
-			
+
 			changeChildOperator(parentOperator, topOperator, sortAndTopOperator)
 		].build
 	}
-	
+
 	/**
 	 * [4] Replace an adjacent pair of GroupingOperator and ProjectionOperator to a single GroupingAndProjectionOperator
 	 */
@@ -167,12 +167,13 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				entries.addAll(groupingOperator.entries)
 				elements.addAll(projectionOperator.elements)
 				tupleIndices.addAll(projectionOperator.tupleIndices)
+
+				input = groupingOperator.input
 			]
-			
+
 			changeChildOperator(parentOperator, projectionOperator, groupingAndProjectionOperator)
 		].build
 	}
-	
 
 	/**
 	 * [5] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
@@ -192,10 +193,9 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				leftInput = leftInputOperator
 				rightInput = getEdgesOperator
 			]
-			
+
 			changeChildOperator(parentOperator, selectionOperator, antiJoinOperator)
 		].build
-	} 
-
+	}
 
 }
