@@ -71,7 +71,6 @@ import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
 import relalg.MaxHopsType
-import relalg.NumberLiteral
 import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgContainer
@@ -649,6 +648,16 @@ class RelalgBuilder {
 		]
 	}
 
+	def dispatch ComparableExpression buildRelalgComparableElement(Parameter e) {
+		createParameterComparableExpression => [
+			parameter = createParameter => [
+				name = e.parameter
+				container = topLevelContainer
+			]
+			container = topLevelContainer
+		]
+	}
+
 	def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {
 		buildRelalgNumberLiteral(e)
 	}
@@ -882,7 +891,7 @@ class RelalgBuilder {
 		]
 	}
 
-	def NumberLiteral buildRelalgNumberLiteral(NumberConstant e) {
+	def buildRelalgNumberLiteral(NumberConstant e) {
 		try {
 			val n = Integer.parseInt(e.value)
 			createIntegerLiteral => [

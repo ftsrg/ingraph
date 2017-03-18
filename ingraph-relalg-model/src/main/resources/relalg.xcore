@@ -486,6 +486,14 @@ class Parameter extends NamedElement, Atom {
 }
 
 /**
+ * Container for a parameter to be placed in comparable position.
+ */
+class ParameterComparableExpression extends ComparableExpression {
+	refers Parameter parameter
+}
+
+
+/**
  * This will hold the map-like construct that is used
  * to represent vertex or edge constraints as well as
  * "values" clause for DML operations.

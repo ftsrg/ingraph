@@ -16,6 +16,7 @@ import relalg.IntegerLiteral
 import relalg.ListExpression
 import relalg.NullLiteral
 import relalg.Parameter
+import relalg.ParameterComparableExpression
 import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
@@ -42,8 +43,12 @@ class ExpressionConverter {
 		'''\literal{"«stringLiteral.value.escape»"}'''
 	}
 
-	def dispatch CharSequence convertExpression(Parameter p) {
-		'''\var{\$«p.name»}'''
+	def dispatch CharSequence convertExpression(Parameter parameter) {
+		'''\var{\$«parameter.name»}'''
+	}
+
+	def dispatch CharSequence convertExpression(ParameterComparableExpression pce) {
+		'''«convertExpression(pce.parameter)»'''
 	}
 
 	def dispatch CharSequence convertExpression(ElementVariable elementVariable) {
