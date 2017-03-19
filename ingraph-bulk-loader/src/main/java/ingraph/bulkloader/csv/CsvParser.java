@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ import ingraph.bulkloader.csv.entityprocessor.EntityProcessor;
 
 public class CsvParser {
 
-	public static <TEntity extends Entity> Collection<TEntity> parse(String csv, EntityProcessor<TEntity> processor) throws FileNotFoundException, IOException {
+	public static <TEntity extends Entity> List<TEntity> parse(String csv, EntityProcessor<TEntity> processor) throws FileNotFoundException, IOException {
 		try (final ICsvMapReader reader = new CsvMapReader(new FileReader(csv), CsvPreference.STANDARD_PREFERENCE)) {
 
 			// process header
@@ -47,7 +46,7 @@ public class CsvParser {
 			final CellProcessor[] processors = processorsList.toArray(new CellProcessor[] {});
 
 			// process rows
-			final Collection<TEntity> entities = new ArrayList<>();
+			final List<TEntity> entities = new ArrayList<>();
 
 			Map<String, Object> row;
 			while ((row = reader.read(columnNames, processors)) != null) {
