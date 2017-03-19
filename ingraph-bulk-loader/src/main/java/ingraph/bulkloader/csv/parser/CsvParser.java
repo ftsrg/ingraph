@@ -1,4 +1,4 @@
-package ingraph.bulkloader.csv;
+package ingraph.bulkloader.csv.parser;
 
 import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
 import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_ID;
@@ -22,7 +22,7 @@ import ingraph.bulkloader.csv.entityprocessor.EntityProcessor;
 
 public class CsvParser {
 
-	public static <TEntity extends Entity> List<TEntity> parse(String csv, EntityProcessor<TEntity> processor) throws FileNotFoundException, IOException {
+	public static <TEntity extends Entity> List<TEntity> parse(String csv, EntityProcessor<TEntity> processor) throws IOException {
 		try (final ICsvMapReader reader = new CsvMapReader(new FileReader(csv), CsvPreference.STANDARD_PREFERENCE)) {
 
 			// process header
@@ -35,7 +35,7 @@ public class CsvParser {
 				processorsList.add(cnp.getType().getCellProcessor());
 			}
 
-			// throw exception if there is not "ID" field in the header
+			// throw exception if there is no "ID" field in the header
 			if (!(columnNameList.contains(INTERNAL_ID) //
 					|| (columnNameList.contains(INTERNAL_START_ID) && columnNameList.contains(INTERNAL_END_ID)) //
 					)) {

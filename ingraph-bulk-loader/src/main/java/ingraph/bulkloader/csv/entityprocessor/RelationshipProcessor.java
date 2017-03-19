@@ -13,6 +13,7 @@ public class RelationshipProcessor extends EntityProcessor<Relationship> {
 	private final String type;
 
 	public RelationshipProcessor(String type) {
+		super();
 		this.type = type;
 	}
 
