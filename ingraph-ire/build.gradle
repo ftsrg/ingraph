@@ -9,11 +9,11 @@ jar {
 }
 
 dependencies {
+  compile project(':ingraph-bulk-loader')
   compile project(':ingraph-cypher2relalg')
   compile project(':ingraph-expression-parser')
   compile project(':ingraph-optimization-transformations')
   compile project(':ingraph-relalg-model')
-  compile project(':ingraph-tinkerpop')
   compile project(':ire')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.1.2'
