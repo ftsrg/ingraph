@@ -128,7 +128,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleFeature"
-    // InternalFeature.g:71:1: ruleFeature returns [EObject current=null] : ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) )? ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* ) ;
+    // InternalFeature.g:71:1: ruleFeature returns [EObject current=null] : ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* ) ;
     public final EObject ruleFeature() throws RecognitionException {
         EObject current = null;
 
@@ -143,11 +143,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalFeature.g:77:2: ( ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) )? ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* ) )
-            // InternalFeature.g:78:2: ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) )? ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* )
+            // InternalFeature.g:77:2: ( ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* ) )
+            // InternalFeature.g:78:2: ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* )
             {
-            // InternalFeature.g:78:2: ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) )? ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* )
-            // InternalFeature.g:79:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) )? ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )*
+            // InternalFeature.g:78:2: ( ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )* )
+            // InternalFeature.g:79:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_FEATURE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_scenarios_3_0= ruleAbstractScenario ) )*
             {
             // InternalFeature.g:79:3: ( (lv_tags_0_0= RULE_TAG ) )*
             loop1:
@@ -193,55 +193,44 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
                 }
             } while (true);
 
-            // InternalFeature.g:97:3: ( (lv_name_1_0= RULE_FEATURE_TEXT ) )?
-            int alt2=2;
-            int LA2_0 = input.LA(1);
+            // InternalFeature.g:97:3: ( (lv_name_1_0= RULE_FEATURE_TEXT ) )
+            // InternalFeature.g:98:4: (lv_name_1_0= RULE_FEATURE_TEXT )
+            {
+            // InternalFeature.g:98:4: (lv_name_1_0= RULE_FEATURE_TEXT )
+            // InternalFeature.g:99:5: lv_name_1_0= RULE_FEATURE_TEXT
+            {
+            lv_name_1_0=(Token)match(input,RULE_FEATURE_TEXT,FOLLOW_4); 
 
-            if ( (LA2_0==RULE_FEATURE_TEXT) ) {
-                alt2=1;
+            					newLeafNode(lv_name_1_0, grammarAccess.getFeatureAccess().getNameFEATURE_TEXTTerminalRuleCall_1_0());
+            				
+
+            					if (current==null) {
+            						current = createModelElement(grammarAccess.getFeatureRule());
+            					}
+            					setWithLastConsumed(
+            						current,
+            						"name",
+            						lv_name_1_0,
+            						"ingraph.report.featuregrammar.Feature.FEATURE_TEXT");
+            				
+
             }
-            switch (alt2) {
-                case 1 :
-                    // InternalFeature.g:98:4: (lv_name_1_0= RULE_FEATURE_TEXT )
-                    {
-                    // InternalFeature.g:98:4: (lv_name_1_0= RULE_FEATURE_TEXT )
-                    // InternalFeature.g:99:5: lv_name_1_0= RULE_FEATURE_TEXT
-                    {
-                    lv_name_1_0=(Token)match(input,RULE_FEATURE_TEXT,FOLLOW_4); 
 
-                    					newLeafNode(lv_name_1_0, grammarAccess.getFeatureAccess().getNameFEATURE_TEXTTerminalRuleCall_1_0());
-                    				
-
-                    					if (current==null) {
-                    						current = createModelElement(grammarAccess.getFeatureRule());
-                    					}
-                    					setWithLastConsumed(
-                    						current,
-                    						"name",
-                    						lv_name_1_0,
-                    						"ingraph.report.featuregrammar.Feature.FEATURE_TEXT");
-                    				
-
-                    }
-
-
-                    }
-                    break;
 
             }
 
             // InternalFeature.g:115:3: ( (lv_elements_2_0= ruleNarrativeElement ) )*
-            loop3:
+            loop2:
             do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
+                int alt2=2;
+                int LA2_0 = input.LA(1);
 
-                if ( ((LA3_0>=RULE_TEXT && LA3_0<=RULE_I_WANT_TO)) ) {
-                    alt3=1;
+                if ( ((LA2_0>=RULE_TEXT && LA2_0<=RULE_I_WANT_TO)) ) {
+                    alt2=1;
                 }
 
 
-                switch (alt3) {
+                switch (alt2) {
             	case 1 :
             	    // InternalFeature.g:116:4: (lv_elements_2_0= ruleNarrativeElement )
             	    {
@@ -275,22 +264,22 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop3;
+            	    break loop2;
                 }
             } while (true);
 
             // InternalFeature.g:134:3: ( (lv_scenarios_3_0= ruleAbstractScenario ) )*
-            loop4:
+            loop3:
             do {
-                int alt4=2;
-                int LA4_0 = input.LA(1);
+                int alt3=2;
+                int LA3_0 = input.LA(1);
 
-                if ( (LA4_0==RULE_TAG||(LA4_0>=RULE_SCENARIO_TEXT && LA4_0<=RULE_SCENARIO_OUTLINE_TEXT)||LA4_0==RULE_BACKGROUND_TEXT) ) {
-                    alt4=1;
+                if ( (LA3_0==RULE_TAG||(LA3_0>=RULE_SCENARIO_TEXT && LA3_0<=RULE_SCENARIO_OUTLINE_TEXT)||LA3_0==RULE_BACKGROUND_TEXT) ) {
+                    alt3=1;
                 }
 
 
-                switch (alt4) {
+                switch (alt3) {
             	case 1 :
             	    // InternalFeature.g:135:4: (lv_scenarios_3_0= ruleAbstractScenario )
             	    {
@@ -324,7 +313,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop4;
+            	    break loop3;
                 }
             } while (true);
 
@@ -408,36 +397,36 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:171:2: (this_InOrderTo_0= ruleInOrderTo | this_AsA_1= ruleAsA | this_IWantTo_2= ruleIWantTo | this_FreeText_3= ruleFreeText )
             {
             // InternalFeature.g:171:2: (this_InOrderTo_0= ruleInOrderTo | this_AsA_1= ruleAsA | this_IWantTo_2= ruleIWantTo | this_FreeText_3= ruleFreeText )
-            int alt5=4;
+            int alt4=4;
             switch ( input.LA(1) ) {
             case RULE_IN_ORDER_TO:
                 {
-                alt5=1;
+                alt4=1;
                 }
                 break;
             case RULE_AS_A:
                 {
-                alt5=2;
+                alt4=2;
                 }
                 break;
             case RULE_I_WANT_TO:
                 {
-                alt5=3;
+                alt4=3;
                 }
                 break;
             case RULE_TEXT:
                 {
-                alt5=4;
+                alt4=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
+                    new NoViableAltException("", 4, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt5) {
+            switch (alt4) {
                 case 1 :
                     // InternalFeature.g:172:3: this_InOrderTo_0= ruleInOrderTo
                     {
@@ -968,9 +957,9 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:365:2: (this_Background_0= ruleBackground | this_Scenario_1= ruleScenario | this_ScenarioWithOutline_2= ruleScenarioWithOutline )
             {
             // InternalFeature.g:365:2: (this_Background_0= ruleBackground | this_Scenario_1= ruleScenario | this_ScenarioWithOutline_2= ruleScenarioWithOutline )
-            int alt6=3;
-            alt6 = dfa6.predict(input);
-            switch (alt6) {
+            int alt5=3;
+            alt5 = dfa5.predict(input);
+            switch (alt5) {
                 case 1 :
                     // InternalFeature.g:366:3: this_Background_0= ruleBackground
                     {
@@ -1106,17 +1095,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:411:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_SCENARIO_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_steps_3_0= ruleStep ) )+
             {
             // InternalFeature.g:411:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop7:
+            loop6:
             do {
-                int alt7=2;
-                int LA7_0 = input.LA(1);
+                int alt6=2;
+                int LA6_0 = input.LA(1);
 
-                if ( (LA7_0==RULE_TAG) ) {
-                    alt7=1;
+                if ( (LA6_0==RULE_TAG) ) {
+                    alt6=1;
                 }
 
 
-                switch (alt7) {
+                switch (alt6) {
             	case 1 :
             	    // InternalFeature.g:412:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -1145,7 +1134,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop7;
+            	    break loop6;
                 }
             } while (true);
 
@@ -1176,17 +1165,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             }
 
             // InternalFeature.g:447:3: ( (lv_elements_2_0= ruleNarrativeElement ) )*
-            loop8:
+            loop7:
             do {
-                int alt8=2;
-                int LA8_0 = input.LA(1);
+                int alt7=2;
+                int LA7_0 = input.LA(1);
 
-                if ( ((LA8_0>=RULE_TEXT && LA8_0<=RULE_I_WANT_TO)) ) {
-                    alt8=1;
+                if ( ((LA7_0>=RULE_TEXT && LA7_0<=RULE_I_WANT_TO)) ) {
+                    alt7=1;
                 }
 
 
-                switch (alt8) {
+                switch (alt7) {
             	case 1 :
             	    // InternalFeature.g:448:4: (lv_elements_2_0= ruleNarrativeElement )
             	    {
@@ -1220,17 +1209,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop8;
+            	    break loop7;
                 }
             } while (true);
 
             // InternalFeature.g:466:3: ( (lv_steps_3_0= ruleStep ) )+
-            int cnt9=0;
-            loop9:
+            int cnt8=0;
+            loop8:
             do {
-                int alt9=2;
-                alt9 = dfa9.predict(input);
-                switch (alt9) {
+                int alt8=2;
+                alt8 = dfa8.predict(input);
+                switch (alt8) {
             	case 1 :
             	    // InternalFeature.g:467:4: (lv_steps_3_0= ruleStep )
             	    {
@@ -1264,12 +1253,12 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    if ( cnt9 >= 1 ) break loop9;
+            	    if ( cnt8 >= 1 ) break loop8;
                         EarlyExitException eee =
-                            new EarlyExitException(9, input);
+                            new EarlyExitException(8, input);
                         throw eee;
                 }
-                cnt9++;
+                cnt8++;
             } while (true);
 
 
@@ -1355,17 +1344,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:504:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_SCENARIO_OUTLINE_TEXT ) ) ( (lv_elements_2_0= ruleNarrativeElement ) )* ( (lv_steps_3_0= ruleStep ) )+ ( (lv_example_4_0= ruleExample ) )
             {
             // InternalFeature.g:504:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop10:
+            loop9:
             do {
-                int alt10=2;
-                int LA10_0 = input.LA(1);
+                int alt9=2;
+                int LA9_0 = input.LA(1);
 
-                if ( (LA10_0==RULE_TAG) ) {
-                    alt10=1;
+                if ( (LA9_0==RULE_TAG) ) {
+                    alt9=1;
                 }
 
 
-                switch (alt10) {
+                switch (alt9) {
             	case 1 :
             	    // InternalFeature.g:505:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -1394,7 +1383,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop10;
+            	    break loop9;
                 }
             } while (true);
 
@@ -1425,17 +1414,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             }
 
             // InternalFeature.g:540:3: ( (lv_elements_2_0= ruleNarrativeElement ) )*
-            loop11:
+            loop10:
             do {
-                int alt11=2;
-                int LA11_0 = input.LA(1);
+                int alt10=2;
+                int LA10_0 = input.LA(1);
 
-                if ( ((LA11_0>=RULE_TEXT && LA11_0<=RULE_I_WANT_TO)) ) {
-                    alt11=1;
+                if ( ((LA10_0>=RULE_TEXT && LA10_0<=RULE_I_WANT_TO)) ) {
+                    alt10=1;
                 }
 
 
-                switch (alt11) {
+                switch (alt10) {
             	case 1 :
             	    // InternalFeature.g:541:4: (lv_elements_2_0= ruleNarrativeElement )
             	    {
@@ -1469,23 +1458,23 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop11;
+            	    break loop10;
                 }
             } while (true);
 
             // InternalFeature.g:559:3: ( (lv_steps_3_0= ruleStep ) )+
-            int cnt12=0;
-            loop12:
+            int cnt11=0;
+            loop11:
             do {
-                int alt12=2;
-                int LA12_0 = input.LA(1);
+                int alt11=2;
+                int LA11_0 = input.LA(1);
 
-                if ( (LA12_0==RULE_TAG||(LA12_0>=RULE_GIVEN_TEXT && LA12_0<=RULE_AND_TEXT)) ) {
-                    alt12=1;
+                if ( (LA11_0==RULE_TAG||(LA11_0>=RULE_GIVEN_TEXT && LA11_0<=RULE_AND_TEXT)) ) {
+                    alt11=1;
                 }
 
 
-                switch (alt12) {
+                switch (alt11) {
             	case 1 :
             	    // InternalFeature.g:560:4: (lv_steps_3_0= ruleStep )
             	    {
@@ -1519,12 +1508,12 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    if ( cnt12 >= 1 ) break loop12;
+            	    if ( cnt11 >= 1 ) break loop11;
                         EarlyExitException eee =
-                            new EarlyExitException(12, input);
+                            new EarlyExitException(11, input);
                         throw eee;
                 }
-                cnt12++;
+                cnt11++;
             } while (true);
 
             // InternalFeature.g:578:3: ( (lv_example_4_0= ruleExample ) )
@@ -1673,17 +1662,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             }
 
             // InternalFeature.g:639:3: ( (lv_rows_2_0= ruleExampleRow ) )*
-            loop13:
+            loop12:
             do {
-                int alt13=2;
-                int LA13_0 = input.LA(1);
+                int alt12=2;
+                int LA12_0 = input.LA(1);
 
-                if ( (LA13_0==RULE_EXAMPLE_CELL) ) {
-                    alt13=1;
+                if ( (LA12_0==RULE_EXAMPLE_CELL) ) {
+                    alt12=1;
                 }
 
 
-                switch (alt13) {
+                switch (alt12) {
             	case 1 :
             	    // InternalFeature.g:640:4: (lv_rows_2_0= ruleExampleRow )
             	    {
@@ -1717,7 +1706,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop13;
+            	    break loop12;
                 }
             } while (true);
 
@@ -1799,18 +1788,18 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:677:3: ( (lv_cells_0_0= ruleExampleCell ) )+ this_EXAMPLE_ROW_END_1= RULE_EXAMPLE_ROW_END
             {
             // InternalFeature.g:677:3: ( (lv_cells_0_0= ruleExampleCell ) )+
-            int cnt14=0;
-            loop14:
+            int cnt13=0;
+            loop13:
             do {
-                int alt14=2;
-                int LA14_0 = input.LA(1);
+                int alt13=2;
+                int LA13_0 = input.LA(1);
 
-                if ( (LA14_0==RULE_EXAMPLE_CELL) ) {
-                    alt14=1;
+                if ( (LA13_0==RULE_EXAMPLE_CELL) ) {
+                    alt13=1;
                 }
 
 
-                switch (alt14) {
+                switch (alt13) {
             	case 1 :
             	    // InternalFeature.g:678:4: (lv_cells_0_0= ruleExampleCell )
             	    {
@@ -1844,12 +1833,12 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    if ( cnt14 >= 1 ) break loop14;
+            	    if ( cnt13 >= 1 ) break loop13;
                         EarlyExitException eee =
-                            new EarlyExitException(14, input);
+                            new EarlyExitException(13, input);
                         throw eee;
                 }
-                cnt14++;
+                cnt13++;
             } while (true);
 
             this_EXAMPLE_ROW_END_1=(Token)match(input,RULE_EXAMPLE_ROW_END,FOLLOW_2); 
@@ -2030,17 +2019,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:754:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_name_1_0= RULE_BACKGROUND_TEXT ) ) ( (lv_steps_2_0= ruleStep ) )*
             {
             // InternalFeature.g:754:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop15:
+            loop14:
             do {
-                int alt15=2;
-                int LA15_0 = input.LA(1);
+                int alt14=2;
+                int LA14_0 = input.LA(1);
 
-                if ( (LA15_0==RULE_TAG) ) {
-                    alt15=1;
+                if ( (LA14_0==RULE_TAG) ) {
+                    alt14=1;
                 }
 
 
-                switch (alt15) {
+                switch (alt14) {
             	case 1 :
             	    // InternalFeature.g:755:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -2069,7 +2058,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop15;
+            	    break loop14;
                 }
             } while (true);
 
@@ -2100,11 +2089,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             }
 
             // InternalFeature.g:790:3: ( (lv_steps_2_0= ruleStep ) )*
-            loop16:
+            loop15:
             do {
-                int alt16=2;
-                alt16 = dfa16.predict(input);
-                switch (alt16) {
+                int alt15=2;
+                alt15 = dfa15.predict(input);
+                switch (alt15) {
             	case 1 :
             	    // InternalFeature.g:791:4: (lv_steps_2_0= ruleStep )
             	    {
@@ -2138,7 +2127,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop16;
+            	    break loop15;
                 }
             } while (true);
 
@@ -2222,9 +2211,9 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:827:2: (this_GivenStep_0= ruleGivenStep | this_WhenStep_1= ruleWhenStep | this_ThenStep_2= ruleThenStep | this_AndStep_3= ruleAndStep )
             {
             // InternalFeature.g:827:2: (this_GivenStep_0= ruleGivenStep | this_WhenStep_1= ruleWhenStep | this_ThenStep_2= ruleThenStep | this_AndStep_3= ruleAndStep )
-            int alt17=4;
-            alt17 = dfa17.predict(input);
-            switch (alt17) {
+            int alt16=4;
+            alt16 = dfa16.predict(input);
+            switch (alt16) {
                 case 1 :
                     // InternalFeature.g:828:3: this_GivenStep_0= ruleGivenStep
                     {
@@ -2376,17 +2365,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:882:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_text_1_0= RULE_GIVEN_TEXT ) ) ( (lv_desc_2_0= ruleOptionalText ) )
             {
             // InternalFeature.g:882:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop18:
+            loop17:
             do {
-                int alt18=2;
-                int LA18_0 = input.LA(1);
+                int alt17=2;
+                int LA17_0 = input.LA(1);
 
-                if ( (LA18_0==RULE_TAG) ) {
-                    alt18=1;
+                if ( (LA17_0==RULE_TAG) ) {
+                    alt17=1;
                 }
 
 
-                switch (alt18) {
+                switch (alt17) {
             	case 1 :
             	    // InternalFeature.g:883:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -2415,7 +2404,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop18;
+            	    break loop17;
                 }
             } while (true);
 
@@ -2555,17 +2544,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:956:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_text_1_0= RULE_WHEN_TEXT ) ) ( (lv_desc_2_0= ruleOptionalText ) )
             {
             // InternalFeature.g:956:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop19:
+            loop18:
             do {
-                int alt19=2;
-                int LA19_0 = input.LA(1);
+                int alt18=2;
+                int LA18_0 = input.LA(1);
 
-                if ( (LA19_0==RULE_TAG) ) {
-                    alt19=1;
+                if ( (LA18_0==RULE_TAG) ) {
+                    alt18=1;
                 }
 
 
-                switch (alt19) {
+                switch (alt18) {
             	case 1 :
             	    // InternalFeature.g:957:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -2594,7 +2583,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop19;
+            	    break loop18;
                 }
             } while (true);
 
@@ -2736,17 +2725,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:1030:3: ( (lv_tags_0_0= RULE_TAG ) )* ( (lv_text_1_0= RULE_THEN_TEXT ) ) ( (lv_desc_2_0= ruleOptionalText ) ) ( (lv_rows_3_0= ruleExampleRow ) )*
             {
             // InternalFeature.g:1030:3: ( (lv_tags_0_0= RULE_TAG ) )*
-            loop20:
+            loop19:
             do {
-                int alt20=2;
-                int LA20_0 = input.LA(1);
+                int alt19=2;
+                int LA19_0 = input.LA(1);
 
-                if ( (LA20_0==RULE_TAG) ) {
-                    alt20=1;
+                if ( (LA19_0==RULE_TAG) ) {
+                    alt19=1;
                 }
 
 
-                switch (alt20) {
+                switch (alt19) {
             	case 1 :
             	    // InternalFeature.g:1031:4: (lv_tags_0_0= RULE_TAG )
             	    {
@@ -2775,7 +2764,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop20;
+            	    break loop19;
                 }
             } while (true);
 
@@ -2837,17 +2826,17 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             }
 
             // InternalFeature.g:1085:3: ( (lv_rows_3_0= ruleExampleRow ) )*
-            loop21:
+            loop20:
             do {
-                int alt21=2;
-                int LA21_0 = input.LA(1);
+                int alt20=2;
+                int LA20_0 = input.LA(1);
 
-                if ( (LA21_0==RULE_EXAMPLE_CELL) ) {
-                    alt21=1;
+                if ( (LA20_0==RULE_EXAMPLE_CELL) ) {
+                    alt20=1;
                 }
 
 
-                switch (alt21) {
+                switch (alt20) {
             	case 1 :
             	    // InternalFeature.g:1086:4: (lv_rows_3_0= ruleExampleRow )
             	    {
@@ -2881,7 +2870,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             	    break;
 
             	default :
-            	    break loop21;
+            	    break loop20;
                 }
             } while (true);
 
@@ -3093,22 +3082,22 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
             // InternalFeature.g:1178:2: (this_TEXT_0= RULE_TEXT | this_CODE_1= RULE_CODE )
             {
             // InternalFeature.g:1178:2: (this_TEXT_0= RULE_TEXT | this_CODE_1= RULE_CODE )
-            int alt22=2;
-            int LA22_0 = input.LA(1);
+            int alt21=2;
+            int LA21_0 = input.LA(1);
 
-            if ( (LA22_0==RULE_TEXT) ) {
-                alt22=1;
+            if ( (LA21_0==RULE_TEXT) ) {
+                alt21=1;
             }
-            else if ( (LA22_0==RULE_CODE) ) {
-                alt22=2;
+            else if ( (LA21_0==RULE_CODE) ) {
+                alt21=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("", 22, 0, input);
+                    new NoViableAltException("", 21, 0, input);
 
                 throw nvae;
             }
-            switch (alt22) {
+            switch (alt21) {
                 case 1 :
                     // InternalFeature.g:1179:3: this_TEXT_0= RULE_TEXT
                     {
@@ -3159,10 +3148,10 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
     // Delegated rules
 
 
-    protected DFA6 dfa6 = new DFA6(this);
-    protected DFA9 dfa9 = new DFA9(this);
+    protected DFA5 dfa5 = new DFA5(this);
+    protected DFA8 dfa8 = new DFA8(this);
+    protected DFA15 dfa15 = new DFA15(this);
     protected DFA16 dfa16 = new DFA16(this);
-    protected DFA17 dfa17 = new DFA17(this);
     static final String dfa_1s = "\5\uffff";
     static final String dfa_2s = "\2\4\3\uffff";
     static final String dfa_3s = "\2\17\3\uffff";
@@ -3183,11 +3172,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
     static final short[] dfa_5 = DFA.unpackEncodedString(dfa_5s);
     static final short[][] dfa_6 = unpackEncodedStringArray(dfa_6s);
 
-    class DFA6 extends DFA {
+    class DFA5 extends DFA {
 
-        public DFA6(BaseRecognizer recognizer) {
+        public DFA5(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 6;
+            this.decisionNumber = 5;
             this.eot = dfa_1;
             this.eof = dfa_1;
             this.min = dfa_2;
@@ -3221,11 +3210,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
     static final short[] dfa_12 = DFA.unpackEncodedString(dfa_12s);
     static final short[][] dfa_13 = unpackEncodedStringArray(dfa_13s);
 
-    class DFA9 extends DFA {
+    class DFA8 extends DFA {
 
-        public DFA9(BaseRecognizer recognizer) {
+        public DFA8(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 9;
+            this.decisionNumber = 8;
             this.eot = dfa_7;
             this.eof = dfa_8;
             this.min = dfa_9;
@@ -3239,11 +3228,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
         }
     }
 
-    class DFA16 extends DFA {
+    class DFA15 extends DFA {
 
-        public DFA16(BaseRecognizer recognizer) {
+        public DFA15(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 16;
+            this.decisionNumber = 15;
             this.eot = dfa_7;
             this.eof = dfa_8;
             this.min = dfa_9;
@@ -3277,11 +3266,11 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
     static final short[] dfa_18 = DFA.unpackEncodedString(dfa_18s);
     static final short[][] dfa_19 = unpackEncodedStringArray(dfa_19s);
 
-    class DFA17 extends DFA {
+    class DFA16 extends DFA {
 
-        public DFA17(BaseRecognizer recognizer) {
+        public DFA16(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 17;
+            this.decisionNumber = 16;
             this.eot = dfa_14;
             this.eof = dfa_14;
             this.min = dfa_15;
@@ -3298,7 +3287,7 @@ public class InternalFeatureParser extends AbstractInternalAntlrParser {
 
     public static final BitSet FOLLOW_1 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_2 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000000000008FF2L});
+    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000000000000030L});
     public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000008FD2L});
     public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000008C12L});
     public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x0000000000000410L});

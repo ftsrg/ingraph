@@ -111,7 +111,7 @@ ruleFeature returns [EObject current=null]
 						"ingraph.report.featuregrammar.Feature.FEATURE_TEXT");
 				}
 			)
-		)?
+		)
 		(
 			(
 				{
