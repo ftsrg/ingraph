@@ -10,10 +10,10 @@ import relalg._
 
 import scala.collection.mutable
 
-class GetOperatorTransformer(vertexConverters: Map[Set[String], Set[GetVerticesOperator]],
-                                  edgeConverters: Map[Set[String], Set[GetEdgesOperator]],
-                                  inputLookup: Map[String, (ChangeSet) => Unit],
-                                indexer: Indexer) extends IdParser {
+class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOperator]],
+                          edgeConverters: Map[Set[String], Set[GetEdgesOperator]],
+                          inputLookup: Map[String, (ChangeSet) => Unit],
+                          indexer: Indexer) extends IdParser {
   val vertices = mutable.HashMap[String, Set[Tuple]]()
   val edges = mutable.HashMap[String, Set[Tuple]]()
 
