@@ -5,7 +5,7 @@ import org.scalatest.WordSpec
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformationAndInferencer
+import ingraph.relalg2rete.Relalg2ReteTransformationAndInferencer
 
 class ExpressionParserTest extends WordSpec {
   def getSelectionOperator(query: String): SelectionOperator = {
