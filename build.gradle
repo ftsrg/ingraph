@@ -34,6 +34,14 @@ subprojects {
       jcenter()
     }
   }
+  
+  eclipse.classpath.file {
+    whenMerged { classpath ->
+      classpath.entries = classpath.entries.findAll { entry ->
+        !entry.path.contains('build/')
+      }
+    }
+  }
 
   publishing {
     publications {

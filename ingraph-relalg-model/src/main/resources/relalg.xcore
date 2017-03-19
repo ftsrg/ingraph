@@ -1,10 +1,10 @@
 @Ecore(nsURI="http://ingraph/relalg")
 @GenModel(bundleManifest="false",
-  modelDirectory="ingraph-relalg-model/build/xcore/main",
+  modelDirectory="ingraph-relalg-model/src/main/java",
   complianceLevel="8.0")
 package relalg
 
-type Function wraps relalg.function.Function
+type Function wraps relalgfunction.Function
 type Bigint wraps java.math.BigInteger
 
 class RelalgContainer {
