@@ -29,8 +29,8 @@ class IndexerTest extends WordSpec {
     }
 
     "make create navigable entities" in {
-      assert(indexer.vertexById(2).edges("owns").sourceVertex.id == 1)
-      assert(indexer.vertexById(2).reverseEdges("owns").targetVertex.id == 3)
+      assert(indexer.vertexById(2).edges("owns").sourceVertex.id == 2)
+      assert(indexer.vertexById(2).reverseEdges("owns").targetVertex.id == 2)
     }
   }
 }
