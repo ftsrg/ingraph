@@ -323,15 +323,23 @@ class RelalgBuilder {
 					warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
 				}
 			}
-			elements.addAll(
-				// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-				returnBody.returnItems.get(0).items.map [ returnItem |
+			for (returnItem: returnBody.returnItems.get(0).items) {
+				elements.add(
 					variableBuilder.buildExpressionVariable(
-						returnItem.alias?.name,
-						buildRelalgExpression(returnItem.expression)
+						returnItem.alias?.name
+					,	buildRelalgExpression(returnItem.expression)
 					)
-				]
-			)
+				)
+			}
+//			elements.addAll(
+//				// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
+//				returnBody.returnItems.get(0).items.map [ returnItem |
+//					variableBuilder.buildExpressionVariable(
+//						returnItem.alias?.name
+//					, buildRelalgExpression(returnItem.expression)
+//					)
+//				]
+//			)
 		]
 		if (trimmer.elements.empty) {
 			unrecoverableError('''RETURN clause processed and resulted in no columns values to return''')
