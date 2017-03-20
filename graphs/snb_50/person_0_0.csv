@@ -1,4 +1,4 @@
-id|firstName|lastName|gender|birthday|creationDate|locationIP|browserUsed
+:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING
 8796093022220|Jose|Alonso|female|1987-09-18|2010-10-17T05:54:00.602+0000|200.5.15.1|Internet Explorer
 2199023255591|Alexei|Feltsman|female|1985-12-05|2010-04-05T14:51:09.862+0000|31.28.5.32|Firefox
 4398046511124|Yahya Ould Ahmed El|Abdallahi|male|1989-02-28|2010-06-04T18:54:25.021+0000|41.138.128.120|Internet Explorer

@@ -1,4 +1,4 @@
-id|imageFile|creationDate|locationIP|browserUsed|language|content|length
+:ID(Post)|imageFile:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT
 343597383680|photo343597383680.jpg|2010-12-26T04:58:53.756+0000|200.5.15.1|Internet Explorer|||0
 343597383681|photo343597383681.jpg|2010-12-26T04:58:54.756+0000|200.5.15.1|Internet Explorer|||0
 343597383682|photo343597383682.jpg|2010-12-26T04:58:55.756+0000|200.5.15.1|Internet Explorer|||0

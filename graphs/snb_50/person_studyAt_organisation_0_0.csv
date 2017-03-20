@@ -1,4 +1,4 @@
-Person.id|Organisation.id|classYear
+:START_ID(Person)|:END_ID(Organisation)|classYear:INT
 8796093022220|2435|2008
 2199023255591|5985|2006
 4398046511105|2945|2007

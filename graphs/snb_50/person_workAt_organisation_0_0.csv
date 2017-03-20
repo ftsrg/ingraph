@@ -1,4 +1,4 @@
-Person.id|Organisation.id|workFrom
+:START_ID(Person)|:END_ID(Organisation)|workFrom:INT
 8796093022220|296|2009
 8796093022220|298|2010
 2199023255591|1093|2007

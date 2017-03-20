@@ -1,4 +1,4 @@
-id|creationDate|locationIP|browserUsed|content|length
+:ID(Comment)|creationDate:STRING|locationIP:STRING|browserUsed:STRING|content:STRING|length:INT
 274877907725|2010-10-17T05:34:03.139+0000|88.80.236.34|Chrome|yes|3
 274877907726|2010-10-17T00:38:23.927+0000|192.101.113.232|Internet Explorer|thanks|6
 274877907727|2010-10-17T05:28:29.102+0000|41.203.141.129|Internet Explorer|LOL|3

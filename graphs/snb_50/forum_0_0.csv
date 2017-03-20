@@ -1,4 +1,4 @@
-id|title|creationDate
+:ID(Forum)|title:STRING|creationDate:STRING
 274877906944|Wall of Jose Alonso|2010-10-17T05:54:10.602+0000
 343597383681|Album 0 of Jose Alonso|2010-12-11T22:18:33.300+0000
 343597383682|Album 1 of Jose Alonso|2010-12-26T04:58:42.756+0000
