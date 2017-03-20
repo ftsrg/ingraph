@@ -7,7 +7,7 @@ export POSTFIX=_0_0.csv
 export DB_DIR=$NEO4J_HOME/data/databases/graph.db
 ```
 
-### Script for converting city, country and contintent to City, Country and Continent
+### Script for converting city/country/contintent to City/Country/Continent
 
 ```bash
 sed -i "s/|c\([a-z]\+\)$/|C\1/" place$POSTFIX
