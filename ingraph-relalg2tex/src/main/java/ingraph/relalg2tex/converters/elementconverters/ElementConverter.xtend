@@ -9,12 +9,12 @@ import relalg.VertexVariable
 	*/
 class ElementConverter {
 
-	extension StringEscaper stringEscaper = new StringEscaper  
- 
+	extension StringEscaper stringEscaper = new StringEscaper
+
 	def dispatch convertElement(VertexVariable variable) {
 		'''{«variable.escapedName»}{'''
 		+ switch variable.vertexLabelSet?.status {
-			case LabelSetStatus.CONTRADICTING: "CONTRADICTING LABEL CONSTRAINTS"
+			case LabelSetStatus.CONTRADICTING: "CONTRADICTING~LABEL~CONSTRAINTS"
 			case null: "" // null labelset means empty labelset constraint
 			default: variable.vertexLabelSet.vertexLabels.map[escapedName].join(" \\land ")
 		}
@@ -24,7 +24,7 @@ class ElementConverter {
 	def dispatch convertElement(EdgeVariable variable) {
 		'''{«variable.escapedName»}{'''
 		+ switch variable.edgeLabelSet?.status {
-			case LabelSetStatus.CONTRADICTING: "CONTRADICTING LABEL CONSTRAINTS"
+			case LabelSetStatus.CONTRADICTING: "CONTRADICTING~LABEL~CONSTRAINTS"
 			case null: "" // null labelset means empty labelset constraint
 			default: variable.edgeLabelSet.edgeLabels.map[escapedName].join(" \\lor ")
 		}
