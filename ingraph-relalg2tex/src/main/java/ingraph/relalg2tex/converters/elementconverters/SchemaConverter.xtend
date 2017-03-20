@@ -9,7 +9,7 @@ class SchemaConverter {
 	extension StringEscaper stringEscaper = new StringEscaper
 
 	def convertSchema(List<Variable> schema) {
-		'''\langle \var{«schema.map[ convertVariable.escape ].join(', ')»} \rangle'''
+		'''\langle «schema.map[ '''\var{«convertVariable.escape»}''' ].join(', ')» \rangle'''
 	} 
 	
 }
