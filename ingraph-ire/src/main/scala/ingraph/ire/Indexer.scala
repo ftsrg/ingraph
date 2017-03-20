@@ -30,17 +30,26 @@ class IngraphEdge(relation: Relationship, indexer: Indexer) {
   val targetVertex: IngraphVertex = indexer.nodeLookup(relation.endNodeId())
   targetVertex.reverseEdges(relation.`type`()) = this
   indexer.edgeLabelLookup.addBinding(relation.`type`(), this)
+  val label: String = relation.`type`()
   override def toString: String = s"Edge(${sourceVertex.id} -[$id]-> ${targetVertex.id}, $properties)"
 }
 
-class Indexer {
+class Indexer(tupleMapper: EntityToTupleMapper) {
 
   val nodeLookup = mutable.HashMap[Long, IngraphVertex]()
   val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
   val edgeLabelLookup = new BufferMultimap[String, IngraphEdge]()
 
-  def addVertex(node: Node) = new IngraphVertex(node, this)
-  def addEdge(relation: Relationship) = new IngraphEdge(relation, this)
+  def addVertex(node: Node) = {
+    val res = new IngraphVertex(node, this)
+    tupleMapper.addVertex(res)
+    res
+  }
+  def addEdge(relation: Relationship) = {
+    val res = new IngraphEdge(relation, this)
+    tupleMapper.addEdge(res)
+    res
+  }
 
   def vertexById(id: Long): IngraphVertex = nodeLookup(id)
   def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)

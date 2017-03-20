@@ -32,7 +32,7 @@ object EngineFactory {
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
       val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
-      val edgeConverters  = new BufferMultimap[Vector[String], GetEdgesOperator]
+      val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
 
       remaining += ForwardConnection(plan, production)
 
@@ -104,8 +104,9 @@ object EngineFactory {
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName
-            val label = op.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.map(_.getName)
-            edgeConverters.addBinding(label, op)
+            val labels = op.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.map(_.getName)
+            for (label <- labels)
+              edgeConverters.addBinding(label, op)
             inputs += (nick -> expr.child)
         }
       }
