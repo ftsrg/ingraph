@@ -1,18 +1,19 @@
 package ingraph.bulkloader.csv.loader;
 
-import com.google.common.collect.Lists;
-import ingraph.bulkloader.csv.entityprocessor.NodeProcessor;
-import ingraph.bulkloader.csv.entityprocessor.RelationshipProcessor;
-import ingraph.bulkloader.csv.parser.CsvParser;
-import org.neo4j.driver.internal.util.Iterables;
-import org.neo4j.driver.v1.types.Node;
-import org.neo4j.driver.v1.types.Relationship;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
+import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.v1.types.Relationship;
+
+import com.google.common.collect.Lists;
+
+import ingraph.bulkloader.csv.entityprocessor.NodeProcessor;
+import ingraph.bulkloader.csv.entityprocessor.RelationshipProcessor;
+import ingraph.bulkloader.csv.parser.CsvParser;
 
 public class MassCsvLoader {
 

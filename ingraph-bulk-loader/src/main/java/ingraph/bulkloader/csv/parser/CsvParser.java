@@ -4,7 +4,6 @@ import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
 import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_ID;
 import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
