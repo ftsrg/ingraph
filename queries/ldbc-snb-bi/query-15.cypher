@@ -1,13 +1,13 @@
 MATCH
   (country:Country {id: $country}),
-  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(somePerson:Person),
-  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(friendOfSomePersion:Person),
-  (somePerson)-[:KNOWS]-(friendOfSomePerson)
+  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(somePerson:Person),
+  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(friendOfSomePersion:Person),
+  (somePerson)-[:knows]-(friendOfSomePerson)
 WITH floor(count(friendOfSomePerson)/count(somePerson)) AS socialNormal
 MATCH
-  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person:Person),
-  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(friendOfPerson:Person),
-  (person)-[:KNOWS]-(friendOfPerson)
+  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person),
+  (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(friendOfPerson:Person),
+  (person)-[:knows]-(friendOfPerson)
 WITH socialNormal, person, count(friendOfPerson) AS count
 WHERE socialNormal = count
 RETURN person.id, count

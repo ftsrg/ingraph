@@ -1,6 +1,6 @@
 MATCH
-  (message:Message)-[:HAS_CREATOR]->(creator:Person),
-  (message)<-[:LIKES]-(fan:Person)
+  (message:Message)-[:hasCreator]->(creator:Person),
+  (message)<-[:likes]-(fan:Person)
 WHERE message.creationDate > $creationDateThreshold
 WITH message, creator, count(fan) AS likeCount
 WHERE likeCount > $likeThreshold
