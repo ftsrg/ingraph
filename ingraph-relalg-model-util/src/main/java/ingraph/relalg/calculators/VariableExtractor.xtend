@@ -4,10 +4,13 @@ import com.google.common.collect.Iterables
 import java.util.List
 import relalg.AttributeVariable
 import relalg.FunctionExpression
+import relalg.GroupingOperator
 import relalg.ProjectionOperator
 import relalg.RelalgFactory
 import relalg.SelectionOperator
+import relalg.SortOperator
 import relalg.UnaryOperator
+import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
 import relalg.function.Function
@@ -35,21 +38,21 @@ class VariableExtractor {
 		Iterables.concat(functions, attributes).toList
 	}
 
-//  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
-//    op.entries // TODO this does not belong here
-//  }
+  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
+    op.entries
+  }
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
 		getAttributes(op.condition)
 	}
 
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-//    op.entries.map[variable]
-//  }
-//
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
-//    #[op.sourceVariable]
-//  }
+  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
+    op.entries.map[expression].filter(VariableExpression).map[variable].toList
+  }
+
+  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
+    #[op.element]
+  }
 	
 	// rest of the unary operators - no extra requirements
 	def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
