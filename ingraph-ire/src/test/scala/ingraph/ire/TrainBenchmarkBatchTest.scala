@@ -30,34 +30,7 @@ class TrainBenchmarkBatchTest extends FlatSpec {
   ).foreach(
     t => s"${t.name}-size-${t.size}" should "work" in {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
-      val adapter = new IngraphAdapter(query)
-      val tf = new TransactionFactory(16)
-      tf.subscribe(adapter.engine.inputLookup)
-      val tran = tf.newBatchTransaction()
-      val nodeFilenames: Map[String, List[String]] = Map(
-        modelPath(t.size, "Region") -> List("Region"),
-        modelPath(t.size, "Route") -> List("Route"),
-        modelPath(t.size, "Segment") -> List("Segment", "TrackElement"),
-        modelPath(t.size, "Semaphore") -> List("Semaphore"),
-        modelPath(t.size, "Sensor") -> List("Sensor"),
-        modelPath(t.size, "Switch") -> List("Switch", "TrackElement"),
-        modelPath(t.size, "SwitchPosition") -> List("SwitchPosition")
-      )
-
-      val relationshipFilenames: Map[String, String] = Map(
-        modelPath(t.size, "connectsTo") -> "connectsTo",
-        modelPath(t.size, "entry") -> "entry",
-        modelPath(t.size, "exit") -> "exit",
-        modelPath(t.size, "follows") -> "follows",
-        modelPath(t.size, "monitoredBy") -> "monitoredBy",
-        modelPath(t.size, "requires") -> "requires",
-        modelPath(t.size, "target") -> "target"
-      )
-
-      adapter.readCsv(nodeFilenames, relationshipFilenames, tran)
-      tran.close()
-      val results = adapter.engine.getResults().size
-      assert(results == t.expectedResultSize)
+      TrainbenchmarkUtils.readModelAndGetResults(query, t.size).size == t.expectedResultSize
     }
   )
 }
