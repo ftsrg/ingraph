@@ -20,6 +20,7 @@ import hu.bme.mit.ire.nodes.unary.ProjectionNode
 import hu.bme.mit.ire.nodes.unary.SelectionNode
 import hu.bme.mit.ire.nodes.unary.SortAndTopNode
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
+import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
@@ -40,8 +41,8 @@ object EngineFactory {
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
-      val vertexConverters = new mutable.HashMap[String, mutable.Set[Tuple2[String, Vector[String]]]] with mutable.MultiMap[String, Tuple2[String, Vector[String]]]
-      val edgeConverters  = new mutable.HashMap[String, mutable.Set[GetEdgesOperator]] with mutable.MultiMap[String, GetEdgesOperator]
+      val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
+      val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
 
       remaining += ForwardConnection(plan, production)
 
@@ -119,13 +120,14 @@ object EngineFactory {
 
           case op: GetVerticesOperator =>
             val nick = op.getVertexVariable.getName
-            val label= op.getVertexVariable.getVertexLabelSet.getVertexLabels.get(0).getName // TODO fix this for multiple labels
-            vertexConverters.addBinding(label, (nick, op.getFullSchema.map(_.getName)))
+            val labels = op.getVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName)
+            vertexConverters.addBinding(labels, op)
             inputs += (nick -> expr.child)
           case op: GetEdgesOperator =>
             val nick = op.getEdgeVariable.getName
-            val label = op.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName // TODO fix this for multiple labels
-            edgeConverters.addBinding(label, op)
+            val labels = op.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.map(_.getName)
+            for (label <- labels)
+              edgeConverters.addBinding(label, op)
             inputs += (nick -> expr.child)
         }
       }

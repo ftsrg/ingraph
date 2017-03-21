@@ -1,6 +1,6 @@
 MATCH
-  (:TagClass {id: $tagClass1})<-[:HAS_TYPE]-(:Tag)<-[:HAS_TAG]-(post1:Post)<-[:CONTAINER_OF]-(forum:Forum)-[:CONTAINER_OF]->(post2:Post)-[:HAS_TAG]->(:Tag)-[:HAS_TYPE]->(:TagClass {id: $tagClass2}),
-  (forum)-[:HAS_MEMBER]->(person:Person)
+  (:TagClass {id: $tagClass1})<-[:hasType]-(:Tag)<-[:hasTag]-(post1:Post)<-[:containerOf]-(forum:Forum)-[:containerOf]->(post2:Post)-[:hasTag]->(:Tag)-[:hasType]->(:TagClass {id: $tagClass2}),
+  (forum)-[:hasMember]->(person:Person)
 WITH forum, count(post1) AS count1, count(post2) AS count2, count(person) AS members
 WHERE members > $threshold
 RETURN forum.id, count1, count2

@@ -1,6 +1,6 @@
-MATCH (:Country {name: $country})<-[:IS_LOCATED_IN]-(message:Message)
+MATCH (:Country {name: $country})<-[:isLocatedIn]-(message:Message)
 WITH message.creationDate AS year, message.creationDate AS month
-MATCH (message:Message)-[:HAS_TAG]->(tag:Tag)
+MATCH (message:Message)-[:hasTag]->(tag:Tag)
 WHERE month < message.creationDate
   AND message.creationDate < year // TODO check properly
 WITH year, month, tag, count(message) AS popularity
