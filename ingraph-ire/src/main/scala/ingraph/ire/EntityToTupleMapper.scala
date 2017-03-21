@@ -53,18 +53,15 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
   }
 
   def addVertex(vertex: IngraphVertex): Unit = {
-    vertexLookup.get(vertex.labels.head).foreach(
-     f => {
-       val labels = f._1
-       val operators = f._2
+    vertex.labels.find(vertexLookup.contains).foreach(
+      f => {
+        val (labels, operators) = vertexLookup(f)
         if (labels.subsetOf(vertex.labels)) {
           for (operator <- operators) {
             val tuple = elementToNode(vertex, operator.getFullSchema.map(_.getName))
             transaction.add(operator.getVertexVariable.getName, tuple)
           }
         }
-      }
-      )
-
+      })
   }
 }
