@@ -7,9 +7,9 @@ import scala.io.Source
 
 class SkipAndTopNodeIntegrationTest extends FlatSpec {
   "SkipAndTopNode" should "work" in {
-    val query = "MATCH (n) RETURN n ORDER BY n.id LIMIT 10"
-    //assert(results == 10)
-    println(results)
+    val query = "MATCH (n: Segment) RETURN n ORDER BY n LIMIT 10"
     val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val expected = ((1406 to 1416).toSet - 1411).map(n => Vector(n.toLong))
+    assert(results == expected)
   }
 }

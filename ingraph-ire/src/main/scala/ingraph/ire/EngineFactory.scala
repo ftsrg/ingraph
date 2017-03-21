@@ -58,15 +58,19 @@ object EngineFactory {
 
             case op: SortAndTopOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)
+              // This is the mighty EMF, so there are no default values, obviously
+              def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Int]
+              val skip = if (op.getSkip == null) 0 else getInt(op.getSkip)
+              val limit = if (op.getLimit == null) 0 else getInt(op.getLimit)
               newLocal(Props(new SortAndTopNode(
                   expr.child,
-                  op.getFullSchema().length,
-                  null,
-                  5, //ExpressionParser.parse(op.getSkip(), variableLookup),
-                  10, //ExpressionParser.parse(op.getLimit(), variableLookup),
-                  op.getEntries().map(_.getDirection() == null)
+                  op.getFullSchema.length,
+                  op.getEntries.map( e=> ExpressionParser.parseValue(e.getExpression, variableLookup)),
+                  skip,
+                  limit,
+                  op.getEntries.map(_.getDirection == null) // WHAT THE FUCK
               )))
-            
+
             case op: SelectionOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))

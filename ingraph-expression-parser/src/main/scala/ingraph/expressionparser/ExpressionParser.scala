@@ -59,7 +59,7 @@ object ExpressionParser {
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
     tuple(lookup(variable))
 
-  private def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
+  def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
