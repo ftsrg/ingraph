@@ -1,12 +1,14 @@
 package ingraph.bulkloader.csv.entityprocessor;
 
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
+
 import java.util.Map;
 
 import org.neo4j.driver.internal.InternalRelationship;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Relationship;
 
-import ingraph.bulkloader.csv.columnname.ColumnConstants;
 import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
 import ingraph.bulkloader.csv.data.IdSpaces;
 
@@ -21,12 +23,14 @@ public class RelationshipRowParser extends EntityRowParser<Relationship> {
 
 	@Override
 	public Relationship processRow(final Map<String, Object> row, final Map<String, ColumnDescriptor> columnDescriptors) {
-		final Long id = 0L; // TODO generate id for relationships
-		final Long start = (Long) row.get(ColumnConstants.INTERNAL_START_ID);
-		final Long end = (Long) row.get(ColumnConstants.INTERNAL_END_ID);
+		// ids
+		final Long id = 0L; // TODO generate id for relationship
+		final Long startId = getId(row, columnDescriptors, INTERNAL_START_ID);
+		final Long endId = getId(row, columnDescriptors, INTERNAL_END_ID);
+		// properties
 		final Map<String, Value> properties = PropertyExtractor.extractProperties(row);
 
-		return new InternalRelationship(id, start, end, type, properties);
+		return new InternalRelationship(id, startId, endId, type, properties);
 	}
 
 }
