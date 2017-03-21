@@ -1,4 +1,4 @@
-MATCH (:County)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(member:Person)<-[:hasMember]-(forum:Forum)
+MATCH (:Country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(member:Person)<-[:hasMember]-(forum:Forum)
 WITH forum, count(member) AS countMembers
 ORDER BY countMembers DESC
 LIMIT 100
