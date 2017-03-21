@@ -57,26 +57,26 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
   def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(m => m(t))
 //  def inverseKeyLookup(t: Tuple): Vector[Any] = maskInverse.map(t(_))
 
-  def getTopN(): Vector[Tuple] = {
+  def getTopN: Vector[Tuple] = {
     var total = 0
     //val iterator: Iterator[(Tuple, Int)] = data.iterator
     val iterator = data.entrySet.iterator
     val builder = new VectorBuilder[Tuple]
-    while (total < limit && iterator.hasNext) {
+    while (total < limit + skip && iterator.hasNext) {
 //      val (tuple, count) = iterator.next()
       val entry = iterator.next
       val tuple = entry.getKey
       val count = entry.getValue
-      for (i <- 0 until Math.min(count, limit - total))
+      for (i <- 0 until Math.min(count, limit + skip - total))
         builder += tuple
       total += count
     }
-    builder.result()
+    builder.result().drop(skip)
   }
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     // TODO maybe checking the changed elements against the lowest forwarded element would speed things up
-    val prevTop = getTopN()
+    val prevTop = getTopN
     for (tuple <- changeSet.positive) {
 //      data(tuple) += 1
       val count : Int = Some(data.get(tuple)).getOrElse(0)
@@ -95,7 +95,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
         data.remove(tuple)
       }
     }
-    val topN = getTopN()
+    val topN = getTopN
     if (topN != prevTop) {
       forward(ChangeSet(positive = topN, negative = prevTop))
     }
