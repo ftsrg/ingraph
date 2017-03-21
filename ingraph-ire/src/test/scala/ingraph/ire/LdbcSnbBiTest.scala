@@ -31,7 +31,7 @@ class LdbcSnbBiTest extends FlatSpec {
     TestCase(23, 100, 0),
     TestCase(24, 3, 0)) //
     .foreach(
-      t => s"query-${t.number}-size-${t.size}" should "work" in {
+      t => s"query-${t.number}-size-${t.size}" should "work" ignore {
         val query = Source.fromFile(queryPath(t.number)).getLines().mkString(" ")
         val adapter = new IngraphAdapter(query)
         val tf = new TransactionFactory(16)
