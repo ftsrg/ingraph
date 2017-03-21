@@ -5,7 +5,6 @@ import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_LABEL;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.neo4j.driver.internal.InternalNode;
@@ -29,25 +28,16 @@ public class NodeRowParser extends EntityRowParser<Node> {
 
 	@Override
 	public Node processRow(final Map<String, Object> row, final Map< String, ColumnDescriptor> columnDescriptors) {
-		final Optional<String> idSpaceName = columnDescriptors.get(INTERNAL_ID).getIdSpaceName();
-
-
-		final Object internalId = row.get(INTERNAL_ID);
-		final long id;
-		if (idSpaceName.isPresent()) {
-			id = idSpaces.add(idSpaceName.get(), internalId);
-		} else {
-			id = (long) internalId;
-		}
-
-
+		// id
+		final long id = getId(row, columnDescriptors, INTERNAL_ID);
+		// labels
 		final Set<String> additionalLabels = (Set<String>) row.getOrDefault(INTERNAL_LABEL, Collections.emptySet());
-		final Map<String, Value> properties = PropertyExtractor.extractProperties(row);
-
 		final SetView<String> allLabels = Sets.union(labels, additionalLabels);
-
+		// properties
+		final Map<String, Value> properties = PropertyExtractor.extractProperties(row);
 
 		return new InternalNode(id, allLabels, properties);
 	}
+
 
 }
