@@ -7,6 +7,7 @@ import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_I
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,23 +31,22 @@ public class CsvParser {
 			// process header
 			final String[] header = reader.getHeader(true);
 
-			final List<ColumnDescriptor> columnDescriptors = new ArrayList<>(header.length);
+			final LinkedHashMap<String, ColumnDescriptor> columnDescriptors = new LinkedHashMap<>();
 			for (String column : header) {
 				final ColumnNameParser cnp = new ColumnNameParser(column);
-				final ColumnDescriptor cd = new ColumnDescriptor(cnp.getName(), cnp.getType(), cnp.getIdSpace());
-				columnDescriptors.add(cd);
+				columnDescriptors.put(cnp.getName(), new ColumnDescriptor(cnp.getType(), cnp.getIdSpaceName()));
+
 			}
 
-			if (columnDescriptors.stream() //
-					.map(x -> x.getName()) //
+			if (columnDescriptors.keySet().stream() //
 					.filter(x -> x.equals(INTERNAL_ID) || x.equals(INTERNAL_START_ID) || x.equals(INTERNAL_END_ID)) //
 					.collect(Collectors.toList()).isEmpty()) {
 				throw new IllegalStateException(
 						"CSV header does not have an 'ID' column (nodes) or 'START_ID' and 'END_ID' columns (relationships).");
 			}
 
-			final String[] columnNames = columnDescriptors.stream().map(ColumnDescriptor::getName).toArray(String[]::new);
-			final CellProcessor[] processors = columnDescriptors.stream() //
+			final String[] columnNames = columnDescriptors.keySet().toArray(new String[]{});
+			final CellProcessor[] processors = columnDescriptors.values().stream()
 					.map(ColumnDescriptor::getColumnType) //
 					.map(ColumnType::getCellProcessor) //
 					.toArray(CellProcessor[]::new);
@@ -56,7 +56,7 @@ public class CsvParser {
 
 			Map<String, Object> row;
 			while ((row = reader.read(columnNames, processors)) != null) {
-				final TEntity entity = processor.processRow(row);
+				final TEntity entity = processor.processRow(row, columnDescriptors);
 				entities.add(entity);
 			}
 

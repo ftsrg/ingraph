@@ -43,7 +43,7 @@ public class ColumnNameParserTest {
 	public void test3() {
 		ColumnNameParser cnp = new ColumnNameParser(":ID(Person)");
 		assertEquals(ColumnType.ID, cnp.getType());
-		assertEquals("Person", cnp.getIdSpace().get());
+		assertEquals("Person", cnp.getIdSpaceName().get());
 	}
 
 	@Test

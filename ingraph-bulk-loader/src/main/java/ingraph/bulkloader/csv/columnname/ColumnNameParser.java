@@ -8,7 +8,7 @@ public class ColumnNameParser {
 
 	private final String name;
 	private final ColumnType type;
-	private final Optional<String> idSpace;
+	private final Optional<String> idSpaceName;
 
 	public ColumnNameParser(String columnName) {
 		final String[] splitted = columnName.split(":");
@@ -21,14 +21,14 @@ public class ColumnNameParser {
 
 			if (matcher.matches()) {
 				type = ColumnType.valueOf(matcher.group(1).toUpperCase());
-				idSpace = Optional.of(matcher.group(2));
+				idSpaceName = Optional.of(matcher.group(2));
 			} else {
 				type = ColumnType.valueOf(typeInfo);
-				idSpace = Optional.empty();
+				idSpaceName = Optional.empty();
 			}
 		} else {
 			type = ColumnType.STRING;
-			idSpace = Optional.empty();
+			idSpaceName = Optional.empty();
 		}
 
 		if (type == ColumnType.LABEL) {
@@ -52,8 +52,8 @@ public class ColumnNameParser {
 		return type;
 	}
 
-	public Optional<String> getIdSpace() {
-		return idSpace;
+	public Optional<String> getIdSpaceName() {
+		return idSpaceName;
 	}
 
 }
