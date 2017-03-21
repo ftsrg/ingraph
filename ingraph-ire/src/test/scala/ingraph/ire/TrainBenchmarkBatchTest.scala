@@ -7,7 +7,7 @@ import scala.io.Source
 
 class TrainBenchmarkBatchTest extends FlatSpec {
 
-  def modelPath(size: Int, lofasz: String) = s"../graphs/trainbenchmark/railway-repair-$size-$lofasz.csv"
+  def modelPath(size: Int, entityName: String) = s"../graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
 
   def queryPath(query: String): String = s"../queries/trainbenchmark/$query.cypher"
 
