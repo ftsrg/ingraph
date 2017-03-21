@@ -1,5 +1,6 @@
-package ingraph.bulkloader.csv;
+package neo4j.driver.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import org.neo4j.driver.internal.value.PathValue;
 import org.neo4j.driver.internal.value.RelationshipValue;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Value;
+import org.neo4j.driver.v1.types.Entity;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
 import org.neo4j.driver.v1.types.Relationship;
@@ -17,6 +19,21 @@ import org.neo4j.driver.v1.types.Relationship;
 import com.google.common.base.Joiner;
 
 public class PrettyPrinter {
+
+	public static String toString(List<? extends Entity> entities) {
+		final List<String> result = new ArrayList<>(entities.size());
+
+		for (final Entity entity : entities) {
+			if (entity instanceof Node) {
+				result.add(toString((Node) entity));
+			} else if (entity instanceof Relationship) {
+				result.add(toString((Relationship) entity));
+			}
+		}
+
+		final Joiner joiner = Joiner.on(",");
+		return String.format("[%s]", joiner.join(result));
+	}
 
 	public static String toString(Record record) {
 		Joiner entityJoiner = Joiner.on(", ");

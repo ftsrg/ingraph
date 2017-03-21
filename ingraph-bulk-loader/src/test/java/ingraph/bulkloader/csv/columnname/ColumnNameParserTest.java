@@ -4,15 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ingraph.bulkloader.csv.columnname.ColumnNameParser;
-import ingraph.bulkloader.csv.columnname.ColumnType;
-
 public class ColumnNameParserTest {
 
 	@Test
 	public void testId() {
 		ColumnNameParser cnp = new ColumnNameParser(":ID");
-		assertEquals("", cnp.getName());
+		assertEquals("_internal_id", cnp.getName());
 		assertEquals(ColumnType.ID, cnp.getType());
 	}
 
@@ -40,6 +37,19 @@ public class ColumnNameParserTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void test2() {
 		new ColumnNameParser("hello:INT2");
+	}
+
+	@Test
+	public void test3() {
+		ColumnNameParser cnp = new ColumnNameParser(":ID(Person)");
+		assertEquals(ColumnType.ID, cnp.getType());
+		assertEquals("Person", cnp.getIdSpace().get());
+	}
+
+	@Test
+	public void testLabels() {
+		ColumnNameParser cnp = new ColumnNameParser(":LABEL");
+		assertEquals(ColumnType.LABEL, cnp.getType());
 	}
 
 }

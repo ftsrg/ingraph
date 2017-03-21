@@ -21,8 +21,8 @@ import ingraph.bulkloader.csv.entityprocessor.EntityProcessor;
 
 public class CsvParser {
 
-	public static <TEntity extends Entity> List<TEntity> parse(String csv, EntityProcessor<TEntity> processor) throws IOException {
-		try (final ICsvMapReader reader = new CsvMapReader(new FileReader(csv), CsvPreference.STANDARD_PREFERENCE)) {
+	public static <TEntity extends Entity> List<TEntity> parse(String csv, CsvPreference csvPreference, EntityProcessor<TEntity> processor) throws IOException {
+		try (final ICsvMapReader reader = new CsvMapReader(new FileReader(csv), csvPreference)) {
 
 			// process header
 			final String[] header = reader.getHeader(true);

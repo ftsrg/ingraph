@@ -14,7 +14,7 @@ public class PropertyExtractor {
 	public static Map<String, Value> extractProperties(final Map<String, Object> row) {
 		final Map<String, Value> properties = new HashMap<>();
 		for (Entry<String, Object> entry : row.entrySet()) {
-			if (ColumnConstants.isId(entry.getKey())) {
+			if (ColumnConstants.isInternal(entry.getKey())) {
 				continue;
 			} else {
 				properties.put(entry.getKey(), Values.value(entry.getValue()));

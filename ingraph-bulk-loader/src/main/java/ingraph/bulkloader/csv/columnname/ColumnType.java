@@ -9,6 +9,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 
 public enum ColumnType {
 
+	LABEL(new ParseLabels()),
 	ID(new ParseLong()),
 	START_ID(new ParseLong()),
 	END_ID(new ParseLong()),

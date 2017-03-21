@@ -1,13 +1,20 @@
 package ingraph.bulkloader.csv;
 
-import com.google.common.collect.ImmutableMap;
-import ingraph.bulkloader.csv.loader.MassCsvLoader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Test;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
+import org.supercsv.prefs.CsvPreference;
 
-import java.io.IOException;
-import java.util.*;
+import com.google.common.collect.ImmutableMap;
+
+import ingraph.bulkloader.csv.loader.MassCsvLoader;
+import neo4j.driver.util.PrettyPrinter;
 
 public class TrainBenchmarkTest {
 
@@ -36,7 +43,7 @@ public class TrainBenchmarkTest {
 
 	@Test
 	public void testLoad() throws IOException {
-		final MassCsvLoader mcl =  new MassCsvLoader(nodeFilenames, relationshipFilenames);
+		final MassCsvLoader mcl =  new MassCsvLoader(nodeFilenames, relationshipFilenames, CsvPreference.STANDARD_PREFERENCE);
 		List<Node> nodes = mcl.getNodes();
 		List<Relationship> relationships = mcl.getRelationships();
 
