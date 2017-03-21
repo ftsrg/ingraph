@@ -61,11 +61,11 @@ public class SnbTest {
 		List<Node> nodes = mcl.getNodes();
 		List<Relationship> relationships = mcl.getRelationships();
 
-		for (int i = 0; i < Math.min(10, nodes.size()); i++) {
+		for (int i = 0; i < Math.min(100, nodes.size()); i++) {
 			System.out.println(PrettyPrinter.toString(nodes.get(i)));
 		}
 
-		for (int i = 0; i < Math.min(10, relationships.size()); i++) {
+		for (int i = 0; i < Math.min(100, relationships.size()); i++) {
 			System.out.println(PrettyPrinter.toString(relationships.get(i)));
 		}
 	}

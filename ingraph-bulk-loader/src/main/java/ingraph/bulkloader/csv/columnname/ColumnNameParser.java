@@ -9,7 +9,6 @@ public class ColumnNameParser {
 	private final String name;
 	private final ColumnType type;
 	private final Optional<String> idSpace;
-	private boolean isLabel = false;
 
 	public ColumnNameParser(String columnName) {
 		final String[] splitted = columnName.split(":");
@@ -17,11 +16,11 @@ public class ColumnNameParser {
 		if (splitted.length > 1) {
 			final String typeInfo = splitted[1];
 
-			Pattern idSpaceRegex = Pattern.compile("(ID|START_ID|END_IT)\\((.*)\\)", Pattern.CASE_INSENSITIVE);
+			Pattern idSpaceRegex = Pattern.compile("(ID|START_ID|END_ID)\\((.*)\\)", Pattern.CASE_INSENSITIVE);
 			Matcher matcher = idSpaceRegex.matcher(typeInfo);
 
 			if (matcher.matches()) {
-				type = ColumnType.ID;
+				type = ColumnType.valueOf(matcher.group(1).toUpperCase());
 				idSpace = Optional.of(matcher.group(2));
 			} else {
 				type = ColumnType.valueOf(typeInfo);

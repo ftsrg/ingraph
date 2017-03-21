@@ -8,11 +8,11 @@ import org.neo4j.driver.v1.types.Relationship;
 
 import ingraph.bulkloader.csv.columnname.ColumnConstants;
 
-public class RelationshipProcessor extends EntityProcessor<Relationship> {
+public class RelationshipRowParser extends EntityRowParser<Relationship> {
 
 	private final String type;
 
-	public RelationshipProcessor(String type) {
+	public RelationshipRowParser(String type) {
 		super();
 		this.type = type;
 	}

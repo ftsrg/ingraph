@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.neo4j.driver.v1.types.Entity;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -16,33 +17,39 @@ import org.supercsv.io.CsvMapReader;
 import org.supercsv.io.ICsvMapReader;
 import org.supercsv.prefs.CsvPreference;
 
+import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
 import ingraph.bulkloader.csv.columnname.ColumnNameParser;
-import ingraph.bulkloader.csv.entityprocessor.EntityProcessor;
+import ingraph.bulkloader.csv.columnname.ColumnType;
+import ingraph.bulkloader.csv.entityprocessor.EntityRowParser;
 
 public class CsvParser {
 
-	public static <TEntity extends Entity> List<TEntity> parse(String csv, CsvPreference csvPreference, EntityProcessor<TEntity> processor) throws IOException {
+	public static <TEntity extends Entity> List<TEntity> parse(String csv, CsvPreference csvPreference,
+			EntityRowParser<TEntity> processor) throws IOException {
 		try (final ICsvMapReader reader = new CsvMapReader(new FileReader(csv), csvPreference)) {
-
 			// process header
 			final String[] header = reader.getHeader(true);
-			final List<String> columnNameList = new ArrayList<>(header.length);
-			final List<CellProcessor> processorsList = new ArrayList<>(header.length);
+
+			final List<ColumnDescriptor> columnDescriptors = new ArrayList<>(header.length);
 			for (String column : header) {
 				final ColumnNameParser cnp = new ColumnNameParser(column);
-				columnNameList.add(cnp.getName());
-				processorsList.add(cnp.getType().getCellProcessor());
+				final ColumnDescriptor cd = new ColumnDescriptor(cnp.getName(), cnp.getType(), cnp.getIdSpace());
+				columnDescriptors.add(cd);
 			}
 
-			// throw exception if there is no "ID" field in the header
-			if (!(columnNameList.contains(INTERNAL_ID) //
-					|| (columnNameList.contains(INTERNAL_START_ID) && columnNameList.contains(INTERNAL_END_ID)) //
-					)) {
-				throw new IllegalStateException("CSV file does not have an 'ID' column (nodes) or 'START_ID' and 'END_ID' columns (relationships).");
+			if (columnDescriptors.stream() //
+					.map(x -> x.getName()) //
+					.filter(x -> x.equals(INTERNAL_ID) || x.equals(INTERNAL_START_ID) || x.equals(INTERNAL_END_ID)) //
+					.collect(Collectors.toList()).isEmpty()) {
+				throw new IllegalStateException(
+						"CSV header does not have an 'ID' column (nodes) or 'START_ID' and 'END_ID' columns (relationships).");
 			}
 
-			final String[] columnNames = columnNameList.toArray(new String[] {});
-			final CellProcessor[] processors = processorsList.toArray(new CellProcessor[] {});
+			final String[] columnNames = columnDescriptors.stream().map(ColumnDescriptor::getName).toArray(String[]::new);
+			final CellProcessor[] processors = columnDescriptors.stream() //
+					.map(ColumnDescriptor::getColumnType) //
+					.map(ColumnType::getCellProcessor) //
+					.toArray(CellProcessor[]::new);
 
 			// process rows
 			final List<TEntity> entities = new ArrayList<>();

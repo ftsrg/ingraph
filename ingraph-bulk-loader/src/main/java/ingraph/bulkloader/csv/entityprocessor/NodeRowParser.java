@@ -1,5 +1,6 @@
 package ingraph.bulkloader.csv.entityprocessor;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,11 +13,11 @@ import com.google.common.collect.Sets.SetView;
 
 import ingraph.bulkloader.csv.columnname.ColumnConstants;
 
-public class NodeProcessor extends EntityProcessor<Node> {
+public class NodeRowParser extends EntityRowParser<Node> {
 
 	private final Set<String> labels;
 
-	public NodeProcessor(Set<String> labels) {
+	public NodeRowParser(Set<String> labels) {
 		super();
 		this.labels = labels;
 	}
@@ -24,7 +25,7 @@ public class NodeProcessor extends EntityProcessor<Node> {
 	@Override
 	public Node processRow(final Map<String, Object> row) {
 		final Long id = (Long) row.get(ColumnConstants.INTERNAL_ID);
-		final Set<String> additionalLabels = (Set<String>) row.get(ColumnConstants.INTERNAL_LABEL);
+		final Set<String> additionalLabels = (Set<String>) row.getOrDefault(ColumnConstants.INTERNAL_LABEL, Collections.emptySet());
 		final Map<String, Value> properties = PropertyExtractor.extractProperties(row);
 
 		final SetView<String> allLabels = Sets.union(labels, additionalLabels);
