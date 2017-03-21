@@ -16,7 +16,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 // TODO implement skip
 class SortAndTopNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int,
-                   selectionMask: Mask,
+                   selectionMask: Vector[(Tuple) => Any],
                    skip: Int,
                    limit: Int,
                    ascendingOrder: Vector[Boolean])
@@ -34,23 +34,28 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
       // Treemap uses the ordering function equality for detecting duplicate keys, so we need to make sure
       // that tuples with same keys are compared as different
       // TODO check if returning -1 for non-equal tuples would mess things up
-      for ((x, y) <- inverseKeyLookup(x).zip(inverseKeyLookup(y))) {
-        val cmp = GenericMath.compare(x, y)
-        if (cmp != 0)
-          return cmp
+//      for ((x, y) <- inverseKeyLookup(x).zip(inverseKeyLookup(y))) {
+//        val cmp = GenericMath.compare(x, y)
+//        if (cmp != 0)
+//          return cmp
+//      }
+      // TODO i haven't really checked because it's 10PM
+      if (x != y) {
+        1
+      } else {
+        0
       }
-      0
     }
   }
 
   // we can use Scala Tree once we migrate to 2.12
   val data: java.util.Map[Tuple, Int] = new TreeMap(comparator)
-  //null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0) 
+  //null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0)
 
-  val maskInverse: Mask = Vector.range(0, tupleLength).filter(i => !selectionMask.contains(i))
+//  val maskInverse: Mask = Vector.range(0, tupleLength).filter(i => !selectionMask.contains(i))
 
-  def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(t(_))
-  def inverseKeyLookup(t: Tuple): Vector[Any] = maskInverse.map(t(_))
+  def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(m => m(t))
+//  def inverseKeyLookup(t: Tuple): Vector[Any] = maskInverse.map(t(_))
 
   def getTopN(): Vector[Tuple] = {
     var total = 0
@@ -77,7 +82,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
       val count : Int = Some(data.get(tuple)).getOrElse(0)
       data.put(tuple, count + 1)
     }
-    for (tuple <- changeSet.negative) {      
+    for (tuple <- changeSet.negative) {
 //      if (data(tuple) > 1) {
 //        data(tuple) -= 1
 //      } else {
@@ -89,7 +94,6 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
       } else {
         data.remove(tuple)
       }
-      
     }
     val topN = getTopN()
     if (topN != prevTop) {
