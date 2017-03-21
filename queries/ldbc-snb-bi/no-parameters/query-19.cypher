@@ -4,7 +4,7 @@ MATCH
   (forum1)-[:hasMember]->(person:Person)<-[:hasMember]-(forum2),
   (forum1)-[:hasMember]->(stranger:Person)<-[:hasMember]-(forum2)
 WHERE NOT (person)-[:knows]-(stranger)
-  AND true person.birthday > 0 //
+  AND person.birthday > "1950-01-01T00:00:00.000+0000"
 WITH person, stranger
 MATCH (person)<-[:hasCreator]-(:Message)-[:replyOf]-(comment1:Comment)-[:hasCreator]->(stranger),
   (stranger)<-[:hasCreator]-(:Message)<-[:replyOf]-(comment2:Comment)-[:hasCreator]->(person)
