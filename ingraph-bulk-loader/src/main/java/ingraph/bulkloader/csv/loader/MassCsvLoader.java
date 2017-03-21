@@ -3,7 +3,6 @@ package ingraph.bulkloader.csv.loader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +13,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.common.collect.Sets;
 
+import ingraph.bulkloader.csv.data.IdSpaces;
 import ingraph.bulkloader.csv.entityprocessor.NodeRowParser;
 import ingraph.bulkloader.csv.entityprocessor.RelationshipRowParser;
 import ingraph.bulkloader.csv.parser.CsvParser;
@@ -22,7 +22,7 @@ public class MassCsvLoader {
 
 	private final List<Node> nodes = new ArrayList<>();
 	private final List<Relationship> relationships = new ArrayList<>();
-	private final Map<String, Map<Object, Long>> idSpaces = new HashMap<>();
+	private final IdSpaces idSpaces = new IdSpaces();
 
 	public MassCsvLoader(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames)
 			throws IOException {
@@ -41,7 +41,7 @@ public class MassCsvLoader {
 			final String filename = nodeFileEntry.getKey();
 			final Set<String> labels = Sets.newHashSet(nodeFileEntry.getValue());
 
-			final NodeRowParser nodeProcessor = new NodeRowParser(labels);
+			final NodeRowParser nodeProcessor = new NodeRowParser(idSpaces, labels);
 			nodes.addAll(CsvParser.parse(filename, csvPreference, nodeProcessor));
 		}
 	}
@@ -52,7 +52,7 @@ public class MassCsvLoader {
 			final String filename = relationshipFileEntry.getKey();
 			final String type = relationshipFileEntry.getValue();
 
-			final RelationshipRowParser relationshipProcessor = new RelationshipRowParser(type);
+			final RelationshipRowParser relationshipProcessor = new RelationshipRowParser(idSpaces, type);
 			relationships.addAll(CsvParser.parse(filename, csvPreference, relationshipProcessor));
 		}
 	}
@@ -64,4 +64,5 @@ public class MassCsvLoader {
 	public List<Relationship> getRelationships() {
 		return relationships;
 	}
+
 }

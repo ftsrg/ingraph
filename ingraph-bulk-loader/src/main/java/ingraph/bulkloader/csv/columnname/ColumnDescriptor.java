@@ -4,26 +4,20 @@ import java.util.Optional;
 
 public class ColumnDescriptor {
 
-	private final String name;
 	private final ColumnType columnType;
-	private final Optional<String> idSpace;
+	private final Optional<String> idSpaceName;
 
-	public ColumnDescriptor(String name, ColumnType columnType, Optional<String> idSpace) {
-		this.name = name;
+	public ColumnDescriptor(ColumnType columnType, Optional<String> idSpaceName) {
 		this.columnType = columnType;
-		this.idSpace = idSpace;
-	}
-
-	public String getName() {
-		return name;
+		this.idSpaceName = idSpaceName;
 	}
 
 	public ColumnType getColumnType() {
 		return columnType;
 	}
 
-	public Optional<String> getIdSpace() {
-		return idSpace;
+	public Optional<String> getIdSpaceName() {
+		return idSpaceName;
 	}
 
 }
