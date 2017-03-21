@@ -57,18 +57,23 @@ public class PrettyPrinter {
 		String propertiesString = toString(node.asMap());
 
 		return String.format( //
-				"(%s%s%s)", //
+				"(%s%s%s%s)", //
+				node.id(), //
 				labelsString, //
 				labelsString.isEmpty() || propertiesString.isEmpty() ? "" : " ", //
-				propertiesString);
+				propertiesString //
+				);
 	}
 
 	public static String toString(Relationship relationship) {
 		String propertiesString = toString(relationship.asMap());
 
-		return String.format("[:%s%s%s]", relationship.type(), //
+		return String.format("(%s)-[:%s%s%s]-(%s)", //
+				relationship.startNodeId(), relationship.type(), //
 				propertiesString.isEmpty() ? "" : " ", //
-				propertiesString);
+				propertiesString, //
+				relationship.endNodeId() //
+		);
 	}
 
 	public static String toString(Path path) {
