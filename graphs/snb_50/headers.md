@@ -1,10 +1,10 @@
-comment :ID(Comment)|creationDate:STRING|locationIP:STRING|browserUsed:STRING|content:STRING|length:INT
-forum :ID(Forum)|title:STRING|creationDate:STRING
-person :ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING
-place :ID(Place)|name:STRING|url:STRING|:LABEL
-post :ID(Post)|imageFile:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT
-tagclass :ID(TagClass)|name:STRING|url:STRING
-tag :ID(Tag)|name:STRING|url:STRING
+comment :ID(Comment)|id:LONG|creationDate:STRING|locationIP:STRING|browserUsed:STRING|content:STRING|length:INT
+forum :ID(Forum)|id:LONG|title:STRING|creationDate:STRING
+person :ID(Person)|id:LONG|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING
+place :ID(Place)|id:LONG|name:STRING|url:STRING|:LABEL
+post :ID(Post)|id:LONG|imageFile:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT
+tagclass :ID(TagClass)|id:LONG|name:STRING|url:STRING
+tag :ID(Tag)|id:LONG|name:STRING|url:STRING
 comment_hasCreator_person :START_ID(Comment)|:END_ID(Person)
 comment_isLocatedIn_place :START_ID(Comment)|:END_ID(Place)
 comment_replyOf_comment :START_ID(Comment)|:END_ID(Comment)
