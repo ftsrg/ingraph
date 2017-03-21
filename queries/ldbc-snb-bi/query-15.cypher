@@ -1,5 +1,5 @@
 MATCH
-  (country:Country {id: $country}),
+  (country:Country),
   (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(somePerson:Person),
   (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(friendOfSomePersion:Person),
   (somePerson)-[:knows]-(friendOfSomePerson)

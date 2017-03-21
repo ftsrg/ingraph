@@ -1,4 +1,4 @@
-MATCH (:Tag {id: $tag})<-[:hasTag]-(message:Message)-[:hasCreator]->(person: Person),
+MATCH (:Tag)<-[:hasTag]-(message:Message)-[:hasCreator]->(person: Person),
   (message)<-[:likes]-(fan:Person),
   (message)<-[:replyOf*]-(comment:Comment)
 WITH person, count(message) AS postCount, count(comment) AS replyCount, count(fan) AS likeCount
