@@ -12,8 +12,8 @@ RETURN
   latestLike.likeTime AS likeTime,
   NOT((liker)-[:knows]-(person)) AS isNew,
   latestLike.msg.id AS messageId,
-  latestLike.msg.content AS messageContent,
-  latestLike.likeTime - latestLike.msg.creationDate AS latencyAsMilli
+  latestLike.msg.content AS messageContent
+  //latestLike.likeTime - latestLike.msg.creationDate AS latencyAsMilli
 ORDER BY
   likeTime DESC,
   personId ASC
