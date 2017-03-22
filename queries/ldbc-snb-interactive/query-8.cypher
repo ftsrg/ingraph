@@ -1,5 +1,5 @@
 // Q8. Most recent replies. This query retrieves the 20 most recent reply comments to all the posts and comments of Person, ordered descending by creation date.
-MATCH (start:Person)<-[:HAS_CREATOR]-()<-[:REPLY_OF]-(comment:Comment)-[:HAS_CREATOR]->(person:Person)
+MATCH (start:Person)<-[:hasCreator]-()<-[:replyOf]-(comment:Comment)-[:hasCreator]->(person:Person)
 RETURN
   person.id AS personId,
   person.firstName AS personFirstName,

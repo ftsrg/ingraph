@@ -1,5 +1,5 @@
 // Q9. Latest Posts. Find the most recent 20 posts and comments from all friends, or friends-of-friends of Person, but created before a Date. Return posts, their creators and creation dates, sort descending by creation date.
-MATCH (:Person {id: $person)-[:KNOWS*1..2]-(friend:Person)<-[:HAS_CREATOR]-(message)
+MATCH (:Person {id: $person)-[:knows*1..2]-(friend:Person)<-[:hasCreator]-(message)
 WHERE message.creationDate < $creationDate
 RETURN DISTINCT
   message.id AS messageId,
