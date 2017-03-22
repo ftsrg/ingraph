@@ -4,6 +4,7 @@ import hu.bme.mit.ire.TransactionFactory
 import org.scalatest.FlatSpec
 
 import scala.io.Source
+import org.supercsv.prefs.CsvPreference
 
 class LdbcSnbBiTest extends FlatSpec {
 
@@ -48,28 +49,30 @@ class LdbcSnbBiTest extends FlatSpec {
           modelPath(t.size, "tag") -> List("Tag"))
 
         val relationshipFilenames: Map[String, String] = Map(
-          modelPath(t.size, "hasCreator") -> "comment_hasCreator_person",
-          modelPath(t.size, "isLocatedIn") -> "comment_isLocatedIn_place",
-          modelPath(t.size, "replyOf") -> "comment_replyOf_comment",
-          modelPath(t.size, "replyOf") -> "comment_replyOf_post",
-          modelPath(t.size, "containerOf") -> "forum_containerOf_post",
-          modelPath(t.size, "hasMember") -> "forum_hasMember_person",
-          modelPath(t.size, "hasModerator") -> "forum_hasModerator_person",
-          modelPath(t.size, "hasTag") -> "forum_hasTag_tag",
-          modelPath(t.size, "hasInterest") -> "person_hasInterest_tag",
-          modelPath(t.size, "isLocatedIn") -> "person_isLocatedIn_place",
-          modelPath(t.size, "knows") -> "person_knows_person",
-          modelPath(t.size, "likes") -> "person_likes_comment",
-          modelPath(t.size, "likes") -> "person_likes_post",
-          modelPath(t.size, "isPartOf") -> "place_isPartOf_place",
-          modelPath(t.size, "hasCreator") -> "post_hasCreator_person",
-          modelPath(t.size, "hasTag") -> "comment_hasTag_tag",
-          modelPath(t.size, "hasTag") -> "post_hasTag_tag",
-          modelPath(t.size, "isLocatedIn") -> "post_isLocatedIn_place",
-          modelPath(t.size, "isSubclassOf") -> "tagclass_isSubclassOf_tagclass",
-          modelPath(t.size, "hasType") -> "tag_hasType_tagclass")
+          modelPath(t.size, "comment_hasCreator_person") -> "hasCreator",
+          modelPath(t.size, "comment_isLocatedIn_place") -> "isLocatedIn",
+          modelPath(t.size, "comment_replyOf_comment") -> "replyOf",
+          modelPath(t.size, "comment_replyOf_post") -> "replyOf",
+          modelPath(t.size, "forum_containerOf_post") -> "containerOf",
+          modelPath(t.size, "forum_hasMember_person") -> "hasMember",
+          modelPath(t.size, "forum_hasModerator_person") -> "hasModerator",
+          modelPath(t.size, "forum_hasTag_tag") -> "hasTag",
+          modelPath(t.size, "person_hasInterest_tag") -> "hasInterest",
+          modelPath(t.size, "person_isLocatedIn_place") -> "isLocatedIn",
+          modelPath(t.size, "person_knows_person") -> "knows",
+          modelPath(t.size, "person_likes_comment") -> "likes",
+          modelPath(t.size, "person_likes_post") -> "likes",
+          modelPath(t.size, "place_isPartOf_place") -> "isPartOf",
+          modelPath(t.size, "post_hasCreator_person") -> "hasCreator",
+          modelPath(t.size, "comment_hasTag_tag") -> "hasTag",
+          modelPath(t.size, "post_hasTag_tag") -> "hasTag",
+          modelPath(t.size, "post_isLocatedIn_place") -> "isLocatedIn",
+          modelPath(t.size, "tagclass_isSubclassOf_tagclass") -> "isSubclassOf",
+          modelPath(t.size, "tag_hasType_tagclass") -> "hasType"
+        )
 
-        adapter.readCsv(nodeFilenames, relationshipFilenames, tran)
+        val csvPreference = new CsvPreference.Builder('"', '|', "\n").build();
+        adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
         tran.close()
         val results = adapter.engine.getResults().size
         assert(results == t.expectedResultSize)

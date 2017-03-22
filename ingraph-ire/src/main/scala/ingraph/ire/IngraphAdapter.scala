@@ -4,6 +4,7 @@ import hu.bme.mit.ire.Transaction
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg2rete.Relalg2ReteTransformationAndInferencer
+import org.supercsv.prefs.CsvPreference
 
 class IngraphAdapter(querySpecification: String) {
   private val plan = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(querySpecification))
@@ -18,13 +19,14 @@ class IngraphAdapter(querySpecification: String) {
 
   def readCsv(nodeFilenames: Map[String, List[String]],
               relationshipFilenames: Map[String, String],
-              transaction: Transaction) {
+              transaction: Transaction,
+              csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
     import scala.collection.JavaConverters._
     // sorry :-)
     tupleMapper.transaction = transaction
     val javaNodeFilenames = nodeFilenames.map(kv => kv._1 -> java.util.Arrays.asList(kv._2: _*))
       .asJava.asInstanceOf[java.util.Map[String, java.util.Collection[String]]]
-    val loader = new MassCsvLoader(javaNodeFilenames, relationshipFilenames.asJava)
+    val loader = new MassCsvLoader(javaNodeFilenames, relationshipFilenames.asJava, csvPreference)
     for (node <- loader.getNodes.asScala) {
       indexer.addVertex(node)
     }
