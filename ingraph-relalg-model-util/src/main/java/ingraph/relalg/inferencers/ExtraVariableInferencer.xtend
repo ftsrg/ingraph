@@ -1,7 +1,6 @@
 package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
-import ingraph.relalg.calculators.ListUnionCalculator
 import ingraph.relalg.calculators.VariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -15,6 +14,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import ingraph.relalg.calculators.UnionCalculator
 
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
@@ -22,7 +22,7 @@ import relalg.Variable
 class ExtraVariableInferencer {
 
 	extension VariableExtractor variableExtractor = new VariableExtractor
-	extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
+	extension UnionCalculator listUnionCalculator = new UnionCalculator
 
 	def inferExtraVariables(RelalgContainer container) {
 		if (!container.incrementalPlan) {
@@ -48,8 +48,16 @@ class ExtraVariableInferencer {
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
 		op.extraAttributes.addAll(extraVariables)
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
+		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
 		
-		val inputExtraVariables = union(extraVariables, newExtraVariables)
+		println(op)
+		println("1. extr " + extraVariables)
+		println("2. new  " + newExtraVariables)
+		println("3. prov " + providedExtraVariables)
+		
+		val inputExtraVariables = union(extraVariables, newExtraVariables).minus(providedExtraVariables)
+		println("= " + inputExtraVariables)
+		
 		op.input.fillExtraVariables(inputExtraVariables)
 	}
 

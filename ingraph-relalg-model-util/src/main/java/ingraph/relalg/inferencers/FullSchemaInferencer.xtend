@@ -3,7 +3,6 @@ package ingraph.relalg.inferencers
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import ingraph.relalg.calculators.JoinAttributeCalculator
-import ingraph.relalg.calculators.ListUnionCalculator
 import ingraph.relalg.calculators.MaskCalculator
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
@@ -16,6 +15,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import ingraph.relalg.calculators.UnionCalculator
 
 /**
  * Inferences the full schema, including extra attributes.
@@ -24,7 +24,7 @@ class FullSchemaInferencer {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
-	extension ListUnionCalculator listUnionCalculator = new ListUnionCalculator
+	extension UnionCalculator listUnionCalculator = new UnionCalculator
 	extension MaskCalculator maskCalculator = new MaskCalculator
 
 	def inferFullSchema(RelalgContainer container) {
