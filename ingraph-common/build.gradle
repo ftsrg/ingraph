@@ -1,9 +1,7 @@
 plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
-  compile project(':ingraph-common')
-  compile project(':ingraph-relalg-model')
-
+  compile group: 'log4j', name: 'log4j', version: log4jVersion
   compile group: 'com.google.guava', name: 'guava', version: guavaVersion
   compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion

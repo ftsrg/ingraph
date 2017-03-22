@@ -2,10 +2,10 @@ package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
-import ingraph.cypher2relalg.util.IngraphLogger
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
+import ingraph.logger.IngraphLogger
 import java.math.BigInteger
 import java.util.Arrays
 import java.util.HashSet

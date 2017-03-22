@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.logger.IngraphLogger
 import java.util.ArrayList
 import java.util.Iterator
 import java.util.LinkedList

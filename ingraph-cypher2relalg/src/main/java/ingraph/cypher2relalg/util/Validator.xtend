@@ -1,16 +1,17 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.logger.IngraphLogger
 import java.util.LinkedList
 import java.util.List
+import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.Match
+import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
+import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
-import org.slizaa.neo4j.opencypher.openCypher.Clause
-import org.slizaa.neo4j.opencypher.openCypher.With
-import org.slizaa.neo4j.opencypher.openCypher.Return
-import org.slizaa.neo4j.opencypher.openCypher.Unwind
 
 class Validator {
 	/**

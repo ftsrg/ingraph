@@ -7,7 +7,7 @@ import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
-import ingraph.cypher2relalg.util.IngraphLogger
+import ingraph.logger.IngraphLogger
 import java.util.ArrayList
 import java.util.Collection
 import java.util.List

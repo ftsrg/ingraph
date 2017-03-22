@@ -1,19 +1,23 @@
 package ingraph.relalg2rete
 
+import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
 import ingraph.optimization.patterns.ExpandOperatorBMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
+import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
+import ingraph.relalg.inferencers.ExtraVariableInferencer
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.Direction
 import relalg.RelalgContainer
-import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatcher
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
+
+	extension IngraphLogger logger = new IngraphLogger(Relalg2ReteTransformation.name)
 
 	new() {
 		val logger = Logger.getRootLogger
@@ -21,12 +25,8 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		ViatraQueryLoggingUtil.setExternalLogger(logger)
 	}
 
-	def log(String log) {
-		println(log)
-	}
-
 	def transformToRete(RelalgContainer container) {
-		log("Transforming relational algebra expression to Rete network")
+		info("Transforming relational algebra expression to Rete network")
 
 		if (container.incrementalPlan) {
 			throw new IllegalStateException(
@@ -51,7 +51,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.precondition(ExpandVertexMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
+			info('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				directed = expandOperator.direction != Direction.BOTH
@@ -72,7 +72,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.precondition(ExpandOperatorAMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandOperatorARule fired for «expandOperator.edgeVariable.name»''')
+			info('''expandOperatorARule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				directed = expandOperator.direction != Direction.BOTH
@@ -97,7 +97,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.precondition(ExpandOperatorBMatcher.querySpecification) //
 		.action [ //
 			val expandOperator = expandOperator
-			log('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
+			info('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
 				directed = expandOperator.direction != Direction.BOTH
@@ -138,7 +138,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.action [ //
 			val sortOperator = sortOperator
 			val topOperator = topOperator
-			log('''sortAndTopOperatorRule fired for «sortOperator» and «topOperator»''')
+			info('''sortAndTopOperatorRule fired for «sortOperator» and «topOperator»''')
 
 			val sortAndTopOperator = createSortAndTopOperator => [
 				entries.addAll(sortOperator.entries)
@@ -161,7 +161,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.action [ //
 			val groupingOperator = groupingOperator
 			val projectionOperator = projectionOperator
-			log('''groupingAndProjectionOperator fired for «groupingOperator» and «projectionOperator»''')
+			info('''groupingAndProjectionOperator fired for «groupingOperator» and «projectionOperator»''')
 
 			val groupingAndProjectionOperator = createGroupingAndProjectionOperator => [
 				entries.addAll(groupingOperator.entries)
@@ -187,7 +187,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			val leftOuterJoinOperator = leftOuterJoinOperator
 			val leftInputOperator = leftInputOperator
 			val getEdgesOperator = getEdgesOperator
-			log('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
+			info('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
 
 			val antiJoinOperator = createAntiJoinOperator => [
 				leftInput = leftInputOperator

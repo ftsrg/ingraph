@@ -1,6 +1,8 @@
 package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
+import ingraph.logger.IngraphLogger
+import ingraph.relalg.calculators.UnionCalculator
 import ingraph.relalg.calculators.VariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -14,13 +16,13 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import ingraph.relalg.calculators.UnionCalculator
 
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
  */
 class ExtraVariableInferencer {
 
+	extension IngraphLogger logger = new IngraphLogger(ExtraVariableInferencer.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension UnionCalculator listUnionCalculator = new UnionCalculator
 
@@ -49,15 +51,15 @@ class ExtraVariableInferencer {
 		op.extraAttributes.addAll(extraVariables)
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
 		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
-		
-		println(op)
-		println("1. extr " + extraVariables)
-		println("2. new  " + newExtraVariables)
-		println("3. prov " + providedExtraVariables)
-		
+
 		val inputExtraVariables = union(extraVariables, newExtraVariables).minus(providedExtraVariables)
-		println("= " + inputExtraVariables)
-		
+
+		info(op.toString)
+		info("1. extr " + extraVariables)
+		info("2. new  " + newExtraVariables)
+		info("3. prov " + providedExtraVariables)
+		info("= " + inputExtraVariables)
+
 		op.input.fillExtraVariables(inputExtraVariables)
 	}
 
@@ -68,10 +70,10 @@ class ExtraVariableInferencer {
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-	  val inputSchema = inputOp.basicSchema
-	  val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains(it.element)]
-	  val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
-	  Iterables.concat(attributes, functions).toList
+		val inputSchema = inputOp.basicSchema
+		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains(it.element)]
+		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+		Iterables.concat(attributes, functions).toList
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {
@@ -84,7 +86,7 @@ class ExtraVariableInferencer {
 		// as extra attributes that are available from both the left and right input
 		rightExtraVariables.removeAll(leftExtraVariables)
 
-		//val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
+		// val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
 		op.leftInput.fillExtraVariables(leftExtraVariables)
 		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}
@@ -98,7 +100,7 @@ class ExtraVariableInferencer {
 		// remove duplicates as we only need each extra variable once
 		// see the related comment in inferDetailedSchema for BinaryOperators
 		middleExtraVariables.removeAll(leftExtraVariables)
-		
+
 		rightExtraVariables.removeAll(leftExtraVariables)
 		rightExtraVariables.removeAll(middleExtraVariables)
 
@@ -106,5 +108,5 @@ class ExtraVariableInferencer {
 		op.middleInput.fillExtraVariables(middleExtraVariables)
 		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}
-	
+
 }

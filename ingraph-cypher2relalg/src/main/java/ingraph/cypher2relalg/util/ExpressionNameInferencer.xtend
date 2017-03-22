@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.logger.IngraphLogger
 import relalg.AttributeVariable
 import relalg.Expression
 import relalg.ExpressionVariable

@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.util
+package ingraph.logger
 
 import java.util.ArrayList
 import java.util.List
@@ -59,6 +59,10 @@ class IngraphLogger {
 
 	def error(Throwable e) {
 		log(Level.SEVERE, e)
+	}
+
+	def info(String msg) {
+		log(Level.INFO, msg)
 	}
 
 	/**
