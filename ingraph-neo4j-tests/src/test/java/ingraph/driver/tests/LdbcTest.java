@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -18,16 +19,16 @@ import org.junit.runners.Parameterized.Parameters;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.shell.tools.imp.format.graphml.XmlGraphMLReader;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
 import neo4j.driver.testkit.EmbeddedTestkitDriver;
 import neo4j.driver.testkit.EmbeddedTestkitSession;
+import neo4j.driver.util.GraphPrettyPrinter;
 
 @RunWith(Parameterized.class)
 public class LdbcTest {
@@ -47,7 +48,7 @@ public class LdbcTest {
 	public void load() throws FileNotFoundException, XMLStreamException {
 		final GraphDatabaseService graphDb = driver.getUnderlyingDatabaseService();
 
-		try (final Transaction tx = graphDb.beginTx()) {
+		try (final org.neo4j.graphdb.Transaction tx = graphDb.beginTx()) {
 			final XmlGraphMLReader xmlGraphMLReader = new XmlGraphMLReader(graphDb);
 			xmlGraphMLReader.nodeLabels(true);
 			xmlGraphMLReader.parseXML(new BufferedReader(new FileReader(graphMlPath)), MapNodeCache.usingHashMap());
@@ -57,14 +58,19 @@ public class LdbcTest {
 
 	@Test
 	public void test() throws IOException {
-		EmbeddedTestkitSession session = driver.session();
+		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
 			final String querySpecification = Files
 					.toString(new File("../queries/ldbc-snb-bi/query-" + queryNumber + ".cypher"), Charsets.UTF_8);
 
-			StatementResult statementResult = session.run(querySpecification);
-			Iterable<Record> statementResultIterable = () -> statementResult;
-			System.out.println("Query " + queryNumber + ": " + Iterables.size(statementResultIterable));
+			final StatementResult statementResult = session.run(querySpecification);
+			final List<Record> results = Lists.newArrayList(statementResult);
+
+			System.out.println("Query " + queryNumber + ": " + results.size());
+			for (Record record : results) {
+				System.out.println(GraphPrettyPrinter.toString(record));
+			}
+			System.out.println();
 		}
 	}
 
