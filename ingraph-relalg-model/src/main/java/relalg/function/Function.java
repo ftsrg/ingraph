@@ -46,8 +46,8 @@ public enum Function {
   LABELS        (FunctionCategory.LIST,          l(NODE),         LIST_TYPE, 1), // labels( node )
   NODES         (FunctionCategory.LIST,          l(PATH),         LIST_TYPE, 1), // nodes( path )
   RANGE         (FunctionCategory.LIST,          l(INTEGER,
-		                                           INTEGER,
-		                                           INTEGER),      LIST_TYPE, 1), // range( start, end [, step] )
+                                                   INTEGER,
+                                                   INTEGER),      LIST_TYPE, 1), // range( start, end [, step] )
 
   E             (FunctionCategory.LOGARITHMIC,   l(NONE),         FLOAT,     0), // e()
   EXP           (FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,     1), // e( expression )
@@ -66,7 +66,7 @@ public enum Function {
 
   EXISTS        (FunctionCategory.PREDICATE,     l(ANY),          BOOLEAN,   1),
   IN_COLLECTION (FunctionCategory.PREDICATE,     l(ANY,
-		                                           LIST_TYPE),    BOOLEAN,   2),
+                                                   LIST_TYPE),    BOOLEAN,   2),
 
   COALESCE      (FunctionCategory.SCALAR,        l(ANY),          ANY,       1), // coalesce( expression [, expression]* )
   STARTNODE     (FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,      1), // startNode( relationship )
@@ -80,39 +80,39 @@ public enum Function {
   ID            (FunctionCategory.SCALAR,        l(ELEMENT),      INTEGER,   1), // id( property-container )
 
   LEFT          (FunctionCategory.STRING,        l(STRING,
-		                                           INTEGER),      STRING,    2), // left( original, length )
+                                                   INTEGER),      STRING,    2), // left( original, length )
   RIGHT         (FunctionCategory.STRING,        l(STRING,
-		                                           INTEGER),      STRING,    2), // right( original, length )
+                                                   INTEGER),      STRING,    2), // right( original, length )
   LTRIM         (FunctionCategory.STRING,        l(STRING),       STRING,    1), // ltrim( original )
   RTRIM         (FunctionCategory.STRING,        l(STRING),       STRING,    1), // rtrim( original )
   TRIM          (FunctionCategory.STRING,        l(STRING),       STRING,    1), // trim( original )
   REPLACE       (FunctionCategory.STRING,        l(STRING,
-		                                           STRING,
-		                                           STRING),       STRING,    3), // replace( original, search, replace )
-  REGEX_LIKE	(FunctionCategory.STRING,		l(STRING,
+                                                   STRING,
+                                                   STRING),       STRING,    3), // replace( original, search, replace )
+  REGEX_LIKE	(FunctionCategory.STRING,        l(STRING,
                                                    STRING),	BOOLEAN,	2), // string =~ pattern
   REVERSE       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // reverse( original )
   SUBSTRING     (FunctionCategory.STRING,        l(STRING,
-		                                           STRING,
-		                                           INTEGER),      STRING,    2), // substring( original, start [, length] )
+                                                   STRING,
+                                                   INTEGER),      STRING,    2), // substring( original, start [, length] )
   TOLOWER       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // lower( original )
   TOUPPER       (FunctionCategory.STRING,        l(STRING),       STRING,    1), // upper( original )
 
   STARTS_WITH   (FunctionCategory.STRING,        l(STRING,
-		                                           STRING),       BOOLEAN,   2), // STARTS_WITH(string, prefixString)
+                                                   STRING),       BOOLEAN,   2), // STARTS_WITH(string, prefixString)
   ENDS_WITH     (FunctionCategory.STRING,        l(STRING,
-		                                           STRING),       BOOLEAN,   2), // ENDS_WITH(string, postfixString)
+                                                   STRING),       BOOLEAN,   2), // ENDS_WITH(string, postfixString)
   CONTAINS      (FunctionCategory.STRING,        l(STRING,
-		                                           STRING),       BOOLEAN,   2), // CONTAINS(string, middleString)
+                                                   STRING),       BOOLEAN,   2), // CONTAINS(string, middleString)
 
   SPLIT         (FunctionCategory.STRING,        l(STRING,
-		                                           STRING),       LIST_TYPE, 2), // split( original, splitPattern )
+                                                   STRING),       LIST_TYPE, 2), // split( original, splitPattern )
 
   ACOS          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // acos( expression )
   ASIN          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // asin( expression )
   ATAN          (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // atan( expression )
   ATAN2         (FunctionCategory.TRIGONOMETRIC, l(NUMBER,
-		                                           NUMBER),       FLOAT,     2), // atan2( expression1, expression2 )
+                                                   NUMBER),       FLOAT,     2), // atan2( expression1, expression2 )
   COS           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // cos( expression )
   COT           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // cot( expression )
   SIN           (FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,     1), // sin( expression )
