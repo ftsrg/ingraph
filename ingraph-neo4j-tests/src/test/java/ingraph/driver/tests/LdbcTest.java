@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
@@ -33,12 +34,22 @@ import neo4j.driver.util.GraphPrettyPrinter;
 @RunWith(Parameterized.class)
 public class LdbcTest {
 
-	@Parameters(name = "query={0}")
-	public static Iterable<? extends Object> data() {
-		return Arrays.asList(3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 20, 23, 24);
+	@Parameters(name = "workload={0}, query={1}")
+	public static Collection<Object[]> data() {
+		return Arrays.asList(new Object[][] {
+				// BI
+				{ "bi", 3 }, { "bi", 4 }, { "bi", 5 }, { "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 12 },
+				{ "bi", 13 }, { "bi", 14 }, { "bi", 15 }, { "bi", 16 }, { "bi", 20 }, { "bi", 23 }, { "bi", 24 },
+				// interactive
+				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
+				{ "interactive", 6 }, { "interactive", 7 }, { "interactive", 8 }, { "interactive", 9 }, { "interactive", 10 },
+				{ "interactive", 11 }, { "interactive", 12 }, { "interactive", 13 } });
 	}
 
-	@Parameter
+	@Parameter(0)
+	public String workload;
+
+	@Parameter(1)
 	public int queryNumber;
 
 	final String graphMlPath = "../graphs/snb_50.graphml";
@@ -60,8 +71,8 @@ public class LdbcTest {
 	public void test() throws IOException {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
-			final String querySpecification = Files
-					.toString(new File("../queries/ldbc-snb-bi/query-" + queryNumber + ".cypher"), Charsets.UTF_8);
+			final String queryPathname = String.format("../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
+			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);
 			final List<Record> results = Lists.newArrayList(statementResult);

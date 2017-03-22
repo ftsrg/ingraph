@@ -1,6 +1,6 @@
 // Q1. Extract description of friends with a given name Given a person's firstName, return up to 20 people with the same first name, sorted by increasing distance (max 3) from a given person, and for people within the same distance sorted by last name. Results should include the list of workplaces and places of study.
-MATCH (:Person)-[path:knows*1..3]-(friend:Person)
-WHERE friend.firstName = "firstName"
+MATCH (:Person {id: $id})-[path:knows*1..3]-(friend:Person)
+WHERE friend.firstName = $firstName
 WITH friend, min(length(path)) AS distance
 ORDER BY distance ASC, friend.lastName ASC, friend.id ASC
 LIMIT 10

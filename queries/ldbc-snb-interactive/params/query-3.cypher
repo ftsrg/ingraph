@@ -4,15 +4,15 @@ MATCH
   (messageX)-[:isLocatedIn]->(countryX:Country)
 WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
   AND NOT((friend)-[:isLocatedIn]->()-[:isPartOf]->(countryX))
-  AND countryX.name = "countryXName"
-  AND messageX.creationDate >= "1950-01-01T00:00:00.000+0000"
-  AND messageX.creationDate < "2050-01-01T00:00:00.000+0000"
+  AND countryX.name = $countryXName
+  AND messageX.creationDate >= $date1
+  AND messageX.creationDate < $date2
 WITH friend, count(DISTINCT messageX) AS xCount
 MATCH (friend)<-[:hasCreator]-(messageY)-[:isLocatedIn]->(countryY:Country)
-WHERE countryY.name = "countryYName"
+WHERE countryY.name = $countryYName
   AND NOT((friend)-[:isLocatedIn]->()-[:isPartOf]->(countryY))
-  AND messageY.creationDate >= "1950-01-01T00:00:00.000+0000"
-  AND messageY.creationDate < "2050-01-01T00:00:00.000+0000"
+  AND messageY.creationDate >= $date1
+  AND messageY.creationDate < $date2
 WITH
   friend.id AS friendId,
   friend.firstName AS friendFirstName,

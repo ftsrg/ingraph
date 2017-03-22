@@ -3,7 +3,7 @@ MATCH (person:Person)-[:knows*1..2]-(friend:Person)
 WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
 WITH DISTINCT friend
 MATCH (friend)-[worksAt:worksAt]->(company:Company)-[:isLocatedIn]->(:Country)
-WHERE worksAt.workFrom < "2050-01-01T00:00:00.000+0000"
+WHERE worksAt.workFrom < $date
 RETURN
   friend.id AS friendId,
   friend.firstName AS friendFirstName,
