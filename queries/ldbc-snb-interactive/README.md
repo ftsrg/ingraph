@@ -4,14 +4,14 @@ The Cypher implementations are taken from the [LDBC specification v0.2.2](https:
 
 ## Paths and legacy Cypher features used by the queries
 
-| query                             |  [1](original/query-1.cypher) |  [2](original/query-2.cypher) |  [3](original/query-3.cypher) |  [4](original/query-4.cypher) |  [5](original/query-5.cypher) |  [6](original/query-6.cypher) |  [7](original/query-7.cypher) |  [8](original/query-8.cypher) |  [9](original/query-9.cypher) | [10](original/query-10.cypher) | [11](original/query-11.cypher) | [12](original/query-12.cypher) | [13](original/query-13.cypher) | [14](original/query-14.cypher) |
-| ------------------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| _standard variant_            |  |  |  [3](query-3.cypher) |  [4](query-4.cypher) |  [5](query-5.cypher) |  [6](query-6.cypher) |  [7](query-7.cypher) |  [8](query-8.cypher) |  | [10](query-10.cypher) | [11](query-11.cypher) | [12](query-12.cypher) |  |  |
-| variable length path            |  x  |     |  x  |     |  x  |  x  |     |     |  x  |  x  | x   | x   |     |     |
-| `CASE`                          |  x  |  x  |     |     |     |     |     |     |  x  |     |     |     | x   |     |
-| `shortestPath`                  |     |     |     |     |     |     |     |     |     |     |     |     | x   |     |
-| `allShortestPaths`              |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
-| `reduce`                        |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
+| query                 | [1](original/query-1.cypher) | [2](original/query-2.cypher) | [3](original/query-3.cypher) | [4](original/query-4.cypher) | [5](original/query-5.cypher) | [6](original/query-6.cypher) | [7](original/query-7.cypher) | [8](original/query-8.cypher) | [9](original/query-9.cypher) | [10](original/query-10.cypher) | [11](original/query-11.cypher) | [12](original/query-12.cypher) | [13](original/query-13.cypher) | [14](original/query-14.cypher) |
+| --------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| _standard variant_    | [1](query-1.cypher) | [2](query-2.cypher) | [3](query-3.cypher) | [4](query-4.cypher) | [5](query-5.cypher) | [6](query-6.cypher) | [7](query-7.cypher) | [8](query-8.cypher) | [9](query-9.cypher) |   [10](query-10.cypher) | [11](query-11.cypher) | [12](query-12.cypher) | [13](query-13.cypher) |  |
+| variable length path  |  x  |     |  x  |     |  x  |  x  |     |     |  x  |  x  | x   | x   |     |     |
+| `CASE` (originally)   |  x  |  x  |     |     |     |     |     |     |  x  |     |     |     | x   |     |
+| `shortestPath`        |     |     |     |     |     |     |     |     |     |     |     |     | x   |     |
+| `allShortestPaths`    |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
+| `reduce`              |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
 
 Technically, Q10 has a variable length path, but the length of the path is `2..2`.
 
