@@ -32,7 +32,6 @@ before_install:
 install:
   - ./gradlew assemble
   - ./gradlew regressionTests --continue
-  - ./gradlew failingTests --continue || true
   - ./gradlew report --continue || ./gradlew report --continue --stacktrace --info
 script:
   # only build and deploy the results if the build is performed on the master branch
