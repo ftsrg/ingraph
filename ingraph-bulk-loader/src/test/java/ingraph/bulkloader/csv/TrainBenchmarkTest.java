@@ -14,7 +14,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.common.collect.ImmutableMap;
 
 import ingraph.bulkloader.csv.loader.MassCsvLoader;
-import neo4j.driver.util.PrettyPrinter;
+import neo4j.driver.util.GraphPrettyPrinter;
 
 public class TrainBenchmarkTest {
 
@@ -48,11 +48,11 @@ public class TrainBenchmarkTest {
 		List<Relationship> relationships = mcl.getRelationships();
 
 		for (int i = 0; i < Math.min(10, nodes.size()); i++) {
-			System.out.println(PrettyPrinter.toString(nodes.get(i)));
+			System.out.println(GraphPrettyPrinter.toString(nodes.get(i)));
 		}
 
 		for (int i = 0; i < Math.min(10, relationships.size()); i++) {
-			System.out.println(PrettyPrinter.toString(relationships.get(i)));
+			System.out.println(GraphPrettyPrinter.toString(relationships.get(i)));
 		}
 	}
 

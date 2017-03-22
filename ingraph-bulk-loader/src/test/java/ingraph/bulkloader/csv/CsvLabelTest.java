@@ -13,7 +13,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.common.collect.ImmutableMap;
 
 import ingraph.bulkloader.csv.loader.MassCsvLoader;
-import neo4j.driver.util.PrettyPrinter;
+import neo4j.driver.util.GraphPrettyPrinter;
 
 public class CsvLabelTest {
 
@@ -24,7 +24,7 @@ public class CsvLabelTest {
 				.build();
 		final MassCsvLoader mcl = new MassCsvLoader(nodeFilenames, ImmutableMap.of(), CsvPreference.STANDARD_PREFERENCE);
 		List<Node> nodes = mcl.getNodes();
-		System.out.println(PrettyPrinter.toString(nodes));
+		System.out.println(GraphPrettyPrinter.toString(nodes));
 	}
 
 }

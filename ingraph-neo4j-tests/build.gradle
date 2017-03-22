@@ -1,0 +1,10 @@
+ext { neo4jVersion = '3.1.1' }
+
+dependencies {
+  compile project(':ingraph-neo4j-util')
+  
+  compile group: 'neo4j-drivers', name: 'neo4j-embedded-testkit-driver', version: '0.0.3-SNAPSHOT'
+  compile group: 'org.neo4j.shell', name: 'import-tools', version: neo4jVersion
+  
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+}

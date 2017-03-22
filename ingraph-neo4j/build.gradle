@@ -1,0 +1,19 @@
+dependencies {
+  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.1.2'
+
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+}
+
+bintray {
+  pkg {
+    repo = 'maven'
+    name = 'ingraph-driver'
+    userOrg = 'ftsrg'
+    licenses = ['EPL-1.0']
+    vcsUrl = 'https://github.com/FTSRG/ingraph.git'
+    version {
+      name = '0.2.0'
+      released = new Date()
+    }
+  }
+}
