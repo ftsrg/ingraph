@@ -106,7 +106,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(SortAndTopOperator op) {
-		#[ topOperatorToTex(op) + sortOperatorToTex(op) ]
+		#[ sortOperatorToTex(op) + topOperatorToTex(op) ]
 	}
 
 	def topOperatorToTex(TopOperator op) {
