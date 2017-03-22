@@ -3,7 +3,6 @@ package ingraph.expressionparser
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
-import relalg.function.{CypherType, FunctionCategory}
 
 
 object ExpressionParser {
@@ -95,5 +94,10 @@ object ExpressionParser {
           val third = parseValue(cmp.getArguments.get(2), lookup)
           tuple => FunctionLookup.fun3(cmp.getFunctor)(first(tuple), second(tuple), third(tuple))
       }
+  }
+
+  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]) = exp match {
+    case exp: VariableExpression => println("variable")
+    case exp: FunctionExpression => println(exp.getFunctor.getCategory.name())
   }
 }

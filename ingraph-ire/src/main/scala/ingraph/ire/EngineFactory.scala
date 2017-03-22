@@ -1,31 +1,19 @@
 package ingraph.ire
 
-import scala.collection.mutable
-
-import org.eclipse.emf.common.util.EList
-
-import com.google.common.collect.ImmutableMap
-
-import akka.actor.ActorRef
-import akka.actor.Props
+import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.messages.ReteMessage
-import hu.bme.mit.ire.nodes.binary.AntiJoinNode
-import hu.bme.mit.ire.nodes.binary.JoinNode
-import hu.bme.mit.ire.nodes.binary.LeftOuterJoinNode
-import hu.bme.mit.ire.nodes.unary.DuplicateEliminationNode
-import hu.bme.mit.ire.nodes.unary.ProductionNode
-import hu.bme.mit.ire.nodes.unary.ProjectionNode
-import hu.bme.mit.ire.nodes.unary.SelectionNode
-import hu.bme.mit.ire.nodes.unary.SortAndTopNode
+import hu.bme.mit.ire.datatypes.{Mask, Tuple}
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
+import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
-import hu.bme.mit.ire.datatypes.Tuple
+
+import scala.collection.mutable
 
 object EngineFactory {
 
@@ -52,9 +40,12 @@ object EngineFactory {
           case op: UnaryOperator =>
             val node: ActorRef = op match {
             case op: ProductionOperator => production
-
-            case op: GroupingOperator =>
-              ???
+            case op: GroupingAndProjectionOperator =>
+              val variableLookup = new SchemaToMap().schemaToMap(op)
+              op.getElements.map(
+                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup))
+              val mask : Mask = op.getTupleIndices
+              newLocal(Props(new AggregateMapper(expr.child, mask, Vector())))
 
             case op: SortAndTopOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)

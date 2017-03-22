@@ -7,31 +7,31 @@ import scala.io.Source
 
 class LdbcSnbBiTest extends FlatSpec {
 
-  def modelPath(size: Int, entityName: String) = s"../graphs/snb_50/$entityName._0_0csv"
+  def modelPath(size: Int, entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
   def queryPath(query: Int): String = s"../queries/ldbc-snb-bi/query-$query.cypher"
 
   case class TestCase(number: Int, size: Int, expectedResultSize: Int)
 
   Vector(
-    TestCase(3, 1, 0),
+//    TestCase(3, 1, 0),
     TestCase(4, 4, 0),
     TestCase(5, 21, 0),
-    TestCase(6, 3, 0),
+//    TestCase(6, 3, 0),
     TestCase(7, 26, 0),
     TestCase(8, 65, 0),
-    TestCase(9, 1, 0),
+//    TestCase(9, 1, 0),
 
-    TestCase(12, 30, 0),
-    TestCase(13, 5, 0),
+//    TestCase(12, 30, 0),
+//    TestCase(13, 5, 0),
     TestCase(14, 28, 0),
-    TestCase(15, 2, 0),
+//    TestCase(15, 2, 0),
     TestCase(16, 99, 0),
     TestCase(20, 15, 0),
     TestCase(23, 100, 0),
     TestCase(24, 3, 0)) //
     .foreach(
-      t => s"query-${t.number}-size-${t.size}" should "work" ignore {
+      t => s"query-${t.number}-size-${t.size}" should "work" in {
         val query = Source.fromFile(queryPath(t.number)).getLines().mkString(" ")
         val adapter = new IngraphAdapter(query)
         val tf = new TransactionFactory(16)
