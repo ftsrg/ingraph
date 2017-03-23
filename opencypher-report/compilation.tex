@@ -83,9 +83,9 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 
 		& \lstinline+RETURN <v>variables</v>+ & $\projection{\atom{variables}}{\left( r \right)}$ \\ \cline{2-3}
 
-		& \lstinline+RETURN <v>v1</v> AS <v>alias1</v> ...+ & $\projection{\atom{v1} \assign \atom{alias1}, \ldots }\left( r \right)$ \\ \cline{2-3}
+		& \lstinline+RETURN <v>v1</v> AS <v>alias1</v> ...+ & $\projection{\atom{v1} \assign \atom{alias1}, \ldots }{}\left( r \right)$ \\ \cline{2-3}
 
-		& \lstinline+RETURN DISTINCT <v>variables</v>+ & $\duplicateelimination\left(\projection{\atom{variables}}{\left( r \right)}\right)$ \\ \cline{2-3}
+		& \lstinline+RETURN DISTINCT <v>variables</v>+ & $\duplicateelimination\left(\projection{\atom{variables}}{}{\left( r \right)}\right)$ \\ \cline{2-3}
 
 		& \lstinline+RETURN <v>variables</v>, <v>aggregates</v>+ & $\grouping{\atom{variables}, \atom{aggregates}}{\left( r \right)}$ \\ \cline{2-3}
 
@@ -112,7 +112,7 @@ We follow the bottom-up approach to build the \rga tree based on the \opencypher
 \paragraph{Example.} The example query in~\autoref{lst:example} can be formalized as:
 {\footnotesize
 	\begin{align*}
-	&\projection{a2} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN}{1}{1} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN}{1}{1} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
+	&\projection{a2}{} \Bigg(\selection{a1.name = 'C.\,E.'} \Big( \alldifferent{\_e1, \_e2} \expandin{a1}{a2}{Actor \land Director}{\_e1}{ACTS\_IN}{1}{1} \expandout{a1}{}{Movie}{\_e2}{ACTS\_IN}{1}{1} \left(\getvertices{a1}{Actor}\right) \Big) \Bigg)
 	\end{align*}
 }
 

@@ -69,7 +69,7 @@ The \getedgestext operator $\getedgesopdirected{src}{srcTypes}{trg}{trgTypes}{e}
 \subsection{Unary Operators}
 \label{sec:unary-operators}
 
-The \projectiontext operator $\projectionop$ keeps a specific set of attributes in the relation: $ t = \projection{A_1, \ldots, A_n} \left(r\right).$ Note that the tuples are not deduplicated by default, \ie the results will have the same number of tuples as the input relation $r$. The projection operator can also rename the attributes, \eg $\projection{v1 \assign v2} \left(r\right)$ renames $\atom{v1}$ to $\atom{v2}$.
+The \projectiontext operator $\projectionop$ keeps a specific set of attributes in the relation: $ t = \projection{A_1, \ldots, A_n}{} \left(r\right).$ Note that the tuples are not deduplicated by default, \ie the results will have the same number of tuples as the input relation $r$. The projection operator can also rename the attributes, \eg $\projection{v1 \assign v2}{} \left(r\right)$ renames $\atom{v1}$ to $\atom{v2}$.
 
 The \selectiontext operator $\selectionop$ filters the incoming relation according to some criteria. Formally,
 $ t = \selection{\theta} \left(r\right), $
@@ -137,7 +137,7 @@ Assuming that $x$ is an attribute of a graph relation, we use the notation $x.a$
 		&                                                       &                                           &             & \bf set & \bf bag &     \bf list     &  \\ \hline\hline
 		\multirow{1}{*}{\bf 0}   &                  $\getvertices{v}{}$                  &             \getverticestext              &     set     &   set   &   set   &       set        &                  $\tuple{\atom{v}}$                  \\ \hline\hline %\cline{2-8}
 %		&              $\getedges{v}{}{w}{}{e}{}$               &               \getedgestext               &     $-$     &   $-$   &   $-$   &       $-$        &               $\tuple{\atom{v, e, w}}$               \\ \hline\hline
-		\multirow{8}{*}{\bf 1}   &         $\projection{v_1, v_2, \ldots} (r)$         &              \projectiontext              &      i      &   bag   &   bag   &       list       &         $\tuple{\atom{v_1, v_2, \ldots}}$          \\ \cline{2-8}
+		\multirow{8}{*}{\bf 1}   &         $\projection{v_1, v_2, \ldots}{} (r)$         &              \projectiontext              &      i      &   bag   &   bag   &       list       &         $\tuple{\atom{v_1, v_2, \ldots}}$          \\ \cline{2-8}
 		&              $\selection{condition} (r)$              &              \selectiontext               &      i      &   set   &   bag   &       list       &                     $\schema{r}$                     \\ \cline{2-8}
 		&            $\expandboth{v}{w}{}{e}{}{min}{max} (r)$             &              \expandbothtext              &     $-$     &   set   &   bag   &       list       &       $\schema{r} \append \tuple{\atom{e, w}}$       \\ \cline{2-8}
 		&            $\alldifferent{variables} (r)$             &             \alldifferenttext             &      i      &   set   &   bag   &       list       &                     $\schema{r}$                     \\ \cline{2-8}
