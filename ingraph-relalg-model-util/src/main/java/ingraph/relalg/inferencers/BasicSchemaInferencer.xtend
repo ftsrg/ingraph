@@ -11,6 +11,7 @@ import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.ExpressionVariable
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -22,8 +23,6 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.Expression
-import relalg.ExpressionVariable
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
