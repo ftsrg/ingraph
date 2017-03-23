@@ -42,7 +42,7 @@ object EngineFactory {
             val node: ActorRef = op match {
             case op: ProductionOperator => production
             case op: GroupingAndProjectionOperator =>
-              val variableLookup = new SchemaToMap().schemaToMap(op)
+              val variableLookup = new SchemaToMap().schemaToMap(op.getInput)
               val functions = () => op.getAggregations.map(
                 e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).flatMap(
                 f => f.map(_()) // GOOD LUCK UNDERSTANDING THIS
