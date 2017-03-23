@@ -85,8 +85,7 @@ class FullSchemaInferencer {
 		// - if a literal value was assigned to the variables
 		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
 		
-		op.fullSchema.addAll(fullSchema)
-//		op.fullSchema.addAll(op.basicSchema)
+		op.fullSchema.addAll(op.basicSchema)
 	}
 
 	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
