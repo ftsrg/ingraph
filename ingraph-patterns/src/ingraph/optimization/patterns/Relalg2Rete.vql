@@ -48,6 +48,11 @@ pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operat
   neg find defaultExpandOperator(expandOperator);
 }
 
+pattern topAndProjectionOperator(topOperator : TopOperator, projectionOperator : ProjectionOperator, parentOperator : Operator) {
+  find parentOperator(topOperator, parentOperator);
+  TopOperator.input(topOperator, projectionOperator);
+}
+
 /*
     parentOperator
           |
@@ -59,7 +64,7 @@ pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operat
           V
      sortOperator (orders the tuples according to some variables and asc/desc directions)
 */
-// [3] transformation for combining adjacent sort and top operators to a single sortAndTop operator
+// [3b] transformation for combining adjacent sort and top operators to a single sortAndTop operator
 pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
   find parentOperator(topOperator, parentOperator);
   TopOperator.input(topOperator, sortOperator);

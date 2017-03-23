@@ -44,16 +44,19 @@ class FullSchemaInferencer {
 	/**
 	 * fillFullSchema
 	 */
+	// nullary operators
 	private def dispatch void fillFullSchema(NullaryOperator op) {
 		val detailedSchema = union(op.basicSchema, op.extraAttributes)
 		op.defineDetailedSchema(detailedSchema)
 	}
 
+	// unary operators
 	private def dispatch void fillFullSchema(UnaryOperator op) {
 		val detailedSchema = op.input.fullSchema
 		op.defineDetailedSchema(detailedSchema)
 	}
-
+	
+	// binary operators
 	private def dispatch void fillFullSchema(UnionOperator op) {
 		// TODO left/right inputs should be the same for their detailed schema
 		op.defineDetailedSchema(op.leftInput.fullSchema)
@@ -64,6 +67,7 @@ class FullSchemaInferencer {
 		op.defineDetailedSchema(fullSchema)
 	}
 
+	// ternary operator
 	private def dispatch void fillFullSchema(TernaryOperator op) {
 		val fullSchema = Lists.newArrayList(Iterables.concat(
 			op.getLeftInput.fullSchema,
@@ -82,6 +86,7 @@ class FullSchemaInferencer {
 		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
 		
 		op.fullSchema.addAll(fullSchema)
+//		op.fullSchema.addAll(op.basicSchema)
 	}
 
 	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
