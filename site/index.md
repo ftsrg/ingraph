@@ -55,10 +55,18 @@ Incremental openCypher queries can also be beneficial for:
 
 # Publications
 
+## Papers
+
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 * J. Maginecz, G. Szárnyas, [Sharded Joins for Scalable Incremental Graph Queries](pub/minisy2016-sharded-joins-for-scalable-incremental-graph-queries.pdf) (PhD Minisymposium 2016)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](http://link.springer.com/article/10.1007/s10270-016-0571-8) (Software and Systems Modeling Journal, 2017)
 * G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://inf.mit.bme.hu/research/publications/evaluation-optimization-strategies-incremental-graph-queries) (Periodica Polytechnica 2017) - to appear in 2017
+
+## Talks
+
+* [Incremental Graph Queries with openCypher](https://fosdem.org/2017/schedule/event/graph_incremental_queries_open_cypher/), FOSDEM 2017, Graph devroom
+* [Incremental Graph Queries for Cypher](http://www.opencypher.org/event/2017/02/08/event-ocim1/), First openCypher Implementers meeting
+* [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Queries](http://wiki.ldbcouncil.org/pages/viewpage.action?pageId=59277315), Linked Data Benchmark Council, 9th TUC meeting
 
 # Related projects on GitHub
 
