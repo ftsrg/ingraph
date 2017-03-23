@@ -9,14 +9,14 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
-                      mask: Mask, functions: () => Vector[StatefulAggregate]
+                      mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate]
                      ) extends UnaryNode with SingleForwarder {
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
   private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = mutable.Map[Tuple, (Tuple, Int)]()
-    for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(t(_)))) {
+    for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(m => m(t)))) {
       val aggregators = data.getOrElseUpdate(key, functions())
 
       oldValues.getOrElseUpdate(key, (aggregators.map(_.value()), keyCount(key)))
@@ -24,7 +24,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
         aggregator.maintainPositive(tuples)
       keyCount(key) += tuples.size
     }
-    for ((key, tuples) <- changeSet.negative.groupBy(t => mask.map(t(_)))) {
+    for ((key, tuples) <- changeSet.negative.groupBy(t => mask.map(m => m(t)))) {
       val aggregators = data.getOrElseUpdate(key, functions())
       oldValues.getOrElseUpdate(key, (aggregators.map(_.value()), keyCount(key)))
       for (aggregator <- aggregators)
