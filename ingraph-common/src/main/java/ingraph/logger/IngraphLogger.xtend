@@ -9,7 +9,7 @@ import java.util.logging.ConsoleHandler
 
 /**
  * This is a wrapper over java.util.logging.Logger
- *
+ * 
  * The main difference is that IngraphLogger instances are not provided by any factory.
  * Under the hood, it forwards logging messages to a java.util.logging.Logger
  * provided upon object instantiation by name or by passing the Logger instance itself.
@@ -26,7 +26,6 @@ class IngraphLogger {
 		/*
 		 *  FIXME: for multiple runs in a single JVM, we should not to add more than 1 ConsoleHandler
 		 */
-
 		this.logger.addHandler(new ConsoleHandler)
 	}
 
@@ -62,7 +61,9 @@ class IngraphLogger {
 	}
 
 	def info(String msg) {
-		log(Level.INFO, msg)
+		if (isDebugMode) {
+			log(Level.INFO, msg)
+		}
 	}
 
 	/**
@@ -76,7 +77,7 @@ class IngraphLogger {
 
 	/**
 	 * Indicates an unrecoverable error.
-	 *
+	 * 
 	 * TODO (to be determined later): Compilation might or might not be aborted.
 	 */
 	def unrecoverableError(String msg) {
@@ -93,4 +94,11 @@ class IngraphLogger {
 		records.add(new LogRecord(level, e.toString))
 		logger.log(level, e.toString)
 	}
+
+	def isDebugMode() {
+		"1".equals(System.getenv("DEBUG")) || //
+		"1".equals(System.getenv("DEBUG_INGRAPH")) || //
+		"1".equals(System.getenv("DEBUG_INGRAPH_CYPHER2RELALG"))
+	}
+
 }
