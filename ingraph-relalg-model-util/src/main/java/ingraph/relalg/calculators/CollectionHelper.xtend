@@ -5,7 +5,7 @@ import com.google.common.collect.Lists
 import com.google.common.collect.Sets
 import java.util.List
 
-class UnionCalculator {
+class CollectionHelper {
 
 	def <T> List<T> union(Iterable<? extends T>... lists) {
 		Lists.newArrayList(Iterables.concat(lists))

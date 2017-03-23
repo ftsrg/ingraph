@@ -20,7 +20,7 @@ class VariableExtractor {
 
 	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension UnionCalculator unionCalculator = new UnionCalculator
+	extension CollectionHelper unionCalculator = new CollectionHelper
 
 	val metaFunctions = #[Function.KEYS, Function.LABELS, Function.TYPE, Function.PROPERTIES]
 

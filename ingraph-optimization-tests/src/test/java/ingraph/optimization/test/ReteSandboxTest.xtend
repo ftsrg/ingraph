@@ -48,16 +48,37 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 
 	@Test
 	def void query7() {
-		process('query7', '''MATCH
-		  (tag:Tag)<-[:hasTag]-(:Message)-[:hasCreator]->(person1:Person)
-		MATCH
-		  (person)<-[:hasCreator]-(message:Message)-[:hasTag]->(tag),
-		  (message)<-[:likes]-(person2:Person)<-[:hasCreator]-(:Message)<-[:likes]-(person3:Person)
-		RETURN
-		  person1.id //, count(person3) AS authorityScore
-		ORDER BY //authorityScore DESC,
-			person1.name ASC
-		LIMIT 100''')
+		process('query7', '''
+			MATCH
+				(tag:Tag)<-[:hasTag]-(:Message)-[:hasCreator]->(person1:Person)
+			MATCH
+				(person)<-[:hasCreator]-(message:Message)-[:hasTag]->(tag),
+				(message)<-[:likes]-(person2:Person)<-[:hasCreator]-(:Message)<-[:likes]-(person3:Person)
+			RETURN
+				person1.id,
+				count(person3) AS authorityScore
+			ORDER BY
+				authorityScore DESC,
+				person1.name ASC
+			LIMIT 100
+		''')
 	}
 	
+	@Test
+	def void sort() {
+		process('sort', '''
+			MATCH (n)-[:KNOWS]-(m)
+			RETURN n, n.name, count(m) AS numberOfFriends
+			ORDER BY n.age
+			LIMIT 100
+		''')
+	}
+	
+	@Test
+	def void sort2() {
+	  process('sort2', '''
+	    MATCH (n: Segment) RETURN n ORDER BY n SKIP 5 LIMIT 10
+    ''')
+	}
+
 }

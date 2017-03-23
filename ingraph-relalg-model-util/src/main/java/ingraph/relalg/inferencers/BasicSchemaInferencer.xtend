@@ -3,6 +3,7 @@ package ingraph.relalg.inferencers
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
+import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.JoinAttributeCalculator
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
@@ -11,6 +12,8 @@ import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
+import relalg.ExpressionVariable
+import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -22,6 +25,7 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.function.FunctionCategory
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -38,6 +42,7 @@ class BasicSchemaInferencer {
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
+	extension CollectionHelper collectionHelper = new CollectionHelper
 	val boolean includeEdges
 
 	new() {
@@ -95,20 +100,42 @@ class BasicSchemaInferencer {
 		]
 
 		// extract variables
-		val List<Variable> elementVariables = op.elements.map [ expressionVariable |
-			if (expressionVariable.expression instanceof VariableExpression) {
-				(expressionVariable.expression as VariableExpression).variable
-			} else { //if (expressionVariable instanceof ExpressionVariable) {
-				expressionVariable
-			} 
-		]
-		op.defineBasicSchema(elementVariables)
+		val s = if (op.elementsToRemove.empty) {
+				val aggregations = op.elements.extractAggregateFunctions
+				op.aggregations.addAll(aggregations)
+				op.elements.removeAll(aggregations)
+				union(op.elements.extractVariables, aggregations)
+			} else {
+				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
+				val basicSchema = Lists.newArrayList(op.input.basicSchema)
+				basicSchema.removeAll(elementsToRemoveVariables)
+				basicSchema
+			}
+
+		op.defineBasicSchema(s)
 	}
-	
+
+	private def extractVariables(List<ExpressionVariable> expressionVariables) {
+		expressionVariables.map [ expressionVariable |
+			val expression = expressionVariable.expression
+			if (expression instanceof VariableExpression) {
+				expression.variable
+			} else { // if (expressionVariable instanceof ExpressionVariable) {
+				expressionVariable
+			}
+		].toList
+	}
+
+	private def extractAggregateFunctions(List<ExpressionVariable> expressionVariables) {
+		expressionVariables.filter[
+			expression instanceof FunctionExpression &&
+				(expression as FunctionExpression).functor.category == FunctionCategory.AGGREGATION
+		].toList
+	}
+
 //	private def dispatch List<Variable> fillBasicSchema(GroupingAndProjectionOperator op) {
 //		throw new UnsupportedOperationException("GroupingAndProjectionOperator not yet supported.")
 //	}
-
 	private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.basicSchema)
 

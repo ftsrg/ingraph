@@ -78,15 +78,26 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(GroupingOperator op) {
-		#['''\grouping{«op.entries.map[convertExpression].join(", ")»}''']
+		#['''«groupingOperator(op)»''']
 	}
 
 	def dispatch convertOperator(ProjectionOperator op) {
-		#['''\projection{«op.elements.convertReturnableElementList»}''']
+		#['''«projectionOperator(op)»''']
 	}
 
 	def dispatch convertOperator(GroupingAndProjectionOperator op) {
-		#['''\grouping{«op.entries.map[convertExpression].join(", ")»} \projection{«op.elements.convertReturnableElementList»}''']
+		#['''«groupingOperator(op)» «projectionOperator(op)»''']
+	}
+
+	def groupingOperator(GroupingOperator op) {
+		'''\grouping{«op.entries.map[convertExpression].join(", ")»}'''
+	}
+
+	def projectionOperator(ProjectionOperator op) {
+		'''\projection{«op.elements.convertReturnableElementList»
+				«IF !op.elements.empty && !op.elementsToRemove.empty»,«ENDIF»
+				«op.elementsToRemove.convertReturnableElementListNegative»}{«op.aggregations.convertReturnableElementList»}
+		'''
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {
@@ -167,5 +178,7 @@ class OperatorConverter {
 	 * TernaryOperators
 	 */
 //  def dispatch
+
+
 
 }
