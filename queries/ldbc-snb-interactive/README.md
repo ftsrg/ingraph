@@ -1,6 +1,6 @@
 # LDBC Social Network Benchmark – Interactive workload
 
-The Cypher implementations are taken from the [LDBC specification v0.2.2](https://github.com/ldbc/ldbc_snb_docs/blob/master/LDBC_SNB_v0.2.2.pdf)
+The Cypher implementations are taken from the [LDBC specification v0.2.2](https://github.com/ldbc/ldbc_snb_docs/blob/bf8ead188f85639e203d4507cbade453c1298bee/LDBC_SNB_v0.2.2.pdf)
 
 ## Paths and legacy Cypher features used by the queries
 
@@ -8,16 +8,16 @@ The Cypher implementations are taken from the [LDBC specification v0.2.2](https:
 | --------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | _standard variant_    | [1](query-1.cypher) | [2](query-2.cypher) | [3](query-3.cypher) | [4](query-4.cypher) | [5](query-5.cypher) | [6](query-6.cypher) | [7](query-7.cypher) | [8](query-8.cypher) | [9](query-9.cypher) |   [10](query-10.cypher) | [11](query-11.cypher) | [12](query-12.cypher) | [13](query-13.cypher) |  |
 | variable length path  |  x  |     |  x  |     |  x  |  x  |     |     |  x  |  x  | x   | x   |     |     |
-| `CASE` (originally)   |  x  |  x  |     |     |     |     |     |     |  x  |     |     |     | x   |     |
-| `shortestPath`        |     |     |     |     |     |     |     |     |     |     |     |     | x   |     |
-| `allShortestPaths`    |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
-| `reduce`              |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
+| [`CASE`](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-syntax-case) (originally)   |  x  |  x  |     |     |     |     |     |     |  x  |     |     |     | x   |     |
+| [`shortestPath`](https://neo4j.com/docs/developer-manual/3.0/cypher/#_single_shortest_path)        |     |     |     |     |     |     |     |     |     |     |     |     | x   |     |
+| [`allShortestPaths`](https://neo4j.com/docs/developer-manual/3.0/cypher/#_all_shortest_paths)    |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
+| [`reduce`](https://neo4j.com/docs/developer-manual/3.0/cypher/#functions-reduce)              |     |     |     |     |     |     |     |     |     |     |     |     |     | x   |
 
 Technically, Q10 has a variable length path, but the length of the path is `2..2`.
 
 ## "Standardized" and "globalized" versions
 
-To showcase the strengths of incremental graph processing, we "globalized" the SNB queries, i.e. we removed parametric bindings to specific variables. For example, if a query started from a specific person, the globalized query start from all persons.
+For simpler testing, we "globalized" the SNB queries, i.e. we removed parametric bindings to specific variables. For example, if a query started from a specific person, the globalized query start from all persons.
 
 We removed queries using non-standard openCypher constructs (e.g. `allShortestPaths`), and changed parameters to use the standard `$param` notation instead of the deprecated `{param}` one.
 
