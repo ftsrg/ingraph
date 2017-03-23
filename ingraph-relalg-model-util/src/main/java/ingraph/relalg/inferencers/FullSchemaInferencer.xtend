@@ -15,7 +15,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import ingraph.relalg.calculators.UnionCalculator
+import ingraph.relalg.calculators.CollectionHelper
 
 /**
  * Inferences the full schema, including extra attributes.
@@ -24,7 +24,7 @@ class FullSchemaInferencer {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
-	extension UnionCalculator listUnionCalculator = new UnionCalculator
+	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension MaskCalculator maskCalculator = new MaskCalculator
 
 	def inferFullSchema(RelalgContainer container) {
@@ -84,8 +84,10 @@ class FullSchemaInferencer {
 		// this projects "-1" in a number of cases, e.g.
 		// - if a literal value was assigned to the variables
 		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
+		op.tupleIndices.addAll(op.aggregations.map[fullSchema.indexOf(it)])
 		
 		op.fullSchema.addAll(op.basicSchema)
+		op.fullSchema.addAll(op.aggregations)
 	}
 
 	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {

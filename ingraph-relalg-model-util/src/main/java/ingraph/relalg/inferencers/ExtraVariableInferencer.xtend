@@ -2,7 +2,6 @@ package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
-import ingraph.relalg.calculators.UnionCalculator
 import ingraph.relalg.calculators.VariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -16,6 +15,7 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import ingraph.relalg.calculators.CollectionHelper
 
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
@@ -24,7 +24,7 @@ class ExtraVariableInferencer {
 
 	extension IngraphLogger logger = new IngraphLogger(ExtraVariableInferencer.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
-	extension UnionCalculator listUnionCalculator = new UnionCalculator
+	extension CollectionHelper listUnionCalculator = new CollectionHelper
 
 	def inferExtraVariables(RelalgContainer container) {
 		if (!container.incrementalPlan) {

@@ -94,10 +94,9 @@ class OperatorConverter {
 	}
 
 	def projectionOperator(ProjectionOperator op) {
-		'''\projection{
-				«op.elements.convertReturnableElementList»
+		'''\projection{«op.elements.convertReturnableElementList»
 				«IF !op.elements.empty && !op.elementsToRemove.empty»,«ENDIF»
-				«op.elementsToRemove.convertReturnableElementListNegative»}
+				«op.elementsToRemove.convertReturnableElementListNegative»}{«op.aggregations.convertReturnableElementList»}
 		'''
 	}
 

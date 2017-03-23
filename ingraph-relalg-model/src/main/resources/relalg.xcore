@@ -236,6 +236,7 @@ class SelectionOperator extends UnaryOperator {
 class ProjectionOperator extends UnaryOperator {
   refers ExpressionVariable[] elements
   refers ExpressionVariable[] elementsToRemove // use EITHER elements OR elementsToRemove
+  refers ExpressionVariable[] aggregations
   int[] tupleIndices
 }
 

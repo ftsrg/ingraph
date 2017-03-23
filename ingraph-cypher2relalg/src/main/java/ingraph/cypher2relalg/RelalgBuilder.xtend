@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg
 
+import com.google.common.collect.Lists
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.StringUtil
@@ -66,6 +67,7 @@ import relalg.Direction
 import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.Expression
+import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
@@ -73,17 +75,16 @@ import relalg.LogicalExpression
 import relalg.MaxHopsType
 import relalg.Operator
 import relalg.OrderDirection
+import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
-import relalg.function.Function
-import relalg.ProjectionOperator
 import relalg.VariableExpression
-import relalg.ExpressionVariable
-import com.google.common.collect.Lists
+import relalg.function.Function
+import ingraph.relalg.calculators.CollectionHelper
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -97,6 +98,7 @@ class RelalgBuilder {
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension IngraphLogger logger = new IngraphLogger(RelalgBuilder.name)
 	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
+	extension CollectionHelper collectionHelper = new CollectionHelper
 
 	// this will be returned and will hold the result of the compilation
 	// never rename this to container as that name will collide with the Expression.container field name
@@ -388,14 +390,17 @@ class RelalgBuilder {
 				if (!(op1 instanceof ProjectionOperator)) {
 					throw new UnsupportedOperationException("op1 should be a projection operator.")
 				}
-				
+
 				val projectionOperator = op1 as ProjectionOperator
-				
-				val availableVariables = projectionOperator.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].toList
+
+				val variables = projectionOperator.elements.filter(ExpressionVariable).map[expression].filter(
+					VariableExpression).map[variable]
+				val functions = projectionOperator.elements.filter(ExpressionVariable)
+				val availableVariables = union(variables, functions)
+
 				for (sortEntry : sortEntries) {
-					val expression = sortEntry.expression					
+					val expression = sortEntry.expression
 					if (expression instanceof VariableExpression) {
-						println(expression.variable)
 						if (!availableVariables.contains(expression.variable)) {
 							variablesToSave.add(createExpressionVariable => [
 								it.expression = expression
@@ -406,7 +411,7 @@ class RelalgBuilder {
 					}
 				}
 				projectionOperator.elements.addAll(variablesToSave)
-				
+
 				val sortOperator = createSortOperator => [
 					entries.addAll(sortEntries)
 					input = op1
