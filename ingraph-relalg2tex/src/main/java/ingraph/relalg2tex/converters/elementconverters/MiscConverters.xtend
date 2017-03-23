@@ -47,9 +47,11 @@ class MiscConverters {
 	}
 
 	def convertReturnableElementList(List<ExpressionVariable> elements) {
-		'''«elements.map[
-			convertReturnableElement(it)
-		].join(", ")»'''
+		'''«elements.map[convertReturnableElement(it)].join(", ")»'''
+	}
+	
+	def convertReturnableElementListNegative(List<ExpressionVariable> elements) {
+		'''«elements.map['''\ominus «convertReturnableElement(it)»'''].join(", ")»'''
 	}
 
 	// FIXME: this should moved to VariableConverter. See #92

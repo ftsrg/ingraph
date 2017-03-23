@@ -22,6 +22,8 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.Expression
+import relalg.ExpressionVariable
 
 /**
  * Infers the basic schema of the operators in the relational algebra tree.
@@ -95,14 +97,26 @@ class BasicSchemaInferencer {
 		]
 
 		// extract variables
-		val List<Variable> elementVariables = op.elements.map [ expressionVariable |
+		val variables = if (op.elementsToRemove.empty) {
+				op.elements.extractVariables
+		} else {
+				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
+				val newVars = Lists.newArrayList(op.input.basicSchema)
+				newVars.removeAll(elementsToRemoveVariables)
+				newVars
+		}	
+		
+		op.defineBasicSchema(variables)
+	}
+	
+	private def extractVariables(List<ExpressionVariable> expressions) {
+		expressions.map [ expressionVariable |
 			if (expressionVariable.expression instanceof VariableExpression) {
 				(expressionVariable.expression as VariableExpression).variable
 			} else { //if (expressionVariable instanceof ExpressionVariable) {
 				expressionVariable
 			} 
 		]
-		op.defineBasicSchema(elementVariables)
 	}
 	
 //	private def dispatch List<Variable> fillBasicSchema(GroupingAndProjectionOperator op) {

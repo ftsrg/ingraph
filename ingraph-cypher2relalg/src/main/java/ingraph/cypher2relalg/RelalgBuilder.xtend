@@ -82,6 +82,8 @@ import relalg.Variable
 import relalg.function.Function
 import relalg.ProjectionOperator
 import relalg.VariableExpression
+import relalg.ExpressionVariable
+import com.google.common.collect.Lists
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -382,29 +384,37 @@ class RelalgBuilder {
 					]
 				]
 
-//				if (op1 instanceof ProjectionOperator) {
-//					for (sortEntry : sortEntries) {
-//						val expression = sortEntry.expression
-//						if (expression instanceof VariableExpression) {
-//							if (!op1.elements.contains(expression.variable)) {
-//								op1.elements.add(createExpressionVariable => [
-//									it.expression = expression
-//									hasInferredName = true
-//									namedElementContainer = topLevelContainer
-//								])
-//							}
-//						}
-//					}
-//				}
+				val List<ExpressionVariable> variablesToSave = Lists.newArrayList();
+				if (!(op1 instanceof ProjectionOperator)) {
+					throw new UnsupportedOperationException("op1 should be a projection operator.")
+				}
+				
+				
+				val projectionOperator = op1 as ProjectionOperator
+				
+				for (sortEntry : sortEntries) {
+					val expression = sortEntry.expression
+					if (expression instanceof VariableExpression) {
+						if (!projectionOperator.elements.contains(expression.variable)) {
+							variablesToSave.add(createExpressionVariable => [
+								it.expression = expression
+								hasInferredName = true
+								namedElementContainer = topLevelContainer
+							])
+						}
+					}
+				}
+				projectionOperator.elements.addAll(variablesToSave)
 				
 				val sortOperator = createSortOperator => [
 					entries.addAll(sortEntries)
-					input = op1.input
+					input = op1
 				]
-				
-				// tricky swap, TODO: think about this
-				op1.input = sortOperator
-				op1
+				val newProjectionOperator = createProjectionOperator => [
+					elementsToRemove.addAll(variablesToSave)
+					input = sortOperator
+				]
+				newProjectionOperator
 			} else {
 				op1
 			}
