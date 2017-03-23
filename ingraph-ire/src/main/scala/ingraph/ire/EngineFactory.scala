@@ -6,6 +6,7 @@ import hu.bme.mit.ire.datatypes.{Mask, Tuple}
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary._
+import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
@@ -42,10 +43,12 @@ object EngineFactory {
             case op: ProductionOperator => production
             case op: GroupingAndProjectionOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)
-              op.getElements.map(
-                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup))
-              val mask : Mask = op.getTupleIndices
-              newLocal(Props(new AggregateMapper(expr.child, mask, Vector())))
+              val functions = () => op.getElements.map(
+                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).flatMap(
+                f => f.map(_()) // GOOD LUCK UNDERSTANDING THIS
+              )
+              val mask : Mask = op.getEntries.map(variableLookup(_).toInt)
+              newLocal(Props(new AggregationNode(expr.child, mask, functions)))
 
             case op: SortAndTopOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)

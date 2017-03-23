@@ -1,6 +1,7 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
 
@@ -58,7 +59,7 @@ object ExpressionParser {
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
     tuple(lookup(variable))
 
-  def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
+  def parseValue(exp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = exp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
@@ -96,8 +97,21 @@ object ExpressionParser {
       }
   }
 
-  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]) = exp match {
-    case exp: VariableExpression => println("variable")
-    case exp: FunctionExpression => println(exp.getFunctor.getCategory.name())
-  }
+  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]
+                    ): Option[() => StatefulAggregate] = exp match {
+    case exp: VariableExpression => println("FIX ME"); None
+
+    case exp: FunctionExpression =>
+      import relalg.function.Function._
+      val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
+      val index = lookup(variable)
+      exp.getFunctor match {
+        case AVG => Some(() => new StatefulAverage(index))
+        case COUNT => Some(() => new StatefulCount())
+        case COUNT_ALL => Some(() => new StatefulCount())
+        case MAX => Some(() => new StatefulMax(index))
+        case MIN => Some(() => new StatefulMin(index))
+        case SUM => Some(() => new StatefulSum(index))
+      }
+    }
 }
