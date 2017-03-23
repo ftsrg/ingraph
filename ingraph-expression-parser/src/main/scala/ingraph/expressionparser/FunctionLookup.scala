@@ -123,7 +123,7 @@ object FunctionLookup {
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
       case REPLACE => (original, search, replace) => original.replace(search, replace)
-      case SUBSTRING => (original, start, length) => original.substring(start, length)
+      case SUBSTRING => (original, start, length) => original.substring(start, start.asInstanceOf[Int] + length.asInstanceOf[Int])
       case RANGE => (start, end, step) => start.asInstanceOf[Int] to end by step
     }
   }
