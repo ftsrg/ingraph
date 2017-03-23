@@ -73,6 +73,12 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 			LIMIT 100
 		''')
 	}
-
+	
+	@Test
+	def void sort2() {
+	  process('sort2', '''
+	    MATCH (n: Segment) RETURN n ORDER BY n SKIP 5 LIMIT 10
+    ''')
+	}
 
 }

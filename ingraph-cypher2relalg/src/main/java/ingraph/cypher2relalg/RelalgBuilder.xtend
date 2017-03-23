@@ -389,13 +389,14 @@ class RelalgBuilder {
 					throw new UnsupportedOperationException("op1 should be a projection operator.")
 				}
 				
-				
 				val projectionOperator = op1 as ProjectionOperator
 				
+				val availableVariables = projectionOperator.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].toList
 				for (sortEntry : sortEntries) {
-					val expression = sortEntry.expression
+					val expression = sortEntry.expression					
 					if (expression instanceof VariableExpression) {
-						if (!projectionOperator.elements.contains(expression.variable)) {
+						println(expression.variable)
+						if (!availableVariables.contains(expression.variable)) {
 							variablesToSave.add(createExpressionVariable => [
 								it.expression = expression
 								hasInferredName = true
@@ -410,11 +411,15 @@ class RelalgBuilder {
 					entries.addAll(sortEntries)
 					input = op1
 				]
-				val newProjectionOperator = createProjectionOperator => [
-					elementsToRemove.addAll(variablesToSave)
-					input = sortOperator
-				]
-				newProjectionOperator
+				if (!variablesToSave.empty) {
+					val newProjectionOperator = createProjectionOperator => [
+						elementsToRemove.addAll(variablesToSave)
+						input = sortOperator
+					]
+					newProjectionOperator
+				} else {
+					sortOperator
+				}
 			} else {
 				op1
 			}
