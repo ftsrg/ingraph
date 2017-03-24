@@ -1,22 +1,14 @@
 package hu.bme.mit.ire.test
 
-import scala.concurrent.duration.Duration
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.Matchers
-import org.scalatest.WordSpecLike
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.actorRef2Scala
-import akka.testkit.ImplicitSender
-import akka.testkit.TestActors
-import akka.testkit.TestKit
+import akka.actor.{ActorSystem, Props, actorRef2Scala}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.aggregation._
-import hu.bme.mit.ire.util.TestUtil.cypherList
-import hu.bme.mit.ire.util.TestUtil.mask
-import hu.bme.mit.ire.util.TestUtil.tuple
-import hu.bme.mit.ire.util.TestUtil.tupleBag
+import hu.bme.mit.ire.util.TestUtil.{cypherList, functionMask, tuple, tupleBag}
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+
+import scala.concurrent.duration.Duration
 
 class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -37,7 +29,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Count" should {
     "count with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, mask(3, 0),
+      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
         () => Vector(new StatefulCount())))) // sex and the city
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", 1))))
@@ -61,7 +53,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Collect" should {
     "collect with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, mask(3, 0),
+      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
         () => Vector(new StatefulCollect(2))))) // (sex, city): (weapon)
       counter ! ChangeSet(positive = tupleBag(odin))
       expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
@@ -104,7 +96,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Sum" should {
     "sum with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, mask(3),
+      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
         () => Vector(new StatefulSum(4))))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
@@ -118,7 +110,7 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
   "Average" should {
     "average with complex keys" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, mask(3),
+      val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
         () => Vector(new StatefulAverage(4))))) // sex, sum for height
       counter ! ChangeSet(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
