@@ -1,14 +1,10 @@
 package ingraph.ire
 
-import java.util
-
 import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
-
+import ingraph.expressionparser.Conversions._
 import relalg._
-
-import scala.collection.mutable
 
 class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOperator]],
                           edgeConverters: Map[String, Set[GetEdgesOperator]],
@@ -18,8 +14,6 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
     yield label -> (labels, operators)
 
   override def idParser(obj: Any): Any = obj
-
-  import Conversions._
 
   var transaction: Transaction = _
 
