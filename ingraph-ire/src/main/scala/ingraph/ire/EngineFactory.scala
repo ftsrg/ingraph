@@ -75,7 +75,9 @@ object EngineFactory {
               newLocal(Props(new ProjectionNode(expr.child, mask)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
-              val indices = Vector(0) // TODO
+              val schema = new SchemaToMap().schemaToMap(op)
+              val indices = op.getEdgeVariables.map(v => schema(v))
+              println("alldiff",indices)
               def allDifferent(r: Tuple): Boolean = {
                 val seen = mutable.HashSet[Any]()
                 for (value <- indices.map(r(_))) {
