@@ -19,7 +19,7 @@ class LdbcSnbBiTest extends FlatSpec {
 //    TestCase(4, 4, 0),
 //    TestCase(5, 21, 0),
 //    TestCase(6, 3, 0),
-    TestCase(7, 26, 0),
+    TestCase(7, 26, 0)
 //    TestCase(8, 65, 0),
 //    TestCase(9, 1, 0),
 
@@ -29,8 +29,9 @@ class LdbcSnbBiTest extends FlatSpec {
 //    TestCase(15, 2, 0),
 //    TestCase(16, 99, 0),
 //    TestCase(20, 15, 0),
-    TestCase(23, 100, 0),
-    TestCase(24, 3, 0)) //
+//    TestCase(23, 100, 0),
+//    TestCase(24, 3, 0)
+    ) //
     .foreach(
       t => s"query-${t.number}-size-1" should "work" in {
         val query = Source.fromFile(queryPath(t.number)).getLines().mkString(" ")

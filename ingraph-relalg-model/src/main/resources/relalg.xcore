@@ -189,7 +189,7 @@ class ExpressionVariable extends Variable {
 /* Operators */
 abstract class Operator {
   refers Variable[] basicSchema
-  refers Variable[] extraAttributes
+  refers Variable[] extraAttributes // TODO rename to extraVariables
   refers Variable[] fullSchema
   contains Cardinality cardinality
 }
@@ -233,10 +233,29 @@ class SelectionOperator extends UnaryOperator {
   refers LogicalExpression condition
 }
 
+/*
+ * The ProjectionOperator is the renaissance man of the Rete network.
+ * 
+ * It can:
+ * - Project variables to a schema, i.e. only keeping a certain set of variables.
+ * - Project variables by defining which ones to remove, i.e. only keeping those that were not selected to remove.
+ * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc.  
+ * - Evaluate aggregation functions, e.g. count(n), sum(n.age), etc.
+ * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
+ *   (i.e. the inferencer algorithm has to propagate these variables to the NullaryOperators)
+ * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
+ * 
+ * The ProjectionOperator can also be merged with the GroupingOperator so it becomes a GroupingAndProjectionOperator,
+ * where it does all that plus the grouping-related features.
+ */
 class ProjectionOperator extends UnaryOperator {
+   // use EITHER elements OR elementsToRemove
   refers ExpressionVariable[] elements
-  refers ExpressionVariable[] elementsToRemove // use EITHER elements OR elementsToRemove
+  refers ExpressionVariable[] elementsToRemove
+  
+  // functions
   refers ExpressionVariable[] aggregations
+  refers ExpressionVariable[] otherFunctions // calculated expressions other than aggregations
   int[] tupleIndices
 }
 

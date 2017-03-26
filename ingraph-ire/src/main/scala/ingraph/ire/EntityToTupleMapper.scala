@@ -29,7 +29,9 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
 
   def edgeToTupleType(edge: IngraphEdge, operator: GetEdgesOperator): Tuple = {
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
-      operator.getFullSchema.drop(3).filter(p => p.isInstanceOf[AttributeVariable]).map(a => {
+      operator.getFullSchema.drop(3)
+//        .filter(p => p.isInstanceOf[AttributeVariable])
+        .map(a => {
         val element = a.asInstanceOf[AttributeVariable].getElement
         element match {
           case _ if element == operator.getSourceVertexVariable => edge.sourceVertex.properties(a.getName).asInstanceOf[Any]

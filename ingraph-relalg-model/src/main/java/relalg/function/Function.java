@@ -40,10 +40,12 @@ public enum Function {
   TOFLOAT       (FunctionCategory.CONVERSION,    l(ANY),          FLOAT,     1), // toFloat( expression )
   TOSTRING      (FunctionCategory.STRING,        l(ANY),          STRING,    1), // toString( expression )
 
-  RELATIONSHIPS (FunctionCategory.LIST,          l(PATH),         LIST_TYPE, 1), // relationships( path )
+  LABELS        (FunctionCategory.META,          l(NODE),         LIST_TYPE, 1), // labels( node )
+  KEYS          (FunctionCategory.META,          l(ELEMENT),      LIST_TYPE, 1), // keys( property-container )
+  PROPERTIES    (FunctionCategory.META,          l(ELEMENT),      MAP,       1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
+  RELATIONSHIPS (FunctionCategory.META,          l(PATH),         LIST_TYPE, 1), // relationships( path )
+
   TAIL          (FunctionCategory.LIST,          l(LIST_TYPE),    LIST_TYPE, 1), // tail( expression )
-  KEYS          (FunctionCategory.LIST,          l(ELEMENT),      LIST_TYPE, 1), // keys( property-container )
-  LABELS        (FunctionCategory.LIST,          l(NODE),         LIST_TYPE, 1), // labels( node )
   NODES         (FunctionCategory.LIST,          l(PATH),         LIST_TYPE, 1), // nodes( path )
   RANGE         (FunctionCategory.LIST,          l(INTEGER,
                                                    INTEGER,
@@ -74,7 +76,6 @@ public enum Function {
   HEAD          (FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,       1), // head( expression )
   LAST          (FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,       1), // last( expression )
   LENGTH        (FunctionCategory.SCALAR,        l(ANY),          INTEGER,   1), // length( path ), length( string )
-  PROPERTIES    (FunctionCategory.SCALAR,        l(ELEMENT),      MAP,       1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
   SIZE          (FunctionCategory.SCALAR,        l(LIST_TYPE),    INTEGER,   1), // size( list ), size( pattern expression )
   TYPE          (FunctionCategory.SCALAR,        l(RELATIONSHIP), STRING,    1), // type( relationship )
   ID            (FunctionCategory.SCALAR,        l(ELEMENT),      INTEGER,   1), // id( property-container )
@@ -161,7 +162,11 @@ public enum Function {
   }
 
   public boolean isAggregation() {
-	return category == FunctionCategory.AGGREGATION;
+    return category == FunctionCategory.AGGREGATION;
+  }
+
+  public boolean isMeta() {
+    return category == FunctionCategory.META;
   }
 
   /**

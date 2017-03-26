@@ -2,6 +2,7 @@ package ingraph.relalg.calculators
 
 import java.util.List
 import relalg.AttributeVariable
+import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
@@ -13,16 +14,12 @@ import relalg.UnaryOperator
 import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.function.Function
-import relalg.ExpressionVariable
 
 class VariableExtractor {
 
 	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension CollectionHelper unionCalculator = new CollectionHelper
-
-	val metaFunctions = #[Function.KEYS, Function.LABELS, Function.TYPE, Function.PROPERTIES]
 
 	/**
 	 * Extract extra variables required by unary operators.
@@ -59,7 +56,18 @@ class VariableExtractor {
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
 		val functionExpressions = op.elements.map[expression].filter(FunctionExpression)
 
-		val List<? extends Variable> functions = functionExpressions.filter[metaFunctions.contains(functor)].map [ // deal with metafunctions
+		val List<? extends Variable> metaFunctions = functionExpressions.filter[functor.meta].map [ // deal with metafunctions
+			val functionExpression = it
+			createExpressionVariable => [
+				namedElementContainer = functionExpression.container
+				expression = functionExpression
+				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
+			]
+		].toList
+		
+		
+		// "otherFunctions" are calculated in place
+		val List<ExpressionVariable> otherFunctions = functionExpressions.filter[!functor.meta && !functor.aggregation].map [ // deal with functions that are not aggregations/metafunctions
 			val functionExpression = it
 			createExpressionVariable => [
 				namedElementContainer = functionExpression.container
@@ -68,8 +76,10 @@ class VariableExtractor {
 			]
 		].toList
 
+		op.otherFunctions.addAll(otherFunctions)
+
 		val attributes = op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable)
-		union(functions, attributes)
+		union(metaFunctions, attributes)
 	}
 
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
@@ -87,8 +97,8 @@ class VariableExtractor {
 	}
 
 	def List<? extends Variable> getProvidedVariablesForProjectionOperator(ProjectionOperator op) {
-		op.elements.filter[ it.expression instanceof FunctionExpression ].toList
+//		op.elements.filter[ it.expression instanceof FunctionExpression ].toList
+		union(op.otherFunctions, op.aggregations)
 	}
-
 
 }

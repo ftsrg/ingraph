@@ -5,6 +5,7 @@ public enum FunctionCategory {
   CONVERSION,
   LIST,
   LOGARITHMIC,
+  META,
   NUMERIC,
   PREDICATE,
   SCALAR,
