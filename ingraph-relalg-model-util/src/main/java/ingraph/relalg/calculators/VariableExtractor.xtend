@@ -61,6 +61,7 @@ class VariableExtractor {
 			createExpressionVariable => [
 				namedElementContainer = functionExpression.container
 				expression = functionExpression
+				// all metafunctions have exactly one argument
 				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
 			]
 		].toList
