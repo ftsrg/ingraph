@@ -1,13 +1,10 @@
 package ingraph.driver.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -20,7 +17,9 @@ import org.junit.runners.Parameterized.Parameters;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.io.fs.FileUtils;
 import org.neo4j.shell.tools.imp.format.graphml.XmlGraphMLReader;
+import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 
 import com.google.common.base.Charsets;
@@ -72,15 +71,15 @@ public class LdbcTest {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
 			final String queryPathname = String.format("../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
+			final String queryResultsPath = String.format("../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);
 			final List<Record> results = Lists.newArrayList(statementResult);
-
 			System.out.println("Query " + queryNumber + ": " + results.size());
-			for (Record record : results) {
-				System.out.println(GraphPrettyPrinter.toString(record));
-			}
+			String stringResult = Json.toJson(results.stream().map(Record::asMap).collect(Collectors.toList()));
+			System.out.println(stringResult);
+			FileUtils.writeToFile(new File(queryResultsPath), stringResult.toString(), false);
 			System.out.println();
 		}
 	}
