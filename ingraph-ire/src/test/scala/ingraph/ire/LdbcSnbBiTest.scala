@@ -1,5 +1,9 @@
 package ingraph.ire
 
+import java.io.FileInputStream
+
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
 import hu.bme.mit.ire.TransactionFactory
 import org.scalatest.FlatSpec
 
@@ -15,7 +19,7 @@ class LdbcSnbBiTest extends FlatSpec {
 
   def queryPath(query: Int): String = s"../queries/ldbc-snb-bi/query-$query.cypher"
 
-  def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "json"
+  def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
 
   case class TestCase(number: Int, expectedResultSize: Int, dummy: Int)
 
@@ -91,10 +95,14 @@ class LdbcSnbBiTest extends FlatSpec {
       println(resultNames)
 
       val actualResults = adapter.engine.getResults()
-      val str = Source.fromFile(queryResultPath(t.number)).mkString
-      val expectedResults = JSON.parseFull(str).get
-        .asInstanceOf[List[Map[String, Any]]]
+
+      val javaResults = new Kryo().readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
+        .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
+      import scala.collection.JavaConverters._
+      val expectedResults = javaResults.asScala.map(f => resultNames.map(f.get))
+
       assert(expectedResults.size == actualResults.size)
+      actualResults.foreach(println)
       for ((actual, expected) <- actualResults.zip(expectedResults.toVector)) {
         println(actual, expected)
         assert(actual == expected)

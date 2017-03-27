@@ -1,13 +1,13 @@
 package ingraph.driver.tests;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.xml.stream.XMLStreamException;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,15 +71,25 @@ public class LdbcTest {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
 			final String queryPathname = String.format("../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
-			final String queryResultsPath = String.format("../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
+			final String queryResultsPath = String.format("../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);
-			final List<Record> results = Lists.newArrayList(statementResult);
+			ArrayList<Record> results = Lists.newArrayList(statementResult);
+			List<Map<String, Object>> serializableResults = results
+				.stream().map(f -> {
+					Map<String, Object> m = new HashMap<>();
+					m.putAll(f.asMap());
+					return m;
+				}).collect(Collectors.toList());
 			System.out.println("Query " + queryNumber + ": " + results.size());
-			String stringResult = Json.toJson(results.stream().map(Record::asMap).collect(Collectors.toList()));
-			System.out.println(stringResult);
-			FileUtils.writeToFile(new File(queryResultsPath), stringResult.toString(), false);
+			try (Output output = new Output(new FileOutputStream(queryResultsPath))) {
+				new Kryo().writeClassAndObject(output, serializableResults);
+			}
+
+			for (Record record : results) {
+				System.out.println(GraphPrettyPrinter.toString(record));
+			}
 			System.out.println();
 		}
 	}
