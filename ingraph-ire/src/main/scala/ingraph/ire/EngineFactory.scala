@@ -62,7 +62,7 @@ object EngineFactory {
                   op.getEntries.map( e=> ExpressionParser.parseValue(e.getExpression, variableLookup)),
                   skip,
                   limit,
-                  op.getEntries.map(_.getDirection == null) // WHAT THE FUCK
+                  op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
               )))
 
             case op: SelectionOperator =>
