@@ -25,7 +25,7 @@ class LdbcSnbBiTest extends FlatSpec {
 
   Vector(
 //        TestCase(3, 1, 0),
-        TestCase(4, 4, 0)
+        TestCase(4, 4, 0),
 //        TestCase(5, 21, 0), // maybe alldifferent
 //        TestCase(6, 3, 0),
 //        TestCase(7, 26, 0), // maybe alldifferent
@@ -33,13 +33,13 @@ class LdbcSnbBiTest extends FlatSpec {
 //        TestCase(9, 1, 0), // WHERE WITH
 
 //        TestCase(12, 30, 0), // WHERE WITH
-//        TestCase(13, 5, 0)
+//        TestCase(13, 5, 0),
 //        TestCase(14, 28, 0), // PATH
 //        TestCase(15, 2, 0), // WHERE WITH
 //        TestCase(16, 99, 0), // PATH
 //        TestCase(20, 15, 0), // PATH
-//        TestCase(23, 100, 0), // FunctionExpression
-//        TestCase(24, 3, 0) // FunctionExpression
+        TestCase(23, 100, 0)
+//        TestCase(24, 3, 0) // maybe alldifferent
   ) //
     .foreach(
     t => s"query-${t.number}-size-1" should "work" in {
