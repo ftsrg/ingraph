@@ -99,9 +99,17 @@ class VariableBuilder {
 		this.expressionVariableChain = new HashMap
 		expressionVariableChain.forEach[
 			val f_it = it
-			if (!f_it.hasInferredName) { // only those with actual name or alias can be re-used in the next context
+			/**
+			 * FIXME: deactivated if to add simple variable-wrapping ExpressionVariables regardless of having inferred name
+			 *
+			 * MATCH (segment:Segment)
+			 * WHERE segment.length <= 0
+			 * WITH segment
+			 * RETURN DISTINCT segment, segment.length AS length
+			 */
+			//if (!f_it.hasInferredName) { // only those with actual name or alias can be re-used in the next context
 				this.expressionVariableChain.put(f_it.name, f_it)
-			}
+			//}
 		]
 		this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
 		this.vertexLabelFactory = vertexLabelFactory
