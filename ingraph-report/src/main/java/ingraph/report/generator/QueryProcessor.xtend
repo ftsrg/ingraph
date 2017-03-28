@@ -1,6 +1,7 @@
 package ingraph.report.generator
 
 import ingraph.cypher2relalg.Cypher2Relalg
+import ingraph.logger.IngraphLogger
 import ingraph.relalg.inferencers.BasicSchemaInferencer
 import ingraph.relalg.inferencers.ExtraVariableInferencer
 import ingraph.relalg.inferencers.FullSchemaInferencer
@@ -12,6 +13,7 @@ import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
 import java.util.ArrayList
 import java.util.List
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
@@ -23,6 +25,7 @@ class QueryProcessor {
 	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 	extension TechReportEscaper escaper = new TechReportEscaper
+	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 
 	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
 	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
@@ -45,7 +48,7 @@ class QueryProcessor {
 			container = Cypher2Relalg.processString(testQuery.querySpecification)
 			compilingQueries++
 		} catch (Exception e) {
-			e.printStackTrace
+			error(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
 	}

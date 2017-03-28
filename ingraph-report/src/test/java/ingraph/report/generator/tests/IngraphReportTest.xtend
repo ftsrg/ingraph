@@ -1,5 +1,6 @@
 package ingraph.report.generator.tests
 
+import ingraph.logger.IngraphLogger
 import ingraph.report.generator.QueryProcessor
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
