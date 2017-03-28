@@ -171,8 +171,14 @@ class EdgeVariable extends ElementVariable {
   contains EdgeLabelSet edgeLabelSet // the edge must have *one* of these labels
 }
 
+/**
+ * Describes an attribute lookup on a variable.
+ * The base variable might be of type ElementVariable or ExpressionVariable,
+ * and if so, element xor expVar is filled, respectively.
+ */
 class AttributeVariable extends GraphObjectVariable {
   refers ElementVariable element opposite attributes
+  refers ExpressionVariable expVar
 }
 
 class ListVariable extends Variable {

@@ -10,9 +10,10 @@ import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.logger.IngraphLogger
 import java.util.ArrayList
 import java.util.Collection
+import java.util.HashMap
 import java.util.List
+import java.util.Map
 import org.eclipse.emf.common.util.EList
-import org.eclipse.xtend.lib.annotations.Accessors
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
@@ -20,6 +21,7 @@ import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import relalg.AttributeVariable
 import relalg.EdgeLabel
 import relalg.EdgeVariable
+import relalg.ElementVariable
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.LabelSetStatus
@@ -42,19 +44,16 @@ class VariableBuilder {
 
 	extension ElementVariableUtil elementVariableUtil
 
-	@Accessors(PUBLIC_GETTER)
 	val VertexVariableFactory vertexVariableFactory
-	@Accessors(PUBLIC_GETTER)
 	val EdgeVariableFactory edgeVariableFactory
 	/**
 	 * Chain means that these are chained from the previous return-items.
 	 */
-	@Accessors(PUBLIC_GETTER)
-	val ExpressionVariableFactory expressionVariableFactoryChain
+	val Map<String, ExpressionVariable> expressionVariableChain
 	/**
-	 * Extended below practically means they are created from the aliased return items.
+	 * Extended below practically means they are created from the aliased return items
+	 * or unwind item.
 	 */
-	@Accessors(PUBLIC_GETTER)
 	val ExpressionVariableFactory expressionVariableFactoryExtended
 
 	val VertexLabelFactory vertexLabelFactory
@@ -73,7 +72,7 @@ class VariableBuilder {
 
 		this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
 		this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-		this.expressionVariableFactoryChain = new ExpressionVariableFactory(this.topLevelContainer)
+		this.expressionVariableChain = new HashMap
 		this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
 		this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
 		this.edgeLabelFactory = new EdgeLabelFactory(this.topLevelContainer)
@@ -97,20 +96,11 @@ class VariableBuilder {
 
 		this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
 		this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
-		this.expressionVariableFactoryChain = new ExpressionVariableFactory(this.topLevelContainer)
-		// Actual edgeVariables and vertexVariables are extracted from the ExpressionVariable
-		//        and put right in the corresponding factories' element list
+		this.expressionVariableChain = new HashMap
 		expressionVariableChain.forEach[
 			val f_it = it
 			if (!f_it.hasInferredName) { // only those with actual name or alias can be re-used in the next context
-				switch f_ite: f_it.expression {
-					VariableExpression: switch v: f_ite.variable {
-						VertexVariable: vertexVariableFactory.elements.put(f_it.name, v)
-						EdgeVariable: edgeVariableFactory.elements.put(f_it.name, v)
-						default: expressionVariableFactoryChain.elements.put(f_it.name, f_it)
-					}
-					default: expressionVariableFactoryChain.elements.put(f_it.name, f_it)
-				}
+				this.expressionVariableChain.put(f_it.name, f_it)
 			}
 		]
 		this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
@@ -129,61 +119,46 @@ class VariableBuilder {
 	}
 
 	protected def AttributeVariable buildPropertyLookupHelper(Variable ev, ExpressionNodeLabelsAndPropertyLookup e) {
-		switch ev {
-			VertexVariable: {
-				if (e.propertyLookups.length == 1) {
-					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
-				} else {
-					unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+		if (e.propertyLookups.length == 1) {
+			val attributeName = e.propertyLookups.get(0).propertyKeyName
+
+			if (ev instanceof ExpressionVariable) {
+				val innerVariable = extractElementVariable(ev)
+				if (innerVariable == null) {
+					unrecoverableError('''Can't find neither VertexVariable nor EdgeVariable wrapped into the ExpressionVariable, so can't build attribute variable.''')
+				}
+			}
+
+			switch ev {
+				VertexVariable
+			,	EdgeVariable
+			,	ExpressionVariable
+				: {
+					ev.createAttribute(attributeName)
+				}
+				default: {
+					unrecoverableError('''Unsupported type received: «ev.class.name»''')
 					null
 				}
 			}
-			EdgeVariable: {
-				if (e.propertyLookups.length == 1) {
-					ev.createAttribute(e.propertyLookups.get(0).propertyKeyName)
-				} else {
-					unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
-					null
-				}
-			}
-			default: {
-				unrecoverableError('''Unsupported type received: «ev.class.name»''')
-				null
-			}
+
+		} else {
+			unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+			null
 		}
 	}
 
 	def dispatch Variable buildRelalgVariable(ExpressionNodeLabelsAndPropertyLookup e) {
-		val ev = buildRelalgVariable(e.left)
-		buildPropertyLookupHelper(ev, e)
+		val v = buildRelalgVariable(e.left)
+		buildPropertyLookupHelper(v, e)
 	}
 
 	def dispatch Variable buildRelalgVariable(VariableRef varRef) {
-		switch varRef {
-			case vertexVariableFactory.hasElement(varRef.variableRef.name) &&
-				edgeVariableFactory.hasElement(varRef.variableRef.name): {
-				unrecoverableError('''Variable name ambigous: «varRef.variableRef.name»''')
-				null
-			}
-			case vertexVariableFactory.hasElement(varRef.variableRef.name): {
-				vertexVariableFactory.createElement(varRef.variableRef.name)
-			}
-			case edgeVariableFactory.hasElement(varRef.variableRef.name): {
-				edgeVariableFactory.createElement(varRef.variableRef.name)
-			}
-			default: {
-				unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
-				null
-			}
-		}
+		buildRelalgVariableInternal(varRef, false)
 	}
 
 	def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
-		if (expressionVariableFactoryExtended.hasElement(varRef.variableRef.name)) {
-			expressionVariableFactoryExtended.createElement(varRef.variableRef.name)
-		} else {
-			buildRelalgVariable(varRef)
-		}
+		buildRelalgVariableInternal(varRef, true)
 	}
 
 	/**
@@ -193,17 +168,17 @@ class VariableBuilder {
 	 * These "*Extended" methods take Expression variables into account for name resolution.
 	 */
 	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
-		val ev = buildRelalgVariableExtended(e.left)
-		if (ev instanceof ExpressionVariable) {
-			val evx = ev.expression
-			if (evx instanceof VariableExpression) {
-				buildPropertyLookupHelper(evx.variable, e)
-			} else {
-				unrecoverableError('''Property lookup attempt on an expression of type «ev.expression.class.name»''')
-				null
-			}
+		val v = buildRelalgVariableExtended(e.left)
+		buildPropertyLookupHelper(v, e)
+	}
+
+	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {
+		val v = findVariable(varRef.variableRef.name, useExpressionVariables)
+		if (v==null) {
+			unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
+			null
 		} else {
-			buildPropertyLookupHelper(ev, e)
+			v
 		}
 	}
 
@@ -226,16 +201,23 @@ class VariableBuilder {
 		vertexVariable
 	}
 
+	/**
+	 * Wraps an expression into an ExpressionVariable with its name given or inferred.
+	 *
+	 * @param name the name, or null to have it inferred.
+	 * @param expression the expression to wrap
+	 *
+	 * @return the ExpressionVariable itself.
+	 */
 	def ExpressionVariable buildExpressionVariable(String name, Expression expression) {
-		expressionVariableFactoryExtended.createElement(name, expression) => [
-			hasInferredName = false
-		]
-	}
+		val iName = if (name === null) {
+			ExpressionNameInferencer.inferName(expression, logger)
+		} else {
+			name
+		}
 
-	def ExpressionVariable buildExpressionVariable(Expression expression) {
-		val name = ExpressionNameInferencer.inferName(expression, logger)
-		buildExpressionVariable(name, expression) => [
-			hasInferredName = true
+		expressionVariableFactoryExtended.createElement(iName, expression) => [
+			hasInferredName = (name === null)
 		]
 	}
 
@@ -250,10 +232,10 @@ class VariableBuilder {
 
 	def void combineLabelSet(EdgeVariable edgeVariable, EList<String> labels, EdgeLabelFactory edgeLabelFactory) {
 		/*
-		 *  if we receive an empty labelset, this does not change the labelset constraint
+		 * if we receive an empty labelset, this does not change the labelset constraint
 		 * if the edge variable
 		 */
-		if (labels == null || labels.empty) {
+		if (labels === null || labels.empty) {
 			return
 		}
 
@@ -305,7 +287,7 @@ class VariableBuilder {
 	}
 
 	/**
-	 * Builds or resolves the appropriate variable and then packs it into a VariableExpression.
+	 * Packs the appropriate variable into a VariableExpression.
 	 *
 	 * This builder method ensures that the new VariableEpression instance
 	 * is registered to the container registered with this builder.
@@ -341,5 +323,64 @@ class VariableBuilder {
 			variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
 			container = topLevelContainer
 		]
+	}
+
+	def getVertexVariableFactoryElements() {
+		vertexVariableFactory.elements
+	}
+	def getEdgeVariableFactoryElements() {
+		edgeVariableFactory.elements
+	}
+
+	/**
+	 * Finds and extracts (returns) the enclosed ElementVariable instance.
+	 * If not found, null is returned.
+	 *
+	 * For a VertexVariable and EdgeVariable, this is idempotent, i.e. returns the variable instance itself.
+	 *
+	 * For an ExpressionVariable, see if it wraps a VertexVariable or EdgeVariable, and if so, returns that variable.
+	 * Note, that this wrapping can be deep like
+	 * (ExpressionVariable wraps VariableExpression wraps)+ ElementVariable
+	 */
+	def dispatch ElementVariable extractElementVariable(VertexVariable v) {
+		v
+	}
+	def dispatch ElementVariable extractElementVariable(EdgeVariable e) {
+		e
+	}
+	def dispatch ElementVariable extractElementVariable(ExpressionVariable ev) {
+		val exp = ev.expression
+		if (exp instanceof VariableExpression) {
+			extractElementVariable(exp.variable)
+		} else {
+			// not found
+			null
+		}
+	}
+
+	/**
+	 * Finds and returns a variable by name in the variable registers,
+	 * i.e. in the factories or in the chained variables.
+	 *
+	 * @param useExpressionVariables specifies whether to look into the expressionVariableFactory,
+	 *        i.e. if we are interested in variables from the WITH/RETURN/UNWIND clauses of the current subquery. 
+	 *        Note, that chained variables are always looked up
+	 *
+	 * If not found or null was passed for name, null is returned.
+	 */
+	def findVariable(String name, boolean useExpressionVariables) {
+		if (name === null) {
+			null
+		} else if (useExpressionVariables && expressionVariableFactoryExtended.hasElement(name)) {
+			expressionVariableFactoryExtended.getElement(name)
+		} else if (expressionVariableChain.get(name) !== null) {
+			expressionVariableChain.get(name)
+		} else if (vertexVariableFactory.hasElement(name)) {
+			vertexVariableFactory.getElement(name)
+		} else if (edgeVariableFactory.hasElement(name)) {
+			edgeVariableFactory.getElement(name)
+		} else {
+			null
+		}
 	}
 }

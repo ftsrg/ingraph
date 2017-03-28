@@ -56,7 +56,7 @@ class ExpressionConverter {
 	}
 
 	def dispatch CharSequence convertExpression(AttributeVariable attributeVariable) {
-		'''\var{«attributeVariable.element.escapedName».«attributeVariable.escapedName»}'''
+		'''\var{«IF attributeVariable.element !== null»«attributeVariable.element.escapedName»«ELSE»«attributeVariable.expVar.escapedName»«ENDIF».«attributeVariable.escapedName»}'''
 	}
 
 	def dispatch CharSequence convertExpression(ExpressionVariable expVariable) {

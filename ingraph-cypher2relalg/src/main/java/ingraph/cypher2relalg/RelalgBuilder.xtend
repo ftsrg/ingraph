@@ -272,16 +272,15 @@ class RelalgBuilder {
 				content
 			}
 		val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
-		val afterUnwind = if (singleQuery_unwindClauseList !== null) {
-				val u0 = singleQuery_unwindClauseList
-				createUnwindOperator => [
-					element = variableBuilder.expressionVariableFactoryExtended.createElement(u0.variable.name,
-						buildRelalgExpression(u0.expression))
-					input = afterReturn
-				]
-			} else {
-				afterReturn
-			}
+		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
+			val u0 = singleQuery_unwindClauseList
+			createUnwindOperator => [
+				element = variableBuilder.buildExpressionVariable(u0.variable.name, buildRelalgExpression(u0.expression))
+				input = afterReturn
+			]
+		} else {
+			afterReturn
+		}
 		afterUnwind
 	}
 
@@ -296,25 +295,27 @@ class RelalgBuilder {
 			input = content
 			if ("*".equals(returnBody.returnItems.get(0).all)) {
 				// add the non-dontCare vertex variables to the return list sorted by variable name
-				val vEl = variableBuilder.vertexVariableFactory.elements
+				val vEl = variableBuilder.vertexVariableFactoryElements
 				vEl.keySet.sort.forEach [ key |
 					val variable = vEl.get(key)
 					if (!variable.dontCare) {
 						elements.add(
 							variableBuilder.buildExpressionVariable(
-								variableBuilder.buildVariableExpression(variable)
+								null
+							,	variableBuilder.buildVariableExpression(variable)
 							)
 						)
 					}
 				]
 				// add the non-dontCare edge variables to the return list sorted by variable name
-				val eEl = variableBuilder.edgeVariableFactory.elements
+				val eEl = variableBuilder.edgeVariableFactoryElements
 				eEl.keySet.sort.forEach [ key |
 					val variable = eEl.get(key)
 					if (!variable.dontCare) {
 						elements.add(
 							variableBuilder.buildExpressionVariable(
-								variableBuilder.buildVariableExpression(variable)
+								null
+							,	variableBuilder.buildVariableExpression(variable)
 							)
 						)
 					}
