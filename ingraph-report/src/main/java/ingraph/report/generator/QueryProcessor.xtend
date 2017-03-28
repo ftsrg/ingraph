@@ -48,7 +48,8 @@ class QueryProcessor {
 			container = Cypher2Relalg.processString(testQuery.querySpecification)
 			compilingQueries++
 		} catch (Exception e) {
-			error(ExceptionUtils.getStackTrace(e))
+			info("An error occurred during the compilation of the query:")
+			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
 	}
