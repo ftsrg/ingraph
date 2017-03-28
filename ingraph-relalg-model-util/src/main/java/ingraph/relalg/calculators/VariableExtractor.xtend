@@ -18,8 +18,8 @@ import relalg.VariableExpression
 class VariableExtractor {
 
 	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension CollectionHelper unionCalculator = new CollectionHelper
+	extension CollectionHelper collectionHelper = new CollectionHelper
+	extension FunctionArgumentExtractor functionArgumentExtractor = new FunctionArgumentExtractor
 
 	/**
 	 * Extract extra variables required by unary operators.
@@ -56,33 +56,15 @@ class VariableExtractor {
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
 		val functionExpressions = op.elements.map[expression].filter(FunctionExpression)
 
-		val List<? extends Variable> metaFunctions = functionExpressions.filter[functor.meta].map [ // deal with metafunctions
-			val functionExpression = it
-			createExpressionVariable => [
-				namedElementContainer = functionExpression.container
-				expression = functionExpression
-				// all metafunctions have exactly one argument
-				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
-			]
-		].toList
-		
-		
-		// "otherFunctions" are calculated in place
-		val List<ExpressionVariable> otherFunctions = functionExpressions.filter[!functor.meta && !functor.aggregation].map [ // deal with functions that are not aggregations/metafunctions
-			val functionExpression = it
-			createExpressionVariable => [
-				namedElementContainer = functionExpression.container
-				expression = functionExpression
-				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
-			]
-		].toList
+		// TODO: filter out duplicates
+		val List<? extends Variable> arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
-		op.otherFunctions.addAll(otherFunctions)
-
-		val attributes = op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable)
-		union(metaFunctions, attributes)
+//		op.otherFunctions.addAll(arguments)
+//		val attributes = op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable)
+//		union(metaFunctions, attributes)
+		arguments
 	}
-
+	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
 		op.entries
 	}
