@@ -24,20 +24,20 @@ class LdbcSnbBiTest extends FlatSpec {
   case class TestCase(number: Int, expectedResultSize: Int, dummy: Int)
 
   Vector(
-    //    TestCase(3, 1, 0),
-    //    TestCase(4, 4, 0),
-    //    TestCase(5, 21, 0),
-    //    TestCase(6, 3, 0),
+        TestCase(3, 1, 0),
+        TestCase(4, 4, 0),
+        TestCase(5, 21, 0),
+        TestCase(6, 3, 0),
     TestCase(7, 26, 0),
-    //    TestCase(8, 65, 0),
-    //    TestCase(9, 1, 0),
+        TestCase(8, 65, 0),
+        TestCase(9, 1, 0),
 
-    //    TestCase(12, 30, 0),
-    //    TestCase(13, 5, 0),
-    //    TestCase(14, 28, 0),
-    //    TestCase(15, 2, 0),
-    //    TestCase(16, 99, 0),
-    //    TestCase(20, 15, 0),
+        TestCase(12, 30, 0),
+        TestCase(13, 5, 0),
+        TestCase(14, 28, 0),
+        TestCase(15, 2, 0),
+        TestCase(16, 99, 0),
+        TestCase(20, 15, 0),
     TestCase(23, 100, 0),
     TestCase(24, 3, 0)
   ) //

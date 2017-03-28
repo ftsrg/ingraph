@@ -1,3 +1,4 @@
+// Experts in social circle
 MATCH
   (:Country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)-[:knows*1..2]-(:Person),
   (person)<-[:hasCreator]-(message:Message)-[:hasTag]->(:Tag)-[:hasType]->(:TagClass),

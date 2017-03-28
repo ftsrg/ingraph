@@ -1,3 +1,4 @@
+// Tag evolution
 MATCH (tag:Tag)<-[:hasTag]-(message:Message)
 WHERE toInt(substring(message.creationDate, 0, 4)) = 2010
   AND toInt(substring(message.creationDate, 5, 2)) = 11

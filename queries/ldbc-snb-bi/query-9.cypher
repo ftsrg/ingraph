@@ -1,3 +1,4 @@
+// Forum with related Tags
 MATCH
   (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(post1:Post)<-[:containerOf]-(forum:Forum)-[:containerOf]->(post2:Post)-[:hasTag]->(:Tag)-[:hasType]->(:TagClass),
   (forum)-[:hasMember]->(person:Person)

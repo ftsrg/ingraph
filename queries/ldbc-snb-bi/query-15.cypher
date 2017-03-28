@@ -1,3 +1,4 @@
+// Social normals
 MATCH
   (country:Country),
   (country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(somePerson:Person),

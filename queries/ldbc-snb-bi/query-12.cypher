@@ -1,3 +1,4 @@
+// Trending Posts
 MATCH
   (message:Message)-[:hasCreator]->(creator:Person),
   (message)<-[:likes]-(fan:Person)

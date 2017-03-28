@@ -1,3 +1,4 @@
+// Stranger's interaction
 MATCH
   (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(forum1:Forum),
   (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(forum2:Forum),

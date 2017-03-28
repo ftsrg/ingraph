@@ -1,3 +1,4 @@
+// Messages by Topic and Continent
 MATCH
   (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(message:Message)<-[:likes]-(person:Person),
   (message)-[:isLocatedIn]->(:Country)-[:isPartOf]->(continent:Continent)

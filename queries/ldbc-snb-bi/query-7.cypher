@@ -1,3 +1,4 @@
+// Most authoritative users on a given topic
 MATCH
   (tag:Tag)<-[:hasTag]-(:Message)-[:hasCreator]->(person1:Person)
 MATCH
