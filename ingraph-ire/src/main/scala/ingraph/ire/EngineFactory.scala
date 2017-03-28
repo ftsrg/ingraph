@@ -2,14 +2,15 @@ package ingraph.ire
 
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.{Mask, Tuple}
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary._
-import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulAggregate}
+import hu.bme.mit.ire.nodes.unary.aggregation.AggregationNode
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
+import ingraph.expressionparser.Conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
@@ -17,8 +18,6 @@ import relalg._
 import scala.collection.mutable
 
 object EngineFactory {
-
-  import Conversions._
 
   val schemaToMap = new SchemaToMap()
 
