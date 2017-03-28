@@ -21,6 +21,7 @@ import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
 import org.slizaa.neo4j.opencypher.openCypher.Count
+import org.slizaa.neo4j.opencypher.openCypher.Create
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.EndsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
@@ -180,7 +181,7 @@ class RelalgBuilder {
 		/**
 		 * Process each subquery.
 		 * 
-		 * A subquery has the form (MATCH*)((WITH UNWIND?)|UNWIND|RETURN)
+		 * A subquery has the form (MATCH*)(CREATE|(WITH UNWIND?)|UNWIND|RETURN)
 		 */
 		var from = 0
 		var variableBuilderChain = variableBuilder
@@ -189,7 +190,7 @@ class RelalgBuilder {
 			val next = if (i + 1 < clauses.length) {
 					clauses.get(i + 1)
 				}
-			if (current instanceof With && ! ( next instanceof Unwind ) || current instanceof Unwind ||
+			if (current instanceof Create || current instanceof With && ! ( next instanceof Unwind ) || current instanceof Unwind ||
 				current instanceof Return) {
 				// [fromX, toX) is the range of clauses that form a subquery
 				val fromX = from
@@ -283,7 +284,24 @@ class RelalgBuilder {
 		} else {
 			afterReturn
 		}
-		afterUnwind
+		val singleQuery_createClause = clauses.filter(typeof(Create)).head
+		val afterCreate = if (singleQuery_createClause !== null) {
+			val u0 = singleQuery_createClause
+			val u1 = createCreateOperator => [
+				input = afterUnwind
+			]
+			val u2 = u0.pattern.patterns.get(0) as PatternElement
+			val u3 = createVariableExpression => [
+				variable = variableBuilder.buildVertexVariable(u2.nodepattern)
+				container = topLevelContainer
+			]
+			val u4 = variableBuilder.buildExpressionVariable(u3.variable.name, u3)
+			u1.elements.add(u4)
+			u1
+		} else {
+			afterUnwind
+		}
+		afterCreate
 	}
 
 	/**

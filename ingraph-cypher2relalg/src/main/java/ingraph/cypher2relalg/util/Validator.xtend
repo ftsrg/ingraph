@@ -4,6 +4,7 @@ import ingraph.logger.IngraphLogger
 import java.util.LinkedList
 import java.util.List
 import org.slizaa.neo4j.opencypher.openCypher.Clause
+import org.slizaa.neo4j.opencypher.openCypher.Create
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
@@ -42,29 +43,32 @@ class Validator {
 	 * A subquery has the form (MATCH*)((WITH UNWIND?)|UNWIND|RETURN)
 	 *
 	 * Checks performed:
-	 * - it consists of only MATCH, WITH, UNWIND and RETURN clauses
-	 * - it ends with RETURN, WITH or UNWIND
-	 * - it has at most 1 of either RETURN or WITH
+	 * - it consists of only MATCH, CREATE, WITH, UNWIND and RETURN clauses
+	 * - it ends with RETURN, CREATE, WITH or UNWIND
+	 * - it has at most 1 of either RETURN, WITH or CREATE
 	 * - it has at most 1 UNWIND
-	 * - it has at least one of WITH, UNWIND and RETURN
+	 * - it has at least one of WITH, CREATE, UNWIND and RETURN
 	 */
 	def static void checkSubQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
 		var numReturnOrWith = 0
 		var numUnwind = 0
 		var numMatch = 0
+		var numCreate = 0
 		for (Clause c: clauses) {
 			switch c {
 				Match: numMatch++
+				Create: numCreate++
 				Unwind: numUnwind++
 				With, Return: numReturnOrWith++
-				default: logger.unsupported('''Currently we only support MATCH, WITH, UNWIND and RETURN clauses in a single subquery. Found: «c.class.name».''')
+				default: logger.unsupported('''Currently we only support MATCH, CREATE, WITH, UNWIND and RETURN clauses in a single subquery. Found: «c.class.name».''')
 			}
 		}
 		if ( ! (clauses.last instanceof Return
 		     || clauses.last instanceof With
 		     || clauses.last instanceof Unwind
+		     || clauses.last instanceof Create
 		)) {
-			logger.unsupported('''Last clause of a single subquery must be RETURN, WITH or UNWIND, but found «clauses.last.class.name» instead.''')
+			logger.unsupported('''Last clause of a single subquery must be RETURN, CREATE, WITH or UNWIND, but found «clauses.last.class.name» instead.''')
 		}
 		if ( numUnwind > 1 ) {
 			logger.unsupported('''At most 1 Unwind clause allowed in a subquery. Found «numUnwind».''')
@@ -72,8 +76,8 @@ class Validator {
 		if ( numReturnOrWith > 1 ) {
 			logger.unsupported('''At most 1 Return or With clause allowed in a subquery. Found «numReturnOrWith».''')
 		}
-		if ( numUnwind + numReturnOrWith < 1 ) {
-			logger.unsupported('''There mist be at least one of WITH, RETURN or UNWIND in a subquery, but none of them was found.''')
+		if ( numCreate + numUnwind + numReturnOrWith < 1 ) {
+			logger.unsupported('''There mist be at least one of WITH, CREATE, RETURN or UNWIND in a subquery, but none of them was found.''')
 		}
 	}
 
@@ -81,7 +85,7 @@ class Validator {
 	 * Some checks for a single query's clauses
 	 *
 	 * Checks performed:
-	 * - we currently support only the following clauses: MATCH, WITH UNWIND?, UNWIND, RETURN
+	 * - we currently support only the following clauses: MATCH, CREATE, WITH UNWIND?, UNWIND, RETURN
 	 * - last clause must be a RETURN clause
 	 */
 	def static void checkSingleQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
@@ -90,12 +94,13 @@ class Validator {
 			     || c instanceof With
 			     || c instanceof Unwind
 			     || c instanceof Return
+			     || c instanceof Create
 			)) {
-				logger.unsupported('''Currently we only support MATCH, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
+				logger.unsupported('''Currently we only support MATCH, CREATE, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
 			}
 		}
-		if ( ! (clauses.last instanceof Return)) {
-			logger.unsupported('''Last clause of a single query must be RETURN, but found «clauses.last.class.name» instead.''')
+		if ( ! (clauses.last instanceof Return || clauses.last instanceof Create)) {
+			logger.unsupported('''Last clause of a single query must be RETURN or CREATE but found «clauses.last.class.name» instead.''')
 		}
 	}
 

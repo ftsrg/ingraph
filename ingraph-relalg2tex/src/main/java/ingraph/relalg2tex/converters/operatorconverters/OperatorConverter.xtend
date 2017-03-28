@@ -8,6 +8,7 @@ import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
+import relalg.CreateOperator
 import relalg.DualObjectSourceOperator
 import relalg.DuplicateEliminationOperator
 import relalg.ExpandOperator
@@ -97,8 +98,16 @@ class OperatorConverter {
 		#['''«projectionOperator(op)»''']
 	}
 
+	def dispatch convertOperator(CreateOperator op) {
+		#['''«createOperator(op)»''']
+	}
+
 	def dispatch convertOperator(GroupingAndProjectionOperator op) {
 		#['''«groupingOperator(op)» «projectionOperator(op)»''']
+	}
+
+	def createOperator(CreateOperator op) {
+		'''\create{«op.elements.convertReturnableElementList»}'''
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {
