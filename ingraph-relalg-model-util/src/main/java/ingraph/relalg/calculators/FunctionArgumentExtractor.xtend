@@ -15,7 +15,9 @@ class FunctionArgumentExtractor {
 
 	def List<? extends Variable> extractFunctionArguments(FunctionExpression fe) {
 		if (fe.functor.aggregation) {
-			// TODO we should handle aggregations here but not that aggregations cannot be nested
+			null
+			// TODO we should handle aggregations here but not that aggregations cannot be nested.
+			// also, maybe this cannot happen now?
 		} else if (fe.functor.meta) {
 			#[createExpressionVariable => [
 				namedElementContainer = fe.container

@@ -17,6 +17,7 @@ import relalg.VariableExpression
 
 class VariableExtractor {
 
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
 	extension CollectionHelper collectionHelper = new CollectionHelper
 	extension FunctionArgumentExtractor functionArgumentExtractor = new FunctionArgumentExtractor
@@ -59,9 +60,11 @@ class VariableExtractor {
 		// TODO: filter out duplicates
 		val List<? extends Variable> arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
-//		op.otherFunctions.addAll(arguments)
-//		val attributes = op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable)
-//		union(metaFunctions, attributes)
+		val List<ExpressionVariable> otherFunctions = op.elements.filter[expression instanceof FunctionExpression]
+			.filter[!(expression as FunctionExpression).functor.meta && !(expression as FunctionExpression).functor.aggregation]
+			.toList
+
+		op.otherFunctions.addAll(otherFunctions)
 		arguments
 	}
 	
