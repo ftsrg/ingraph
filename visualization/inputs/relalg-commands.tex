@@ -110,6 +110,12 @@
 	}{
 		\pi
 	}}
+	
+\newcommand{\createop}{\iftoggle{textualoperators}{
+	\relalgop{Create}
+}{
+	\zeta
+}}
 
 \newcommand{\selectionop}{\iftoggle{textualoperators}{
 		\relalgop{Selection}
@@ -241,6 +247,7 @@
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 \newcommand{\sort}[1]{\sortop_{#1}}
 \newcommand{\projection}[2]{\projectionop_{#1}^{#2}}
+\newcommand{\create}[1]{\createop_{#1}}
 \newcommand{\selection}[1]{\selectionop_{#1}}
 \newcommand{\rename}[1]{\renameop_{#1}}
 \newcommand{\grouping}[1]{\groupingop_{#1}}
