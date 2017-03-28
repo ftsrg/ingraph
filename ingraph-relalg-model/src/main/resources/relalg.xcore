@@ -309,10 +309,23 @@ class ProjectionOperator extends BeamerOperator {
   refers ExpressionVariable[] otherFunctions // calculated expressions other than aggregations
 }
 
-abstract class NavigationOperator extends Operator {
+/**
+ * Represents the create/update/delete operator.
+ */
+ abstract class CUDOperator extends UnaryOperator {
+ 	refers ExpressionVariable[] elements
+ }
+ 
+ class CreateOperator extends CUDOperator {
+ }
+
+abstract class NavigationOperator extends Operator, NavigationDescriptor{
   int minHops
-  contains MaxHops maxHops  
-  Direction direction
+  contains MaxHops maxHops
+}
+
+abstract class NavigationDescriptor extends Expression {
+	Direction direction
   refers VertexVariable sourceVertexVariable
   refers EdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable
