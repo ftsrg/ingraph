@@ -21,6 +21,7 @@ public enum Function {
   //                                             input            output     min.
   //             category                        types            type      arity
   AVG           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
+  COLLECT       (FunctionCategory.AGGREGATION,   l(NUMBER),       LIST_TYPE, 1),
   COUNT         (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
   COUNT_ALL     (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1), // count(*)
   MAX           (FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,    1),
