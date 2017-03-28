@@ -9,7 +9,7 @@ import org.scalatest.FlatSpec
 
 import scala.io.Source
 import org.supercsv.prefs.CsvPreference
-import relalg.{ProductionOperator, ProjectionOperator}
+import relalg._
 
 import scala.util.parsing.json.JSON
 
@@ -84,26 +84,24 @@ class LdbcSnbBiTest extends FlatSpec {
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
       adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
       tran.close()
-
-      // Note that the whole return statement needs to be on the same line.
-      val resultNames = Source.fromFile(queryPath(t.number)).getLines()
-        .find(_.startsWith("RETURN")).map(l => l.drop("RETURN ".length).split(", ").map {
-        case f if f.contains(" AS ") => f.split(" AS ")(1)
-        case f => f
+      import ingraph.expressionparser.Conversions._
+      val resultNames = adapter.plan.getRootExpression.getBasicSchema.map {
+        case a: AttributeVariable => s"${a.getElement.getName}.${a.getName}"
+        case e => e.getName
       }
-      ).get.toVector
-
+      println(resultNames)
       val actualResults = adapter.engine.getResults()
 
       val javaResults = new Kryo().readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
         .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
       import scala.collection.JavaConverters._
       val expectedResults = javaResults.asScala.map(f => resultNames.map(f.get))
+      expectedResults.foreach(n => assert(n != null))
 
       assert(expectedResults.size == actualResults.size)
-      for ((actual, expected) <- actualResults.zip(expectedResults.toVector)) {
+      for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
         println(actual, expected)
-        assert(actual == expected)
+        assert(expected == actual)
       }
     })
 }

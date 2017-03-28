@@ -7,7 +7,7 @@ import ingraph.relalg2rete.Relalg2ReteTransformationAndInferencer
 import org.supercsv.prefs.CsvPreference
 
 class IngraphAdapter(querySpecification: String) {
-  private val plan = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(querySpecification))
+  val plan = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(querySpecification))
 
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
 
