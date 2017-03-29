@@ -931,6 +931,19 @@ class RelalgBuilder {
 		]
 	}
 
+	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(VariableRef e) {
+		val ae = createVariableArithmeticExpression => [
+			variable = variableBuilder.buildRelalgVariable(e)
+			container = topLevelContainer
+		]
+
+		if (ae.variable instanceof ElementVariable) {
+			unsupported('''Unsupported variable of type «ae.class.name» found in an arithmetic expression.''')
+		}
+
+		ae
+	}
+
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(FunctionInvocation fi) {
 		val fe = createFunctionArithmeticExpression => [
 			container = topLevelContainer
