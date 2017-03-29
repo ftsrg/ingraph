@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.ActorRef
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
+import hu.bme.mit.ire.messages.{Δ, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
 import java.util.Collection
@@ -22,11 +22,11 @@ object Utils {
     * @param cs
     * @return
     */
-  def changeSetPermutations(cs: ChangeSet) = {
+  def changeSetPermutations(cs: Δ) = {
     val values = for (
       pos <- cs.positive.toVector.permutations;
       neg <- cs.negative.toVector.permutations
-    ) yield ChangeSet(pos, neg)
+    ) yield Δ(pos, neg)
     values.toSeq
   }
 
@@ -74,9 +74,9 @@ object SizeCounter {
   def count(containers: Iterable[Iterable[Any]]*): Long = {
     containers.map(tuples => tuples.foldLeft(0)(_ + _.size)).sum
   }
-  
+
   def count(containers: Collection[Tuple]): Long = {
     containers.size
   }
-  
+
 }

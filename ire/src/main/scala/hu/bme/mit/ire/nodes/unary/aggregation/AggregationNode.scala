@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.{Mask, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{Δ, ReteMessage}
 import hu.bme.mit.ire.nodes.unary.UnaryNode
 
 import scala.collection.immutable.VectorBuilder
@@ -14,7 +14,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
   private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
 
-  override def onChangeSet(changeSet: ChangeSet): Unit = {
+  override def onChangeSet(changeSet: Δ): Unit = {
     val oldValues = mutable.Map[Tuple, (Tuple, Int)]()
     for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(m => m(t)))) {
       val aggregators = data.getOrElseUpdate(key, functions())
@@ -44,7 +44,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
           negative += key ++ oldValues
       }
     }
-    forward(ChangeSet(positive = positive.result(), negative = negative.result()))
+    forward(Δ(positive = positive.result(), negative = negative.result()))
   }
 
   override def onSizeRequest(): Long = ???

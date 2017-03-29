@@ -8,21 +8,21 @@ abstract class UnaryNode(val expectedTerminatorCount: Int = 1) extends Actor wit
   val log = context.system.log
   val name = self.path.name
 
-  def onChangeSet(changeSet: ChangeSet)
+  def onChangeSet(changeSet: Δ)
 
   override def receive: Actor.Receive = {
-    case pause: Pause => context.become({
-      case resume: Resume => {
+    case pause: ▌▌ => context.become({
+      case resume: ▶ => {
         if (resume.messageID == pause.messageID) {
           context.unbecome()
           unstashAll()
         } else stash()
       }
-      case terminator: TerminatorMessage => handleTerminator(terminator)
+      case terminator: ✝ => handleTerminator(terminator)
       case _ => stash()
     })
-    case changeSet: ChangeSet => onChangeSet(changeSet)
-    case terminator: TerminatorMessage => handleTerminator(terminator)
+    case changeSet: Δ => onChangeSet(changeSet)
+    case terminator: ✝ => handleTerminator(terminator)
     case Primary | Secondary =>
       throw new UnsupportedOperationException(s"$name received Beta-wrapped message")
     case _:SizeRequest => sender() ! onSizeRequest()

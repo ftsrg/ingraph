@@ -1,7 +1,7 @@
 package hu.bme.mit.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 
 import scala.collection.mutable
 
@@ -14,11 +14,11 @@ trait Transaction extends AutoCloseable {
 }
 
 class TransactionFactory(val messageSize: Int = 16) {
-  val subscribers = new mutable.HashMap[String, mutable.MutableList[(ChangeSet) => Unit]]
+  val subscribers = new mutable.HashMap[String, mutable.MutableList[(Δ) => Unit]]
   val usedIDs = new mutable.HashSet[Long]()
   val idGenerator = new scala.util.Random
 
-  def subscribe(subscriber: Map[String, (ChangeSet) => Unit]) = {
+  def subscribe(subscriber: Map[String, (Δ) => Unit]) = {
     for ((attribute, func) <- subscriber)
       subscribers.getOrElseUpdate(attribute, mutable.MutableList()) += func
   }
@@ -45,8 +45,8 @@ class TransactionFactory(val messageSize: Int = 16) {
     val negativeChangeSets = mutable.HashMap.empty[String, Vector[Tuple]]
 
     def close(): Unit = {
-      positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(positive = kv._2))))
-      negativeChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(ChangeSet(negative = kv._2))))
+      positiveChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(Δ(positive = kv._2))))
+      negativeChangeSets.foreach(kv => subscribers(kv._1).foreach(sub => sub(Δ(negative = kv._2))))
       positiveChangeSets.clear()
       negativeChangeSets.clear()
     }
@@ -75,7 +75,7 @@ class TransactionFactory(val messageSize: Int = 16) {
     override def add(pred: String, node: Tuple) = {
       super.add(pred, node)
       if (subscribers.contains(pred) && positiveChangeSets(pred).size == messageSize) {
-        subscribers(pred).foreach(sub => sub(ChangeSet(positive = positiveChangeSets(pred))))
+        subscribers(pred).foreach(sub => sub(Δ(positive = positiveChangeSets(pred))))
         positiveChangeSets(pred) = Vector.empty[Tuple]
       }
     }
@@ -83,7 +83,7 @@ class TransactionFactory(val messageSize: Int = 16) {
     override def remove(pred: String, node: Tuple) = {
       super.remove(pred, node)
       if (subscribers.contains(pred) && negativeChangeSets(pred).size == messageSize) {
-        subscribers(pred).foreach(sub => sub(ChangeSet(negative = negativeChangeSets(pred))))
+        subscribers(pred).foreach(sub => sub(Δ(negative = negativeChangeSets(pred))))
         negativeChangeSets(pred) = Vector.empty[Tuple]
       }
     }

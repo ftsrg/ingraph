@@ -2,7 +2,7 @@ package hu.bme.mit.ire.test
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.nodes.unary.UnwindNode
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.actorRef2Scala
@@ -20,7 +20,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
 
   "Unwind" must {
     "do simple unwind 0" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(
           tuple("x", cypherList(1, 2, 3), "y"),
           tuple("w", cypherList(), "z")
@@ -34,7 +34,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
 
       unwind ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(
           tuple("x", cypherList(1, 2, 3), "y", 1),
           tuple("x", cypherList(1, 2, 3), "y", 2),
@@ -48,7 +48,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
     }
 
     "do simple unwind 1" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(
           tuple("x", List(1, 2, 3), "y"),
           tuple("w", List(4, 5), "z")
@@ -58,7 +58,7 @@ class UnwindNodeTest(_system: ActorSystem) extends TestKit(_system) with Implici
       val unwind = system.actorOf(Props(new UnwindNode(echoActor ! _, 1)))
 
       unwind ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(
           tuple("x", cypherList(1, 2, 3), "y", 1),
           tuple("x", cypherList(1, 2, 3), "y", 2),

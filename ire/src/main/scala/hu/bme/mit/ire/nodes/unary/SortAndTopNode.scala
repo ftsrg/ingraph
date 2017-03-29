@@ -6,7 +6,7 @@ import java.util.TreeMap
 import scala.collection.immutable.VectorBuilder
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.messages.ReteMessage
 import hu.bme.mit.ire.util.GenericMath
 import hu.bme.mit.ire.util.SizeCounter
@@ -74,7 +74,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
     builder.result().drop(skip)
   }
 
-  override def onChangeSet(changeSet: ChangeSet): Unit = {
+  override def onChangeSet(changeSet: Δ): Unit = {
     // TODO maybe checking the changed elements against the lowest forwarded element would speed things up
     val prevTop = getTopN
     for (tuple <- changeSet.positive) {
@@ -97,7 +97,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
     }
     val topN = getTopN
     if (topN != prevTop) {
-      forward(ChangeSet(positive = topN, negative = prevTop))
+      forward(Δ(positive = topN, negative = prevTop))
     }
   }
 

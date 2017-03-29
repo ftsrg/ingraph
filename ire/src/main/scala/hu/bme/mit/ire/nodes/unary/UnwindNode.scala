@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{Δ, ReteMessage}
 
 class UnwindNode(override val next: (ReteMessage) => Unit,
                  val index: Int,
@@ -18,8 +18,8 @@ class UnwindNode(override val next: (ReteMessage) => Unit,
     } yield tuple :+ listElement
   }
 
-  def onChangeSet(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(
+  def onChangeSet(changeSet: Δ): Unit = {
+    forward(Δ(
       unwind(changeSet.positive, index),
       unwind(changeSet.negative, index)
     ))

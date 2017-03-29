@@ -6,25 +6,25 @@ import hu.bme.mit.ire.messages._
 
 abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
-  var primaryPause: Option[Pause] = None
-  var secondaryPause: Option[Pause] = None
+  var primaryPause: Option[▌▌] = None
+  var secondaryPause: Option[▌▌] = None
 
-  def onPrimary(changeSet: ChangeSet)
+  def onPrimary(changeSet: Δ)
 
-  def onSecondary(changeSet: ChangeSet)
+  def onSecondary(changeSet: Δ)
 
   override def receive: Actor.Receive = {
     case Primary(reteMessage: ReteMessage) => {
       primaryPause match {
         case Some(pause) => {
           reteMessage match {
-            case resume: Resume => {
+            case resume: ▶ => {
               if (resume.messageID == pause.messageID)
                 primaryPause = None
               if (secondaryPause.isEmpty)
                 unstashAll()
             }
-            case terminator: TerminatorMessage => {
+            case terminator: ✝ => {
               if (terminator.messageID == pause.messageID)
                 handleTerminator(terminator)
               else
@@ -34,9 +34,9 @@ abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor wi
           }
         }
         case None => reteMessage match {
-          case pause: Pause => primaryPause = Some(pause)
-          case cs: ChangeSet => onPrimary(cs); // printForwarding(cs)
-          case t: TerminatorMessage => handleTerminator(t)
+          case pause: ▌▌ => primaryPause = Some(pause)
+          case cs: Δ => onPrimary(cs); // printForwarding(cs)
+          case t: ✝ => handleTerminator(t)
         }
       }
     }
@@ -44,13 +44,13 @@ abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor wi
       secondaryPause match {
         case Some(pause) => {
           reteMessage match {
-            case resume: Resume => {
+            case resume: ▶ => {
               if (resume.messageID == pause.messageID)
                 secondaryPause = None
               if (primaryPause.isEmpty)
                 unstashAll()
             }
-            case terminator: TerminatorMessage => {
+            case terminator: ✝ => {
               if (terminator.messageID == pause.messageID)
                 handleTerminator(terminator)
               else
@@ -60,9 +60,9 @@ abstract class BinaryNode(val expectedTerminatorCount: Int = 2) extends Actor wi
           }
         }
         case None => reteMessage match {
-          case pause: Pause => secondaryPause = Some(pause)
-          case cs: ChangeSet => onSecondary(cs); //printForwarding(cs)
-          case t: TerminatorMessage => handleTerminator(t)
+          case pause: ▌▌ => secondaryPause = Some(pause)
+          case cs: Δ => onSecondary(cs); //printForwarding(cs)
+          case t: ✝ => handleTerminator(t)
         }
 
       }

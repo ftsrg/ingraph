@@ -2,13 +2,13 @@ package ingraph.ire
 
 import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import ingraph.expressionparser.Conversions._
 import relalg._
 
 class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOperator]],
                           edgeConverters: Map[String, Set[GetEdgesOperator]],
-                          inputLookup: Map[String, (ChangeSet) => Unit]) extends IdParser {
+                          inputLookup: Map[String, (Δ) => Unit]) extends IdParser {
   private val vertexLookup: Map[String, (Set[String], Set[GetVerticesOperator])] = for ((labels, operators) <- vertexConverters;
                                                                                         label <- labels)
     yield label -> (labels, operators)

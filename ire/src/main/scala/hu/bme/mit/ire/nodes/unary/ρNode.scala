@@ -2,13 +2,13 @@ package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Mask
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{Δ, ReteMessage}
 
 abstract class ρImpl(val mask: Mask) extends UnaryNode {
   override def onSizeRequest() = 0
-  override def onChangeSet(changeSet: ChangeSet) = {
+  override def onChangeSet(changeSet: Δ) = {
 //    println(changeSet)
-    forward(ChangeSet(
+    forward(Δ(
       changeSet.positive.map(t => mask.map(i => t(i))),
       changeSet.negative.map(t => mask.map(i => t(i)))
     ))

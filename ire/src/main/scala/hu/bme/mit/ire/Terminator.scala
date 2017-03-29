@@ -20,8 +20,8 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
     production ! ExpectTerminator(terminatorID, messageID, promise)
     val future = promise.future
     inputs.foreach(input => {
-      input(Pause(messageID))
-      input(TerminatorMessage(terminatorID, messageID))
+      input(▌▌(messageID))
+      input(✝(terminatorID, messageID))
     })
     future
   }
@@ -31,7 +31,7 @@ class Terminator private(terminatorID: Int, val inputs: Iterable[ReteMessage => 
     production ! ExpectTerminator(terminatorID, lastMessageID, promise)
     val future = promise.future
     inputs.foreach(input => {
-      input(TerminatorMessage(terminatorID, lastMessageID))
+      input(✝(terminatorID, lastMessageID))
     })
     future
   }
@@ -58,9 +58,9 @@ trait TerminatorHandler {
   val expectedTerminatorCount: Int
   val terminatorCount = new mutable.HashMap[Int, Int]
 
-  def forward(terminator: TerminatorMessage)
+  def forward(terminator: ✝)
 
-  def handleTerminator(terminator: TerminatorMessage): Unit = {
+  def handleTerminator(terminator: ✝): Unit = {
     val count = terminatorCount.getOrElse(terminator.messageID, 0) + 1
     if (count >= expectedTerminatorCount) {
       forward(terminator)

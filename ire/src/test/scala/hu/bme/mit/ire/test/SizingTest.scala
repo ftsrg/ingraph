@@ -4,8 +4,8 @@ import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.{Indexer, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
-import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.messages.{Δ, Primary, Secondary}
+import hu.bme.mit.ire.nodes.binary.⋈
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, σNode}
 import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
@@ -20,12 +20,12 @@ class SizingTest extends WordSpec with TimeLimits {
   import util.Utils.conversions._
   class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
+    override val inputLookup: Map[String, (Δ) => Unit] = Map(
+      "testval" -> ((cs: Δ) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
     val forwarder = newLocal(Props(new σNode(production, a => true)))
-    val joiner = newLocal(Props(new JoinNode(forwarder, 2, 2, mask(0), mask(0))), "joiner")
+    val joiner = newLocal(Props(new ⋈(forwarder, 2, 2, mask(0), mask(0))), "joiner")
   }
 
   "SizeCounter" should {

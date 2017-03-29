@@ -3,8 +3,8 @@ package ingraph.ire
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
+import hu.bme.mit.ire.messages.{Δ, ReteMessage}
+import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, ⋈, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.AggregationNode
 import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
@@ -98,7 +98,7 @@ object EngineFactory {
               case op: AntiJoinOperator =>
                 newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
               case op: JoinOperator =>
-                newLocal(Props(new JoinNode(
+                newLocal(Props(new ⋈(
                     expr.child,
                     op.getLeftInput.getFullSchema.length,
                     op.getRightInput.getFullSchema.length,
@@ -131,7 +131,7 @@ object EngineFactory {
         }
       }
 
-      override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap
+      override val inputLookup: Map[String, (Δ) => Unit] = inputs.toMap
       override val terminator: Terminator = Terminator(inputs.values, production)
     }
 }

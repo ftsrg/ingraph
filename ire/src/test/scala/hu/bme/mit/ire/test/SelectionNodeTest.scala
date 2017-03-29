@@ -4,7 +4,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.nodes.unary.{EqualityNode, InequalityNode, σNode}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -21,7 +21,7 @@ class SelectionTest(_system: ActorSystem) extends TestKit(_system) with Implicit
 
   "Selection" must {
     "check the condition properly" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(tuple(0, "something"), tuple(0, "something else"))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -31,33 +31,33 @@ class SelectionTest(_system: ActorSystem) extends TestKit(_system) with Implicit
       val checker = system.actorOf(Props(new σNode(echoActor ! _, condition)))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = tupleBag(tuple(0, "something"))))
+      expectMsg(Δ(positive = tupleBag(tuple(0, "something"))))
     }
   }
   "EqualityChecker" must {
     "check equality properly" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(tuple(0, 2, 1), tuple(0, 0, 0), tuple(0, 2, 0))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val equalityChecker = system.actorOf(Props(new EqualityNode(echoActor ! _, 0, mask(1, 2))))
 
       equalityChecker ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(0, 0, 0))
       ))
     }
   }
   "InequalityChecker" must {
     "check inequality properly" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(tuple(0, 2, 1), tuple(0, 3, 0), tuple(0, 0, 0))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val inequalityChecker = system.actorOf(Props(new InequalityNode(echoActor ! _, 0, mask(1, 2))))
 
       inequalityChecker ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(0, 2, 1))
       ))
     }

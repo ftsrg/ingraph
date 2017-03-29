@@ -2,7 +2,7 @@ package hu.bme.mit.ire.test
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.messages.{Δ, Primary, Secondary}
 import hu.bme.mit.ire.nodes.binary.AntiJoinNode
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
@@ -22,10 +22,10 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
 
   "AntiJoin" must {
     "do simple antijoins 0" in {
-      val primary = ChangeSet(
+      val primary = Δ(
         positive = tupleBag(tuple(1, 2), tuple(1, 3), tuple(1, 4))
       )
-      val secondary = ChangeSet(
+      val secondary = Δ(
         positive = tupleBag(tuple(3, 5), tuple(3, 6), tuple(4, 7))
       )
       val primaryMask = mask(1)
@@ -35,17 +35,17 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
 
       joiner ! Secondary(secondary)
       joiner ! Primary(primary)
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 2))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(3, 5), tuple(4, 7))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 4))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(3, 5), tuple(4, 7))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 4))))
     }
 
     "do simple antijoins 1" in {
-      val primary = ChangeSet(
+      val primary = Δ(
         positive = tupleBag(tuple(1, 2), tuple(1, 3), tuple(1, 4))
       )
-      val secondary = ChangeSet(
+      val secondary = Δ(
         positive = tupleBag(tuple(3, 5), tuple(3, 6), tuple(4, 7))
       )
       val primaryMask = mask(1)
@@ -55,17 +55,17 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
 
       joiner ! Secondary(secondary)
       joiner ! Primary(primary)
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 2))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 8), tuple(3, 9))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(1, 2))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(2, 8), tuple(3, 9))))
+      expectMsg(Δ(negative = tupleBag(tuple(1, 2))))
     }
 
     "do simple antijoins 2" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7))
       )
-      val sec = ChangeSet(
+      val sec = Δ(
         positive = tupleBag(tuple(13, 15, 16))
       )
       val primaryMask = mask(0, 1)
@@ -76,16 +76,16 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       joiner ! Secondary(sec)
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(4, 5, 6, 7))
       ))
     }
     //based on https://github.com/FTSRG/incqueryd/tree/master/hu.bme.mit.incqueryd.client/hu.bme.mit.incqueryd.rete.nodes/src/test/resources/test-cases
     "do antijoin 1" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7))
       )
-      val sec = ChangeSet(
+      val sec = Δ(
         positive = tupleBag(tuple(7, 8))
       )
       val primaryMask = mask(2)
@@ -94,17 +94,17 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet(positive = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7))))
+      expectMsg(Δ(positive = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7))))
 
       joiner ! Secondary(sec)
       expectMsgAnyOf(Utils.changeSetPermutations(
-        ChangeSet(negative = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7)))): _*)
+        Δ(negative = tupleBag(tuple(5, 6, 7), tuple(10, 11, 7)))): _*)
     }
     "do antijoin 2" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(1, 5), tuple(2, 6))
       )
-      val sec = ChangeSet(
+      val sec = Δ(
         positive = tupleBag(tuple(5, 10))
       )
       val primaryMask = mask(1)
@@ -114,11 +114,11 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
 
       joiner ! Primary(prim)
       expectMsgAnyOf(
-        Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(1, 5), tuple(2, 6)))): _*
+        Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(1, 5), tuple(2, 6)))): _*
       )
 
       joiner ! Secondary(sec)
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         negative = tupleBag(tuple(1, 5))
       )
       )
@@ -129,45 +129,45 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 2), tuple(3, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(1, 2), tuple(3, 4))))
       expectMsg(
-        ChangeSet(positive = tupleBag(tuple(1, 2), tuple(3, 4)))
+        Δ(positive = tupleBag(tuple(1, 2), tuple(3, 4)))
       )
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 3), tuple(2, 4), tuple(4, 5))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(2, 3), tuple(2, 4), tuple(4, 5))))
       expectMsgAnyOf(Utils.changeSetPermutations(
-        ChangeSet(negative = tupleBag(tuple(1, 2), tuple(3, 4)))
+        Δ(negative = tupleBag(tuple(1, 2), tuple(3, 4)))
       ): _*)
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(4, 5))))
       expectMsg(
-        ChangeSet(positive = tupleBag(tuple(3, 4)))
+        Δ(positive = tupleBag(tuple(3, 4)))
       )
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 3))))
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 4))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(2, 3))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(2, 4))))
       expectMsg(
-        ChangeSet(positive = tupleBag(tuple(1, 2)))
+        Δ(positive = tupleBag(tuple(1, 2)))
       )
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(3, 4))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 3))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(4, 3))))
+      expectMsg(Δ(negative = tupleBag(tuple(3, 4))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(1, 4))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 5))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 5))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(1, 5))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 5))))
 
-      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(1, 5))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(1, 5))))
+      joiner ! Primary(Δ(negative = tupleBag(tuple(1, 5))))
+      expectMsg(Δ(negative = tupleBag(tuple(1, 5))))
     }
     "do antijoin new 2" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3))
       )
-      val secondary = ChangeSet(
+      val secondary = Δ(
         positive = tupleBag(tuple(4, 8), tuple(4, 9), tuple(3, 4))
       )
       val primaryMask = mask(1)
@@ -176,38 +176,38 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3))))
+      expectMsg(Δ(positive = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3))))
 
       joiner ! Secondary(secondary)
       expectMsgAnyOf(
         Utils.changeSetPermutations(
-          ChangeSet(negative = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3)))
+          Δ(negative = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4), tuple(1, 3), tuple(2, 3)))
         ): _*
       )
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 7))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(4, 7))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 8))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(4, 8))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 9))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(4, 9))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(negative = tupleBag(tuple(2, 4), tuple(3, 4), tuple(5, 4), tuple(6, 4)))): _*)
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(3, 4))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(1, 3), tuple(2, 3)))): _*)
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(3, 4))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(1, 3), tuple(2, 3)))): _*)
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(4, 3))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(4, 3))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(4, 3))))
+      expectMsg(Δ(positive = tupleBag(tuple(4, 3))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(3, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(1, 3), tuple(2, 3), tuple(4, 3)))): _*)
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(3, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(negative = tupleBag(tuple(1, 3), tuple(2, 3), tuple(4, 3)))): _*)
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(7, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(7, 4))))
     }
     "do antijoin new 3" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))
       )
 
@@ -217,29 +217,29 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet(tupleBag(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))))
+      expectMsg(Δ(tupleBag(tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(8, 2, 6, 4))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(8, 2, 6, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(8, 2, 6, 4))))
+      expectMsg(Δ(positive = tupleBag(tuple(8, 2, 6, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 5, 4, 3))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-        Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
+        Utils.changeSetPermutations(Δ(negative = tupleBag(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(Δ(
         positive = tupleBag(tuple(5, 5, 7, 3))
       ))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(1, 5, 6, 7))))
+      expectMsg(Δ(negative = tupleBag(tuple(1, 5, 6, 7))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 5, 4, 3))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-        Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
+        Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
     }
 
     "have bag behavior" in {
-      val prim = ChangeSet(
+      val prim = Δ(
         positive = tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))
       )
 
@@ -249,25 +249,25 @@ class AntiJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with Impli
       val joiner = system.actorOf(Props(new AntiJoinNode(echoActor ! _, primaryMask, secondaryMask)))
 
       joiner ! Primary(prim)
-      expectMsg(ChangeSet(tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))))
+      expectMsg(Δ(tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(1, 5, 6, 7), tuple(3, 2, 5, 4))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(8, 2, 6, 4))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(8, 2, 6, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(8, 2, 6, 4))))
+      expectMsg(Δ(positive = tupleBag(tuple(8, 2, 6, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 5, 4, 3))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-        Utils.changeSetPermutations(ChangeSet(
+        Utils.changeSetPermutations(Δ(
           negative = tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(Δ(
         positive = tupleBag(tuple(5, 5, 7, 3))
       ))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(1, 5, 6, 7))))
+      expectMsg(Δ(negative = tupleBag(tuple(1, 5, 6, 7))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 5, 4, 3))))
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(2, 5, 4, 3))))
       expectMsgAnyOf(
-        Utils.changeSetPermutations(ChangeSet(
+        Utils.changeSetPermutations(Δ(
           positive = tupleBag(tuple(1, 2, 3, 4), tuple(1, 2, 3, 4), tuple(3, 2, 5, 4), tuple(8, 2, 6, 4)))): _*
       )
     }

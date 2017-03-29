@@ -7,24 +7,24 @@ import scala.collection.mutable
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Path
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.messages.ReteMessage
 import hu.bme.mit.ire.nodes.ternary.TernaryNode
 import hu.bme.mit.ire.util.SizeCounter
 import hu.bme.mit.ire.util.TestUtil.tuple
 import scala.collection.mutable.HashSet
 
-class TransitiveClosureNode(override val next: (ReteMessage) => Unit,   
-                            val src: Int,   
-                            val trg: Int,   
+class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
+                            val src: Int,
+                            val trg: Int,
                             val edge: Int,
                             var min: Long = 1,
                             var max: Long = Long.MaxValue
                            ) extends TernaryNode with SingleForwarder {
-  
+
   min = if (min > 1) min else 1
   max = if (max > 1) max else Long.MaxValue
-  
+
   val sourceVerticesIndexer = new HashSet[Long]
   val targetVerticesIndexer = new HashSet[Long]
 
@@ -32,35 +32,35 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
 
   override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
-  
-  def onPrimary(changeSet: ChangeSet): Unit = {
+
+  def onPrimary(changeSet: Δ): Unit = {
     val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
     changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
-    
+
     val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
     changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
-    
-    forward(ChangeSet(
-      positive = positiveTuples,
-      negative = negativeTuples
-    ))
-  }
-  
-  def onSecondary(changeSet: ChangeSet): Unit = {
-    val positiveTuples = changeSet.positive.flatMap(pathsToTargetVertex)
-    changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(targetVerticesIndexer.add(_))
-    
-    val negativeTuples = changeSet.negative.flatMap(pathsToTargetVertex)
-    changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(targetVerticesIndexer.remove(_))
-    
-    forward(ChangeSet(
+
+    forward(Δ(
       positive = positiveTuples,
       negative = negativeTuples
     ))
   }
 
-  def onTernary(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(
+  def onSecondary(changeSet: Δ): Unit = {
+    val positiveTuples = changeSet.positive.flatMap(pathsToTargetVertex)
+    changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(targetVerticesIndexer.add(_))
+
+    val negativeTuples = changeSet.negative.flatMap(pathsToTargetVertex)
+    changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(targetVerticesIndexer.remove(_))
+
+    forward(Δ(
+      positive = positiveTuples,
+      negative = negativeTuples
+    ))
+  }
+
+  def onTernary(changeSet: Δ): Unit = {
+    forward(Δ(
       positive = changeSet.positive.flatMap(newPathsWithEdge),
       negative = changeSet.negative.flatMap(removePathsWithEdge)
     ))
@@ -93,7 +93,7 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
         val path = pathToSourceVertex._2 ++ Vector(edgeId) ++ pathFromTargetVertex._2
         reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) += path
-        if (sourceVerticesIndexer.contains(pathToSourceVertex._1) && targetVerticesIndexer.contains(pathFromTargetVertex._1) && isInRange(path)) 
+        if (sourceVerticesIndexer.contains(pathToSourceVertex._1) && targetVerticesIndexer.contains(pathFromTargetVertex._1) && isInRange(path))
           newPathsBuilder += tuple(pathToSourceVertex._1, pathFromTargetVertex._1, path)
       }
     }
@@ -156,25 +156,25 @@ class TransitiveClosureNode(override val next: (ReteMessage) => Unit,
 
     removedPathsBuilder.result
   }
-  
+
   private def pathsFromSourceVertex(inputTuple: Tuple): Vector[Tuple] = {
     val sourceId = inputTuple(0).asInstanceOf[Number].longValue
-    
+
     var reachableFromSource = reachableVertices.getOrElse(sourceId, new mutable.HashMap)
     reachableFromSource.keys.filter(targetVerticesIndexer.contains(_)).flatMap(targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId))).toVector
   }
-  
+
   private def pathsToTargetVertex(inputTuple: Tuple): Vector[Tuple] = {
     val targetId = inputTuple(0).asInstanceOf[Number].longValue
     reachableFrom.getOrElse(targetId, Set.empty).filter(sourceVerticesIndexer.contains(_)).flatMap(sourceId => pathTuplesToTrackedTarget(sourceId, targetId, reachableVertices(sourceId)(targetId))).toVector
   }
-  
+
   private def pathTuplesToTrackedTarget(sourceId: Long, targetId: Long, paths: mutable.MutableList[Path]): Iterable[Tuple] = {
     paths.filter(isInRange).map(path => tuple(sourceId, targetId, path))
   }
-  
+
   private def isInRange(path: Path): Boolean = {
     path.size >= min && path.size <= max
   }
-  
+
 }

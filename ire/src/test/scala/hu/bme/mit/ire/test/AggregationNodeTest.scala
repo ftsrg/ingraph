@@ -3,7 +3,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.TestUtil.{cypherList, functionMask, tuple, tupleBag}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -31,22 +31,22 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
         () => Vector(new StatefulCount())))) // sex and the city
-      counter ! ChangeSet(positive = tupleBag(odin))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", 1))))
-      counter ! ChangeSet(positive = tupleBag(thor))
-      expectMsg(ChangeSet(
+      counter ! Δ(positive = tupleBag(odin))
+      expectMsg(Δ(positive = tupleBag(tuple("male", "Asgard", 1))))
+      counter ! Δ(positive = tupleBag(thor))
+      expectMsg(Δ(
         positive = tupleBag(tuple("male", "Asgard", 2)),
         negative = tupleBag(tuple("male", "Asgard", 1))
       ))
-      counter ! ChangeSet(negative = tupleBag(odin))
-      expectMsg(ChangeSet(
+      counter ! Δ(negative = tupleBag(odin))
+      expectMsg(Δ(
         positive = tupleBag(tuple("male", "Asgard", 1)),
         negative = tupleBag(tuple("male", "Asgard", 2))
       ))
-      counter ! ChangeSet(positive = tupleBag(freya))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", 1))))
-      counter ! ChangeSet(negative = tupleBag(freya))
-      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", 1))))
+      counter ! Δ(positive = tupleBag(freya))
+      expectMsg(Δ(positive = tupleBag(tuple("female", "Asgard", 1))))
+      counter ! Δ(negative = tupleBag(freya))
+      expectMsg(Δ(negative = tupleBag(tuple("female", "Asgard", 1))))
     }
   }
 
@@ -55,27 +55,27 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3, 0),
         () => Vector(new StatefulCollect(2))))) // (sex, city): (weapon)
-      counter ! ChangeSet(positive = tupleBag(odin))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
-      counter ! ChangeSet(positive = tupleBag(thor))
-      expectMsg(ChangeSet(
+      counter ! Δ(positive = tupleBag(odin))
+      expectMsg(Δ(positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))))
+      counter ! Δ(positive = tupleBag(thor))
+      expectMsg(Δ(
         positive = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir"))),
         negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir")))
       ))
-      counter ! ChangeSet(negative = tupleBag(odin))
-      expectMsg(ChangeSet(
+      counter ! Δ(negative = tupleBag(odin))
+      expectMsg(Δ(
         positive = tupleBag(tuple("male", "Asgard", cypherList("Mjölnir"))),
         negative = tupleBag(tuple("male", "Asgard", cypherList("Gungnir", "Mjölnir")))
       ))
-      counter ! ChangeSet(positive = tupleBag(freya))
-      expectMsg(ChangeSet(positive = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
-      counter ! ChangeSet(negative = tupleBag(freya))
-      expectMsg(ChangeSet(negative = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
+      counter ! Δ(positive = tupleBag(freya))
+      expectMsg(Δ(positive = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
+      counter ! Δ(negative = tupleBag(freya))
+      expectMsg(Δ(negative = tupleBag(tuple("female", "Asgard", cypherList("N/A")))))
     }
   }
 
   def assertNextChangeSetWithTolerance(key: Int, positive: Option[Any] = None, negative: Option[Any] = None): Unit = {
-    val cs = receiveOne(Duration("1 s")).asInstanceOf[ChangeSet]
+    val cs = receiveOne(Duration("1 s")).asInstanceOf[Δ]
 
     def assertEquals(actual: Any, expected: Any) {
       (actual, expected) match {
@@ -98,11 +98,11 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
         () => Vector(new StatefulSum(4))))) // sex, sum for height
-      counter ! ChangeSet(positive = tupleBag(odin))
+      counter ! Δ(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
-      counter ! ChangeSet(positive = tupleBag(thor))
+      counter ! Δ(positive = tupleBag(thor))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.1f), negative = Some(1))
-      counter ! ChangeSet(positive = tupleBag(ragnar))
+      counter ! Δ(positive = tupleBag(ragnar))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.9), negative = Some(2.1f))
     }
   }
@@ -112,11 +112,11 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val counter = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
         () => Vector(new StatefulAverage(4))))) // sex, sum for height
-      counter ! ChangeSet(positive = tupleBag(odin))
+      counter ! Δ(positive = tupleBag(odin))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(1))
-      counter ! ChangeSet(positive = tupleBag(thor))
+      counter ! Δ(positive = tupleBag(thor))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.1f/2), negative = Some(1))
-      counter ! ChangeSet(positive = tupleBag(ragnar))
+      counter ! Δ(positive = tupleBag(ragnar))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.9/3), negative = Some(2.1f/2))
     }
   }

@@ -2,7 +2,7 @@ package hu.bme.mit.ire.test
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.actorRef2Scala
@@ -19,7 +19,7 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
 
   "Min" must {
     "do simple min 0" in {
-      val changeSet = ChangeSet(
+      val changeSet = Δ(
         positive = tupleBag(tuple("a", 1), tuple("a", 2), tuple("a", 1.1), tuple("b", 3))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -27,14 +27,14 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
         new AggregationNode(echoActor ! _, functionMask(0), () => Vector(new StatefulMin(1)))))
 
       min ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple("a", 1), tuple("b", 3))
       ))
 
-      min ! ChangeSet(
+      min ! Δ(
         negative = tupleBag(tuple("a", 1))
       )
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple("a", 1.1)),
         negative = tupleBag(tuple("a", 1))
       ))

@@ -3,7 +3,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, σNode}
 import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.TestUtil._
@@ -15,8 +15,8 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
 
   class TestQuery1 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => forwarder ! cs)
+    override val inputLookup: Map[String, (Δ) => Unit] = Map(
+      "testval" -> ((cs: Δ) => forwarder ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
     val forwarder = system.actorOf(Props(new σNode(production ! _, a => true)))
@@ -24,9 +24,9 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
 
   class TestQuery2 extends TrainbenchmarkQuery {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => forwarder ! cs),
-      "testval2" -> ((cs: ChangeSet) => forwarder2 ! cs)
+    override val inputLookup: Map[String, (Δ) => Unit] = Map(
+      "testval" -> ((cs: Δ) => forwarder ! cs),
+      "testval2" -> ((cs: Δ) => forwarder2 ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _, forwarder2 ! _), production)
     val forwarder = system.actorOf(Props(new σNode(production ! _, a => true)))

@@ -3,7 +3,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.TransactionFactory
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -25,7 +25,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
       tran.add("test", tuple(6, 1L))
       tran.add("test", tuple(6, 2L))
       tran.close()
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
+      expectMsg(Δ(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
     }
 
     "do no splitting in batch" in {
@@ -37,7 +37,7 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
         tran.add("test", tuple(6, i))
       }
       tran.close()
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 3), tuple(6, 2), tuple(6, 1))))
+      expectMsg(Δ(positive = tupleBag(tuple(6, 3), tuple(6, 2), tuple(6, 1))))
     }
     "send messageSize sized messages when using continuous transactions" in {
       val input = new TransactionFactory(messageSize = 2)
@@ -48,8 +48,8 @@ class TransactionFactoryTest(_system: ActorSystem) extends TestKit(_system) with
         tran.add("test", tuple(6, i))
       }
       tran.close()
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(6, 3))))
+      expectMsg(Δ(positive = tupleBag(tuple(6, 2), tuple(6, 1))))
+      expectMsg(Δ(positive = tupleBag(tuple(6, 3))))
     }
   }
 }

@@ -3,8 +3,8 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
-import hu.bme.mit.ire.nodes.binary.{JoinNode, ParallelJoinNode}
+import hu.bme.mit.ire.messages.{Δ, Primary, ReteMessage, Secondary}
+import hu.bme.mit.ire.nodes.binary.{⋈, ParallelJoinNode}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -22,13 +22,13 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
   "Join" must {
     "join the values" in {
-      val primaryChangeSet = ChangeSet(
+      val primaryChangeSet = Δ(
         positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
-      val secondaryChangeSet = ChangeSet(
+      val secondaryChangeSet = Δ(
         positive = tupleBag(tuple(0, 15, 16, 13))
       )
       val primaryTupleWidth = 4
@@ -36,11 +36,11 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primaryMask = mask(0, 1)
       val secondaryMask = mask(1, 2)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+      val joiner = system.actorOf(Props(new ⋈(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(primaryChangeSet)
       joiner ! Secondary(secondaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(15, 16, 17, 18, 0, 13))
       ))
     }
@@ -51,9 +51,9 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primaryMask = mask(2)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+      val joiner = system.actorOf(Props(new ⋈(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(
+      joiner ! Primary(Δ(
         positive = tupleBag(
           tuple(5, 6, 7),
           tuple(10, 11, 7)
@@ -61,8 +61,8 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
       )
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(7, 8))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(7, 8))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(
         positive = tupleBag(
           tuple(5, 6, 7, 8),
           tuple(10, 11, 7, 8)
@@ -77,9 +77,9 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primaryMask = mask(1)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+      val joiner = system.actorOf(Props(new ⋈(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(
+      joiner ! Primary(Δ(
         positive = tupleBag(
           tuple(1, 5),
           tuple(2, 6)
@@ -87,11 +87,11 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       )
       )
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(Δ(
         positive = tupleBag(tuple(5, 10))
       )
       )
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 5, 10))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 5, 10))))
     }
     "do join new 1" in {
       val primaryTupleWidth = 2
@@ -99,46 +99,46 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primaryMask = mask(1)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+      val joiner = system.actorOf(Props(new ⋈(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(3, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(2, 4), tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(4, 5))))
 
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(3, 4))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(3, 4, 5))))
+      joiner ! Primary(Δ(negative = tupleBag(tuple(3, 4))))
+      expectMsg(Δ(negative = tupleBag(tuple(3, 4, 5))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(3, 4))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(3, 4, 5))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(3, 4))))
+      expectMsg(Δ(positive = tupleBag(tuple(3, 4, 5))))
 
-      joiner ! Secondary(ChangeSet(negative = tupleBag(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      joiner ! Secondary(Δ(negative = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(negative = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(4, 5))))
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
     "do parallel joins" in {
       val primaryMask = mask(0)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
-      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val joinerA = system.actorOf(Props(new ⋈(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val joinerB = system.actorOf(Props(new ⋈(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
       val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
       val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, 2, 2, primaryMask, secondaryMask,
         hashFunction = (n: Tuple) => n(0).hashCode())))
-      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 2))))
-      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
+      forkingJoiner ! Secondary(Δ(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Secondary(Δ(positive = tupleBag(tuple(1, 3))))
 
-      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(0, 2))))
-      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 2))))
+      forkingJoiner ! Primary(Δ(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Primary(Δ(positive = tupleBag(tuple(1, 2))))
 
-      joinerB ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2, 3, 3))))
-      joinerA ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 3))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(0, 2, 2, 3))))
+      joinerB ! Secondary(Δ(positive = tupleBag(tuple(1, 3))))
+      expectMsg(Δ(positive = tupleBag(tuple(1, 2, 3, 3))))
+      joinerA ! Secondary(Δ(positive = tupleBag(tuple(0, 3))))
+      expectMsg(Δ(positive = tupleBag(tuple(0, 2, 2, 3))))
     }
 
     "have bag behavior" in {
@@ -147,23 +147,23 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val primaryMask = mask(1)
       val secondaryMask = mask(0)
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+      val joiner = system.actorOf(Props(new ⋈(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4), tuple(2, 4), tuple(3, 4))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(2, 4), tuple(2, 4), tuple(3, 4))))
 
-      joiner ! Secondary(ChangeSet(positive = tupleBag(tuple(4, 5))))
+      joiner ! Secondary(Δ(positive = tupleBag(tuple(4, 5))))
 
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(positive = tupleBag(
+      expectMsgAnyOf(Utils.changeSetPermutations(Δ(positive = tupleBag(
         tuple(2, 4, 5), tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
 
-      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(2, 4))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(2, 4, 5))))
+      joiner ! Primary(Δ(negative = tupleBag(tuple(2, 4))))
+      expectMsg(Δ(negative = tupleBag(tuple(2, 4, 5))))
 
-      joiner ! Primary(ChangeSet(negative = tupleBag(tuple(2, 4))))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(2, 4, 5))))
+      joiner ! Primary(Δ(negative = tupleBag(tuple(2, 4))))
+      expectMsg(Δ(negative = tupleBag(tuple(2, 4, 5))))
 
-      joiner ! Primary(ChangeSet(positive = tupleBag(tuple(2, 4))))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(2, 4, 5))))
+      joiner ! Primary(Δ(positive = tupleBag(tuple(2, 4))))
+      expectMsg(Δ(positive = tupleBag(tuple(2, 4, 5))))
     }
   }
 }

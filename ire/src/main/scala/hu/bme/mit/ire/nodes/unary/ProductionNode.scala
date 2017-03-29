@@ -27,7 +27,7 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
   }
 
   override def receive: Actor.Receive = {
-    case ChangeSet(p, n) =>
+    case Δ(p, n) =>
       p.foreach {
         t =>
           results += t
@@ -41,11 +41,11 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
 
     case ExpectMoreTerminators(terminatorID, inputs) => inputsToResume(terminatorID) = inputs
 
-    case TerminatorMessage(terminatorID, messageID, route) =>
+    case ✝(terminatorID, messageID, route) =>
       log.info(s"terminator$messageID received")
       receivedTerminatorCount(messageID) += 1
       if (receivedTerminatorCount(messageID) == expectedTerminatorCount) {
-        inputsToResume(terminatorID).foreach(input => input(Resume(messageID)))
+        inputsToResume(terminatorID).foreach(input => input(▶(messageID)))
         listeners.foreach(_.terminated())
         terminatorPromises(messageID).success(results.toList)
         receivedTerminatorCount.drop(messageID)

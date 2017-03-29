@@ -6,7 +6,7 @@ import org.scalatest.BeforeAndAfterAll
 import akka.actor.ActorSystem
 import org.scalatest.Matchers
 import org.scalatest.WordSpecLike
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Δ
 import hu.bme.mit.ire.nodes.ternary.ShortestPathNode
 import akka.actor.Props
 import hu.bme.mit.ire.messages.Ternary
@@ -19,7 +19,7 @@ import hu.bme.mit.ire.datatypes.Path
 
 class ShortestPathNodeTest (_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
-  
+
   val src = 0
   val trg = 2
   val edge = 1
@@ -29,37 +29,37 @@ class ShortestPathNodeTest (_system: ActorSystem) extends TestKit(_system) with 
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
-  
+
   "A ShortestPathNode" must {
     "calculate shortest path" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val shortestPathNode = system.actorOf(Props(new ShortestPathNode(echoActor ! _, src, trg, edge)))
 
-      shortestPathNode ! Ternary(ChangeSet(
+      shortestPathNode ! Ternary(Δ(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
       expectNoMsg
-      
-      shortestPathNode ! Primary(ChangeSet(
+
+      shortestPathNode ! Primary(Δ(
         positive = tupleBag(tuple(1))
       ))
       expectNoMsg
-      
-      shortestPathNode ! Secondary(ChangeSet(
+
+      shortestPathNode ! Secondary(Δ(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(1, 2, Path(100)), tuple(1, 3, Path(100, 101)))
       ))
-      
-      shortestPathNode ! Ternary(ChangeSet(
+
+      shortestPathNode ! Ternary(Δ(
         positive = tupleBag(tuple(1, 102, 3))
       ))
-      expectMsg(ChangeSet(
+      expectMsg(Δ(
         positive = tupleBag(tuple(1, 3, Path(102))),
         negative = tupleBag(tuple(1, 3, Path(100, 101)))
       ))
     }
   }
-  
+
 }
