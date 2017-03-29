@@ -20,7 +20,7 @@ abstract class IngraphReportTest {
 		val ratio = calculateCompilingQueryRatio(working, total)
 		'''
 			«title» &
-			\progressbar[width=10cm, heighta=.3cm, filledcolor=«color», emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«ratio»} &
+			\progressbar[width=9cm, heighta=.3cm, filledcolor=«color», emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«ratio»} &
 			«working» &
 			«total» \\
 		'''
@@ -42,17 +42,19 @@ abstract class IngraphReportTest {
 		for (cqs : chapterQuerySpecifications.entrySet) {
 			val sectionTitle = cqs.key
 			val sectionQuerySpecifications = cqs.value
+			val sectionLabel = sectionTitle.toLabel
 
 			val qp = new QueryProcessor
 			qp.processQueries(sectionQuerySpecifications)
 
 			val sectionCompilingQueries = qp.compilingQueries
 			val sectionTotalQueries = qp.totalQueries
-			val sectionProgressbar = progressbarTableRow("gray", sectionTitle, sectionCompilingQueries, sectionTotalQueries)
+			val sectionProgressbar = progressbarTableRow("gray", '''\hyperref[sec:«sectionLabel»]{«sectionTitle»}''', sectionCompilingQueries, sectionTotalQueries)
 			
 			sectionProgressbars.add(sectionProgressbar)
 			sections += '''
 				\section{«sectionTitle»}
+				\label{sec:«sectionLabel»}
 				
 				«PROGRESSBAR_TABLE_HEADER»
 				«sectionProgressbar»
@@ -75,7 +77,10 @@ abstract class IngraphReportTest {
 		'''
 		doc += sections
 
-		val progressbarTableRow = progressbarTableRow("OliveGreen", '''\hyperref[chp:«chapterName»]{«shortTitle»}''', chapterCompilingQueries, chapterTotalQueries)
+		val progressbarTableRow = progressbarTableRow( //
+			"OliveGreen", //
+			'''\hyperref[chp:«chapterName»]{«shortTitle»}''', //
+			chapterCompilingQueries, chapterTotalQueries)
 
 		val appendixDir = "../opencypher-report/appendix/"
 		val charset = Charset.forName("UTF-8")

@@ -24,5 +24,10 @@ class TechReportEscaper {
 			.replaceAll('''\n\s*''', "\n") //
 			.replaceAll('''\n$''', "") //
 	}
+	
+	def toLabel(String s) {
+		s //
+			.replaceAll(" ", "_") //
+	}
 
 }
