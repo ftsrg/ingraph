@@ -1048,7 +1048,7 @@ class RelalgBuilder {
 		]
 		val patternElementChain_EdgeVariable = variableBuilder.buildEdgeVariable(ec.relationshipPattern.detail) => [
 			// parse map-like constraints if given
-			buildRelalgProperties(ec.relationshipPattern.detail.properties, it)
+			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it)
 		]
 
 		val isLeftArrow = ec.relationshipPattern.incoming
