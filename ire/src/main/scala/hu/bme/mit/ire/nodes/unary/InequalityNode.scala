@@ -8,7 +8,7 @@ import hu.bme.mit.ire.messages.ReteMessage
 class InequalityNode(override val next: (ReteMessage) => Unit,
                      val distinguishedElementIndex: Int,
                      val inequals: Mask) extends
-  SelectionNode(
+  σNode(
     next,
     condition = (tuple: Tuple) => !inequals.map { i => tuple(i) }.contains(tuple(distinguishedElementIndex))
   ) with SingleForwarder

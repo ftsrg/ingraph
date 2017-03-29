@@ -5,7 +5,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.nodes.binary.JoinNode
-import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, σNode}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils.conversions._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -25,15 +25,15 @@ class TerminatorTest(_system: ActorSystem) extends TestKit(_system) with Implici
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new ProductionNode("alpha test", 2)))
-      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true, expectedTerminatorCount = 2))) // TODO wtf
+      val intermediary = system.actorOf(Props(new σNode(production ! _, c => true, expectedTerminatorCount = 2))) // TODO wtf
       //      val intermediary = system.actorOf(Props(new SelectionNode(production ! _, c => true)))
-      val input1 = system.actorOf(Props(new SelectionNode(production ! _, c => true)))
+      val input1 = system.actorOf(Props(new σNode(production ! _, c => true)))
       input1 ! ChangeSet(positive = tupleBag(tuple(15)))
       input1 ! ChangeSet(positive = tupleBag(tuple(19)))
-      val input2 = system.actorOf(Props(new SelectionNode(intermediary ! _, c => true)))
+      val input2 = system.actorOf(Props(new σNode(intermediary ! _, c => true)))
       input2 ! ChangeSet(positive = tupleBag(tuple(25)))
       input2 ! ChangeSet(positive = tupleBag(tuple(29)))
-      val input3 = system.actorOf(Props(new SelectionNode(intermediary ! _, c => true)))
+      val input3 = system.actorOf(Props(new σNode(intermediary ! _, c => true)))
 
       val terminator = Terminator(List(
         input1 ! _, input2 ! _, input3 ! _
@@ -51,7 +51,7 @@ class TerminatorTest(_system: ActorSystem) extends TestKit(_system) with Implici
     "propagate terminator messages" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val production = system.actorOf(Props(new ProductionNode("")), "Production")
-      val checker = system.actorOf(Props(new SelectionNode(production ! _, c => true)), "checker")
+      val checker = system.actorOf(Props(new σNode(production ! _, c => true)), "checker")
       val intermediary = system.actorOf(Props(new JoinNode(checker ! _, 1, 1, mask(0), mask(0))), "intermediary")
       val input1 = system.actorOf(Props(new JoinNode(intermediary ! Primary(_), 1, 1, mask(0), mask(0))), "inputBeta")
       val msg15 = ChangeSet(positive = tupleBag(tuple(15)))

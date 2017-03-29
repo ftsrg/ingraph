@@ -6,7 +6,7 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.{Indexer, Tuple}
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.nodes.binary.JoinNode
-import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, σNode}
 import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 import hu.bme.mit.ire.util.TestUtil._
@@ -24,7 +24,7 @@ class SizingTest extends WordSpec with TimeLimits {
       "testval" -> ((cs: ChangeSet) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
-    val forwarder = newLocal(Props(new SelectionNode(production, a => true)))
+    val forwarder = newLocal(Props(new σNode(production, a => true)))
     val joiner = newLocal(Props(new JoinNode(forwarder, 2, 2, mask(0), mask(0))), "joiner")
   }
 

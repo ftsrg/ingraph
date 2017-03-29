@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, Props, actorRef2Scala}
 import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, σNode}
 import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.FlatSpec
@@ -19,7 +19,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
       "testval" -> ((cs: ChangeSet) => forwarder ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
-    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
+    val forwarder = system.actorOf(Props(new σNode(production ! _, a => true)))
   }
 
   class TestQuery2 extends TrainbenchmarkQuery {
@@ -29,8 +29,8 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
       "testval2" -> ((cs: ChangeSet) => forwarder2 ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _, forwarder2 ! _), production)
-    val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
-    val forwarder2 = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
+    val forwarder = system.actorOf(Props(new σNode(production ! _, a => true)))
+    val forwarder2 = system.actorOf(Props(new σNode(production ! _, a => true)))
   }
 
   "multiple queries" should "work" in {

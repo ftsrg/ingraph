@@ -4,9 +4,10 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
-abstract class ProjectionImpl(val mask: Mask) extends UnaryNode {
+abstract class ρImpl(val mask: Mask) extends UnaryNode {
   override def onSizeRequest() = 0
   override def onChangeSet(changeSet: ChangeSet) = {
+//    println(changeSet)
     forward(ChangeSet(
       changeSet.positive.map(t => mask.map(i => t(i))),
       changeSet.negative.map(t => mask.map(i => t(i)))
@@ -14,6 +15,6 @@ abstract class ProjectionImpl(val mask: Mask) extends UnaryNode {
   }
 }
 
-class ProjectionNode(override val next: (ReteMessage) => Unit,
-                     override val mask: Mask)
-  extends ProjectionImpl(mask) with SingleForwarder {}
+class ρNode(override val next: (ReteMessage) => Unit,
+            override val mask: Mask)
+  extends ρImpl(mask) with SingleForwarder {}
