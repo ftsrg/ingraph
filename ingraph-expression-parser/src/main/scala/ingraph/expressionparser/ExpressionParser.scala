@@ -74,8 +74,8 @@ object ExpressionParser {
       tuple => tuple(index)
     case cmp: VariableExpression =>
       val variable = cmp.getVariable match {
-        case a: AttributeVariable => a
         case e: ExpressionVariable => e.getExpression.asInstanceOf[VariableExpression].getVariable
+        case a => a
       }
       val index = lookup(variable).toInt
       tuple => tuple(index)
