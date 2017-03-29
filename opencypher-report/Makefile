@@ -1,6 +1,7 @@
 DOCUMENT=opencypher-report
 
 all: clean
+	git rev-parse --short HEAD > commit-id.tex
 	latexmk -xelatex -quiet $(DOCUMENT)
 
 clean:

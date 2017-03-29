@@ -7,10 +7,25 @@ import java.io.File
 import java.nio.charset.Charset
 import java.util.Map
 import org.apache.commons.io.FileUtils
+import java.util.ArrayList
 
 abstract class IngraphReportTest {
 
 	protected extension TechReportEscaper escaper = new TechReportEscaper
+
+	val PROGRESSBAR_TABLE_HEADER = '''\begin{tabular}{llr@{ of }l}'''
+	val PROGRESSBAR_TABLE_FOOTER = '''\end{tabular}'''
+
+	def String progressbarTableRow(String color, String title, int working, int total) {
+		val ratio = calculateCompilingQueryRatio(working, total)
+		'''
+			«title» &
+			\progressbar[width=10cm, heighta=.3cm, filledcolor=«color», emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«ratio»} &
+			«working» &
+			«total» \\
+		'''
+		
+	}
 
 	def printChapter(String chapterName, String chapterTitle, String shortTitle, 
 		Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
@@ -18,6 +33,8 @@ abstract class IngraphReportTest {
 			\chapter{«chapterTitle»}
 			\label{chp:«chapterName»}
 		'''
+
+		val sectionProgressbars = new ArrayList<String>
 
 		var chapterCompilingQueries = 0
 		var chapterTotalQueries = 0
@@ -31,14 +48,15 @@ abstract class IngraphReportTest {
 
 			val sectionCompilingQueries = qp.compilingQueries
 			val sectionTotalQueries = qp.totalQueries
-			val sectionCompilingQueryRatio = calculateCompilingQueryRation(sectionTotalQueries, sectionCompilingQueries)
-
+			val sectionProgressbar = progressbarTableRow("gray", sectionTitle, sectionCompilingQueries, sectionTotalQueries)
+			
+			sectionProgressbars.add(sectionProgressbar)
 			sections += '''
 				\section{«sectionTitle»}
 				
-				\progressbar[width=10cm, heighta=.3cm, filledcolor=gray, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«sectionCompilingQueryRatio»}
-				«sectionCompilingQueries» of «sectionTotalQueries»
-				
+				«PROGRESSBAR_TABLE_HEADER»
+				«sectionProgressbar»
+				«PROGRESSBAR_TABLE_FOOTER»
 			'''
 
 			for (subsection : qp.subsections) {
@@ -49,32 +67,27 @@ abstract class IngraphReportTest {
 			chapterTotalQueries += sectionTotalQueries
 		}
 
-		val chapterCompilingQueryRatio = calculateCompilingQueryRation(chapterTotalQueries, chapterCompilingQueries)
 		doc += '''
-				\begin{tabular}{llr@{ of }l}
+				«PROGRESSBAR_TABLE_HEADER»
 				\input{appendix/progressbar-«chapterName»}
-				\end{tabular}
+				«sectionProgressbars.join»
+				«PROGRESSBAR_TABLE_FOOTER»
 		'''
 		doc += sections
 
-		val progressbar = '''
-			\hyperref[chp:«chapterName»]{«shortTitle»} &
-			\progressbar[width=10cm, heighta=.3cm, filledcolor=OliveGreen, emptycolor=white, borderwidth=1pt, tickswidth=1pt, subdivisions=10]{«chapterCompilingQueryRatio»} &
-			«chapterCompilingQueries» &
-			«chapterTotalQueries» \\
-		'''
+		val progressbarTableRow = progressbarTableRow("OliveGreen", '''\hyperref[chp:«chapterName»]{«shortTitle»}''', chapterCompilingQueries, chapterTotalQueries)
 
 		val appendixDir = "../opencypher-report/appendix/"
 		val charset = Charset.forName("UTF-8")
-		FileUtils.writeStringToFile(new File('''«appendixDir»progressbar-«chapterName».tex'''), progressbar, charset)
+		FileUtils.writeStringToFile(new File('''«appendixDir»progressbar-«chapterName».tex'''), progressbarTableRow, charset)
 		FileUtils.writeStringToFile(new File('''«appendixDir»chapter-«chapterName».tex'''), doc, charset)
 	}
 
-	protected def String calculateCompilingQueryRation(int sectionTotalQueries, int sectionCompilingQueries) {
-		if (sectionTotalQueries == 0) {
+	protected def String calculateCompilingQueryRatio(int working, int total) {
+		if (total == 0) {
 			"1"
 		} else {
-			String.format("%.02f", (sectionCompilingQueries as float) / sectionTotalQueries)
+			String.format("%.02f", (working as float) / total)
 		}
 	}
 
