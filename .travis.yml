@@ -32,7 +32,7 @@ before_install:
 install:
   - ./gradlew assemble
   - ./gradlew regressionTests --continue
-  - ./gradlew report --continue || ./gradlew report --continue --stacktrace --info
+  - ./gradlew report --continue --stacktrace
 script:
   # only build and deploy the results if the build is performed on the master branch
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then cd opencypher-report; make || cat opencypher-report.log; cd ..; scripts/deploy.sh; fi

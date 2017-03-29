@@ -48,7 +48,6 @@ class QueryProcessor {
 			container = Cypher2Relalg.processString(testQuery.querySpecification)
 			compilingQueries++
 		} catch (Exception e) {
-			info("An error occurred during the compilation of the query:")
 			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
@@ -122,7 +121,7 @@ class QueryProcessor {
 			expressionContainer.inferBasicSchema
 			expressionConverter.convert(expressionContainer).toString
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
@@ -133,7 +132,7 @@ class QueryProcessor {
 			treeContainer.inferBasicSchema
 			treeSerializer.convert(treeContainer)
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
@@ -147,7 +146,7 @@ class QueryProcessor {
 			incrementalContainer.inferFullSchema
 			treeSerializer.convert(incrementalContainer)
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
