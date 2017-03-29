@@ -41,15 +41,17 @@ class VariableExtractor {
 		getAttributes(op.condition)
 	}
 
+	// SortOperator and SortAndTopOperator
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-		op.entries.map[expression].filter(VariableExpression).map[variable].toList
+		val attributes = op.entries.map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable]
+		return attributes.minus(op.basicSchema).toList
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
 		#[op.element]
 	}
 
-	// rest of the unary operators - no extra requirements
+	// rest of the unary operators, e.g. TopOperator, no extra requirements
 	def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
 		#[]
 	}

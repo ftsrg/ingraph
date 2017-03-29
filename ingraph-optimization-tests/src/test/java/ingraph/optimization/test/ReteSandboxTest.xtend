@@ -97,5 +97,10 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 		LIMIT 100
 		''')
 	}
+	
+	@Test
+	def void sortAndTopNode() {
+	  process('sort-and-top', '''MATCH (n: Segment) RETURN n ORDER BY n SKIP 5 LIMIT 10''')
+	}
 
 }
