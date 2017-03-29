@@ -63,10 +63,18 @@ object ExpressionParser {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
-    case cmp: AttributeVariable =>  tuple => tuple(lookup(cmp))
-    case cmp: Variable => tuple => tuple(lookup(cmp))
-    case cmp: VariableComparableExpression => tuple => tuple(lookup(cmp.getVariable))
-    case cmp: VariableExpression => tuple => tuple(lookup(cmp.getVariable))
+    case cmp: AttributeVariable =>
+      val index = lookup(cmp).toInt
+      tuple => tuple(index)
+    case cmp: Variable =>
+      val index = lookup(cmp).toInt
+      tuple => tuple(index)
+    case cmp: VariableComparableExpression =>
+      val index = lookup(cmp.getVariable).toInt
+      tuple => tuple(index)
+    case cmp: VariableExpression =>
+      val index = lookup(cmp.getVariable).toInt
+      tuple => tuple(index)
     case exp: ArithmeticOperationExpression =>
       val left = parseValue(exp.getLeftOperand, lookup)
       val right = parseValue(exp.getRightOperand, lookup)
@@ -79,21 +87,27 @@ object ExpressionParser {
         case POWER => tuple => GenericMath.power(left(tuple), right(tuple))
         case MOD => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
-    case cmp: FunctionExpression =>
-      cmp.getArguments.size() match {
-        case 0 => tuple => FunctionLookup.fun0(cmp.getFunctor)()
+    case exp: FunctionExpression =>
+      exp.getArguments.size() match {
+        case 0 =>
+          val function = FunctionLookup.fun0(exp.getFunctor)
+          tuple => function()
         case 1 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          tuple => FunctionLookup.fun1(cmp.getFunctor)(first(tuple))
+          val first: (Tuple) => Any = parseValue(exp.getArguments.get(0), lookup)
+          val function: (Tuple) => Any = t => FunctionLookup.fun1(exp.getFunctor)(first(t))
+          tuple => function(tuple)
         case 2 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          val second = parseValue(cmp.getArguments.get(1), lookup)
-          tuple => FunctionLookup.fun2(cmp.getFunctor)(first(tuple), second(tuple))
+          val first = parseValue(exp.getArguments.get(0), lookup)
+          val second = parseValue(exp.getArguments.get(1), lookup)
+          val function: (Tuple) => Any = t => FunctionLookup.fun2(exp.getFunctor)(first(t), second(t))
+          tuple => function(tuple)
         case 3 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          val second = parseValue(cmp.getArguments.get(1), lookup)
-          val third = parseValue(cmp.getArguments.get(2), lookup)
-          tuple => FunctionLookup.fun3(cmp.getFunctor)(first(tuple), second(tuple), third(tuple))
+          val first = parseValue(exp.getArguments.get(0), lookup)
+          val second = parseValue(exp.getArguments.get(1), lookup)
+          val third = parseValue(exp.getArguments.get(2), lookup)
+          val function: (Tuple) => Any =
+            tuple => FunctionLookup.fun3(exp.getFunctor)(first(tuple), second(tuple), third(tuple))
+          tuple => function(tuple)
       }
   }
 
