@@ -25,7 +25,7 @@ class ExpressionNameInferencer {
 	}
 
 	def dispatch static String inferName(AttributeVariable e, IngraphLogger logger) {
-		e.element.name + '.' + e.name
+		e.baseVariable.name + '.' + e.name
 	}
 
 	def dispatch static String inferName(NamedElement e, IngraphLogger logger) {

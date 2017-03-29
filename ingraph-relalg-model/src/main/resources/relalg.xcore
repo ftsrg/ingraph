@@ -179,6 +179,15 @@ class EdgeVariable extends ElementVariable {
 class AttributeVariable extends GraphObjectVariable {
   refers ElementVariable element opposite attributes
   refers ExpressionVariable expVar
+  op Variable getBaseVariable() {
+    if (element !== null && expVar === null) {
+      return element
+    } else if (element === null && expVar !== null) {
+      return expVar
+    } else {
+      throw new IllegalStateException("AttributeVariable must have non-null value for element or expVar, but not for both!")
+    }
+  }
 }
 
 class ListVariable extends Variable {
