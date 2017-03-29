@@ -7,9 +7,9 @@ import scala.io.Source
 
 class SortAndTopNodeIntegrationTest extends FlatSpec {
   "SortAndTopNode" should "work" in {
-    val query = "MATCH (n: Segment) RETURN n ORDER BY n SKIP 5 LIMIT 10"
+    val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
     val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
-    val expected = ((1400 to 1410).toSet - 1405).map(n => Vector(n.toLong))
+    val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }
 }
