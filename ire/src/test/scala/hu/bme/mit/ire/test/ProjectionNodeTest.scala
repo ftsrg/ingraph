@@ -3,7 +3,7 @@ package hu.bme.mit.ire.test
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.nodes.unary.ProjectionNode
+import hu.bme.mit.ire.nodes.unary.ρNode
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -28,7 +28,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
         negative = tupleBag(tuple(-0, -2), tuple(-10, -12))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val selector = system.actorOf(Props(new ProjectionNode(echoActor ! _, selectionMask)), name = "testSelector")
+      val selector = system.actorOf(Props(new ρNode(echoActor ! _, selectionMask)), name = "testSelector")
 
       selector ! changes
       expectMsg(expectedChanges)
@@ -43,7 +43,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
 
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1, 0)))) // swap attributes
+      val checker = system.actorOf(Props(new ρNode(echoActor ! _, mask(1, 0)))) // swap attributes
 
       checker ! changeSet
       expectMsg(ChangeSet(
@@ -54,7 +54,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
 
     "do projection with lesser length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1))))
+      val checker = system.actorOf(Props(new ρNode(echoActor ! _, mask(1))))
 
       checker ! changeSet
       expectMsg(ChangeSet(

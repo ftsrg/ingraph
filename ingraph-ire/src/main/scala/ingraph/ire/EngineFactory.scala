@@ -66,12 +66,12 @@ object EngineFactory {
 
             case op: SelectionOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op)
-              newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
+              newLocal(Props(new σNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
             case op: ProjectionOperator =>
               val lookup = schemaToMap.schemaToMap(op.getInput)
               val mask = op.getTupleIndices
-              newLocal(Props(new ProjectionNode(expr.child, mask)))
+              newLocal(Props(new ρNode(expr.child, mask)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
               val schema = new SchemaToMap().schemaToMap(op)
@@ -89,7 +89,7 @@ object EngineFactory {
                 true
               }
 
-              newLocal(Props(new SelectionNode(expr.child, allDifferent)))
+              newLocal(Props(new σNode(expr.child, allDifferent)))
             }
             remaining += ForwardConnection(op.getInput, node)
 
