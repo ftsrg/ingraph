@@ -11,6 +11,7 @@ class ExpressionParserTest extends WordSpec {
   def getSelectionOperator(query: String): SelectionOperator = {
     val relalg = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(query))
     relalg.getRootExpression
+      .asInstanceOf[ProductionOperator].getInput
       .asInstanceOf[ProjectionOperator].getInput
       .asInstanceOf[SelectionOperator]
   }
