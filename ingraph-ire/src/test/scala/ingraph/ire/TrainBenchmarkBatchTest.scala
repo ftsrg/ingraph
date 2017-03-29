@@ -7,8 +7,6 @@ import scala.io.Source
 
 class TrainBenchmarkBatchTest extends FlatSpec {
 
-  def modelPath(size: Int, entityName: String) = s"../graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
-
   def queryPath(query: String): String = s"../queries/trainbenchmark/$query.cypher"
 
   case class TestCase(name: String, size: Int, expectedResultSize: Int)
@@ -33,4 +31,11 @@ class TrainBenchmarkBatchTest extends FlatSpec {
       TrainbenchmarkUtils.readModelAndGetResults(query, t.size).size == t.expectedResultSize
     }
   )
+
+  "SortAndTopNode" should "work" in {
+    val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
+    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
+    assert(results == expected)
+  }
 }
