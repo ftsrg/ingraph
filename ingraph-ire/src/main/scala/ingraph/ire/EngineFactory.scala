@@ -23,6 +23,7 @@ object EngineFactory {
 
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
+
   def createQueryEngine(plan: Operator) =
     new TrainbenchmarkQuery {
       override val production = system.actorOf(Props(new ProductionNode("")))
@@ -41,7 +42,7 @@ object EngineFactory {
             val node: ActorRef = op match {
             case op: ProductionOperator => production
             case op: GroupingAndProjectionOperator =>
-              val variableLookup = new SchemaToMap().schemaToMap(op.getInput)
+              val variableLookup = schemaToMap.schemaToMap(op.getInput)
               val functions = () => op.getAggregations.map(
                 e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).map(
                 _() // GOOD LUCK UNDERSTANDING THIS
@@ -50,7 +51,7 @@ object EngineFactory {
               newLocal(Props(new AggregationNode(expr.child, mask, functions)))
 
             case op: SortAndTopOperator =>
-              val variableLookup = new SchemaToMap().schemaToMap(op.getInput)
+              val variableLookup = schemaToMap.schemaToMap(op.getInput)
               // This is the mighty EMF, so there are no default values, obviously
               def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Int]
               val skip = if (op.getSkip == null) 0 else getInt(op.getSkip)
@@ -65,7 +66,7 @@ object EngineFactory {
               )))
 
             case op: SelectionOperator =>
-              val variableLookup = new SchemaToMap().schemaToMap(op)
+              val variableLookup = schemaToMap.schemaToMap(op.getInput)
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
 
             case op: ProjectionOperator =>
@@ -74,9 +75,8 @@ object EngineFactory {
               newLocal(Props(new ProjectionNode(expr.child, mask)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
-              val schema = new SchemaToMap().schemaToMap(op)
+              val schema = schemaToMap.schemaToMap(op.getInput)
               val indices = op.getEdgeVariables.map(v => schema(v))
-              println("alldiff",indices)
               def allDifferent(r: Tuple): Boolean = {
                 val seen = mutable.HashSet[Any]()
                 for (value <- indices.map(r(_))) {
