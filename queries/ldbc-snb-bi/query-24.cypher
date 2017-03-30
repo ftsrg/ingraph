@@ -8,3 +8,5 @@ RETURN
   toInt(substring(message.creationDate, 0, 4)) AS year,
   toInt(substring(message.creationDate, 5, 2)) AS month,
   continent.name
+ORDER BY messageCount, likeCount, year, month, continent.name
+LIMIT 100
