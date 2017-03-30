@@ -188,16 +188,6 @@ class AttributeVariable extends GraphObjectVariable {
       throw new IllegalStateException("AttributeVariable must have non-null value for element or expVar, but not for both!")
     }
   }
-  
-  op Variable getBaseVariable2() {
-    if (element !== null && expVar === null) {
-      return element
-    } else if (element === null && expVar !== null) {
-      return (((expVar.expression as VariableExpression).variable as ExpressionVariable).expression as VariableExpression).variable
-    } else {
-      throw new IllegalStateException("AttributeVariable must have non-null value for element or expVar, but not for both!")
-    }
-  }
 }
 
 class ListVariable extends Variable {

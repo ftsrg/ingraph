@@ -10,6 +10,7 @@ import org.supercsv.prefs.CsvPreference
 import relalg._
 
 import scala.io.Source
+import ingraph.relalg.expressions.ExpressionUnwrapper
 
 class LdbcSnbBiTest extends FunSuite {
 
@@ -83,7 +84,7 @@ class LdbcSnbBiTest extends FunSuite {
       tran.close()
       import ingraph.expressionparser.Conversions._
       val resultNames = adapter.plan.getRootExpression.getBasicSchema.map {
-        case a: AttributeVariable => s"${a.getBaseVariable2.getName}.${a.getName}"
+        case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
         case e => e.getName
       }
 
