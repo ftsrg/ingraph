@@ -2,11 +2,13 @@ package ingraph.optimization.patterns
 
 import "http://ingraph/relalg";
 
-// [0] transformation for eliminating left outer joins on the Dual table
-pattern unnecessaryLeftOuterJoin(leftInputOperator : Operator, dualOperator : DualObjectSourceOperator, leftOuterJoinOperator : LeftOuterJoinOperator, parentOperator : Operator) {
+// [0] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
+// to the Dual table
+pattern unnecessaryLeftOuterJoin(inputOperator : Operator, leftOuterJoinOperator : LeftOuterJoinOperator, parentOperator : Operator) {
 	find parentOperator(leftOuterJoinOperator, parentOperator);
-	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
+	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, inputOperator);
 	LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, dualOperator);
+	DualObjectSourceOperator(dualOperator);
 }
 
 /*
@@ -89,9 +91,16 @@ pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperato
    groupingOperator
 */
 // [4] transformation for combining adjacent grouping and projection operators to a single groupingAndProjection operator
-pattern groupingAndProjectionOperator(projectionOperator : ProjectionOperator, groupingOperator : GroupingOperator, parentOperator : Operator) {
+pattern mergeGroupingAndProjectionOperator(projectionOperator : ProjectionOperator, groupingOperator : GroupingOperator, parentOperator : Operator) {
   find parentOperator(projectionOperator, parentOperator);
   ProjectionOperator.input(projectionOperator, groupingOperator);
+  // do not merge operators that are already GroupingAndProjectionOperators
+  neg find groupingAndProjectionOperator(projectionOperator);
+  neg find groupingAndProjectionOperator(groupingOperator);
+}
+
+pattern groupingAndProjectionOperator(groupingAndProjectionOperator) {
+	GroupingAndProjectionOperator(groupingAndProjectionOperator);
 }
 
 /*

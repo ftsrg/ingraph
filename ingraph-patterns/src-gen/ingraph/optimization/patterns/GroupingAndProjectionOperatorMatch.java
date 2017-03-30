@@ -9,9 +9,7 @@ import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-import relalg.GroupingOperator;
-import relalg.Operator;
-import relalg.ProjectionOperator;
+import relalg.GroupingAndProjectionOperator;
 
 /**
  * Pattern-specific match representation of the ingraph.optimization.patterns.groupingAndProjectionOperator pattern,
@@ -28,71 +26,37 @@ import relalg.ProjectionOperator;
  */
 @SuppressWarnings("all")
 public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatch {
-  private ProjectionOperator fProjectionOperator;
+  private GroupingAndProjectionOperator fGroupingAndProjectionOperator;
   
-  private GroupingOperator fGroupingOperator;
+  private static List<String> parameterNames = makeImmutableList("groupingAndProjectionOperator");
   
-  private Operator fParentOperator;
-  
-  private static List<String> parameterNames = makeImmutableList("projectionOperator", "groupingOperator", "parentOperator");
-  
-  private GroupingAndProjectionOperatorMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    this.fProjectionOperator = pProjectionOperator;
-    this.fGroupingOperator = pGroupingOperator;
-    this.fParentOperator = pParentOperator;
+  private GroupingAndProjectionOperatorMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    this.fGroupingAndProjectionOperator = pGroupingAndProjectionOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
-    if ("projectionOperator".equals(parameterName)) return this.fProjectionOperator;
-    if ("groupingOperator".equals(parameterName)) return this.fGroupingOperator;
-    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
+    if ("groupingAndProjectionOperator".equals(parameterName)) return this.fGroupingAndProjectionOperator;
     return null;
   }
   
-  public ProjectionOperator getProjectionOperator() {
-    return this.fProjectionOperator;
-  }
-  
-  public GroupingOperator getGroupingOperator() {
-    return this.fGroupingOperator;
-  }
-  
-  public Operator getParentOperator() {
-    return this.fParentOperator;
+  public GroupingAndProjectionOperator getGroupingAndProjectionOperator() {
+    return this.fGroupingAndProjectionOperator;
   }
   
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    if ("projectionOperator".equals(parameterName) ) {
-    	this.fProjectionOperator = (ProjectionOperator) newValue;
-    	return true;
-    }
-    if ("groupingOperator".equals(parameterName) ) {
-    	this.fGroupingOperator = (GroupingOperator) newValue;
-    	return true;
-    }
-    if ("parentOperator".equals(parameterName) ) {
-    	this.fParentOperator = (Operator) newValue;
+    if ("groupingAndProjectionOperator".equals(parameterName) ) {
+    	this.fGroupingAndProjectionOperator = (GroupingAndProjectionOperator) newValue;
     	return true;
     }
     return false;
   }
   
-  public void setProjectionOperator(final ProjectionOperator pProjectionOperator) {
+  public void setGroupingAndProjectionOperator(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fProjectionOperator = pProjectionOperator;
-  }
-  
-  public void setGroupingOperator(final GroupingOperator pGroupingOperator) {
-    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fGroupingOperator = pGroupingOperator;
-  }
-  
-  public void setParentOperator(final Operator pParentOperator) {
-    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fParentOperator = pParentOperator;
+    this.fGroupingAndProjectionOperator = pGroupingAndProjectionOperator;
   }
   
   @Override
@@ -107,22 +71,18 @@ public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatc
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fProjectionOperator, fGroupingOperator, fParentOperator};
+    return new Object[]{fGroupingAndProjectionOperator};
   }
   
   @Override
   public GroupingAndProjectionOperatorMatch toImmutable() {
-    return isMutable() ? newMatch(fProjectionOperator, fGroupingOperator, fParentOperator) : this;
+    return isMutable() ? newMatch(fGroupingAndProjectionOperator) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
-    result.append("\"projectionOperator\"=" + prettyPrintValue(fProjectionOperator) + ", ");
-    
-    result.append("\"groupingOperator\"=" + prettyPrintValue(fGroupingOperator) + ", ");
-    
-    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator)
+    result.append("\"groupingAndProjectionOperator\"=" + prettyPrintValue(fGroupingAndProjectionOperator)
     );
     return result.toString();
   }
@@ -131,9 +91,7 @@ public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatc
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((fProjectionOperator == null) ? 0 : fProjectionOperator.hashCode());
-    result = prime * result + ((fGroupingOperator == null) ? 0 : fGroupingOperator.hashCode());
-    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
+    result = prime * result + ((fGroupingAndProjectionOperator == null) ? 0 : fGroupingAndProjectionOperator.hashCode());
     return result;
   }
   
@@ -154,12 +112,8 @@ public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatc
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     GroupingAndProjectionOperatorMatch other = (GroupingAndProjectionOperatorMatch) obj;
-    if (fProjectionOperator == null) {if (other.fProjectionOperator != null) return false;}
-    else if (!fProjectionOperator.equals(other.fProjectionOperator)) return false;
-    if (fGroupingOperator == null) {if (other.fGroupingOperator != null) return false;}
-    else if (!fGroupingOperator.equals(other.fGroupingOperator)) return false;
-    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
-    else if (!fParentOperator.equals(other.fParentOperator)) return false;
+    if (fGroupingAndProjectionOperator == null) {if (other.fGroupingAndProjectionOperator != null) return false;}
+    else if (!fGroupingAndProjectionOperator.equals(other.fGroupingAndProjectionOperator)) return false;
     return true;
   }
   
@@ -181,40 +135,36 @@ public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatc
    * 
    */
   public static GroupingAndProjectionOperatorMatch newEmptyMatch() {
-    return new Mutable(null, null, null);
+    return new Mutable(null);
   }
   
   /**
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static GroupingAndProjectionOperatorMatch newMutableMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return new Mutable(pProjectionOperator, pGroupingOperator, pParentOperator);
+  public static GroupingAndProjectionOperatorMatch newMutableMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return new Mutable(pGroupingAndProjectionOperator);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static GroupingAndProjectionOperatorMatch newMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return new Immutable(pProjectionOperator, pGroupingOperator, pParentOperator);
+  public static GroupingAndProjectionOperatorMatch newMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return new Immutable(pGroupingAndProjectionOperator);
   }
   
   private static final class Mutable extends GroupingAndProjectionOperatorMatch {
-    Mutable(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-      super(pProjectionOperator, pGroupingOperator, pParentOperator);
+    Mutable(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+      super(pGroupingAndProjectionOperator);
     }
     
     @Override
@@ -224,8 +174,8 @@ public abstract class GroupingAndProjectionOperatorMatch extends BasePatternMatc
   }
   
   private static final class Immutable extends GroupingAndProjectionOperatorMatch {
-    Immutable(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-      super(pProjectionOperator, pGroupingOperator, pParentOperator);
+    Immutable(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+      super(pGroupingAndProjectionOperator);
     }
     
     @Override

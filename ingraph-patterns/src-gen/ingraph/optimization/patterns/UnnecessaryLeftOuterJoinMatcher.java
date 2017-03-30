@@ -16,7 +16,6 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseMatcher;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
-import relalg.DualObjectSourceOperator;
 import relalg.LeftOuterJoinOperator;
 import relalg.Operator;
 
@@ -31,11 +30,13 @@ import relalg.Operator;
  * 
  * <p>Original source:
  * <code><pre>
- * // [0] transformation for eliminating left outer joins on the Dual table
- * pattern unnecessaryLeftOuterJoin(leftInputOperator : Operator, dualOperator : DualObjectSourceOperator, leftOuterJoinOperator : LeftOuterJoinOperator, parentOperator : Operator) {
+ * // [0] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
+ * // to the Dual table
+ * pattern unnecessaryLeftOuterJoin(inputOperator : Operator, leftOuterJoinOperator : LeftOuterJoinOperator, parentOperator : Operator) {
  * 	find parentOperator(leftOuterJoinOperator, parentOperator);
- * 	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
+ * 	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, inputOperator);
  * 	LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, dualOperator);
+ * 	DualObjectSourceOperator(dualOperator);
  * }
  * </pre></code>
  * 
@@ -73,13 +74,11 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
     return new UnnecessaryLeftOuterJoinMatcher();
   }
   
-  private final static int POSITION_LEFTINPUTOPERATOR = 0;
+  private final static int POSITION_INPUTOPERATOR = 0;
   
-  private final static int POSITION_DUALOPERATOR = 1;
+  private final static int POSITION_LEFTOUTERJOINOPERATOR = 1;
   
-  private final static int POSITION_LEFTOUTERJOINOPERATOR = 2;
-  
-  private final static int POSITION_PARENTOPERATOR = 3;
+  private final static int POSITION_PARENTOPERATOR = 2;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(UnnecessaryLeftOuterJoinMatcher.class);
   
@@ -97,181 +96,130 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return matches represented as a UnnecessaryLeftOuterJoinMatch object.
    * 
    */
-  public Collection<UnnecessaryLeftOuterJoinMatch> getAllMatches(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawGetAllMatches(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator});
+  public Collection<UnnecessaryLeftOuterJoinMatch> getAllMatches(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return rawGetAllMatches(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return a match represented as a UnnecessaryLeftOuterJoinMatch object, or null if no match is found.
    * 
    */
-  public UnnecessaryLeftOuterJoinMatch getOneArbitraryMatch(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawGetOneArbitraryMatch(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator});
+  public UnnecessaryLeftOuterJoinMatch getOneArbitraryMatch(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return rawGetOneArbitraryMatch(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawHasMatch(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator});
+  public boolean hasMatch(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return rawHasMatch(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawCountMatches(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator});
+  public int countMatches(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return rawCountMatches(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryLeftOuterJoinMatch> processor) {
-    rawForEachMatch(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator}, processor);
+  public void forEachMatch(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryLeftOuterJoinMatch> processor) {
+    rawForEachMatch(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryLeftOuterJoinMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator}, processor);
+  public boolean forOneArbitraryMatch(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryLeftOuterJoinMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pInputOperator, pLeftOuterJoinOperator, pParentOperator}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pDualOperator the fixed value of pattern parameter dualOperator, or null if not bound.
+   * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public UnnecessaryLeftOuterJoinMatch newMatch(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return UnnecessaryLeftOuterJoinMatch.newMatch(pLeftInputOperator, pDualOperator, pLeftOuterJoinOperator, pParentOperator);
+  public UnnecessaryLeftOuterJoinMatch newMatch(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return UnnecessaryLeftOuterJoinMatch.newMatch(pInputOperator, pLeftOuterJoinOperator, pParentOperator);
   }
   
   /**
-   * Retrieve the set of values that occur in matches for leftInputOperator.
+   * Retrieve the set of values that occur in matches for inputOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  protected Set<Operator> rawAccumulateAllValuesOfleftInputOperator(final Object[] parameters) {
+  protected Set<Operator> rawAccumulateAllValuesOfinputOperator(final Object[] parameters) {
     Set<Operator> results = new HashSet<Operator>();
-    rawAccumulateAllValues(POSITION_LEFTINPUTOPERATOR, parameters, results);
+    rawAccumulateAllValues(POSITION_INPUTOPERATOR, parameters, results);
     return results;
   }
   
   /**
-   * Retrieve the set of values that occur in matches for leftInputOperator.
+   * Retrieve the set of values that occur in matches for inputOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfleftInputOperator() {
-    return rawAccumulateAllValuesOfleftInputOperator(emptyArray());
+  public Set<Operator> getAllValuesOfinputOperator() {
+    return rawAccumulateAllValuesOfinputOperator(emptyArray());
   }
   
   /**
-   * Retrieve the set of values that occur in matches for leftInputOperator.
+   * Retrieve the set of values that occur in matches for inputOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfleftInputOperator(final UnnecessaryLeftOuterJoinMatch partialMatch) {
-    return rawAccumulateAllValuesOfleftInputOperator(partialMatch.toArray());
+  public Set<Operator> getAllValuesOfinputOperator(final UnnecessaryLeftOuterJoinMatch partialMatch) {
+    return rawAccumulateAllValuesOfinputOperator(partialMatch.toArray());
   }
   
   /**
-   * Retrieve the set of values that occur in matches for leftInputOperator.
+   * Retrieve the set of values that occur in matches for inputOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfleftInputOperator(final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawAccumulateAllValuesOfleftInputOperator(new Object[]{
-    null, 
-    pDualOperator, 
-    pLeftOuterJoinOperator, 
-    pParentOperator
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for dualOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<DualObjectSourceOperator> rawAccumulateAllValuesOfdualOperator(final Object[] parameters) {
-    Set<DualObjectSourceOperator> results = new HashSet<DualObjectSourceOperator>();
-    rawAccumulateAllValues(POSITION_DUALOPERATOR, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for dualOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<DualObjectSourceOperator> getAllValuesOfdualOperator() {
-    return rawAccumulateAllValuesOfdualOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for dualOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<DualObjectSourceOperator> getAllValuesOfdualOperator(final UnnecessaryLeftOuterJoinMatch partialMatch) {
-    return rawAccumulateAllValuesOfdualOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for dualOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<DualObjectSourceOperator> getAllValuesOfdualOperator(final Operator pLeftInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
-    return rawAccumulateAllValuesOfdualOperator(new Object[]{
-    pLeftInputOperator, 
+  public Set<Operator> getAllValuesOfinputOperator(final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pParentOperator) {
+    return rawAccumulateAllValuesOfinputOperator(new Object[]{
     null, 
     pLeftOuterJoinOperator, 
     pParentOperator
@@ -312,10 +260,9 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final Operator pParentOperator) {
+  public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final Operator pInputOperator, final Operator pParentOperator) {
     return rawAccumulateAllValuesOfleftOuterJoinOperator(new Object[]{
-    pLeftInputOperator, 
-    pDualOperator, 
+    pInputOperator, 
     null, 
     pParentOperator
     });
@@ -355,10 +302,9 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfparentOperator(final Operator pLeftInputOperator, final DualObjectSourceOperator pDualOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator) {
+  public Set<Operator> getAllValuesOfparentOperator(final Operator pInputOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator) {
     return rawAccumulateAllValuesOfparentOperator(new Object[]{
-    pLeftInputOperator, 
-    pDualOperator, 
+    pInputOperator, 
     pLeftOuterJoinOperator, 
     null
     });
@@ -367,7 +313,7 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
   @Override
   protected UnnecessaryLeftOuterJoinMatch tupleToMatch(final Tuple t) {
     try {
-    	return UnnecessaryLeftOuterJoinMatch.newMatch((Operator) t.get(POSITION_LEFTINPUTOPERATOR), (DualObjectSourceOperator) t.get(POSITION_DUALOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return UnnecessaryLeftOuterJoinMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -377,7 +323,7 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
   @Override
   protected UnnecessaryLeftOuterJoinMatch arrayToMatch(final Object[] match) {
     try {
-    	return UnnecessaryLeftOuterJoinMatch.newMatch((Operator) match[POSITION_LEFTINPUTOPERATOR], (DualObjectSourceOperator) match[POSITION_DUALOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryLeftOuterJoinMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -387,7 +333,7 @@ public class UnnecessaryLeftOuterJoinMatcher extends BaseMatcher<UnnecessaryLeft
   @Override
   protected UnnecessaryLeftOuterJoinMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return UnnecessaryLeftOuterJoinMatch.newMutableMatch((Operator) match[POSITION_LEFTINPUTOPERATOR], (DualObjectSourceOperator) match[POSITION_DUALOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryLeftOuterJoinMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

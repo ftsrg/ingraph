@@ -7,7 +7,6 @@ import relalg.FunctionExpression
 import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
 import relalg.ProjectionOperator
-import relalg.RelalgFactory
 import relalg.SelectionOperator
 import relalg.SortOperator
 import relalg.UnaryOperator
@@ -68,6 +67,10 @@ class VariableExtractor {
 			.toList
 
 		op.otherFunctions.addAll(otherFunctions)
+		
+		println(extraAttributes)
+		println(arguments)
+		
 		union(extraAttributes, arguments)
 	}
 	

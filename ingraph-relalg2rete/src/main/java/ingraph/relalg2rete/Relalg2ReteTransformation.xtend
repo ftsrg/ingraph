@@ -4,17 +4,17 @@ import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
 import ingraph.optimization.patterns.ExpandOperatorBMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
-import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
+import ingraph.optimization.patterns.MergeGroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.patterns.TopAndProjectionOperatorMatcher
+import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.Direction
 import relalg.RelalgContainer
-import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
@@ -40,7 +40,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(swapTopAndProjectionOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
-		statements.fireWhilePossible(groupingAndProjectionOperatorRule)
+		statements.fireWhilePossible(mergeGroupingAndProjectionOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		container.incrementalPlan = true
 		return container
@@ -54,7 +54,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.precondition(UnnecessaryLeftOuterJoinMatcher.querySpecification) //
 		.action [ //
 			info('''unnecessaryLeftOuterJoinOperatorRule fired for «leftOuterJoinOperator»''')
-			changeChildOperator(parentOperator, leftOuterJoinOperator, leftInputOperator)
+			changeChildOperator(parentOperator, leftOuterJoinOperator, inputOperator)
 		].build
 	}
 
@@ -187,9 +187,9 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	/**
 	 * [4] Replace an adjacent pair of GroupingOperator and ProjectionOperator to a single GroupingAndProjectionOperator
 	 */
-	protected def groupingAndProjectionOperatorRule() {
+	protected def mergeGroupingAndProjectionOperatorRule() {
 		createRule() //
-		.precondition(GroupingAndProjectionOperatorMatcher.querySpecification) //
+		.precondition(MergeGroupingAndProjectionOperatorMatcher.querySpecification) //
 		.action [ //
 			val groupingOperator = groupingOperator
 			val projectionOperator = projectionOperator

@@ -16,9 +16,7 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseMatcher;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.tuple.Tuple;
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil;
-import relalg.GroupingOperator;
-import relalg.Operator;
-import relalg.ProjectionOperator;
+import relalg.GroupingAndProjectionOperator;
 
 /**
  * Generated pattern matcher API of the ingraph.optimization.patterns.groupingAndProjectionOperator pattern,
@@ -31,20 +29,8 @@ import relalg.ProjectionOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * parentOperator
- *           |
- *           | input
- *           V
- *   projectionOperator
- *           |
- *           | input
- *           V
- *    groupingOperator
- * 
- * // [4] transformation for combining adjacent grouping and projection operators to a single groupingAndProjection operator
- * pattern groupingAndProjectionOperator(projectionOperator : ProjectionOperator, groupingOperator : GroupingOperator, parentOperator : Operator) {
- *   find parentOperator(projectionOperator, parentOperator);
- *   ProjectionOperator.input(projectionOperator, groupingOperator);
+ * pattern groupingAndProjectionOperator(groupingAndProjectionOperator) {
+ * 	GroupingAndProjectionOperator(groupingAndProjectionOperator);
  * }
  * </pre></code>
  * 
@@ -82,11 +68,7 @@ public class GroupingAndProjectionOperatorMatcher extends BaseMatcher<GroupingAn
     return new GroupingAndProjectionOperatorMatcher();
   }
   
-  private final static int POSITION_PROJECTIONOPERATOR = 0;
-  
-  private final static int POSITION_GROUPINGOPERATOR = 1;
-  
-  private final static int POSITION_PARENTOPERATOR = 2;
+  private final static int POSITION_GROUPINGANDPROJECTIONOPERATOR = 0;
   
   private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(GroupingAndProjectionOperatorMatcher.class);
   
@@ -104,224 +86,104 @@ public class GroupingAndProjectionOperatorMatcher extends BaseMatcher<GroupingAn
   
   /**
    * Returns the set of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return matches represented as a GroupingAndProjectionOperatorMatch object.
    * 
    */
-  public Collection<GroupingAndProjectionOperatorMatch> getAllMatches(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return rawGetAllMatches(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator});
+  public Collection<GroupingAndProjectionOperatorMatch> getAllMatches(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return rawGetAllMatches(new Object[]{pGroupingAndProjectionOperator});
   }
   
   /**
    * Returns an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return a match represented as a GroupingAndProjectionOperatorMatch object, or null if no match is found.
    * 
    */
-  public GroupingAndProjectionOperatorMatch getOneArbitraryMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return rawGetOneArbitraryMatch(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator});
+  public GroupingAndProjectionOperatorMatch getOneArbitraryMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return rawGetOneArbitraryMatch(new Object[]{pGroupingAndProjectionOperator});
   }
   
   /**
    * Indicates whether the given combination of specified pattern parameters constitute a valid pattern match,
    * under any possible substitution of the unspecified parameters (if any).
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return true if the input is a valid (partial) match of the pattern.
    * 
    */
-  public boolean hasMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return rawHasMatch(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator});
+  public boolean hasMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return rawHasMatch(new Object[]{pGroupingAndProjectionOperator});
   }
   
   /**
    * Returns the number of all matches of the pattern that conform to the given fixed values of some parameters.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return the number of pattern matches found.
    * 
    */
-  public int countMatches(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return rawCountMatches(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator});
+  public int countMatches(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return rawCountMatches(new Object[]{pGroupingAndProjectionOperator});
   }
   
   /**
    * Executes the given processor on each match of the pattern that conforms to the given fixed values of some parameters.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator, final IMatchProcessor<? super GroupingAndProjectionOperatorMatch> processor) {
-    rawForEachMatch(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator}, processor);
+  public void forEachMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator, final IMatchProcessor<? super GroupingAndProjectionOperatorMatch> processor) {
+    rawForEachMatch(new Object[]{pGroupingAndProjectionOperator}, processor);
   }
   
   /**
    * Executes the given processor on an arbitrarily chosen match of the pattern that conforms to the given fixed values of some parameters.
    * Neither determinism nor randomness of selection is guaranteed.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @param processor the action that will process the selected match.
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator, final IMatchProcessor<? super GroupingAndProjectionOperatorMatch> processor) {
-    return rawForOneArbitraryMatch(new Object[]{pProjectionOperator, pGroupingOperator, pParentOperator}, processor);
+  public boolean forOneArbitraryMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator, final IMatchProcessor<? super GroupingAndProjectionOperatorMatch> processor) {
+    return rawForOneArbitraryMatch(new Object[]{pGroupingAndProjectionOperator}, processor);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
-   * @param pProjectionOperator the fixed value of pattern parameter projectionOperator, or null if not bound.
-   * @param pGroupingOperator the fixed value of pattern parameter groupingOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
+   * @param pGroupingAndProjectionOperator the fixed value of pattern parameter groupingAndProjectionOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public GroupingAndProjectionOperatorMatch newMatch(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return GroupingAndProjectionOperatorMatch.newMatch(pProjectionOperator, pGroupingOperator, pParentOperator);
+  public GroupingAndProjectionOperatorMatch newMatch(final GroupingAndProjectionOperator pGroupingAndProjectionOperator) {
+    return GroupingAndProjectionOperatorMatch.newMatch(pGroupingAndProjectionOperator);
   }
   
   /**
-   * Retrieve the set of values that occur in matches for projectionOperator.
+   * Retrieve the set of values that occur in matches for groupingAndProjectionOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  protected Set<ProjectionOperator> rawAccumulateAllValuesOfprojectionOperator(final Object[] parameters) {
-    Set<ProjectionOperator> results = new HashSet<ProjectionOperator>();
-    rawAccumulateAllValues(POSITION_PROJECTIONOPERATOR, parameters, results);
+  protected Set<GroupingAndProjectionOperator> rawAccumulateAllValuesOfgroupingAndProjectionOperator(final Object[] parameters) {
+    Set<GroupingAndProjectionOperator> results = new HashSet<GroupingAndProjectionOperator>();
+    rawAccumulateAllValues(POSITION_GROUPINGANDPROJECTIONOPERATOR, parameters, results);
     return results;
   }
   
   /**
-   * Retrieve the set of values that occur in matches for projectionOperator.
+   * Retrieve the set of values that occur in matches for groupingAndProjectionOperator.
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<ProjectionOperator> getAllValuesOfprojectionOperator() {
-    return rawAccumulateAllValuesOfprojectionOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for projectionOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<ProjectionOperator> getAllValuesOfprojectionOperator(final GroupingAndProjectionOperatorMatch partialMatch) {
-    return rawAccumulateAllValuesOfprojectionOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for projectionOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<ProjectionOperator> getAllValuesOfprojectionOperator(final GroupingOperator pGroupingOperator, final Operator pParentOperator) {
-    return rawAccumulateAllValuesOfprojectionOperator(new Object[]{
-    null, 
-    pGroupingOperator, 
-    pParentOperator
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for groupingOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<GroupingOperator> rawAccumulateAllValuesOfgroupingOperator(final Object[] parameters) {
-    Set<GroupingOperator> results = new HashSet<GroupingOperator>();
-    rawAccumulateAllValues(POSITION_GROUPINGOPERATOR, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for groupingOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<GroupingOperator> getAllValuesOfgroupingOperator() {
-    return rawAccumulateAllValuesOfgroupingOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for groupingOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<GroupingOperator> getAllValuesOfgroupingOperator(final GroupingAndProjectionOperatorMatch partialMatch) {
-    return rawAccumulateAllValuesOfgroupingOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for groupingOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<GroupingOperator> getAllValuesOfgroupingOperator(final ProjectionOperator pProjectionOperator, final Operator pParentOperator) {
-    return rawAccumulateAllValuesOfgroupingOperator(new Object[]{
-    pProjectionOperator, 
-    null, 
-    pParentOperator
-    });
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
-    Set<Operator> results = new HashSet<Operator>();
-    rawAccumulateAllValues(POSITION_PARENTOPERATOR, parameters, results);
-    return results;
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<Operator> getAllValuesOfparentOperator() {
-    return rawAccumulateAllValuesOfparentOperator(emptyArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<Operator> getAllValuesOfparentOperator(final GroupingAndProjectionOperatorMatch partialMatch) {
-    return rawAccumulateAllValuesOfparentOperator(partialMatch.toArray());
-  }
-  
-  /**
-   * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
-   * 
-   */
-  public Set<Operator> getAllValuesOfparentOperator(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator) {
-    return rawAccumulateAllValuesOfparentOperator(new Object[]{
-    pProjectionOperator, 
-    pGroupingOperator, 
-    null
-    });
+  public Set<GroupingAndProjectionOperator> getAllValuesOfgroupingAndProjectionOperator() {
+    return rawAccumulateAllValuesOfgroupingAndProjectionOperator(emptyArray());
   }
   
   @Override
   protected GroupingAndProjectionOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return GroupingAndProjectionOperatorMatch.newMatch((ProjectionOperator) t.get(POSITION_PROJECTIONOPERATOR), (GroupingOperator) t.get(POSITION_GROUPINGOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return GroupingAndProjectionOperatorMatch.newMatch((GroupingAndProjectionOperator) t.get(POSITION_GROUPINGANDPROJECTIONOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -331,7 +193,7 @@ public class GroupingAndProjectionOperatorMatcher extends BaseMatcher<GroupingAn
   @Override
   protected GroupingAndProjectionOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return GroupingAndProjectionOperatorMatch.newMatch((ProjectionOperator) match[POSITION_PROJECTIONOPERATOR], (GroupingOperator) match[POSITION_GROUPINGOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return GroupingAndProjectionOperatorMatch.newMatch((GroupingAndProjectionOperator) match[POSITION_GROUPINGANDPROJECTIONOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -341,7 +203,7 @@ public class GroupingAndProjectionOperatorMatcher extends BaseMatcher<GroupingAn
   @Override
   protected GroupingAndProjectionOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return GroupingAndProjectionOperatorMatch.newMutableMatch((ProjectionOperator) match[POSITION_PROJECTIONOPERATOR], (GroupingOperator) match[POSITION_GROUPINGOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return GroupingAndProjectionOperatorMatch.newMutableMatch((GroupingAndProjectionOperator) match[POSITION_GROUPINGANDPROJECTIONOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;

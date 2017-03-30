@@ -107,6 +107,8 @@ class FullSchemaInferencer {
 //		op.fullSchema.addAll(op.input.fullSchema)
 //		op.fullSchema.addAll(op.otherFunctions)
 //		op.fullSchema.addAll(op.aggregations)
+		val fullSchemaNames = fullSchema.map[name]
+		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 		op.fullSchema.addAll(op.basicSchema)
 		op.fullSchema.addAll(op.extraAttributes)
 	}

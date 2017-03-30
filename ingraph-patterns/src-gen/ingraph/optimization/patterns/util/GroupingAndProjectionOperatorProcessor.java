@@ -5,9 +5,7 @@ package ingraph.optimization.patterns.util;
 
 import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatch;
 import org.eclipse.viatra.query.runtime.api.IMatchProcessor;
-import relalg.GroupingOperator;
-import relalg.Operator;
-import relalg.ProjectionOperator;
+import relalg.GroupingAndProjectionOperator;
 
 /**
  * A match processor tailored for the ingraph.optimization.patterns.groupingAndProjectionOperator pattern.
@@ -19,15 +17,13 @@ import relalg.ProjectionOperator;
 public abstract class GroupingAndProjectionOperatorProcessor implements IMatchProcessor<GroupingAndProjectionOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pProjectionOperator the value of pattern parameter projectionOperator in the currently processed match
-   * @param pGroupingOperator the value of pattern parameter groupingOperator in the currently processed match
-   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
+   * @param pGroupingAndProjectionOperator the value of pattern parameter groupingAndProjectionOperator in the currently processed match
    * 
    */
-  public abstract void process(final ProjectionOperator pProjectionOperator, final GroupingOperator pGroupingOperator, final Operator pParentOperator);
+  public abstract void process(final GroupingAndProjectionOperator pGroupingAndProjectionOperator);
   
   @Override
   public void process(final GroupingAndProjectionOperatorMatch match) {
-    process(match.getProjectionOperator(), match.getGroupingOperator(), match.getParentOperator());
+    process(match.getGroupingAndProjectionOperator());
   }
 }

@@ -6,7 +6,6 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatch;
 import ingraph.optimization.patterns.GroupingAndProjectionOperatorMatcher;
-import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -15,15 +14,13 @@ import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecification;
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
-import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.backend.IQueryBackendFactory;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
+import org.eclipse.viatra.query.runtime.matchers.context.IInputKey;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Equality;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameterDirection;
@@ -73,7 +70,7 @@ public final class GroupingAndProjectionOperatorQuerySpecification extends BaseG
   
   @Override
   public GroupingAndProjectionOperatorMatch newMatch(final Object... parameters) {
-    return GroupingAndProjectionOperatorMatch.newMatch((relalg.ProjectionOperator) parameters[0], (relalg.GroupingOperator) parameters[1], (relalg.Operator) parameters[2]);
+    return GroupingAndProjectionOperatorMatch.newMatch((relalg.GroupingAndProjectionOperator) parameters[0]);
   }
   
   /**
@@ -105,13 +102,9 @@ public final class GroupingAndProjectionOperatorQuerySpecification extends BaseG
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
     private final static GroupingAndProjectionOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pProjectionOperator = new PParameter("projectionOperator", "relalg.ProjectionOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "ProjectionOperator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pGroupingAndProjectionOperator = new PParameter("groupingAndProjectionOperator", "relalg.GroupingAndProjectionOperator", (IInputKey)null, PParameterDirection.INOUT);
     
-    private final PParameter parameter_pGroupingOperator = new PParameter("groupingOperator", "relalg.GroupingOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "GroupingOperator")), PParameterDirection.INOUT);
-    
-    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
-    
-    private final List<PParameter> parameters = Arrays.asList(parameter_pProjectionOperator, parameter_pGroupingOperator, parameter_pParentOperator);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pGroupingAndProjectionOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -120,7 +113,7 @@ public final class GroupingAndProjectionOperatorQuerySpecification extends BaseG
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("projectionOperator","groupingOperator","parentOperator");
+      return Arrays.asList("groupingAndProjectionOperator");
     }
     
     @Override
@@ -135,24 +128,12 @@ public final class GroupingAndProjectionOperatorQuerySpecification extends BaseG
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_projectionOperator = body.getOrCreateVariableByName("projectionOperator");
-      		PVariable var_groupingOperator = body.getOrCreateVariableByName("groupingOperator");
-      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		new TypeConstraint(body, new FlatTuple(var_projectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ProjectionOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_groupingOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GroupingOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		PVariable var_groupingAndProjectionOperator = body.getOrCreateVariableByName("groupingAndProjectionOperator");
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_projectionOperator, parameter_pProjectionOperator),
-      		   new ExportedParameter(body, var_groupingOperator, parameter_pGroupingOperator),
-      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+      		   new ExportedParameter(body, var_groupingAndProjectionOperator, parameter_pGroupingAndProjectionOperator)
       		));
-      		//   find parentOperator(projectionOperator, parentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_projectionOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		//   ProjectionOperator.input(projectionOperator, groupingOperator)
-      		new TypeConstraint(body, new FlatTuple(var_projectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ProjectionOperator")));
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_projectionOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-      		new Equality(body, var__virtual_0_, var_groupingOperator);
+      		// 	GroupingAndProjectionOperator(groupingAndProjectionOperator)
+      		new TypeConstraint(body, new FlatTuple(var_groupingAndProjectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GroupingAndProjectionOperator")));
       		bodies.add(body);
       	}
       	// to silence compiler error
