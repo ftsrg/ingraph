@@ -103,8 +103,9 @@ class OperatorConverter {
 
 	def dispatch convertOperator(SelectionOperator op) {
 		#[
-			'''\selection{
-				«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF» +
+			'''
+			\selection{
+				«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»
 			}
 			'''
 		]
