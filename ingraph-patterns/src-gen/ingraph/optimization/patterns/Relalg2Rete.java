@@ -12,6 +12,7 @@ import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.TopAndProjectionOperatorMatcher;
+import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher;
 import ingraph.optimization.patterns.VariablesInLogicalExpressionMatcher;
 import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandOperatorAQuerySpecification;
@@ -22,6 +23,7 @@ import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
 import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.TopAndProjectionOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.UnnecessaryLeftOuterJoinQuerySpecification;
 import ingraph.optimization.patterns.util.VariablesInLogicalExpressionQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
@@ -35,6 +37,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
+ * <li>unnecessaryLeftOuterJoin</li>
  * <li>defaultExpandOperator</li>
  * <li>expandVertex</li>
  * <li>expandOperatorA</li>
@@ -69,6 +72,7 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
   private static Relalg2Rete INSTANCE;
   
   private Relalg2Rete() throws ViatraQueryException {
+    querySpecifications.add(UnnecessaryLeftOuterJoinQuerySpecification.instance());
     querySpecifications.add(DefaultExpandOperatorQuerySpecification.instance());
     querySpecifications.add(ExpandVertexQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorAQuerySpecification.instance());
@@ -79,6 +83,14 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
     querySpecifications.add(LeftOuterJoinAndSelectionQuerySpecification.instance());
     querySpecifications.add(VariablesInLogicalExpressionQuerySpecification.instance());
     querySpecifications.add(LeftDeepTreeNodesQuerySpecification.instance());
+  }
+  
+  public UnnecessaryLeftOuterJoinQuerySpecification getUnnecessaryLeftOuterJoin() throws ViatraQueryException {
+    return UnnecessaryLeftOuterJoinQuerySpecification.instance();
+  }
+  
+  public UnnecessaryLeftOuterJoinMatcher getUnnecessaryLeftOuterJoin(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return UnnecessaryLeftOuterJoinMatcher.on(engine);
   }
   
   public DefaultExpandOperatorQuerySpecification getDefaultExpandOperator() throws ViatraQueryException {

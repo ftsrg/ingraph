@@ -14,6 +14,7 @@ import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.Direction
 import relalg.RelalgContainer
+import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
@@ -33,6 +34,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
 		}
 		val statements = register(container)
+		statements.fireWhilePossible(unnecessaryLeftOuterJoinOperatorRule)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
 		statements.fireWhilePossible(expandOperatorBRule)
@@ -42,6 +44,18 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		container.incrementalPlan = true
 		return container
+	}
+
+	/**
+	 * [0] Remove unnecessary LeftOuterJoinOperators
+	 */
+	protected def unnecessaryLeftOuterJoinOperatorRule() {
+		createRule() //
+		.precondition(UnnecessaryLeftOuterJoinMatcher.querySpecification) //
+		.action [ //
+			info('''unnecessaryLeftOuterJoinOperatorRule fired for «leftOuterJoinOperator»''')
+			changeChildOperator(parentOperator, leftOuterJoinOperator, leftInputOperator)
+		].build
 	}
 
 	/**
