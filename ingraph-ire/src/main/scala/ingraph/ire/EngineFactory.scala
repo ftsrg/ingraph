@@ -56,10 +56,12 @@ object EngineFactory {
               def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Int]
               val skip = if (op.getSkip == null) 0 else getInt(op.getSkip)
               val limit = if (op.getLimit == null) 0 else getInt(op.getLimit)
+              val sortKeys = op.getEntries.map(
+                e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortAndTopNode(
                   expr.child,
                   op.getFullSchema.length,
-                  op.getEntries.map( e=> ExpressionParser.parseValue(e.getExpression, variableLookup)),
+                  sortKeys,
                   skip,
                   limit,
                   op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
@@ -98,20 +100,24 @@ object EngineFactory {
               case op: AntiJoinOperator =>
                 newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
               case op: JoinOperator =>
+                val leftMask = emfToInt(op.getLeftMask)
+                val rightMask = emfToInt(op.getRightMask)
                 newLocal(Props(new JoinNode(
                     expr.child,
                     op.getLeftInput.getFullSchema.length,
                     op.getRightInput.getFullSchema.length,
-                    emfToInt(op.getLeftMask),
-                    emfToInt(op.getRightMask)
+                    leftMask,
+                    rightMask
                 )))
               case op: LeftOuterJoinOperator =>
+                val leftMask = emfToInt(op.getLeftMask)
+                val rightMask = emfToInt(op.getRightMask)
                 newLocal(Props(new LeftOuterJoinNode(
                   expr.child,
                   op.getLeftInput.getFullSchema.length,
                   op.getRightInput.getFullSchema.length,
-                  emfToInt(op.getLeftMask),
-                  emfToInt(op.getRightMask)
+                  leftMask,
+                  rightMask
                 )))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)
