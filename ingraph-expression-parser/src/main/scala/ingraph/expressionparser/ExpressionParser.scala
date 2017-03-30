@@ -4,6 +4,7 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
+import relalg.function.FunctionCategory
 
 
 object ExpressionParser {
@@ -74,7 +75,10 @@ object ExpressionParser {
       tuple => tuple(index)
     case cmp: VariableExpression =>
       val variable = cmp.getVariable match {
-        case e: ExpressionVariable => e.getExpression.asInstanceOf[VariableExpression].getVariable
+        case e: ExpressionVariable => e.getExpression match {
+          case v: VariableExpression => v.getVariable
+          case f: FunctionExpression => e
+        }
         case a => a
       }
       val index = lookup(variable).toInt
@@ -91,7 +95,7 @@ object ExpressionParser {
         case POWER => tuple => GenericMath.power(left(tuple), right(tuple))
         case MOD => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
-    case exp: FunctionExpression =>
+    case exp: FunctionExpression if exp.getFunctor.getCategory != FunctionCategory.AGGREGATION =>
       exp.getArguments.size() match {
         case 0 =>
           val function = FunctionLookup.fun0(exp.getFunctor)
