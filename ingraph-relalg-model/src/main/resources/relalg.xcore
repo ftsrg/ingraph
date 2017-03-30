@@ -14,7 +14,7 @@ class RelalgContainer {
   contains Expression[] expressions opposite ^container
   boolean incrementalPlan = "false"
   boolean basicSchemaInferred = "false"
-  boolean extraAttributesInferred = "false"
+  boolean extraVariablesInferred = "false"
   boolean fullSchemaInferred = "false"
 }
 
@@ -208,7 +208,7 @@ class ExpressionVariable extends Variable {
 /* Operators */
 abstract class Operator {
   refers Variable[] basicSchema
-  refers Variable[] extraAttributes // TODO rename to extraVariables
+  refers Variable[] extraVariables // TODO rename to extraVariables
   refers Variable[] fullSchema
   contains Cardinality cardinality
 }

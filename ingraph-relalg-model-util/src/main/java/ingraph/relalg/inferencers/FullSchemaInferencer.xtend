@@ -31,8 +31,8 @@ class FullSchemaInferencer {
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def inferFullSchema(RelalgContainer container) {
-		if (!container.extraAttributesInferred) {
-			throw new IllegalStateException("ExtraAttributeInferencer must be executed before FullSchemaInferencer")
+		if (!container.isExtraVariablesInferred) {
+			throw new IllegalStateException("ExtraVariableInferencer must be executed before FullSchemaInferencer")
 		} else if (container.fullSchemaInferred) {
 			throw new IllegalStateException("FullSchemaInferencer on relalg container was already executed")
 		} else {
@@ -49,7 +49,7 @@ class FullSchemaInferencer {
 	 */
 	// nullary operators
 	private def dispatch void fillFullSchema(NullaryOperator op) {
-		val detailedSchema = union(op.basicSchema, op.extraAttributes)
+		val detailedSchema = union(op.basicSchema, op.extraVariables)
 		op.defineDetailedSchema(detailedSchema)
 	}
 
@@ -110,7 +110,7 @@ class FullSchemaInferencer {
 		val fullSchemaNames = fullSchema.map[name]
 		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 		op.fullSchema.addAll(op.basicSchema)
-		op.fullSchema.addAll(op.extraAttributes)
+		op.fullSchema.addAll(op.extraVariables)
 	}
 
 	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {

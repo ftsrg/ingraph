@@ -48,9 +48,9 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 			\\ \footnotesize
 			$\color{gray} «op.basicSchema.convertSchema» $
 			«ENDIF»
-			«IF op.extractContainer.extraAttributesInferred»
+			«IF op.extractContainer.isExtraVariablesInferred»
 			\\ \footnotesize
-			$\color{violet} «op.extraAttributes.convertSchema» $
+			$\color{violet} «op.extraVariables.convertSchema» $
 			«ENDIF»
 			«IF op.extractContainer.fullSchemaInferred»
 			\\ \footnotesize

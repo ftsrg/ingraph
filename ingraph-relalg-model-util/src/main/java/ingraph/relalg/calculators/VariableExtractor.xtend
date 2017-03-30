@@ -57,7 +57,7 @@ class VariableExtractor {
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
 		val functionExpressions = op.elements.map[expression].filter(FunctionExpression)
 
-		val extraAttributes = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
+		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
 		
 		// TODO: filter out duplicates
 		val List<? extends Variable> arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
@@ -68,7 +68,7 @@ class VariableExtractor {
 
 		op.otherFunctions.addAll(otherFunctions)
 		
-		union(extraAttributes, arguments)
+		union(extraVariables, arguments)
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {

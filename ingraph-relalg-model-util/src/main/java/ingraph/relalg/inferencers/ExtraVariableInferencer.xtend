@@ -37,10 +37,10 @@ class ExtraVariableInferencer {
 
 		if (!container.basicSchemaInferred) {
 			throw new IllegalStateException("BasicSchemaInferencer must be executed before ExtraVariableInferencer")
-		} else if (container.extraAttributesInferred) {
+		} else if (container.isExtraVariablesInferred) {
 			throw new IllegalStateException("ExtraVariableInferencer on relalg container was already executed")
 		} else {
-			container.extraAttributesInferred = true
+			container.extraVariablesInferred = true
 		}
 
 		container.rootExpression.fillExtraVariables(#[])
@@ -48,11 +48,11 @@ class ExtraVariableInferencer {
 	}
 
 	private def dispatch void fillExtraVariables(NullaryOperator op, List<Variable> extraVariables) {
-		op.extraAttributes.addAll(extraVariables)
+		op.extraVariables.addAll(extraVariables)
 	}
 
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
-		op.extraAttributes.addAll(extraVariables)
+		op.extraVariables.addAll(extraVariables)
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
  		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
 
@@ -68,7 +68,7 @@ class ExtraVariableInferencer {
 	}
 
 	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
-		op.extraAttributes.addAll(extraVariables)
+		op.extraVariables.addAll(extraVariables)
 		op.leftInput.fillExtraVariables(extraVariables)
 		op.rightInput.fillExtraVariables(extraVariables)
 	}
@@ -99,7 +99,7 @@ class ExtraVariableInferencer {
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {
-		op.extraAttributes.addAll(extraVariables)
+		op.extraVariables.addAll(extraVariables)
 		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
 		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)
 
@@ -114,7 +114,7 @@ class ExtraVariableInferencer {
 	}
 
 	private def dispatch void fillExtraVariables(TernaryOperator op, List<Variable> extraVariables) {
-		op.extraAttributes.addAll(extraVariables)
+		op.extraVariables.addAll(extraVariables)
 		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
 		val middleExtraVariables = extraVariables.propagateTo(op.middleInput)
 		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)

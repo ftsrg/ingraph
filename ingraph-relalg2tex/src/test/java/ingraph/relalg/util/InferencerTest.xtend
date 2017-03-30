@@ -16,7 +16,7 @@ class InferencerTest {
 	extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter(config)
 	
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraAttributeInferencer = new ExtraVariableInferencer
+	extension ExtraVariableInferencer extraVariableInferences = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
