@@ -68,8 +68,10 @@ public class GraphPrettyPrinter {
 	public static String toString(Relationship relationship) {
 		String propertiesString = toString(relationship.asMap());
 
-		return String.format("(%s)-[:%s%s%s]-(%s)", //
-				relationship.startNodeId(), relationship.type(), //
+		return String.format("(<%d>)-[<%d>:%s%s%s]-(<%d>)", //
+				relationship.startNodeId(), //
+				relationship.id(), //
+				relationship.type(), //
 				propertiesString.isEmpty() ? "" : " ", //
 				propertiesString, //
 				relationship.endNodeId() //

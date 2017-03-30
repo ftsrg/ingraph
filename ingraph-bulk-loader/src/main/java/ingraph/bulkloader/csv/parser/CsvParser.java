@@ -35,7 +35,6 @@ public class CsvParser {
 			for (String column : header) {
 				final ColumnNameParser cnp = new ColumnNameParser(column);
 				columnDescriptors.put(cnp.getName(), new ColumnDescriptor(cnp.getType(), cnp.getIdSpaceName()));
-
 			}
 
 			if (columnDescriptors.keySet().stream() //

@@ -15,16 +15,18 @@ import ingraph.bulkloader.csv.data.IdSpaces;
 public class RelationshipRowParser extends EntityRowParser<Relationship> {
 
 	private final String type;
+	private final IdGenerator idGenerator;
 
-	public RelationshipRowParser(final IdSpaces idSpaces, final String type) {
+	public RelationshipRowParser(final IdSpaces idSpaces, final String type, final IdGenerator idGenerator) {
 		super(idSpaces);
 		this.type = type;
+		this.idGenerator = idGenerator;
 	}
 
 	@Override
 	public Relationship processRow(final Map<String, Object> row, final Map<String, ColumnDescriptor> columnDescriptors) {
 		// ids
-		final Long id = 0L; // TODO generate id for relationship
+		final Long id = idGenerator.generateNewId();
 		final Long startId = getId(row, columnDescriptors, INTERNAL_START_ID);
 		final Long endId = getId(row, columnDescriptors, INTERNAL_END_ID);
 		// properties

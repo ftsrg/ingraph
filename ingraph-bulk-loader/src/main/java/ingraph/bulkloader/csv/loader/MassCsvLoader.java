@@ -14,6 +14,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.common.collect.Sets;
 
 import ingraph.bulkloader.csv.data.IdSpaces;
+import ingraph.bulkloader.csv.entityprocessor.IdGenerator;
 import ingraph.bulkloader.csv.entityprocessor.NodeRowParser;
 import ingraph.bulkloader.csv.entityprocessor.RelationshipRowParser;
 import ingraph.bulkloader.csv.parser.CsvParser;
@@ -48,11 +49,13 @@ public class MassCsvLoader {
 
 	private void loadRelationships(Map<String, String> relationshipFilenames, CsvPreference csvPreference)
 			throws IOException {
+		final IdGenerator idGenerator = new IdGenerator();
+
 		for (final Map.Entry<String, String> relationshipFileEntry : relationshipFilenames.entrySet()) {
 			final String filename = relationshipFileEntry.getKey();
 			final String type = relationshipFileEntry.getValue();
 
-			final RelationshipRowParser relationshipProcessor = new RelationshipRowParser(idSpaces, type);
+			final RelationshipRowParser relationshipProcessor = new RelationshipRowParser(idSpaces, type, idGenerator);
 			relationships.addAll(CsvParser.parse(filename, csvPreference, relationshipProcessor));
 		}
 	}
