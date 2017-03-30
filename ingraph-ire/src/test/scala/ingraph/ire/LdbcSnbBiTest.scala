@@ -5,15 +5,13 @@ import java.io.FileInputStream
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import hu.bme.mit.ire.TransactionFactory
-import org.scalatest.FlatSpec
-
-import scala.io.Source
+import org.scalatest.FunSuite
 import org.supercsv.prefs.CsvPreference
 import relalg._
 
-import scala.util.parsing.json.JSON
+import scala.io.Source
 
-class LdbcSnbBiTest extends FlatSpec {
+class LdbcSnbBiTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
@@ -42,7 +40,7 @@ class LdbcSnbBiTest extends FlatSpec {
         TestCase(24, 3, 0)
   ) //
     .foreach(
-    t => s"query-${t.number}-size-1" should "work" in {
+    t => test(s"query-${t.number}-size-1") {
       val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
       val adapter = new IngraphAdapter(query)
       val tf = new TransactionFactory(16)

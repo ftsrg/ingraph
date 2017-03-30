@@ -1,11 +1,10 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.TransactionFactory
-import org.scalatest.FlatSpec
+import org.scalatest.FunSuite
 
 import scala.io.Source
 
-class TrainBenchmarkBatchTest extends FlatSpec {
+class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
   def queryPath(query: String): String = s"../queries/trainbenchmark/$query.cypher"
 
@@ -26,7 +25,7 @@ class TrainBenchmarkBatchTest extends FlatSpec {
     TestCase("SwitchSet", 2, 8),
     TestCase("ConnectedSegments", 2, 16)
   ).foreach(
-    t => s"${t.name}-size-${t.size}" should "work" in {
+    t => test(s"${t.name}-size-${t.size}") {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
       TrainbenchmarkUtils.readModelAndGetResults(query, t.size).size == t.expectedResultSize
     }
