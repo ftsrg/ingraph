@@ -25,7 +25,8 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
       operator.getFullSchema.drop(3)
         .map(a => {
-        val element = a.asInstanceOf[AttributeVariable].getElement
+        val element = a.asInstanceOf[AttributeVariable].getBaseVariable2
+//        println(element)
         element match {
           case _ if element == operator.getSourceVertexVariable => edge.sourceVertex.properties(a.getName).asInstanceOf[Any]
           case _ if element == operator.getTargetVertexVariable => edge.targetVertex.properties(a.getName).asInstanceOf[Any]

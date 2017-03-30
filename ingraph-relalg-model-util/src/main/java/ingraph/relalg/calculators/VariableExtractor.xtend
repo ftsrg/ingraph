@@ -16,7 +16,7 @@ import relalg.VariableExpression
 
 class VariableExtractor {
 
-	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
+	extension ExpressionToVariables expressionToVariables = new ExpressionToVariables
 	extension CollectionHelper collectionHelper = new CollectionHelper
 	extension FunctionArgumentExtractor functionArgumentExtractor = new FunctionArgumentExtractor
 
@@ -67,9 +67,6 @@ class VariableExtractor {
 			.toList
 
 		op.otherFunctions.addAll(otherFunctions)
-		
-		println(extraAttributes)
-		println(arguments)
 		
 		union(extraAttributes, arguments)
 	}

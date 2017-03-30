@@ -54,7 +54,7 @@ class ExtraVariableInferencer {
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
 		op.extraAttributes.addAll(extraVariables)
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
-		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
+ 		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
 
 		val inputExtraVariables = union(extraVariables, newExtraVariables).minus(providedExtraVariables)
 

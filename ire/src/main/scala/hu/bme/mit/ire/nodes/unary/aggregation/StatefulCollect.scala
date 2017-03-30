@@ -18,7 +18,6 @@ class StatefulCollect(collectKey: Int) extends StatefulAggregate {
   }
 
   override def value(): Any = {
-    println(collection)
     collection.toVector
   }
 }

@@ -10,11 +10,11 @@ class JoinAttributeCalculator {
 
 	def dispatch calculateJoinAttributes(EquiJoinLikeOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
 		//Lists.newArrayList(Iterables.concat(leftSchema, rightSchema))
-		val leftSchemaNames = op.leftInput.basicSchema.map[name]
+		val leftSchemaNames = leftSchema.map[name]
 
 		val joinAttributes = Iterables.concat( // 
-			op.leftInput.basicSchema,
-			op.rightInput.basicSchema.filter[
+			leftSchema,
+			rightSchema.filter[
 				variable | !leftSchemaNames.contains(variable.name) // only keep variables that are NOT in the left schema
 			]
 		)
