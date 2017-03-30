@@ -43,8 +43,8 @@ object EngineFactory {
             case op: GroupingAndProjectionOperator =>
               val variableLookup = new SchemaToMap().schemaToMap(op.getInput)
               val functions = () => op.getAggregations.map(
-                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).flatMap(
-                f => f.map(_()) // GOOD LUCK UNDERSTANDING THIS
+                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).map(
+                _() // GOOD LUCK UNDERSTANDING THIS
               )
               val mask = op.getElements.map(e => ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new AggregationNode(expr.child, mask, functions)))

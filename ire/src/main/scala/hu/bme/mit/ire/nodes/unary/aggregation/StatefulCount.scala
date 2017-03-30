@@ -15,3 +15,11 @@ class StatefulCount extends StatefulAggregate {
     count -= values.size
   }
 }
+
+class NullAwareStatefulCount(val index: Int) extends StatefulCount {
+  override def maintainPositive(values: Iterable[Tuple]): Unit =
+    super.maintainPositive(values.filter(t => t(index) != null))
+
+  override def maintainNegative(values: Iterable[Tuple]): Unit =
+    super.maintainNegative(values.filter(t => t(index) != null))
+}
