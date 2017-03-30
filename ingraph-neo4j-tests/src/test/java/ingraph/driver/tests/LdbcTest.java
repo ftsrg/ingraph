@@ -1,11 +1,6 @@
 package ingraph.driver.tests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,6 +21,8 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.shell.tools.imp.format.graphml.XmlGraphMLReader;
+import org.neo4j.shell.tools.imp.util.FileUtils;
+import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -37,6 +34,8 @@ import com.google.common.io.Files;
 import neo4j.driver.testkit.EmbeddedTestkitDriver;
 import neo4j.driver.testkit.EmbeddedTestkitSession;
 import neo4j.driver.util.GraphPrettyPrinter;
+
+import static org.neo4j.io.fs.FileUtils.writeToFile;
 
 @RunWith(Parameterized.class)
 public class LdbcTest {
@@ -79,7 +78,8 @@ public class LdbcTest {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
 			final String queryPathname = String.format("../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
-			final String queryResultsPath = String.format("../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
+			final String queryResultBin = String.format("../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
+			final String queryResultJson = String.format("../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);
@@ -91,10 +91,10 @@ public class LdbcTest {
 					return m;
 				}).collect(Collectors.toList());
 			System.out.println("Query " + queryNumber + ": " + results.size());
-			try (Output output = new Output(new FileOutputStream(queryResultsPath))) {
+			try (Output output = new Output(new FileOutputStream(queryResultBin))) {
 				new Kryo().writeClassAndObject(output, serializableResults);
 			}
-
+			writeToFile(new File(queryResultJson), Json.toJson(serializableResults), false);
 			for (Record record : results) {
 				System.out.println(GraphPrettyPrinter.toString(record));
 			}
