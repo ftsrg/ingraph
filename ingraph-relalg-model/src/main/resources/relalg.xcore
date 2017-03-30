@@ -203,6 +203,10 @@ class AttributeVariable extends GraphObjectVariable {
 class ListVariable extends Variable {
 }
 
+class PathVariable extends Variable {
+  // FIXME: what's inside a PathVariable
+}
+
 /**
  * Represents a named expression like returned elements.
  */
