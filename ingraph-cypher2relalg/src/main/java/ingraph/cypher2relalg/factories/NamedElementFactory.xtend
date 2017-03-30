@@ -16,7 +16,7 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 	}
 
 	// ensure that we generate unique names in the compiler
-	static var n = 1;
+	private static var n = 1;
 	@Accessors(PUBLIC_GETTER)
 	val elements = new HashMap<String, TNamedElement>
 
