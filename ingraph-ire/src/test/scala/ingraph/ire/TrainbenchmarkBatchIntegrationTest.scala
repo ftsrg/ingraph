@@ -31,7 +31,7 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
     }
   )
 
-  "SortAndTopNode" should "work" in {
+  test("SortAndTopNode") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
     val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
     val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))

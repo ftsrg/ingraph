@@ -19,25 +19,56 @@ class LdbcSnbBiTest extends FunSuite {
 
   def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
 
-  case class TestCase(number: Int, expectedResultSize: Int, dummy: Int)
+  val nodeFilenames: Map[String, List[String]] = Map(
+    modelPath("comment") -> List("Message", "Comment"),
+    modelPath("forum") -> List("Forum"),
+    modelPath("person") -> List("Person"),
+    modelPath("place") -> List("Place"),
+    modelPath("post") -> List("Message", "Post"),
+    modelPath("tagclass") -> List("TagClass"),
+    modelPath("tag") -> List("Tag"))
+
+  val relationshipFilenames: Map[String, String] = Map(
+    modelPath("comment_hasCreator_person") -> "hasCreator",
+    modelPath("comment_isLocatedIn_place") -> "isLocatedIn",
+    modelPath("comment_replyOf_comment") -> "replyOf",
+    modelPath("comment_replyOf_post") -> "replyOf",
+    modelPath("forum_containerOf_post") -> "containerOf",
+    modelPath("forum_hasMember_person") -> "hasMember",
+    modelPath("forum_hasModerator_person") -> "hasModerator",
+    modelPath("forum_hasTag_tag") -> "hasTag",
+    modelPath("person_hasInterest_tag") -> "hasInterest",
+    modelPath("person_isLocatedIn_place") -> "isLocatedIn",
+    modelPath("person_knows_person") -> "knows",
+    modelPath("person_likes_comment") -> "likes",
+    modelPath("person_likes_post") -> "likes",
+    modelPath("place_isPartOf_place") -> "isPartOf",
+    modelPath("post_hasCreator_person") -> "hasCreator",
+    modelPath("comment_hasTag_tag") -> "hasTag",
+    modelPath("post_hasTag_tag") -> "hasTag",
+    modelPath("post_isLocatedIn_place") -> "isLocatedIn",
+    modelPath("tagclass_isSubclassOf_tagclass") -> "isSubclassOf",
+    modelPath("tag_hasType_tagclass") -> "hasType"
+  )
+
+  case class TestCase(number: Int)
 
   Vector(
-//        TestCase(3, 1, 0),
-        TestCase(4, 4, 0),
-//        TestCase(5, 21, 0), // maybe alldifferent
-//        TestCase(6, 3, 0),
-//        TestCase(7, 26, 0), // maybe alldifferent
-//        TestCase(8, 65, 0), // PATH
-//        TestCase(9, 1, 0), // WHERE WITH
-
-//        TestCase(12, 30, 0), // WHERE WITH
-//        TestCase(13, 5, 0),
-//        TestCase(14, 28, 0), // PATH
-//        TestCase(15, 2, 0), // WHERE WITH
-//        TestCase(16, 99, 0), // PATH
-//        TestCase(20, 15, 0), // PATH
-        TestCase(23, 100, 0),
-        TestCase(24, 3, 0)
+        TestCase(3),
+        TestCase(4),
+        TestCase(5),
+        TestCase(6),
+        TestCase(7),
+//        TestCase(8), // PATH
+//        TestCase(9), // WHERE WITH
+//        TestCase(12), // WHERE WITH
+        TestCase(13),
+//        TestCase(14), // PATH
+//        TestCase(15), // WHERE WITH
+//        TestCase(16), // PATH
+//        TestCase(20), // PATH
+        TestCase(23),
+        TestCase(24)
   ) //
     .foreach(
     t => test(s"query-${t.number}-size-1") {
@@ -47,38 +78,6 @@ class LdbcSnbBiTest extends FunSuite {
       tf.subscribe(adapter.engine.inputLookup)
       val tran = tf.newBatchTransaction()
 
-      val nodeFilenames: Map[String, List[String]] = Map(
-        modelPath("comment") -> List("Message", "Comment"),
-        modelPath("forum") -> List("Forum"),
-        modelPath("person") -> List("Person"),
-        modelPath("place") -> List("Place"),
-        modelPath("post") -> List("Message", "Post"),
-        modelPath("tagclass") -> List("TagClass"),
-        modelPath("tag") -> List("Tag"))
-
-      val relationshipFilenames: Map[String, String] = Map(
-        modelPath("comment_hasCreator_person") -> "hasCreator",
-        modelPath("comment_isLocatedIn_place") -> "isLocatedIn",
-        modelPath("comment_replyOf_comment") -> "replyOf",
-        modelPath("comment_replyOf_post") -> "replyOf",
-        modelPath("forum_containerOf_post") -> "containerOf",
-        modelPath("forum_hasMember_person") -> "hasMember",
-        modelPath("forum_hasModerator_person") -> "hasModerator",
-        modelPath("forum_hasTag_tag") -> "hasTag",
-        modelPath("person_hasInterest_tag") -> "hasInterest",
-        modelPath("person_isLocatedIn_place") -> "isLocatedIn",
-        modelPath("person_knows_person") -> "knows",
-        modelPath("person_likes_comment") -> "likes",
-        modelPath("person_likes_post") -> "likes",
-        modelPath("place_isPartOf_place") -> "isPartOf",
-        modelPath("post_hasCreator_person") -> "hasCreator",
-        modelPath("comment_hasTag_tag") -> "hasTag",
-        modelPath("post_hasTag_tag") -> "hasTag",
-        modelPath("post_isLocatedIn_place") -> "isLocatedIn",
-        modelPath("tagclass_isSubclassOf_tagclass") -> "isSubclassOf",
-        modelPath("tag_hasType_tagclass") -> "hasType"
-      )
-
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
       adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
       tran.close()
@@ -87,7 +86,7 @@ class LdbcSnbBiTest extends FunSuite {
         case a: AttributeVariable => s"${a.getElement.getName}.${a.getName}"
         case e => e.getName
       }
-      println(resultNames)
+
       val actualResults = adapter.engine.getResults()
 
       val javaResults = new Kryo().readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
@@ -98,7 +97,6 @@ class LdbcSnbBiTest extends FunSuite {
 
       assert(expectedResults.size == actualResults.size)
       for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
-        println(actual, expected)
         assert(expected == actual)
       }
     })
