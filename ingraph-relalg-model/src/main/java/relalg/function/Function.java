@@ -41,10 +41,15 @@ public enum Function {
   TOFLOAT       ("toFloat",        FunctionCategory.CONVERSION,    l(ANY),          FLOAT,       1), // toFloat( expression )
   TOSTRING      ("toString",       FunctionCategory.STRING,        l(ANY),          STRING,      1), // toString( expression )
 
+  // "metafunctions" are functions that require the engine to propgate some information from the get*nodes,
+  // e.g. labels of a node,
   LABELS        ("labels",         FunctionCategory.META,          l(NODE),         LIST_TYPE,   1), // labels( node )
   KEYS          ("keys",           FunctionCategory.META,          l(ELEMENT),      LIST_TYPE,   1), // keys( property-container )
   PROPERTIES    ("properties",     FunctionCategory.META,          l(ELEMENT),      MAP,         1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
   RELATIONSHIPS ("relationships",  FunctionCategory.META,          l(PATH),         LIST_TYPE,   1), // relationships( path )
+  TYPE          ("type",           FunctionCategory.META,          l(RELATIONSHIP), STRING,      1), // type( relationship )
+  STARTNODE     ("startNode",      FunctionCategory.META,          l(RELATIONSHIP), NODE,        1), // startNode( relationship )
+  ENDNODE       ("endNode",        FunctionCategory.META,          l(RELATIONSHIP), NODE,        1), // endNode( relationship )
 
   TAIL          ("tail",           FunctionCategory.LIST,          l(LIST_TYPE),    LIST_TYPE,   1), // tail( expression )
   NODES         ("nodes",          FunctionCategory.LIST,          l(PATH),         LIST_TYPE,   1), // nodes( path )
@@ -72,13 +77,10 @@ public enum Function {
                                                                      LIST_TYPE),    BOOLEAN,     2),
 
   COALESCE      ("coalesce",       FunctionCategory.SCALAR,        l(ANY),          ANY,         1), // coalesce( expression [, expression]* )
-  STARTNODE     ("startNode",      FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,        1), // startNode( relationship )
-  ENDNODE       ("endNode",        FunctionCategory.SCALAR,        l(RELATIONSHIP), NODE,        1), // endNode( relationship )
   HEAD          ("head",           FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,         1), // head( expression )
   LAST          ("last",           FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,         1), // last( expression )
   LENGTH        ("length",         FunctionCategory.SCALAR,        l(ANY),          INTEGER,     1), // length( path ), length( string )
   SIZE          ("size",           FunctionCategory.SCALAR,        l(LIST_TYPE),    INTEGER,     1), // size( list ), size( pattern expression )
-  TYPE          ("type",           FunctionCategory.SCALAR,        l(RELATIONSHIP), STRING,      1), // type( relationship )
   ID            ("id",             FunctionCategory.SCALAR,        l(ELEMENT),      INTEGER,     1), // id( property-container )
 
   LEFT          ("left",           FunctionCategory.STRING,        l(STRING,
