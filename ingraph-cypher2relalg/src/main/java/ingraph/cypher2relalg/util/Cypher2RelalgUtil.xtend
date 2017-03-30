@@ -2,6 +2,7 @@ package ingraph.cypher2relalg.util
 
 import ingraph.logger.IngraphLogger
 import java.util.ArrayList
+import java.util.HashSet
 import java.util.Iterator
 import java.util.LinkedList
 import java.util.List
@@ -12,11 +13,13 @@ import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.DuplicateEliminationOperator
+import relalg.EdgeVariable
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
+import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.GraphObjectVariable
 import relalg.GroupingOperator
@@ -25,6 +28,7 @@ import relalg.LeftOuterJoinOperator
 import relalg.ListExpression
 import relalg.Literal
 import relalg.LogicalExpression
+import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
@@ -188,6 +192,46 @@ class Cypher2RelalgUtil {
 		}
 
 		effectivelySeenAggregate
+	}
+
+	/**
+	 * Finds edge variables in the given relalg tree.
+	 *
+	 * @param op the operator tree to process
+	 *
+	 * @return set of edge variables found in the relalg tree
+	 */
+	def Set<EdgeVariable> extractEdgeVariables(Operator op) {
+		val fifo = new LinkedList<Operator>
+		val edgeVariables = new HashSet<EdgeVariable>
+
+		fifo.add(op)
+		while (!fifo.empty) {
+			val el = fifo.removeFirst
+			switch (el) {
+				ExpandOperator: {
+					edgeVariables.add(el.edgeVariable)
+					fifo.add(el.input)
+				}
+				BinaryOperator: {
+					fifo.add(el.leftInput)
+					fifo.add(el.rightInput)
+				}
+				UnaryOperator: {
+					fifo.add(el.input)
+				}
+				GetEdgesOperator: {
+					edgeVariables.add(el.edgeVariable)
+				}
+				NullaryOperator: {
+				}
+				default: {
+					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
+				}
+			}
+		}
+
+		edgeVariables
 	}
 
 	/**

@@ -11,6 +11,7 @@ import java.math.BigInteger
 import java.util.Arrays
 import java.util.HashSet
 import java.util.List
+import java.util.Set
 import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
@@ -64,6 +65,7 @@ import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
+import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.Expression
@@ -482,13 +484,21 @@ class RelalgBuilder {
 	 * - natural join of comma-separated patternParts in the MATCH clause
 	 */
 	def dispatch Operator buildRelalg(Match m) {
+		val Set<EdgeVariable> edgeVariablesOfMatchClause = new HashSet<EdgeVariable>()
 		// handle comma-separated patternParts in the MATCH clause
-		// use of lazy map OK as passed to buildLeftDeepTree and used only once - jmarton, 2017-01-07
-		val pattern_PatternPartList = m.pattern.patterns.map[buildRelalg(it)]
+		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
+		for (pattern: m.pattern.patterns) {
+			val op = buildRelalg(pattern)
+
+			edgeVariablesOfMatchClause.addAll(extractEdgeVariables(op))
+
+			pattern_PatternPartList.add(op)
+		}
 
 		// they are natural joined together
 		val allDifferentOperator = createAllDifferentOperator => [
 			input = buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator)
+			edgeVariables.addAll(edgeVariablesOfMatchClause)
 		]
 
 		if (m.where !== null) {
