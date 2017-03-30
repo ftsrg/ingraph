@@ -13,8 +13,8 @@ abstract class IngraphReportTest {
 
 	protected extension TechReportEscaper escaper = new TechReportEscaper
 
-	val PROGRESSBAR_TABLE_HEADER = '''\begin{tabular}{llr@{ of }l}'''
-	val PROGRESSBAR_TABLE_FOOTER = '''\end{tabular}'''
+	val PROGRESSBAR_TABLE_HEADER = '''\begin{longtable}{llr@{ of }l}'''
+	val PROGRESSBAR_TABLE_FOOTER = '''\end{longtable}'''
 
 	def String progressbarTableRow(String color, String title, int working, int total) {
 		val ratio = calculateCompilingQueryRatio(working, total)
