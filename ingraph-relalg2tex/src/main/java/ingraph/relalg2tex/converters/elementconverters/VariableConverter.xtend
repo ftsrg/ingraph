@@ -15,7 +15,7 @@ class VariableConverter {
 	}
 
 	def dispatch convertVariable(AttributeVariable variable) {
-		'''«variable.element.name».«variable.name»'''
+		'''«variable.baseVariable.name».«variable.name»'''
 	}
 
 	def dispatch convertVariable(ListVariable variable) {
