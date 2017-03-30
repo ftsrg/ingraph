@@ -240,7 +240,17 @@ abstract class UnaryOperator extends Operator {
   contains Operator input
 }
 
-class ProductionOperator extends UnaryOperator {
+
+/**
+ * A projection-like operator that is only capable of performing a projection operation.
+ */
+abstract class BeamerOperator extends UnaryOperator {
+  refers ExpressionVariable[] elements
+  int[] tupleIndices
+  
+}
+
+class ProductionOperator extends BeamerOperator {
 }
 
 class SelectionOperator extends UnaryOperator {
@@ -263,15 +273,13 @@ class SelectionOperator extends UnaryOperator {
  * The ProjectionOperator can also be merged with the GroupingOperator so it becomes a GroupingAndProjectionOperator,
  * where it does all that plus the grouping-related features.
  */
-class ProjectionOperator extends UnaryOperator {
+class ProjectionOperator extends BeamerOperator {
    // use EITHER elements OR elementsToRemove
-  refers ExpressionVariable[] elements
   refers ExpressionVariable[] elementsToRemove
   
   // functions
   refers ExpressionVariable[] aggregations
   refers ExpressionVariable[] otherFunctions // calculated expressions other than aggregations
-  int[] tupleIndices
 }
 
 abstract class NavigationOperator extends Operator {

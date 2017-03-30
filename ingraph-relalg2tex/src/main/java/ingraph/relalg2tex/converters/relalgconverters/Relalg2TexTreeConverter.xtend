@@ -5,11 +5,11 @@ import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.elementconverters.SchemaConverter
 import ingraph.relalg2tex.converters.elementconverters.TupleConverter
 import relalg.AbstractJoinOperator
+import relalg.BeamerOperator
 import relalg.BinaryOperator
 import relalg.Cardinality
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.ProjectionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 
@@ -55,7 +55,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 			«IF op.extractContainer.fullSchemaInferred»
 			\\ \footnotesize
 			$\color{orange} «op.fullSchema.convertSchema» $
-			«IF op instanceof ProjectionOperator»
+			«IF op instanceof BeamerOperator»
 			\\ \footnotesize
 			$\color{orange} «op.tupleIndices.convertTuple»$
 			«ENDIF»

@@ -74,7 +74,7 @@ class OperatorConverter {
 	 * UnaryOperators
 	 */
 	def dispatch convertOperator(ProductionOperator op) {
-		throw new UnsupportedOperationException('''Visualization of the production operator is currently not supported.''')
+		#['''\production{«op.elements.convertReturnableElementList»}''']
 	}
 
 	def dispatch convertOperator(GroupingOperator op) {
@@ -94,7 +94,8 @@ class OperatorConverter {
 	}
 
 	def projectionOperator(ProjectionOperator op) {
-		'''\projection{«op.elements.convertReturnableElementList»
+		'''
+			\projection{«op.elements.convertReturnableElementList»
 				«IF !op.elements.empty && !op.elementsToRemove.empty»,«ENDIF»
 				«op.elementsToRemove.convertReturnableElementListNegative»}{«op.aggregations.convertReturnableElementList»}
 		'''
@@ -102,9 +103,10 @@ class OperatorConverter {
 
 	def dispatch convertOperator(SelectionOperator op) {
 		#[
-			'''\selection{''' +
-			'''«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»''' +
-			'''}'''
+			'''\selection{
+				«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF» +
+			}
+			'''
 		]
 	}
 

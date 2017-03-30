@@ -2,10 +2,13 @@ package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
+import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.VariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
+import relalg.EdgeVariable
+import relalg.ElementVariable
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.NullaryOperator
@@ -15,7 +18,8 @@ import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import ingraph.relalg.calculators.CollectionHelper
+import relalg.VariableExpression
+import relalg.VertexVariable
 
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
@@ -69,10 +73,28 @@ class ExtraVariableInferencer {
 		op.rightInput.fillExtraVariables(extraVariables)
 	}
 
+
+	def dispatch ElementVariable extractElementVariable(VertexVariable v) {
+		v
+	}
+	def dispatch ElementVariable extractElementVariable(EdgeVariable e) {
+		e
+	}
+	def dispatch ElementVariable extractElementVariable(ExpressionVariable ev) {
+		val exp = ev.expression
+		if (exp instanceof VariableExpression) {
+			extractElementVariable(exp.variable)
+		} else {
+			// not found
+			null
+		}
+	}
+
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchema = inputOp.basicSchema
-		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains(it.element)]
+		val inputSchema = inputOp.basicSchema.map[extractElementVariable]
+		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains( it.baseVariable.extractElementVariable )]
 		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+
 		Iterables.concat(attributes, functions).toList
 	}
 

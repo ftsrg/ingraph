@@ -105,12 +105,18 @@
 		\tau
 	}}
 
+\newcommand{\productionop}{\iftoggle{textualoperators}{
+		\relalgop{Production}
+	}{
+		\Omega
+	}}
+
 \newcommand{\projectionop}{\iftoggle{textualoperators}{
 		\relalgop{Projection}
 	}{
 		\pi
 	}}
-	
+
 \newcommand{\createop}{\iftoggle{textualoperators}{
 	\relalgop{Create}
 }{
@@ -251,7 +257,8 @@
 \newcommand{\selection}[1]{\selectionop_{#1}}
 \newcommand{\rename}[1]{\renameop_{#1}}
 \newcommand{\grouping}[1]{\groupingop_{#1}}
-	
+\newcommand{\production}[1]{\productionop_{#1}}
+
 %%%%%%%%%% binary operators %%%%%%%%%%
 
 \newcommand{\join}{\joinop}

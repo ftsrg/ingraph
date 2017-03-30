@@ -160,8 +160,11 @@ class BasicSchemaInferencer {
 		op.defineBasicSchema(schema)
 
 		// calculate common variables
-		leftInputSchema.retainAll(rightInputSchema)
-		op.commonVariables.addAll(leftInputSchema)
+		val rightSchemaNames = op.rightInput.basicSchema.map[name]
+		val commonVariables = op.leftInput.basicSchema.filter[
+			variable | rightSchemaNames.contains(variable.name)
+		]
+		op.commonVariables.addAll(commonVariables)
 
 		op.basicSchema
 	}

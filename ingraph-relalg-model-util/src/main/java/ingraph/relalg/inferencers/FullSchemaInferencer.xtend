@@ -2,6 +2,7 @@ package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
+import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.JoinAttributeCalculator
 import ingraph.relalg.calculators.MaskCalculator
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
@@ -9,13 +10,14 @@ import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
+import relalg.RelalgFactory
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import ingraph.relalg.calculators.CollectionHelper
 
 /**
  * Inferences the full schema, including extra attributes.
@@ -26,6 +28,7 @@ class FullSchemaInferencer {
 	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension MaskCalculator maskCalculator = new MaskCalculator
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def inferFullSchema(RelalgContainer container) {
 		if (!container.extraAttributesInferred) {
@@ -80,13 +83,31 @@ class FullSchemaInferencer {
 	/**
 	 * defineSchema
 	 */
-	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+	private def dispatch void defineDetailedSchema(ProductionOperator op, List<? extends Variable> fullSchema) {
 		// this projects "-1" in a number of cases, e.g.
 		// - if a literal value was assigned to the variables
-		op.tupleIndices.addAll(op.basicSchema.map[fullSchema.indexOf(it)])
-		op.tupleIndices.addAll(op.aggregations.map[fullSchema.indexOf(it)])
-		
+		val fullSchemaNames = fullSchema.map[name]
+
+		op.elements.addAll(op.basicSchema.map[
+			val element = it
+			createExpressionVariable => [
+				expression = createVariableExpression => [
+					variable =  element
+					container = element.namedElementContainer
+				]
+				hasInferredName = true
+				namedElementContainer = element.namedElementContainer
+			]
+		])
+		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 		op.fullSchema.addAll(op.basicSchema)
+	}
+
+	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+		println(op.elements)
+
+		op.fullSchema.addAll(op.input.fullSchema)
+		op.fullSchema.addAll(op.otherFunctions)
 		op.fullSchema.addAll(op.aggregations)
 	}
 
