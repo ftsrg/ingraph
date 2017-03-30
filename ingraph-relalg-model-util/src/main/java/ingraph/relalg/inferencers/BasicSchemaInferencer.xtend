@@ -201,7 +201,8 @@ class BasicSchemaInferencer {
 	 * defineSchema
 	 */
 	private def defineBasicSchema(Operator op, List<Variable> basicSchema) {
-		// EObjectEList.addAll() would remove duplicates anyways, but we use Guava to explicitly remove duplicates (while preserving iteration order)
+		// EObjectEList.addAll() would remove duplicates anyways, 
+		// but we use Guava to explicitly remove duplicates (while preserving iteration order)
 		val uniqueList = ImmutableSet.copyOf(basicSchema).asList()
 		op.basicSchema.addAll(uniqueList)
 		basicSchema

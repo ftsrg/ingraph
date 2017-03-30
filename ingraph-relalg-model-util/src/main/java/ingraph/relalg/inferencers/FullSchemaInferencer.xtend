@@ -104,11 +104,11 @@ class FullSchemaInferencer {
 	}
 
 	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
-		println(op.elements)
-
-		op.fullSchema.addAll(op.input.fullSchema)
-		op.fullSchema.addAll(op.otherFunctions)
-		op.fullSchema.addAll(op.aggregations)
+//		op.fullSchema.addAll(op.input.fullSchema)
+//		op.fullSchema.addAll(op.otherFunctions)
+//		op.fullSchema.addAll(op.aggregations)
+		op.fullSchema.addAll(op.basicSchema)
+		op.fullSchema.addAll(op.extraAttributes)
 	}
 
 	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {

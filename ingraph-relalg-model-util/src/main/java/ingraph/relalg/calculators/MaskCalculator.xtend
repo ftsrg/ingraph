@@ -26,12 +26,12 @@ class MaskCalculator {
 	
 	// binary operators
 	def dispatch void calculateTuples(AbstractJoinOperator op) {
-		val leftIndices = op.leftInput.schemaToMap
-		val rightIndices = op.rightInput.schemaToMap
+		val leftIndices = op.leftInput.schemaToMapNames
+		val rightIndices = op.rightInput.schemaToMapNames
 		
 		op.commonVariables.forEach[ variable |
-			op.leftMask.add(leftIndices.get(variable))
-			op.rightMask.add(rightIndices.get(variable))
+			op.leftMask.add(leftIndices.get(variable.name))
+			op.rightMask.add(rightIndices.get(variable.name))
 		]
 	}
 	
