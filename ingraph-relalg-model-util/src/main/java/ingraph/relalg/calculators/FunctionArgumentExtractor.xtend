@@ -23,7 +23,7 @@ class FunctionArgumentExtractor {
 				namedElementContainer = fe.container
 				expression = fe
 				// all metafunctions have exactly one argument
-				name = '''«fe.functor.prettyName»(«(fe.arguments.get(0) as VariableExpression).variable.name»)'''
+				name = '''«fe.functor»(«(fe.arguments.get(0) as VariableExpression).variable.name»)'''
 			]]
 		} else {
 			fe.arguments.map[extractVariableFromExpression]

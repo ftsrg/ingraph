@@ -72,7 +72,7 @@ class ExpressionConverter {
 	}
 
 	def dispatch CharSequence convertExpression(FunctionExpression fe) {
-		'''\literal{«fe.functor.prettyName.escape»} \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
+		'''\literal{«fe.functor.toString.escape»} \left( «fe.arguments.map[convertExpression].join(", ")» \right)'''
 	}
 
 	def dispatch CharSequence convertExpression(EmptyListExpression fe) {

@@ -139,7 +139,8 @@ public enum Function {
     this.minimumArity = minimumArity;
   }
 
-  public String getPrettyName() {
+  @Override
+	public String toString() {
     return prettyName;
   }
 
