@@ -291,17 +291,29 @@ class RelalgBuilder {
 				input = afterUnwind
 			]
 			val u2 = u0.pattern.patterns.get(0) as PatternElement
-			val u3 = createVariableExpression => [
-				variable = variableBuilder.buildVertexVariable(u2.nodepattern)
-				container = topLevelContainer
-			]
-			val u4 = variableBuilder.buildExpressionVariable(u3.variable.name, u3)
+			val u4 = buildCreateNodePattern(u2.nodepattern)
 			u1.elements.add(u4)
+			for (element: u2.chain) {
+				val u5 = buildCreateNodePattern(element.nodePattern)
+				u1.elements.add(u5)
+			}
 			u1
 		} else {
 			afterUnwind
 		}
 		afterCreate
+	}
+	
+	/**
+	 * Provide the vertices for CREATE operator.
+	 */
+	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
+		val u0 = createVariableExpression => [
+			variable = variableBuilder.buildVertexVariable(nodepattern)
+			container = topLevelContainer
+		]
+		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
+		u1
 	}
 
 	/**
