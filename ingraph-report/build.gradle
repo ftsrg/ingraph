@@ -12,6 +12,7 @@ dependencies {
   testCompile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.junit4', version: xtextVersion
   testCompile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.junit', version: xtextVersion
 }
+
 configurations {
   mwe2 { extendsFrom compile }
 }

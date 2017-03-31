@@ -37,12 +37,9 @@ gen/
 .cache-main
 .cache-tests
 xtend-gen
-xtext-gen
 generated/
 
 /out/
 .tmpBin/
-ingraph-cypxmi/
-internal/*.g
 *.xtextbin
 hs_err_pid*.log
