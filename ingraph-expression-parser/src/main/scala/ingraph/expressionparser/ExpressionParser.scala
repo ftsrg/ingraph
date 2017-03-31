@@ -119,19 +119,31 @@ object ExpressionParser {
       }
   }
 
-  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]
-                    ): () => StatefulAggregate = exp match {
+  import relalg.function.Function._
+  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]): () => StatefulAggregate = exp match {
     case exp: FunctionExpression =>
-      import relalg.function.Function._
-      val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
-      val index = lookup(variable)
-      exp.getFunctor match {
-        case AVG => () => new StatefulAverage(index)
-        case COUNT => () => new NullAwareStatefulCount(index)
-        case COUNT_ALL => () => new StatefulCount()
-        case MAX => () => new StatefulMax(index)
-        case MIN => () => new StatefulMin(index)
-        case SUM => () => new StatefulSum(index)
+      if (exp.getFunctor != COLLECT) {
+        val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
+        val index = lookup(variable)
+        exp.getFunctor match {
+          case AVG => () => new StatefulAverage(index)
+          case COUNT => () => new NullAwareStatefulCount(index)
+          case COUNT_ALL => () => new StatefulCount()
+          case MAX => () => new StatefulMax(index)
+          case MIN => () => new StatefulMin(index)
+          case SUM => () => new StatefulSum(index)
+        }
+      } else {
+        val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
+                println(lookup)
+        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable)).map(_.toInt)
+            println(indices)
+        () => new StatefulCollect(indices)
       }
-    }
+  }
+
+  private def parseListExpression(expr: ListExpression): Vector[Expression] = expr match {
+    case f: EmptyListExpression => Vector()
+    case nonempty => parseListExpression(nonempty.getTail) :+ nonempty.getHead
+  }
 }
