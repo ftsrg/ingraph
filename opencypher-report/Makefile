@@ -1,7 +1,7 @@
 DOCUMENT=opencypher-report
 
 all: clean
-	git log --oneline -n 1 > commit-id.tex
+	git log --oneline -n 1 > commit-message.tex
 	latexmk -xelatex -quiet $(DOCUMENT)
 
 clean:
