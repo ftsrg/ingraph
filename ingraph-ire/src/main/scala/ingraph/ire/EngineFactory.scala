@@ -69,6 +69,17 @@ object EngineFactory {
                   op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
               )))
 
+            case op: SortOperator =>
+              val variableLookup = getSchema(op.getInput)
+              val sortKeys = op.getEntries.map(
+                e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
+              newLocal(Props(new SortNode(
+                expr.child,
+                op.getFullSchema.length,
+                sortKeys,
+                op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
+              )))
+
             case op: SelectionOperator =>
               val variableLookup = getSchema(op.getInput)
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))

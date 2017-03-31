@@ -13,12 +13,9 @@ import hu.bme.mit.ire.util.SizeCounter
 import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Tuple
 
-// TODO implement skip
-class SortAndTopNode(override val next: (ReteMessage) => Unit,
+class SortNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int,
                    selectionMask: Vector[(Tuple) => Any],
-                   skip: Int,
-                   limit: Int,
                    ascendingOrder: Vector[Boolean])
   extends UnaryNode with SingleForwarder {
 
@@ -57,26 +54,26 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
   def keyLookup(t: Tuple): Vector[Any] = selectionMask.map(m => m(t))
 //  def inverseKeyLookup(t: Tuple): Vector[Any] = maskInverse.map(t(_))
 
-  def getTopN: Vector[Tuple] = {
+  def getTuplesInOrder: Vector[Tuple] = {
     var total = 0
     //val iterator: Iterator[(Tuple, Int)] = data.iterator
     val iterator = data.entrySet.iterator
     val builder = new VectorBuilder[Tuple]
-    while (total < limit + skip && iterator.hasNext) {
+    while (iterator.hasNext) {
 //      val (tuple, count) = iterator.next()
       val entry = iterator.next
       val tuple = entry.getKey
       val count = entry.getValue
-      for (i <- 0 until Math.min(count, limit + skip - total))
+      for (i <- 0 until count)
         builder += tuple
       total += count
     }
-    builder.result().drop(skip)
+    builder.result()
   }
 
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     // TODO maybe checking the changed elements against the lowest forwarded element would speed things up
-    val prevTop = getTopN
+    val prevTop = getTuplesInOrder
     for (tuple <- changeSet.positive) {
 //      data(tuple) += 1
       val count : Int = Some(data.get(tuple)).getOrElse(0)
@@ -95,7 +92,7 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
         data.remove(tuple)
       }
     }
-    val topN = getTopN
+    val topN = getTuplesInOrder
     if (topN != prevTop) {
       forward(ChangeSet(positive = topN, negative = prevTop))
     }
@@ -104,4 +101,30 @@ class SortAndTopNode(override val next: (ReteMessage) => Unit,
   // TODO we can simplify this in 2.12
 //  override def onSizeRequest(): Long = SizeCounter.count(data.keys)
   override def onSizeRequest(): Long = SizeCounter.count(data.keySet)
+}
+
+class SortAndTopNode(next: (ReteMessage) => Unit,
+                     tupleLength: Int,
+                     selectionMask: Vector[(Tuple) => Any],
+                     skip: Int,
+                     limit: Int,
+                     ascendingOrder: Vector[Boolean])
+  extends SortNode(next, tupleLength, selectionMask, ascendingOrder) {
+
+  override def getTuplesInOrder: Vector[Tuple] = {
+    var total = 0
+    //val iterator: Iterator[(Tuple, Int)] = data.iterator
+    val iterator = data.entrySet.iterator
+    val builder = new VectorBuilder[Tuple]
+    while (total < limit + skip && iterator.hasNext) {
+      //      val (tuple, count) = iterator.next()
+      val entry = iterator.next
+      val tuple = entry.getKey
+      val count = entry.getValue
+      for (i <- 0 until Math.min(count, limit + skip - total))
+        builder += tuple
+      total += count
+    }
+    builder.result().drop(skip)
+  }
 }
