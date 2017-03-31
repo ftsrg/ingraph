@@ -31,7 +31,7 @@ before_install:
   - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
-  - ./gradlew assemble
+  - ./gradlew assemble --stacktrace
   - ./gradlew regressionTests --continue
 script:
   # only build and deploy the results if the build is performed on the master branch
