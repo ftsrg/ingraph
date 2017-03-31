@@ -51,6 +51,7 @@ class QueryProcessor {
 			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
+		container.eResource.unload
 	}
 
 	def subsection(RelalgContainer container, String name, String listing, boolean regressionTest) {
