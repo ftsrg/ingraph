@@ -1,9 +1,16 @@
 package ingraph.driver.tests;
 
-import java.io.*;
-import java.util.ArrayList;
+import static org.neo4j.io.fs.FileUtils.writeToFile;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +28,9 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.shell.tools.imp.format.graphml.XmlGraphMLReader;
-import org.neo4j.shell.tools.imp.util.FileUtils;
 import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
+import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
@@ -31,11 +38,10 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
 import neo4j.driver.testkit.EmbeddedTestkitDriver;
 import neo4j.driver.testkit.EmbeddedTestkitSession;
 import neo4j.driver.util.GraphPrettyPrinter;
-
-import static org.neo4j.io.fs.FileUtils.writeToFile;
 
 @RunWith(Parameterized.class)
 public class LdbcTest {
@@ -83,8 +89,9 @@ public class LdbcTest {
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);
-			ArrayList<Record> results = Lists.newArrayList(statementResult);
-			List<Map<String, Object>> serializableResults = results
+
+			final List<Record> results = Lists.newArrayList(statementResult);
+			final List<Map<String, Object>> serializableResults = results
 				.stream().map(f -> {
 					Map<String, Object> m = new HashMap<>();
 					m.putAll(f.asMap());
@@ -92,7 +99,13 @@ public class LdbcTest {
 				}).collect(Collectors.toList());
 			System.out.println("Query " + queryNumber + ": " + results.size());
 			try (Output output = new Output(new FileOutputStream(queryResultBin))) {
-				new Kryo().writeClassAndObject(output, serializableResults);
+				final Kryo kryo = new Kryo();
+				kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+				kryo.addDefaultSerializer(
+						Collections.unmodifiableCollection(Collections.emptyList()).getClass(),
+						UnmodifiableCollectionsSerializer.class);
+
+				kryo.writeClassAndObject(output, serializableResults);
 			}
 			writeToFile(new File(queryResultJson), Json.toJson(serializableResults), false);
 			for (Record record : results) {

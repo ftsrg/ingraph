@@ -2,15 +2,21 @@ package ingraph.ire
 
 import java.io.FileInputStream
 
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-import hu.bme.mit.ire.TransactionFactory
+import scala.Vector
+import scala.io.Source
+
+import org.objenesis.strategy.StdInstantiatorStrategy
 import org.scalatest.FunSuite
 import org.supercsv.prefs.CsvPreference
-import relalg._
 
-import scala.io.Source
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
+
+import hu.bme.mit.ire.TransactionFactory
 import ingraph.relalg.expressions.ExpressionUnwrapper
+import relalg.AttributeVariable
+import java.util.Collections
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
 
 class LdbcSnbBiTest extends FunSuite {
 
@@ -90,8 +96,15 @@ class LdbcSnbBiTest extends FunSuite {
 
       val actualResults = adapter.engine.getResults()
 
-      val javaResults = new Kryo().readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
+      val kryo = new Kryo
+      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+      kryo.addDefaultSerializer(
+          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass(),
+          classOf[UnmodifiableCollectionsSerializer]);
+
+      val javaResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
         .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
+
       import scala.collection.JavaConverters._
       val expectedResults = javaResults.asScala.map(f => resultNames.map(f.get))
       expectedResults.foreach(n => assert(n != null))

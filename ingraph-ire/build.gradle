@@ -20,5 +20,6 @@ dependencies {
 
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
+  testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }
