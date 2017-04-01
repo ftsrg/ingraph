@@ -67,6 +67,8 @@ abstract class IngraphReportTest {
 
 			chapterCompilingQueries += sectionCompilingQueries
 			chapterTotalQueries += sectionTotalQueries
+			
+			qp.close
 		}
 
 		doc += '''

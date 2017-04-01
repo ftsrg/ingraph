@@ -11,6 +11,7 @@ import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConver
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
+import java.io.Closeable
 import java.util.ArrayList
 import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -18,9 +19,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
 
-class QueryProcessor {
+class QueryProcessor implements Closeable {
 	
-	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
+	extension Relalg2ReteTransformation relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
 	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
 	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
@@ -51,7 +52,6 @@ class QueryProcessor {
 			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
-		container.eResource.unload
 	}
 
 	def subsection(RelalgContainer container, String name, String listing, boolean regressionTest) {
@@ -150,6 +150,10 @@ class QueryProcessor {
 			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
+	}
+	
+	override close() {
+		relalg2ReteTransformation.close
 	}
 
 

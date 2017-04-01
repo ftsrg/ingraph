@@ -13,11 +13,15 @@ import relalg.Operator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryOperator
+import java.io.Closeable
+import java.io.IOException
 
-abstract class AbstractRelalgTransformation {
+abstract class AbstractRelalgTransformation implements Closeable {
 
 	protected val extension RelalgFactory relalgFactory = RelalgFactory.eINSTANCE
 	protected val extension BatchTransformationRuleFactory ruleFactory = new BatchTransformationRuleFactory
+
+	var AdvancedViatraQueryEngine engine
 
 	new() {
 		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
@@ -25,7 +29,7 @@ abstract class AbstractRelalgTransformation {
 
 	protected def register(RelalgContainer container) {
 		val scope = new EMFScope(container)
-		val AdvancedViatraQueryEngine engine = AdvancedViatraQueryEngine.createUnmanagedEngine(scope)
+		engine = AdvancedViatraQueryEngine.createUnmanagedEngine(scope)
 
 		val transformation = BatchTransformation.forEngine(engine).build
 		val statements = transformation.transformationStatements
@@ -74,6 +78,10 @@ abstract class AbstractRelalgTransformation {
 				return expandOperator.targetVertexVariable
 			}
 		}
+	}
+
+	override close() throws IOException {
+		engine?.dispose
 	}
 
 }
