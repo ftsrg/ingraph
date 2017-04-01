@@ -1,4 +1,5 @@
 dist: trusty
+sudo: required
 language: java
 jdk:
   - oraclejdk8
@@ -12,24 +13,12 @@ cache:
     - $HOME/.gradle/cache
     - $HOME/.gradle/wrapper
 
-addons:
-  apt:
-    packages:
-      - texlive-base
-      - texlive-science
-      - texlive-fonts-recommended
-      - texlive-fonts-extra
-      - texlive-latex-extra
-      - texlive-xetex
-      - latexmk
-      - lmodern
-      - pgf
-
 before_install:
-  # we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
+# we re-generate openCypher TCK tests with the actual regressionTest/failingTest classification
   - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
+  - sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf
   - ./gradlew assemble --stacktrace
   - ./gradlew regressionTests --continue
 script:
