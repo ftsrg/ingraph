@@ -9,6 +9,7 @@ allprojects {
 
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'eclipse'
   apply plugin: 'com.jfrog.bintray'
   apply plugin: 'maven-publish'
 
@@ -54,10 +55,6 @@ subprojects {
     override = true
     publications = ['mavenJava']
   }
-}
-
-configure(subprojects.findAll {it.name != 'ingraph-patterns'}) {
-  apply plugin: 'eclipse'
 }
 
 ext {
