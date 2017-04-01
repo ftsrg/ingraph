@@ -3,7 +3,6 @@ package ingraph.relalg2tex.converters.elementconverters
 import java.util.List
 import relalg.Direction
 import relalg.EdgeVariable
-import relalg.ExpressionVariable
 import relalg.MaxHops
 import relalg.SortEntry
 
@@ -11,7 +10,6 @@ class MiscConverters {
 
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	extension VariableConverter variableConverter = new VariableConverter
 
 	def convertDirection(Direction direction) {
 		switch direction {
@@ -38,21 +36,13 @@ class MiscConverters {
 		}
 	}
 
-	def entryToTex(SortEntry entry) {
+	def sortEntryToTex(SortEntry entry) {
 		val direction = switch (entry.direction) {
 			case ASCENDING: "asc"
 			case DESCENDING: "desc"
 			default: throw new UnsupportedOperationException('''SortEntry «entry.direction» not supported.''')
 		}
 		'''\«direction» «entry.expression.convertExpression»'''
-	}
-
-	def convertReturnableElementList(List<ExpressionVariable> elements) {
-		'''«elements.map[convertVariable].join(", ")»'''
-	}
-	
-	def convertReturnableElementListNegative(List<ExpressionVariable> elements) {
-		'''«elements.map['''\ominus «convertVariable»'''].join(", ")»'''
 	}
 
 	def edgeVariableList(List<EdgeVariable> edgeVariables) {
