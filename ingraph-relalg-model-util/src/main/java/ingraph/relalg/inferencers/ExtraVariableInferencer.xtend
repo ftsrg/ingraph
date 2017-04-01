@@ -4,22 +4,20 @@ import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.VariableExtractor
+import ingraph.relalg.util.ElementVariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
-import relalg.EdgeVariable
-import relalg.ElementVariable
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
-import relalg.VariableExpression
-import relalg.VertexVariable
 
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
@@ -29,6 +27,7 @@ class ExtraVariableInferencer {
 	extension IngraphLogger logger = new IngraphLogger(ExtraVariableInferencer.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
+	extension ElementVariableExtractor elementVariableExtractor = new ElementVariableExtractor
 
 	def inferExtraVariables(RelalgContainer container) {
 		if (!container.incrementalPlan) {
@@ -51,18 +50,16 @@ class ExtraVariableInferencer {
 		op.extraVariables.addAll(extraVariables)
 	}
 
+	// some unary operators, such as selection, projection and grouping, often require extra variables
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
+
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
- 		val providedExtraVariables = extractUnaryOperatorProvidedVariables(op)
+ 		val inputExtraVariables = union(extraVariables, newExtraVariables)
 
-		val inputExtraVariables = union(extraVariables, newExtraVariables).minus(providedExtraVariables)
-
-		info(op.toString)
-		info("1. extr " + extraVariables)
-		info("2. new  " + newExtraVariables)
-		info("3. prov " + providedExtraVariables)
-		info("= " + inputExtraVariables)
+ 		if (op instanceof ProjectionOperator) {
+			inputExtraVariables.minus(op.calculatedVariables)
+ 		}
 
 		op.input.fillExtraVariables(inputExtraVariables)
 	}
@@ -71,23 +68,6 @@ class ExtraVariableInferencer {
 		op.extraVariables.addAll(extraVariables)
 		op.leftInput.fillExtraVariables(extraVariables)
 		op.rightInput.fillExtraVariables(extraVariables)
-	}
-
-
-	def dispatch ElementVariable extractElementVariable(VertexVariable v) {
-		v
-	}
-	def dispatch ElementVariable extractElementVariable(EdgeVariable e) {
-		e
-	}
-	def dispatch ElementVariable extractElementVariable(ExpressionVariable ev) {
-		val exp = ev.expression
-		if (exp instanceof VariableExpression) {
-			extractElementVariable(exp.variable)
-		} else {
-			// not found
-			null
-		}
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {

@@ -76,18 +76,8 @@ class VariableExtractor {
 		op.entries.filter[!basicSchemaNames.contains(it.name)].toList
 	}
 
-//
 
-	def dispatch List<? extends Variable> extractUnaryOperatorProvidedVariables(GroupingAndProjectionOperator op) {
-		union(getProvidedVariablesForProjectionOperator(op))
-	}
-
-	def dispatch List<? extends Variable> extractUnaryOperatorProvidedVariables(UnaryOperator op) {
-		#[]
-	}
-
-	def List<? extends Variable> getProvidedVariablesForProjectionOperator(ProjectionOperator op) {
-//		op.elements.filter[ it.expression instanceof FunctionExpression ].toList
+	def List<? extends Variable> getCalculatedVariables(ProjectionOperator op) {
 		union(op.otherFunctions, op.aggregations)
 	}
 

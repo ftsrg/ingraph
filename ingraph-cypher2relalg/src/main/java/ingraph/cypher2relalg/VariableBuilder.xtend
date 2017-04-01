@@ -21,24 +21,25 @@ import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import relalg.AttributeVariable
 import relalg.EdgeLabel
 import relalg.EdgeVariable
-import relalg.ElementVariable
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.LabelSetStatus
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.Variable
-import relalg.VariableExpression
 import relalg.VertexLabel
 import relalg.VertexVariable
+import ingraph.relalg.util.ElementVariableExtractor
 
 /**
  * This is the variable builder component of
  * the openCypher to relational algebra compiler.
  */
 class VariableBuilder {
+
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension IngraphLogger logger = new IngraphLogger(VariableBuilder.name)
+	extension ElementVariableExtractor elementVariableExtractor = new ElementVariableExtractor
 
 	val RelalgContainer topLevelContainer
 
@@ -132,7 +133,7 @@ class VariableBuilder {
 
 			if (ev instanceof ExpressionVariable) {
 				val innerVariable = extractElementVariable(ev)
-				if (innerVariable == null) {
+				if (innerVariable === null) {
 					unrecoverableError('''Can't find neither VertexVariable nor EdgeVariable wrapped into the ExpressionVariable, so can't build attribute variable.''')
 				}
 			}
@@ -182,7 +183,7 @@ class VariableBuilder {
 
 	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {
 		val v = findVariable(varRef.variableRef.name, useExpressionVariables)
-		if (v==null) {
+		if (v === null) {
 			unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
 			null
 		} else {
@@ -338,32 +339,6 @@ class VariableBuilder {
 	}
 	def getEdgeVariableFactoryElements() {
 		edgeVariableFactory.elements
-	}
-
-	/**
-	 * Finds and extracts (returns) the enclosed ElementVariable instance.
-	 * If not found, null is returned.
-	 *
-	 * For a VertexVariable and EdgeVariable, this is idempotent, i.e. returns the variable instance itself.
-	 *
-	 * For an ExpressionVariable, see if it wraps a VertexVariable or EdgeVariable, and if so, returns that variable.
-	 * Note, that this wrapping can be deep like
-	 * (ExpressionVariable wraps VariableExpression wraps)+ ElementVariable
-	 */
-	def dispatch ElementVariable extractElementVariable(VertexVariable v) {
-		v
-	}
-	def dispatch ElementVariable extractElementVariable(EdgeVariable e) {
-		e
-	}
-	def dispatch ElementVariable extractElementVariable(ExpressionVariable ev) {
-		val exp = ev.expression
-		if (exp instanceof VariableExpression) {
-			extractElementVariable(exp.variable)
-		} else {
-			// not found
-			null
-		}
 	}
 
 	/**
