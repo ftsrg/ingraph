@@ -41,5 +41,4 @@ generated/
 
 /out/
 .tmpBin/
-*.xtextbin
 hs_err_pid*.log
