@@ -18,127 +18,113 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Function {
-  //                                              input            t
-  //             name              category       types           output type  min. arity
-  AVG           ("avg",            FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  COLLECT       ("collect",        FunctionCategory.AGGREGATION,   l(NUMBER),       LIST_TYPE,   1),
-  COUNT         ("count",          FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  COUNT_ALL     ("count(*)",       FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      0), // count(*)
-  MAX           ("max",            FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  MIN           ("min",            FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  SUM           ("sum",            FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
+  //             name              category                        output type  ma input types
 
-  STDDEV        ("stddev",         FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  STDDEVP       ("stddevp",        FunctionCategory.AGGREGATION,   l(NUMBER),       NUMBER,      1),
-  PERCENTILECONT("percentileCont", FunctionCategory.AGGREGATION,   l(NUMBER,
-                                                                     FLOAT),        NUMBER,      2),
-  PERCENTILEDISC("percentileDisc", FunctionCategory.AGGREGATION,   l(NUMBER,
-                                                                     FLOAT),        NUMBER,      2),
+  // aggregation functions
+  AVG           ("avg",            FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  COLLECT       ("collect",        FunctionCategory.AGGREGATION,   LIST_TYPE,   1, l(NUMBER)                   ),
+  COUNT         ("count",          FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  COUNT_ALL     ("count(*)",       FunctionCategory.AGGREGATION,   NUMBER,      0, l(NUMBER)                   ), // count(*)
+  MAX           ("max",            FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  MIN           ("min",            FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  SUM           ("sum",            FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
 
-  TOBOOLEAN     ("toBoolean",      FunctionCategory.CONVERSION,    l(ANY),          BOOLEAN,     1), // toBoolean( expression )
-  TOINTEGER     ("toInt",          FunctionCategory.CONVERSION,    l(ANY),          INTEGER,     1), // toInteger( expression )
-  TOINT         ("toInt",          FunctionCategory.CONVERSION,    l(ANY),          INTEGER,     1), // toInt( expression )
-  TOFLOAT       ("toFloat",        FunctionCategory.CONVERSION,    l(ANY),          FLOAT,       1), // toFloat( expression )
-  TOSTRING      ("toString",       FunctionCategory.STRING,        l(ANY),          STRING,      1), // toString( expression )
+  STDDEV        ("stddev",         FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  STDDEVP       ("stddevp",        FunctionCategory.AGGREGATION,   NUMBER,      1, l(NUMBER)                   ),
+  PERCENTILECONT("percentileCont", FunctionCategory.AGGREGATION,   NUMBER,      2, l(NUMBER, FLOAT)            ),
+  PERCENTILEDISC("percentileDisc", FunctionCategory.AGGREGATION,   NUMBER,      2, l(NUMBER, FLOAT)            ),
 
-  // "metafunctions" are functions that require the engine to propgate some information from the get*nodes,
-  // e.g. labels of a node,
-  LABELS        ("labels",         FunctionCategory.META,          l(NODE),         LIST_TYPE,   1), // labels( node )
-  KEYS          ("keys",           FunctionCategory.META,          l(ELEMENT),      LIST_TYPE,   1), // keys( property-container )
-  PROPERTIES    ("properties",     FunctionCategory.META,          l(ELEMENT),      MAP,         1), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
-  RELATIONSHIPS ("relationships",  FunctionCategory.META,          l(PATH),         LIST_TYPE,   1), // relationships( path )
-  TYPE          ("type",           FunctionCategory.META,          l(RELATIONSHIP), STRING,      1), // type( relationship )
-  STARTNODE     ("startNode",      FunctionCategory.META,          l(RELATIONSHIP), NODE,        1), // startNode( relationship )
-  ENDNODE       ("endNode",        FunctionCategory.META,          l(RELATIONSHIP), NODE,        1), // endNode( relationship )
+  // metafunctions
+  // these are functions that require the engine to propgate some information from the get*nodes, e.g. labels of a node
+  LABELS        ("labels",         FunctionCategory.META,          LIST_TYPE,   1, l(NODE)                     ), // labels( node )
+  KEYS          ("keys",           FunctionCategory.META,          LIST_TYPE,   1, l(ELEMENT)                  ), // keys( property-container )
+  PROPERTIES    ("properties",     FunctionCategory.META,          MAP,         1, l(ELEMENT)                  ), // properties( expression ) -- "If the argument is a node or a relationship, the returned map is a map of its properties .If the argument is already a map, it is returned unchanged."
+  RELATIONSHIPS ("relationships",  FunctionCategory.META,          LIST_TYPE,   1, l(PATH)                     ), // relationships( path )
+  TYPE          ("type",           FunctionCategory.META,          STRING,      1, l(RELATIONSHIP)             ), // type( relationship )
+  STARTNODE     ("startNode",      FunctionCategory.META,          NODE,        1, l(RELATIONSHIP)             ), // startNode( relationship )
+  ENDNODE       ("endNode",        FunctionCategory.META,          NODE,        1, l(RELATIONSHIP)             ), // endNode( relationship )
 
-  TAIL          ("tail",           FunctionCategory.LIST,          l(LIST_TYPE),    LIST_TYPE,   1), // tail( expression )
-  NODES         ("nodes",          FunctionCategory.LIST,          l(PATH),         LIST_TYPE,   1), // nodes( path )
-  RANGE         ("range",          FunctionCategory.LIST,          l(INTEGER,
-                                                                     INTEGER,
-                                                                     INTEGER),      LIST_TYPE,   1), // range( start, end [, step] )
+  // list functions
+  TAIL          ("tail",           FunctionCategory.LIST,          LIST_TYPE,   1, l(LIST_TYPE)                ), // tail( expression )
+  NODES         ("nodes",          FunctionCategory.LIST,          LIST_TYPE,   1, l(PATH)                     ), // nodes( path )
+  RANGE         ("range",          FunctionCategory.LIST,          LIST_TYPE,   1, l(INTEGER, INTEGER, INTEGER)), // range( start, end [, step] )
 
-  E             ("e",              FunctionCategory.LOGARITHMIC,   l(NONE),         FLOAT,       0), // e()
-  EXP           ("e",              FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,       1), // e( expression )
-  LOG           ("log",            FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,       1), // log( expression )
-  LOG10         ("log10",          FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,       1), // log10( expression )
-  SQRT          ("sqrt",           FunctionCategory.LOGARITHMIC,   l(NUMBER),       FLOAT,       1), // sqrt( expression )
+  // conversion functions
+  TOBOOLEAN     ("toBoolean",      FunctionCategory.CONVERSION,    BOOLEAN,     1, l(ANY)                      ), // toBoolean( expression )
+  TOINTEGER     ("toInt",          FunctionCategory.CONVERSION,    INTEGER,     1, l(ANY)                      ), // toInteger( expression )
+  TOINT         ("toInt",          FunctionCategory.CONVERSION,    INTEGER,     1, l(ANY)                      ), // toInt( expression )
+  TOFLOAT       ("toFloat",        FunctionCategory.CONVERSION,    FLOAT,       1, l(ANY)                      ), // toFloat( expression )
+  TOSTRING      ("toString",       FunctionCategory.CONVERSION,    STRING,      1, l(ANY)                      ), // toString( expression )
 
-  ABS           ("abs",            FunctionCategory.NUMERIC,       l(NUMBER),       NUMBER,      1), // abs( expression )
+  // predicate functions
+  EXISTS        ("exists",         FunctionCategory.PREDICATE,     BOOLEAN,     1, l(ANY)                      ),
+  IN_COLLECTION ("in_collection",  FunctionCategory.PREDICATE,     BOOLEAN,     2, l(ANY, LIST_TYPE)           ),
 
-  CEIL          ("ceil",           FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,     1), // ceil( expression )
-  FLOOR         ("floor",          FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,     1), // floor( expression )
-  ROUND         ("round",          FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,     1), // round( expression )
-  SIGN          ("sign",           FunctionCategory.NUMERIC,       l(NUMBER),       INTEGER,     1), // sign( expression )
+  // scalar functions
+  HEAD          ("head",           FunctionCategory.SCALAR,        ANY,         1, l(LIST_TYPE)                ), // head( expression )
+  LAST          ("last",           FunctionCategory.SCALAR,        ANY,         1, l(LIST_TYPE)                ), // last( expression )
+  SIZE          ("size",           FunctionCategory.SCALAR,        INTEGER,     1, l(LIST_TYPE)                ), // size( list ), size( pattern expression )
+  LENGTH        ("length",         FunctionCategory.SCALAR,        INTEGER,     1, l(ANY)                      ), // length( path ), length( string )
+  COALESCE      ("coalesce",       FunctionCategory.SCALAR,        ANY,         1, l(ANY)                      ), // coalesce( expression [, expression]* )
+  ID            ("id",             FunctionCategory.SCALAR,        INTEGER,     1, l(ELEMENT)                  ), // id( property-container )
 
-  RAND          ("rand",           FunctionCategory.NUMERIC,       l(NONE),         FLOAT,       0), // rand()
+  // string functions
+  LEFT          ("left",           FunctionCategory.STRING,        STRING,      2, l(STRING,INTEGER)           ), // left( original, length )
+  RIGHT         ("right",          FunctionCategory.STRING,        STRING,      2, l(STRING, INTEGER)          ), // right( original, length )
+  LTRIM         ("ltrim",          FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // ltrim( original )
+  RTRIM         ("rtrim",          FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // rtrim( original )
+  TRIM          ("trim",           FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // trim( original )
+  REPLACE       ("replace",        FunctionCategory.STRING,        STRING,      3, l(STRING, STRING, STRING)   ), // replace( original, search, replace )
+  REGEX_LIKE    ("regexLike",      FunctionCategory.STRING,        BOOLEAN,     2, l(STRING, STRING)           ), // string =~ pattern
+  REVERSE       ("reverse",        FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // reverse( original )
+  SUBSTRING     ("substring",      FunctionCategory.STRING,        STRING,      2, l(STRING, STRING, INTEGER)  ), // substring( original, start [, length] )
+  TOLOWER       ("toLower",        FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // lower( original )
+  TOUPPER       ("toUpper",        FunctionCategory.STRING,        STRING,      1, l(STRING)                   ), // upper( original )
+  STARTS_WITH   ("startsWith",     FunctionCategory.STRING,        BOOLEAN,     2, l(STRING, STRING)           ), // STARTS_WITH(string, prefixString)
+  ENDS_WITH     ("endsWith",       FunctionCategory.STRING,        BOOLEAN,     2, l(STRING, STRING)           ), // ENDS_WITH(string, postfixString)
+  CONTAINS      ("contains",       FunctionCategory.STRING,        BOOLEAN,     2, l(STRING, STRING)           ), // CONTAINS(string, middleString)
+  SPLIT         ("split",          FunctionCategory.STRING,        LIST_TYPE,   2, l(STRING, STRING)           ), // split( original, splitPattern )
 
-  EXISTS        ("exists",         FunctionCategory.PREDICATE,     l(ANY),          BOOLEAN,     1),
-  IN_COLLECTION ("in_collection",  FunctionCategory.PREDICATE,     l(ANY,
-                                                                     LIST_TYPE),    BOOLEAN,     2),
+  // logarithmic functions
+  E             ("e",              FunctionCategory.LOGARITHMIC,   FLOAT,       0, l(NONE)                     ), // e()
+  EXP           ("e",              FunctionCategory.LOGARITHMIC,   FLOAT,       1, l(NUMBER)                   ), // e( expression )
+  LOG           ("log",            FunctionCategory.LOGARITHMIC,   FLOAT,       1, l(NUMBER)                   ), // log( expression )
+  LOG10         ("log10",          FunctionCategory.LOGARITHMIC,   FLOAT,       1, l(NUMBER)                   ), // log10( expression )
+  SQRT          ("sqrt",           FunctionCategory.LOGARITHMIC,   FLOAT,       1, l(NUMBER)                   ), // sqrt( expression )
 
-  COALESCE      ("coalesce",       FunctionCategory.SCALAR,        l(ANY),          ANY,         1), // coalesce( expression [, expression]* )
-  HEAD          ("head",           FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,         1), // head( expression )
-  LAST          ("last",           FunctionCategory.SCALAR,        l(LIST_TYPE),    ANY,         1), // last( expression )
-  LENGTH        ("length",         FunctionCategory.SCALAR,        l(ANY),          INTEGER,     1), // length( path ), length( string )
-  SIZE          ("size",           FunctionCategory.SCALAR,        l(LIST_TYPE),    INTEGER,     1), // size( list ), size( pattern expression )
-  ID            ("id",             FunctionCategory.SCALAR,        l(ELEMENT),      INTEGER,     1), // id( property-container )
+  // numeric functions
+  ABS           ("abs",            FunctionCategory.NUMERIC,       NUMBER,      1, l(NUMBER)                   ), // abs( expression )
+  CEIL          ("ceil",           FunctionCategory.NUMERIC,       INTEGER,     1, l(NUMBER)                   ), // ceil( expression )
+  FLOOR         ("floor",          FunctionCategory.NUMERIC,       INTEGER,     1, l(NUMBER)                   ), // floor( expression )
+  ROUND         ("round",          FunctionCategory.NUMERIC,       INTEGER,     1, l(NUMBER)                   ), // round( expression )
+  SIGN          ("sign",           FunctionCategory.NUMERIC,       INTEGER,     1, l(NUMBER)                   ), // sign( expression )
+  RAND          ("rand",           FunctionCategory.NUMERIC,       FLOAT,       0, l(NONE)                     ), // rand()
 
-  LEFT          ("left",           FunctionCategory.STRING,        l(STRING,
-                                                                     INTEGER),      STRING,      2), // left( original, length )
-  RIGHT         ("right",          FunctionCategory.STRING,        l(STRING,
-                                                                     INTEGER),      STRING,      2), // right( original, length )
-  LTRIM         ("ltrim",          FunctionCategory.STRING,        l(STRING),       STRING,      1), // ltrim( original )
-  RTRIM         ("rtrim",          FunctionCategory.STRING,        l(STRING),       STRING,      1), // rtrim( original )
-  TRIM          ("trim",           FunctionCategory.STRING,        l(STRING),       STRING,      1), // trim( original )
-  REPLACE       ("replace",        FunctionCategory.STRING,        l(STRING,
-                                                                     STRING,
-                                                                     STRING),       STRING,      3), // replace( original, search, replace )
-  REGEX_LIKE    ("regexLike",      FunctionCategory.STRING,        l(STRING,
-                                                                     STRING),       BOOLEAN,     2), // string =~ pattern
-  REVERSE       ("reverse",        FunctionCategory.STRING,        l(STRING),       STRING,      1), // reverse( original )
-  SUBSTRING     ("substring",      FunctionCategory.STRING,        l(STRING,
-                                                                     STRING,
-                                                                     INTEGER),      STRING,      2), // substring( original, start [, length] )
-  TOLOWER       ("toLower",        FunctionCategory.STRING,        l(STRING),       STRING,      1), // lower( original )
-  TOUPPER       ("toUpper",        FunctionCategory.STRING,        l(STRING),       STRING,      1), // upper( original )
-
-  STARTS_WITH   ("startsWith",     FunctionCategory.STRING,        l(STRING,
-                                                                     STRING),       BOOLEAN,     2), // STARTS_WITH(string, prefixString)
-  ENDS_WITH     ("endsWith",       FunctionCategory.STRING,        l(STRING,
-                                                                     STRING),       BOOLEAN,     2), // ENDS_WITH(string, postfixString)
-  CONTAINS      ("contains",       FunctionCategory.STRING,        l(STRING,
-                                                                     STRING),       BOOLEAN,     2), // CONTAINS(string, middleString)
-
-  SPLIT         ("split",          FunctionCategory.STRING,        l(STRING,
-                                                                     STRING),       LIST_TYPE,   2), // split( original, splitPattern )
-
-  ACOS          ("acos",           FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // acos( expression )
-  ASIN          ("asin",           FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // asin( expression )
-  ATAN          ("atan",           FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // atan( expression )
-  ATAN2         ("atan2",          FunctionCategory.TRIGONOMETRIC, l(NUMBER,
-                                                                     NUMBER),       FLOAT,       2), // atan2( expression1, expression2 )
-  COS           ("cos",            FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // cos( expression )
-  COT           ("cot",            FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // cot( expression )
-  SIN           ("sin",            FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // sin( expression )
-  TAN           ("tan",            FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // tan( expression )
-
-  DEGREES       ("degrees",        FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // degrees( expression )
-  RADIANS       ("radians",        FunctionCategory.TRIGONOMETRIC, l(NUMBER),       FLOAT,       1), // radians( expression )
-
-  PI            ("pi",             FunctionCategory.TRIGONOMETRIC, l(NONE),         FLOAT,       0), // pi()
-;
+  // trigonometric functions
+  ACOS          ("acos",           FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // acos( expression )
+  ASIN          ("asin",           FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // asin( expression )
+  ATAN          ("atan",           FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // atan( expression )
+  ATAN2         ("atan2",          FunctionCategory.TRIGONOMETRIC, FLOAT,       2, l(NUMBER, NUMBER)           ), // atan2( expression1, expression2 )
+  COS           ("cos",            FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // cos( expression )
+  COT           ("cot",            FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // cot( expression )
+  SIN           ("sin",            FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // sin( expression )
+  TAN           ("tan",            FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // tan( expression )
+  DEGREES       ("degrees",        FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // degrees( expression )
+  RADIANS       ("radians",        FunctionCategory.TRIGONOMETRIC, FLOAT,       1, l(NUMBER)                   ), // radians( expression )
+  PI            ("pi",             FunctionCategory.TRIGONOMETRIC, FLOAT,       0, l(NONE)                     ), // pi()
+  ;
   private final String prettyName;
   private final FunctionCategory category;
-  private final List<CypherType> inputTypes;
   private final CypherType outputType;
   private final int minimumArity;
+  private final List<CypherType> inputTypes;
 
-  Function(final String prettyName, final FunctionCategory category, final List<CypherType> inputTypes, final CypherType outputType, final int minimumArity) {
+  Function(final String prettyName, final FunctionCategory category, final CypherType outputType, final int minimumArity, final List<CypherType> inputTypes) {
     this.prettyName = prettyName;
     this.category = category;
-    this.inputTypes = inputTypes;
     this.outputType = outputType;
     this.minimumArity = minimumArity;
+    this.inputTypes = inputTypes;
   }
 
   @Override
