@@ -36,7 +36,7 @@ install:
 script:
   # only build and deploy the results if the build is performed on the master branch
   - pushd .
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew report --stacktrace && cd opencypher-report && make && cd .. && scripts/deploy.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then ./gradlew report --stacktrace && cd opencypher-report && make && cd .. && scripts/deploy.sh || dmesg; fi
   - popd
   - ./gradlew :ire:test --continue
   - ./gradlew :ingraph-expression-parser:test --continue
