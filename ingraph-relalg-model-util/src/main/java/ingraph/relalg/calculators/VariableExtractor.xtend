@@ -23,16 +23,16 @@ class VariableExtractor {
 	/**
 	 * Extract extra variables required by unary operators.
 	 */
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingAndProjectionOperator op) {
+		union(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
+	}
+
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
 		return getExtraVariablesForProjectionOperator(op)
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
 		return getExtraVariablesForGroupingOperator(op)
-	}
-
-	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingAndProjectionOperator op) {
-		union(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
