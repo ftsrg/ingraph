@@ -1,5 +1,4 @@
 plugins { id 'org.xtext.xtend' version '1.0.15' }
-apply from: "${rootDir}/gradle/source-layout-xtext.gradle"
 
 dependencies {
   compile project(':ingraph-cypher2relalg')
@@ -7,37 +6,26 @@ dependencies {
   compile project(':ingraph-relalg2tex')
   compile project(':ingraph-optimization-transformations')
 
+  compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
   compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
   compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase', version: xtextVersion
   testCompile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.junit4', version: xtextVersion
   testCompile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase.junit', version: xtextVersion
 }
 
-configurations {
-  mwe2 { extendsFrom compile }
-}
-
-dependencies {
-  mwe2 group: 'org.eclipse.emf', name: 'org.eclipse.emf.mwe2.launch', version: '2.8.3'
-  mwe2 group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xtext.generator', version: xtextVersion
-  compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
-}
-
 task report(type: Test) {
   doFirst{ println('Generating report') }
 }
 
-task generateXtextLanguage(type: JavaExec) {
-  main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
-  classpath = configurations.mwe2
-  inputs.file 'src/main/java/ingraph/report/featuregrammar/GenerateFeature.mwe2'
-  inputs.file 'src/main/java/ingraph/report/featuregrammar/Feature.xtext'
-  outputs.dir 'src/main/xtext-gen'
-  args += 'src/main/java/ingraph/report/featuregrammar/GenerateFeature.mwe2'
-  args += '-p'
-  args += "rootPath=/${projectDir}/.."
+sourceSets {
+  main {
+    java.srcDirs = ['src/main/java', 'src/main/xtext-gen']
+    resources.srcDirs = ['src/main/resources', 'src/main/xtext-gen']
+    xtendOutputDir = 'src/main/xtend-gen'
+  }
+  test {
+    java.srcDirs = ['src/test/java', 'src/test/xtext-gen']
+    resources.srcDirs = ['src/test/resources', 'src/test/xtext-gen']
+    xtendOutputDir = 'src/test/xtend-gen'
+  }
 }
-
-generateXtext.dependsOn(generateXtextLanguage)
-clean.dependsOn(cleanGenerateXtextLanguage)
-eclipse.classpath.plusConfigurations += [configurations.mwe2]
