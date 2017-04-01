@@ -6,10 +6,10 @@ import relalg.ExpressionVariable
 import relalg.ListVariable
 
 class VariableConverter {
+
+	extension ExpressionConverter expressionConverter = new ExpressionConverter
+	extension StringEscaper stringEscaper = new StringEscaper
  
-	/**
-	 * convertVariable
-	 */
 	def dispatch convertVariable(ElementVariable variable) {
 		'''«variable.name»'''
 	}
@@ -22,32 +22,9 @@ class VariableConverter {
 		'''«variable.name»'''
 	}
 
-  // FIXME: how does this relate to MiscConverters.convertReturnableElement(ExpressionVariable)
-  // See #92
-	def dispatch convertVariable(ExpressionVariable variable) {
-		//'''«convertExpression(variable, variable.expression)»'''
-		'''«variable.name»'''
+	def dispatch convertVariable(ExpressionVariable el) {
+		convertExpression(el.expression) +
+		  if (el.dontCare || el.hasInferredName) "" else '''\assign \var{«el.name.escape»}'''
 	}
-
-//
-//  def dispatch convertExpression(ExpressionVariable variable, VariableListExpression expression) {
-//    '''«expression.variable.name»[]'''
-//  }
-//
-//  def dispatch convertExpression(ExpressionVariable variable, VariableExpression expression) {
-//    '''«expression.variable.name»'''
-//  }
-//
-//  def dispatch convertExpression(ExpressionVariable variable, Literal expression) {
-//    '''«variable.name»'''
-//  }
-//
-//  def dispatch convertExpression(ExpressionVariable variable, FunctionExpression expression) {
-//    '''«expression.functor.lowerCaseName»(«expression.arguments.map[toString.escape].join(", ")»)'''
-//  }
-//
-//  def dispatch convertExpression(ExpressionVariable variable, Expression expression) {
-//    throw new UnsupportedOperationException('''Cannot convert ExpressionVariable «variable» with Expression «expression»''')
-//  }
 
 }

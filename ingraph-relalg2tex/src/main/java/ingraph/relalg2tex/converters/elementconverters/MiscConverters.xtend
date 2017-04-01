@@ -11,6 +11,7 @@ class MiscConverters {
 
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
+	extension VariableConverter variableConverter = new VariableConverter
 
 	def convertDirection(Direction direction) {
 		switch direction {
@@ -47,17 +48,11 @@ class MiscConverters {
 	}
 
 	def convertReturnableElementList(List<ExpressionVariable> elements) {
-		'''«elements.map[convertReturnableElement(it)].join(", ")»'''
+		'''«elements.map[convertVariable].join(", ")»'''
 	}
 	
 	def convertReturnableElementListNegative(List<ExpressionVariable> elements) {
-		'''«elements.map['''\ominus «convertReturnableElement(it)»'''].join(", ")»'''
-	}
-
-	// FIXME: this should moved to VariableConverter. See #92
-	def convertReturnableElement(ExpressionVariable el) {
-		convertExpression(el.expression) +
-		  if (el.dontCare || el.hasInferredName) "" else '''\assign \var{«el.name»}'''
+		'''«elements.map['''\ominus «convertVariable»'''].join(", ")»'''
 	}
 
 	def edgeVariableList(List<EdgeVariable> edgeVariables) {

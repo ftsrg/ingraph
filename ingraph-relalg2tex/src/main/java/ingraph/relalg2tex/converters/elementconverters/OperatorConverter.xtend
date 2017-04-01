@@ -30,6 +30,7 @@ class OperatorConverter {
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ElementConverter elementConverter = new ElementConverter
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
+	extension VariableConverter variableConverter = new VariableConverter
 	protected RelalgConverterConfig config
 
 	new(RelalgConverterConfig config) {
@@ -143,7 +144,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		#['''\unwind{«op.element.convertReturnableElement»}''']
+		#['''\unwind{«op.element.convertVariable»}''']
 	}
 
 	def dispatch convertOperator(GetEdgesOperator op) {
@@ -176,12 +177,5 @@ class OperatorConverter {
 	def dispatch joinOperator(LeftOuterJoinOperator operator) {
 		'''leftouterjoin'''
 	}
-
-	/**
-	 * TernaryOperators
-	 */
-//  def dispatch
-
-
 
 }
