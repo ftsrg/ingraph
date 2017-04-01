@@ -1,13 +1,12 @@
 package ingraph.report.generator.tests
 
-import ingraph.report.generator.QueryProcessor
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
 import java.io.File
 import java.nio.charset.Charset
+import java.util.ArrayList
 import java.util.Map
 import org.apache.commons.io.FileUtils
-import java.util.ArrayList
 
 abstract class IngraphReportTest {
 
@@ -44,11 +43,11 @@ abstract class IngraphReportTest {
 			val sectionQuerySpecifications = cqs.value
 			val sectionLabel = sectionTitle.toLabel
 
-			val qp = new QueryProcessor
-			qp.processQueries(sectionQuerySpecifications)
+			val cp = new ChapterProcessor
+			cp.processQueries(sectionQuerySpecifications)
 
-			val sectionCompilingQueries = qp.compilingQueries
-			val sectionTotalQueries = qp.totalQueries
+			val sectionCompilingQueries = cp.compilingQueries
+			val sectionTotalQueries = cp.totalQueries
 			val sectionProgressbar = progressbarTableRow("gray", '''\hyperref[sec:«sectionLabel»]{«sectionTitle»}''', sectionCompilingQueries, sectionTotalQueries)
 			
 			sectionProgressbars.add(sectionProgressbar)
@@ -61,14 +60,12 @@ abstract class IngraphReportTest {
 				«PROGRESSBAR_TABLE_FOOTER»
 			'''
 
-			for (subsection : qp.subsections) {
+			for (subsection : cp.subsections) {
 				sections += subsection
 			}
 
 			chapterCompilingQueries += sectionCompilingQueries
 			chapterTotalQueries += sectionTotalQueries
-			
-			qp.close
 		}
 
 		doc += '''

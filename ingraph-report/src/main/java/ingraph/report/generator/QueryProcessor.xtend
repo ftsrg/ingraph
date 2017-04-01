@@ -12,11 +12,9 @@ import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
 import java.io.Closeable
-import java.util.ArrayList
 import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
 
 class QueryProcessor implements Closeable {
@@ -32,26 +30,15 @@ class QueryProcessor implements Closeable {
 	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
 	protected val expressionConverter = new Relalg2TexExpressionConverter
 
-	@Accessors(PUBLIC_GETTER) var totalQueries = 0
-	@Accessors(PUBLIC_GETTER) var compilingQueries = 0
-	@Accessors(PUBLIC_GETTER) val List<CharSequence> subsections = new ArrayList
-
-	def void processQueries(Iterable<TestQuery> testQueries) {
-		for (testQuery : testQueries) {
-			toSubsection(testQuery)
-		}
-	}
-
-	def void toSubsection(TestQuery testQuery) {
-		totalQueries++
+	def boolean toSubsection(TestQuery testQuery, List<CharSequence> subsections) {
 		var RelalgContainer container = null
 		try {
 			container = Cypher2Relalg.processString(testQuery.querySpecification)
-			compilingQueries++
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
+		return container !== null
 	}
 
 	def subsection(RelalgContainer container, String name, String listing, boolean regressionTest) {
