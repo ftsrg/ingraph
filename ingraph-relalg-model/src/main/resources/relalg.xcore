@@ -188,6 +188,9 @@ class AttributeVariable extends GraphObjectVariable {
       throw new IllegalStateException("AttributeVariable must have non-null value for element or expVar, but not for both!")
     }
   }
+  op String toString() {
+    baseVariable.name + "." + name
+  }
 }
 
 class ListVariable extends Variable {
