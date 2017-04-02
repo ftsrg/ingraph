@@ -2,12 +2,14 @@ package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
-import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.JoinAttributeCalculator
 import ingraph.relalg.calculators.MaskCalculator
+import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
+import relalg.GroupingAndProjectionOperator
+import relalg.GroupingOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProductionOperator
@@ -49,7 +51,7 @@ class FullSchemaInferencer {
 	 */
 	// nullary operators
 	private def dispatch void fillFullSchema(NullaryOperator op) {
-		val detailedSchema = union(op.basicSchema, op.extraVariables)
+		val detailedSchema = uniqueUnion(op.basicSchema, op.extraVariables)
 		op.defineFullSchema(detailedSchema)
 	}
 
@@ -103,14 +105,27 @@ class FullSchemaInferencer {
 		op.fullSchema.addAll(op.basicSchema)
 	}
 
+	private def dispatch void defineFullSchema(GroupingAndProjectionOperator op, List<? extends Variable> fullSchema) {
+		op.fullSchemaGroupingOperator(fullSchema)
+		op.fullSchemaProjectionOperator(fullSchema)
+	}
+
+	private def dispatch void defineFullSchema(GroupingOperator op, List<? extends Variable> fullSchema) {
+		op.fullSchemaGroupingOperator(fullSchema)
+	}
+
 	private def dispatch void defineFullSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
-//		op.fullSchema.addAll(op.input.fullSchema)
-//		op.fullSchema.addAll(op.otherFunctions)
-//		op.fullSchema.addAll(op.aggregations)
+		op.fullSchemaProjectionOperator(fullSchema)
+	}
+
+	private def fullSchemaGroupingOperator(GroupingOperator op, List<? extends Variable> fullSchema) {
+		op.entries.addAll(op.input.extraVariables)
+	}
+
+	private def fullSchemaProjectionOperator(ProjectionOperator op, List<? extends Variable> fullSchema) {
 		val fullSchemaNames = fullSchema.map[name]
 		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
-		op.fullSchema.addAll(op.basicSchema)
-		op.fullSchema.addAll(op.extraVariables)
+		op.fullSchema.addAll(uniqueUnion(op.basicSchema, op.extraVariables))
 	}
 
 	private def dispatch void defineFullSchema(Operator op, List<? extends Variable> fullSchema) {

@@ -1,5 +1,6 @@
 package ingraph.relalg.calculators
 
+import ingraph.relalg.collectors.CollectionHelper
 import java.util.List
 import relalg.AttributeVariable
 import relalg.BeamerOperator
@@ -26,7 +27,7 @@ class VariableExtractor {
 	 */
 	// GroupingAndProjection-, Grouping- and ProjectionOperators
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingAndProjectionOperator op) {
-		union(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
+		uniqueUnion(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
@@ -64,12 +65,15 @@ class VariableExtractor {
 	}
 
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
+		// TODO: filter out duplicates
 		val functionExpressions = op.elements.map[expression].filter(FunctionExpression)
+		val arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
 		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
 		
-		// TODO: filter out duplicates
-		val List<? extends Variable> arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
+		val aggregations = op.aggregations.map[expression].filter(FunctionExpression)		
+		val aggregationExtraVariables = aggregations.map[extractFunctionArguments].flatten.toList
+		
 
 		val List<ExpressionVariable> otherFunctions = op.elements.filter[expression instanceof FunctionExpression]
 			.filter[!(expression as FunctionExpression).functor.meta && !(expression as FunctionExpression).functor.aggregation]
@@ -77,7 +81,7 @@ class VariableExtractor {
 
 		op.otherFunctions.addAll(otherFunctions)
 		
-		union(extraVariables, arguments)
+		uniqueUnion(extraVariables, arguments, aggregationExtraVariables)
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
@@ -87,7 +91,7 @@ class VariableExtractor {
 
 
 	def List<? extends Variable> getCalculatedVariables(ProjectionOperator op) {
-		union(op.otherFunctions, op.aggregations)
+		uniqueUnion(op.otherFunctions, op.aggregations)
 	}
 
 }

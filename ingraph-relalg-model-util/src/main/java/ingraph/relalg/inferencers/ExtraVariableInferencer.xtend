@@ -2,8 +2,8 @@ package ingraph.relalg.inferencers
 
 import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
-import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.VariableExtractor
+import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.ElementVariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -55,10 +55,10 @@ class ExtraVariableInferencer {
 		op.extraVariables.addAll(extraVariables)
 
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
-		val inputExtraVariables = union(extraVariables, newExtraVariables)
+		var inputExtraVariables = uniqueUnion(extraVariables, newExtraVariables)
 
 		if (op instanceof ProjectionOperator) {
-			inputExtraVariables.minus(op.calculatedVariables)
+			inputExtraVariables = inputExtraVariables.minus(op.calculatedVariables)
 		}
 
 		op.input.fillExtraVariables(inputExtraVariables)

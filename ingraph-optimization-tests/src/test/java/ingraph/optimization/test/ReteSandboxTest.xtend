@@ -40,6 +40,27 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 			LIMIT 100
 		''')
 	}
+	
+	@Test
+	def void query4() {
+	  process('query4', '''
+	  	MATCH (:Country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)<-[:hasModerator]-(forum:Forum)-[:containerOf]->(post:Post)-[:hasTag]->(:Tag)-[:hasType]->(:TagClass)
+	  	RETURN forum.id, forum.title, forum.creationDate, person.id, count(post) AS count
+	  	ORDER BY count DESC, forum.id ASC
+	  	LIMIT 20
+	  ''')
+	}
+	
+	@Test
+	def void query6() {
+		process('query6', '''
+		MATCH (:Tag)<-[:hasTag]-(message:Message)-[:hasCreator]->(person: Person),
+		  (message)<-[:likes]-(fan:Person),
+		  (message)<-[:replyOf]-(comment:Comment) // TODO add * for transitivity
+		WITH person, count(message) AS postCount, count(comment) AS replyCount, count(fan) AS likeCount
+		RETURN person.id
+		''')
+	}
 
 	@Test
 	def void query7() {
@@ -58,6 +79,31 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 			LIMIT 100
 		''')
 	}
+	
+	@Test
+	def void query13() {
+		process('query13', '''
+			MATCH (:Country)<-[:isLocatedIn]-(message:Message)-[:hasTag]->(tag:Tag)
+			WITH
+			  toInt(substring(message.creationDate, 0, 4)) AS year,
+			  toInt(substring(message.creationDate, 5, 2)) AS month,
+			  count(message) AS popularity,
+			  tag
+			ORDER BY popularity DESC, tag.name ASC
+			RETURN year, month, collect([tag.name, popularity]) AS popularTags
+			ORDER BY year DESC, month ASC
+			LIMIT 100
+		''')
+	}
+
+	@Test
+	def void aggr() {
+		process('aggr', '''
+			MATCH (n:Node)
+			RETURN n, sum(n.age)
+		''')
+	}
+
 
 	@Test
 	def void query23() {
@@ -100,20 +146,6 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	  process('sort2', '''
 	    MATCH (n: Segment) RETURN n ORDER BY n SKIP 5 LIMIT 10
     ''')
-	}
-	
-	@Test
-	def void query6() {
-		process('query-6', '''
-		// Most active Posters of a given Topic
-		MATCH (:Tag)<-[:hasTag]-(message:Message)-[:hasCreator]->(person: Person),
-		  (message)<-[:likes]-(fan:Person),
-		  (message)<-[:replyOf*]-(comment:Comment)
-		WITH person, count(message) AS postCount, count(comment) AS replyCount, count(fan) AS likeCount
-		RETURN person.id, postCount, replyCount, likeCount, 1*postCount+2*replyCount+10*likeCount AS score
-		ORDER BY score DESC, person.id ASC
-		LIMIT 100
-		''')
 	}
 	
 	@Test

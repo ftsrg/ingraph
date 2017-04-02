@@ -7,6 +7,7 @@ import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
 import ingraph.logger.IngraphLogger
+import ingraph.relalg.collectors.CollectionHelper
 import java.math.BigInteger
 import java.util.Arrays
 import java.util.HashSet
@@ -86,7 +87,6 @@ import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
 import relalg.function.Function
-import ingraph.relalg.calculators.CollectionHelper
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.

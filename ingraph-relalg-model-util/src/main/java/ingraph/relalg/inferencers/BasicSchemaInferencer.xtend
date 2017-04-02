@@ -3,8 +3,8 @@ package ingraph.relalg.inferencers
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
-import ingraph.relalg.calculators.CollectionHelper
 import ingraph.relalg.calculators.JoinAttributeCalculator
+import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator

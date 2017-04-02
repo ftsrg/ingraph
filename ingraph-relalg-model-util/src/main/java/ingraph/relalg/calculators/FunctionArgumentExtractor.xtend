@@ -8,17 +8,23 @@ import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
 import relalg.Variable
 import relalg.VariableExpression
+import relalg.Literal
+import relalg.ListExpression
+import ingraph.relalg.util.ListExpressionUtil
 
 class FunctionArgumentExtractor {
 
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 
 	def List<? extends Variable> extractFunctionArguments(FunctionExpression fe) {
-		if (fe.functor.aggregation) {
-			null
-			// TODO we should handle aggregations here but not that aggregations cannot be nested.
-			// also, maybe this cannot happen now?
-		} else if (fe.functor.meta) {
+//		if (fe.functor.aggregation) {
+//			println(fe.arguments)
+//			null
+//			fe.
+//			// TODO we should handle aggregations here but note that aggregations cannot be nested.
+//			// also, maybe this cannot happen now?
+//		} else 
+		if (fe.functor.meta) {
 			#[createExpressionVariable => [
 				namedElementContainer = fe.container
 				expression = fe
@@ -53,8 +59,12 @@ class FunctionArgumentExtractor {
 		#[extractVariableFromExpression(a.operand)].flatten.toList
 	}
 
-	def dispatch List<? extends Variable> extractVariableFromExpression(Expression a) {
+	def dispatch List<? extends Variable> extractVariableFromExpression(Literal a) {
 		#[]
+	}
+	
+	def dispatch List<? extends Variable> extractVariableFromExpression(ListExpression a) {
+		ListExpressionUtil.toList(a).map[extractVariableFromExpression].flatten.toList
 	}
 
 }

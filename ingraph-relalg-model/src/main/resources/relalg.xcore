@@ -4,6 +4,8 @@
   complianceLevel="8.0")
 package relalg
 
+import java.util.Collections
+
 type Function wraps relalg.function.Function
 type Bigint wraps java.math.BigInteger
 
