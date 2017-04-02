@@ -5,6 +5,7 @@
 package relalg
 
 import java.util.Collections
+import java.util.Objects
 
 type Function wraps relalg.function.Function
 type Bigint wraps java.math.BigInteger
@@ -154,10 +155,21 @@ class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
 /* Variables */
 abstract class Variable extends NamedElement {
   boolean dontCare = "false"
+  
+  op boolean equals(Object o) {
+    if (o === null || !(o instanceof Variable)) {
+      false
+    } else {
+      Objects.equals(toString, o.toString)
+    }
+  }
 }
 
 /* common superclass for vertices, edges and attributes */
 abstract class GraphObjectVariable extends Variable {
+  op int hashCode() {
+    toString.hashCode
+  }
 }
 
 abstract class ElementVariable extends GraphObjectVariable {
