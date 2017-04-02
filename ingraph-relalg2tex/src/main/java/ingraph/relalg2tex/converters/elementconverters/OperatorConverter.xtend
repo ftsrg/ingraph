@@ -28,12 +28,13 @@ class OperatorConverter {
 	extension ElementConverter elementConverter = new ElementConverter
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
 	extension VariableConverter variableConverter = new VariableConverter
-	extension BinaryOperatorConverter binaryOperatorConverter= new BinaryOperatorConverter(config)
 	extension GroupingProjectionOperatorConverter groupingProjectionOperatorConverter = new GroupingProjectionOperatorConverter
 	extension SortTopOperatorConverter sortTopOperatorConverter = new SortTopOperatorConverter
+	extension BinaryOperatorConverter binaryOperatorConverter
 
 	new(RelalgConverterConfig config) {
 		this.config = config
+		binaryOperatorConverter = new BinaryOperatorConverter(config)
 	}
 
 	/**
