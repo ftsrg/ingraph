@@ -8,7 +8,7 @@ import relalg.UnaryArithmeticOperatorType
 import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 
-class OperatorTypeConverter {
+class ExpressionOperatorTypeConverter {
 
 	def convertOperatorType(ArithmeticComparisonOperatorType op) {
 		switch (op) {

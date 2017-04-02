@@ -1,11 +1,11 @@
 package ingraph.relalg2tex.converters.relalgconverters
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
-import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 

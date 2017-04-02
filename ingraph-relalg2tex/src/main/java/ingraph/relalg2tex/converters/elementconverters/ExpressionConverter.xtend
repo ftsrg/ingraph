@@ -25,7 +25,7 @@ import relalg.VariableExpression
 class ExpressionConverter {
 	
 	extension StringEscaper stringEscaper = new StringEscaper
-	extension OperatorTypeConverter operatorConverter = new OperatorTypeConverter
+	extension ExpressionOperatorTypeConverter operatorConverter = new ExpressionOperatorTypeConverter
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''

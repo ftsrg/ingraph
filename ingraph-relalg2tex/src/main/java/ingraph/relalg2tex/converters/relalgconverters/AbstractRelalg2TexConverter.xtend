@@ -1,8 +1,8 @@
 package ingraph.relalg2tex.converters.relalgconverters
 
 import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.converters.elementconverters.OperatorConverter
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
+import ingraph.relalg2tex.converters.operatorconverters.OperatorConverter
 import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils

@@ -1,5 +1,7 @@
-package ingraph.relalg2tex.converters.elementconverters
+package ingraph.relalg2tex.converters.operatorconverters
 
+import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
+import ingraph.relalg2tex.converters.elementconverters.MiscConverters
 import relalg.SortOperator
 import relalg.TopOperator
 

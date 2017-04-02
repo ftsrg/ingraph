@@ -1,6 +1,11 @@
-package ingraph.relalg2tex.converters.elementconverters
+package ingraph.relalg2tex.converters.operatorconverters
 
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.converters.elementconverters.ElementConverter
+import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
+import ingraph.relalg2tex.converters.elementconverters.MiscConverters
+import ingraph.relalg2tex.converters.elementconverters.StringEscaper
+import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
 import relalg.DualObjectSourceOperator
@@ -23,11 +28,11 @@ class OperatorConverter {
 
 	RelalgConverterConfig config
 
-	extension MiscConverters miscConverters = new MiscConverters
 	extension StringEscaper stringEscaper = new StringEscaper
+	extension MiscConverters miscConverters = new MiscConverters
 	extension ElementConverter elementConverter = new ElementConverter
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	extension VariableConverter variableConverter = new VariableConverter
+	extension VariableNameConverter variableNameConverter = new VariableNameConverter
 	extension GroupingProjectionOperatorConverter groupingProjectionOperatorConverter = new GroupingProjectionOperatorConverter
 	extension SortTopOperatorConverter sortTopOperatorConverter = new SortTopOperatorConverter
 	extension BinaryOperatorConverter binaryOperatorConverter
@@ -129,7 +134,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		#['''\unwind{«op.element.convertVariable»}''']
+		#['''\unwind{«op.element.convertVariable.escape»}''']
 	}
 
 	/**

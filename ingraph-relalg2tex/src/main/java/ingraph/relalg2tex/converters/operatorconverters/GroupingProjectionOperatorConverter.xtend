@@ -1,5 +1,6 @@
-package ingraph.relalg2tex.converters.elementconverters
+package ingraph.relalg2tex.converters.operatorconverters
 
+import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import java.util.List
 import relalg.ExpressionVariable
 import relalg.GroupingOperator
@@ -7,8 +8,8 @@ import relalg.ProjectionOperator
 
 class GroupingProjectionOperatorConverter {
 
-	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	extension VariableConverter variableConverter = new VariableConverter
+	extension ingraph.relalg2tex.converters.elementconverters.ExpressionConverter expressionConverter = new ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
+	extension VariableNameConverter variableNameConverter = new VariableNameConverter
 
 	def convertReturnableElementList(List<ExpressionVariable> elements) {
 		'''«elements.map[convertVariable].join(", ")»'''

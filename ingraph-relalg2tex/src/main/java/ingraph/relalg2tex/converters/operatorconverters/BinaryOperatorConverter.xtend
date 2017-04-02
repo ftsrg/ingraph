@@ -1,4 +1,4 @@
-package ingraph.relalg2tex.converters.elementconverters
+package ingraph.relalg2tex.converters.operatorconverters
 
 import relalg.AbstractJoinOperator
 import relalg.AntiJoinOperator
@@ -11,7 +11,7 @@ class BinaryOperatorConverter {
 
 	RelalgConverterConfig config
 
-	extension StringEscaper stringEscaper = new StringEscaper
+	extension ingraph.relalg2tex.converters.elementconverters.StringEscaper stringEscaper = new ingraph.relalg2tex.converters.elementconverters.StringEscaper
 
 	new(RelalgConverterConfig config) {
 		this.config = config
