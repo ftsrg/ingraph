@@ -88,6 +88,8 @@ import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
 import relalg.function.Function
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipPattern
+import relalg.VertexVariable
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -293,15 +295,33 @@ class RelalgBuilder {
 			val u2 = u0.pattern.patterns.get(0) as PatternElement
 			val u4 = buildCreateNodePattern(u2.nodepattern)
 			u1.elements.add(u4)
+			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
 			for (element: u2.chain) {
 				val u5 = buildCreateNodePattern(element.nodePattern)
 				u1.elements.add(u5)
+				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
+				u1.elements.add(u6)
+				lastVertexVariable = (u5.expression as VariableExpression).variable as VertexVariable
 			}
 			u1
 		} else {
 			afterUnwind
 		}
 		afterCreate
+	}
+	
+	/**
+	 * Provide the edges for CREATE operator.
+	 */
+	protected def ExpressionVariable buildCreateRelationshipPattern (RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target) {
+		val u0 = createNavigationDescriptor => [
+			edgeVariable = variableBuilder.buildEdgeVariable(relationshippattern.detail)
+			sourceVertexVariable = source
+			targetVertexVariable = target
+			container = topLevelContainer
+		]
+		val u1 = variableBuilder.buildExpressionVariable(u0.edgeVariable.name, u0)
+		u1
 	}
 	
 	/**
