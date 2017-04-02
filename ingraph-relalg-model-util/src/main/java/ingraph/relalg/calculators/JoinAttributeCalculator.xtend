@@ -9,13 +9,11 @@ import relalg.Variable
 class JoinAttributeCalculator {
 
 	def dispatch calculateJoinAttributes(EquiJoinLikeOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
-		//Lists.newArrayList(Iterables.concat(leftSchema, rightSchema))
-		val leftSchemaNames = leftSchema.map[name]
-
+		val leftSchemaNames = leftSchema.map[toString]
 		val joinAttributes = Iterables.concat( // 
 			leftSchema,
 			rightSchema.filter[
-				variable | !leftSchemaNames.contains(variable.name) // only keep variables that are NOT in the left schema
+				variable | !leftSchemaNames.contains(variable.toString) // only keep variables that are NOT in the left schema
 			]
 		)
 		joinAttributes.toList

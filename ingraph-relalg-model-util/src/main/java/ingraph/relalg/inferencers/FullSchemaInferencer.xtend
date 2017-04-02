@@ -50,24 +50,24 @@ class FullSchemaInferencer {
 	// nullary operators
 	private def dispatch void fillFullSchema(NullaryOperator op) {
 		val detailedSchema = union(op.basicSchema, op.extraVariables)
-		op.defineDetailedSchema(detailedSchema)
+		op.defineFullSchema(detailedSchema)
 	}
 
 	// unary operators
 	private def dispatch void fillFullSchema(UnaryOperator op) {
 		val detailedSchema = op.input.fullSchema
-		op.defineDetailedSchema(detailedSchema)
+		op.defineFullSchema(detailedSchema)
 	}
 	
 	// binary operators
 	private def dispatch void fillFullSchema(UnionOperator op) {
 		// TODO left/right inputs should be the same for their detailed schema
-		op.defineDetailedSchema(op.leftInput.fullSchema)
+		op.defineFullSchema(op.leftInput.fullSchema)
 	}
 
 	private def dispatch void fillFullSchema(AbstractJoinOperator op) {
 		val fullSchema = calculateJoinAttributes(op, op.getLeftInput.fullSchema, op.getRightInput.fullSchema)
-		op.defineDetailedSchema(fullSchema)
+		op.defineFullSchema(fullSchema)
 	}
 
 	// ternary operator
@@ -77,13 +77,13 @@ class FullSchemaInferencer {
 			op.getMiddleInput.fullSchema,
 			op.getRightInput.fullSchema
 		))
-		op.defineDetailedSchema(fullSchema)
+		op.defineFullSchema(fullSchema)
 	}
 	
 	/**
 	 * defineSchema
 	 */
-	private def dispatch void defineDetailedSchema(ProductionOperator op, List<? extends Variable> fullSchema) {
+	private def dispatch void defineFullSchema(ProductionOperator op, List<? extends Variable> fullSchema) {
 		// this projects "-1" in a number of cases, e.g.
 		// - if a literal value was assigned to the variables
 		val fullSchemaNames = fullSchema.map[name]
@@ -103,7 +103,7 @@ class FullSchemaInferencer {
 		op.fullSchema.addAll(op.basicSchema)
 	}
 
-	private def dispatch void defineDetailedSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
+	private def dispatch void defineFullSchema(ProjectionOperator op, List<? extends Variable> fullSchema) {
 //		op.fullSchema.addAll(op.input.fullSchema)
 //		op.fullSchema.addAll(op.otherFunctions)
 //		op.fullSchema.addAll(op.aggregations)
@@ -113,7 +113,7 @@ class FullSchemaInferencer {
 		op.fullSchema.addAll(op.extraVariables)
 	}
 
-	private def dispatch void defineDetailedSchema(Operator op, List<? extends Variable> fullSchema) {
+	private def dispatch void defineFullSchema(Operator op, List<? extends Variable> fullSchema) {
 		op.fullSchema.addAll(fullSchema)
 	}
 

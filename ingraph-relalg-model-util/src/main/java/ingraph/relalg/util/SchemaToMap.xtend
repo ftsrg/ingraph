@@ -18,7 +18,7 @@ class SchemaToMap {
 	def Map<String, Integer> schemaToMapNames(Operator op) {
 		val mapBuilder = new ImmutableMap.Builder<String, Integer>()
 		for (i : 0 ..< op.fullSchema.length) {
-			mapBuilder.put(op.fullSchema.get(i).name, i)
+			mapBuilder.put(op.fullSchema.get(i).toString, i)
 		}
 		return mapBuilder.build
 	}

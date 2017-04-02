@@ -161,6 +161,9 @@ abstract class GraphObjectVariable extends Variable {
 abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
   refers PropertyList properties
+  op String toString() {
+    name
+  }
 }
 
 class VertexVariable extends ElementVariable {
@@ -206,6 +209,9 @@ class PathVariable extends Variable {
 class ExpressionVariable extends Variable {
   boolean hasInferredName
   refers Expression expression
+  op String toString() {
+    name
+  }
 }
 
 /* Operators */
