@@ -2,6 +2,7 @@ package ingraph.relalg.calculators
 
 import java.util.List
 import relalg.AttributeVariable
+import relalg.BeamerOperator
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GroupingAndProjectionOperator
@@ -23,6 +24,7 @@ class VariableExtractor {
 	/**
 	 * Extract extra variables required by unary operators.
 	 */
+	// GroupingAndProjection-, Grouping- and ProjectionOperators
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingAndProjectionOperator op) {
 		union(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
 	}
@@ -35,8 +37,15 @@ class VariableExtractor {
 		return getExtraVariablesForGroupingOperator(op)
 	}
 
+	// SelectionOperators
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
 		getAttributes(op.condition)
+	}
+
+	// BeamerOperator (i.e. ProductionOperator)
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(BeamerOperator op) {
+		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
+		extraVariables
 	}
 
 	// SortOperator and SortAndTopOperator
@@ -49,7 +58,7 @@ class VariableExtractor {
 		#[op.element]
 	}
 
-	// rest of the unary operators, e.g. TopOperator, no extra requirements
+	// rest of the unary operators, e.g. the TopOperator, require no extra attributes
 	def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
 		#[]
 	}

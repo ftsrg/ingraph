@@ -55,11 +55,11 @@ class ExtraVariableInferencer {
 		op.extraVariables.addAll(extraVariables)
 
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
- 		val inputExtraVariables = union(extraVariables, newExtraVariables)
+		val inputExtraVariables = union(extraVariables, newExtraVariables)
 
- 		if (op instanceof ProjectionOperator) {
+		if (op instanceof ProjectionOperator) {
 			inputExtraVariables.minus(op.calculatedVariables)
- 		}
+		}
 
 		op.input.fillExtraVariables(inputExtraVariables)
 	}

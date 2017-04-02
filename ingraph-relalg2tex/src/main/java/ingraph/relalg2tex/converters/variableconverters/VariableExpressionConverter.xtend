@@ -4,7 +4,7 @@ import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import relalg.ExpressionVariable
 
-class VariableExpresssionConverter extends AbstractVariableConverter {
+class VariableExpressionConverter extends AbstractVariableConverter {
 
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionConverter expressionConverter = new ExpressionConverter

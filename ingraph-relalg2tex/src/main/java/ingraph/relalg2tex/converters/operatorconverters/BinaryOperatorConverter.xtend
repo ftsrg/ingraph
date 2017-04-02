@@ -9,7 +9,7 @@ import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class BinaryOperatorConverter {
 
-	RelalgConverterConfig config
+	val RelalgConverterConfig config
 
 	extension ingraph.relalg2tex.converters.elementconverters.StringEscaper stringEscaper = new ingraph.relalg2tex.converters.elementconverters.StringEscaper
 
