@@ -318,6 +318,7 @@ class RelalgBuilder {
 			edgeVariable = variableBuilder.buildEdgeVariable(relationshippattern.detail)
 			sourceVertexVariable = source
 			targetVertexVariable = target
+			direction = convertToDirection(relationshippattern)
 			container = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.edgeVariable.name, u0)
@@ -1112,16 +1113,13 @@ class RelalgBuilder {
 			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it)
 		]
 
-		val isLeftArrow = ec.relationshipPattern.incoming
-		val isRightArrow = ec.relationshipPattern.outgoing
+
 
 		val range = ec.relationshipPattern.detail?.range
 
 		createExpandOperator() => [
 			edgeVariable = patternElementChain_EdgeVariable;
-			direction = if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
-				Direction.BOTH
-			else if(isLeftArrow) Direction.IN else Direction.OUT;
+			direction = convertToDirection(ec.relationshipPattern)
 			targetVertexVariable = patternElementChain_VertexVariable;
 
 			minHops = if (range?.lower === null) {
@@ -1189,4 +1187,20 @@ class RelalgBuilder {
 	}
 
 	def dispatch buildRelalgProperties(Void p, ElementVariable ev) {}
+
+	/**
+	 * Given a RelationshipPattern instance, it's direction information
+	 * is mapped to the relalg model's Direction type.
+	 *
+	 * @param pattern the relationship pattern
+	 * @return the appropriate direction descriptor
+	 */
+	protected def convertToDirection(RelationshipPattern pattern) {
+		val isLeftArrow =pattern.incoming
+		val isRightArrow = pattern.outgoing
+		
+		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
+			Direction.BOTH
+		else if(isLeftArrow) Direction.IN else Direction.OUT
+	}
 }

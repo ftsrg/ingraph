@@ -324,7 +324,7 @@ abstract class NavigationOperator extends Operator, NavigationDescriptor{
   contains MaxHops maxHops
 }
 
-abstract class NavigationDescriptor extends Expression {
+class NavigationDescriptor extends Expression {
 	Direction direction
   refers VertexVariable sourceVertexVariable
   refers EdgeVariable edgeVariable
