@@ -54,6 +54,12 @@ http://download.eclipse.org/viatra/updates/milestone).
 * Install the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support).
 * Currently, VIATRA is not supported in IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
 
+If you are unable to download Xtend plug-in from the plug-in list:
+* Download the [Xtext IDEA Core plug-in](https://plugins.jetbrains.com/plugin/8072-xtext-idea-core).
+* Install the plug-in using **Plugins** | **Install plugin from disks...**
+* Download the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support).
+* Install the plug-in using **Plugins** | **Install plugin from disks...**
+
 #### Importing the projects
 
 * Import the projects using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
