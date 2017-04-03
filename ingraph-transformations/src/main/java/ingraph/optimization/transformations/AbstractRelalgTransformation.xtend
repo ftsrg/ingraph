@@ -15,6 +15,7 @@ import relalg.RelalgFactory
 import relalg.UnaryOperator
 import java.io.Closeable
 import java.io.IOException
+import relalg.Direction
 
 abstract class AbstractRelalgTransformation implements Closeable {
 
@@ -84,4 +85,14 @@ abstract class AbstractRelalgTransformation implements Closeable {
 		engine?.dispose
 	}
 
+	protected def normalizeDirection(Direction direction) {
+		switch (direction) {
+			case BOTH: {
+				return Direction.BOTH
+			}
+			default: {
+				return Direction.OUT
+			}
+		}
+	}	
 }

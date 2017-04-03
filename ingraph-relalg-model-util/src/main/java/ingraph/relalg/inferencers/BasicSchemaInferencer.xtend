@@ -178,21 +178,19 @@ class BasicSchemaInferencer {
 		op.defineBasicSchema(op.leftInput.basicSchema)
 	}
 
-	// ternary operators
+	// unary operator again
 	private def dispatch List<Variable> fillBasicSchema(PathOperator op) {
 		val schema = Lists.newArrayList(Iterables.concat(
-			op.leftInput.basicSchema,
-			op.middleInput.basicSchema,
-			op.rightInput.basicSchema
+			op.input.basicSchema
 		))
 
-		val listExpressionVariable = createExpressionVariable => [
-			expression = op.listVariable
-		]
-
-		if (includeEdges) {
-			schema.add(listExpressionVariable)
-		}
+		//FIXME: do something meaningful here
+//		if (includeEdges) {
+//			val listExpressionVariable = createExpressionVariable => [
+//				expression = op.listVariable
+//			]
+//			schema.add(listExpressionVariable)
+//		}
 		schema.add(op.targetVertexVariable)
 		op.defineBasicSchema(schema)
 	}

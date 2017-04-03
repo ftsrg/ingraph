@@ -9,8 +9,10 @@ import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
 import relalg.CreateOperator
+import relalg.Direction
 import relalg.DualObjectSourceOperator
 import relalg.DuplicateEliminationOperator
+import relalg.EdgeListVariable
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
@@ -54,7 +56,7 @@ class OperatorConverter {
 
 	def dispatch convertOperator(GetEdgesOperator op) {
 		#[
-			'''\getedges«IF op.directed»directed«ELSE»undirected«ENDIF»''' +
+			'''\getedges«IF op.direction === Direction.BOTH»undirected«ELSE»directed«ENDIF»''' +
 			'''«op.sourceVertexVariable.convertElement»«op.targetVertexVariable.convertElement»«op.edgeVariable.convertElement»'''
 		]
 	}
@@ -77,12 +79,22 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(ExpandOperator op) {
+		val ev=op.edgeVariable
 		#[
-			'''\expand«op.direction.convertDirection»''' + //
+			if (op instanceof PathOperator) {
+				'''\transitiveclosure'''
+			} else {
+				'''\expand'''
+			} + //
+			'''«op.direction.convertDirection»''' + //
 			'''{«op.sourceVertexVariable.escapedName»}''' + //
 			'''«op.targetVertexVariable.convertElement»''' + //
 			'''«op.edgeVariable.convertElement»''' + //
-			'''{«op.minHops»}{«op.maxHops.hopsToString»}'''
+			if (ev instanceof EdgeListVariable) {
+				'''{«ev.minHops»}{«ev.maxHops.hopsToString»}'''
+			} else {
+				'''{}{}'''
+			}
 		]
 	}
 
@@ -130,16 +142,6 @@ class OperatorConverter {
 
 	def dispatch convertOperator(SortAndTopOperator op) {
 		#[ sortOperatorToTex(op) + topOperatorToTex(op) ]
-	}
-
-	def dispatch convertOperator(PathOperator op) {
-		#[
-			'''\transitiveclosure«op.direction.convertDirection»''' + //
-			'''{«op.sourceVertexVariable.escapedName»}''' + //
-			'''«op.targetVertexVariable.convertElement»''' + //
-			'''«op.edgeVariable.convertElement»''' + //
-			'''{«op.minHops»}{«op.maxHops.hopsToString»}'''
-		]
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {

@@ -7,6 +7,7 @@ import java.util.Iterator
 import java.util.LinkedList
 import java.util.List
 import java.util.Set
+import relalg.AbstractEdgeVariable
 import relalg.ArithmeticComparisonExpression
 import relalg.ArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
@@ -201,9 +202,9 @@ class Cypher2RelalgUtil {
 	 *
 	 * @return set of edge variables found in the relalg tree
 	 */
-	def Set<EdgeVariable> extractEdgeVariables(Operator op) {
+	def Set<AbstractEdgeVariable> extractEdgeVariables(Operator op) {
 		val fifo = new LinkedList<Operator>
-		val edgeVariables = new HashSet<EdgeVariable>
+		val edgeVariables = new HashSet<AbstractEdgeVariable>
 
 		fifo.add(op)
 		while (!fifo.empty) {

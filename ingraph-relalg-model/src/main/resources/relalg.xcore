@@ -184,8 +184,21 @@ class VertexVariable extends ElementVariable {
   contains VertexLabelSet vertexLabelSet // the vertex must have *all* of these labels
 }
 
-class EdgeVariable extends ElementVariable {
+abstract class AbstractEdgeVariable extends ElementVariable {
   contains EdgeLabelSet edgeLabelSet // the edge must have *one* of these labels
+}
+
+class EdgeVariable extends AbstractEdgeVariable {
+}
+
+/**
+ * This is the variable for r in the query below:
+ * MATCH (m)-[r*2..5]->(n)
+ * RETURN m, r, n
+ */
+class EdgeListVariable extends AbstractEdgeVariable {
+  int minHops
+  contains MaxHops maxHops
 }
 
 /**
@@ -254,12 +267,11 @@ class GetVerticesOperator extends NullaryOperator {
 class DualObjectSourceOperator extends NullaryOperator {
 }
 
-// (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
-class GetEdgesOperator extends NullaryOperator {
-  boolean directed = "true"
-  refers VertexVariable sourceVertexVariable
-  refers EdgeVariable edgeVariable
-  refers VertexVariable targetVertexVariable
+/**
+ * Note: while this has a direction, a directed edge should always be described as
+ * (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
+ */
+class GetEdgesOperator extends NullaryOperator, NavigationDescriptor {
 }
 
 /* Unary operators */
@@ -325,9 +337,9 @@ abstract class NavigationOperator extends Operator, NavigationDescriptor{
 }
 
 class NavigationDescriptor extends Expression {
-	Direction direction
+  Direction direction
   refers VertexVariable sourceVertexVariable
-  refers EdgeVariable edgeVariable
+  refers AbstractEdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable
 }
 
@@ -340,31 +352,26 @@ class MaxHops {
   int hops
 }
 
-class ExpandOperator extends UnaryOperator, NavigationOperator {
+class ExpandOperator extends UnaryOperator, NavigationDescriptor {
 }
 
 
+//FIXME: remove ternary operator as it is unused
 abstract class TernaryOperator extends Operator {
   contains Operator leftInput
   contains Operator middleInput
   contains Operator rightInput
 }
 
-class PathOperator extends TernaryOperator, NavigationOperator {
+class PathOperator extends ExpandOperator {
   PathSemantics semantics
-  contains VariableListExpression listVariable
 }
 
 class DuplicateEliminationOperator extends UnaryOperator {
 }
 
 class AllDifferentOperator extends UnaryOperator {
-  refers EdgeVariable[] edgeVariables
-  contains EdgeVariableSet[] edgeVariableSets
-}
-
-class EdgeVariableSet { // TODO - we should think about this a bit more
-  refers EdgeVariable[] edgeVariables
+  refers AbstractEdgeVariable[] edgeVariables
 }
 
 class SortOperator extends UnaryOperator {

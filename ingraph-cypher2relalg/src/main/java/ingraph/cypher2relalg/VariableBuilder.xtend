@@ -1,6 +1,7 @@
 package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
+import ingraph.cypher2relalg.factories.EdgeListVariableFactory
 import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.ExpressionVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
@@ -8,6 +9,7 @@ import ingraph.cypher2relalg.factories.VertexVariableFactory
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.logger.IngraphLogger
+import ingraph.relalg.util.ElementVariableExtractor
 import java.util.ArrayList
 import java.util.Collection
 import java.util.HashMap
@@ -18,18 +20,19 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLoo
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import relalg.AbstractEdgeVariable
 import relalg.AttributeVariable
 import relalg.EdgeLabel
 import relalg.EdgeVariable
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.LabelSetStatus
+import relalg.MaxHopsType
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.Variable
 import relalg.VertexLabel
 import relalg.VertexVariable
-import ingraph.relalg.util.ElementVariableExtractor
 
 /**
  * This is the variable builder component of
@@ -47,6 +50,7 @@ class VariableBuilder {
 
 	val VertexVariableFactory vertexVariableFactory
 	val EdgeVariableFactory edgeVariableFactory
+	val EdgeListVariableFactory edgeListVariableFactory
 	/**
 	 * Chain means that these are chained from the previous return-items.
 	 */
@@ -73,6 +77,7 @@ class VariableBuilder {
 
 		this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
 		this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+		this.edgeListVariableFactory = new EdgeListVariableFactory(this.topLevelContainer)
 		this.expressionVariableChain = new HashMap
 		this.expressionVariableFactoryExtended = new ExpressionVariableFactory(this.topLevelContainer)
 		this.vertexLabelFactory = new VertexLabelFactory(this.topLevelContainer)
@@ -97,6 +102,7 @@ class VariableBuilder {
 
 		this.vertexVariableFactory = new VertexVariableFactory(this.topLevelContainer)
 		this.edgeVariableFactory = new EdgeVariableFactory(this.topLevelContainer)
+		this.edgeListVariableFactory = new EdgeListVariableFactory(this.topLevelContainer)
 		this.expressionVariableChain = new HashMap
 		expressionVariableChain.forEach[
 			val f_it = it
@@ -192,7 +198,27 @@ class VariableBuilder {
 	}
 
 	def buildEdgeVariable(RelationshipDetail r) {
-		val edgeVariable = edgeVariableFactory.createElement(r)
+		val edgeVariable = if (r.range === null) {
+			edgeVariableFactory.createElement(r)
+		} else {
+			edgeListVariableFactory.createElement(r) => [
+				minHops = if (r.range.lower === null) {
+					1
+				} else {
+					Integer.valueOf(r.range.lower)
+				}
+				maxHops = if (r.range.upper === null) {
+					createMaxHops() => [
+						maxHopsType = MaxHopsType.UNLIMITED
+					]
+				} else {
+					createMaxHops() => [
+						maxHopsType = MaxHopsType.LIMITED
+						hops = Integer.valueOf(r.range.upper)
+					]
+				}
+			]
+		}
 
 		// add labels to the variable
 		edgeVariable.combineLabelSet(r?.types?.relTypeName, edgeLabelFactory)
@@ -239,7 +265,7 @@ class VariableBuilder {
 		}
 	}
 
-	def void combineLabelSet(EdgeVariable edgeVariable, EList<String> labels, EdgeLabelFactory edgeLabelFactory) {
+	def void combineLabelSet(AbstractEdgeVariable edgeVariable, EList<String> labels, EdgeLabelFactory edgeLabelFactory) {
 		/*
 		 * if we receive an empty labelset, this does not change the labelset constraint
 		 * if the edge variable
@@ -362,6 +388,8 @@ class VariableBuilder {
 			vertexVariableFactory.getElement(name)
 		} else if (edgeVariableFactory.hasElement(name)) {
 			edgeVariableFactory.getElement(name)
+		} else if (edgeListVariableFactory.hasElement(name)) {
+		  edgeListVariableFactory.getElement(name)
 		} else {
 			null
 		}

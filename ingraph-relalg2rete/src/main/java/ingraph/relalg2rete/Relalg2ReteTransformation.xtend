@@ -13,7 +13,6 @@ import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
-import relalg.Direction
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
@@ -69,7 +68,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			info('''expandVertexRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
-				directed = expandOperator.direction != Direction.BOTH
+				direction = expandOperator.direction.normalizeDirection
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
@@ -90,7 +89,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			info('''expandOperatorARule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
-				directed = expandOperator.direction != Direction.BOTH
+				direction = expandOperator.direction.normalizeDirection
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
@@ -115,7 +114,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			info('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
 
 			val getEdgesOperator = createGetEdgesOperator => [
-				directed = expandOperator.direction != Direction.BOTH
+				direction = expandOperator.direction.normalizeDirection
 				sourceVertexVariable = expandOperator.source
 				targetVertexVariable = expandOperator.target
 				edgeVariable = expandOperator.edgeVariable
@@ -125,19 +124,20 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 				vertexVariable = expandOperator.targetVertexVariable
 			]
 			val pathOperator = createPathOperator => [
-				minHops = expandOperator.minHops
-				maxHops = expandOperator.maxHops
-
-				sourceVertexVariable = expandOperator.source
-				targetVertexVariable = expandOperator.target
-				edgeVariable = expandOperator.edgeVariable
-
-				val edgeVariable = edgeVariable
-				listVariable = createVariableListExpression => [variable = edgeVariable]
-
-				leftInput = sourceVertexOperator
-				middleInput = getEdgesOperator
-				rightInput = targetVertexOperator
+				//FIXME: rework for improved relalg metamodel
+//				minHops = expandOperator.minHops
+//				maxHops = expandOperator.maxHops
+//
+//				sourceVertexVariable = expandOperator.source
+//				targetVertexVariable = expandOperator.target
+//				edgeVariable = expandOperator.edgeVariable
+//
+//				val edgeVariable = edgeVariable
+//				listVariable = createVariableListExpression => [variable = edgeVariable]
+//
+//				leftInput = sourceVertexOperator
+//				middleInput = getEdgesOperator
+//				rightInput = targetVertexOperator
 			]
 
 			changeChildOperator(parentOperator, expandOperator, pathOperator)

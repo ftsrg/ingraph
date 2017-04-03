@@ -1,8 +1,8 @@
 package ingraph.relalg2tex.converters.elementconverters
 
 import java.util.List
+import relalg.AbstractEdgeVariable
 import relalg.Direction
-import relalg.EdgeVariable
 import relalg.MaxHops
 import relalg.SortEntry
 
@@ -45,7 +45,7 @@ class MiscConverters {
 		'''\«direction» «entry.expression.convertExpression»'''
 	}
 
-	def edgeVariableList(List<EdgeVariable> edgeVariables) {
+	def edgeVariableList(List<AbstractEdgeVariable> edgeVariables) {
 		'''«edgeVariables.map["\\var{"+ escapedName + "}"].join(", ")»'''
 	}
 

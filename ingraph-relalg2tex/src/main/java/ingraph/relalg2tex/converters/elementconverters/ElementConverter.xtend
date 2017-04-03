@@ -1,6 +1,6 @@
 package ingraph.relalg2tex.converters.elementconverters
 
-import relalg.EdgeVariable
+import relalg.AbstractEdgeVariable
 import relalg.LabelSetStatus
 import relalg.VertexVariable
 
@@ -21,7 +21,8 @@ class ElementConverter {
 		+ '''}'''
 	}
 
-	def dispatch convertElement(EdgeVariable variable) {
+	def dispatch convertElement(AbstractEdgeVariable variable) {
+		//FIXME: for EdgeListVariable instances, serialize limits
 		'''{«variable.escapedName»}{'''
 		+ switch variable.edgeLabelSet?.status {
 			case LabelSetStatus.CONTRADICTING: "CONTRADICTING~LABEL~CONSTRAINTS"

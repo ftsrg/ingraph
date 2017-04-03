@@ -1,6 +1,5 @@
 package ingraph.cypher2relalg
 
-import com.google.common.collect.Lists
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.StringUtil
@@ -50,6 +49,7 @@ import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.Properties
 import org.slizaa.neo4j.opencypher.openCypher.RegExpMatchingExpression
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
+import org.slizaa.neo4j.opencypher.openCypher.RelationshipPattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnBody
@@ -60,6 +60,7 @@ import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.With
+import relalg.AbstractEdgeVariable
 import relalg.ArithmeticComparisonOperatorType
 import relalg.ArithmeticExpression
 import relalg.AttributeVariable
@@ -67,7 +68,6 @@ import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
-import relalg.EdgeVariable
 import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.Expression
@@ -76,10 +76,8 @@ import relalg.FunctionExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
-import relalg.MaxHopsType
 import relalg.Operator
 import relalg.OrderDirection
-import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
 import relalg.UnaryGraphObjectLogicalOperatorType
@@ -87,9 +85,8 @@ import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.function.Function
-import org.slizaa.neo4j.opencypher.openCypher.RelationshipPattern
 import relalg.VertexVariable
+import relalg.function.Function
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -536,7 +533,7 @@ class RelalgBuilder {
 	 * - natural join of comma-separated patternParts in the MATCH clause
 	 */
 	def dispatch Operator buildRelalg(Match m) {
-		val Set<EdgeVariable> edgeVariablesOfMatchClause = new HashSet<EdgeVariable>()
+		val Set<AbstractEdgeVariable> edgeVariablesOfMatchClause = new HashSet<AbstractEdgeVariable>()
 		// handle comma-separated patternParts in the MATCH clause
 		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
 		for (pattern: m.pattern.patterns) {
@@ -1115,35 +1112,11 @@ class RelalgBuilder {
 
 
 
-		val range = ec.relationshipPattern.detail?.range
 
 		createExpandOperator() => [
 			edgeVariable = patternElementChain_EdgeVariable;
 			direction = convertToDirection(ec.relationshipPattern)
 			targetVertexVariable = patternElementChain_VertexVariable;
-
-			minHops = if (range?.lower === null) {
-				1
-			} else {
-				Integer.valueOf(range.lower)
-			}
-			maxHops = if (range === null) {
-				createMaxHops() => [
-					maxHopsType = MaxHopsType.LIMITED
-					hops = 1
-				]
-			} else {
-				if (range.upper === null) {
-					createMaxHops() => [
-						maxHopsType = MaxHopsType.UNLIMITED
-					]
-				} else {
-					createMaxHops() => [
-						maxHopsType = MaxHopsType.LIMITED
-						hops = Integer.valueOf(ec.relationshipPattern.detail.range.upper)
-					]
-				}
-			}
 		]
 
 	}
