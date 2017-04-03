@@ -101,8 +101,8 @@ class FullSchemaInferencer {
 				namedElementContainer = element.namedElementContainer
 			]
 		])
-		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 		op.fullSchema.addAll(op.basicSchema)
+		op.tupleIndices.addAll(op.fullSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 	}
 
 	private def dispatch void defineFullSchema(GroupingAndProjectionOperator op, List<? extends Variable> fullSchema) {
@@ -124,8 +124,8 @@ class FullSchemaInferencer {
 
 	private def fullSchemaProjectionOperator(ProjectionOperator op, List<? extends Variable> fullSchema) {
 		val fullSchemaNames = fullSchema.map[name]
-		op.tupleIndices.addAll(op.basicSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 		op.fullSchema.addAll(uniqueUnion(op.basicSchema, op.extraVariables))
+		op.tupleIndices.addAll(op.fullSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
 	}
 
 	private def dispatch void defineFullSchema(Operator op, List<? extends Variable> fullSchema) {

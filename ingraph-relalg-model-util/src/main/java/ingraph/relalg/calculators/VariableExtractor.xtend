@@ -15,6 +15,7 @@ import relalg.UnaryOperator
 import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
+import ingraph.relalg.expressions.ExpressionUnwrapper
 
 class VariableExtractor {
 
@@ -45,14 +46,15 @@ class VariableExtractor {
 
 	// BeamerOperator (i.e. ProductionOperator)
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(BeamerOperator op) {
-		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
-		extraVariables
+		op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
 	}
 
 	// SortOperator and SortAndTopOperator
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-		val attributes = op.entries.map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable]
-		return attributes.minus(op.basicSchema).toList
+		val x = op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
+//		println(op.entries.map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression])
+//		println(x)
+		x
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {

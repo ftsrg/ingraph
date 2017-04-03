@@ -11,22 +11,30 @@ class ExpressionUnwrapper {
 		if (av.element !== null && av.expVar === null) {
 			return av.element
 		} else if (av.element === null && av.expVar !== null) {
-			return av.expVar.extract
+			return av.expVar.extractExpressionVariable
 		} else {
 			throw new IllegalStateException(
 				"AttributeVariable must have non-null value for element or expVar, but not for both!")
 		}
 	}
 
-	def static Variable extract(ExpressionVariable ev) {
+	def static Variable extractExpressionVariable(ExpressionVariable ev) {
 		val expression = ev.expression
 		if (expression instanceof VariableExpression) {
-			val variable = expression.variable
-			if (variable instanceof ExpressionVariable) {
-				return extract(variable)
-			} else {
-				variable
-			}
+			extractVariableExpression(expression)
+		} else {
+			ev
 		}
 	}
+
+	def static Variable extractVariableExpression(VariableExpression ve) {
+		val variable = ve.variable
+		if (variable instanceof ExpressionVariable) {
+			return extractExpressionVariable(variable)
+		} else {
+			variable
+		}
+	}
+
+
 }

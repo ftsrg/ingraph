@@ -397,45 +397,46 @@ class RelalgBuilder {
 					]
 				]
 
-				val List<ExpressionVariable> variablesToSave = Lists.newArrayList();
-				if (!(op1 instanceof ProjectionOperator)) {
-					throw new UnsupportedOperationException("op1 should be a projection operator.")
-				}
-
-				val projectionOperator = op1 as ProjectionOperator
-
-				val variables = projectionOperator.elements.filter(ExpressionVariable).map[expression].filter(
-					VariableExpression).map[variable]
-				val functions = projectionOperator.elements.filter(ExpressionVariable)
-				val availableVariables = union(variables, functions)
-
-				for (sortEntry : sortEntries) {
-					val expression = sortEntry.expression
-					if (expression instanceof VariableExpression) {
-						if (!availableVariables.contains(expression.variable)) {
-							variablesToSave.add(createExpressionVariable => [
-								it.expression = expression
-								hasInferredName = true
-								namedElementContainer = topLevelContainer
-							])
-						}
-					}
-				}
-				projectionOperator.elements.addAll(variablesToSave)
-
+//				val List<ExpressionVariable> variablesToSave = Lists.newArrayList();
+//				if (!(op1 instanceof ProjectionOperator)) {
+//					throw new UnsupportedOperationException("op1 should be a projection operator.")
+//				}
+//
+//				val projectionOperator = op1 as ProjectionOperator
+//
+//				val variables = projectionOperator.elements.filter(ExpressionVariable).map[expression].filter(
+//					VariableExpression).map[variable]
+//				val functions = projectionOperator.elements.filter(ExpressionVariable)
+//				val availableVariables = union(variables, functions)
+//
+//				for (sortEntry : sortEntries) {
+//					val expression = sortEntry.expression
+//					if (expression instanceof VariableExpression) {
+//						if (!availableVariables.contains(expression.variable)) {
+//							variablesToSave.add(createExpressionVariable => [
+//								it.expression = expression
+//								hasInferredName = true
+//								namedElementContainer = topLevelContainer
+//							])
+//						}
+//					}
+//				}
+//				projectionOperator.elements.addAll(variablesToSave)
+//
 				val sortOperator = createSortOperator => [
 					entries.addAll(sortEntries)
 					input = op1
 				]
-				if (!variablesToSave.empty) {
-					val newProjectionOperator = createProjectionOperator => [
-						elementsToRemove.addAll(variablesToSave)
-						input = sortOperator
-					]
-					newProjectionOperator
-				} else {
-					sortOperator
-				}
+				sortOperator
+//				if (!variablesToSave.empty) {
+//					val newProjectionOperator = createProjectionOperator => [
+//						elementsToRemove.addAll(variablesToSave)
+//						input = sortOperator
+//					]
+//					newProjectionOperator
+//				} else {
+//					sortOperator
+//				}
 			} else {
 				op1
 			}
