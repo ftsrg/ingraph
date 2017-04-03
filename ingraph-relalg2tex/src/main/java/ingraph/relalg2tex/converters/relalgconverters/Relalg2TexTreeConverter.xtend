@@ -15,7 +15,7 @@ import relalg.UnaryOperator
 
 class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
-	extension SchemaConverter schemaConverter = new SchemaConverter
+	extension SchemaConverter schemaConverter = new SchemaConverter(config.schemaIndices)
 	extension TupleConverter tupleConverter = new TupleConverter
 	extension ContainerExtractor containerExtractor = new ContainerExtractor
 

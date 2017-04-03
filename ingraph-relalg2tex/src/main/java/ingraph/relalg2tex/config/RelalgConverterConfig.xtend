@@ -37,4 +37,9 @@ class RelalgConverterConfig {
 	 */
 	boolean textualOperators
 
+	/**
+	 * whether to include indices for schema, e.g. <[0] person, [1] person.name, [2] city>
+	 */
+	boolean schemaIndices
+
 }

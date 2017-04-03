@@ -19,7 +19,12 @@ abstract class Cypher2Relalg2Rete2TexTest {
 
 	protected extension ReteOptimization optimization = new ReteOptimization
 
-	protected val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).includeCommonVariables(true).build
+	protected val config = RelalgConverterConfig.builder
+		.consoleOutput(false) //
+		.standaloneDocument(true) //
+		.includeCommonVariables(true) //
+		.schemaIndices(true) //
+		.build
 	protected val drawer = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()
