@@ -3,7 +3,6 @@ package ingraph.relalg2tex.converters.relalgconverters
 import ingraph.relalg.util.ContainerExtractor
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.elementconverters.SchemaConverter
-import ingraph.relalg2tex.converters.elementconverters.TupleConverter
 import relalg.AbstractJoinOperator
 import relalg.BeamerOperator
 import relalg.BinaryOperator

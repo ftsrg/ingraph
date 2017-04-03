@@ -1,11 +1,9 @@
 package ingraph.relalg2tex.converters.elementconverters
 
 import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
+import java.util.ArrayList
 import java.util.List
 import relalg.Variable
-import java.util.ArrayList
-import java.util.Collection
-import java.util.Collections
 
 class SchemaConverter {
  
