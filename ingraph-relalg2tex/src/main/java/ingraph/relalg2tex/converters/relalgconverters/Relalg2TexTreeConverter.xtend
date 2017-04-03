@@ -16,7 +16,6 @@ import relalg.UnaryOperator
 class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
 	extension SchemaConverter schemaConverter = new SchemaConverter(config.schemaIndices)
-	extension TupleConverter tupleConverter = new TupleConverter
 	extension ContainerExtractor containerExtractor = new ContainerExtractor
 
 	new() {
@@ -54,10 +53,10 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 			«ENDIF»
 			«IF op.extractContainer.fullSchemaInferred»
 			\\ \footnotesize
-			$\color{orange} «op.fullSchema.convertSchema» $
 			«IF op instanceof BeamerOperator»
-			\\ \footnotesize
-			$\color{orange} «op.tupleIndices.convertTuple»$
+			$\color{orange} «op.fullSchema.convertSchemaWithIndices(op.tupleIndices)»$
+			«ELSE»
+			$\color{orange} «op.fullSchema.convertSchemaWithIndices»$
 			«ENDIF»
 			«ENDIF»
 			«IF op instanceof AbstractJoinOperator && op.extractContainer.fullSchemaInferred && config.includeCommonVariables»

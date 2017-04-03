@@ -8,7 +8,10 @@ class TupleConverter {
 		'''[ \var{«tuple.map[
 			if (it == -1) '''\#''' else it
 		].join(", ")»} ]'''
-	} 
+	}
 	
-	
+	def convertTupleIndex(Integer i) {
+		if (i == -1) '''\#''' else i
+	}
+
 }
