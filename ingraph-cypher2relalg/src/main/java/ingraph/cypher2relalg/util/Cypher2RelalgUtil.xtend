@@ -85,7 +85,7 @@ class Cypher2RelalgUtil {
 			for (retVal = i.next; i.hasNext;) {
 				val nextAE = createBinaryLogicalExpression => [
 					operator = binaryLogicalOperator
-					container = outerContainer
+					expressionContainer = outerContainer
 				]
 				nextAE.rightOperand = i.next
 				nextAE.leftOperand = retVal

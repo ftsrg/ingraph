@@ -330,7 +330,7 @@ class VariableBuilder {
 	def buildVariableExpression(Variable v) {
 		createVariableExpression => [
 			variable = v
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -343,7 +343,7 @@ class VariableBuilder {
 	def dispatch buildVariableExpression(VariableRef v, boolean useExpressionVariables) {
 		createVariableExpression => [
 			variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -356,7 +356,7 @@ class VariableBuilder {
 	def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup v, boolean useExpressionVariables) {
 		createVariableExpression => [
 			variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 

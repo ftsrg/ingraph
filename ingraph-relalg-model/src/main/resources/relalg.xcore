@@ -14,7 +14,7 @@ class RelalgContainer {
   String name
   contains Operator rootExpression
   contains NamedElement[] elements opposite namedElementContainer
-  contains Expression[] expressions opposite ^container
+  contains Expression[] expressions opposite expressionContainer
   boolean incrementalPlan = "false"
   boolean basicSchemaInferred = "false"
   boolean extraVariablesInferred = "false"
@@ -445,7 +445,7 @@ class UnionOperator extends CommutativeBinaryOperator, AssociativeBinaryOperator
 
 /* expression */
 abstract class Expression {
-  refers RelalgContainer ^container opposite expressions
+  refers RelalgContainer expressionContainer opposite expressions
   String text
 }
 

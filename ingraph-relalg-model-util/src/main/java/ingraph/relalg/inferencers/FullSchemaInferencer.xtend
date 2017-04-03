@@ -95,7 +95,7 @@ class FullSchemaInferencer {
 			createExpressionVariable => [
 				expression = createVariableExpression => [
 					variable =  element
-					container = element.namedElementContainer
+					expressionContainer = element.namedElementContainer
 				]
 				hasInferredName = true
 				namedElementContainer = element.namedElementContainer

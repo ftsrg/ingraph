@@ -316,7 +316,7 @@ class RelalgBuilder {
 			sourceVertexVariable = source
 			targetVertexVariable = target
 			direction = convertToDirection(relationshippattern)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.edgeVariable.name, u0)
 		u1
@@ -328,7 +328,7 @@ class RelalgBuilder {
 	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
 		val u0 = createVariableExpression => [
 			variable = variableBuilder.buildVertexVariable(nodepattern)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
 		u1
@@ -584,7 +584,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperatorType.AND
 			leftOperand = buildRelalgLogicalExpression(e.left, joins)
 			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -593,7 +593,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperatorType.OR
 			leftOperand = buildRelalgLogicalExpression(e.left, joins)
 			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -602,7 +602,7 @@ class RelalgBuilder {
 			operator = BinaryLogicalOperatorType.XOR
 			leftOperand = buildRelalgLogicalExpression(e.left, joins)
 			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -610,7 +610,7 @@ class RelalgBuilder {
 		createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
 			operand = variableBuilder.buildRelalgVariable(e.left)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -618,7 +618,7 @@ class RelalgBuilder {
 		createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NULL
 			operand = variableBuilder.buildRelalgVariable(e.left)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -627,7 +627,7 @@ class RelalgBuilder {
 		EList<Operator> joins
 	) {
 		val fe = createFunctionLogicalExpression => [
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 		fe.functor = Function.REGEX_LIKE
@@ -647,7 +647,7 @@ class RelalgBuilder {
 				createUnaryLogicalExpression => [
 					operator = UnaryLogicalOperatorType.NOT
 					operand = buildRelalgLogicalExpression(e.left, joins)
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			default: {
 				unsupported("TODO: " + e.operator)
@@ -667,7 +667,7 @@ class RelalgBuilder {
 		relationshipVariableExpressions.add(createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
 			operand = variableBuilder.buildVertexVariable(e.nodePattern)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		])
 
 		relationshipVariableExpressions.addAll(
@@ -677,7 +677,7 @@ class RelalgBuilder {
 				createUnaryGraphObjectLogicalExpression => [
 					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
 					operand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			]
 		)
@@ -688,7 +688,7 @@ class RelalgBuilder {
 				createUnaryGraphObjectLogicalExpression => [
 					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
 					operand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			]
 		)
@@ -712,7 +712,7 @@ class RelalgBuilder {
 			}
 			leftOperand = buildRelalgComparableElement(e.left)
 			rightOperand = buildRelalgComparableElement(e.right)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -724,7 +724,7 @@ class RelalgBuilder {
 			functor = Function.STARTS_WITH
 			arguments.add(buildRelalgExpression(e.left))
 			arguments.add(buildRelalgExpression(e.right))
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -736,7 +736,7 @@ class RelalgBuilder {
 			functor = Function.ENDS_WITH
 			arguments.add(buildRelalgExpression(e.left))
 			arguments.add(buildRelalgExpression(e.right))
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -748,7 +748,7 @@ class RelalgBuilder {
 			functor = Function.CONTAINS
 			arguments.add(buildRelalgExpression(e.left))
 			arguments.add(buildRelalgExpression(e.right))
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -760,7 +760,7 @@ class RelalgBuilder {
 			functor = Function.IN_COLLECTION
 			arguments.add(buildRelalgExpression(e.left))
 			arguments.add(buildRelalgExpression(e.right))
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -768,9 +768,9 @@ class RelalgBuilder {
 		createParameterComparableExpression => [
 			parameter = createParameter => [
 				name = e.parameter
-				container = topLevelContainer
+				expressionContainer = topLevelContainer
 			]
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -785,7 +785,7 @@ class RelalgBuilder {
 	def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
 		createVariableComparableExpression => [
 			variable = variableBuilder.buildRelalgVariable(e)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -807,7 +807,7 @@ class RelalgBuilder {
 		if (x instanceof AttributeVariable) {
 			createVariableComparableExpression => [
 				variable = x
-				container = topLevelContainer
+				expressionContainer = topLevelContainer
 			]
 		} else {
 			unsupported('''Unsupported type received: «x.class.name»''')
@@ -817,7 +817,7 @@ class RelalgBuilder {
 
 	def dispatch ComparableExpression buildRelalgComparableElement(FunctionInvocation fi) {
 		val fe = createFunctionComparableExpression => [
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 		populateFunctionExpression(fe, fi)
@@ -857,7 +857,7 @@ class RelalgBuilder {
 
 	def dispatch Expression buildRelalgExpression(FunctionInvocation fi) {
 		val fe = createFunctionExpression => [
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 		populateFunctionExpression(fe, fi)
@@ -868,7 +868,7 @@ class RelalgBuilder {
 	def dispatch Expression buildRelalgExpression(Count fi) {
 		createFunctionExpression => [
 			functor = Function.COUNT_ALL
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -880,7 +880,7 @@ class RelalgBuilder {
 		val emptyList = createEmptyListExpression => [
 			head = null
 			tail = null
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 		// the tail of the first expression will be the list that was built
 		val first = createListExpression => [
@@ -892,7 +892,7 @@ class RelalgBuilder {
 			recent.tail = createListExpression => [
 				head = buildRelalgExpression(e)
 				tail = emptyList
-				container = topLevelContainer
+				expressionContainer = topLevelContainer
 			]
 			recent = recent.tail
 		}
@@ -930,7 +930,7 @@ class RelalgBuilder {
 			 */
 			:
 				createNullLiteral => [
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			default:
 				throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e).toString()»''')
@@ -945,7 +945,7 @@ class RelalgBuilder {
 			}
 			leftOperand = buildRelalgArithmeticExpression(e.left)
 			rightOperand = buildRelalgArithmeticExpression(e.right)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 	}
@@ -963,7 +963,7 @@ class RelalgBuilder {
 			}
 			leftOperand = buildRelalgArithmeticExpression(e.left)
 			rightOperand = buildRelalgArithmeticExpression(e.right)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 	}
@@ -975,7 +975,7 @@ class RelalgBuilder {
 			}
 			leftOperand = buildRelalgArithmeticExpression(e.left)
 			rightOperand = buildRelalgArithmeticExpression(e.right)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -986,14 +986,14 @@ class RelalgBuilder {
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionNodeLabelsAndPropertyLookup e) {
 		createVariableArithmeticExpression => [
 			variable = variableBuilder.buildRelalgVariable(e)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(VariableRef e) {
 		val ae = createVariableArithmeticExpression => [
 			variable = variableBuilder.buildRelalgVariable(e)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 		if (ae.variable instanceof ElementVariable) {
@@ -1005,7 +1005,7 @@ class RelalgBuilder {
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(FunctionInvocation fi) {
 		val fe = createFunctionArithmeticExpression => [
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 
 		populateFunctionExpression(fe, fi)
@@ -1019,7 +1019,7 @@ class RelalgBuilder {
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(Count fi) {
 		createFunctionArithmeticExpression => [
 			functor = Function.COUNT_ALL
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -1028,19 +1028,19 @@ class RelalgBuilder {
 			val n = Integer.parseInt(e.value)
 			createIntegerLiteral => [
 				value = n
-				container = topLevelContainer
+				expressionContainer = topLevelContainer
 			]
 		} catch (NumberFormatException ex1) {
 			try {
 				val n = new BigInteger(e.value)
 				createBigIntegerLiteral => [
 					value = n
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			} catch (NumberFormatException ex2) {
 				createDoubleLiteral => [
 					value = Double.parseDouble(e.value)
-					container = topLevelContainer
+					expressionContainer = topLevelContainer
 				]
 			}
 		}
@@ -1049,14 +1049,14 @@ class RelalgBuilder {
 	def buildRelalgStringLiteral(StringConstant e) {
 		createStringLiteral => [
 			value = StringUtil.unescapeCypherString(e.value, logger)
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
 	def buildRelalgParameter(Parameter expression) {
 		createParameter => [
 			name = expression.parameter
-			container = topLevelContainer
+			expressionContainer = topLevelContainer
 		]
 	}
 
@@ -1140,7 +1140,7 @@ class RelalgBuilder {
 	def dispatch buildRelalgProperties(MapLiteral properties, ElementVariable ev) {
 		if (properties !== null) {
 			val pList = createPropertyList => [
-				container = topLevelContainer
+				expressionContainer = topLevelContainer
 			]
 
 			properties.entries.forEach [ e |

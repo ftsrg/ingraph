@@ -2,7 +2,6 @@ package ingraph.relalg.calculators
 
 import java.util.List
 import relalg.ArithmeticOperationExpression
-import relalg.Expression
 import relalg.FunctionExpression
 import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
@@ -26,7 +25,7 @@ class FunctionArgumentExtractor {
 //		} else 
 		if (fe.functor.meta) {
 			#[createExpressionVariable => [
-				namedElementContainer = fe.container
+				namedElementContainer = fe.expressionContainer
 				expression = fe
 				// all metafunctions have exactly one argument
 				name = '''«fe.functor»(«(fe.arguments.get(0) as VariableExpression).variable.name»)'''
