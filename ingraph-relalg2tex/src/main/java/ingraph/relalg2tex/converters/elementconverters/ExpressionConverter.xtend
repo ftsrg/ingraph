@@ -7,6 +7,7 @@ import relalg.AttributeVariable
 import relalg.BigIntegerLiteral
 import relalg.BinaryLogicalExpression
 import relalg.BooleanLiteral
+import relalg.Direction
 import relalg.DoubleLiteral
 import relalg.ElementVariable
 import relalg.EmptyListExpression
@@ -14,6 +15,7 @@ import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.IntegerLiteral
 import relalg.ListExpression
+import relalg.NavigationDescriptor
 import relalg.NullLiteral
 import relalg.Parameter
 import relalg.ParameterComparableExpression
@@ -26,6 +28,7 @@ class ExpressionConverter {
 	
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionOperatorTypeConverter operatorConverter = new ExpressionOperatorTypeConverter
+	extension ElementConverter elementConverter = new ElementConverter
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''
@@ -107,6 +110,17 @@ class ExpressionConverter {
 
 	def dispatch CharSequence convertExpression(ArithmeticOperationExpression exp) {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
+	}
+
+	def dispatch CharSequence convertExpression(NavigationDescriptor exp) {
+		'''\navigationdescriptor'''
+		+ switch exp.direction {
+			case Direction.IN: '''in'''
+			case Direction.OUT: '''out'''
+			case Direction.BOTH: '''both'''
+		}
+		+ '''«exp.edgeVariable.convertElement»''' // creates {\var{e}}{Label1|Label2...}
+		+ '''{«exp.sourceVertexVariable.convertExpression»}{«exp.targetVertexVariable.convertExpression»}'''
 	}
 
 	def dispatch CharSequence convertExpression(BooleanLiteral exp) {

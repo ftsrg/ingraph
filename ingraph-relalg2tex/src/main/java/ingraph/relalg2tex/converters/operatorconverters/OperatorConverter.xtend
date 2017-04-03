@@ -107,7 +107,7 @@ class OperatorConverter {
 	}
 
 	def createOperator(CreateOperator op) {
-		'''\create{«op.elements.convertReturnableElementList»}'''
+		'''\create{«op.elements.map[it.expression.convertExpression].join(", ")»}'''
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {

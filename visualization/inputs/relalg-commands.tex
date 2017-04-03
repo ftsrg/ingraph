@@ -233,6 +233,10 @@
 \newcommand{\expandout}[7]{\expandoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 \newcommand{\expandin}[7]{\expandinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
+\newcommand{\navigationdescriptorboth}[4]{\expandbothop \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
+\newcommand{\navigationdescriptorout}[4]{\expandoutop \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
+\newcommand{\navigationdescriptorin}[4]{\expandinop \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
+
 % transitive closure operators
 \newcommand{\transitiveclosureboth}[7]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 \newcommand{\transitiveclosureout}[7]{\transitiveclosureoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
