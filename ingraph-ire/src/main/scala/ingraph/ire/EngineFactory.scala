@@ -80,6 +80,9 @@ object EngineFactory {
                 op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
               )))
 
+            case op: TopOperator => 
+              throw new IllegalStateException("Incremental query plan should not contain TopOperators, only SortAndTopOperators are allowed.")
+
             case op: SelectionOperator =>
               val variableLookup = getSchema(op.getInput)
               newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.getCondition, variableLookup))))
