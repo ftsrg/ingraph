@@ -33,6 +33,15 @@ import relalg.RelalgFactory
 import relalg.Variable
 import relalg.VertexLabel
 import relalg.VertexVariable
+import org.eclipse.emf.ecore.EObject
+import org.slizaa.neo4j.opencypher.openCypher.Match
+import org.slizaa.neo4j.opencypher.openCypher.With
+import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.Create
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
+import org.slizaa.neo4j.opencypher.openCypher.Delete
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.Order
 
 /**
  * This is the variable builder component of
@@ -169,7 +178,30 @@ class VariableBuilder {
 	}
 
 	def dispatch Variable buildRelalgVariable(VariableRef varRef) {
-		buildRelalgVariableInternal(varRef, false)
+		val useExpressionVariables = findOutExpressionVariableUsageFromContext(varRef)
+		buildRelalgVariableInternal(varRef, useExpressionVariables)
+	}
+
+	/**
+	 * Variable lookup scope depends on the clause in which the variable is being resolved.
+	 *
+	 * UNWIND and ORDER BY clauses use expression variables, others don't use them for name lookup
+	 */	
+	def findOutExpressionVariableUsageFromContext(EObject eo) {
+		for (var EObject c = eo;; c=c.eContainer) {
+			switch c {
+				Create,
+				Delete,
+				Match,
+				With,
+				Return: { return false }
+				Unwind,
+				Order: { return true }
+				Cypher: {
+					unrecoverableError('''We were about to get variable name resolution context, but somehow we have reached «eo.class.name» Did you introduce a new clause to the compiler?''')
+				}
+			}
+		}
 	}
 
 	def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
@@ -177,16 +209,21 @@ class VariableBuilder {
 	}
 
 	/**
-	 * Expression variables from return has the highest priority in name resolution for order by,
-	 * but they don't play a role when building later return items.
-	 *
-	 * These "*Extended" methods take Expression variables into account for name resolution.
+	 * 
 	 */
 	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
 		val v = buildRelalgVariableExtended(e.left)
 		buildPropertyLookupHelper(v, e)
 	}
 
+	/**
+	 * Resolves a variable by its name.
+	 *
+	 * Expression variables from return has the highest priority in name resolution for order by
+	 * and UNWIND, but they don't play a role when building later return items.
+	 * 
+	 * @param useExpressionVariables indicate whether we should take expressionvariables into account for name resolution.
+	 */
 	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {
 		val v = findVariable(varRef.variableRef.name, useExpressionVariables)
 		if (v === null) {
