@@ -19,7 +19,7 @@ class ExpressionParserTest extends WordSpec {
 
   val schemaToMap = new SchemaToMap()
   import scala.collection.JavaConverters._
-  def getSchema(operator: Operator): Map[Variable, Integer] = schemaToMap.schemaToMap(operator).asScala.toMap
+  def getSchema(operator: Operator): Map[String, Integer] = schemaToMap.schemaToMapNames(operator).asScala.toMap
 
   val rocks = "emfrocks"
   "ExpressionParser" should {

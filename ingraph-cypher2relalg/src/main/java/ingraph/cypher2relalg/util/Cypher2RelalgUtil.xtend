@@ -14,7 +14,6 @@ import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
 import relalg.DuplicateEliminationOperator
-import relalg.EdgeVariable
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression

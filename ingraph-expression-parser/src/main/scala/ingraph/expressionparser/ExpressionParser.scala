@@ -8,7 +8,7 @@ import relalg.function.FunctionCategory
 
 
 object ExpressionParser {
-  def parse(expression: Expression, lookup: Map[Variable, Integer]): (Tuple) => Boolean =
+  def parse(expression: Expression, lookup: Map[String, Integer]): (Tuple) => Boolean =
     expression match {
       case exp: UnaryLogicalExpression =>
         import UnaryLogicalOperatorType._
@@ -57,21 +57,21 @@ object ExpressionParser {
         }
     }
 
-  private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
-    tuple(lookup(variable))
+  private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[String, Integer]): Any =
+    tuple(lookup(variable.toString))
 
-  def parseValue(exp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = exp match {
+  def parseValue(exp: Expression, lookup: Map[String, Integer]): (Tuple) => Any = exp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
     case cmp: AttributeVariable =>
-      val index = lookup(cmp).toInt
+      val index = lookup(cmp.toString).toInt
       tuple => tuple(index)
     case cmp: Variable =>
-      val index = lookup(cmp).toInt
+      val index = lookup(cmp.toString).toInt
       tuple => tuple(index)
     case cmp: VariableComparableExpression =>
-      val index = lookup(cmp.getVariable).toInt
+      val index = lookup(cmp.getVariable.toString).toInt
       tuple => tuple(index)
     case cmp: VariableExpression =>
       val variable = cmp.getVariable match {
@@ -81,7 +81,7 @@ object ExpressionParser {
         }
         case a => a
       }
-      val index = lookup(variable).toInt
+      val index = lookup(variable.toString).toInt
       tuple => tuple(index)
     case exp: ArithmeticOperationExpression =>
       val left = parseValue(exp.getLeftOperand, lookup)
@@ -120,11 +120,11 @@ object ExpressionParser {
   }
 
   import relalg.function.Function._
-  def parseAggregate(exp: Expression, lookup: Map[Variable, Integer]): () => StatefulAggregate = exp match {
+  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): () => StatefulAggregate = exp match {
     case exp: FunctionExpression =>
       if (exp.getFunctor != COLLECT) {
         val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
-        val index = lookup(variable)
+        val index = lookup(variable.toString)
         exp.getFunctor match {
           case AVG => () => new StatefulAverage(index)
           case COUNT => () => new NullAwareStatefulCount(index)
@@ -136,7 +136,7 @@ object ExpressionParser {
       } else {
         val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
                 println(lookup)
-        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable)).map(_.toInt)
+        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.toString)).map(_.toInt)
             println(indices)
         () => new StatefulCollect(indices)
       }

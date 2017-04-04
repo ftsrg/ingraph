@@ -25,7 +25,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		.includeCommonVariables(true) //
 		.schemaIndices(true) //
 		.build
-	protected val drawer = new Relalg2TexTreeConverter(config)
+	protected val extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()
 	
@@ -33,7 +33,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification)
 		containerSearchBased.inferBasicSchema
-		drawer.convert(containerSearchBased, '''«directory()»/«query»-search''')
+		containerSearchBased.convert('''«directory()»/«query»-search''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
 		// Rete
@@ -42,9 +42,8 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		containerRete.inferBasicSchema
 		containerRete.inferExtraVariables
 		containerRete.inferFullSchema
-		drawer.convert(containerRete, '''«directory()»/«query»-rete''')
+		containerRete.convert('''«directory()»/«query»-rete''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
-		return containerSearchBased
 	}
 	
 	

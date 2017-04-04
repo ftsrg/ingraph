@@ -118,7 +118,7 @@ class ReteOptimization extends AbstractRelalgTransformation {
 		.precondition(FoldableConstantExpressionMatcher.querySpecification)//
 		.action [
 			System.err.println("FIRE!")
-			val x = ExpressionParserWrapper.parse(e, new HashMap<Variable, Integer>())(new Vector<Object>(1,1,1))
+			val x = ExpressionParserWrapper.parse(e, new HashMap<String, Integer>())(new Vector<Object>(1,1,1))
 			println(x)
 		].build
 	}

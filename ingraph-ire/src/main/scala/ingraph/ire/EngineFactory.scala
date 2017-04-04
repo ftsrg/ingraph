@@ -21,7 +21,7 @@ object EngineFactory {
 
   val schemaToMap = new SchemaToMap()
   import scala.collection.JavaConverters._
-  def getSchema(operator: Operator): Map[Variable, Integer] = schemaToMap.schemaToMap(operator).asScala.toMap
+  def getSchema(operator: Operator): Map[String, Integer] = schemaToMap.schemaToMapNames(operator).asScala.toMap
 
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
@@ -72,7 +72,7 @@ object EngineFactory {
             case op: SortOperator =>
               val variableLookup = getSchema(op.getInput)
               val sortKeys = op.getEntries.map(
-                e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
+                e => ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortNode(
                 expr.child,
                 op.getFullSchema.length,
@@ -94,7 +94,7 @@ object EngineFactory {
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
               val schema = getSchema(op.getInput)
-              val indices = op.getEdgeVariables.map(v => schema(v))
+              val indices = op.getEdgeVariables.map(v => schema(v.toString))
               def allDifferent(r: Tuple): Boolean = {
                 val seen = mutable.HashSet[Any]()
                 for (value <- indices.map(r(_))) {

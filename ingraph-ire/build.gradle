@@ -15,6 +15,7 @@ dependencies {
   compile project(':ingraph-optimization-transformations')
   compile project(':ingraph-relalg-model')
   compile project(':ire')
+  testCompile project(':ingraph-relalg2tex')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jJavaDriverVersion
 
