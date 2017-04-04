@@ -6,7 +6,6 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.ExpandOperatorAMatch;
 import ingraph.optimization.patterns.ExpandOperatorAMatcher;
-import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -142,8 +141,6 @@ public final class ExpandOperatorAQuerySpecification extends BaseGeneratedEMFQue
       		));
       		// 	find parentOperator(expandOperator, parentOperator)
       		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	find defaultExpandOperator(expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		bodies.add(body);
       	}
       	// to silence compiler error

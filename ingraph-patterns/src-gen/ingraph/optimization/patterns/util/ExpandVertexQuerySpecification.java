@@ -6,7 +6,6 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.ExpandVertexMatch;
 import ingraph.optimization.patterns.ExpandVertexMatcher;
-import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -149,9 +148,7 @@ public final class ExpandVertexQuerySpecification extends BaseGeneratedEMFQueryS
       		));
       		// 	find parentOperator(expandOperator, parentOperator)
       		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	find defaultExpandOperator(expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), DefaultExpandOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
+      		// //	find defaultExpandOperator(expandOperator);	ExpandOperator.input(expandOperator, getVerticesOperator)
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
       		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));

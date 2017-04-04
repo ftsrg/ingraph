@@ -2,7 +2,6 @@ package ingraph.relalg2rete
 
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
-import ingraph.optimization.patterns.ExpandOperatorBMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.MergeGroupingAndProjectionOperatorMatcher
@@ -36,7 +35,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(unnecessaryLeftOuterJoinOperatorRule)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
-		statements.fireWhilePossible(expandOperatorBRule)
+//		statements.fireWhilePossible(expandOperatorBRule)
 		statements.fireWhilePossible(swapTopAndProjectionOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(mergeGroupingAndProjectionOperatorRule)
@@ -103,46 +102,46 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		].build
 	}
 
-	/**
-	 * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
-	 */
-	protected def expandOperatorBRule() {
-		createRule() //
-		.precondition(ExpandOperatorBMatcher.querySpecification) //
-		.action [ //
-			val expandOperator = expandOperator
-			info('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
-
-			val getEdgesOperator = createGetEdgesOperator => [
-				direction = expandOperator.direction.normalizeDirection
-				sourceVertexVariable = expandOperator.source
-				targetVertexVariable = expandOperator.target
-				edgeVariable = expandOperator.edgeVariable
-			]
-			val sourceVertexOperator = expandOperator.input
-			val targetVertexOperator = createGetVerticesOperator => [
-				vertexVariable = expandOperator.targetVertexVariable
-			]
-			val pathOperator = createPathOperator => [
-				//FIXME: rework for improved relalg metamodel
-//				minHops = expandOperator.minHops
-//				maxHops = expandOperator.maxHops
+//	/**
+//	 * [2.B] Replace a non-default expand operator with a PathOperator and a GetVerticesOperator
+//	 */
+//	protected def expandOperatorBRule() {
+//		createRule() //
+//		.precondition(ExpandOperatorBMatcher.querySpecification) //
+//		.action [ //
+//			val expandOperator = expandOperator
+//			info('''expandOperatorBRule fired for «expandOperator.edgeVariable.name»''')
 //
+//			val getEdgesOperator = createGetEdgesOperator => [
+//				direction = expandOperator.direction.normalizeDirection
 //				sourceVertexVariable = expandOperator.source
 //				targetVertexVariable = expandOperator.target
 //				edgeVariable = expandOperator.edgeVariable
+//			]
+//			val sourceVertexOperator = expandOperator.input
+//			val targetVertexOperator = createGetVerticesOperator => [
+//				vertexVariable = expandOperator.targetVertexVariable
+//			]
+//			val pathOperator = createPathOperator => [
+//				//FIXME: rework for improved relalg metamodel
+////				minHops = expandOperator.minHops
+////				maxHops = expandOperator.maxHops
+////
+////				sourceVertexVariable = expandOperator.source
+////				targetVertexVariable = expandOperator.target
+////				edgeVariable = expandOperator.edgeVariable
+////
+////				val edgeVariable = edgeVariable
+////				listVariable = createVariableListExpression => [variable = edgeVariable]
+////
+////				leftInput = sourceVertexOperator
+////				middleInput = getEdgesOperator
+////				rightInput = targetVertexOperator
+//			]
 //
-//				val edgeVariable = edgeVariable
-//				listVariable = createVariableListExpression => [variable = edgeVariable]
-//
-//				leftInput = sourceVertexOperator
-//				middleInput = getEdgesOperator
-//				rightInput = targetVertexOperator
-			]
-
-			changeChildOperator(parentOperator, expandOperator, pathOperator)
-		].build
-	}
+//			changeChildOperator(parentOperator, expandOperator, pathOperator)
+//		].build
+//	}
 
 	/**
 	 * [3.A] Swap an adjacent pair of Top and Projection operators

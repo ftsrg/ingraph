@@ -31,10 +31,29 @@ import relalg.Operator;
  * 
  * <p>Original source:
  * <code><pre>
+ * parentOperator
+ *           |
+ *           | input
+ *           V
+ *     expandOperator
+ *           |
+ *           | input
+ *           V
+ *   getVerticesOperator
+ * 
+ * 
+ * //pattern defaultExpandOperator(expandOperator : ExpandOperator) {
+ * //  ExpandOperator(expandOperator);
+ * //  ExpandOperator.minHops(expandOperator, 1);
+ * //  ExpandOperator.maxHops(expandOperator, maxHops);
+ * //  MaxHops.maxHopsType(maxHops, ::LIMITED);
+ * //  MaxHops.hops(maxHops, 1);
+ * //}
+ * 
  * // [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
  * pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
  * 	find parentOperator(expandOperator, parentOperator);
- * 	find defaultExpandOperator(expandOperator);
+ * //	find defaultExpandOperator(expandOperator);
  * 	ExpandOperator.input(expandOperator, getVerticesOperator);
  * 	GetVerticesOperator(getVerticesOperator);
  * }
