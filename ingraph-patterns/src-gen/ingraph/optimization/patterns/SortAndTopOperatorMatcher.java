@@ -31,7 +31,19 @@ import relalg.TopOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * parentOperator
+ * // [2b] transformation for eliminating the remaining non-default expand operators
+ * //pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
+ * //  find parentOperator(expandOperator, parentOperator);
+ * //  neg find defaultExpandOperator(expandOperator);
+ * //}
+ * 
+ * //pattern topAndProjectionOperator(topOperator : TopOperator, projectionOperator : ProjectionOperator, parentOperator : Operator) {
+ * //  find parentOperator(topOperator, parentOperator);
+ * //  TopOperator.input(topOperator, projectionOperator);
+ * //}
+ * 
+ * 
+ *     parentOperator
  *           |
  *           | input
  *           V

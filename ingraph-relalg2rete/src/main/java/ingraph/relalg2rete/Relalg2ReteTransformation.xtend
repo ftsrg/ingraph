@@ -6,7 +6,6 @@ import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
 import ingraph.optimization.patterns.MergeGroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
-import ingraph.optimization.patterns.TopAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import org.apache.log4j.Level
@@ -36,7 +35,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
 //		statements.fireWhilePossible(expandOperatorBRule)
-		statements.fireWhilePossible(swapTopAndProjectionOperatorRule)
+//		statements.fireWhilePossible(swapTopAndProjectionOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(mergeGroupingAndProjectionOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
@@ -143,21 +142,21 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 //		].build
 //	}
 
-	/**
-	 * [3.A] Swap an adjacent pair of Top and Projection operators
-	 */
-	protected def swapTopAndProjectionOperatorRule() {
-		createRule() //
-		.precondition(TopAndProjectionOperatorMatcher.querySpecification) //
-		.action [ //
-			info('''swapTopAndProjectionOperatorRule fired for «topOperator» and «projectionOperator»''')
-
-			changeChildOperator(parentOperator, topOperator, projectionOperator)
-			val oldProjectionOperatorInput = projectionOperator.input 
-			projectionOperator.input = topOperator
-			topOperator.input = oldProjectionOperatorInput
-		].build
-	}
+//	/**
+//	 * [3.A] Swap an adjacent pair of Top and Projection operators
+//	 */
+//	protected def swapTopAndProjectionOperatorRule() {
+//		createRule() //
+//		.precondition(TopAndProjectionOperatorMatcher.querySpecification) //
+//		.action [ //
+//			info('''swapTopAndProjectionOperatorRule fired for «topOperator» and «projectionOperator»''')
+//
+//			changeChildOperator(parentOperator, topOperator, projectionOperator)
+//			val oldProjectionOperatorInput = projectionOperator.input 
+//			projectionOperator.input = topOperator
+//			topOperator.input = oldProjectionOperatorInput
+//		].build
+//	}
 
 
 	/**

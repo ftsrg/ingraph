@@ -58,10 +58,10 @@ pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operat
 //  neg find defaultExpandOperator(expandOperator);
 //}
 
-pattern topAndProjectionOperator(topOperator : TopOperator, projectionOperator : ProjectionOperator, parentOperator : Operator) {
-  find parentOperator(topOperator, parentOperator);
-  TopOperator.input(topOperator, projectionOperator);
-}
+//pattern topAndProjectionOperator(topOperator : TopOperator, projectionOperator : ProjectionOperator, parentOperator : Operator) {
+//  find parentOperator(topOperator, parentOperator);
+//  TopOperator.input(topOperator, projectionOperator);
+//}
 
 /*
     parentOperator

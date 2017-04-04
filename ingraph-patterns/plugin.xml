@@ -9,7 +9,6 @@
       <query-specification fqn="ingraph.optimization.patterns.unnecessaryLeftOuterJoin"/>
       <query-specification fqn="ingraph.optimization.patterns.expandVertex"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperatorA"/>
-      <query-specification fqn="ingraph.optimization.patterns.topAndProjectionOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.sortAndTopOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.mergeGroupingAndProjectionOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.groupingAndProjectionOperator"/>
