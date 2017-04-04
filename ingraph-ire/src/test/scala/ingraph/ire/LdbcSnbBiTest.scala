@@ -75,8 +75,9 @@ class LdbcSnbBiTest extends FunSuite {
 //        TestCase(16), // PATH
 //        TestCase(20), // PATH
         TestCase(23),
-        TestCase(24)
-  ) //
+        TestCase(24),
+        null
+  ).filter(_ != null) //
     .foreach(
     t => test(s"query-${t.number}-size-1") {
       val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
