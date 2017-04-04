@@ -111,7 +111,7 @@ class FullSchemaInferencer {
 		op.fullSchemaGroupingOperator(fullSchema)
 		op.fullSchemaProjectionOperator(fullSchema)
 		
-		val varNames = union(op.entries, op.aggregations, op.otherFunctions).map[name]
+		val varNames = union(op.otherFunctions, op.aggregations).map[name]
 		op.order.addAll(op.fullSchema.map[varNames.indexOf(name)])
 	}
 
