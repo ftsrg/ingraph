@@ -154,7 +154,10 @@ class Cypher2RelalgUtil {
 				VariableExpression: {
 					switch (myVar: el.variable) {
 						GraphObjectVariable: groupingVariables.add(myVar)
-						ExpressionVariable: fifo.add(myVar.expression)
+						// Do not check the content of myVar.expression, else it will introduce unnecessary aggregations.
+						// See the following query for an example:
+						// MATCH (tag)<--(message) WITH tag, count(message) AS countMessage RETURN tag, countMessage
+//						ExpressionVariable: fifo.add(myVar.expression)
 					}
 				}
 				ArithmeticOperationExpression: {
