@@ -155,20 +155,13 @@ class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
 abstract class Variable extends NamedElement {
   boolean dontCare = "false"
   
-  op boolean equals(Object o) {
-    if (o === null || !(o instanceof Variable)) {
-      false
-    } else {
-      Objects.equals(toString, o.toString)
-    }
+  op boolean sameName(Variable v) {
+    Objects.equals(toString, v.toString)
   }
 }
 
 /* common superclass for vertices, edges and attributes */
 abstract class GraphObjectVariable extends Variable {
-  op int hashCode() {
-    toString.hashCode
-  }
 }
 
 abstract class ElementVariable extends GraphObjectVariable {
