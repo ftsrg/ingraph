@@ -198,23 +198,23 @@ class VariableBuilder {
 	}
 
 	def buildEdgeVariable(RelationshipDetail r) {
-		val edgeVariable = if (r.range === null) {
+		val edgeVariable = if (r?.range === null) {
 			edgeVariableFactory.createElement(r)
 		} else {
 			edgeListVariableFactory.createElement(r) => [
-				minHops = if (r.range.lower === null) {
+				minHops = if (r?.range.lower === null) {
 					1
 				} else {
-					Integer.valueOf(r.range.lower)
+					Integer.valueOf(r?.range.lower)
 				}
-				maxHops = if (r.range.upper === null) {
+				maxHops = if (r?.range.upper === null) {
 					createMaxHops() => [
 						maxHopsType = MaxHopsType.UNLIMITED
 					]
 				} else {
 					createMaxHops() => [
 						maxHopsType = MaxHopsType.LIMITED
-						hops = Integer.valueOf(r.range.upper)
+						hops = Integer.valueOf(r?.range.upper)
 					]
 				}
 			]
