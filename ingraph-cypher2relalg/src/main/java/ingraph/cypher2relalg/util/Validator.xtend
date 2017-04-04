@@ -40,7 +40,7 @@ class Validator {
 	/**
 	 * Some checks for a single subquery's clauses
 	 *
-	 * A subquery has the form (MATCH*)((WITH UNWIND?)|UNWIND|RETURN)
+	 * A subquery has the form (MATCH*)(CREATE|(WITH UNWIND?)|UNWIND|RETURN)
 	 *
 	 * Checks performed:
 	 * - it consists of only MATCH, CREATE, WITH, UNWIND and RETURN clauses
