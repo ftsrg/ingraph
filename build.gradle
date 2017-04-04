@@ -65,6 +65,7 @@ ext {
   jmhVersion = '1.17.5'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
+  neo4jJavaDriverVersion = '1.2.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
   scalaVersion = '2.11.8'

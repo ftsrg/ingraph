@@ -8,18 +8,18 @@ class TestModelFactory {
 	val extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	
 	public def testModel1() {
-		val ctr = createRelalgContainer
+		val container = createRelalgContainer
 		
 		val l = createBooleanLiteral => [
-			container = ctr
+			expressionContainer = container
 			value = true
 		]
 		val r = createBooleanLiteral => [
-			container = ctr
+			expressionContainer = container
 			value = false
 		]
 		val condition = createBinaryLogicalExpression => [
-			container = ctr
+			expressionContainer = container
 			operator = BinaryLogicalOperatorType.AND
 			leftOperand = l
 			rightOperand = r
@@ -30,8 +30,8 @@ class TestModelFactory {
 		val productionOperator = createProductionOperator => [
 			input = selectionOperator
 		]
-		ctr.rootExpression = productionOperator
-		ctr
+		container.rootExpression = productionOperator
+		container
 	}
 	
 	public def testModel2() {

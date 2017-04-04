@@ -4,7 +4,6 @@
   complianceLevel="8.0")
 package relalg
 
-import java.util.Collections
 import java.util.Objects
 
 type Function wraps relalg.function.Function

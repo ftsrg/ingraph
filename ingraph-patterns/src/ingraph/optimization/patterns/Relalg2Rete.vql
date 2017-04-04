@@ -24,10 +24,11 @@ pattern unnecessaryLeftOuterJoin(inputOperator : Operator, leftOuterJoinOperator
 
 */
 pattern defaultExpandOperator(expandOperator : ExpandOperator) {
-  ExpandOperator.minHops(expandOperator, 1);
-  ExpandOperator.maxHops(expandOperator, maxHops);
-  MaxHops.maxHopsType(maxHops, ::LIMITED);
-  MaxHops.hops(maxHops, 1);
+  ExpandOperator(expandOperator);
+//  ExpandOperator.minHops(expandOperator, 1);
+//  ExpandOperator.maxHops(expandOperator, maxHops);
+//  MaxHops.maxHopsType(maxHops, ::LIMITED);
+//  MaxHops.hops(maxHops, 1);
 }
 
 // [1a] transformation for eliminating default expand operators connected to a getVerticesOperator

@@ -41,10 +41,11 @@ import relalg.ExpandOperator;
  * 
  * 
  * pattern defaultExpandOperator(expandOperator : ExpandOperator) {
- *   ExpandOperator.minHops(expandOperator, 1);
- *   ExpandOperator.maxHops(expandOperator, maxHops);
- *   MaxHops.maxHopsType(maxHops, ::LIMITED);
- *   MaxHops.hops(maxHops, 1);
+ *   ExpandOperator(expandOperator);
+ * //  ExpandOperator.minHops(expandOperator, 1);
+ * //  ExpandOperator.maxHops(expandOperator, maxHops);
+ * //  MaxHops.maxHopsType(maxHops, ::LIMITED);
+ * //  MaxHops.hops(maxHops, 1);
  * }
  * </pre></code>
  * 

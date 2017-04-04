@@ -1,5 +1,5 @@
 dependencies {
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: '1.1.2'
+  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jJavaDriverVersion
 
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
