@@ -1,5 +1,7 @@
 package ingraph.optimization.test
 
+import ingraph.cypher2relalg.Cypher2Relalg
+import org.eclipse.emf.ecore.util.EcoreUtil
 import org.junit.Test
 
 class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
@@ -49,6 +51,16 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	  	ORDER BY count DESC, forum.id ASC
 	  	LIMIT 20
 	  ''')
+	}
+	
+		@Test
+	def void queryx() {
+		val x = Cypher2Relalg.processString('''
+	  	MATCH (semaphore:Semaphore)
+	  	RETURN semaphore.signal
+	  ''')
+	  EcoreUtil.copy(x)
+	  
 	}
 	
 	@Test
