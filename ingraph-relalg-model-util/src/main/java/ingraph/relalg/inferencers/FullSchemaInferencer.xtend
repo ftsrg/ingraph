@@ -8,6 +8,8 @@ import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
+import relalg.ExpressionVariable
+import relalg.FunctionExpression
 import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
 import relalg.NullaryOperator
@@ -108,6 +110,9 @@ class FullSchemaInferencer {
 	private def dispatch void defineFullSchema(GroupingAndProjectionOperator op, List<? extends Variable> fullSchema) {
 		op.fullSchemaGroupingOperator(fullSchema)
 		op.fullSchemaProjectionOperator(fullSchema)
+		
+		val varNames = union(op.entries, op.aggregations, op.otherFunctions).map[name]
+		op.order.addAll(op.fullSchema.map[varNames.indexOf(name)])
 	}
 
 	private def dispatch void defineFullSchema(GroupingOperator op, List<? extends Variable> fullSchema) {
@@ -119,13 +124,24 @@ class FullSchemaInferencer {
 	}
 
 	private def fullSchemaGroupingOperator(GroupingOperator op, List<? extends Variable> fullSchema) {
-		op.entries.addAll(op.input.extraVariables)
+//		op.entries.addAll(op.input.extraVariables)
+//			val entries = new ArrayList(op.entries)
+//			val newEntries = uniqueUnion(entries, op.input.extraVariables)
+//			op.entries.clear
+//			op.entries.addAll(newEntries)
 	}
 
 	private def fullSchemaProjectionOperator(ProjectionOperator op, List<? extends Variable> fullSchema) {
 		val fullSchemaNames = fullSchema.map[name]
 		op.fullSchema.addAll(uniqueUnion(op.basicSchema, op.extraVariables))
 		op.tupleIndices.addAll(op.fullSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
+		
+//		val aggregations = op.fullSchema.filter(ExpressionVariable).map[expression].filter[
+//			it instanceof FunctionExpression && (it as FunctionExpression).functor.isAggregation
+//		]
+
+		val List<Variable> others = op.fullSchema.minus(op.aggregations)
+		op.otherFunctions.addAll(others)
 	}
 
 	private def dispatch void defineFullSchema(Operator op, List<? extends Variable> fullSchema) {

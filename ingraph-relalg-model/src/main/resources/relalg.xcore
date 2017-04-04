@@ -278,7 +278,6 @@ abstract class UnaryOperator extends Operator {
 abstract class BeamerOperator extends UnaryOperator {
   refers ExpressionVariable[] elements
   int[] tupleIndices
-  
 }
 
 class ProductionOperator extends BeamerOperator {
@@ -306,11 +305,11 @@ class SelectionOperator extends UnaryOperator {
  */
 class ProjectionOperator extends BeamerOperator {
    // use EITHER elements OR elementsToRemove
-  refers ExpressionVariable[] elementsToRemove
+//  refers ExpressionVariable[] elementsToRemove
   
   // functions
   refers ExpressionVariable[] aggregations
-  refers ExpressionVariable[] otherFunctions // calculated expressions other than aggregations
+  refers Variable[] otherFunctions // calculated expressions other than aggregations
 }
 
 /**
@@ -389,10 +388,11 @@ class SortAndTopOperator extends SortOperator, TopOperator {
 }
 
 class GroupingOperator extends UnaryOperator {
-  refers Variable[] entries
+  refers Variable[] entries // TODO rename this to aggregrationEntries
 }
 
 class GroupingAndProjectionOperator extends GroupingOperator, ProjectionOperator {
+  int[] order
 }
 
 class UnwindOperator extends UnaryOperator {

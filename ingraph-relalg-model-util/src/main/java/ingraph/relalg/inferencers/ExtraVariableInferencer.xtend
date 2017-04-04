@@ -61,7 +61,8 @@ class ExtraVariableInferencer {
 			inputExtraVariables = inputExtraVariables.minus(op.calculatedVariables)
 		}
 
-		op.input.fillExtraVariables(inputExtraVariables)
+		val filteredInputExtraVariables = inputExtraVariables.propagateTo(op.input)
+		op.input.fillExtraVariables(filteredInputExtraVariables)
 	}
 
 	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
@@ -71,11 +72,10 @@ class ExtraVariableInferencer {
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchema = inputOp.basicSchema.map[extractElementVariable]
-		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains( it.baseVariable.extractElementVariable )]
+		val inputSchemaNames = inputOp.basicSchema.map[extractElementVariable].map[toString]
+		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchemaNames.contains( it.baseVariable.extractElementVariable.toString )]
 		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
-
-		Iterables.concat(attributes, functions).toList
+		uniqueUnion(attributes, functions)
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {

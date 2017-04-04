@@ -153,7 +153,10 @@ class Cypher2RelalgUtil {
 			switch (el) {
 				VariableExpression: {
 					switch (myVar: el.variable) {
-						GraphObjectVariable: groupingVariables.add(myVar)
+						GraphObjectVariable:
+							if (!groupingVariables.map[toString].toList.contains(myVar.toString)) {
+								groupingVariables.add(myVar)
+							}
 						// Do not check the content of myVar.expression, else it will introduce unnecessary aggregations.
 						// See the following query for an example:
 						// MATCH (tag)<--(message) WITH tag, count(message) AS countMessage RETURN tag, countMessage
@@ -172,7 +175,14 @@ class Cypher2RelalgUtil {
 					if (el.functor.isAggregation) {
 						effectivelySeenAggregate = true
 					} else {
-						fifo.addAll(el.arguments)
+//						fifo.addAll(el.arguments)
+							groupingVariables.add(createExpressionVariable =>
+								[ 
+									expression = el
+									hasInferredName = true
+									namedElementContainer = el.expressionContainer
+								]
+							)
 					}
 				}
 				EmptyListExpression: {}

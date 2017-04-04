@@ -77,11 +77,11 @@ class VariableExtractor {
 		val aggregationExtraVariables = aggregations.map[extractFunctionArguments].flatten.toList
 		
 
-		val List<ExpressionVariable> otherFunctions = op.elements.filter[expression instanceof FunctionExpression]
-			.filter[!(expression as FunctionExpression).functor.meta && !(expression as FunctionExpression).functor.aggregation]
-			.toList
-
-		op.otherFunctions.addAll(otherFunctions)
+//		val List<ExpressionVariable> otherFunctions = op.elements.filter[expression instanceof FunctionExpression]
+//			.filter[!(expression as FunctionExpression).functor.meta && !(expression as FunctionExpression).functor.aggregation]
+//			.toList
+//
+//		op.otherFunctions.addAll(otherFunctions)
 		
 		uniqueUnion(extraVariables, arguments, aggregationExtraVariables)
 	}
