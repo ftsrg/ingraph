@@ -322,6 +322,10 @@ class ProjectionOperator extends BeamerOperator {
  
  class CreateOperator extends CUDOperator {
  }
+ 
+ class DeleteOperator extends CUDOperator {
+ 	boolean detach
+ }
 
 abstract class NavigationOperator extends Operator, NavigationDescriptor{
   int minHops

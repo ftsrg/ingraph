@@ -5,6 +5,7 @@ import java.util.LinkedList
 import java.util.List
 import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.openCypher.Create
+import org.slizaa.neo4j.opencypher.openCypher.Delete
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
@@ -40,35 +41,39 @@ class Validator {
 	/**
 	 * Some checks for a single subquery's clauses
 	 *
-	 * A subquery has the form (MATCH*)(CREATE|(WITH UNWIND?)|UNWIND|RETURN)
+	 * A subquery has the form (MATCH*)(CREATE|DELETE*|(WITH UNWIND?)|UNWIND|RETURN)
 	 *
 	 * Checks performed:
-	 * - it consists of only MATCH, CREATE, WITH, UNWIND and RETURN clauses
-	 * - it ends with RETURN, CREATE, WITH or UNWIND
+	 * - it consists of only MATCH, CREATE, DELETE, WITH, UNWIND and RETURN clauses
+	 * - it ends with RETURN, CREATE, DELETE, WITH or UNWIND
 	 * - it has at most 1 of either RETURN, WITH or CREATE
 	 * - it has at most 1 UNWIND
-	 * - it has at least one of WITH, CREATE, UNWIND and RETURN
+	 * - it has at least one of WITH, CREATE, DELETE, UNWIND and RETURN
+	 * - before DELETE there must be at least one MATCH clause
 	 */
 	def static void checkSubQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
 		var numReturnOrWith = 0
 		var numUnwind = 0
 		var numMatch = 0
 		var numCreate = 0
+		var numDelete = 0
 		for (Clause c: clauses) {
 			switch c {
 				Match: numMatch++
 				Create: numCreate++
+				Delete: numDelete++
 				Unwind: numUnwind++
 				With, Return: numReturnOrWith++
-				default: logger.unsupported('''Currently we only support MATCH, CREATE, WITH, UNWIND and RETURN clauses in a single subquery. Found: «c.class.name».''')
+				default: logger.unsupported('''Currently we only support MATCH, CREATE, DELETE, WITH, UNWIND and RETURN clauses in a single subquery. Found: «c.class.name».''')
 			}
 		}
 		if ( ! (clauses.last instanceof Return
 		     || clauses.last instanceof With
 		     || clauses.last instanceof Unwind
 		     || clauses.last instanceof Create
+		     || clauses.last instanceof Delete
 		)) {
-			logger.unsupported('''Last clause of a single subquery must be RETURN, CREATE, WITH or UNWIND, but found «clauses.last.class.name» instead.''')
+			logger.unsupported('''Last clause of a single subquery must be RETURN, CREATE, DELETE, WITH or UNWIND, but found «clauses.last.class.name» instead.''')
 		}
 		if ( numUnwind > 1 ) {
 			logger.unsupported('''At most 1 Unwind clause allowed in a subquery. Found «numUnwind».''')
@@ -76,8 +81,11 @@ class Validator {
 		if ( numReturnOrWith > 1 ) {
 			logger.unsupported('''At most 1 Return or With clause allowed in a subquery. Found «numReturnOrWith».''')
 		}
-		if ( numCreate + numUnwind + numReturnOrWith < 1 ) {
-			logger.unsupported('''There mist be at least one of WITH, CREATE, RETURN or UNWIND in a subquery, but none of them was found.''')
+		if ( numDelete + numCreate + numUnwind + numReturnOrWith < 1 ) {
+			logger.unsupported('''There must be at least one of WITH, CREATE, DELETE, RETURN or UNWIND in a subquery, but none of them was found.''')
+		}
+		if ( numDelete > 1 && numMatch < 1 ) {
+			logger.unsupported('''There must be at least one of MATCH before DELETE in a subquery, but no MATCH was found.''')	
 		}
 	}
 
@@ -85,7 +93,7 @@ class Validator {
 	 * Some checks for a single query's clauses
 	 *
 	 * Checks performed:
-	 * - we currently support only the following clauses: MATCH, CREATE, WITH UNWIND?, UNWIND, RETURN
+	 * - we currently support only the following clauses: MATCH, CREATE, DELETE, WITH UNWIND?, UNWIND, RETURN
 	 * - last clause must be a RETURN clause
 	 */
 	def static void checkSingleQueryClauseSequence(List<Clause> clauses, IngraphLogger logger) {
@@ -95,12 +103,13 @@ class Validator {
 			     || c instanceof Unwind
 			     || c instanceof Return
 			     || c instanceof Create
+			     || c instanceof Delete
 			)) {
-				logger.unsupported('''Currently we only support MATCH, CREATE, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
+				logger.unsupported('''Currently we only support MATCH, CREATE, DELETE, WITH, UNWIND and RETURN clauses in a single query. Found: «c.class.name».''')
 			}
 		}
-		if ( ! (clauses.last instanceof Return || clauses.last instanceof Create)) {
-			logger.unsupported('''Last clause of a single query must be RETURN or CREATE but found «clauses.last.class.name» instead.''')
+		if ( ! (clauses.last instanceof Return || clauses.last instanceof Create || clauses.last instanceof Delete)) {
+			logger.unsupported('''Last clause of a single query must be RETURN, CREATE or DELETE but found «clauses.last.class.name» instead.''')
 		}
 	}
 
