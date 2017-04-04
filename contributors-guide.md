@@ -8,7 +8,9 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 #### Prerequisites
 
-It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and selecting **Eclipse IDE for Java and DSL Developers** distribution.
+Start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and select **Eclipse IDE for Java and DSL Developers** distribution.
+
+It is recommended to increase the memory available for Eclipse: edit the `eclipse.ini` file and set a larger value, e.g. `-Xmx4G`.
 
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins from the update site of your Eclipse release (e.g. the Neon update site):
 
@@ -30,9 +32,9 @@ http://download.eclipse.org/viatra/updates/milestone).
 
 1. Build the projects from command line with the following command:
 
-  ```bash
-  ./gradlew clean build eclipse -x test
-  ```
+    ```bash
+    ./gradlew clean build eclipse -x test
+    ```
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**.
 
 #### Opening relational algebra models
