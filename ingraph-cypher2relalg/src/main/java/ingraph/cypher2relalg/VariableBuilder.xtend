@@ -6,6 +6,7 @@ import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.ExpressionVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
+import ingraph.cypher2relalg.util.EUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.logger.IngraphLogger
@@ -16,10 +17,16 @@ import java.util.HashMap
 import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
+import org.slizaa.neo4j.opencypher.openCypher.Order
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import org.slizaa.neo4j.opencypher.openCypher.Where
+import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.AbstractEdgeVariable
 import relalg.AttributeVariable
 import relalg.EdgeLabel
@@ -169,9 +176,22 @@ class VariableBuilder {
 	}
 
 	def dispatch Variable buildRelalgVariable(VariableRef varRef) {
-		buildRelalgVariableInternal(varRef, false)
+		val useExpressionVariables = findOutExpressionVariableUsageFromContext(varRef)
+		buildRelalgVariableInternal(varRef, useExpressionVariables)
 	}
 
+	/**
+	 * Variable lookup scope depends on the clause in which the variable is being resolved.
+	 *
+	 * UNWIND, ORDER BY and WITH...WHERE clauses use expression variables, others don't use them for name lookup
+	 */
+	def findOutExpressionVariableUsageFromContext(EObject eo) {
+	  EUtil.hasInContainerHierarchy(eo, #[typeof(Unwind)], typeof(Cypher))
+	  || EUtil.hasInContainerHierarchy(eo, #[typeof(Order)], typeof(Cypher))
+	  || EUtil.hasInContainerHierarchy(eo, #[typeof(Where), typeof(With)], typeof(Cypher))
+	}
+
+	@Deprecated
 	def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
 		buildRelalgVariableInternal(varRef, true)
 	}
@@ -182,11 +202,20 @@ class VariableBuilder {
 	 *
 	 * These "*Extended" methods take Expression variables into account for name resolution.
 	 */
+	@Deprecated
 	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
 		val v = buildRelalgVariableExtended(e.left)
 		buildPropertyLookupHelper(v, e)
 	}
 
+	/**
+	 * Resolves a variable by its name.
+	 *
+	 * Expression variables from return has the highest priority in name resolution for order by
+	 * and UNWIND, but they don't play a role when building later return items.
+	 *
+	 * @param useExpressionVariables indicate whether we should take expressionvariables into account for name resolution.
+	 */
 	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {
 		val v = findVariable(varRef.variableRef.name, useExpressionVariables)
 		if (v === null) {
