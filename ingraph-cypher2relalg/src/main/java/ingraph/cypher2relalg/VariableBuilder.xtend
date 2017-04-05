@@ -6,6 +6,7 @@ import ingraph.cypher2relalg.factories.EdgeVariableFactory
 import ingraph.cypher2relalg.factories.ExpressionVariableFactory
 import ingraph.cypher2relalg.factories.VertexLabelFactory
 import ingraph.cypher2relalg.factories.VertexVariableFactory
+import ingraph.cypher2relalg.util.EUtil
 import ingraph.cypher2relalg.util.ElementVariableUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.logger.IngraphLogger
@@ -16,10 +17,16 @@ import java.util.HashMap
 import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.EObject
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
+import org.slizaa.neo4j.opencypher.openCypher.Order
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipDetail
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
+import org.slizaa.neo4j.opencypher.openCypher.Where
+import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.AbstractEdgeVariable
 import relalg.AttributeVariable
 import relalg.EdgeLabel
@@ -185,25 +192,15 @@ class VariableBuilder {
 	/**
 	 * Variable lookup scope depends on the clause in which the variable is being resolved.
 	 *
-	 * UNWIND and ORDER BY clauses use expression variables, others don't use them for name lookup
-	 */	
+	 * UNWIND, ORDER BY and WITH...WHERE clauses use expression variables, others don't use them for name lookup
+	 */
 	def findOutExpressionVariableUsageFromContext(EObject eo) {
-		for (var EObject c = eo;; c=c.eContainer) {
-			switch c {
-				Create,
-				Delete,
-				Match,
-				With,
-				Return: { return false }
-				Unwind,
-				Order: { return true }
-				Cypher: {
-					unrecoverableError('''We were about to get variable name resolution context, but somehow we have reached «eo.class.name» Did you introduce a new clause to the compiler?''')
-				}
-			}
-		}
+	  EUtil.hasInContainerHierarchy(eo, #[typeof(Unwind)], typeof(Cypher))
+	  || EUtil.hasInContainerHierarchy(eo, #[typeof(Order)], typeof(Cypher))
+	  || EUtil.hasInContainerHierarchy(eo, #[typeof(Where), typeof(With)], typeof(Cypher))
 	}
 
+	@Deprecated
 	def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
 		buildRelalgVariableInternal(varRef, true)
 	}
@@ -211,6 +208,7 @@ class VariableBuilder {
 	/**
 	 * 
 	 */
+	@Deprecated
 	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
 		val v = buildRelalgVariableExtended(e.left)
 		buildPropertyLookupHelper(v, e)
@@ -221,7 +219,7 @@ class VariableBuilder {
 	 *
 	 * Expression variables from return has the highest priority in name resolution for order by
 	 * and UNWIND, but they don't play a role when building later return items.
-	 * 
+	 *
 	 * @param useExpressionVariables indicate whether we should take expressionvariables into account for name resolution.
 	 */
 	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {

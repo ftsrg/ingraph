@@ -509,10 +509,25 @@ class RelalgBuilder {
 	}
 
 	def dispatch UnaryOperator buildRelalgReturn(With w, Operator content) {
-		if (w.where !== null) {
-			unsupported('''WHERE clause in WITH is unsupported.''')
+		val rb = buildRelalgReturnBody(w.distint, w.returnBody, content)
+		if (w.where === null) {
+			rb
+		} else {
+			// left outer joins extracted from the patterns in the where clause
+			// should remain empty in WITH WHERE
+			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
+
+			val selectionOperator = createSelectionOperator => [
+				input = rb
+				condition = buildRelalgLogicalExpression(w.where.expression, joinOperationsOfWhereClause)
+			]
+
+			if (joinOperationsOfWhereClause.length !== 0) {
+				unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moveing this expression to MATCH...WHERE.''')
+			}
+
+			selectionOperator
 		}
-		buildRelalgReturnBody(w.distint, w.returnBody, content)
 	}
 
 	def expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
