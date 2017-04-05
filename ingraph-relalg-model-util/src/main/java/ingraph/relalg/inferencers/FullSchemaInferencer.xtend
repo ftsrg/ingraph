@@ -8,8 +8,6 @@ import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
-import relalg.ExpressionVariable
-import relalg.FunctionExpression
 import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
 import relalg.NullaryOperator
@@ -111,8 +109,9 @@ class FullSchemaInferencer {
 		op.fullSchemaGroupingOperator(fullSchema)
 		op.fullSchemaProjectionOperator(fullSchema)
 		
-		val varNames = union(op.otherFunctions, op.aggregations).map[name]
-		op.order.addAll(op.fullSchema.map[varNames.indexOf(name)])
+		val varNames = union(op.otherFunctions, op.aggregations).map[toString]
+		println(varNames)
+		op.order.addAll(op.fullSchema.map[varNames.indexOf(toString)])
 	}
 
 	private def dispatch void defineFullSchema(GroupingOperator op, List<? extends Variable> fullSchema) {

@@ -9,6 +9,9 @@ import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import java.io.File
+import java.nio.charset.Charset
+import org.apache.commons.io.FileUtils
 
 abstract class Cypher2Relalg2Rete2TexTest {
 	
@@ -28,6 +31,11 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	protected val extension Relalg2TexTreeConverter converter = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()
+	
+	protected def processFile(String query, String queryFile) {
+		val querySpecification = FileUtils.readFileToString(new File('''../queries/«queryFile».cypher'''), Charset.forName("UTF-8"))
+		process(query, querySpecification)
+	}
 	
 	protected def process(String query, String querySpecification) {
 		// search-based

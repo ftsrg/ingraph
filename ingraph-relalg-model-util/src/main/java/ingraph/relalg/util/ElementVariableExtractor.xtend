@@ -31,8 +31,7 @@ class ElementVariableExtractor {
 		if (exp instanceof VariableExpression) {
 			extractElementVariable(exp.variable)
 		} else {
-			// not found
-			null
+			throw new IllegalStateException("Cannot extract elementVariable")
 		}
 	}
 

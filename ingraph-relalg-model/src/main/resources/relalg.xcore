@@ -206,8 +206,10 @@ class AttributeVariable extends GraphObjectVariable {
       return element
     } else if (element === null && expVar !== null) {
       return expVar
+    } else if (element === null && expVar === null) {
+      throw new IllegalStateException("AttributeVariable must have non-null value for either element or expVar, but both are null.")
     } else {
-      throw new IllegalStateException("AttributeVariable must have non-null value for element or expVar, but not for both!")
+      throw new IllegalStateException("AttributeVariable must have non-null value for either element or expVar, but not for both.")
     }
   }
   op String toString() {

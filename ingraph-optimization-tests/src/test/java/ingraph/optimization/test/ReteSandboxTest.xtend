@@ -17,5 +17,8 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 			ORDER BY tag.name
 		''')
 	}
-	
+
+	@Test
+	def void query4() { processFile('query-4', 'ldbc-snb-bi/query-4') }
+
 }

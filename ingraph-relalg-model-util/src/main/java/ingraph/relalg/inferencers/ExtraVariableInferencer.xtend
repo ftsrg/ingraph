@@ -1,6 +1,5 @@
 package ingraph.relalg.inferencers
 
-import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.VariableExtractor
 import ingraph.relalg.collectors.CollectionHelper
@@ -72,9 +71,14 @@ class ExtraVariableInferencer {
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchemaNames = inputOp.basicSchema.map[extractElementVariable].map[toString]
-		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchemaNames.contains( it.baseVariable.extractElementVariable.toString )]
+		val inputSchemaNames = inputOp.basicSchema.map[toString]
+		val attributes = extraVariables.filter(AttributeVariable).filter[
+			!inputSchemaNames.contains( it.toString ) && // do not propagate if it is already there
+																										// TODO check this for joins - e.g. if it is available on the left input, do not propagate to the right 
+			inputSchemaNames.contains( it.baseVariable.extractElementVariable.toString )
+		]
 		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+
 		uniqueUnion(attributes, functions)
 	}
 
