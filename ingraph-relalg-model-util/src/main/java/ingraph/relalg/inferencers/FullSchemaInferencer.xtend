@@ -110,7 +110,6 @@ class FullSchemaInferencer {
 		op.fullSchemaProjectionOperator(fullSchema)
 		
 		val varNames = union(op.otherFunctions, op.aggregations).map[toString]
-		println(varNames)
 		op.order.addAll(op.fullSchema.map[varNames.indexOf(toString)])
 	}
 
@@ -134,10 +133,6 @@ class FullSchemaInferencer {
 		val fullSchemaNames = fullSchema.map[name]
 		op.fullSchema.addAll(uniqueUnion(op.basicSchema, op.extraVariables))
 		op.tupleIndices.addAll(op.fullSchema.map[variable | fullSchemaNames.indexOf(variable.name)])
-		
-//		val aggregations = op.fullSchema.filter(ExpressionVariable).map[expression].filter[
-//			it instanceof FunctionExpression && (it as FunctionExpression).functor.isAggregation
-//		]
 
 		val List<Variable> others = op.fullSchema.minus(op.aggregations)
 		op.otherFunctions.addAll(others)

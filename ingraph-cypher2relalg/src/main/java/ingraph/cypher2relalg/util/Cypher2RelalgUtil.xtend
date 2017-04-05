@@ -175,14 +175,14 @@ class Cypher2RelalgUtil {
 					if (el.functor.isAggregation) {
 						effectivelySeenAggregate = true
 					} else {
-//						fifo.addAll(el.arguments)
-							groupingVariables.add(createExpressionVariable =>
-								[ 
-									expression = el
-									hasInferredName = true
-									namedElementContainer = el.expressionContainer
-								]
-							)
+						fifo.addAll(el.arguments)
+//							groupingVariables.add(createExpressionVariable =>
+//								[
+//									expression = el
+//									hasInferredName = true
+//									namedElementContainer = el.expressionContainer
+//								]
+//							)
 					}
 				}
 				EmptyListExpression: {}
