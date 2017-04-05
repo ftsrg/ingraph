@@ -49,11 +49,12 @@ class TckReportTest extends IngraphReportTest {
 				if ( //
 				scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].
 					isEmpty && //
-				!querySpecification.contains("CREATE ") && //
+//				!querySpecification.contains("CREATE ") && //
 				!querySpecification.contains("MERGE ") && //
 				!querySpecification.contains("REMOVE ") && //
 				!querySpecification.contains("SET ") && //
-				!querySpecification.contains("DELETE ") //
+//				!querySpecification.contains("DELETE ") && //
+				true
 				) {
 					val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
 					println(scenarioId)
