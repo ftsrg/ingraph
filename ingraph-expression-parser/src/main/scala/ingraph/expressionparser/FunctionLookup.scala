@@ -48,7 +48,10 @@ object FunctionLookup {
       case TAIL => (list) => list.asInstanceOf[Iterable[Any]].tail
       case HEAD => (list) => list.asInstanceOf[List[Any]].headOption.orElse(null)
       case LAST => (list) => list.asInstanceOf[Iterable[Any]].last
-      case LENGTH => (list) => list.asInstanceOf[Iterable[Any]].length
+      case LENGTH => {
+        case i: Iterable[Any] => i.length
+        case s: String => s.length
+      }
       case SIZE => (list) => list.asInstanceOf[List[Any]].size
       case COALESCE => (list) => list.asInstanceOf[Iterable[Any]] find { _ != null } // TODO this might return null or None :-/
 
