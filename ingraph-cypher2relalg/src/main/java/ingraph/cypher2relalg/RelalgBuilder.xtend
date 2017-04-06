@@ -312,9 +312,11 @@ class RelalgBuilder {
 				input = afterCreate
 				detach = u0.detach
 			]
-			val u2 = u0.expressions.get(0) as VariableRef
-			val u4 = buildDeleteVariableRef(u2)
-			u1.elements.add(u4)
+			for (element: u0.expressions) {
+			  val u2 = element as VariableRef
+			  val u4 = buildDeleteVariableRef(u2)
+			  u1.elements.add(u4)
+			}
 			u1
 		} else {
 			afterCreate
