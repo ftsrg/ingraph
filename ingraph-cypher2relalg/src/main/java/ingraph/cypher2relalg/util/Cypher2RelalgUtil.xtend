@@ -33,6 +33,7 @@ import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.SelectionOperator
 import relalg.SortOperator
 import relalg.TopOperator
 import relalg.UnaryArithmeticOperationExpression
@@ -241,7 +242,7 @@ class Cypher2RelalgUtil {
 	 * Inject the given Left Outer Join operator just above the content
 	 * into operator tree. Content will become the rightInput of the left outer join operator.
 	 * @param op A operator tree of the form
-	 *        TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
+	 *        SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
 	 * @param lojo A Left Outer Join operator instance to be injected.
 	 */
 	def validateAndInjectLOJO(Operator op, LeftOuterJoinOperator lojo) {
@@ -250,7 +251,8 @@ class Cypher2RelalgUtil {
 		var currentOperator = op
 		val unaryOperatorTreeSeen = new ArrayList<String>
 		val pattern = #[
-			new UnaryOperator0or1Pattern(TopOperator, true)
+		  new UnaryOperator0or1Pattern(SelectionOperator, true)
+		, new UnaryOperator0or1Pattern(TopOperator, true)
 		, new UnaryOperator0or1Pattern(SortOperator, true)
 		, new UnaryOperator0or1Pattern(DuplicateEliminationOperator, true)
 		, new UnaryOperator0or1Pattern(ProjectionOperator, false)
