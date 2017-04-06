@@ -24,19 +24,17 @@ class MaxNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val max = system.actorOf(Props(new AggregationNode(
-        echoActor ! _, functionMask(0), () => Vector(new StatefulMax(1)))))
+        echoActor ! _, functionMask(0), () => Vector(new StatefulMax(1)), Vector(1, 0))))
 
       max ! changeSet
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("a", 2), tuple("b", 3))
+        positive = tupleBag(tuple(2, "a"), tuple(3, "b"))
       ))
 
-      max ! ChangeSet(
-        negative = tupleBag(tuple("a", 2))
-      )
+      max ! ChangeSet(negative = tupleBag(tuple("a", 2)))
       expectMsg(ChangeSet(
-        positive = tupleBag(tuple("a", 1.1)),
-        negative = tupleBag(tuple("a", 2))
+        positive = tupleBag(tuple(1.1, "a")),
+        negative = tupleBag(tuple(2, "a"))
       ))
     }
   }
