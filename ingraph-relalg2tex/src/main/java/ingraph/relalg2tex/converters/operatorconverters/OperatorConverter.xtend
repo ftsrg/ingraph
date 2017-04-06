@@ -9,6 +9,7 @@ import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
 import relalg.CreateOperator
+import relalg.DeleteOperator
 import relalg.Direction
 import relalg.DualObjectSourceOperator
 import relalg.DuplicateEliminationOperator
@@ -114,12 +115,20 @@ class OperatorConverter {
 		#['''«createOperator(op)»''']
 	}
 
+	def dispatch convertOperator(DeleteOperator op) {
+		#['''«deleteOperator(op)»''']
+	}
+
 	def dispatch convertOperator(GroupingAndProjectionOperator op) {
 		#['''«groupingOperator(op)» «projectionOperator(op)»''']
 	}
 
 	def createOperator(CreateOperator op) {
 		'''\create{«op.elements.map[it.expression.convertExpression].join(", ")»}'''
+	}
+
+	def deleteOperator(DeleteOperator op) {
+		'''\delete{«IF op.detach»*«ENDIF»}{«op.elements.map[it.expression.convertExpression].join(", ")»}'''
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {
