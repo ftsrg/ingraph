@@ -22,6 +22,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
 import org.slizaa.neo4j.opencypher.openCypher.Count
 import org.slizaa.neo4j.opencypher.openCypher.Create
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.Delete
 import org.slizaa.neo4j.opencypher.openCypher.EndsWithExpression
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
@@ -180,7 +181,7 @@ class RelalgBuilder {
 		/**
 		 * Process each subquery.
 		 * 
-		 * A subquery has the form (MATCH*)(CREATE|(WITH UNWIND?)|UNWIND|RETURN)
+		 * A subquery has the form (MATCH*)(CREATE|DELETE+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 		 */
 		var from = 0
 		var variableBuilderChain = variableBuilder
@@ -189,7 +190,7 @@ class RelalgBuilder {
 			val next = if (i + 1 < clauses.length) {
 					clauses.get(i + 1)
 				}
-			if (current instanceof Create || current instanceof With && ! ( next instanceof Unwind ) || current instanceof Unwind ||
+			if (current instanceof Delete || current instanceof Delete && ( next instanceof Return ) || current instanceof Create || current instanceof With && ! ( next instanceof Unwind ) || current instanceof Unwind ||
 				current instanceof Return) {
 				// [fromX, toX) is the range of clauses that form a subquery
 				val fromX = from
@@ -304,7 +305,21 @@ class RelalgBuilder {
 		} else {
 			afterUnwind
 		}
-		afterCreate
+		val singleQuery_deleteClause = clauses.filter(typeof(Delete)).head
+		val afterDelete = if (singleQuery_deleteClause !== null) {
+			val u0 = singleQuery_deleteClause
+			val u1 = createDeleteOperator => [
+				input = afterCreate
+				detach = u0.detach
+			]
+			val u2 = u0.expressions.get(0) as VariableRef
+			val u4 = buildDeleteVariableRef(u2)
+			u1.elements.add(u4)
+			u1
+		} else {
+			afterCreate
+		}
+		afterDelete
 	}
 	
 	/**
@@ -328,6 +343,18 @@ class RelalgBuilder {
 	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
 		val u0 = createVariableExpression => [
 			variable = variableBuilder.buildVertexVariable(nodepattern)
+			expressionContainer = topLevelContainer
+		]
+		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
+		u1
+	}
+	
+	/**
+	 * Provide the vertices for DELETE operator.
+	 */
+	protected def ExpressionVariable buildDeleteVariableRef(VariableRef variableref) {
+		val u0 = createVariableExpression => [
+			variable = variableBuilder.buildRelalgVariable(variableref)
 			expressionContainer = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
