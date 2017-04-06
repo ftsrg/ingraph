@@ -17,7 +17,6 @@ import relalg.DuplicateEliminationOperator
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
-import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
