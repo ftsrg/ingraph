@@ -19,8 +19,8 @@ before_install:
 # we use the install block to stop the build if any command fails
 install:
   - sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf
-  - ./gradlew assemble --stacktrace
-  - ./gradlew regressionTests --continue
+  - ./gradlew assemble --stacktrace --quiet
+  - ./gradlew regressionTests --continue --quiet
 script:
   # only build and deploy the results if the build is performed on the master branch
   - pushd .
