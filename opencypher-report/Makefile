@@ -1,6 +1,6 @@
 DOCUMENT=opencypher-report
 #MODE=-interaction=batchmode
-MODE=
+MODE=-shell-escape
 
 all: clean
 	git log --oneline -n 1 | sed "s/#/\\\\#/g" | sed "s/\`/'/g" | sed "s|_|\\\\_|" > commit-message.tex
