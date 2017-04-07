@@ -1,6 +1,6 @@
 DOCUMENT=opencypher-report
 #MODE=-interaction=batchmode
-MODE=-shell-escape
+MODE=-extra-mem-bot=10000000
 
 all: clean
 	git log --oneline -n 1 | sed "s/#/\\\\#/g" | sed "s/\`/'/g" | sed "s|_|\\\\_|" > commit-message.tex
