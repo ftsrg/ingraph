@@ -56,31 +56,31 @@ class QueryProcessor implements Closeable {
 		Cannot parse query. This is probably a limitation in our current parser and not an error in the query specification.
 
 		«ELSE»
-«««		\subsubsection*«"Relational algebra expression for search-based evaluation".toHeader(name)»
-«««
-«««		«val expression = container.expression»
-«««		«IF expression === null»
-«««			Cannot visualize expression.
-«««		«ELSE»
-«««			\begin{align*}
-«««			\begin{autobreak}
-«««			r = «expression»
-«««			\end{autobreak}
-«««			\end{align*}
-«««		«ENDIF»
-«««
-«««		\subsubsection*«"Relational algebra tree for search-based evaluation".toHeader(name)»
-«««
-«««		«val searchTree = container.visualizeTree»
-«««		«IF searchTree === null»
-«««			Cannot visualize tree.
-«««		«ELSE»
-«««			\begin{center}
-«««			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
-«««			«searchTree»
-«««			\end{adjustbox}
-«««			\end{center}
-«««		«ENDIF»
+		\subsubsection*«"Relational algebra expression for search-based evaluation".toHeader(name)»
+
+		«val expression = container.expression»
+		«IF expression === null»
+			Cannot visualize expression.
+		«ELSE»
+			\begin{align*}
+			\begin{autobreak}
+			r = «expression»
+			\end{autobreak}
+			\end{align*}
+		«ENDIF»
+
+		\subsubsection*«"Relational algebra tree for search-based evaluation".toHeader(name)»
+
+		«val searchTree = container.visualizeTree»
+		«IF searchTree === null»
+			Cannot visualize tree.
+		«ELSE»
+			\begin{center}
+			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
+			«searchTree»
+			\end{adjustbox}
+			\end{center}
+		«ENDIF»
 
 		\subsubsection*«"Incremental relational algebra tree".toHeader(name)»
 
