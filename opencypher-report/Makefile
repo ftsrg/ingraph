@@ -1,5 +1,5 @@
 DOCUMENT=opencypher-report
-COMPILER=lualatex -interaction=batchmode
+COMPILER=lualatex
 
 all: clean
 	git log --oneline -n 1 | sed "s/#/\\\\#/g" | sed "s/\`/'/g" | sed "s|_|\\\\_|" > commit-message.tex
