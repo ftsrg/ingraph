@@ -225,3 +225,65 @@ $$\Delta t \equiv \bigunion_{i=1}^{n} \Delta r_i,$$
 
 where $\Delta r_1, \Delta r_2, \ldots, \Delta r_n$ are the update messages triggered by the last change.
 %For positive update messages, $t' = t \union \Delta t,$ while for negative update messages $t' = t \setminus \Delta t.$
+
+\section{Inferencing Tuples}
+
+Graph query engines often use single-machine (even single-threaded), search-based algorithms. Using these algorithms includes many tradeoffs:
+
+\begin{itemize}
+	\item They do not scale well for large graphs.
+	\item They cannot run in parallel.
+	\item They cannot provide incremental maintenance -- if the graph changes, they have to completely reevaluate the query.
+\end{itemize}
+
+However, they have advantageous properties as well:
+
+\begin{itemize}
+	\item They are more straightforward to implement than incremental algorithms.
+	\item They are typically able to execute with limited memory.
+	\item They can access properties of elements (e.g. the \texttt{name} property of a vertex or the \texttt{weight} property of an edge) by using a pointer.
+\end{itemize}
+
+\subsubsection{Concepts}
+
+Let's take a simple Cypher query, that returns the name :
+
+\begin{lstlisting}[label=lst:inferencing-example, caption=Example query]
+MATCH (n:Person)
+WHERE n.age > 27
+RETURN n.name
+\end{lstlisting}
+
+\newcommand{\screenshotscale}{0.45}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=\screenshotscale]{neo4j-query-plan}
+	\caption{Neo4j query plan for \autoref{lst:inferencing-example}.}
+	\label{fig:neo4-query-plan}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\input{example-inferencing}
+	\caption{Relational algebra tree with tuples for \textcolor{gray}{external schema}, \textcolor{violet}{additional attributes} and \textcolor{orange}{internal schema}.}
+	\label{fig:example-inferencing}
+\end{figure}
+
+There are three key concepts for defining the schema for each operator in the relational algebra plan:
+
+\begin{itemize}
+	\item The \emph{external schema} (typeset in \textcolor{gray}{gray}) is a relational schema that defines the schema visible for users. This schema is what the Neo4j query planner generates (see \autoref{fig:example-inferencing}).
+	
+	\item The \emph{additional attributes} (typeset in \textcolor{violet}{violet}) define attributes that are required by an operator's ancestors. For example, the \projectiontext ($\projectionop$) and \selectiontext ($\selectionop$) operators might require additional properties. For \autoref{lst:inferencing-example}, the projection requires the $\var{name}$ attribute, while the selection requires the $\var{age}$.
+	
+	\item The \emph{internal schema} (typeset in \textcolor{orange}{orange}) defines a relational schema that contains the \emph{external schema} plus the additional attributes that are required to locally perform computations.
+\end{itemize}
+
+\autoref{fig:neo4-query-plan} illustrates these concepts.
+
+We call the process of calculating the external schema, the additional attributes and the internal schema as \emph{inferencing}.
+
+\subsubsection{More examples}
+
+See the Appendices for more examples, starting with the TCK test cases (\autoref{chp:tck}).
