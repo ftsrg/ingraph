@@ -76,7 +76,7 @@ class QueryProcessor implements Closeable {
 «««			Cannot visualize tree.
 «««		«ELSE»
 «««			\begin{center}
-«««			\begin{adjustbox}{max width=\textwidth}
+«««			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
 «««			«searchTree»
 «««			\end{adjustbox}
 «««			\end{center}
@@ -89,7 +89,7 @@ class QueryProcessor implements Closeable {
 			Cannot visualize incremental tree.
 		«ELSE»
 			\begin{center}
-			\begin{adjustbox}{max width=\textwidth}
+			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
 			«incrementalTree»
 			\end{adjustbox}
 			\end{center}
