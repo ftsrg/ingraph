@@ -16,6 +16,10 @@ class StringEscaper {
 		.replaceAll('''\\(?!string[{}])''', '''\\backslash{}''')
 		.replace('''_''', '''\_''')
 		.replace(''' ''', '''\ ''')
+		// these are required when displaying square brackets in optional arguments
+		// such as \subsection[toctitle]{title}
+		.replace('''[''', '''{[}''')
+		.replace(''']''', '''{]}''')
 	}
 
 	def escapedName(NamedElement element) {
