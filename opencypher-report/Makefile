@@ -7,6 +7,7 @@ all: clean
 	$(COMPILER) $(DOCUMENT)
 	bibtex $(DOCUMENT) > /dev/null
 	$(COMPILER) $(DOCUMENT)
+	echo
 
 clean:
 	echo Cleaning temporary files and PDF...

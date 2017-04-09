@@ -1,5 +1,4 @@
-
-\section{Inferencing Tuples}
+\chapter{Inferencing Tuples}
 
 Graph query engines often use single-machine (even single-threaded), search-based algorithms. Using these algorithms includes many tradeoffs:
 
@@ -17,7 +16,7 @@ However, they have advantageous properties as well:
 	\item They can access properties of elements (e.g. the \texttt{name} property of a vertex or the \texttt{weight} property of an edge) by using a pointer.
 \end{itemize}
 
-\subsubsection{Concepts}
+\subsection{Concepts}
 
 Let's take a simple Cypher query, that returns the name :
 
@@ -57,6 +56,6 @@ There are three key concepts for defining the schema for each operator in the re
 
 We call the process of calculating the external schema, the additional attributes and the internal schema as \emph{inferencing}.
 
-\subsubsection{More examples}
+\subsection{More examples}
 
 See the Appendices for more examples, starting with the TCK test cases (\autoref{chp:tck}).
