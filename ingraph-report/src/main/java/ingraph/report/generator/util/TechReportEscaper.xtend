@@ -4,15 +4,17 @@ class TechReportEscaper {
 
 	def escape(String s) {
 		s //
-			.replaceAll('''#''', ''' no.''') //
-			.replaceAll('''_''', '''\_''') //
-			.replaceAll('''`''', "'") //
+			.replace("#", " no.") //
+			.replace("_", '''\_''') //
+			.replace("`", "'") //
+			.replace("[", "{[}") //
+			.replace("]", "{]}") //
 	}
 
 	def cleanup(String s) {
 		s //
-			.replaceAll('''"""''', "") // """
-			.replaceAll("'''", "") // '''
+			.replace('''"""''', "") // """
+			.replace("'''", "") // '''
 			.replaceAll("\n   ", "\n") // indentation
 			.replaceAll("^\n", "") // newline at the start
 			.replaceAll("\n$", "") // newline at the end

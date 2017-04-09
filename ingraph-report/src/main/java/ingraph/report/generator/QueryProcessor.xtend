@@ -100,7 +100,7 @@ class QueryProcessor implements Closeable {
 	}
 	
 	def toHeader(String title, String queryName) {
-		'''{«title» \textcolor{gray}{(«queryName.escape»)}}'''
+		'''{«title.escape» \textcolor{gray}{(«queryName.escape»)}}'''
 	}
 
 	def expression(RelalgContainer container) {
