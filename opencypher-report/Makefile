@@ -1,11 +1,11 @@
 DOCUMENT=opencypher-report
-COMPILER=lualatex
+COMPILER=lualatex -interaction=batchmode
 
 all: clean
 	git log --oneline -n 1 | sed "s/#/\\\\#/g" | sed "s/\`/'/g" | sed "s|_|\\\\_|" > commit-message.tex
 	$(COMPILER) $(DOCUMENT)
 	$(COMPILER) $(DOCUMENT)
-	bibtex $(DOCUMENT)
+	bibtex $(DOCUMENT) > /dev/null
 	$(COMPILER) $(DOCUMENT)
 
 clean:
