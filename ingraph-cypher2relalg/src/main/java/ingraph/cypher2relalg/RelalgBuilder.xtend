@@ -374,7 +374,7 @@ class RelalgBuilder {
 	def UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content) {
 		// FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
 		// but it should be w/o .get(0)
-		val trimmer = createProjectionOperator => [
+		val projection = createProjectionOperator => [
 			input = content
 			if ("*".equals(returnBody.returnItems.get(0).all)) {
 				// add the non-dontCare vertex variables to the return list sorted by variable name
@@ -425,21 +425,21 @@ class RelalgBuilder {
 //				]
 //			)
 		]
-		if (trimmer.elements.empty) {
+		if (projection.elements.empty) {
 			unrecoverableError('''RETURN clause processed and resulted in no columns values to return''')
 		} else {
 			// let's see if there is a need for grouping
 			var seenAggregate = false
 			val groupingVariables = new HashSet<Variable>
-			for (el : trimmer.elements) {
+			for (el : projection.elements) {
 				seenAggregate = cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
 					seenAggregate)
 			}
 			if (seenAggregate) {
 				// put a grouping operator under the projection operator
-				val trimmerInput = trimmer.input
-				trimmer.input = createGroupingOperator => [
-					input = trimmerInput
+				val projectionInput = projection.input
+				projection.input = createGroupingOperator => [
+					input = projectionInput
 					// order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
 					entries.addAll(groupingVariables.sortBy [
 						ExpressionNameInferencer.inferName(it, logger) + '##' + it.class.name
@@ -451,10 +451,10 @@ class RelalgBuilder {
 		// add duplicate-elimination operator if return DISTINCT was specified
 		val op1 = if (distinct) {
 				createDuplicateEliminationOperator => [
-					input = trimmer
+					input = projection
 				]
 			} else {
-				trimmer
+				projection
 			}
 
 		val order = returnBody.order
