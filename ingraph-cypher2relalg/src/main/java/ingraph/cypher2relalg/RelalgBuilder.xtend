@@ -190,8 +190,12 @@ class RelalgBuilder {
 			val next = if (i + 1 < clauses.length) {
 					clauses.get(i + 1)
 				}
-			if (current instanceof Delete || current instanceof Delete && ( next instanceof Return ) || current instanceof Create || current instanceof With && ! ( next instanceof Unwind ) || current instanceof Unwind ||
-				current instanceof Return) {
+			if (current instanceof Delete && ! ( next instanceof Delete ) && ! ( next instanceof Return )
+			 || current instanceof Create
+			 || current instanceof With && ! ( next instanceof Unwind )
+			 || current instanceof Unwind
+			 ||	current instanceof Return
+			 ) {
 				// [fromX, toX) is the range of clauses that form a subquery
 				val fromX = from
 				val toX = i + 1
@@ -305,21 +309,22 @@ class RelalgBuilder {
 		} else {
 			afterUnwind
 		}
-		val singleQuery_deleteClause = clauses.filter(typeof(Delete)).head
-		val afterDelete = if (singleQuery_deleteClause !== null) {
-			val u0 = singleQuery_deleteClause
-			val u1 = createDeleteOperator => [
-				input = afterCreate
-				detach = u0.detach
-			]
-			for (element: u0.expressions) {
-			  val u2 = element as VariableRef
-			  val u4 = buildDeleteVariableRef(u2)
-			  u1.elements.add(u4)
+		val singleQuery_deleteClauseList = clauses.filter(typeof(Delete))
+		val afterDelete = {
+			var Operator op = afterCreate
+			for (element: singleQuery_deleteClauseList) {
+				val u1 = createDeleteOperator => [
+					detach = element.detach
+				]
+				u1.input = op
+				for (element2: element.expressions) {
+				  val u2 = element2 as VariableRef
+				  val u4 = buildDeleteVariableRef(u2)
+				  u1.elements.add(u4)
+				}
+				op = u1
 			}
-			u1
-		} else {
-			afterCreate
+			op
 		}
 		afterDelete
 	}
