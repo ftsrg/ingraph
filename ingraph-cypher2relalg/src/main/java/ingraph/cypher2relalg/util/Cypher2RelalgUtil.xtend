@@ -248,13 +248,13 @@ class Cypher2RelalgUtil {
 	}
 
 	/**
-	 * Inject the given Left Outer Join operator just above the content
-	 * into operator tree. Content will become the rightInput of the left outer join operator.
+	 * Inject the given natural join operator just above the content
+	 * into operator tree. Content will become the rightInput of the natural join operator.
 	 * @param op A operator tree of the form
 	 *        SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
-	 * @param lojo A Left Outer Join operator instance to be injected.
+	 * @param najo A natural join operator instance to be injected.
 	 */
-	def validateAndInjectLOJO(Operator op, LeftOuterJoinOperator lojo) {
+	def validateAndInjectNaJO(Operator op, JoinOperator najo) {
 		// we find the parent node of content and also validate the sequence in a pass
 		var UnaryOperator parent = null
 		var currentOperator = op
@@ -289,8 +289,8 @@ class Cypher2RelalgUtil {
 		if (parent === null) {
 			unrecoverableError('''This should never happen: after validation, we found parent to be null, but reached this point...''')
 		} else {
-			lojo.rightInput = parent.input
-			parent.input = lojo
+			najo.rightInput = parent.input
+			parent.input = najo
 		}
 		op
 	}

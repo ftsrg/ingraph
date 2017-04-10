@@ -216,15 +216,15 @@ class RelalgBuilder {
 		/*
 		 * Chain subqueries together.
 		 * A single subquery was compiled to the following operator tree:
-		 *  TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
-		 * When we chain them together, the left outer join should be injected just above the content,
+		 *  SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
+		 * When we chain them together, the natural join should be injected just above the content,
 		 * and its right input should be content, its left input should be the chain built so far.
 		 */
 		var chainSoFar = ops.head
 		for (op : ops.tail) {
-			val lojo = createLeftOuterJoinOperator
-			lojo.leftInput = chainSoFar
-			chainSoFar = validateAndInjectLOJO(op, lojo)
+			val najo = createJoinOperator
+			najo.leftInput = chainSoFar
+			chainSoFar = validateAndInjectNaJO(op, najo)
 		}
 		chainSoFar
 	}
