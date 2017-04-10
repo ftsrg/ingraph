@@ -94,7 +94,7 @@ class OperatorConverter {
 			if (ev instanceof EdgeListVariable) {
 				'''{«ev.minHops»}{«ev.maxHops.hopsToString»}'''
 			} else {
-				'''{}{}'''
+				'''{1}{1}'''
 			}
 		]
 	}

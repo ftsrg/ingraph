@@ -22,7 +22,7 @@ class ElementConverter {
 	}
 
 	def dispatch convertElement(AbstractEdgeVariable variable) {
-		//FIXME: for EdgeListVariable instances, serialize limits
+		// for EdgeListVariable instances, limits are serialized directly in OperatorConverter.convertOperator(ExpandOperator op)
 		'''{«variable.escapedName»}{'''
 		+ switch variable.edgeLabelSet?.status {
 			case LabelSetStatus.CONTRADICTING: "CONTRADICTING~LABEL~CONSTRAINTS"
