@@ -77,9 +77,9 @@ class LdbcSnbBiTest extends FunSuite {
         TestCase(23),
         TestCase(24),
 
-        TestCase(3),
-        TestCase(6),
-        TestCase(13),
+//        TestCase(3),
+//        TestCase(6),
+//        TestCase(13),
 
 //        TestCase(8), // PATH
 //        TestCase(9), // WHERE WITH
