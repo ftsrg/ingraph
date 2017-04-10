@@ -204,7 +204,6 @@ class RelalgBuilder {
 				 * for each subQuery, but we retain the the label factories as well as
 				 * top-level container not to break the containment hierarchy and separate variable namespaces.
 				 */
-				// FIXME: chain "return" variables forward to the next builder
 				variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
 				val builder = new RelalgBuilder(topLevelContainer, variableBuilderChain)
 				ops.add(

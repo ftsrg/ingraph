@@ -135,6 +135,8 @@ class VariableBuilder {
 	/**
 	 * Creates a new VariableBuilder instance that has new variable factory instances
 	 * but retains label factories and the topLevelContainer.
+	 * 
+	 * This also chains forward expression variables, i.e. those from a WITH or RETURN clause
 	 */
 	def cloneBuilderWithNewVariableFactories() {
 		new VariableBuilder(topLevelContainer, vertexLabelFactory, edgeLabelFactory, expressionVariableFactoryExtended.elements.values,  logger)
