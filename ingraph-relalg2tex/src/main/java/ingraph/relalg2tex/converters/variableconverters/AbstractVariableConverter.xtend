@@ -10,15 +10,15 @@ class AbstractVariableConverter {
 	extension StringEscaper stringEscaper = new StringEscaper
  
 	def dispatch convertVariable(ElementVariable variable) {
-		'''«variable.escapedName»'''
+		'''\var{«variable.escapedName»}'''
 	}
 
 	def dispatch convertVariable(AttributeVariable variable) {
-		'''«variable.baseVariable.escapedName».«variable.escapedName»'''
+		'''\var{«variable.baseVariable.escapedName».«variable.escapedName»}'''
 	}
 
 	def dispatch convertVariable(ListVariable variable) {
-		'''«variable.escapedName»'''
+		'''\var{«variable.escapedName»}'''
 	}
 
 }

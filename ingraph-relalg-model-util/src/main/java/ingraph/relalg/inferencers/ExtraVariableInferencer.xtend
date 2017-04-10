@@ -1,6 +1,5 @@
 package ingraph.relalg.inferencers
 
-import com.google.common.collect.Iterables
 import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.VariableExtractor
 import ingraph.relalg.collectors.CollectionHelper
@@ -61,7 +60,8 @@ class ExtraVariableInferencer {
 			inputExtraVariables = inputExtraVariables.minus(op.calculatedVariables)
 		}
 
-		op.input.fillExtraVariables(inputExtraVariables)
+		val filteredInputExtraVariables = inputExtraVariables.propagateTo(op.input)
+		op.input.fillExtraVariables(filteredInputExtraVariables)
 	}
 
 	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
@@ -71,11 +71,17 @@ class ExtraVariableInferencer {
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchema = inputOp.basicSchema.map[extractElementVariable]
-		val attributes = extraVariables.filter(AttributeVariable).filter[inputSchema.contains( it.baseVariable.extractElementVariable )]
-		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+		val inputSchemaNames = inputOp.basicSchema.map[toString]
 
-		Iterables.concat(attributes, functions).toList
+		val attributes = extraVariables.filter(AttributeVariable).filter[
+			!inputSchemaNames.contains( it.toString ) && // do not propagate if it is already there
+																										// TODO check this for joins - e.g. if it is available on the left input, do not propagate to the right 
+			inputSchemaNames.contains( it.baseVariable.extractElementVariable.toString )
+		]
+		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
+				.filter[!inputSchemaNames.contains( it.toString )]
+
+		uniqueUnion(attributes, functions)
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {

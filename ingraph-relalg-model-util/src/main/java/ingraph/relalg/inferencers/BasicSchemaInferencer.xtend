@@ -100,17 +100,17 @@ class BasicSchemaInferencer {
 		]
 
 		// extract variables
-		val s = if (op.elementsToRemove.empty) {
+//		val s = if (op.elementsToRemove.empty) {
 				val aggregations = op.elements.extractAggregateFunctions
 				op.aggregations.addAll(aggregations)
 				op.elements.removeAll(aggregations)
-				union(op.elements.extractVariables, aggregations)
-			} else {
-				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
-				val basicSchema = Lists.newArrayList(op.input.basicSchema)
-				basicSchema.removeAll(elementsToRemoveVariables)
-				basicSchema
-			}
+				val s = union(op.elements.extractVariables, aggregations)
+//			} else {
+//				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
+//				val basicSchema = Lists.newArrayList(op.input.basicSchema)
+//				basicSchema.removeAll(elementsToRemoveVariables)
+//				basicSchema
+//			}
 
 		op.defineBasicSchema(s)
 	}

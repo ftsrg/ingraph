@@ -40,6 +40,15 @@ import relalg.RelalgFactory
 import relalg.Variable
 import relalg.VertexLabel
 import relalg.VertexVariable
+import org.eclipse.emf.ecore.EObject
+import org.slizaa.neo4j.opencypher.openCypher.Match
+import org.slizaa.neo4j.opencypher.openCypher.With
+import org.slizaa.neo4j.opencypher.openCypher.Return
+import org.slizaa.neo4j.opencypher.openCypher.Create
+import org.slizaa.neo4j.opencypher.openCypher.Unwind
+import org.slizaa.neo4j.opencypher.openCypher.Delete
+import org.slizaa.neo4j.opencypher.openCypher.Cypher
+import org.slizaa.neo4j.opencypher.openCypher.Order
 
 /**
  * This is the variable builder component of
@@ -199,10 +208,7 @@ class VariableBuilder {
 	}
 
 	/**
-	 * Expression variables from return has the highest priority in name resolution for order by,
-	 * but they don't play a role when building later return items.
-	 *
-	 * These "*Extended" methods take Expression variables into account for name resolution.
+	 * 
 	 */
 	@Deprecated
 	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {

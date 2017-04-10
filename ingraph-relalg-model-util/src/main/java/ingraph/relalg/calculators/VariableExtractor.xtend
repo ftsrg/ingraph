@@ -51,10 +51,7 @@ class VariableExtractor {
 
 	// SortOperator and SortAndTopOperator
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-		val x = op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
-//		println(op.entries.map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(ExpressionVariable).map[expression])
-//		println(x)
-		x
+		op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
@@ -67,28 +64,19 @@ class VariableExtractor {
 	}
 
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
-		// TODO: filter out duplicates
-		val functionExpressions = op.elements.map[expression].filter(FunctionExpression)
+		val functionExpressions = op.elements.map[expression].filter(FunctionExpression).filter[!functor.isAggregation]
 		val arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
 		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
-		
-		val aggregations = op.aggregations.map[expression].filter(FunctionExpression)		
+		val aggregations = op.aggregations.map[expression].filter(FunctionExpression)
 		val aggregationExtraVariables = aggregations.map[extractFunctionArguments].flatten.toList
-		
 
-		val List<ExpressionVariable> otherFunctions = op.elements.filter[expression instanceof FunctionExpression]
-			.filter[!(expression as FunctionExpression).functor.meta && !(expression as FunctionExpression).functor.aggregation]
-			.toList
-
-		op.otherFunctions.addAll(otherFunctions)
-		
 		uniqueUnion(extraVariables, arguments, aggregationExtraVariables)
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
-		val basicSchemaNames = op.basicSchema.map[name]
-		op.entries.filter[!basicSchemaNames.contains(it.name)].toList
+		val basicSchemaNames = op.basicSchema.map[toString]
+		op.entries.filter[!basicSchemaNames.contains(it.toString)].toList
 	}
 
 

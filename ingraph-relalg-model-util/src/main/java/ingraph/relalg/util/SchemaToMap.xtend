@@ -3,7 +3,6 @@ package ingraph.relalg.util
 import com.google.common.collect.ImmutableMap
 import java.util.Map
 import relalg.Operator
-import relalg.Variable
 
 class SchemaToMap {
  

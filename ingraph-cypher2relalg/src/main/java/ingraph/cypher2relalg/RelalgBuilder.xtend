@@ -605,7 +605,7 @@ class RelalgBuilder {
 			val selectionOperator = createSelectionOperator => [
 				condition = buildRelalgLogicalExpression(m.where.expression, joinOperationsOfWhereClause)
 			]
-
+			
 			val selectionInput = if (joinOperationsOfWhereClause.empty) {
 					allDifferentOperator
 				} else {

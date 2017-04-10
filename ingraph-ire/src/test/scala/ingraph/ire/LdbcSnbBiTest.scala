@@ -17,6 +17,8 @@ import ingraph.relalg.expressions.ExpressionUnwrapper
 import relalg.AttributeVariable
 import java.util.Collections
 import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class LdbcSnbBiTest extends FunSuite {
 
@@ -58,30 +60,43 @@ class LdbcSnbBiTest extends FunSuite {
     modelPath("tag_hasType_tagclass") -> "hasType"
   )
 
+  val converterConfig = RelalgConverterConfig.builder
+    .consoleOutput(false) //
+    .standaloneDocument(true) //
+    .includeCommonVariables(true) //
+    .schemaIndices(true) //
+    .build
+  val converter = new Relalg2TexTreeConverter(converterConfig)
+
   case class TestCase(number: Int)
 
   Vector(
-//        TestCase(3),
         TestCase(4),
         TestCase(5),
-//        TestCase(6),
         TestCase(7),
+        TestCase(23),
+        TestCase(24),
+
+        TestCase(3),
+        TestCase(6),
+        TestCase(13),
+
 //        TestCase(8), // PATH
 //        TestCase(9), // WHERE WITH
 //        TestCase(12), // WHERE WITH
-//        TestCase(13),
 //        TestCase(14), // PATH
 //        TestCase(15), // WHERE WITH
 //        TestCase(16), // PATH
 //        TestCase(20), // PATH
-        TestCase(23),
-        TestCase(24),
         null
   ).filter(_ != null) //
     .foreach(
     t => test(s"query-${t.number}-size-1") {
       val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
       val adapter = new IngraphAdapter(query)
+
+      converter.convert(adapter.plan, s"../visualization/ldbc-snb-bi/query-${t.number}")
+
       val tf = new TransactionFactory(16)
       tf.subscribe(adapter.engine.inputLookup)
       val tran = tf.newBatchTransaction()
@@ -110,9 +125,9 @@ class LdbcSnbBiTest extends FunSuite {
       val expectedResults = javaResults.asScala.map(f => resultNames.map(f.get))
       expectedResults.foreach(n => assert(n != null))
 
-      assert(expectedResults.size == actualResults.size)
+      assertResult(expectedResults.size)(actualResults.size)
       for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
-        assert(expected == actual)
+        assertResult(expected)(actual)
       }
     })
 }

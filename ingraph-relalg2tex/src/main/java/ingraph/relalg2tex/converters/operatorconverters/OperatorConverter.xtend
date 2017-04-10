@@ -120,7 +120,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(GroupingAndProjectionOperator op) {
-		#['''«groupingOperator(op)» «projectionOperator(op)»''']
+		#['''\groupingop  «projectionOperator(op)» [«op.order.join("; ")»]''']
 	}
 
 	def createOperator(CreateOperator op) {
