@@ -34,8 +34,6 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(unnecessaryLeftOuterJoinOperatorRule)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
-//		statements.fireWhilePossible(expandOperatorBRule)
-//		statements.fireWhilePossible(swapTopAndProjectionOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
 		statements.fireWhilePossible(mergeGroupingAndProjectionOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
