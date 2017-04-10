@@ -238,7 +238,7 @@ class ExpressionVariable extends Variable {
 /* Operators */
 abstract class Operator {
   refers Variable[] basicSchema
-  refers Variable[] extraVariables // TODO rename to extraVariables
+  refers Variable[] extraVariables
   refers Variable[] fullSchema
   contains Cardinality cardinality
 }
@@ -295,8 +295,7 @@ class SelectionOperator extends UnaryOperator {
  * 
  * It can:
  * - Project variables to a schema, i.e. only keeping a certain set of variables.
- * - Project variables by defining which ones to remove, i.e. only keeping those that were not selected to remove.
- * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc.  
+ * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
  * - Evaluate aggregation functions, e.g. count(n), sum(n.age), etc.
  * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
  *   (i.e. the inferencer algorithm has to propagate these variables to the NullaryOperators)
