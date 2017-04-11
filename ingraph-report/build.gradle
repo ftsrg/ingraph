@@ -6,6 +6,8 @@ dependencies {
   compile project(':ingraph-relalg2tex')
   compile project(':ingraph-optimization-transformations')
 
+  compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.mwe2.launch', version: '2.8.3'
+  compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xtext.generator', version: xtextVersion
   compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
   compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
   compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase', version: xtextVersion
