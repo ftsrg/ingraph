@@ -23,7 +23,8 @@ subprojects {
   repositories {
     jcenter()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
-    maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
+    //maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
+    maven { url 'https://build.incquerylabs.com/nexus/content/repositories/viatra.staging/' }
     maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
   }
 
@@ -71,9 +72,9 @@ ext {
   scalaVersion = '2.11.8'
   scalaTestVersion = '3.0.1'
   slizaaVersion = '1.0.0-SNAPSHOT'
-  viatraMinorVersion = '.2'
-  viatraDseVersion = '0.15' + viatraMinorVersion
-  viatraVersion = '1.5' + viatraMinorVersion
+  viatraMinorVersion = '.0.M1'
+  viatraDseVersion = '0.16' + viatraMinorVersion
+  viatraVersion = '1.6' + viatraMinorVersion
   xtendVersion = '2.10.0'
   xtextVersion = xtendVersion
 }
