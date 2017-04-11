@@ -1,4 +1,4 @@
-plugins { id 'org.xtext.xtend' version '1.0.15' }
+apply plugin: 'application'
 
 dependencies {
   compile project(':ingraph-optimization-transformations')
@@ -9,3 +9,5 @@ dependencies {
   compile group: 'com.google.guava', name: 'guava', version: guavaVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
+
+mainClassName = 'hello.main.HelloWorldApp'
