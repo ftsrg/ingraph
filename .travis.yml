@@ -23,9 +23,7 @@ install:
   - ./gradlew regressionTests --continue --quiet
 script:
   # only build and deploy the results if the build is performed on the master branch
-  - pushd .
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then scripts/generate-and-deploy-report.sh; fi
-  - popd
   - scripts/test.sh --quiet
 notifications:
   slack: ftsrg:ll9rntRuEyb9KC9z5cWAQShn

@@ -4,8 +4,12 @@
 
 set -e
 
+pushd .
+
 ./gradlew report --stacktrace --quiet
 cd opencypher-report
 make
 cd ..
 scripts/deploy.sh
+
+popd
