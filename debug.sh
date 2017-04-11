@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export DEBUG_INGRAPH=1
 while true; do
   cd ~/git/ingraph
   ./gradlew clean distzip
