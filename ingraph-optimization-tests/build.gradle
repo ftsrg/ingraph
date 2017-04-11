@@ -10,4 +10,4 @@ dependencies {
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
 
-mainClassName = 'hello.main.HelloWorldApp'
+mainClassName = 'ingraph.optimization.test.HelloWorldApp'
