@@ -2,7 +2,7 @@
 
 while true; do
   cd ~/git/ingraph
-  gradle clean distzip
+  ./gradlew clean distzip
   cd ingraph-optimization-tests/build/distributions/
   unzip ingraph-optimization-tests-0.2.0.zip
 
