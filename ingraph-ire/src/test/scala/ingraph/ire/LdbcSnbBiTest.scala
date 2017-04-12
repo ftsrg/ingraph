@@ -95,7 +95,7 @@ class LdbcSnbBiTest extends FunSuite {
       val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
       val adapter = new IngraphAdapter(query)
 
-      converter.convert(adapter.plan, s"../visualization/ldbc-snb-bi/query-${t.number}")
+      converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
 
       val tf = new TransactionFactory(16)
       tf.subscribe(adapter.engine.inputLookup)
