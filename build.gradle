@@ -62,7 +62,7 @@ ext {
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
   emfVersion = '2.10.1'
-  guavaVersion = '20.0' // do not upgrade to 21.0 as VIATRA uses https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html
+  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA uses https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html
   jmhVersion = '1.17.5'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
