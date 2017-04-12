@@ -3,8 +3,7 @@ MATCH (:Person)-[:knows]-(friend:Person)
 OPTIONAL MATCH
   (friend)<-[:hasCreator]-(comment:Comment)-[:replyOf]->(:Post)-[:hasTag]->(tag:Tag),
   (tag)-[:hasType]->(tagClass:TagClass)-[:isSubclassOf*0..]->(baseTagClass:TagClass)
-WHERE tagClass.name = $class
-   OR baseTagClass.name = $class
+WHERE baseTagClass.name = $class // this also includes tagClass due to the 0 lower limit
 RETURN
   friend.id AS friendId,
   friend.firstName AS friendFirstName,
