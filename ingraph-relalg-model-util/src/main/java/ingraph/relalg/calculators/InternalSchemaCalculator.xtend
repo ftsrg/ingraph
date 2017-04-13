@@ -1,4 +1,4 @@
-package ingraph.relalg.inferencers
+package ingraph.relalg.calculators
 
 import ingraph.relalg.calculators.JoinAttributeCalculator
 import ingraph.relalg.calculators.MaskCalculator
@@ -19,7 +19,7 @@ import relalg.UnionOperator
 import relalg.Variable
 
 /**
- * Inferences the full schema, including extra attributes.
+ * Calculates the internal schema that consists of the external schema plus the extra variables.
  */
 class InternalSchemaCalculator {
 

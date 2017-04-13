@@ -1,32 +1,28 @@
-package ingraph.relalg.inferencers
+package ingraph.relalg.calculators
 
 import ingraph.logger.IngraphLogger
-import ingraph.relalg.calculators.VariableExtractor
 import ingraph.relalg.collectors.CollectionHelper
-import ingraph.relalg.util.ElementVariableExtractor
 import java.util.List
 import relalg.AbstractJoinOperator
-import relalg.AttributeVariable
-import relalg.ExpressionVariable
-import relalg.FunctionExpression
 import relalg.NullaryOperator
-import relalg.Operator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
-import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 
 /**
- * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
+ * Calculates extra variables.
+ * 
+ * For example, a projection may need extra variables for projecting attributes
+ * or a selection may need extra attributes for evaluating conditions.
  */
 class ExtraVariablesCalculator {
 
 	extension IngraphLogger logger = new IngraphLogger(ExtraVariablesCalculator.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
-	extension ElementVariableExtractor elementVariableExtractor = new ElementVariableExtractor
+	extension ExtraVariablesPropagator extraVariablesPropagator = new ExtraVariablesPropagator
 
 	def calculateExtraVariables(RelalgContainer container) {
 		if (!container.incrementalPlan) {
@@ -45,11 +41,18 @@ class ExtraVariablesCalculator {
 		container
 	}
 
+	/*
+	 * nullary operators
+	 */
 	private def dispatch void fillExtraVariables(NullaryOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
 	}
 
-	// some unary operators, such as selection, projection and grouping, often require extra variables
+	/*
+	 * unary operators
+	 * 
+	 * some unary operators, such as selection, projection and grouping, often require extra variables
+	 */
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
 
@@ -64,24 +67,13 @@ class ExtraVariablesCalculator {
 		op.input.fillExtraVariables(filteredInputExtraVariables)
 	}
 
+	/*
+	 * binary operators 
+	 */
 	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
 		op.leftInput.fillExtraVariables(extraVariables)
 		op.rightInput.fillExtraVariables(extraVariables)
-	}
-
-	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchemaNames = inputOp.externalSchema.map[toString]
-
-		val attributes = extraVariables.filter(AttributeVariable).filter[
-			!inputSchemaNames.contains( it.toString ) && // do not propagate if it is already there
-																										// TODO check this for joins - e.g. if it is available on the left input, do not propagate to the right 
-			inputSchemaNames.contains( it.baseVariable.extractElementVariable.toString )
-		]
-		val functions = extraVariables.filter(ExpressionVariable).filter[expression instanceof FunctionExpression] // TODO this should involve a decision
-				.filter[!inputSchemaNames.contains( it.toString )]
-
-		uniqueUnion(attributes, functions)
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {
@@ -94,7 +86,6 @@ class ExtraVariablesCalculator {
 		// as extra attributes that are available from both the left and right input
 		rightExtraVariables.removeAll(leftExtraVariables)
 
-		// val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
 		op.leftInput.fillExtraVariables(leftExtraVariables)
 		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}

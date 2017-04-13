@@ -2,6 +2,9 @@ package ingraph.report.generator
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.logger.IngraphLogger
+import ingraph.relalg.calculators.ExternalSchemaCalculator
+import ingraph.relalg.calculators.ExtraVariablesCalculator
+import ingraph.relalg.calculators.InternalSchemaCalculator
 import ingraph.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
@@ -13,9 +16,6 @@ import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
-import ingraph.relalg.inferencers.ExternalSchemaCalculator
-import ingraph.relalg.inferencers.InternalSchemaCalculator
-import ingraph.relalg.inferencers.ExtraVariablesCalculator
 
 class QueryProcessor implements Closeable {
 	

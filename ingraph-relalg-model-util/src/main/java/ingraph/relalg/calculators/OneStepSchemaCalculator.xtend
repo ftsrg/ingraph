@@ -1,4 +1,4 @@
-package ingraph.relalg.inferencers
+package ingraph.relalg.calculators
 
 import relalg.RelalgContainer
 
@@ -12,7 +12,7 @@ class OneStepSchemaCalculator {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	def inferCompleteSchema(RelalgContainer container) {
+	def calculateSchema(RelalgContainer container) {
 		container.calculateExternalSchema
 		container.calculateExtraVariables
 		container.calculateInternalSchema

@@ -1,9 +1,8 @@
-package ingraph.relalg.inferencers
+package ingraph.relalg.calculators
 
 import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
-import ingraph.relalg.calculators.JoinAttributeCalculator
 import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
@@ -20,7 +19,6 @@ import relalg.Operator
 import relalg.PathOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
-import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
@@ -28,9 +26,9 @@ import relalg.VariableExpression
 import relalg.function.FunctionCategory
 
 /**
- * Infers the basic schema of the operators in the relational algebra tree.
+ * Calculates the external schema of the operators in the relational algebra tree.
  * 
- * This inferencing uses a postorder traversal (action are applied from the bottom to the top) 
+ * This calculation uses a postorder traversal (action are applied from the bottom to the top) 
  * first it uses recursion / dispatch methods to reach the (unary) input nodes,
  * then each method returns with the inferred schema.
  * 
@@ -135,6 +133,7 @@ class ExternalSchemaCalculator {
 //	private def dispatch List<Variable> fillexternalSchema(GroupingAndProjectionOperator op) {
 //		throw new UnsupportedOperationException("GroupingAndProjectionOperator not yet supported.")
 //	}
+
 	private def dispatch List<Variable> fillExternalSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.externalSchema)
 
