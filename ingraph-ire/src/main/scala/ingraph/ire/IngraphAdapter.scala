@@ -3,11 +3,11 @@ package ingraph.ire
 import hu.bme.mit.ire.Transaction
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg2rete.Relalg2ReteTransformationAndInferencer
+import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import org.supercsv.prefs.CsvPreference
 
 class IngraphAdapter(querySpecification: String) {
-  val plan = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(querySpecification))
+  val plan = Relalg2ReteTransformationAndSchemaCalculator.apply(Cypher2Relalg.processString(querySpecification))
 
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
 

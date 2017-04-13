@@ -42,23 +42,23 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 		'''
 		[
 			{«op.operator»
-			«IF op.extractContainer.basicSchemaInferred»
+			«IF op.extractContainer.isExternalSchemaInferred»
 			\\ \footnotesize
-			$\color{gray} «op.basicSchema.convertSchema» $
+			$\color{externalschemacolor} «op.externalSchema.convertSchema» $
 			«ENDIF»
 			«IF op.extractContainer.isExtraVariablesInferred»
 			\\ \footnotesize
-			$\color{violet} «op.extraVariables.convertSchema» $
+			$\color{extravariablescolor} «op.extraVariables.convertSchema» $
 			«ENDIF»
-			«IF op.extractContainer.fullSchemaInferred»
+			«IF op.extractContainer.isInternalSchemaInferred»
 			\\ \footnotesize
 			«IF op instanceof BeamerOperator»
-			$\color{orange} «op.fullSchema.convertSchemaWithIndices(op.tupleIndices)»$
+			$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
 			«ELSE»
-			$\color{orange} «op.fullSchema.convertSchemaWithIndices»$
+			$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices»$
 			«ENDIF»
 			«ENDIF»
-			«IF op instanceof AbstractJoinOperator && op.extractContainer.fullSchemaInferred && config.includeCommonVariables»
+			«IF op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
 			\\ \footnotesize
 			$\color{orange}
 			\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :

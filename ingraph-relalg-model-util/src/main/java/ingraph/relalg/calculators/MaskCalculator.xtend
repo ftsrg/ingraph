@@ -38,10 +38,5 @@ class MaskCalculator {
 	def dispatch void calculateTuples(UnionOperator op) {
 		// do nothing
 	}
-	
-	// ternary operators
-	def dispatch void calculateTuples(TernaryOperator op) {
-		// TODO do something
-	}
 
 }

@@ -105,7 +105,7 @@ class LdbcSnbBiTest extends FunSuite {
       adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
       tran.close()
       import ingraph.expressionparser.Conversions._
-      val resultNames = adapter.plan.getRootExpression.getBasicSchema.map {
+      val resultNames = adapter.plan.getRootExpression.getExternalSchema.map {
         case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
         case e => e.getName
       }

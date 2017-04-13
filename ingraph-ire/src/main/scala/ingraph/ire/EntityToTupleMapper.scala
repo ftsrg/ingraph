@@ -24,7 +24,7 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
 
   def edgeToTupleType(edge: IngraphEdge, operator: GetEdgesOperator): Tuple = {
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
-      operator.getFullSchema.drop(3)
+      operator.getInternalSchema.drop(3)
         .map(a => {
         val element = ExpressionUnwrapper.extractBaseVariable(a.asInstanceOf[AttributeVariable])
         element match {
@@ -54,7 +54,7 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
         val (labels, operators) = vertexLookup(f)
         if (labels.subsetOf(vertex.labels)) {
           for (operator <- operators) {
-            val tuple = elementToNode(vertex, operator.getFullSchema.map(_.getName))
+            val tuple = elementToNode(vertex, operator.getInternalSchema.map(_.getName))
             transaction.add(operator.getVertexVariable.getName, tuple)
           }
         }

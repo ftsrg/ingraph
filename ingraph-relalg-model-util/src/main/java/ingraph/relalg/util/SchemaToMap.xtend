@@ -6,18 +6,10 @@ import relalg.Operator
 
 class SchemaToMap {
  
-//	def Map<Variable, Integer> schemaToMap(Operator op) {
-//		val mapBuilder = new ImmutableMap.Builder<Variable, Integer>()
-//		for (i : 0 ..< op.fullSchema.length) {
-//			mapBuilder.put(op.fullSchema.get(i), i)
-//		}
-//		return mapBuilder.build
-//	}
-
 	def Map<String, Integer> schemaToMapNames(Operator op) {
 		val mapBuilder = new ImmutableMap.Builder<String, Integer>()
-		for (i : 0 ..< op.fullSchema.length) {
-			mapBuilder.put(op.fullSchema.get(i).toString, i)
+		for (i : 0 ..< op.internalSchema.length) {
+			mapBuilder.put(op.internalSchema.get(i).toString, i)
 		}
 		return mapBuilder.build
 	}

@@ -2,9 +2,6 @@ package ingraph.report.generator
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.logger.IngraphLogger
-import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg.inferencers.ExtraVariableInferencer
-import ingraph.relalg.inferencers.FullSchemaInferencer
 import ingraph.relalg2rete.Relalg2ReteTransformation
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
@@ -16,13 +13,16 @@ import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
+import ingraph.relalg.inferencers.ExternalSchemaCalculator
+import ingraph.relalg.inferencers.InternalSchemaCalculator
+import ingraph.relalg.inferencers.ExtraVariablesCalculator
 
 class QueryProcessor implements Closeable {
 	
 	extension Relalg2ReteTransformation relalg2ReteTransformation = new Relalg2ReteTransformation
-	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
-	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
+	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
+	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 	extension TechReportEscaper escaper = new TechReportEscaper
 	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 
@@ -106,7 +106,7 @@ class QueryProcessor implements Closeable {
 	def expression(RelalgContainer container) {
 		try {
 			val expressionContainer = EcoreUtil.copy(container)
-			expressionContainer.inferBasicSchema
+			expressionContainer.calculateExternalSchema
 			expressionConverter.convert(expressionContainer).toString
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
@@ -117,7 +117,7 @@ class QueryProcessor implements Closeable {
 	def visualizeTree(RelalgContainer container) {
 		try {
 			val treeContainer = EcoreUtil.copy(container)
-			treeContainer.inferBasicSchema
+			treeContainer.calculateExternalSchema
 			treeSerializer.convert(treeContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
@@ -129,9 +129,9 @@ class QueryProcessor implements Closeable {
 		try {
 			val incrementalContainer = EcoreUtil.copy(container)
 			incrementalContainer.transformToRete
-			incrementalContainer.inferBasicSchema
-			incrementalContainer.inferExtraVariables
-			incrementalContainer.inferFullSchema
+			incrementalContainer.calculateExternalSchema
+			incrementalContainer.calculateExtraVariables
+			incrementalContainer.calculateInternalSchema
 			treeSerializer.convert(incrementalContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))

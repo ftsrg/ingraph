@@ -21,22 +21,22 @@ import relalg.Variable
 /**
  * Infers extra variables. For example, a projection or a selection may need extra variables for projecting attributes or evaluating conditions.
  */
-class ExtraVariableInferencer {
+class ExtraVariablesCalculator {
 
-	extension IngraphLogger logger = new IngraphLogger(ExtraVariableInferencer.name)
+	extension IngraphLogger logger = new IngraphLogger(ExtraVariablesCalculator.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension ElementVariableExtractor elementVariableExtractor = new ElementVariableExtractor
 
-	def inferExtraVariables(RelalgContainer container) {
+	def calculateExtraVariables(RelalgContainer container) {
 		if (!container.incrementalPlan) {
-			throw new IllegalStateException("ExtraVariableInferencer must be executed on an incremental query plan")
+			throw new IllegalStateException("ExtraVariablesCalculator must be executed on an incremental query plan")
 		}
 
-		if (!container.basicSchemaInferred) {
-			throw new IllegalStateException("BasicSchemaInferencer must be executed before ExtraVariableInferencer")
+		if (!container.isExternalSchemaInferred) {
+			throw new IllegalStateException("ExternalSchemaCalculator must be executed before ExtraVariableCalculator")
 		} else if (container.isExtraVariablesInferred) {
-			throw new IllegalStateException("ExtraVariableInferencer on relalg container was already executed")
+			throw new IllegalStateException("ExtraVariablesCalculator on relalg container was already executed")
 		} else {
 			container.extraVariablesInferred = true
 		}
@@ -71,7 +71,7 @@ class ExtraVariableInferencer {
 	}
 
 	private def propagateTo(List<Variable> extraVariables, Operator inputOp) {
-		val inputSchemaNames = inputOp.basicSchema.map[toString]
+		val inputSchemaNames = inputOp.externalSchema.map[toString]
 
 		val attributes = extraVariables.filter(AttributeVariable).filter[
 			!inputSchemaNames.contains( it.toString ) && // do not propagate if it is already there
@@ -96,24 +96,6 @@ class ExtraVariableInferencer {
 
 		// val orderedExtraVariables = union(leftExtraVariables, rightExtraVariables)
 		op.leftInput.fillExtraVariables(leftExtraVariables)
-		op.rightInput.fillExtraVariables(rightExtraVariables)
-	}
-
-	private def dispatch void fillExtraVariables(TernaryOperator op, List<Variable> extraVariables) {
-		op.extraVariables.addAll(extraVariables)
-		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
-		val middleExtraVariables = extraVariables.propagateTo(op.middleInput)
-		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)
-
-		// remove duplicates as we only need each extra variable once
-		// see the related comment in inferDetailedSchema for BinaryOperators
-		middleExtraVariables.removeAll(leftExtraVariables)
-
-		rightExtraVariables.removeAll(leftExtraVariables)
-		rightExtraVariables.removeAll(middleExtraVariables)
-
-		op.leftInput.fillExtraVariables(leftExtraVariables)
-		op.middleInput.fillExtraVariables(middleExtraVariables)
 		op.rightInput.fillExtraVariables(rightExtraVariables)
 	}
 

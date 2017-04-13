@@ -62,7 +62,7 @@ object EngineFactory {
                 e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortAndTopNode(
                   expr.child,
-                  op.getFullSchema.length,
+                  op.getInternalSchema.length,
                   sortKeys,
                   skip,
                   limit,
@@ -75,12 +75,12 @@ object EngineFactory {
                 e => ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortNode(
                 expr.child,
-                op.getFullSchema.length,
+                op.getInternalSchema.length,
                 sortKeys,
                 op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
               )))
 
-            case op: TopOperator => 
+            case op: TopOperator =>
               throw new IllegalStateException("Incremental query plan should not contain TopOperators, only SortAndTopOperators are allowed.")
 
             case op: SelectionOperator =>
@@ -120,8 +120,8 @@ object EngineFactory {
                 val rightMask = emfToInt(op.getRightMask)
                 newLocal(Props(new JoinNode(
                     expr.child,
-                    op.getLeftInput.getFullSchema.length,
-                    op.getRightInput.getFullSchema.length,
+                    op.getLeftInput.getInternalSchema.length,
+                    op.getRightInput.getInternalSchema.length,
                     leftMask,
                     rightMask
                 )))
@@ -130,8 +130,8 @@ object EngineFactory {
                 val rightMask = emfToInt(op.getRightMask)
                 newLocal(Props(new LeftOuterJoinNode(
                   expr.child,
-                  op.getLeftInput.getFullSchema.length,
-                  op.getRightInput.getFullSchema.length,
+                  op.getLeftInput.getInternalSchema.length,
+                  op.getRightInput.getInternalSchema.length,
                   leftMask,
                   rightMask
                 )))

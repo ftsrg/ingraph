@@ -37,9 +37,8 @@ import relalg.function.FunctionCategory
  * For example, a join node concatenates the schema of its input nodes (left/right) and removes
  * duplicate attributes. 
  */
-class BasicSchemaInferencer {
+class ExternalSchemaCalculator {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
 	extension CollectionHelper collectionHelper = new CollectionHelper
@@ -53,37 +52,37 @@ class BasicSchemaInferencer {
 		this.includeEdges = includeEdges
 	}
 
-	def inferBasicSchema(RelalgContainer container) {
-		if (container.basicSchemaInferred) {
-			throw new IllegalStateException("BasicSchemaInferencer on relalg container was already executed")
+	def calculateExternalSchema(RelalgContainer container) {
+		if (container.isExternalSchemaInferred) {
+			throw new IllegalStateException("ExternalSchemaCalculator on relalg container was already executed")
 		} else {
-			container.basicSchemaInferred = true
+			container.externalSchemaInferred = true
 		}
 
-		container.rootExpression.traverse([fillBasicSchema])
+		container.rootExpression.traverse([fillExternalSchema])
 		container
 	}
 
 	// nullary operators
-	private def dispatch List<Variable> fillBasicSchema(DualObjectSourceOperator op) {
-		op.defineBasicSchema(#[])
+	private def dispatch List<Variable> fillExternalSchema(DualObjectSourceOperator op) {
+		op.defineExternalSchema(#[])
 	}
 
-	private def dispatch List<Variable> fillBasicSchema(GetVerticesOperator op) {
-		op.defineBasicSchema(#[op.vertexVariable])
+	private def dispatch List<Variable> fillExternalSchema(GetVerticesOperator op) {
+		op.defineExternalSchema(#[op.vertexVariable])
 	}
 
-	private def dispatch List<Variable> fillBasicSchema(GetEdgesOperator op) {
+	private def dispatch List<Variable> fillExternalSchema(GetEdgesOperator op) {
 		if (includeEdges) {
-			op.defineBasicSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
+			op.defineExternalSchema(#[op.sourceVertexVariable, op.edgeVariable, op.targetVertexVariable])
 		} else {
-			op.defineBasicSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
+			op.defineExternalSchema(#[op.sourceVertexVariable, op.targetVertexVariable])
 		}
 	}
 
 	// unary operators
-	private def dispatch List<Variable> fillBasicSchema(ProjectionOperator op) {
-		val schema = op.input.basicSchema
+	private def dispatch List<Variable> fillExternalSchema(ProjectionOperator op) {
+		val schema = op.input.externalSchema
 
 		// check if all projected variables are in the schema
 		// 1) vertices and edges
@@ -107,12 +106,12 @@ class BasicSchemaInferencer {
 				val s = union(op.elements.extractVariables, aggregations)
 //			} else {
 //				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
-//				val basicSchema = Lists.newArrayList(op.input.basicSchema)
-//				basicSchema.removeAll(elementsToRemoveVariables)
-//				basicSchema
+//				val externalSchema = Lists.newArrayList(op.input.externalSchema)
+//				externalSchema.removeAll(elementsToRemoveVariables)
+//				externalSchema
 //			}
 
-		op.defineBasicSchema(s)
+		op.defineExternalSchema(s)
 	}
 
 	private def extractVariables(List<ExpressionVariable> expressionVariables) {
@@ -133,55 +132,55 @@ class BasicSchemaInferencer {
 		].toList
 	}
 
-//	private def dispatch List<Variable> fillBasicSchema(GroupingAndProjectionOperator op) {
+//	private def dispatch List<Variable> fillexternalSchema(GroupingAndProjectionOperator op) {
 //		throw new UnsupportedOperationException("GroupingAndProjectionOperator not yet supported.")
 //	}
-	private def dispatch List<Variable> fillBasicSchema(ExpandOperator op) {
-		val schema = Lists.newArrayList(op.input.basicSchema)
+	private def dispatch List<Variable> fillExternalSchema(ExpandOperator op) {
+		val schema = Lists.newArrayList(op.input.externalSchema)
 
 		if (includeEdges) {
 			schema.add(op.edgeVariable)
 		}
 		schema.add(op.targetVertexVariable)
-		op.defineBasicSchema(schema)
+		op.defineExternalSchema(schema)
 	}
 
 	// rest of the unary operators
-	private def dispatch List<Variable> fillBasicSchema(UnaryOperator op) {
-		val schema = Lists.newArrayList(op.input.basicSchema)
-		op.defineBasicSchema(schema)
+	private def dispatch List<Variable> fillExternalSchema(UnaryOperator op) {
+		val schema = Lists.newArrayList(op.input.externalSchema)
+		op.defineExternalSchema(schema)
 	}
 
 	// binary operators
-	private def dispatch List<Variable> fillBasicSchema(AbstractJoinOperator op) {
-		val leftInputSchema = Lists.newArrayList(op.leftInput.basicSchema)
-		val rightInputSchema = Lists.newArrayList(op.rightInput.basicSchema)
+	private def dispatch List<Variable> fillExternalSchema(AbstractJoinOperator op) {
+		val leftInputSchema = Lists.newArrayList(op.leftInput.externalSchema)
+		val rightInputSchema = Lists.newArrayList(op.rightInput.externalSchema)
 		val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
-		op.defineBasicSchema(schema)
+		op.defineExternalSchema(schema)
 
 		// calculate common variables
-		val rightSchemaNames = op.rightInput.basicSchema.map[name]
-		val commonVariables = op.leftInput.basicSchema.filter[
+		val rightSchemaNames = op.rightInput.externalSchema.map[name]
+		val commonVariables = op.leftInput.externalSchema.filter[
 			variable | rightSchemaNames.contains(variable.name)
 		]
 		op.commonVariables.addAll(commonVariables)
 
-		op.basicSchema
+		op.externalSchema
 	}
 
-	private def dispatch List<Variable> fillBasicSchema(UnionOperator op) {
+	private def dispatch List<Variable> fillExternalSchema(UnionOperator op) {
 		// TODO I think this does the right thing but I am not sure - SzG
-		if (op.leftInput.basicSchema.equals(op.rightInput.basicSchema)) {
+		if (op.leftInput.externalSchema.equals(op.rightInput.externalSchema)) {
 			throw new IllegalStateException("All sub queries in a UNION must have the same column names")
 		}
 		// we only keep the left schema
-		op.defineBasicSchema(op.leftInput.basicSchema)
+		op.defineExternalSchema(op.leftInput.externalSchema)
 	}
 
 	// unary operator again
-	private def dispatch List<Variable> fillBasicSchema(PathOperator op) {
+	private def dispatch List<Variable> fillExternalSchema(PathOperator op) {
 		val schema = Lists.newArrayList(Iterables.concat(
-			op.input.basicSchema
+			op.input.externalSchema
 		))
 
 		//FIXME: do something meaningful here
@@ -192,18 +191,18 @@ class BasicSchemaInferencer {
 //			schema.add(listExpressionVariable)
 //		}
 		schema.add(op.targetVertexVariable)
-		op.defineBasicSchema(schema)
+		op.defineExternalSchema(schema)
 	}
 
 	/**
 	 * defineSchema
 	 */
-	private def defineBasicSchema(Operator op, List<Variable> basicSchema) {
+	private def defineExternalSchema(Operator op, List<Variable> externalSchema) {
 		// EObjectEList.addAll() would remove duplicates anyways, 
 		// but we use Guava to explicitly remove duplicates (while preserving iteration order)
-		val uniqueList = ImmutableSet.copyOf(basicSchema).asList()
-		op.basicSchema.addAll(uniqueList)
-		basicSchema
+		val uniqueList = ImmutableSet.copyOf(externalSchema).asList()
+		op.externalSchema.addAll(uniqueList)
+		externalSchema
 	}
 
 }

@@ -75,8 +75,8 @@ class VariableExtractor {
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
-		val basicSchemaNames = op.basicSchema.map[toString]
-		op.entries.filter[!basicSchemaNames.contains(it.toString)].toList
+		val externalSchemaNames = op.externalSchema.map[toString]
+		op.entries.filter[!externalSchemaNames.contains(it.toString)].toList
 	}
 
 
