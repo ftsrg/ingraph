@@ -48,33 +48,32 @@ class InternalSchemaCalculator {
 	 */
 	// nullary operators
 	private def dispatch void fillInternalSchema(NullaryOperator op) {
-		val detailedSchema = uniqueUnion(op.externalSchema, op.extraVariables)
-		op.defineInternalSchema(detailedSchema)
+		val internalSchema = uniqueUnion(op.externalSchema, op.extraVariables)
+		op.defineInternalSchema(internalSchema)
 	}
 
 	// unary operators
 	private def dispatch void fillInternalSchema(UnaryOperator op) {
-		val detailedSchema = op.input.internalSchema
-		op.defineInternalSchema(detailedSchema)
+		val internalSchema = op.input.internalSchema
+		op.defineInternalSchema(internalSchema)
 	}
-	
+
 	// binary operators
 	private def dispatch void fillInternalSchema(UnionOperator op) {
-		// TODO left/right inputs should be the same for their detailed schema
-		op.defineInternalSchema(op.leftInput.internalSchema)
+		// TODO left/right inputs should be the same for their external schema
+		val internalSchema = op.leftInput.internalSchema
+		op.defineInternalSchema(internalSchema)
 	}
 
 	private def dispatch void fillInternalSchema(AbstractJoinOperator op) {
 		val internalSchema = calculateJoinAttributes(op, op.getLeftInput.internalSchema, op.getRightInput.internalSchema)
 		op.defineInternalSchema(internalSchema)
 	}
-	
+
 	/**
-	 * defineSchema
+	 * defineInternalSchema
 	 */
 	private def dispatch void defineInternalSchema(ProductionOperator op, List<? extends Variable> internalSchema) {
-		// this projects "-1" in a number of cases, e.g.
-		// - if a literal value was assigned to the variables
 		val internalSchemaNames = internalSchema.map[name]
 
 		op.elements.addAll(op.externalSchema.map[
@@ -89,33 +88,28 @@ class InternalSchemaCalculator {
 			]
 		])
 		op.internalSchema.addAll(op.externalSchema)
+
+		// this projects "-1" in a number of cases, e.g. if a literal value was assigned to the variables
 		op.tupleIndices.addAll(op.internalSchema.map[variable | internalSchemaNames.indexOf(variable.name)])
 	}
 
 	private def dispatch void defineInternalSchema(GroupingAndProjectionOperator op, List<? extends Variable> internalSchema) {
-		op.internalSchemaGroupingOperator(internalSchema)
 		op.internalSchemaProjectionOperator(internalSchema)
-		
 		val varNames = union(op.otherFunctions, op.aggregations).map[toString]
 		op.order.addAll(op.internalSchema.map[varNames.indexOf(toString)])
-	}
-
-	private def dispatch void defineInternalSchema(GroupingOperator op, List<? extends Variable> internalSchema) {
-		op.internalSchemaGroupingOperator(internalSchema)
 	}
 
 	private def dispatch void defineInternalSchema(ProjectionOperator op, List<? extends Variable> internalSchema) {
 		op.internalSchemaProjectionOperator(internalSchema)
 	}
 
-	private def internalSchemaGroupingOperator(GroupingOperator op, List<? extends Variable> internalSchema) {
-//		op.entries.addAll(op.input.extraVariables)
-//			val entries = new ArrayList(op.entries)
-//			val newEntries = uniqueUnion(entries, op.input.extraVariables)
-//			op.entries.clear
-//			op.entries.addAll(newEntries)
+	private def dispatch void defineInternalSchema(Operator op, List<? extends Variable> internalSchema) {
+		op.internalSchema.addAll(internalSchema)
 	}
 
+	/*
+	 * Miscellaneous 
+	 */
 	private def internalSchemaProjectionOperator(ProjectionOperator op, List<? extends Variable> internalSchema) {
 		val internalSchemaNames = internalSchema.map[name]
 		op.internalSchema.addAll(uniqueUnion(op.externalSchema, op.extraVariables))
@@ -125,8 +119,5 @@ class InternalSchemaCalculator {
 		op.otherFunctions.addAll(others)
 	}
 
-	private def dispatch void defineInternalSchema(Operator op, List<? extends Variable> internalSchema) {
-		op.internalSchema.addAll(internalSchema)
-	}
 
 }
