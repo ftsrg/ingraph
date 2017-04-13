@@ -5,11 +5,11 @@ import org.scalatest.WordSpec
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg2rete.Relalg2ReteTransformationAndInferencer
+import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 
 class ExpressionParserTest extends WordSpec {
   def getSelectionOperator(query: String): SelectionOperator = {
-    val relalg = Relalg2ReteTransformationAndInferencer.apply(Cypher2Relalg.processString(query))
+    val relalg = Relalg2ReteTransformationAndSchemaCalculator.apply(Cypher2Relalg.processString(query))
     relalg.getRootExpression
       .asInstanceOf[ProductionOperator].getInput
       .asInstanceOf[ProjectionOperator].getInput
