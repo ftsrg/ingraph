@@ -5,7 +5,6 @@ import ingraph.relalg.collectors.CollectionHelper
 import java.util.List
 import relalg.AbstractJoinOperator
 import relalg.NullaryOperator
-import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.UnaryOperator
 import relalg.UnionOperator
@@ -57,12 +56,7 @@ class ExtraVariablesCalculator {
 		op.extraVariables.addAll(extraVariables)
 
 		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
-		var inputExtraVariables = uniqueUnion(extraVariables, newExtraVariables)
-
-		if (op instanceof ProjectionOperator) {
-			inputExtraVariables = inputExtraVariables.minus(op.calculatedVariables)
-		}
-
+		var inputExtraVariables = uniqueUnion(extraVariables, newExtraVariables).minus(op.calculatedVariables)
 		val filteredInputExtraVariables = inputExtraVariables.propagateTo(op.input)
 		op.input.fillExtraVariables(filteredInputExtraVariables)
 	}
@@ -72,18 +66,19 @@ class ExtraVariablesCalculator {
 	 */
 	private def dispatch void fillExtraVariables(UnionOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
+
 		op.leftInput.fillExtraVariables(extraVariables)
 		op.rightInput.fillExtraVariables(extraVariables)
 	}
 
 	private def dispatch void fillExtraVariables(AbstractJoinOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
+	
+		// Calculate left and right extra variables -- we only need each extra variable once.
+		// For variables that could be propagated to both sides,
+		// we choose the left side as it works for both equijoin and antijoin operators.
 		val leftExtraVariables = extraVariables.propagateTo(op.leftInput)
 		val rightExtraVariables = extraVariables.propagateTo(op.rightInput)
-
-		// remove duplicates as we only need each extra variable once
-		// we choose "right\left" as it works for both equijoin and antijoin operators,
-		// as extra attributes that are available from both the left and right input
 		rightExtraVariables.removeAll(leftExtraVariables)
 
 		op.leftInput.fillExtraVariables(leftExtraVariables)

@@ -3,13 +3,13 @@ package ingraph.cypher2relalg.trainbenchmark
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.cypherparser.CypherUtil
+import ingraph.relalg.calculators.ExternalSchemaCalculator
 import java.io.IOException
 import org.junit.Test
-import ingraph.relalg.inferencers.ExternalSchemaCalculator
 
 class TrainBenchmarkCypher2RelalgTest {
 
-	extension ExternalSchemaCalculator si = new ExternalSchemaCalculator
+	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)

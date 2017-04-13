@@ -17,11 +17,11 @@ class CypherUtil {
 	def static void save(Cypher cypher, String filename) {
 		EcoreUtil.resolveAll(cypher)
 
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(CypherUtil.MODEL_EXTENSION,
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(MODEL_EXTENSION,
 			new XMIResourceFactoryImpl())
 
 		val resourceSet = new ResourceSetImpl
-		val filePath = filename + "." + CypherUtil.MODEL_EXTENSION
+		val filePath = filename + "." + MODEL_EXTENSION
 		val absoluteFilePath = new File(filePath).absolutePath
 		
 		val uri = URI.createFileURI(absoluteFilePath)
