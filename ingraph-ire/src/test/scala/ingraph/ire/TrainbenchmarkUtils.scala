@@ -29,7 +29,7 @@ object TrainbenchmarkUtils {
   )
 
   def readModelAndGetResults(query: String, size: Int): Iterable[Tuple] = {
-    val adapter = new IngraphAdapter(query)
+    val adapter = new IngraphAdapter(query, null) // TODO passing null is not a good idea
     val tf = new TransactionFactory(16)
     tf.subscribe(adapter.engine.inputLookup)
     val tran = tf.newBatchTransaction()

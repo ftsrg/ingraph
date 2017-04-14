@@ -33,7 +33,7 @@ class QueryProcessor implements Closeable {
 	def boolean toSubsection(TestQuery testQuery, List<CharSequence> subsections) {
 		var RelalgContainer container = null
 		try {
-			container = Cypher2Relalg.processString(testQuery.querySpecification)
+			container = Cypher2Relalg.processString(testQuery.querySpecification, testQuery.queryName)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
 		}

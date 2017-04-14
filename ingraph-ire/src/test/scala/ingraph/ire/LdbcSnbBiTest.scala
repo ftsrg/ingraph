@@ -93,7 +93,7 @@ class LdbcSnbBiTest extends FunSuite {
     .foreach(
     t => test(s"query-${t.number}-size-1") {
       val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
-      val adapter = new IngraphAdapter(query)
+      val adapter = new IngraphAdapter(query, s"ldbc-snb-bi-${t.number}")
 
       converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
 

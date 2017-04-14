@@ -133,7 +133,7 @@ class RelalgBuilder {
 		this.variableBuilder = variableBuilder
 	}
 
-	def build(Cypher cypher) {
+	def build(Cypher cypher, String queryName) {
 		EcoreUtil.resolveAll(cypher)
 
 		if (Cypher2RelalgConfig.isDebugMode) {
@@ -145,6 +145,11 @@ class RelalgBuilder {
 		]
 
 		topLevelContainer
+	}
+
+	@Deprecated
+	def build(Cypher cypher) {
+	  build(cypher, null)
 	}
 
 	def dispatch Operator buildRelalg(RegularQuery q) {
