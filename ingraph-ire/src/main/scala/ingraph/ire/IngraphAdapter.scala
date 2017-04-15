@@ -6,8 +6,9 @@ import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import org.supercsv.prefs.CsvPreference
 
-class IngraphAdapter(querySpecification: String) {
-  val plan = Relalg2ReteTransformationAndSchemaCalculator.apply(Cypher2Relalg.processString(querySpecification))
+class IngraphAdapter(querySpecification: String, queryName: String) {
+  val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
+  val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
 
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
 
