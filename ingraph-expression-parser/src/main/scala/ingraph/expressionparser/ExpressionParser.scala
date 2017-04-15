@@ -83,7 +83,7 @@ object ExpressionParser {
       }
       val index = lookup(variable.toString).toInt
       tuple => tuple(index)
-    case exp: ArithmeticOperationExpression =>
+    case exp: BinaryArithmeticOperationExpression =>
       val left = parseValue(exp.getLeftOperand, lookup)
       val right = parseValue(exp.getRightOperand, lookup)
       import BinaryArithmeticOperatorType._

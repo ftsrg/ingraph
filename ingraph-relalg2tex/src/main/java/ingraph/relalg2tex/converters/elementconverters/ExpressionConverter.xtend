@@ -2,9 +2,9 @@ package ingraph.relalg2tex.converters.elementconverters
 
 import ingraph.relalg2tex.constants.RelNullConstants
 import relalg.ArithmeticComparisonExpression
-import relalg.ArithmeticOperationExpression
 import relalg.AttributeVariable
 import relalg.BigIntegerLiteral
+import relalg.BinaryArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
 import relalg.BooleanLiteral
 import relalg.Direction
@@ -108,7 +108,7 @@ class ExpressionConverter {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convertOperatorType» «exp.rightOperand.convertExpression»'''
 	}
 
-	def dispatch CharSequence convertExpression(ArithmeticOperationExpression exp) {
+	def dispatch CharSequence convertExpression(BinaryArithmeticOperationExpression exp) {
 		'''«exp.leftOperand.convertExpression» «exp.operator.convert» «exp.rightOperand.convertExpression»'''
 	}
 

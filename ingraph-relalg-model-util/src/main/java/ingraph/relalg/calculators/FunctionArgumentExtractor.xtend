@@ -1,15 +1,15 @@
 package ingraph.relalg.calculators
 
+import ingraph.relalg.util.ListExpressionUtil
 import java.util.List
-import relalg.ArithmeticOperationExpression
+import relalg.BinaryArithmeticOperationExpression
 import relalg.FunctionExpression
+import relalg.ListExpression
+import relalg.Literal
 import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.Literal
-import relalg.ListExpression
-import ingraph.relalg.util.ListExpressionUtil
 
 class FunctionArgumentExtractor {
 
@@ -50,12 +50,12 @@ class FunctionArgumentExtractor {
 		#[a.variable]
 	}
 
-	def dispatch List<? extends Variable> extractVariableFromExpression(ArithmeticOperationExpression a) {
-		#[extractVariableFromExpression(a.leftOperand), extractVariableFromExpression(a.rightOperand)].flatten.toList
-	}
-
 	def dispatch List<? extends Variable> extractVariableFromExpression(UnaryArithmeticOperationExpression a) {
 		#[extractVariableFromExpression(a.operand)].flatten.toList
+	}
+
+	def dispatch List<? extends Variable> extractVariableFromExpression(BinaryArithmeticOperationExpression a) {
+		#[extractVariableFromExpression(a.leftOperand), extractVariableFromExpression(a.rightOperand)].flatten.toList
 	}
 
 	def dispatch List<? extends Variable> extractVariableFromExpression(Literal a) {

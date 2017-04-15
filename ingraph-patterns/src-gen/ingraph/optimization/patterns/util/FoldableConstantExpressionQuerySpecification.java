@@ -144,15 +144,15 @@ public final class FoldableConstantExpressionQuerySpecification extends BaseGene
       		   new ExportedParameter(body, var_v1, parameter_pV1),
       		   new ExportedParameter(body, var_v2, parameter_pV2)
       		));
-      		// 	ArithmeticOperationExpression.leftOperand(e, v1)
-      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticOperationExpression")));
+      		// 	BinaryArithmeticOperationExpression.leftOperand(e, v1)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticOperationExpression", "leftOperand")));
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "leftOperand")));
       		new Equality(body, var__virtual_0_, var_v1);
-      		// 	ArithmeticOperationExpression.rightOperand(e, v2)
-      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticOperationExpression")));
+      		// 	BinaryArithmeticOperationExpression.rightOperand(e, v2)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticOperationExpression", "rightOperand")));
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "rightOperand")));
       		new Equality(body, var__virtual_1_, var_v2);
       		bodies.add(body);
       	}

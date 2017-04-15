@@ -101,7 +101,6 @@ class RelalgBuilder {
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	extension IngraphLogger logger = new IngraphLogger(RelalgBuilder.name)
 	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
-	extension CollectionHelper collectionHelper = new CollectionHelper
 
 	// this will be returned and will hold the result of the compilation
 	// never rename this to container as that name will collide with the Expression.container field name
@@ -991,7 +990,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {
-		createArithmeticOperationExpression => [
+		createBinaryArithmeticOperationExpression => [
 			operator = switch e.operator {
 				case "+": BinaryArithmeticOperatorType.PLUS
 				case "-": BinaryArithmeticOperatorType.MINUS
@@ -1008,7 +1007,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionMulDiv e) {
-		createArithmeticOperationExpression => [
+		createBinaryArithmeticOperationExpression => [
 			operator = switch e.operator {
 				case "*": BinaryArithmeticOperatorType.MULTIPLICATION
 				case "/": BinaryArithmeticOperatorType.DIVISION
@@ -1022,7 +1021,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPower e) {
-		createArithmeticOperationExpression => [
+		createBinaryArithmeticOperationExpression => [
 			operator = switch e.operator {
 				case "^": BinaryArithmeticOperatorType.POWER
 			}

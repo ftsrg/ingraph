@@ -465,16 +465,16 @@ abstract class UnaryExpression extends Expression {
 abstract class BinaryExpression extends Expression {
 }
 
-// arithmetic operations evaluate to a number, hence they are arithmetic expressins
-class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
-  BinaryArithmeticOperatorType operator
-  refers ArithmeticExpression leftOperand
-  refers ArithmeticExpression rightOperand
-}
-
 class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
   UnaryArithmeticOperatorType operator
   refers ArithmeticExpression operand
+}
+
+// binary arithmetic operations evaluate to a number, hence they are arithmetic expressins
+class BinaryArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
+  BinaryArithmeticOperatorType operator
+  refers ArithmeticExpression leftOperand
+  refers ArithmeticExpression rightOperand
 }
 
 // arithmetic comparisons evaluate to true/false, hence they are logical expressions

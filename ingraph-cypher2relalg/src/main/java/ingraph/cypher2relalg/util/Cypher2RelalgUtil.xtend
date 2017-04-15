@@ -9,7 +9,7 @@ import java.util.List
 import java.util.Set
 import relalg.AbstractEdgeVariable
 import relalg.ArithmeticComparisonExpression
-import relalg.ArithmeticOperationExpression
+import relalg.BinaryArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
@@ -163,12 +163,12 @@ class Cypher2RelalgUtil {
 //						ExpressionVariable: fifo.add(myVar.expression)
 					}
 				}
-				ArithmeticOperationExpression: {
-					fifo.add(el.leftOperand)
-					fifo.add(el.rightOperand)
-				}
 				UnaryArithmeticOperationExpression: {
 					fifo.add(el.operand)
+				}
+				BinaryArithmeticOperationExpression: {
+					fifo.add(el.leftOperand)
+					fifo.add(el.rightOperand)
 				}
 				Literal: {}
 				FunctionExpression: {
