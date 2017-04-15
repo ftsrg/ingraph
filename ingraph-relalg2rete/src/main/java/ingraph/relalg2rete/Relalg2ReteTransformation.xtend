@@ -8,29 +8,23 @@ import ingraph.optimization.patterns.MergeGroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
 import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
-import org.apache.log4j.Level
-import org.apache.log4j.Logger
-import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
 import relalg.RelalgContainer
 
 class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 	extension IngraphLogger logger = new IngraphLogger(Relalg2ReteTransformation.name)
 
-	new() {
-		val logger = Logger.getRootLogger
-		logger.setLevel(Level.ERROR)
-		ViatraQueryLoggingUtil.setExternalLogger(logger)
+	new(RelalgContainer container) {
+		super(container)
 	}
 
-	def transformToRete(RelalgContainer container) {
+	def transformToRete() {
 		info("Transforming relational algebra expression to Rete network")
 
 		if (container.incrementalPlan) {
 			throw new IllegalStateException(
 				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
 		}
-		val statements = register(container)
 		statements.fireWhilePossible(unnecessaryLeftOuterJoinOperatorRule)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)

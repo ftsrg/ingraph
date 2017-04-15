@@ -20,7 +20,6 @@ class ChapterProcessor {
 			if (compiled) {
 				compilingQueries++
 			}
-			qp.close
 		}
 	}
 	

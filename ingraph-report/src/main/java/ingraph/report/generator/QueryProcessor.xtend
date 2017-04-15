@@ -11,15 +11,13 @@ import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConver
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
-import java.io.Closeable
 import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
 
-class QueryProcessor implements Closeable {
+class QueryProcessor {
 	
-	extension Relalg2ReteTransformation relalg2ReteTransformation = new Relalg2ReteTransformation
 	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
@@ -128,7 +126,9 @@ class QueryProcessor implements Closeable {
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
 			val incrementalContainer = EcoreUtil.copy(container)
-			incrementalContainer.transformToRete
+			val relalg2ReteTransformation = new Relalg2ReteTransformation(incrementalContainer)
+			relalg2ReteTransformation.transformToRete
+			relalg2ReteTransformation.close
 			incrementalContainer.calculateExternalSchema
 			incrementalContainer.calculateExtraVariables
 			incrementalContainer.calculateInternalSchema
@@ -138,10 +138,5 @@ class QueryProcessor implements Closeable {
 			null
 		}
 	}
-	
-	override close() {
-		relalg2ReteTransformation.close
-	}
-
 
 }

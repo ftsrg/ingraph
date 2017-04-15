@@ -14,14 +14,16 @@ import org.eclipse.viatra.dse.api.Strategies
 import org.eclipse.viatra.dse.solutionstore.SolutionStore
 import relalg.RelalgContainer
 import relalg.RelalgPackage
-import relalg.Variable
 import scala.collection.immutable.HashMap
 import scala.collection.immutable.Vector
 
 class ReteOptimization extends AbstractRelalgTransformation {
 
-	def performSimpleOptimization(RelalgContainer container) {
-		val statements = register(container)
+	new(RelalgContainer container) {
+		super(container)
+	}
+	
+	def performSimpleOptimization() {
 		statements.fireAllCurrent(cascadingSelectionsRule)
 		statements.fireAllCurrent(swappableSelectionsRule)
 		statements.fireAllCurrent(associativeOperatorRule)
