@@ -11,6 +11,11 @@ class Cypher2Relalg {
 		return processCypher(cypher, queryFile)
 	}
 
+	@Deprecated
+	def static RelalgContainer processString(String queryString) {
+		processString(queryString, null)
+	}
+
 	def static RelalgContainer processString(String queryString, String queryName) {
 		val cypher = CypherParser.parseString(queryString)
 		return processCypher(cypher, queryName)
