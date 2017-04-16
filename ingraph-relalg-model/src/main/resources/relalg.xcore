@@ -303,11 +303,10 @@ class SelectionOperator extends UnaryOperator {
  * 
  * The ProjectionOperator can also be merged with the GroupingOperator so it becomes a GroupingAndProjectionOperator,
  * where it does all that plus the grouping-related features.
+ * 
+ * TODO: the grouping-related features should be moved to the GroupingOperator as discussed in issue #132
  */
 class ProjectionOperator extends BeamerOperator {
-   // use EITHER elements OR elementsToRemove
-//  refers ExpressionVariable[] elementsToRemove
-  
   // functions
   refers ExpressionVariable[] aggregations
   refers Variable[] otherFunctions // calculated expressions other than aggregations
@@ -327,7 +326,7 @@ class ProjectionOperator extends BeamerOperator {
  	boolean detach
  }
 
-abstract class NavigationOperator extends Operator, NavigationDescriptor{
+abstract class NavigationOperator extends Operator, NavigationDescriptor {
   int minHops
   contains MaxHops maxHops
 }
