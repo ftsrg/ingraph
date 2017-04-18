@@ -6,7 +6,7 @@ AntiJoin(activeRoute=inactiveRoute)
  | |
  | +---------------------------------------+
  |                                         |
- |                                        Filter(swP.position != sw.currentPosition)
+ |                                        Filter(swP.position <> sw.currentPosition)
  |                                         |
  |                                        AllDifferent([_e1, _e2])
  |                                         |
@@ -27,7 +27,7 @@ NotIn(activeRoute) # variable not appear in 2nd input
  |                                         |
  |                                        NamedInnerProduction([inactiveRoute], name=inactiveRoutes)
  |                                         |
- |                                        Filter(swP.position != sw.currentPosition)
+ |                                        Filter(swP.position <> sw.currentPosition)
  |                                         |
  |                                        AllDifferent([_e1, _e2])
  |                                         |
