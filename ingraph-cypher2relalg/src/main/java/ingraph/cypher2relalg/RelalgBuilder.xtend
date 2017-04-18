@@ -755,7 +755,6 @@ class RelalgBuilder {
 		createArithmeticComparisonExpression => [
 			operator = switch e.operator {
 				case "=": ArithmeticComparisonOperatorType.EQUAL_TO
-				case "!=",
 				case "<>": ArithmeticComparisonOperatorType.NOT_EQUAL_TO
 				case "<": ArithmeticComparisonOperatorType.LESS_THAN
 				case "<=": ArithmeticComparisonOperatorType.LESS_THAN_OR_EQUAL
