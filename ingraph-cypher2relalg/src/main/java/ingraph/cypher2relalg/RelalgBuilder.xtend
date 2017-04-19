@@ -298,14 +298,23 @@ class RelalgBuilder {
 				input = afterUnwind
 			]
 			val u2 = u0.pattern.patterns.get(0) as PatternElement
+			val t0 = variableBuilder.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable.name)
 			val u4 = buildCreateNodePattern(u2.nodepattern)
-			u1.elements.add(u4)
+			if (!t0) {
+				u1.elements.add(u4)
+			}
 			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
 			for (element: u2.chain) {
+				val t1 = variableBuilder.vertexVariableFactoryElements.containsKey(element.nodePattern.variable.name)
 				val u5 = buildCreateNodePattern(element.nodePattern)
-				u1.elements.add(u5)
+				if (!t1) {
+					u1.elements.add(u5)
+				}
+				val t2 = variableBuilder.vertexVariableFactoryElements.containsKey(element.relationshipPattern.detail.types.relTypeName)
 				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
-				u1.elements.add(u6)
+				if (!t2) {
+					u1.elements.add(u6)
+				}
 				lastVertexVariable = (u5.expression as VariableExpression).variable as VertexVariable
 			}
 			u1
