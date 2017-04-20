@@ -22,15 +22,15 @@ class GroupingProjectionOperatorConverter {
 	}
 
 	def groupingOperator(GroupingOperator op) {
-		'''\grouping{«op.entries.map[convertExpression].join(", ")»}'''
+		'''\grouping{«op.elements.convertReturnableElementList»}{«op.aggregationCriteria.map[convertExpression].join(", ")»}'''
 	}
 
 	def projectionOperator(ProjectionOperator op) {
 		'''
-			\projection{«op.otherFunctions.convertReturnableElementList»
+			\projection{«op.elements.convertReturnableElementList»
 «««				«IF !op.elements.empty && !op.elementsToRemove.empty»,«ENDIF»
 «««				«op.elementsToRemove.convertReturnableElementListNegative»
-				}{«op.aggregations.convertReturnableElementList»}
+				}{}
 		'''
 	}
 

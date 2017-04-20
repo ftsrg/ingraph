@@ -251,7 +251,8 @@ class Cypher2RelalgUtil {
 	 * Inject the given natural join operator just above the content
 	 * into operator tree. Content will become the rightInput of the natural join operator.
 	 * @param op A operator tree of the form
-	 *        SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
+	 *        SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator content
+	 *        Note that GroupingOperator is a subclass of ProjectionOperator, so it might appear instead of a plain old ProjectionOperator
 	 * @param najo A natural join operator instance to be injected.
 	 */
 	def validateAndInjectNaJO(Operator op, JoinOperator najo) {
@@ -265,7 +266,6 @@ class Cypher2RelalgUtil {
 		, new UnaryOperator0or1Pattern(SortOperator, true)
 		, new UnaryOperator0or1Pattern(DuplicateEliminationOperator, true)
 		, new UnaryOperator0or1Pattern(ProjectionOperator, false)
-		, new UnaryOperator0or1Pattern(GroupingOperator, true)
 		]
 		for (p: pattern) {
 			if (p.opc.isInstance(currentOperator)) {

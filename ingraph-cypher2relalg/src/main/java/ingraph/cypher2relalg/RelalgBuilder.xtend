@@ -6,7 +6,6 @@ import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
 import ingraph.logger.IngraphLogger
-import ingraph.relalg.collectors.CollectionHelper
 import java.math.BigInteger
 import java.util.Arrays
 import java.util.HashSet
@@ -387,79 +386,86 @@ class RelalgBuilder {
 	def UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content) {
 		// FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
 		// but it should be w/o .get(0)
-		val projection = createProjectionOperator => [
-			input = content
-			if ("*".equals(returnBody.returnItems.get(0).all)) {
-				// add the non-dontCare vertex variables to the return list sorted by variable name
-				val vEl = variableBuilder.vertexVariableFactoryElements
-				vEl.keySet.sort.forEach [ key |
-					val variable = vEl.get(key)
-					if (!variable.dontCare) {
-						elements.add(
-							variableBuilder.buildExpressionVariable(
-								null
-							,	variableBuilder.buildVariableExpression(variable)
-							)
+
+		// pre-create elements to project to which will be copied to BeamerOperator.elements
+		val _elements = new BasicEList<ExpressionVariable>
+
+		if ("*".equals(returnBody.returnItems.get(0).all)) {
+			// add the non-dontCare vertex variables to the return list sorted by variable name
+			val vEl = variableBuilder.vertexVariableFactoryElements
+			vEl.keySet.sort.forEach [ key |
+				val variable = vEl.get(key)
+				if (!variable.dontCare) {
+					_elements.add(
+						variableBuilder.buildExpressionVariable(
+							null
+						,	variableBuilder.buildVariableExpression(variable)
 						)
-					}
-				]
-				// add the non-dontCare edge variables to the return list sorted by variable name
-				val eEl = variableBuilder.edgeVariableFactoryElements
-				eEl.keySet.sort.forEach [ key |
-					val variable = eEl.get(key)
-					if (!variable.dontCare) {
-						elements.add(
-							variableBuilder.buildExpressionVariable(
-								null
-							,	variableBuilder.buildVariableExpression(variable)
-							)
-						)
-					}
-				]
-				if (elements.empty) {
-					warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
-				}
-			}
-			for (returnItem: returnBody.returnItems.get(0).items) {
-				elements.add(
-					variableBuilder.buildExpressionVariable(
-						returnItem.alias?.name
-					,	buildRelalgExpression(returnItem.expression)
 					)
-				)
-			}
-//			elements.addAll(
-//				// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-//				returnBody.returnItems.get(0).items.map [ returnItem |
-//					variableBuilder.buildExpressionVariable(
-//						returnItem.alias?.name
-//					, buildRelalgExpression(returnItem.expression)
-//					)
-//				]
-//			)
-		]
-		if (projection.elements.empty) {
-			unrecoverableError('''RETURN clause processed and resulted in no columns values to return''')
-		} else {
-			// let's see if there is a need for grouping
-			var seenAggregate = false
-			val groupingVariables = new HashSet<Variable>
-			for (el : projection.elements) {
-				seenAggregate = cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
-					seenAggregate)
-			}
-			if (seenAggregate) {
-				// put a grouping operator under the projection operator
-				val projectionInput = projection.input
-				projection.input = createGroupingOperator => [
-					input = projectionInput
-					// order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
-					entries.addAll(groupingVariables.sortBy [
-						ExpressionNameInferencer.inferName(it, logger) + '##' + it.class.name
-					])
-				]
+				}
+			]
+			// add the non-dontCare edge variables to the return list sorted by variable name
+			val eEl = variableBuilder.edgeVariableFactoryElements
+			eEl.keySet.sort.forEach [ key |
+				val variable = eEl.get(key)
+				if (!variable.dontCare) {
+					_elements.add(
+						variableBuilder.buildExpressionVariable(
+							null
+						,	variableBuilder.buildVariableExpression(variable)
+						)
+					)
+				}
+			]
+			if (_elements.empty) {
+				warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
 			}
 		}
+		for (returnItem: returnBody.returnItems.get(0).items) {
+			_elements.add(
+				variableBuilder.buildExpressionVariable(
+					returnItem.alias?.name
+				,	buildRelalgExpression(returnItem.expression)
+				)
+			)
+		}
+
+		if (_elements.empty) {
+			unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
+		}
+
+		// let's see if there is a need for grouping
+		var seenAggregate = false
+		val groupingVariables = new HashSet<Variable>
+		for (el: _elements) {
+			seenAggregate = cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
+				seenAggregate)
+		}
+
+		val projection = if (seenAggregate) {
+			createGroupingOperator => [
+				// order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
+				// use of lazy map OK as passed to sortBy - jmarton, 2017-04-20
+				aggregationCriteria.addAll(groupingVariables.map[
+				  val mapIt = it
+				  createVariableExpression => [
+				    variable = mapIt
+				    expressionContainer = topLevelContainer
+				  ]
+				].sortBy [
+					ExpressionNameInferencer.inferName(it, logger) + '##' + it.class.name
+				])
+			]
+		} else {
+			// create plain old ProjectionOperator
+			createProjectionOperator => [
+				input = content
+			]
+		}
+		projection => [
+			input = content
+			elements.addAll(_elements)
+		]
 
 		// add duplicate-elimination operator if return DISTINCT was specified
 		val op1 = if (distinct) {

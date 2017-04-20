@@ -296,20 +296,26 @@ class SelectionOperator extends UnaryOperator {
  * It can:
  * - Project variables to a schema, i.e. only keeping a certain set of variables.
  * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
- * - Evaluate aggregation functions, e.g. count(n), sum(n.age), etc.
  * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
  *   (i.e. the inferencer algorithm has to propagate these variables to the NullaryOperators)
  * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
- * 
- * The ProjectionOperator can also be merged with the GroupingOperator so it becomes a GroupingAndProjectionOperator,
- * where it does all that plus the grouping-related features.
- * 
- * TODO: the grouping-related features should be moved to the GroupingOperator as discussed in issue #132
  */
 class ProjectionOperator extends BeamerOperator {
+}
+
+/**
+ * The GroupingOperator adds grouping functionality to the basic ProjectionOperator.
+ * 
+ * If ProjectionOperator was the renaissance man, this is Baroque of the relational graph algebra model.
+ */
+class GroupingOperator extends ProjectionOperator {
+	// be prepared that eventually expressions will be used as grouping criteria 
+  refers Expression[] aggregationCriteria
+  int[] order
+  //FIXME: these came from the superb ProjectionOperator
   // functions
-  refers ExpressionVariable[] aggregations
-  refers Variable[] otherFunctions // calculated expressions other than aggregations
+  //refers ExpressionVariable[] aggregations
+  //refers Variable[] otherFunctions // calculated expressions other than aggregations
 }
 
 /**
@@ -389,14 +395,6 @@ class TopOperator extends UnaryOperator {
 
 // for incremental queries to handle sort and top as a single operator
 class SortAndTopOperator extends SortOperator, TopOperator {
-}
-
-class GroupingOperator extends UnaryOperator {
-  refers Variable[] entries // TODO rename this to aggregrationEntries
-}
-
-class GroupingAndProjectionOperator extends GroupingOperator, ProjectionOperator {
-  int[] order
 }
 
 class UnwindOperator extends UnaryOperator {

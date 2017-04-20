@@ -17,7 +17,6 @@ import relalg.EdgeListVariable
 import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
-import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
 import relalg.PathOperator
 import relalg.ProductionOperator
@@ -107,6 +106,10 @@ class OperatorConverter {
 		#['''«groupingOperator(op)»''']
 	}
 
+//	def dispatch convertOperator(GroupingOperator op) {
+//		#['''\groupingop  «projectionOperator(op)» [«op.order.join("; ")»]''']
+//	}
+
 	def dispatch convertOperator(ProjectionOperator op) {
 		#['''«projectionOperator(op)»''']
 	}
@@ -117,10 +120,6 @@ class OperatorConverter {
 
 	def dispatch convertOperator(DeleteOperator op) {
 		#['''«deleteOperator(op)»''']
-	}
-
-	def dispatch convertOperator(GroupingAndProjectionOperator op) {
-		#['''\groupingop  «projectionOperator(op)» [«op.order.join("; ")»]''']
 	}
 
 	def createOperator(CreateOperator op) {
