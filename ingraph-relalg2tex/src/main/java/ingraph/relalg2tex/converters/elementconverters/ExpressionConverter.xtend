@@ -1,6 +1,7 @@
 package ingraph.relalg2tex.converters.elementconverters
 
 import ingraph.relalg2tex.constants.RelNullConstants
+import relalg.AbstractEdgeVariable
 import relalg.ArithmeticComparisonExpression
 import relalg.AttributeVariable
 import relalg.BigIntegerLiteral
@@ -11,6 +12,7 @@ import relalg.Direction
 import relalg.DoubleLiteral
 import relalg.ElementVariable
 import relalg.EmptyListExpression
+import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.IntegerLiteral
@@ -23,12 +25,35 @@ import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
+import relalg.VertexVariable
 
 class ExpressionConverter {
 	
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionOperatorTypeConverter operatorConverter = new ExpressionOperatorTypeConverter
 	extension ElementConverter elementConverter = new ElementConverter
+
+
+	/**
+	 * In case of VariableExpression wrapping a VertexVariable or AbstractEdgeVariable,
+	 * labelset constraints will also be serialized.
+	 *
+	 * Otherwise, it falls back to convertExpression.
+	 */
+	def CharSequence convertExpressionWithLabelSet(Expression exp) {
+		// Note: this is not a nice, expression-based Xtend code.
+		// It's more like a Java procedural code because of the return's
+		if (exp instanceof VariableExpression) {
+			val v = exp.variable
+			if (v instanceof VertexVariable) {
+				return '''\nodevariable{«v.escapedName»}{«convertVertexLabelSet(v.vertexLabelSet)»}'''
+			} else if (v instanceof AbstractEdgeVariable) {
+				return '''\edgevariable{«v.escapedName»}{«convertEdgeLabelSet(v.edgeLabelSet)»}'''
+			}
+		}
+
+		return convertExpression(exp)
+	}
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''

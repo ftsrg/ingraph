@@ -124,7 +124,7 @@ class OperatorConverter {
 	}
 
 	def createOperator(CreateOperator op) {
-		'''\create{«op.elements.map[it.expression.convertExpression].join(", ")»}'''
+		'''\create{«op.elements.map[it.expression.convertExpressionWithLabelSet].join(", ")»}'''
 	}
 
 	def deleteOperator(DeleteOperator op) {
