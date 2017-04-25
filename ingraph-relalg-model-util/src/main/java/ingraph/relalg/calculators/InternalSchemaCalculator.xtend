@@ -4,6 +4,7 @@ import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
+import relalg.GroupingOperator
 import relalg.NullaryOperator
 import relalg.Operator
 import relalg.ProductionOperator
@@ -89,8 +90,12 @@ class InternalSchemaCalculator {
 		op.tupleIndices.addAll(op.internalSchema.map[variable | internalSchemaNames.indexOf(variable.name)])
 	}
 
+	private def dispatch void defineInternalSchema(GroupingOperator op, List<? extends Variable> internalSchema) {
+		op.defineInternalSchemaForProjectionOperator(internalSchema)
+	}
+
 	private def dispatch void defineInternalSchema(ProjectionOperator op, List<? extends Variable> internalSchema) {
-		op.internalSchemaProjectionOperator(internalSchema)
+		op.defineInternalSchemaForProjectionOperator(internalSchema)
 	}
 
 	private def dispatch void defineInternalSchema(Operator op, List<? extends Variable> internalSchema) {
@@ -100,14 +105,10 @@ class InternalSchemaCalculator {
 	/*
 	 * Miscellaneous 
 	 */
-	private def internalSchemaProjectionOperator(ProjectionOperator op, List<? extends Variable> internalSchema) {
+	private def void defineInternalSchemaForProjectionOperator(ProjectionOperator op, List<? extends Variable> internalSchema) {
 		val internalSchemaNames = internalSchema.map[name]
 		op.internalSchema.addAll(uniqueUnion(op.externalSchema, op.extraVariables))
 		op.tupleIndices.addAll(op.internalSchema.map[variable | internalSchemaNames.indexOf(variable.name)])
-
-//		val List<Variable> others = op.internalSchema.minus(op.aggregations)
-//		op.otherFunctions.addAll(others)
-//	TODO GroupingAndProjection refactor
 	}
 
 }

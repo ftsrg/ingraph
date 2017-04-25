@@ -27,11 +27,11 @@ class VariableExtractor {
 	 * Extract extra variables required by unary operators.
 	 */
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
-		return getExtraVariablesForProjectionOperator(op)
+		op.getExtraVariablesForProjectionOperator
 	}
 
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
-		return getExtraVariablesForGroupingOperator(op)
+		uniqueUnion(op.getExtraVariablesForProjectionOperator, op.getExtraVariablesForGroupingOperator)
 	}
 
 	// SelectionOperator
@@ -71,9 +71,10 @@ class VariableExtractor {
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
-//		val externalSchemaNames = op.externalSchema.map[toString]
-//		op.aggregationCriteria.map[].filter[!externalSchemaNames.contains(it.toString)].toList
-		#[]
+		val externalSchemaNames = op.externalSchema.map[toString]
+		op.aggregationCriteria
+			.filter(ExpressionVariable).map[ExpressionUnwrapper.extractExpressionVariable(it)]
+			.filter[!externalSchemaNames.contains(it.toString)].toList
 	}
 
 	/*
