@@ -121,14 +121,46 @@ class Cypher2RelalgUtil {
 	 * and so on.
 	 */
 	def chainBinaryOperatorsLeft(Operator head, Iterable<? extends BinaryOperator> tail) {
+		chainEncapsulatedBinaryOperatorsLeft(head, tail)
+	}
+
+	/**
+	 * Chain operators to build a left deep tree.
+	 *
+	 * Building a left deep tree requires binary operators, so tail should contain relalg trees that
+	 * under arbitrary number of UnaryOperator's, lead to a BinaryOperator, i.e. encapsulates a BinaryOperator.
+	 * These binary operators connect relalg trees together.
+	 */
+	def chainEncapsulatedBinaryOperatorsLeft(Operator head, Iterable<? extends Operator> tail) {
 		var lastAlgebraExpression = head
 
-		for (BinaryOperator op : tail) {
-			op.leftInput = lastAlgebraExpression
+		for (Operator op : tail) {
+			val binaryOp = findFirstBinaryOperator(op)
+			binaryOp.leftInput = lastAlgebraExpression
 			lastAlgebraExpression = op
 		}
 
 		lastAlgebraExpression
+	}
+
+	/**
+	 * Finds and returns the first BinaryOperator instance that can be reached from op
+	 * after going through an arbitrary number of UnaryOperator instances.
+	 *
+	 * If op itself is a BinaryOperator instance, it will be returned.
+	 *
+	 * Should we reach an object that is not UnaryOperator before reaching the BinaryOperator
+	 * instance, an unrecoverable error will be raised.
+	 */
+	protected def BinaryOperator findFirstBinaryOperator(Operator op) {
+		switch (op) {
+			BinaryOperator: op
+			UnaryOperator: findFirstBinaryOperator(op.input)
+			default: {
+				unrecoverableError('''Found «op.class», expected a tree leading to a BinaryOperator through zero or more UnaryOperator's.''')
+				null
+			}
+		}
 	}
 
 	/**

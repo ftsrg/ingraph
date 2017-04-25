@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg
 
+import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.StringUtil
@@ -69,6 +70,7 @@ import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.ElementVariable
+import relalg.EquiJoinLikeOperator
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.ExpressionVariable
@@ -80,6 +82,7 @@ import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.SelectionOperator
 import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
@@ -251,27 +254,64 @@ class RelalgBuilder {
 		// use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
 		val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
 			val mapIt = it
-			val joinOp = if (mapIt.optional) {
-					createLeftOuterJoinOperator
+			val relalgMatchDescriptor = buildRelalgMatch(mapIt)
+
+			if (mapIt.optional) {
+				val lojo = if (relalgMatchDescriptor.condition === null) {
+					createThetaLeftOuterJoinOperator => [
+						condition = relalgMatchDescriptor.condition
+					]
 				} else {
-					createJoinOperator
+					createLeftOuterJoinOperator
 				}
-			joinOp => [
-				rightInput = buildRelalg(mapIt)
-			]
+				lojo => [
+					rightInput = relalgMatchDescriptor.op
+				]
+			} else {
+				val join = createJoinOperator => [
+					rightInput = relalgMatchDescriptor.op
+				]
+				if (relalgMatchDescriptor.condition === null) {
+					join
+				} else {
+					createSelectionOperator => [
+						input = join
+						condition = relalgMatchDescriptor.condition
+					]
+				}
+			}
 		]
 
 		// if there is no match clause or the first is already an "OPTIONAL MATCH", we include the dual source
 		val content = if (singleQuery_MatchList.empty || singleQuery_MatchList.head instanceof LeftOuterJoinOperator) {
-				chainBinaryOperatorsLeft(createDualObjectSourceOperator, singleQuery_MatchList)
+				chainEncapsulatedBinaryOperatorsLeft(createDualObjectSourceOperator, singleQuery_MatchList)
 			} else {
 				/*
 				 * The compiled form of the first MATCH clause is on the rightInput
-				 * of the first join operator.
+				 * of the first join operator, which is possibly on the input of a SelectionOperator.
 				 * 
 				 * This join operator is in fact, unnecessary.
 				 */
-				chainBinaryOperatorsLeft(singleQuery_MatchList?.head?.rightInput, singleQuery_MatchList?.tail)
+				val matchListHead = singleQuery_MatchList?.head
+				val chainHead = switch (matchListHead) {
+				  JoinOperator: matchListHead.rightInput
+				  SelectionOperator: {
+				    val _result = matchListHead
+				    val _l_input = matchListHead.input
+				    if (_l_input instanceof EquiJoinLikeOperator) {
+				      _result.input = _l_input.rightInput
+				    } else {
+				      unrecoverableError('''Unexpected relalg node «_l_input» found under «matchListHead.class».''')
+				    }
+				    _result
+				  }
+				  default: {
+				    unrecoverableError('''Unexpected relalg node found: «matchListHead.class»''')
+				    null
+				  }
+				}
+				//singleQuery_MatchList?.head?.rightInput
+				chainEncapsulatedBinaryOperatorsLeft(chainHead, singleQuery_MatchList?.tail)
 			}
 
 		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
@@ -590,16 +630,24 @@ class RelalgBuilder {
 		}
 	}
 
-	/*
+	/**
 	 * MATCH clause is compiled as follows:
 	 * (the lower elements being the input for the upper ones)
-	 * 
-	 * - Selection as built from the where clause
+	 *
 	 * - Left outer join of the patterns extracted from the where clause (is any)
 	 * - AllDifferentOperator on the edges in the patternParts
 	 * - natural join of comma-separated patternParts in the MATCH clause
+	 *
+	 * Also a filter boolean condition is built from the where clause.
+	 * In case no WHERE condition applies, contiion is null meaning no filtering,
+	 * i.e. pass through all records.
+	 *
+	 * @returns a RelalgMatchDescriptor,
+	 *          whose op attribute is the compiled form of the MATCH without the WHERE,
+	 *          and condition attribute holds the filter condition.
 	 */
-	def dispatch Operator buildRelalg(Match m) {
+	def buildRelalgMatch(Match m) {
+	  val result = new RelalgMatchDescriptor
 		val Set<AbstractEdgeVariable> edgeVariablesOfMatchClause = new HashSet<AbstractEdgeVariable>()
 		// handle comma-separated patternParts in the MATCH clause
 		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
@@ -621,11 +669,9 @@ class RelalgBuilder {
 			// left outer joins extracted from the patterns in the where clause
 			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
 
-			val selectionOperator = createSelectionOperator => [
-				condition = buildRelalgLogicalExpression(m.where.expression, joinOperationsOfWhereClause)
-			]
-			
-			val selectionInput = if (joinOperationsOfWhereClause.empty) {
+			result.condition = buildRelalgLogicalExpression(m.where.expression, joinOperationsOfWhereClause)
+
+			result.op = if (joinOperationsOfWhereClause.empty) {
 					allDifferentOperator
 				} else {
 					/*
@@ -638,12 +684,11 @@ class RelalgBuilder {
 
 					buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator)
 				}
-
-			selectionOperator.input = selectionInput
-			selectionOperator
 		} else {
-			allDifferentOperator
+			result.op =  allDifferentOperator
 		}
+
+		result
 	}
 
 	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e, EList<Operator> joins) {

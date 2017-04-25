@@ -298,9 +298,21 @@ abstract class BeamerOperator extends UnaryOperator {
 class ProductionOperator extends BeamerOperator {
 }
 
-class SelectionOperator extends UnaryOperator {
+/**
+ * Represents a condition which can be used for selection, theta-join.
+ *
+ * Different operators building on this might have different semantics,
+ * e.g. for a left outer join, this never filter on the left input
+ *
+ * - condition holds the actual filtering condition.
+ * - conditionString is for informational purposes only. TeX serialization might use this.
+ */
+abstract class AbstractCondition {
   String conditionString
   refers LogicalExpression condition
+}
+
+class SelectionOperator extends UnaryOperator, AbstractCondition {
 }
 
 /*
@@ -437,7 +449,15 @@ abstract class AbstractJoinOperator extends BinaryOperator {
 abstract class EquiJoinLikeOperator extends AbstractJoinOperator {
 }
 
+/**
+ * Left outer join states that each tuple of its left input will appear
+ * on the output regardless of whether a matching tuple
+ * on the right input is available or not.
+ */
 class LeftOuterJoinOperator extends EquiJoinLikeOperator {
+}
+
+class ThetaLeftOuterJoinOperator extends LeftOuterJoinOperator, AbstractCondition {
 }
 
 class JoinOperator extends EquiJoinLikeOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
