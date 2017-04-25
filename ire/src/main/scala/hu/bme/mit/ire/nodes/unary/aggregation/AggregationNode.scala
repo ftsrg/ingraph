@@ -9,8 +9,8 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
-                      mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate],
-                      order: Vector[Int]) extends UnaryNode with SingleForwarder {
+                      mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate]
+                     ) extends UnaryNode with SingleForwarder {
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
   private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
 
@@ -38,15 +38,10 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
     for ((key, (oldValues, oldCount)) <- oldValues) {
       val newValues = data(key).map(_.value())
       if (oldValues != newValues) {
-        if (keyCount(key) != 0) {
-          val unordered = key ++ newValues
-          positive += order.map(unordered)
-        }
-        if (oldCount != 0) {
-          val unordered = key ++ oldValues
-          negative += order.map(unordered)
-        }
-
+        if (keyCount(key) != 0)
+          positive += key ++ newValues
+        if (oldCount != 0)
+          negative += key ++ oldValues
       }
     }
     forward(ChangeSet(positive = positive.result(), negative = negative.result()))

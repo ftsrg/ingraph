@@ -51,7 +51,7 @@ object EngineFactory {
                 _() // GOOD LUCK UNDERSTANDING THIS
               )
               val mask = op.getElements.map(e => ExpressionParser.parseValue(e.getExpression, variableLookup))
-              newLocal(Props(new AggregationNode(expr.child, mask, functions, op.getOrder)))
+              newLocal(Props(new AggregationNode(expr.child, mask, functions)))
 
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
