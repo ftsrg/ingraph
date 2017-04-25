@@ -1,5 +1,6 @@
 package ingraph.report.generator.tests
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
 import java.io.File
@@ -11,6 +12,15 @@ import org.apache.commons.io.FileUtils
 abstract class IngraphReportTest {
 
 	protected extension TechReportEscaper escaper = new TechReportEscaper
+	protected val RelalgConverterConfig treeSerializerConfig
+
+	new() {
+		this.treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
+	}
+
+	new(RelalgConverterConfig treeSerializerConfig) {
+		this.treeSerializerConfig = treeSerializerConfig
+	}
 
 	val PROGRESSBAR_TABLE_HEADER = '''\begin{longtable}{llr@{ of }l}'''
 	val PROGRESSBAR_TABLE_FOOTER = '''\end{longtable}'''
@@ -43,7 +53,7 @@ abstract class IngraphReportTest {
 			val sectionQuerySpecifications = cqs.value
 			val sectionLabel = sectionTitle.toLabel
 
-			val cp = new ChapterProcessor
+			val cp = new ChapterProcessor(treeSerializerConfig)
 			cp.processQueries(sectionQuerySpecifications)
 
 			val sectionCompilingQueries = cp.compilingQueries

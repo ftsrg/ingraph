@@ -1,6 +1,7 @@
 package ingraph.report.generator.tests
 
 import com.google.common.collect.ImmutableMap
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.NaturalOrderComparator
 import java.io.File
@@ -11,6 +12,14 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
 abstract class DirectoryTest extends IngraphReportTest {
+
+	new() {
+		super()
+	}
+
+	new(RelalgConverterConfig treeSerializerConfig) {
+		super(treeSerializerConfig)
+	}
 
 	def toChapter(String directoryName, String chapterTitle) {
 		toChapter(directoryName, chapterTitle, chapterTitle)
