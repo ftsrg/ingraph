@@ -4,8 +4,8 @@
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
-import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatch;
-import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher;
+import ingraph.optimization.patterns.UnnecessaryJoinMatch;
+import ingraph.optimization.patterns.UnnecessaryJoinMatcher;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -31,15 +31,15 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.queries.QueryInitializa
 import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
 
 /**
- * A pattern-specific query specification that can instantiate UnnecessaryLeftOuterJoinMatcher in a type-safe way.
+ * A pattern-specific query specification that can instantiate UnnecessaryJoinMatcher in a type-safe way.
  * 
- * @see UnnecessaryLeftOuterJoinMatcher
- * @see UnnecessaryLeftOuterJoinMatch
+ * @see UnnecessaryJoinMatcher
+ * @see UnnecessaryJoinMatch
  * 
  */
 @SuppressWarnings("all")
-public final class UnnecessaryLeftOuterJoinQuerySpecification extends BaseGeneratedEMFQuerySpecification<UnnecessaryLeftOuterJoinMatcher> {
-  private UnnecessaryLeftOuterJoinQuerySpecification() {
+public final class UnnecessaryJoinQuerySpecification extends BaseGeneratedEMFQuerySpecification<UnnecessaryJoinMatcher> {
+  private UnnecessaryJoinQuerySpecification() {
     super(GeneratedPQuery.INSTANCE);
   }
   
@@ -48,7 +48,7 @@ public final class UnnecessaryLeftOuterJoinQuerySpecification extends BaseGenera
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static UnnecessaryLeftOuterJoinQuerySpecification instance() throws ViatraQueryException {
+  public static UnnecessaryJoinQuerySpecification instance() throws ViatraQueryException {
     try{
     	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
@@ -57,35 +57,35 @@ public final class UnnecessaryLeftOuterJoinQuerySpecification extends BaseGenera
   }
   
   @Override
-  protected UnnecessaryLeftOuterJoinMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return UnnecessaryLeftOuterJoinMatcher.on(engine);
+  protected UnnecessaryJoinMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return UnnecessaryJoinMatcher.on(engine);
   }
   
   @Override
-  public UnnecessaryLeftOuterJoinMatcher instantiate() throws ViatraQueryException {
-    return UnnecessaryLeftOuterJoinMatcher.create();
+  public UnnecessaryJoinMatcher instantiate() throws ViatraQueryException {
+    return UnnecessaryJoinMatcher.create();
   }
   
   @Override
-  public UnnecessaryLeftOuterJoinMatch newEmptyMatch() {
-    return UnnecessaryLeftOuterJoinMatch.newEmptyMatch();
+  public UnnecessaryJoinMatch newEmptyMatch() {
+    return UnnecessaryJoinMatch.newEmptyMatch();
   }
   
   @Override
-  public UnnecessaryLeftOuterJoinMatch newMatch(final Object... parameters) {
-    return UnnecessaryLeftOuterJoinMatch.newMatch((relalg.Operator) parameters[0], (relalg.LeftOuterJoinOperator) parameters[1], (relalg.Operator) parameters[2]);
+  public UnnecessaryJoinMatch newMatch(final Object... parameters) {
+    return UnnecessaryJoinMatch.newMatch((relalg.Operator) parameters[0], (relalg.EquiJoinLikeOperator) parameters[1], (relalg.Operator) parameters[2]);
   }
   
   /**
-   * Inner class allowing the singleton instance of {@link UnnecessaryLeftOuterJoinQuerySpecification} to be created 
+   * Inner class allowing the singleton instance of {@link UnnecessaryJoinQuerySpecification} to be created 
    * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link UnnecessaryLeftOuterJoinQuerySpecification#instance()}.
+   * 	but rather at the first call to {@link UnnecessaryJoinQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
    */
   private static class LazyHolder {
-    private final static UnnecessaryLeftOuterJoinQuerySpecification INSTANCE = new UnnecessaryLeftOuterJoinQuerySpecification();
+    private final static UnnecessaryJoinQuerySpecification INSTANCE = new UnnecessaryJoinQuerySpecification();
     
     /**
      * Statically initializes the query specification <b>after</b> the field {@link #INSTANCE} is assigned.
@@ -103,24 +103,24 @@ public final class UnnecessaryLeftOuterJoinQuerySpecification extends BaseGenera
   }
   
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
-    private final static UnnecessaryLeftOuterJoinQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
+    private final static UnnecessaryJoinQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
-    private final PParameter parameter_pInputOperator = new PParameter("inputOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pLeftInputOperator = new PParameter("leftInputOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
-    private final PParameter parameter_pLeftOuterJoinOperator = new PParameter("leftOuterJoinOperator", "relalg.LeftOuterJoinOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "LeftOuterJoinOperator")), PParameterDirection.INOUT);
+    private final PParameter parameter_pEquiJoinLikeOperator = new PParameter("equiJoinLikeOperator", "relalg.EquiJoinLikeOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "EquiJoinLikeOperator")), PParameterDirection.INOUT);
     
     private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pInputOperator, parameter_pLeftOuterJoinOperator, parameter_pParentOperator);
+    private final List<PParameter> parameters = Arrays.asList(parameter_pLeftInputOperator, parameter_pEquiJoinLikeOperator, parameter_pParentOperator);
     
     @Override
     public String getFullyQualifiedName() {
-      return "ingraph.optimization.patterns.unnecessaryLeftOuterJoin";
+      return "ingraph.optimization.patterns.unnecessaryJoin";
     }
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("inputOperator","leftOuterJoinOperator","parentOperator");
+      return Arrays.asList("leftInputOperator","equiJoinLikeOperator","parentOperator");
     }
     
     @Override
@@ -135,29 +135,29 @@ public final class UnnecessaryLeftOuterJoinQuerySpecification extends BaseGenera
       try {
       	{
       		PBody body = new PBody(this);
-      		PVariable var_inputOperator = body.getOrCreateVariableByName("inputOperator");
-      		PVariable var_leftOuterJoinOperator = body.getOrCreateVariableByName("leftOuterJoinOperator");
+      		PVariable var_leftInputOperator = body.getOrCreateVariableByName("leftInputOperator");
+      		PVariable var_equiJoinLikeOperator = body.getOrCreateVariableByName("equiJoinLikeOperator");
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		PVariable var_dualOperator = body.getOrCreateVariableByName("dualOperator");
-      		new TypeConstraint(body, new FlatTuple(var_inputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_leftInputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
       		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_inputOperator, parameter_pInputOperator),
-      		   new ExportedParameter(body, var_leftOuterJoinOperator, parameter_pLeftOuterJoinOperator),
+      		   new ExportedParameter(body, var_leftInputOperator, parameter_pLeftInputOperator),
+      		   new ExportedParameter(body, var_equiJoinLikeOperator, parameter_pEquiJoinLikeOperator),
       		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
-      		// 	find parentOperator(leftOuterJoinOperator, parentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_leftOuterJoinOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, inputOperator)
-      		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
+      		// 	find parentOperator(equiJoinLikeOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_equiJoinLikeOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		// 	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, leftInputOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
-      		new Equality(body, var__virtual_0_, var_inputOperator);
-      		// 	LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, dualOperator)
-      		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
+      		new Equality(body, var__virtual_0_, var_leftInputOperator);
+      		// 	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_leftOuterJoinOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "rightInput")));
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "rightInput")));
       		new Equality(body, var__virtual_1_, var_dualOperator);
       		// 	DualObjectSourceOperator(dualOperator)
       		new TypeConstraint(body, new FlatTuple(var_dualOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "DualObjectSourceOperator")));

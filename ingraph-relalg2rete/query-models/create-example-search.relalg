@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ASCII"?>
+<relalg:RelalgContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:relalg="http://ingraph/relalg" externalSchemaInferred="true">
+  <rootExpression xsi:type="relalg:ProductionOperator" externalSchema="//@elements.1">
+    <input xsi:type="relalg:ProjectionOperator" externalSchema="//@elements.1" elements="//@elements.2">
+      <input xsi:type="relalg:JoinOperator">
+        <leftInput xsi:type="relalg:CreateOperator" elements="//@elements.1">
+          <input xsi:type="relalg:DualObjectSourceOperator"/>
+        </leftInput>
+        <rightInput xsi:type="relalg:DualObjectSourceOperator"/>
+      </input>
+    </input>
+  </rootExpression>
+  <elements xsi:type="relalg:VertexVariable" name="n">
+    <vertexLabelSet/>
+  </elements>
+  <elements xsi:type="relalg:ExpressionVariable" name="n" expression="//@expressions.0"/>
+  <elements xsi:type="relalg:ExpressionVariable" name="n" hasInferredName="true" expression="//@expressions.1"/>
+  <expressions xsi:type="relalg:VariableExpression" variable="//@elements.0"/>
+  <expressions xsi:type="relalg:VariableExpression" variable="//@elements.1"/>
+</relalg:RelalgContainer>

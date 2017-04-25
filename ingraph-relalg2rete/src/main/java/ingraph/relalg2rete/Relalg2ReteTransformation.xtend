@@ -4,9 +4,8 @@ import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
-import ingraph.optimization.patterns.MergeGroupingAndProjectionOperatorMatcher
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher
-import ingraph.optimization.patterns.UnnecessaryLeftOuterJoinMatcher
+import ingraph.optimization.patterns.UnnecessaryJoinMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
 
@@ -25,25 +24,24 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			throw new IllegalStateException(
 				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
 		}
-		statements.fireWhilePossible(unnecessaryLeftOuterJoinOperatorRule)
+		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
-		statements.fireWhilePossible(mergeGroupingAndProjectionOperatorRule)
 		statements.fireWhilePossible(leftOuterAndSelectionRule)
 		container.incrementalPlan = true
 		return container
 	}
 
 	/**
-	 * [0] Remove unnecessary LeftOuterJoinOperators
+	 * [0] Remove unnecessary JoinOperators
 	 */
-	protected def unnecessaryLeftOuterJoinOperatorRule() {
+	protected def unnecessaryJoinOperatorRule() {
 		createRule() //
-		.precondition(UnnecessaryLeftOuterJoinMatcher.querySpecification) //
+		.precondition(UnnecessaryJoinMatcher.querySpecification) //
 		.action [ //
-			info('''unnecessaryLeftOuterJoinOperatorRule fired for «leftOuterJoinOperator»''')
-			changeChildOperator(parentOperator, leftOuterJoinOperator, inputOperator)
+			info('''unnecessaryJoinOperatorRule fired for «equiJoinLikeOperator»''')
+			changeChildOperator(parentOperator, equiJoinLikeOperator, leftInputOperator)
 		].build
 	}
 
@@ -175,30 +173,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	/**
-	 * [4] Replace an adjacent pair of GroupingOperator and ProjectionOperator to a single GroupingAndProjectionOperator
-	 */
-	protected def mergeGroupingAndProjectionOperatorRule() {
-		createRule() //
-		.precondition(MergeGroupingAndProjectionOperatorMatcher.querySpecification) //
-		.action [ //
-			val groupingOperator = groupingOperator
-			val projectionOperator = projectionOperator
-			info('''groupingAndProjectionOperator fired for «groupingOperator» and «projectionOperator»''')
-
-			val groupingAndProjectionOperator = createGroupingAndProjectionOperator => [
-				entries.addAll(groupingOperator.entries)
-				elements.addAll(projectionOperator.elements)
-				tupleIndices.addAll(projectionOperator.tupleIndices)
-
-				input = groupingOperator.input
-			]
-
-			changeChildOperator(parentOperator, projectionOperator, groupingAndProjectionOperator)
-		].build
-	}
-
-	/**
-	 * [5] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
+	 * [4] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
 	 */
 	protected def leftOuterAndSelectionRule() {
 		createRule() //

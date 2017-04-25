@@ -4,10 +4,10 @@ import "http://ingraph/relalg";
 
 // [0] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
 // to the Dual table
-pattern unnecessaryLeftOuterJoin(inputOperator : Operator, leftOuterJoinOperator : LeftOuterJoinOperator, parentOperator : Operator) {
-	find parentOperator(leftOuterJoinOperator, parentOperator);
-	LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, inputOperator);
-	LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, dualOperator);
+pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
+	find parentOperator(equiJoinLikeOperator, parentOperator);
+	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, leftInputOperator);
+	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
 	DualObjectSourceOperator(dualOperator);
 }
 
@@ -78,30 +78,6 @@ pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operat
 pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
   find parentOperator(topOperator, parentOperator);
   TopOperator.input(topOperator, sortOperator);
-}
-
-/*
-    parentOperator
-          |
-          | *input
-          V
-  projectionOperator
-          |
-          | input
-          V
-   groupingOperator
-*/
-// [4] transformation for combining adjacent grouping and projection operators to a single groupingAndProjection operator
-pattern mergeGroupingAndProjectionOperator(projectionOperator : ProjectionOperator, groupingOperator : GroupingOperator, parentOperator : Operator) {
-  find parentOperator(projectionOperator, parentOperator);
-  ProjectionOperator.input(projectionOperator, groupingOperator);
-  // do not merge operators that are already GroupingAndProjectionOperators
-  neg find groupingAndProjectionOperator(projectionOperator);
-  neg find groupingAndProjectionOperator(groupingOperator);
-}
-
-pattern groupingAndProjectionOperator(groupingAndProjectionOperator) {
-	GroupingAndProjectionOperator(groupingAndProjectionOperator);
 }
 
 /*
