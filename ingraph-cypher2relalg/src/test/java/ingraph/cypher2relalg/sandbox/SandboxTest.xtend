@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg.tck.sandbox
+package ingraph.cypher2relalg.sandbox
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser

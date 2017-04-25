@@ -26,6 +26,7 @@ import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
 import relalg.VariableExpression
 import relalg.VertexVariable
+import relalg.function.Function
 
 class ExpressionConverter {
 	
@@ -102,7 +103,7 @@ class ExpressionConverter {
 	def dispatch CharSequence convertExpression(FunctionExpression fe) {
 		'''
 			\literal{«fe.functor.toString.escape»}
-			«IF !fe.arguments.empty»\left( «fe.arguments.map[convertExpression].join(", ")» \right)«ENDIF»
+			«IF fe.functor != Function.COUNT_ALL»\left( «fe.arguments.map[convertExpression].join(", ")» \right)«ENDIF»
 		'''
 	}
 

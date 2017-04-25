@@ -96,20 +96,7 @@ class ExternalSchemaCalculator {
 			}
 		]
 
-		// extract variables
-//		val s = if (op.elementsToRemove.empty) {
-				val aggregations = op.elements.extractAggregateFunctions
-				op.aggregations.addAll(aggregations)
-				op.elements.removeAll(aggregations)
-				val s = union(op.elements.extractVariables, aggregations)
-//			} else {
-//				val elementsToRemoveVariables = op.elementsToRemove.extractVariables
-//				val externalSchema = Lists.newArrayList(op.input.externalSchema)
-//				externalSchema.removeAll(elementsToRemoveVariables)
-//				externalSchema
-//			}
-
-		op.defineExternalSchema(s)
+		op.defineExternalSchema(op.elements.extractVariables)
 	}
 
 	private def extractVariables(List<ExpressionVariable> expressionVariables) {
@@ -129,10 +116,6 @@ class ExternalSchemaCalculator {
 				(expression as FunctionExpression).functor.category == FunctionCategory.AGGREGATION
 		].toList
 	}
-
-//	private def dispatch List<Variable> fillexternalSchema(GroupingAndProjectionOperator op) {
-//		throw new UnsupportedOperationException("GroupingAndProjectionOperator not yet supported.")
-//	}
 
 	private def dispatch List<Variable> fillExternalSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.externalSchema)

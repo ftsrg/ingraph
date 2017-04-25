@@ -6,8 +6,8 @@ import java.util.List
 import relalg.AttributeVariable
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
-import relalg.GroupingAndProjectionOperator
 import relalg.GroupingOperator
+import relalg.Operator
 import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.SelectionOperator
@@ -16,7 +16,6 @@ import relalg.UnaryOperator
 import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.Operator
 
 class VariableExtractor {
 
@@ -27,11 +26,6 @@ class VariableExtractor {
 	/**
 	 * Extract extra variables required by unary operators.
 	 */
-	// GroupingAndProjection-, Grouping- and ProjectionOperators
-	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingAndProjectionOperator op) {
-		uniqueUnion(getExtraVariablesForGroupingOperator(op), getExtraVariablesForProjectionOperator(op))
-	}
-
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
 		return getExtraVariablesForProjectionOperator(op)
 	}
@@ -73,22 +67,21 @@ class VariableExtractor {
 		val arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
 		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
-		val aggregations = op.aggregations.map[expression].filter(FunctionExpression)
-		val aggregationExtraVariables = aggregations.map[extractFunctionArguments].flatten.toList
-
-		uniqueUnion(extraVariables, arguments, aggregationExtraVariables)
+		uniqueUnion(extraVariables, arguments)
 	}
 	
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
-		val externalSchemaNames = op.externalSchema.map[toString]
-		op.entries.filter[!externalSchemaNames.contains(it.toString)].toList
+//		val externalSchemaNames = op.externalSchema.map[toString]
+//		op.aggregationCriteria.map[].filter[!externalSchemaNames.contains(it.toString)].toList
+		#[]
 	}
 
 	/*
 	 * calculatedVariables
 	 */
 	def dispatch List<? extends Variable> getCalculatedVariables(ProjectionOperator op) {
-		uniqueUnion(op.otherFunctions, op.aggregations)
+//		uniqueUnion(op.elementsotherFunctions, op.aggregations)
+		#[]
 	}
 
 	def dispatch List<? extends Variable> getCalculatedVariables(Operator op) {

@@ -170,7 +170,7 @@ public final class LeftOuterJoinAndSelectionQuerySpecification extends BaseGener
       		//   SelectionOperator.condition(selectionOperator, condition)
       		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_selectionOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "SelectionOperator", "condition")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AbstractCondition", "condition")));
       		new Equality(body, var__virtual_1_, var_condition);
       		//   UnaryLogicalExpression.operator(condition, ::NOT)
       		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");

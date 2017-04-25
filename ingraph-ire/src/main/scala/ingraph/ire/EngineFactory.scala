@@ -43,10 +43,10 @@ object EngineFactory {
           case op: UnaryOperator =>
             val node: ActorRef = op match {
             case op: ProductionOperator => production
-            case op: GroupingAndProjectionOperator =>
+            case op: GroupingOperator =>
               val variableLookup = getSchema(op.getInput)
-              val functions = () => op.getAggregations.map(
-                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)).map(
+              val functions = () => op.getAggregationCriteria.map(
+                e => ExpressionParser.parseAggregate(e, variableLookup)).map(
                 _() // GOOD LUCK UNDERSTANDING THIS
               )
               val mask = op.getElements.map(e => ExpressionParser.parseValue(e.getExpression, variableLookup))
