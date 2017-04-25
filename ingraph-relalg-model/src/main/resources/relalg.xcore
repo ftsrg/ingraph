@@ -282,6 +282,19 @@ abstract class BeamerOperator extends UnaryOperator {
   int[] tupleIndices
 }
 
+/**
+ * Currently, the ProductionOperator is used to "trim" extra variables that are part of the internal schema
+ * (as they are required for processing the query), but are not specified in the external schema.
+ *
+ * TODO: In the future, it should also be able to collect properties for a specific vertex/edge.
+ * For example, if the user specifies the following query:
+ *
+ * MATCH (p:Person)-[l:LIKES]->(m:Message)
+ * RETURN p, l, m.content
+ *
+ * We should return a vertex for Person p, a relationship for LIKES l (both with all their properties)
+ * and the content property of Message m.
+ */
 class ProductionOperator extends BeamerOperator {
 }
 
