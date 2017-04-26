@@ -6,6 +6,7 @@ import ingraph.relalg.calculators.ExternalSchemaCalculator
 import ingraph.relalg.calculators.ExtraVariablesCalculator
 import ingraph.relalg.calculators.InternalSchemaCalculator
 import ingraph.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.generator.data.TestQuery
@@ -14,7 +15,6 @@ import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
-import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class QueryProcessor {
 	
@@ -24,14 +24,9 @@ class QueryProcessor {
 	extension TechReportEscaper escaper = new TechReportEscaper
 	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 
+	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
+	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
 	protected val expressionConverter = new Relalg2TexExpressionConverter
-	protected val RelalgConverterConfig treeSerializerConfig
-	protected val Relalg2TexTreeConverter treeSerializer
-
-	new(RelalgConverterConfig treeSerializerConfig) {
-		this.treeSerializerConfig = treeSerializerConfig
-		this.treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
-	}
 
 	def boolean toSubsection(TestQuery testQuery, List<CharSequence> subsections) {
 		var RelalgContainer container = null
