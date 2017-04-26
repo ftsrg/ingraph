@@ -24,9 +24,12 @@ class QueryProcessor {
 	extension TechReportEscaper escaper = new TechReportEscaper
 	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 
-	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
-	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
+	protected val Relalg2TexTreeConverter treeSerializer
 	protected val expressionConverter = new Relalg2TexExpressionConverter
+
+	new(RelalgConverterConfig treeSerializerConfig) {
+		treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
+	}
 
 	def boolean toSubsection(TestQuery testQuery, List<CharSequence> subsections) {
 		var RelalgContainer container = null

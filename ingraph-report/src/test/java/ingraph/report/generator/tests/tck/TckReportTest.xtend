@@ -8,6 +8,7 @@ import ingraph.report.featuregrammar.feature.Scenario
 import ingraph.report.featuregrammar.feature.ThenStep
 import ingraph.report.featuregrammar.feature.WhenStep
 import ingraph.report.generator.data.TestQuery
+import ingraph.report.generator.data.TestQueryBuilder
 import ingraph.report.generator.tests.IngraphReportTest
 import java.io.File
 import java.nio.charset.Charset
@@ -59,7 +60,7 @@ class TckReportTest extends IngraphReportTest {
 					val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
 					println(scenarioId)
 					val regressionTest = failingAndRegressionTests.contains(scenarioId)
-					val testQuery = TestQuery.builder.queryName(scenario.name).querySpecification(querySpecification).regressionTest(regressionTest).
+					val testQuery = new TestQueryBuilder().setQueryName(scenario.name).setQuerySpecification(querySpecification).setRegressionTest(regressionTest).
 						build
 					testQueries.add(testQuery)
 				}

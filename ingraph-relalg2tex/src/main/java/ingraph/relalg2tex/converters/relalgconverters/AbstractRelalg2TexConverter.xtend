@@ -1,6 +1,7 @@
 package ingraph.relalg2tex.converters.relalgconverters
 
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import ingraph.relalg2tex.converters.operatorconverters.OperatorConverter
 import java.io.File
@@ -16,7 +17,7 @@ abstract class AbstractRelalg2TexConverter {
 	protected val extension StringEscaper stringEscaper = new StringEscaper
 
 	protected new() {
-		this(RelalgConverterConfig.builder.build)
+		this(new RelalgConverterConfigBuilder().build)
 	}
 
 	protected new(RelalgConverterConfig config) {

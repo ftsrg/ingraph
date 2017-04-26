@@ -1,5 +1,7 @@
 package ingraph.report.generator.tests
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
 import java.io.File
@@ -14,6 +16,15 @@ abstract class IngraphReportTest {
 
 	val PROGRESSBAR_TABLE_HEADER = '''\begin{longtable}{llr@{ of }l}'''
 	val PROGRESSBAR_TABLE_FOOTER = '''\end{longtable}'''
+	val RelalgConverterConfig treeSerializerConfig
+
+	new() {
+		this.treeSerializerConfig = new RelalgConverterConfigBuilder().setIncludeCommonVariables(true).setTextualOperators(true).build
+	}
+
+	new(RelalgConverterConfig treeSerializerConfig) {
+		this.treeSerializerConfig = treeSerializerConfig
+	}
 
 	def String progressbarTableRow(String color, String title, int working, int total) {
 		val ratio = calculateCompilingQueryRatio(working, total)
@@ -43,7 +54,7 @@ abstract class IngraphReportTest {
 			val sectionQuerySpecifications = cqs.value
 			val sectionLabel = sectionTitle.toLabel
 
-			val cp = new ChapterProcessor
+			val cp = new ChapterProcessor(treeSerializerConfig)
 			cp.processQueries(sectionQuerySpecifications)
 
 			val sectionCompilingQueries = cp.compilingQueries

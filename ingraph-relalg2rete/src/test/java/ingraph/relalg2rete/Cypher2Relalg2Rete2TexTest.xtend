@@ -5,7 +5,7 @@ import ingraph.relalg.calculators.ExternalSchemaCalculator
 import ingraph.relalg.calculators.ExtraVariablesCalculator
 import ingraph.relalg.calculators.InternalSchemaCalculator
 import ingraph.relalg.util.RelalgUtil
-import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 
 abstract class Cypher2Relalg2Rete2TexTest {
@@ -14,7 +14,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = RelalgConverterConfig.builder.consoleOutput(false).standaloneDocument(true).includeCommonVariables(true).build
+	protected val config = new RelalgConverterConfigBuilder().setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).build
 	protected val drawer = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()

@@ -3,14 +3,14 @@ package ingraph.cypher2relalg.trainbenchmark
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.cypherparser.CypherParser
 import ingraph.relalg.util.RelalgUtil
-import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import java.io.IOException
 import org.junit.Test
 
 class TrainBenchmarkCypher2Relalg2TexTest {
 	
-	val config = RelalgConverterConfig.builder.standaloneDocument(true).consoleOutput(false).build
+	val config = new RelalgConverterConfigBuilder().setStandaloneDocument(true).setConsoleOutput(false).build
 	val drawer = new Relalg2TexTreeConverter(config)
 	
 	def process(String query) {
