@@ -159,6 +159,18 @@
 		\omega
 	}}
 
+\newcommand{\unnestop}{\iftoggle{textualoperators}{
+		\relalgop{Unnest}
+	}{
+		\nu
+	}}
+
+\newcommand{\nestop}{\iftoggle{textualoperators}{
+		\relalgop{Nest}
+	}{
+		\mu
+	}}
+
 \newcommand{\joinop}{\iftoggle{textualoperators}{
 		\relalgop{Join}
 	}{
@@ -270,6 +282,8 @@
 \newcommand{\rename}[1]{\renameop_{#1}}
 \newcommand{\grouping}[2]{\groupingop_{#1}^{#2}}
 \newcommand{\production}[1]{\productionop_{#1}}
+\newcommand{\nest}[1]{\nestop_{#1}}
+\newcommand{\unnest}[1]{\unnestop_{#1}}
 
 %%%%%%%%%% binary operators %%%%%%%%%%
 
