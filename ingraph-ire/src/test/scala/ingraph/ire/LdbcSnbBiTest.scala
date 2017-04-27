@@ -19,6 +19,7 @@ import java.util.Collections
 import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 
 class LdbcSnbBiTest extends FunSuite {
 
@@ -60,11 +61,11 @@ class LdbcSnbBiTest extends FunSuite {
     modelPath("tag_hasType_tagclass") -> "hasType"
   )
 
-  val converterConfig = RelalgConverterConfig.builder
-    .consoleOutput(false) //
-    .standaloneDocument(true) //
-    .includeCommonVariables(true) //
-    .schemaIndices(true) //
+  val converterConfig = new RelalgConverterConfigBuilder() //
+    .setConsoleOutput(false) //
+    .setStandaloneDocument(true) //
+    .setIncludeCommonVariables(true) //
+    .setSchemaIndices(true) //
     .build
   val converter = new Relalg2TexTreeConverter(converterConfig)
 
