@@ -7,7 +7,7 @@ import org.junit.Test
 class RunningExamplesTest extends DirectoryTest {
 
 	new() {
-		super(new RelalgConverterConfigBuilder().setIncludeCommonVariables(true).setTextualOperators(false).build)
+		super(new RelalgConverterConfigBuilder().setOmitSchema(true).setIncludeCommonVariables(true).setTextualOperators(false).build)
 	}
 
 	@Test

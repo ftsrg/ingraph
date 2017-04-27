@@ -3,9 +3,14 @@ package ingraph.relalg2tex.config;
 public class RelalgConverterConfig {
 
 	/**
-	 * whether to include cardinality information in the converter (for trees)
+	 * whether to include cardinality information (for trees)
 	 */
 	private final boolean includeCardinality;
+
+	/**
+	 * whether to omit schema information (for trees)
+	 */
+	private final boolean omitSchema;
 
 	/**
 	 * whether to use parentheses for expressions)
@@ -42,6 +47,10 @@ public class RelalgConverterConfig {
 		return includeCardinality;
 	}
 
+	public boolean isOmitSchema() {
+		return omitSchema;
+	}
+
 	public boolean isParentheses() {
 		return parentheses;
 	}
@@ -66,11 +75,12 @@ public class RelalgConverterConfig {
 		return schemaIndices;
 	}
 
-	public RelalgConverterConfig(final boolean includeCardinality, final boolean parentheses,
+	public RelalgConverterConfig(final boolean includeCardinality, final boolean omitSchema, final boolean parentheses,
 			final boolean standaloneDocument, final boolean includeCommonVariables, final boolean consoleOutput,
 			final boolean textualOperators, final boolean schemaIndices) {
 		super();
 		this.includeCardinality = includeCardinality;
+		this.omitSchema = omitSchema;
 		this.parentheses = parentheses;
 		this.standaloneDocument = standaloneDocument;
 		this.includeCommonVariables = includeCommonVariables;

@@ -42,21 +42,23 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 		'''
 		[
 			{«op.operator»
-			«IF op.extractContainer.isExternalSchemaInferred»
-			\\ \footnotesize
-			$\color{externalschemacolor} «op.externalSchema.convertSchema» $
-			«ENDIF»
-			«IF op.extractContainer.isExtraVariablesInferred»
-			\\ \footnotesize
-			$\color{extravariablescolor} «op.extraVariables.convertSchema» $
-			«ENDIF»
-			«IF op.extractContainer.isInternalSchemaInferred»
-			\\ \footnotesize
-			«IF op instanceof BeamerOperator»
-			$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
-			«ELSE»
-			$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices»$
-			«ENDIF»
+			«IF !config.omitSchema»
+				«IF op.extractContainer.isExternalSchemaInferred»
+				\\ \footnotesize
+				$\color{externalschemacolor} «op.externalSchema.convertSchema» $
+				«ENDIF»
+				«IF op.extractContainer.isExtraVariablesInferred»
+				\\ \footnotesize
+				$\color{extravariablescolor} «op.extraVariables.convertSchema» $
+				«ENDIF»
+				«IF op.extractContainer.isInternalSchemaInferred»
+				\\ \footnotesize
+					«IF op instanceof BeamerOperator»
+					$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
+					«ELSE»
+					$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices»$
+					«ENDIF»
+				«ENDIF»
 			«ENDIF»
 			«IF op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
 			\\ \footnotesize

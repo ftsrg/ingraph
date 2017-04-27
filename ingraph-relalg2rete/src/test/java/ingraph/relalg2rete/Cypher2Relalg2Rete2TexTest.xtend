@@ -14,7 +14,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = new RelalgConverterConfigBuilder().setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).build
+	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).build
 	protected val drawer = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()

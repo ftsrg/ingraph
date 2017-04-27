@@ -2,6 +2,7 @@ package ingraph.relalg2tex.config;
 
 public class RelalgConverterConfigBuilder {
 	private boolean includeCardinality;
+	private boolean omitSchema;
 	private boolean parentheses;
 	private boolean standaloneDocument;
 	private boolean includeCommonVariables;
@@ -11,6 +12,11 @@ public class RelalgConverterConfigBuilder {
 
 	public RelalgConverterConfigBuilder setIncludeCardinality(boolean includeCardinality) {
 		this.includeCardinality = includeCardinality;
+		return this;
+	}
+
+	public RelalgConverterConfigBuilder setOmitSchema(boolean omitSchema) {
+		this.omitSchema = omitSchema;
 		return this;
 	}
 
@@ -45,7 +51,7 @@ public class RelalgConverterConfigBuilder {
 	}
 
 	public RelalgConverterConfig build() {
-		return new RelalgConverterConfig(includeCardinality, parentheses, standaloneDocument, includeCommonVariables,
+		return new RelalgConverterConfig(includeCardinality, omitSchema, parentheses, standaloneDocument, includeCommonVariables,
 				consoleOutput, textualOperators, schemaIndices);
 	}
 }

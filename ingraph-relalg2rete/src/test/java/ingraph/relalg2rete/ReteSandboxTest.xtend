@@ -9,8 +9,14 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	}
 
 	@Test
-	def void create1() {
-		process('create-example', '''CREATE (n) RETURN n''')
+	def void sandbox() {
+		process('sandbox', '''
+			MATCH (p1:Person)
+			UNWIND p1.speaks AS p1lang
+			MATCH (p2:Person)
+			WHERE p1lang IN p2.speaks // AND p1 <> p2
+			RETURN p1lang
+		''')
 	}
 
 	@Test
