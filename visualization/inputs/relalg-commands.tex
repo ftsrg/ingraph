@@ -242,9 +242,9 @@
 	{
 		\ifstrequal{#4}{1}
 		{} % minHops = 1 and maxHops = 1 -> write nothing
-		{\kleenestar \atom{#3} \ldots \atom{#4}} % minHops = 1 and maxHops != 1
+		{\kleenestar_\atom{#3}^\atom{#4}} % minHops = 1 and maxHops != 1
 	} % minHops != 1
-	{\kleenestar \atom{#3} \ldots \atom{#4}}
+	{\kleenestar_\atom{#3}^\atom{#4}}
 	\right]}
 
 \newcommand{\expandboth}[7]{\expandbothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
