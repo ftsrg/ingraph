@@ -13,7 +13,7 @@ public class RelalgConverterConfig {
 	private final boolean omitSchema;
 
 	/**
-	 * whether to use parentheses for expressions)
+	 * whether to use parentheses (for expressions)
 	 */
 	private final boolean parentheses;
 

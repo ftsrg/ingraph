@@ -42,7 +42,7 @@ class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 
 	def dispatch CharSequence children(UnaryOperator op) {
 		'''«op.operator»
-		\Big(«op.input.children»\Big)
+		«IF config.parentheses»\Big(«ENDIF»«op.input.children»«IF config.parentheses»\Big)«ENDIF»
 		'''
 	}
 

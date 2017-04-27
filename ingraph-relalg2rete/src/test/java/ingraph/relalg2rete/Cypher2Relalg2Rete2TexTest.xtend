@@ -7,6 +7,7 @@ import ingraph.relalg.calculators.InternalSchemaCalculator
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 
 abstract class Cypher2Relalg2Rete2TexTest {
 		
@@ -14,8 +15,9 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).build
-	protected val drawer = new Relalg2TexTreeConverter(config)
+	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).setParentheses(true).build
+	protected val expressionConverter = new Relalg2TexExpressionConverter(config)
+	protected val treeConverter = new Relalg2TexTreeConverter(config)
 	
 	protected abstract def String directory()
 	
@@ -23,7 +25,8 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification, query)
 		containerSearchBased.calculateExternalSchema
-		drawer.convert(containerSearchBased, '''«directory()»/«query»-search''')
+		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-expression''')
+		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-search''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
 		// Rete
@@ -33,7 +36,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		containerRete.calculateExternalSchema
 		containerRete.calculateExtraVariables
 		containerRete.calculateInternalSchema
-		drawer.convert(containerRete, '''«directory()»/«query»-rete''')
+		treeConverter.convert(containerRete, '''«directory()»/«query»-rete''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
 		return containerSearchBased
 	}
