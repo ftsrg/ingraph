@@ -1,4 +1,4 @@
 MATCH (p:Person)
 WITH p
-UNWIND p.speaks AS language
-RETURN p.name, language
+UNWIND p.speaks AS lang
+RETURN p.name, lang
