@@ -10,23 +10,24 @@ import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 
 abstract class Cypher2Relalg2Rete2TexTest {
-		
+
 	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).setParentheses(true).setIncludeProductionOperator(false).build
+	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
+		setStandaloneDocument(true).setIncludeCommonVariables(false).setParentheses(true).
+		setIncludeProductionOperator(false).build
 	protected val expressionConverter = new Relalg2TexExpressionConverter(config)
 	protected val treeConverter = new Relalg2TexTreeConverter(config)
-	
+
 	protected abstract def String directory()
-	
+
 	protected def process(String query, String querySpecification) {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification, query)
 		containerSearchBased.calculateExternalSchema
 		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-expression''')
-		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-search''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
 //		// Rete
@@ -40,6 +41,5 @@ abstract class Cypher2Relalg2Rete2TexTest {
 //		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
 //		return containerSearchBased
 	}
-	
-	
+
 }
