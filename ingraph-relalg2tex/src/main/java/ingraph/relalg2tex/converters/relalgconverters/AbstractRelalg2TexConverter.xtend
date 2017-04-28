@@ -70,7 +70,7 @@ abstract class AbstractRelalg2TexConverter {
 	def abstract CharSequence convertBody(Operator expression)
 
 	def operator(Operator op) {
-		op.convertOperator.join("")
+		op.convertOperator
 	}
 
 }

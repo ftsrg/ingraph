@@ -113,7 +113,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	 * operator
 	 */
 	override operator(Operator op) {
-		'''$«op?.convertOperator.join('''$\\$''')»$'''
+		'''$«op?.convertOperator»$'''
 	}
 
 }

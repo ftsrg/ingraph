@@ -49,118 +49,96 @@ class OperatorConverter {
 	 * NullaryOperators
 	 */
 	def dispatch convertOperator(DualObjectSourceOperator op) {
-		#[
-			'''\var{Dual}'''
-		]
+		'''\dual'''
 	}
 
 	def dispatch convertOperator(GetEdgesOperator op) {
-		#[
-			'''\getedges«IF op.direction === Direction.BOTH»undirected«ELSE»directed«ENDIF»''' +
-			'''«op.sourceVertexVariable.convertElement»«op.targetVertexVariable.convertElement»«op.edgeVariable.convertElement»'''
-		]
+		'''\getedges«IF op.direction === Direction.BOTH»undirected«ELSE»directed«ENDIF»''' +
+		'''«op.sourceVertexVariable.convertElement»«op.targetVertexVariable.convertElement»«op.edgeVariable.convertElement»'''
 	}
 
 	def dispatch convertOperator(GetVerticesOperator op) {
-		#[
-			'''\getvertices«op.vertexVariable.convertElement»'''
-		]
+		'''\getvertices«op.vertexVariable.convertElement»'''
 	}
 
 	/**
 	 * UnaryOperators
 	 */
 	def dispatch convertOperator(AllDifferentOperator op) {
-		#['''\alldifferent{«op.edgeVariables.edgeVariableList»}''']
+		'''\alldifferent{«op.edgeVariables.edgeVariableList»}'''
 	}
 
 	def dispatch convertOperator(DuplicateEliminationOperator op) {
-		#['''\duplicateelimination''']
+		'''\duplicateelimination'''
 	}
 
 	def dispatch convertOperator(ExpandOperator op) {
 		val ev=op.edgeVariable
-		#[
-			if (op instanceof PathOperator) {
-				'''\transitiveclosure'''
-			} else {
-				'''\expand'''
-			} + //
-			'''«op.direction.convertDirection»''' + //
-			'''{«op.sourceVertexVariable.escapedName»}''' + //
-			'''«op.targetVertexVariable.convertElement»''' + //
-			'''«op.edgeVariable.convertElement»''' + //
-			if (ev instanceof EdgeListVariable) {
-				'''{«ev.minHops»}{«ev.maxHops.hopsToString»}'''
-			} else {
-				'''{1}{1}'''
-			}
-		]
+		if (op instanceof PathOperator) {
+			'''\transitiveclosure'''
+		} else {
+			'''\expand'''
+		} + //
+		'''«op.direction.convertDirection»''' + //
+		'''{«op.sourceVertexVariable.escapedName»}''' + //
+		'''«op.targetVertexVariable.convertElement»''' + //
+		'''«op.edgeVariable.convertElement»''' + //
+		if (ev instanceof EdgeListVariable) {
+			'''{«ev.minHops»}{«ev.maxHops.hopsToString»}'''
+		} else {
+			'''{1}{1}'''
+		}
 	}
 
 	def dispatch convertOperator(ProductionOperator op) {
-		#['''\production{«op.elements.convertReturnableElementList»}''']
+		'''\production{«op.elements.convertReturnableElementList»}'''
 	}
 
 	def dispatch convertOperator(GroupingOperator op) {
-		#['''«groupingOperator(op)»''']
+		'''«groupingOperator(op)»'''
 	}
 
-//	def dispatch convertOperator(GroupingOperator op) {
-//		#['''\groupingop  «projectionOperator(op)» [«op.order.join("; ")»]''']
-//	}
-
 	def dispatch convertOperator(ProjectionOperator op) {
-		#['''«projectionOperator(op)»''']
+		'''«projectionOperator(op)»'''
 	}
 
 	def dispatch convertOperator(CreateOperator op) {
-		#['''«createOperator(op)»''']
-	}
-
-	def dispatch convertOperator(DeleteOperator op) {
-		#['''«deleteOperator(op)»''']
-	}
-
-	def createOperator(CreateOperator op) {
 		'''\create{«op.elements.map[it.expression.convertExpressionWithLabelSet].join(", ")»}'''
 	}
 
-	def deleteOperator(DeleteOperator op) {
+	def dispatch convertOperator(DeleteOperator op) {
 		'''\delete{«IF op.detach»*«ENDIF»}{«op.elements.map[it.expression.convertExpression].join(", ")»}'''
 	}
 
 	def dispatch convertOperator(SelectionOperator op) {
-		#[
-			'''
-			\selection{
-				«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»
-			}
-			'''
-		]
+		'''
+		\selection{
+			«IF op.condition !== null»«op.condition.convertExpression»«ELSE»\mathtt{«op.conditionString.convertConditionString»}«ENDIF»
+		}
+		'''
 	}
 
 	def dispatch convertOperator(SortOperator op) {
-		#[ sortOperatorToTex(op) ]
+		sortOperatorToTex(op)
 	}
 
 	def dispatch convertOperator(TopOperator op) {
-		#[ topOperatorToTex(op) ]
+		topOperatorToTex(op)
 	}
 
 	def dispatch convertOperator(SortAndTopOperator op) {
-		#[ sortOperatorToTex(op) + topOperatorToTex(op) ]
+		sortOperatorToTex(op) + topOperatorToTex(op)
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		#['''\unwind{«op.element.convertVariable.escape»}''']
+		'''\unwind{«op.element.convertVariable.escape»}'''
 	}
 
 	/**
 	 * BinaryOperators
 	 */
 	def dispatch convertOperator(BinaryOperator op) {
-		#['''\«op.convertBinaryOperator»''']
+		'''\«op.convertBinaryOperator»'''
 	}
 
 }

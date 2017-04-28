@@ -18,6 +18,11 @@ public class RelalgConverterConfig {
 	private final boolean parentheses;
 
 	/**
+	 * whether to use parentheses (for expressions)
+	 */
+	private final boolean includeProductionOperator;
+
+	/**
 	 * whether to generate a standalone TeX document
 	 */
 	private final boolean standaloneDocument;
@@ -55,6 +60,10 @@ public class RelalgConverterConfig {
 		return parentheses;
 	}
 
+	public boolean isIncludeProductionOperator() {
+		return includeProductionOperator;
+	}
+
 	public boolean isStandaloneDocument() {
 		return standaloneDocument;
 	}
@@ -76,12 +85,13 @@ public class RelalgConverterConfig {
 	}
 
 	public RelalgConverterConfig(final boolean includeCardinality, final boolean omitSchema, final boolean parentheses,
-			final boolean standaloneDocument, final boolean includeCommonVariables, final boolean consoleOutput,
-			final boolean textualOperators, final boolean schemaIndices) {
+			final boolean includeProductionOperator, final boolean standaloneDocument, final boolean includeCommonVariables,
+			final boolean consoleOutput, final boolean textualOperators, final boolean schemaIndices) {
 		super();
 		this.includeCardinality = includeCardinality;
 		this.omitSchema = omitSchema;
 		this.parentheses = parentheses;
+		this.includeProductionOperator = includeProductionOperator;
 		this.standaloneDocument = standaloneDocument;
 		this.includeCommonVariables = includeCommonVariables;
 		this.consoleOutput = consoleOutput;

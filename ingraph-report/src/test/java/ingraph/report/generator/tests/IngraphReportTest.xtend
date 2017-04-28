@@ -19,7 +19,7 @@ abstract class IngraphReportTest {
 	val RelalgConverterConfig treeSerializerConfig
 
 	new() {
-		this.treeSerializerConfig = new RelalgConverterConfigBuilder().setIncludeCommonVariables(true).setTextualOperators(true).build
+		this.treeSerializerConfig = new RelalgConverterConfigBuilder().setIncludeCommonVariables(true).setTextualOperators(true).setIncludeProductionOperator(true).build
 	}
 
 	new(RelalgConverterConfig treeSerializerConfig) {

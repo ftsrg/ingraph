@@ -15,7 +15,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).setParentheses(true).build
+	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).setStandaloneDocument(true).setIncludeCommonVariables(true).setParentheses(true).setIncludeProductionOperator(false).build
 	protected val expressionConverter = new Relalg2TexExpressionConverter(config)
 	protected val treeConverter = new Relalg2TexTreeConverter(config)
 	
@@ -29,16 +29,16 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-search''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
-		// Rete
-		val containerRete = Cypher2Relalg.processString(querySpecification, query)
-		val transformation = new Relalg2ReteTransformation(containerRete)
-		transformation.transformToRete
-		containerRete.calculateExternalSchema
-		containerRete.calculateExtraVariables
-		containerRete.calculateInternalSchema
-		treeConverter.convert(containerRete, '''«directory()»/«query»-rete''')
-		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
-		return containerSearchBased
+//		// Rete
+//		val containerRete = Cypher2Relalg.processString(querySpecification, query)
+//		val transformation = new Relalg2ReteTransformation(containerRete)
+//		transformation.transformToRete
+//		containerRete.calculateExternalSchema
+//		containerRete.calculateExtraVariables
+//		containerRete.calculateInternalSchema
+//		treeConverter.convert(containerRete, '''«directory()»/«query»-rete''')
+//		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
+//		return containerSearchBased
 	}
 	
 	

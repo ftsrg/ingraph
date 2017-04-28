@@ -4,6 +4,7 @@ import ingraph.relalg2tex.config.RelalgConverterConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.ProductionOperator
 import relalg.TernaryOperator
 import relalg.UnaryOperator
 
@@ -41,13 +42,17 @@ class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 	}
 
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operator»
-		«IF config.parentheses»\Big(«ENDIF»«op.input.children»«IF config.parentheses»\Big)«ENDIF»
+		val includeOperator = !(op instanceof ProductionOperator) || config.includeProductionOperator
+		'''
+		«IF includeOperator»«op.operator»«IF config.parentheses»\Big(«ENDIF»«ENDIF»
+		«op.input.children»
+		«IF includeOperator»«IF config.parentheses»\Big)«ENDIF»«ENDIF»
 		'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.leftInput.children»
+		'''
+		«op.leftInput.children»
 		«op.operator»
 		«op.rightInput.children»
 		'''

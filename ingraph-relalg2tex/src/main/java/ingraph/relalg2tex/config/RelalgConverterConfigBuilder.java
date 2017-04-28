@@ -4,6 +4,7 @@ public class RelalgConverterConfigBuilder {
 	private boolean includeCardinality;
 	private boolean omitSchema;
 	private boolean parentheses;
+	private boolean includeProductionOperator;
 	private boolean standaloneDocument;
 	private boolean includeCommonVariables;
 	private boolean consoleOutput;
@@ -22,6 +23,11 @@ public class RelalgConverterConfigBuilder {
 
 	public RelalgConverterConfigBuilder setParentheses(boolean parentheses) {
 		this.parentheses = parentheses;
+		return this;
+	}
+
+	public RelalgConverterConfigBuilder setIncludeProductionOperator(boolean includeProductionOperator) {
+		this.includeProductionOperator = includeProductionOperator;
 		return this;
 	}
 
@@ -51,7 +57,7 @@ public class RelalgConverterConfigBuilder {
 	}
 
 	public RelalgConverterConfig build() {
-		return new RelalgConverterConfig(includeCardinality, omitSchema, parentheses, standaloneDocument, includeCommonVariables,
+		return new RelalgConverterConfig(includeCardinality, omitSchema, parentheses, includeProductionOperator, standaloneDocument, includeCommonVariables,
 				consoleOutput, textualOperators, schemaIndices);
 	}
 }
