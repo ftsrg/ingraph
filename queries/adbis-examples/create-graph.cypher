@@ -1,7 +1,7 @@
 CREATE
-  (a:Person:Student {name: 'Alice', speaks: ['en', 'fr']}),
-  (b:Person {name: 'Bob', speaks: ['en', 'fr']}),
-  (c:Person:Teacher {name: 'Cecil', speaks: ['en']}),
+  (a:Person:Student {name: 'Alice', speaks: ['en']}),
+  (b:Person {name: 'Bob', speaks: ['fr']}),
+  (c:Person:Teacher {name: 'Cecil', speaks: ['en', 'de']}),
   (d:Message:Post {language: 'en'}),
   (e:Message:Comment {language: 'en'}),
   (f:Message:Comment {language: 'fr'}),
