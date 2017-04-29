@@ -11,8 +11,13 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	@Test
 	def void adbis1() {
 		process('adbis-query-1', '''
-			MATCH ()<-[:LIKES]-(m:Message)-[:LIKES]->(), (m)<-[:REPLY]-(r)
-			RETURN r
+			MATCH (m1:Message)
+			WITH m1.language AS singleLang, count(*) AS cnt
+			WHERE cnt = 1
+			MATCH (m2:Message)
+			WHERE m2.language = singleLang
+			OPTIONAL MATCH (m2)-[:REPLY_OF]->(m3:Message)
+			RETURN m2.language as replyLang, m3.language as originalLang
 		''')
 	}
 

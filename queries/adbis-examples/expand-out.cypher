@@ -1,2 +1,2 @@
-MATCH (p1:Person)-[:KNOWS]->(p2:Person)
-RETURN p1.name, p2.name
+MATCH (p:Person)-[:LIKES]->(m:Message)
+RETURN p.name, m.language

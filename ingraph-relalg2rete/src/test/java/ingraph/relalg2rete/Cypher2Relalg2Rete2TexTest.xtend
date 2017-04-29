@@ -27,6 +27,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification, query)
 		containerSearchBased.calculateExternalSchema
+		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-tree''')
 		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-expression''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
