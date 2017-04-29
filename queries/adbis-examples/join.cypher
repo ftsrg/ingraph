@@ -1,4 +1,4 @@
 MATCH
-  ()-[:LIKES]->(m:Message)<-[:LIKES]-(),
-  (m)<-[:REPLY]-(r)
+ ()-[:LIKES]->(m:Message)<-[:LIKES]-(),
+ (m)<-[:REPLY]-(r)
 RETURN r
