@@ -131,7 +131,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		'''\unwind{«op.element.convertVariable.escape»}'''
+		'''\unwind{«op.element.convertVariable»}'''
 	}
 
 	/**
