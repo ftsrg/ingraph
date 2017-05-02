@@ -53,13 +53,10 @@ object EngineFactory {
               )
               val aggregationCriteria = op.getAggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
               val projectionVariableLookup: Map[String, Integer] =
-                aggregationCriteria.zipWithIndex.map( a => a._1.toString() -> a._2.asInstanceOf[Integer] ).toMap ++
+                aggregationCriteria.zipWithIndex.map( a => a._1._1.toString -> a._2.asInstanceOf[Integer] ).toMap ++
                 aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
-              println(op.getElements.map(_.toString))
-              println(op.getAggregationCriteria.map(_.toString))
-              println(op.getElements)
               val projectionExpressions = op.getElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
-              newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions)))
+              newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
               // This is the mighty EMF, so there are no default values, obviously
@@ -74,7 +71,7 @@ object EngineFactory {
                   sortKeys,
                   skip,
                   limit,
-                  op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
+                  op.getEntries.map(_.getDirection == OrderDirection.ASCENDING)
               )))
 
             case op: SortOperator =>
