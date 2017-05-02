@@ -60,7 +60,10 @@ object ExpressionParser {
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[String, Integer]): Any =
     tuple(lookup(variable.toString))
 
-  def parseValue(exp: Expression, lookup: Map[String, Integer]): (Tuple) => Any = exp match {
+  def parseValue(exp: Expression, lookup: Map[String, Integer]): (Tuple) => Any =
+    if (lookup.contains(exp.toString))
+      tuple => tuple(lookup(exp.toString))
+    else exp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
@@ -117,29 +120,35 @@ object ExpressionParser {
             tuple => FunctionLookup.fun3(exp.getFunctor)(first(tuple), second(tuple), third(tuple))
           tuple => function(tuple)
       }
+    case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
+      tuple => lookup(exp.toString)
   }
 
   import relalg.function.Function._
-  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): () => StatefulAggregate = exp match {
-    case exp: FunctionExpression =>
+  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): List[(String, () => StatefulAggregate)] = exp match {
+    case exp: FunctionExpression if exp.getFunctor.getCategory ==  FunctionCategory.AGGREGATION =>
       if (exp.getFunctor != COLLECT) {
         val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
         val index = lookup(variable.toString)
-        exp.getFunctor match {
+        List((exp.toString, exp.getFunctor match {
           case AVG => () => new StatefulAverage(index)
           case COUNT => () => new NullAwareStatefulCount(index)
           case COUNT_ALL => () => new StatefulCount()
           case MAX => () => new StatefulMax(index)
           case MIN => () => new StatefulMin(index)
           case SUM => () => new StatefulSum(index)
-        }
+        }))
       } else {
         val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
                 println(lookup)
         val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.toString)).map(_.toInt)
             println(indices)
-        () => new StatefulCollect(indices)
+        List((exp.toString, () => new StatefulCollect(indices)))
       }
+    case exp: Literal => List()
+    case exp: VariableExpression => List()
+    case exp: BinaryArithmeticOperationExpression =>
+      parseAggregate(exp.getLeftOperand, lookup) ++ parseAggregate(exp.getRightOperand, lookup)
   }
 
   private def parseListExpression(expr: ListExpression): Vector[Expression] = expr match {

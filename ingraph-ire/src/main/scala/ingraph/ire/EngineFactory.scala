@@ -45,14 +45,21 @@ object EngineFactory {
             case op: ProductionOperator => production
             case op: GroupingOperator =>
               val variableLookup = getSchema(op.getInput)
-              val functions = () => op.getAggregationCriteria.map(
-                e => ExpressionParser.parseAggregate(e, variableLookup)
-              ).map(
-                _() // GOOD LUCK UNDERSTANDING THIS
+              val aggregates = op.getElements.flatMap(
+                e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)
               )
-              val mask = op.getElements.map(e => ExpressionParser.parseValue(e.getExpression, variableLookup))
-              newLocal(Props(new AggregationNode(expr.child, mask, functions)))
-
+              val functions = () => aggregates.map(
+                _._2() // GOOD LUCK UNDERSTANDING THIS
+              )
+              val aggregationCriteria = op.getAggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
+              val projectionVariableLookup: Map[String, Integer] =
+                aggregationCriteria.zipWithIndex.map( a => a._1.toString() -> a._2.asInstanceOf[Integer] ).toMap ++
+                aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
+              println(op.getElements.map(_.toString))
+              println(op.getAggregationCriteria.map(_.toString))
+              println(op.getElements)
+              val projectionExpressions = op.getElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
+              newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions)))
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
               // This is the mighty EMF, so there are no default values, obviously
@@ -90,8 +97,8 @@ object EngineFactory {
 
             case op: ProjectionOperator =>
               val lookup = getSchema(op.getInput)
-              val mask = op.getTupleIndices
-              newLocal(Props(new ProjectionNode(expr.child, mask)))
+              val expressions = op.getElements.map( e => ExpressionParser.parseValue(e.getExpression, lookup))
+              newLocal(Props(new ProjectionNode(expr.child, expressions)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
               val schema = getSchema(op.getInput)
