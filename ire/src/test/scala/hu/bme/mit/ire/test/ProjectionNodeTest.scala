@@ -22,7 +22,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
         positive = tupleBag(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)),
         negative = tupleBag(tuple(-0, -1, -2, -3), tuple(-10, -11, -12, -13))
       )
-      val selectionMask = mask(0, 2)
+      val selectionMask = functionMask(0, 2)
       val expectedChanges = ChangeSet(
         positive = tupleBag(tuple(15, 17), tuple(4, 6)),
         negative = tupleBag(tuple(-0, -2), tuple(-10, -12))
@@ -43,7 +43,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
 
     "do projection with equal length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1, 0)))) // swap attributes
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, functionMask(1, 0)))) // swap attributes
 
       checker ! changeSet
       expectMsg(ChangeSet(
@@ -54,7 +54,7 @@ class ProjectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Imp
 
     "do projection with lesser length" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, mask(1))))
+      val checker = system.actorOf(Props(new ProjectionNode(echoActor ! _, functionMask(1))))
 
       checker ! changeSet
       expectMsg(ChangeSet(
