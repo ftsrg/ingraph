@@ -6,12 +6,10 @@ import org.junit.Test
 
 class AdbisExamplesTest extends DirectoryTest {
 
-	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
-		setStandaloneDocument(true).setIncludeCommonVariables(false).setParentheses(true).
-		setIncludeProductionOperator(false).setTextualOperators(false).build
-
 	new() {
-		super()
+		super(new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
+		setStandaloneDocument(true).setIncludeCommonVariables(false).setParentheses(true).
+		setIncludeProductionOperator(false).setTextualOperators(false).build)
 	}
 
 	@Test
