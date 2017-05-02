@@ -15,8 +15,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	protected val config = new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
-		setStandaloneDocument(true).setIncludeCommonVariables(false).setParentheses(true).
+	protected val config = new RelalgConverterConfigBuilder().setStandaloneDocument(true).setParentheses(true).
 		setIncludeProductionOperator(false).build
 	protected val expressionConverter = new Relalg2TexExpressionConverter(config)
 	protected val treeConverter = new Relalg2TexTreeConverter(config)
@@ -27,20 +26,20 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification, query)
 		containerSearchBased.calculateExternalSchema
-		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-tree''')
-		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-expression''')
+		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-search-tree''')
+		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-search-expression''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-search''')
 
-//		// Rete
-//		val containerRete = Cypher2Relalg.processString(querySpecification, query)
-//		val transformation = new Relalg2ReteTransformation(containerRete)
-//		transformation.transformToRete
-//		containerRete.calculateExternalSchema
-//		containerRete.calculateExtraVariables
-//		containerRete.calculateInternalSchema
-//		treeConverter.convert(containerRete, '''«directory()»/«query»-rete''')
-//		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
-//		return containerSearchBased
+		// Rete
+		val containerRete = Cypher2Relalg.processString(querySpecification, query)
+		val transformation = new Relalg2ReteTransformation(containerRete)
+		transformation.transformToRete
+		containerRete.calculateExternalSchema
+		containerRete.calculateExtraVariables
+		containerRete.calculateInternalSchema
+		treeConverter.convert(containerRete, '''«directory()»/«query»-rete-tree''')		
+		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
+		return containerSearchBased
 	}
 
 }

@@ -8,6 +8,7 @@ import java.io.File
 import java.nio.charset.Charset
 import org.apache.commons.io.FileUtils
 import relalg.Operator
+import relalg.ProductionOperator
 import relalg.RelalgContainer
 
 abstract class AbstractRelalg2TexConverter {
@@ -71,6 +72,10 @@ abstract class AbstractRelalg2TexConverter {
 
 	def operator(Operator op) {
 		op.convertOperator
+	}
+	
+	def includeOperator(Operator op) {
+		!(op instanceof ProductionOperator) || config.includeProductionOperator
 	}
 
 }

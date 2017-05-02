@@ -11,8 +11,9 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	@Test
 	def void adbis1() {
 		process('adbis-query-1', '''
-			MATCH (m1:Message)
-			RETURN sin(m1.content)
+			MATCH (p:Person)
+			UNWIND p.speaks AS lang
+			RETURN DISTINCT lang
 		''')
 	}
 

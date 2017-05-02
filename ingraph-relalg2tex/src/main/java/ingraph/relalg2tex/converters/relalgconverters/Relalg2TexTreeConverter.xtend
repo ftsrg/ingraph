@@ -39,39 +39,43 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	 * toNode
 	 */
 	def CharSequence toNode(Operator op) {
-		'''
-		[
-			{«op.operator»
-			«IF !config.omitSchema»
-				«IF op.extractContainer.isExternalSchemaInferred»
-				\\ \footnotesize
-				$\color{externalschemacolor} «op.externalSchema.convertSchema» $
-				«ENDIF»
-				«IF op.extractContainer.isExtraVariablesInferred»
-				\\ \footnotesize
-				$\color{extravariablescolor} «op.extraVariables.convertSchema» $
-				«ENDIF»
-				«IF op.extractContainer.isInternalSchemaInferred»
-				\\ \footnotesize
-					«IF op instanceof BeamerOperator»
-					$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
-					«ELSE»
-					$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices»$
+		val start =
+				'''[
+				{«op.operator»
+				«IF !config.omitSchema»
+					«IF op.extractContainer.isExternalSchemaInferred»
+					\\ \footnotesize
+					$\color{externalschemacolor} «op.externalSchema.convertSchema» $
+					«ENDIF»
+					«IF op.extractContainer.isExtraVariablesInferred»
+						«println(op.extraVariables)»
+					\\ \footnotesize
+					$\color{extravariablescolor} «op.extraVariables.convertSchema» $
+					«ENDIF»
+					«IF op.extractContainer.isInternalSchemaInferred»
+					\\ \footnotesize
+						«IF op instanceof BeamerOperator»
+						$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices(op.tupleIndices)»$
+						«ELSE»
+						$\color{internalschemacolor} «op.internalSchema.convertSchemaWithIndices»$
+						«ENDIF»
 					«ENDIF»
 				«ENDIF»
-			«ENDIF»
-			«IF op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
-			\\ \footnotesize
-			$\color{orange}
-			\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
-			\langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
-			«ENDIF»
-			«IF config.includeCardinality && op.cardinality !== null»
-			\\ \footnotesize \# «op.cardinality.formatCardinality»
-			«ENDIF»
-			}«op?.children»«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»
-		]
+				«IF op instanceof AbstractJoinOperator && op.extractContainer.isInternalSchemaInferred && config.includeCommonVariables»
+				\\ \footnotesize
+				$\color{orange}
+				\langle \var{«(op as AbstractJoinOperator).leftMask.join(", ")»} \rangle :
+				\langle \var{«(op as AbstractJoinOperator).rightMask.join(", ")»} \rangle$
+				«ENDIF»
+				«IF config.includeCardinality && op.cardinality !== null»
+				\\ \footnotesize \# «op.cardinality.formatCardinality»
+				«ENDIF»
+				}'''
+		
+		val end = '''«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»]
 		'''
+		
+		'''«IF op.includeOperator»«start»«ENDIF»«op?.children»«IF op.includeOperator»«end»«ENDIF»'''
 	}
 
 	/**
@@ -83,14 +87,11 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 
 	def dispatch children(UnaryOperator op) {
 		'''
-		
-			«op.input?.toNode»
-		'''
+			«op.input?.toNode»'''
 	}
 
 	def dispatch children(BinaryOperator op) {
 		'''
-		
 			«op.leftInput.toNode»
 			«op.rightInput.toNode»
 		'''
@@ -98,7 +99,6 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	
 	def dispatch children(TernaryOperator op) {
 		'''
-		
 			«op.leftInput.toNode»
 			«op.middleInput.toNode»
 			«op.rightInput.toNode»
