@@ -256,6 +256,12 @@ class GetVerticesOperator extends NullaryOperator {
 }
 
 /**
+ * Singular graph object source, i.e. the singularity, that should always return zero tuples
+ */
+class SingularObjectSourceOperator extends NullaryOperator {
+}
+
+/**
  * Dual graph object source, that should always return a single tuple, i.e. ()
  */
 class DualObjectSourceOperator extends NullaryOperator {
