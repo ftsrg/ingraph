@@ -32,7 +32,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	/**
-	 * [1] Replace the GetVertexOperator + default 1..1 ExpandOperator pairs with a single GetEdgesOperator
+	 * [1] Replace the GetVerticesOperator + default 1..1 ExpandOperator pairs with a single GetEdgesOperator
 	 */
 	protected def expandVertexRule() {
 		createRule() //
