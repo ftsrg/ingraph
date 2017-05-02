@@ -27,7 +27,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		}
 		// simpliciations
 		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
-		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
+		statements.fireWhilePossible(emptyAllDifferentOperatorRule)
 		
 		// Rete
 		statements.fireWhilePossible(expandVertexRule)
