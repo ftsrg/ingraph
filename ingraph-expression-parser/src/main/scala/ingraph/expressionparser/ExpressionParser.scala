@@ -140,11 +140,10 @@ object ExpressionParser {
         }))
       } else {
         val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
-                println(lookup)
         val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.toString)).map(_.toInt)
-            println(indices)
         List((exp.toString, () => new StatefulCollect(indices)))
       }
+    case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
     case exp: Literal => List()
     case exp: VariableExpression => List()
     case exp: BinaryArithmeticOperationExpression =>

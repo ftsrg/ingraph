@@ -24,7 +24,7 @@ class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val min = system.actorOf(Props(
-        new AggregationNode(echoActor ! _, functionMask(0), () => Vector(new StatefulMin(1)))))
+        new AggregationNode(echoActor ! _, functionMask(0), () => Vector(new StatefulMin(1)), functionMask(0, 1))))
 
       min ! changeSet
       expectMsg(ChangeSet(

@@ -24,7 +24,7 @@ class MaxNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val max = system.actorOf(Props(new AggregationNode(
-        echoActor ! _, functionMask(0), () => Vector(new StatefulMax(1)))))
+        echoActor ! _, functionMask(0), () => Vector(new StatefulMax(1)), functionMask(0, 1))))
 
       max ! changeSet
       expectMsg(ChangeSet(
