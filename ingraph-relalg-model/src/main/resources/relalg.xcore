@@ -78,6 +78,9 @@ class EdgeLabelSet extends LabelSet {
  */
 class VariableExpression extends Expression {
 	refers Variable variable
+	op String toString() {
+	  variable.toString()
+	}
 }
 
 /**
