@@ -72,13 +72,13 @@ class LdbcSnbBiTest extends FunSuite {
   case class TestCase(number: Int)
 
   Vector(
+        TestCase(3),
         TestCase(4),
         TestCase(5),
         TestCase(7),
 //        TestCase(23),
 //        TestCase(24),
 
-//        TestCase(3),
 //        TestCase(6),
 //        TestCase(13),
 
