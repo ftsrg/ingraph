@@ -25,6 +25,8 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	protected def process(String query, String querySpecification) {
 		// search-based
 		val containerSearchBased = Cypher2Relalg.processString(querySpecification, query)
+		val simplifyingTransformationSearchBased = new SimplifyingTransformation(containerSearchBased)
+		simplifyingTransformationSearchBased.simplify
 		containerSearchBased.calculateExternalSchema
 		treeConverter.convert(containerSearchBased, '''«directory()»/«query»-search-tree''')
 		expressionConverter.convert(containerSearchBased, '''«directory()»/«query»-search-expression''')
@@ -32,7 +34,9 @@ abstract class Cypher2Relalg2Rete2TexTest {
 
 		// Rete
 		val containerRete = Cypher2Relalg.processString(querySpecification, query)
+		val simplifyingTransformationRete = new SimplifyingTransformation(containerRete)
 		val transformation = new Relalg2ReteTransformation(containerRete)
+		simplifyingTransformationRete.simplify
 		transformation.transformToRete
 		containerRete.calculateExternalSchema
 		containerRete.calculateExtraVariables
