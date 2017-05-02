@@ -7,7 +7,7 @@ import org.junit.Test
 class AdbisExamplesTest extends DirectoryTest {
 
 	new() {
-		super(new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
+		super(new RelalgConverterConfigBuilder().setOmitSchema(false).setConsoleOutput(false).
 		setStandaloneDocument(false).setIncludeCommonVariables(false).setParentheses(true).
 		setIncludeProductionOperator(false).setTextualOperators(false).build)
 	}
