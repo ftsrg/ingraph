@@ -48,7 +48,6 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 					$\color{externalschemacolor} «op.externalSchema.convertSchema» $
 					«ENDIF»
 					«IF op.extractContainer.isExtraVariablesInferred»
-						«println(op.extraVariables)»
 					\\ \footnotesize
 					$\color{extravariablescolor} «op.extraVariables.convertSchema» $
 					«ENDIF»
