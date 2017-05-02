@@ -2,15 +2,6 @@ package ingraph.optimization.patterns
 
 import "http://ingraph/relalg";
 
-// [0] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
-// to the Dual table
-pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
-	find parentOperator(equiJoinLikeOperator, parentOperator);
-	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, leftInputOperator);
-	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
-	DualObjectSourceOperator(dualOperator);
-}
-
 /*
     parentOperator
           |

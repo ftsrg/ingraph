@@ -8,7 +8,7 @@ class VariableNameConverter extends AbstractVariableConverter {
 	extension StringEscaper stringEscaper = new StringEscaper
 
 	def dispatch convertVariable(ExpressionVariable variable) {
-		'''«variable.escapedName»'''
+		'''\var{«variable.escapedName»}'''
 	}
 
 }

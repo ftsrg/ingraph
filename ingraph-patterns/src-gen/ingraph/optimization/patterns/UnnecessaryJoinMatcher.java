@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-patterns/src/ingraph/optimization/patterns/RelalgSimplifier.vql
  */
 package ingraph.optimization.patterns;
 
@@ -30,7 +30,7 @@ import relalg.Operator;
  * 
  * <p>Original source:
  * <code><pre>
- * // [0] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
+ * // [a] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
  * // to the Dual table
  * pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
  * 	find parentOperator(equiJoinLikeOperator, parentOperator);

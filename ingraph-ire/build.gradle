@@ -12,7 +12,6 @@ dependencies {
   compile project(':ingraph-bulk-loader')
   compile project(':ingraph-cypher2relalg')
   compile project(':ingraph-expression-parser')
-  compile project(':ingraph-optimization-transformations')
   compile project(':ingraph-relalg-model')
   compile project(':ire')
   testCompile project(':ingraph-relalg2tex')

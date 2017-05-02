@@ -1,0 +1,23 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+// [a] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
+// to the Dual table
+pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
+	find parentOperator(equiJoinLikeOperator, parentOperator);
+	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, leftInputOperator);
+	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
+	DualObjectSourceOperator(dualOperator);
+}
+
+// [b]
+pattern emptyAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
+	find parentOperator(allDifferentOperator, parentOperator);
+	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+	AllDifferentOperator.input(allDifferentOperator, inputOperator);
+}
+
+pattern allDifferentOperatorEdgeVariables(allDifferentOperator : AllDifferentOperator, edgeVariable : EdgeVariable) {
+	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
+}

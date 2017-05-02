@@ -1,6 +1,7 @@
 package ingraph.relalg2rete
 
 import ingraph.logger.IngraphLogger
+import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatcher
 import ingraph.optimization.patterns.ExpandOperatorAMatcher
 import ingraph.optimization.patterns.ExpandVertexMatcher
 import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher
@@ -24,7 +25,11 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 			throw new IllegalStateException(
 				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
 		}
+		// simpliciations
 		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
+		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
+		
+		// Rete
 		statements.fireWhilePossible(expandVertexRule)
 		statements.fireWhilePossible(expandOperatorARule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
@@ -34,7 +39,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 	}
 
 	/**
-	 * [0] Remove unnecessary JoinOperators
+	 * [a] Remove unnecessary JoinOperators
 	 */
 	protected def unnecessaryJoinOperatorRule() {
 		createRule() //
@@ -42,6 +47,18 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 		.action [ //
 			info('''unnecessaryJoinOperatorRule fired for «equiJoinLikeOperator»''')
 			changeChildOperator(parentOperator, equiJoinLikeOperator, leftInputOperator)
+		].build
+	}
+
+	/**
+	 * [b] Remove unnecessary AllDifferentOperators
+	 */
+	protected def emptyAllDifferentOperatorRule() {
+		createRule() //
+		.precondition(EmptyAllDifferentOperatorMatcher.querySpecification) //
+		.action [ //
+			info('''emptyAllDifferentOperatorRule fired for «allDifferentOperator»''')
+			changeChildOperator(parentOperator, allDifferentOperator, inputOperator)
 		].build
 	}
 

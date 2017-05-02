@@ -8,7 +8,7 @@ class AdbisExamplesTest extends DirectoryTest {
 
 	new() {
 		super(new RelalgConverterConfigBuilder().setOmitSchema(true).setConsoleOutput(false).
-		setStandaloneDocument(true).setIncludeCommonVariables(false).setParentheses(true).
+		setStandaloneDocument(false).setIncludeCommonVariables(false).setParentheses(true).
 		setIncludeProductionOperator(false).setTextualOperators(false).build)
 	}
 

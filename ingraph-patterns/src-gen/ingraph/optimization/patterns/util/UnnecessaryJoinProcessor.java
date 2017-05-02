@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-patterns/src/ingraph/optimization/patterns/RelalgSimplifier.vql
  */
 package ingraph.optimization.patterns.util;
 
