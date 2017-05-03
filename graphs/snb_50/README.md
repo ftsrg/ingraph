@@ -15,12 +15,11 @@ sed -i "s/|c\([a-z]\+\)$/|C\1/" place$POSTFIX
 
 ### Delete your database and load the SNB CSVs
 
+Be careful - this deletes all data in your database.
+
 ```bash
-# Delete Neo4j database - be careful!
 ./delete-neo4j-database.sh
-# Replace headers
 ./replace-headers.sh
-# Neo4j import
 ./import-to-neo4j.sh
 ```
 
