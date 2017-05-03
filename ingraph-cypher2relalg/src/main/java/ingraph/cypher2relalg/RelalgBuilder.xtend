@@ -336,6 +336,7 @@ class RelalgBuilder {
 			val u1 = createCreateOperator => [
 				input = afterUnwind
 			]
+			//FIXME: loop through patterns of a CREATE clause, see #129
 			val u2 = u0.pattern.patterns.get(0) as PatternElement
 			val t0 = variableBuilder.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
 			val u4 = buildCreateNodePattern(u2.nodepattern)
