@@ -1,9 +1,7 @@
 package ingraph.relalg.calculators
 
 import com.google.common.collect.ImmutableSet
-import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
-import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
 import relalg.AbstractJoinOperator
@@ -12,7 +10,6 @@ import relalg.DualObjectSourceOperator
 import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.ExpressionVariable
-import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.Operator
@@ -23,7 +20,6 @@ import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.function.FunctionCategory
 
 /**
  * Calculates the external schema of the operators in the relational algebra tree.
@@ -38,8 +34,7 @@ import relalg.function.FunctionCategory
 class ExternalSchemaCalculator {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
-	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
-	extension CollectionHelper collectionHelper = new CollectionHelper
+	extension JoinSchemaCalculator joinSchemaCalculator = new JoinSchemaCalculator
 	val boolean includeEdges
 
 	new() {
@@ -110,13 +105,6 @@ class ExternalSchemaCalculator {
 		].toList
 	}
 
-	private def extractAggregateFunctions(List<ExpressionVariable> expressionVariables) {
-		expressionVariables.filter[
-			expression instanceof FunctionExpression &&
-				(expression as FunctionExpression).functor.category == FunctionCategory.AGGREGATION
-		].toList
-	}
-
 	private def dispatch List<Variable> fillExternalSchema(ExpandOperator op) {
 		val schema = Lists.newArrayList(op.input.externalSchema)
 
@@ -137,7 +125,7 @@ class ExternalSchemaCalculator {
 	private def dispatch List<Variable> fillExternalSchema(AbstractJoinOperator op) {
 		val leftInputSchema = Lists.newArrayList(op.leftInput.externalSchema)
 		val rightInputSchema = Lists.newArrayList(op.rightInput.externalSchema)
-		val schema = calculateJoinAttributes(op, leftInputSchema, rightInputSchema)
+		val schema = calculateJoinSchema(op, leftInputSchema, rightInputSchema)
 		op.defineExternalSchema(schema)
 
 		// calculate common variables
@@ -161,9 +149,7 @@ class ExternalSchemaCalculator {
 
 	// unary operator again
 	private def dispatch List<Variable> fillExternalSchema(PathOperator op) {
-		val schema = Lists.newArrayList(Iterables.concat(
-			op.input.externalSchema
-		))
+		val schema = Lists.newArrayList(op.input.externalSchema)
 
 		//FIXME: do something meaningful here
 //		if (includeEdges) {

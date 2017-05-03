@@ -4,7 +4,6 @@ import ingraph.relalg2tex.config.RelalgConverterConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.TernaryOperator
 import relalg.UnaryOperator
 
 class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
@@ -52,13 +51,6 @@ class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 		'''
 		«op.leftInput.children»
 		«op.operator»
-		«op.rightInput.children»
-		'''
-	}
-	
-	def dispatch CharSequence children(TernaryOperator op) {
-		'''«op.leftInput.children»
-		«op.operator»_{«op.middleInput.children»}
 		«op.rightInput.children»
 		'''
 	}

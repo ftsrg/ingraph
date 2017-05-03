@@ -3,46 +3,55 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.util.ExpandOperatorAQuerySpecification;
+import ingraph.optimization.patterns.util.GetVerticesAndExpandOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import relalg.ExpandOperator;
+import relalg.GetVerticesOperator;
 import relalg.Operator;
 
 /**
- * Pattern-specific match representation of the ingraph.optimization.patterns.expandOperatorA pattern,
- * to be used in conjunction with {@link ExpandOperatorAMatcher}.
+ * Pattern-specific match representation of the ingraph.optimization.patterns.getVerticesAndExpandOperator pattern,
+ * to be used in conjunction with {@link GetVerticesAndExpandOperatorMatcher}.
  * 
  * <p>Class fields correspond to parameters of the pattern. Fields with value null are considered unassigned.
  * Each instance is a (possibly partial) substitution of pattern parameters,
  * usable to represent a match of the pattern in the result of a query,
  * or to specify the bound (fixed) input parameters when issuing a query.
  * 
- * @see ExpandOperatorAMatcher
- * @see ExpandOperatorAProcessor
+ * @see GetVerticesAndExpandOperatorMatcher
+ * @see GetVerticesAndExpandOperatorProcessor
  * 
  */
 @SuppressWarnings("all")
-public abstract class ExpandOperatorAMatch extends BasePatternMatch {
+public abstract class GetVerticesAndExpandOperatorMatch extends BasePatternMatch {
+  private GetVerticesOperator fGetVerticesOperator;
+  
   private ExpandOperator fExpandOperator;
   
   private Operator fParentOperator;
   
-  private static List<String> parameterNames = makeImmutableList("expandOperator", "parentOperator");
+  private static List<String> parameterNames = makeImmutableList("getVerticesOperator", "expandOperator", "parentOperator");
   
-  private ExpandOperatorAMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+  private GetVerticesAndExpandOperatorMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    this.fGetVerticesOperator = pGetVerticesOperator;
     this.fExpandOperator = pExpandOperator;
     this.fParentOperator = pParentOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
+    if ("getVerticesOperator".equals(parameterName)) return this.fGetVerticesOperator;
     if ("expandOperator".equals(parameterName)) return this.fExpandOperator;
     if ("parentOperator".equals(parameterName)) return this.fParentOperator;
     return null;
+  }
+  
+  public GetVerticesOperator getGetVerticesOperator() {
+    return this.fGetVerticesOperator;
   }
   
   public ExpandOperator getExpandOperator() {
@@ -56,6 +65,10 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
+    if ("getVerticesOperator".equals(parameterName) ) {
+    	this.fGetVerticesOperator = (GetVerticesOperator) newValue;
+    	return true;
+    }
     if ("expandOperator".equals(parameterName) ) {
     	this.fExpandOperator = (ExpandOperator) newValue;
     	return true;
@@ -65,6 +78,11 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
     	return true;
     }
     return false;
+  }
+  
+  public void setGetVerticesOperator(final GetVerticesOperator pGetVerticesOperator) {
+    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
+    this.fGetVerticesOperator = pGetVerticesOperator;
   }
   
   public void setExpandOperator(final ExpandOperator pExpandOperator) {
@@ -79,27 +97,29 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   
   @Override
   public String patternName() {
-    return "ingraph.optimization.patterns.expandOperatorA";
+    return "ingraph.optimization.patterns.getVerticesAndExpandOperator";
   }
   
   @Override
   public List<String> parameterNames() {
-    return ExpandOperatorAMatch.parameterNames;
+    return GetVerticesAndExpandOperatorMatch.parameterNames;
   }
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fExpandOperator, fParentOperator};
+    return new Object[]{fGetVerticesOperator, fExpandOperator, fParentOperator};
   }
   
   @Override
-  public ExpandOperatorAMatch toImmutable() {
-    return isMutable() ? newMatch(fExpandOperator, fParentOperator) : this;
+  public GetVerticesAndExpandOperatorMatch toImmutable() {
+    return isMutable() ? newMatch(fGetVerticesOperator, fExpandOperator, fParentOperator) : this;
   }
   
   @Override
   public String prettyPrint() {
     StringBuilder result = new StringBuilder();
+    result.append("\"getVerticesOperator\"=" + prettyPrintValue(fGetVerticesOperator) + ", ");
+    
     result.append("\"expandOperator\"=" + prettyPrintValue(fExpandOperator) + ", ");
     
     result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator)
@@ -111,6 +131,7 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((fGetVerticesOperator == null) ? 0 : fGetVerticesOperator.hashCode());
     result = prime * result + ((fExpandOperator == null) ? 0 : fExpandOperator.hashCode());
     result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
     return result;
@@ -120,7 +141,7 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   public boolean equals(final Object obj) {
     if (this == obj)
     	return true;
-    if (!(obj instanceof ExpandOperatorAMatch)) { // this should be infrequent
+    if (!(obj instanceof GetVerticesAndExpandOperatorMatch)) { // this should be infrequent
     	if (obj == null) {
     		return false;
     	}
@@ -132,7 +153,9 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
     		return false;
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
-    ExpandOperatorAMatch other = (ExpandOperatorAMatch) obj;
+    GetVerticesAndExpandOperatorMatch other = (GetVerticesAndExpandOperatorMatch) obj;
+    if (fGetVerticesOperator == null) {if (other.fGetVerticesOperator != null) return false;}
+    else if (!fGetVerticesOperator.equals(other.fGetVerticesOperator)) return false;
     if (fExpandOperator == null) {if (other.fExpandOperator != null) return false;}
     else if (!fExpandOperator.equals(other.fExpandOperator)) return false;
     if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
@@ -141,9 +164,9 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
   }
   
   @Override
-  public ExpandOperatorAQuerySpecification specification() {
+  public GetVerticesAndExpandOperatorQuerySpecification specification() {
     try {
-    	return ExpandOperatorAQuerySpecification.instance();
+    	return GetVerticesAndExpandOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
      	// This cannot happen, as the match object can only be instantiated if the query specification exists
      	throw new IllegalStateException (ex);
@@ -157,39 +180,41 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
    * @return the empty match.
    * 
    */
-  public static ExpandOperatorAMatch newEmptyMatch() {
-    return new Mutable(null, null);
+  public static GetVerticesAndExpandOperatorMatch newEmptyMatch() {
+    return new Mutable(null, null, null);
   }
   
   /**
    * Returns a mutable (partial) match.
    * Fields of the mutable match can be filled to create a partial match, usable as matcher input.
    * 
+   * @param pGetVerticesOperator the fixed value of pattern parameter getVerticesOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static ExpandOperatorAMatch newMutableMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
-    return new Mutable(pExpandOperator, pParentOperator);
+  public static GetVerticesAndExpandOperatorMatch newMutableMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    return new Mutable(pGetVerticesOperator, pExpandOperator, pParentOperator);
   }
   
   /**
    * Returns a new (partial) match.
    * This can be used e.g. to call the matcher with a partial match.
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
+   * @param pGetVerticesOperator the fixed value of pattern parameter getVerticesOperator, or null if not bound.
    * @param pExpandOperator the fixed value of pattern parameter expandOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static ExpandOperatorAMatch newMatch(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
-    return new Immutable(pExpandOperator, pParentOperator);
+  public static GetVerticesAndExpandOperatorMatch newMatch(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+    return new Immutable(pGetVerticesOperator, pExpandOperator, pParentOperator);
   }
   
-  private static final class Mutable extends ExpandOperatorAMatch {
-    Mutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
-      super(pExpandOperator, pParentOperator);
+  private static final class Mutable extends GetVerticesAndExpandOperatorMatch {
+    Mutable(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+      super(pGetVerticesOperator, pExpandOperator, pParentOperator);
     }
     
     @Override
@@ -198,9 +223,9 @@ public abstract class ExpandOperatorAMatch extends BasePatternMatch {
     }
   }
   
-  private static final class Immutable extends ExpandOperatorAMatch {
-    Immutable(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
-      super(pExpandOperator, pParentOperator);
+  private static final class Immutable extends GetVerticesAndExpandOperatorMatch {
+    Immutable(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {
+      super(pGetVerticesOperator, pExpandOperator, pParentOperator);
     }
     
     @Override

@@ -31,19 +31,7 @@ import relalg.TopOperator;
  * 
  * <p>Original source:
  * <code><pre>
- * // [2b] transformation for eliminating the remaining non-default expand operators
- * //pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
- * //  find parentOperator(expandOperator, parentOperator);
- * //  neg find defaultExpandOperator(expandOperator);
- * //}
- * 
- * //pattern topAndProjectionOperator(topOperator : TopOperator, projectionOperator : ProjectionOperator, parentOperator : Operator) {
- * //  find parentOperator(topOperator, parentOperator);
- * //  TopOperator.input(topOperator, projectionOperator);
- * //}
- * 
- * 
- *     parentOperator
+ * parentOperator
  *           |
  *           | input
  *           V
@@ -53,7 +41,7 @@ import relalg.TopOperator;
  *           V
  *      sortOperator (orders the tuples according to some variables and asc/desc directions)
  * 
- * // [3b] transformation for combining adjacent sort and top operators to a single sortAndTop operator
+ * // [4] transformation for combining adjacent sort and top operators to a single sortAndTop operator
  * pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
  *   find parentOperator(topOperator, parentOperator);
  *   TopOperator.input(topOperator, sortOperator);

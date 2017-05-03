@@ -344,33 +344,29 @@ class ProjectionOperator extends BeamerOperator {
  * If ProjectionOperator was the renaissance man, this is Baroque of the relational graph algebra model.
  */
 class GroupingOperator extends ProjectionOperator {
-	// be prepared that eventually expressions will be used as grouping criteria 
+  // be prepared that eventually expressions will be used as grouping criteria 
   refers Expression[] aggregationCriteria
   int[] order
-  //FIXME: these came from the superb ProjectionOperator
-  // functions
-  //refers ExpressionVariable[] aggregations
-  //refers Variable[] otherFunctions // calculated expressions other than aggregations
 }
 
 /**
  * Represents the create/update/delete operator.
  */
- abstract class CUDOperator extends UnaryOperator {
- 	refers ExpressionVariable[] elements
- }
- 
- class CreateOperator extends CUDOperator {
- }
- 
- class DeleteOperator extends CUDOperator {
- 	boolean detach
- }
-
-abstract class NavigationOperator extends Operator, NavigationDescriptor {
-  int minHops
-  contains MaxHops maxHops
+abstract class CUDOperator extends UnaryOperator {
+  refers ExpressionVariable[] elements
 }
+ 
+class CreateOperator extends CUDOperator {
+}
+ 
+class DeleteOperator extends CUDOperator {
+  boolean detach
+}
+
+//abstract class NavigationOperator extends Operator, NavigationDescriptor {
+//  int minHops
+//  contains MaxHops maxHops
+//}
 
 class NavigationDescriptor extends Expression {
   Direction direction
@@ -391,13 +387,8 @@ class MaxHops {
 class ExpandOperator extends UnaryOperator, NavigationDescriptor {
 }
 
-
-//FIXME: remove ternary operator as it is unused
-abstract class TernaryOperator extends Operator {
-  contains Operator leftInput
-  contains Operator middleInput
-  contains Operator rightInput
-}
+//class TransitiveClosureOperator extends TernaryOperator, NavigationDescriptor {
+//}
 
 class PathOperator extends ExpandOperator {
   PathSemantics semantics
@@ -471,6 +462,10 @@ class ThetaLeftOuterJoinOperator extends LeftOuterJoinOperator, AbstractConditio
 }
 
 class JoinOperator extends EquiJoinLikeOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+}
+
+class TransitiveClosureJoinOperator extends EquiJoinLikeOperator {
+	refers EdgeListVariable edgeListVariable
 }
 
 class AntiJoinOperator extends AbstractJoinOperator {

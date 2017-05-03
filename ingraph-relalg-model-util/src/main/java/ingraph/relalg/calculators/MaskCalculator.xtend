@@ -3,7 +3,6 @@ package ingraph.relalg.calculators
 import ingraph.relalg.util.SchemaToMap
 import relalg.AbstractJoinOperator
 import relalg.NullaryOperator
-import relalg.TernaryOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 

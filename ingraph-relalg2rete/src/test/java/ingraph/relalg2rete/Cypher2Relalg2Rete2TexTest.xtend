@@ -16,7 +16,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
 	protected val config = new RelalgConverterConfigBuilder().setStandaloneDocument(true).setParentheses(true).
-		setIncludeProductionOperator(false).setSchemaIndices(true).build
+		setIncludeProductionOperator(false).setSchemaIndices(true).setIncludeCommonVariables(true).build
 	protected val expressionConverter = new Relalg2TexExpressionConverter(config)
 	protected val treeConverter = new Relalg2TexTreeConverter(config)
 

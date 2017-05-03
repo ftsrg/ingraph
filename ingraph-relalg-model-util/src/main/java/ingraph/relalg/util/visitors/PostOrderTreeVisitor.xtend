@@ -3,7 +3,6 @@ package ingraph.relalg.util.visitors
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.TernaryOperator
 import relalg.UnaryOperator
 
 /**
@@ -23,14 +22,6 @@ class PostOrderTreeVisitor {
 	
 	def dispatch void traverse(BinaryOperator op, (Operator) => void visitor) {
 		op.leftInput.traverse(visitor)
-		op.rightInput.traverse(visitor)
-		
-		visitor.apply(op)
-	}
-	
-	def dispatch void traverse(TernaryOperator op, (Operator) => void visitor) {
-		op.leftInput.traverse(visitor)
-		op.middleInput.traverse(visitor)
 		op.rightInput.traverse(visitor)
 		
 		visitor.apply(op)

@@ -3,8 +3,6 @@ package ingraph.report.generator
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.ExternalSchemaCalculator
-import ingraph.relalg.calculators.ExtraVariablesCalculator
-import ingraph.relalg.calculators.InternalSchemaCalculator
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
@@ -19,8 +17,6 @@ import relalg.RelalgContainer
 class QueryProcessor {
 	
 	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
-	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
-	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 	extension TechReportEscaper escaper = new TechReportEscaper
 	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 

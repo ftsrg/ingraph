@@ -9,7 +9,6 @@ import relalg.BinaryOperator
 import relalg.Cardinality
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.TernaryOperator
 import relalg.UnaryOperator
 
 class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
@@ -92,14 +91,6 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	def dispatch children(BinaryOperator op) {
 		'''
 			«op.leftInput.toNode»
-			«op.rightInput.toNode»
-		'''
-	}
-	
-	def dispatch children(TernaryOperator op) {
-		'''
-			«op.leftInput.toNode»
-			«op.middleInput.toNode»
 			«op.rightInput.toNode»
 		'''
 	}

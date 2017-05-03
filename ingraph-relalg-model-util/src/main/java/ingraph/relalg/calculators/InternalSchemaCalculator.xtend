@@ -11,6 +11,7 @@ import relalg.ProductionOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
+import relalg.TransitiveClosureJoinOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
@@ -21,7 +22,7 @@ import relalg.Variable
 class InternalSchemaCalculator {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
-	extension JoinAttributeCalculator joinAttributeCalculator = new JoinAttributeCalculator
+	extension JoinSchemaCalculator joinAttributeCalculator = new JoinSchemaCalculator
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension MaskCalculator maskCalculator = new MaskCalculator
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
@@ -62,8 +63,13 @@ class InternalSchemaCalculator {
 		op.defineInternalSchema(internalSchema)
 	}
 
+	private def dispatch void fillInternalSchema(TransitiveClosureJoinOperator op) {
+		val internalSchema = op.calculateJoinSchema(op.getLeftInput.internalSchema, op.getRightInput.internalSchema)
+		op.defineInternalSchema(internalSchema)
+	}
+
 	private def dispatch void fillInternalSchema(AbstractJoinOperator op) {
-		val internalSchema = calculateJoinAttributes(op, op.getLeftInput.internalSchema, op.getRightInput.internalSchema)
+		val internalSchema = op.calculateJoinSchema(op.getLeftInput.internalSchema, op.getRightInput.internalSchema)
 		op.defineInternalSchema(internalSchema)
 	}
 

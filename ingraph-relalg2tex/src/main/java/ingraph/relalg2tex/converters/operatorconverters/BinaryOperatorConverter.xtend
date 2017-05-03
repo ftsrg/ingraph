@@ -1,17 +1,19 @@
 package ingraph.relalg2tex.converters.operatorconverters
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
+import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import relalg.AbstractJoinOperator
 import relalg.AntiJoinOperator
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
+import relalg.TransitiveClosureJoinOperator
 import relalg.UnionOperator
-import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class BinaryOperatorConverter {
 
 	val RelalgConverterConfig config
 
-	extension ingraph.relalg2tex.converters.elementconverters.StringEscaper stringEscaper = new ingraph.relalg2tex.converters.elementconverters.StringEscaper
+	extension StringEscaper stringEscaper = new StringEscaper
 
 	new(RelalgConverterConfig config) {
 		this.config = config
@@ -28,6 +30,10 @@ class BinaryOperatorConverter {
 
 	def dispatch joinOperator(JoinOperator operator) {
 		'''join'''
+	}
+
+	def dispatch joinOperator(TransitiveClosureJoinOperator operator) {
+		'''join\ast'''
 	}
 
 	def dispatch joinOperator(AntiJoinOperator operator) {
