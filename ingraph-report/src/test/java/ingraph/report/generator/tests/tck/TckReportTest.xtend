@@ -34,7 +34,7 @@ class TckReportTest extends IngraphReportTest {
 		val injector = new FeatureStandaloneSetup().createInjectorAndDoEMFRegistration()
 		val resourceSet = injector.getInstance(typeof(XtextResourceSet))
 
-		val files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
+		val files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], false))
 		Collections.sort(files)
 
 		val chapterTestQueries = new LinkedHashMap<String, Iterable<TestQuery>>
