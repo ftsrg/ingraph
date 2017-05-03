@@ -50,7 +50,7 @@ public class LdbcTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				// BI
-				{ "bi", 3 }, { "bi", 4 }, { "bi", 5 }, { "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 12 },
+				{ "bi", 2 }, { "bi", 3 }, { "bi", 4 }, { "bi", 5 }, { "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 12 },
 				{ "bi", 13 }, { "bi", 14 }, { "bi", 15 }, { "bi", 16 }, { "bi", 20 }, { "bi", 23 }, { "bi", 24 },
 				// interactive
 				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
