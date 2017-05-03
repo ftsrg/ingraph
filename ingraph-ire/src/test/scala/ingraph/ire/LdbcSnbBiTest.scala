@@ -32,6 +32,7 @@ class LdbcSnbBiTest extends FunSuite {
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("comment") -> List("Message", "Comment"),
     modelPath("forum") -> List("Forum"),
+    modelPath("organisation") -> List("Company", "University"),
     modelPath("person") -> List("Person"),
     modelPath("place") -> List("Place"),
     modelPath("post") -> List("Message", "Post"),
@@ -58,7 +59,10 @@ class LdbcSnbBiTest extends FunSuite {
     modelPath("post_hasTag_tag") -> "hasTag",
     modelPath("post_isLocatedIn_place") -> "isLocatedIn",
     modelPath("tagclass_isSubclassOf_tagclass") -> "isSubclassOf",
-    modelPath("tag_hasType_tagclass") -> "hasType"
+    modelPath("tag_hasType_tagclass") -> "hasType",
+    modelPath("organisation_isLocatedIn_place") -> "isLocatedIn",
+    modelPath("person_studyAt_organisation") -> "studyAt",
+    modelPath("person_workAt_organisation") -> "workAt"
   )
 
   val converterConfig = new RelalgConverterConfigBuilder() //
