@@ -4,8 +4,9 @@
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
-import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatch;
-import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatcher;
+import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatch;
+import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatcher;
+import ingraph.optimization.patterns.util.EmptyOrSingleVariableAllDifferentOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -31,15 +32,15 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.queries.QueryInitializa
 import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
 
 /**
- * A pattern-specific query specification that can instantiate EmptyAllDifferentOperatorMatcher in a type-safe way.
+ * A pattern-specific query specification that can instantiate UnnecessaryAllDifferentOperatorMatcher in a type-safe way.
  * 
- * @see EmptyAllDifferentOperatorMatcher
- * @see EmptyAllDifferentOperatorMatch
+ * @see UnnecessaryAllDifferentOperatorMatcher
+ * @see UnnecessaryAllDifferentOperatorMatch
  * 
  */
 @SuppressWarnings("all")
-public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGeneratedEMFQuerySpecification<EmptyAllDifferentOperatorMatcher> {
-  private EmptyAllDifferentOperatorQuerySpecification() {
+public final class UnnecessaryAllDifferentOperatorQuerySpecification extends BaseGeneratedEMFQuerySpecification<UnnecessaryAllDifferentOperatorMatcher> {
+  private UnnecessaryAllDifferentOperatorQuerySpecification() {
     super(GeneratedPQuery.INSTANCE);
   }
   
@@ -48,7 +49,7 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static EmptyAllDifferentOperatorQuerySpecification instance() throws ViatraQueryException {
+  public static UnnecessaryAllDifferentOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
     	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
@@ -57,35 +58,35 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
   }
   
   @Override
-  protected EmptyAllDifferentOperatorMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return EmptyAllDifferentOperatorMatcher.on(engine);
+  protected UnnecessaryAllDifferentOperatorMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return UnnecessaryAllDifferentOperatorMatcher.on(engine);
   }
   
   @Override
-  public EmptyAllDifferentOperatorMatcher instantiate() throws ViatraQueryException {
-    return EmptyAllDifferentOperatorMatcher.create();
+  public UnnecessaryAllDifferentOperatorMatcher instantiate() throws ViatraQueryException {
+    return UnnecessaryAllDifferentOperatorMatcher.create();
   }
   
   @Override
-  public EmptyAllDifferentOperatorMatch newEmptyMatch() {
-    return EmptyAllDifferentOperatorMatch.newEmptyMatch();
+  public UnnecessaryAllDifferentOperatorMatch newEmptyMatch() {
+    return UnnecessaryAllDifferentOperatorMatch.newEmptyMatch();
   }
   
   @Override
-  public EmptyAllDifferentOperatorMatch newMatch(final Object... parameters) {
-    return EmptyAllDifferentOperatorMatch.newMatch((relalg.Operator) parameters[0], (relalg.AllDifferentOperator) parameters[1], (relalg.Operator) parameters[2]);
+  public UnnecessaryAllDifferentOperatorMatch newMatch(final Object... parameters) {
+    return UnnecessaryAllDifferentOperatorMatch.newMatch((relalg.Operator) parameters[0], (relalg.AllDifferentOperator) parameters[1], (relalg.Operator) parameters[2]);
   }
   
   /**
-   * Inner class allowing the singleton instance of {@link EmptyAllDifferentOperatorQuerySpecification} to be created 
+   * Inner class allowing the singleton instance of {@link UnnecessaryAllDifferentOperatorQuerySpecification} to be created 
    * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link EmptyAllDifferentOperatorQuerySpecification#instance()}.
+   * 	but rather at the first call to {@link UnnecessaryAllDifferentOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
    */
   private static class LazyHolder {
-    private final static EmptyAllDifferentOperatorQuerySpecification INSTANCE = new EmptyAllDifferentOperatorQuerySpecification();
+    private final static UnnecessaryAllDifferentOperatorQuerySpecification INSTANCE = new UnnecessaryAllDifferentOperatorQuerySpecification();
     
     /**
      * Statically initializes the query specification <b>after</b> the field {@link #INSTANCE} is assigned.
@@ -103,7 +104,7 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
   }
   
   private static class GeneratedPQuery extends BaseGeneratedEMFPQuery {
-    private final static EmptyAllDifferentOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
+    private final static UnnecessaryAllDifferentOperatorQuerySpecification.GeneratedPQuery INSTANCE = new GeneratedPQuery();
     
     private final PParameter parameter_pInputOperator = new PParameter("inputOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
     
@@ -115,7 +116,7 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
     
     @Override
     public String getFullyQualifiedName() {
-      return "ingraph.optimization.patterns.emptyAllDifferentOperator";
+      return "ingraph.optimization.patterns.unnecessaryAllDifferentOperator";
     }
     
     @Override
@@ -138,7 +139,6 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
       		PVariable var_inputOperator = body.getOrCreateVariableByName("inputOperator");
       		PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
       		new TypeConstraint(body, new FlatTuple(var_inputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
       		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
@@ -154,11 +154,8 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
       		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
       		new Equality(body, var__virtual_0_, var_inputOperator);
-      		// 	 //0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable)
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AllDifferentOperator", "edgeVariables")));
-      		new Equality(body, var__virtual_1_, var_edgeVariable);
+      		// 	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator), EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
       		bodies.add(body);
       	}
       	// to silence compiler error

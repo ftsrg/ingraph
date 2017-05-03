@@ -4,10 +4,12 @@
 package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.AllDifferentOperatorEdgeVariablesMatcher;
-import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatcher;
+import ingraph.optimization.patterns.EmptyOrSingleVariableAllDifferentOperatorMatcher;
+import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatcher;
 import ingraph.optimization.patterns.UnnecessaryJoinMatcher;
 import ingraph.optimization.patterns.util.AllDifferentOperatorEdgeVariablesQuerySpecification;
-import ingraph.optimization.patterns.util.EmptyAllDifferentOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.EmptyOrSingleVariableAllDifferentOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.UnnecessaryAllDifferentOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.UnnecessaryJoinQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
@@ -22,7 +24,8 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>unnecessaryJoin</li>
- * <li>emptyAllDifferentOperator</li>
+ * <li>unnecessaryAllDifferentOperator</li>
+ * <li>emptyOrSingleVariableAllDifferentOperator</li>
  * <li>allDifferentOperatorEdgeVariables</li>
  * </ul>
  * 
@@ -49,7 +52,8 @@ public final class RelalgSimplifier extends BaseGeneratedPatternGroup {
   
   private RelalgSimplifier() throws ViatraQueryException {
     querySpecifications.add(UnnecessaryJoinQuerySpecification.instance());
-    querySpecifications.add(EmptyAllDifferentOperatorQuerySpecification.instance());
+    querySpecifications.add(UnnecessaryAllDifferentOperatorQuerySpecification.instance());
+    querySpecifications.add(EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance());
     querySpecifications.add(AllDifferentOperatorEdgeVariablesQuerySpecification.instance());
   }
   
@@ -61,12 +65,20 @@ public final class RelalgSimplifier extends BaseGeneratedPatternGroup {
     return UnnecessaryJoinMatcher.on(engine);
   }
   
-  public EmptyAllDifferentOperatorQuerySpecification getEmptyAllDifferentOperator() throws ViatraQueryException {
-    return EmptyAllDifferentOperatorQuerySpecification.instance();
+  public UnnecessaryAllDifferentOperatorQuerySpecification getUnnecessaryAllDifferentOperator() throws ViatraQueryException {
+    return UnnecessaryAllDifferentOperatorQuerySpecification.instance();
   }
   
-  public EmptyAllDifferentOperatorMatcher getEmptyAllDifferentOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return EmptyAllDifferentOperatorMatcher.on(engine);
+  public UnnecessaryAllDifferentOperatorMatcher getUnnecessaryAllDifferentOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return UnnecessaryAllDifferentOperatorMatcher.on(engine);
+  }
+  
+  public EmptyOrSingleVariableAllDifferentOperatorQuerySpecification getEmptyOrSingleVariableAllDifferentOperator() throws ViatraQueryException {
+    return EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance();
+  }
+  
+  public EmptyOrSingleVariableAllDifferentOperatorMatcher getEmptyOrSingleVariableAllDifferentOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return EmptyOrSingleVariableAllDifferentOperatorMatcher.on(engine);
   }
   
   public AllDifferentOperatorEdgeVariablesQuerySpecification getAllDifferentOperatorEdgeVariables() throws ViatraQueryException {

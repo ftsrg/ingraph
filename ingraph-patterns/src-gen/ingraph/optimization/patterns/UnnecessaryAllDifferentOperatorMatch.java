@@ -3,7 +3,7 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.util.EmptyAllDifferentOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.UnnecessaryAllDifferentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
@@ -13,20 +13,20 @@ import relalg.AllDifferentOperator;
 import relalg.Operator;
 
 /**
- * Pattern-specific match representation of the ingraph.optimization.patterns.emptyAllDifferentOperator pattern,
- * to be used in conjunction with {@link EmptyAllDifferentOperatorMatcher}.
+ * Pattern-specific match representation of the ingraph.optimization.patterns.unnecessaryAllDifferentOperator pattern,
+ * to be used in conjunction with {@link UnnecessaryAllDifferentOperatorMatcher}.
  * 
  * <p>Class fields correspond to parameters of the pattern. Fields with value null are considered unassigned.
  * Each instance is a (possibly partial) substitution of pattern parameters,
  * usable to represent a match of the pattern in the result of a query,
  * or to specify the bound (fixed) input parameters when issuing a query.
  * 
- * @see EmptyAllDifferentOperatorMatcher
- * @see EmptyAllDifferentOperatorProcessor
+ * @see UnnecessaryAllDifferentOperatorMatcher
+ * @see UnnecessaryAllDifferentOperatorProcessor
  * 
  */
 @SuppressWarnings("all")
-public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
+public abstract class UnnecessaryAllDifferentOperatorMatch extends BasePatternMatch {
   private Operator fInputOperator;
   
   private AllDifferentOperator fAllDifferentOperator;
@@ -35,7 +35,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
   
   private static List<String> parameterNames = makeImmutableList("inputOperator", "allDifferentOperator", "parentOperator");
   
-  private EmptyAllDifferentOperatorMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+  private UnnecessaryAllDifferentOperatorMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
     this.fInputOperator = pInputOperator;
     this.fAllDifferentOperator = pAllDifferentOperator;
     this.fParentOperator = pParentOperator;
@@ -96,12 +96,12 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
   
   @Override
   public String patternName() {
-    return "ingraph.optimization.patterns.emptyAllDifferentOperator";
+    return "ingraph.optimization.patterns.unnecessaryAllDifferentOperator";
   }
   
   @Override
   public List<String> parameterNames() {
-    return EmptyAllDifferentOperatorMatch.parameterNames;
+    return UnnecessaryAllDifferentOperatorMatch.parameterNames;
   }
   
   @Override
@@ -110,7 +110,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
   }
   
   @Override
-  public EmptyAllDifferentOperatorMatch toImmutable() {
+  public UnnecessaryAllDifferentOperatorMatch toImmutable() {
     return isMutable() ? newMatch(fInputOperator, fAllDifferentOperator, fParentOperator) : this;
   }
   
@@ -140,7 +140,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
   public boolean equals(final Object obj) {
     if (this == obj)
     	return true;
-    if (!(obj instanceof EmptyAllDifferentOperatorMatch)) { // this should be infrequent
+    if (!(obj instanceof UnnecessaryAllDifferentOperatorMatch)) { // this should be infrequent
     	if (obj == null) {
     		return false;
     	}
@@ -152,7 +152,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
     		return false;
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
-    EmptyAllDifferentOperatorMatch other = (EmptyAllDifferentOperatorMatch) obj;
+    UnnecessaryAllDifferentOperatorMatch other = (UnnecessaryAllDifferentOperatorMatch) obj;
     if (fInputOperator == null) {if (other.fInputOperator != null) return false;}
     else if (!fInputOperator.equals(other.fInputOperator)) return false;
     if (fAllDifferentOperator == null) {if (other.fAllDifferentOperator != null) return false;}
@@ -163,9 +163,9 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
   }
   
   @Override
-  public EmptyAllDifferentOperatorQuerySpecification specification() {
+  public UnnecessaryAllDifferentOperatorQuerySpecification specification() {
     try {
-    	return EmptyAllDifferentOperatorQuerySpecification.instance();
+    	return UnnecessaryAllDifferentOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
      	// This cannot happen, as the match object can only be instantiated if the query specification exists
      	throw new IllegalStateException (ex);
@@ -179,7 +179,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
    * @return the empty match.
    * 
    */
-  public static EmptyAllDifferentOperatorMatch newEmptyMatch() {
+  public static UnnecessaryAllDifferentOperatorMatch newEmptyMatch() {
     return new Mutable(null, null, null);
   }
   
@@ -193,7 +193,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static EmptyAllDifferentOperatorMatch newMutableMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+  public static UnnecessaryAllDifferentOperatorMatch newMutableMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
     return new Mutable(pInputOperator, pAllDifferentOperator, pParentOperator);
   }
   
@@ -207,11 +207,11 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
    * @return the (partial) match object.
    * 
    */
-  public static EmptyAllDifferentOperatorMatch newMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+  public static UnnecessaryAllDifferentOperatorMatch newMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
     return new Immutable(pInputOperator, pAllDifferentOperator, pParentOperator);
   }
   
-  private static final class Mutable extends EmptyAllDifferentOperatorMatch {
+  private static final class Mutable extends UnnecessaryAllDifferentOperatorMatch {
     Mutable(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
       super(pInputOperator, pAllDifferentOperator, pParentOperator);
     }
@@ -222,7 +222,7 @@ public abstract class EmptyAllDifferentOperatorMatch extends BasePatternMatch {
     }
   }
   
-  private static final class Immutable extends EmptyAllDifferentOperatorMatch {
+  private static final class Immutable extends UnnecessaryAllDifferentOperatorMatch {
     Immutable(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
       super(pInputOperator, pAllDifferentOperator, pParentOperator);
     }

@@ -12,11 +12,19 @@ pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : Equ
 }
 
 // [b]
-pattern emptyAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
+pattern unnecessaryAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
 	find parentOperator(allDifferentOperator, parentOperator);
 	AllDifferentOperator.input(allDifferentOperator, inputOperator);
-	 //0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator);
+}
+
+pattern emptyOrSingleVariableAllDifferentOperator(allDifferentOperator : AllDifferentOperator) {
+	// empty
+	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+} or {
 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
+	// EdgeVariable and *not* an EdgeListVariable
+	EdgeVariable(edgeVariable);
 }
 
 pattern allDifferentOperatorEdgeVariables(allDifferentOperator : AllDifferentOperator, edgeVariable : EdgeVariable) {

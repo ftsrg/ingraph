@@ -3,8 +3,8 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatch;
-import ingraph.optimization.patterns.util.EmptyAllDifferentOperatorQuerySpecification;
+import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatch;
+import ingraph.optimization.patterns.util.UnnecessaryAllDifferentOperatorQuerySpecification;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,32 +20,31 @@ import relalg.AllDifferentOperator;
 import relalg.Operator;
 
 /**
- * Generated pattern matcher API of the ingraph.optimization.patterns.emptyAllDifferentOperator pattern,
+ * Generated pattern matcher API of the ingraph.optimization.patterns.unnecessaryAllDifferentOperator pattern,
  * providing pattern-specific query methods.
  * 
  * <p>Use the pattern matcher on a given model via {@link #on(ViatraQueryEngine)},
  * e.g. in conjunction with {@link ViatraQueryEngine#on(Notifier)}.
  * 
- * <p>Matches of the pattern will be represented as {@link EmptyAllDifferentOperatorMatch}.
+ * <p>Matches of the pattern will be represented as {@link UnnecessaryAllDifferentOperatorMatch}.
  * 
  * <p>Original source:
  * <code><pre>
  * // [b]
- * pattern emptyAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
+ * pattern unnecessaryAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
  * 	find parentOperator(allDifferentOperator, parentOperator);
  * 	AllDifferentOperator.input(allDifferentOperator, inputOperator);
- * 	 //0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
- * 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
+ * 	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator);
  * }
  * </pre></code>
  * 
- * @see EmptyAllDifferentOperatorMatch
- * @see EmptyAllDifferentOperatorProcessor
- * @see EmptyAllDifferentOperatorQuerySpecification
+ * @see UnnecessaryAllDifferentOperatorMatch
+ * @see UnnecessaryAllDifferentOperatorProcessor
+ * @see UnnecessaryAllDifferentOperatorQuerySpecification
  * 
  */
 @SuppressWarnings("all")
-public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDifferentOperatorMatch> {
+public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<UnnecessaryAllDifferentOperatorMatch> {
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
    * If the pattern matcher is already constructed in the engine, only a light-weight reference is returned.
@@ -54,11 +53,11 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @throws ViatraQueryException if an error occurs during pattern matcher creation
    * 
    */
-  public static EmptyAllDifferentOperatorMatcher on(final ViatraQueryEngine engine) throws ViatraQueryException {
+  public static UnnecessaryAllDifferentOperatorMatcher on(final ViatraQueryEngine engine) throws ViatraQueryException {
     // check if matcher already exists
-    EmptyAllDifferentOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
+    UnnecessaryAllDifferentOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (EmptyAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (UnnecessaryAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -69,8 +68,8 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @noreference This method is for internal matcher initialization by the framework, do not call it manually.
    * 
    */
-  public static EmptyAllDifferentOperatorMatcher create() throws ViatraQueryException {
-    return new EmptyAllDifferentOperatorMatcher();
+  public static UnnecessaryAllDifferentOperatorMatcher create() throws ViatraQueryException {
+    return new UnnecessaryAllDifferentOperatorMatcher();
   }
   
   private final static int POSITION_INPUTOPERATOR = 0;
@@ -79,7 +78,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
   
   private final static int POSITION_PARENTOPERATOR = 2;
   
-  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(EmptyAllDifferentOperatorMatcher.class);
+  private final static Logger LOGGER = ViatraQueryLoggingUtil.getLogger(UnnecessaryAllDifferentOperatorMatcher.class);
   
   /**
    * Initializes the pattern matcher within an existing VIATRA Query engine.
@@ -89,7 +88,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @throws ViatraQueryException if an error occurs during pattern matcher creation
    * 
    */
-  private EmptyAllDifferentOperatorMatcher() throws ViatraQueryException {
+  private UnnecessaryAllDifferentOperatorMatcher() throws ViatraQueryException {
     super(querySpecification());
   }
   
@@ -98,10 +97,10 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pAllDifferentOperator the fixed value of pattern parameter allDifferentOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
-   * @return matches represented as a EmptyAllDifferentOperatorMatch object.
+   * @return matches represented as a UnnecessaryAllDifferentOperatorMatch object.
    * 
    */
-  public Collection<EmptyAllDifferentOperatorMatch> getAllMatches(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+  public Collection<UnnecessaryAllDifferentOperatorMatch> getAllMatches(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
     return rawGetAllMatches(new Object[]{pInputOperator, pAllDifferentOperator, pParentOperator});
   }
   
@@ -111,10 +110,10 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @param pInputOperator the fixed value of pattern parameter inputOperator, or null if not bound.
    * @param pAllDifferentOperator the fixed value of pattern parameter allDifferentOperator, or null if not bound.
    * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
-   * @return a match represented as a EmptyAllDifferentOperatorMatch object, or null if no match is found.
+   * @return a match represented as a UnnecessaryAllDifferentOperatorMatch object, or null if no match is found.
    * 
    */
-  public EmptyAllDifferentOperatorMatch getOneArbitraryMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+  public UnnecessaryAllDifferentOperatorMatch getOneArbitraryMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
     return rawGetOneArbitraryMatch(new Object[]{pInputOperator, pAllDifferentOperator, pParentOperator});
   }
   
@@ -151,7 +150,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @param processor the action that will process each pattern match.
    * 
    */
-  public void forEachMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator, final IMatchProcessor<? super EmptyAllDifferentOperatorMatch> processor) {
+  public void forEachMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryAllDifferentOperatorMatch> processor) {
     rawForEachMatch(new Object[]{pInputOperator, pAllDifferentOperator, pParentOperator}, processor);
   }
   
@@ -165,7 +164,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @return true if the pattern has at least one match with the given parameter values, false if the processor was not invoked
    * 
    */
-  public boolean forOneArbitraryMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator, final IMatchProcessor<? super EmptyAllDifferentOperatorMatch> processor) {
+  public boolean forOneArbitraryMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator, final IMatchProcessor<? super UnnecessaryAllDifferentOperatorMatch> processor) {
     return rawForOneArbitraryMatch(new Object[]{pInputOperator, pAllDifferentOperator, pParentOperator}, processor);
   }
   
@@ -179,8 +178,8 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @return the (partial) match object.
    * 
    */
-  public EmptyAllDifferentOperatorMatch newMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
-    return EmptyAllDifferentOperatorMatch.newMatch(pInputOperator, pAllDifferentOperator, pParentOperator);
+  public UnnecessaryAllDifferentOperatorMatch newMatch(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
+    return UnnecessaryAllDifferentOperatorMatch.newMatch(pInputOperator, pAllDifferentOperator, pParentOperator);
   }
   
   /**
@@ -208,7 +207,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfinputOperator(final EmptyAllDifferentOperatorMatch partialMatch) {
+  public Set<Operator> getAllValuesOfinputOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
     return rawAccumulateAllValuesOfinputOperator(partialMatch.toArray());
   }
   
@@ -250,7 +249,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final EmptyAllDifferentOperatorMatch partialMatch) {
+  public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
     return rawAccumulateAllValuesOfallDifferentOperator(partialMatch.toArray());
   }
   
@@ -292,7 +291,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
-  public Set<Operator> getAllValuesOfparentOperator(final EmptyAllDifferentOperatorMatch partialMatch) {
+  public Set<Operator> getAllValuesOfparentOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
     return rawAccumulateAllValuesOfparentOperator(partialMatch.toArray());
   }
   
@@ -310,9 +309,9 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
   }
   
   @Override
-  protected EmptyAllDifferentOperatorMatch tupleToMatch(final Tuple t) {
+  protected UnnecessaryAllDifferentOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return EmptyAllDifferentOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in tuple not properly typed!",e);
     	return null;
@@ -320,9 +319,9 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
   }
   
   @Override
-  protected EmptyAllDifferentOperatorMatch arrayToMatch(final Object[] match) {
+  protected UnnecessaryAllDifferentOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return EmptyAllDifferentOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -330,9 +329,9 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
   }
   
   @Override
-  protected EmptyAllDifferentOperatorMatch arrayToMatchMutable(final Object[] match) {
+  protected UnnecessaryAllDifferentOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return EmptyAllDifferentOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryAllDifferentOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
     	LOGGER.error("Element(s) in array not properly typed!",e);
     	return null;
@@ -344,7 +343,7 @@ public class EmptyAllDifferentOperatorMatcher extends BaseMatcher<EmptyAllDiffer
    * @throws ViatraQueryException if the pattern definition could not be loaded
    * 
    */
-  public static IQuerySpecification<EmptyAllDifferentOperatorMatcher> querySpecification() throws ViatraQueryException {
-    return EmptyAllDifferentOperatorQuerySpecification.instance();
+  public static IQuerySpecification<UnnecessaryAllDifferentOperatorMatcher> querySpecification() throws ViatraQueryException {
+    return UnnecessaryAllDifferentOperatorQuerySpecification.instance();
   }
 }

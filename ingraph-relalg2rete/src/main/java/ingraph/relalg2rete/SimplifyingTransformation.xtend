@@ -1,7 +1,7 @@
 package ingraph.relalg2rete
 
 import ingraph.logger.IngraphLogger
-import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatcher
+import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatcher
 import ingraph.optimization.patterns.UnnecessaryJoinMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
@@ -23,7 +23,7 @@ class SimplifyingTransformation extends AbstractRelalgTransformation {
 		}
 
 		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
-		statements.fireWhilePossible(emptyAllDifferentOperatorRule)
+		statements.fireWhilePossible(unnecessaryAllDifferentOperatorRule)
 		container.simplifiedPlan = true
 		return container
 	}
@@ -43,11 +43,11 @@ class SimplifyingTransformation extends AbstractRelalgTransformation {
 	/**
 	 * [b] Remove unnecessary AllDifferentOperators
 	 */
-	protected def emptyAllDifferentOperatorRule() {
+	protected def unnecessaryAllDifferentOperatorRule() {
 		createRule() //
-		.precondition(EmptyAllDifferentOperatorMatcher.querySpecification) //
+		.precondition(UnnecessaryAllDifferentOperatorMatcher.querySpecification) //
 		.action [ //
-			info('''emptyAllDifferentOperatorRule fired for «allDifferentOperator»''')
+			info('''unnecessaryAllDifferentOperatorRule fired for «allDifferentOperator»''')
 			changeChildOperator(parentOperator, allDifferentOperator, inputOperator)
 		].build
 	}
