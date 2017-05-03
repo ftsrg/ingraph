@@ -36,7 +36,7 @@ class SimplifyingTransformation extends AbstractRelalgTransformation {
 		.precondition(UnnecessaryJoinMatcher.querySpecification) //
 		.action [ //
 			info('''unnecessaryJoinOperatorRule fired for «equiJoinLikeOperator»''')
-			changeChildOperator(parentOperator, equiJoinLikeOperator, leftInputOperator)
+			changeChildOperator(parentOperator, equiJoinLikeOperator, otherInputOperator)
 		].build
 	}
 

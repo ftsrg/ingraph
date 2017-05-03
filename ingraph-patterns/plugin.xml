@@ -17,6 +17,7 @@
   <extension id="ingraph.optimization.patterns.RelalgSimplifier" point="org.eclipse.viatra.query.runtime.queryspecification">
     <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.RelalgSimplifier" id="ingraph.optimization.patterns.RelalgSimplifier">
       <query-specification fqn="ingraph.optimization.patterns.unnecessaryJoin"/>
+      <query-specification fqn="ingraph.optimization.patterns.joinOnDual"/>
       <query-specification fqn="ingraph.optimization.patterns.unnecessaryAllDifferentOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.emptyOrSingleVariableAllDifferentOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.allDifferentOperatorEdgeVariables"/>

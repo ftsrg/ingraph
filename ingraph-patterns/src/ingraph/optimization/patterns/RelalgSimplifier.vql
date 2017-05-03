@@ -4,11 +4,19 @@ import "http://ingraph/relalg";
 
 // [a] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
 // to the Dual table
-pattern unnecessaryJoin(leftInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
+pattern unnecessaryJoin(otherInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
 	find parentOperator(equiJoinLikeOperator, parentOperator);
-	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, leftInputOperator);
-	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
+	find joinOnDual(otherInputOperator, equiJoinLikeOperator);
+}
+
+pattern joinOnDual(otherInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator) {
 	DualObjectSourceOperator(dualOperator);
+	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, dualOperator);
+	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, otherInputOperator);
+} or {
+	DualObjectSourceOperator(dualOperator);
+	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
+	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
 }
 
 // [b]
@@ -22,6 +30,7 @@ pattern emptyOrSingleVariableAllDifferentOperator(allDifferentOperator : AllDiff
 	// empty
 	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
 } or {
+	1 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
 	// EdgeVariable and *not* an EdgeListVariable
 	EdgeVariable(edgeVariable);

@@ -1,10 +1,12 @@
 package ingraph.ire
 
+import org.supercsv.prefs.CsvPreference
+
 import hu.bme.mit.ire.Transaction
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
-import org.supercsv.prefs.CsvPreference
+import ingraph.relalg2rete.SimplifyingTransformation
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
   val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator

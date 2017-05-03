@@ -3,7 +3,7 @@
  */
 package ingraph.optimization.patterns;
 
-import ingraph.optimization.patterns.util.UnnecessaryJoinQuerySpecification;
+import ingraph.optimization.patterns.util.JoinOnDualQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
@@ -13,39 +13,35 @@ import relalg.EquiJoinLikeOperator;
 import relalg.Operator;
 
 /**
- * Pattern-specific match representation of the ingraph.optimization.patterns.unnecessaryJoin pattern,
- * to be used in conjunction with {@link UnnecessaryJoinMatcher}.
+ * Pattern-specific match representation of the ingraph.optimization.patterns.joinOnDual pattern,
+ * to be used in conjunction with {@link JoinOnDualMatcher}.
  * 
  * <p>Class fields correspond to parameters of the pattern. Fields with value null are considered unassigned.
  * Each instance is a (possibly partial) substitution of pattern parameters,
  * usable to represent a match of the pattern in the result of a query,
  * or to specify the bound (fixed) input parameters when issuing a query.
  * 
- * @see UnnecessaryJoinMatcher
- * @see UnnecessaryJoinProcessor
+ * @see JoinOnDualMatcher
+ * @see JoinOnDualProcessor
  * 
  */
 @SuppressWarnings("all")
-public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
+public abstract class JoinOnDualMatch extends BasePatternMatch {
   private Operator fOtherInputOperator;
   
   private EquiJoinLikeOperator fEquiJoinLikeOperator;
   
-  private Operator fParentOperator;
+  private static List<String> parameterNames = makeImmutableList("otherInputOperator", "equiJoinLikeOperator");
   
-  private static List<String> parameterNames = makeImmutableList("otherInputOperator", "equiJoinLikeOperator", "parentOperator");
-  
-  private UnnecessaryJoinMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
+  private JoinOnDualMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
     this.fOtherInputOperator = pOtherInputOperator;
     this.fEquiJoinLikeOperator = pEquiJoinLikeOperator;
-    this.fParentOperator = pParentOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
     if ("otherInputOperator".equals(parameterName)) return this.fOtherInputOperator;
     if ("equiJoinLikeOperator".equals(parameterName)) return this.fEquiJoinLikeOperator;
-    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
     return null;
   }
   
@@ -57,10 +53,6 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     return this.fEquiJoinLikeOperator;
   }
   
-  public Operator getParentOperator() {
-    return this.fParentOperator;
-  }
-  
   @Override
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
@@ -70,10 +62,6 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     }
     if ("equiJoinLikeOperator".equals(parameterName) ) {
     	this.fEquiJoinLikeOperator = (EquiJoinLikeOperator) newValue;
-    	return true;
-    }
-    if ("parentOperator".equals(parameterName) ) {
-    	this.fParentOperator = (Operator) newValue;
     	return true;
     }
     return false;
@@ -89,29 +77,24 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     this.fEquiJoinLikeOperator = pEquiJoinLikeOperator;
   }
   
-  public void setParentOperator(final Operator pParentOperator) {
-    if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fParentOperator = pParentOperator;
-  }
-  
   @Override
   public String patternName() {
-    return "ingraph.optimization.patterns.unnecessaryJoin";
+    return "ingraph.optimization.patterns.joinOnDual";
   }
   
   @Override
   public List<String> parameterNames() {
-    return UnnecessaryJoinMatch.parameterNames;
+    return JoinOnDualMatch.parameterNames;
   }
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fOtherInputOperator, fEquiJoinLikeOperator, fParentOperator};
+    return new Object[]{fOtherInputOperator, fEquiJoinLikeOperator};
   }
   
   @Override
-  public UnnecessaryJoinMatch toImmutable() {
-    return isMutable() ? newMatch(fOtherInputOperator, fEquiJoinLikeOperator, fParentOperator) : this;
+  public JoinOnDualMatch toImmutable() {
+    return isMutable() ? newMatch(fOtherInputOperator, fEquiJoinLikeOperator) : this;
   }
   
   @Override
@@ -119,9 +102,7 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     StringBuilder result = new StringBuilder();
     result.append("\"otherInputOperator\"=" + prettyPrintValue(fOtherInputOperator) + ", ");
     
-    result.append("\"equiJoinLikeOperator\"=" + prettyPrintValue(fEquiJoinLikeOperator) + ", ");
-    
-    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator)
+    result.append("\"equiJoinLikeOperator\"=" + prettyPrintValue(fEquiJoinLikeOperator)
     );
     return result.toString();
   }
@@ -132,7 +113,6 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     int result = 1;
     result = prime * result + ((fOtherInputOperator == null) ? 0 : fOtherInputOperator.hashCode());
     result = prime * result + ((fEquiJoinLikeOperator == null) ? 0 : fEquiJoinLikeOperator.hashCode());
-    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
     return result;
   }
   
@@ -140,7 +120,7 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
   public boolean equals(final Object obj) {
     if (this == obj)
     	return true;
-    if (!(obj instanceof UnnecessaryJoinMatch)) { // this should be infrequent
+    if (!(obj instanceof JoinOnDualMatch)) { // this should be infrequent
     	if (obj == null) {
     		return false;
     	}
@@ -152,20 +132,18 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     		return false;
     	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
-    UnnecessaryJoinMatch other = (UnnecessaryJoinMatch) obj;
+    JoinOnDualMatch other = (JoinOnDualMatch) obj;
     if (fOtherInputOperator == null) {if (other.fOtherInputOperator != null) return false;}
     else if (!fOtherInputOperator.equals(other.fOtherInputOperator)) return false;
     if (fEquiJoinLikeOperator == null) {if (other.fEquiJoinLikeOperator != null) return false;}
     else if (!fEquiJoinLikeOperator.equals(other.fEquiJoinLikeOperator)) return false;
-    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
-    else if (!fParentOperator.equals(other.fParentOperator)) return false;
     return true;
   }
   
   @Override
-  public UnnecessaryJoinQuerySpecification specification() {
+  public JoinOnDualQuerySpecification specification() {
     try {
-    	return UnnecessaryJoinQuerySpecification.instance();
+    	return JoinOnDualQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
      	// This cannot happen, as the match object can only be instantiated if the query specification exists
      	throw new IllegalStateException (ex);
@@ -179,8 +157,8 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
    * @return the empty match.
    * 
    */
-  public static UnnecessaryJoinMatch newEmptyMatch() {
-    return new Mutable(null, null, null);
+  public static JoinOnDualMatch newEmptyMatch() {
+    return new Mutable(null, null);
   }
   
   /**
@@ -189,12 +167,11 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
    * 
    * @param pOtherInputOperator the fixed value of pattern parameter otherInputOperator, or null if not bound.
    * @param pEquiJoinLikeOperator the fixed value of pattern parameter equiJoinLikeOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static UnnecessaryJoinMatch newMutableMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
-    return new Mutable(pOtherInputOperator, pEquiJoinLikeOperator, pParentOperator);
+  public static JoinOnDualMatch newMutableMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
+    return new Mutable(pOtherInputOperator, pEquiJoinLikeOperator);
   }
   
   /**
@@ -203,17 +180,16 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
    * @param pOtherInputOperator the fixed value of pattern parameter otherInputOperator, or null if not bound.
    * @param pEquiJoinLikeOperator the fixed value of pattern parameter equiJoinLikeOperator, or null if not bound.
-   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static UnnecessaryJoinMatch newMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
-    return new Immutable(pOtherInputOperator, pEquiJoinLikeOperator, pParentOperator);
+  public static JoinOnDualMatch newMatch(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
+    return new Immutable(pOtherInputOperator, pEquiJoinLikeOperator);
   }
   
-  private static final class Mutable extends UnnecessaryJoinMatch {
-    Mutable(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
-      super(pOtherInputOperator, pEquiJoinLikeOperator, pParentOperator);
+  private static final class Mutable extends JoinOnDualMatch {
+    Mutable(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
+      super(pOtherInputOperator, pEquiJoinLikeOperator);
     }
     
     @Override
@@ -222,9 +198,9 @@ public abstract class UnnecessaryJoinMatch extends BasePatternMatch {
     }
   }
   
-  private static final class Immutable extends UnnecessaryJoinMatch {
-    Immutable(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
-      super(pOtherInputOperator, pEquiJoinLikeOperator, pParentOperator);
+  private static final class Immutable extends JoinOnDualMatch {
+    Immutable(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
+      super(pOtherInputOperator, pEquiJoinLikeOperator);
     }
     
     @Override

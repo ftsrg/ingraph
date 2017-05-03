@@ -5,10 +5,12 @@ package ingraph.optimization.patterns;
 
 import ingraph.optimization.patterns.AllDifferentOperatorEdgeVariablesMatcher;
 import ingraph.optimization.patterns.EmptyOrSingleVariableAllDifferentOperatorMatcher;
+import ingraph.optimization.patterns.JoinOnDualMatcher;
 import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatcher;
 import ingraph.optimization.patterns.UnnecessaryJoinMatcher;
 import ingraph.optimization.patterns.util.AllDifferentOperatorEdgeVariablesQuerySpecification;
 import ingraph.optimization.patterns.util.EmptyOrSingleVariableAllDifferentOperatorQuerySpecification;
+import ingraph.optimization.patterns.util.JoinOnDualQuerySpecification;
 import ingraph.optimization.patterns.util.UnnecessaryAllDifferentOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.UnnecessaryJoinQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
@@ -24,6 +26,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
  * <li>unnecessaryJoin</li>
+ * <li>joinOnDual</li>
  * <li>unnecessaryAllDifferentOperator</li>
  * <li>emptyOrSingleVariableAllDifferentOperator</li>
  * <li>allDifferentOperatorEdgeVariables</li>
@@ -52,6 +55,7 @@ public final class RelalgSimplifier extends BaseGeneratedPatternGroup {
   
   private RelalgSimplifier() throws ViatraQueryException {
     querySpecifications.add(UnnecessaryJoinQuerySpecification.instance());
+    querySpecifications.add(JoinOnDualQuerySpecification.instance());
     querySpecifications.add(UnnecessaryAllDifferentOperatorQuerySpecification.instance());
     querySpecifications.add(EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance());
     querySpecifications.add(AllDifferentOperatorEdgeVariablesQuerySpecification.instance());
@@ -63,6 +67,14 @@ public final class RelalgSimplifier extends BaseGeneratedPatternGroup {
   
   public UnnecessaryJoinMatcher getUnnecessaryJoin(final ViatraQueryEngine engine) throws ViatraQueryException {
     return UnnecessaryJoinMatcher.on(engine);
+  }
+  
+  public JoinOnDualQuerySpecification getJoinOnDual() throws ViatraQueryException {
+    return JoinOnDualQuerySpecification.instance();
+  }
+  
+  public JoinOnDualMatcher getJoinOnDual(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return JoinOnDualMatcher.on(engine);
   }
   
   public UnnecessaryAllDifferentOperatorQuerySpecification getUnnecessaryAllDifferentOperator() throws ViatraQueryException {

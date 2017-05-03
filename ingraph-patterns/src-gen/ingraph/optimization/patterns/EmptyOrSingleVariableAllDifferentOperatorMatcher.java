@@ -33,6 +33,7 @@ import relalg.AllDifferentOperator;
  * 	// empty
  * 	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
  * } or {
+ * 	1 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
  * 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
  * 	// EdgeVariable and not an EdgeListVariable
  * 	EdgeVariable(edgeVariable);
