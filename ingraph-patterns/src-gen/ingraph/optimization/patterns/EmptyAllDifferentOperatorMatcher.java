@@ -33,8 +33,9 @@ import relalg.Operator;
  * // [b]
  * pattern emptyAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
  * 	find parentOperator(allDifferentOperator, parentOperator);
- * 	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
  * 	AllDifferentOperator.input(allDifferentOperator, inputOperator);
+ * 	 //0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+ * 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
  * }
  * </pre></code>
  * 

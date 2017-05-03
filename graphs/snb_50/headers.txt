@@ -1,5 +1,6 @@
 comment :ID(Comment)|id:LONG|creationDate:STRING|locationIP:STRING|browserUsed:STRING|content:STRING|length:INT
 forum :ID(Forum)|id:LONG|title:STRING|creationDate:STRING
+organisation :ID(Organisation)|id:LONG|:LABEL|name:STRING|url:STRING
 person :ID(Person)|id:LONG|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING
 place :ID(Place)|id:LONG|name:STRING|url:STRING|:LABEL
 post :ID(Post)|id:LONG|imageFile:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT

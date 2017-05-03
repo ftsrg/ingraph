@@ -2,7 +2,7 @@
 
 # duplicate ids
 # only run once
-files=( comment forum person place post tagclass tag)
+files=( comment forum organisation person place post tagclass tag )
 for file in "${files[@]}"
 do
    echo $file$POSTFIX

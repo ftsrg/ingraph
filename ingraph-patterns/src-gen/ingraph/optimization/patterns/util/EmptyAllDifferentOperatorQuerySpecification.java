@@ -6,7 +6,6 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatch;
 import ingraph.optimization.patterns.EmptyAllDifferentOperatorMatcher;
-import ingraph.optimization.patterns.util.AllDifferentOperatorEdgeVariablesQuerySpecification;
 import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +23,6 @@ import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Equality;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.PatternMatchCounter;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.ConstantValue;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
@@ -141,7 +138,7 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
       		PVariable var_inputOperator = body.getOrCreateVariableByName("inputOperator");
       		PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
       		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		PVariable var___0_ = body.getOrCreateVariableByName("_<0>");
+      		PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
       		new TypeConstraint(body, new FlatTuple(var_inputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
       		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
@@ -152,17 +149,16 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
       		));
       		// 	find parentOperator(allDifferentOperator, parentOperator)
       		new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _)
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new ConstantValue(body, var__virtual_0_, 0);
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new PatternMatchCounter(body, new FlatTuple(var_allDifferentOperator, var___0_), AllDifferentOperatorEdgeVariablesQuerySpecification.instance().getInternalQueryRepresentation(), var__virtual_1_);
-      		new Equality(body, var__virtual_0_, var__virtual_1_);
       		// 	AllDifferentOperator.input(allDifferentOperator, inputOperator)
       		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-      		new Equality(body, var__virtual_2_, var_inputOperator);
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
+      		new Equality(body, var__virtual_0_, var_inputOperator);
+      		// 	 //0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable)
+      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AllDifferentOperator", "edgeVariables")));
+      		new Equality(body, var__virtual_1_, var_edgeVariable);
       		bodies.add(body);
       	}
       	// to silence compiler error
@@ -172,9 +168,5 @@ public final class EmptyAllDifferentOperatorQuerySpecification extends BaseGener
       }
       return bodies;
     }
-  }
-  
-  private static int evaluateExpression_1_1() {
-    return 0;
   }
 }

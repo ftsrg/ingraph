@@ -3,6 +3,7 @@
 $NEO4J_HOME/bin/neo4j-import --into $DB_DIR \
   --nodes:Message:Comment comment$POSTFIX \
   --nodes:Forum forum$POSTFIX \
+  --nodes:Organisation organisation$POSTFIX \
   --nodes:Person person$POSTFIX \
   --nodes:Place place$POSTFIX \
   --nodes:Message:Post post$POSTFIX \
@@ -28,4 +29,7 @@ $NEO4J_HOME/bin/neo4j-import --into $DB_DIR \
   --relationships:isLocatedIn post_isLocatedIn_place$POSTFIX \
   --relationships:isSubclassOf tagclass_isSubclassOf_tagclass$POSTFIX \
   --relationships:hasType tag_hasType_tagclass$POSTFIX \
+  --relationships:studyAt person_studyAt_organisation$POSTFIX \
+  --relationships:workAt person_workAt_organisation$POSTFIX \
+  --relationships:isLocatedIn organisation_isLocatedIn_place$POSTFIX \
   --delimiter '|'
