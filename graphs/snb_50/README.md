@@ -34,10 +34,27 @@ We ignore some files as they are difficult to load and none of the queries need 
 
 ### Property files
 
-All of them:
+These files store lists in a normalized form:
 
-* person_speaks_language
-* person_email_emailaddress
+* `person_speaks_language`
+
+  ```
+  Person.id	language
+  8796093022220	es
+  8796093022220	en
+  2199023255591	ru
+  2199023255591	en
+  ```
+
+* `person_email_emailaddress`
+
+  ```
+  Person.id	email
+  8796093022220	Jose8796093022220@gmail.com
+  8796093022220	Jose8796093022220@gmx.com
+  2199023255591	Alexei2199023255591@gmail.com
+  2199023255591	Alexei2199023255591@zoho.com
+  ```
 
 ## Misc
 

@@ -42,3 +42,5 @@ generated/
 /out/
 .tmpBin/
 hs_err_pid*.log
+*.~*
+*.*~
