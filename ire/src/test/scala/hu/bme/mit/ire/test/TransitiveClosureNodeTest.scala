@@ -12,6 +12,7 @@ import hu.bme.mit.ire.messages.Ternary
 import hu.bme.mit.ire.messages.Primary
 import hu.bme.mit.ire.messages.Secondary
 import hu.bme.mit.ire.util.Utils
+import scala.concurrent.duration.Duration
 
 class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -19,6 +20,8 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
   val src = 0
   val trg = 2
   val edge = 1
+  
+  val timeout = Duration(100, "millis")
 
   def this() = this(ActorSystem("MySpec"))
 
@@ -34,12 +37,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
@@ -94,12 +97,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(3), tuple(4))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -123,12 +126,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -152,12 +155,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(3), tuple(4))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -188,12 +191,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3), tuple(4))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
@@ -218,12 +221,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3), tuple(4))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
@@ -248,12 +251,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
@@ -283,12 +286,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
@@ -325,12 +328,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -340,10 +343,10 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       )): _*)
 
       transitiveClosure ! Ternary(ChangeSet(negative = tupleBag(tuple(2, 1010, 3))))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(negative = tupleBag(tuple(0, 100, 2))))
-      expectNoMsg
+      expectNoMsg(timeout)
     }
 
     "include directed cycles" in {
@@ -353,12 +356,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -385,12 +388,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -412,12 +415,12 @@ class TransitiveClosureNodeTest(_system: ActorSystem) extends TestKit(_system) w
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectNoMsg
+      expectNoMsg(timeout)
 
       transitiveClosure ! Ternary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
