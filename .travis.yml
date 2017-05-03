@@ -26,7 +26,11 @@ script:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then scripts/generate-and-deploy-report.sh; fi
   #- scripts/test.sh --quiet
 notifications:
-  slack: ftsrg:ll9rntRuEyb9KC9z5cWAQShn
-  email: false
-  on_success: change
-  on_failure: always
+  slack:
+    rooms:
+      - ftsrg:ll9rntRuEyb9KC9z5cWAQShn
+    on_success: change
+    on_failure: always
+  email:
+    on_success: change
+    on_failure: always
