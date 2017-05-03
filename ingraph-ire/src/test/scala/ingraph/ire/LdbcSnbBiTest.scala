@@ -82,17 +82,19 @@ class LdbcSnbBiTest extends FunSuite {
         TestCase(5),
         TestCase(6),
         TestCase(7),
-//        TestCase(23),
-//        TestCase(24),
-//        TestCase(13),
+        TestCase(9),
+        TestCase(12),
 
 //        TestCase(8), // PATH
-//        TestCase(9), // WHERE WITH
-//        TestCase(12), // WHERE WITH
 //        TestCase(14), // PATH
-//        TestCase(15), // WHERE WITH
 //        TestCase(16), // PATH
 //        TestCase(20), // PATH
+
+//        TestCase(13),
+//        TestCase(15), // WHERE WITH
+//        TestCase(23),
+//        TestCase(24),
+
         null
   ).filter(_ != null) //
     .foreach(
