@@ -5,7 +5,7 @@ import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.ExternalSchemaCalculator
 import ingraph.relalg.calculators.ExtraVariablesCalculator
 import ingraph.relalg.calculators.InternalSchemaCalculator
-import ingraph.relalg2rete.Relalg2ReteTransformation
+import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
@@ -15,7 +15,6 @@ import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
-import ingraph.relalg2rete.SimplifyingTransformation
 
 class QueryProcessor {
 	
@@ -130,16 +129,8 @@ class QueryProcessor {
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
 			val incrementalContainer = EcoreUtil.copy(container)
-			val simplifyingTransformation = new SimplifyingTransformation(incrementalContainer)
-			simplifyingTransformation.simplify
-			simplifyingTransformation.close
-
-			val relalg2ReteTransformation = new Relalg2ReteTransformation(incrementalContainer)
-			relalg2ReteTransformation.transformToRete
-			relalg2ReteTransformation.close
-			incrementalContainer.calculateExternalSchema
-			incrementalContainer.calculateExtraVariables
-			incrementalContainer.calculateInternalSchema
+			val calculator = new Relalg2ReteTransformationAndSchemaCalculator
+			calculator.apply(incrementalContainer)
 			treeSerializer.convert(incrementalContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))

@@ -92,6 +92,7 @@ class InternalSchemaCalculator {
 
 	private def dispatch void defineInternalSchema(GroupingOperator op, List<? extends Variable> internalSchema) {
 		op.defineInternalSchemaForProjectionOperator(internalSchema)
+		op.defineInternalSchemaForGroupingOperator(internalSchema)
 	}
 
 	private def dispatch void defineInternalSchema(ProjectionOperator op, List<? extends Variable> internalSchema) {
@@ -109,6 +110,32 @@ class InternalSchemaCalculator {
 		val internalSchemaNames = internalSchema.map[name]
 		op.internalSchema.addAll(uniqueUnion(op.externalSchema, op.extraVariables))
 		op.tupleIndices.addAll(op.internalSchema.map[variable | internalSchemaNames.indexOf(variable.name)])
+	}
+	
+	private def void defineInternalSchemaForGroupingOperator(GroupingOperator op, List<? extends Variable> internalSchema) {
+		op.aggregationCriteria.addAll(
+			op.extraVariables.map[ 
+				val extraVariable = it
+				createVariableExpression => [
+					variable = extraVariable
+					expressionContainer = extraVariable.namedElementContainer
+				]
+			]
+		)
+
+		op.elements.addAll(
+			op.extraVariables.map[ 
+				val extraVariable = it
+				createExpressionVariable => [
+					expression = createVariableExpression => [
+						variable = extraVariable
+						expressionContainer = extraVariable.namedElementContainer
+					]
+					namedElementContainer = extraVariable.namedElementContainer
+					hasInferredName = true
+				]
+			]
+		)
 	}
 
 }
