@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg
 
+import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
 import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
@@ -70,7 +71,6 @@ import relalg.BinaryLogicalOperatorType
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.ElementVariable
-import relalg.EquiJoinLikeOperator
 import relalg.ExpandOperator
 import relalg.Expression
 import relalg.ExpressionVariable
@@ -82,7 +82,6 @@ import relalg.Operator
 import relalg.OrderDirection
 import relalg.RelalgContainer
 import relalg.RelalgFactory
-import relalg.SelectionOperator
 import relalg.UnaryGraphObjectLogicalOperatorType
 import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
@@ -220,19 +219,15 @@ class RelalgBuilder {
 		}
 
 		/*
-		 * Chain subqueries together.
-		 * A single subquery was compiled to the following operator tree:
-		 *  SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
-		 * When we chain them together, the natural join should be injected just above the content,
-		 * and its right input should be content, its left input should be the chain built so far.
+		 * Compiled form of the query is the chain if the subqueries on the first BinaryOperator having unpopulated leftInput.
+		 *
+		 * The first qubquery will receive a dual object source there.
 		 */
-		var chainSoFar = ops.head
-		for (op : ops.tail) {
-			val najo = createJoinOperator
-			najo.leftInput = chainSoFar
-			chainSoFar = validateAndInjectNaJO(op, najo)
-		}
-		chainSoFar
+		chainEncapsulatedBinaryOperatorsLeft(
+			  createDualObjectSourceOperator
+			, ops
+			, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
+		)
 	}
 
 	/**
@@ -249,9 +244,12 @@ class RelalgBuilder {
 
 		/*
 		 * We compile all MATCH clauses and attach to a (left outer) join operator.
-		 * The first one will not be used, but its rightOperand will be extracted, though.
+		 * The first one will not be used to chain match clauses together,
+		 * but it will be used to chain subqueries together.
+		 * In case of the first subquery, a dual source will be put there
+		 * when chaining together subqueries.
 		 */
-		// use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
+		// use of lazy map OK as passed to chainEncapsulatedBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
 		val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
 			val mapIt = it
 			val relalgMatchDescriptor = buildRelalgMatch(mapIt)
@@ -282,36 +280,14 @@ class RelalgBuilder {
 			}
 		]
 
-		// if there is no match clause or the first is already an "OPTIONAL MATCH", we include the dual source
-		val content = if (singleQuery_MatchList.empty || singleQuery_MatchList.head instanceof LeftOuterJoinOperator) {
-				chainEncapsulatedBinaryOperatorsLeft(createDualObjectSourceOperator, singleQuery_MatchList)
+		// result will have a join node on the leftInput arc having leftInput===null. This will be used to chain subqueries together.
+		val content = if (singleQuery_MatchList.empty) {
+				// if there is no match clause we return a single Join having the dual source on its rightInput
+				createJoinOperator => [
+					rightInput = createDualObjectSourceOperator
+				]
 			} else {
-				/*
-				 * The compiled form of the first MATCH clause is on the rightInput
-				 * of the first join operator, which is possibly on the input of a SelectionOperator.
-				 * 
-				 * This join operator is in fact, unnecessary.
-				 */
-				val matchListHead = singleQuery_MatchList?.head
-				val chainHead = switch (matchListHead) {
-				  JoinOperator: matchListHead.rightInput
-				  SelectionOperator: {
-				    val _result = matchListHead
-				    val _l_input = matchListHead.input
-				    if (_l_input instanceof EquiJoinLikeOperator) {
-				      _result.input = _l_input.rightInput
-				    } else {
-				      unrecoverableError('''Unexpected relalg node «_l_input» found under «matchListHead.class».''')
-				    }
-				    _result
-				  }
-				  default: {
-				    unrecoverableError('''Unexpected relalg node found: «matchListHead.class»''')
-				    null
-				  }
-				}
-				//singleQuery_MatchList?.head?.rightInput
-				chainEncapsulatedBinaryOperatorsLeft(chainHead, singleQuery_MatchList?.tail)
+				chainEncapsulatedBinaryOperatorsLeft(null, singleQuery_MatchList, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_BINARY_OPERATOR)
 			}
 
 		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head

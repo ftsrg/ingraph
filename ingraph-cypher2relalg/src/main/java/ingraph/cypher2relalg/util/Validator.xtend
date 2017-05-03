@@ -1,6 +1,7 @@
 package ingraph.cypher2relalg.util
 
 import ingraph.logger.IngraphLogger
+import java.util.ArrayList
 import java.util.LinkedList
 import java.util.List
 import org.slizaa.neo4j.opencypher.openCypher.Clause
@@ -10,12 +11,18 @@ import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.With
+import relalg.DuplicateEliminationOperator
 import relalg.Operator
 import relalg.ProjectionOperator
+import relalg.SelectionOperator
+import relalg.SortOperator
+import relalg.TopOperator
 import relalg.UnaryOperator
 import relalg.UnionOperator
 
 class Validator {
+	static extension IngraphLogger logger = new IngraphLogger(Validator.name)
+
 	/**
 	 * Some checks for a single subquery's MATCH clauses.
 	 *
@@ -170,6 +177,49 @@ class Validator {
 			result
 		} else {
 			return true
+		}
+	}
+
+	/**
+	 * Validate compiled form of a subquery.
+	 * 
+	 * @param op A operator tree of the form
+	 *        SelectionOperator? TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator content
+	 *        Note that GroupingOperator is a subclass of ProjectionOperator, so it might appear instead of a plain old ProjectionOperator
+	 */
+	def static checkSubqueryCompilation(Operator op) {
+		// we find the parent node of content and also validate the sequence in a pass
+		var UnaryOperator parent = null
+		var currentOperator = op
+		val unaryOperatorTreeSeen = new ArrayList<String>
+		val pattern = #[
+		  new UnaryOperator0or1Pattern(SelectionOperator, true)
+		, new UnaryOperator0or1Pattern(TopOperator, true)
+		, new UnaryOperator0or1Pattern(SortOperator, true)
+		, new UnaryOperator0or1Pattern(DuplicateEliminationOperator, true)
+		, new UnaryOperator0or1Pattern(ProjectionOperator, false)
+		]
+		for (p: pattern) {
+			if (p.opc.isInstance(currentOperator)) {
+				if (currentOperator instanceof UnaryOperator) {
+					unaryOperatorTreeSeen.add(currentOperator.class.name)
+					parent = currentOperator
+					currentOperator = currentOperator.input
+				} else {
+					unrecoverableError('''Static error in the compiler!'''
+													 +''' We support a chain of «UnaryOperator.name» for pattern matching.'''
+													 +''' So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
+													 +''' This does not match what we expected: «pattern.join(' ')»'''
+														)
+				}
+			} else if (p.mandatory) {
+				unrecoverableError('''So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
+												 +''' This does not match what we expected: «pattern.join(' ')»'''
+													)
+			}
+		}
+		if (parent === null) {
+			unrecoverableError('''This should never happen: after validation, we found parent to be null, but reached this point...''')
 		}
 	}
 
