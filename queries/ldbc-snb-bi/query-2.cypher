@@ -6,7 +6,9 @@ WITH
   person.gender AS gender,
   floor(toFloat(2013-toInt(substring(person.birthday, 0, 4)))/5) AS ageGroup,
   tag.name AS tagName,
-  count(message) AS messageCount
+  message
+WITH
+  countryName, month, gender, ageGroup, tagName, count(message) AS messageCount
 // WHERE messageCount > 100
 RETURN countryName, month, gender, ageGroup, tagName, messageCount
 ORDER BY messageCount DESC, tagName ASC, ageGroup ASC, gender ASC, month ASC, countryName ASC
