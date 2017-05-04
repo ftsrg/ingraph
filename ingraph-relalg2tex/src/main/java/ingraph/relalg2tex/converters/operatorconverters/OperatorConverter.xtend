@@ -75,7 +75,7 @@ class OperatorConverter {
 	def dispatch convertOperator(ExpandOperator op) {
 		val ev=op.edgeVariable
 		if (op instanceof PathOperator) {
-			'''\transitiveclosure'''
+			throw new UnsupportedOperationException("Path operators are not yet supported.")
 		} else {
 			'''\expand'''
 		} + //

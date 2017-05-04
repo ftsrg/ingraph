@@ -22,7 +22,7 @@ import relalg.Variable
 class InternalSchemaCalculator {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
-	extension JoinSchemaCalculator joinAttributeCalculator = new JoinSchemaCalculator
+	extension JoinSchemaCalculator joinSchemaCalculator = new JoinSchemaCalculator
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension MaskCalculator maskCalculator = new MaskCalculator
 	extension RelalgFactory factory = RelalgFactory.eINSTANCE

@@ -23,6 +23,7 @@ class JoinSchemaCalculator {
 
 	def dispatch calculateJoinSchema(TransitiveClosureJoinOperator op, List<Variable> leftSchema, List<Variable> rightSchema) {
 		val joinSchema = calculateEquiJoinSchema(leftSchema, rightSchema)
+		// replace the EdgeVariable with and EdgeListVariable (e.g. replace "e" with "[e]")
 		val joinSchemaWithEdgeList = joinSchema.map[
 			if (it instanceof EdgeVariable && it.name.equals(op.edgeListVariable.name)) {
 				op.edgeListVariable

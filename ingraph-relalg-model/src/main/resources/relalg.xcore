@@ -387,9 +387,6 @@ class MaxHops {
 class ExpandOperator extends UnaryOperator, NavigationDescriptor {
 }
 
-//class TransitiveClosureOperator extends TernaryOperator, NavigationDescriptor {
-//}
-
 class PathOperator extends ExpandOperator {
   PathSemantics semantics
 }

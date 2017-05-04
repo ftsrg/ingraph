@@ -7,7 +7,7 @@ import relalg.ElementVariable
 import relalg.ListVariable
 import ingraph.relalg2tex.converters.elementconverters.MiscConverters
 
-class AbstractVariableConverter {
+abstract class AbstractVariableConverter {
 
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension MiscConverters miscConverters = new MiscConverters
