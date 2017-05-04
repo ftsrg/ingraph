@@ -1,3 +1,4 @@
+// Most active Posters of a given Topic
 MATCH (:Tag)<-[:hasTag]-(message:Message)-[:hasCreator]->(person: Person),
   (message)<-[:likes]-(fan:Person),
   (message)<-[:replyOf]-(comment:Comment) // TODO add * for transitivity

@@ -1,1 +1,0 @@
-// Zombies in a country
