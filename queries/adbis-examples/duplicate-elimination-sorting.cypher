@@ -1,0 +1,4 @@
+MATCH (p:Person)
+UNWIND p.speaks AS lang
+RETURN DISTINCT lang
+ORDER BY lang SKIP 2 LIMIT 1

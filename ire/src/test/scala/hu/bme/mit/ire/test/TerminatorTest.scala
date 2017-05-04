@@ -44,7 +44,7 @@ class TerminatorTest(_system: ActorSystem) extends TestKit(_system) with Implici
       input2 ! ChangeSet(positive = tupleBag(tuple(26)))
       input2 ! ChangeSet(positive = tupleBag(tuple(27)))
       val expected = Set(tuple(15), tuple(19), tuple(25), tuple(29))
-      assert(Await.result(future, Duration(1, HOURS)) == expected)
+      assert(Await.result(future, Duration(1, HOURS)).toSet == expected)
     }
   }
   "Binary nodes" must {
@@ -69,16 +69,16 @@ class TerminatorTest(_system: ActorSystem) extends TestKit(_system) with Implici
       input1 ! Secondary(ChangeSet(positive = tupleBag(tuple(16))))
       intermediary ! Secondary(ChangeSet(positive = tupleBag(tuple(16))))
 
-      assert(Await.result(future, Duration(1, HOURS)) == Set(tuple(15), tuple(25)))
-      assert(Await.result(terminator.send(), Duration(1, HOURS)) == Set(tuple(15), tuple(25), tuple(16)))
+      assert(Await.result(future, Duration(1, HOURS)).toSet == Set(tuple(15), tuple(25)))
+      assert(Await.result(terminator.send(), Duration(1, HOURS)).toSet == Set(tuple(15), tuple(25), tuple(16)))
       (1 to 500).foreach(i => {
         input1 ! Secondary(ChangeSet(negative = tupleBag(tuple(16))))
-        assert(Await.result(terminator.send(), Duration(1, HOURS)) == Set(tuple(15), tuple(25)))
+        assert(Await.result(terminator.send(), Duration(1, HOURS)).toSet == Set(tuple(15), tuple(25)))
         input1 ! Secondary(ChangeSet(positive = tupleBag(tuple(16))))
         intermediary ! Secondary(ChangeSet(negative = tupleBag(tuple(15))))
-        assert(Await.result(terminator.send(), Duration(1, HOURS)) == Set(tuple(25), tuple(16)))
+        assert(Await.result(terminator.send(), Duration(1, HOURS)).toSet == Set(tuple(25), tuple(16)))
         intermediary ! Secondary(ChangeSet(positive = tupleBag(tuple(15))))
-        assert(Await.result(terminator.send(), Duration(1, HOURS)) == Set(tuple(15), tuple(25), tuple(16)))
+        assert(Await.result(terminator.send(), Duration(1, HOURS)).toSet == Set(tuple(15), tuple(25), tuple(16)))
       })
     }
   }

@@ -16,7 +16,7 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 	}
 
 	// ensure that we generate unique names in the compiler
-	static var n = 1;
+	private static var n = 1;
 	@Accessors(PUBLIC_GETTER)
 	val elements = new HashMap<String, TNamedElement>
 
@@ -31,14 +31,25 @@ abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 			elements.put(variableName, variable)
 		}
 
-		val element = elements.get(variableName)
-		//container.elements.add(element)
-
-		return element
+		elements.get(variableName)
 	}
 
+	/**
+	 * Indicates if this factory is aware of the element by its name,
+	 * i.e. the element has ever been created by this factory instance.
+	 */
 	def hasElement(String elementName) {
 		return (elements.get(elementName) !== null)
+	}
+
+	/**
+	 * Returns the element by name this factory is aware of it,
+	 * i.e. the element has ever been created by this factory instance.
+	 *
+	 * Otherwise returns null.
+	 */
+	def TNamedElement getElement(String elementName) {
+		return elements.get(elementName)
 	}
 
 	def generateName() {

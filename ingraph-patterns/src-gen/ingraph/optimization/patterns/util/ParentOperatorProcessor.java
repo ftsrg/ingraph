@@ -17,14 +17,14 @@ import relalg.Operator;
 public abstract class ParentOperatorProcessor implements IMatchProcessor<ParentOperatorMatch> {
   /**
    * Defines the action that is to be executed on each match.
-   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * @param pOperator the value of pattern parameter operator in the currently processed match
+   * @param pParentOperator the value of pattern parameter parentOperator in the currently processed match
    * 
    */
-  public abstract void process(final Operator pParentOperator, final Operator pOperator);
+  public abstract void process(final Operator pOperator, final Operator pParentOperator);
   
   @Override
   public void process(final ParentOperatorMatch match) {
-    process(match.getParentOperator(), match.getOperator());
+    process(match.getOperator(), match.getParentOperator());
   }
 }

@@ -1,6 +1,6 @@
 Distinct([semaphore, route1, route2, sensor1, sensor2, te1, te2]) # distinct can't be ignored as edges can be multiplied
  |
-Filter(route1 != route2)
+Filter(route1 <> route2)
  |
 AntiJoin([semaphore, route2]) # antijoin on the listed variables that appear on both sides
  | |

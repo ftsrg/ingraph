@@ -1,11 +1,10 @@
 package ingraph.relalg2tex.converters.relalgconverters
 
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import relalg.BinaryOperator
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.TernaryOperator
 import relalg.UnaryOperator
-import ingraph.relalg2tex.config.RelalgConverterConfig
 
 class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 
@@ -41,21 +40,17 @@ class Relalg2TexExpressionConverter extends AbstractRelalg2TexConverter {
 	}
 
 	def dispatch CharSequence children(UnaryOperator op) {
-		'''«op.operator»
-		\Big(«op.input.children»\Big)
+		'''
+		«IF op.includeOperator»«op.operator»«IF config.parentheses»\Big(«ENDIF»«ENDIF»
+		«op.input.children»
+		«IF op.includeOperator»«IF config.parentheses»\Big)«ENDIF»«ENDIF»
 		'''
 	}
 
 	def dispatch CharSequence children(BinaryOperator op) {
-		'''«op.leftInput.children»
-		«op.operator»
-		«op.rightInput.children»
 		'''
-	}
-	
-	def dispatch CharSequence children(TernaryOperator op) {
-		'''«op.leftInput.children»
-		«op.operator»_{«op.middleInput.children»}
+		«op.leftInput.children»
+		«op.operator»
 		«op.rightInput.children»
 		'''
 	}

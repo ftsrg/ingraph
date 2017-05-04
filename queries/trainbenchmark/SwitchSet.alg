@@ -1,6 +1,6 @@
 Distinct([semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position]) # TODO: what does it mean to return a complete node/edge?
  |
-Filter(sw.currentPosition != swP.position)
+Filter(sw.currentPosition <> swP.position)
  |
 Filter(semaphore.signal='GO')
  |

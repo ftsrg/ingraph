@@ -4,12 +4,12 @@
 		\vspace{0.3cm}
 		\textbf{Budapest University of Technology and Economics}\\
 		\textmd{Faculty of Electrical Engineering and Informatics}\\[5cm]
-		
+
 		\vspace{0.4cm}
-		{\huge \bfseries Formalization of openCypher Queries in Relational Algebra}\\[0.8cm]
+		{\huge \bfseries Formalisation of openCypher Queries in Relational Algebra (Extended Version)}\\[0.8cm]
 		\vspace{0.5cm}
 		\textsc{\Large Technical Report}\\[4cm]
-		
+
 		{\Large Gábor Szárnyas, József Marton}\\
 
 		\IfFileExists{./disable-appendix}{}{
@@ -23,10 +23,18 @@
 			\input{appendix/progressbar-static-analysis-java}
 			\input{appendix/progressbar-static-analysis-javascript}
 			\input{appendix/progressbar-trainbenchmark}
+			\input{appendix/progressbar-adbis-examples}
+			\input{appendix/progressbar-cikm-examples}
 			\end{tabular}
 		}
-		
+
 		\vfill
-		{\large Generated on \yyyymmdddate \today~\currenttime~GMT+0.}
-	\end{center}		
+
+		\IfFileExists{./commit-message}{
+			{\large Commit: \texttt{\input{commit-message}}}
+		}{}
+	\end{center}
 \end{titlepage}
+
+% this is the simplest way to count the title page in the page numbers, while not displaying the page number on the title page
+\addtocounter{page}{1}

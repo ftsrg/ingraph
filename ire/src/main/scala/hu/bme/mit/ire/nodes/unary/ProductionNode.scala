@@ -12,7 +12,8 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
   val log = context.system.log
 
   val receivedTerminatorCount = mutable.Map.empty[Int, Int]
-  val results = new mutable.HashSet[Tuple]
+  // TODO find datastructure that stores order but has O(1) delete
+  val results = new mutable.ListBuffer[Tuple]
   val terminatorPromises = mutable.Map.empty[Int, Promise[Iterable[Tuple]]]
   val inputsToResume = mutable.Map.empty[Int, Iterable[ReteMessage => Unit]]
   val listeners = new mutable.ListBuffer[ChangeListener]
@@ -29,12 +30,12 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
     case ChangeSet(p, n) =>
       p.foreach {
         t =>
-          results.add(t)
+          results += t
           listeners.foreach(_.added(t))
       }
       n.foreach {
         t =>
-          results.remove(t)
+          results -= t
           listeners.foreach(_.removed(t))
       }
 
@@ -46,7 +47,7 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
       if (receivedTerminatorCount(messageID) == expectedTerminatorCount) {
         inputsToResume(terminatorID).foreach(input => input(Resume(messageID)))
         listeners.foreach(_.terminated())
-        terminatorPromises(messageID).success(results.toSet)
+        terminatorPromises(messageID).success(results.toList)
         receivedTerminatorCount.drop(messageID)
         terminatorPromises.drop(messageID)
       }

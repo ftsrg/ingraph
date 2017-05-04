@@ -30,6 +30,16 @@ public class Neo4jDriver extends CypherDriver {
 	}
 
 	@Override
+	public Session session(final String bookmark) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
+	public Session session(final AccessMode mode, final String bookmark) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
 	public void close() {
 		driver.close();
 	}

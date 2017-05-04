@@ -1,13 +1,13 @@
 plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
+  compile project(':ingraph-common')
   compile project(':ingraph-cypher-parser')
   compile project(':ingraph-patterns')
   compile project(':ingraph-relalg-model-util')
   testCompile project(':ingraph-relalg2tex')
 
   compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
-  compile group: 'log4j', name: 'log4j', version: log4jVersion
   compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
   compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion

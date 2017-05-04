@@ -1,7 +1,9 @@
 package ingraph.report.generator.tests
 
 import com.google.common.collect.ImmutableMap
+import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.report.generator.data.TestQuery
+import ingraph.report.generator.data.TestQueryBuilder
 import ingraph.report.generator.util.NaturalOrderComparator
 import java.io.File
 import java.nio.charset.Charset
@@ -11,6 +13,13 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
 abstract class DirectoryTest extends IngraphReportTest {
+
+	new() {
+	}
+
+	new(RelalgConverterConfig treeSerializerConfig) {
+		super(treeSerializerConfig)
+	}
 
 	def toChapter(String directoryName, String chapterTitle) {
 		toChapter(directoryName, chapterTitle, chapterTitle)
@@ -25,7 +34,7 @@ abstract class DirectoryTest extends IngraphReportTest {
 		for (fileName : fileNames) {
 			val queryName = FilenameUtils.removeExtension(fileName)
 			val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
-			val testQuery = TestQuery.builder.queryName(queryName).querySpecification(querySpecification).build
+			val testQuery = new TestQueryBuilder().setQueryName(queryName).setQuerySpecification(querySpecification).build
 			sectionTestQueries.add(testQuery)
 		}
 		

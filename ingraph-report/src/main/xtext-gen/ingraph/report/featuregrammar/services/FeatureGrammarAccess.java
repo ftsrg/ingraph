@@ -35,12 +35,12 @@ public class FeatureGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Feature:
 		//	tags+=TAG*
-		//	name=FEATURE_TEXT?
+		//	name=FEATURE_TEXT
 		//	elements+=NarrativeElement*
 		//	scenarios+=AbstractScenario*;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//tags+=TAG* name=FEATURE_TEXT? elements+=NarrativeElement* scenarios+=AbstractScenario*
+		//tags+=TAG* name=FEATURE_TEXT elements+=NarrativeElement* scenarios+=AbstractScenario*
 		public Group getGroup() { return cGroup; }
 		
 		//tags+=TAG*
@@ -49,7 +49,7 @@ public class FeatureGrammarAccess extends AbstractGrammarElementFinder {
 		//TAG
 		public RuleCall getTagsTAGTerminalRuleCall_0_0() { return cTagsTAGTerminalRuleCall_0_0; }
 		
-		//name=FEATURE_TEXT?
+		//name=FEATURE_TEXT
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
 		
 		//FEATURE_TEXT
@@ -697,7 +697,7 @@ public class FeatureGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Feature:
 	//	tags+=TAG*
-	//	name=FEATURE_TEXT?
+	//	name=FEATURE_TEXT
 	//	elements+=NarrativeElement*
 	//	scenarios+=AbstractScenario*;
 	public FeatureElements getFeatureAccess() {
@@ -912,7 +912,7 @@ public class FeatureGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//terminal fragment NL:
-	//	'\r'? '\n'?;
+	//	'\r'? '\n';
 	public TerminalRule getNLRule() {
 		return tNL;
 	}

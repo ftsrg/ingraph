@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_GB
 % !TeX encoding = UTF-8
-% !TeX program = xelatex
+% !TeX program = lualatex
 \documentclass{report}
 
 % we have to load xcolor first, see http://tex.stackexchange.com/questions/99049/latex-error-option-clash-for-package-xcolor-even-if-i-put-listings-before
@@ -13,6 +13,13 @@
 %\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
 \usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage{hyperref}
+
+\hypersetup{
+	pdfinfo={
+		Author={G\'abor Sz\'arnyas, J\'ozsef Marton},
+		Title={Formalisation of openCypher Queries in Relational Algebra (Extended Version)}
+	}
+}
 
 \usepackage{graphicx}
 \usepackage{fancyhdr}
@@ -33,6 +40,7 @@
 \usepackage{lineno}
 \usepackage{accsupp}
 \usepackage{datetime}
+\usepackage{longtable}
 %\usepackage{tocstyle} % prevents numbers an titles from overlapping in ToC
 
 \renewcommand{\thelinenumber}{
@@ -51,10 +59,6 @@
 
 \nonfrenchspacing
 
-% title page
-\title{openCypher Specification}
-\author{G\'abor Sz\'arnyas, J\'ozsef Marton}
-
 \begin{document}
 
 %\input{minimal-sandbox}
@@ -69,6 +73,8 @@
 
 \input{incremental}
 
+\input{calculating-schemas}
+
 \bibliographystyle{abbrv}
 \bibliography{bib}
 
@@ -82,6 +88,8 @@
 	\input{appendix/chapter-static-analysis-java}
 	\input{appendix/chapter-static-analysis-javascript}
 	\input{appendix/chapter-trainbenchmark}
+	\input{appendix/chapter-adbis-examples}
+	\input{appendix/chapter-cikm-examples}
 }
 
 \end{document}

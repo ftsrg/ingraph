@@ -225,6 +225,10 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => if (a > b) 1 else  if (a < b) -1 else 0
         case b: Long   => if (a > b) 1 else  if (a < b) -1 else 0
       }
+    case a: String =>
+      b match {
+        case b: String => a.compareTo(b)
+      }
   }
 
   def toInt(a: Any): Int = a match {

@@ -1,9 +1,8 @@
 package ingraph.relalg2tex.converters.elementconverters
 
 import java.util.List
+import relalg.AbstractEdgeVariable
 import relalg.Direction
-import relalg.EdgeVariable
-import relalg.ExpressionVariable
 import relalg.MaxHops
 import relalg.SortEntry
 
@@ -37,7 +36,7 @@ class MiscConverters {
 		}
 	}
 
-	def entryToTex(SortEntry entry) {
+	def sortEntryToTex(SortEntry entry) {
 		val direction = switch (entry.direction) {
 			case ASCENDING: "asc"
 			case DESCENDING: "desc"
@@ -46,19 +45,7 @@ class MiscConverters {
 		'''\«direction» «entry.expression.convertExpression»'''
 	}
 
-	def convertReturnableElementList(List<ExpressionVariable> elements) {
-		'''«elements.map[
-			convertReturnableElement(it)
-		].join(", ")»'''
-	}
-
-	// FIXME: this should moved to VariableConverter. See #92
-	def convertReturnableElement(ExpressionVariable el) {
-		convertExpression(el.expression) +
-		  if (el.dontCare || el.hasInferredName) "" else '''\assign \var{«el.name»}'''
-	}
-
-	def edgeVariableList(List<EdgeVariable> edgeVariables) {
+	def edgeVariableList(List<AbstractEdgeVariable> edgeVariables) {
 		'''«edgeVariables.map["\\var{"+ escapedName + "}"].join(", ")»'''
 	}
 

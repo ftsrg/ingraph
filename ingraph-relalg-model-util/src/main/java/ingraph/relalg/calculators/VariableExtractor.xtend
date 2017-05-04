@@ -1,59 +1,93 @@
 package ingraph.relalg.calculators
 
-import com.google.common.collect.Iterables
+import ingraph.relalg.collectors.CollectionHelper
+import ingraph.relalg.expressions.ExpressionUnwrapper
 import java.util.List
 import relalg.AttributeVariable
+import relalg.ExpressionVariable
 import relalg.FunctionExpression
+import relalg.GroupingOperator
+import relalg.Operator
+import relalg.ProductionOperator
 import relalg.ProjectionOperator
-import relalg.RelalgFactory
 import relalg.SelectionOperator
+import relalg.SortOperator
 import relalg.UnaryOperator
+import relalg.UnwindOperator
 import relalg.Variable
 import relalg.VariableExpression
-import relalg.function.Function
 
 class VariableExtractor {
 
-	extension ExpressionToAttributes expressionToAttributes = new ExpressionToAttributes
- 	extension RelalgFactory factory = RelalgFactory.eINSTANCE
- 
- 	val metaFunctions = #[Function.KEYS, Function.LABELS, Function.TYPE, Function.PROPERTIES]
- 
+	extension ExpressionToVariables expressionToVariables = new ExpressionToVariables
+	extension CollectionHelper collectionHelper = new CollectionHelper
+	extension FunctionArgumentExtractor functionArgumentExtractor = new FunctionArgumentExtractor
+
 	/**
-	 * Extract extra attributes required by unary operators.
+	 * Extract extra variables required by unary operators.
 	 */
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProjectionOperator op) {
-		val functions = op.elements.map[expression].filter(FunctionExpression).filter[metaFunctions.contains(functor)].map[ 
-			val functionExpression = it
-			createExpressionVariable => [
-				namedElementContainer = functionExpression.container
-				expression = functionExpression
-				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
-			]
-		]
-		val attributes = op.elements.map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable)
-		Iterables.concat(functions, attributes).toList
+		op.getExtraVariablesForProjectionOperator
 	}
 
-//  def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
-//    op.entries // TODO this does not belong here
-//  }
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(GroupingOperator op) {
+		uniqueUnion(op.getExtraVariablesForProjectionOperator, op.getExtraVariablesForGroupingOperator)
+	}
 
+	// SelectionOperator
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SelectionOperator op) {
 		getAttributes(op.condition)
 	}
 
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-//    op.entries.map[variable]
-//  }
-//
-//  def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
-//    #[op.sourceVariable]
-//  }
-	
-	// rest of the unary operators - no extra requirements
+	// ProductionOperator
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(ProductionOperator op) {
+		op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
+	}
+
+	// SortOperator and SortAndTopOperator
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
+		op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
+	}
+
+	// UnwindOperator
+	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(UnwindOperator op) {
+		#[op.element]
+	}
+
+	// rest of the unary operators, e.g. the TopOperator, require no extra attributes
 	def dispatch List<AttributeVariable> extractUnaryOperatorExtraVariables(UnaryOperator op) {
 		#[]
 	}
 
+	/*
+	 * auxiliary functions
+	 */
+	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
+		val functionExpressions = op.elements.map[expression].filter(FunctionExpression).filter[!functor.isAggregation]
+		val arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
+
+		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
+		uniqueUnion(extraVariables, arguments)
+	}
+	
+	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
+		val externalSchemaNames = op.externalSchema.map[toString]
+		op.aggregationCriteria
+			.filter(ExpressionVariable).map[ExpressionUnwrapper.extractExpressionVariable(it)]
+			.filter[!externalSchemaNames.contains(it.toString)].toList
+	}
+
+	/*
+	 * calculatedVariables
+	 */
+	def dispatch List<? extends Variable> getCalculatedVariables(ProjectionOperator op) {
+//		uniqueUnion(op.elementsotherFunctions, op.aggregations)
+		#[]
+	}
+
+	def dispatch List<? extends Variable> getCalculatedVariables(Operator op) {
+		#[]
+	}
+
+	
 }

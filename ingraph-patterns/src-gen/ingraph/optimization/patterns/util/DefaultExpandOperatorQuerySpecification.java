@@ -6,6 +6,8 @@ package ingraph.optimization.patterns.util;
 import com.google.common.collect.Sets;
 import ingraph.optimization.patterns.DefaultExpandOperatorMatch;
 import ingraph.optimization.patterns.DefaultExpandOperatorMatcher;
+import ingraph.optimization.patterns.util.ExpandOperatorWithDefaultEdgeVariableQuerySpecification;
+import ingraph.optimization.patterns.util.ParentOperatorQuerySpecification;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -14,15 +16,13 @@ import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecification;
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
-import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.backend.IQueryBackendFactory;
 import org.eclipse.viatra.query.runtime.matchers.backend.QueryEvaluationHint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PBody;
 import org.eclipse.viatra.query.runtime.matchers.psystem.PVariable;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.Equality;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicdeferred.ExportedParameter;
-import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.ConstantValue;
+import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.PositivePatternCall;
 import org.eclipse.viatra.query.runtime.matchers.psystem.basicenumerables.TypeConstraint;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameter;
 import org.eclipse.viatra.query.runtime.matchers.psystem.queries.PParameterDirection;
@@ -72,7 +72,7 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
   
   @Override
   public DefaultExpandOperatorMatch newMatch(final Object... parameters) {
-    return DefaultExpandOperatorMatch.newMatch((relalg.ExpandOperator) parameters[0]);
+    return DefaultExpandOperatorMatch.newMatch((relalg.ExpandOperator) parameters[0], (relalg.Operator) parameters[1]);
   }
   
   /**
@@ -106,7 +106,9 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
     
     private final PParameter parameter_pExpandOperator = new PParameter("expandOperator", "relalg.ExpandOperator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "ExpandOperator")), PParameterDirection.INOUT);
     
-    private final List<PParameter> parameters = Arrays.asList(parameter_pExpandOperator);
+    private final PParameter parameter_pParentOperator = new PParameter("parentOperator", "relalg.Operator", new EClassTransitiveInstancesKey((EClass)getClassifierLiteralSafe("http://ingraph/relalg", "Operator")), PParameterDirection.INOUT);
+    
+    private final List<PParameter> parameters = Arrays.asList(parameter_pExpandOperator, parameter_pParentOperator);
     
     @Override
     public String getFullyQualifiedName() {
@@ -115,7 +117,7 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
     
     @Override
     public List<String> getParameterNames() {
-      return Arrays.asList("expandOperator");
+      return Arrays.asList("expandOperator","parentOperator");
     }
     
     @Override
@@ -131,37 +133,17 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
       	{
       		PBody body = new PBody(this);
       		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
-      		PVariable var_maxHops = body.getOrCreateVariableByName("maxHops");
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
       		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator)
+      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
       		));
-      		//   ExpandOperator.minHops(expandOperator, 1)
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new ConstantValue(body, var__virtual_0_, 1);
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationOperator", "minHops")));
-      		new Equality(body, var__virtual_1_, var__virtual_0_);
-      		//   ExpandOperator.maxHops(expandOperator, maxHops)
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationOperator", "maxHops")));
-      		new Equality(body, var__virtual_2_, var_maxHops);
-      		//   MaxHops.maxHopsType(maxHops, ::LIMITED)
-      		PVariable var__virtual_3_ = body.getOrCreateVariableByName(".virtual{3}");
-      		new ConstantValue(body, var__virtual_3_, getEnumLiteral("http://ingraph/relalg", "MaxHopsType", "LIMITED").getInstance());
-      		new TypeConstraint(body, new FlatTuple(var_maxHops), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "MaxHops")));
-      		PVariable var__virtual_4_ = body.getOrCreateVariableByName(".virtual{4}");
-      		new TypeConstraint(body, new FlatTuple(var_maxHops, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "MaxHops", "maxHopsType")));
-      		new Equality(body, var__virtual_4_, var__virtual_3_);
-      		//   MaxHops.hops(maxHops, 1)
-      		PVariable var__virtual_5_ = body.getOrCreateVariableByName(".virtual{5}");
-      		new ConstantValue(body, var__virtual_5_, 1);
-      		new TypeConstraint(body, new FlatTuple(var_maxHops), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "MaxHops")));
-      		PVariable var__virtual_6_ = body.getOrCreateVariableByName(".virtual{6}");
-      		new TypeConstraint(body, new FlatTuple(var_maxHops, var__virtual_6_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "MaxHops", "hops")));
-      		new Equality(body, var__virtual_6_, var__virtual_5_);
+      		// 	find parentOperator(expandOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		// 	find expandOperatorWithDefaultEdgeVariable(expandOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance().getInternalQueryRepresentation());
       		bodies.add(body);
       	}
       	// to silence compiler error
@@ -171,13 +153,5 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
       }
       return bodies;
     }
-  }
-  
-  private static int evaluateExpression_1_1() {
-    return 1;
-  }
-  
-  private static int evaluateExpression_1_2() {
-    return 1;
   }
 }

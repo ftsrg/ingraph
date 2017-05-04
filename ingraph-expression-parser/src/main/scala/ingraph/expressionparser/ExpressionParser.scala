@@ -1,13 +1,14 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import relalg._
-import relalg.function.{CypherType, FunctionCategory}
+import relalg.function.FunctionCategory
 
 
 object ExpressionParser {
-  def parse(expression: Expression, lookup: Map[Variable, Integer]): (Tuple) => Boolean =
+  def parse(expression: Expression, lookup: Map[String, Integer]): (Tuple) => Boolean =
     expression match {
       case exp: UnaryLogicalExpression =>
         import UnaryLogicalOperatorType._
@@ -56,18 +57,36 @@ object ExpressionParser {
         }
     }
 
-  private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[Variable, Integer]): Any =
-    tuple(lookup(variable))
+  private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[String, Integer]): Any =
+    tuple(lookup(variable.toString))
 
-  private def parseValue(cmp: Expression, lookup: Map[Variable, Integer]): (Tuple) => Any = cmp match {
+  def parseValue(exp: Expression, lookup: Map[String, Integer]): (Tuple) => Any =
+    if (lookup.contains(exp.toString))
+      tuple => tuple(lookup(exp.toString))
+    else exp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
-    case cmp: AttributeVariable =>  tuple => tuple(lookup(cmp))
-    case cmp: Variable => tuple => tuple(lookup(cmp))
-    case cmp: VariableComparableExpression => tuple => tuple(lookup(cmp.getVariable))
-    case cmp: VariableExpression => tuple => tuple(lookup(cmp.getVariable))
-    case exp: ArithmeticOperationExpression =>
+    case cmp: AttributeVariable =>
+      val index = lookup(cmp.toString).toInt
+      tuple => tuple(index)
+    case cmp: Variable =>
+      val index = lookup(cmp.toString).toInt
+      tuple => tuple(index)
+    case cmp: VariableComparableExpression =>
+      val index = lookup(cmp.getVariable.toString).toInt
+      tuple => tuple(index)
+    case cmp: VariableExpression =>
+      val variable = cmp.getVariable match {
+        case e: ExpressionVariable => e.getExpression match {
+          case v: VariableExpression => v.getVariable
+          case f: FunctionExpression => e
+        }
+        case a => a
+      }
+      val index = lookup(variable.toString).toInt
+      tuple => tuple(index)
+    case exp: BinaryArithmeticOperationExpression =>
       val left = parseValue(exp.getLeftOperand, lookup)
       val right = parseValue(exp.getRightOperand, lookup)
       import BinaryArithmeticOperatorType._
@@ -79,21 +98,60 @@ object ExpressionParser {
         case POWER => tuple => GenericMath.power(left(tuple), right(tuple))
         case MOD => tuple => GenericMath.mod(left(tuple), right(tuple))
       }
-    case cmp: FunctionExpression =>
-      cmp.getArguments.size() match {
-        case 0 => tuple => FunctionLookup.fun0(cmp.getFunctor)()
+    case exp: FunctionExpression if exp.getFunctor.getCategory != FunctionCategory.AGGREGATION =>
+      exp.getArguments.size() match {
+        case 0 =>
+          val function = FunctionLookup.fun0(exp.getFunctor)
+          tuple => function()
         case 1 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          tuple => FunctionLookup.fun1(cmp.getFunctor)(first(tuple))
+          val first: (Tuple) => Any = parseValue(exp.getArguments.get(0), lookup)
+          val function: (Tuple) => Any = t => FunctionLookup.fun1(exp.getFunctor)(first(t))
+          tuple => function(tuple)
         case 2 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          val second = parseValue(cmp.getArguments.get(1), lookup)
-          tuple => FunctionLookup.fun2(cmp.getFunctor)(first(tuple), second(tuple))
+          val first = parseValue(exp.getArguments.get(0), lookup)
+          val second = parseValue(exp.getArguments.get(1), lookup)
+          val function: (Tuple) => Any = t => FunctionLookup.fun2(exp.getFunctor)(first(t), second(t))
+          tuple => function(tuple)
         case 3 =>
-          val first = parseValue(cmp.getArguments.get(0), lookup)
-          val second = parseValue(cmp.getArguments.get(1), lookup)
-          val third = parseValue(cmp.getArguments.get(2), lookup)
-          tuple => FunctionLookup.fun3(cmp.getFunctor)(first(tuple), second(tuple), third(tuple))
+          val first = parseValue(exp.getArguments.get(0), lookup)
+          val second = parseValue(exp.getArguments.get(1), lookup)
+          val third = parseValue(exp.getArguments.get(2), lookup)
+          val function: (Tuple) => Any =
+            tuple => FunctionLookup.fun3(exp.getFunctor)(first(tuple), second(tuple), third(tuple))
+          tuple => function(tuple)
       }
+    case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
+      tuple => lookup(exp.toString)
+  }
+
+  import relalg.function.Function._
+  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): List[(String, () => StatefulAggregate)] = exp match {
+    case exp: FunctionExpression if exp.getFunctor.getCategory ==  FunctionCategory.AGGREGATION =>
+      if (exp.getFunctor != COLLECT) {
+        val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
+        val index = lookup(variable.toString)
+        List((exp.toString, exp.getFunctor match {
+          case AVG => () => new StatefulAverage(index)
+          case COUNT => () => new NullAwareStatefulCount(index)
+          case COUNT_ALL => () => new StatefulCount()
+          case MAX => () => new StatefulMax(index)
+          case MIN => () => new StatefulMin(index)
+          case SUM => () => new StatefulSum(index)
+        }))
+      } else {
+        val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
+        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.toString)).map(_.toInt)
+        List((exp.toString, () => new StatefulCollect(indices)))
+      }
+    case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
+    case exp: Literal => List()
+    case exp: VariableExpression => List()
+    case exp: BinaryArithmeticOperationExpression =>
+      parseAggregate(exp.getLeftOperand, lookup) ++ parseAggregate(exp.getRightOperand, lookup)
+  }
+
+  private def parseListExpression(expr: ListExpression): Vector[Expression] = expr match {
+    case f: EmptyListExpression => Vector()
+    case nonempty => parseListExpression(nonempty.getTail) :+ nonempty.getHead
   }
 }

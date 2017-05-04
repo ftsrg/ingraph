@@ -17,12 +17,22 @@ public class IngraphDriver extends CypherDriver {
 
 	@Override
 	public Session session() {
-		return null;
+		throw new UnsupportedOperationException("unimplemented");
 	}
 
 	@Override
 	public Session session(final AccessMode mode) {
-		return null;
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
+	public Session session(final String bookmark) {
+		throw new UnsupportedOperationException("unimplemented");
+	}
+
+	@Override
+	public Session session(final AccessMode mode, String bookmark) {
+		throw new UnsupportedOperationException("unimplemented");
 	}
 
 	@Override

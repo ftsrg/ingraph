@@ -10,6 +10,7 @@ mkdir out
 cp -r site/* out/ || true
 cp -r ingraph-cypher2relalg/build/reports/tests/ out/
 cp opencypher-report/opencypher-report.pdf out/pub/
+cp -r opencypher-report/appendix out/pub/
 
 # go to the out directory and create a *new* Git repo
 cd out

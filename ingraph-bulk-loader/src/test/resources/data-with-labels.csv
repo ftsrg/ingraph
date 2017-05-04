@@ -1,0 +1,2 @@
+productId:ID(Product),name,price,:LABEL
+11,Chocolate,10,Product;Food

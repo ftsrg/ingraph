@@ -158,7 +158,7 @@ public final class CascadableSelectionQuerySpecification extends BaseGeneratedEM
       		// 	SelectionOperator.condition(selectionOperator, condition)
       		new TypeConstraint(body, new FlatTuple(var_selectionOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_selectionOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "SelectionOperator", "condition")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AbstractCondition", "condition")));
       		new Equality(body, var__virtual_0_, var_condition);
       		// 	// condition: leftOperand AND rightOperand	BinaryLogicalExpression.operator(condition, ::AND)
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");

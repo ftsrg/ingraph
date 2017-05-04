@@ -1,9 +1,9 @@
 // Q11. Job referral. Find top 10 friends of the specified Person, or a friend of her friend (excluding the specified person), who has long worked in a company in a specified Country. Sort ascending by start date, and then ascending by person identifier.
-MATCH (person:Person)-[:KNOWS*1..2]-(friend:Person)
+MATCH (person:Person)-[:knows*1..2]-(friend:Person)
 WHERE NOT(person = friend) // I think this condition is unnecessary as Cypher will not travel the same edge twice (szarnyasg)
 WITH DISTINCT friend
-MATCH (friend)-[worksAt:WORKS_AT]->(company:Company)-[:IS_LOCATED_IN]->(:Country)
-WHERE worksAt.workFrom < $date
+MATCH (friend)-[worksAt:worksAt]->(company:Company)-[:isLocatedIn]->(:Country)
+WHERE worksAt.workFrom < "2050-01-01T00:00:00.000+0000"
 RETURN
   friend.id AS friendId,
   friend.firstName AS friendFirstName,

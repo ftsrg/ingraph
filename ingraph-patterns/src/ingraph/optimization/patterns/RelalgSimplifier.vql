@@ -1,0 +1,45 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+// [a] transformation for eliminating left outer joins that join the result of an arbitrary operator (inputOperator) 
+// to the Dual table
+pattern unnecessaryJoin(otherInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator, parentOperator : Operator) {
+	find parentOperator(equiJoinLikeOperator, parentOperator);
+	find joinOnDual(otherInputOperator, equiJoinLikeOperator);
+}
+
+pattern joinOnDual(otherInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator) {
+	DualObjectSourceOperator(dualOperator);
+	JoinOperator.leftInput(equiJoinLikeOperator, dualOperator);
+	JoinOperator.rightInput(equiJoinLikeOperator, otherInputOperator);
+} or {
+  DualObjectSourceOperator(dualOperator);
+  JoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
+  JoinOperator.rightInput(equiJoinLikeOperator, dualOperator);
+} or {
+  DualObjectSourceOperator(dualOperator);
+  LeftOuterJoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
+  LeftOuterJoinOperator.rightInput(equiJoinLikeOperator, dualOperator);
+}
+
+// [b]
+pattern unnecessaryAllDifferentOperator(inputOperator : Operator, allDifferentOperator : AllDifferentOperator, parentOperator : Operator) {
+	find parentOperator(allDifferentOperator, parentOperator);
+	AllDifferentOperator.input(allDifferentOperator, inputOperator);
+	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator);
+}
+
+pattern emptyOrSingleVariableAllDifferentOperator(allDifferentOperator : AllDifferentOperator) {
+	// empty
+	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+} or {
+	1 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _);
+	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
+	// EdgeVariable and *not* an EdgeListVariable
+	EdgeVariable(edgeVariable);
+}
+
+pattern allDifferentOperatorEdgeVariables(allDifferentOperator : AllDifferentOperator, edgeVariable : EdgeVariable) {
+	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable);
+}

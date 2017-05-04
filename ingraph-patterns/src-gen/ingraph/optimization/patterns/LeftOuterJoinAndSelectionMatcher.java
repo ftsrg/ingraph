@@ -48,7 +48,7 @@ import relalg.SelectionOperator;
  *      V               V
  *    leftInputOp...  getEdgesOperator
  * 
- * // [4] (run after [2])
+ * // [5] (run after [2])
  * // transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
  * pattern leftOuterJoinAndSelection(
  *   parentOperator : Operator,
@@ -57,7 +57,7 @@ import relalg.SelectionOperator;
  *   leftInputOperator: Operator,
  *   getEdgesOperator: GetEdgesOperator
  * ) {
- *   find parentOperator(parentOperator, selectionOperator);
+ *   find parentOperator(selectionOperator, parentOperator);
  *   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
  *   SelectionOperator.condition(selectionOperator, condition);
  *   UnaryLogicalExpression.operator(condition, ::NOT);

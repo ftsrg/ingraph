@@ -1,35 +1,34 @@
 package ingraph.cypher2relalg.util
 
-import java.util.ArrayList
+import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
+import ingraph.logger.IngraphLogger
+import java.util.HashSet
 import java.util.Iterator
 import java.util.LinkedList
 import java.util.List
 import java.util.Set
+import relalg.AbstractEdgeVariable
 import relalg.ArithmeticComparisonExpression
-import relalg.ArithmeticOperationExpression
+import relalg.BinaryArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
-import relalg.DuplicateEliminationOperator
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
-import relalg.ExpressionVariable
 import relalg.FunctionExpression
+import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.GraphObjectVariable
-import relalg.GroupingOperator
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.ListExpression
 import relalg.Literal
 import relalg.LogicalExpression
+import relalg.NullaryOperator
 import relalg.Operator
-import relalg.ProjectionOperator
 import relalg.RelalgContainer
 import relalg.RelalgFactory
-import relalg.SortOperator
-import relalg.TopOperator
 import relalg.UnaryArithmeticOperationExpression
 import relalg.UnaryOperator
 import relalg.UnionOperator
@@ -79,7 +78,7 @@ class Cypher2RelalgUtil {
 			for (retVal = i.next; i.hasNext;) {
 				val nextAE = createBinaryLogicalExpression => [
 					operator = binaryLogicalOperator
-					container = outerContainer
+					expressionContainer = outerContainer
 				]
 				nextAE.rightOperand = i.next
 				nextAE.leftOperand = retVal
@@ -116,14 +115,74 @@ class Cypher2RelalgUtil {
 	 * and so on.
 	 */
 	def chainBinaryOperatorsLeft(Operator head, Iterable<? extends BinaryOperator> tail) {
+		chainEncapsulatedBinaryOperatorsLeft(head, tail, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_TREE_ROOT)
+	}
+
+	/**
+	 * Chain operators to build a left deep tree.
+	 *
+	 * Building a left deep tree requires binary operators, so tail should contain relalg trees that
+	 * under arbitrary number of UnaryOperator's, lead to a BinaryOperator, i.e. encapsulates a BinaryOperator.
+	 * These binary operators connect relalg trees together.
+	 * 
+	 * @param mode determines the matching mode. For possibilities, see EncapsulatedBinaryOperatorChainMode 
+	 */
+	def chainEncapsulatedBinaryOperatorsLeft(Operator head, Iterable<? extends Operator> tail, EncapsulatedBinaryOperatorChainMode mode) {
 		var lastAlgebraExpression = head
 
-		for (BinaryOperator op : tail) {
-			op.leftInput = lastAlgebraExpression
+		for (Operator op : tail) {
+			val binaryOp = switch (mode) {
+				case CHAIN_AT_TREE_ROOT: {
+				  if (op instanceof BinaryOperator) {
+				    op
+				  } else {
+				    unrecoverableError('''Chain mode «mode» requested on a tree having a root other than «typeof(BinaryOperator)».''')
+				    null
+				  }
+				}
+				case CHAIN_AT_FIRST_BINARY_OPERATOR: findBinaryOperator(op, false)
+				case CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC: findBinaryOperator(op, true)
+			}
+			if (binaryOp.leftInput !== null) {
+			  unrecoverableError('''During chaining, found «binaryOp.class» instance having its leftInput !== null.''')
+			}
+			binaryOp.leftInput = lastAlgebraExpression
 			lastAlgebraExpression = op
 		}
 
 		lastAlgebraExpression
+	}
+
+	/**
+	 * Finds and returns a BinaryOperator instance that can be reached from op.
+	 * Parameter travelToLeft determines which BinaryOperator to return:
+	 *  - if false, the first BinaryOperator found will be returned,
+	 *    i.e. the one that was found after traveling through zero or more UnaryOpretor instances.
+	 *    Note: If op itself is a BinaryOperator instance, it will be returned.
+	 *  - in true, we follow leftInput for BinaryOperator instances having a populated leftInput (i.e. !== null ),
+	 *    and return the first BinaryOperator instance w/ un-populated leftInput (i.e. === null )
+	 *
+	 *
+	 * In case we don't find the requested BinaryOperator instance,
+	 * an unrecoverable error will be raised.
+	 * 
+	 * @param travelToLeft specify if we want to travel through BinaryOperator instances w/ populated leftInput  
+	 */
+	protected def BinaryOperator findBinaryOperator(Operator op, boolean travelToLeft) {
+		switch (op) {
+			BinaryOperator: {
+			  if (travelToLeft && op.leftInput !== null) {
+			    findBinaryOperator(op.leftInput, travelToLeft)
+			  } else {
+			    op
+			  }
+			}
+			UnaryOperator: findBinaryOperator(op.input, travelToLeft)
+			default: {
+				unrecoverableError('''Found «op.class», expected a tree leading to a BinaryOperator through zero or more UnaryOperator's and in case of travelToLeft==true populated BinaryOperator.leftInput references.''')
+				null
+			}
+		}
 	}
 
 	/**
@@ -148,16 +207,22 @@ class Cypher2RelalgUtil {
 			switch (el) {
 				VariableExpression: {
 					switch (myVar: el.variable) {
-						GraphObjectVariable: groupingVariables.add(myVar)
-						ExpressionVariable: fifo.add(myVar.expression)
+						GraphObjectVariable:
+							if (!groupingVariables.map[toString].toList.contains(myVar.toString)) {
+								groupingVariables.add(myVar)
+							}
+						// Do not check the content of myVar.expression, else it will introduce unnecessary aggregations.
+						// See the following query for an example:
+						// MATCH (tag)<--(message) WITH tag, count(message) AS countMessage RETURN tag, countMessage
+//						ExpressionVariable: fifo.add(myVar.expression)
 					}
-				}
-				ArithmeticOperationExpression: {
-					fifo.add(el.leftOperand)
-					fifo.add(el.rightOperand)
 				}
 				UnaryArithmeticOperationExpression: {
 					fifo.add(el.operand)
+				}
+				BinaryArithmeticOperationExpression: {
+					fifo.add(el.leftOperand)
+					fifo.add(el.rightOperand)
 				}
 				Literal: {}
 				FunctionExpression: {
@@ -165,6 +230,13 @@ class Cypher2RelalgUtil {
 						effectivelySeenAggregate = true
 					} else {
 						fifo.addAll(el.arguments)
+//							groupingVariables.add(createExpressionVariable =>
+//								[
+//									expression = el
+//									hasInferredName = true
+//									namedElementContainer = el.expressionContainer
+//								]
+//							)
 					}
 				}
 				EmptyListExpression: {}
@@ -190,49 +262,42 @@ class Cypher2RelalgUtil {
 	}
 
 	/**
-	 * Inject the given Left Outer Join operator just above the content
-	 * into operator tree. Content will become the rightInput of the left outer join operator.
-	 * @param op A operator tree of the form
-	 *        TopOperator? SortOperator? DuplicateEliminationOperator? ProjectionOperator GroupingOperator? content
-	 * @param lojo A Left Outer Join operator instance to be injected.
+	 * Finds edge variables in the given relalg tree.
+	 *
+	 * @param op the operator tree to process
+	 *
+	 * @return set of edge variables found in the relalg tree
 	 */
-	def validateAndInjectLOJO(Operator op, LeftOuterJoinOperator lojo) {
-		// we find the parent node of content and also validate the sequence in a pass
-		var UnaryOperator parent = null
-		var currentOperator = op
-		val unaryOperatorTreeSeen = new ArrayList<String>
-		val pattern = #[
-			new UnaryOperator0or1Pattern(TopOperator, true)
-		, new UnaryOperator0or1Pattern(SortOperator, true)
-		, new UnaryOperator0or1Pattern(DuplicateEliminationOperator, true)
-		, new UnaryOperator0or1Pattern(ProjectionOperator, false)
-		, new UnaryOperator0or1Pattern(GroupingOperator, true)
-		]
-		for (p: pattern) {
-			if (p.opc.isInstance(currentOperator)) {
-				if (currentOperator instanceof UnaryOperator) {
-					unaryOperatorTreeSeen.add(currentOperator.class.name)
-					parent = currentOperator
-					currentOperator = currentOperator.input
-				} else {
-					unrecoverableError('''Static error in the compiler!'''
-													 +''' We support a chain of «UnaryOperator.name» for pattern matching.'''
-													 +''' So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
-													 +''' This does not match what we expected: «pattern.join(' ')»'''
-														)
+	def Set<AbstractEdgeVariable> extractEdgeVariables(Operator op) {
+		val fifo = new LinkedList<Operator>
+		val edgeVariables = new HashSet<AbstractEdgeVariable>
+
+		fifo.add(op)
+		while (!fifo.empty) {
+			val el = fifo.removeFirst
+			switch (el) {
+				ExpandOperator: {
+					edgeVariables.add(el.edgeVariable)
+					fifo.add(el.input)
 				}
-			} else if (p.mandatory) {
-				unrecoverableError('''So far we have seen a chain of «unaryOperatorTreeSeen.join(',')», and now we reached «currentOperator.class.name».'''
-												 +''' This does not match what we expected: «pattern.join(' ')»'''
-													)
+				BinaryOperator: {
+					fifo.add(el.leftInput)
+					fifo.add(el.rightInput)
+				}
+				UnaryOperator: {
+					fifo.add(el.input)
+				}
+				GetEdgesOperator: {
+					edgeVariables.add(el.edgeVariable)
+				}
+				NullaryOperator: {
+				}
+				default: {
+					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
+				}
 			}
 		}
-		if (parent === null) {
-			unrecoverableError('''This should never happen: after validation, we found parent to be null, but reached this point...''')
-		} else {
-			lojo.rightInput = parent.input
-			parent.input = lojo
-		}
-		op
+
+		edgeVariables
 	}
 }

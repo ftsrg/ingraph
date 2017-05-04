@@ -197,12 +197,7 @@ public class FeatureSemanticSequencer extends AbstractDelegatingSemanticSequence
 	 *     Feature returns Feature
 	 *
 	 * Constraint:
-	 *     (
-	 *         (tags+=TAG+ ((name=FEATURE_TEXT scenarios+=AbstractScenario+) | scenarios+=AbstractScenario+)) | 
-	 *         (((tags+=TAG+ name=FEATURE_TEXT) | name=FEATURE_TEXT)? elements+=NarrativeElement+ scenarios+=AbstractScenario+) | 
-	 *         (name=FEATURE_TEXT scenarios+=AbstractScenario+) | 
-	 *         scenarios+=AbstractScenario+
-	 *     )?
+	 *     (tags+=TAG* name=FEATURE_TEXT elements+=NarrativeElement* scenarios+=AbstractScenario*)
 	 */
 	protected void sequence_Feature(ISerializationContext context, Feature semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

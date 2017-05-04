@@ -31,8 +31,8 @@ import relalg.Literal;
  * <p>Original source:
  * <code><pre>
  * pattern FoldableConstantExpression(e, v1: Literal, v2: Literal) {
- * 	ArithmeticOperationExpression.leftOperand(e, v1);
- * 	ArithmeticOperationExpression.rightOperand(e, v2);
+ * 	BinaryArithmeticOperationExpression.leftOperand(e, v1);
+ * 	BinaryArithmeticOperationExpression.rightOperand(e, v2);
  * } or {
  * 	ArithmeticComparisonExpression.leftOperand(e, v1);
  * 	ArithmeticComparisonExpression.rightOperand(e, v2);

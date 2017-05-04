@@ -139,11 +139,11 @@ Only regular expressions are legacy (for [good reason](http://quotes.yourdiction
 * [Statistical functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#_statistics)
   * `stdDev()`
   * `stdDevP()`
+* `CASE` - though the grammar for the standard form is not published as of 2017-04-21
 
 #### Legacy
 
 * Parameters with old syntax (`{}`)
-* `CASE`
 * [List functions](https://neo4j.com/docs/developer-manual/3.0/cypher/#query-functions-list)
   * `extract`
   * `filter`

@@ -1,53 +1,41 @@
 package ingraph.report.generator
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.relalg2rete.Relalg2ReteTransformation
-import ingraph.relalg.inferencers.BasicSchemaInferencer
-import ingraph.relalg.inferencers.ExtraVariableInferencer
-import ingraph.relalg.inferencers.FullSchemaInferencer
+import ingraph.logger.IngraphLogger
+import ingraph.relalg.calculators.ExternalSchemaCalculator
+import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.report.generator.data.TestQuery
 import ingraph.report.generator.util.TechReportEscaper
-import java.util.ArrayList
 import java.util.List
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
-import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.RelalgContainer
 
 class QueryProcessor {
 	
-	extension Relalg2ReteTransformation Relalg2ReteTransformation = new Relalg2ReteTransformation
-	extension BasicSchemaInferencer basicSchemaInferencer = new BasicSchemaInferencer
-	extension ExtraVariableInferencer extraVariableInferencer = new ExtraVariableInferencer
-	extension FullSchemaInferencer fullSchemaInferencer = new FullSchemaInferencer
+	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 	extension TechReportEscaper escaper = new TechReportEscaper
+	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
 
-	protected val treeSerializerConfig = RelalgConverterConfig.builder.includeCommonVariables(true).textualOperators(true).build
-	protected val treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
+	protected val Relalg2TexTreeConverter treeSerializer
 	protected val expressionConverter = new Relalg2TexExpressionConverter
 
-	@Accessors(PUBLIC_GETTER) var totalQueries = 0
-	@Accessors(PUBLIC_GETTER) var compilingQueries = 0
-	@Accessors(PUBLIC_GETTER) var List<CharSequence> subsections = new ArrayList
-
-	def void processQueries(Iterable<TestQuery> testQueries) {
-		for (testQuery : testQueries) {
-			toSubsection(testQuery)
-		}
+	new(RelalgConverterConfig treeSerializerConfig) {
+		treeSerializer = new Relalg2TexTreeConverter(treeSerializerConfig)
 	}
 
-	def void toSubsection(TestQuery testQuery) {
-		totalQueries++
+	def boolean toSubsection(TestQuery testQuery, List<CharSequence> subsections) {
 		var RelalgContainer container = null
 		try {
-			container = Cypher2Relalg.processString(testQuery.querySpecification)
-			compilingQueries++
+			container = Cypher2Relalg.processString(testQuery.querySpecification, testQuery.queryName)
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 		}
 		subsections.add(subsection(container, testQuery.queryName, testQuery.querySpecification, testQuery.regressionTest))
+		return container !== null
 	}
 
 	def subsection(RelalgContainer container, String name, String listing, boolean regressionTest) {
@@ -85,7 +73,7 @@ class QueryProcessor {
 			Cannot visualize tree.
 		«ELSE»
 			\begin{center}
-			\begin{adjustbox}{max width=\textwidth}
+			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
 			«searchTree»
 			\end{adjustbox}
 			\end{center}
@@ -98,7 +86,7 @@ class QueryProcessor {
 			Cannot visualize incremental tree.
 		«ELSE»
 			\begin{center}
-			\begin{adjustbox}{max width=\textwidth}
+			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
 			«incrementalTree»
 			\end{adjustbox}
 			\end{center}
@@ -109,16 +97,16 @@ class QueryProcessor {
 	}
 	
 	def toHeader(String title, String queryName) {
-		'''{«title» \textcolor{gray}{(«queryName.escape»)}}'''
+		'''{«title.escape» \textcolor{gray}{(«queryName.escape»)}}'''
 	}
 
 	def expression(RelalgContainer container) {
 		try {
 			val expressionContainer = EcoreUtil.copy(container)
-			expressionContainer.inferBasicSchema
+			expressionContainer.calculateExternalSchema
 			expressionConverter.convert(expressionContainer).toString
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
@@ -126,10 +114,10 @@ class QueryProcessor {
 	def visualizeTree(RelalgContainer container) {
 		try {
 			val treeContainer = EcoreUtil.copy(container)
-			treeContainer.inferBasicSchema
+			treeContainer.calculateExternalSchema
 			treeSerializer.convert(treeContainer)
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
@@ -137,16 +125,13 @@ class QueryProcessor {
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
 			val incrementalContainer = EcoreUtil.copy(container)
-			incrementalContainer.transformToRete
-			incrementalContainer.inferBasicSchema
-			incrementalContainer.inferExtraVariables
-			incrementalContainer.inferFullSchema
+			val calculator = new Relalg2ReteTransformationAndSchemaCalculator
+			calculator.apply(incrementalContainer)
 			treeSerializer.convert(incrementalContainer)
 		} catch (Exception e) {
-			e.printStackTrace
+			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
-
 
 }

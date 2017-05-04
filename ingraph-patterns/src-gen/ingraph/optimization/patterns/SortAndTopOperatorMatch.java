@@ -9,7 +9,7 @@ import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-import relalg.RelalgContainer;
+import relalg.Operator;
 import relalg.SortOperator;
 import relalg.TopOperator;
 
@@ -32,21 +32,21 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   
   private TopOperator fTopOperator;
   
-  private RelalgContainer fTopLevelContainer;
+  private Operator fParentOperator;
   
-  private static List<String> parameterNames = makeImmutableList("sortOperator", "topOperator", "topLevelContainer");
+  private static List<String> parameterNames = makeImmutableList("sortOperator", "topOperator", "parentOperator");
   
-  private SortAndTopOperatorMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer) {
+  private SortAndTopOperatorMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
     this.fSortOperator = pSortOperator;
     this.fTopOperator = pTopOperator;
-    this.fTopLevelContainer = pTopLevelContainer;
+    this.fParentOperator = pParentOperator;
   }
   
   @Override
   public Object get(final String parameterName) {
     if ("sortOperator".equals(parameterName)) return this.fSortOperator;
     if ("topOperator".equals(parameterName)) return this.fTopOperator;
-    if ("topLevelContainer".equals(parameterName)) return this.fTopLevelContainer;
+    if ("parentOperator".equals(parameterName)) return this.fParentOperator;
     return null;
   }
   
@@ -58,8 +58,8 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     return this.fTopOperator;
   }
   
-  public RelalgContainer getTopLevelContainer() {
-    return this.fTopLevelContainer;
+  public Operator getParentOperator() {
+    return this.fParentOperator;
   }
   
   @Override
@@ -73,8 +73,8 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     	this.fTopOperator = (TopOperator) newValue;
     	return true;
     }
-    if ("topLevelContainer".equals(parameterName) ) {
-    	this.fTopLevelContainer = (RelalgContainer) newValue;
+    if ("parentOperator".equals(parameterName) ) {
+    	this.fParentOperator = (Operator) newValue;
     	return true;
     }
     return false;
@@ -90,9 +90,9 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     this.fTopOperator = pTopOperator;
   }
   
-  public void setTopLevelContainer(final RelalgContainer pTopLevelContainer) {
+  public void setParentOperator(final Operator pParentOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fTopLevelContainer = pTopLevelContainer;
+    this.fParentOperator = pParentOperator;
   }
   
   @Override
@@ -107,12 +107,12 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fSortOperator, fTopOperator, fTopLevelContainer};
+    return new Object[]{fSortOperator, fTopOperator, fParentOperator};
   }
   
   @Override
   public SortAndTopOperatorMatch toImmutable() {
-    return isMutable() ? newMatch(fSortOperator, fTopOperator, fTopLevelContainer) : this;
+    return isMutable() ? newMatch(fSortOperator, fTopOperator, fParentOperator) : this;
   }
   
   @Override
@@ -122,7 +122,7 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     
     result.append("\"topOperator\"=" + prettyPrintValue(fTopOperator) + ", ");
     
-    result.append("\"topLevelContainer\"=" + prettyPrintValue(fTopLevelContainer)
+    result.append("\"parentOperator\"=" + prettyPrintValue(fParentOperator)
     );
     return result.toString();
   }
@@ -133,7 +133,7 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     int result = 1;
     result = prime * result + ((fSortOperator == null) ? 0 : fSortOperator.hashCode());
     result = prime * result + ((fTopOperator == null) ? 0 : fTopOperator.hashCode());
-    result = prime * result + ((fTopLevelContainer == null) ? 0 : fTopLevelContainer.hashCode());
+    result = prime * result + ((fParentOperator == null) ? 0 : fParentOperator.hashCode());
     return result;
   }
   
@@ -158,8 +158,8 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
     else if (!fSortOperator.equals(other.fSortOperator)) return false;
     if (fTopOperator == null) {if (other.fTopOperator != null) return false;}
     else if (!fTopOperator.equals(other.fTopOperator)) return false;
-    if (fTopLevelContainer == null) {if (other.fTopLevelContainer != null) return false;}
-    else if (!fTopLevelContainer.equals(other.fTopLevelContainer)) return false;
+    if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
+    else if (!fParentOperator.equals(other.fParentOperator)) return false;
     return true;
   }
   
@@ -190,12 +190,12 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
    * 
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
-   * @param pTopLevelContainer the fixed value of pattern parameter topLevelContainer, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static SortAndTopOperatorMatch newMutableMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer) {
-    return new Mutable(pSortOperator, pTopOperator, pTopLevelContainer);
+  public static SortAndTopOperatorMatch newMutableMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return new Mutable(pSortOperator, pTopOperator, pParentOperator);
   }
   
   /**
@@ -204,17 +204,17 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
    * <p>The returned match will be immutable. Use {@link #newEmptyMatch()} to obtain a mutable match object.
    * @param pSortOperator the fixed value of pattern parameter sortOperator, or null if not bound.
    * @param pTopOperator the fixed value of pattern parameter topOperator, or null if not bound.
-   * @param pTopLevelContainer the fixed value of pattern parameter topLevelContainer, or null if not bound.
+   * @param pParentOperator the fixed value of pattern parameter parentOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static SortAndTopOperatorMatch newMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer) {
-    return new Immutable(pSortOperator, pTopOperator, pTopLevelContainer);
+  public static SortAndTopOperatorMatch newMatch(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+    return new Immutable(pSortOperator, pTopOperator, pParentOperator);
   }
   
   private static final class Mutable extends SortAndTopOperatorMatch {
-    Mutable(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer) {
-      super(pSortOperator, pTopOperator, pTopLevelContainer);
+    Mutable(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+      super(pSortOperator, pTopOperator, pParentOperator);
     }
     
     @Override
@@ -224,8 +224,8 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends SortAndTopOperatorMatch {
-    Immutable(final SortOperator pSortOperator, final TopOperator pTopOperator, final RelalgContainer pTopLevelContainer) {
-      super(pSortOperator, pTopOperator, pTopLevelContainer);
+    Immutable(final SortOperator pSortOperator, final TopOperator pTopOperator, final Operator pParentOperator) {
+      super(pSortOperator, pTopOperator, pParentOperator);
     }
     
     @Override

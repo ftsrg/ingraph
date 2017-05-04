@@ -14,19 +14,12 @@ import "http://ingraph/relalg";
   getVerticesOperator
 
 */
-pattern defaultExpandOperator(expandOperator : ExpandOperator) {
-  ExpandOperator.minHops(expandOperator, 1);
-  ExpandOperator.maxHops(expandOperator, maxHops);
-  MaxHops.maxHopsType(maxHops, ::LIMITED);
-  MaxHops.hops(maxHops, 1);
-}
-
-// [1a] transformation for eliminating default expand operators connected to a getVerticesOperator
-pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
-	find parentOperator(parentOperator, expandOperator);
-	find defaultExpandOperator(expandOperator);
+// [1] transformation for eliminating standard expand operators connected to a getVerticesOperator
+pattern getVerticesAndExpandOperator(getVerticesOperator : GetVerticesOperator, expandOperator : ExpandOperator, parentOperator : Operator) {
+  find parentOperator(expandOperator, parentOperator);
+	find expandOperatorWithDefaultEdgeVariable(expandOperator);
 	ExpandOperator.input(expandOperator, getVerticesOperator);
-	GetVerticesOperator(getVerticesOperator);
+  GetVerticesOperator(getVerticesOperator);
 }
 
 /*
@@ -36,32 +29,39 @@ pattern expandVertex(getVerticesOperator : GetVerticesOperator, expandOperator :
           V
     expandOperator
 */
-// [2a] transformation for eliminating the remaining default expand operators
-pattern expandOperatorA(expandOperator : ExpandOperator, parentOperator : Operator) {
-	find parentOperator(parentOperator, expandOperator);
-	find defaultExpandOperator(expandOperator);
+// [2] transformation for eliminating the remaining default expand operators
+pattern defaultExpandOperator(expandOperator : ExpandOperator, parentOperator : Operator) {
+	find parentOperator(expandOperator, parentOperator);
+	find expandOperatorWithDefaultEdgeVariable(expandOperator);
 }
 
-// [2b] transformation for eliminating the remaining non-default expand operators
-pattern expandOperatorB(expandOperator : ExpandOperator, parentOperator : Operator) {
-  find parentOperator(parentOperator, expandOperator);
-  neg find defaultExpandOperator(expandOperator);
+private pattern expandOperatorWithDefaultEdgeVariable(defaultExpandOperator : ExpandOperator) {
+	ExpandOperator.edgeVariable(defaultExpandOperator, edgeVariable);
+	EdgeVariable(edgeVariable);
+}
+
+// [3] transform for eliminating the rest of expand operators
+pattern transitiveExpandOperator(inputOperator : Operator, expandOperator : ExpandOperator, parentOperator : Operator, edgeListVariable : EdgeListVariable) {
+  find parentOperator(expandOperator, parentOperator);
+  ExpandOperator.input(expandOperator, inputOperator);
+  ExpandOperator.edgeVariable(expandOperator, edgeListVariable);
+  EdgeListVariable(edgeListVariable);
 }
 
 /*
-      container
-          |
-          | rootExpression
-          V
-     topOperator (skips/limits a given amount of tuples)
+    parentOperator
           |
           | *input
           V
+     topOperator (skips/limits a given amount of tuples)
+          |
+          | input
+          V
      sortOperator (orders the tuples according to some variables and asc/desc directions)
 */
-// [3] transformation for combining adjacent top and sort operators to a single sortAndTop operator
-pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, topLevelContainer : RelalgContainer) {
-  RelalgContainer.rootExpression(topLevelContainer, topOperator);
+// [4] transformation for combining adjacent sort and top operators to a single sortAndTop operator
+pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperator, parentOperator : Operator) {
+  find parentOperator(topOperator, parentOperator);
   TopOperator.input(topOperator, sortOperator);
 }
 
@@ -82,7 +82,7 @@ pattern sortAndTopOperator(sortOperator : SortOperator, topOperator : TopOperato
      V               V
    leftInputOp...  getEdgesOperator
 */
-// [4] (run after [2])
+// [5] (run after [2])
 // transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
 pattern leftOuterJoinAndSelection(
   parentOperator : Operator,
@@ -91,7 +91,7 @@ pattern leftOuterJoinAndSelection(
   leftInputOperator: Operator,
   getEdgesOperator: GetEdgesOperator
 ) {
-  find parentOperator(parentOperator, selectionOperator);
+  find parentOperator(selectionOperator, parentOperator);
   SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
   SelectionOperator.condition(selectionOperator, condition);
   UnaryLogicalExpression.operator(condition, ::NOT);

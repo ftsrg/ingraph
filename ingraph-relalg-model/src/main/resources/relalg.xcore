@@ -4,6 +4,8 @@
   complianceLevel="8.0")
 package relalg
 
+import java.util.Objects
+
 type Function wraps relalg.function.Function
 type Bigint wraps java.math.BigInteger
 
@@ -11,11 +13,12 @@ class RelalgContainer {
   String name
   contains Operator rootExpression
   contains NamedElement[] elements opposite namedElementContainer
-  contains Expression[] expressions opposite ^container
+  contains Expression[] expressions opposite expressionContainer
+  boolean simplifiedPlan = "false"
   boolean incrementalPlan = "false"
-  boolean basicSchemaInferred = "false"
-  boolean extraAttributesInferred = "false"
-  boolean fullSchemaInferred = "false"
+  boolean externalSchemaInferred = "false"
+  boolean extraVariablesInferred = "false"
+  boolean internalSchemaInferred = "false"
 }
 
 abstract class NamedElement {
@@ -76,6 +79,9 @@ class EdgeLabelSet extends LabelSet {
  */
 class VariableExpression extends Expression {
 	refers Variable variable
+	op String toString() {
+	  variable.toString()
+	}
 }
 
 /**
@@ -152,6 +158,10 @@ class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
 /* Variables */
 abstract class Variable extends NamedElement {
   boolean dontCare = "false"
+  
+  op boolean sameName(Variable v) {
+    Objects.equals(toString, v.toString)
+  }
 }
 
 /* common superclass for vertices, edges and attributes */
@@ -160,21 +170,62 @@ abstract class GraphObjectVariable extends Variable {
 
 abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
+  refers PropertyList properties
+  op String toString() {
+    name
+  }
 }
 
 class VertexVariable extends ElementVariable {
   contains VertexLabelSet vertexLabelSet // the vertex must have *all* of these labels
 }
 
-class EdgeVariable extends ElementVariable {
+abstract class AbstractEdgeVariable extends ElementVariable {
   contains EdgeLabelSet edgeLabelSet // the edge must have *one* of these labels
 }
 
+class EdgeVariable extends AbstractEdgeVariable {
+}
+
+/**
+ * This is the variable for r in the query below:
+ * MATCH (m)-[r*2..5]->(n)
+ * RETURN m, r, n
+ */
+class EdgeListVariable extends AbstractEdgeVariable {
+  int minHops
+  contains MaxHops maxHops
+}
+
+/**
+ * Describes an attribute lookup on a variable.
+ * The base variable might be of type ElementVariable or ExpressionVariable,
+ * and if so, element xor expVar is filled, respectively.
+ */
 class AttributeVariable extends GraphObjectVariable {
   refers ElementVariable element opposite attributes
+  refers ExpressionVariable expVar
+  op Variable getBaseVariable() {
+    if (element !== null && expVar === null) {
+      return element
+    } else if (element === null && expVar !== null) {
+      return expVar
+    } else if (element === null && expVar === null) {
+      throw new IllegalStateException("AttributeVariable must have non-null value for either element or expVar, but both are null.")
+    } else {
+      throw new IllegalStateException("AttributeVariable must have non-null value for either element or expVar, but not for both.")
+    }
+  }
+  op String toString() {
+    baseVariable.name + "." + name
+  }
 }
 
 class ListVariable extends Variable {
+}
+
+class PathVariable extends Variable {
+  // FIXME: what's inside a PathVariable
 }
 
 /**
@@ -183,13 +234,16 @@ class ListVariable extends Variable {
 class ExpressionVariable extends Variable {
   boolean hasInferredName
   refers Expression expression
+  op String toString() {
+    name
+  }
 }
 
 /* Operators */
 abstract class Operator {
-  refers Variable[] basicSchema
-  refers Variable[] extraAttributes
-  refers Variable[] fullSchema
+  refers Variable[] externalSchema
+  refers Variable[] extraVariables
+  refers Variable[] internalSchema
   contains Cardinality cardinality
 }
 
@@ -206,17 +260,22 @@ class GetVerticesOperator extends NullaryOperator {
 }
 
 /**
+ * Singular graph object source, i.e. the singularity, that should always return zero tuples
+ */
+class SingularObjectSourceOperator extends NullaryOperator {
+}
+
+/**
  * Dual graph object source, that should always return a single tuple, i.e. ()
  */
 class DualObjectSourceOperator extends NullaryOperator {
 }
 
-// (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
-class GetEdgesOperator extends NullaryOperator {
-  boolean directed = "true"
-  refers VertexVariable sourceVertexVariable
-  refers EdgeVariable edgeVariable
-  refers VertexVariable targetVertexVariable
+/**
+ * Note: while this has a direction, a directed edge should always be described as
+ * (sourceVertexVariable)-[edgeVariable]->(targetVertexVariable)
+ */
+class GetEdgesOperator extends NullaryOperator, NavigationDescriptor {
 }
 
 /* Unary operators */
@@ -224,25 +283,95 @@ abstract class UnaryOperator extends Operator {
   contains Operator input
 }
 
-class ProductionOperator extends UnaryOperator {
-}
 
-class SelectionOperator extends UnaryOperator {
-  String conditionString
-  refers LogicalExpression condition
-}
-
-class ProjectionOperator extends UnaryOperator {
+/**
+ * A projection-like operator that is only capable of performing a projection operation.
+ */
+abstract class BeamerOperator extends UnaryOperator {
   refers ExpressionVariable[] elements
   int[] tupleIndices
 }
 
-abstract class NavigationOperator extends Operator {
-  int minHops
-  contains MaxHops maxHops  
+/**
+ * Currently, the ProductionOperator is used to "trim" extra variables that are part of the internal schema
+ * (as they are required for processing the query), but are not specified in the external schema.
+ *
+ * TODO: In the future, it should also be able to collect properties for a specific vertex/edge.
+ * For example, if the user specifies the following query:
+ *
+ * MATCH (p:Person)-[l:LIKES]->(m:Message)
+ * RETURN p, l, m.content
+ *
+ * We should return a vertex for Person p, a relationship for LIKES l (both with all their properties)
+ * and the content property of Message m.
+ */
+class ProductionOperator extends BeamerOperator {
+}
+
+/**
+ * Represents a condition which can be used for selection, theta-join.
+ *
+ * Different operators building on this might have different semantics,
+ * e.g. for a left outer join, this never filter on the left input
+ *
+ * - condition holds the actual filtering condition.
+ * - conditionString is for informational purposes only. TeX serialization might use this.
+ */
+abstract class AbstractCondition {
+  String conditionString
+  refers LogicalExpression condition
+}
+
+class SelectionOperator extends UnaryOperator, AbstractCondition {
+}
+
+/*
+ * The ProjectionOperator is the renaissance man of the Rete network.
+ * 
+ * It can:
+ * - Project variables to a schema, i.e. only keeping a certain set of variables.
+ * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
+ * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
+ *   (i.e. the inferencer algorithm has to propagate these variables to the NullaryOperators)
+ * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
+ */
+class ProjectionOperator extends BeamerOperator {
+}
+
+/**
+ * The GroupingOperator adds grouping functionality to the basic ProjectionOperator.
+ * 
+ * If ProjectionOperator was the renaissance man, this is Baroque of the relational graph algebra model.
+ */
+class GroupingOperator extends ProjectionOperator {
+  // be prepared that eventually expressions will be used as grouping criteria 
+  refers Expression[] aggregationCriteria
+  int[] order
+}
+
+/**
+ * Represents the create/update/delete operator.
+ */
+abstract class CUDOperator extends UnaryOperator {
+  refers ExpressionVariable[] elements
+}
+ 
+class CreateOperator extends CUDOperator {
+}
+ 
+class DeleteOperator extends CUDOperator {
+  boolean detach
+}
+
+//abstract class NavigationOperator extends Operator, NavigationDescriptor {
+//  int minHops
+//  contains MaxHops maxHops
+//}
+
+class NavigationDescriptor extends Expression {
   Direction direction
   refers VertexVariable sourceVertexVariable
-  refers EdgeVariable edgeVariable
+  refers AbstractEdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable
 }
 
@@ -255,31 +384,18 @@ class MaxHops {
   int hops
 }
 
-class ExpandOperator extends UnaryOperator, NavigationOperator {
+class ExpandOperator extends UnaryOperator, NavigationDescriptor {
 }
 
-
-abstract class TernaryOperator extends Operator {
-  contains Operator leftInput
-  contains Operator middleInput
-  contains Operator rightInput
-}
-
-class PathOperator extends TernaryOperator, NavigationOperator {
+class PathOperator extends ExpandOperator {
   PathSemantics semantics
-  contains VariableListExpression listVariable
 }
 
 class DuplicateEliminationOperator extends UnaryOperator {
 }
 
 class AllDifferentOperator extends UnaryOperator {
-  refers EdgeVariable[] edgeVariables
-  contains EdgeVariableSet[] edgeVariableSets
-}
-
-class EdgeVariableSet { // TODO - we should think about this a bit more
-  refers EdgeVariable[] edgeVariables
+  refers AbstractEdgeVariable[] edgeVariables
 }
 
 class SortOperator extends UnaryOperator {
@@ -302,10 +418,6 @@ class TopOperator extends UnaryOperator {
 
 // for incremental queries to handle sort and top as a single operator
 class SortAndTopOperator extends SortOperator, TopOperator {
-}
-
-class GroupingOperator extends UnaryOperator {
-  refers Variable[] entries
 }
 
 class UnwindOperator extends UnaryOperator {
@@ -335,10 +447,22 @@ abstract class AbstractJoinOperator extends BinaryOperator {
 abstract class EquiJoinLikeOperator extends AbstractJoinOperator {
 }
 
+/**
+ * Left outer join states that each tuple of its left input will appear
+ * on the output regardless of whether a matching tuple
+ * on the right input is available or not.
+ */
 class LeftOuterJoinOperator extends EquiJoinLikeOperator {
 }
 
+class ThetaLeftOuterJoinOperator extends LeftOuterJoinOperator, AbstractCondition {
+}
+
 class JoinOperator extends EquiJoinLikeOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
+}
+
+class TransitiveClosureJoinOperator extends EquiJoinLikeOperator {
+	refers EdgeListVariable edgeListVariable
 }
 
 class AntiJoinOperator extends AbstractJoinOperator {
@@ -350,7 +474,7 @@ class UnionOperator extends CommutativeBinaryOperator, AssociativeBinaryOperator
 
 /* expression */
 abstract class Expression {
-  refers RelalgContainer ^container opposite expressions
+  refers RelalgContainer expressionContainer opposite expressions
   String text
 }
 
@@ -373,16 +497,16 @@ abstract class UnaryExpression extends Expression {
 abstract class BinaryExpression extends Expression {
 }
 
-// arithmetic operations evaluate to a number, hence they are arithmetic expressins
-class ArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
-  BinaryArithmeticOperatorType operator
-  refers ArithmeticExpression leftOperand
-  refers ArithmeticExpression rightOperand
-}
-
 class UnaryArithmeticOperationExpression extends UnaryExpression, ArithmeticExpression {
   UnaryArithmeticOperatorType operator
   refers ArithmeticExpression operand
+}
+
+// binary arithmetic operations evaluate to a number, hence they are arithmetic expressins
+class BinaryArithmeticOperationExpression extends BinaryExpression, ArithmeticExpression {
+  BinaryArithmeticOperatorType operator
+  refers ArithmeticExpression leftOperand
+  refers ArithmeticExpression rightOperand
 }
 
 // arithmetic comparisons evaluate to true/false, hence they are logical expressions
@@ -479,6 +603,32 @@ class NullLiteral extends NumberLiteral, StringLiteral {
 }
 
 class Parameter extends NamedElement, Atom {
+}
+
+/**
+ * Container for a parameter to be placed in comparable position.
+ */
+class ParameterComparableExpression extends ComparableExpression {
+	refers Parameter parameter
+}
+
+
+/**
+ * This will hold the map-like construct that is used
+ * to represent vertex or edge constraints as well as
+ * "values" clause for DML operations.
+ */
+class PropertyList extends Expression {
+	contains PropertyListEntry[] entries
+}
+
+/**
+ * An entry has its name which corresponds to the attribute name
+ * and its value is an expression.
+ */
+class PropertyListEntry {
+	String key
+	refers Expression value
 }
 
 class Case {

@@ -9,12 +9,17 @@ jar {
 }
 
 dependencies {
+  compile project(':ingraph-bulk-loader')
   compile project(':ingraph-cypher2relalg')
   compile project(':ingraph-expression-parser')
-  compile project(':ingraph-optimization-transformations')
   compile project(':ingraph-relalg-model')
-  compile project(':ingraph-tinkerpop')
   compile project(':ire')
+  testCompile project(':ingraph-relalg2tex')
+
+  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jJavaDriverVersion
+
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
+  testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
+  testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }

@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.logger.IngraphLogger
 import java.io.UnsupportedEncodingException
 import java.util.regex.Matcher
 import java.util.regex.Pattern

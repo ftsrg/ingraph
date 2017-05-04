@@ -8,12 +8,14 @@ The ingraph project is implemented in Java, Scala and Xtend. The development tea
 
 #### Prerequisites
 
-It is recommended to start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and selecting **Eclipse IDE for Java and DSL Developers** distribution.
+Start with [Eclipse Neon](http://www.eclipse.org/downloads/packages/release/Neon) and select **Eclipse IDE for Java and DSL Developers** distribution.
+
+It is recommended to increase the memory available for Eclipse: edit the `eclipse.ini` file and set a larger value, e.g. `-Xmx4G`.
 
 :notebook_with_decorative_cover: The _DSL Developers_ flavor of Eclipse has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins from the update site of your Eclipse release (e.g. the Neon update site):
 
 * **Xtend IDE**
-* **Xtext SDK**
+* **Xtext Complete SDK**
 * **EMF - Eclipse Modeling Framework Xcore SDK**
 
 Proceed with installing the required dependencies:
@@ -21,8 +23,8 @@ Proceed with installing the required dependencies:
 1. Install the following plug-ins for Scala:
   * [Scala IDE](http://scala-ide.org/). Install all optional dependencies.
   * [ScalaTest for Scala IDE](http://www.scalatest.org/user_guide/using_scalatest_with_eclipse) plug-in.
-1. Go to the **Help** | **Eclipse Marketplace...** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
-1. Go to the **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
+1. Go to **Help** | **Eclipse Marketplace...** and install the **Buildship: Eclipse Plug-ins for Gradle** plug-in. You may also want to install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+1. Go to **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
 1. Install **VIATRA Core** 1.6.x from the [milestone update site](
 http://download.eclipse.org/viatra/updates/milestone).
 
@@ -30,9 +32,9 @@ http://download.eclipse.org/viatra/updates/milestone).
 
 1. Build the projects from command line with the following command:
 
-  ```bash
-  ./gradlew clean build eclipse -x test
-  ```
+    ```bash
+    ./gradlew clean build eclipse -x test
+    ```
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the directory of this repository. When prompted whether to overwrite the existing project files, click **Keep**.
 
 #### Opening relational algebra models
@@ -53,6 +55,12 @@ http://download.eclipse.org/viatra/updates/milestone).
 * Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 * Install the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support).
 * Currently, VIATRA is not supported in IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
+
+If you are unable to download Xtend plug-in from the plug-in list:
+* Download the [Xtext IDEA Core plug-in](https://plugins.jetbrains.com/plugin/8072-xtext-idea-core).
+* Install the plug-in using **Plugins** | **Install plugin from disks...**
+* Download the [Xtend plug-in](https://plugins.jetbrains.com/idea/plugin/8073-xtend-support).
+* Install the plug-in using **Plugins** | **Install plugin from disks...**
 
 #### Importing the projects
 

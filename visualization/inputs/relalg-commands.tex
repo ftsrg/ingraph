@@ -33,157 +33,175 @@
 
 \newcommand{\relalgop}[1]{\textsc{#1}}
 
-\newcommand{\getverticesop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\getverticesop}{\iftoggle{textualoperators}{
 		\relalgop{GetVertices}
 	}{
 		\bigcirc
 	}}
 
-\newcommand{\getedgesopdirected}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\getedgesopdirected}{\iftoggle{textualoperators}{
 		\relalgop{GetEdges}
 	}{
 		\Uparrow
 	}}
 
-\newcommand{\getedgesopundirected}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\getedgesopundirected}{\iftoggle{textualoperators}{
 		\relalgop{GetEdgesUndirected}
 	}{
 		\Updownarrow
 	}}
 
-\newcommand{\expandbothop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\expandbothop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandBoth}
 	}{
 		\updownarrow
 	}}
 
-\newcommand{\expandoutop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\expandoutop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandOut}
 	}{
 		\uparrow
 	}}
 
-\newcommand{\expandinop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\expandinop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandIn}
 	}{
 		\downarrow
 	}}
 
-\newcommand{\transitiveclosurebothop}{\iftoggle{textualoperators}{
-		\relalgop{TransitiveClosureBoth}
-	}{
-		\oplus \updownarrow
-	}}
-
-\newcommand{\transitiveclosureoutop}{\iftoggle{textualoperators}{
-		\relalgop{TransitiveClosureOut}
-	}{
-		\oplus \updownarrow
-	}}
-
-\newcommand{\transitiveclosureinop}{\iftoggle{textualoperators}{
-		\relalgop{TransitiveClosureIn}
-	}{
-		\oplus \updownarrow
-	}}
-
-\newcommand{\alldifferentop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\alldifferentop}{\iftoggle{textualoperators}{
 		\relalgop{AllDifferent}
 	}{
 		\not\equiv
 	}}
 
-\newcommand{\duplicateeliminationop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\duplicateeliminationop}{\iftoggle{textualoperators}{
 		\relalgop{DuplicateElimination}
 	}{
 		\delta
 	}}
 
-\newcommand{\sortop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\sortop}{\iftoggle{textualoperators}{
 		\relalgop{Sort}
 	}{
 		\tau
 	}}
 
-\newcommand{\projectionop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\productionop}{\iftoggle{textualoperators}{
+		\relalgop{Production}
+	}{
+		\Omega
+	}}
+
+\DeclareMathOperator*{\projectionop}{\iftoggle{textualoperators}{
 		\relalgop{Projection}
 	}{
 		\pi
 	}}
 
-\newcommand{\selectionop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\createop}{\iftoggle{textualoperators}{
+	\relalgop{Create}
+}{
+	\zeta
+}}
+
+\DeclareMathOperator*{\deleteop}{\iftoggle{textualoperators}{
+	\relalgop{Delete}
+}{
+	\chi
+}}
+
+\DeclareMathOperator*{\selectionop}{\iftoggle{textualoperators}{
 		\relalgop{Selection}
 	}{
 		\sigma
 	}}
 
-\newcommand{\renameop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\renameop}{\iftoggle{textualoperators}{
 		\relalgop{Rename}
 	}{
 		\rho
 	}}
 
-\newcommand{\groupingop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\groupingop}{\iftoggle{textualoperators}{
 		\relalgop{Grouping}
 	}{
 		\gamma
 	}}
 
-\newcommand{\topop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\topop}{\iftoggle{textualoperators}{
 		\relalgop{Top}
 	}{
 		\lambda
 	}}
 
-\newcommand{\unwindop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\unwindop}{\iftoggle{textualoperators}{
 		\relalgop{Unwind}
 	}{
 		\omega
 	}}
 
-\newcommand{\joinop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\unnestop}{\iftoggle{textualoperators}{
+		\relalgop{Unnest}
+	}{
+		\nu
+	}}
+
+\DeclareMathOperator*{\nestop}{\iftoggle{textualoperators}{
+		\relalgop{Nest}
+	}{
+		\mu
+	}}
+
+\DeclareMathOperator*{\joinop}{\iftoggle{textualoperators}{
 		\relalgop{Join}
 	}{
 		\bowtie
 	}}
 
-\newcommand{\antijoinop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\transitivejoinop}{\iftoggle{textualoperators}{
+		\relalgop{TransitiveJoin}
+	}{
+		\bowtie^\ast
+	}}
+
+\DeclareMathOperator*{\antijoinop}{\iftoggle{textualoperators}{
 		\relalgop{AntiJoin}
 	}{
 		\antijoinsymbol
 	}}
 
-\newcommand{\leftouterjoinop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\leftouterjoinop}{\iftoggle{textualoperators}{
 		\relalgop{LeftOuterJoin}
 	}{
 		\leftouterjoinsymbol
 	}}
 
-\newcommand{\unionop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\unionop}{\iftoggle{textualoperators}{
 		\relalgop{Union}
 	}{
 		\cup
 	}}
 
-\newcommand{\bagunionop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\bagunionop}{\iftoggle{textualoperators}{
 		\relalgop{BagUnion}
 	}{
 		\uplus
 	}}
 
-\newcommand{\minusop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\minusop}{\iftoggle{textualoperators}{
 		\relalgop{Minus}
 	}{
 		\setminus
 	}}
 
-\newcommand{\intersectionop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\intersectionop}{\iftoggle{textualoperators}{
 		\relalgop{Intersection}
 	}{
 		\cap
 	}}
 
-\newcommand{\cartesianproductop}{\iftoggle{textualoperators}{
+\DeclareMathOperator*{\cartesianproductop}{\iftoggle{textualoperators}{
 		\relalgop{CartesianProduct}
 	}{
 		\times
@@ -198,11 +216,13 @@
 \newcommand{\getedgesdirected}[6]{\getedgesopdirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 \newcommand{\getedgesundirected}[6]{\getedgesopundirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 
+\newcommand{\dual}{\var{Dual}}
+
 %%%%%%%%%% unary operators %%%%%%%%%%
 
 % expand operators
 \newcommand{\kleenestar}{\ast}
-\newcommand{\nagivationbody}[3]{~_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
+\newcommand{\nagivationbody}[3]{\,_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
 \newcommand{\expandedgevariable}[4]{
 	\left[
 	% #3: minHops, cannot be empty
@@ -212,19 +232,18 @@
 	{
 		\ifstrequal{#4}{1}
 		{} % minHops = 1 and maxHops = 1 -> write nothing
-		{\kleenestar \atom{#3} \ldots \atom{#4}} % minHops = 1 and maxHops != 1
+		{\kleenestar_\atom{#3}^\atom{#4}} % minHops = 1 and maxHops != 1
 	} % minHops != 1
-	{\kleenestar \atom{#3} \ldots \atom{#4}}
+	{\kleenestar_\atom{#3}^\atom{#4}}
 	\right]}
 
 \newcommand{\expandboth}[7]{\expandbothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 \newcommand{\expandout}[7]{\expandoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 \newcommand{\expandin}[7]{\expandinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
 
-% transitive closure operators
-\newcommand{\transitiveclosureboth}[7]{\transitiveclosurebothop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
-\newcommand{\transitiveclosureout}[7]{\transitiveclosureoutop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
-\newcommand{\transitiveclosurein}[7]{\transitiveclosureinop \nagivationbody{#1}{#2}{#3} \expandedgevariable{#4}{#5}{#6}{#7} }
+\newcommand{\navigationdescriptorboth}[4]{\updownarrow \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
+\newcommand{\navigationdescriptorout}[4]{\uparrow \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
+\newcommand{\navigationdescriptorin}[4]{\downarrow \nagivationbody{#3}{#4}{} \edgevariable{#1}{#2} }
 
 % top/skip/limit operators
 \newcommand{\topp}[2]{\topop_{#1}^{#2}}
@@ -234,20 +253,27 @@
 % see A Formal Presentation of MongoDB (Extended Version)
 % by Elena Botoeva, Diego Calvanese, Benjamin Cogrel, Martin Rezk, Guohui Xiao
 % https://arxiv.org/abs/1603.09291
-\newcommand{\unwind}[1]{\unwindop_\atom{#1}}
+\newcommand{\unwind}[1]{\unwindop_{#1}}
 
 % rest of unary operators
-\newcommand{\alldifferent}[1]{\alldifferentop_{\atom{#1}}}
+\newcommand{\alldifferent}[1]{\alldifferentop_{#1}}
 \newcommand{\duplicateelimination}{\duplicateeliminationop}
 \newcommand{\sort}[1]{\sortop_{#1}}
-\newcommand{\projection}[1]{\projectionop_\atom{#1}}
-\newcommand{\selection}[1]{\selectionop_\atom{#1}}
-\newcommand{\rename}[1]{\renameop_\atom{#1}}
-\newcommand{\grouping}[1]{\groupingop_\atom{#1}}
-	
+\newcommand{\projection}[2]{\projectionop_{#1}^{#2}}
+\newcommand{\create}[1]{\createop_{#1}}
+% delete: #1: '*' in case of DETACH DELETE, otherwise empty. #2: variable list to delete
+\newcommand{\delete}[2]{\deleteop_{#2}^{#1}}
+\newcommand{\selection}[1]{\selectionop_{#1}}
+\newcommand{\rename}[1]{\renameop_{#1}}
+\newcommand{\grouping}[2]{\groupingop_{#1}^{#2}}
+\newcommand{\production}[1]{\productionop_{#1}}
+\newcommand{\nest}[1]{\nestop_{#1}}
+\newcommand{\unnest}[1]{\unnestop_{#1}}
+
 %%%%%%%%%% binary operators %%%%%%%%%%
 
 \newcommand{\join}{\joinop}
+\newcommand{\transitivejoin}{\transitivejoinop}
 \newcommand{\antijoin}{\antijoinop}
 \newcommand{\leftouterjoin}{\leftouterjoinop}
 \newcommand{\union}{\unionop}
@@ -256,4 +282,12 @@
 \newcommand{\intersection}{\intersectionop}
 \newcommand{\cartesianproduct}{\cartesianproduct}
 
-%%%%%%%%%% ternary operators %%%%%%%%%%
+% colors
+
+\newcommand{\externalschemacolorname}{gray}
+\newcommand{\extravariablescolorname}{violet}
+\newcommand{\internalschemacolorname}{orange}
+
+\colorlet{externalschemacolor}{\externalschemacolorname}
+\colorlet{extravariablescolor}{\extravariablescolorname}
+\colorlet{internalschemacolor}{\internalschemacolorname}

@@ -8,6 +8,7 @@ import ingraph.report.featuregrammar.feature.Scenario
 import ingraph.report.featuregrammar.feature.ThenStep
 import ingraph.report.featuregrammar.feature.WhenStep
 import ingraph.report.generator.data.TestQuery
+import ingraph.report.generator.data.TestQueryBuilder
 import ingraph.report.generator.tests.IngraphReportTest
 import java.io.File
 import java.nio.charset.Charset
@@ -33,7 +34,7 @@ class TckReportTest extends IngraphReportTest {
 		val injector = new FeatureStandaloneSetup().createInjectorAndDoEMFRegistration()
 		val resourceSet = injector.getInstance(typeof(XtextResourceSet))
 
-		val files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], true))
+		val files = Lists.newArrayList(FileUtils.listFiles(new File(CUCUMBER_TESTS_DIR), #["feature"], false))
 		Collections.sort(files)
 
 		val chapterTestQueries = new LinkedHashMap<String, Iterable<TestQuery>>
@@ -49,16 +50,17 @@ class TckReportTest extends IngraphReportTest {
 				if ( //
 				scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].
 					isEmpty && //
-				!querySpecification.contains("CREATE ") && //
+//				!querySpecification.contains("CREATE ") && //
 				!querySpecification.contains("MERGE ") && //
 				!querySpecification.contains("REMOVE ") && //
 				!querySpecification.contains("SET ") && //
-				!querySpecification.contains("DELETE ") //
+//				!querySpecification.contains("DELETE ") && //
+				true
 				) {
 					val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
 					println(scenarioId)
 					val regressionTest = failingAndRegressionTests.contains(scenarioId)
-					val testQuery = TestQuery.builder.queryName(scenario.name).querySpecification(querySpecification).regressionTest(regressionTest).
+					val testQuery = new TestQueryBuilder().setQueryName(scenario.name).setQuerySpecification(querySpecification).setRegressionTest(regressionTest).
 						build
 					testQueries.add(testQuery)
 				}
