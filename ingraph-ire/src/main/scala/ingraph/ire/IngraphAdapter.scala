@@ -1,15 +1,18 @@
 package ingraph.ire
 
+import scala.collection.JavaConverters._
+
 import org.supercsv.prefs.CsvPreference
 
 import hu.bme.mit.ire.Transaction
+import hu.bme.mit.ire.TransactionFactory
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
-import ingraph.relalg2rete.SimplifyingTransformation
 import ingraph.relalg.expressions.ExpressionUnwrapper
+import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import relalg.AttributeVariable
-import hu.bme.mit.ire.TransactionFactory
+import java.util.Collection
+import hu.bme.mit.ire.datatypes.Tuple
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
   private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
@@ -54,6 +57,10 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
     tf.subscribe(engine.inputLookup)
     val tran = tf.newBatchTransaction()
     tran
+  }
+  
+  def getResult(): Collection[Tuple] = {
+    engine.getResults().asJavaCollection
   }
 
 }

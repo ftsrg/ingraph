@@ -17,7 +17,7 @@ public class IngraphDriver extends CypherDriver {
 	}
 
 	@Override
-	public Session session() {
+	public IngraphSession session() {
 		return new IngraphSession();
 	}
 
