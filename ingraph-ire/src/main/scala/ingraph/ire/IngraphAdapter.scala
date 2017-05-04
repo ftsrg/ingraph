@@ -7,6 +7,8 @@ import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2rete.SimplifyingTransformation
+import ingraph.relalg.expressions.ExpressionUnwrapper
+import relalg.AttributeVariable
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
   val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
@@ -36,6 +38,14 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
     for (relationship <- loader.getRelationships.asScala) {
       indexer.addEdge(relationship)
     }
-
   }
+
+  def resultNames() : Vector[String] = {
+    import ingraph.expressionparser.Conversions._
+    plan.getRootExpression.getExternalSchema.map {
+      case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
+      case e => e.getName
+    }
+  }
+
 }

@@ -1,12 +1,13 @@
-package ingraph.driver;
+package ingraph.driver.ingraph;
 
 import org.neo4j.driver.v1.AccessMode;
-import org.neo4j.driver.v1.AuthToken;
 import org.neo4j.driver.v1.Session;
+
+import ingraph.driver.CypherDriver;
 
 public class IngraphDriver extends CypherDriver {
 
-	IngraphDriver(final String uri, final AuthToken authToken) {
+	public IngraphDriver() {
 		super();
 	}
 
@@ -17,7 +18,7 @@ public class IngraphDriver extends CypherDriver {
 
 	@Override
 	public Session session() {
-		throw new UnsupportedOperationException("unimplemented");
+		return new IngraphSession();
 	}
 
 	@Override
