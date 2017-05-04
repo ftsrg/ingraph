@@ -142,13 +142,13 @@ public final class JoinOnDualQuerySpecification extends BaseGeneratedEMFQuerySpe
       		));
       		// 	DualObjectSourceOperator(dualOperator)
       		new TypeConstraint(body, new FlatTuple(var_dualOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "DualObjectSourceOperator")));
-      		// 	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, dualOperator)
-      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
+      		// 	JoinOperator.leftInput(equiJoinLikeOperator, dualOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "JoinOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
       		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
       		new Equality(body, var__virtual_0_, var_dualOperator);
-      		// 	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, otherInputOperator)
-      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
+      		// 	JoinOperator.rightInput(equiJoinLikeOperator, otherInputOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "JoinOperator")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
       		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "rightInput")));
       		new Equality(body, var__virtual_1_, var_otherInputOperator);
@@ -165,15 +165,40 @@ public final class JoinOnDualQuerySpecification extends BaseGeneratedEMFQuerySpe
       		   new ExportedParameter(body, var_otherInputOperator, parameter_pOtherInputOperator),
       		   new ExportedParameter(body, var_equiJoinLikeOperator, parameter_pEquiJoinLikeOperator)
       		));
-      		// 	DualObjectSourceOperator(dualOperator)
+      		//   DualObjectSourceOperator(dualOperator)
       		new TypeConstraint(body, new FlatTuple(var_dualOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "DualObjectSourceOperator")));
-      		// 	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, otherInputOperator)
-      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
+      		//   JoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "JoinOperator")));
       		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
       		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
       		new Equality(body, var__virtual_0_, var_otherInputOperator);
-      		// 	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator)
+      		//   JoinOperator.rightInput(equiJoinLikeOperator, dualOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "JoinOperator")));
+      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "rightInput")));
+      		new Equality(body, var__virtual_1_, var_dualOperator);
+      		bodies.add(body);
+      	}
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_otherInputOperator = body.getOrCreateVariableByName("otherInputOperator");
+      		PVariable var_equiJoinLikeOperator = body.getOrCreateVariableByName("equiJoinLikeOperator");
+      		PVariable var_dualOperator = body.getOrCreateVariableByName("dualOperator");
+      		new TypeConstraint(body, new FlatTuple(var_otherInputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
       		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_otherInputOperator, parameter_pOtherInputOperator),
+      		   new ExportedParameter(body, var_equiJoinLikeOperator, parameter_pEquiJoinLikeOperator)
+      		));
+      		//   DualObjectSourceOperator(dualOperator)
+      		new TypeConstraint(body, new FlatTuple(var_dualOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "DualObjectSourceOperator")));
+      		//   LeftOuterJoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "leftInput")));
+      		new Equality(body, var__virtual_0_, var_otherInputOperator);
+      		//   LeftOuterJoinOperator.rightInput(equiJoinLikeOperator, dualOperator)
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LeftOuterJoinOperator")));
       		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
       		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryOperator", "rightInput")));
       		new Equality(body, var__virtual_1_, var_dualOperator);

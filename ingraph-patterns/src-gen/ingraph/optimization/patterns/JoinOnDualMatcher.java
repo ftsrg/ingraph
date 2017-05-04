@@ -32,12 +32,16 @@ import relalg.Operator;
  * <code><pre>
  * pattern joinOnDual(otherInputOperator : Operator, equiJoinLikeOperator : EquiJoinLikeOperator) {
  * 	DualObjectSourceOperator(dualOperator);
- * 	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, dualOperator);
- * 	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, otherInputOperator);
+ * 	JoinOperator.leftInput(equiJoinLikeOperator, dualOperator);
+ * 	JoinOperator.rightInput(equiJoinLikeOperator, otherInputOperator);
  * } or {
- * 	DualObjectSourceOperator(dualOperator);
- * 	EquiJoinLikeOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
- * 	EquiJoinLikeOperator.rightInput(equiJoinLikeOperator, dualOperator);
+ *   DualObjectSourceOperator(dualOperator);
+ *   JoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
+ *   JoinOperator.rightInput(equiJoinLikeOperator, dualOperator);
+ * } or {
+ *   DualObjectSourceOperator(dualOperator);
+ *   LeftOuterJoinOperator.leftInput(equiJoinLikeOperator, otherInputOperator);
+ *   LeftOuterJoinOperator.rightInput(equiJoinLikeOperator, dualOperator);
  * }
  * </pre></code>
  * 
