@@ -9,11 +9,12 @@ import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2rete.SimplifyingTransformation
 import ingraph.relalg.expressions.ExpressionUnwrapper
 import relalg.AttributeVariable
+import hu.bme.mit.ire.TransactionFactory
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
-  val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
-  val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
+  private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
 
+  val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
 
   private val tupleMapper = new EntityToTupleMapper(
@@ -46,6 +47,13 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
       case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
       case e => e.getName
     }
+  }
+  
+  def getNewTransaction(): Transaction = {
+    val tf = new TransactionFactory(16)
+    tf.subscribe(engine.inputLookup)
+    val tran = tf.newBatchTransaction()
+    tran
   }
 
 }

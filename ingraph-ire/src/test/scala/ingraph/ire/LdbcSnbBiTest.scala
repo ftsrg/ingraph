@@ -104,18 +104,10 @@ class LdbcSnbBiTest extends FunSuite {
 
       converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
 
-      val tf = new TransactionFactory(16)
-      tf.subscribe(adapter.engine.inputLookup)
-      val tran = tf.newBatchTransaction()
-
+      val tran = adapter.getNewTransaction()
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
       adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
       tran.close()
-      import ingraph.expressionparser.Conversions._
-      val resultNames: Vector[String] = adapter.plan.getRootExpression.getExternalSchema.map {
-        case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
-        case e => e.getName
-      }
 
       val actualResults = adapter.engine.getResults()
 
@@ -129,7 +121,7 @@ class LdbcSnbBiTest extends FunSuite {
         .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
 
       import scala.collection.JavaConverters._
-      val expectedResults = javaResults.asScala.map(f => resultNames.map(f.get))
+      val expectedResults = javaResults.asScala.map(f => adapter.resultNames().map(f.get))
       expectedResults.foreach(n => assert(n != null))
 
       assertResult(expectedResults.size)(actualResults.size)

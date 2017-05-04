@@ -1,6 +1,6 @@
 dependencies {
   compile project(':ingraph-ire')
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jJavaDriverVersion
+  compile project(':ingraph-reactive-driver-interfaces')
 
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }

@@ -5,14 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import neo4j.driver.reactive.interfaces.RecordChangeSetListener;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
 
-import neo4j.driver.reactive.impl.Neo4jReactiveDriver;
 import neo4j.driver.reactive.interfaces.ReactiveDriver;
 import neo4j.driver.reactive.interfaces.ReactiveSession;
-import neo4j.driver.testkit.EmbeddedTestkitDriver;
 
 public class DriverManager {
 
@@ -22,7 +19,7 @@ public class DriverManager {
 	Map<UUID, StatementResult> resultMap = new HashMap<>();
 
 	public DriverManager() {
-		this.driver = new Neo4jReactiveDriver(new EmbeddedTestkitDriver());
+//		this.driver = new Neo4jReactiveDriver(new EmbeddedTestkitDriver());
 		this.session = driver.session();
 	}
 
@@ -38,8 +35,8 @@ public class DriverManager {
 	}
 
 	public List<String> columns(UUID id) {
-		StatementResult statement = listenerMap.get(id);
-		return statement.keys();
+//		StatementResult statement = listenerMap.get(id);
+//		return statement.keys();
 
 		return null;
 	}

@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.trainbenchmark
+package hu.bme.mit.ire.engine
 
 import akka.actor._
 import akka.pattern
@@ -11,16 +11,14 @@ import hu.bme.mit.ire.messages.{ChangeSet, SizeRequest}
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
-object TrainbenchmarkQuery {
+object RelationalEngine {
   val system = ActorSystem()
 
 }
 
-
-
-abstract class TrainbenchmarkQuery {
+abstract class RelationalEngine {
   lazy val log = system.log
-  val system = TrainbenchmarkQuery.system
+  val system = RelationalEngine.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
   val inputLookup: Map[String, ChangeSet => Unit]

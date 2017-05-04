@@ -7,7 +7,6 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.nodes.unary.aggregation.AggregationNode
-import hu.bme.mit.ire.trainbenchmark.TrainbenchmarkQuery
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.Conversions._
@@ -16,6 +15,7 @@ import ingraph.relalg.util.SchemaToMap
 import relalg._
 
 import scala.collection.mutable
+import hu.bme.mit.ire.engine.RelationalEngine
 
 object EngineFactory {
 
@@ -27,7 +27,7 @@ object EngineFactory {
   case class EdgeTransformer(nick: String, source:String, target: String)
 
   def createQueryEngine(plan: Operator) =
-    new TrainbenchmarkQuery {
+    new RelationalEngine {
       override val production = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()

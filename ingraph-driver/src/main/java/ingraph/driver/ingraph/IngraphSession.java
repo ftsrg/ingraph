@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.Statement;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
@@ -13,8 +12,10 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.TypeSystem;
 
 import ingraph.ire.IngraphAdapter;
+import neo4j.driver.reactive.data.RecordChangeSet;
+import neo4j.driver.reactive.interfaces.ReactiveSession;
 
-public class IngraphSession implements Session {
+public class IngraphSession implements ReactiveSession {
 
 	@Override
 	public boolean isOpen() {
@@ -28,10 +29,7 @@ public class IngraphSession implements Session {
 
 	@Override
 	public StatementResult run(String statementTemplate, Map<String, Object> statementParameters) {
-		final IngraphAdapter adapter = new IngraphAdapter(statementTemplate, "q");
-
-
-		return null;
+		throw new UnsupportedOperationException("Vanilla queries are not yet supported");
 	}
 
 	@Override
@@ -86,6 +84,18 @@ public class IngraphSession implements Session {
 
 	@Override
 	public void close() {
+	}
+
+	@Override
+	public IngraphRecordChangeSetListener registerQuery(String queryName, String querySpecification) {
+		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName);
+		final IngraphRecordChangeSetListener listener = new IngraphRecordChangeSetListener(adapter);
+		return listener;
+	}
+
+	@Override
+	public RecordChangeSet getDeltas(String queryName) {
+		return null;
 	}
 
 }
