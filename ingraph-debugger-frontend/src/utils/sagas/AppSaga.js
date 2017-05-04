@@ -16,26 +16,34 @@ function* watchModifyQuery(action) {
         }
     }
 
+    const firstLine = action.definition.split('\n')[0];
+    if (firstLine.startsWith('//')) {
+        yield put({
+            type: 'MODIFY_QUERY_NAME',
+            id: action.query.get('id'),
+            name: firstLine.substr(2)
+        })
+    }
+
     const response = yield API.registerQuery(action.definition);
-    console.log(response);
     if (response.status !== 200) {
         throw new Error('Query cannot be registered');
     }
 
     const data = yield response.json();
-    console.log(data);
     if (data.status === 'OK') {
         yield put({
             type: 'QUERY_PARSE_OK',
             id: action.query.get('id'),
             sessionId: data.body.sessionId,
+            columns: data.body.columns,
+            initialData: data.body.initialData,
         });
     } else {
-        console.log(data.body.message);
         yield put({
             type: 'QUERY_PARSE_FAIL',
             id: action.query.get('id'),
-            message: data.body.message,
+            reason: data.body.message,
         });
     }
 

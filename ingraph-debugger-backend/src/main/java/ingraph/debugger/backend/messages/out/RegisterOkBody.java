@@ -24,7 +24,7 @@ public class RegisterOkBody {
 	public List<String> getColumns() {
 		return columns;
 	}
-	
+
 	public RecordChangeSet getInitialData() {
 		return initialMatches;
 	}

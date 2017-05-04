@@ -1,7 +1,7 @@
 package ingraph.debugger.backend.messages.out;
 
 public class Letter {
-	
+
 	public enum Status {
 		OK, PARSE_ERROR
 	}

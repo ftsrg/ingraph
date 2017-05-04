@@ -9,14 +9,11 @@ import ingraph.debugger.backend.managers.DriverManager;
 
 @Path("api/deregister")
 public class DeregisterQuery {
-	
-	@Inject
-	DriverManager dms;
-	
+
 	@POST
 	@Produces("text/plain")
 	public String deregister() {
 		return null;
 	}
-	
+
 }

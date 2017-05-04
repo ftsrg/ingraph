@@ -13,12 +13,12 @@ public class ValueSerializer extends JsonSerializer<Value> {
 
 	@Override
 	public void serialize(Value value, JsonGenerator gen, SerializerProvider serializers)
-			throws IOException, JsonProcessingException {
+		throws IOException, JsonProcessingException {
 		gen.writeStartObject();
-		for(String key : value.keys()) {
+		for (String key : value.keys()) {
 			gen.writeObjectField(key, value.get(key).asObject());
 		}
 		gen.writeEndObject();
 	}
-	
+
 }

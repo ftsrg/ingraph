@@ -13,7 +13,6 @@ export default (state = initialState, action) => {
             return state.setIn(['queries', id],
                 Immutable.fromJS({
                     id: id,
-                    handleId: null,
                     name: 'Query #' + (state.get('queries').count() + 1),
                     definition: '',
                 })
@@ -39,7 +38,23 @@ export default (state = initialState, action) => {
             return state.setIn(['queries', action.id, 'name'], action.name);
         }
         case "MODIFY_QUERY_DEFINITION": {
-            return state.setIn(['queries', action.id, 'definition'], action.definition);
+            return state
+                .deleteIn(['queries', action.id, 'sessionId'])
+                .deleteIn(['queries', action.id, 'data'])
+                .setIn(['queries', action.id, 'definition'], action.definition)
+        }
+        case "QUERY_PARSE_OK": {
+            return state
+                .setIn(['queries', action.id, 'state'], 'PARSED')
+                .deleteIn(['queries', action.id, 'failReason'])
+                .setIn(['queries', action.id, 'sessionId'], action.sessionId)
+                .setIn(['queries', action.id, 'columns'], Immutable.fromJS(action.columns))
+                .setIn(['queries', action.id, 'data'], Immutable.fromJS(action.initialData.positive))
+        }
+        case "QUERY_PARSE_FAIL": {
+            return state
+                .setIn(['queries', action.id, 'state'], 'FAILED')
+                .setIn(['queries', action.id, 'failReason'], action.reason)
         }
         default:
             return state;

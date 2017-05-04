@@ -13,13 +13,13 @@ public class RecordSerializer extends JsonSerializer<Record> {
 
 	@Override
 	public void serialize(Record value, JsonGenerator gen, SerializerProvider serializers)
-			throws IOException, JsonProcessingException {
+		throws IOException, JsonProcessingException {
 		gen.writeStartObject();
-		for(String key : value.keys()) {
+		for (String key : value.keys()) {
 			gen.writeObjectField(key, value.get(key));
 		}
 		gen.writeEndObject();
-		
+
 	}
-	
+
 }
