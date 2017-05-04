@@ -155,6 +155,10 @@ object EngineFactory {
             for (label <- labels)
               edgeConverters.addBinding(label, op)
             inputs += (nick -> expr.child)
+          case op: DualObjectSourceOperator =>
+            inputs += ("" -> expr.child)
+            expr.child(ChangeSet(positive=Vector(Vector())))
+
         }
       }
 
