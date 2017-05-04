@@ -14,8 +14,13 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 
+
 import scala.collection.{immutable, mutable}
 import hu.bme.mit.ire.engine.RelationalEngine
+
+import scala.collection.mutable
+import hu.bme.mit.ire.nodes.binary.TransitiveClosureJoinNode
+
 
 object EngineFactory {
 
@@ -180,6 +185,17 @@ object EngineFactory {
                   op.getRightInput.getInternalSchema.length,
                   leftMask,
                   rightMask
+                )))
+              case op: TransitiveClosureJoinOperator =>
+                val minHops = op.getEdgeListVariable.getMinHops
+                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
+                  case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
+                  case MaxHopsType.UNLIMITED => Long.MaxValue
+                }
+                newLocal(Props(new TransitiveClosureJoinNode(
+                  expr.child,
+                  minHops,
+                  maxHops
                 )))
             }
             remaining += ForwardConnection(op.getLeftInput, node.primary)
