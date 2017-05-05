@@ -1,26 +1,13 @@
 package ingraph.driver.test
 
-import java.io.FileInputStream
-
-import scala.Vector
-import scala.io.Source
-
-import org.objenesis.strategy.StdInstantiatorStrategy
+import ingraph.driver.ingraph.IngraphDriver
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import org.scalatest.FunSuite
 import org.supercsv.prefs.CsvPreference
 
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import hu.bme.mit.ire.TransactionFactory
-import ingraph.relalg.expressions.ExpressionUnwrapper
-import relalg.AttributeVariable
-import java.util.Collections
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-import ingraph.driver.ingraph.IngraphDriver
+import scala.collection.JavaConverters._
+import scala.io.Source
 
 class LdbcSnbBiDriverTest extends FunSuite {
 
@@ -102,13 +89,13 @@ class LdbcSnbBiDriverTest extends FunSuite {
     t => test(s"query-${t.number}-size-1") {
       val queryName = s"ldbc-snb-bi-${t.number}"
       val querySpecification = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
-      
+
       val driver = new IngraphDriver()
       val session = driver.session()
-      
+
       val listener = session.registerQuery(queryName, querySpecification)
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
-      listener.readCsv(nodeFilenames, relationshipFilenames, csvPreference)
+      listener.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
 
 //      val actualResults = adapter.engine.getResults()
 //

@@ -1,7 +1,5 @@
 package ingraph.ire
 
-import scala.collection.JavaConverters._
-
 import org.supercsv.prefs.CsvPreference
 
 import hu.bme.mit.ire.Transaction
@@ -11,8 +9,8 @@ import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.expressions.ExpressionUnwrapper
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import relalg.AttributeVariable
-import java.util.Collection
 import hu.bme.mit.ire.datatypes.Tuple
+import scala.collection.JavaConverters._
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
   private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
@@ -25,6 +23,18 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     engine.inputLookup) with LongIdParser
   private val indexer = new Indexer(tupleMapper)
+
+  def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
+                  relationshipFilenames: java.util.Map[String, String],
+                  transaction: Transaction,
+                  csvPreference: CsvPreference = CsvPreference.STANDARD_PREFERENCE) {
+    readCsv(
+      nodeFilenames.asScala.mapValues(_.asScala.toList).toMap,
+      relationshipFilenames.asScala.toMap,
+      transaction,
+      csvPreference
+    )
+  }
 
   def readCsv(nodeFilenames: Map[String, List[String]],
               relationshipFilenames: Map[String, String],
@@ -51,16 +61,16 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
       case e => e.getName
     }
   }
-  
-  def getNewTransaction(): Transaction = {
+
+  def newTransaction(): Transaction = {
     val tf = new TransactionFactory(16)
     tf.subscribe(engine.inputLookup)
     val tran = tf.newBatchTransaction()
     tran
   }
-  
-  def getResult(): Collection[Tuple] = {
-    engine.getResults().asJavaCollection
+
+  def result(): Iterable[Tuple] = {
+    engine.getResults()
   }
 
 }

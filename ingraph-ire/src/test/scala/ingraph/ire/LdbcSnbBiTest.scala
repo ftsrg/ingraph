@@ -104,7 +104,7 @@ class LdbcSnbBiTest extends FunSuite {
 
       converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
 
-      val tran = adapter.getNewTransaction()
+      val tran = adapter.newTransaction()
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
       adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
       tran.close()
