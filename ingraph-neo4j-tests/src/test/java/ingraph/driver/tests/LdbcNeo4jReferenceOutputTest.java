@@ -44,7 +44,7 @@ import neo4j.driver.testkit.EmbeddedTestkitSession;
 import neo4j.driver.util.GraphPrettyPrinter;
 
 @RunWith(Parameterized.class)
-public class LdbcTest {
+public class LdbcNeo4jReferenceOutputTest {
 
 	@Parameters(name = "workload={0}, query={1}")
 	public static Collection<Object[]> data() {
