@@ -1,8 +1,18 @@
 package ingraph.driver.test
 
+import java.io.FileInputStream
+import java.util
+import java.util.Collections
+
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
+import ingraph.driver.data.{IngraphDeltaHandler, PrintDeltaHandler}
 import ingraph.driver.ingraph.IngraphDriver
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import org.neo4j.driver.v1.Record
+import org.objenesis.strategy.StdInstantiatorStrategy
 import org.scalatest.FunSuite
 import org.supercsv.prefs.CsvPreference
 
@@ -95,27 +105,28 @@ class LdbcSnbBiDriverTest extends FunSuite {
 
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
 
-      val queryHandle = session.registerQuery(queryName, querySpecification)
-      queryHandle.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
 
-//      val actualResults = adapter.engine.getResults()
-//
-//      val kryo = new Kryo
-//      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
-//      kryo.addDefaultSerializer(
-//          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass(),
-//          classOf[UnmodifiableCollectionsSerializer]);
-//
-//      val javaResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
-//        .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
-//
-//      import scala.collection.JavaConverters._
-//      val expectedResults = javaResults.asScala.map(f => adapter.resultNames().map(f.get))
-//      expectedResults.foreach(n => assert(n != null))
-//
-//      assertResult(expectedResults.size)(actualResults.size)
-//      for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
-//        assertResult(expected)(actual)
-//      }
+      val queryHandler = session.registerQuery(queryName, querySpecification)
+      var actualChangeSize = 0
+      class AssertionHandler(override val keys: Vector[String], size: Int) extends IngraphDeltaHandler {
+        override def onChange(positiveRecords: util.List[_ <: Record], negativeRecords: util.List[_ <: Record]): Unit = {
+          actualChangeSize = positiveRecords.size()
+        }
+      }
+      
+      val kryo = new Kryo
+      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()))
+      kryo.addDefaultSerializer(
+          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass,
+          classOf[UnmodifiableCollectionsSerializer])
+
+      val javaResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
+        .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
+
+      import scala.collection.JavaConverters._
+      val expectedResultsSize = javaResults.size()
+      queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames(), expectedResultsSize))
+      queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
+      assert(actualChangeSize == expectedResultsSize)
     })
 }

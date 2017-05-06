@@ -1,5 +1,6 @@
 package ingraph.driver.ingraph;
 
+import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.IngraphAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
 import org.neo4j.driver.v1.*;
