@@ -5,6 +5,15 @@ import org.neo4j.driver.v1.Session;
 
 import ingraph.driver.CypherDriver;
 
+/**
+ * Current limitations include:
+ *
+ * <ul>
+ *     <li>Queries with updates (transformations) cannot be registered, i.e. {@code MATCH (n) CREATE (n)-[:REL]->()} is not supported.</li>
+ *     <li>Queries cannot return nodes or relationships, only values, i.e. {@code MATCH (n)-[e]->() RETURN n, e} does not work, but
+ *     {@code MATCH (n)-[e]->() RETURN n.name, e.weight} does.</li>
+ * </ul>
+ */
 public class IngraphDriver extends CypherDriver {
 
 	public IngraphDriver() {

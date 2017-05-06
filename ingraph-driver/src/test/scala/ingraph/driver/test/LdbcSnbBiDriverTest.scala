@@ -93,9 +93,10 @@ class LdbcSnbBiDriverTest extends FunSuite {
       val driver = new IngraphDriver()
       val session = driver.session()
 
-      val listener = session.registerQuery(queryName, querySpecification)
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
-      listener.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
+
+      val queryHandle = session.registerQuery(queryName, querySpecification)
+      queryHandle.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
 
 //      val actualResults = adapter.engine.getResults()
 //

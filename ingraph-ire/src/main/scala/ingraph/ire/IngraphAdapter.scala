@@ -1,7 +1,6 @@
 package ingraph.ire
 
 import org.supercsv.prefs.CsvPreference
-
 import hu.bme.mit.ire.Transaction
 import hu.bme.mit.ire.TransactionFactory
 import ingraph.bulkloader.csv.loader.MassCsvLoader
@@ -10,6 +9,8 @@ import ingraph.relalg.expressions.ExpressionUnwrapper
 import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import relalg.AttributeVariable
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.listeners.ChangeListener
+
 import scala.collection.JavaConverters._
 
 class IngraphAdapter(querySpecification: String, queryName: String) {
@@ -71,6 +72,10 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
 
   def result(): Iterable[Tuple] = {
     engine.getResults()
+  }
+
+  def addListener(listener: ChangeListener): Unit = {
+    engine.addListener(listener)
   }
 
 }

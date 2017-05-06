@@ -1,21 +1,14 @@
 package ingraph.driver.ingraph;
 
+import ingraph.ire.IngraphAdapter;
+import neo4j.driver.reactive.data.RecordChangeSet;
+import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.types.TypeSystem;
+
 import java.util.Collections;
 import java.util.Map;
 
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Statement;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
-import org.neo4j.driver.v1.TransactionWork;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.TypeSystem;
-
-import ingraph.ire.IngraphAdapter;
-import neo4j.driver.reactive.data.RecordChangeSet;
-import neo4j.driver.reactive.interfaces.ReactiveSession;
-
-public class IngraphSession implements ReactiveSession {
+public class IngraphSession implements Session {
 
 	@Override
 	public boolean isOpen() {
@@ -86,14 +79,12 @@ public class IngraphSession implements ReactiveSession {
 	public void close() {
 	}
 
-	@Override
-	public IngraphRecordChangeSetListener registerQuery(String queryName, String querySpecification) {
+	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {
 		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName);
-		final IngraphRecordChangeSetListener listener = new IngraphRecordChangeSetListener(adapter);
+		final IngraphQueryHandler listener = new IngraphQueryHandler(adapter);
 		return listener;
 	}
 
-	@Override
 	public RecordChangeSet getDeltas(String queryName) {
 		return null;
 	}
