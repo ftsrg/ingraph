@@ -113,7 +113,7 @@ class LdbcSnbBiDriverTest extends FunSuite {
           actualChangeSize = positiveRecords.size()
         }
       }
-      
+
       val kryo = new Kryo
       kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()))
       kryo.addDefaultSerializer(
