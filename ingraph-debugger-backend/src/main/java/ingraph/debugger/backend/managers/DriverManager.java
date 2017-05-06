@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ingraph.driver.IngraphDriver;
 import neo4j.driver.reactive.interfaces.RecordChangeSetListener;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
@@ -16,13 +17,10 @@ import neo4j.driver.testkit.EmbeddedTestkitDriver;
 
 public class DriverManager {
 
-	ReactiveDriver driver;
-	ReactiveSession session;
-
-	Map<UUID, StatementResult> resultMap = new HashMap<>();
+	IngraphDriver driver;
 
 	public DriverManager() {
-		this.driver = new Neo4jReactiveDriver(new EmbeddedTestkitDriver());
+		this.driver = new IngraphDriver();
 		this.session = driver.session();
 	}
 
@@ -30,8 +28,7 @@ public class DriverManager {
 		UUID id = UUID.randomUUID();
 
 		try (Transaction t = session.beginTransaction()) {
-			// = session.registerQuery(id.toString(), definition);
-
+			t.
 		}
 
 		return id;
