@@ -9,6 +9,7 @@ WHERE NOT (person)-[:knows]-(stranger)
 WITH person, stranger
 MATCH (person)<-[:hasCreator]-(:Message)-[:replyOf]-(comment1:Comment)-[:hasCreator]->(stranger),
   (stranger)<-[:hasCreator]-(:Message)<-[:replyOf]-(comment2:Comment)-[:hasCreator]->(person)
-RETURN person.id, count(stranger) AS strangersCount, count(comment1) + count(comment2) AS interactionCount
+WITH person, count(stranger) AS strangersCount, count(comment1) AS comment1Count, count(comment2) AS comment2Count
+RETURN person.id, strangersCount, comment1Count + comment2Count AS interactionCount
 ORDER BY interactionCount DESC, person.id ASC
 LIMIT 100

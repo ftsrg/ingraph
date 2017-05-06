@@ -1,14 +1,23 @@
 package ingraph.driver.tests;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
-import neo4j.driver.testkit.EmbeddedTestkitDriver;
-import neo4j.driver.testkit.EmbeddedTestkitSession;
-import neo4j.driver.util.GraphPrettyPrinter;
+import static org.neo4j.io.fs.FileUtils.writeToFile;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.xml.stream.XMLStreamException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,12 +32,16 @@ import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import javax.xml.stream.XMLStreamException;
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
-import static org.neo4j.io.fs.FileUtils.writeToFile;
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
+import neo4j.driver.testkit.EmbeddedTestkitDriver;
+import neo4j.driver.testkit.EmbeddedTestkitSession;
+import neo4j.driver.util.GraphPrettyPrinter;
 
 @RunWith(Parameterized.class)
 public class LdbcNeo4jReferenceOutputTest {
@@ -37,8 +50,11 @@ public class LdbcNeo4jReferenceOutputTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				// BI
-				{ "bi", 2 }, { "bi", 3 }, { "bi", 4 }, { "bi", 5 }, { "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 12 },
-				{ "bi", 13 }, { "bi", 14 }, { "bi", 15 }, { "bi", 16 }, { "bi", 20 }, { "bi", 23 }, { "bi", 24 },
+				{ "bi", 2 }, { "bi", 1 }, { "bi", 3 }, { "bi", 4 }, { "bi", 5 }, //
+				{ "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 10 }, //
+				             { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
+				{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
+				{ "bi", 21 },                             { "bi", 24 }, //
 				// interactive
 				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
 				{ "interactive", 6 }, { "interactive", 7 }, { "interactive", 8 }, { "interactive", 9 }, { "interactive", 10 },
