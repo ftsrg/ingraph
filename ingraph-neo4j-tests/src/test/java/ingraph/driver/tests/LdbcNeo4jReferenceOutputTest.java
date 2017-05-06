@@ -1,23 +1,14 @@
 package ingraph.driver.tests;
 
-import static org.neo4j.io.fs.FileUtils.writeToFile;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.xml.stream.XMLStreamException;
-
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
+import neo4j.driver.testkit.EmbeddedTestkitDriver;
+import neo4j.driver.testkit.EmbeddedTestkitSession;
+import neo4j.driver.util.GraphPrettyPrinter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,16 +23,12 @@ import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
+import javax.xml.stream.XMLStreamException;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
-import neo4j.driver.testkit.EmbeddedTestkitDriver;
-import neo4j.driver.testkit.EmbeddedTestkitSession;
-import neo4j.driver.util.GraphPrettyPrinter;
+import static org.neo4j.io.fs.FileUtils.writeToFile;
 
 @RunWith(Parameterized.class)
 public class LdbcNeo4jReferenceOutputTest {
@@ -105,7 +92,7 @@ public class LdbcNeo4jReferenceOutputTest {
 						Collections.unmodifiableCollection(Collections.emptyList()).getClass(),
 						UnmodifiableCollectionsSerializer.class);
 
-				kryo.writeClassAndObject(output, serializableResults);
+				kryo.writeClassAndObject(output, results);
 			}
 			writeToFile(new File(queryResultJson), Json.toJson(serializableResults), false);
 			for (Record record : results) {

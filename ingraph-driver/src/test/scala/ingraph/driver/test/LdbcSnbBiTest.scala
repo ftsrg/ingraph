@@ -1,25 +1,10 @@
-package ingraph.ire
+package ingraph.driver.test
 
-import java.io.FileInputStream
-
-import scala.Vector
-import scala.io.Source
-
-import org.objenesis.strategy.StdInstantiatorStrategy
-import org.scalatest.FunSuite
-import org.supercsv.prefs.CsvPreference
-
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import hu.bme.mit.ire.TransactionFactory
-import ingraph.relalg.expressions.ExpressionUnwrapper
-import relalg.AttributeVariable
-import java.util.Collections
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import org.scalatest.FunSuite
+
+import scala.io.Source
 
 abstract class LdbcSnbBiTest extends FunSuite {
 
@@ -105,6 +90,6 @@ abstract class LdbcSnbBiTest extends FunSuite {
 
       runQuery(queryNumber, queryName, querySpecification)
     })
-    
+
   def runQuery(queryNumber : Int, queryName : String, querySpecification : String)
 }
