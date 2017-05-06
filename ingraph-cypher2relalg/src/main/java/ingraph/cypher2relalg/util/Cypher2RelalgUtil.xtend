@@ -209,6 +209,7 @@ class Cypher2RelalgUtil {
 				VariableExpression: {
 					switch (myVar: el.variable) {
 						GraphObjectVariable:
+							//FIXME: do we really need this map[toString] test?
 							if (!groupingVariables.map[toString].toList.contains(myVar.toString)) {
 								groupingVariables.add(myVar)
 							}
