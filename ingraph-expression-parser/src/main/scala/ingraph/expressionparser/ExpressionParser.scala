@@ -152,6 +152,6 @@ object ExpressionParser {
 
   private def parseListExpression(expr: ListExpression): Vector[Expression] = expr match {
     case f: EmptyListExpression => Vector()
-    case nonempty => parseListExpression(nonempty.getTail) :+ nonempty.getHead
+    case nonempty => nonempty.getHead +: parseListExpression(nonempty.getTail)
   }
 }
