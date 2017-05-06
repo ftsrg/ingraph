@@ -216,6 +216,9 @@ class Cypher2RelalgUtil {
 						ExpressionVariable: {
 							groupingVariables.add(myVar)
 						}
+						default: {
+							unsupported('''Unexpected, yet unsupported variable type found while enumerating grouping variables, got «myVar.class.name»''')
+						}
 					}
 				}
 				UnaryArithmeticOperationExpression: {
