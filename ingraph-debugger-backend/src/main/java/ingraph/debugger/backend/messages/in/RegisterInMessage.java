@@ -6,8 +6,4 @@ public class RegisterInMessage {
 	public String getDefinition() {
 		return definition;
 	}
-
-	public void setDefinition(String definition) {
-		this.definition = definition;
-	}
 }
