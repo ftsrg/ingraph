@@ -11,21 +11,37 @@ class ReteSandboxTest extends Cypher2Relalg2Rete2TexTest {
 	@Test
 	def void q1() {
 		process('query-1', '''
-		MATCH (:Country)<-[:isLocatedIn]-(message:Message)-[:hasTag]->(tag:Tag)
-		WITH
+		MATCH (message:Message)
+		WITH message, substring(message.creationDate, 5, 2) AS messageMonth
+		RETURN count(message) AS messageCount, messageMonth AS month
+		ORDER BY month
+		''')
+	}
+
+	@Test
+	def void q2() {
+		process('query-2', '''
+		// Messages by Topic and Continent
+		MATCH
+		  (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(message:Message)<-[:likes]-(person:Person),
+		  (message)-[:isLocatedIn]->(:Country)-[:isPartOf]->(continent:Continent)
+		RETURN
+		  count(message) AS messageCount,
+		  count(person) AS likeCount,
 		  toInt(substring(message.creationDate, 0, 4)) AS year,
 		  toInt(substring(message.creationDate, 5, 2)) AS month,
-		  message,
-		  tag
-		WITH
-		  year,
-		  month,
-		  count(message) AS popularity,
-		  tag
-		ORDER BY popularity DESC, tag.name ASC
-		RETURN year, month, collect([tag.name, popularity]) AS popularTags
-		ORDER BY year DESC, month ASC
+		  continent.name
+		ORDER BY messageCount, likeCount, year, month, continent.name
 		LIMIT 100
+		''')
+	}
+
+	@Test
+	def void q3() {
+		process('query-3', '''
+		MATCH (n:Person)
+		WHERE n.age > 27
+		RETURN n.name
 		''')
 	}
 

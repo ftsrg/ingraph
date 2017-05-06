@@ -3,10 +3,12 @@ package ingraph.relalg2tex.converters.elementconverters
 import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import java.util.ArrayList
 import java.util.List
+import relalg.ExpressionVariable
 import relalg.Variable
 
 class SchemaConverter {
  
+	//extension VariableExpressionConverter variableExpressionConverter = new VariableExpressionConverter //VariableNameConverter
 	extension VariableNameConverter variableNameConverter = new VariableNameConverter
 
 	extension TupleConverter tupleConverter = new TupleConverter
@@ -19,6 +21,9 @@ class SchemaConverter {
 	def convertSchema(List<Variable> schema) {
 		val list = new ArrayList(schema.size)
 		schema.forEach[ element, index |
+//			if (element instanceof ExpressionVariable) {
+//				println(element.hasInferredName)
+//			}
 			list.add('''\var{«element.convertVariable»}''')
 		]
 		'''\langle «list.join(', ')» \rangle'''

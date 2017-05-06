@@ -71,14 +71,13 @@ abstract class LdbcSnbBiTest extends FunSuite {
         TestCase(12),
         TestCase(13),
         TestCase(15),
+        TestCase(23),
+        TestCase(24),
 
 //        TestCase(8), // PATH
 //        TestCase(14), // PATH
 //        TestCase(16), // PATH
 //        TestCase(20), // PATH
-
-        TestCase(23),
-        TestCase(24),
 
         null
   ).filter(_ != null) //

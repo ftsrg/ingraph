@@ -17,7 +17,6 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
   override def onChangeSet(changeSet: ChangeSet): Unit = {
     val oldValues = mutable.Map[Tuple, (Tuple, Int)]()
     for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(m => m(t)))) {
-      println(key)
       val aggregators = data.getOrElseUpdate(key, functions())
 
       oldValues.getOrElseUpdate(key, (aggregators.map(_.value()), keyCount(key)))
