@@ -10,6 +10,7 @@ import com.esotericsoftware.kryo.io.Input
 import java.util.Collections
 
 import org.neo4j.driver.v1.Record
+import ingraph.tests.LdbcSnbBiTest
 
 class LdbcSnbBiEngineTest extends LdbcSnbBiTest {
 

@@ -4,14 +4,16 @@ import java.io.FileInputStream
 import java.util
 import java.util.Collections
 
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.driver.data.IngraphDeltaHandler
-import ingraph.driver.ingraph.IngraphDriver
 import org.neo4j.driver.v1.Record
 import org.objenesis.strategy.StdInstantiatorStrategy
 import org.supercsv.prefs.CsvPreference
+
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
+
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
+import ingraph.driver.data.IngraphDeltaHandler
+import ingraph.driver.ingraph.IngraphDriver
 
 class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
 
@@ -42,7 +44,6 @@ class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
 
     val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(queryNumber))))
       .asInstanceOf[java.util.ArrayList[Record]]
-    import scala.collection.JavaConverters._
     assertResult(expectedResults.size)(actualResults.size)
     for ((expected, actual) <- expectedResults.asScala.zip(actualResults.asScala.toVector)) {
       assertResult(expected.asMap())(actual.asMap())

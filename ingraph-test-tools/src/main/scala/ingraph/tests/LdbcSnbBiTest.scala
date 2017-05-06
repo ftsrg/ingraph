@@ -1,10 +1,10 @@
-package ingraph.driver.test
+package ingraph.tests
 
-import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import org.scalatest.FunSuite
-
+import scala.Vector
 import scala.io.Source
+import org.scalatest.FunSuite
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 
 abstract class LdbcSnbBiTest extends FunSuite {
 
@@ -90,6 +90,6 @@ abstract class LdbcSnbBiTest extends FunSuite {
 
       runQuery(queryNumber, queryName, querySpecification)
     })
-
+    
   def runQuery(queryNumber : Int, queryName : String, querySpecification : String)
 }
