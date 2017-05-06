@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+body, p {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* CodeMirror stuff, for beautiful editing experience */
+
+.CodeMirror {
+    max-height: 100px;
+
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}

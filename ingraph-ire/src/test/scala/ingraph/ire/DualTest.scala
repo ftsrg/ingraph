@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 import scala.io.Source
 
-class RandomTest extends FunSuite {
+class DualTest extends FunSuite {
   test("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
     val adapter = new IngraphAdapter(query, "opt")

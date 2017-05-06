@@ -16,7 +16,7 @@ dependencies {
   compile project(':ire')
   testCompile project(':ingraph-relalg2tex')
 
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jJavaDriverVersion
+  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
