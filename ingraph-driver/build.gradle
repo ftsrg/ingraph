@@ -8,6 +8,9 @@ jar {
   from sourceSets.main.allScala
 }
 
+sourceSets.main.scala.srcDir "src/main/java"
+sourceSets.main.java.srcDirs = []
+
 dependencies {
   compile project(':ingraph-ire')
   compile project(':ingraph-reactive-driver-interfaces')
