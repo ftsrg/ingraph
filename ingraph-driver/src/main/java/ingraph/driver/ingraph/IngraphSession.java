@@ -80,10 +80,14 @@ public class IngraphSession implements Session {
 	public void close() {
 	}
 
-	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {
+	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
 		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName);
 		final IngraphQueryHandler listener = new IngraphQueryHandler(adapter);
 		return listener;
+	}
+
+	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {
+		return registerQuery(queryName, querySpecification, Collections.emptyMap());
 	}
 
 	public RecordChangeSet getDeltas(String queryName) {
