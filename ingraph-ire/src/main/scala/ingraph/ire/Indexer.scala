@@ -20,6 +20,7 @@ case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
                        targetVertex: IngraphVertex,
                       label: String) {
   override def toString: String = s"Edge(${sourceVertex.id} -[$id]-> ${targetVertex.id}, $properties)"
+  def inverse(): IngraphEdge = IngraphEdge(id, properties, targetVertex, sourceVertex, label)
 }
 
 class Indexer(tupleMapper: EntityToTupleMapper) {

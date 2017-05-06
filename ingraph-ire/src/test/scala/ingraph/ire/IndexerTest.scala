@@ -17,6 +17,15 @@ class IndexerTest extends WordSpec {
   indexer.addEdge(new InternalRelationship(7, 3, 1, "hates"))
   indexer.addEdge(new InternalRelationship(8, 1, 1, "eats"))
 
+  "IngraphEdge" should {
+    "reverse itself" in {
+      val edge: IngraphEdge = indexer.edgesByLabel("eats").head
+      val inverse = edge.inverse()
+      assert(edge.sourceVertex == inverse.targetVertex)
+      assert(inverse.sourceVertex == edge.targetVertex)
+    }
+  }
+
   "Indexer" should {
 
     "return edges by label" in {
