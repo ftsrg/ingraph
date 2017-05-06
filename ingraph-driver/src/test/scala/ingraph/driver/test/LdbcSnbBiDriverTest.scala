@@ -1,27 +1,25 @@
-package ingraph.ire
+package ingraph.driver.test
 
 import java.io.FileInputStream
+import java.util
+import java.util.Collections
 
-import scala.Vector
-import scala.io.Source
-
+import com.esotericsoftware.kryo.Kryo
+import com.esotericsoftware.kryo.io.Input
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
+import ingraph.driver.data.{IngraphDeltaHandler, PrintDeltaHandler}
+import ingraph.driver.ingraph.IngraphDriver
+import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
+import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
+import org.neo4j.driver.v1.Record
 import org.objenesis.strategy.StdInstantiatorStrategy
 import org.scalatest.FunSuite
 import org.supercsv.prefs.CsvPreference
 
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
+import scala.collection.JavaConverters._
+import scala.io.Source
 
-import hu.bme.mit.ire.TransactionFactory
-import ingraph.relalg.expressions.ExpressionUnwrapper
-import relalg.AttributeVariable
-import java.util.Collections
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfig
-import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-
-class LdbcSnbBiTest extends FunSuite {
+class LdbcSnbBiDriverTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
@@ -99,34 +97,36 @@ class LdbcSnbBiTest extends FunSuite {
   ).filter(_ != null) //
     .foreach(
     t => test(s"query-${t.number}-size-1") {
-      val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
-      val adapter = new IngraphAdapter(query, s"ldbc-snb-bi-${t.number}")
+      val queryName = s"ldbc-snb-bi-${t.number}"
+      val querySpecification = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
 
-      converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
+      val driver = new IngraphDriver()
+      val session = driver.session()
 
-      val tran = adapter.newTransaction()
       val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
-      adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
-      tran.close()
 
-      val actualResults = adapter.engine.getResults()
+
+      val queryHandler = session.registerQuery(queryName, querySpecification)
+      var actualChangeSize = 0
+      class AssertionHandler(override val keys: Vector[String], size: Int) extends IngraphDeltaHandler {
+        override def onChange(positiveRecords: util.List[_ <: Record], negativeRecords: util.List[_ <: Record]): Unit = {
+          actualChangeSize = positiveRecords.size()
+        }
+      }
 
       val kryo = new Kryo
-      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()))
       kryo.addDefaultSerializer(
-          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass(),
-          classOf[UnmodifiableCollectionsSerializer]);
+          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass,
+          classOf[UnmodifiableCollectionsSerializer])
 
       val javaResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
         .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
 
       import scala.collection.JavaConverters._
-      val expectedResults = javaResults.asScala.map(f => adapter.resultNames().map(f.get))
-      expectedResults.foreach(n => assert(n != null))
-
-      assertResult(expectedResults.size)(actualResults.size)
-      for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
-        assertResult(expected)(actual)
-      }
+      val expectedResultsSize = javaResults.size()
+      queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames(), expectedResultsSize))
+      queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
+      assert(actualChangeSize == expectedResultsSize)
     })
 }

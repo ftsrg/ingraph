@@ -16,6 +16,7 @@ import relalg.BinaryOperator
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
+import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
@@ -208,13 +209,16 @@ class Cypher2RelalgUtil {
 				VariableExpression: {
 					switch (myVar: el.variable) {
 						GraphObjectVariable:
+							//FIXME: do we really need this map[toString] test?
 							if (!groupingVariables.map[toString].toList.contains(myVar.toString)) {
 								groupingVariables.add(myVar)
 							}
-						// Do not check the content of myVar.expression, else it will introduce unnecessary aggregations.
-						// See the following query for an example:
-						// MATCH (tag)<--(message) WITH tag, count(message) AS countMessage RETURN tag, countMessage
-//						ExpressionVariable: fifo.add(myVar.expression)
+						ExpressionVariable: {
+							groupingVariables.add(myVar)
+						}
+						default: {
+							unsupported('''Unexpected, yet unsupported variable type found while enumerating grouping variables, got «myVar.class.name»''')
+						}
 					}
 				}
 				UnaryArithmeticOperationExpression: {

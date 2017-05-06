@@ -16,6 +16,7 @@ ext {
 }
 
 dependencies {
+    compile project(':ingraph-driver')
 	compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: jerseyVersion
 	compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: jerseyVersion
 	compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: jerseyVersion

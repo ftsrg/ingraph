@@ -27,13 +27,13 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
   ).foreach(
     t => test(s"${t.name}-size-${t.size}") {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
-      TrainbenchmarkUtils.readModelAndGetResults(query, t.size).size == t.expectedResultSize
+      TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize
     }
   )
 
   test("SortAndTopNode") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
-    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
+    val results = TrainbenchmarkUtils.readModelAndGetResults("SortAndTopTest", query, 1)
     val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }

@@ -5,15 +5,15 @@ import hu.bme.mit.ire.TransactionFactory;
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
-import hu.bme.mit.ire.trainbenchmark._
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.FlatSpec
 import org.scalatest.concurrent.TimeLimits
 import scala.Vector
+import hu.bme.mit.ire.engine.RelationalEngine
 
 class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
 
-  class TestQuery1 extends TrainbenchmarkQuery {
+  class TestQuery1 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs: ChangeSet) => forwarder ! cs)
@@ -22,7 +22,7 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
     val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
   }
 
-  class TestQuery2 extends TrainbenchmarkQuery {
+  class TestQuery2 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs: ChangeSet) => forwarder ! cs),

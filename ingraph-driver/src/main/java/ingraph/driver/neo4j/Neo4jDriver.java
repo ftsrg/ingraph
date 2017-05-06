@@ -1,4 +1,4 @@
-package ingraph.driver;
+package ingraph.driver.neo4j;
 
 import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.AuthToken;
@@ -6,11 +6,13 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 
+import ingraph.driver.CypherDriver;
+
 public class Neo4jDriver extends CypherDriver {
 
 	final Driver driver;
 
-	Neo4jDriver(final String uri, final AuthToken authToken) {
+	public Neo4jDriver(final String uri, final AuthToken authToken) {
 		driver = GraphDatabase.driver(uri, authToken);
 	}
 

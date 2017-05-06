@@ -1,5 +1,6 @@
 package hu.bme.mit.ire
 
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.util.BufferMultimap
 
 import scala.collection.mutable

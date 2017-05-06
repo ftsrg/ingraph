@@ -1,24 +1,34 @@
 package hu.bme.mit.ire.test
 
-import akka.actor.{ActorRef, Props, actorRef2Scala}
-import hu.bme.mit.ire.TransactionFactory;
-import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.{Indexer, Tuple}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
-import hu.bme.mit.ire.nodes.binary.JoinNode
-import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
-import hu.bme.mit.ire.trainbenchmark._
-import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
-import hu.bme.mit.ire.util.TestUtil._
+import scala.Vector
+import scala.collection.mutable
+
 import org.scalatest.WordSpec
 import org.scalatest.concurrent.TimeLimits
-import scala.collection.mutable
-import scala.Vector
+
+import akka.actor.ActorRef
+import akka.actor.Props
+import akka.actor.actorRef2Scala
+import hu.bme.mit.ire.Terminator
+import hu.bme.mit.ire.TransactionFactory
+import hu.bme.mit.ire.datatypes.Indexer
+import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.Primary
+import hu.bme.mit.ire.messages.Secondary
+import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.nodes.unary.ProductionNode
+import hu.bme.mit.ire.nodes.unary.SelectionNode
+import hu.bme.mit.ire.util.BufferMultimap
+import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.util.TestUtil.mask
+import hu.bme.mit.ire.util.TestUtil.tuple
+import hu.bme.mit.ire.engine.RelationalEngine
 
 class SizingTest extends WordSpec with TimeLimits {
 
-  import util.Utils.conversions._
-  class TestQuery1 extends TrainbenchmarkQuery {
+  import hu.bme.mit.ire.util.Utils.conversions._
+  class TestQuery1 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
     override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
       "testval" -> ((cs: ChangeSet) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
