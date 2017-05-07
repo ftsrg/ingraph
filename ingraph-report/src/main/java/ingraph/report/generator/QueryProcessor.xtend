@@ -44,9 +44,11 @@ class QueryProcessor {
 
 		\subsubsection*«"Query specification".toHeader(name)»
 
-		\begin{lstlisting}[float=h]
+		\begin{minipage}{\linewidth}
+		\begin{lstlisting}
 		«listing»
 		\end{lstlisting}
+		\end{minipage}
 
 		«IF container === null»
 		\subsubsection*{Cannot parse query}
