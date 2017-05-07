@@ -44,7 +44,7 @@ class QueryProcessor {
 
 		\subsubsection*«"Query specification".toHeader(name)»
 
-		\begin{lstlisting}[float]
+		\begin{lstlisting}[float=H]
 		«listing»
 		\end{lstlisting}
 
