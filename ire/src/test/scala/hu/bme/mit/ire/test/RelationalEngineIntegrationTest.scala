@@ -1,17 +1,28 @@
 package hu.bme.mit.ire.test
 
-import akka.actor.{ActorRef, Props, actorRef2Scala}
-import hu.bme.mit.ire.TransactionFactory;
+import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
+import hu.bme.mit.ire.TransactionFactory
 import hu.bme.mit.ire._
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
-import org.scalatest.FlatSpec
+import org.scalatest._
 import org.scalatest.concurrent.TimeLimits
+
 import scala.Vector
 import hu.bme.mit.ire.engine.RelationalEngine
+import hu.bme.mit.ire.listeners.ChangeListener
 
-class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
+class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+  with FlatSpecLike with Matchers with BeforeAndAfterAll {
+
+  def this() = this(ActorSystem("MySpec"))
+
+  override def afterAll {
+    TestKit.shutdownActorSystem(system)
+  }
 
   class TestQuery1 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
@@ -87,5 +98,28 @@ class Wildcard_QueryIntegrationTest extends FlatSpec with TimeLimits {
     })
     val endTime: Long = System.nanoTime() - beginTime
     val avg = endTime / 500 / 3
+  }
+
+  "listeners" should "listen" in {
+    val echoActor = system.actorOf(TestActors.echoActorProps)
+    val input = new TransactionFactory(10)
+    val query = new TestQuery1
+    input.subscribe(query.inputLookup)
+    val tran0 = input.newBatchTransaction()
+    tran0.add("testval", tuple(5, 5))
+    tran0.close()
+
+    query.addListener(new ChangeListener {
+      override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
+        echoActor ! ChangeSet(positive, negative)
+      }
+    })
+    expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
+    val tran1 = input.newBatchTransaction()
+    tran1.remove("testval", tuple(5, 5))
+    tran1.add("testval", tuple(6, 6))
+    tran1.close()
+    query.getResults()
+    expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative=Vector(tuple(5, 5))))
   }
 }
