@@ -1,6 +1,6 @@
 import {stringify} from 'querystring';
 
-const baseURL = "http://localhost:8080/ingraph-debugger-backend/api/";
+const baseURL = "http://localhost:8080/ingraph-debugger-backend-0.2.0/api/";
 
 class API {
 
@@ -29,6 +29,11 @@ class API {
         });
     }
 
+    static getNotificationSource(sessionId) {
+        return new EventSource(
+            baseURL + 'notification?id=' + sessionId,
+        );
+    }
 }
 
 export default API;

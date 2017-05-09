@@ -63,6 +63,10 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
     }
   }
 
+  def resultNamesJava() : java.util.List[String] = {
+    resultNames().asJava
+  }
+
   def newTransaction(): Transaction = {
     val tf = new TransactionFactory(16)
     tf.subscribe(engine.inputLookup)

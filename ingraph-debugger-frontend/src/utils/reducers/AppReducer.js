@@ -43,14 +43,6 @@ export default (state = initialState, action) => {
                 .deleteIn(['queries', action.id, 'data'])
                 .setIn(['queries', action.id, 'definition'], action.definition)
         }
-        case "QUERY_PARSE_OK": {
-            return state
-                .setIn(['queries', action.id, 'state'], 'PARSED')
-                .deleteIn(['queries', action.id, 'failReason'])
-                .setIn(['queries', action.id, 'sessionId'], action.sessionId)
-                .setIn(['queries', action.id, 'columns'], Immutable.fromJS(action.columns))
-                .setIn(['queries', action.id, 'data'], Immutable.fromJS(action.initialData.positive))
-        }
         case "QUERY_PARSE_FAIL": {
             return state
                 .setIn(['queries', action.id, 'state'], 'FAILED')
