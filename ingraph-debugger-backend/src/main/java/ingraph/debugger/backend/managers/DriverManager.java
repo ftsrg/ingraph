@@ -90,8 +90,8 @@ public class DriverManager {
 		handler.readCsv(nodeFilenames, relationshipFilenames, csvPreference);
 
 		queryHandlerMap.put(id, handler);
-		Iterable<IndexedSeq<Object>> results = handler.adapter().engine().getResults();
-		System.out.println(results);
+		//Iterable<IndexedSeq<Object>> results = handler.adapter().engine().getResults();
+		//System.out.println(results);
 		return id;
 	}
 
