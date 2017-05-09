@@ -10,6 +10,7 @@ import ingraph.relalg.expressions.ExpressionUnwrapper
 class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOperator]],
                           edgeConverters: Map[String, Set[GetEdgesOperator]],
                           inputLookup: Map[String, (ChangeSet) => Unit]) extends IdParser {
+
   private val vertexLookup: Map[String, (Set[String], Set[GetVerticesOperator])] = for ((labels, operators) <- vertexConverters;
                                                                                         label <- labels)
     yield label -> (labels, operators)
@@ -48,6 +49,18 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
     }
   }
 
+  def removeEdge(edge: IngraphEdge): Unit = {
+    for (operators <- edgeConverters.get(edge.label); operator <- operators) {
+      val sourceLabels = operator.getSourceVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
+      val targetLabels = operator.getTargetVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
+      if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
+        targetLabels.subsetOf(edge.targetVertex.labels)) {
+        val tuple = edgeToTupleType(edge, operator)
+        transaction.remove(operator.getEdgeVariable.getName, tuple)
+      }
+    }
+  }
+
   def addVertex(vertex: IngraphVertex): Unit = {
     vertex.labels.find(vertexLookup.contains).foreach(
       f => {
@@ -56,6 +69,19 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
           for (operator <- operators) {
             val tuple = elementToNode(vertex, operator.getInternalSchema.map(_.getName))
             transaction.add(operator.getVertexVariable.getName, tuple)
+          }
+        }
+      })
+  }
+
+  def removeVertex(vertex: IngraphVertex): Unit = {
+    vertex.labels.find(vertexLookup.contains).foreach(
+      f => {
+        val (labels, operators) = vertexLookup(f)
+        if (labels.subsetOf(vertex.labels)) {
+          for (operator <- operators) {
+            val tuple = elementToNode(vertex, operator.getInternalSchema.map(_.getName))
+            transaction.remove(operator.getVertexVariable.getName, tuple)
           }
         }
       })

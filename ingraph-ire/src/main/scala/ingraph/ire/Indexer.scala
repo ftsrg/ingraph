@@ -25,9 +25,29 @@ case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
 
 class Indexer(tupleMapper: EntityToTupleMapper) {
 
-  val nodeLookup = mutable.HashMap[Long, IngraphVertex]()
+  val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
+  val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
   val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
   val edgeLabelLookup = new BufferMultimap[String, IngraphEdge]()
+  val mappers = mutable.Buffer[EntityToTupleMapper]()
+
+  def clear(): Unit = {
+    vertexLookup.clear()
+    vertexLabelLookup.clear()
+    edgeLabelLookup.clear()
+    mappers.clear()
+  }
+
+  def subscribe(tupleMapper: EntityToTupleMapper): Unit = {
+    mappers += tupleMapper
+    for (vertex <- vertexLookup.values) {
+      tupleMapper.addVertex(vertex)
+    }
+    for (vertexList <- edgeLabelLookup.values;
+        vertex <- vertexList) {
+      tupleMapper.addEdge(vertex)
+    }
+  }
 
   def addVertex(node: Node): IngraphVertex = {
     val id: Long = node.id()
@@ -36,17 +56,26 @@ class Indexer(tupleMapper: EntityToTupleMapper) {
     val vertex = IngraphVertex(id, properties, labels)
     for (label <- labels)
       vertexLabelLookup.addBinding(label, vertex)
-    nodeLookup(id) = vertex
-    tupleMapper.addVertex(vertex)
+    vertexLookup(id) = vertex
+    mappers.foreach(_.addVertex(vertex))
     vertex
   }
+
+  def removeVertexById(id: Long): Unit = {
+    val vertex = vertexLookup(id)
+    vertex.labels.foreach(label => vertexLabelLookup.removeBinding(label, vertex))
+    vertexLookup.remove(id)
+    mappers.foreach(_.removeVertex(vertex))
+  }
+
   def addEdge(relation: Relationship): IngraphEdge = {
     val id: Long = relation.id()
     val properties: Map[String, AnyRef] = relation.asMap().toMap
-    val sourceVertex: IngraphVertex = nodeLookup(relation.startNodeId())
-    val targetVertex: IngraphVertex = nodeLookup(relation.endNodeId())
+    val sourceVertex: IngraphVertex = vertexLookup(relation.startNodeId())
+    val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
     val label: String = relation.`type`()
     val edge = IngraphEdge(id, properties, sourceVertex, targetVertex, label)
+    edgeLookup(id) = edge
     sourceVertex.edges(relation.`type`()) = edge
     targetVertex.reverseEdges(relation.`type`()) = edge
     edgeLabelLookup.addBinding(relation.`type`(), edge)
@@ -54,7 +83,15 @@ class Indexer(tupleMapper: EntityToTupleMapper) {
     edge
   }
 
-  def vertexById(id: Long): IngraphVertex = nodeLookup(id)
+  def removeEdgeById(id: Long): Unit = {
+    val edge = edgeLookup(id)
+    mappers.foreach(_.removeEdge(edge))
+    edgeLabelLookup.removeBinding(edge.label, edge)
+    edgeLookup.remove(id)
+  }
+
+  def vertexById(id: Long): IngraphVertex = vertexLookup(id)
+  def edgeById(id: Long): IngraphEdge = edgeLookup(id)
   def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)
   def edgesByLabel(label: String): Seq[IngraphEdge] = edgeLabelLookup(label)
 }
