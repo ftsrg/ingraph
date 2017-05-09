@@ -3,7 +3,6 @@ package ingraph.relalg2tex.converters.elementconverters
 import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import java.util.ArrayList
 import java.util.List
-import relalg.ExpressionVariable
 import relalg.Variable
 
 class SchemaConverter {
@@ -24,7 +23,7 @@ class SchemaConverter {
 //			if (element instanceof ExpressionVariable) {
 //				println(element.hasInferredName)
 //			}
-			list.add('''\var{«element.convertVariable»}''')
+			list.add(element.convertVariable)
 		]
 		'''\langle «list.join(', ')» \rangle'''
 	}
