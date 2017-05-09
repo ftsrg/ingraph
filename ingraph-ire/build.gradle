@@ -14,8 +14,10 @@ dependencies {
   compile project(':ingraph-expression-parser')
   compile project(':ingraph-relalg-model')
   compile project(':ire')
+  
   testCompile project(':ingraph-relalg2tex')
-
+  testCompile project(':ingraph-test-tools')
+  
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.neo4j.driver.v1.types.Node;
@@ -21,38 +22,55 @@ public class SnbTest {
 	private static final String PREFIX = "../graphs/snb_50/";
 	private static final String POSTFIX = "_0_0.csv";
 
-	final Map<String, Collection<String>> nodeFilenames = ImmutableMap.<String, Collection<String>>builder() //
-			.put(PREFIX + "comment" + POSTFIX, Arrays.asList("Message", "Comment")) //
-			.put(PREFIX + "forum" + POSTFIX, Arrays.asList("Forum")) //
-			.put(PREFIX + "person" + POSTFIX, Arrays.asList("Person")) //
-			.put(PREFIX + "place" + POSTFIX, Arrays.asList("Place")) //
-			.put(PREFIX + "post" + POSTFIX, Arrays.asList("Message", "Post")) //
-			.put(PREFIX + "tagclass" + POSTFIX, Arrays.asList("TagClass")) //
-			.put(PREFIX + "tag" + POSTFIX, Arrays.asList("Tag")) //
+	final Map<String, Collection<String>> nodeCsvs = ImmutableMap.<String, Collection<String>>builder() //
+			.put("comment", Arrays.asList("Message", "Comment")) //
+			.put("forum", Arrays.asList("Forum")) //
+			.put("organisation", Arrays.asList("Company", "University")) //
+			.put("person", Arrays.asList("Person")) //
+			.put("place", Arrays.asList("Place")) //
+			.put("post", Arrays.asList("Message", "Post")) //
+			.put("tagclass", Arrays.asList("TagClass")) //
+			.put("tag", Arrays.asList("Tag")) //
 			.build();
 
-	final Map<String, String> relationshipFilenames = ImmutableMap.<String, String>builder() //
-			.put(PREFIX + "comment_hasCreator_person" + POSTFIX, "hasCreator") //
-			.put(PREFIX + "comment_isLocatedIn_place" + POSTFIX, "isLocatedIn") //
-			.put(PREFIX + "comment_replyOf_comment" + POSTFIX, "replyOf") //
-			.put(PREFIX + "comment_replyOf_post" + POSTFIX, "replyOf") //
-			.put(PREFIX + "forum_containerOf_post" + POSTFIX, "containerOf") //
-			.put(PREFIX + "forum_hasMember_person" + POSTFIX, "hasMember") //
-			.put(PREFIX + "forum_hasModerator_person" + POSTFIX, "hasModerator") //
-			.put(PREFIX + "forum_hasTag_tag" + POSTFIX, "hasTag") //
-			.put(PREFIX + "person_hasInterest_tag" + POSTFIX, "hasInterest") //
-			.put(PREFIX + "person_isLocatedIn_place" + POSTFIX, "isLocatedIn") //
-			.put(PREFIX + "person_knows_person" + POSTFIX, "knows") //
-			.put(PREFIX + "person_likes_comment" + POSTFIX, "likes") //
-			.put(PREFIX + "person_likes_post" + POSTFIX, "likes") //
-			.put(PREFIX + "place_isPartOf_place" + POSTFIX, "isPartOf") //
-			.put(PREFIX + "post_hasCreator_person" + POSTFIX, "hasCreator") //
-			.put(PREFIX + "comment_hasTag_tag" + POSTFIX, "hasTag") //
-			.put(PREFIX + "post_hasTag_tag" + POSTFIX, "hasTag") //
-			.put(PREFIX + "post_isLocatedIn_place" + POSTFIX, "isLocatedIn") //
-			.put(PREFIX + "tagclass_isSubclassOf_tagclass" + POSTFIX, "isSubclassOf") //
-			.put(PREFIX + "tag_hasType_tagclass" + POSTFIX, "hasType") //
+	final Map<String, String> relationshipCsvs = ImmutableMap.<String, String>builder() //
+			.put("comment_hasCreator_person", "hasCreator") //
+			.put("comment_isLocatedIn_place", "isLocatedIn") //
+			.put("comment_replyOf_comment", "replyOf") //
+			.put("comment_replyOf_post", "replyOf") //
+			.put("forum_containerOf_post", "containerOf") //
+			.put("forum_hasMember_person", "hasMember") //
+			.put("forum_hasModerator_person", "hasModerator") //
+			.put("forum_hasTag_tag", "hasTag") //
+			.put("person_hasInterest_tag", "hasInterest") //
+			.put("person_isLocatedIn_place", "isLocatedIn") //
+			.put("person_knows_person", "knows") //
+			.put("person_likes_comment", "likes") //
+			.put("person_likes_post", "likes") //
+			.put("place_isPartOf_place", "isPartOf") //
+			.put("post_hasCreator_person", "hasCreator") //
+			.put("comment_hasTag_tag", "hasTag") //
+			.put("post_hasTag_tag", "hasTag") //
+			.put("post_isLocatedIn_place", "isLocatedIn") //
+			.put("tagclass_isSubclassOf_tagclass", "isSubclassOf") //
+			.put("tag_hasType_tagclass", "hasType") //
+			.put("organisation_isLocatedIn_place", "isLocatedIn") //
+			.put("person_studyAt_organisation", "studyAt") //
+			.put("person_workAt_organisation", "workAt") //
 			.build();
+
+	final Map<String, Collection<String>> nodeFilenames = addPreAndPostFix(nodeCsvs);
+	final Map<String, String> relationshipFilenames = addPreAndPostFix(relationshipCsvs);
+
+	protected <T> Map<String, T> addPreAndPostFix(Map<String, T> names) {
+		return names.entrySet()
+		.stream()
+		.collect(Collectors.toMap(
+			e -> PREFIX + e.getKey() + POSTFIX,
+			e -> e.getValue())
+		);
+	}
+
 
 	@Test
 	public void testLoad() throws IOException {

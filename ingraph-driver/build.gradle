@@ -16,7 +16,8 @@ dependencies {
   compile project(':ingraph-reactive-driver-interfaces')
 
   testCompile project(':ingraph-relalg2tex')
-
+  testCompile project(':ingraph-test-tools')
+  
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion

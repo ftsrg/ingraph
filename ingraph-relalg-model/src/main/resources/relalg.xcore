@@ -232,10 +232,18 @@ class PathVariable extends Variable {
  * Represents a named expression like returned elements.
  */
 class ExpressionVariable extends Variable {
-  boolean hasInferredName
+  boolean hasInferredName // true iff the name can be inferred from the expression (and hence the name attribute is null) 
   refers Expression expression
   op String toString() {
-    name
+    if (hasInferredName) {
+      if (expression instanceof VariableExpression) {
+        (expression as VariableExpression).variable.name
+      } else {
+        null
+      }
+    } else {
+      name
+    }
   }
 }
 
@@ -289,6 +297,7 @@ abstract class UnaryOperator extends Operator {
  */
 abstract class BeamerOperator extends UnaryOperator {
   refers ExpressionVariable[] elements
+  refers ExpressionVariable[] internalElements
   int[] tupleIndices
 }
 

@@ -114,7 +114,21 @@ class InternalSchemaCalculator {
 	 */
 	private def void defineInternalSchemaForProjectionOperator(ProjectionOperator op, List<? extends Variable> internalSchema) {
 		val internalSchemaNames = internalSchema.map[name]
+		
 		op.internalSchema.addAll(uniqueUnion(op.externalSchema, op.extraVariables))
+		
+		op.internalElements.addAll(op.elements)
+		op.internalElements.addAll(op.extraVariables.map[
+			val element = it
+			createExpressionVariable => [
+				expression = createVariableExpression => [
+					variable =  element
+					expressionContainer = element.namedElementContainer
+				]
+				hasInferredName = true
+				namedElementContainer = element.namedElementContainer
+			]
+		])
 		op.tupleIndices.addAll(op.internalSchema.map[variable | internalSchemaNames.indexOf(variable.name)])
 	}
 	

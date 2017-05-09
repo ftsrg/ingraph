@@ -55,7 +55,7 @@ object EngineFactory {
               val projectionVariableLookup: Map[String, Integer] =
                 aggregationCriteria.zipWithIndex.map( a => a._1._1.toString -> a._2.asInstanceOf[Integer] ).toMap ++
                 aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
-              val projectionExpressions = op.getElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
+              val projectionExpressions = op.getInternalElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
               newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
@@ -94,7 +94,7 @@ object EngineFactory {
 
             case op: ProjectionOperator =>
               val lookup = getSchema(op.getInput)
-              val expressions = op.getElements.map( e => ExpressionParser.parseValue(e.getExpression, lookup))
+              val expressions = op.getInternalElements.map( e => ExpressionParser.parseValue(e.getExpression, lookup))
               newLocal(Props(new ProjectionNode(expr.child, expressions)))
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>

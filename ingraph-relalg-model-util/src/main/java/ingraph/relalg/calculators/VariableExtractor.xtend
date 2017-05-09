@@ -46,7 +46,8 @@ class VariableExtractor {
 
 	// SortOperator and SortAndTopOperator
 	def dispatch List<? extends Variable> extractUnaryOperatorExtraVariables(SortOperator op) {
-		op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
+		//op.entries.map[expression].filter(VariableExpression).map[ExpressionUnwrapper.extractVariableExpression(it)].toList
+		op.entries.map[expression].filter(VariableExpression).map[variable].toList
 	}
 
 	// UnwindOperator
@@ -69,7 +70,7 @@ class VariableExtractor {
 		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
 		uniqueUnion(extraVariables, arguments)
 	}
-	
+
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {
 		val externalSchemaNames = op.externalSchema.map[toString]
 		op.aggregationCriteria
@@ -89,5 +90,4 @@ class VariableExtractor {
 		#[]
 	}
 
-	
 }

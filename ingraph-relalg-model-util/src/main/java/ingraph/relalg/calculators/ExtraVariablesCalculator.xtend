@@ -55,7 +55,7 @@ class ExtraVariablesCalculator {
 	private def dispatch void fillExtraVariables(UnaryOperator op, List<Variable> extraVariables) {
 		op.extraVariables.addAll(extraVariables)
 
-		val newExtraVariables = extractUnaryOperatorExtraVariables(op)
+		val newExtraVariables = op.extractUnaryOperatorExtraVariables
 		var inputExtraVariables = uniqueUnion(extraVariables, newExtraVariables).minus(op.calculatedVariables)
 		val propagatedInputExtraVariables = inputExtraVariables.propagateTo(op.input)
 

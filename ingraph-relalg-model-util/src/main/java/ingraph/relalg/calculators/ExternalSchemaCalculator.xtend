@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Lists
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
+import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
@@ -16,6 +17,7 @@ import relalg.Operator
 import relalg.PathOperator
 import relalg.ProjectionOperator
 import relalg.RelalgContainer
+import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
@@ -35,6 +37,7 @@ class ExternalSchemaCalculator {
 
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 	extension JoinSchemaCalculator joinSchemaCalculator = new JoinSchemaCalculator
+	extension RelalgFactory factory = RelalgFactory.eINSTANCE
 	val boolean includeEdges
 
 	new() {
@@ -75,18 +78,18 @@ class ExternalSchemaCalculator {
 
 	// unary operators
 	private def dispatch List<Variable> fillExternalSchema(ProjectionOperator op) {
-		val schema = op.input.externalSchema
+		val inputSchema = op.input.externalSchema
 
 		// check if all projected variables are in the schema
 		// 1) vertices and edges
 		op.elements.map[expression].filter(ElementVariable).forEach [
-			if (!schema.contains(it)) {
+			if (!inputSchema.contains(it)) {
 				throw new IllegalStateException('''Variable «it.name» is not part of the schema in projection operator.''')
 			}
 		]
 		// 2) attributes
 		op.elements.map[expression].filter(AttributeVariable).forEach [
-			if (!schema.contains(it.element)) {
+			if (!inputSchema.contains(it.element)) {
 				throw new IllegalStateException('''Attribute «it.name» cannot be projected as its vertex/edge variable does not exists.''')
 			}
 		]
@@ -95,12 +98,19 @@ class ExternalSchemaCalculator {
 	}
 
 	private def extractVariables(List<ExpressionVariable> expressionVariables) {
-		expressionVariables.map [ expressionVariable |
-			val expression = expressionVariable.expression
-			if (expression instanceof VariableExpression) {
-				expression.variable
-			} else { // if (expressionVariable instanceof ExpressionVariable) {
-				expressionVariable
+		expressionVariables.map [ expressionVariable |		
+			if (!expressionVariable.hasInferredName) {
+				createExpressionVariable => [
+					name = expressionVariable.name
+					namedElementContainer = expressionVariable.namedElementContainer
+				]
+			} else {
+				val expr = expressionVariable.expression
+				if (expr instanceof VariableExpression) {
+					expr.variable
+				} else {
+					expressionVariable
+				}
 			}
 		].toList
 	}

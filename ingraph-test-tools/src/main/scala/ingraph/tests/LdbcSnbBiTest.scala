@@ -1,27 +1,12 @@
-package ingraph.ire
-
-import java.io.FileInputStream
+package ingraph.tests
 
 import scala.Vector
 import scala.io.Source
-
-import org.objenesis.strategy.StdInstantiatorStrategy
 import org.scalatest.FunSuite
-import org.supercsv.prefs.CsvPreference
-
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import hu.bme.mit.ire.TransactionFactory
-import ingraph.relalg.expressions.ExpressionUnwrapper
-import relalg.AttributeVariable
-import java.util.Collections
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 
-class LdbcSnbBiTest extends FunSuite {
+abstract class LdbcSnbBiTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
@@ -76,57 +61,42 @@ class LdbcSnbBiTest extends FunSuite {
   case class TestCase(number: Int)
 
   Vector(
-//        TestCase(2),
+//        TestCase(1), // CASE
+        TestCase(2),
         TestCase(3),
         TestCase(4),
         TestCase(5),
         TestCase(6),
         TestCase(7),
-        TestCase(9),
-        TestCase(12),
-
 //        TestCase(8), // PATH
+        TestCase(9),
+//        TestCase(10), // CASE
+//        TestCase(11), // unwind parameter
+        TestCase(12),
+        TestCase(13),
 //        TestCase(14), // PATH
+        TestCase(15),
 //        TestCase(16), // PATH
+//        TestCase(17), // no Cypher implementation yet
+//        TestCase(18), // no Cypher implementation yet
+//        TestCase(19), // antijoin
 //        TestCase(20), // PATH
-
-//        TestCase(13),
-//        TestCase(15), // WHERE WITH
-//        TestCase(23),
-//        TestCase(24),
-
+//        TestCase(21), // no Cypher implementation yet
+        //TestCase(22), // no Cypher implementation yet
+        //TestCase(23), // no Cypher implementation yet
+        TestCase(24),
+//        TestCase(25), // no cypher implementation yet
+        
         null
   ).filter(_ != null) //
     .foreach(
     t => test(s"query-${t.number}-size-1") {
-      val query = Source.fromFile(queryPath(t.number)).getLines().mkString("\n")
-      val adapter = new IngraphAdapter(query, s"ldbc-snb-bi-${t.number}")
+      val queryNumber = t.number
+      val queryName = s"ldbc-snb-bi-${t.number}"
+      val querySpecification = Source.fromFile(queryPath(queryNumber)).getLines().mkString("\n")
 
-      converter.convert(adapter.plan, s"ldbc-snb-bi/query-${t.number}")
-
-      val tran = adapter.newTransaction()
-      val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
-      adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)
-      tran.close()
-
-      val actualResults = adapter.engine.getResults()
-
-      val kryo = new Kryo
-      kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
-      kryo.addDefaultSerializer(
-          Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass(),
-          classOf[UnmodifiableCollectionsSerializer]);
-
-      val javaResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(t.number))))
-        .asInstanceOf[java.util.ArrayList[java.util.Map[String, Any]]]
-
-      import scala.collection.JavaConverters._
-      val expectedResults = javaResults.asScala.map(f => adapter.resultNames().map(f.get))
-      expectedResults.foreach(n => assert(n != null))
-
-      assertResult(expectedResults.size)(actualResults.size)
-      for ((expected, actual) <- expectedResults.zip(actualResults.toVector)) {
-        assertResult(expected)(actual)
-      }
+      runQuery(queryNumber, queryName, querySpecification)
     })
+    
+  def runQuery(queryNumber : Int, queryName : String, querySpecification : String)
 }
