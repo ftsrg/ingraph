@@ -60,9 +60,13 @@ class RandomTest extends FunSuite {
     indexer.addVertex(new InternalNode(3L, List("Segment").asJava, Map[String, Value]().asJava))
     indexer.addEdge(new InternalRelationship(4L, 1L, 2L, "ON"))
     indexer.addEdge(new InternalRelationship(5L, 2L, 3L, "NEXT"))
+    indexer.addEdge(new InternalRelationship(6L, 3L, 2L, "NEXT"))
     val whereIsAdapter = new IngraphAdapter(whereIsTrain, "something", indexer)
-    assert(whereIsAdapter.result() == List(Vector(2)))
-    new IngraphOneOffQuery(oneOff, "remove", indexer).terminate()
-    assert(whereIsAdapter.result() == List(Vector(3)))
+    for (i <- 1 to 10 ) {
+      assert(whereIsAdapter.result() == List(Vector(2)))
+      new IngraphOneOffQuery(oneOff, "remove", indexer).terminate()
+      assert(whereIsAdapter.result() == List(Vector(3)))
+      new IngraphOneOffQuery(oneOff, "remove", indexer).terminate()
+    }
   }
 }
