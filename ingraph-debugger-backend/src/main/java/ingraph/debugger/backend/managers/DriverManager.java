@@ -3,17 +3,15 @@ package ingraph.debugger.backend.managers;
 import com.google.common.collect.ImmutableMap;
 import ingraph.driver.data.IngraphDeltaHandler;
 import ingraph.driver.data.IngraphQueryHandler;
+import ingraph.driver.data.Repackager;
 import ingraph.driver.ingraph.IngraphDriver;
 import ingraph.driver.ingraph.IngraphSession;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.neo4j.driver.v1.Record;
 import org.supercsv.prefs.CsvPreference;
-import scala.collection.IndexedSeq;
-import scala.collection.Iterable;
 import scala.collection.immutable.Vector;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DriverManager {
 
@@ -74,8 +72,9 @@ public class DriverManager {
 	}
 
 	private IngraphSession session;
-
 	private Map<UUID, IngraphQueryHandler> queryHandlerMap = new HashMap<>();
+	private Boolean initialized = false;
+
 
 	public DriverManager() {
 		IngraphDriver driver = new IngraphDriver();
@@ -86,13 +85,21 @@ public class DriverManager {
 		UUID id = UUID.randomUUID();
 		IngraphQueryHandler handler = session.registerQuery(id.toString(), definition);
 
-		final CsvPreference csvPreference = new CsvPreference.Builder('"', '|', "\n").build();
-		handler.readCsv(nodeFilenames, relationshipFilenames, csvPreference);
+		if (!this.initialized) {
+			final CsvPreference csvPreference = new CsvPreference.Builder('"', '|', "\n").build();
+			handler.readCsv(nodeFilenames, relationshipFilenames, csvPreference);
+		}
 
 		queryHandlerMap.put(id, handler);
-		//Iterable<IndexedSeq<Object>> results = handler.adapter().engine().getResults();
-		//System.out.println(results);
+
 		return id;
+	}
+
+	public List<? extends Record> getResults(UUID id) {
+		Vector<String> keys = queryHandlerMap.get(id).adapter().resultNames();
+
+		Repackager repackager = new Repackager(keys);
+		return repackager.repackageResult(queryHandlerMap.get(id).adapter().engine().getResults());
 	}
 
 	public List<String> getKeys(UUID id) {

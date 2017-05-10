@@ -15,7 +15,7 @@ public class RecordSerializer extends JsonSerializer<Record> {
 		throws IOException, JsonProcessingException {
 		gen.writeStartObject();
 		for (String key : value.keys()) {
-			gen.writeObjectField(key, value.get(key));
+			gen.writeObjectField(key, value.get(key).asObject());
 		}
 		gen.writeEndObject();
 

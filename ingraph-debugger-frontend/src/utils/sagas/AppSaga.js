@@ -32,6 +32,11 @@ function* watchModifyQuery(action) {
 
     const data = yield response.json();
     if (data.status === 'OK') {
+        yield put({
+            type: 'QUERY_PARSED',
+            id: action.query.get('id'),
+            ...data.body,
+        });
 
         const source = API.getNotificationSource(data.body.sessionId);
         while (true) {

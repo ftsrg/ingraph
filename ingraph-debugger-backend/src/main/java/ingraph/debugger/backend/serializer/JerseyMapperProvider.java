@@ -18,10 +18,6 @@ public class JerseyMapperProvider implements ContextResolver<ObjectMapper> {
 		SimpleModule recordSerializerModule = new SimpleModule();
 		recordSerializerModule.addSerializer(Record.class, new RecordSerializer());
 		objectMapper.registerModule(recordSerializerModule);
-
-		SimpleModule valueSerializerModule = new SimpleModule();
-		valueSerializerModule.addSerializer(Value.class, new ValueSerializer());
-		objectMapper.registerModule(valueSerializerModule);
 	}
 
 	@Override
