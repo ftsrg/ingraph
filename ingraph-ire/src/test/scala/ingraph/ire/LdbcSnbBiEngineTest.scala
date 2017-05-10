@@ -14,9 +14,10 @@ import org.supercsv.prefs.CsvPreference
 class LdbcSnbBiEngineTest extends LdbcSnbBiTest {
 
   override def runQuery(queryNumber : Int, queryName : String, querySpecification : String) {
-    val adapter = new IngraphAdapter(querySpecification, queryName)
+    val indexer = new Indexer()
+    val adapter = new IngraphAdapter(querySpecification, queryName, indexer)
 
-    converter.convert(adapter.plan, s"ldbc-snb-bi/query-${queryNumber}")
+    converter.convert(adapter.plan, s"ldbc-snb-bi/query-$queryNumber")
 
     val tran = adapter.newTransaction()
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()

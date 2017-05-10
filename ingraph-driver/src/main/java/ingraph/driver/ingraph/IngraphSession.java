@@ -1,6 +1,7 @@
 package ingraph.driver.ingraph;
 
 import ingraph.driver.data.IngraphQueryHandler;
+import ingraph.ire.Indexer;
 import ingraph.ire.IngraphAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
 import org.neo4j.driver.v1.*;
@@ -10,6 +11,8 @@ import java.util.Collections;
 import java.util.Map;
 
 public class IngraphSession implements Session {
+
+	Indexer indexer = new Indexer();
 
 	@Override
 	public boolean isOpen() {
@@ -81,9 +84,8 @@ public class IngraphSession implements Session {
 	}
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
-		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName);
-		final IngraphQueryHandler listener = new IngraphQueryHandler(adapter);
-		return listener;
+		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName, indexer);
+		return new IngraphQueryHandler(adapter);
 	}
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {

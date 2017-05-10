@@ -13,17 +13,20 @@ import hu.bme.mit.ire.listeners.ChangeListener
 
 import scala.collection.JavaConverters._
 
-class IngraphAdapter(querySpecification: String, queryName: String) {
+class IngraphAdapter(querySpecification: String, queryName: String, indexer: Indexer = new Indexer()) {
   private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
 
   val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
+  val transactionFactory = new TransactionFactory(16)
+  transactionFactory.subscribe(engine.inputLookup)
 
   private val tupleMapper = new EntityToTupleMapper(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     engine.inputLookup) with LongIdParser
-  private val indexer = new Indexer(tupleMapper)
+  tupleMapper.transaction = transactionFactory.newBatchTransaction()
+  indexer.subscribe(tupleMapper)
 
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
                   relationshipFilenames: java.util.Map[String, String],
@@ -64,13 +67,13 @@ class IngraphAdapter(querySpecification: String, queryName: String) {
   }
 
   def newTransaction(): Transaction = {
-    val tf = new TransactionFactory(16)
-    tf.subscribe(engine.inputLookup)
-    val tran = tf.newBatchTransaction()
+    val tran = transactionFactory.newBatchTransaction()
+    tupleMapper.transaction = tran
     tran
   }
 
   def result(): Iterable[Tuple] = {
+    tupleMapper.transaction.close()
     engine.getResults()
   }
 

@@ -21,28 +21,31 @@ class RandomTest extends FunSuite {
 
   test("Vertices can be removed from indexer") {
     import scala.collection.JavaConverters._
+    val indexer = new Indexer()
     val query = "MATCH (n:Person) RETURN n"
-    val adapter = new IngraphAdapter(query, "remove")
-    Indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
-    Indexer.addVertex(new InternalNode(2L, List("Person").asJava, Map[String, Value]().asJava))
+    val adapter = new IngraphAdapter(query, "remove", indexer)
+
+    indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
+    indexer.addVertex(new InternalNode(2L, List("Person").asJava, Map[String, Value]().asJava))
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
-    Indexer.removeVertexById(1L)
+    indexer.removeVertexById(1L)
     assert(adapter.result().toSet == Set(Vector(2)))
-    Indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
+    indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
   }
 
   test("Edges can be removed from indexer") {
     import scala.collection.JavaConverters._
+    val indexer = new Indexer()
     val query = "MATCH (n:Person) -[:Knows]-> (m:Person) RETURN m"
-    val adapter = new IngraphAdapter(query, "remove")
-    Indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
-    Indexer.addVertex(new InternalNode(2L, List("Person").asJava, Map[String, Value]().asJava))
-    Indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
+    val adapter = new IngraphAdapter(query, "remove", indexer)
+    indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
+    indexer.addVertex(new InternalNode(2L, List("Person").asJava, Map[String, Value]().asJava))
+    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
     assert(adapter.result().toSet == Set(Vector(2)))
-    Indexer.removeEdgeById(3L)
+    indexer.removeEdgeById(3L)
     assert(adapter.result().toSet == Set())
-    Indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
+    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
     assert(adapter.result().toSet == Set(Vector(2)))
   }
 }

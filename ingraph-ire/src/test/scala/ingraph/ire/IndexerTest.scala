@@ -7,7 +7,7 @@ import org.scalatest.{FlatSpec, WordSpec}
 
 import scala.collection.JavaConverters._
 class IndexerTest extends WordSpec {
-  val indexer = new Indexer(new EntityToTupleMapper(Map(), Map(), Map()))
+  val indexer = new Indexer()
   indexer.addVertex(new InternalNode(1, Seq("dog").asJava, Map("age" -> Values.value(5)).asJava))
   indexer.addVertex(new InternalNode(2, Seq("person").asJava, Map("age" -> Values.value(25)).asJava))
   indexer.addVertex(new InternalNode(3, Seq("cat").asJava, Map("age" -> Values.value(7)).asJava))

@@ -23,7 +23,7 @@ case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
   def inverse(): IngraphEdge = IngraphEdge(id, properties, targetVertex, sourceVertex, label)
 }
 
-class Indexer(tupleMapper: EntityToTupleMapper) {
+class Indexer {
 
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
@@ -79,7 +79,7 @@ class Indexer(tupleMapper: EntityToTupleMapper) {
     sourceVertex.edges(relation.`type`()) = edge
     targetVertex.reverseEdges(relation.`type`()) = edge
     edgeLabelLookup.addBinding(relation.`type`(), edge)
-    tupleMapper.addEdge(edge)
+    mappers.foreach(_.addEdge(edge))
     edge
   }
 
