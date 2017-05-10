@@ -14,7 +14,7 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 
-import scala.collection.mutable
+import scala.collection.{immutable, mutable}
 import hu.bme.mit.ire.engine.RelationalEngine
 
 object EngineFactory {
@@ -26,7 +26,7 @@ object EngineFactory {
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: Operator) =
+  def createQueryEngine(plan: Operator, indexer: Indexer) =
     new RelationalEngine {
       override val production = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -41,7 +41,7 @@ object EngineFactory {
         val expr = remaining.remove(0)
         expr.parent match {
           case op: UnaryOperator =>
-            val node: ActorRef = op match {
+            val node: (ReteMessage) => Unit = op match {
             case op: ProductionOperator => production
             case op: GroupingOperator =>
               val variableLookup = getSchema(op.getInput)
@@ -113,6 +113,47 @@ object EngineFactory {
               }
 
               newLocal(Props(new SelectionNode(expr.child, allDifferent)))
+            case op: CreateOperator =>
+              val lookup = getSchema(op.getInput)
+              val creations: Seq[(datatypes.Tuple) => IngraphEdge] = (for (element <- op.getElements)
+                yield element.asInstanceOf[ExpressionVariable].getExpression match {
+                  case n: NavigationDescriptor =>
+                    val demeter = n.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName
+                    val sourceIndex = lookup(n.getSourceVertexVariable.getName)
+                    val targetIndex = lookup(n.getTargetVertexVariable.getName)
+                    Some((t: Tuple) => {
+                      indexer.addEdge(
+                        indexer.newId(),
+                        t(sourceIndex).asInstanceOf[Long],
+                        t(targetIndex).asInstanceOf[Long],
+                        demeter)
+                    })
+                  case _ => None
+                }).flatten
+
+              (m: ReteMessage) => {
+                m match {
+                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r(_)))
+                  case _ =>
+                }
+                expr.child(m)
+              }
+            case op: DeleteOperator =>
+              val lookup = getSchema(op.getInput)
+              val removals: Seq[(Tuple) => Unit] = for (element <- op.getElements)
+                yield element.getExpression.asInstanceOf[VariableExpression].getVariable match {
+                  case e: EdgeVariable =>
+                    (t: Tuple) => indexer.removeEdgeById(t(lookup(e.getName)).asInstanceOf[Long])
+                  case v: VertexVariable =>
+                    (t: Tuple) => indexer.removeVertexById(t(lookup(v.getName)).asInstanceOf[Long])
+                }
+              (m: ReteMessage) => {
+                m match {
+                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r(_)))
+                  case _ =>
+                }
+                expr.child(m)
+              }
             }
             remaining += ForwardConnection(op.getInput, node)
 

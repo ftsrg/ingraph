@@ -1,12 +1,12 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.util.BufferMultimap
-
 import org.neo4j.driver.v1.Value
 import org.neo4j.driver.v1.types.{Node, Relationship}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
+import scala.util.Random
 
 
 case class IngraphVertex(id: Long, properties: Map[String, AnyRef], labels: Set[String]) {
@@ -95,6 +95,10 @@ class Indexer {
     edge
   }
 
+  def addEdge(id: Long, sourceId: Long, targetId: Long, label: String): IngraphEdge = {
+    addEdge(IngraphEdge(id, Map.empty, vertexLookup(sourceId), vertexLookup(targetId), label))
+  }
+
   def removeEdgeById(id: Long): Unit = {
     val edge = edgeLookup(id)
     mappers.foreach(_.removeEdge(edge))
@@ -106,4 +110,13 @@ class Indexer {
   def edgeById(id: Long): IngraphEdge = edgeLookup(id)
   def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)
   def edgesByLabel(label: String): Seq[IngraphEdge] = edgeLabelLookup(label)
+
+  val rnd = new Random(1)
+  def newId(): Long = {
+    var id = rnd.nextLong()
+    while (edgeLookup.contains(id) || vertexLookup.contains(id)) {
+      id = rnd.nextLong()
+    }
+    id
+  }
 }

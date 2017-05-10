@@ -17,7 +17,7 @@ class IngraphAdapter(querySpecification: String, queryName: String, indexer: Ind
   private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
 
   val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
-  val engine = EngineFactory.createQueryEngine(plan.getRootExpression)
+  val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)
 
