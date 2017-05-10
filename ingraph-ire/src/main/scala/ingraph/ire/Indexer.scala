@@ -19,7 +19,7 @@ case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
                       label: String) {
-  override def toString: String = s"Edge(${sourceVertex.id} -[$id]-> ${targetVertex.id}, $properties)"
+  override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
   def inverse(): IngraphEdge = IngraphEdge(id, properties, targetVertex, sourceVertex, label)
 }
 
@@ -38,15 +38,19 @@ class Indexer {
     mappers.clear()
   }
 
-  def subscribe(tupleMapper: EntityToTupleMapper): Unit = {
-    mappers += tupleMapper
+  def fill(tupleMapper: EntityToTupleMapper): Unit = {
     for (vertex <- vertexLookup.values) {
       tupleMapper.addVertex(vertex)
     }
     for (vertexList <- edgeLabelLookup.values;
-        vertex <- vertexList) {
+         vertex <- vertexList) {
       tupleMapper.addEdge(vertex)
     }
+  }
+
+  def subscribe(tupleMapper: EntityToTupleMapper): Unit = {
+    mappers += tupleMapper
+    fill(tupleMapper)
   }
 
   def addVertex(node: Node): IngraphVertex = {
@@ -54,9 +58,13 @@ class Indexer {
     val properties: Map[String, AnyRef]  = node.asMap().toMap
     val labels = node.labels().toSet
     val vertex = IngraphVertex(id, properties, labels)
-    for (label <- labels)
+    addVertex(vertex)
+  }
+
+  def addVertex(vertex: IngraphVertex): IngraphVertex = {
+    for (label <- vertex.labels)
       vertexLabelLookup.addBinding(label, vertex)
-    vertexLookup(id) = vertex
+    vertexLookup(vertex.id) = vertex
     mappers.foreach(_.addVertex(vertex))
     vertex
   }
@@ -75,10 +83,14 @@ class Indexer {
     val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
     val label: String = relation.`type`()
     val edge = IngraphEdge(id, properties, sourceVertex, targetVertex, label)
-    edgeLookup(id) = edge
-    sourceVertex.edges(relation.`type`()) = edge
-    targetVertex.reverseEdges(relation.`type`()) = edge
-    edgeLabelLookup.addBinding(relation.`type`(), edge)
+    addEdge(edge)
+  }
+
+  def addEdge(edge: IngraphEdge): IngraphEdge = {
+    edgeLookup(edge.id) = edge
+    edge.sourceVertex.edges(edge.label) = edge
+    edge.targetVertex.reverseEdges(edge.label) = edge
+    edgeLabelLookup.addBinding(edge.label, edge)
     mappers.foreach(_.addEdge(edge))
     edge
   }
