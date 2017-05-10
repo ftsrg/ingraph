@@ -101,25 +101,27 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
   }
 
   "listeners" should "listen" in {
-    val echoActor = system.actorOf(TestActors.echoActorProps)
-    val input = new TransactionFactory(10)
-    val query = new TestQuery1
-    input.subscribe(query.inputLookup)
-    val tran0 = input.newBatchTransaction()
-    tran0.add("testval", tuple(5, 5))
-    tran0.close()
-
-    query.addListener(new ChangeListener {
-      override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
-        echoActor ! ChangeSet(positive, negative)
-      }
+    (1 to 1000).foreach(i => {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val input = new TransactionFactory(10)
+      val query = new TestQuery1
+      input.subscribe(query.inputLookup)
+      val tran0 = input.newBatchTransaction()
+      tran0.add("testval", tuple(5, 5))
+      tran0.close()
+      query.getResults()
+      query.addListener(new ChangeListener {
+        override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
+          echoActor ! ChangeSet(positive, negative)
+        }
+      })
+      expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
+      val tran1 = input.newBatchTransaction()
+      tran1.remove("testval", tuple(5, 5))
+      tran1.add("testval", tuple(6, 6))
+      tran1.close()
+      query.getResults()
+      expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
     })
-    expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
-    val tran1 = input.newBatchTransaction()
-    tran1.remove("testval", tuple(5, 5))
-    tran1.add("testval", tuple(6, 6))
-    tran1.close()
-    query.getResults()
-    expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative=Vector(tuple(5, 5))))
   }
 }
