@@ -6,42 +6,17 @@ import relalg.BinaryArithmeticOperationExpression
 import relalg.FunctionExpression
 import relalg.ListExpression
 import relalg.Literal
-import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
 import relalg.Variable
 import relalg.VariableExpression
 
 class FunctionArgumentExtractor {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-
 	def List<? extends Variable> extractFunctionArguments(FunctionExpression fe) {
-//		if (fe.functor.aggregation) {
-//			println(fe.arguments)
-//			null
-//			fe.
-//			// TODO we should handle aggregations here but note that aggregations cannot be nested.
-//			// also, maybe this cannot happen now?
-//		} else 
-		if (fe.functor.meta) {
-			#[createExpressionVariable => [
-				namedElementContainer = fe.expressionContainer
-				expression = fe
-				// all metafunctions have exactly one argument
-				name = '''«fe.functor»(«(fe.arguments.get(0) as VariableExpression).variable.name»)'''
-			]]
-		} else {
-			fe.arguments.map[extractVariableFromExpression]
-		}.flatten.toList
+			fe.arguments.map[extractVariableFromExpression].flatten.toList
 	}
-//			createExpressionVariable => [
-//				namedElementContainer = a.container
-//				expression = a
-//				name = '''«functionExpression.functor.name.toLowerCase»(«(functionExpression.arguments.get(0) as VariableExpression).variable.name»)'''
-//			]
-//		}
-//		fe.arguments.map[extractVariableFromArgument].flatten.toList
 
+	// extractVariableFromExpression
 	def dispatch List<? extends Variable> extractVariableFromExpression(FunctionExpression a) {
 		extractFunctionArguments(a)
 	}

@@ -1,4 +1,4 @@
-Distinct([segment, segment.length AS length]) # TODO: what does it mean to return a complete node/edge?
+Distinct([segment, segment.length AS length])
  |
 Filter(segment.length <= 0)
  |

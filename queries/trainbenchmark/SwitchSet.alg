@@ -1,4 +1,4 @@
-Distinct([semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position]) # TODO: what does it mean to return a complete node/edge?
+Distinct([semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position])
  |
 Filter(sw.currentPosition <> swP.position)
  |

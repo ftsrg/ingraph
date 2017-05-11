@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet
 import com.google.common.collect.Lists
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
-import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.AbstractJoinOperator
 import relalg.AttributeVariable
 import relalg.DualObjectSourceOperator
