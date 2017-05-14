@@ -67,8 +67,13 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val pathsToSource = pathsToSourceVertex(sourceId)
     val pathsFromTarget = pathsFromTargetVertex(targetId)
     for(pathToSourceVertex <- pathsToSource; pathFromTargetVertex <- pathsFromTarget){
-    	val path = pathToSourceVertex._2 ++ Vector(edgeId) ++ pathFromTargetVertex._2
-      if(path.size <= maxHops && areDistinctPaths(pathToSourceVertex._2, pathFromTargetVertex._2)){
+      if(pathToSourceVertex._2.size + pathFromTargetVertex._2.size + 1 <= maxHops && areDistinctPaths(pathToSourceVertex._2, pathFromTargetVertex._2)){
+        var pathBuilder = new VectorBuilder[Long]
+        pathBuilder ++= pathToSourceVertex._2
+        pathBuilder += edgeId
+        pathBuilder ++= pathFromTargetVertex._2
+    	  val path = pathBuilder.result
+        
         if (!reachableVertices(pathToSourceVertex._1).contains(pathFromTargetVertex._1)) {
           reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) = new mutable.MutableList
         }
@@ -84,11 +89,11 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def pathsToSourceVertex(sourceId: Long) = {
-    reachableFrom.getOrElse(sourceId, Set.empty).flatMap(startVertex => reachableVertices(startVertex)(sourceId).map(path => (startVertex, path))).toList ++ List((sourceId, Path()))
+    reachableFrom.getOrElse(sourceId, Set.empty).flatMap(startVertex => reachableVertices(startVertex)(sourceId).map(path => (startVertex, path))).toList.:: (sourceId, Path())
   }
 
   private def pathsFromTargetVertex(targetId: Long) = {
-    reachableVertices.getOrElse(targetId, Map.empty).flatMap(entry => entry._2.map(path => (entry._1, path))).toList ++ List((targetId, Path()))
+    reachableVertices.getOrElse(targetId, Map.empty).flatMap(entry => entry._2.map(path => (entry._1, path))).toList.:: (targetId, Path())
   }
 
   private def areDistinctPaths(p1: Path, p2: Path): Boolean = {
@@ -155,4 +160,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   private def isInRange(path: Path): Boolean = {
     path.size >= minHops && path.size <= maxHops
   }
+  
+  case class PathData(
+    path: Path,
+    pathHash: mutable.HashSet[Long]
+  )
 }
