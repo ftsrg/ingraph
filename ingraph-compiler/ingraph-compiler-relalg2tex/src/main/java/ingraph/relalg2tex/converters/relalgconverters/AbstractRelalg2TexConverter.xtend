@@ -29,7 +29,7 @@ abstract class AbstractRelalg2TexConverter {
 	def convert(RelalgContainer container, String filename) {
 		val tex = convert(container)
 
-		val file = new File("../visualization/" + filename + ".tex")
+		val file = new File("../../visualization/" + filename + ".tex")
 		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
 
 		tex
@@ -73,7 +73,7 @@ abstract class AbstractRelalg2TexConverter {
 	def operator(Operator op) {
 		op.convertOperator
 	}
-	
+
 	def includeOperator(Operator op) {
 		!(op instanceof ProductionOperator) || config.includeProductionOperator
 	}

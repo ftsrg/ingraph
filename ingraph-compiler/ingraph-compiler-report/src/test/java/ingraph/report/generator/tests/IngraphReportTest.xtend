@@ -34,10 +34,10 @@ abstract class IngraphReportTest {
 			«working» &
 			«total» \\
 		'''
-		
+
 	}
 
-	def printChapter(String chapterName, String chapterTitle, String shortTitle, 
+	def printChapter(String chapterName, String chapterTitle, String shortTitle,
 		Map<String, Iterable<TestQuery>> chapterQuerySpecifications) {
 		var doc = '''
 			\chapter{«chapterTitle»}
@@ -60,12 +60,12 @@ abstract class IngraphReportTest {
 			val sectionCompilingQueries = cp.compilingQueries
 			val sectionTotalQueries = cp.totalQueries
 			val sectionProgressbar = progressbarTableRow("gray", '''\hyperref[sec:«sectionLabel»]{«sectionTitle»}''', sectionCompilingQueries, sectionTotalQueries)
-			
+
 			sectionProgressbars.add(sectionProgressbar)
 			sections += '''
 				\section{«sectionTitle»}
 				\label{sec:«sectionLabel»}
-				
+
 				«PROGRESSBAR_TABLE_HEADER»
 				«sectionProgressbar»
 				«PROGRESSBAR_TABLE_FOOTER»
@@ -92,7 +92,7 @@ abstract class IngraphReportTest {
 			'''\hyperref[chp:«chapterName»]{«shortTitle»}''', //
 			chapterCompilingQueries, chapterTotalQueries)
 
-		val appendixDir = "../opencypher-report/appendix/"
+		val appendixDir = "../../opencypher-report/appendix/"
 		val charset = Charset.forName("UTF-8")
 		FileUtils.writeStringToFile(new File('''«appendixDir»progressbar-«chapterName».tex'''), progressbarTableRow, charset)
 		FileUtils.writeStringToFile(new File('''«appendixDir»chapter-«chapterName».tex'''), doc, charset)

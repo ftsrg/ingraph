@@ -18,7 +18,7 @@ class CypherParser {
 		// https://typefox.io/how-and-why-use-xtext-without-the-ide
 		val injector = new OpenCypherStandaloneSetup().createInjectorAndDoEMFRegistration()
 		val resourceSet = injector.getInstance(XtextResourceSet)
-		val filePath = "../queries/" + fileName + ".cypher"
+		val filePath = "../../queries/" + fileName + ".cypher"
 		val resource = resourceSet.getResource(URI.createFileURI(filePath), true)
 		validateAndThrowError(resource)
 		return resource.contents.get(0) as Cypher

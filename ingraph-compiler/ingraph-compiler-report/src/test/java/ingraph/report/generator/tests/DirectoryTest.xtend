@@ -26,10 +26,10 @@ abstract class DirectoryTest extends IngraphReportTest {
 	}
 
 	def toChapter(String directoryName, String chapterTitle, String shortTitle) {
-		val directoryPath = '''../queries/«directoryName»/'''
+		val directoryPath = '''../../queries/«directoryName»/'''
 		val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
 		Collections.sort(fileNames, new NaturalOrderComparator());
-	 
+
 		val sectionTestQueries = new LinkedList<TestQuery>
 		for (fileName : fileNames) {
 			val queryName = FilenameUtils.removeExtension(fileName)
@@ -37,9 +37,9 @@ abstract class DirectoryTest extends IngraphReportTest {
 			val testQuery = new TestQueryBuilder().setQueryName(queryName).setQuerySpecification(querySpecification).build
 			sectionTestQueries.add(testQuery)
 		}
-		
+
 		val chapterQuerySpecifications = ImmutableMap.<String, Iterable<TestQuery>>of("Queries", sectionTestQueries)
 		printChapter(directoryName, chapterTitle, shortTitle, chapterQuerySpecifications)
 	}
-	
+
 }

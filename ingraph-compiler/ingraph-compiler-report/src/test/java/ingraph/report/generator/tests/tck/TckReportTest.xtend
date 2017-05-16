@@ -25,7 +25,7 @@ class TckReportTest extends IngraphReportTest {
 
 	@Test
 	def void generateChapter() {
-		val CUCUMBER_TESTS_DIR = "../opencypher-tests/"
+		val CUCUMBER_TESTS_DIR = "../../opencypher-tests/"
 		val failingAndRegressionTests = Files.readLines(
 			new File('''«CUCUMBER_TESTS_DIR»failing-and-regression-tests.txt'''),
 			Charset.forName("UTF-8")
