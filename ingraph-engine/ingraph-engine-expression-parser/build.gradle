@@ -9,8 +9,8 @@ jar {
 }
 
 dependencies {
-  compile group: 'ingraph-compiler', name: 'ingraph-compiler-cypher2relalg', version: ingraphVersion
-  compile group: 'ingraph-compiler', name: 'ingraph-compiler-relalg2rete', version: ingraphVersion
+  compile group: 'ingraph-compiler', name: 'ingraph-compiler-cypher2search', version: ingraphVersion
+  compile group: 'ingraph-compiler', name: 'ingraph-compiler-search2rete', version: ingraphVersion
 
   compile project(':ingraph-engine-ire')
 
