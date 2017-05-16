@@ -1,5 +1,5 @@
 dependencies {
-  compile project(':ingraph-compiler-relalg-model')
+  compile project(':ingraph-compiler:ingraph-compiler-relalg-model')
 
   compile group: 'org.eclipse.viatra', name: 'viatra-query-runtime', version: viatraVersion
 }

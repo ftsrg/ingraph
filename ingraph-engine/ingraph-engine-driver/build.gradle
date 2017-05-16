@@ -12,9 +12,9 @@ sourceSets.main.scala.srcDir "src/main/java"
 sourceSets.main.java.srcDirs = []
 
 dependencies {
-  compile project(':ingraph-engine-ingraph-ire')
-  compile project(':ingraph-engine-reactive-driver-interfaces')
-  testCompile project(':ingraph-engine-test-tools')
+  compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
+  compile project(':ingraph-engine:ingraph-engine-reactive-driver-interfaces')
+  testCompile project(':ingraph-engine:ingraph-engine-test-tools')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
   compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion

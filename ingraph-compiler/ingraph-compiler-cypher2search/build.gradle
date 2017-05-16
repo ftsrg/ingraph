@@ -1,10 +1,10 @@
 plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
-  compile project(':ingraph-compiler-common')
-  compile project(':ingraph-compiler-patterns')
-  compile project(':ingraph-compiler-relalg-model-util')
-  testCompile project(':ingraph-compiler-relalg2tex')
+  compile project(':ingraph-compiler:ingraph-compiler-common')
+  compile project(':ingraph-compiler:ingraph-compiler-patterns')
+  compile project(':ingraph-compiler:ingraph-compiler-relalg-model-util')
+  testCompile project(':ingraph-compiler:ingraph-compiler-relalg2tex')
 
   compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
   compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion

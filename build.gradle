@@ -3,7 +3,7 @@ plugins {
 }
 
 allprojects {
-  group = 'ingraph-engine'
+  group = 'ingraph'
   version = '0.2.0-SNAPSHOT'
 }
 
@@ -21,7 +21,6 @@ subprojects {
   targetCompatibility = 1.8
 
   repositories {
-    mavenLocal()
     jcenter()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
     //maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
@@ -60,8 +59,6 @@ subprojects {
 }
 
 ext {
-  ingraphVersion = '0.2.0-SNAPSHOT'
-
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
   emfVersion = '2.10.1'
@@ -72,6 +69,12 @@ ext {
   neo4jDriverVersion = '1.2.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
-  scalaVersion = '2.11.8'
   scalaTestVersion = '3.0.1'
+  scalaVersion = '2.11.8'
+  slizaaVersion = '1.0.0-SNAPSHOT'
+  viatraMinorVersion = '.0.M1'
+  viatraDseVersion = '0.16' + viatraMinorVersion
+  viatraVersion = '1.6' + viatraMinorVersion
+  xtendVersion = '2.10.0'
+  xtextVersion = xtendVersion
 }

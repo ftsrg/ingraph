@@ -22,14 +22,9 @@ install:
 script:
   # only build and deploy the results if the build is performed on the master branch
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then scripts/generate-and-deploy-report.sh; fi
-  - cd ingraph-compiler
   - ./gradlew assemble testClasses --stacktrace --quiet
   - ./gradlew regressionTests --continue --quiet
-  - ./gradlew publishToMavenLocal
-  - cd ..
-  - cd ingraph-engine
-  - ./gradlew :ingraph-engine-ire:test :ingraph-engine-expression-parser:test :ingraph-engine-ingraph-ire:test --quiet --continue --stacktrace
-  - cd ..
+  - ./gradlew :ingraph-engine:ingraph-engine-ire:test :ingraph-engine:ingraph-engine-expression-parser:test :ingraph-engine:ingraph-engine-ingraph-ire:test --quiet --continue --stacktrace
 notifications:
   slack:
     rooms:
