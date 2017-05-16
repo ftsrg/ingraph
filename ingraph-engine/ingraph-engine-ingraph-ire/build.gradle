@@ -9,7 +9,7 @@ jar {
 }
 
 dependencies {
-  compile group: 'ingraph-compiler', name: 'ingraph-compiler-cypher2relalg', version: ingraphVersion
+  compile group: 'ingraph-compiler', name: 'ingraph-compiler-cypher2search', version: ingraphVersion
   compile group: 'ingraph-compiler', name: 'ingraph-compiler-relalg2tex', version: ingraphVersion
 
   compile project(':ingraph-engine-bulk-loader')
