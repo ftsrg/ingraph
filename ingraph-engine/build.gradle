@@ -1,0 +1,77 @@
+plugins {
+  id 'com.jfrog.bintray' version '1.7.1' apply false
+}
+
+allprojects {
+  group = 'ingraph-engine'
+  version = '0.2.0-SNAPSHOT'
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+  apply plugin: 'com.jfrog.bintray'
+  apply plugin: 'maven-publish'
+
+  jar {
+    from sourceSets.main.allJava
+  }
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
+    //maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
+    maven { url 'https://build.incquerylabs.com/nexus/content/repositories/viatra.staging/' }
+    maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
+  }
+
+  // disable warnings for Scala projects
+  tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-nowarn"]
+  }
+
+  configurations.all { exclude group: 'asm' }
+
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+      }
+    }
+  }
+
+  bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publish = true
+    override = true
+    publications = ['mavenJava']
+  }
+}
+
+ext {
+  ingraphVersion = '0.2.0-SNAPSHOT'
+
+  commonsIoVersion = '2.5'
+  commonsMathVersion = '3.6.1'
+  emfVersion = '2.10.1'
+  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA uses https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html
+  jmhVersion = '1.17.5'
+  junitVersion = '4.12'
+  log4jVersion = '1.2.17'
+  neo4jDriverVersion = '1.2.1'
+  pegdownVersion = '1.6.0'
+  scalaShortVersion = '2.11'
+  scalaVersion = '2.11.8'
+  scalaTestVersion = '3.0.1'
+}

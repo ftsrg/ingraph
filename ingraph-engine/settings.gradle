@@ -1,0 +1,13 @@
+rootProject.name = 'ingraph-engine'
+
+include ':ingraph-engine-bulk-loader'
+include ':ingraph-engine-debugger-backend'
+include ':ingraph-engine-debugger-frontend'
+include ':ingraph-engine-driver'
+include ':ingraph-engine-expression-parser'
+include ':ingraph-engine-ingraph-ire'
+include ':ingraph-engine-ire'
+include ':ingraph-engine-neo4j-tests'
+include ':ingraph-engine-neo4j-util'
+include ':ingraph-engine-reactive-driver-interfaces'
+include ':ingraph-engine-test-tools'

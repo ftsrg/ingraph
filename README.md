@@ -6,6 +6,14 @@
 
 For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
+## Projects
+
+ingraph consists of two main projects:
+
+1. `ingraph-compiler`, which compiles openCypher queries to relational algebra search plans / Rete networks. The compiler components are built using EMF-based technologies (Xcore, Xtend, Xtext and VIATRA), so we recommended the Eclipse IDE for developing them.
+
+2. `ingraph-engine`, which evaluates the search plans / Rete networks. The engine is built using Scala-based technologies (Akka, ScalaTest and Scala Cukes), so we recommend contribtors to use IntelliJ IDEA for developing these components.
+
 ## Pages
 
 * [Contributor's guide](contributors-guide.md)

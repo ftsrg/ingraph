@@ -1,0 +1,10 @@
+plugins { id 'org.xtext.xtend' version '1.0.15' }
+
+dependencies {
+  compile project(':ingraph-compiler-relalg-model')
+  compile project(':ingraph-compiler-relalg-model-util')
+
+  compile group: 'commons-io', name: 'commons-io', version: commonsIoVersion
+  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+}
