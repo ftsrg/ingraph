@@ -1,8 +1,8 @@
 plugins { id 'org.xtext.xtend' version '1.0.15' }
 
 dependencies {
-  compile project(':ingraph-compiler-cypher2relalg')
-  compile project(':ingraph-compiler-relalg2rete')
+  compile project(':ingraph-compiler-cypher2search')
+  compile project(':ingraph-compiler-search2rete')
   compile project(':ingraph-compiler-relalg2tex')
 
   compile group: 'org.eclipse.emf', name: 'org.eclipse.emf.mwe2.launch', version: '2.8.3'
