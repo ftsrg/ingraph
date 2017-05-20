@@ -18,7 +18,7 @@ before_install:
   - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex texlive-extra-utils latexmk lmodern pgf; fi
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf; fi
   - ./gradlew assemble testClasses --stacktrace --quiet
   - ./gradlew regressionTests --continue --quiet
 script:

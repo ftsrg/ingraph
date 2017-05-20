@@ -1,5 +1,5 @@
 DOCUMENT=opencypher-report
-COMPILER=texfot lualatex
+COMPILER=./texfot.pl lualatex
 COMPILER_SILENT=$(COMPILER) -interaction=batchmode
 
 all: clean
