@@ -4,7 +4,7 @@ plugins {
 
 allprojects {
   group = 'ingraph'
-  version = '0.2.0'
+  version = '0.2.0-SNAPSHOT'
 }
 
 subprojects {
@@ -69,8 +69,8 @@ ext {
   neo4jDriverVersion = '1.2.1'
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
-  scalaVersion = '2.11.8'
   scalaTestVersion = '3.0.1'
+  scalaVersion = '2.11.8'
   slizaaVersion = '1.0.0-SNAPSHOT'
   viatraMinorVersion = '.0.M1'
   viatraDseVersion = '0.16' + viatraMinorVersion

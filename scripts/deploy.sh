@@ -8,7 +8,7 @@ mkdir out
 
 # run our compile script, discussed above
 cp -r site/* out/ || true
-cp -r ingraph-cypher2relalg/build/reports/tests/ out/
+cp -r ingraph-compiler/ingraph-compiler-cypher2search/build/reports/tests/ out/
 cp opencypher-report/opencypher-report.pdf out/pub/
 cp -r opencypher-report/appendix out/pub/
 

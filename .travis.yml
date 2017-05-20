@@ -24,7 +24,7 @@ install:
 script:
   # only build and deploy the results if the build is performed on the master branch
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then scripts/generate-and-deploy-report.sh; fi
-  - scripts/test.sh --quiet
+  - ./gradlew :ingraph-engine:ingraph-engine-ire:test :ingraph-engine:ingraph-engine-expression-parser:test :ingraph-engine:ingraph-engine-ingraph-ire:test --quiet --continue --stacktrace
 notifications:
   slack:
     rooms:
