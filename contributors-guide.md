@@ -64,7 +64,10 @@ If you are unable to download Xtend plug-in from the plug-in list:
 
 #### Importing the projects
 
-* Import the projects using **New** | **Project from Existing Sources...**. Untick **Create separate module per source set**.
+* Import the projects using **New** | **Project from Existing Sources...**.
+  * Tick **Auto import**
+  * Untick **Create separate module per source set**.
+* In the Gradle view, click **Execute Gradle Task** and set the **Command line** textbox to `build -x test`.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
 
 ## Debug mode
