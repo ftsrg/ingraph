@@ -86,7 +86,8 @@ abstract class LdbcSnbBiTest extends FunSuite {
         //TestCase(23), // no Cypher implementation yet
         TestCase(24),
 //        TestCase(25), // no cypher implementation yet
-
+        TestCase(26),
+        TestCase(27),
         null
   ).filter(_ != null) //
     .foreach(
