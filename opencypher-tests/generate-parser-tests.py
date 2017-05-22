@@ -18,7 +18,7 @@ with open("failing-and-regression-tests.txt", "r") as file:
 filenames = sorted(glob.glob('*.feature'))
 for filename in filenames:
     filename_without_extension = os.path.splitext(filename)[0]
-    test_file = open("../ingraph-cypher2relalg/src/test/java/ingraph/cypher2relalg/tck/tests/%sParserTest.xtend" % filename_without_extension, "w")
+    test_file = open("../ingraph-compiler/ingraph-compiler-cypher2search/src/test/java/ingraph/cypher2relalg/tck/tests/%sParserTest.xtend" % filename_without_extension, "w")
 
     test_header = """package ingraph.cypher2relalg.tck.tests
 
