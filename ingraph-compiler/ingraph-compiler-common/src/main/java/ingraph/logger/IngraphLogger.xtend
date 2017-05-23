@@ -98,7 +98,7 @@ class IngraphLogger {
 	def isDebugMode() {
 		"1".equals(System.getenv("DEBUG")) || //
 		"1".equals(System.getenv("DEBUG_INGRAPH")) || //
-		"1".equals(System.getenv("DEBUG_INGRAPH_CYPHER2RELALG"))
+		"1".equals(System.getenv("DEBUG_INGRAPH_CYPHER2SEARCH"))
 	}
 
 }
