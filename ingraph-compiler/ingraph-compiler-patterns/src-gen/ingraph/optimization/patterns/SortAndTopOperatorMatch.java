@@ -66,16 +66,16 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("sortOperator".equals(parameterName) ) {
-    	this.fSortOperator = (SortOperator) newValue;
-    	return true;
+        this.fSortOperator = (SortOperator) newValue;
+        return true;
     }
     if ("topOperator".equals(parameterName) ) {
-    	this.fTopOperator = (TopOperator) newValue;
-    	return true;
+        this.fTopOperator = (TopOperator) newValue;
+        return true;
     }
     if ("parentOperator".equals(parameterName) ) {
-    	this.fParentOperator = (Operator) newValue;
-    	return true;
+        this.fParentOperator = (Operator) newValue;
+        return true;
     }
     return false;
   }
@@ -140,18 +140,18 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-    	return true;
+        return true;
     if (!(obj instanceof SortAndTopOperatorMatch)) { // this should be infrequent
-    	if (obj == null) {
-    		return false;
-    	}
-    	if (!(obj instanceof IPatternMatch)) {
-    		return false;
-    	}
-    	IPatternMatch otherSig  = (IPatternMatch) obj;
-    	if (!specification().equals(otherSig.specification()))
-    		return false;
-    	return Arrays.deepEquals(toArray(), otherSig.toArray());
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof IPatternMatch)) {
+            return false;
+        }
+        IPatternMatch otherSig  = (IPatternMatch) obj;
+        if (!specification().equals(otherSig.specification()))
+            return false;
+        return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     SortAndTopOperatorMatch other = (SortAndTopOperatorMatch) obj;
     if (fSortOperator == null) {if (other.fSortOperator != null) return false;}
@@ -166,10 +166,10 @@ public abstract class SortAndTopOperatorMatch extends BasePatternMatch {
   @Override
   public SortAndTopOperatorQuerySpecification specification() {
     try {
-    	return SortAndTopOperatorQuerySpecification.instance();
+        return SortAndTopOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-     	// This cannot happen, as the match object can only be instantiated if the query specification exists
-     	throw new IllegalStateException (ex);
+         // This cannot happen, as the match object can only be instantiated if the query specification exists
+         throw new IllegalStateException (ex);
     }
   }
   

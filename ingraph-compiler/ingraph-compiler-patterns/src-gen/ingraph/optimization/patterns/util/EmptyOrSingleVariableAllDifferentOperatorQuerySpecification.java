@@ -51,9 +51,9 @@ public final class EmptyOrSingleVariableAllDifferentOperatorQuerySpecification e
    */
   public static EmptyOrSingleVariableAllDifferentOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
@@ -79,8 +79,8 @@ public final class EmptyOrSingleVariableAllDifferentOperatorQuerySpecification e
   
   /**
    * Inner class allowing the singleton instance of {@link EmptyOrSingleVariableAllDifferentOperatorQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link EmptyOrSingleVariableAllDifferentOperatorQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link EmptyOrSingleVariableAllDifferentOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -130,50 +130,51 @@ public final class EmptyOrSingleVariableAllDifferentOperatorQuerySpecification e
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
-      		PVariable var___0_ = body.getOrCreateVariableByName("_<0>");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator)
-      		));
-      		// 	// empty	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _)
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new ConstantValue(body, var__virtual_0_, 0);
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new PatternMatchCounter(body, new FlatTuple(var_allDifferentOperator, var___0_), AllDifferentOperatorEdgeVariablesQuerySpecification.instance().getInternalQueryRepresentation(), var__virtual_1_);
-      		new Equality(body, var__virtual_0_, var__virtual_1_);
-      		bodies.add(body);
-      	}
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
-      		PVariable var___0_ = body.getOrCreateVariableByName("_<0>");
-      		PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator)
-      		));
-      		// 	1 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _)
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new ConstantValue(body, var__virtual_0_, 1);
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new PatternMatchCounter(body, new FlatTuple(var_allDifferentOperator, var___0_), AllDifferentOperatorEdgeVariablesQuerySpecification.instance().getInternalQueryRepresentation(), var__virtual_1_);
-      		new Equality(body, var__virtual_0_, var__virtual_1_);
-      		// 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable)
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AllDifferentOperator", "edgeVariables")));
-      		new Equality(body, var__virtual_2_, var_edgeVariable);
-      		// 	// EdgeVariable and *not* an EdgeListVariable	EdgeVariable(edgeVariable)
-      		new TypeConstraint(body, new FlatTuple(var_edgeVariable), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EdgeVariable")));
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
+              PVariable var___0_ = body.getOrCreateVariableByName("_<0>");
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator)
+              ));
+              // 	// empty	0 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _)
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new ConstantValue(body, var__virtual_0_, 0);
+              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+              new PatternMatchCounter(body, new FlatTuple(var_allDifferentOperator, var___0_), AllDifferentOperatorEdgeVariablesQuerySpecification.instance().getInternalQueryRepresentation(), var__virtual_1_);
+              new Equality(body, var__virtual_0_, var__virtual_1_);
+              bodies.add(body);
+          }
+          {
+              PBody body = new PBody(this);
+              PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
+              PVariable var___0_ = body.getOrCreateVariableByName("_<0>");
+              PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator)
+              ));
+              // 	1 == count find allDifferentOperatorEdgeVariables(allDifferentOperator, _)
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new ConstantValue(body, var__virtual_0_, 1);
+              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+              new PatternMatchCounter(body, new FlatTuple(var_allDifferentOperator, var___0_), AllDifferentOperatorEdgeVariablesQuerySpecification.instance().getInternalQueryRepresentation(), var__virtual_1_);
+              new Equality(body, var__virtual_0_, var__virtual_1_);
+              // 	AllDifferentOperator.edgeVariables(allDifferentOperator, edgeVariable)
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+              PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "AllDifferentOperator", "edgeVariables")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_2_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AbstractEdgeVariable")));
+              new Equality(body, var__virtual_2_, var_edgeVariable);
+              // 	// EdgeVariable and *not* an EdgeListVariable	EdgeVariable(edgeVariable)
+              new TypeConstraint(body, new FlatTuple(var_edgeVariable), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EdgeVariable")));
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

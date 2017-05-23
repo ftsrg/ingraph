@@ -57,7 +57,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
     // check if matcher already exists
     CommutativeOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (CommutativeOperatorMatcher)engine.getMatcher(querySpecification());
+        matcher = (CommutativeOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -311,30 +311,30 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   @Override
   protected CommutativeOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return CommutativeOperatorMatch.newMatch((CommutativeBinaryOperator) t.get(POSITION_OP), (Operator) t.get(POSITION_LEFTINPUT), (Operator) t.get(POSITION_RIGHTINPUT));
+        return CommutativeOperatorMatch.newMatch((CommutativeBinaryOperator) t.get(POSITION_OP), (Operator) t.get(POSITION_LEFTINPUT), (Operator) t.get(POSITION_RIGHTINPUT));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected CommutativeOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return CommutativeOperatorMatch.newMatch((CommutativeBinaryOperator) match[POSITION_OP], (Operator) match[POSITION_LEFTINPUT], (Operator) match[POSITION_RIGHTINPUT]);
+        return CommutativeOperatorMatch.newMatch((CommutativeBinaryOperator) match[POSITION_OP], (Operator) match[POSITION_LEFTINPUT], (Operator) match[POSITION_RIGHTINPUT]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected CommutativeOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return CommutativeOperatorMatch.newMutableMatch((CommutativeBinaryOperator) match[POSITION_OP], (Operator) match[POSITION_LEFTINPUT], (Operator) match[POSITION_RIGHTINPUT]);
+        return CommutativeOperatorMatch.newMutableMatch((CommutativeBinaryOperator) match[POSITION_OP], (Operator) match[POSITION_LEFTINPUT], (Operator) match[POSITION_RIGHTINPUT]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

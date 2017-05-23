@@ -49,9 +49,9 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
    */
   public static DefaultExpandOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
@@ -77,8 +77,8 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
   
   /**
    * Inner class allowing the singleton instance of {@link DefaultExpandOperatorQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link DefaultExpandOperatorQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link DefaultExpandOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -130,26 +130,26 @@ public final class DefaultExpandOperatorQuerySpecification extends BaseGenerated
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
-      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
-      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
-      		));
-      		// 	find parentOperator(expandOperator, parentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	find expandOperatorWithDefaultEdgeVariable(expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance().getInternalQueryRepresentation());
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
+              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+              new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
+                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+              ));
+              // 	find parentOperator(expandOperator, parentOperator)
+              new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+              // 	find expandOperatorWithDefaultEdgeVariable(expandOperator)
+              new PositivePatternCall(body, new FlatTuple(var_expandOperator), ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance().getInternalQueryRepresentation());
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

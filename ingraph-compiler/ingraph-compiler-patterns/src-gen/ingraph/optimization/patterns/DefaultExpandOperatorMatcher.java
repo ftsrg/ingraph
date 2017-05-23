@@ -62,7 +62,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
     // check if matcher already exists
     DefaultExpandOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (DefaultExpandOperatorMatcher)engine.getMatcher(querySpecification());
+        matcher = (DefaultExpandOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -263,30 +263,30 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   @Override
   protected DefaultExpandOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return DefaultExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+        return DefaultExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected DefaultExpandOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return DefaultExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+        return DefaultExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected DefaultExpandOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return DefaultExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+        return DefaultExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

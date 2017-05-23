@@ -4,13 +4,13 @@
 package ingraph.optimization.patterns.util;
 
 import com.google.common.collect.Sets;
+import ingraph.optimization.patterns.ExpandOperatorWithDefaultEdgeVariableMatch;
+import ingraph.optimization.patterns.ExpandOperatorWithDefaultEdgeVariableMatcher;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
-import org.eclipse.viatra.query.runtime.api.ViatraQueryMatcher;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecification;
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
@@ -36,7 +36,7 @@ import org.eclipse.viatra.query.runtime.matchers.tuple.FlatTuple;
  * 
  */
 @SuppressWarnings("all")
-final class ExpandOperatorWithDefaultEdgeVariableQuerySpecification extends BaseGeneratedEMFQuerySpecification<ViatraQueryMatcher<IPatternMatch>> {
+public final class ExpandOperatorWithDefaultEdgeVariableQuerySpecification extends BaseGeneratedEMFQuerySpecification<ExpandOperatorWithDefaultEdgeVariableMatcher> {
   private ExpandOperatorWithDefaultEdgeVariableQuerySpecification() {
     super(GeneratedPQuery.INSTANCE);
   }
@@ -48,36 +48,36 @@ final class ExpandOperatorWithDefaultEdgeVariableQuerySpecification extends Base
    */
   public static ExpandOperatorWithDefaultEdgeVariableQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
   @Override
-  protected ViatraQueryMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
-    throw new UnsupportedOperationException();
+  protected ExpandOperatorWithDefaultEdgeVariableMatcher instantiate(final ViatraQueryEngine engine) throws ViatraQueryException {
+    return ExpandOperatorWithDefaultEdgeVariableMatcher.on(engine);
   }
   
   @Override
-  public ViatraQueryMatcher instantiate() throws ViatraQueryException {
-    throw new UnsupportedOperationException();
+  public ExpandOperatorWithDefaultEdgeVariableMatcher instantiate() throws ViatraQueryException {
+    return ExpandOperatorWithDefaultEdgeVariableMatcher.create();
   }
   
   @Override
-  public IPatternMatch newEmptyMatch() {
-    throw new UnsupportedOperationException();
+  public ExpandOperatorWithDefaultEdgeVariableMatch newEmptyMatch() {
+    return ExpandOperatorWithDefaultEdgeVariableMatch.newEmptyMatch();
   }
   
   @Override
-  public IPatternMatch newMatch(final Object... parameters) {
-    throw new UnsupportedOperationException();
+  public ExpandOperatorWithDefaultEdgeVariableMatch newMatch(final Object... parameters) {
+    return ExpandOperatorWithDefaultEdgeVariableMatch.newMatch((relalg.ExpandOperator) parameters[0]);
   }
   
   /**
    * Inner class allowing the singleton instance of {@link ExpandOperatorWithDefaultEdgeVariableQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link ExpandOperatorWithDefaultEdgeVariableQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link ExpandOperatorWithDefaultEdgeVariableQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -127,27 +127,28 @@ final class ExpandOperatorWithDefaultEdgeVariableQuerySpecification extends Base
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_defaultExpandOperator = body.getOrCreateVariableByName("defaultExpandOperator");
-      		PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
-      		new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_defaultExpandOperator, parameter_pDefaultExpandOperator)
-      		));
-      		// 	ExpandOperator.edgeVariable(defaultExpandOperator, edgeVariable)
-      		new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationDescriptor", "edgeVariable")));
-      		new Equality(body, var__virtual_0_, var_edgeVariable);
-      		// 	EdgeVariable(edgeVariable)
-      		new TypeConstraint(body, new FlatTuple(var_edgeVariable), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EdgeVariable")));
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_defaultExpandOperator = body.getOrCreateVariableByName("defaultExpandOperator");
+              PVariable var_edgeVariable = body.getOrCreateVariableByName("edgeVariable");
+              new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_defaultExpandOperator, parameter_pDefaultExpandOperator)
+              ));
+              // 	ExpandOperator.edgeVariable(defaultExpandOperator, edgeVariable)
+              new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new TypeConstraint(body, new FlatTuple(var_defaultExpandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "NavigationDescriptor", "edgeVariable")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AbstractEdgeVariable")));
+              new Equality(body, var__virtual_0_, var_edgeVariable);
+              // 	EdgeVariable(edgeVariable)
+              new TypeConstraint(body, new FlatTuple(var_edgeVariable), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EdgeVariable")));
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

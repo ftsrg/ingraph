@@ -23,8 +23,7 @@ subprojects {
   repositories {
     jcenter()
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
-    //maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
-    maven { url 'https://build.incquerylabs.com/nexus/content/repositories/viatra.staging/' }
+    maven { url 'https://repo.eclipse.org/content/groups/viatra2/' }
     maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
   }
 
@@ -62,7 +61,7 @@ ext {
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
   emfVersion = '2.10.1'
-  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA uses https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html
+  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA currently uses the ToStringHelper class (https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html)
   jmhVersion = '1.17.5'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
@@ -72,7 +71,7 @@ ext {
   scalaTestVersion = '3.0.1'
   scalaVersion = '2.11.8'
   slizaaVersion = '1.0.0-SNAPSHOT'
-  viatraMinorVersion = '.0.M1'
+  viatraMinorVersion = '.0.M3'
   viatraDseVersion = '0.16' + viatraMinorVersion
   viatraVersion = '1.6' + viatraMinorVersion
   xtendVersion = '2.10.0'

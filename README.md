@@ -22,7 +22,7 @@ Start with [Eclipse Oxygen](http://www.eclipse.org/downloads/packages/release/Ox
 
 Required dependencies:
 
-* Install the **VIATRA Query and Transformation SDK** 1.6.x plug-in from the Oxygen update site.
+* Install the **VIATRA Query and Transformation SDK** 1.6.0.M3 plug-in from the [VIATRA milestone update site](http://download.eclipse.org/viatra/updates/milestone/).
 
 Recommended dependencies:
 
@@ -46,6 +46,8 @@ Recommended dependencies:
 
     This will generate 1. source files from the Xcore model and 2. the Eclipse project files.
 1. Import the project with **Import...** | **Gradle** | **Gradle Project**, select the `ingraph-compiler` directory. Note that you *should not* select the `ingraph` directory, but the compiler's directory instead. When prompted whether to overwrite existing project files, click **Keep**.
+
+Optionally, you might also import the `ingraph-engine` directory.
 
 #### Opening relational algebra models
 

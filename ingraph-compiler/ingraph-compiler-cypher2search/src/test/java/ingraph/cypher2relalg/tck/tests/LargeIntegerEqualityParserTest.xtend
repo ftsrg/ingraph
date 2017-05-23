@@ -45,7 +45,7 @@ class LargeIntegerEqualityParserTest {
     Scenario: Handling explicit equality of large integer
     */
     @Test
-    @Category(FailingTests)
+    @Category(RegressionTests)
     def void testLargeIntegerEquality_03() {
         val cypher = CypherParser.parseString('''
         MATCH (p:Label)

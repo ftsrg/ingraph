@@ -58,7 +58,7 @@ public class VariablesInLogicalExpressionMatcher extends BaseMatcher<VariablesIn
     // check if matcher already exists
     VariablesInLogicalExpressionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (VariablesInLogicalExpressionMatcher)engine.getMatcher(querySpecification());
+        matcher = (VariablesInLogicalExpressionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -188,30 +188,30 @@ public class VariablesInLogicalExpressionMatcher extends BaseMatcher<VariablesIn
   @Override
   protected VariablesInLogicalExpressionMatch tupleToMatch(final Tuple t) {
     try {
-    	return VariablesInLogicalExpressionMatch.newMatch((Expression) t.get(POSITION_EXPRESSION));
+        return VariablesInLogicalExpressionMatch.newMatch((Expression) t.get(POSITION_EXPRESSION));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected VariablesInLogicalExpressionMatch arrayToMatch(final Object[] match) {
     try {
-    	return VariablesInLogicalExpressionMatch.newMatch((Expression) match[POSITION_EXPRESSION]);
+        return VariablesInLogicalExpressionMatch.newMatch((Expression) match[POSITION_EXPRESSION]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected VariablesInLogicalExpressionMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return VariablesInLogicalExpressionMatch.newMutableMatch((Expression) match[POSITION_EXPRESSION]);
+        return VariablesInLogicalExpressionMatch.newMutableMatch((Expression) match[POSITION_EXPRESSION]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

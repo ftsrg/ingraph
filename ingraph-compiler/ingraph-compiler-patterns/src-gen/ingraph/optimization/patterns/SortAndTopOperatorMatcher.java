@@ -67,7 +67,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
     // check if matcher already exists
     SortAndTopOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (SortAndTopOperatorMatcher)engine.getMatcher(querySpecification());
+        matcher = (SortAndTopOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -321,30 +321,30 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   @Override
   protected SortAndTopOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return SortAndTopOperatorMatch.newMatch((SortOperator) t.get(POSITION_SORTOPERATOR), (TopOperator) t.get(POSITION_TOPOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+        return SortAndTopOperatorMatch.newMatch((SortOperator) t.get(POSITION_SORTOPERATOR), (TopOperator) t.get(POSITION_TOPOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected SortAndTopOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return SortAndTopOperatorMatch.newMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+        return SortAndTopOperatorMatch.newMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected SortAndTopOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return SortAndTopOperatorMatch.newMutableMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+        return SortAndTopOperatorMatch.newMutableMatch((SortOperator) match[POSITION_SORTOPERATOR], (TopOperator) match[POSITION_TOPOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

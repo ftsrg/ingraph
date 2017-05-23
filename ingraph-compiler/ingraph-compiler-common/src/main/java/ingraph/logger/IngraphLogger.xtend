@@ -9,7 +9,7 @@ import java.util.logging.ConsoleHandler
 
 /**
  * This is a wrapper over java.util.logging.Logger
- * 
+ *
  * The main difference is that IngraphLogger instances are not provided by any factory.
  * Under the hood, it forwards logging messages to a java.util.logging.Logger
  * provided upon object instantiation by name or by passing the Logger instance itself.
@@ -77,7 +77,7 @@ class IngraphLogger {
 
 	/**
 	 * Indicates an unrecoverable error.
-	 * 
+	 *
 	 * TODO (to be determined later): Compilation might or might not be aborted.
 	 */
 	def unrecoverableError(String msg) {

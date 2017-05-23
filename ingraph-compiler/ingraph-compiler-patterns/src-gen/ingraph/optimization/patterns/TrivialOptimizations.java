@@ -18,7 +18,7 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
- * A pattern group formed of all patterns defined in TrivialOptimizations.vql.
+ * A pattern group formed of all public patterns defined in TrivialOptimizations.vql.
  * 
  * <p>Use the static instance as any {@link org.eclipse.viatra.query.runtime.api.IPatternGroup}, to conveniently prepare
  * a VIATRA Query engine for matching all patterns originally defined in file TrivialOptimizations.vql,
@@ -46,7 +46,7 @@ public final class TrivialOptimizations extends BaseGeneratedPatternGroup {
    */
   public static TrivialOptimizations instance() throws ViatraQueryException {
     if (INSTANCE == null) {
-    	INSTANCE = new TrivialOptimizations();
+        INSTANCE = new TrivialOptimizations();
     }
     return INSTANCE;
   }

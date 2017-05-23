@@ -35,7 +35,7 @@ pattern defaultExpandOperator(expandOperator : ExpandOperator, parentOperator : 
 	find expandOperatorWithDefaultEdgeVariable(expandOperator);
 }
 
-private pattern expandOperatorWithDefaultEdgeVariable(defaultExpandOperator : ExpandOperator) {
+pattern expandOperatorWithDefaultEdgeVariable(defaultExpandOperator : ExpandOperator) {
 	ExpandOperator.edgeVariable(defaultExpandOperator, edgeVariable);
 	EdgeVariable(edgeVariable);
 }

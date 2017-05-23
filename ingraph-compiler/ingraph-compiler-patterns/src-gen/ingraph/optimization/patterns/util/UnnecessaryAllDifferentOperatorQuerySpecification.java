@@ -51,9 +51,9 @@ public final class UnnecessaryAllDifferentOperatorQuerySpecification extends Bas
    */
   public static UnnecessaryAllDifferentOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
@@ -79,8 +79,8 @@ public final class UnnecessaryAllDifferentOperatorQuerySpecification extends Bas
   
   /**
    * Inner class allowing the singleton instance of {@link UnnecessaryAllDifferentOperatorQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link UnnecessaryAllDifferentOperatorQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link UnnecessaryAllDifferentOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -134,34 +134,35 @@ public final class UnnecessaryAllDifferentOperatorQuerySpecification extends Bas
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_inputOperator = body.getOrCreateVariableByName("inputOperator");
-      		PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
-      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		new TypeConstraint(body, new FlatTuple(var_inputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_inputOperator, parameter_pInputOperator),
-      		   new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator),
-      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
-      		));
-      		// 	find parentOperator(allDifferentOperator, parentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	AllDifferentOperator.input(allDifferentOperator, inputOperator)
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-      		new Equality(body, var__virtual_0_, var_inputOperator);
-      		// 	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator), EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_inputOperator = body.getOrCreateVariableByName("inputOperator");
+              PVariable var_allDifferentOperator = body.getOrCreateVariableByName("allDifferentOperator");
+              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+              new TypeConstraint(body, new FlatTuple(var_inputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_inputOperator, parameter_pInputOperator),
+                 new ExportedParameter(body, var_allDifferentOperator, parameter_pAllDifferentOperator),
+                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+              ));
+              // 	find parentOperator(allDifferentOperator, parentOperator)
+              new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+              // 	AllDifferentOperator.input(allDifferentOperator, inputOperator)
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "AllDifferentOperator")));
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new TypeConstraint(body, new FlatTuple(var_allDifferentOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              new Equality(body, var__virtual_0_, var_inputOperator);
+              // 	find emptyOrSingleVariableAllDifferentOperator(allDifferentOperator)
+              new PositivePatternCall(body, new FlatTuple(var_allDifferentOperator), EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

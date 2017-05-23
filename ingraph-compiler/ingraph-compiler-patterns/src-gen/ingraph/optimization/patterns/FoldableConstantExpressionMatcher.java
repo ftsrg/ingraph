@@ -61,7 +61,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
     // check if matcher already exists
     FoldableConstantExpressionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (FoldableConstantExpressionMatcher)engine.getMatcher(querySpecification());
+        matcher = (FoldableConstantExpressionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -315,30 +315,30 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   @Override
   protected FoldableConstantExpressionMatch tupleToMatch(final Tuple t) {
     try {
-    	return FoldableConstantExpressionMatch.newMatch((Expression) t.get(POSITION_E), (Literal) t.get(POSITION_V1), (Literal) t.get(POSITION_V2));
+        return FoldableConstantExpressionMatch.newMatch((Expression) t.get(POSITION_E), (Literal) t.get(POSITION_V1), (Literal) t.get(POSITION_V2));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected FoldableConstantExpressionMatch arrayToMatch(final Object[] match) {
     try {
-    	return FoldableConstantExpressionMatch.newMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
+        return FoldableConstantExpressionMatch.newMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected FoldableConstantExpressionMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return FoldableConstantExpressionMatch.newMutableMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
+        return FoldableConstantExpressionMatch.newMutableMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

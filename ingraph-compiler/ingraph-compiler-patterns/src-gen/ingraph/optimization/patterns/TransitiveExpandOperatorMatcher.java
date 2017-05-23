@@ -59,7 +59,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
     // check if matcher already exists
     TransitiveExpandOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (TransitiveExpandOperatorMatcher)engine.getMatcher(querySpecification());
+        matcher = (TransitiveExpandOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -368,30 +368,30 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   @Override
   protected TransitiveExpandOperatorMatch tupleToMatch(final Tuple t) {
     try {
-    	return TransitiveExpandOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR), (EdgeListVariable) t.get(POSITION_EDGELISTVARIABLE));
+        return TransitiveExpandOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR), (EdgeListVariable) t.get(POSITION_EDGELISTVARIABLE));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected TransitiveExpandOperatorMatch arrayToMatch(final Object[] match) {
     try {
-    	return TransitiveExpandOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR], (EdgeListVariable) match[POSITION_EDGELISTVARIABLE]);
+        return TransitiveExpandOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR], (EdgeListVariable) match[POSITION_EDGELISTVARIABLE]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected TransitiveExpandOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return TransitiveExpandOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR], (EdgeListVariable) match[POSITION_EDGELISTVARIABLE]);
+        return TransitiveExpandOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR], (EdgeListVariable) match[POSITION_EDGELISTVARIABLE]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

@@ -81,24 +81,24 @@ public abstract class AssociativeOperatorMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("op1".equals(parameterName) ) {
-    	this.fOp1 = (JoinOperator) newValue;
-    	return true;
+        this.fOp1 = (JoinOperator) newValue;
+        return true;
     }
     if ("op2".equals(parameterName) ) {
-    	this.fOp2 = (JoinOperator) newValue;
-    	return true;
+        this.fOp2 = (JoinOperator) newValue;
+        return true;
     }
     if ("a".equals(parameterName) ) {
-    	this.fA = (Operator) newValue;
-    	return true;
+        this.fA = (Operator) newValue;
+        return true;
     }
     if ("b".equals(parameterName) ) {
-    	this.fB = (Operator) newValue;
-    	return true;
+        this.fB = (Operator) newValue;
+        return true;
     }
     if ("c".equals(parameterName) ) {
-    	this.fC = (Operator) newValue;
-    	return true;
+        this.fC = (Operator) newValue;
+        return true;
     }
     return false;
   }
@@ -179,18 +179,18 @@ public abstract class AssociativeOperatorMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-    	return true;
+        return true;
     if (!(obj instanceof AssociativeOperatorMatch)) { // this should be infrequent
-    	if (obj == null) {
-    		return false;
-    	}
-    	if (!(obj instanceof IPatternMatch)) {
-    		return false;
-    	}
-    	IPatternMatch otherSig  = (IPatternMatch) obj;
-    	if (!specification().equals(otherSig.specification()))
-    		return false;
-    	return Arrays.deepEquals(toArray(), otherSig.toArray());
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof IPatternMatch)) {
+            return false;
+        }
+        IPatternMatch otherSig  = (IPatternMatch) obj;
+        if (!specification().equals(otherSig.specification()))
+            return false;
+        return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     AssociativeOperatorMatch other = (AssociativeOperatorMatch) obj;
     if (fOp1 == null) {if (other.fOp1 != null) return false;}
@@ -209,10 +209,10 @@ public abstract class AssociativeOperatorMatch extends BasePatternMatch {
   @Override
   public AssociativeOperatorQuerySpecification specification() {
     try {
-    	return AssociativeOperatorQuerySpecification.instance();
+        return AssociativeOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-     	// This cannot happen, as the match object can only be instantiated if the query specification exists
-     	throw new IllegalStateException (ex);
+         // This cannot happen, as the match object can only be instantiated if the query specification exists
+         throw new IllegalStateException (ex);
     }
   }
   
