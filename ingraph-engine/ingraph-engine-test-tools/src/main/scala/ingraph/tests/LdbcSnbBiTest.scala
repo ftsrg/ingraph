@@ -8,9 +8,9 @@ import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 
 abstract class LdbcSnbBiTest extends FunSuite {
 
-  def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
+  def modelPath(entityName: String) = s"../../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(query: Int): String = s"../queries/ldbc-snb-bi/query-$query.cypher"
+  def queryPath(query: Int): String = s"../../queries/ldbc-snb-bi/query-$query.cypher"
 
   def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
 
