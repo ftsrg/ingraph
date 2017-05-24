@@ -26,7 +26,10 @@ Required dependencies:
 
 Recommended dependencies:
 
-1. Go to **Help** | **Eclipse Marketplace...** and install the **EditorConfig** plug-in.
+1. Go to **Help** | **Eclipse Marketplace...** and install the following plugins:
+  * **EditorConfig**
+  * **Minimalist Gradle Editor**
+  * **Buildship Gradle Integration 2.0**
 1. Install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
 
 :notebook_with_decorative_cover: The _Oxygen_ release of the _DSL Developers_ flavor has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins:
