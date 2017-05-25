@@ -67,9 +67,9 @@ ext {
   log4jVersion = '1.2.17'
   neo4jDriverVersion = '1.2.1'
   pegdownVersion = '1.6.0'
-  scalaShortVersion = '2.11'
+  scalaShortVersion = '2.12'
   scalaTestVersion = '3.0.1'
-  scalaVersion = '2.11.8'
+  scalaVersion = '2.12.2'
   slizaaVersion = '1.0.0-SNAPSHOT'
   viatraMinorVersion = '.0.M3'
   viatraDseVersion = '0.16' + viatraMinorVersion
