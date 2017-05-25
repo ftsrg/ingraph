@@ -26,18 +26,17 @@ Required dependencies:
 
 Recommended dependencies:
 
-1. Go to **Help** | **Eclipse Marketplace...** and install the following plugins:
+* Go to **Help** | **Eclipse Marketplace...** and install the following plugins:
   * **EditorConfig**
   * **Minimalist Gradle Editor**
-  * **Buildship Gradle Integration 2.0**
-1. Install the Eclipse Groovy tooling from <https://github.com/groovy/groovy-eclipse/wiki> to provide an editor for the `.gradle` configuration files.
+* If you are brave, install the **Scala IDE** and **ScalaTest** from the [Scala IDE update site](http://download.scala-ide.org/sdk/lithium/e46/scala212/stable/site). It was developed for Neon, but works with Oxygen, except for the Scala worksheet.
 
-:notebook_with_decorative_cover: The _Oxygen_ release of the _DSL Developers_ flavor has the required dependencies for Xtend, Xtext and Xcore. If you start from another Eclipse flavor, you should install the missing plug-ins:
+:notebook_with_decorative_cover: If you start from another Eclipse flavor (e.g. the Scala IDE), you should install the following plug-ins. However, this is quite tricky and is _not recommended_.
 
-* Install the following from the update site of your Eclipse release (e.g. the Oxygen update site):
   * **Xtend IDE**
   * **Xtext Complete SDK**
-  * **EMF - Eclipse Modeling Framework Xcore SDK**
+  * **EMF - Eclipse Modeling Framework Xcore SDK** (1.5.0+)
+  * **Buildship Gradle Integration 2.0**
 
 #### Importing the projects
 
