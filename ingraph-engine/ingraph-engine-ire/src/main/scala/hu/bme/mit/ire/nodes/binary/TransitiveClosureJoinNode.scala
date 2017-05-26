@@ -36,9 +36,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   
   override def onPrimary(changeSet: ChangeSet): Unit = {
     val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
-    changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
-    
     val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
+
+    changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
     changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
     
     forward(ChangeSet(
@@ -58,6 +58,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(0).asInstanceOf[Number].longValue
     val targetId = inputTuple(2).asInstanceOf[Number].longValue
     val edgeId = inputTuple(1).asInstanceOf[Number].longValue
+    val extraVariables = inputTuple.drop(3)
 
     var newPathsBuilder = new VectorBuilder[Tuple]
 
@@ -77,7 +78,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
         pathBuilder ++= pathToSourceVertex._2.path
         pathBuilder += edgeId
         pathBuilder ++= pathFromTargetVertex._2.path
-    	  val path = pathBuilder.result
+        val path = pathBuilder.result
         
         if (!reachableVertices(pathToSourceVertex._1).contains(pathFromTargetVertex._1)) {
           reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) = new mutable.MutableList
@@ -85,7 +86,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
         reachableFrom(pathFromTargetVertex._1) += pathToSourceVertex._1
         reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) += PathData(path, mutable.HashSet(path: _*))
         if (sourceVerticesIndexer.contains(pathToSourceVertex._1) && isInRange(path)) {
-        	newPathsBuilder += tuple(pathToSourceVertex._1, path, pathFromTargetVertex._1)
+          newPathsBuilder += tuple(pathToSourceVertex._1, path, pathFromTargetVertex._1) ++ tuple(extraVariables : _*)
         }
       }
     }
