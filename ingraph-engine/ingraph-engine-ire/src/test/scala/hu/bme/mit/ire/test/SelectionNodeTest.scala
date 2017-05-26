@@ -10,7 +10,7 @@ import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.actorRef2Scala
 
-class SelectionTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+class SelectionNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   def this() = this(ActorSystem("MySpec"))
