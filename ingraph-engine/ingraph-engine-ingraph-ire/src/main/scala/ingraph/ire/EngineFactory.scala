@@ -187,6 +187,8 @@ object EngineFactory {
                   rightMask
                 )))
               case op: TransitiveClosureJoinOperator =>
+                val leftMask = emfToInt(op.getLeftMask)
+                val rightMask = emfToInt(op.getRightMask)
                 val minHops = op.getEdgeListVariable.getMinHops
                 val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
                   case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
@@ -194,6 +196,10 @@ object EngineFactory {
                 }
                 newLocal(Props(new TransitiveClosureJoinNode(
                   expr.child,
+                  op.getLeftInput.getInternalSchema.length,
+                  op.getRightInput.getInternalSchema.length,
+                  leftMask,
+                  rightMask,
                   minHops,
                   maxHops
                 )))

@@ -27,11 +27,18 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
   override def afterAll {
     TestKit.shutdownActorSystem(system)
   }
+
+  val primaryTupleWidth = 3
+  val secondaryTupleWidth = 3
+  val primaryMask = mask(2)
+  val secondaryMask = mask(0)
+
   
   "A TransitiveClosureNode" must {
     "calculate transitive closure" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
@@ -72,7 +79,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "honor max path length bound" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, maxHops = 2)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, maxHops = 2)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -96,7 +103,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "honor min path length bound" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, minHops = 2)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, minHops = 2)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -120,7 +127,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "honor min and max path length bound" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, minHops = 2, maxHops = 2)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, minHops = 2, maxHops = 2)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -151,7 +158,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "discard paths with same edge twice" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
@@ -176,7 +183,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "handle complex test case 1" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, minHops = 2, maxHops = 3)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, minHops = 2, maxHops = 3)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
@@ -222,7 +229,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "include paths going through same vertex more times" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
@@ -252,7 +259,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "handle complex test case 2" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -289,7 +296,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "not do anything in case of non-present vertices or edges" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -312,7 +319,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "include directed cycles" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2), tuple(3))
@@ -339,7 +346,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "handle multiple paths and edges between vertices" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))
@@ -361,7 +368,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
 
     "calculate negative updates" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1), tuple(2))

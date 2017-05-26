@@ -23,7 +23,7 @@ class BinaryOperatorConverter {
 
 	def dispatch convertBinaryOperator(AbstractJoinOperator op) {
 		'''«op.joinOperator»''' +
-		'''«IF config.includeCommonVariables»\{«op.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
+		'''«IF config.includeCommonVariables» \{«op.commonVariables.map['''\var{«escapedName»}'''].join(", ")»\}«ENDIF»'''
 	}
 
 	def dispatch convertBinaryOperator(UnionOperator op) {

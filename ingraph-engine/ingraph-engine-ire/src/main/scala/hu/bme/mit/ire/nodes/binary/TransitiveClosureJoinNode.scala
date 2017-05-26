@@ -5,6 +5,7 @@ import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable
 
 import hu.bme.mit.ire.SingleForwarder
+import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Path
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
@@ -14,12 +15,16 @@ import hu.bme.mit.ire.util.TestUtil.tuple
 import scala.collection.mutable.HashSet
 
 
-class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,    
-                            var minHops: Long = 1, 
-                            var maxHops: Long = Long.MaxValue
-                           ) extends BinaryNode with SingleForwarder {
+class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
+                                override val primaryTupleWidth: Int,
+                                override val secondaryTupleWidth: Int,
+                                override val primaryMask: Mask,
+                                override val secondaryMask: Mask,
+                                var minHops: Long = 1,
+                                var maxHops: Long = Long.MaxValue
+                                ) extends JoinNodeBase with SingleForwarder {
   
-  minHops = if (minHops >= 1) minHops else 1
+  minHops = if (minHops >= 1) minHops else 1 // 0..x is perfectly valid in Cypher, so minHops can be set to 0
   maxHops = if (maxHops >= 1) maxHops else Long.MaxValue
   
   val sourceVerticesIndexer = new HashSet[Long]
