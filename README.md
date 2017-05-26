@@ -43,7 +43,7 @@ Recommended dependencies:
 1. Build the projects from command line with the following command:
 
     ```bash
-    ./gradlew clean build eclipse -x test
+    ./gradlew clean assemble eclipse
     ```
 
     This will generate 1. source files from the Xcore model and 2. the Eclipse project files.
@@ -68,15 +68,19 @@ Optionally, you might also import the `ingraph-engine` directory.
 
 * Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 
-*Note.* Currently, there are is no VIATRA plug-in for IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
+*Note.* Currently, there is no VIATRA plug-in for IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
 
 #### Importing the projects
 
 * Import the projects using **New** | **Project from Existing Sources...**.
   * Tick **Auto import**
   * Untick **Create separate module per source set**.
-* In the Gradle view, click **Execute Gradle Task** and set the **Command line** textbox to `build -x test`. This will generate source files from the Xcore model.
+* In the Gradle view, click **Execute Gradle Task** and set the **Command line** textbox to `assemble`. This will generate source files from the Xcore model.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
+
+#### Running the tests
+
+Run the tests in `LdbcSnbBiDriverTest`. They will fail, so click the `LdbcSnbBiDriverTest` caption next to the "green play button", choose **Edit configuration...** and set the **Working directory** to `[...]/ingraph/ingraph-engine/ingraph-engine-driver`.
 
 ## Debug mode
 
