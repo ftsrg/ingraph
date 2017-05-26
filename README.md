@@ -10,7 +10,7 @@ For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.b
 
 ingraph is defined as a single Gradle project, so it can be built in a single step. However, the subprojects are split to two categories:
 
-1. `ingraph-compiler`, which compiles openCypher queries to relational algebra expressions (search plans / Rete networks). The compiler components are built using EMF-based technologies (Xcore, Xtend, Xtext and VIATRA), so we recommended the Eclipse IDE for developing them.
+1. `ingraph-compiler`, which compiles openCypher queries to relational algebra expressions (search plans / Rete networks). The compiler components are built using EMF-based technologies (Xcore, Xtend, Xtext and VIATRA), so we recommend the Eclipse IDE for developing them.
 
 2. `ingraph-engine`, which evaluates relational algebra expressions. The engine is built using Scala-based technologies (Akka, ScalaTest and Scala Cukes), so we recommend contributors to use IntelliJ IDEA for developing these components.
 
