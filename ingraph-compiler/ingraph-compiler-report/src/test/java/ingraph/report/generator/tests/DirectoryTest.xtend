@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils
 abstract class DirectoryTest extends IngraphReportTest {
 
 	new() {
+		super()
 	}
 
 	new(RelalgConverterConfig treeSerializerConfig) {
