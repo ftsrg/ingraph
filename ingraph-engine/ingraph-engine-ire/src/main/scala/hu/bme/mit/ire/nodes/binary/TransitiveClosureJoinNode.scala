@@ -20,33 +20,33 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
                                 override val secondaryTupleWidth: Int,
                                 override val primaryMask: Mask,
                                 override val secondaryMask: Mask,
-                                var minHops: Long = 1,
+                                var minHops: Long = 0,
                                 var maxHops: Long = Long.MaxValue
                                 ) extends JoinNodeBase with SingleForwarder {
-  
-  minHops = if (minHops >= 1) minHops else 1 // 0..x is perfectly valid in Cypher, so minHops can be set to 0
+
+  minHops = if (minHops >= 0) minHops else 0
   maxHops = if (maxHops >= 1) maxHops else Long.MaxValue
-  
+
   val sourceVerticesIndexer = new HashSet[Long]
 
   val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[PathData]]]
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
 
   override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
-  
+
   override def onPrimary(changeSet: ChangeSet): Unit = {
     val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
     val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
 
     changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
     changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
-    
+
     forward(ChangeSet(
       positive = positiveTuples,
       negative = negativeTuples
     ))
   }
-  
+
   override def onSecondary(changeSet: ChangeSet): Unit = {
     forward(ChangeSet(
       positive = changeSet.positive.flatMap(newPathsWithEdge),
@@ -79,7 +79,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
         pathBuilder += edgeId
         pathBuilder ++= pathFromTargetVertex._2.path
         val path = pathBuilder.result
-        
+
         if (!reachableVertices(pathToSourceVertex._1).contains(pathFromTargetVertex._1)) {
           reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) = new mutable.MutableList
         }
@@ -129,7 +129,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val targetVertices = reachableVertices.getOrElse(targetId, Map.empty).keySet ++ Set(targetId)
     for (source <- sourceVertices; target <- targetVertices) {
       val containingPaths = reachableVertices(source).getOrElse(target, mutable.MutableList.empty).filter(_.pathHash.contains(edgeId))
-      if (sourceVerticesIndexer.contains(source)) 
+      if (sourceVerticesIndexer.contains(source))
         removedPathsBuilder ++= containingPaths.filter(pathData => isInRange(pathData.path)).map(pathData => tuple(source, pathData.path, target))
 
       if (containingPaths.size > 0) {
@@ -150,28 +150,34 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
     removedPathsBuilder.result
   }
-  
+
   private def pathsFromSourceVertex(inputTuple: Tuple): Vector[Tuple] = {
     val sourceId = inputTuple(0).asInstanceOf[Number].longValue
-    
-    var reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
-    reachableFromSource.keysIterator.flatMap(targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId))).toVector
+    var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
+
+    if(minHops == 0)
+      pathsFromSourceVertexBuilder += tuple(sourceId, Path(), sourceId)
+
+    val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
+    pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId)))
+
+    pathsFromSourceVertexBuilder.result
   }
-  
+
   private def pathTuplesToTrackedTarget(sourceId: Long, targetId: Long, paths: mutable.MutableList[PathData]): Iterable[Tuple] = {
     paths.filter(pathData => isInRange(pathData.path)).map(path => tuple(sourceId, path.path, targetId))
   }
-  
+
   private def isInRange(path: Path): Boolean = {
     path.size >= minHops && path.size <= maxHops
   }
-  
+
   case class PathData(val path: Path, val pathHash: mutable.HashSet[Long]) {
     override def equals(other: Any) = other match {
       case that: PathData => that.path.equals(this.path)
       case _ => false
     }
-    
+
     override def hashCode = path.hashCode
   }
 }
