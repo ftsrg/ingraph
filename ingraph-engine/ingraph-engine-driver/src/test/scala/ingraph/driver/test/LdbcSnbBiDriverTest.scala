@@ -38,8 +38,11 @@ class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
         classOf[UnmodifiableCollectionsSerializer])
 
     import scala.collection.JavaConverters._
+
     queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames()))
     queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
+
+    actualResults.asScala.toVector.map(println(_))
 
     val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(queryNumber))))
       .asInstanceOf[java.util.ArrayList[Record]]

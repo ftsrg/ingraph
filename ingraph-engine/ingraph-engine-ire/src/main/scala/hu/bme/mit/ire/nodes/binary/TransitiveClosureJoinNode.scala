@@ -21,11 +21,10 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
                                 override val secondaryTupleWidth: Int,
                                 override val primaryMask: Mask,
                                 override val secondaryMask: Mask,
-                                var minHops: Long = 0,
+                                val minHops: Long = 0,
                                 var maxHops: Long = Long.MaxValue
                                 ) extends JoinNodeBase with SingleForwarder {
 
-  minHops = if (minHops >= 0) minHops else 0
   maxHops = if (maxHops >= 1) maxHops else Long.MaxValue
 
   val sourceLookup = new mutable.HashMap[Any, Tuple]
@@ -35,9 +34,16 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetVertexIndex = 2 - sourceVertexIndex
   
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Tuple = {
+    // TODO: there might be extra attributes for the path
+    val myTuple = if (sourceVertexIndex == 0) {
+        tuple(path) ++ tuple(targetId) 
+      } else {
+        tuple(targetId) ++ tuple(path)
+      }
+
     tuple(sourceId) ++ sourceLookup.getOrElse(sourceId, tuple()) ++
-    tuple(path) ++ // TODO: there might be extra attributes for the path
-    tuple(targetId) ++ targetLookup.getOrElse(targetId, tuple())
+    myTuple ++
+    targetLookup.getOrElse(targetId, tuple())
   }
 
   val sourceVerticesIndexer = new HashSet[Long]
