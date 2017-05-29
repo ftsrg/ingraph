@@ -34,7 +34,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetVertexIndex = 2 - sourceVertexIndex
   
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Tuple = {
-    // TODO: there might be extra attributes for the path
+    // TODO: there might be extra attributes for the path as well
     val myTuple = if (sourceVertexIndex == 0) {
         tuple(path) ++ tuple(targetId) 
       } else {
@@ -42,8 +42,8 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
       }
 
     tuple(sourceId) ++ sourceLookup.getOrElse(sourceId, tuple()) ++
-    myTuple ++
-    targetLookup.getOrElse(targetId, tuple())
+      myTuple ++
+      targetLookup.getOrElse(targetId, tuple())
   }
 
   val sourceVerticesIndexer = new HashSet[Long]

@@ -75,11 +75,13 @@ abstract class LdbcSnbBiTest extends FunSuite {
         TestCase(20), // PATH
         TestCase(24),
 
+        // our own tests
         TestCase(26), // PATH
         TestCase(27), // PATH
         TestCase(28), // PATH
         TestCase(29), // PATH
 //        TestCase(30), // PATH
+//        TestCase(31), // PATH
 
 //        TestCase(8), // PATH
 //        TestCase(16), // PATH

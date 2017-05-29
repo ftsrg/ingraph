@@ -23,5 +23,21 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 		RETURN tag.name
 		''')
 	}
+	
+	@Test
+	def void q3() {
+		process('query-3', '''
+		MATCH (country:Country)<-[:isPartOf]-(city:City)<-[:isLocatedIn]-(person:Person)-[:knows*1..2]-(:Person)
+		RETURN person.id
+		''')
+	}
+	
+	@Test
+	def void q4() {
+		process('query-4', '''
+		MATCH (p1:Person)-[:knows*1..2]->(p2:Person)
+		RETURN p1.id, p2.id
+	''')
+	}
 
 }
