@@ -7,8 +7,6 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 abstract class ProjectionImpl(val mask: Vector[Tuple => Any]) extends UnaryNode {
   override def onSizeRequest() = 0
   override def onChangeSet(changeSet: ChangeSet) = {
-    println("xxx")
-    changeSet.positive.map(println(_))
     forward(ChangeSet(
       changeSet.positive.map(t => mask.map(f => f(t))),
       changeSet.negative.map(t => mask.map(f => f(t)))
