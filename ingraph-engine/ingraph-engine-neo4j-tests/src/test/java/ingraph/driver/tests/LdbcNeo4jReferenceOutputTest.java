@@ -50,11 +50,12 @@ public class LdbcNeo4jReferenceOutputTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				// BI
-				{ "bi", 2 }, { "bi", 1 }, { "bi", 3 }, { "bi", 4 }, { "bi", 5 }, //
-				{ "bi", 6 }, { "bi", 7 }, { "bi", 8 }, { "bi", 9 }, { "bi", 10 }, //
+				             { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
+				{ "bi", 6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
 				             { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
-				{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
-				{ "bi", 21 },                             { "bi", 24 }, //
+				{ "bi", 16 },                            { "bi", 19 }, { "bi", 20 }, //
+				                                         { "bi", 24 }, //
+				{ "bi", 26 }, { "bi", 27 }, { "bi", 28 }, //
 				// interactive
 				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
 				{ "interactive", 6 }, { "interactive", 7 }, { "interactive", 8 }, { "interactive", 9 }, { "interactive", 10 },
@@ -67,7 +68,7 @@ public class LdbcNeo4jReferenceOutputTest {
 	@Parameter(1)
 	public int queryNumber;
 
-	final String graphMlPath = "../graphs/snb_50.graphml";
+	final String graphMlPath = "../../graphs/snb_50.graphml";
 	final EmbeddedTestkitDriver driver = new EmbeddedTestkitDriver();
 
 	@Before
@@ -86,9 +87,9 @@ public class LdbcNeo4jReferenceOutputTest {
 	public void test() throws IOException {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
-			final String queryPathname = String.format("../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
-			final String queryResultBin = String.format("../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
-			final String queryResultJson = String.format("../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
+			final String queryPathname = String.format("../../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
+			final String queryResultBin = String.format("../../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
+			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);

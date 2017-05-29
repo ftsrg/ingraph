@@ -18,7 +18,7 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
- * A pattern group formed of all public patterns defined in RelalgSimplifier.vql.
+ * A pattern group formed of all patterns defined in RelalgSimplifier.vql.
  * 
  * <p>Use the static instance as any {@link org.eclipse.viatra.query.runtime.api.IPatternGroup}, to conveniently prepare
  * a VIATRA Query engine for matching all patterns originally defined in file RelalgSimplifier.vql,
@@ -46,7 +46,7 @@ public final class RelalgSimplifier extends BaseGeneratedPatternGroup {
    */
   public static RelalgSimplifier instance() throws ViatraQueryException {
     if (INSTANCE == null) {
-        INSTANCE = new RelalgSimplifier();
+    	INSTANCE = new RelalgSimplifier();
     }
     return INSTANCE;
   }

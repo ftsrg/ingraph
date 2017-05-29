@@ -49,9 +49,9 @@ public final class FoldableConstantExpressionQuerySpecification extends BaseGene
    */
   public static FoldableConstantExpressionQuerySpecification instance() throws ViatraQueryException {
     try{
-        return LazyHolder.INSTANCE;
+    	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-        throw processInitializerError(err);
+    	throw processInitializerError(err);
     }
   }
   
@@ -77,8 +77,8 @@ public final class FoldableConstantExpressionQuerySpecification extends BaseGene
   
   /**
    * Inner class allowing the singleton instance of {@link FoldableConstantExpressionQuerySpecification} to be created 
-   *     <b>not</b> at the class load time of the outer class, 
-   *     but rather at the first call to {@link FoldableConstantExpressionQuerySpecification#instance()}.
+   * 	<b>not</b> at the class load time of the outer class, 
+   * 	but rather at the first call to {@link FoldableConstantExpressionQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -132,88 +132,82 @@ public final class FoldableConstantExpressionQuerySpecification extends BaseGene
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-          {
-              PBody body = new PBody(this);
-              PVariable var_e = body.getOrCreateVariableByName("e");
-              PVariable var_v1 = body.getOrCreateVariableByName("v1");
-              PVariable var_v2 = body.getOrCreateVariableByName("v2");
-              new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_e, parameter_pE),
-                 new ExportedParameter(body, var_v1, parameter_pV1),
-                 new ExportedParameter(body, var_v2, parameter_pV2)
-              ));
-              // 	BinaryArithmeticOperationExpression.leftOperand(e, v1)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "leftOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticExpression")));
-              new Equality(body, var__virtual_0_, var_v1);
-              // 	BinaryArithmeticOperationExpression.rightOperand(e, v2)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
-              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "rightOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_1_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticExpression")));
-              new Equality(body, var__virtual_1_, var_v2);
-              bodies.add(body);
-          }
-          {
-              PBody body = new PBody(this);
-              PVariable var_e = body.getOrCreateVariableByName("e");
-              PVariable var_v1 = body.getOrCreateVariableByName("v1");
-              PVariable var_v2 = body.getOrCreateVariableByName("v2");
-              new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_e, parameter_pE),
-                 new ExportedParameter(body, var_v1, parameter_pV1),
-                 new ExportedParameter(body, var_v2, parameter_pV2)
-              ));
-              // 	ArithmeticComparisonExpression.leftOperand(e, v1)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression", "leftOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ComparableExpression")));
-              new Equality(body, var__virtual_0_, var_v1);
-              // 	ArithmeticComparisonExpression.rightOperand(e, v2)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression")));
-              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression", "rightOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_1_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ComparableExpression")));
-              new Equality(body, var__virtual_1_, var_v2);
-              bodies.add(body);
-          }
-          {
-              PBody body = new PBody(this);
-              PVariable var_e = body.getOrCreateVariableByName("e");
-              PVariable var_v1 = body.getOrCreateVariableByName("v1");
-              PVariable var_v2 = body.getOrCreateVariableByName("v2");
-              new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_e, parameter_pE),
-                 new ExportedParameter(body, var_v1, parameter_pV1),
-                 new ExportedParameter(body, var_v2, parameter_pV2)
-              ));
-              // 	BinaryLogicalExpression.leftOperand(e, v1)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "leftOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
-              new Equality(body, var__virtual_0_, var_v1);
-              // 	BinaryLogicalExpression.rightOperand(e, v2)
-              new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-              new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "rightOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_1_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
-              new Equality(body, var__virtual_1_, var_v2);
-              bodies.add(body);
-          }
-          // to silence compiler error
-          if (false) throw new ViatraQueryException("Never", "happens");
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_e = body.getOrCreateVariableByName("e");
+      		PVariable var_v1 = body.getOrCreateVariableByName("v1");
+      		PVariable var_v2 = body.getOrCreateVariableByName("v2");
+      		new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_e, parameter_pE),
+      		   new ExportedParameter(body, var_v1, parameter_pV1),
+      		   new ExportedParameter(body, var_v2, parameter_pV2)
+      		));
+      		// 	BinaryArithmeticOperationExpression.leftOperand(e, v1)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "leftOperand")));
+      		new Equality(body, var__virtual_0_, var_v1);
+      		// 	BinaryArithmeticOperationExpression.rightOperand(e, v2)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression")));
+      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryArithmeticOperationExpression", "rightOperand")));
+      		new Equality(body, var__virtual_1_, var_v2);
+      		bodies.add(body);
+      	}
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_e = body.getOrCreateVariableByName("e");
+      		PVariable var_v1 = body.getOrCreateVariableByName("v1");
+      		PVariable var_v2 = body.getOrCreateVariableByName("v2");
+      		new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_e, parameter_pE),
+      		   new ExportedParameter(body, var_v1, parameter_pV1),
+      		   new ExportedParameter(body, var_v2, parameter_pV2)
+      		));
+      		// 	ArithmeticComparisonExpression.leftOperand(e, v1)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression", "leftOperand")));
+      		new Equality(body, var__virtual_0_, var_v1);
+      		// 	ArithmeticComparisonExpression.rightOperand(e, v2)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression")));
+      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "ArithmeticComparisonExpression", "rightOperand")));
+      		new Equality(body, var__virtual_1_, var_v2);
+      		bodies.add(body);
+      	}
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_e = body.getOrCreateVariableByName("e");
+      		PVariable var_v1 = body.getOrCreateVariableByName("v1");
+      		PVariable var_v2 = body.getOrCreateVariableByName("v2");
+      		new TypeConstraint(body, new FlatTuple(var_v1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		new TypeConstraint(body, new FlatTuple(var_v2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Literal")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_e, parameter_pE),
+      		   new ExportedParameter(body, var_v1, parameter_pV1),
+      		   new ExportedParameter(body, var_v2, parameter_pV2)
+      		));
+      		// 	BinaryLogicalExpression.leftOperand(e, v1)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "leftOperand")));
+      		new Equality(body, var__virtual_0_, var_v1);
+      		// 	BinaryLogicalExpression.rightOperand(e, v2)
+      		new TypeConstraint(body, new FlatTuple(var_e), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+      		new TypeConstraint(body, new FlatTuple(var_e, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "rightOperand")));
+      		new Equality(body, var__virtual_1_, var_v2);
+      		bodies.add(body);
+      	}
+      	// to silence compiler error
+      	if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-          throw processDependencyException(ex);
+      	throw processDependencyException(ex);
       }
       return bodies;
     }

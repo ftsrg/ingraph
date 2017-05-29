@@ -65,16 +65,16 @@ public abstract class UnnecessaryAllDifferentOperatorMatch extends BasePatternMa
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("inputOperator".equals(parameterName) ) {
-        this.fInputOperator = (Operator) newValue;
-        return true;
+    	this.fInputOperator = (Operator) newValue;
+    	return true;
     }
     if ("allDifferentOperator".equals(parameterName) ) {
-        this.fAllDifferentOperator = (AllDifferentOperator) newValue;
-        return true;
+    	this.fAllDifferentOperator = (AllDifferentOperator) newValue;
+    	return true;
     }
     if ("parentOperator".equals(parameterName) ) {
-        this.fParentOperator = (Operator) newValue;
-        return true;
+    	this.fParentOperator = (Operator) newValue;
+    	return true;
     }
     return false;
   }
@@ -139,18 +139,18 @@ public abstract class UnnecessaryAllDifferentOperatorMatch extends BasePatternMa
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof UnnecessaryAllDifferentOperatorMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     UnnecessaryAllDifferentOperatorMatch other = (UnnecessaryAllDifferentOperatorMatch) obj;
     if (fInputOperator == null) {if (other.fInputOperator != null) return false;}
@@ -165,10 +165,10 @@ public abstract class UnnecessaryAllDifferentOperatorMatch extends BasePatternMa
   @Override
   public UnnecessaryAllDifferentOperatorQuerySpecification specification() {
     try {
-        return UnnecessaryAllDifferentOperatorQuerySpecification.instance();
+    	return UnnecessaryAllDifferentOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

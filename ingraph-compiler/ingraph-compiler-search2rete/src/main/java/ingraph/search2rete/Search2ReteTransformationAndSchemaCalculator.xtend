@@ -1,9 +1,9 @@
-package ingraph.relalg2rete
+package ingraph.search2rete
 
 import ingraph.relalg.calculators.OneStepSchemaCalculator
 import relalg.RelalgContainer
 
-class Relalg2ReteTransformationAndSchemaCalculator {
+class Search2ReteTransformationAndSchemaCalculator {
 
 	val oneStepSchemaCalculator = new OneStepSchemaCalculator
 
@@ -11,8 +11,8 @@ class Relalg2ReteTransformationAndSchemaCalculator {
 		val simplifyingTransformation = new SimplifyingTransformation(searchPlan)
 		val simplifiedPlan = simplifyingTransformation.simplify
 
-		val relalg2rete = new Relalg2ReteTransformation(simplifiedPlan)
-		val retePlan = relalg2rete.transformToRete
+		val search2rete = new Search2ReteTransformation(simplifiedPlan)
+		val retePlan = search2rete.transformToRete
 
 		val retePlanWithSchema = oneStepSchemaCalculator.calculateSchema(retePlan)
 

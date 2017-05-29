@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
  */
 package ingraph.optimization.patterns.util;
 
@@ -50,9 +50,9 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
    */
   public static SortAndTopOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
-        return LazyHolder.INSTANCE;
+    	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-        throw processInitializerError(err);
+    	throw processInitializerError(err);
     }
   }
   
@@ -78,8 +78,8 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
   
   /**
    * Inner class allowing the singleton instance of {@link SortAndTopOperatorQuerySpecification} to be created 
-   *     <b>not</b> at the class load time of the outer class, 
-   *     but rather at the first call to {@link SortAndTopOperatorQuerySpecification#instance()}.
+   * 	<b>not</b> at the class load time of the outer class, 
+   * 	but rather at the first call to {@link SortAndTopOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -133,33 +133,32 @@ public final class SortAndTopOperatorQuerySpecification extends BaseGeneratedEMF
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-          {
-              PBody body = new PBody(this);
-              PVariable var_sortOperator = body.getOrCreateVariableByName("sortOperator");
-              PVariable var_topOperator = body.getOrCreateVariableByName("topOperator");
-              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-              new TypeConstraint(body, new FlatTuple(var_sortOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SortOperator")));
-              new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
-              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_sortOperator, parameter_pSortOperator),
-                 new ExportedParameter(body, var_topOperator, parameter_pTopOperator),
-                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
-              ));
-              //   find parentOperator(topOperator, parentOperator)
-              new PositivePatternCall(body, new FlatTuple(var_topOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-              //   TopOperator.input(topOperator, sortOperator)
-              new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_topOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              new Equality(body, var__virtual_0_, var_sortOperator);
-              bodies.add(body);
-          }
-          // to silence compiler error
-          if (false) throw new ViatraQueryException("Never", "happens");
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_sortOperator = body.getOrCreateVariableByName("sortOperator");
+      		PVariable var_topOperator = body.getOrCreateVariableByName("topOperator");
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+      		new TypeConstraint(body, new FlatTuple(var_sortOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SortOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_sortOperator, parameter_pSortOperator),
+      		   new ExportedParameter(body, var_topOperator, parameter_pTopOperator),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+      		));
+      		//   find parentOperator(topOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_topOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		//   TopOperator.input(topOperator, sortOperator)
+      		new TypeConstraint(body, new FlatTuple(var_topOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "TopOperator")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_topOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
+      		new Equality(body, var__virtual_0_, var_sortOperator);
+      		bodies.add(body);
+      	}
+      	// to silence compiler error
+      	if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-          throw processDependencyException(ex);
+      	throw processDependencyException(ex);
       }
       return bodies;
     }

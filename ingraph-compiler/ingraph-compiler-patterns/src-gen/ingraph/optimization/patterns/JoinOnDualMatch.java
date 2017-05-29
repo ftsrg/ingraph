@@ -57,12 +57,12 @@ public abstract class JoinOnDualMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("otherInputOperator".equals(parameterName) ) {
-        this.fOtherInputOperator = (Operator) newValue;
-        return true;
+    	this.fOtherInputOperator = (Operator) newValue;
+    	return true;
     }
     if ("equiJoinLikeOperator".equals(parameterName) ) {
-        this.fEquiJoinLikeOperator = (EquiJoinLikeOperator) newValue;
-        return true;
+    	this.fEquiJoinLikeOperator = (EquiJoinLikeOperator) newValue;
+    	return true;
     }
     return false;
   }
@@ -119,18 +119,18 @@ public abstract class JoinOnDualMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof JoinOnDualMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     JoinOnDualMatch other = (JoinOnDualMatch) obj;
     if (fOtherInputOperator == null) {if (other.fOtherInputOperator != null) return false;}
@@ -143,10 +143,10 @@ public abstract class JoinOnDualMatch extends BasePatternMatch {
   @Override
   public JoinOnDualQuerySpecification specification() {
     try {
-        return JoinOnDualQuerySpecification.instance();
+    	return JoinOnDualQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

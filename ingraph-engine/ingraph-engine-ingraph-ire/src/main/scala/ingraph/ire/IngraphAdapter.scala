@@ -6,7 +6,7 @@ import hu.bme.mit.ire.TransactionFactory
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.expressions.ExpressionUnwrapper
-import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
+import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
 import relalg.AttributeVariable
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
@@ -14,7 +14,7 @@ import hu.bme.mit.ire.listeners.ChangeListener
 import scala.collection.JavaConverters._
 
 class IngraphAdapter(querySpecification: String, queryName: String, indexer: Indexer = new Indexer()) {
-  private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
+  private val reteCalc = new Search2ReteTransformationAndSchemaCalculator
 
   val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)

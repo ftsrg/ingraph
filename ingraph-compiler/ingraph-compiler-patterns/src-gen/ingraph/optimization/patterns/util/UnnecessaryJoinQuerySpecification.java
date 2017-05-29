@@ -49,9 +49,9 @@ public final class UnnecessaryJoinQuerySpecification extends BaseGeneratedEMFQue
    */
   public static UnnecessaryJoinQuerySpecification instance() throws ViatraQueryException {
     try{
-        return LazyHolder.INSTANCE;
+    	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-        throw processInitializerError(err);
+    	throw processInitializerError(err);
     }
   }
   
@@ -77,8 +77,8 @@ public final class UnnecessaryJoinQuerySpecification extends BaseGeneratedEMFQue
   
   /**
    * Inner class allowing the singleton instance of {@link UnnecessaryJoinQuerySpecification} to be created 
-   *     <b>not</b> at the class load time of the outer class, 
-   *     but rather at the first call to {@link UnnecessaryJoinQuerySpecification#instance()}.
+   * 	<b>not</b> at the class load time of the outer class, 
+   * 	but rather at the first call to {@link UnnecessaryJoinQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -132,29 +132,29 @@ public final class UnnecessaryJoinQuerySpecification extends BaseGeneratedEMFQue
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-          {
-              PBody body = new PBody(this);
-              PVariable var_otherInputOperator = body.getOrCreateVariableByName("otherInputOperator");
-              PVariable var_equiJoinLikeOperator = body.getOrCreateVariableByName("equiJoinLikeOperator");
-              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-              new TypeConstraint(body, new FlatTuple(var_otherInputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
-              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_otherInputOperator, parameter_pOtherInputOperator),
-                 new ExportedParameter(body, var_equiJoinLikeOperator, parameter_pEquiJoinLikeOperator),
-                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
-              ));
-              // 	find parentOperator(equiJoinLikeOperator, parentOperator)
-              new PositivePatternCall(body, new FlatTuple(var_equiJoinLikeOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-              // 	find joinOnDual(otherInputOperator, equiJoinLikeOperator)
-              new PositivePatternCall(body, new FlatTuple(var_otherInputOperator, var_equiJoinLikeOperator), JoinOnDualQuerySpecification.instance().getInternalQueryRepresentation());
-              bodies.add(body);
-          }
-          // to silence compiler error
-          if (false) throw new ViatraQueryException("Never", "happens");
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_otherInputOperator = body.getOrCreateVariableByName("otherInputOperator");
+      		PVariable var_equiJoinLikeOperator = body.getOrCreateVariableByName("equiJoinLikeOperator");
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+      		new TypeConstraint(body, new FlatTuple(var_otherInputOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_equiJoinLikeOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "EquiJoinLikeOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_otherInputOperator, parameter_pOtherInputOperator),
+      		   new ExportedParameter(body, var_equiJoinLikeOperator, parameter_pEquiJoinLikeOperator),
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+      		));
+      		// 	find parentOperator(equiJoinLikeOperator, parentOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_equiJoinLikeOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		// 	find joinOnDual(otherInputOperator, equiJoinLikeOperator)
+      		new PositivePatternCall(body, new FlatTuple(var_otherInputOperator, var_equiJoinLikeOperator), JoinOnDualQuerySpecification.instance().getInternalQueryRepresentation());
+      		bodies.add(body);
+      	}
+      	// to silence compiler error
+      	if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-          throw processDependencyException(ex);
+      	throw processDependencyException(ex);
       }
       return bodies;
     }

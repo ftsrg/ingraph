@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
  */
 package ingraph.optimization.patterns;
 
@@ -24,10 +24,10 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
- * A pattern group formed of all public patterns defined in Relalg2Rete.vql.
+ * A pattern group formed of all patterns defined in Search2Rete.vql.
  * 
  * <p>Use the static instance as any {@link org.eclipse.viatra.query.runtime.api.IPatternGroup}, to conveniently prepare
- * a VIATRA Query engine for matching all patterns originally defined in file Relalg2Rete.vql,
+ * a VIATRA Query engine for matching all patterns originally defined in file Search2Rete.vql,
  * in order to achieve better performance than one-by-one on-demand matcher initialization.
  * 
  * <p> From package ingraph.optimization.patterns, the group contains the definition of the following patterns: <ul>
@@ -45,7 +45,7 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * 
  */
 @SuppressWarnings("all")
-public final class Relalg2Rete extends BaseGeneratedPatternGroup {
+public final class Search2Rete extends BaseGeneratedPatternGroup {
   /**
    * Access the pattern group.
    * 
@@ -53,16 +53,16 @@ public final class Relalg2Rete extends BaseGeneratedPatternGroup {
    * @throws ViatraQueryException if there was an error loading the generated code of pattern specifications
    * 
    */
-  public static Relalg2Rete instance() throws ViatraQueryException {
+  public static Search2Rete instance() throws ViatraQueryException {
     if (INSTANCE == null) {
-        INSTANCE = new Relalg2Rete();
+    	INSTANCE = new Search2Rete();
     }
     return INSTANCE;
   }
   
-  private static Relalg2Rete INSTANCE;
+  private static Search2Rete INSTANCE;
   
-  private Relalg2Rete() throws ViatraQueryException {
+  private Search2Rete() throws ViatraQueryException {
     querySpecifications.add(GetVerticesAndExpandOperatorQuerySpecification.instance());
     querySpecifications.add(DefaultExpandOperatorQuerySpecification.instance());
     querySpecifications.add(ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance());

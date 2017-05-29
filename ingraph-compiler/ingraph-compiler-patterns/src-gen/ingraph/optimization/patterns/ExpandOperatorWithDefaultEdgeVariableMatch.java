@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
  */
 package ingraph.optimization.patterns;
 
@@ -48,8 +48,8 @@ public abstract class ExpandOperatorWithDefaultEdgeVariableMatch extends BasePat
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("defaultExpandOperator".equals(parameterName) ) {
-        this.fDefaultExpandOperator = (ExpandOperator) newValue;
-        return true;
+    	this.fDefaultExpandOperator = (ExpandOperator) newValue;
+    	return true;
     }
     return false;
   }
@@ -98,18 +98,18 @@ public abstract class ExpandOperatorWithDefaultEdgeVariableMatch extends BasePat
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof ExpandOperatorWithDefaultEdgeVariableMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     ExpandOperatorWithDefaultEdgeVariableMatch other = (ExpandOperatorWithDefaultEdgeVariableMatch) obj;
     if (fDefaultExpandOperator == null) {if (other.fDefaultExpandOperator != null) return false;}
@@ -120,10 +120,10 @@ public abstract class ExpandOperatorWithDefaultEdgeVariableMatch extends BasePat
   @Override
   public ExpandOperatorWithDefaultEdgeVariableQuerySpecification specification() {
     try {
-        return ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance();
+    	return ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

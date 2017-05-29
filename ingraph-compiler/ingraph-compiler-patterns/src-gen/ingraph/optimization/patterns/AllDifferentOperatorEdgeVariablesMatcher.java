@@ -54,7 +54,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
     // check if matcher already exists
     AllDifferentOperatorEdgeVariablesMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (AllDifferentOperatorEdgeVariablesMatcher)engine.getMatcher(querySpecification());
+    	matcher = (AllDifferentOperatorEdgeVariablesMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -255,30 +255,30 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch tupleToMatch(final Tuple t) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (EdgeVariable) t.get(POSITION_EDGEVARIABLE));
+    	return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (EdgeVariable) t.get(POSITION_EDGEVARIABLE));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch arrayToMatch(final Object[] match) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
+    	return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
+    	return AllDifferentOperatorEdgeVariablesMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

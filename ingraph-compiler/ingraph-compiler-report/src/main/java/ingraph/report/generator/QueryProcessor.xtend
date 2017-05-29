@@ -3,7 +3,6 @@ package ingraph.report.generator
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.logger.IngraphLogger
 import ingraph.relalg.calculators.ExternalSchemaCalculator
-import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
 import ingraph.relalg2tex.config.RelalgConverterConfig
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
@@ -13,9 +12,10 @@ import java.util.List
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
+import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
 
 class QueryProcessor {
-	
+
 	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 	extension TechReportEscaper escaper = new TechReportEscaper
 	extension IngraphLogger logger = new IngraphLogger(QueryProcessor.name)
@@ -97,7 +97,7 @@ class QueryProcessor {
 		«ENDIF»
 		'''
 	}
-	
+
 	def toHeader(String title, String queryName) {
 		'''{«title.escape» \textcolor{gray}{(«queryName.escape»)}}'''
 	}
@@ -127,7 +127,7 @@ class QueryProcessor {
 	def visualizeWithTransformations(RelalgContainer container) {
 		try {
 			val incrementalContainer = EcoreUtil.copy(container)
-			val calculator = new Relalg2ReteTransformationAndSchemaCalculator
+			val calculator = new Search2ReteTransformationAndSchemaCalculator
 			calculator.apply(incrementalContainer)
 			treeSerializer.convert(incrementalContainer)
 		} catch (Exception e) {
