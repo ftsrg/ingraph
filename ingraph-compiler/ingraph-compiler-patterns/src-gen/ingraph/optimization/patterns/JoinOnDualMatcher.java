@@ -64,7 +64,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
     // check if matcher already exists
     JoinOnDualMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (JoinOnDualMatcher)engine.getMatcher(querySpecification());
+    	matcher = (JoinOnDualMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -265,30 +265,30 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   @Override
   protected JoinOnDualMatch tupleToMatch(final Tuple t) {
     try {
-        return JoinOnDualMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR));
+    	return JoinOnDualMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected JoinOnDualMatch arrayToMatch(final Object[] match) {
     try {
-        return JoinOnDualMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
+    	return JoinOnDualMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected JoinOnDualMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return JoinOnDualMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
+    	return JoinOnDualMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

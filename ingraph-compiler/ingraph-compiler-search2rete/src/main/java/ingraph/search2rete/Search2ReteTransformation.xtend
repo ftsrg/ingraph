@@ -1,4 +1,4 @@
-package ingraph.relalg2rete
+package ingraph.search2rete
 
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.DefaultExpandOperatorMatcher
@@ -9,9 +9,9 @@ import ingraph.optimization.patterns.TransitiveExpandOperatorMatcher
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import relalg.RelalgContainer
 
-class Relalg2ReteTransformation extends AbstractRelalgTransformation {
+class Search2ReteTransformation extends AbstractRelalgTransformation {
 
-	extension IngraphLogger logger = new IngraphLogger(Relalg2ReteTransformation.name)
+	extension IngraphLogger logger = new IngraphLogger(Search2ReteTransformation.name)
 
 	new(RelalgContainer container) {
 		super(container)
@@ -22,7 +22,7 @@ class Relalg2ReteTransformation extends AbstractRelalgTransformation {
 
 		if (container.incrementalPlan) {
 			throw new IllegalStateException(
-				"The query plan is already incremental. Relalg2ReteTransformation should be invoked on a non-incremental search plan")
+				"The relalg plan is already a Rete plan. Search2ReteTransformation should be invoked on a (non-incremental) search plan")
 		}
 		statements.fireWhilePossible(getVerticesAndExpandOperatorRule)
 		statements.fireWhilePossible(defaultExpandOperatorRule)

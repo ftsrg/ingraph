@@ -65,16 +65,16 @@ public abstract class FoldableConstantExpressionMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("e".equals(parameterName) ) {
-        this.fE = (Expression) newValue;
-        return true;
+    	this.fE = (Expression) newValue;
+    	return true;
     }
     if ("v1".equals(parameterName) ) {
-        this.fV1 = (Literal) newValue;
-        return true;
+    	this.fV1 = (Literal) newValue;
+    	return true;
     }
     if ("v2".equals(parameterName) ) {
-        this.fV2 = (Literal) newValue;
-        return true;
+    	this.fV2 = (Literal) newValue;
+    	return true;
     }
     return false;
   }
@@ -139,18 +139,18 @@ public abstract class FoldableConstantExpressionMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof FoldableConstantExpressionMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     FoldableConstantExpressionMatch other = (FoldableConstantExpressionMatch) obj;
     if (fE == null) {if (other.fE != null) return false;}
@@ -165,10 +165,10 @@ public abstract class FoldableConstantExpressionMatch extends BasePatternMatch {
   @Override
   public FoldableConstantExpressionQuerySpecification specification() {
     try {
-        return FoldableConstantExpressionQuerySpecification.instance();
+    	return FoldableConstantExpressionQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

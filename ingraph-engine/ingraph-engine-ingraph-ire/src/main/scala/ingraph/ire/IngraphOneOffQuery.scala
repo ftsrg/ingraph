@@ -6,14 +6,14 @@ import hu.bme.mit.ire.listeners.ChangeListener
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.expressions.ExpressionUnwrapper
-import ingraph.relalg2rete.Relalg2ReteTransformationAndSchemaCalculator
+import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
 import org.supercsv.prefs.CsvPreference
 import relalg.AttributeVariable
 
 import scala.collection.JavaConverters._
 
 class IngraphOneOffQuery(querySpecification: String, queryName: String, indexer: Indexer = new Indexer()) {
-  private val reteCalc = new Relalg2ReteTransformationAndSchemaCalculator
+  private val reteCalc = new Search2ReteTransformationAndSchemaCalculator
 
   val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
   val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)

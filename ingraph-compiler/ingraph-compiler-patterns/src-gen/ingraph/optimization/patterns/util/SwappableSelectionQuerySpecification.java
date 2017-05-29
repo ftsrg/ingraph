@@ -50,9 +50,9 @@ public final class SwappableSelectionQuerySpecification extends BaseGeneratedEMF
    */
   public static SwappableSelectionQuerySpecification instance() throws ViatraQueryException {
     try{
-        return LazyHolder.INSTANCE;
+    	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-        throw processInitializerError(err);
+    	throw processInitializerError(err);
     }
   }
   
@@ -78,8 +78,8 @@ public final class SwappableSelectionQuerySpecification extends BaseGeneratedEMF
   
   /**
    * Inner class allowing the singleton instance of {@link SwappableSelectionQuerySpecification} to be created 
-   *     <b>not</b> at the class load time of the outer class, 
-   *     but rather at the first call to {@link SwappableSelectionQuerySpecification#instance()}.
+   * 	<b>not</b> at the class load time of the outer class, 
+   * 	but rather at the first call to {@link SwappableSelectionQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -133,33 +133,32 @@ public final class SwappableSelectionQuerySpecification extends BaseGeneratedEMF
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-          {
-              PBody body = new PBody(this);
-              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-              PVariable var_selectionOperator1 = body.getOrCreateVariableByName("selectionOperator1");
-              PVariable var_selectionOperator2 = body.getOrCreateVariableByName("selectionOperator2");
-              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              new TypeConstraint(body, new FlatTuple(var_selectionOperator1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
-              new TypeConstraint(body, new FlatTuple(var_selectionOperator2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
-                 new ExportedParameter(body, var_selectionOperator1, parameter_pSelectionOperator1),
-                 new ExportedParameter(body, var_selectionOperator2, parameter_pSelectionOperator2)
-              ));
-              // 	find parentOperator(parentOperator, selectionOperator1)
-              new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_selectionOperator1), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-              // 	SelectionOperator.input(selectionOperator1, selectionOperator2)
-              new TypeConstraint(body, new FlatTuple(var_selectionOperator1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_selectionOperator1, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-              new Equality(body, var__virtual_0_, var_selectionOperator2);
-              bodies.add(body);
-          }
-          // to silence compiler error
-          if (false) throw new ViatraQueryException("Never", "happens");
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+      		PVariable var_selectionOperator1 = body.getOrCreateVariableByName("selectionOperator1");
+      		PVariable var_selectionOperator2 = body.getOrCreateVariableByName("selectionOperator2");
+      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator),
+      		   new ExportedParameter(body, var_selectionOperator1, parameter_pSelectionOperator1),
+      		   new ExportedParameter(body, var_selectionOperator2, parameter_pSelectionOperator2)
+      		));
+      		// 	find parentOperator(parentOperator, selectionOperator1)
+      		new PositivePatternCall(body, new FlatTuple(var_parentOperator, var_selectionOperator1), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+      		// 	SelectionOperator.input(selectionOperator1, selectionOperator2)
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator1), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "SelectionOperator")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_selectionOperator1, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
+      		new Equality(body, var__virtual_0_, var_selectionOperator2);
+      		bodies.add(body);
+      	}
+      	// to silence compiler error
+      	if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-          throw processDependencyException(ex);
+      	throw processDependencyException(ex);
       }
       return bodies;
     }

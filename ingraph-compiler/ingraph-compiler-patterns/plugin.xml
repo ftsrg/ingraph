@@ -4,8 +4,17 @@
       <query-specification fqn="ingraph.optimization.patterns.parentOperator"/>
     </group>
   </extension>
-  <extension id="ingraph.optimization.patterns.Relalg2Rete" point="org.eclipse.viatra.query.runtime.queryspecification">
-    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.Relalg2Rete" id="ingraph.optimization.patterns.Relalg2Rete">
+  <extension id="ingraph.optimization.patterns.RelalgSimplifier" point="org.eclipse.viatra.query.runtime.queryspecification">
+    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.RelalgSimplifier" id="ingraph.optimization.patterns.RelalgSimplifier">
+      <query-specification fqn="ingraph.optimization.patterns.unnecessaryJoin"/>
+      <query-specification fqn="ingraph.optimization.patterns.joinOnDual"/>
+      <query-specification fqn="ingraph.optimization.patterns.unnecessaryAllDifferentOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.emptyOrSingleVariableAllDifferentOperator"/>
+      <query-specification fqn="ingraph.optimization.patterns.allDifferentOperatorEdgeVariables"/>
+    </group>
+  </extension>
+  <extension id="ingraph.optimization.patterns.Search2Rete" point="org.eclipse.viatra.query.runtime.queryspecification">
+    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.Search2Rete" id="ingraph.optimization.patterns.Search2Rete">
       <query-specification fqn="ingraph.optimization.patterns.getVerticesAndExpandOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.defaultExpandOperator"/>
       <query-specification fqn="ingraph.optimization.patterns.expandOperatorWithDefaultEdgeVariable"/>
@@ -14,15 +23,6 @@
       <query-specification fqn="ingraph.optimization.patterns.leftOuterJoinAndSelection"/>
       <query-specification fqn="ingraph.optimization.patterns.variablesInLogicalExpression"/>
       <query-specification fqn="ingraph.optimization.patterns.leftDeepTreeNodes"/>
-    </group>
-  </extension>
-  <extension id="ingraph.optimization.patterns.RelalgSimplifier" point="org.eclipse.viatra.query.runtime.queryspecification">
-    <group group="org.eclipse.viatra.query.runtime.extensibility.SingletonExtensionFactory:ingraph.optimization.patterns.RelalgSimplifier" id="ingraph.optimization.patterns.RelalgSimplifier">
-      <query-specification fqn="ingraph.optimization.patterns.unnecessaryJoin"/>
-      <query-specification fqn="ingraph.optimization.patterns.joinOnDual"/>
-      <query-specification fqn="ingraph.optimization.patterns.unnecessaryAllDifferentOperator"/>
-      <query-specification fqn="ingraph.optimization.patterns.emptyOrSingleVariableAllDifferentOperator"/>
-      <query-specification fqn="ingraph.optimization.patterns.allDifferentOperatorEdgeVariables"/>
     </group>
   </extension>
   <extension id="ingraph.optimization.patterns.TrivialOptimizations" point="org.eclipse.viatra.query.runtime.queryspecification">

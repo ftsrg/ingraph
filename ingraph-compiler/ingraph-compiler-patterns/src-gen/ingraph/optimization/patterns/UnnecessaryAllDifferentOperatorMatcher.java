@@ -57,7 +57,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
     // check if matcher already exists
     UnnecessaryAllDifferentOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (UnnecessaryAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (UnnecessaryAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -311,30 +311,30 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   @Override
   protected UnnecessaryAllDifferentOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) t.get(POSITION_INPUTOPERATOR), (AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryAllDifferentOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryAllDifferentOperatorMatch.newMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryAllDifferentOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return UnnecessaryAllDifferentOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryAllDifferentOperatorMatch.newMutableMatch((Operator) match[POSITION_INPUTOPERATOR], (AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

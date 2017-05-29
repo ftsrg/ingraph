@@ -57,7 +57,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
     // check if matcher already exists
     UnnecessaryJoinMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (UnnecessaryJoinMatcher)engine.getMatcher(querySpecification());
+    	matcher = (UnnecessaryJoinMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -311,30 +311,30 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   @Override
   protected UnnecessaryJoinMatch tupleToMatch(final Tuple t) {
     try {
-        return UnnecessaryJoinMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return UnnecessaryJoinMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryJoinMatch arrayToMatch(final Object[] match) {
     try {
-        return UnnecessaryJoinMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryJoinMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryJoinMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return UnnecessaryJoinMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryJoinMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

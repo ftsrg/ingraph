@@ -1,4 +1,4 @@
-package ingraph.relalg2rete
+package ingraph.search2rete
 
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.relalg.calculators.ExternalSchemaCalculator
@@ -9,7 +9,7 @@ import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 
-abstract class Cypher2Relalg2Rete2TexTest {
+abstract class Cypher2Search2Rete2TexTest {
 
 	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
@@ -35,7 +35,7 @@ abstract class Cypher2Relalg2Rete2TexTest {
 		// Rete
 		val containerRete = Cypher2Relalg.processString(querySpecification, query)
 		val simplifyingTransformationRete = new SimplifyingTransformation(containerRete)
-		val transformation = new Relalg2ReteTransformation(containerRete)
+		val transformation = new Search2ReteTransformation(containerRete)
 		simplifyingTransformationRete.simplify
 		transformation.transformToRete
 		containerRete.calculateExternalSchema

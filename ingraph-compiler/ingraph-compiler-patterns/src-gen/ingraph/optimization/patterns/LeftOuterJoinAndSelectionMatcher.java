@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
  */
 package ingraph.optimization.patterns;
 
@@ -89,7 +89,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
     // check if matcher already exists
     LeftOuterJoinAndSelectionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (LeftOuterJoinAndSelectionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (LeftOuterJoinAndSelectionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -455,30 +455,30 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   @Override
   protected LeftOuterJoinAndSelectionMatch tupleToMatch(final Tuple t) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (GetEdgesOperator) t.get(POSITION_GETEDGESOPERATOR));
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (GetEdgesOperator) t.get(POSITION_GETEDGESOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatch(final Object[] match) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
+    	return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (GetEdgesOperator) match[POSITION_GETEDGESOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

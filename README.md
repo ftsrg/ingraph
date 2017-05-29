@@ -51,9 +51,16 @@ Recommended dependencies:
 
 Optionally, you might also import the `ingraph-engine` directory.
 
-#### Opening relational algebra models
+#### relalg models
 
-1. Open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
+There are two kinds for relational algebra (`relalg`) models:
+
+* non-incremental search plans (`search`)
+* incremental Rete networks (`rete`)
+
+Both models use the same metamodel defined in the [`relalg.xcore`](ingraph-compiler/ingraph-compiler-relalg-model/src/main/resources/relalg.xcore) source file. The compiler produces `search` models, which can be transformed to `rete` models using the `Search2ReteTransformation` class. For `search` models, the `incrementalPlan` boolean flag is set to `false`, while for `rete` models, it is set to `true`.
+
+To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 
 #### Using VIATRA
 

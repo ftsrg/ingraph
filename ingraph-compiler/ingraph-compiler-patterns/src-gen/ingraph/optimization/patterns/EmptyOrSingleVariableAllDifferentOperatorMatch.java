@@ -48,8 +48,8 @@ public abstract class EmptyOrSingleVariableAllDifferentOperatorMatch extends Bas
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("allDifferentOperator".equals(parameterName) ) {
-        this.fAllDifferentOperator = (AllDifferentOperator) newValue;
-        return true;
+    	this.fAllDifferentOperator = (AllDifferentOperator) newValue;
+    	return true;
     }
     return false;
   }
@@ -98,18 +98,18 @@ public abstract class EmptyOrSingleVariableAllDifferentOperatorMatch extends Bas
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof EmptyOrSingleVariableAllDifferentOperatorMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     EmptyOrSingleVariableAllDifferentOperatorMatch other = (EmptyOrSingleVariableAllDifferentOperatorMatch) obj;
     if (fAllDifferentOperator == null) {if (other.fAllDifferentOperator != null) return false;}
@@ -120,10 +120,10 @@ public abstract class EmptyOrSingleVariableAllDifferentOperatorMatch extends Bas
   @Override
   public EmptyOrSingleVariableAllDifferentOperatorQuerySpecification specification() {
     try {
-        return EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance();
+    	return EmptyOrSingleVariableAllDifferentOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

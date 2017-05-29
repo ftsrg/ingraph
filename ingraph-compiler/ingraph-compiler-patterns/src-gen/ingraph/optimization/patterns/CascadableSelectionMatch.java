@@ -74,20 +74,20 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("parentOperator".equals(parameterName) ) {
-        this.fParentOperator = (Operator) newValue;
-        return true;
+    	this.fParentOperator = (Operator) newValue;
+    	return true;
     }
     if ("selectionOperator".equals(parameterName) ) {
-        this.fSelectionOperator = (SelectionOperator) newValue;
-        return true;
+    	this.fSelectionOperator = (SelectionOperator) newValue;
+    	return true;
     }
     if ("leftOperand".equals(parameterName) ) {
-        this.fLeftOperand = (LogicalExpression) newValue;
-        return true;
+    	this.fLeftOperand = (LogicalExpression) newValue;
+    	return true;
     }
     if ("rightOperand".equals(parameterName) ) {
-        this.fRightOperand = (LogicalExpression) newValue;
-        return true;
+    	this.fRightOperand = (LogicalExpression) newValue;
+    	return true;
     }
     return false;
   }
@@ -160,18 +160,18 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof CascadableSelectionMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     CascadableSelectionMatch other = (CascadableSelectionMatch) obj;
     if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
@@ -188,10 +188,10 @@ public abstract class CascadableSelectionMatch extends BasePatternMatch {
   @Override
   public CascadableSelectionQuerySpecification specification() {
     try {
-        return CascadableSelectionQuerySpecification.instance();
+    	return CascadableSelectionQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

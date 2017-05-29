@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Relalg2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
  */
 package ingraph.optimization.patterns;
 
@@ -70,7 +70,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
     // check if matcher already exists
     GetVerticesAndExpandOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (GetVerticesAndExpandOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (GetVerticesAndExpandOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -324,30 +324,30 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   @Override
   protected GetVerticesAndExpandOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return GetVerticesAndExpandOperatorMatch.newMatch((GetVerticesOperator) t.get(POSITION_GETVERTICESOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return GetVerticesAndExpandOperatorMatch.newMatch((GetVerticesOperator) t.get(POSITION_GETVERTICESOPERATOR), (ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected GetVerticesAndExpandOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return GetVerticesAndExpandOperatorMatch.newMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return GetVerticesAndExpandOperatorMatch.newMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected GetVerticesAndExpandOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return GetVerticesAndExpandOperatorMatch.newMutableMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return GetVerticesAndExpandOperatorMatch.newMutableMatch((GetVerticesOperator) match[POSITION_GETVERTICESOPERATOR], (ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

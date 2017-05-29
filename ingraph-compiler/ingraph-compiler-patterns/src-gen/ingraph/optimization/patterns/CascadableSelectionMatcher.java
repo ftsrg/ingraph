@@ -64,7 +64,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
     // check if matcher already exists
     CascadableSelectionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (CascadableSelectionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (CascadableSelectionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -373,30 +373,30 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   @Override
   protected CascadableSelectionMatch tupleToMatch(final Tuple t) {
     try {
-        return CascadableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
+    	return CascadableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected CascadableSelectionMatch arrayToMatch(final Object[] match) {
     try {
-        return CascadableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected CascadableSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return CascadableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

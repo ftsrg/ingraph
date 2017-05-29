@@ -65,16 +65,16 @@ public abstract class SwappableSelectionMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("parentOperator".equals(parameterName) ) {
-        this.fParentOperator = (Operator) newValue;
-        return true;
+    	this.fParentOperator = (Operator) newValue;
+    	return true;
     }
     if ("selectionOperator1".equals(parameterName) ) {
-        this.fSelectionOperator1 = (SelectionOperator) newValue;
-        return true;
+    	this.fSelectionOperator1 = (SelectionOperator) newValue;
+    	return true;
     }
     if ("selectionOperator2".equals(parameterName) ) {
-        this.fSelectionOperator2 = (SelectionOperator) newValue;
-        return true;
+    	this.fSelectionOperator2 = (SelectionOperator) newValue;
+    	return true;
     }
     return false;
   }
@@ -139,18 +139,18 @@ public abstract class SwappableSelectionMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof SwappableSelectionMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     SwappableSelectionMatch other = (SwappableSelectionMatch) obj;
     if (fParentOperator == null) {if (other.fParentOperator != null) return false;}
@@ -165,10 +165,10 @@ public abstract class SwappableSelectionMatch extends BasePatternMatch {
   @Override
   public SwappableSelectionQuerySpecification specification() {
     try {
-        return SwappableSelectionQuerySpecification.instance();
+    	return SwappableSelectionQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   
