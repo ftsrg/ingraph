@@ -50,12 +50,12 @@ public class LdbcNeo4jReferenceOutputTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				// BI
-				             { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
-				{ "bi", 6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
-				             { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
-				{ "bi", 16 },                            { "bi", 19 }, { "bi", 20 }, //
-				                                         { "bi", 24 }, //
-				{ "bi", 26 }, { "bi", 27 }, { "bi", 28 }, //
+				              { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
+				 { "bi", 6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
+				              { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
+				{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
+				                                          { "bi", 24 }, //
+				{ "bi", 26 }, { "bi", 27 }, { "bi", 28 }, { "bi", 29 }, //
 				// interactive
 				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
 				{ "interactive", 6 }, { "interactive", 7 }, { "interactive", 8 }, { "interactive", 9 }, { "interactive", 10 },

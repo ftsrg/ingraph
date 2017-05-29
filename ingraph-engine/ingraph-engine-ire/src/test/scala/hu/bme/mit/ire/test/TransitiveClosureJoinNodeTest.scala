@@ -33,7 +33,6 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
   val primaryMask = mask(2)
   val secondaryMask = mask(0)
 
-
   "A TransitiveClosureNode" must {
     "calculate transitive closure" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)

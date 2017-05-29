@@ -11,9 +11,9 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 	@Test
 	def void q1() {
 		process('query-1', '''
-		MATCH (comment:Comment)-[r:replyOf*]->(message:Message)
-		RETURN comment.content, message.content
-		ORDER BY comment.content, message.content
+		MATCH (message:Message)<-[r:replyOf*]-(comment:Comment)
+		RETURN message.content, comment.content
+		ORDER BY message.content, comment.content
 		''')
 	}
 

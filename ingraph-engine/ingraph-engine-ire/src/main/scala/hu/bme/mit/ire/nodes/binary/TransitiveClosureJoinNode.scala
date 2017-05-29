@@ -31,6 +31,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val sourceLookup = new mutable.HashMap[Any, Tuple]
   val targetLookup = new mutable.HashMap[Any, Tuple]
 
+  val sourceVertexIndex = secondaryMask(0)
+  val targetVertexIndex = 2 - sourceVertexIndex
+  
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Tuple = {
     tuple(sourceId) ++ sourceLookup.getOrElse(sourceId, tuple()) ++
     tuple(path) ++ // TODO: there might be extra attributes for the path
@@ -65,9 +68,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   override def onSecondary(changeSet: ChangeSet): Unit = {
     // in the current implementation we can assume that the secondary input is a GetEdges operator
     for (tuple <- changeSet.positive)
-      targetLookup.put(tuple(2), tuple.drop(3))
+      targetLookup.put(tuple(targetVertexIndex), tuple.drop(3))
     for (tuple <- changeSet.negative)
-      targetLookup.remove(tuple(2))
+      targetLookup.remove(tuple(targetVertexIndex))
 
     forward(ChangeSet(
       positive = changeSet.positive.flatMap(newPathsWithEdge),
@@ -76,9 +79,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def newPathsWithEdge(inputTuple: Tuple): Vector[Tuple] = {
-    val sourceId = inputTuple(0).asInstanceOf[Number].longValue
-    val targetId = inputTuple(2).asInstanceOf[Number].longValue
+    val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     val edgeId = inputTuple(1).asInstanceOf[Number].longValue
+    val targetId = inputTuple(targetVertexIndex).asInstanceOf[Number].longValue
 
     var newPathsBuilder = new VectorBuilder[Tuple]
 
@@ -135,9 +138,9 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def removePathsWithEdge(inputTuple: Tuple): Vector[Tuple] = {
-    val sourceId = inputTuple(0).asInstanceOf[Number].longValue
-    val targetId = inputTuple(2).asInstanceOf[Number].longValue
+    val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     val edgeId = inputTuple(1).asInstanceOf[Number].longValue
+    val targetId = inputTuple(targetVertexIndex).asInstanceOf[Number].longValue
 
     var removedPathsBuilder = new VectorBuilder[Tuple]
 

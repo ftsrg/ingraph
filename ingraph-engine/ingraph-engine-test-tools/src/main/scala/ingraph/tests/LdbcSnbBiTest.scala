@@ -61,7 +61,7 @@ abstract class LdbcSnbBiTest extends FunSuite {
   case class TestCase(number: Int)
 
   Vector(
-//        TestCase(1), // CASE
+////        TestCase(1), // CASE
         TestCase(2),
         TestCase(3),
         TestCase(4),
@@ -72,6 +72,7 @@ abstract class LdbcSnbBiTest extends FunSuite {
 //        TestCase(10), // CASE
         TestCase(12),
         TestCase(13),
+        TestCase(14), // PATH
         TestCase(15),
 //        TestCase(19), // antijoin
         TestCase(24),
@@ -79,9 +80,9 @@ abstract class LdbcSnbBiTest extends FunSuite {
         TestCase(26), // PATH
         TestCase(27), // PATH
         TestCase(28), // PATH
-        
+        TestCase(29), // PATH
+
 //        TestCase(8), // PATH
-//        TestCase(14), // PATH
 //        TestCase(16), // PATH
 //        TestCase(20), // PATH
 
