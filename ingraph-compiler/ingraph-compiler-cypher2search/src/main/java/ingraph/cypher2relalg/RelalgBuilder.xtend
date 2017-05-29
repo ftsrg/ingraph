@@ -313,7 +313,6 @@ class RelalgBuilder {
 				input = afterUnwind
 			]
 			for (_u2: u0.pattern.patterns) {
-				//FIXME: loop through patterns of a CREATE clause, see #129
 				val u2 = _u2 as PatternElement
 				if (u2 === null) {
 					unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
