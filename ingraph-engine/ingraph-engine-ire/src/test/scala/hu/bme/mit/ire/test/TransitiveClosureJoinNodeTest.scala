@@ -76,6 +76,24 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       )): _*)
     }
 
+    "calculate transitive closure the other way round" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1))
+      ))
+      expectNoMsg(timeout)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
+      )): _*)
+    }
+
     "honor max path length bound" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, maxHops = 2)))
