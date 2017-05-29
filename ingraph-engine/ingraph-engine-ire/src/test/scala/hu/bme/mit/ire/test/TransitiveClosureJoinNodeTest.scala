@@ -84,13 +84,15 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       transitiveClosure ! Primary(ChangeSet(
         positive = tupleBag(tuple(1))
       ))
-      expectNoMsg(timeout)
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, Path(), 1))
+      )): _*)
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
       expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
+        positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
       )): _*)
     }
 
