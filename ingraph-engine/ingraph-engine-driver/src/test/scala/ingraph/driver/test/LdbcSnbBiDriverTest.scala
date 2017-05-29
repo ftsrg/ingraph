@@ -23,7 +23,6 @@ class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
 
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
 
-
     val queryHandler = session.registerQuery(queryName, querySpecification)
     var actualResults: util.List[_ <: Record] = null
     class AssertionHandler(override val keys: Vector[String]) extends IngraphDeltaHandler {

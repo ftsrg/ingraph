@@ -45,13 +45,13 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
 
   override def onPrimary(changeSet: ChangeSet): Unit = {
-    val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
-    val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
-    
     for (tuple <- changeSet.positive)
       sourceLookup.put(tuple(0), tuple.drop(1))
     for (tuple <- changeSet.negative)
       sourceLookup.remove(tuple(0))
+
+    val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
+    val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
 
     changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
     changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
@@ -63,6 +63,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   override def onSecondary(changeSet: ChangeSet): Unit = {
+    // in the current implementation we can assume that the secondary input is a GetEdges operator
     for (tuple <- changeSet.positive)
       targetLookup.put(tuple(2), tuple.drop(3))
     for (tuple <- changeSet.negative)
@@ -175,7 +176,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(0).asInstanceOf[Number].longValue
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
-    if(minHops == 0)
+    if (minHops == 0)
       pathsFromSourceVertexBuilder += composeTuple(sourceId, Path(), sourceId)
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
