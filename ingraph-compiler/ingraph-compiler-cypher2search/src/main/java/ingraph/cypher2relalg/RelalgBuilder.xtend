@@ -363,6 +363,7 @@ class RelalgBuilder {
 	protected def ExpressionVariable buildCreateRelationshipPattern (RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target) {
 		val u0 = createNavigationDescriptor => [
 			edgeVariable = variableBuilder.buildEdgeVariable(relationshippattern.detail)
+			buildRelalgProperties(relationshippattern.detail.properties, edgeVariable)
 			sourceVertexVariable = source
 			targetVertexVariable = target
 			direction = convertToDirection(relationshippattern)
@@ -377,7 +378,9 @@ class RelalgBuilder {
 	 */
 	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
 		val u0 = createVariableExpression => [
-			variable = variableBuilder.buildVertexVariable(nodepattern)
+			val vertexVariable = variableBuilder.buildVertexVariable(nodepattern)
+			buildRelalgProperties(nodepattern.properties, vertexVariable)
+			variable = vertexVariable
 			expressionContainer = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
