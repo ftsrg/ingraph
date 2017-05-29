@@ -79,7 +79,6 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(0).asInstanceOf[Number].longValue
     val targetId = inputTuple(2).asInstanceOf[Number].longValue
     val edgeId = inputTuple(1).asInstanceOf[Number].longValue
-    val edgeAndTargetExtraVariables = inputTuple.drop(3)
 
     var newPathsBuilder = new VectorBuilder[Tuple]
 
