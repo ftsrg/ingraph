@@ -54,7 +54,7 @@ public class ExpandOperatorWithDefaultEdgeVariableMatcher extends BaseMatcher<Ex
     // check if matcher already exists
     ExpandOperatorWithDefaultEdgeVariableMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (ExpandOperatorWithDefaultEdgeVariableMatcher)engine.getMatcher(querySpecification());
+        matcher = (ExpandOperatorWithDefaultEdgeVariableMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -184,30 +184,30 @@ public class ExpandOperatorWithDefaultEdgeVariableMatcher extends BaseMatcher<Ex
   @Override
   protected ExpandOperatorWithDefaultEdgeVariableMatch tupleToMatch(final Tuple t) {
     try {
-    	return ExpandOperatorWithDefaultEdgeVariableMatch.newMatch((ExpandOperator) t.get(POSITION_DEFAULTEXPANDOPERATOR));
+        return ExpandOperatorWithDefaultEdgeVariableMatch.newMatch((ExpandOperator) t.get(POSITION_DEFAULTEXPANDOPERATOR));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected ExpandOperatorWithDefaultEdgeVariableMatch arrayToMatch(final Object[] match) {
     try {
-    	return ExpandOperatorWithDefaultEdgeVariableMatch.newMatch((ExpandOperator) match[POSITION_DEFAULTEXPANDOPERATOR]);
+        return ExpandOperatorWithDefaultEdgeVariableMatch.newMatch((ExpandOperator) match[POSITION_DEFAULTEXPANDOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected ExpandOperatorWithDefaultEdgeVariableMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return ExpandOperatorWithDefaultEdgeVariableMatch.newMutableMatch((ExpandOperator) match[POSITION_DEFAULTEXPANDOPERATOR]);
+        return ExpandOperatorWithDefaultEdgeVariableMatch.newMutableMatch((ExpandOperator) match[POSITION_DEFAULTEXPANDOPERATOR]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   

@@ -3,7 +3,7 @@ package ingraph.relalg.calculators
 import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import java.util.List
-import relalg.EquiJoinLikeOperator
+import relalg.AbstractJoinOperator
 import relalg.GroupingOperator
 import relalg.NullaryOperator
 import relalg.Operator
@@ -62,7 +62,7 @@ class InternalSchemaCalculator {
 		op.defineInternalSchema(internalSchema)
 	}
 
-	private def dispatch void fillInternalSchema(EquiJoinLikeOperator op) {
+	private def dispatch void fillInternalSchema(AbstractJoinOperator op) {
 		val internalSchema = op.calculateJoinSchema(op.getLeftInput.internalSchema, op.getRightInput.internalSchema)
 		op.defineInternalSchema(internalSchema)
 	}

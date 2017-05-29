@@ -24,7 +24,7 @@ import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 
 /**
- * A pattern group formed of all patterns defined in Search2Rete.vql.
+ * A pattern group formed of all public patterns defined in Search2Rete.vql.
  * 
  * <p>Use the static instance as any {@link org.eclipse.viatra.query.runtime.api.IPatternGroup}, to conveniently prepare
  * a VIATRA Query engine for matching all patterns originally defined in file Search2Rete.vql,
@@ -55,7 +55,7 @@ public final class Search2Rete extends BaseGeneratedPatternGroup {
    */
   public static Search2Rete instance() throws ViatraQueryException {
     if (INSTANCE == null) {
-    	INSTANCE = new Search2Rete();
+        INSTANCE = new Search2Rete();
     }
     return INSTANCE;
   }

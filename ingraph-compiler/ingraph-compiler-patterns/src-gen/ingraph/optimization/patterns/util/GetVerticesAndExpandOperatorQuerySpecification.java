@@ -51,9 +51,9 @@ public final class GetVerticesAndExpandOperatorQuerySpecification extends BaseGe
    */
   public static GetVerticesAndExpandOperatorQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
@@ -79,8 +79,8 @@ public final class GetVerticesAndExpandOperatorQuerySpecification extends BaseGe
   
   /**
    * Inner class allowing the singleton instance of {@link GetVerticesAndExpandOperatorQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link GetVerticesAndExpandOperatorQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link GetVerticesAndExpandOperatorQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -134,36 +134,37 @@ public final class GetVerticesAndExpandOperatorQuerySpecification extends BaseGe
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_getVerticesOperator = body.getOrCreateVariableByName("getVerticesOperator");
-      		PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
-      		PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
-      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_getVerticesOperator, parameter_pGetVerticesOperator),
-      		   new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
-      		   new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
-      		));
-      		//   find parentOperator(expandOperator, parentOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	find expandOperatorWithDefaultEdgeVariable(expandOperator)
-      		new PositivePatternCall(body, new FlatTuple(var_expandOperator), ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance().getInternalQueryRepresentation());
-      		// 	ExpandOperator.input(expandOperator, getVerticesOperator)
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
-      		new Equality(body, var__virtual_0_, var_getVerticesOperator);
-      		//   GetVerticesOperator(getVerticesOperator)
-      		new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_getVerticesOperator = body.getOrCreateVariableByName("getVerticesOperator");
+              PVariable var_expandOperator = body.getOrCreateVariableByName("expandOperator");
+              PVariable var_parentOperator = body.getOrCreateVariableByName("parentOperator");
+              new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
+              new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+              new TypeConstraint(body, new FlatTuple(var_parentOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_getVerticesOperator, parameter_pGetVerticesOperator),
+                 new ExportedParameter(body, var_expandOperator, parameter_pExpandOperator),
+                 new ExportedParameter(body, var_parentOperator, parameter_pParentOperator)
+              ));
+              //   find parentOperator(expandOperator, parentOperator)
+              new PositivePatternCall(body, new FlatTuple(var_expandOperator, var_parentOperator), ParentOperatorQuerySpecification.instance().getInternalQueryRepresentation());
+              // 	find expandOperatorWithDefaultEdgeVariable(expandOperator)
+              new PositivePatternCall(body, new FlatTuple(var_expandOperator), ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance().getInternalQueryRepresentation());
+              // 	ExpandOperator.input(expandOperator, getVerticesOperator)
+              new TypeConstraint(body, new FlatTuple(var_expandOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "ExpandOperator")));
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new TypeConstraint(body, new FlatTuple(var_expandOperator, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryOperator", "input")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Operator")));
+              new Equality(body, var__virtual_0_, var_getVerticesOperator);
+              //   GetVerticesOperator(getVerticesOperator)
+              new TypeConstraint(body, new FlatTuple(var_getVerticesOperator), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "GetVerticesOperator")));
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

@@ -11,10 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFPQuery;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedEMFQuerySpecification;
 import org.eclipse.viatra.query.runtime.emf.types.EClassTransitiveInstancesKey;
+import org.eclipse.viatra.query.runtime.emf.types.EDataTypeInSlotsKey;
 import org.eclipse.viatra.query.runtime.emf.types.EStructuralFeatureInstancesKey;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
 import org.eclipse.viatra.query.runtime.matchers.backend.IQueryBackendFactory;
@@ -51,9 +53,9 @@ public final class VariablesInLogicalExpressionQuerySpecification extends BaseGe
    */
   public static VariablesInLogicalExpressionQuerySpecification instance() throws ViatraQueryException {
     try{
-    	return LazyHolder.INSTANCE;
+        return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-    	throw processInitializerError(err);
+        throw processInitializerError(err);
     }
   }
   
@@ -79,8 +81,8 @@ public final class VariablesInLogicalExpressionQuerySpecification extends BaseGe
   
   /**
    * Inner class allowing the singleton instance of {@link VariablesInLogicalExpressionQuerySpecification} to be created 
-   * 	<b>not</b> at the class load time of the outer class, 
-   * 	but rather at the first call to {@link VariablesInLogicalExpressionQuerySpecification#instance()}.
+   *     <b>not</b> at the class load time of the outer class, 
+   *     but rather at the first call to {@link VariablesInLogicalExpressionQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -130,42 +132,45 @@ public final class VariablesInLogicalExpressionQuerySpecification extends BaseGe
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-      	{
-      		PBody body = new PBody(this);
-      		PVariable var_expression = body.getOrCreateVariableByName("expression");
-      		PVariable var_expression2 = body.getOrCreateVariableByName("expression2");
-      		PVariable var_notNull = body.getOrCreateVariableByName("notNull");
-      		new TypeConstraint(body, new FlatTuple(var_expression), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Expression")));
-      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-      		   new ExportedParameter(body, var_expression, parameter_pExpression)
-      		));
-      		//   BinaryLogicalExpression.operator(expression, ::AND)
-      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-      		new ConstantValue(body, var__virtual_0_, getEnumLiteral("http://ingraph/relalg", "BinaryLogicalOperatorType", "AND").getInstance());
-      		new TypeConstraint(body, new FlatTuple(var_expression), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-      		PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
-      		new TypeConstraint(body, new FlatTuple(var_expression, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "operator")));
-      		new Equality(body, var__virtual_1_, var__virtual_0_);
-      		//     find leftDeepTreeNodes+(expression, expression2)
-      		new BinaryTransitiveClosure(body, new FlatTuple(var_expression, var_expression2), LeftDeepTreeNodesQuerySpecification.instance().getInternalQueryRepresentation());
-      		//     BinaryLogicalExpression.rightOperand(expression2, notNull)
-      		new TypeConstraint(body, new FlatTuple(var_expression2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-      		PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
-      		new TypeConstraint(body, new FlatTuple(var_expression2, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "rightOperand")));
-      		new Equality(body, var__virtual_2_, var_notNull);
-      		//   UnaryGraphObjectLogicalExpression.operator(notNull, ::IS_NOT_NULL)
-      		PVariable var__virtual_3_ = body.getOrCreateVariableByName(".virtual{3}");
-      		new ConstantValue(body, var__virtual_3_, getEnumLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalOperatorType", "IS_NOT_NULL").getInstance());
-      		new TypeConstraint(body, new FlatTuple(var_notNull), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalExpression")));
-      		PVariable var__virtual_4_ = body.getOrCreateVariableByName(".virtual{4}");
-      		new TypeConstraint(body, new FlatTuple(var_notNull, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalExpression", "operator")));
-      		new Equality(body, var__virtual_4_, var__virtual_3_);
-      		bodies.add(body);
-      	}
-      	// to silence compiler error
-      	if (false) throw new ViatraQueryException("Never", "happens");
+          {
+              PBody body = new PBody(this);
+              PVariable var_expression = body.getOrCreateVariableByName("expression");
+              PVariable var_expression2 = body.getOrCreateVariableByName("expression2");
+              PVariable var_notNull = body.getOrCreateVariableByName("notNull");
+              new TypeConstraint(body, new FlatTuple(var_expression), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "Expression")));
+              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+                 new ExportedParameter(body, var_expression, parameter_pExpression)
+              ));
+              //   BinaryLogicalExpression.operator(expression, ::AND)
+              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+              new ConstantValue(body, var__virtual_0_, getEnumLiteral("http://ingraph/relalg", "BinaryLogicalOperatorType", "AND").getInstance());
+              new TypeConstraint(body, new FlatTuple(var_expression), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+              PVariable var__virtual_1_ = body.getOrCreateVariableByName(".virtual{1}");
+              new TypeConstraint(body, new FlatTuple(var_expression, var__virtual_1_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "operator")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_1_), new EDataTypeInSlotsKey((EDataType)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalOperatorType")));
+              new Equality(body, var__virtual_1_, var__virtual_0_);
+              //     find leftDeepTreeNodes+(expression, expression2)
+              new BinaryTransitiveClosure(body, new FlatTuple(var_expression, var_expression2), LeftDeepTreeNodesQuerySpecification.instance().getInternalQueryRepresentation());
+              //     BinaryLogicalExpression.rightOperand(expression2, notNull)
+              new TypeConstraint(body, new FlatTuple(var_expression2), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+              PVariable var__virtual_2_ = body.getOrCreateVariableByName(".virtual{2}");
+              new TypeConstraint(body, new FlatTuple(var_expression2, var__virtual_2_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "rightOperand")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_2_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
+              new Equality(body, var__virtual_2_, var_notNull);
+              //   UnaryGraphObjectLogicalExpression.operator(notNull, ::IS_NOT_NULL)
+              PVariable var__virtual_3_ = body.getOrCreateVariableByName(".virtual{3}");
+              new ConstantValue(body, var__virtual_3_, getEnumLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalOperatorType", "IS_NOT_NULL").getInstance());
+              new TypeConstraint(body, new FlatTuple(var_notNull), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalExpression")));
+              PVariable var__virtual_4_ = body.getOrCreateVariableByName(".virtual{4}");
+              new TypeConstraint(body, new FlatTuple(var_notNull, var__virtual_4_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalExpression", "operator")));
+              new TypeConstraint(body, new FlatTuple(var__virtual_4_), new EDataTypeInSlotsKey((EDataType)getClassifierLiteral("http://ingraph/relalg", "UnaryGraphObjectLogicalOperatorType")));
+              new Equality(body, var__virtual_4_, var__virtual_3_);
+              bodies.add(body);
+          }
+          // to silence compiler error
+          if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-      	throw processDependencyException(ex);
+          throw processDependencyException(ex);
       }
       return bodies;
     }

@@ -61,34 +61,34 @@ abstract class LdbcSnbBiTest extends FunSuite {
   case class TestCase(number: Int)
 
   Vector(
-////        TestCase(1), // CASE
-//        TestCase(2),
-//        TestCase(3),
-//        TestCase(4),
-//        TestCase(5),
-//        TestCase(6),
-//        TestCase(7),
-////        TestCase(8), // PATH
-//        TestCase(9),
-////        TestCase(10), // CASE
-////        TestCase(11), // unwind parameter
-//        TestCase(12),
-//        TestCase(13),
-////        TestCase(14), // PATH
-//        TestCase(15),
-////        TestCase(16), // PATH
-////        TestCase(17), // no Cypher implementation yet
-////        TestCase(18), // no Cypher implementation yet
-////        TestCase(19), // antijoin
-////        TestCase(20), // PATH
-////        TestCase(21), // no Cypher implementation yet
-//        //TestCase(22), // no Cypher implementation yet
-//        //TestCase(23), // no Cypher implementation yet
-//        TestCase(24),
-////        TestCase(25), // no cypher implementation yet
+//        TestCase(1), // CASE
+        TestCase(2),
+        TestCase(3),
+        TestCase(4),
+        TestCase(5),
+        TestCase(6),
+        TestCase(7),
+//        TestCase(8), // PATH
+        TestCase(9),
+//        TestCase(10), // CASE
+//        TestCase(11), // unwind parameter
+        TestCase(12),
+        TestCase(13),
+//        TestCase(14), // PATH
+        TestCase(15),
+//        TestCase(16), // PATH
+//        TestCase(17), // no Cypher implementation yet
+//        TestCase(18), // no Cypher implementation yet
+//        TestCase(19), // antijoin
+//        TestCase(20), // PATH
+//        TestCase(21), // no Cypher implementation yet
+        //TestCase(22), // no Cypher implementation yet
+        //TestCase(23), // no Cypher implementation yet
+        TestCase(24),
+//        TestCase(25), // no cypher implementation yet
 //        TestCase(26), // PATH
 //        TestCase(27), // PATH
-        TestCase(28), // PATH
+//        TestCase(28), // PATH
         null
   ).filter(_ != null) //
     .foreach(

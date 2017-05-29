@@ -54,7 +54,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
     // check if matcher already exists
     LeftDeepTreeNodesMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-    	matcher = (LeftDeepTreeNodesMatcher)engine.getMatcher(querySpecification());
+        matcher = (LeftDeepTreeNodesMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -255,30 +255,30 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   @Override
   protected LeftDeepTreeNodesMatch tupleToMatch(final Tuple t) {
     try {
-    	return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) t.get(POSITION_PARENT), (BinaryLogicalExpression) t.get(POSITION_CHILD));
+        return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) t.get(POSITION_PARENT), (BinaryLogicalExpression) t.get(POSITION_CHILD));
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in tuple not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in tuple not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected LeftDeepTreeNodesMatch arrayToMatch(final Object[] match) {
     try {
-    	return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
+        return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
   @Override
   protected LeftDeepTreeNodesMatch arrayToMatchMutable(final Object[] match) {
     try {
-    	return LeftDeepTreeNodesMatch.newMutableMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
+        return LeftDeepTreeNodesMatch.newMutableMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
     } catch(ClassCastException e) {
-    	LOGGER.error("Element(s) in array not properly typed!",e);
-    	return null;
+        LOGGER.error("Element(s) in array not properly typed!",e);
+        return null;
     }
   }
   
