@@ -23,10 +23,13 @@ class IngraphLogger {
 	new(String loggerName) {
 		this.name = loggerName
 		this.logger = Logger.getLogger(name)
+
 		/*
 		 *  FIXME: for multiple runs in a single JVM, we should not to add more than 1 ConsoleHandler
 		 */
-		this.logger.addHandler(new ConsoleHandler)
+		if (this.logger.handlers.size == 0) {
+			this.logger.addHandler(new ConsoleHandler)
+		}
 	}
 
 	new(Logger logger) {
