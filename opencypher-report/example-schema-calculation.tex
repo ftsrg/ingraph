@@ -1,80 +1,59 @@
 \begin{forest} for tree={align=center}
-[
+	[
 	{$\production{\var{n.name}}$
-	\\ \footnotesize
-	$\color{gray} \langle \var{n.name} \rangle $
-	\\ \footnotesize
-	$\color{violet} \langle  \rangle $
-	\\ \footnotesize
-	$\color{orange} \langle {}_{0}^{0}
-	\var{n.name}
-	 \rangle$
-	}
-		[
-			{$\projection{\var{n.name}
-				}{}
-			$
-			\\ \footnotesize
-			$\color{gray} \langle \var{n.name} \rangle $
-			\\ \footnotesize
-			$\color{violet} \langle  \rangle $
-			\\ \footnotesize
-			$\color{orange} \langle {}_{0}^{1}
-			\var{n.name}
-			 \rangle$
-			}
-				[
-					{$\selection{
-						\var{n.age} > \literal{27}
-					}
-					$
-					\\ \footnotesize
-					$\color{gray} \langle \var{n} \rangle $
-					\\ \footnotesize
-					$\color{violet} \langle \var{n.name} \rangle $
-					\\ \footnotesize
-					$\color{orange} \langle {}_{0}^{}
-					\var{n}
-					, {}_{1}^{}
-					\var{n.name}
-					, {}_{2}^{}
-					\var{n.age}
-					 \rangle$
-					}
-						[
-							{$\alldifferent{}$
-							\\ \footnotesize
-							$\color{gray} \langle \var{n} \rangle $
-							\\ \footnotesize
-							$\color{violet} \langle \var{n.name}, \var{n.age} \rangle $
-							\\ \footnotesize
-							$\color{orange} \langle {}_{0}^{}
-							\var{n}
-							, {}_{1}^{}
-							\var{n.name}
-							, {}_{2}^{}
-							\var{n.age}
-							 \rangle$
-							}
-								[
-									{$\getvertices{n}{Person}$
-									\\ \footnotesize
-									$\color{gray} \langle \var{n} \rangle $
-									\\ \footnotesize
-									$\color{violet} \langle \var{n.name}, \var{n.age} \rangle $
-									\\ \footnotesize
-									$\color{orange} \langle {}_{0}^{}
-									\var{n}
-									, {}_{1}^{}
-									\var{n.name}
-									, {}_{2}^{}
-									\var{n.age}
-									 \rangle$
-									},tier=input,for tree={blue,densely dashed}
-								]
-						]
-				]
-		]
-]
-;
+		\\ \footnotesize
+		$\color{externalschemacolor} \langle \var{n.name} \rangle $
+		\\ \footnotesize
+		$\color{extravariablescolor} \langle  \rangle $
+		\\ \footnotesize
+		$\color{internalschemacolor} \langle {}_{0}^{0}
+		\var{\var{n.name}}
+		\rangle$
+	}[
+	{$\projection{\var{n.name}}{}
+		$
+		\\ \footnotesize
+		$\color{externalschemacolor} \langle \var{n.name} \rangle $
+		\\ \footnotesize
+		$\color{extravariablescolor} \langle  \rangle $
+		\\ \footnotesize
+		$\color{internalschemacolor} \langle {}_{0}^{1}
+		\var{\var{n.name}}
+		\rangle$
+	}[
+	{$\selection{
+			\var{n.age} > \literal{27}
+		}
+		$
+		\\ \footnotesize
+		$\color{externalschemacolor} \langle \var{n}  \rangle $
+		\\ \footnotesize
+		$\color{extravariablescolor} \langle \var{n.name} \rangle $
+		\\ \footnotesize
+		$\color{internalschemacolor} \langle {}_{0}^{}
+		\var{\var{n} }
+		, {}_{1}^{}
+		\var{\var{n.name}}
+		, {}_{2}^{}
+		\var{\var{n.age}}
+		\rangle$
+	}[
+	{$\getvertices{n}{Person}$
+		\\ \footnotesize
+		$\color{externalschemacolor} \langle \var{n}  \rangle $
+		\\ \footnotesize
+		$\color{extravariablescolor} \langle \var{n.name}, \var{n.age} \rangle $
+		\\ \footnotesize
+		$\color{internalschemacolor} \langle {}_{0}^{}
+		\var{\var{n} }
+		, {}_{1}^{}
+		\var{\var{n.name}}
+		, {}_{2}^{}
+		\var{\var{n.age}}
+		\rangle$
+	},tier=input,for tree={blue,densely dashed}]
+	]
+	]
+	]
+	;
 \end{forest}
