@@ -5,7 +5,7 @@ import ingraph.relalg2tex.converters.elementconverters.ElementConverter
 import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
 import ingraph.relalg2tex.converters.elementconverters.MiscConverters
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
-import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
+import ingraph.relalg2tex.converters.variableconverters.VariableExpressionConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
 import relalg.CreateOperator
@@ -35,7 +35,7 @@ class OperatorConverter {
 	extension MiscConverters miscConverters = new MiscConverters
 	extension ElementConverter elementConverter = new ElementConverter
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	extension VariableNameConverter variableNameConverter = new VariableNameConverter
+	extension VariableExpressionConverter variableExpressionConverter = new VariableExpressionConverter
 	extension GroupingProjectionOperatorConverter groupingProjectionOperatorConverter = new GroupingProjectionOperatorConverter
 	extension SortTopOperatorConverter sortTopOperatorConverter = new SortTopOperatorConverter
 	extension BinaryOperatorConverter binaryOperatorConverter
