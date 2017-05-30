@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,22 +49,28 @@ public class LdbcNeo4jReferenceOutputTest {
 
 	@Parameters(name = "workload={0}, query={1}")
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-				// simple tests
-				{ "simple", 1 }, { "simple", 2 }, { "simple", 3 }, { "simple", 4 }, { "simple", 5 }, //
-				{ "simple", 6 }, //
+		final List<Object[]> data = new ArrayList<>();
 
-				// BI
-				              { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
-				{ "bi",  6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
-				{ "bi", 11 }, { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
-				{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
-				                                          { "bi", 24 }, //
+		for (int i = 1; i <= 26; i++) {
+			final Object[] o = new Object[] {"simple", i};
+			data.add(o);
+		}
 
-				// interactive
-				{ "interactive",  1 }, { "interactive",  2 }, { "interactive",  3 }, { "interactive",  4 }, { "interactive",  5 },
-				{ "interactive",  6 }, { "interactive",  7 }, { "interactive",  8 }, { "interactive",  9 }, { "interactive", 10 },
-				{ "interactive", 11 }, { "interactive", 12 }, { "interactive", 13 } });
+		data.addAll(Arrays.asList(new Object[][] {
+			// BI
+			              { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
+			{ "bi",  6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
+			{ "bi", 11 }, { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
+			{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
+			                                          { "bi", 24 },               //
+		}));
+
+		for (int i = 1; i <= 13; i++) {
+			final Object[] o = new Object[] {"interactive", i};
+			data.add(o);
+		}
+
+		return data;
 	}
 
 	@Parameter(0)

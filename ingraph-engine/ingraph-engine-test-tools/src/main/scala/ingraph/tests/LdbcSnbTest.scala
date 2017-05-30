@@ -5,6 +5,7 @@ import scala.io.Source
 import org.scalatest.FunSuite
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
+import scala.collection.immutable.Range
 
 abstract class LdbcSnbTest extends FunSuite {
 
@@ -60,48 +61,25 @@ abstract class LdbcSnbTest extends FunSuite {
 
   case class TestCase(workload: String, number: Int)
 
-  Vector(
-        TestCase("bi", 2),
-        TestCase("bi", 3),
-        TestCase("bi", 4),
-        TestCase("bi", 5),
-        TestCase("bi", 6),
-        TestCase("bi", 7),
-        TestCase("bi", 9),
-        TestCase("bi", 12),
-        TestCase("bi", 13),
-        TestCase("bi", 14), // PATH
-        TestCase("bi", 15),
-        TestCase("bi", 20), // PATH
-        TestCase("bi", 24),
+  val testCases =
+    List(2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 15, 20, 24).map(new TestCase("bi", _)) ++
+    List(1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 20, 21, 22, 23, 24).map(new TestCase("simple", _))
 
-        // simple tests
-        TestCase("simple", 1), // PATH
-        TestCase("simple", 2), // PATH
-        TestCase("simple", 3), // PATH
-        TestCase("simple", 4), // PATH
-//        TestCase("simple", 5), // PATH
-//        TestCase("simple", 6), // PATH
+  // BI
+  // 1 // CASE
+  // 8 // PATH
+  // 10 // CASE
+  // 11 // requires list comprehensions
+  // 16 // PATH
+  // 17 // no Cypher implementation yet
+  // 18 // no Cypher implementation yet
+  // 19 // antijoin
+  // 21 // no Cypher implementation yet
+  // 22 // no Cypher implementation yet
+  // 23 // no Cypher implementation yet
+  // 25 // no cypher implementation yet
 
-//        TestCase("bi", 8), // PATH
-//        TestCase("bi", 16), // PATH
-
-//        TestCase("bi", 1), // CASE
-//        TestCase("bi", 10), // CASE
-//        TestCase("bi", 19), // antijoin
-
-//        TestCase("bi", 11), // requires list comprehensions
-
-//        TestCase("bi", 17), // no Cypher implementation yet
-//        TestCase("bi", 18), // no Cypher implementation yet
-//        TestCase("bi", 21), // no Cypher implementation yet
-//        TestCase("bi", 22), // no Cypher implementation yet
-//        TestCase("bi", 23), // no Cypher implementation yet
-//        TestCase("bi", 25), // no cypher implementation yet
-
-        
-        null
-  ).filter(_ != null) //
+  testCases.filter(_ != null) //
     .foreach(
     t =>
       test(s"${t.workload}-${t.number}-size-1") {
