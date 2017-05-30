@@ -6,6 +6,7 @@ import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
 import ingraph.relalg2tex.converters.elementconverters.MiscConverters
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
 import ingraph.relalg2tex.converters.variableconverters.VariableExpressionConverter
+import ingraph.relalg2tex.converters.variableconverters.VariableNameConverter
 import relalg.AllDifferentOperator
 import relalg.BinaryOperator
 import relalg.CreateOperator
@@ -31,14 +32,17 @@ class OperatorConverter {
 
 	RelalgConverterConfig config
 
+	//extension ExpressionUnwrapper expressionUnwrapper = new ExpressionUnwrapper
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension MiscConverters miscConverters = new MiscConverters
 	extension ElementConverter elementConverter = new ElementConverter
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
-	extension VariableExpressionConverter variableExpressionConverter = new VariableExpressionConverter
 	extension GroupingProjectionOperatorConverter groupingProjectionOperatorConverter = new GroupingProjectionOperatorConverter
 	extension SortTopOperatorConverter sortTopOperatorConverter = new SortTopOperatorConverter
 	extension BinaryOperatorConverter binaryOperatorConverter
+
+	val variableNameConverter = new VariableNameConverter
+	val variableExpressionConverter = new VariableExpressionConverter	
 
 	new(RelalgConverterConfig config) {
 		this.config = config
@@ -103,7 +107,8 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(CreateOperator op) {
-		'''\create{«op.elements.map[it.expression.convertExpressionWithLabelSet].join(", ")»}'''
+//		'''\create{«op.elements.map[it.expression.convertExpressionWithLabelSet].join(", ")»}'''
+		'''\create{«op.elements.map[variableNameConverter.convertVariable(it)].join(", ")»}'''
 	}
 
 	def dispatch convertOperator(DeleteOperator op) {
@@ -131,7 +136,7 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(UnwindOperator op) {
-		'''\unwind{«op.element.convertVariable»}'''
+		'''\unwind{«variableExpressionConverter.convertVariable(op.element)»}'''
 	}
 
 	/**

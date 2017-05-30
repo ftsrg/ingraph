@@ -20,9 +20,6 @@ class SchemaConverter {
 	def convertSchema(List<Variable> schema) {
 		val list = new ArrayList(schema.size)
 		schema.forEach[ element, index |
-//			if (element instanceof ExpressionVariable) {
-//				println(element.hasInferredName)
-//			}
 			list.add(element.convertVariable)
 		]
 		'''\langle «list.join(', ')» \rangle'''
