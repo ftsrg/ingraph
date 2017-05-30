@@ -1,7 +1,7 @@
 // Unrelated Replies
 UNWIND $blacklist AS word
 MATCH
-  (country:Country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)<-[:hasCreator]-(message:Message)<-[:replyTo]-(reply:Comment),
+  (country:Country)<-[:isPartOf]-(:City)<-[:isLocatedIn]-(person:Person)<-[:hasCreator]-(message:Message)<-[:replyOf]-(reply:Comment),
   (message)-[:hasTag]->(tag:Tag),
   (fan:Person)-[:likes]->(reply)
 WHERE NOT (tag)<-[:hasTag]-(reply)
