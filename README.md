@@ -43,7 +43,7 @@ Recommended dependencies:
 1. Build the projects from command line with the following command:
 
     ```bash
-    ./gradlew clean assemble eclipse
+    ./gradlew assemble eclipse
     ```
 
     This will generate 1. source files from the Xcore model and 2. the Eclipse project files.
