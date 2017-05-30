@@ -58,8 +58,8 @@ public class LdbcNeo4jReferenceOutputTest {
 				{ "bi", 26 }, { "bi", 27 }, { "bi", 28 }, { "bi", 29 }, { "bi", 30 }, //
 				{ "bi", 31 }, //
 				// interactive
-				{ "interactive", 1 }, { "interactive", 2 }, { "interactive", 3 }, { "interactive", 4 }, { "interactive", 5 },
-				{ "interactive", 6 }, { "interactive", 7 }, { "interactive", 8 }, { "interactive", 9 }, { "interactive", 10 },
+				{ "interactive",  1 }, { "interactive",  2 }, { "interactive",  3 }, { "interactive",  4 }, { "interactive",  5 },
+				{ "interactive",  6 }, { "interactive",  7 }, { "interactive",  8 }, { "interactive",  9 }, { "interactive", 10 },
 				{ "interactive", 11 }, { "interactive", 12 }, { "interactive", 13 } });
 	}
 
@@ -88,9 +88,9 @@ public class LdbcNeo4jReferenceOutputTest {
 	public void test() throws IOException {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
-			final String queryPathname = String.format("../../queries/ldbc-snb-%s/query-%d.cypher", workload, queryNumber);
-			final String queryResultBin = String.format("../../queries/ldbc-snb-%s/query-%d.bin", workload, queryNumber);
-			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/query-%d.json", workload, queryNumber);
+			final String queryPathname = String.format("../../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
+			final String queryResultBin = String.format("../../queries/ldbc-snb-%s/%s-%d.bin", workload, workload, queryNumber);
+			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d.json", workload, workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);

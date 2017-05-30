@@ -23,7 +23,7 @@ class RailwayVerificationTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../../graphs/railway-verification/${entityName}.csv"
 
-  def queryPath(query: Int): String = s"../../queries/railway-verification/query-$query.cypher"
+  def queryPath(query: Int): String = s"../../queries/railway-verification/railway-$query.cypher"
 
   //def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
 
@@ -57,9 +57,9 @@ class RailwayVerificationTest extends FunSuite {
     null
   ).filter(_ != null) //
     .foreach(
-    t => test(s"query-${t.number}-size-1") {
+    t => test(s"railway-${t.number}-size-1") {
       val queryNumber = t.number
-      val queryName = s"query-${t.number}"
+      val queryName = s"railway-${t.number}"
       val querySpecification = Source.fromFile(queryPath(queryNumber)).getLines().mkString("\n")
 
       runQuery(queryNumber, queryName, querySpecification)
