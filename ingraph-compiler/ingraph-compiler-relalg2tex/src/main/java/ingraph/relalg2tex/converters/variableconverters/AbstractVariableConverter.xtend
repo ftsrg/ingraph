@@ -47,8 +47,8 @@ abstract class AbstractVariableConverter {
 		'''\atom{«entry.key»}: «entry.value.convertExpression»'''
 	}
 
-	def convertExpressionVariable(ExpressionVariable ev) {
-		'''\var{«ExpressionUnwrapper.extractExpressionVariable(ev).convertVariable»}'''
+	def unwrap(ExpressionVariable ev) {
+		ExpressionUnwrapper.extractExpressionVariable(ev)
 	}
 
 }

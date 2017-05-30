@@ -8,7 +8,7 @@ class VariableExpressionConverter extends AbstractVariableConverter {
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
 
 	def dispatch convertVariable(ExpressionVariable ev) {
-		'''«convertExpression(ev.expression)»«IF !(ev.dontCare || ev.hasInferredName)»\assign «convertExpressionVariable(ev)»«ENDIF»'''
+		'''«ev.expression.convertExpression»«IF !(ev.dontCare || ev.hasInferredName)»\assign «ev.unwrap.name»«ENDIF»'''
 	}
 
 }

@@ -5,7 +5,7 @@ import relalg.ExpressionVariable
 class VariableNameConverter extends AbstractVariableConverter {
 
 	def dispatch convertVariable(ExpressionVariable ev) {
-		convertExpressionVariable(ev)
+		ev.unwrap.name
 	}
 
 }

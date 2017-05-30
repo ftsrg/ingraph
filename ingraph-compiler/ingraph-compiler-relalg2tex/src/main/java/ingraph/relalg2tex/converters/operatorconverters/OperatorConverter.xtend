@@ -107,7 +107,6 @@ class OperatorConverter {
 	}
 
 	def dispatch convertOperator(CreateOperator op) {
-//		'''\create{«op.elements.map[it.expression.convertExpressionWithLabelSet].join(", ")»}'''
 		'''\create{«op.elements.map[variableNameConverter.convertVariable(it)].join(", ")»}'''
 	}
 
