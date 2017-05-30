@@ -90,7 +90,7 @@ abstract class LdbcSnbBiTest extends FunSuite {
 //        TestCase(10), // CASE
 //        TestCase(19), // antijoin
 
-//        TestCase(11), // unwind parameter
+//        TestCase(11), // requires list comprehensions
 
 //        TestCase(17), // no Cypher implementation yet
 //        TestCase(18), // no Cypher implementation yet
