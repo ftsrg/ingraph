@@ -49,13 +49,16 @@ public class LdbcNeo4jReferenceOutputTest {
 	@Parameters(name = "workload={0}, query={1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
+				// simple tests
+				{ "simple", 1 }, { "simple", 2 }, { "simple", 3 }, { "simple", 4 }, { "simple", 5 }, //
+				{ "simple", 6 }, //
+
 				// BI
 				              { "bi",  2 }, { "bi",  3 }, { "bi",  4 }, { "bi",  5 }, //
 				{ "bi",  6 }, { "bi",  7 }, { "bi",  8 }, { "bi",  9 }, { "bi", 10 }, //
 				{ "bi", 11 }, { "bi", 12 }, { "bi", 13 }, { "bi", 14 }, { "bi", 15 }, //
 				{ "bi", 16 },                             { "bi", 19 }, { "bi", 20 }, //
 				                                          { "bi", 24 }, //
-				{ "bi", 26 }, { "bi", 27 }, { "bi", 28 }, { "bi", 29 }, { "bi", 30 }, //
 
 				// interactive
 				{ "interactive",  1 }, { "interactive",  2 }, { "interactive",  3 }, { "interactive",  4 }, { "interactive",  5 },
@@ -88,9 +91,9 @@ public class LdbcNeo4jReferenceOutputTest {
 	public void test() throws IOException {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
-			final String queryPathname = String.format("../../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
-			final String queryResultBin = String.format("../../queries/ldbc-snb-%s/%s-%d.bin", workload, workload, queryNumber);
-			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d.json", workload, workload, queryNumber);
+			final String queryPathname   = String.format("../../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
+			final String queryResultBin  = String.format("../../queries/ldbc-snb-%s/%s-%d.bin",    workload, workload, queryNumber);
+			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d.json",   workload, workload, queryNumber);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);

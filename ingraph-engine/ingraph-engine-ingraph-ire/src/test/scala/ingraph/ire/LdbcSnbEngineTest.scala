@@ -6,14 +6,14 @@ import java.util.Collections
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.tests.LdbcSnbBiTest
 import org.neo4j.driver.v1.Record
 import org.objenesis.strategy.StdInstantiatorStrategy
 import org.supercsv.prefs.CsvPreference
+import ingraph.tests.LdbcSnbTest
 
-class LdbcSnbBiEngineTest extends LdbcSnbBiTest {
+class LdbcSnbEngineTest extends LdbcSnbTest {
 
-  override def runQuery(queryNumber : Int, queryName : String, querySpecification : String) {
+  override def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String) {
     val indexer = new Indexer()
     val adapter = new IngraphAdapter(querySpecification, queryName, indexer)
 
@@ -32,7 +32,7 @@ class LdbcSnbBiEngineTest extends LdbcSnbBiTest {
         Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass,
         classOf[UnmodifiableCollectionsSerializer])
 
-    val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(queryNumber))))
+    val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(workload, queryNumber))))
       .asInstanceOf[java.util.ArrayList[Record]]
     assertResult(expectedResults.size)(actualResults.size)
     // do not assert on the result contents -- the results use Scala collections, while the reference output uses Java collections.

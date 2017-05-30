@@ -13,11 +13,11 @@ import com.esotericsoftware.kryo.io.Input
 import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
 import ingraph.driver.data.IngraphDeltaHandler
 import ingraph.driver.ingraph.IngraphDriver
-import ingraph.tests.LdbcSnbBiTest
+import ingraph.tests.LdbcSnbTest
 
-class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
+class LdbcSnbDriverTest extends LdbcSnbTest {
 
-  override def runQuery(queryNumber : Int, queryName : String, querySpecification : String) {
+  override def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String) {
     val driver = new IngraphDriver()
     val session = driver.session()
 
@@ -44,7 +44,7 @@ class LdbcSnbBiDriverTest extends LdbcSnbBiTest {
 
     actualResults.asScala.toVector.map(println(_))
 
-    val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(queryNumber))))
+    val expectedResults = kryo.readClassAndObject(new Input(new FileInputStream(queryResultPath(workload, queryNumber))))
       .asInstanceOf[java.util.ArrayList[Record]]
     assertResult(expectedResults.size)(actualResults.size)
     for ((expected, actual) <- expectedResults.asScala.zip(actualResults.asScala.toVector)) {

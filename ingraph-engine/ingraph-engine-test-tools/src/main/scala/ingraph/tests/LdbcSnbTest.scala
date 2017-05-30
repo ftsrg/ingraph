@@ -6,13 +6,13 @@ import org.scalatest.FunSuite
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 
-abstract class LdbcSnbBiTest extends FunSuite {
+abstract class LdbcSnbTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(query: Int): String = s"../../queries/ldbc-snb-bi/bi-$query.cypher"
+  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-$workload/$workload-$query.cypher"
 
-  def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
+  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight("cypher".length) + "bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("comment") -> List("Message", "Comment"),
@@ -58,58 +58,59 @@ abstract class LdbcSnbBiTest extends FunSuite {
     .build
   val converter = new Relalg2TexTreeConverter(converterConfig)
 
-  case class TestCase(number: Int)
+  case class TestCase(workload: String, number: Int)
 
   Vector(
-        TestCase(2),
-        TestCase(3),
-        TestCase(4),
-        TestCase(5),
-        TestCase(6),
-        TestCase(7),
-        TestCase(9),
-        TestCase(12),
-        TestCase(13),
-        TestCase(14), // PATH
-        TestCase(15),
-        TestCase(20), // PATH
-        TestCase(24),
+        TestCase("bi", 2),
+        TestCase("bi", 3),
+        TestCase("bi", 4),
+        TestCase("bi", 5),
+        TestCase("bi", 6),
+        TestCase("bi", 7),
+        TestCase("bi", 9),
+        TestCase("bi", 12),
+        TestCase("bi", 13),
+        TestCase("bi", 14), // PATH
+        TestCase("bi", 15),
+        TestCase("bi", 20), // PATH
+        TestCase("bi", 24),
 
-        // our own tests
-        TestCase(26), // PATH
-        TestCase(27), // PATH
-        TestCase(28), // PATH
-        TestCase(29), // PATH
-//        TestCase(30), // PATH
-//        TestCase(31), // PATH
+        // simple tests
+        TestCase("simple", 1), // PATH
+        TestCase("simple", 2), // PATH
+        TestCase("simple", 3), // PATH
+        TestCase("simple", 4), // PATH
+//        TestCase("simple", 5), // PATH
+//        TestCase("simple", 6), // PATH
 
-//        TestCase(8), // PATH
-//        TestCase(16), // PATH
+//        TestCase("bi", 8), // PATH
+//        TestCase("bi", 16), // PATH
 
-//        TestCase(1), // CASE
-//        TestCase(10), // CASE
-//        TestCase(19), // antijoin
+//        TestCase("bi", 1), // CASE
+//        TestCase("bi", 10), // CASE
+//        TestCase("bi", 19), // antijoin
 
-//        TestCase(11), // requires list comprehensions
+//        TestCase("bi", 11), // requires list comprehensions
 
-//        TestCase(17), // no Cypher implementation yet
-//        TestCase(18), // no Cypher implementation yet
-//        TestCase(21), // no Cypher implementation yet
-//        TestCase(22), // no Cypher implementation yet
-//        TestCase(23), // no Cypher implementation yet
-//        TestCase(25), // no cypher implementation yet
+//        TestCase("bi", 17), // no Cypher implementation yet
+//        TestCase("bi", 18), // no Cypher implementation yet
+//        TestCase("bi", 21), // no Cypher implementation yet
+//        TestCase("bi", 22), // no Cypher implementation yet
+//        TestCase("bi", 23), // no Cypher implementation yet
+//        TestCase("bi", 25), // no cypher implementation yet
 
         
         null
   ).filter(_ != null) //
     .foreach(
-    t => test(s"bi-${t.number}-size-1") {
-      val queryNumber = t.number
-      val queryName = s"ldbc-snb-bi-${t.number}"
-      val querySpecification = Source.fromFile(queryPath(queryNumber)).getLines().mkString("\n")
+    t =>
+      test(s"${t.workload}-${t.number}-size-1") {
+      
+      val queryName = s"ldbc-snb-${t.workload}-${t.number}"
+      val querySpecification = Source.fromFile(queryPath(t.workload, t.number)).getLines().mkString("\n")
 
-      runQuery(queryNumber, queryName, querySpecification)
+      runQuery(t.workload, t.number, queryName, querySpecification)
     })
 
-  def runQuery(queryNumber : Int, queryName : String, querySpecification : String)
+  def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String)
 }

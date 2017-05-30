@@ -57,12 +57,12 @@ public abstract class AllDifferentOperatorEdgeVariablesMatch extends BasePattern
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("allDifferentOperator".equals(parameterName) ) {
-    	this.fAllDifferentOperator = (AllDifferentOperator) newValue;
-    	return true;
+        this.fAllDifferentOperator = (AllDifferentOperator) newValue;
+        return true;
     }
     if ("edgeVariable".equals(parameterName) ) {
-    	this.fEdgeVariable = (EdgeVariable) newValue;
-    	return true;
+        this.fEdgeVariable = (EdgeVariable) newValue;
+        return true;
     }
     return false;
   }
@@ -119,18 +119,18 @@ public abstract class AllDifferentOperatorEdgeVariablesMatch extends BasePattern
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-    	return true;
+        return true;
     if (!(obj instanceof AllDifferentOperatorEdgeVariablesMatch)) { // this should be infrequent
-    	if (obj == null) {
-    		return false;
-    	}
-    	if (!(obj instanceof IPatternMatch)) {
-    		return false;
-    	}
-    	IPatternMatch otherSig  = (IPatternMatch) obj;
-    	if (!specification().equals(otherSig.specification()))
-    		return false;
-    	return Arrays.deepEquals(toArray(), otherSig.toArray());
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof IPatternMatch)) {
+            return false;
+        }
+        IPatternMatch otherSig  = (IPatternMatch) obj;
+        if (!specification().equals(otherSig.specification()))
+            return false;
+        return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     AllDifferentOperatorEdgeVariablesMatch other = (AllDifferentOperatorEdgeVariablesMatch) obj;
     if (fAllDifferentOperator == null) {if (other.fAllDifferentOperator != null) return false;}
@@ -143,10 +143,10 @@ public abstract class AllDifferentOperatorEdgeVariablesMatch extends BasePattern
   @Override
   public AllDifferentOperatorEdgeVariablesQuerySpecification specification() {
     try {
-    	return AllDifferentOperatorEdgeVariablesQuerySpecification.instance();
+        return AllDifferentOperatorEdgeVariablesQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-     	// This cannot happen, as the match object can only be instantiated if the query specification exists
-     	throw new IllegalStateException (ex);
+         // This cannot happen, as the match object can only be instantiated if the query specification exists
+         throw new IllegalStateException (ex);
     }
   }
   
