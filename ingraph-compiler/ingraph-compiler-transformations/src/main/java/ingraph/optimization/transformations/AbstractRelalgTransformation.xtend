@@ -3,6 +3,7 @@ package ingraph.optimization.transformations
 import java.io.Closeable
 import java.io.IOException
 import org.apache.log4j.Level
+import org.apache.log4j.Logger
 import org.eclipse.viatra.query.runtime.api.AdvancedViatraQueryEngine
 import org.eclipse.viatra.query.runtime.emf.EMFScope
 import org.eclipse.viatra.query.runtime.util.ViatraQueryLoggingUtil
@@ -28,10 +29,9 @@ abstract class AbstractRelalgTransformation implements Closeable {
 	protected val BatchTransformationStatements statements
 
 	new(RelalgContainer container) {
-		ViatraQueryLoggingUtil.getDefaultLogger().setLevel(Level.OFF)
-//		val logger = Logger.getRootLogger
-//		logger.setLevel(Level.ERROR)
-//		ViatraQueryLoggingUtil.setExternalLogger(logger)
+		val logger = Logger.getRootLogger
+		logger.setLevel(Level.ERROR)
+		ViatraQueryLoggingUtil.setExternalLogger(logger)
 		
 		this.container = container
 		val scope = new EMFScope(container)
