@@ -1,4 +1,4 @@
-package ingraph.search2rete
+package ingraph.optimization.transformations
 
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.patterns.UnnecessaryAllDifferentOperatorMatcher

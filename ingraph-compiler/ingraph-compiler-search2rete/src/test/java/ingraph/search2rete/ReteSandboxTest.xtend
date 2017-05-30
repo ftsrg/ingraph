@@ -11,8 +11,8 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 	@Test
 	def void q1() {
 		process('query-1', '''
-		MATCH (tag:Tag)<-[:hasTag]-(message:Message)<-[:replyOf*]-(comment:Comment)
-		RETURN tag.name
+			MATCH (node)
+			RETURN exists(node.attr)
 		''')
 	}
 

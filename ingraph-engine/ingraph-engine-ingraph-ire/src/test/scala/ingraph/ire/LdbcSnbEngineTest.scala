@@ -15,7 +15,7 @@ class LdbcSnbEngineTest extends LdbcSnbTest {
 
   override def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String) {
     val indexer = new Indexer()
-    val adapter = new IngraphAdapter(querySpecification, queryName, indexer)
+    val adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer)
 
     converter.convert(adapter.plan, s"ldbc-snb-bi/bi-$queryNumber")
 

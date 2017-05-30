@@ -21,7 +21,6 @@ import hu.bme.mit.ire.engine.RelationalEngine
 import scala.collection.mutable
 import hu.bme.mit.ire.nodes.binary.TransitiveClosureJoinNode
 
-
 object EngineFactory {
 
   val schemaToMap = new SchemaToMap()
