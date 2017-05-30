@@ -13,6 +13,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils
 import org.eclipse.emf.ecore.util.EcoreUtil
 import relalg.RelalgContainer
 import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
+import ingraph.optimization.transformations.SearchPlanCalculator
 
 class QueryProcessor {
 
@@ -115,9 +116,10 @@ class QueryProcessor {
 
 	def visualizeTree(RelalgContainer container) {
 		try {
-			val treeContainer = EcoreUtil.copy(container)
-			treeContainer.calculateExternalSchema
-			treeSerializer.convert(treeContainer)
+			val searchContainer = EcoreUtil.copy(container)
+			val calculator = new SearchPlanCalculator
+			calculator.apply(searchContainer)
+			treeSerializer.convert(searchContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
 			null
