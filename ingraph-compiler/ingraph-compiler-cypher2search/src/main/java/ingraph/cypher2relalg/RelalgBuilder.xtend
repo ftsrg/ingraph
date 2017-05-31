@@ -68,6 +68,7 @@ import relalg.ArithmeticExpression
 import relalg.AttributeVariable
 import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
+import relalg.CUDOperator
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.ElementVariable
@@ -186,7 +187,9 @@ class RelalgBuilder {
 		/**
 		 * Process each subquery.
 		 * 
-		 * A subquery has the form (MATCH*)(CREATE|DELETE+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
+		 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
+		 *
+		 * Note: CUDOperator is the same as CREATE|DELETE (for now), and UPDATE (set) operations should also come here
 		 */
 		var from = 0
 		var variableBuilderChain = variableBuilder
@@ -195,7 +198,7 @@ class RelalgBuilder {
 			val next = if (i + 1 < clauses.length) {
 					clauses.get(i + 1)
 				}
-			if (current instanceof Delete && ! ( next instanceof Delete ) && ! ( next instanceof Return )
+			if (current instanceof CUDOperator && ! ( next instanceof CUDOperator ) && ! ( next instanceof Return )
 			 || current instanceof Create
 			 || current instanceof With && ! ( next instanceof Unwind )
 			 || current instanceof Unwind
@@ -306,60 +309,60 @@ class RelalgBuilder {
 		} else {
 			afterReturn
 		}
-		val singleQuery_createClause = clauses.filter(typeof(Create)).head
-		val afterCreate = if (singleQuery_createClause !== null) {
-			val u0 = singleQuery_createClause
-			val u1 = createCreateOperator => [
-				input = afterUnwind
-			]
-			for (_u2: u0.pattern.patterns) {
-				val u2 = _u2 as PatternElement
-				if (u2 === null) {
-					unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
-				}
-				val t0 = variableBuilder.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
-				val u4 = buildCreateNodePattern(u2.nodepattern)
-				if (!t0) {
-					u1.elements.add(u4)
-				}
-				var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
-				for (element: u2.chain) {
-					val t1 = variableBuilder.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
-					val u5 = buildCreateNodePattern(element.nodePattern)
-					if (!t1) {
-						u1.elements.add(u5)
+		// process all CUD operations (currently only CREATE and DELETE clauses are supported
+		val afterCud = {
+			var Operator op = afterUnwind
+
+			for (cudClause: clauses.filter([it instanceof Create || it instanceof Delete])) {
+				op = switch cudClause {
+					Create: buildCreateOperator(cudClause, op)
+					Delete: buildDeleteOperator(cudClause, op)
+					default: {
+						logger.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
+						null
 					}
-					val t2 = variableBuilder.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
-					val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
-					if (!t2) {
-						u1.elements.add(u6)
-					}
-					lastVertexVariable = (u5.expression as VariableExpression).variable as VertexVariable
 				}
 			}
-			u1
-		} else {
-			afterUnwind
-		}
-		val singleQuery_deleteClauseList = clauses.filter(typeof(Delete))
-		val afterDelete = {
-			var Operator op = afterCreate
-			for (element: singleQuery_deleteClauseList) {
-				val u1 = createDeleteOperator => [
-					detach = element.detach
-				]
-				u1.input = op
-				for (element2: element.expressions) {
-				  val u2 = element2 as VariableRef
-				  val u4 = buildDeleteVariableRef(u2)
-				  u1.elements.add(u4)
-				}
-				op = u1
-			}
+
 			op
 		}
-		afterDelete
+		afterCud
 	}
+
+	/**
+	 * Build and return a create operator from the CREATE clause and attach p_input to its input. 
+	 */
+	protected def buildCreateOperator(Create u0, Operator p_input) {
+		val u1 = createCreateOperator => [
+			input = p_input
+		]
+		for (_u2: u0.pattern.patterns) {
+			val u2 = _u2 as PatternElement
+			if (u2 === null) {
+				unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
+			}
+			val t0 = variableBuilder.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
+			val u4 = buildCreateNodePattern(u2.nodepattern)
+			if (!t0) {
+				u1.elements.add(u4)
+			}
+			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
+			for (element: u2.chain) {
+				val t1 = variableBuilder.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
+				val u5 = buildCreateNodePattern(element.nodePattern)
+				if (!t1) {
+					u1.elements.add(u5)
+				}
+				val t2 = variableBuilder.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
+				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
+				if (!t2) {
+					u1.elements.add(u6)
+				}
+				lastVertexVariable = (u5.expression as VariableExpression).variable as VertexVariable
+			}
+		}
+		u1
+	} 
 	
 	/**
 	 * Provide the edges for CREATE operator.
@@ -388,6 +391,22 @@ class RelalgBuilder {
 			expressionContainer = topLevelContainer
 		]
 		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
+		u1
+	}
+	
+	/**
+	 * Build and return a delete operator from the DELETE clause and attach p_input to its input. 
+	 */
+	protected def buildDeleteOperator(Delete element, Operator p_input) {
+		val u1 = createDeleteOperator => [
+			detach = element.detach
+		]
+		u1.input = p_input
+		for (element2: element.expressions) {
+		  val u2 = element2 as VariableRef
+		  val u4 = buildDeleteVariableRef(u2)
+		  u1.elements.add(u4)
+		}
 		u1
 	}
 	

@@ -48,12 +48,12 @@ class Validator {
 	/**
 	 * Some checks for a single subquery's clauses
 	 *
-	 * A subquery has the form (MATCH*)(CREATE|DELETE+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
+	 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 	 *
 	 * Checks performed:
 	 * - it consists of only MATCH, CREATE, DELETE, WITH, UNWIND and RETURN clauses
 	 * - it ends with RETURN, CREATE, DELETE, WITH or UNWIND
-	 * - it has at most 1 of either RETURN, WITH or CREATE
+	 * - it has at most 1 of either RETURN, WITH
 	 * - it has at most 1 UNWIND
 	 * - it has at least one of WITH, CREATE, DELETE, UNWIND and RETURN
 	 * - before DELETE there must be at least one MATCH clause
