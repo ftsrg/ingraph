@@ -24,10 +24,6 @@ class ExtraVariablesCalculator {
 	extension ExtraVariablesPropagator extraVariablesPropagator = new ExtraVariablesPropagator
 
 	def calculateExtraVariables(RelalgContainer container) {
-		if (!container.incrementalPlan) {
-			throw new IllegalStateException("ExtraVariablesCalculator must be executed on an incremental query plan")
-		}
-
 		if (!container.isExternalSchemaInferred) {
 			throw new IllegalStateException("ExternalSchemaCalculator must be executed before ExtraVariableCalculator")
 		} else if (container.isExtraVariablesInferred) {

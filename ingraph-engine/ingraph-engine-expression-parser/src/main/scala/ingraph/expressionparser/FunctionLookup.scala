@@ -36,12 +36,12 @@ object FunctionLookup {
   def fun1(function: Function): (Any) => Any = {
     /* don't do this at home */
     implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToInt(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
 
     function match {
       case TOBOOLEAN => (x) => x.asInstanceOf[Boolean]
-      case TOINTEGER | TOINT => (x) => GenericMath.toInt(x)
+      case TOINTEGER | TOINT => (x) => GenericMath.toLong(x)
       case TOFLOAT => (x) => GenericMath.toDouble(x)
       case TOSTRING => (x) => x.toString
 
@@ -105,29 +105,30 @@ object FunctionLookup {
   }
 
   def fun2(function: Function): (Any, Any) => Any = {
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
-      case LEFT => (original, length) => original.substring(0, length)
-      case RIGHT => (original, length) => original.substring(original.length - length, original.length)
+      case LEFT => (original, length) => original.substring(0, length.toInt)
+      case RIGHT => (original, length) => original.substring(original.length - length toInt, original.length)
       case SPLIT => (original, splitPattern) => original.split(splitPattern)
-      case SUBSTRING => (original, start) => original.substring(start)
-      case RANGE => (start, end) => start.asInstanceOf[Int] to end
+      case SUBSTRING => (original, start) => original.substring(start.toInt)
+      case RANGE => (start, end) => start.asInstanceOf[Long] to end
 
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
       case ENDS_WITH => (string, substring) => string.endsWith(substring)
-      case CONTAINS => (string, substring) => string.contains(substring)      
+      case CONTAINS => (string, substring) => string.contains(substring)
     }
   }
 
   def fun3(function: Function): (Any, Any, Any) => Any = {
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
       case REPLACE => (original, search, replace) => original.replace(search, replace)
-      case SUBSTRING => (original, start, length) => original.substring(start, start.asInstanceOf[Int] + length.asInstanceOf[Int])
-      case RANGE => (start, end, step) => start.asInstanceOf[Int] to end by step
+      case SUBSTRING => (original, start, length) => original.substring(start.toInt,
+        start.asInstanceOf[Long] + length.asInstanceOf[Long] toInt)
+      case RANGE => (start, end, step) => start.asInstanceOf[Long] to end by step
     }
   }
 

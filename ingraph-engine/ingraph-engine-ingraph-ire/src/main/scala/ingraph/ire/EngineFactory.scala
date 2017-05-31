@@ -14,13 +14,19 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 
-
 import scala.collection.{immutable, mutable}
 import hu.bme.mit.ire.engine.RelationalEngine
 
 import scala.collection.mutable
 import hu.bme.mit.ire.nodes.binary.TransitiveClosureJoinNode
+import ingraph.ire.EngineFactory.ForwardConnection
 
+import scala.collection.mutable.ArrayBuffer
+
+abstract class AnnotatedRelationalEngine extends RelationalEngine {
+  val vertexConverters: BufferMultimap[Vector[String], GetVerticesOperator]
+  val edgeConverters: BufferMultimap[String, GetEdgesOperator]
+}
 
 object EngineFactory {
 
@@ -31,14 +37,14 @@ object EngineFactory {
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: Operator, indexer: Indexer) =
-    new RelationalEngine {
+  def createQueryEngine(plan: Operator, indexer: Indexer): AnnotatedRelationalEngine =
+    new AnnotatedRelationalEngine {
       override val production = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
-      val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
-      val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
+      override val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
+      override val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
 
       remaining += ForwardConnection(plan, production)
 
@@ -65,9 +71,9 @@ object EngineFactory {
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
               // This is the mighty EMF, so there are no default values, obviously
-              def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Int]
-              val skip = if (op.getSkip == null) 0 else getInt(op.getSkip)
-              val limit = if (op.getLimit == null) 0 else getInt(op.getLimit)
+              def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
+              val skip: Long = if (op.getSkip == null) 0 else getInt(op.getSkip)
+              val limit: Long = if (op.getLimit == null) 0 else getInt(op.getLimit)
               val sortKeys = op.getEntries.map(
                 e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortAndTopNode(

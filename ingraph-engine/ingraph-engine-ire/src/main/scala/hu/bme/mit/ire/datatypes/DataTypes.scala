@@ -10,7 +10,7 @@ package object datatypes {
   type TupleBag = Iterable[Tuple] //mutable.Map[Tuple, Integer]
   type Mask = Vector[Int]
   type CypherList = IndexedSeq[Any] // TODO Cypher is not a good name on this level of abstraction
-  type Indexer = BufferMultimap[Tuple, Tuple]
+  type JoinCache = BufferMultimap[Tuple, Tuple]
 
   type Path = Vector[Long]
   val Path = scala.collection.immutable.Vector

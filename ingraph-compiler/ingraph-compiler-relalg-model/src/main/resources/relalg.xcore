@@ -372,11 +372,6 @@ class DeleteOperator extends CUDOperator {
   boolean detach
 }
 
-//abstract class NavigationOperator extends Operator, NavigationDescriptor {
-//  int minHops
-//  contains MaxHops maxHops
-//}
-
 class NavigationDescriptor extends Expression {
   Direction direction
   refers VertexVariable sourceVertexVariable
@@ -605,7 +600,7 @@ class BigIntegerLiteral extends NumberLiteral {
 }
 
 class IntegerLiteral extends NumberLiteral {
-  int value
+  long value
 }
 
 class NullLiteral extends NumberLiteral, StringLiteral {

@@ -231,7 +231,7 @@ object GenericMath extends Ordering[Any] {
       }
   }
 
-  def toInt(a: Any): Int = a match {
+  def toLong(a: Any): Long = a match {
     case a: Float => a.toInt
     case a: Double => a.toInt
     case a: Int => a.toInt

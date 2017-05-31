@@ -9,18 +9,21 @@ import scala.collection.mutable
 import scala.util.Random
 
 
-case class IngraphVertex(id: Long, properties: Map[String, AnyRef], labels: Set[String]) {
+case class IngraphVertex(id: Long,
+                         labels: Set[String],
+                         properties: Map[String, AnyRef] = Map()) {
   val edges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   val reverseEdges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   override def toString: String = s"Vertex($id, $properties)"
 }
 
-case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
+case class IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
-                      label: String) {
+                       label: String,
+                       properties: Map[String, AnyRef] = Map()) {
   override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
-  def inverse(): IngraphEdge = IngraphEdge(id, properties, targetVertex, sourceVertex, label)
+  def inverse(): IngraphEdge = IngraphEdge(id, targetVertex, sourceVertex, label, properties)
 }
 
 class Indexer {
@@ -57,7 +60,7 @@ class Indexer {
     val id: Long = node.id()
     val properties: Map[String, AnyRef]  = node.asMap().toMap
     val labels = node.labels().toSet
-    val vertex = IngraphVertex(id, properties, labels)
+    val vertex = IngraphVertex(id, labels, properties)
     addVertex(vertex)
   }
 
@@ -82,7 +85,7 @@ class Indexer {
     val sourceVertex: IngraphVertex = vertexLookup(relation.startNodeId())
     val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
     val label: String = relation.`type`()
-    val edge = IngraphEdge(id, properties, sourceVertex, targetVertex, label)
+    val edge = IngraphEdge(id, sourceVertex, targetVertex, label, properties)
     addEdge(edge)
   }
 
@@ -96,7 +99,7 @@ class Indexer {
   }
 
   def addEdge(id: Long, sourceId: Long, targetId: Long, label: String): IngraphEdge = {
-    addEdge(IngraphEdge(id, Map.empty, vertexLookup(sourceId), vertexLookup(targetId), label))
+    addEdge(IngraphEdge(id, vertexLookup(sourceId), vertexLookup(targetId), label, Map.empty))
   }
 
   def removeEdgeById(id: Long): Unit = {
@@ -110,6 +113,8 @@ class Indexer {
   def edgeById(id: Long): IngraphEdge = edgeLookup(id)
   def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)
   def edgesByLabel(label: String): Seq[IngraphEdge] = edgeLabelLookup(label)
+  def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup(label).size
+  def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup(label).size
 
   val rnd = new Random(1)
   def newId(): Long = {

@@ -14,7 +14,7 @@ import relalg.PropertyListEntry
 
 abstract class AbstractVariableConverter {
 
-	extension StringEscaper stringEscaper = new StringEscaper
+	protected extension StringEscaper stringEscaper = new StringEscaper
 	extension MiscConverters miscConverters = new MiscConverters
 	extension ExpressionConverter expressionConverter = new ExpressionConverter
 	

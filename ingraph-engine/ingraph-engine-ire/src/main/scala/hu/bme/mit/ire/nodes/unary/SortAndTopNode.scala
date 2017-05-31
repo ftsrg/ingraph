@@ -106,13 +106,13 @@ class SortNode(override val next: (ReteMessage) => Unit,
 class SortAndTopNode(next: (ReteMessage) => Unit,
                      tupleLength: Int,
                      selectionMask: Vector[(Tuple) => Any],
-                     skip: Int,
-                     limit: Int,
+                     skip: Long,
+                     limit: Long,
                      ascendingOrder: Vector[Boolean])
   extends SortNode(next, tupleLength, selectionMask, ascendingOrder) {
 
   override def getTuplesInOrder: Vector[Tuple] = {
-    var total = 0
+    var total: Long = 0
     //val iterator: Iterator[(Tuple, Int)] = data.iterator
     val iterator = data.entrySet.iterator
     val builder = new VectorBuilder[Tuple]
@@ -121,10 +121,10 @@ class SortAndTopNode(next: (ReteMessage) => Unit,
       val entry = iterator.next
       val tuple = entry.getKey
       val count = entry.getValue
-      for (i <- 0 until Math.min(count, limit + skip - total))
+      for (i <- 0L until math.min(count, limit + skip - total))
         builder += tuple
       total += count
     }
-    builder.result().drop(skip)
+    builder.result().drop(skip.toInt)
   }
 }

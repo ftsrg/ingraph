@@ -2,7 +2,7 @@ package ingraph.driver.ingraph;
 
 import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
-import ingraph.ire.IngraphAdapter;
+import ingraph.ire.IngraphIncrementalAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.TypeSystem;
@@ -84,7 +84,7 @@ public class IngraphSession implements Session {
 	}
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification, Map<String, Object> statementParameters) {
-		final IngraphAdapter adapter = new IngraphAdapter(querySpecification, queryName, indexer);
+		final IngraphIncrementalAdapter adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer);
 		return new IngraphQueryHandler(adapter);
 	}
 

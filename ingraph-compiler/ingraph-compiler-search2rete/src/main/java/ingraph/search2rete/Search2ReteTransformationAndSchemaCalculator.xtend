@@ -1,5 +1,6 @@
 package ingraph.search2rete
 
+import ingraph.optimization.transformations.SimplifyingTransformation
 import ingraph.relalg.calculators.OneStepSchemaCalculator
 import relalg.RelalgContainer
 

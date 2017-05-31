@@ -12,7 +12,7 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
                    override val secondaryMask: Mask)
   extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
-  val primaryIndexer: Indexer = new BufferMultimap[Tuple, Tuple]
+  val primaryIndexer = new JoinCache
   val secondaryTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
   val secondaryProjectedTuples: mutable.Set[Tuple] = mutable.Set[Tuple]()
 

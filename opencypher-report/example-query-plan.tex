@@ -1,0 +1,27 @@
+\begin{forest} for tree={align=center}
+[
+				{$\production{}$
+				\\ \footnotesize
+				$\color{externalschemacolor} \langle \var{n.name} \rangle $
+				}[
+				{$\projection{\var{n.name}}{}
+				$
+				\\ \footnotesize
+				$\color{externalschemacolor} \langle \var{n.name} \rangle $
+				}[
+				{$\selection{
+					\var{n.age} > \literal{27}
+				}
+				$
+				\\ \footnotesize
+				$\color{externalschemacolor} \langle \var{n}  \rangle $
+				}[
+				{$\getvertices{n}{Person}$
+				\\ \footnotesize
+				$\color{externalschemacolor} \langle \var{n}  \rangle $
+				},tier=input,for tree={nullarynodecolor,densely dashed}]
+]
+]
+]
+;
+\end{forest}

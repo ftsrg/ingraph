@@ -29,7 +29,7 @@ object TrainbenchmarkUtils {
   )
 
   def readModelAndGetResults(queryName: String, querySpecification: String, size: Int): Iterable[Tuple] = {
-    val adapter = new IngraphAdapter(querySpecification, queryName)
+    val adapter = new IngraphIncrementalAdapter(querySpecification, queryName)
     val tf = new TransactionFactory(16)
     tf.subscribe(adapter.engine.inputLookup)
     val tran = tf.newBatchTransaction()

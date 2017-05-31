@@ -12,22 +12,17 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
 
 import scala.collection.JavaConverters._
+import relalg.RelalgContainer
 
-class IngraphAdapter(querySpecification: String, queryName: String, indexer: Indexer = new Indexer()) {
-  private val reteCalc = new Search2ReteTransformationAndSchemaCalculator
+abstract class AbstractIngraphAdapter {
 
-  val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
-  val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)
-  val transactionFactory = new TransactionFactory(16)
-  transactionFactory.subscribe(engine.inputLookup)
+  val querySpecification: String
+  val queryName: String
+  val indexer: Indexer = new Indexer()
 
-  private val tupleMapper = new EntityToTupleMapper(
-    engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
-    engine.inputLookup) with LongIdParser
-  tupleMapper.transaction = transactionFactory.newBatchTransaction()
-  indexer.subscribe(tupleMapper)
-
+  val plan: RelalgContainer
+  val tupleMapper: EntityToTupleMapper
+  val engine: AnnotatedRelationalEngine
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
                   relationshipFilenames: java.util.Map[String, String],
                   transaction: Transaction,
@@ -64,21 +59,6 @@ class IngraphAdapter(querySpecification: String, queryName: String, indexer: Ind
       case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
       case e => e.getName
     }
-  }
-
-  def newTransaction(): Transaction = {
-    val tran = transactionFactory.newBatchTransaction()
-    tupleMapper.transaction = tran
-    tran
-  }
-
-  def result(): Iterable[Tuple] = {
-    tupleMapper.transaction.close()
-    engine.getResults()
-  }
-
-  def addListener(listener: ChangeListener): Unit = {
-    engine.addListener(listener)
   }
 
 }

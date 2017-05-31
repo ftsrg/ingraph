@@ -12,7 +12,7 @@ import java.util.LinkedList
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
-abstract class DirectoryTest extends IngraphReportTest {
+abstract class ReportDirectoryTest extends IngraphReportTest {
 
 	new() {
 		super()

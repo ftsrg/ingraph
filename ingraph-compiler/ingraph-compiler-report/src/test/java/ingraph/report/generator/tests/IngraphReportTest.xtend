@@ -93,7 +93,7 @@ abstract class IngraphReportTest {
 		doc += sections
 
 		val progressbarTableRow = progressbarTableRow( //
-			"OliveGreen", //
+			"progressbargreen", //
 			'''\hyperref[chp:«chapterName»]{«shortTitle»}''', //
 			chapterCompilingQueries, chapterTotalQueries)
 
