@@ -64,9 +64,9 @@ object EngineFactory {
             case op: SortAndTopOperator =>
               val variableLookup = getSchema(op.getInput)
               // This is the mighty EMF, so there are no default values, obviously
-              def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Int]
-              val skip = if (op.getSkip == null) 0 else getInt(op.getSkip)
-              val limit = if (op.getLimit == null) 0 else getInt(op.getLimit)
+              def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
+              val skip: Long = if (op.getSkip == null) 0 else getInt(op.getSkip)
+              val limit: Long = if (op.getLimit == null) 0 else getInt(op.getLimit)
               val sortKeys = op.getEntries.map(
                 e=> ExpressionParser.parseValue(e.getExpression, variableLookup))
               newLocal(Props(new SortAndTopNode(
