@@ -36,12 +36,12 @@ object FunctionLookup {
   def fun1(function: Function): (Any) => Any = {
     /* don't do this at home */
     implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToInt(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
 
     function match {
       case TOBOOLEAN => (x) => x.asInstanceOf[Boolean]
-      case TOINTEGER | TOINT => (x) => GenericMath.toInt(x)
+      case TOINTEGER | TOINT => (x) => GenericMath.toLong(x)
       case TOFLOAT => (x) => GenericMath.toDouble(x)
       case TOSTRING => (x) => x.toString
 
