@@ -1,9 +1,9 @@
 package ingraph.report.generator.tests.directories
 
-import ingraph.report.generator.tests.DirectoryTest
 import org.junit.Test
+import ingraph.report.generator.tests.ReportDirectoryTest
 
-class TrainBenchmarkReportTest extends DirectoryTest {
+class TrainBenchmarkReportTest extends ReportDirectoryTest {
 
 	@Test
 	def void generateChapter() {

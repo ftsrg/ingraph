@@ -64,7 +64,7 @@ class QueryProcessor {
 		«ELSE»
 			\begin{align*}
 			\begin{autobreak}
-			r = «expression»
+			«expression»
 			\end{autobreak}
 			\end{align*}
 		«ENDIF»

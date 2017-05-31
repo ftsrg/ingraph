@@ -1,9 +1,9 @@
 package ingraph.report.generator.tests.directories
 
-import ingraph.report.generator.tests.DirectoryTest
 import org.junit.Test
+import ingraph.report.generator.tests.ReportDirectoryTest
 
-class StaticAnalysisJavaScriptTest extends DirectoryTest {
+class StaticAnalysisJavaScriptTest extends ReportDirectoryTest {
 
 	@Test
 	def void generateChapter() {
