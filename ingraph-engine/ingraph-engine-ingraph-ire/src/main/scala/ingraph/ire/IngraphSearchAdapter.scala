@@ -16,22 +16,21 @@ class IngraphSearchAdapter(
     override val querySpecification: String,
     override val queryName: String,
     override val indexer: Indexer = new Indexer()
-  ) extends AbstractIngraphAdapter(querySpecification, queryName, indexer) {
+  ) extends AbstractIngraphAdapter {
 
   val reteCalc = new Search2ReteTransformationAndSchemaCalculator
-  plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
-  val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)
-  
+  override val plan = reteCalc.apply(Cypher2Relalg.processString(querySpecification, queryName))
+  override val engine = EngineFactory.createQueryEngine(plan.getRootExpression, indexer)
+
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)
 
-  tupleMapper = new EntityToTupleMapper(
+  override val tupleMapper = new EntityToTupleMapper(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
     engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
     engine.inputLookup) with LongIdParser
   tupleMapper.transaction = transactionFactory.newBatchTransaction()
   indexer.fill(tupleMapper)
-  tupleMapper.transaction.close()
 
   // Do this on initialization? Make this an object?
   def terminate(): Iterable[Tuple] = {

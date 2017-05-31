@@ -14,12 +14,19 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 
-
 import scala.collection.{immutable, mutable}
 import hu.bme.mit.ire.engine.RelationalEngine
 
 import scala.collection.mutable
 import hu.bme.mit.ire.nodes.binary.TransitiveClosureJoinNode
+import ingraph.ire.EngineFactory.ForwardConnection
+
+import scala.collection.mutable.ArrayBuffer
+
+abstract class AnnotatedRelationalEngine extends RelationalEngine {
+  val vertexConverters: BufferMultimap[Vector[String], GetVerticesOperator]
+  val edgeConverters: BufferMultimap[String, GetEdgesOperator]
+}
 
 object EngineFactory {
 
@@ -30,14 +37,14 @@ object EngineFactory {
   case class ForwardConnection(parent: Operator, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: Operator, indexer: Indexer) =
-    new RelationalEngine {
+  def createQueryEngine(plan: Operator, indexer: Indexer): AnnotatedRelationalEngine =
+    new AnnotatedRelationalEngine {
       override val production = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
-      val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
-      val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
+      override val vertexConverters = new BufferMultimap[Vector[String], GetVerticesOperator]
+      override val edgeConverters  = new BufferMultimap[String, GetEdgesOperator]
 
       remaining += ForwardConnection(plan, production)
 

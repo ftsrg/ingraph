@@ -14,14 +14,15 @@ import hu.bme.mit.ire.listeners.ChangeListener
 import scala.collection.JavaConverters._
 import relalg.RelalgContainer
 
-abstract class AbstractIngraphAdapter(
-    val querySpecification: String,
-    val queryName: String,
-    val indexer: Indexer = new Indexer()) {
+abstract class AbstractIngraphAdapter {
 
-  var plan: RelalgContainer = null
-  var tupleMapper: EntityToTupleMapper = null 
+  val querySpecification: String
+  val queryName: String
+  val indexer: Indexer = new Indexer()
 
+  val plan: RelalgContainer
+  val tupleMapper: EntityToTupleMapper
+  val engine: AnnotatedRelationalEngine
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
                   relationshipFilenames: java.util.Map[String, String],
                   transaction: Transaction,
