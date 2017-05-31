@@ -1085,7 +1085,7 @@ class RelalgBuilder {
 
 	def buildRelalgNumberLiteral(NumberConstant e) {
 		try {
-			val n = Integer.parseInt(e.value)
+			val n = Long.parseLong(e.value)
 			createIntegerLiteral => [
 				value = n
 				expressionContainer = topLevelContainer

@@ -605,7 +605,7 @@ class BigIntegerLiteral extends NumberLiteral {
 }
 
 class IntegerLiteral extends NumberLiteral {
-  int value
+  long value
 }
 
 class NullLiteral extends NumberLiteral, StringLiteral {
