@@ -67,6 +67,7 @@ object ExpressionParser {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
+    case cmp: BigIntegerLiteral => _ => cmp.getValue
     case cmp: AttributeVariable =>
       val index = lookup(cmp.toString).toInt
       tuple => tuple(index)
