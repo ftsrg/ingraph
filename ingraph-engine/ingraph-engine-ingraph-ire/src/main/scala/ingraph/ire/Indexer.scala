@@ -18,7 +18,7 @@ case class IngraphVertex(id: Long, properties: Map[String, AnyRef], labels: Set[
 case class IngraphEdge(id: Long, properties: Map[String, AnyRef],
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
-                      label: String) {
+                       label: String) {
   override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
   def inverse(): IngraphEdge = IngraphEdge(id, properties, targetVertex, sourceVertex, label)
 }

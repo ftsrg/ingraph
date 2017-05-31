@@ -11,7 +11,7 @@ import akka.actor.Props
 import akka.actor.actorRef2Scala
 import hu.bme.mit.ire.Terminator
 import hu.bme.mit.ire.TransactionFactory
-import hu.bme.mit.ire.datatypes.Indexer
+import hu.bme.mit.ire.datatypes.JoinCache
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.messages.Primary
@@ -47,7 +47,7 @@ class SizingTest extends WordSpec with TimeLimits {
     }
 
     "count deeper" in {
-      val data: Indexer = new BufferMultimap[Tuple, Tuple]
+      val data = new JoinCache
       data.addBinding(tuple(2, 3), tuple(3, 4))
       data.addBinding(tuple(2, 3), tuple(3, 5))
       data.addBinding(tuple(2, 3), tuple(3, 6))

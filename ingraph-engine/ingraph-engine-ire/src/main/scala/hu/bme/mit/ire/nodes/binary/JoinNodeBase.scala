@@ -12,8 +12,8 @@ abstract class JoinNodeBase extends BinaryNode {
   val primaryMask: Mask
   val secondaryMask: Mask
 
-  val primaryIndexer = new BufferMultimap[Tuple, Tuple]
-  val secondaryIndexer = new BufferMultimap[Tuple, Tuple]
+  val primaryIndexer = new JoinCache
+  val secondaryIndexer = new JoinCache
 
   val primaryMaskInverse: Mask = Vector.range(0, primaryTupleWidth) filter (i => !primaryMask.contains(i))
   val secondaryMaskInverse: Mask = Vector.range(0, secondaryTupleWidth) filter (i => !secondaryMask.contains(i))
@@ -31,7 +31,7 @@ abstract class JoinNodeBase extends BinaryNode {
       otherTuple ++ extract(tuple, secondaryMaskInverse)
   }
 
-  def joinTuples(tuples: Iterable[Tuple], otherIndexer: Indexer, slotMask: Mask, slot: Slot): TupleBag = {
+  def joinTuples(tuples: Iterable[Tuple], otherIndexer: JoinCache, slotMask: Mask, slot: Slot): TupleBag = {
     for {
       tuple <- tuples
       joinAttributes = slotMask.map(i => tuple(i))
@@ -40,7 +40,7 @@ abstract class JoinNodeBase extends BinaryNode {
     } yield combine(tuple, otherTupleFull, slot)
   }
 
-  def join(delta: ChangeSet, slotIndexer: Indexer, otherIndexer: Indexer, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
+  def join(delta: ChangeSet, slotIndexer: JoinCache, otherIndexer: JoinCache, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
     // join the tuples based on the other slot's indexer
     val joinedPositiveTuples: TupleBag = joinTuples(delta.positive, otherIndexer, slotMask, slot)
     val joinedNegativeTuples: TupleBag = joinTuples(delta.negative, otherIndexer, slotMask, slot)

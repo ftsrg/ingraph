@@ -16,7 +16,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val secondaryMask: Mask)
   extends JoinNodeBase with SingleForwarder {
 
-  val pairlessTuples = new BufferMultimap[Tuple, Tuple]
+  val pairlessTuples = new JoinCache
 
   override def onSizeRequest(): Long = 0
 
