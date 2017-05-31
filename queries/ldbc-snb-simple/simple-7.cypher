@@ -1,4 +1,5 @@
-MATCH (p1:Person)-[:knows*]->(p2:Person)
+MATCH (p1:Person)-[ks:knows*]->(p2:Person)
 WHERE p1.id = 41
-RETURN p1.id, p2.id
+  AND p2.id = 6597069766660
+RETURN p1.id, ks, p2.id
 ORDER BY p1.id, p2.id
