@@ -105,14 +105,14 @@ object FunctionLookup {
   }
 
   def fun2(function: Function): (Any, Any) => Any = {
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
-      case LEFT => (original, length) => original.substring(0, length)
-      case RIGHT => (original, length) => original.substring(original.length - length, original.length)
+      case LEFT => (original, length) => original.substring(0, length.toInt)
+      case RIGHT => (original, length) => original.substring(original.length - length toInt, original.length)
       case SPLIT => (original, splitPattern) => original.split(splitPattern)
-      case SUBSTRING => (original, start) => original.substring(start)
-      case RANGE => (start, end) => start.asInstanceOf[Int] to end
+      case SUBSTRING => (original, start) => original.substring(start.toInt)
+      case RANGE => (start, end) => start.asInstanceOf[Long] to end
 
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
