@@ -69,10 +69,10 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 				\\ \footnotesize \# «op.cardinality.formatCardinality»
 				«ENDIF»
 				}'''
-		
-		val end = '''«IF op instanceof NullaryOperator»,tier=input,for tree={blue,densely dashed}«ENDIF»]
+
+		val end = '''«IF op instanceof NullaryOperator»,tier=input,for tree={nullarynodecolor,densely dashed}«ENDIF»]
 		'''
-		
+
 		'''«IF op.includeOperator»«start»«ENDIF»«op?.children»«IF op.includeOperator»«end»«ENDIF»'''
 	}
 
@@ -98,7 +98,7 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 	def formatCardinality(Cardinality cardinality) {
 		return String.format("%.02f", cardinality.value)
 	}
-	
+
 	/**
 	 * operator
 	 */
