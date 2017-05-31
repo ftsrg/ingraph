@@ -33,55 +33,54 @@
 
 \newcommand{\relalgop}[1]{\textsc{#1}}
 
-\DeclareMathOperator*{\getverticesop}{\iftoggle{textualoperators}{
-		\relalgop{GetVertices}
+\newcommand{\getverticesop}{\iftoggle{textualoperators}{\relalgop{GetVertices}
 	}{
 		\bigcirc
 	}}
 
-\DeclareMathOperator*{\getedgesopdirected}{\iftoggle{textualoperators}{
+\newcommand{\getedgesopdirected}{\iftoggle{textualoperators}{
 		\relalgop{GetEdges}
 	}{
 		\Uparrow
 	}}
 
-\DeclareMathOperator*{\getedgesopundirected}{\iftoggle{textualoperators}{
+\newcommand{\getedgesopundirected}{\iftoggle{textualoperators}{
 		\relalgop{GetEdgesUndirected}
 	}{
 		\Updownarrow
 	}}
 
-\DeclareMathOperator*{\expandbothop}{\iftoggle{textualoperators}{
+\newcommand{\expandbothop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandBoth}
 	}{
 		\updownarrow
 	}}
 
-\DeclareMathOperator*{\expandoutop}{\iftoggle{textualoperators}{
+\newcommand{\expandoutop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandOut}
 	}{
 		\uparrow
 	}}
 
-\DeclareMathOperator*{\expandinop}{\iftoggle{textualoperators}{
+\newcommand{\expandinop}{\iftoggle{textualoperators}{
 		\relalgop{ExpandIn}
 	}{
 		\downarrow
 	}}
 
-\DeclareMathOperator*{\alldifferentop}{\iftoggle{textualoperators}{
+\newcommand{\alldifferentop}{\iftoggle{textualoperators}{
 		\relalgop{AllDifferent}
 	}{
 		\not\equiv
 	}}
 
-\DeclareMathOperator*{\duplicateeliminationop}{\iftoggle{textualoperators}{
+\newcommand{\duplicateeliminationop}{\iftoggle{textualoperators}{
 		\relalgop{DuplicateElimination}
 	}{
 		\delta
 	}}
 
-\DeclareMathOperator*{\sortop}{\iftoggle{textualoperators}{
+\newcommand{\sortop}{\iftoggle{textualoperators}{
 		\relalgop{Sort}
 	}{
 		\tau
@@ -93,115 +92,115 @@
 		\Omega
 	}}
 
-\DeclareMathOperator*{\projectionop}{\iftoggle{textualoperators}{
+\newcommand{\projectionop}{\iftoggle{textualoperators}{
 		\relalgop{Projection}
 	}{
 		\pi
 	}}
 
-\DeclareMathOperator*{\createop}{\iftoggle{textualoperators}{
+\newcommand{\createop}{\iftoggle{textualoperators}{
 	\relalgop{Create}
 }{
 	\zeta
 }}
 
-\DeclareMathOperator*{\deleteop}{\iftoggle{textualoperators}{
+\newcommand{\deleteop}{\iftoggle{textualoperators}{
 	\relalgop{Delete}
 }{
 	\chi
 }}
 
-\DeclareMathOperator*{\selectionop}{\iftoggle{textualoperators}{
+\newcommand{\selectionop}{\iftoggle{textualoperators}{
 		\relalgop{Selection}
 	}{
 		\sigma
 	}}
 
-\DeclareMathOperator*{\renameop}{\iftoggle{textualoperators}{
+\newcommand{\renameop}{\iftoggle{textualoperators}{
 		\relalgop{Rename}
 	}{
 		\rho
 	}}
 
-\DeclareMathOperator*{\groupingop}{\iftoggle{textualoperators}{
+\newcommand{\groupingop}{\iftoggle{textualoperators}{
 		\relalgop{Grouping}
 	}{
 		\gamma
 	}}
 
-\DeclareMathOperator*{\topop}{\iftoggle{textualoperators}{
+\newcommand{\topop}{\iftoggle{textualoperators}{
 		\relalgop{Top}
 	}{
 		\lambda
 	}}
 
-\DeclareMathOperator*{\unwindop}{\iftoggle{textualoperators}{
+\newcommand{\unwindop}{\iftoggle{textualoperators}{
 		\relalgop{Unwind}
 	}{
 		\omega
 	}}
 
-\DeclareMathOperator*{\unnestop}{\iftoggle{textualoperators}{
+\newcommand{\unnestop}{\iftoggle{textualoperators}{
 		\relalgop{Unnest}
 	}{
 		\nu
 	}}
 
-\DeclareMathOperator*{\nestop}{\iftoggle{textualoperators}{
+\newcommand{\nestop}{\iftoggle{textualoperators}{
 		\relalgop{Nest}
 	}{
 		\mu
 	}}
 
-\DeclareMathOperator*{\joinop}{\iftoggle{textualoperators}{
+\newcommand{\joinop}{\iftoggle{textualoperators}{
 		\relalgop{Join}
 	}{
 		\bowtie
 	}}
 
-\DeclareMathOperator*{\transitivejoinop}{\iftoggle{textualoperators}{
+\newcommand{\transitivejoinop}{\iftoggle{textualoperators}{
 		\relalgop{TransitiveJoin}
 	}{
 		\bowtie^\ast
 	}}
 
-\DeclareMathOperator*{\antijoinop}{\iftoggle{textualoperators}{
+\newcommand{\antijoinop}{\iftoggle{textualoperators}{
 		\relalgop{AntiJoin}
 	}{
 		\antijoinsymbol
 	}}
 
-\DeclareMathOperator*{\leftouterjoinop}{\iftoggle{textualoperators}{
+\newcommand{\leftouterjoinop}{\iftoggle{textualoperators}{
 		\relalgop{LeftOuterJoin}
 	}{
 		\leftouterjoinsymbol
 	}}
 
-\DeclareMathOperator*{\unionop}{\iftoggle{textualoperators}{
+\newcommand{\unionop}{\iftoggle{textualoperators}{
 		\relalgop{Union}
 	}{
 		\cup
 	}}
 
-\DeclareMathOperator*{\bagunionop}{\iftoggle{textualoperators}{
+\newcommand{\bagunionop}{\iftoggle{textualoperators}{
 		\relalgop{BagUnion}
 	}{
 		\uplus
 	}}
 
-\DeclareMathOperator*{\minusop}{\iftoggle{textualoperators}{
+\newcommand{\minusop}{\iftoggle{textualoperators}{
 		\relalgop{Minus}
 	}{
 		\setminus
 	}}
 
-\DeclareMathOperator*{\intersectionop}{\iftoggle{textualoperators}{
+\newcommand{\intersectionop}{\iftoggle{textualoperators}{
 		\relalgop{Intersection}
 	}{
 		\cap
 	}}
 
-\DeclareMathOperator*{\cartesianproductop}{\iftoggle{textualoperators}{
+\newcommand{\cartesianproductop}{\iftoggle{textualoperators}{
 		\relalgop{CartesianProduct}
 	}{
 		\times
