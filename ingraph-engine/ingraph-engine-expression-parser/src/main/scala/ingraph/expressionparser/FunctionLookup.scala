@@ -117,17 +117,18 @@ object FunctionLookup {
       // these are not define as functions in openCypher, but it's reasonable to treat them as such
       case STARTS_WITH => (string, substring) => string.startsWith(substring)
       case ENDS_WITH => (string, substring) => string.endsWith(substring)
-      case CONTAINS => (string, substring) => string.contains(substring)      
+      case CONTAINS => (string, substring) => string.contains(substring)
     }
   }
 
   def fun3(function: Function): (Any, Any, Any) => Any = {
-    implicit def anyToInt(any: Any) = any.asInstanceOf[Int]
+    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
     implicit def anyToString(any: Any) = any.asInstanceOf[String]
     function match {
       case REPLACE => (original, search, replace) => original.replace(search, replace)
-      case SUBSTRING => (original, start, length) => original.substring(start, start.asInstanceOf[Int] + length.asInstanceOf[Int])
-      case RANGE => (start, end, step) => start.asInstanceOf[Int] to end by step
+      case SUBSTRING => (original, start, length) => original.substring(start.toInt,
+        start.asInstanceOf[Long] + length.asInstanceOf[Long] toInt)
+      case RANGE => (start, end, step) => start.asInstanceOf[Long] to end by step
     }
   }
 
