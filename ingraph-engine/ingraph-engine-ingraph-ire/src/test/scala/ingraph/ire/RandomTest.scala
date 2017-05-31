@@ -49,24 +49,4 @@ class RandomTest extends FunSuite {
     assert(adapter.result().toSet == Set(Vector(2)))
   }
 
-  test("One off modifier queries work") {
-    val indexer = new Indexer()
-    val oneOff = """MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)
-                  |DELETE r
-                  |CREATE (t)-[:ON]->(seg2)""".stripMargin
-    val whereIsTrain = "MATCH (t:Train)-[r:ON]->(s:Segment) RETURN s"
-    indexer.addVertex(new InternalNode(1L, List("Train").asJava, Map[String, Value]().asJava))
-    indexer.addVertex(new InternalNode(2L, List("Segment").asJava, Map[String, Value]().asJava))
-    indexer.addVertex(new InternalNode(3L, List("Segment").asJava, Map[String, Value]().asJava))
-    indexer.addEdge(new InternalRelationship(4L, 1L, 2L, "ON"))
-    indexer.addEdge(new InternalRelationship(5L, 2L, 3L, "NEXT"))
-    indexer.addEdge(new InternalRelationship(6L, 3L, 2L, "NEXT"))
-    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
-    for (i <- 1 to 10 ) {
-      assert(whereIsAdapter.result() == List(Vector(2)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
-      assert(whereIsAdapter.result() == List(Vector(3)))
-      new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
-    }
-  }
 }
