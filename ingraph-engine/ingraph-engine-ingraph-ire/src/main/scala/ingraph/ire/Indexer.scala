@@ -110,6 +110,8 @@ class Indexer {
   def edgeById(id: Long): IngraphEdge = edgeLookup(id)
   def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)
   def edgesByLabel(label: String): Seq[IngraphEdge] = edgeLabelLookup(label)
+  def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup(label).size
+  def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup(label).size
 
   val rnd = new Random(1)
   def newId(): Long = {
