@@ -126,21 +126,24 @@ object EngineFactory {
               newLocal(Props(new SelectionNode(expr.child, allDifferent)))
             case op: CreateOperator =>
               val lookup = getSchema(op.getInput)
-              val creations: Seq[(datatypes.Tuple) => IngraphEdge] = (for (element <- op.getElements)
+              val creations: Vector[(Tuple) => Any] = for (element <- op.getElements)
                 yield element.asInstanceOf[ExpressionVariable].getExpression match {
                   case n: NavigationDescriptor =>
                     val demeter = n.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName
                     val sourceIndex = lookup(n.getSourceVertexVariable.getName)
                     val targetIndex = lookup(n.getTargetVertexVariable.getName)
-                    Some((t: Tuple) => {
+                    (t: Tuple) => {
                       indexer.addEdge(
                         indexer.newId(),
                         t(sourceIndex).asInstanceOf[Long],
                         t(targetIndex).asInstanceOf[Long],
                         demeter)
-                    })
-                  case _ => None
-                }).flatten
+                    }
+                  case v: VariableExpression =>
+                    val variable = v.getVariable.asInstanceOf[VertexVariable]
+                    (t: Tuple) => indexer.addVertex(IngraphVertex(
+                      indexer.newId(), variable.getVertexLabelSet.getVertexLabels.map(l => l.getName).toSet))
+                }
 
               (m: ReteMessage) => {
                 m match {

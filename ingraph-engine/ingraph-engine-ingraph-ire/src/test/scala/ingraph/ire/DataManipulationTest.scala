@@ -56,4 +56,15 @@ class DataManipulationTest extends FunSuite {
 
     assert(whereIsAdapter.result() == List())
   }
+
+  test("create vertex works") {
+    val indexer = new Indexer()
+
+    val oneOff = "CREATE (t:Train)"
+    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
+
+    assert(whereIsAdapter.result().size == 1)
+  }
 }
