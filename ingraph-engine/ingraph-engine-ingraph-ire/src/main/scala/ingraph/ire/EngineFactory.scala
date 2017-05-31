@@ -39,7 +39,7 @@ object EngineFactory {
 
   def createQueryEngine(plan: Operator, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
-      override val production = system.actorOf(Props(new ProductionNode("")))
+      override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
@@ -147,7 +147,7 @@ object EngineFactory {
 
               (m: ReteMessage) => {
                 m match {
-                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r(_)))
+                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r))
                   case _ =>
                 }
                 expr.child(m)
@@ -163,7 +163,7 @@ object EngineFactory {
                 }
               (m: ReteMessage) => {
                 m match {
-                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r(_)))
+                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
                   case _ =>
                 }
                 expr.child(m)

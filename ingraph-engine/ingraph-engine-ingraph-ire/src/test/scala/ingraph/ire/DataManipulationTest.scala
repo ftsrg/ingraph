@@ -48,7 +48,7 @@ class DataManipulationTest extends FunSuite {
   test("delete vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = """MATCH (t:Train) DELETE t""".stripMargin
+    val oneOff = "MATCH (t:Train) DELETE t"
     new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
