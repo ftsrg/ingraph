@@ -87,13 +87,11 @@
 		\tau
 	}}
 
-%\DeclareMathOperator*{\productionop}{\iftoggle{textualoperators}{
-%		\relalgop{Production}
-%	}{
-%		\Omega
-%	}}
-
-\DeclareMathOperator*{\productionop}{\Omega}
+\newcommand{\productionop}{\iftoggle{textualoperators}{
+		\relalgop{Production}
+	}{
+		\Omega
+	}}
 
 \DeclareMathOperator*{\projectionop}{\iftoggle{textualoperators}{
 		\relalgop{Projection}
