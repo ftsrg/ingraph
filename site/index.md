@@ -34,7 +34,7 @@ We also plan to include stream processing features (e.g. defining windows), but 
 
 ingraph is not efficient/expressive enough for the following technical challenges:
 
-* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis)
+* Queries that are evaluated only evaluated once or infrequently (i.e. batch processing, daily analysis) [our main goal for the summer of 2017 is to resolve this issue, so stay tuned]
 * Graph analytics involving PageRank, community detection, etc.
 
 Currently, the ingraph project is not mature enough for production use. Instead, it should be used in prototypes and performance experiments.
@@ -44,7 +44,7 @@ Currently, the ingraph project is not mature enough for production use. Instead,
 Candidates for primary use cases of incremental openCypher queries are:
 
 * Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid))
-* Static analysis of source code repositories ([thesis work](pub/stein-daniel-msc.pdf))
+* Static analysis of source code repositories (thesis work [#1](pub/stein-daniel-msc.pdf), [#2](pub/lucz-soma-bsc.pdf))
 * Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
 * Model simulation and analysis of runtime models
 
@@ -66,8 +66,9 @@ Incremental openCypher queries can also be beneficial for:
 ## Talks
 
 * [ingraph: Live Queries on Graphs](https://www.youtube.com/watch?v=uLu2w8JxMKo) ([slides](https://www.slideshare.net/neo4j/graphconnect-europe-2017-ingraph-live-queries-on-graphs)), GraphConnect 2017 lightning talk
+* [The ingraph project and incremental evaluation of Cypher queries](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim2/slides/ocim2-ingraph.pdf), 2nd openCypher Implementers Meeting
+* [Incremental Graph Queries for Cypher](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim1/slides/ocim2017-incremental-opencypher.pdf), 1st openCypher Implementers Meeting
 * [Incremental Graph Queries with openCypher](https://fosdem.org/2017/schedule/event/graph_incremental_queries_open_cypher/), FOSDEM 2017, Graph devroom
-* [Incremental Graph Queries for Cypher](http://www.opencypher.org/event/2017/02/08/event-ocim1/), First openCypher Implementers meeting
 * [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Queries](http://wiki.ldbcouncil.org/pages/viewpage.action?pageId=59277315), Linked Data Benchmark Council, 9th TUC meeting
 
 # Related projects on GitHub
