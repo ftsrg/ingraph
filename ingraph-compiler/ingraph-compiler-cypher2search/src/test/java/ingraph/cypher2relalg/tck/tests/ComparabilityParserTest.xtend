@@ -30,7 +30,7 @@ class ComparabilityParserTest {
         RETURN i.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Comparability_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testComparability_01")
         RelalgUtil.save(container, "relalg-models/tck/Comparability_01")
     }
 
@@ -53,7 +53,7 @@ class ComparabilityParserTest {
         RETURN i.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Comparability_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testComparability_02")
         RelalgUtil.save(container, "relalg-models/tck/Comparability_02")
     }
 

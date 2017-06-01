@@ -22,7 +22,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN cOuNt( * )
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testColumnNameAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_01")
     }
 
@@ -37,7 +37,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN nOdEs( p )
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testColumnNameAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_02")
     }
 
@@ -52,7 +52,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN coUnt( dIstInct p )
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testColumnNameAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_03")
     }
 
@@ -67,7 +67,7 @@ class ColumnNameAcceptanceParserTest {
         RETURN aVg(    n.aGe     )
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ColumnNameAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testColumnNameAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/ColumnNameAcceptance_04")
     }
 

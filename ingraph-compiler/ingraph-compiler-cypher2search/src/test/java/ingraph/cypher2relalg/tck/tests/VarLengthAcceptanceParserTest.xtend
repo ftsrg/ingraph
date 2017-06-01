@@ -23,7 +23,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_01")
     }
 
@@ -39,7 +39,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_02")
     }
 
@@ -55,7 +55,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_03")
     }
 
@@ -71,7 +71,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_04")
     }
 
@@ -87,7 +87,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_05")
     }
 
@@ -103,7 +103,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_06")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_06")
     }
 
@@ -119,7 +119,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_07")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_07")
     }
 
@@ -135,7 +135,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_08")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_08")
     }
 
@@ -151,7 +151,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_09")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_09")
     }
 
@@ -167,7 +167,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_10")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_10")
     }
 
@@ -183,7 +183,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_11")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_11")
     }
 
@@ -199,7 +199,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_12")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_12")
     }
 
@@ -215,7 +215,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_13")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_13")
     }
 
@@ -231,7 +231,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_14")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_14")
     }
 
@@ -247,7 +247,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_15")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_15")
     }
 
@@ -263,7 +263,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_16")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_16")
     }
 
@@ -279,7 +279,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_17")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_17")
     }
 
@@ -295,7 +295,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_18")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_18")
     }
 
@@ -311,7 +311,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_19")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_19")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_19")
     }
 
@@ -327,7 +327,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_20")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_20")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_20")
     }
 
@@ -343,7 +343,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_21")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_21")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_21")
     }
 
@@ -359,7 +359,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_22")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_22")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_22")
     }
 
@@ -375,7 +375,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_23")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_23")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_23")
     }
 
@@ -391,7 +391,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_24")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_24")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_24")
     }
 
@@ -415,7 +415,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_25")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_25")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_25")
     }
 
@@ -445,7 +445,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_26")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_26")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_26")
     }
 
@@ -477,7 +477,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_27")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_27")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_27")
     }
 
@@ -501,7 +501,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_28")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_28")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_28")
     }
 
@@ -525,7 +525,7 @@ class VarLengthAcceptanceParserTest {
         RETURN c.name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance_29")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance_29")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance_29")
     }
 

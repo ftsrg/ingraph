@@ -22,7 +22,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean('true') AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_01")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_01")
     }
 
@@ -38,7 +38,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(b) AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_02")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_02")
     }
 
@@ -54,7 +54,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(s) AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_03")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_03")
     }
 
@@ -70,7 +70,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toBoolean(things) AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_04")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_04")
     }
 
@@ -92,7 +92,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(n.age) AS age
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_05")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_05")
     }
 
@@ -108,7 +108,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(weight)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_06")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_06")
     }
 
@@ -124,7 +124,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(foo_string) AS foo, toInteger(empty_string) AS empty
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_07")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_07")
     }
 
@@ -140,7 +140,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_08")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_08")
     }
 
@@ -156,7 +156,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN things | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_09")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_09")
     }
 
@@ -172,7 +172,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toInteger(n)] AS int_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_10")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_10")
     }
 
@@ -189,7 +189,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toInteger(1 - {param}) AS result
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_11")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_11")
     }
 
@@ -211,7 +211,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toFloat(n.rating) AS float
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_12")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_12")
     }
 
@@ -227,7 +227,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_13")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_13")
     }
 
@@ -243,7 +243,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toFloat(foo_string) AS foo, toFloat(empty_string) AS empty
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_14")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_14")
     }
 
@@ -259,7 +259,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_15")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_15")
     }
 
@@ -275,7 +275,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toFloat(n)] AS float_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_16")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_16")
     }
 
@@ -297,7 +297,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(n.rating)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_17")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_17")
     }
 
@@ -317,7 +317,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(m.watched)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_18")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_18")
     }
 
@@ -332,7 +332,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(1 < 0) AS bool
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_19")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_19")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_19")
     }
 
@@ -347,7 +347,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(true) AS bool
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_20")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_20")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_20")
     }
 
@@ -362,7 +362,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [x IN [1, 2.3, true, 'apa'] | toString(x) ] AS list
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_21")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_21")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_21")
     }
 
@@ -378,7 +378,7 @@ class TypeConversionFunctionsParserTest {
         RETURN [n IN numbers | toString(n)] AS string_numbers
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_22")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_22")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_22")
     }
 
@@ -394,7 +394,7 @@ class TypeConversionFunctionsParserTest {
         RETURN coalesce(toString(gen), 'x') AS result
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_23")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_23")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_23")
     }
 
@@ -410,7 +410,7 @@ class TypeConversionFunctionsParserTest {
         RETURN toString(coalesce(gen, 'x')) AS result
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TypeConversionFunctions_24")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTypeConversionFunctions_24")
         RelalgUtil.save(container, "relalg-models/tck/TypeConversionFunctions_24")
     }
 

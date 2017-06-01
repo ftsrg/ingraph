@@ -76,10 +76,10 @@ class %sParserTest {
         %s
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/%s")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "test%s")
         RelalgUtil.save(container, "relalg-models/tck/%s")
     }
-""" % (scenario, regression_or_failing, test_name, indent(query), test_name, test_name)
+""" % (scenario, regression_or_failing, test_name, indent(query), test_name, test_name, test_name)
         test_file.write(test_case)
 
     test_footer = """

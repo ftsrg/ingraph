@@ -23,7 +23,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_01")
     }
 
@@ -39,7 +39,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_02")
     }
 
@@ -55,7 +55,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_03")
     }
 
@@ -71,7 +71,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_04")
     }
 
@@ -88,7 +88,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_05")
     }
 
@@ -104,7 +104,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_06")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_06")
     }
 
@@ -120,7 +120,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_07")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_07")
     }
 
@@ -142,7 +142,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_08")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_08")
     }
 
@@ -164,7 +164,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_09")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_09")
     }
 
@@ -186,7 +186,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_10")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_10")
     }
 
@@ -208,7 +208,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_11")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_11")
     }
 
@@ -230,7 +230,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_12")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_12")
     }
 
@@ -252,7 +252,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a.name AS name
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_13")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_13")
     }
 
@@ -268,7 +268,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_14")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_14")
     }
 
@@ -284,7 +284,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_15")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_15")
     }
 
@@ -300,7 +300,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_16")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_16")
     }
 
@@ -316,7 +316,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_17")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_17")
     }
 
@@ -332,7 +332,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_18")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_18")
     }
 
@@ -348,7 +348,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_19")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_19")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_19")
     }
 
@@ -366,7 +366,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_20")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_20")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_20")
     }
 
@@ -382,7 +382,7 @@ class StartsWithAcceptanceParserTest {
         RETURN a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_21")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_21")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_21")
     }
 
@@ -400,7 +400,7 @@ class StartsWithAcceptanceParserTest {
         RETURN v, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_22")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_22")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_22")
     }
 
@@ -418,7 +418,7 @@ class StartsWithAcceptanceParserTest {
         RETURN v, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_23")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_23")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_23")
     }
 
@@ -436,7 +436,7 @@ class StartsWithAcceptanceParserTest {
         RETURN v, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartsWithAcceptance_24")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartsWithAcceptance_24")
         RelalgUtil.save(container, "relalg-models/tck/StartsWithAcceptance_24")
     }
 

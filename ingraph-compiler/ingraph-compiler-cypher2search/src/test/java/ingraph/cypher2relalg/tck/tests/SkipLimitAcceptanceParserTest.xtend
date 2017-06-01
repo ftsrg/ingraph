@@ -29,7 +29,7 @@ class SkipLimitAcceptanceParserTest {
         RETURN count > 0 AS nonEmpty
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/SkipLimitAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testSkipLimitAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/SkipLimitAcceptance_01")
     }
 
@@ -50,7 +50,7 @@ class SkipLimitAcceptanceParserTest {
         RETURN count(*) AS count
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/SkipLimitAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testSkipLimitAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/SkipLimitAcceptance_02")
     }
 

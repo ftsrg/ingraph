@@ -30,7 +30,7 @@ class UnionAcceptanceParserTest {
         RETURN b AS a
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testUnionAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_01")
     }
 
@@ -47,7 +47,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testUnionAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_02")
     }
 
@@ -64,7 +64,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testUnionAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_03")
     }
 
@@ -83,7 +83,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testUnionAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_04")
     }
 
@@ -102,7 +102,7 @@ class UnionAcceptanceParserTest {
         RETURN 2 AS x
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/UnionAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testUnionAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/UnionAcceptance_05")
     }
 

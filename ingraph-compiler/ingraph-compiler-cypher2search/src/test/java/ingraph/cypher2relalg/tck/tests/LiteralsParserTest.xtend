@@ -21,7 +21,7 @@ class LiteralsParserTest {
         RETURN 1 AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_01")
         RelalgUtil.save(container, "relalg-models/tck/Literals_01")
     }
 
@@ -35,7 +35,7 @@ class LiteralsParserTest {
         RETURN 1.0 AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_02")
         RelalgUtil.save(container, "relalg-models/tck/Literals_02")
     }
 
@@ -49,7 +49,7 @@ class LiteralsParserTest {
         RETURN -1e-9 AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_03")
         RelalgUtil.save(container, "relalg-models/tck/Literals_03")
     }
 
@@ -63,7 +63,7 @@ class LiteralsParserTest {
         RETURN true AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_04")
         RelalgUtil.save(container, "relalg-models/tck/Literals_04")
     }
 
@@ -77,7 +77,7 @@ class LiteralsParserTest {
         RETURN '' AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_05")
         RelalgUtil.save(container, "relalg-models/tck/Literals_05")
     }
 
@@ -91,7 +91,7 @@ class LiteralsParserTest {
         RETURN "" AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_06")
         RelalgUtil.save(container, "relalg-models/tck/Literals_06")
     }
 
@@ -105,7 +105,7 @@ class LiteralsParserTest {
         RETURN null AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_07")
         RelalgUtil.save(container, "relalg-models/tck/Literals_07")
     }
 
@@ -119,7 +119,7 @@ class LiteralsParserTest {
         RETURN [] AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_08")
         RelalgUtil.save(container, "relalg-models/tck/Literals_08")
     }
 
@@ -133,7 +133,7 @@ class LiteralsParserTest {
         RETURN [0, 1, 2] AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_09")
         RelalgUtil.save(container, "relalg-models/tck/Literals_09")
     }
 
@@ -147,7 +147,7 @@ class LiteralsParserTest {
         RETURN {} AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_10")
         RelalgUtil.save(container, "relalg-models/tck/Literals_10")
     }
 
@@ -161,7 +161,7 @@ class LiteralsParserTest {
         RETURN {k1: 0, k2: 'string'} AS literal
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/Literals_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLiterals_11")
         RelalgUtil.save(container, "relalg-models/tck/Literals_11")
     }
 

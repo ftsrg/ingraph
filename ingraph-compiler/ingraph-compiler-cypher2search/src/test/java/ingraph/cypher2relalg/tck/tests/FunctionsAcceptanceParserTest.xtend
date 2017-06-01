@@ -27,7 +27,7 @@ class FunctionsAcceptanceParserTest {
         RETURN coalesce(a.title, a.name)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_01")
     }
 
@@ -44,7 +44,7 @@ class FunctionsAcceptanceParserTest {
         RETURN length(nodes(p)), type(r), nodes(p), relationships(p)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_02")
     }
 
@@ -60,7 +60,7 @@ class FunctionsAcceptanceParserTest {
         RETURN count(item) AS item
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_03")
     }
 
@@ -80,7 +80,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(p) AS m
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_04")
     }
 
@@ -100,7 +100,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(r) AS m
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_05")
     }
 
@@ -115,7 +115,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties({name: 'Popeye', level: 9001}) AS m
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_06")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_06")
     }
 
@@ -130,7 +130,7 @@ class FunctionsAcceptanceParserTest {
         RETURN properties(null)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_07")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_07")
     }
 
@@ -145,7 +145,7 @@ class FunctionsAcceptanceParserTest {
         RETURN reverse('raksO')
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_08")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_08")
     }
 
@@ -167,7 +167,7 @@ class FunctionsAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_09")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_09")
     }
 
@@ -195,7 +195,7 @@ class FunctionsAcceptanceParserTest {
         RETURN percentileDisc(0.90, deg), deg
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_10")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_10")
     }
 
@@ -215,7 +215,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_11")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_11")
     }
 
@@ -235,7 +235,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r1), type(r2)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_12")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_12")
     }
 
@@ -256,7 +256,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_13")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_13")
     }
 
@@ -277,7 +277,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_14")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_14")
     }
 
@@ -298,7 +298,7 @@ class FunctionsAcceptanceParserTest {
         RETURN type(list[0])
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_15")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_15")
     }
 
@@ -319,7 +319,7 @@ class FunctionsAcceptanceParserTest {
         RETURN labels(list[0]) AS l
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_16")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_16")
     }
 
@@ -340,7 +340,7 @@ class FunctionsAcceptanceParserTest {
         RETURN labels(list[1]) AS l
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_17")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_17")
     }
 
@@ -360,7 +360,7 @@ class FunctionsAcceptanceParserTest {
         RETURN n, EXIsTS(n.prop) AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/FunctionsAcceptance_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testFunctionsAcceptance_18")
         RelalgUtil.save(container, "relalg-models/tck/FunctionsAcceptance_18")
     }
 
