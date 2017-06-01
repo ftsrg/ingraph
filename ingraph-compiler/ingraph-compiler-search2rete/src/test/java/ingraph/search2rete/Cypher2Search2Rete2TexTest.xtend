@@ -4,7 +4,6 @@ import ingraph.Cypher2SearchAbstractTest
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.SimplifyingTransformation
 import ingraph.relalg.util.RelalgUtil
-import ingraph.search2tasks.Search2TasksTransformation
 import relalg.RelalgContainer
 
 abstract class Cypher2Search2Rete2TexTest extends Cypher2SearchAbstractTest {

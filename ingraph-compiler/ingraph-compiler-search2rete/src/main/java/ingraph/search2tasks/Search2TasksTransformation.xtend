@@ -15,10 +15,10 @@ class Search2TasksTransformation extends AbstractRelalgTransformation {
 	}
 	
 	def transformToTasks() {
-		info("Transforming relational algebra expression to Rete network")		
+		info("Transforming relational algebra expression to tasks")		
 		
 		container.rootExpression.traverse[
-			println(it.class.name)
+			println(it)
 		]
 		
 		return container
