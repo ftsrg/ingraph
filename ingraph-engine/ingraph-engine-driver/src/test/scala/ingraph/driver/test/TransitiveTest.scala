@@ -18,7 +18,7 @@ import org.scalatest.FunSuite
 import scala.io.Source
 
 class TransitiveTest extends FunSuite {
-  
+
   def modelPath(entityName: String) = s"../../graphs/snb_small/${entityName}_0_0.csv"
 
   def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-$workload/$workload-$query.cypher"
@@ -26,11 +26,11 @@ class TransitiveTest extends FunSuite {
   def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight("cypher".length) + "bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
-    modelPath("person") -> List("Person"),
+    modelPath("person") -> List("Person")
   )
 
   val relationshipFilenames: Map[String, String] = Map(
-    modelPath("person_knows_person") -> "knows",
+    modelPath("person_knows_person") -> "knows"
   )
 
   case class TestCase(workload: String, number: Int)
@@ -42,7 +42,7 @@ class TransitiveTest extends FunSuite {
     .foreach(
     t =>
       test(s"${t.workload}-${t.number}-size-1") {
-      
+
       val queryName = s"ldbc-snb-${t.workload}-${t.number}"
       val querySpecification = Source.fromFile(queryPath(t.workload, t.number)).getLines().mkString("\n")
 

@@ -427,5 +427,63 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
         negative = tupleBag(tuple(1, Path(100), 2))
       ))
     }
+
+    "handle multiple target paths from same target vertex" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(36))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(), 36))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(36, 7, 11), tuple(17, 3, 38))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(7), 11))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(17, 2, 21), tuple(21, 4, 38))))
+      expectNoMsg(timeout)
+
+      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(11, 1, 17))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(7, 1, 3), 38), tuple(36, Path(7, 1, 2, 4), 38), tuple(36, Path(7, 1, 2), 21), tuple(36, Path(7, 1), 17))
+      )): _*)
+    }
+
+    "handle multiple source paths from same source vertex" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
+
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(36), tuple(37))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(), 36), tuple(37, Path(), 37))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(36, 7, 11), tuple(36, 6, 37))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(7), 11), tuple(36, Path(6), 37))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(37, 3, 11))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(6, 3), 11), tuple(37, Path(3), 11))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(11, 1, 21))))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(36, Path(6, 3, 1), 21), tuple(36, Path(7, 1), 21), tuple(37, Path(3, 1), 21))
+      )): _*)
+    }
   }
 }

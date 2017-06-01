@@ -32,11 +32,11 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
   val sourceVertexIndex = secondaryMask(0)
   val targetVertexIndex = 2 - sourceVertexIndex
-  
+
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Tuple = {
     // TODO: there might be extra attributes for the path as well
     val myTuple = if (sourceVertexIndex == 0) {
-        tuple(path) ++ tuple(targetId) 
+        tuple(path) ++ tuple(targetId)
       } else {
         tuple(targetId) ++ tuple(path)
       }
@@ -128,7 +128,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def pathsFromTargetVertex(targetId: Long) = {
-    reachableVertices.getOrElse(targetId, Map.empty).flatMap(entry => entry._2.map(path => (entry._1, path))).toList.:: (targetId, PathData(Path(), mutable.HashSet[Long]()))
+    reachableVertices.getOrElse(targetId, Map.empty).flatten(entry => entry._2.map(path => (entry._1, path))).toList.:: (targetId, PathData(Path(), mutable.HashSet[Long]()))
   }
 
   private def areDistinctPaths(p1: mutable.HashSet[Long], p2: mutable.HashSet[Long]): Boolean = {
