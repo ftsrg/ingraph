@@ -4,6 +4,7 @@ import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
 import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
+import ingraph.cypher2relalg.util.GrammarUtil
 import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
@@ -68,7 +69,6 @@ import relalg.ArithmeticExpression
 import relalg.AttributeVariable
 import relalg.BinaryArithmeticOperatorType
 import relalg.BinaryLogicalOperatorType
-import relalg.CUDOperator
 import relalg.ComparableExpression
 import relalg.Direction
 import relalg.ElementVariable
@@ -189,7 +189,7 @@ class RelalgBuilder {
 		 * 
 		 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 		 *
-		 * Note: CUDOperator is the same as CREATE|DELETE (for now), and UPDATE (set) operations should also come here
+		 * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
 		 */
 		var from = 0
 		var variableBuilderChain = variableBuilder
@@ -198,8 +198,7 @@ class RelalgBuilder {
 			val next = if (i + 1 < clauses.length) {
 					clauses.get(i + 1)
 				}
-			if (current instanceof CUDOperator && ! ( next instanceof CUDOperator ) && ! ( next instanceof Return )
-			 || current instanceof Create
+			if (GrammarUtil.isCudClause(current) && ! GrammarUtil.isCudClause(next) && ! ( next instanceof Return )
 			 || current instanceof With && ! ( next instanceof Unwind )
 			 || current instanceof Unwind
 			 ||	current instanceof Return
@@ -313,7 +312,7 @@ class RelalgBuilder {
 		val afterCud = {
 			var Operator op = afterUnwind
 
-			for (cudClause: clauses.filter([it instanceof Create || it instanceof Delete])) {
+			for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
 				op = switch cudClause {
 					Create: buildCreateOperator(cudClause, op)
 					Delete: buildDeleteOperator(cudClause, op)
