@@ -14,6 +14,7 @@ import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.UnionOperator
 import relalg.Variable
+import relalg.ExpandOperator
 
 /**
  * Calculates the internal schema that consists of the external schema plus the extra variables.
@@ -99,6 +100,11 @@ class InternalSchemaCalculator {
 		op.defineInternalSchemaForProjectionOperator(internalSchema)
 	}
 
+	private def dispatch void defineInternalSchema(ExpandOperator op, List<? extends Variable> internalSchema) {
+		op.internalSchema.addAll(uniqueUnion(op.externalSchema, op.extraVariables))
+	}
+
+	// the rest
 	private def dispatch void defineInternalSchema(Operator op, List<? extends Variable> internalSchema) {
 		op.internalSchema.addAll(internalSchema)
 	}
