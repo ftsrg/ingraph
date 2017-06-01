@@ -16,11 +16,12 @@ class Search2TasksTransformation extends AbstractRelalgTransformation {
 	
 	def transformToTasks() {
 		info("Transforming relational algebra expression to tasks")		
-		
+
+		statements.fireWhilePossible(getVerticesAndExpandOperatorRule)
 		container.rootExpression.traverse[
 			println(it)
 		]
-		
+
 		return container
 	}
 	
