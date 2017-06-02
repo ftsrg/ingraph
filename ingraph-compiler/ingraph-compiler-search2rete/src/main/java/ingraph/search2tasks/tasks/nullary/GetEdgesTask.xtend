@@ -1,12 +1,12 @@
-package ingraph.search2tasks.tasks.unary
+package ingraph.search2tasks.tasks.nullary
 
-import ingraph.search2tasks.tasks.Task
 import org.eclipse.xtend.lib.annotations.Data
-import relalg.AbstractEdgeVariable
+import ingraph.search2tasks.tasks.Task
 import relalg.VertexVariable
+import relalg.AbstractEdgeVariable
 
 @Data
-class ExpandBothTask implements Task{
+class GetEdgesTask implements Task{
 	
 	val VertexVariable sourceVar
 	val AbstractEdgeVariable edgeVar
