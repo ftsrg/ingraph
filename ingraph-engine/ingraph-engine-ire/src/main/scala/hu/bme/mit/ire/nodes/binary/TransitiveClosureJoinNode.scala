@@ -36,8 +36,8 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
     println(sourceId + "->" + targetId + " through " + path)
-    println("sl: " + sourceLookup)
-    println("tl: " + targetLookup)
+//    println("sl: " + sourceLookup)
+//    println("tl: " + targetLookup)
     
     val x = sourceLookup(sourceId).map(sourceTuple =>
       targetLookup(targetId).map(targetTuple =>
@@ -60,8 +60,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     for (t <- changeSet.negative)
       sourceLookup.remove(t(sourceVertexIndex).asInstanceOf[Long])
 
-    println("sl: " + sourceLookup)
-
+//    println("sl: " + sourceLookup)
 //    changeSet.positive.map(x => println(s"pri> +${x.length} ${x}"))
 //    changeSet.negative.map(x => println(s"pri> -${x.length} ${x}"))
 
@@ -90,6 +89,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     for (t <- changeSet.negative)
       targetLookup.remove(t(targetVertexIndex).asInstanceOf[Long])
 
+//    println("tl: " + targetLookup)
 //    changeSet.positive.map(x => println(s"sec> +${x.length} ${x}"))
 //    changeSet.negative.map(x => println(s"sec> -${x.length} ${x}"))
 
@@ -138,7 +138,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
         reachableFrom(pathFromTargetVertex._1) += pathToSourceVertex._1
         reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) += PathData(path, mutable.HashSet(path: _*))
         if (sourceVerticesIndexer.contains(pathToSourceVertex._1) && isInRange(path)) {
-          newPathsBuilder ++= composeTuple(pathToSourceVertex._1, path, pathFromTargetVertex._1)
+//          newPathsBuilder ++= composeTuple(pathToSourceVertex._1, path, pathFromTargetVertex._1)
         }
       }
     }
@@ -147,11 +147,17 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def pathsToSourceVertex(sourceId: Long) = {
-    reachableFrom.getOrElse(sourceId, Set.empty).flatMap(startVertex => reachableVertices(startVertex)(sourceId).map(path => (startVertex, path))).toList.:: (sourceId, PathData(Path(), mutable.HashSet[Long]()))
+    reachableFrom.getOrElse(sourceId, Set.empty)
+      .flatMap(startVertex => reachableVertices(startVertex)(sourceId).map(path => (startVertex, path)))
+      .toList
+      .:: (sourceId, PathData(Path(), mutable.HashSet[Long]()))
   }
 
   private def pathsFromTargetVertex(targetId: Long) = {
-    reachableVertices.getOrElse(targetId, Map.empty).flatten(entry => entry._2.map(path => (entry._1, path))).toList.:: (targetId, PathData(Path(), mutable.HashSet[Long]()))
+    reachableVertices.getOrElse(targetId, Map.empty)
+      .flatten(entry => entry._2.map(path => (entry._1, path)))
+      .toList
+      .:: (targetId, PathData(Path(), mutable.HashSet[Long]()))
   }
 
   private def areDistinctPaths(p1: mutable.HashSet[Long], p2: mutable.HashSet[Long]): Boolean = {
@@ -181,11 +187,12 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val targetVertices = reachableVertices.getOrElse(targetId, Map.empty).keySet ++ Set(targetId)
     for (source <- sourceVertices; target <- targetVertices) {
       val containingPaths = reachableVertices(source).getOrElse(target, mutable.MutableList.empty).filter(_.pathHash.contains(edgeId))
-      if (sourceVerticesIndexer.contains(source))
-        removedPathsBuilder ++= containingPaths
-          .filter(pathData => isInRange(pathData.path))
-          .map(pathData => composeTuple(source, pathData.path, target))
-          .flatten
+      if (sourceVerticesIndexer.contains(source)) {
+//        removedPathsBuilder ++= containingPaths
+//          .filter(pathData => isInRange(pathData.path))
+//          .map(pathData => composeTuple(source, pathData.path, target))
+//          .flatten
+      }
 
       if (containingPaths.size > 0) {
         reachableVertices(source)(target) = reachableVertices(source)(target).diff(containingPaths)
@@ -207,14 +214,16 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def pathsFromSourceVertex(inputTuple: Tuple): Vector[Tuple] = {
-    val sourceId = inputTuple(0).asInstanceOf[Number].longValue
+    val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
-    if (minHops == 0)
-      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
+//    if (minHops == 0)
+//      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
-    pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId)))
+    pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(
+        targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId))
+      )
 
     pathsFromSourceVertexBuilder.result
   }
