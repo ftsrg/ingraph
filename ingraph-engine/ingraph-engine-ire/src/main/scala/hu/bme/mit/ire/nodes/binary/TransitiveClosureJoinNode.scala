@@ -35,11 +35,15 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetVertexIndex = 2 - secondaryMask(0)
 
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
+    println(sourceId + "->" + targetId + " through " + path)
+    println("sl: " + sourceLookup)
+    println("tl: " + targetLookup)
+    
     val x = sourceLookup(sourceId).map(sourceTuple =>
       targetLookup(targetId).map(targetTuple =>
         sourceTuple ++ targetTuple)
       ).flatten
-    x.map(println(_))
+//    x.map(println(_))
     x
   }
 
@@ -52,18 +56,20 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
   override def onPrimary(changeSet: ChangeSet): Unit = {
     for (t <- changeSet.positive)
-      sourceLookup.addBinding(t(sourceVertexIndex).asInstanceOf[Long], t) //tuple.drop(1))
+      sourceLookup.addBinding(t(sourceVertexIndex).asInstanceOf[Long], t)
     for (t <- changeSet.negative)
       sourceLookup.remove(t(sourceVertexIndex).asInstanceOf[Long])
+
+    println("sl: " + sourceLookup)
+
+//    changeSet.positive.map(x => println(s"pri> +${x.length} ${x}"))
+//    changeSet.negative.map(x => println(s"pri> -${x.length} ${x}"))
 
     val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
     val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
 
-    changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
-    changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
-
-    changeSet.positive.map(x => println(s"pri> +${x.length} ${x}"))
-    changeSet.negative.map(x => println(s"pri> -${x.length} ${x}"))
+    changeSet.positive.map(inputTuple => inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
+    changeSet.negative.map(inputTuple => inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
 
 //    positiveTuples.map(x => println(s"pri-out> +${x.length} ${x}"))
 //    positiveTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
@@ -84,8 +90,8 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     for (t <- changeSet.negative)
       targetLookup.remove(t(targetVertexIndex).asInstanceOf[Long])
 
-    changeSet.positive.map(x => println(s"sec> +${x.length} ${x}"))
-    changeSet.negative.map(x => println(s"sec> -${x.length} ${x}"))
+//    changeSet.positive.map(x => println(s"sec> +${x.length} ${x}"))
+//    changeSet.negative.map(x => println(s"sec> -${x.length} ${x}"))
 
     val positiveTuples = changeSet.positive.flatMap(newPathsWithEdge)
     val negativeTuples = changeSet.negative.flatMap(removePathsWithEdge)

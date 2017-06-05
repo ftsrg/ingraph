@@ -64,6 +64,7 @@ abstract class LdbcSnbTest extends FunSuite {
 
   val testCases =
     List(5).map(new TestCase("simple", _))
+//      List(7).map(new TestCase("simple", _))
 
   // BI
   // 1 // CASE
