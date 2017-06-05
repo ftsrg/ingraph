@@ -34,10 +34,15 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val sourceVertexIndex = primaryMask(0)
   val targetVertexIndex = secondaryMask(0)
 
-  def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
+  def composeTuple(sourceId: Long, path: Path, targetId: Long) = {
     println(sourceId + "->" + targetId + " through " + path)
 
     for(sourceTuple <- sourceLookup(sourceId); targetTuple <- targetLookup(targetId))
+      yield sourceTuple ++ targetTuple
+  }
+
+  def composeTupleSingleSource(sourceTuple: Tuple, path: Path, targetId: Long) = {
+    for(targetTuple <- targetLookup(targetId))
       yield sourceTuple ++ targetTuple
   }
 
@@ -212,20 +217,20 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
     if (minHops == 0)
-      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
+      pathsFromSourceVertexBuilder ++= composeTupleSingleSource(inputTuple, Path(), sourceId) // is it OK after this one is already added to lookup? I think yes.
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
     pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(
-        targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId))
-      )
+      targetId => pathTuplesToTrackedTarget(inputTuple, targetId, reachableFromSource(targetId))
+    )
 
     pathsFromSourceVertexBuilder.result
   }
 
-  private def pathTuplesToTrackedTarget(sourceId: Long, targetId: Long, paths: mutable.MutableList[PathData]): Iterable[Tuple] = {
+  private def pathTuplesToTrackedTarget(sourceTuple: Tuple, targetId: Long, paths: mutable.MutableList[PathData]): Iterable[Tuple] = {
     paths
       .filter(pathData => isInRange(pathData.path))
-      .map(pathData => composeTuple(sourceId, pathData.path, targetId))
+      .map(pathData => composeTupleSingleSource(sourceTuple, pathData.path, targetId))
       .flatten
   }
 
