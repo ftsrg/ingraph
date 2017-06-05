@@ -20,3 +20,5 @@ include ':ingraph-engine:ingraph-engine-neo4j-tests'
 include ':ingraph-engine:ingraph-engine-neo4j-util'
 include ':ingraph-engine:ingraph-engine-reactive-driver-interfaces'
 include ':ingraph-engine:ingraph-engine-test-tools'
+include ':ingraph-engine:ingraph-engine-sre'
+
