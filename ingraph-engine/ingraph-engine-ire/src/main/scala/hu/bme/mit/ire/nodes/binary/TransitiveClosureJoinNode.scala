@@ -32,19 +32,13 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetLookup = new BufferMultimap[Long, Tuple]
 
   val sourceVertexIndex = primaryMask(0)
-  val targetVertexIndex = 2 - secondaryMask(0)
+  val targetVertexIndex = secondaryMask(0)
 
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
     println(sourceId + "->" + targetId + " through " + path)
-//    println("sl: " + sourceLookup)
-//    println("tl: " + targetLookup)
-    
-    val x = sourceLookup(sourceId).map(sourceTuple =>
-      targetLookup(targetId).map(targetTuple =>
-        sourceTuple ++ targetTuple)
-      ).flatten
-//    x.map(println(_))
-    x
+
+    for(sourceTuple <- sourceLookup(sourceId); targetTuple <- targetLookup(targetId))
+      yield sourceTuple ++ targetTuple
   }
 
   val sourceVerticesIndexer = new HashSet[Long]
@@ -74,7 +68,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 //    positiveTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
 //    negativeTuples.map(x => println(s"pri-out> -${x.length} ${x}"))
 //    negativeTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
-    
+
     forward(ChangeSet(
       positive = positiveTuples,
       negative = negativeTuples
@@ -217,8 +211,8 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     val sourceId = inputTuple(sourceVertexIndex).asInstanceOf[Number].longValue
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
-//    if (minHops == 0)
-//      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
+    if (minHops == 0)
+      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
     pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(
