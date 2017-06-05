@@ -32,13 +32,15 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetLookup = new BufferMultimap[Long, Tuple]
 
   val sourceVertexIndex = primaryMask(0)
-  val targetVertexIndex = secondaryMask(0)
+  val targetVertexIndex = 2 - secondaryMask(0)
 
   def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
-    sourceLookup(sourceId)
-      .map(sourceTuple => targetLookup(targetId)
-      .map(targetTuple => sourceTuple ++ targetTuple))
-      .flatten
+    val x = sourceLookup(sourceId).map(sourceTuple =>
+      targetLookup(targetId).map(targetTuple =>
+        sourceTuple ++ targetTuple)
+      ).flatten
+    x.map(println(_))
+    x
   }
 
   val sourceVerticesIndexer = new HashSet[Long]
