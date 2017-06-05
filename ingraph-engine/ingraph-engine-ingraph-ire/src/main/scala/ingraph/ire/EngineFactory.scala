@@ -206,6 +206,7 @@ object EngineFactory {
                   op.getRightInput.getInternalSchema.length,
                   leftMask,
                   rightMask,
+                  op.getInternalSchema.length,
                   minHops,
                   maxHops
                 )))

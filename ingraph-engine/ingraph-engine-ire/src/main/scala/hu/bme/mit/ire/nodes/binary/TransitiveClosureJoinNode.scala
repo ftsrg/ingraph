@@ -21,29 +21,24 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
                                 override val secondaryTupleWidth: Int,
                                 override val primaryMask: Mask,
                                 override val secondaryMask: Mask,
+                                val outputTupleWidth: Int,
                                 val minHops: Long = 0,
                                 var maxHops: Long = Long.MaxValue
                                 ) extends JoinNodeBase with SingleForwarder {
 
   maxHops = if (maxHops >= 1) maxHops else Long.MaxValue
 
-  val sourceLookup = new mutable.HashMap[Any, Tuple]
-  val targetLookup = new mutable.HashMap[Any, Tuple]
+  val sourceLookup = new BufferMultimap[Long, Tuple]
+  val targetLookup = new BufferMultimap[Long, Tuple]
 
-  val sourceVertexIndex = secondaryMask(0)
-  val targetVertexIndex = 2 - sourceVertexIndex
+  val sourceVertexIndex = primaryMask(0)
+  val targetVertexIndex = secondaryMask(0)
 
-  def composeTuple(sourceId: Long, path: Path, targetId: Long): Tuple = {
-    // TODO: there might be extra attributes for the path as well
-    val myTuple = if (sourceVertexIndex == 0) {
-        tuple(path) ++ tuple(targetId)
-      } else {
-        tuple(targetId) ++ tuple(path)
-      }
-
-    tuple(sourceId) ++ sourceLookup.getOrElse(sourceId, tuple()) ++
-      myTuple ++
-      targetLookup.getOrElse(targetId, tuple())
+  def composeTuple(sourceId: Long, path: Path, targetId: Long): Iterable[Tuple] = {
+    sourceLookup(sourceId)
+      .map(sourceTuple => targetLookup(targetId)
+      .map(targetTuple => sourceTuple ++ targetTuple))
+      .flatten
   }
 
   val sourceVerticesIndexer = new HashSet[Long]
@@ -54,10 +49,10 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
 
   override def onPrimary(changeSet: ChangeSet): Unit = {
-    for (tuple <- changeSet.positive)
-      sourceLookup.put(tuple(0), tuple.drop(1))
-    for (tuple <- changeSet.negative)
-      sourceLookup.remove(tuple(0))
+    for (t <- changeSet.positive)
+      sourceLookup.addBinding(t(sourceVertexIndex).asInstanceOf[Long], t) //tuple.drop(1))
+    for (t <- changeSet.negative)
+      sourceLookup.remove(t(sourceVertexIndex).asInstanceOf[Long])
 
     val positiveTuples = changeSet.positive.flatMap(pathsFromSourceVertex)
     val negativeTuples = changeSet.negative.flatMap(pathsFromSourceVertex)
@@ -65,6 +60,14 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     changeSet.positive.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.add(_))
     changeSet.negative.map(inputTuple => inputTuple(0).asInstanceOf[Number].longValue).foreach(sourceVerticesIndexer.remove(_))
 
+    changeSet.positive.map(x => println(s"pri> +${x.length} ${x}"))
+    changeSet.negative.map(x => println(s"pri> -${x.length} ${x}"))
+
+//    positiveTuples.map(x => println(s"pri-out> +${x.length} ${x}"))
+//    positiveTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
+//    negativeTuples.map(x => println(s"pri-out> -${x.length} ${x}"))
+//    negativeTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
+    
     forward(ChangeSet(
       positive = positiveTuples,
       negative = negativeTuples
@@ -72,15 +75,27 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   override def onSecondary(changeSet: ChangeSet): Unit = {
+    val m = secondaryMask(0)
     // in the current implementation we can assume that the secondary input is a GetEdges operator
-    for (tuple <- changeSet.positive)
-      targetLookup.put(tuple(targetVertexIndex), tuple.drop(3))
-    for (tuple <- changeSet.negative)
-      targetLookup.remove(tuple(targetVertexIndex))
+    for (t <- changeSet.positive)
+      targetLookup.addBinding(t(targetVertexIndex).asInstanceOf[Long], t.take(m - 1) ++ t.drop(m)) //, tuple.drop(3))
+    for (t <- changeSet.negative)
+      targetLookup.remove(t(targetVertexIndex).asInstanceOf[Long])
+
+    changeSet.positive.map(x => println(s"sec> +${x.length} ${x}"))
+    changeSet.negative.map(x => println(s"sec> -${x.length} ${x}"))
+
+    val positiveTuples = changeSet.positive.flatMap(newPathsWithEdge)
+    val negativeTuples = changeSet.negative.flatMap(removePathsWithEdge)
+
+//    positiveTuples.map(x => println(s"sec-out> +${x.length} ${x}"))
+//    positiveTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
+//    negativeTuples.map(x => println(s"sec-out> -${x.length} ${x}"))
+//    negativeTuples.foreach(x => if (x.length != outputTupleWidth) {throw new IllegalStateException})
 
     forward(ChangeSet(
-      positive = changeSet.positive.flatMap(newPathsWithEdge),
-      negative = changeSet.negative.flatMap(removePathsWithEdge)
+      positive = positiveTuples,
+      negative = negativeTuples
     ))
   }
 
@@ -115,7 +130,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
         reachableFrom(pathFromTargetVertex._1) += pathToSourceVertex._1
         reachableVertices(pathToSourceVertex._1)(pathFromTargetVertex._1) += PathData(path, mutable.HashSet(path: _*))
         if (sourceVerticesIndexer.contains(pathToSourceVertex._1) && isInRange(path)) {
-          newPathsBuilder += composeTuple(pathToSourceVertex._1, path, pathFromTargetVertex._1)
+          newPathsBuilder ++= composeTuple(pathToSourceVertex._1, path, pathFromTargetVertex._1)
         }
       }
     }
@@ -159,7 +174,10 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     for (source <- sourceVertices; target <- targetVertices) {
       val containingPaths = reachableVertices(source).getOrElse(target, mutable.MutableList.empty).filter(_.pathHash.contains(edgeId))
       if (sourceVerticesIndexer.contains(source))
-        removedPathsBuilder ++= containingPaths.filter(pathData => isInRange(pathData.path)).map(pathData => composeTuple(source, pathData.path, target))
+        removedPathsBuilder ++= containingPaths
+          .filter(pathData => isInRange(pathData.path))
+          .map(pathData => composeTuple(source, pathData.path, target))
+          .flatten
 
       if (containingPaths.size > 0) {
         reachableVertices(source)(target) = reachableVertices(source)(target).diff(containingPaths)
@@ -185,7 +203,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
     var pathsFromSourceVertexBuilder = new VectorBuilder[Tuple]
 
     if (minHops == 0)
-      pathsFromSourceVertexBuilder += composeTuple(sourceId, Path(), sourceId)
+      pathsFromSourceVertexBuilder ++= composeTuple(sourceId, Path(), sourceId)
 
     val reachableFromSource = reachableVertices.getOrElse(sourceId, mutable.HashMap.empty)
     pathsFromSourceVertexBuilder ++= reachableFromSource.keysIterator.flatMap(targetId => pathTuplesToTrackedTarget(sourceId, targetId, reachableFromSource(targetId)))
@@ -194,7 +212,10 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   private def pathTuplesToTrackedTarget(sourceId: Long, targetId: Long, paths: mutable.MutableList[PathData]): Iterable[Tuple] = {
-    paths.filter(pathData => isInRange(pathData.path)).map(pathData => composeTuple(sourceId, pathData.path, targetId))
+    paths
+      .filter(pathData => isInRange(pathData.path))
+      .map(pathData => composeTuple(sourceId, pathData.path, targetId))
+      .flatten
   }
 
   private def isInRange(path: Path): Boolean = {
