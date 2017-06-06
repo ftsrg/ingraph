@@ -15,6 +15,9 @@ indent_style = tab
 indent_size = 2
 indent_style = space
 
+[*.xcore]
+trim_trailing_whitespace = false
+
 [*.gradle]
 indent_size = 2
 indent_style = space
