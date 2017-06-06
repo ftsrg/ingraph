@@ -1,11 +1,14 @@
 apply plugin: 'scala'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.1'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+  compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
+  compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+  compile group: 'org.scalaz', name: "scalaz_$scalaShortVersion", version: '7.2.13'
+
+  testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
 }
 
