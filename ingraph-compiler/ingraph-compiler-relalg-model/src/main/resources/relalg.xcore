@@ -424,7 +424,9 @@ class TopOperator extends UnaryOperator {
   refers Expression limit
 }
 
-// for incremental queries to handle sort and top as a single operator
+/*
+ * For incremental queries to handle sort and top as a single operator.
+ */
 class SortAndTopOperator extends SortOperator, TopOperator {
 }
 
@@ -451,7 +453,9 @@ abstract class AbstractJoinOperator extends BinaryOperator {
   int[] rightMask
 }
 
-// abstract class for operator that implement an equijoin-like operation (
+/*
+ * For operators that implement an equijoin-like operation.
+ */
 abstract class EquiJoinLikeOperator extends AbstractJoinOperator {
 }
 
