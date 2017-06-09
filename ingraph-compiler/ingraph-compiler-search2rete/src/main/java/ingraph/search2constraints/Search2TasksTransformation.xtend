@@ -1,4 +1,4 @@
-package ingraph.search2tasks
+package ingraph.search2constraints
 
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.transformations.AbstractRelalgTransformation
