@@ -46,24 +46,24 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 		''')
 	}
 	
-	@Test
-	def void semaphoreneighbor() {
-		process('semaphoreneighbor', '''
-			MATCH (semaphore:Semaphore)<-[:exit]-(route1:Route)-[:requires]->(sensor1:Sensor)<-[:monitoredBy]-(te1)-[:connectsTo]->(te2)-[:monitoredBy]->(sensor2:Sensor)<-[:requires]-(route2:Route)
-			WHERE NOT ((semaphore)<-[:entry]-(route2))
-			      AND route1 <> route2
-			RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
-		''')
-	}
+//	@Test
+//	def void semaphoreneighbor() {
+//		process('semaphoreneighbor', '''
+//			MATCH (semaphore:Semaphore)<-[:exit]-(route1:Route)-[:requires]->(sensor1:Sensor)<-[:monitoredBy]-(te1)-[:connectsTo]->(te2)-[:monitoredBy]->(sensor2:Sensor)<-[:requires]-(route2:Route)
+//			WHERE NOT ((semaphore)<-[:entry]-(route2))
+//			      AND route1 <> route2
+//			RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
+//		''')
+//	}
 	
-	@Test
-	def void switchmonitored() {
-		process('switchmonitored', '''
-			MATCH (sw:Switch)
-			WHERE NOT ((sw)-[:monitoredBy]->(:Sensor))
-			RETURN DISTINCT sw
-		''')
-	}
+//	@Test
+//	def void switchmonitored() {
+//		process('switchmonitored', '''
+//			MATCH (sw:Switch)
+//			WHERE NOT ((sw)-[:monitoredBy]->(:Sensor))
+//			RETURN DISTINCT sw
+//		''')
+//	}
 	
 	@Test
 	def void switchset() {
@@ -72,6 +72,14 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 			WHERE semaphore.signal = "GO"
 			  AND sw.currentPosition <> swP.position
 			RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position
+		''')
+	}
+	
+	@Test
+	def void routesensorpositive() {
+		process('routesensorpositive', '''
+			MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
+			RETURN DISTINCT route, sensor, swP, sw
 		''')
 	}
 	
