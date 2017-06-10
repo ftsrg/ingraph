@@ -16,10 +16,18 @@ abstract class Search2ConstraintsTransformationTest extends Cypher2SearchAbstrac
 
 		simplifyingTransformationRete.simplify
 
-		transformation.transformToTasks
-//		container.calculateExternalSchema
-//		container.calculateExtraVariables
-//		container.calculateInternalSchema
+		transformation.transformToConstraints
+
+		// Currently schema calculation is not necessary
+		// container.calculateExternalSchema
+		// container.calculateExtraVariables
+		// container.calculateInternalSchema
+
+		println('''Constraint set for query "«query»"''')
+		for (constraint : constraints) {
+			println(constraint)
+		}
+
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
 		return containerSearchBased
 	}

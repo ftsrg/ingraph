@@ -21,7 +21,7 @@ import relalg.VertexVariable
 import ingraph.search2constraints.constraints.Selection
 import com.google.common.collect.Lists
 import ingraph.search2constraints.constraints.Equality
-
+import relalg.Operator
 
 /**
  * Utility class for compiling relational algebra operators into search Constraints.
@@ -76,6 +76,11 @@ class Relalg2ConstraintCompiler {
 		  }
 	  }
 	  return equalities
+	}
+
+	static def dispatch List<Constraint> compile(Operator op){
+		System.err.println("Unhandled operator type: " + op.class.simpleName)
+		return #[]
 	}
 
 	// Internal helper methods
