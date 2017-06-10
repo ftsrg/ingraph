@@ -9,35 +9,71 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 	}
 
 	@Test
-	def void q1() {
-		process('query-1', '''
-			MATCH (node)
-			RETURN exists(node.attr)
+	def void connectedsegments() {
+		process('connectedsegments', '''
+			MATCH
+			  (sensor:Sensor)<-[:monitoredBy]-(segment1:Segment),
+			  (segment1:Segment)-[:connectsTo]->
+			  (segment2:Segment)-[:connectsTo]->
+			  (segment3:Segment)-[:connectsTo]->
+			  (segment4:Segment)-[:connectsTo]->
+			  (segment5:Segment)-[:connectsTo]->(segment6:Segment),
+			  (segment2:Segment)-[:monitoredBy]->(sensor:Sensor),
+			  (segment3:Segment)-[:monitoredBy]->(sensor:Sensor),
+			  (segment4:Segment)-[:monitoredBy]->(sensor:Sensor),
+			  (segment5:Segment)-[:monitoredBy]->(sensor:Sensor),
+			  (segment6:Segment)-[:monitoredBy]->(sensor:Sensor)
+			RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
+		''')
+	}
+	
+
+	@Test
+	def void poslength() {
+		process('poslength', '''
+			MATCH (segment:Segment)
+			WHERE segment.length <= 0
+			RETURN DISTINCT segment, segment.length AS length
 		''')
 	}
 
 	@Test
-	def void q2() {
-		process('query-2', '''
-		MATCH (tag:Tag)<-[:hasTag]-(:Message)<-[:replyOf*]-(comment:Comment)
-		RETURN tag.name
+	def void routesensor() {
+		process('routesensor', '''
+			MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
+			WHERE NOT ((route)-[g:requires]->(sensor))
+			RETURN DISTINCT route, sensor, swP, sw
 		''')
 	}
 	
 	@Test
-	def void q3() {
-		process('query-3', '''
-		MATCH (country:Country)<-[:isPartOf]-(city:City)<-[:isLocatedIn]-(person:Person)-[:knows*1..2]-(:Person)
-		RETURN person.id
+	def void semaphoreneighbor() {
+		process('semaphoreneighbor', '''
+			MATCH (semaphore:Semaphore)<-[:exit]-(route1:Route)-[:requires]->(sensor1:Sensor)<-[:monitoredBy]-(te1)-[:connectsTo]->(te2)-[:monitoredBy]->(sensor2:Sensor)<-[:requires]-(route2:Route)
+			WHERE NOT ((semaphore)<-[:entry]-(route2))
+			      AND route1 <> route2
+			RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 		''')
 	}
 	
 	@Test
-	def void q4() {
-		process('query-4', '''
-		MATCH (p1:Person)-[:knows*1..2]->(p2:Person)
-		RETURN p1.id, p2.id
-	''')
+	def void switchmonitored() {
+		process('switchmonitored', '''
+			MATCH (sw:Switch)
+			WHERE NOT ((sw)-[:monitoredBy]->(:Sensor))
+			RETURN DISTINCT sw
+		''')
 	}
+	
+	@Test
+	def void switchset() {
+		process('switchset', '''
+			MATCH (semaphore:Semaphore)<-[:entry]-(route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)
+			WHERE semaphore.signal = "GO"
+			  AND sw.currentPosition <> swP.position
+			RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position
+		''')
+	}
+	
 
 }
