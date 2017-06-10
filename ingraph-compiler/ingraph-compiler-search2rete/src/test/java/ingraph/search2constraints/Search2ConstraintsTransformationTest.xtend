@@ -14,12 +14,17 @@ abstract class Search2ConstraintsTransformationTest extends Cypher2SearchAbstrac
 		 
 		simplifyingTransformationRete.simplify
 		
-		transformation.transformToConstraints
+		val constraints = transformation.transformToConstraints
 
 		// Currently schema calculation is not necessary
 		// container.calculateExternalSchema
 		// container.calculateExtraVariables
 		// container.calculateInternalSchema
+
+		println('''Constraint set for query "«query»"''')
+		for (constraint : constraints) {
+			println(constraint)
+		}
 
 		return containerSearchBased
 	}
