@@ -1,8 +1,10 @@
  package ingraph.search2constraints
 
+import com.google.common.collect.Sets
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.transformations.AbstractRelalgTransformation
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
+import ingraph.search2constraints.constraints.Constraint
 import relalg.RelalgContainer
 
 class Search2ConstraintTransformation extends AbstractRelalgTransformation {
@@ -14,15 +16,18 @@ class Search2ConstraintTransformation extends AbstractRelalgTransformation {
 		super(container) 
 	}
 	
-	def transformToTasks() {
-		info("Transforming relational algebra expression to tasks")		
+	def transformToConstraints() {
+		info("Transforming relational algebra expression to constraints")		
 
-		statements.fireWhilePossible(getVerticesAndExpandOperatorRule)
+		// Currently no transformation is done on the inpot relalg. tree
+		//statements.fireWhilePossible(getVerticesAndExpandOperatorRule)
+		
+		val constraints = Sets.<Constraint>newHashSet
 		container.rootExpression.traverse[
-			println(it)
+			constraints.addAll(Relalg2ConstraintCompiler.compile(it))
 		]
 
-		return container
+		return constraints
 	}
 	
 }

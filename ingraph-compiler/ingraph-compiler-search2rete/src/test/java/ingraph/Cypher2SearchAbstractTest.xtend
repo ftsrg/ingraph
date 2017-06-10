@@ -1,7 +1,7 @@
 package ingraph
 
 import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.optimization.transformations.SimplifyingTransformation
+import ingraph.optimization.transformations.SearchPlanCalculator
 import ingraph.relalg.calculators.ExternalSchemaCalculator
 import ingraph.relalg.calculators.ExtraVariablesCalculator
 import ingraph.relalg.calculators.InternalSchemaCalculator
@@ -10,7 +10,6 @@ import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import relalg.RelalgContainer
-import ingraph.optimization.transformations.SearchPlanCalculator
 
 abstract class Cypher2SearchAbstractTest {
 

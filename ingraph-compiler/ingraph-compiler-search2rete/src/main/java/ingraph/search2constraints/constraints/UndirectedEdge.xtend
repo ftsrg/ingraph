@@ -2,7 +2,6 @@ package ingraph.search2constraints.constraints
 
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Data
-import relalg.AbstractEdgeVariable
 import relalg.EdgeVariable
 import relalg.VertexVariable
 
