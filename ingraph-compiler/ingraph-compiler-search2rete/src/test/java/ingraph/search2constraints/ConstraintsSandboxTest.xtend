@@ -2,7 +2,7 @@ package ingraph.search2constraints
 
 import org.junit.Test
 
-class TasksSandboxTest extends Search2ConstraintsTransformationTest {
+class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 
 	override protected directory() {
 		return "sandbox"
