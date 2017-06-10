@@ -1,4 +1,4 @@
-package ingraph.search2constraints
+ package ingraph.search2constraints
 
 import ingraph.logger.IngraphLogger
 import ingraph.optimization.transformations.AbstractRelalgTransformation
@@ -11,7 +11,7 @@ class Search2TasksTransformation extends AbstractRelalgTransformation {
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 
 	new(RelalgContainer container) {
-		super(container)
+		super(container) 
 	}
 	
 	def transformToTasks() {
