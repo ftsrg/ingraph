@@ -13,9 +13,9 @@ abstract class Search2ConstraintsTransformationTest extends Cypher2SearchAbstrac
 		val container = Cypher2Relalg.processString(querySpecification, query)
 		val simplifyingTransformationRete = new SimplifyingTransformation(container)
 		val Search2ConstraintTransformation transformation = new Search2ConstraintTransformation(container)
-		 
+
 		simplifyingTransformationRete.simplify
-		
+
 		transformation.transformToTasks
 //		container.calculateExternalSchema
 //		container.calculateExtraVariables

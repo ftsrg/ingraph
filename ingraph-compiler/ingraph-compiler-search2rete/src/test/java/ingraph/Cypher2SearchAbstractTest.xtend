@@ -32,14 +32,14 @@ abstract class Cypher2SearchAbstractTest {
 		treeConverter1.convert(containerSearchBased, '''«directory()»/«query»-raw''')
 		treeConverter2.convert(containerSearchBased, '''«directory()»/«query»-raw-standalone''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-raw''')
-		
+
 		val simplifyingTransformation = new SimplifyingTransformation(containerSearchBased)
 		val simplifiedPlan = simplifyingTransformation.simplify
 
 		treeConverter1.convert(simplifiedPlan, '''«directory()»/«query»-simplified''')
 		treeConverter2.convert(simplifiedPlan, '''«directory()»/«query»-simplified-standalone''')
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-simplified''')
-		
+
 	}
 
 	protected abstract def RelalgContainer transform(String querySpecification, String query, RelalgContainer containerSearchBased)
