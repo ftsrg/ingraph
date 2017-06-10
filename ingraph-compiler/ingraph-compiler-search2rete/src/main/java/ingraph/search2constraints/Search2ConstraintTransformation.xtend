@@ -5,9 +5,9 @@ import ingraph.optimization.transformations.AbstractRelalgTransformation
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
 import relalg.RelalgContainer
 
-class Search2TasksTransformation extends AbstractRelalgTransformation {
+class Search2ConstraintTransformation extends AbstractRelalgTransformation {
 
-	extension IngraphLogger logger = new IngraphLogger(Search2TasksTransformation.name)
+	extension IngraphLogger logger = new IngraphLogger(Search2ConstraintTransformation.name)
 	extension PostOrderTreeVisitor treeVisitor = new PostOrderTreeVisitor
 
 	new(RelalgContainer container) {
