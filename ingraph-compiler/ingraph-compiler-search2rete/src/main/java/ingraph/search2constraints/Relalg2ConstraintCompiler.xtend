@@ -22,12 +22,18 @@ import ingraph.search2constraints.constraints.Selection
 import com.google.common.collect.Lists
 import ingraph.search2constraints.constraints.Equality
 import relalg.Operator
+import relalg.ProjectionOperator
+import ingraph.search2constraints.constraints.Projection
+import relalg.ProductionOperator
+import ingraph.logger.IngraphLogger
 
 /**
  * Utility class for compiling relational algebra operators into search Constraints.
  * For operators with no compilation logic (missing dispatch method) an <code>IllegalArgumentException</code> is thrown.
  */
 class Relalg2ConstraintCompiler {
+
+	static extension IngraphLogger logger = new IngraphLogger(Relalg2ConstraintCompiler.name)
 
 	static def dispatch List<Constraint> compile(GetVerticesOperator getVerticesOp) {
 		val variable = getVerticesOp.vertexVariable
@@ -78,8 +84,17 @@ class Relalg2ConstraintCompiler {
 	  return equalities
 	}
 
+	static def dispatch List<Constraint> compile(ProjectionOperator projectionOp){
+		#[new Projection(projectionOp.externalSchema)]
+	}
+
+	static def dispatch List<Constraint> compile(ProductionOperator productionOperator){
+		// TODO implement according to #153
+		return #[]
+	}
+
 	static def dispatch List<Constraint> compile(Operator op){
-		System.err.println("Unhandled operator type: " + op.class.simpleName)
+		warning("Unhandled relalg. operator type: " + op.class.name)
 		return #[]
 	}
 

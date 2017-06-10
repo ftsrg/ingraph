@@ -23,10 +23,16 @@ abstract class Search2ConstraintsTransformationTest extends Cypher2SearchAbstrac
 		// container.calculateExtraVariables
 		// container.calculateInternalSchema
 
-		println('''Constraint set for query "«query»"''')
+		println('''
+			================= START ====================
+			Compiled constraint set for query "«query»":
+		''')
 		for (constraint : constraints) {
 			println(constraint)
 		}
+		println('''
+			================= END   ====================
+		''')
 
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
 		return containerSearchBased
