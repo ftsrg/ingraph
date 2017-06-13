@@ -1,9 +1,14 @@
 package ingraph.search2constraints
 
-import ingraph.search2constraints.constraints.AllDifferent
+import com.google.common.collect.Lists
+import ingraph.logger.IngraphLogger
 import ingraph.search2constraints.constraints.Constraint
 import ingraph.search2constraints.constraints.DirectedEdge
 import ingraph.search2constraints.constraints.DuplicateElimination
+import ingraph.search2constraints.constraints.Equality
+import ingraph.search2constraints.constraints.Inequality
+import ingraph.search2constraints.constraints.Projection
+import ingraph.search2constraints.constraints.Selection
 import ingraph.search2constraints.constraints.UndirectedEdge
 import ingraph.search2constraints.constraints.Vertex
 import java.util.List
@@ -16,16 +21,11 @@ import relalg.ExpandOperator
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.JoinOperator
+import relalg.Operator
+import relalg.ProductionOperator
+import relalg.ProjectionOperator
 import relalg.SelectionOperator
 import relalg.VertexVariable
-import ingraph.search2constraints.constraints.Selection
-import com.google.common.collect.Lists
-import ingraph.search2constraints.constraints.Equality
-import relalg.Operator
-import relalg.ProjectionOperator
-import ingraph.search2constraints.constraints.Projection
-import relalg.ProductionOperator
-import ingraph.logger.IngraphLogger
 
 /**
  * Utility class for compiling relational algebra operators into search Constraints.
@@ -50,7 +50,14 @@ class Relalg2ConstraintCompiler {
 	} 
 	
 	static def dispatch List<Constraint> compile(AllDifferentOperator allDiffOp) {
-		#[new AllDifferent(allDiffOp.edgeVariables)]
+		val inequalities = Lists.newArrayList
+		val vars = allDiffOp.edgeVariables
+		for (var i=0; i< vars.length-1; i++) {
+			for (var j=i+1; j< vars.length; j++) {
+				new Inequality(vars.get(i), vars.get(j)) 
+			}
+		}
+		return inequalities
 	} 
  
 	static def dispatch List<Constraint> compile(DuplicateEliminationOperator dupElimOp) {
