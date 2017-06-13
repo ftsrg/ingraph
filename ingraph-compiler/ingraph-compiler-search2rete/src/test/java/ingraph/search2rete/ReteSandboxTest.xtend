@@ -1,9 +1,5 @@
 package ingraph.search2rete
 
-import java.io.File
-import java.nio.charset.Charset
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.FilenameUtils
 import org.junit.Test
 
 class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
@@ -12,27 +8,45 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 		return "sandbox"
 	}
 
-//	val queries = #[
-//	  ''''''
-//	]
-//
-//	@Test
-//	def void queries() {
-//		for (i : 0 ..< queries.length) {
-//			process('''query-«i»''', queries.get(i))
-//		}
-//	}
+	@Test
+	def void q1() {
+		process('query-1', '''
+			MATCH (node)
+			RETURN exists(node.attr)
+		''')
+	}
 
 	@Test
-	def void q() {
-		val directoryPath = '''../../queries/railway-verification/'''
-		val fileNames = FileUtils.listFiles(new File(directoryPath), #["cypher"], false).map[name].toList
+	def void q2() {
+		process('query-2', '''
+			MATCH (tag:Tag)<-[:hasTag]-(:Message)<-[:replyOf*]-(comment:Comment)
+			RETURN tag.name
+		''')
+	}
 
-		for (fileName : fileNames) {
-			val queryName = FilenameUtils.removeExtension(fileName)
-			val querySpecification = FileUtils.readFileToString(new File(directoryPath + fileName), Charset.forName("UTF-8"))
-			process(queryName, querySpecification)
-		}
+	@Test
+	def void q3() {
+		process('query-3', '''
+			MATCH (country:Country)<-[:isPartOf]-(city:City)<-[:isLocatedIn]-(person:Person)-[:knows*1..2]-(:Person)
+			RETURN person.id
+		''')
+	}
+
+	@Test
+	def void q4() {
+		process('query-4', '''
+			MATCH (p1:Person)-[:knows*1..2]->(p2:Person)
+			RETURN p1.id, p2.id
+		''')
+	}
+
+	@Test
+	def void routesensor() {
+		process('routesensor', '''
+			MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
+			WHERE NOT ((route)-[g:requires]->(sensor))
+			RETURN DISTINCT route, sensor, swP, sw
+		''')
 	}
 
 }
