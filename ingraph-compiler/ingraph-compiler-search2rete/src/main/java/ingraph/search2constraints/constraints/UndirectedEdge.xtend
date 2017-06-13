@@ -21,4 +21,18 @@ class UndirectedEdge implements Constraint{
 		this.edgeVar = edgeVar
 	}
 	
+		override toString() {
+			val v1 = vertexVariables.get(0)
+			val v2 = if(vertexVariables.length > 1) {
+				vertexVariables.get(1)
+			} else {
+				vertexVariables.get(0)
+			}
+			
+				
+			
+		return '''«this.class.simpleName» [ «v1.name» : «FOR l : v1.vertexLabelSet.vertexLabels SEPARATOR ' AND '»«l.name»«ENDFOR» -- «edgeVar.name» : «FOR l : edgeVar.edgeLabelSet.edgeLabels SEPARATOR ' OR '»«l.name»«ENDFOR» -- «v2.name» : «FOR l : v2.vertexLabelSet.vertexLabels SEPARATOR ' AND '»«l.name»«ENDFOR» ]'''
+	
+	}
+	
 }

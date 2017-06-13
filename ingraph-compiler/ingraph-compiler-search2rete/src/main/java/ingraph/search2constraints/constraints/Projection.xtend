@@ -5,6 +5,10 @@ import relalg.Variable
 import java.util.List
 
 @Data
-class Projection implements Constraint{
-	List<Variable> variablesToKeep 
+class Projection implements Constraint {
+	List<Variable> variablesToKeep
+
+	override toString() '''
+		«this.class.simpleName» [ «FOR v : variablesToKeep SEPARATOR ','»«v»«ENDFOR» ]
+	'''
 }

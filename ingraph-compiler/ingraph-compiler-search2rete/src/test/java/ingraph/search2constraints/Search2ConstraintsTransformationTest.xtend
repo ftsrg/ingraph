@@ -28,7 +28,7 @@ abstract class Search2ConstraintsTransformationTest extends Cypher2SearchAbstrac
 			Compiled constraint set for query "«query»":
 		''')
 		for (constraint : constraints) {
-			println(constraint)
+			print(constraint)
 		}
 		println('''
 			================= END   ====================
