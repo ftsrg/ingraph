@@ -54,7 +54,7 @@ class Relalg2ConstraintCompiler {
 		val vars = allDiffOp.edgeVariables
 		for (var i=0; i< vars.length-1; i++) {
 			for (var j=i+1; j< vars.length; j++) {
-				new Inequality(vars.get(i), vars.get(j)) 
+				new Inequality(#{vars.get(i), vars.get(j)}) 
 			}
 		}
 		return inequalities
