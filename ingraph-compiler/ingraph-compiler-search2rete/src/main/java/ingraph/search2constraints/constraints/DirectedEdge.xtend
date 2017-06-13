@@ -11,4 +11,12 @@ class DirectedEdge implements Constraint{
 	val EdgeVariable edgeVar
 	val VertexVariable targetVar
 	
+	override toString()'''
+		DirectedEdge [
+			sourceVar = «sourceVar.name» , labels: «FOR l : sourceVar.vertexLabelSet.vertexLabels SEPARATOR ','» «l.toString» «ENDFOR»
+			edgeVar = «edgeVar.name» , type: «FOR l : edgeVar.edgeLabelSet.edgeLabels SEPARATOR ','» «l.toString» «ENDFOR»
+			targetVar = «targetVar.name» , labels: «FOR l : targetVar.vertexLabelSet.vertexLabels SEPARATOR ','» «l.toString» «ENDFOR»
+		]
+	'''
+	
 }
