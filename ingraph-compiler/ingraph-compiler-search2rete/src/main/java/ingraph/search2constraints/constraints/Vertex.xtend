@@ -6,8 +6,10 @@ import relalg.VertexVariable
 @Data
 class Vertex implements Constraint{
 	
-	val VertexVariable variable
+	val VertexVariable vertexVariable
 	
-	
+	override toString()'''
+		«this.class.simpleName» [ vertexVariable «vertexVariable», labels: «FOR l : vertexVariable.vertexLabelSet.vertexLabels SEPARATOR ','» «l.name» «ENDFOR»]
+	'''
 		
 }

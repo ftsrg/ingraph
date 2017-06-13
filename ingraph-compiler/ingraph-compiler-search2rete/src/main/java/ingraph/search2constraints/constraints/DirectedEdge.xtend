@@ -5,18 +5,14 @@ import relalg.EdgeVariable
 import relalg.VertexVariable
 
 @Data
-class DirectedEdge implements Constraint{
-	
+class DirectedEdge implements Constraint {
+
 	val VertexVariable sourceVar
 	val EdgeVariable edgeVar
 	val VertexVariable targetVar
-	
-	override toString()'''
-		DirectedEdge [
-			sourceVar = «sourceVar.name» , labels: «FOR l : sourceVar.vertexLabelSet.vertexLabels SEPARATOR ','» «l.toString» «ENDFOR»
-			edgeVar = «edgeVar.name» , type: «FOR l : edgeVar.edgeLabelSet.edgeLabels SEPARATOR ','» «l.toString» «ENDFOR»
-			targetVar = «targetVar.name» , labels: «FOR l : targetVar.vertexLabelSet.vertexLabels SEPARATOR ','» «l.toString» «ENDFOR»
-		]
+
+	override toString() '''
+		«this.class.simpleName» [ «sourceVar.name» : «FOR l : sourceVar.vertexLabelSet.vertexLabels SEPARATOR ' AND '»«l.name»«ENDFOR» -- «edgeVar.name» : «FOR l : edgeVar.edgeLabelSet.edgeLabels SEPARATOR ' OR '»«l.name»«ENDFOR» -->> «targetVar.name» : «FOR l : targetVar.vertexLabelSet.vertexLabels SEPARATOR ' AND '»«l.name»«ENDFOR» ]
 	'''
-	
+
 }
