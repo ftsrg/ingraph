@@ -6,7 +6,7 @@ import java.util.List
 
 @Data
 class Projection implements Constraint {
-	List<Variable> variablesToKeep
+	List<? extends Variable> variablesToKeep
 
 	override toString() '''
 		«this.class.simpleName» [ «FOR v : variablesToKeep SEPARATOR ','»«v»«ENDFOR» ]
