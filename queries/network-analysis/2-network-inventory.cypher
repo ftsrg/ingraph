@@ -1,2 +1,2 @@
 MATCH (n)
-RETURN labels(n)[0] as type, count(*) as count, collect(n.host) as names
+RETURN labels(n)[0] AS type, count(*) AS count, collect(n.host) AS names
