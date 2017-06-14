@@ -1,4 +1,4 @@
 MATCH (p:Person)
 RETURN DISTINCT p.name
-ORDER BY p.name
- SKIP 1 LIMIT 2
+ ORDER BY p.name
+  SKIP 1 LIMIT 2
