@@ -29,7 +29,7 @@ import relalg.VertexVariable
 import relalg.function.Function
 
 class ExpressionConverter {
-	
+
 	extension StringEscaper stringEscaper = new StringEscaper
 	extension ExpressionOperatorTypeConverter operatorConverter = new ExpressionOperatorTypeConverter
 	extension ElementConverter elementConverter = new ElementConverter
@@ -47,7 +47,7 @@ class ExpressionConverter {
 		if (exp instanceof VariableExpression) {
 			val v = exp.variable
 			if (v instanceof VertexVariable) {
-				return '''\nodevariable{«v.escapedName»}{«convertVertexLabelSet(v.vertexLabelSet)»}'''
+				return '''\vertexvariable{«v.escapedName»}{«convertVertexLabelSet(v.vertexLabelSet)»}'''
 			} else if (v instanceof AbstractEdgeVariable) {
 				return '''\edgevariable{«v.escapedName»}{«convertEdgeLabelSet(v.edgeLabelSet)»}'''
 			}
@@ -59,11 +59,11 @@ class ExpressionConverter {
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''
 	}
-	
+
 	def dispatch CharSequence convertExpression(BigIntegerLiteral bigintegerLiteral)	{
 		'''\literal{«bigintegerLiteral.value»}'''
 	}
-	
+
 	def dispatch CharSequence convertExpression(DoubleLiteral doubleLiteral) {
 		'''\literal{«doubleLiteral.value»}'''
 	}
@@ -95,7 +95,7 @@ class ExpressionConverter {
 			'''\var{«expVariable.escapedName»}'''
 		}
 	}
-	
+
 	def dispatch CharSequence convertExpression(VariableExpression ve) {
 		convertExpression(ve.variable)
 	}
