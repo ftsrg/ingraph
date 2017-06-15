@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import CodeMirror from 'react-codemirror';
-import {MdSave} from 'react-icons/lib/md';
+import {MdRepeat, MdRepeatOne} from "react-icons/lib/md/index";
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/neo.css';
@@ -26,7 +26,7 @@ class EditorHeader extends React.Component {
         })
     };
 
-    handleSave = () => {
+    handleQuery = () => {
         if (this.state.modified) {
             this.props.dispatch({
                 type: 'REGISTER_QUERY_DEFINITION',
@@ -34,6 +34,10 @@ class EditorHeader extends React.Component {
                 definition: this.state.definition,
             })
         }
+    };
+
+    handleIncrementalQuery = () => {
+
     };
 
     renderPlaceholder() {
@@ -56,12 +60,20 @@ class EditorHeader extends React.Component {
                 <div style={styles.editorContainer}>
                     <CodeMirror value={this.state.definition} options={options} onChange={this.handleChange}/>
                 </div>
-                <Button
-                    style={styles.submitButton}
-                    enabled={this.state.modified}
-                    handleClick={this.handleSave}>
-                    <MdSave color="white" size={30} />
-                </Button>
+                <div style={styles.buttonContainer}>
+                    <Button
+                        style={styles.submitButton}
+                        enabled={this.state.modified}
+                        handleClick={this.handleQuery}>
+                        <MdRepeatOne color="white" size={30} />
+                    </Button>
+                    <Button
+                        style={styles.submitButton}
+                        enabled={this.state.modified}
+                        handleClick={this.handleInrementalQuery}>
+                        <MdRepeat color="white" size={30} />
+                    </Button>
+                </div>
             </div>
         )
     }
@@ -94,6 +106,11 @@ const styles = {
     editorContainer: {
         flex: 1,
     },
+    buttonContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginLeft: 5,
+    },
     placeholderText: {
         flex: 1,
         cursor: 'default',
@@ -104,10 +121,9 @@ const styles = {
         textAlign: 'center',
     },
     submitButton: {
-        height: '100px',
-        width: '40px',
-        marginLeft: '10px',
-        borderRadius: '10px',
+        width: 50,
+        margin: 2,
+        borderRadius: 10,
     },
 };
 
