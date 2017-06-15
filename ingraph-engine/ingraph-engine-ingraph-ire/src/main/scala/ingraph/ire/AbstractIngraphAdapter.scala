@@ -61,8 +61,6 @@ abstract class AbstractIngraphAdapter {
     }
   }
 
-<<<<<<< HEAD:ingraph-engine/ingraph-engine-ingraph-ire/src/main/scala/ingraph/ire/AbstractIngraphAdapter.scala
-=======
   def resultNamesJava() : java.util.List[String] = {
     resultNames().asJava
   }
@@ -81,6 +79,4 @@ abstract class AbstractIngraphAdapter {
   def addListener(listener: ChangeListener): Unit = {
     engine.addListener(listener)
   }
-
->>>>>>> debugger:ingraph-ire/src/main/scala/ingraph/ire/IngraphAdapter.scala
 }
