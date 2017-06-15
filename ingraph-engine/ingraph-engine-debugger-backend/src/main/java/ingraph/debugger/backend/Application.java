@@ -1,17 +1,17 @@
 package ingraph.debugger.backend;
 
-import javax.ws.rs.ApplicationPath;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ingraph.debugger.backend.managers.DriverManager;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import ingraph.debugger.backend.managers.DriverManager;
+import javax.ws.rs.ApplicationPath;
 
 @ApplicationPath("/")
 public class Application extends ResourceConfig {
 
 	public Application() {
-		packages("ingraph.debugger.backend.handlers");
+		packages("ingraph.debugger.backend");
 		register(new AbstractBinder() {
 			@Override
 			protected void configure() {

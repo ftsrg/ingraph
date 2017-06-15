@@ -33,12 +33,20 @@ function* watchModifyQuery(action) {
     const data = yield response.json();
     if (data.status === 'OK') {
         yield put({
-            type: 'QUERY_PARSE_OK',
+            type: 'QUERY_PARSED',
             id: action.query.get('id'),
-            sessionId: data.body.sessionId,
-            columns: data.body.columns,
-            initialData: data.body.initialData,
+            ...data.body,
         });
+
+        const source = API.getNotificationSource(data.body.sessionId);
+        while (true) {
+            const p =new Promise((res) => {
+                source.onmessage = mes => res(mes);
+            });
+            let message = yield p;
+            console.log(message);
+        }
+
     } else {
         yield put({
             type: 'QUERY_PARSE_FAIL',

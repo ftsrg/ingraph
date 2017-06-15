@@ -61,4 +61,26 @@ abstract class AbstractIngraphAdapter {
     }
   }
 
+<<<<<<< HEAD:ingraph-engine/ingraph-engine-ingraph-ire/src/main/scala/ingraph/ire/AbstractIngraphAdapter.scala
+=======
+  def resultNamesJava() : java.util.List[String] = {
+    resultNames().asJava
+  }
+
+  def newTransaction(): Transaction = {
+    val tf = new TransactionFactory(16)
+    tf.subscribe(engine.inputLookup)
+    val tran = tf.newBatchTransaction()
+    tran
+  }
+
+  def result(): Iterable[Tuple] = {
+    engine.getResults()
+  }
+
+  def addListener(listener: ChangeListener): Unit = {
+    engine.addListener(listener)
+  }
+
+>>>>>>> debugger:ingraph-ire/src/main/scala/ingraph/ire/IngraphAdapter.scala
 }

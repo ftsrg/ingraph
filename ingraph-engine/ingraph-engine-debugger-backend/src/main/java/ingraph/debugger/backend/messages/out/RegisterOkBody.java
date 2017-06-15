@@ -1,20 +1,20 @@
 package ingraph.debugger.backend.messages.out;
 
+import org.neo4j.driver.v1.Record;
+
 import java.util.List;
 import java.util.UUID;
-
-import neo4j.driver.reactive.data.RecordChangeSet;
 
 public class RegisterOkBody {
 
 	private String sessionId;
 	private List<String> columns;
-	private RecordChangeSet initialMatches;
+	private List<? extends Record> initialResults;
 
-	public RegisterOkBody(UUID sessionId, List<String> columns, RecordChangeSet initial) {
+	public RegisterOkBody(UUID sessionId, List<String> columns, List<? extends Record> initialResults) {
 		this.sessionId = sessionId.toString();
 		this.columns = columns;
-		this.initialMatches = initial;
+		this.initialResults = initialResults;
 	}
 
 	public String getSessionId() {
@@ -25,8 +25,7 @@ public class RegisterOkBody {
 		return columns;
 	}
 
-	public RecordChangeSet getInitialData() {
-		return initialMatches;
+	public List<? extends Record> getInitialResults() {
+		return initialResults;
 	}
-
 }
