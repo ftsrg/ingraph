@@ -4,11 +4,27 @@ repositories {
   mavenCentral()
 }
 
+configurations {
+  scalaCompilerPlugin {
+    transitive = false
+  }
+}
+
 dependencies {
+  // compiler plugins need full version!
+  scalaCompilerPlugin group: 'org.scalamacros', name: "paradise_$scalaVersion", version: '2.1.1'
+
   compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
   compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
-  compile group: 'org.scalaz', name: "scalaz_$scalaShortVersion", version: '7.2.13'
+  compile group: 'org.scalaz', name: "scalaz-core_$scalaShortVersion", version: '7.2.13'
+  compile group: 'com.chuusai', name: "shapeless_$scalaShortVersion", version: '2.3.2'
+  compile group: 'com.github.mpilquist', name: "simulacrum_$scalaShortVersion", version: '0.11.0'
 
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
 }
+
+def String scalaCompilerOptions="-Xplugin:$configurations.scalaCompilerPlugin.singleFile.path"
+
+compileScala.scalaCompileOptions.additionalParameters = [scalaCompilerOptions]
+compileTestScala.scalaCompileOptions.additionalParameters = [scalaCompilerOptions]
 
