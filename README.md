@@ -65,7 +65,7 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 #### Using VIATRA
 
 1. Go to **Window** | **Preferences** | **VIATRA** | **Query Explorer** and make sure that the **Dynamic EMF mode** is _turned on_ (it is turned off by default).
-1. Use the **Query Explorer** view and do not load the model by clicking the green play button, instead click to the downward pointing triangle and click **Load Resource**.
+1. Use the **Query Explorer** view and do not load the model by clicking the green play button (it will take minutes), instead click to the downward pointing triangle and click **Load Resource**.
 1. Open the `vql` query specification.
 1. Click the **green play button** to load the query.
 
