@@ -1,3 +1,3 @@
-MATCH (s:Station)-[:INCLUDES]->(re:RailroadElement)
+MATCH (s:Station)-[:INCLUDES]->(re:Element)
 WHERE NOT (re)<-[:ON]-(:Train)
-RETURN s
+RETURN DISTINCT s
