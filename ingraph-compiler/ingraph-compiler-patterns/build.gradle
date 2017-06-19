@@ -16,7 +16,6 @@ eclipse {
   project {
     natures = [
       'org.eclipse.jdt.core.javanature',
-      'org.eclipse.buildship.core.gradleprojectnature',
       'org.eclipse.xtext.ui.shared.xtextNature',
       'org.eclipse.viatra.query.projectnature',
       'org.eclipse.pde.PluginNature'
@@ -25,7 +24,6 @@ eclipse {
     buildCommand 'org.eclipse.viatra.query.tooling.ui.projectbuilder'
     buildCommand 'org.eclipse.xtext.ui.shared.xtextBuilder'
     buildCommand 'org.eclipse.jdt.core.javabuilder'
-    buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
     buildCommand 'org.eclipse.pde.ManifestBuilder'
     buildCommand 'org.eclipse.pde.SchemaBuilder'
   }
