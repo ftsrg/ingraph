@@ -56,7 +56,7 @@ class VertexLabelSet extends LabelSet {
 /*
  * An edge satisfies a label set constraint iff it has any of the labels in the label set.
  * An edge might has at most one label.
- * 
+ *
  * For an edge variable, the combination of the following label set constraints
  * is contradicting, thus un-satisfiable:
  *  1. [edge1:A|B], so edge1 needs to have either label A, either label B
@@ -70,7 +70,7 @@ class EdgeLabelSet extends LabelSet {
 /*
  * VariableExpression is a generic container for a variable to make it easy
  * to include into expressions.
- * 
+ *
  * Various sub-types like VariableComparableExpression, VariableArithmeticExpression
  * exists to allow type-safe building of expressions. However keep in mind, that
  * it is not guaranteed that the variable will hold a value that is e.g.
@@ -86,7 +86,7 @@ class VariableExpression extends Expression {
 
 /*
  * Container for a variable to be placed in comparable position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class VariableComparableExpression extends VariableExpression, ComparableExpression {
@@ -94,7 +94,7 @@ class VariableComparableExpression extends VariableExpression, ComparableExpress
 
 /*
  * Container for a variable to be placed in string expression position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class VariableStringExpression extends VariableExpression, StringExpression {
@@ -102,7 +102,7 @@ class VariableStringExpression extends VariableExpression, StringExpression {
 
 /*
  * Container for a variable to be placed in arithmetic expression position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class VariableArithmeticExpression extends VariableExpression, ArithmeticExpression {
@@ -110,7 +110,7 @@ class VariableArithmeticExpression extends VariableExpression, ArithmeticExpress
 
 /*
  * Container for a variable to be placed in list expression position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class VariableListExpression extends VariableExpression, ListExpression {
@@ -119,7 +119,7 @@ class VariableListExpression extends VariableExpression, ListExpression {
 /*
  * FunctionExpression is a generic container for a function call descriptor,
  * i.e. the functor and its argument expressions.
- * 
+ *
  * Various sub-types like FunctionComparableExpression, FunctionArithmeticExpression
  * exists to allow type-safe building of expressions. However keep in mind, that
  * it is not guaranteed that it will refer to a function that is e.g.
@@ -133,7 +133,7 @@ class FunctionExpression extends Expression {
 
 /*
  * Container for a function call to be placed in comparable position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class FunctionComparableExpression extends FunctionExpression, ComparableExpression {
@@ -141,7 +141,7 @@ class FunctionComparableExpression extends FunctionExpression, ComparableExpress
 
 /*
  * Container for a function call to be placed in arithmetic expression position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpression {
@@ -149,7 +149,7 @@ class FunctionArithmeticExpression extends FunctionExpression, ArithmeticExpress
 
 /*
  * Container for a function call to be placed in logical expression position.
- * 
+ *
  * Note: type check is always needed in query execution time!
  */
 class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
@@ -308,13 +308,13 @@ abstract class BeamerOperator extends UnaryOperator {
 /*
  * Currently, the ProductionOperator is used to "trim" extra variables that are part of the internal schema
  * (as they are required for processing the query), but are not specified in the external schema.
- * 
+ *
  * TODO: In the future, it should also be able to collect properties for a specific vertex/edge.
  * For example, if the user specifies the following query:
- * 
+ *
  * MATCH (p:Person)-[l:LIKES]->(m:Message)
  * RETURN p, l, m.content
- * 
+ *
  * We should return a vertex for Person p, a relationship for LIKES l (both with all their properties)
  * and the content property of Message m.
  */
@@ -323,10 +323,10 @@ class ProductionOperator extends BeamerOperator {
 
 /*
  * Represents a condition which can be used for selection, theta-join.
- * 
+ *
  * Different operators building on this might have different semantics,
  * e.g. for a left outer join, this never filter on the left input
- * 
+ *
  * - condition holds the actual filtering condition.
  * - conditionString is for informational purposes only. TeX serialization might use this.
  */
@@ -336,11 +336,14 @@ abstract class AbstractCondition {
 }
 
 class SelectionOperator extends UnaryOperator, AbstractCondition {
+  op String toString() {
+    "Selection " + conditionString
+  }
 }
 
 /*
  * The ProjectionOperator is the renaissance man of the Rete network.
- * 
+ *
  * It can:
  * - Project variables to a schema, i.e. only keeping a certain set of variables.
  * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
@@ -353,7 +356,7 @@ class ProjectionOperator extends BeamerOperator {
 
 /*
  * The GroupingOperator adds grouping functionality to the basic ProjectionOperator.
- * 
+ *
  * If ProjectionOperator was the renaissance man, this is Baroque of the relational graph algebra model.
  */
 class GroupingOperator extends ProjectionOperator {
@@ -416,7 +419,7 @@ class SortEntry {
 }
 /*
  * This stands for the SKIP n LIMIT m clause.
- * 
+ *
  * Expressions in skip and limit may not contain variable references.
  */
 class TopOperator extends UnaryOperator {
@@ -537,12 +540,12 @@ abstract class LogicalExpression extends Expression {
 
 /*
  * ListExpression represents a list of expressions (of type Expression).
- * 
+ *
  * The empty list is an instance of the EmptyListExpression.
- * 
+ *
  * The non-empty list is composed of a head (exactly one element, always non-null Java value)
  * and a tail, which, again is a list (of type ListExpression).
- * 
+ *
  * If we denote the empty list by [] (which, again, is of the type EmptyListExpression),
  * and the non-empty list by [ head | tail ],
  * then the list <1, 2, 3> is represented as:
@@ -702,12 +705,12 @@ enum UnaryGraphObjectLogicalOperatorType {
 
 /*
  * Indicates if the labelset represented is theoretically satisfiable or not.
- * 
+ *
  * If it is undefined, it matches every labels.
  * If it is defined, but empty, matching semantics differs:
  *  1. a vertex must have *all* of the labels
  *  2. an edge must have *one* of the labels
- * 
+ *
  * A labelset can be non-satisfiable (false, also known as contradicting) if,
  * for the same edge variable edge1, the following labelset constraints
  * were given in the query:
@@ -730,7 +733,7 @@ enum LabelSetStatus {
   /*
    * A labelset constraint might be non-satisfiable,
    * in case it is a combination of multiple  labelset constraints.
-   * 
+   *
    * For an edge variable, the combination of the following labelset constraints
    * is contradicting, thus un-satisfiable:
    *  1. [edge1:A|B], so edge1 needs to have either label A, either label B
@@ -742,7 +745,7 @@ enum LabelSetStatus {
 
 /*
  * example data set:
- * 
+ *
  CREATE
   (a:Node {name: 'a'}),
   (b:Node {name: 'b'}),
