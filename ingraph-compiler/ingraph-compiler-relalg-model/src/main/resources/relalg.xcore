@@ -1,6 +1,6 @@
 @Ecore(nsURI="http://ingraph/relalg")
 @GenModel(bundleManifest="false",
-  modelDirectory="ingraph-relalg-model/build/xcore/main",
+  modelDirectory="ingraph-compiler-relalg-model/build/xcore/main",
   complianceLevel="8.0")
 package relalg
 
@@ -44,7 +44,7 @@ abstract class LabelSet {
 
 /*
  * A vertex satisfies a label set constraint iff it has all the labels in the label set.
- * 
+ *
  * The vertex itself might has more labels, so in case of more than one label set constraint
  * for a single vertex variable, it is always satisfiable, i.e.
  * LabelSet.status should never be LabelSetStatus.CONTRADICTING.
