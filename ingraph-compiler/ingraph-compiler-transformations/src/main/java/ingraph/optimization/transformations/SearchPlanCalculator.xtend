@@ -1,16 +1,18 @@
 package ingraph.optimization.transformations
 
-import ingraph.optimization.transformations.SimplifyingTransformation
+import ingraph.relalg.calculators.ExternalSchemaCalculator
 import relalg.RelalgContainer
 
 class SearchPlanCalculator {
 
-	val oneStepSchemaCalculator = new ingraph.relalg.calculators.OneStepSchemaCalculator
+//	val oneStepSchemaCalculator = new OneStepSchemaCalculator
+	val externalSchemaCalculator = new ExternalSchemaCalculator
 
 	def apply(RelalgContainer searchPlan) {
 		val simplifyingTransformation = new SimplifyingTransformation(searchPlan)
 		val simplifiedPlan = simplifyingTransformation.simplify
-		val simplifiedPlanWithSchema = oneStepSchemaCalculator.calculateSchema(simplifiedPlan)
+//		val simplifiedPlanWithSchema = oneStepSchemaCalculator.calculateSchema(simplifiedPlan)
+		val simplifiedPlanWithSchema = externalSchemaCalculator.calculateExternalSchema(simplifiedPlan)
 
 		return simplifiedPlanWithSchema
 	}
