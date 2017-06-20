@@ -382,6 +382,8 @@ class DeleteOperator extends CUDOperator {
 class NavigationDescriptor extends Expression {
   Direction direction
   refers VertexVariable sourceVertexVariable
+  // FIXME (nice-to-have), jmarton, 20170620:
+  // some descendants do not support all AbstractEdgeVariable subclasses
   refers AbstractEdgeVariable edgeVariable
   refers VertexVariable targetVertexVariable
 }
@@ -444,9 +446,11 @@ abstract class BinaryOperator extends Operator {
   contains Operator rightInput
 }
 
+// FIXME: cleanup? jmarton, 20170620
 abstract class CommutativeBinaryOperator extends BinaryOperator {
 }
 
+// FIXME: cleanup? jmarton, 20170620
 abstract class AssociativeBinaryOperator extends BinaryOperator {
 }
 
@@ -470,6 +474,7 @@ abstract class EquiJoinLikeOperator extends AbstractJoinOperator {
 class LeftOuterJoinOperator extends EquiJoinLikeOperator {
 }
 
+// FIXME: cleanup? jmarton, 20170620
 class ThetaLeftOuterJoinOperator extends LeftOuterJoinOperator, AbstractCondition {
 }
 
@@ -483,7 +488,7 @@ class TransitiveClosureJoinOperator extends EquiJoinLikeOperator {
 class AntiJoinOperator extends AbstractJoinOperator {
 }
 
-class UnionOperator extends CommutativeBinaryOperator, AssociativeBinaryOperator {
+class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, AssociativeBinaryOperator {
   boolean bag // set or bag union
 }
 
