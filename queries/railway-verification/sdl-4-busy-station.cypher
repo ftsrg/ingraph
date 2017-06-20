@@ -1,4 +1,4 @@
-MATCH (s:Station)-[:INCL]->(:Element)<-[:ON]-(t:Train)
-WITH s, count(t) AS countTrains
+MATCH (s:Station)-[:INCL]->(:Element)<-[:ON]-(tr:Train)
+WITH s, count(tr) AS countTrains
 WHERE countTrains >= 2
 RETURN s

@@ -23,7 +23,7 @@ class SimplifyingTransformation extends AbstractRelalgTransformation {
 		}
 
 		statements.fireWhilePossible(unnecessaryJoinOperatorRule)
-//		statements.fireWhilePossible(unnecessaryAllDifferentOperatorRule)
+		statements.fireWhilePossible(unnecessaryAllDifferentOperatorRule)
 		statements.fireWhilePossible(leftOuterJoinAndSelectionRule)
 		container.simplifiedPlan = true
 		return container
