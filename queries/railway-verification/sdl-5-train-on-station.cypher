@@ -1,5 +1,5 @@
 MATCH
   (t:Train)-[:ON]->(seg:Segment)
 OPTIONAL MATCH
-  (seg)-[:NEXT|WAY_OUT*0..]-(:Segment)<-[:INCLUDES]-(st:Station)
+  (seg)-[:NEXT|OUT*0..]-(:Segment)<-[:INCL]-(st:Station)
 RETURN DISTINCT t, st

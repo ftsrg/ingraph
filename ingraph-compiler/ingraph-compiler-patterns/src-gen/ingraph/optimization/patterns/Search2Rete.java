@@ -6,19 +6,13 @@ package ingraph.optimization.patterns;
 import ingraph.optimization.patterns.DefaultExpandOperatorMatcher;
 import ingraph.optimization.patterns.ExpandOperatorWithDefaultEdgeVariableMatcher;
 import ingraph.optimization.patterns.GetVerticesAndExpandOperatorMatcher;
-import ingraph.optimization.patterns.LeftDeepTreeNodesMatcher;
-import ingraph.optimization.patterns.LeftOuterJoinAndSelectionMatcher;
 import ingraph.optimization.patterns.SortAndTopOperatorMatcher;
 import ingraph.optimization.patterns.TransitiveExpandOperatorMatcher;
-import ingraph.optimization.patterns.VariablesInLogicalExpressionMatcher;
 import ingraph.optimization.patterns.util.DefaultExpandOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.ExpandOperatorWithDefaultEdgeVariableQuerySpecification;
 import ingraph.optimization.patterns.util.GetVerticesAndExpandOperatorQuerySpecification;
-import ingraph.optimization.patterns.util.LeftDeepTreeNodesQuerySpecification;
-import ingraph.optimization.patterns.util.LeftOuterJoinAndSelectionQuerySpecification;
 import ingraph.optimization.patterns.util.SortAndTopOperatorQuerySpecification;
 import ingraph.optimization.patterns.util.TransitiveExpandOperatorQuerySpecification;
-import ingraph.optimization.patterns.util.VariablesInLogicalExpressionQuerySpecification;
 import org.eclipse.viatra.query.runtime.api.ViatraQueryEngine;
 import org.eclipse.viatra.query.runtime.api.impl.BaseGeneratedPatternGroup;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
@@ -36,9 +30,6 @@ import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
  * <li>expandOperatorWithDefaultEdgeVariable</li>
  * <li>transitiveExpandOperator</li>
  * <li>sortAndTopOperator</li>
- * <li>leftOuterJoinAndSelection</li>
- * <li>variablesInLogicalExpression</li>
- * <li>leftDeepTreeNodes</li>
  * </ul>
  * 
  * @see IPatternGroup
@@ -68,9 +59,6 @@ public final class Search2Rete extends BaseGeneratedPatternGroup {
     querySpecifications.add(ExpandOperatorWithDefaultEdgeVariableQuerySpecification.instance());
     querySpecifications.add(TransitiveExpandOperatorQuerySpecification.instance());
     querySpecifications.add(SortAndTopOperatorQuerySpecification.instance());
-    querySpecifications.add(LeftOuterJoinAndSelectionQuerySpecification.instance());
-    querySpecifications.add(VariablesInLogicalExpressionQuerySpecification.instance());
-    querySpecifications.add(LeftDeepTreeNodesQuerySpecification.instance());
   }
   
   public GetVerticesAndExpandOperatorQuerySpecification getGetVerticesAndExpandOperator() throws ViatraQueryException {
@@ -111,29 +99,5 @@ public final class Search2Rete extends BaseGeneratedPatternGroup {
   
   public SortAndTopOperatorMatcher getSortAndTopOperator(final ViatraQueryEngine engine) throws ViatraQueryException {
     return SortAndTopOperatorMatcher.on(engine);
-  }
-  
-  public LeftOuterJoinAndSelectionQuerySpecification getLeftOuterJoinAndSelection() throws ViatraQueryException {
-    return LeftOuterJoinAndSelectionQuerySpecification.instance();
-  }
-  
-  public LeftOuterJoinAndSelectionMatcher getLeftOuterJoinAndSelection(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return LeftOuterJoinAndSelectionMatcher.on(engine);
-  }
-  
-  public VariablesInLogicalExpressionQuerySpecification getVariablesInLogicalExpression() throws ViatraQueryException {
-    return VariablesInLogicalExpressionQuerySpecification.instance();
-  }
-  
-  public VariablesInLogicalExpressionMatcher getVariablesInLogicalExpression(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return VariablesInLogicalExpressionMatcher.on(engine);
-  }
-  
-  public LeftDeepTreeNodesQuerySpecification getLeftDeepTreeNodes() throws ViatraQueryException {
-    return LeftDeepTreeNodesQuerySpecification.instance();
-  }
-  
-  public LeftDeepTreeNodesMatcher getLeftDeepTreeNodes(final ViatraQueryEngine engine) throws ViatraQueryException {
-    return LeftDeepTreeNodesMatcher.on(engine);
   }
 }

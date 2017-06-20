@@ -70,7 +70,8 @@ class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
 				«ENDIF»
 				}'''
 
-		val end = '''«IF op instanceof NullaryOperator»,tier=input,for tree={nullarynodecolor,densely dashed}«ENDIF»]
+		//val end = '''«IF op instanceof NullaryOperator»,tier=input,for tree={nullarynodecolor,densely dashed}«ENDIF»]
+		val end = '''«IF op instanceof NullaryOperator»,for tree={nullarynodecolor,densely dashed}«ENDIF»]
 		'''
 
 		'''«IF op.includeOperator»«start»«ENDIF»«op?.children»«IF op.includeOperator»«end»«ENDIF»'''

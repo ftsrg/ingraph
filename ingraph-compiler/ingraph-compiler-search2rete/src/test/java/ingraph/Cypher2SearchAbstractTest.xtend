@@ -4,7 +4,6 @@ import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.optimization.transformations.SimplifyingTransformation
 import ingraph.relalg.util.RelalgUtil
 import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexExpressionConverter
 import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
 import relalg.RelalgContainer
 
@@ -16,7 +15,7 @@ abstract class Cypher2SearchAbstractTest {
 		setIncludeProductionOperator(false).setSchemaIndices(true).setIncludeCommonVariables(true).build
 	protected val treeConverter1 = new Relalg2TexTreeConverter(config1)
 
-	protected val config2 = new RelalgConverterConfigBuilder().setStandaloneDocument(false).setParentheses(true).
+	protected val config2 = new RelalgConverterConfigBuilder().setStandaloneDocument(true).setParentheses(true).
 		setIncludeProductionOperator(false).setSchemaIndices(true).setIncludeCommonVariables(true).build
 	protected val treeConverter2 = new Relalg2TexTreeConverter(config2)
 
