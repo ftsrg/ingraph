@@ -1,0 +1,56 @@
+package ingraph.optimization.patterns
+
+import "http://ingraph/relalg";
+
+/*
+       parentOperator
+            |
+            | *input
+            V
+       selectionOperator.condition = NOT(...)
+            |
+            | *input
+            V
+     leftOuterJoinOperator
+        |         |
+       /           \
+      /             \
+     | leftInput     | rightInput
+     V               V
+   leftInputOp...  operator
+*/
+// [5] (run after [2])
+// transformation for combining adjacent selection and leftOuterJoin operators to a single antijoin operator
+pattern leftOuterJoinAndSelection(
+  parentOperator : Operator,
+  selectionOperator : SelectionOperator,
+  leftOuterJoinOperator: LeftOuterJoinOperator,
+  leftInputOperator: Operator,
+  rightInputOperator: Operator
+) {
+  find parentOperator(selectionOperator, parentOperator);
+  SelectionOperator.input(selectionOperator, leftOuterJoinOperator);
+  SelectionOperator.condition(selectionOperator, condition);
+  UnaryLogicalExpression.operator(condition, ::NOT);
+  UnaryLogicalExpression.operand(condition, _conditionInternalExpression);
+  
+  LeftOuterJoinOperator.leftInput(leftOuterJoinOperator, leftInputOperator);
+  LeftOuterJoinOperator.rightInput(leftOuterJoinOperator, rightInputOperator);
+}
+
+pattern sel(lojOperator: LeftOuterJoinOperator, selectionOperator: SelectionOperator) {
+  SelectionOperator.condition(selectionOperator, expression);
+  SelectionOperator.input(selectionOperator, lojOperator);
+
+  BinaryLogicalExpression.operator(expression, ::AND);
+
+  find leftDeepTreeNodes+(expression, expression2);
+
+  BinaryLogicalExpression.rightOperand(expression2, notNull);
+  UnaryGraphObjectLogicalExpression.operator(notNull, ::IS_NOT_NULL); // (expression2 != NULL)
+}
+
+pattern leftDeepTreeNodes(parent : BinaryLogicalExpression, child : BinaryLogicalExpression) {
+  BinaryLogicalExpression.leftOperand(parent, child);
+  BinaryLogicalExpression(child);
+}

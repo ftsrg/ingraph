@@ -1,5 +1,5 @@
 /**
- * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/Search2Rete.vql
+ * Generated from platform:/resource/ingraph-compiler-patterns/src/ingraph/optimization/patterns/MergeLeftOuterJoins.vql
  */
 package ingraph.optimization.patterns;
 
@@ -9,7 +9,6 @@ import java.util.List;
 import org.eclipse.viatra.query.runtime.api.IPatternMatch;
 import org.eclipse.viatra.query.runtime.api.impl.BasePatternMatch;
 import org.eclipse.viatra.query.runtime.exception.ViatraQueryException;
-import relalg.GetEdgesOperator;
 import relalg.LeftOuterJoinOperator;
 import relalg.Operator;
 import relalg.SelectionOperator;
@@ -37,16 +36,16 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
   
   private Operator fLeftInputOperator;
   
-  private GetEdgesOperator fGetEdgesOperator;
+  private Operator fRightInputOperator;
   
-  private static List<String> parameterNames = makeImmutableList("parentOperator", "selectionOperator", "leftOuterJoinOperator", "leftInputOperator", "getEdgesOperator");
+  private static List<String> parameterNames = makeImmutableList("parentOperator", "selectionOperator", "leftOuterJoinOperator", "leftInputOperator", "rightInputOperator");
   
-  private LeftOuterJoinAndSelectionMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
+  private LeftOuterJoinAndSelectionMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
     this.fParentOperator = pParentOperator;
     this.fSelectionOperator = pSelectionOperator;
     this.fLeftOuterJoinOperator = pLeftOuterJoinOperator;
     this.fLeftInputOperator = pLeftInputOperator;
-    this.fGetEdgesOperator = pGetEdgesOperator;
+    this.fRightInputOperator = pRightInputOperator;
   }
   
   @Override
@@ -55,7 +54,7 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     if ("selectionOperator".equals(parameterName)) return this.fSelectionOperator;
     if ("leftOuterJoinOperator".equals(parameterName)) return this.fLeftOuterJoinOperator;
     if ("leftInputOperator".equals(parameterName)) return this.fLeftInputOperator;
-    if ("getEdgesOperator".equals(parameterName)) return this.fGetEdgesOperator;
+    if ("rightInputOperator".equals(parameterName)) return this.fRightInputOperator;
     return null;
   }
   
@@ -75,8 +74,8 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     return this.fLeftInputOperator;
   }
   
-  public GetEdgesOperator getGetEdgesOperator() {
-    return this.fGetEdgesOperator;
+  public Operator getRightInputOperator() {
+    return this.fRightInputOperator;
   }
   
   @Override
@@ -98,8 +97,8 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
         this.fLeftInputOperator = (Operator) newValue;
         return true;
     }
-    if ("getEdgesOperator".equals(parameterName) ) {
-        this.fGetEdgesOperator = (GetEdgesOperator) newValue;
+    if ("rightInputOperator".equals(parameterName) ) {
+        this.fRightInputOperator = (Operator) newValue;
         return true;
     }
     return false;
@@ -125,9 +124,9 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     this.fLeftInputOperator = pLeftInputOperator;
   }
   
-  public void setGetEdgesOperator(final GetEdgesOperator pGetEdgesOperator) {
+  public void setRightInputOperator(final Operator pRightInputOperator) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
-    this.fGetEdgesOperator = pGetEdgesOperator;
+    this.fRightInputOperator = pRightInputOperator;
   }
   
   @Override
@@ -142,12 +141,12 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
   
   @Override
   public Object[] toArray() {
-    return new Object[]{fParentOperator, fSelectionOperator, fLeftOuterJoinOperator, fLeftInputOperator, fGetEdgesOperator};
+    return new Object[]{fParentOperator, fSelectionOperator, fLeftOuterJoinOperator, fLeftInputOperator, fRightInputOperator};
   }
   
   @Override
   public LeftOuterJoinAndSelectionMatch toImmutable() {
-    return isMutable() ? newMatch(fParentOperator, fSelectionOperator, fLeftOuterJoinOperator, fLeftInputOperator, fGetEdgesOperator) : this;
+    return isMutable() ? newMatch(fParentOperator, fSelectionOperator, fLeftOuterJoinOperator, fLeftInputOperator, fRightInputOperator) : this;
   }
   
   @Override
@@ -161,7 +160,7 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     
     result.append("\"leftInputOperator\"=" + prettyPrintValue(fLeftInputOperator) + ", ");
     
-    result.append("\"getEdgesOperator\"=" + prettyPrintValue(fGetEdgesOperator)
+    result.append("\"rightInputOperator\"=" + prettyPrintValue(fRightInputOperator)
     );
     return result.toString();
   }
@@ -174,7 +173,7 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     result = prime * result + ((fSelectionOperator == null) ? 0 : fSelectionOperator.hashCode());
     result = prime * result + ((fLeftOuterJoinOperator == null) ? 0 : fLeftOuterJoinOperator.hashCode());
     result = prime * result + ((fLeftInputOperator == null) ? 0 : fLeftInputOperator.hashCode());
-    result = prime * result + ((fGetEdgesOperator == null) ? 0 : fGetEdgesOperator.hashCode());
+    result = prime * result + ((fRightInputOperator == null) ? 0 : fRightInputOperator.hashCode());
     return result;
   }
   
@@ -203,8 +202,8 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
     else if (!fLeftOuterJoinOperator.equals(other.fLeftOuterJoinOperator)) return false;
     if (fLeftInputOperator == null) {if (other.fLeftInputOperator != null) return false;}
     else if (!fLeftInputOperator.equals(other.fLeftInputOperator)) return false;
-    if (fGetEdgesOperator == null) {if (other.fGetEdgesOperator != null) return false;}
-    else if (!fGetEdgesOperator.equals(other.fGetEdgesOperator)) return false;
+    if (fRightInputOperator == null) {if (other.fRightInputOperator != null) return false;}
+    else if (!fRightInputOperator.equals(other.fRightInputOperator)) return false;
     return true;
   }
   
@@ -237,12 +236,12 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
    * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
+   * @param pRightInputOperator the fixed value of pattern parameter rightInputOperator, or null if not bound.
    * @return the new, mutable (partial) match object.
    * 
    */
-  public static LeftOuterJoinAndSelectionMatch newMutableMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
-    return new Mutable(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator);
+  public static LeftOuterJoinAndSelectionMatch newMutableMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
+    return new Mutable(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pRightInputOperator);
   }
   
   /**
@@ -253,17 +252,17 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
    * @param pSelectionOperator the fixed value of pattern parameter selectionOperator, or null if not bound.
    * @param pLeftOuterJoinOperator the fixed value of pattern parameter leftOuterJoinOperator, or null if not bound.
    * @param pLeftInputOperator the fixed value of pattern parameter leftInputOperator, or null if not bound.
-   * @param pGetEdgesOperator the fixed value of pattern parameter getEdgesOperator, or null if not bound.
+   * @param pRightInputOperator the fixed value of pattern parameter rightInputOperator, or null if not bound.
    * @return the (partial) match object.
    * 
    */
-  public static LeftOuterJoinAndSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
-    return new Immutable(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator);
+  public static LeftOuterJoinAndSelectionMatch newMatch(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
+    return new Immutable(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pRightInputOperator);
   }
   
   private static final class Mutable extends LeftOuterJoinAndSelectionMatch {
-    Mutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
-      super(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator);
+    Mutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
+      super(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pRightInputOperator);
     }
     
     @Override
@@ -273,8 +272,8 @@ public abstract class LeftOuterJoinAndSelectionMatch extends BasePatternMatch {
   }
   
   private static final class Immutable extends LeftOuterJoinAndSelectionMatch {
-    Immutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final GetEdgesOperator pGetEdgesOperator) {
-      super(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pGetEdgesOperator);
+    Immutable(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
+      super(pParentOperator, pSelectionOperator, pLeftOuterJoinOperator, pLeftInputOperator, pRightInputOperator);
     }
     
     @Override

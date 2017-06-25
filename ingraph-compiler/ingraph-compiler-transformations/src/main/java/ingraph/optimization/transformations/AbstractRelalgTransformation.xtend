@@ -213,7 +213,7 @@ abstract class AbstractRelalgTransformation implements Closeable {
 	/**
 	 * [5] Replace a pair of SelectionOperator and LeftOuterJoinOperator to a single AntiJoinOperator
 	 */
-	protected def leftOuterAndSelectionRule() {
+	protected def leftOuterJoinAndSelectionRule() {
 		createRule() //
 		.precondition(LeftOuterJoinAndSelectionMatcher.querySpecification) //
 		.action [ //
@@ -221,18 +221,16 @@ abstract class AbstractRelalgTransformation implements Closeable {
 			val selectionOperator = selectionOperator
 			val leftOuterJoinOperator = leftOuterJoinOperator
 			val leftInputOperator = leftInputOperator
-			val getEdgesOperator = getEdgesOperator
+			val rightInputOperator = rightInputOperator
 			info('''leftOuterAndSelectionRule fired for «selectionOperator» and «leftOuterJoinOperator»''')
 
 			val antiJoinOperator = createAntiJoinOperator => [
 				leftInput = leftInputOperator
-				rightInput = getEdgesOperator
+				rightInput = rightInputOperator
 			]
 
 			changeChildOperator(parentOperator, selectionOperator, antiJoinOperator)
 		].build
 	}
-
-
 
 }

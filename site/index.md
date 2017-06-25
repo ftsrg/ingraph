@@ -18,17 +18,15 @@ Understanding the [big data landscape](img/Big-Data-Landscape-2016-v18-FINAL.png
 
 ingraph operates on the [property graph data model](https://arxiv.org/abs/1006.2361). In computer science, property graphs are also known as [typed](http://link.springer.com/chapter/10.1007/3-540-45832-8_14)/[heterogeneous](http://www.sciencedirect.com/science/article/pii/S0957417412009657) [attributed](http://dl.acm.org/citation.cfm?id=1281271) graphs.
 
-Typed graphs are also used in other disciplines, usually for analysis with the tools of [network theory](https://en.wikipedia.org/wiki/Network_theory). Related terms include multidimensional networks ([social network analysis](http://link.springer.com/article/10.1007/s11280-012-0190-4)), multiplex networks ([physics](https://arxiv.org/abs/1403.1546)) and multi[-]layer[ed] networks ([social network analysis](https://arxiv.org/abs/1207.4293) and [physics](https://arxiv.org/abs/1309.7233)).
+Typed graphs are also used in other disciplines, usually for analysis with the tools of [network theory](https://en.wikipedia.org/wiki/Network_theory). Related terms include multidimensional networks ([social network analysis](http://link.springer.com/article/10.1007/s11280-012-0190-4)), multiplex networks ([physics](https://arxiv.org/abs/1403.1546)), multi[-]layer[ed] networks ([social network analysis](https://arxiv.org/abs/1207.4293) and [physics](https://arxiv.org/abs/1309.7233)) and [heterogeneous networks](https://www.youtube.com/watch?v=jwhAlNgjvMA).
 
 ### Suited for
 
 ingraph is suited for the following technical challenges:
 
-* Standing queries with a continuously changing graph
-* Global analytical graph patterns
+* Standing queries on a continuously changing graph
 * Evaluating queries over a runtime (live) model
-
-We also plan to include stream processing features (e.g. defining windows), but currently we focus on implementing basic pattern matching features.
+* Global analytical graph patterns
 
 ### Not suited for
 
@@ -52,6 +50,10 @@ Incremental openCypher queries can also be beneficial for:
 
 * Recommendation engines ([Neo4j white paper](https://neo4j.com/resources/recommendations-business-white-paper/))
 * Stream processing ([real-time urban monitoring](http://link.springer.com/chapter/10.1007/978-3-642-41338-4_12))
+
+# Related projects
+
+* [Grapflow](http://graphflow.io/) also aims to provide "continuous subgraph queries", based their extension of the openCypher query language, openCypher++.
 
 # Publications
 

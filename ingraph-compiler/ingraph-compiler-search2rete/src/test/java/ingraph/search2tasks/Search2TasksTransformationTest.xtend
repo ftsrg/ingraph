@@ -16,9 +16,9 @@ abstract class Search2TasksTransformationTest extends Cypher2SearchAbstractTest 
 		simplifyingTransformationRete.simplify
 		
 		transformation.transformToTasks
-		container.calculateExternalSchema
-		container.calculateExtraVariables
-		container.calculateInternalSchema
+//		container.calculateExternalSchema
+//		container.calculateExtraVariables
+//		container.calculateInternalSchema
 		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
 		return containerSearchBased
 	}

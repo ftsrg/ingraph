@@ -20,7 +20,7 @@ class Search2ReteTransformation extends AbstractRelalgTransformation {
 		statements.fireWhilePossible(defaultExpandOperatorRule)
 		statements.fireWhilePossible(transitiveExpandOperatorRule)
 		statements.fireWhilePossible(sortAndTopOperatorRule)
-		statements.fireWhilePossible(leftOuterAndSelectionRule)
+		statements.fireWhilePossible(leftOuterJoinAndSelectionRule)
 		container.incrementalPlan = true
 		return container
 	}
