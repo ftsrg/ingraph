@@ -26,6 +26,8 @@ ingraph is defined as a single Gradle project, so it can be built in a single st
 
 #### Prerequisites
 
+We recommend Eclipse for developing the compiler.
+
 Start with [Eclipse Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/) and select **Eclipse IDE for Java and DSL Developers** distribution. It is recommended to increase the memory available for Eclipse: edit the `eclipse.ini` file and set a larger value, e.g. `-Xmx2G`.
 
 Required dependencies:
@@ -81,6 +83,7 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 
 #### Prerequisites
 
+* We recommend to use IntelliJ for developing the engine.
 * Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 
 *Note.* Currently, there is no VIATRA plug-in for IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
@@ -88,7 +91,7 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 #### Importing the projects
 
 * Import the projects using **New** | **Project from Existing Sources...**.
-  * Tick **Auto import**
+  * Tick **Auto import**.
   * Untick **Create separate module per source set**.
 * In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
