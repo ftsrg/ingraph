@@ -90,7 +90,8 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 
 #### Importing the projects
 
-* Import the projects using **New** | **Project from Existing Sources...**.
+* Import the projects using **New** | **Project from Existing Sources...** (or simply click **Import Project** on the welcome screen).
+  * Select the `ingraph` directory.
   * Tick **Auto import**.
   * Untick **Create separate module per source set**.
 * In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
