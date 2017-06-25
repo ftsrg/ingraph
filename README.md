@@ -6,7 +6,15 @@
 
 For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
-## Projects
+## User's guide
+
+To run the tests, issue the following command:
+
+```
+./gradlew :ingraph-engine:ingraph-engine-ingraph-ire:test
+```
+
+## Contributor's guide
 
 ingraph is defined as a single Gradle project, so it can be built in a single step. However, the subprojects are split to two categories:
 
