@@ -23,7 +23,7 @@ abstract class LdbcSnbTest extends FunSuite {
     modelPath("place") -> List("Place"),
     modelPath("post") -> List("Message", "Post"),
     modelPath("tagclass") -> List("TagClass"),
-    modelPath("tag") -> List("Tag"),
+    modelPath("tag") -> List("Tag")
   )
 
   val relationshipFilenames: Map[String, String] = Map(
@@ -49,7 +49,7 @@ abstract class LdbcSnbTest extends FunSuite {
     modelPath("tag_hasType_tagclass") -> "hasType",
     modelPath("organisation_isLocatedIn_place") -> "isLocatedIn",
     modelPath("person_studyAt_organisation") -> "studyAt",
-    modelPath("person_workAt_organisation") -> "workAt",
+    modelPath("person_workAt_organisation") -> "workAt"
   )
 
   val converterConfig = new RelalgConverterConfigBuilder() //
@@ -84,7 +84,7 @@ abstract class LdbcSnbTest extends FunSuite {
     .foreach(
     t =>
       test(s"${t.workload}-${t.number}-size-1") {
-      
+
       val queryName = s"ldbc-snb-${t.workload}-${t.number}"
       val querySpecification = Source.fromFile(queryPath(t.workload, t.number)).getLines().mkString("\n")
 
