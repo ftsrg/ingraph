@@ -8,12 +8,12 @@ import scala.collection.mutable
 import scala.util.Random
 
 trait IngraphElement {
-  def properties: Map[String, AnyRef]
+  def properties: Map[String, Any]
 }
 
 case class IngraphVertex(id: Long,
                          labels: Set[String],
-                         override val properties: Map[String, AnyRef] = Map()) extends IngraphElement {
+                         override val properties: Map[String, Any] = Map()) extends IngraphElement {
   val edges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   val reverseEdges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   override def toString: String = s"Vertex($id, $properties)"
@@ -23,7 +23,7 @@ case class IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
                        label: String,
-                       override val properties: Map[String, AnyRef] = Map()) extends IngraphElement {
+                       override val properties: Map[String, Any] = Map()) extends IngraphElement {
   override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
   def inverse(): IngraphEdge = IngraphEdge(id, targetVertex, sourceVertex, label, properties)
 }
@@ -60,7 +60,7 @@ class Indexer {
 
   def addVertex(node: Node): IngraphVertex = {
     val id: Long = node.id()
-    val properties: Map[String, AnyRef]  = node.asMap().toMap
+    val properties: Map[String, Any]  = node.asMap().toMap
     val labels = node.labels().toSet
     val vertex = IngraphVertex(id, labels, properties)
     addVertex(vertex)
@@ -83,7 +83,7 @@ class Indexer {
 
   def addEdge(relation: Relationship): IngraphEdge = {
     val id: Long = relation.id()
-    val properties: Map[String, AnyRef] = relation.asMap().toMap
+    val properties: Map[String, Any] = relation.asMap().toMap
     val sourceVertex: IngraphVertex = vertexLookup(relation.startNodeId())
     val targetVertex: IngraphVertex = vertexLookup(relation.endNodeId())
     val label: String = relation.`type`()

@@ -10,7 +10,7 @@ import scala.collection.mutable
 import java.util.Collection
 
 object Utils {
-  def nop(id: String, b: AnyRef) = {}
+  def nop(id: String, b: Any) = {}
 
   def idStringToLong(in: String): Long = {
     in.drop(1).toLong
@@ -74,9 +74,9 @@ object SizeCounter {
   def count(containers: Iterable[Iterable[Any]]*): Long = {
     containers.map(tuples => tuples.foldLeft(0)(_ + _.size)).sum
   }
-  
+
   def count(containers: Collection[Tuple]): Long = {
     containers.size
   }
-  
+
 }
