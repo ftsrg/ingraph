@@ -251,30 +251,30 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth)))
 
-      transitiveClosure ! Primary(ChangeSet(
-        positive = tupleBag(tuple(1), tuple(2), tuple(3))
-      ))
-      expectNoMsg(timeout)
+          transitiveClosure ! Primary(ChangeSet(
+            positive = tupleBag(tuple(1), tuple(2), tuple(3))
+          ))
+          expectNoMsg(timeout)
 
-      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1))
-      )): _*)
+          transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 1))))
+          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+            positive = tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1))
+          )): _*)
 
-      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = tupleBag(tuple(1, Path(100, 102), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100), 2), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(102), 1))
-      )): _*)
+          transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 102, 1))))
+          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+            positive = tupleBag(tuple(1, Path(100, 102), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100), 2), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(102), 1))
+          )): _*)
 
-      transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        positive = tupleBag(tuple(1, Path(100, 103), 3), tuple(2, Path(102, 100, 103), 3), tuple(2, Path(101, 100, 103), 3), tuple(2, Path(103), 3))
-      )): _*)
+          transitiveClosure ! Secondary(ChangeSet(positive = tupleBag(tuple(2, 103, 3))))
+          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+            positive = tupleBag(tuple(1, Path(100, 103), 3), tuple(2, Path(102, 100, 103), 3), tuple(2, Path(101, 100, 103), 3), tuple(2, Path(103), 3))
+          )): _*)
 
-      transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-        negative = tupleBag(tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(101, 100, 103), 3))
-      )): _*)
+          transitiveClosure ! Secondary(ChangeSet(negative = tupleBag(tuple(2, 101, 1))))
+          expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+            negative = tupleBag(tuple(1, Path(100, 101), 1), tuple(2, Path(101, 100), 2), tuple(2, Path(101), 1), tuple(2, Path(101, 100, 102), 1), tuple(2, Path(102, 100, 101), 1), tuple(2, Path(101, 100, 103), 3))
+          )): _*)
     }
 
     "handle complex test case 2" in {
@@ -468,178 +468,233 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
         positive = tupleBag(tuple(36, Path(6, 3, 1), 21), tuple(36, Path(7, 1), 21), tuple(37, Path(3, 1), 21))
       )): _*)
     }
-  }
 
-  "calculate transitive closure with backward edges" in {
-    val echoActor = system.actorOf(TestActors.echoActorProps)
+    "calculate transitive closure with backward edges" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
 
-    val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, mask(0), outputTupleWidth, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, mask(0), outputTupleWidth, minHops = 0)))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(2, 100, 1), tuple(3, 101, 2))
-    ))
-    expectNoMsg(timeout)
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(2, 100, 1), tuple(3, 101, 2))
+      ))
+      expectNoMsg(timeout)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(1))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, Path(), 1), tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3))
+      )): _*)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(2))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(2, Path(), 2), tuple(2, Path(101), 3))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(2, Path(), 2), tuple(2, Path(101), 3))
+      )): _*)
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(3, 102, 1))
-    ))
-    expectMsg(ChangeSet(
-      positive = tupleBag(tuple(1, Path(102), 3))
-    ))
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(3, 102, 1))
+      ))
+      expectMsg(ChangeSet(
+        positive = tupleBag(tuple(1, Path(102), 3))
+      ))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      negative = tupleBag(tuple(3, 101, 2))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      negative = tupleBag(
-        tuple(1, Path(100, 101), 3),
-        tuple(2, Path(101), 3)
-      )
-    )): _*)
-  }
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(3, 101, 2))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, Path(100, 101), 3),
+          tuple(2, Path(101), 3)
+        )
+      )): _*)
+    }
 
-  "calculate transitive closure with extra attributes" in {
-    val echoActor = system.actorOf(TestActors.echoActorProps)
+    "calculate transitive closure with extra attributes" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
 
-    val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(1, 100, 2, "abc"), tuple(2, 101, 3, "def"))
-    ))
-    expectNoMsg(timeout)
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 100, 2, "abc"), tuple(2, 101, 3, "def"))
+      ))
+      expectNoMsg(timeout)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(1, 1001))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1, 1001))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(2, 1002))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2, 1002))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(1, 102, 3, "def"))
-    ))
-    expectMsg(ChangeSet(
-      positive = tupleBag(tuple(1, 1001, Path(102), 3, "def"))
-    ))
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 102, 3, "def"))
+      ))
+      expectMsg(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(102), 3, "def"))
+      ))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      negative = tupleBag(tuple(2, 101, 3, "def"))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      negative = tupleBag(
-        tuple(1, 1001, Path(100, 101), 3, "def"),
-        tuple(2, 1002, Path(101), 3, "def")
-      )
-    )): _*)
-  }
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(2, 101, 3, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, 1001, Path(100, 101), 3, "def"),
+          tuple(2, 1002, Path(101), 3, "def")
+        )
+      )): _*)
+    }
 
-  "calculate transitive closure with extra attributes and backward edges" in {
-    val echoActor = system.actorOf(TestActors.echoActorProps)
+    "calculate transitive closure with extra attributes and backward edges" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
 
-    val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, mask(0), outputTupleWidth = 5, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, mask(0), outputTupleWidth = 5, minHops = 0)))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(2, 100, 1, "abc"), tuple(3, 101, 2, "def"))
-    ))
-    expectNoMsg(timeout)
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(2, 100, 1, "abc"), tuple(3, 101, 2, "def"))
+      ))
+      expectNoMsg(timeout)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(1, 1001))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1, 1001))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(2, 1002))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2, 1002))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(3, 102, 1, "def"))
-    ))
-    expectMsg(ChangeSet(
-      positive = tupleBag(tuple(1, 1001, Path(102), 3, "def"))
-    ))
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(3, 102, 1, "def"))
+      ))
+      expectMsg(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(102), 3, "def"))
+      ))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      negative = tupleBag(tuple(3, 101, 2, "def"))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      negative = tupleBag(
-        tuple(1, 1001, Path(100, 101), 3, "def"),
-        tuple(2, 1002, Path(101), 3, "def")
-      )
-    )): _*)
-  }
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(3, 101, 2, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, 1001, Path(100, 101), 3, "def"),
+          tuple(2, 1002, Path(101), 3, "def")
+        )
+      )): _*)
+    }
 
-  "calculate transitive closure with extra attributes multiple target tuple" in {
-    val echoActor = system.actorOf(TestActors.echoActorProps)
+    "calculate transitive closure with extra attributes multiple target tuple" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
 
-    val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(1, 100, 2, "abc"), tuple(2, 101, 3, "def"))
-    ))
-    expectNoMsg(timeout)
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 100, 2, "abc"), tuple(2, 101, 3, "def"))
+      ))
+      expectNoMsg(timeout)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(1, 1001))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1, 1001))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Primary(ChangeSet(
-      positive = tupleBag(tuple(2, 1002))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
-    )): _*)
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2, 1002))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
+      )): _*)
 
-    transitiveClosure ! Secondary(ChangeSet(
-      positive = tupleBag(tuple(1, 102, 3, "wow"))
-    ))
-    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-      positive = tupleBag(
-        tuple(1, 1001, Path(102), 3, "wow"),
-        tuple(1, 1001, Path(102), 3, "def"),
-        tuple(2, 1002, Path(101), 3, "wow"),
-        tuple(1, 1001, Path(100, 101), 3, "wow")
-      )
-    )): _*)
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 102, 3, "wow"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(
+          tuple(1, 1001, Path(102), 3, "wow"),
+          tuple(1, 1001, Path(102), 3, "def"),
+          tuple(2, 1002, Path(101), 3, "wow"),
+          tuple(1, 1001, Path(100, 101), 3, "wow")
+        )
+      )): _*)
 
-//    transitiveClosure ! Secondary(ChangeSet(
-//      negative = tupleBag(tuple(2, 101, 3, "def"))
-//    ))
-//    expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
-//      negative = tupleBag(
-//        tuple(1, 1001, Path(100, 101), 3, "def"),
-//        tuple(2, 1002, Path(101), 3, "def")
-//      )
-//    )): _*)
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(2, 101, 3, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, 1001, Path(100, 101), 3, "def"),
+          tuple(1, 1001, Path(100, 101), 3, "wow"),
+          tuple(2, 1002, Path(101), 3, "def"),
+          tuple(2, 1002, Path(101), 3, "wow")
+        )
+      )): _*)
+    }
+
+    "handle repeating complex tuple target" in {
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, secondaryMask, outputTupleWidth = 5, minHops = 0)))
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 100, 2, "abc"), tuple(2, 101, 3, "def"))
+      ))
+      expectNoMsg(timeout)
+
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(1, 1001))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
+      )): _*)
+
+      transitiveClosure ! Primary(ChangeSet(
+        positive = tupleBag(tuple(2, 1002))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(tuple(2, 1002, Path(), 2, 1002), tuple(2, 1002, Path(101), 3, "def"))
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        positive = tupleBag(tuple(1, 102, 3, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        positive = tupleBag(
+          tuple(1, 1001, Path(102), 3, "def")
+        )
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(2, 101, 3, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, 1001, Path(100, 101), 3, "def"),
+          tuple(2, 1002, Path(101), 3, "def")
+        )
+      )): _*)
+
+      transitiveClosure ! Secondary(ChangeSet(
+        negative = tupleBag(tuple(1, 102, 3, "def"))
+      ))
+      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+        negative = tupleBag(
+          tuple(1, 1001, Path(102), 3, "def")
+        )
+      )): _*)
+    }
   }
 }
