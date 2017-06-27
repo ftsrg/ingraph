@@ -7,7 +7,7 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 	override protected directory() {
 		return "sandbox"
 	}
-	
+
 	// Basic test patterns
 	@Test
 	def void switchset() {
@@ -15,15 +15,15 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 			MATCH (semaphore:Semaphore)<-[:entry]-(route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)
 			WHERE semaphore.signal = "GO"
 			  AND sw.currentPosition <> swP.position
-			RETURN DISTINCT semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position
+			RETURN semaphore, route, swP, sw, sw.currentPosition AS currentPosition, swP.position AS position
 		''')
 	}
-	
+
 	@Test
 	def void routesensorpositive() {
 		process('routesensorpositive', '''
 			MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
-			RETURN DISTINCT route, sensor, swP, sw
+			RETURN route, sensor, swP, sw
 		''')
 	}
 
@@ -32,7 +32,16 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 		process('poslength', '''
 			MATCH (segment:Segment)
 			WHERE segment.length <= 0
-			RETURN DISTINCT segment, segment.length AS length
+			RETURN segment, segment.length AS length
+		''')
+	}
+	
+	@Test
+	def void simple() {
+		process('simple', '''
+			MATCH (segment:Segment)
+			WHERE segment.length = 0
+			RETURN segment, segment.length AS length
 		''')
 	}
 
@@ -41,7 +50,7 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 		process('routesensor', '''
 			MATCH (route:Route)-[:follows]->(swP:SwitchPosition)-[:target]->(sw:Switch)-[:monitoredBy]->(sensor:Sensor)
 			WHERE NOT ((route)-[g:requires]->(sensor))
-			RETURN DISTINCT route, sensor, swP, sw
+			RETURN route, sensor, swP, sw
 		''')
 	}
 
@@ -64,9 +73,9 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 //			RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
 //		''')
 //	}
-		
 
-	
+
+
 //	@Test
 //	def void semaphoreneighbor() {
 //		process('semaphoreneighbor', '''
@@ -76,7 +85,7 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 //			RETURN DISTINCT semaphore, route1, route2, sensor1, sensor2, te1, te2
 //		''')
 //	}
-	
+
 //	@Test
 //	def void switchmonitored() {
 //		process('switchmonitored', '''
@@ -86,6 +95,6 @@ class ConstraintsSandboxTest extends Search2ConstraintsTransformationTest {
 //		''')
 //	}
 
-	
+
 
 }
