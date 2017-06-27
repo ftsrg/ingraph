@@ -16,7 +16,7 @@ class ExpressionPrettyPrinter {
 	
 	private val arithmeticComparisonOperatorMapping = newHashMap( 
 		ArithmeticComparisonOperatorType.EQUAL_TO -> "=", 
-	  ArithmeticComparisonOperatorType.NOT_EQUAL_TO-> "!=", 
+	  ArithmeticComparisonOperatorType.NOT_EQUAL_TO-> "<>", 
 	  ArithmeticComparisonOperatorType.GREATER_THAN-> ">", 
 	  ArithmeticComparisonOperatorType.GREATER_THAN_OR_EQUAL-> ">=", 
 	  ArithmeticComparisonOperatorType.LESS_THAN-> "<", 
