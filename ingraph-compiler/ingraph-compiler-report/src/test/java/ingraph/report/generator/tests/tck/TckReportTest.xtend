@@ -54,13 +54,7 @@ class TckReportTest extends IngraphReportTest {
 
 				for (querySpecification : querySpecifications) {
 					if ( //
-						scenario.steps.filter(typeof(ThenStep)).filter[text.contains("SyntaxError should be raised")].isEmpty && //
-						!querySpecification.contains("CREATE ") && //
-						!querySpecification.contains("MERGE ") && //
-						!querySpecification.contains("REMOVE ") && //
-						!querySpecification.contains("SET ") && //
-						!querySpecification.contains("DELETE ") && //
-						true
+						scenario.steps.filter(typeof(ThenStep)).filter[text.contains("SyntaxError should be raised")].isEmpty //
 					) {
 						val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
 						println(scenarioId)
@@ -92,10 +86,10 @@ class TckReportTest extends IngraphReportTest {
 		val stepsWithoutQuery = s.steps.filter[desc === null]
 		s.steps.removeAll(stepsWithoutQuery)
 
-		s.steps.filter(typeof(WhenStep)).forEach[desc = desc.cleanup]
-		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup]
-		s.steps.filter(typeof(GivenStep)).forEach[desc = desc.cleanup]
-		s.steps.filter(typeof(ThenStep)).forEach[desc = desc.cleanup]
+		s.steps.filter(typeof(WhenStep)).forEach[desc = desc.cleanup.unindent] // cleanup and unindent almost do the same thing
+		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup.unindent]
+		s.steps.filter(typeof(GivenStep)).forEach[desc = desc.cleanup.unindent]
+		s.steps.filter(typeof(ThenStep)).forEach[desc = desc.cleanup.unindent]
 		s
 	}
 
