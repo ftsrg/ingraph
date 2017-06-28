@@ -3,7 +3,9 @@ package ingraph.report.generator.tests.tck
 import com.google.common.collect.Lists
 import com.google.common.io.Files
 import ingraph.report.featuregrammar.FeatureStandaloneSetup
+import ingraph.report.featuregrammar.feature.AndStep
 import ingraph.report.featuregrammar.feature.Feature
+import ingraph.report.featuregrammar.feature.GivenStep
 import ingraph.report.featuregrammar.feature.Scenario
 import ingraph.report.featuregrammar.feature.ThenStep
 import ingraph.report.featuregrammar.feature.WhenStep
@@ -12,6 +14,7 @@ import ingraph.report.generator.data.TestQueryBuilder
 import ingraph.report.generator.tests.IngraphReportTest
 import java.io.File
 import java.nio.charset.Charset
+import java.util.ArrayList
 import java.util.Collections
 import java.util.LinkedHashMap
 import java.util.LinkedList
@@ -45,24 +48,27 @@ class TckReportTest extends IngraphReportTest {
 			for (scenario : feature.scenarios.filter(typeof(Scenario)).map[processScenario].filter [
 				!name.contains("Fail")
 			]) {
-				val querySpecification = scenario.steps.filter(typeof(WhenStep)).map[desc].join.unindent
+				val querySpecifications = new ArrayList<String>
+				scenario.steps.filter(typeof(AndStep)).map[desc].forEach[querySpecifications.add(it)]
+				scenario.steps.filter(typeof(WhenStep)).map[desc].forEach[querySpecifications.add(it)]
 
-				if ( //
-				scenario.steps.filter(typeof(ThenStep)).filter[it.text.contains("SyntaxError should be raised")].
-					isEmpty && //
-//				!querySpecification.contains("CREATE ") && //
-				!querySpecification.contains("MERGE ") && //
-				!querySpecification.contains("REMOVE ") && //
-				!querySpecification.contains("SET ") && //
-//				!querySpecification.contains("DELETE ") && //
-				true
-				) {
-					val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
-					println(scenarioId)
-					val regressionTest = failingAndRegressionTests.contains(scenarioId)
-					val testQuery = new TestQueryBuilder().setQueryName(scenario.name).setQuerySpecification(querySpecification).setRegressionTest(regressionTest).
-						build
-					testQueries.add(testQuery)
+				for (querySpecification : querySpecifications) {
+					if ( //
+						scenario.steps.filter(typeof(ThenStep)).filter[text.contains("SyntaxError should be raised")].isEmpty && //
+						!querySpecification.contains("CREATE ") && //
+						!querySpecification.contains("MERGE ") && //
+						!querySpecification.contains("REMOVE ") && //
+						!querySpecification.contains("SET ") && //
+						!querySpecification.contains("DELETE ") && //
+						true
+					) {
+						val scenarioId = '''«file.name»: Scenario: «scenario.name»'''
+						println(scenarioId)
+						val regressionTest = failingAndRegressionTests.contains(scenarioId)
+						val testQuery = new TestQueryBuilder().setQueryName(scenario.name).setQuerySpecification(querySpecification)
+							.setRegressionTest(regressionTest).build
+						testQueries.add(testQuery)
+					}
 				}
 			}
 			chapterTestQueries.put(feature.name.escape, testQueries)
@@ -83,10 +89,14 @@ class TckReportTest extends IngraphReportTest {
 	def processScenario(Scenario s) {
 		s.name = s.name.replaceAll("^Scenario: ", "").replaceAll("\n", "")
 
+		val stepsWithQuery = s.steps.filter[desc != null]
+		s.steps.clear
+		s.steps.addAll(stepsWithQuery)
+		
 		s.steps.filter(typeof(WhenStep)).forEach[desc = desc.cleanup]
-//		s.steps.filter(typeof(GivenStep)).forEach[desc = desc.cleanup]
-//		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup]
-//		s.steps.filter(typeof(ThenStep)).forEach[desc = desc.cleanup]
+		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup]
+		s.steps.filter(typeof(GivenStep)).forEach[desc = desc.cleanup]
+		s.steps.filter(typeof(ThenStep)).forEach[desc = desc.cleanup]
 		s
 	}
 
