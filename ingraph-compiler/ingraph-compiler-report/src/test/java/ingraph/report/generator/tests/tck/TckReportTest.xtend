@@ -89,10 +89,9 @@ class TckReportTest extends IngraphReportTest {
 	def processScenario(Scenario s) {
 		s.name = s.name.replaceAll("^Scenario: ", "").replaceAll("\n", "")
 
-		val stepsWithQuery = s.steps.filter[desc != null]
-		s.steps.clear
-		s.steps.addAll(stepsWithQuery)
-		
+		val stepsWithoutQuery = s.steps.filter[desc === null]
+		s.steps.removeAll(stepsWithoutQuery)
+
 		s.steps.filter(typeof(WhenStep)).forEach[desc = desc.cleanup]
 		s.steps.filter(typeof(AndStep)).forEach[desc = desc.cleanup]
 		s.steps.filter(typeof(GivenStep)).forEach[desc = desc.cleanup]
