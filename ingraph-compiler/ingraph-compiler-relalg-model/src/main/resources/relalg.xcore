@@ -176,7 +176,7 @@ abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
   refers PropertyList properties
   op String toString() {
-    name
+    "" + name
   }
 }
 
@@ -224,7 +224,7 @@ class AttributeVariable extends GraphObjectVariable {
     }
   }
   op String toString() {
-    baseVariable.name + "." + name
+    "" + baseVariable.name + "." + name
   }
 }
 
@@ -242,7 +242,7 @@ class ExpressionVariable extends Variable {
   boolean hasInferredName // true iff the name can be inferred from the expression (and hence the name attribute is null)
   refers Expression expression
   op String toString() {
-    if (hasInferredName) {
+    "" + if (hasInferredName) {
       if (expression instanceof VariableExpression) {
         (expression as VariableExpression).variable.name
       } else {
