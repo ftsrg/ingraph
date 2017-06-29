@@ -37,7 +37,7 @@ class ExpressionNameInferencer {
 	}
 
 	def dispatch static String inferName(Expression e, IngraphLogger logger) {
-		logger.warning('''Don't know how to assign name to an expression of type «e.class.name», please assign an alias ot the corresponding return clause. For now, we return a generated unique name.''')
+		logger.warning('''Don't know how to assign name to an expression of type «e.class.name», please assign an alias to the corresponding return item. For now, we return a generated unique name.''')
 		'''_iname«n++»'''
 	}
 }
