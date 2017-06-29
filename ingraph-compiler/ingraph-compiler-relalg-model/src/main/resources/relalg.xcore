@@ -677,7 +677,7 @@ class PropertyList extends Expression {
  * An entry has its name which corresponds to the attribute name
  * and its value is an expression.
  */
-class PropertyListEntry {
+class PropertyListEntry wraps java.util.Map$Entry {
   String key
   refers Expression value
 }

@@ -4,13 +4,14 @@ import ingraph.relalg.expressions.ExpressionUnwrapper
 import ingraph.relalg2tex.converters.elementconverters.ExpressionConverter
 import ingraph.relalg2tex.converters.elementconverters.MiscConverters
 import ingraph.relalg2tex.converters.elementconverters.StringEscaper
+import java.util.Map
 import relalg.AttributeVariable
 import relalg.EdgeListVariable
 import relalg.ElementVariable
+import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.ListVariable
 import relalg.PropertyList
-import relalg.PropertyListEntry
 
 abstract class AbstractVariableConverter {
 
@@ -43,7 +44,7 @@ abstract class AbstractVariableConverter {
 		}
 	}
 
-	def convertPropertyListEntry(PropertyListEntry entry) {
+	def convertPropertyListEntry(Map.Entry<String, Expression> entry) {
 		'''\atom{«entry.key»}: «entry.value.convertExpression»'''
 	}
 

@@ -1257,11 +1257,9 @@ class RelalgBuilder {
 			]
 
 			properties.entries.forEach [ e |
-				val le = createPropertyListEntry => [
-					key = e.key
-					value = buildRelalgExpression(e.value)
-				]
-				pList.entries.add(le)
+				val key = e.key
+				val value = buildRelalgExpression(e.value) 
+				pList.entries.put(key, value)
 			]
 
 			ev.properties = pList
