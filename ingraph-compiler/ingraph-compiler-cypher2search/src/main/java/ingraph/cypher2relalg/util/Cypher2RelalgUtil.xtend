@@ -21,6 +21,7 @@ import relalg.FunctionExpression
 import relalg.GetEdgesOperator
 import relalg.GetVerticesOperator
 import relalg.GraphObjectVariable
+import relalg.IndexAccessExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.ListExpression
@@ -245,6 +246,9 @@ class Cypher2RelalgUtil {
 				ListExpression: {
 					fifo.add(el.head)
 					fifo.add(el.tail)
+				}
+				IndexAccessExpression: {
+					fifo.add(el.list)
 				}
 				BinaryLogicalExpression: {
 					fifo.add(el.leftOperand)

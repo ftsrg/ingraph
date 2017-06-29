@@ -15,6 +15,8 @@ import relalg.EmptyListExpression
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
+import relalg.IndexRangeAccessExpression
+import relalg.IndexSimpleAccessExpression
 import relalg.IntegerLiteral
 import relalg.ListExpression
 import relalg.NavigationDescriptor
@@ -58,6 +60,14 @@ class ExpressionConverter {
 
 	def dispatch CharSequence convertExpression(IntegerLiteral integerLiteral) {
 		'''\literal{«integerLiteral.value»}'''
+	}
+
+	def dispatch CharSequence convertExpression(IndexSimpleAccessExpression ie) {
+		'''«ie.list.convertExpression»[\literal{«ie.idx»}]'''
+	}
+
+	def dispatch CharSequence convertExpression(IndexRangeAccessExpression ie) {
+		'''«ie.list.convertExpression»[\literal{«ie.lower»}..\literal{«ie.upper»}]'''
 	}
 
 	def dispatch CharSequence convertExpression(BigIntegerLiteral bigintegerLiteral)	{

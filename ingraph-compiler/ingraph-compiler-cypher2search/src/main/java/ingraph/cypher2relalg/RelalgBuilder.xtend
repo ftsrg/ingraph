@@ -37,6 +37,7 @@ import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
 import org.slizaa.neo4j.opencypher.openCypher.FunctionInvocation
 import org.slizaa.neo4j.opencypher.openCypher.InCollectionExpression
+import org.slizaa.neo4j.opencypher.openCypher.IndexExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.MapLiteral
@@ -76,6 +77,7 @@ import relalg.ExpandOperator
 import relalg.Expression
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
+import relalg.IndexAccessExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
 import relalg.LogicalExpression
@@ -954,6 +956,35 @@ class RelalgBuilder {
 		variableBuilder.buildVariableExpression(e, false)
 	}
 
+	def dispatch Expression buildRelalgExpression(IndexExpression ie) {
+		var IndexAccessExpression retVal
+		if (ie.expression === null) {
+			unrecoverableError('''Index lookup expression found having null as subscript.''')
+		}
+		if (ie.expression instanceof NumberConstant) {
+			if (ie.upper === null) {
+				retVal = createIndexSimpleAccessExpression => [
+					idx = buildRelalgNumber(ie.expression as NumberConstant)
+				]
+			} else {
+				if (ie.upper instanceof NumberConstant) {
+					retVal = createIndexRangeAccessExpression => [
+						lower = buildRelalgNumber(ie.expression as NumberConstant)
+						upper = buildRelalgNumber(ie.upper as NumberConstant)
+					]
+				} else {
+					unrecoverableError('''Index lookup expression should have numeric subscript but found «ie.upper.class.name».''')
+				}
+			}
+		} else {
+			unrecoverableError('''Index lookup expression should have numeric subscript but found «ie.expression.class.name».''')
+		}
+		retVal => [
+			list = buildRelalgExpression(ie.left)
+			expressionContainer = topLevelContainer
+		]
+	}
+
 	def dispatch Expression buildRelalgExpression(ExpressionList el) {
 		val emptyList = createEmptyListExpression => [
 			head = null
@@ -1093,6 +1124,16 @@ class RelalgBuilder {
 			functor = Function.COUNT_ALL
 			expressionContainer = topLevelContainer
 		]
+	}
+
+	def buildRelalgNumber(NumberConstant e) {
+		var int n
+		try {
+			n = Integer.parseInt(e.value)
+		} catch (NumberFormatException ex1) {
+			unrecoverableError('''Unable to parse «e.value» as integer.''')
+		}
+		n
 	}
 
 	def buildRelalgNumberLiteral(NumberConstant e) {

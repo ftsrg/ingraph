@@ -568,6 +568,36 @@ class ListExpression extends Expression {
 class EmptyListExpression extends ListExpression {
 }
 
+/*
+ * Common base to express the subscript operator,
+ * i.e. list[0] or list[0..2] (where upper limit is excluded).
+ * 
+ * Indexing is 0-based.
+ * List should have a runtime type of a list.
+ */
+abstract class IndexAccessExpression extends Expression {
+	refers Expression list
+}
+
+/*
+ * 0-based list indexing, e.g. list[0] refers to the first element,
+ * list[1] refers to the second, or null if no such element exists in the list.
+ */
+class IndexSimpleAccessExpression extends IndexAccessExpression {
+  int idx
+}
+
+/*
+ * 0-based, left inclusive, right excluded list range indexing.
+ * list[0..2] returns a list of list[0] and list[1] if both exist.
+ * If some of the list entries does not exist, it will be omitted,
+ * and it list has 2 elements, list[10..20] should evaluate to the empty list.
+ */
+class IndexRangeAccessExpression extends IndexAccessExpression {
+	int lower
+	int upper
+}
+
 class BinaryLogicalExpression extends BinaryExpression, LogicalExpression {
   BinaryLogicalOperatorType operator
   refers LogicalExpression leftOperand
