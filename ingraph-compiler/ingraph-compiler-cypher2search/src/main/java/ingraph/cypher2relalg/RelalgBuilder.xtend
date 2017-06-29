@@ -1000,13 +1000,7 @@ class RelalgBuilder {
 			ExpressionMulDiv,
 			ExpressionPower:
 				buildRelalgArithmeticExpression(e)
-			,
-			NullConstant
-			/*
-			 * Note: before introducing the dispatch member buildRelalgExpression(ExpressionComparison e)
-			 * this somehow caught control when e was of type ExpressionComparisonImpl
-			 */
-			:
+			NullConstant:
 				createNullLiteral => [
 					expressionContainer = topLevelContainer
 				]
