@@ -1036,7 +1036,7 @@ class RelalgBuilder {
 					expressionContainer = topLevelContainer
 				]
 			default:
-				throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e).toString()»''')
+				throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e)»''')
 		}
 	}
 
@@ -1241,7 +1241,7 @@ class RelalgBuilder {
 	}
 
 //  def dispatch buildRelalg(Cypher rule) {
-//    println(String::format("received unsupported cypher element: %s", rule.class.toString()))
+//    println(String::format("received unsupported cypher element: %s", rule.class.name))
 //  }
 	/**
 	 * Parse map-like constraints if given

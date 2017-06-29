@@ -30,12 +30,12 @@ abstract class AbstractRelalg2TexConverter {
 		val tex = convert(container)
 
 		val file = new File("../../visualization/" + filename + ".tex")
-		FileUtils.writeStringToFile(file, tex.toString, Charset.forName("UTF-8"))
+		FileUtils.writeStringToFile(file, tex, Charset.forName("UTF-8"))
 
 		tex
 	}
 
-	def convert(RelalgContainer container) {
+	def String convert(RelalgContainer container) {
 		val s = convertAlgebraExpression(container.rootExpression)
 
 		if (config.consoleOutput) {
@@ -45,7 +45,7 @@ abstract class AbstractRelalg2TexConverter {
 		return s
 	}
 
-	def CharSequence convertAlgebraExpression(Operator expression) {
+	def String convertAlgebraExpression(Operator expression) {
 		'''
 			«IF config.standaloneDocument»
 				% !TeX spellcheck = en_GB

@@ -4,8 +4,6 @@
   complianceLevel="8.0")
 package relalg
 
-import java.util.Objects
-
 type Function wraps relalg.function.Function
 type Bigint wraps java.math.BigInteger
 
@@ -21,9 +19,14 @@ class RelalgContainer {
   boolean internalSchemaInferred = "false"
 }
 
-abstract class NamedElement {
+abstract class RelalgModelElement {
+  op String fullName() { throw new UnsupportedOperationException("fullName() method not implemented for class " + class.name) }
+}
+
+abstract class NamedElement extends RelalgModelElement {
   String name
   refers RelalgContainer namedElementContainer opposite elements
+  op String fullName() { return name }
 }
 
 abstract class Label extends NamedElement {
@@ -79,9 +82,7 @@ class EdgeLabelSet extends LabelSet {
  */
 class VariableExpression extends Expression {
   refers Variable variable
-  op String toString() {
-    variable.toString()
-  }
+  op String fullName() { variable.fullName() }
 }
 
 /*
@@ -129,6 +130,7 @@ class VariableListExpression extends VariableExpression, ListExpression {
 class FunctionExpression extends Expression {
   Function functor
   refers Expression[] arguments
+  op String fullName() { return functor + "(" + arguments.map[fullName].join(", ") + ")" }
 }
 
 /*
@@ -157,10 +159,6 @@ class FunctionLogicalExpression extends FunctionExpression, LogicalExpression {
 
 abstract class Variable extends NamedElement {
   boolean dontCare = "false"
-
-  op boolean sameName(Variable v) {
-    Objects.equals(toString, v.toString)
-  }
 }
 
 /*
@@ -175,9 +173,6 @@ abstract class GraphObjectVariable extends Variable {
 abstract class ElementVariable extends GraphObjectVariable {
   refers AttributeVariable[] attributes opposite element
   refers PropertyList properties
-  op String toString() {
-    name
-  }
 }
 
 class VertexVariable extends ElementVariable {
@@ -223,9 +218,7 @@ class AttributeVariable extends GraphObjectVariable {
       throw new IllegalStateException("AttributeVariable must have non-null value for either element or expVar, but not for both.")
     }
   }
-  op String toString() {
-    baseVariable.name + "." + name
-  }
+  op String fullName() { return baseVariable.name + "." + name }
 }
 
 class ListVariable extends Variable {
@@ -241,12 +234,12 @@ class PathVariable extends Variable {
 class ExpressionVariable extends Variable {
   boolean hasInferredName // true iff the name can be inferred from the expression (and hence the name attribute is null)
   refers Expression expression
-  op String toString() {
-    if (hasInferredName) {
+  op String fullName() {
+    return if (hasInferredName) {
       if (expression instanceof VariableExpression) {
         (expression as VariableExpression).variable.name
       } else {
-        null
+        expression.fullName // not sure - Szarnyasg
       }
     } else {
       name
@@ -337,7 +330,7 @@ abstract class AbstractCondition {
 
 class SelectionOperator extends UnaryOperator, AbstractCondition {
   op String toString() {
-    "Selection " + conditionString
+    return "Selection { condition: " + conditionString + " }"
   }
 }
 
@@ -493,7 +486,7 @@ class UnionOperator extends BinaryOperator, CommutativeBinaryOperator, Associati
 }
 
 /* expression */
-abstract class Expression {
+abstract class Expression extends RelalgModelElement {
   refers RelalgContainer expressionContainer opposite expressions
   String text
 }
@@ -527,6 +520,7 @@ class BinaryArithmeticOperationExpression extends BinaryExpression, ArithmeticEx
   BinaryArithmeticOperatorType operator
   refers ArithmeticExpression leftOperand
   refers ArithmeticExpression rightOperand
+  op String fullName() { return leftOperand.fullName + operator + rightOperand.fullName }
 }
 
 // arithmetic comparisons evaluate to true/false, hence they are logical expressions
@@ -534,6 +528,7 @@ class ArithmeticComparisonExpression extends BinaryExpression, LogicalExpression
   ArithmeticComparisonOperatorType operator
   refers ComparableExpression leftOperand
   refers ComparableExpression rightOperand
+  op String fullName() { return leftOperand.fullName + operator + rightOperand.fullName }
 }
 
 // not sure what we will make of this
@@ -559,6 +554,7 @@ abstract class LogicalExpression extends Expression {
 class ListExpression extends Expression {
   refers Expression head
   refers ListExpression tail
+  op String fullName() { return head?.fullName + ", " + tail?.fullName }
 }
 
 /*
@@ -628,10 +624,12 @@ abstract class Literal extends Atom {
 
 class BooleanLiteral extends Literal, LogicalExpression {
   boolean value
+  op String fullName() { return value.toString }
 }
 
 class StringLiteral extends Literal, StringExpression {
   String value
+  op String fullName() { return value }
 }
 
 abstract class NumberLiteral extends Literal, ArithmeticExpression {
@@ -639,14 +637,17 @@ abstract class NumberLiteral extends Literal, ArithmeticExpression {
 
 class DoubleLiteral extends NumberLiteral {
   double value
+  op String fullName() { return value.toString }
 }
 
 class BigIntegerLiteral extends NumberLiteral {
   Bigint value
+  op String fullName() { return value.toString }
 }
 
 class IntegerLiteral extends NumberLiteral {
   long value
+  op String fullName() { return value.toString }
 }
 
 class NullLiteral extends NumberLiteral, StringLiteral {

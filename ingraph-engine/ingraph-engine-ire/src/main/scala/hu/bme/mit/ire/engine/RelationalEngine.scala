@@ -47,7 +47,7 @@ abstract class RelationalEngine {
   }
 
   def newLocal(props: Props, name: String): ActorRef = {
-    val actor = system.actorOf(props, name + System.currentTimeMillis().toString)
+    val actor = system.actorOf(props, name + System.currentTimeMillis())
     actors += actor
     actor
   }

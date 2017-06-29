@@ -3,8 +3,9 @@ package ingraph.relalg.collectors
 import com.google.common.collect.Iterables
 import com.google.common.collect.Lists
 import com.google.common.collect.Sets
-import java.util.List
 import java.util.ArrayList
+import java.util.List
+import relalg.RelalgModelElement
 
 class CollectionHelper {
 
@@ -12,10 +13,10 @@ class CollectionHelper {
 		Lists.newArrayList(Iterables.concat(lists))
 	}
 	
-	def <T> List<T> uniqueUnion(Iterable<? extends T>... lists) {
+	def <T extends RelalgModelElement> List<T> uniqueUnion(Iterable<? extends T>... lists) {
 		val result = new ArrayList<T> 
 		union(lists).forEach[
-			if (!result.map[toString].contains(it.toString)) {
+			if (!result.map[fullName].contains(it.fullName)) {
 				result.add(it)
 			}
 		]

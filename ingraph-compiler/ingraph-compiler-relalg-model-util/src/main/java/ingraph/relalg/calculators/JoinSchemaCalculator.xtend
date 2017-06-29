@@ -36,11 +36,11 @@ class JoinSchemaCalculator {
 
 	//
 	def calculateEquiJoinSchema(List<Variable> leftSchema, List<Variable> rightSchema) {
-		val leftSchemaNames = leftSchema.map[toString]
+		val leftSchemaNames = leftSchema.map[fullName]
 		val joinSchema = union( // 
 			leftSchema,
 			rightSchema.filter[
-				variable | !leftSchemaNames.contains(variable.toString) // only keep variables that are NOT in the left schema
+				variable | !leftSchemaNames.contains(variable.fullName) // only keep variables that are NOT in the left schema
 			]
 		)
 		joinSchema.toList

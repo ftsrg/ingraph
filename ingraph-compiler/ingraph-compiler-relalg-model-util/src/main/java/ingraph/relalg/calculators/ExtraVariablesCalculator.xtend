@@ -18,7 +18,6 @@ import relalg.Variable
  */
 class ExtraVariablesCalculator {
 
-	extension IngraphLogger logger = new IngraphLogger(ExtraVariablesCalculator.name)
 	extension VariableExtractor variableExtractor = new VariableExtractor
 	extension CollectionHelper listUnionCalculator = new CollectionHelper
 	extension ExtraVariablesPropagator extraVariablesPropagator = new ExtraVariablesPropagator

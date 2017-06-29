@@ -58,24 +58,24 @@ object ExpressionParser {
     }
 
   private def parseVariable(variable: Variable, tuple: Tuple, lookup: Map[String, Integer]): Any =
-    tuple(lookup(variable.toString))
+    tuple(lookup(variable.fullName))
 
   def parseValue(exp: Expression, lookup: Map[String, Integer]): (Tuple) => Any =
-    if (lookup.contains(exp.toString))
-      tuple => tuple(lookup(exp.toString))
+    if (lookup.contains(exp.fullName))
+      tuple => tuple(lookup(exp.fullName))
     else exp match {
     case cmp: DoubleLiteral => _ => cmp.getValue
     case cmp: IntegerLiteral => _ => cmp.getValue
     case cmp: StringLiteral => _ => cmp.getValue
     case cmp: BigIntegerLiteral => _ => cmp.getValue
     case cmp: AttributeVariable =>
-      val index = lookup(cmp.toString).toInt
+      val index = lookup(cmp.fullName).toInt
       tuple => tuple(index)
     case cmp: Variable =>
-      val index = lookup(cmp.toString).toInt
+      val index = lookup(cmp.fullName).toInt
       tuple => tuple(index)
     case cmp: VariableComparableExpression =>
-      val index = lookup(cmp.getVariable.toString).toInt
+      val index = lookup(cmp.getVariable.fullName).toInt
       tuple => tuple(index)
     case cmp: VariableExpression =>
       val variable = cmp.getVariable match {
@@ -85,7 +85,7 @@ object ExpressionParser {
         }
         case a => a
       }
-      val index = lookup(variable.toString).toInt
+      val index = lookup(variable.fullName).toInt
       tuple => tuple(index)
     case exp: BinaryArithmeticOperationExpression =>
       val left = parseValue(exp.getLeftOperand, lookup)
@@ -122,7 +122,7 @@ object ExpressionParser {
           tuple => function(tuple)
       }
     case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
-      tuple => lookup(exp.toString)
+      tuple => lookup(exp.fullName)
   }
 
   import relalg.function.Function._
@@ -130,8 +130,8 @@ object ExpressionParser {
     case exp: FunctionExpression if exp.getFunctor.getCategory ==  FunctionCategory.AGGREGATION =>
       if (exp.getFunctor != COLLECT) {
         val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
-        val index = lookup(variable.toString)
-        List((exp.toString, exp.getFunctor match {
+        val index = lookup(variable.fullName)
+        List((exp.fullName, exp.getFunctor match {
           case AVG => () => new StatefulAverage(index)
           case COUNT => () => new NullAwareStatefulCount(index)
           case COUNT_ALL => () => new StatefulCount()
@@ -141,8 +141,8 @@ object ExpressionParser {
         }))
       } else {
         val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
-        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.toString)).map(_.toInt)
-        List((exp.toString, () => new StatefulCollect(indices)))
+        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.fullName)).map(_.toInt)
+        List((exp.fullName, () => new StatefulCollect(indices)))
       }
     case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
     case exp: Literal => List()

@@ -4,8 +4,8 @@ import relalg.NamedElement
 
 class StringEscaper {
 	
-	def escape(CharSequence s) {
-		s.toString
+	def escape(String s) {
+		s
 		.replace('\b', '''\b''')
 		.replace('\f', '''\f''')
 		.replace('\n', '''\n''')

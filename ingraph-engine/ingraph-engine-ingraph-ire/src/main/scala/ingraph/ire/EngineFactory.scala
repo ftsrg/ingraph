@@ -64,7 +64,7 @@ object EngineFactory {
               )
               val aggregationCriteria = op.getAggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
               val projectionVariableLookup: Map[String, Integer] =
-                aggregationCriteria.zipWithIndex.map( a => a._1._1.toString -> a._2.asInstanceOf[Integer] ).toMap ++
+                aggregationCriteria.zipWithIndex.map( a => a._1._1.fullName -> a._2.asInstanceOf[Integer] ).toMap ++
                 aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
               val projectionExpressions = op.getInternalElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
               newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
@@ -110,7 +110,7 @@ object EngineFactory {
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
               val schema = getSchema(op.getInput)
-              val indices = op.getEdgeVariables.map(v => schema(v.toString))
+              val indices = op.getEdgeVariables.map(v => schema(v.fullName))
               def allDifferent(r: Tuple): Boolean = {
                 val seen = mutable.HashSet[Any]()
                 for (value <- indices.map(r(_))) {

@@ -120,7 +120,7 @@ class QueryProcessor {
 		try {
 			val expressionContainer = EcoreUtil.copy(container)
 			expressionContainer.calculateExternalSchema
-			expressionConverter.convert(expressionContainer).toString
+			expressionConverter.convert(expressionContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
 			null
