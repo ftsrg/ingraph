@@ -197,7 +197,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for getVerticesOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<GetVerticesOperator> rawAccumulateAllValuesOfgetVerticesOperator(final Object[] parameters) {
@@ -208,7 +208,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for getVerticesOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<GetVerticesOperator> getAllValuesOfgetVerticesOperator() {
@@ -217,7 +217,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for getVerticesOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<GetVerticesOperator> getAllValuesOfgetVerticesOperator(final GetVerticesAndExpandOperatorMatch partialMatch) {
@@ -226,7 +226,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for getVerticesOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<GetVerticesOperator> getAllValuesOfgetVerticesOperator(final ExpandOperator pExpandOperator, final Operator pParentOperator) {
@@ -239,7 +239,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<ExpandOperator> rawAccumulateAllValuesOfexpandOperator(final Object[] parameters) {
@@ -250,7 +250,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator() {
@@ -259,7 +259,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final GetVerticesAndExpandOperatorMatch partialMatch) {
@@ -268,7 +268,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final GetVerticesOperator pGetVerticesOperator, final Operator pParentOperator) {
@@ -281,7 +281,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -292,7 +292,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -301,7 +301,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final GetVerticesAndExpandOperatorMatch partialMatch) {
@@ -310,7 +310,7 @@ public class GetVerticesAndExpandOperatorMatcher extends BaseMatcher<GetVertices
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final GetVerticesOperator pGetVerticesOperator, final ExpandOperator pExpandOperator) {

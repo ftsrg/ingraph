@@ -180,7 +180,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<ExpandOperator> rawAccumulateAllValuesOfexpandOperator(final Object[] parameters) {
@@ -191,7 +191,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator() {
@@ -200,7 +200,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final DefaultExpandOperatorMatch partialMatch) {
@@ -209,7 +209,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final Operator pParentOperator) {
@@ -221,7 +221,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -232,7 +232,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -241,7 +241,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final DefaultExpandOperatorMatch partialMatch) {
@@ -250,7 +250,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final ExpandOperator pExpandOperator) {

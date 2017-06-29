@@ -1,6 +1,5 @@
 package ingraph.relalg.calculators
 
-import ingraph.logger.IngraphLogger
 import ingraph.relalg.collectors.CollectionHelper
 import java.util.List
 import relalg.AbstractJoinOperator

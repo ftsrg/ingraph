@@ -182,7 +182,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfotherInputOperator(final Object[] parameters) {
@@ -193,7 +193,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator() {
@@ -202,7 +202,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final JoinOnDualMatch partialMatch) {
@@ -211,7 +211,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final EquiJoinLikeOperator pEquiJoinLikeOperator) {
@@ -223,7 +223,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<EquiJoinLikeOperator> rawAccumulateAllValuesOfequiJoinLikeOperator(final Object[] parameters) {
@@ -234,7 +234,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator() {
@@ -243,7 +243,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final JoinOnDualMatch partialMatch) {
@@ -252,7 +252,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final Operator pOtherInputOperator) {

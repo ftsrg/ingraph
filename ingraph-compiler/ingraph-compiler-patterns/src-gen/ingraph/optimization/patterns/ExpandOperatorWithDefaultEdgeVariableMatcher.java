@@ -163,7 +163,7 @@ public class ExpandOperatorWithDefaultEdgeVariableMatcher extends BaseMatcher<Ex
   
   /**
    * Retrieve the set of values that occur in matches for defaultExpandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<ExpandOperator> rawAccumulateAllValuesOfdefaultExpandOperator(final Object[] parameters) {
@@ -174,7 +174,7 @@ public class ExpandOperatorWithDefaultEdgeVariableMatcher extends BaseMatcher<Ex
   
   /**
    * Retrieve the set of values that occur in matches for defaultExpandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfdefaultExpandOperator() {

@@ -184,7 +184,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfotherInputOperator(final Object[] parameters) {
@@ -195,7 +195,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator() {
@@ -204,7 +204,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -213,7 +213,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
@@ -226,7 +226,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<EquiJoinLikeOperator> rawAccumulateAllValuesOfequiJoinLikeOperator(final Object[] parameters) {
@@ -237,7 +237,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator() {
@@ -246,7 +246,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -255,7 +255,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final Operator pOtherInputOperator, final Operator pParentOperator) {
@@ -268,7 +268,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -279,7 +279,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -288,7 +288,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -297,7 +297,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {

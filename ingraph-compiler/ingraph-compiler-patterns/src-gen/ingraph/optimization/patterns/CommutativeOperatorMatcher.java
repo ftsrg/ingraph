@@ -184,7 +184,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<CommutativeBinaryOperator> rawAccumulateAllValuesOfop(final Object[] parameters) {
@@ -195,7 +195,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<CommutativeBinaryOperator> getAllValuesOfop() {
@@ -204,7 +204,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<CommutativeBinaryOperator> getAllValuesOfop(final CommutativeOperatorMatch partialMatch) {
@@ -213,7 +213,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<CommutativeBinaryOperator> getAllValuesOfop(final Operator pLeftInput, final Operator pRightInput) {
@@ -226,7 +226,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for leftInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfleftInput(final Object[] parameters) {
@@ -237,7 +237,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for leftInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInput() {
@@ -246,7 +246,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for leftInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInput(final CommutativeOperatorMatch partialMatch) {
@@ -255,7 +255,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for leftInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInput(final CommutativeBinaryOperator pOp, final Operator pRightInput) {
@@ -268,7 +268,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for rightInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfrightInput(final Object[] parameters) {
@@ -279,7 +279,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for rightInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInput() {
@@ -288,7 +288,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for rightInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInput(final CommutativeOperatorMatch partialMatch) {
@@ -297,7 +297,7 @@ public class CommutativeOperatorMatcher extends BaseMatcher<CommutativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for rightInput.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInput(final CommutativeBinaryOperator pOp, final Operator pLeftInput) {

@@ -184,7 +184,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfinputOperator(final Object[] parameters) {
@@ -195,7 +195,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator() {
@@ -204,7 +204,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
@@ -213,7 +213,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator(final AllDifferentOperator pAllDifferentOperator, final Operator pParentOperator) {
@@ -226,7 +226,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<AllDifferentOperator> rawAccumulateAllValuesOfallDifferentOperator(final Object[] parameters) {
@@ -237,7 +237,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator() {
@@ -246,7 +246,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
@@ -255,7 +255,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final Operator pInputOperator, final Operator pParentOperator) {
@@ -268,7 +268,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -279,7 +279,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -288,7 +288,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final UnnecessaryAllDifferentOperatorMatch partialMatch) {
@@ -297,7 +297,7 @@ public class UnnecessaryAllDifferentOperatorMatcher extends BaseMatcher<Unnecess
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pInputOperator, final AllDifferentOperator pAllDifferentOperator) {

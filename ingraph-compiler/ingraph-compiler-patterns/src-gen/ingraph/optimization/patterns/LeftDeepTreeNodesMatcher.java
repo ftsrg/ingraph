@@ -172,7 +172,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<BinaryLogicalExpression> rawAccumulateAllValuesOfparent(final Object[] parameters) {
@@ -183,7 +183,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent() {
@@ -192,7 +192,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent(final LeftDeepTreeNodesMatch partialMatch) {
@@ -201,7 +201,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent(final BinaryLogicalExpression pChild) {
@@ -213,7 +213,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<BinaryLogicalExpression> rawAccumulateAllValuesOfchild(final Object[] parameters) {
@@ -224,7 +224,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild() {
@@ -233,7 +233,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild(final LeftDeepTreeNodesMatch partialMatch) {
@@ -242,7 +242,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild(final BinaryLogicalExpression pParent) {
