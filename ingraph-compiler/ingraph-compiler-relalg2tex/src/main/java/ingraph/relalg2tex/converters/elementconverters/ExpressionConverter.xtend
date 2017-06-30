@@ -8,6 +8,7 @@ import relalg.BigIntegerLiteral
 import relalg.BinaryArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
 import relalg.BooleanLiteral
+import relalg.CaseExpression
 import relalg.Direction
 import relalg.DoubleLiteral
 import relalg.ElementVariable
@@ -23,6 +24,7 @@ import relalg.NavigationDescriptor
 import relalg.NullLiteral
 import relalg.Parameter
 import relalg.ParameterComparableExpression
+import relalg.SimpleCaseExpression
 import relalg.StringLiteral
 import relalg.UnaryGraphObjectLogicalExpression
 import relalg.UnaryLogicalExpression
@@ -160,6 +162,22 @@ class ExpressionConverter {
 		}
 		+ '''«exp.edgeVariable.convertElement»''' // creates {\var{e}}{Label1|Label2...}
 		+ '''{«exp.sourceVertexVariable.convertExpression»}{«exp.targetVertexVariable.convertExpression»}'''
+	}
+
+	def dispatch CharSequence convertExpression(CaseExpression ce) {
+		'''
+			\literal{case}
+			\left(
+				«IF ce instanceof SimpleCaseExpression»\literal{test: }«ce.test.convertExpression», «ENDIF»
+				«ce.cases.map[
+					'''\left \{'''
+					+ '''\literal{when: }'''+it.when.convertExpression+''', '''
+					+ '''\literal{then: }'''+it.then.convertExpression
+					+ '''\right \}'''
+				].join(", ")»
+				«IF ce.fallback !== null», \literal{fallback: }«ce.fallback.convertExpression»«ENDIF»
+			\right)
+		'''
 	}
 
 	def dispatch CharSequence convertExpression(BooleanLiteral exp) {

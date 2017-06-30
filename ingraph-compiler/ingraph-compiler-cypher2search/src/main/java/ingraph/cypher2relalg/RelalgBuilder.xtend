@@ -660,6 +660,24 @@ class RelalgBuilder {
 		result
 	}
 
+	/**
+	 * This is a wrapper around the buildRelalgLogicalExpression to be used
+	 * in contexts where no join clauses should be generated.
+	 *
+	 * We use this outside of WHERE clauses.
+	 */
+	def buildRelalgLogicalExpressionNoJoinAllowed(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
+		// there should be no join clauses added when we build
+		// a logical expression outside the WHERE clause
+		val dummyJoins = new BasicEList<Operator>
+		val logicalExp = buildRelalgLogicalExpression(e, dummyJoins)
+		if (dummyJoins.size > 0) {
+			unrecoverableError('''Joins found when building a logical expression in generic expression position.''')
+		}
+
+		logicalExp
+	}
+
 	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e, EList<Operator> joins) {
 		createBinaryLogicalExpression => [
 			operator = BinaryLogicalOperatorType.AND
@@ -915,24 +933,45 @@ class RelalgBuilder {
 
 	def dispatch Expression buildRelalgExpression(CaseExpression e) {
 		if (!(e.expression instanceof CaseExpression)) {
-			unsupported("Outer CaseExpressions should contain a CaseExpression")
+			unrecoverableError("Outer CaseExpressions should contain a CaseExpression")
+		}
+		val ce = e.expression as CaseExpression
+
+		// do we process a simple case expression,
+		// i.e. when there is a single value we search for
+		var boolean isSimple = false
+
+		val retVal = if (ce.caseExpression === null) {
+			createGeneralCaseExpression => [
+				expressionContainer = topLevelContainer
+			]
+		} else {
+		  isSimple = true
+			createSimpleCaseExpression => [
+				expressionContainer = topLevelContainer
+				test = buildRelalgComparableElement(ce.caseExpression)
+			]
 		}
 
-		val caseExpression = e.expression as CaseExpression
-		val simpleCaseExpression = createSimpleCaseExpression
-		// CASE test
-		simpleCaseExpression.test = buildRelalgExpression(caseExpression.caseExpression)
-
 		// WHEN when THEN then
-		caseExpression.caseAlternatives.forEach [
-			val whenExpression = buildRelalgComparableElement(when)
-			val thenExpression = buildRelalgComparableElement(then)
-			val case_ = createCase => [when = whenExpression; then = thenExpression]
-			simpleCaseExpression.cases.add(case_)
-		]
+		for (ca: ce.caseAlternatives) {
+		  val case_ = createCase => [
+		    then = buildRelalgExpression(ca.then)
+		  ]
+		  if (isSimple) {
+		    case_.when = buildRelalgComparableElement(ca.when)
+		  } else {
+		    case_.when = buildRelalgLogicalExpressionNoJoinAllowed(ca.when)
+		  }
+		  retVal.cases.add(case_)
+		}
+
 		// ELSE elseExpression
-		simpleCaseExpression.default_ = buildRelalgArithmeticExpression(caseExpression.elseExpression)
-		simpleCaseExpression
+		if (ce.elseExpression !== null) {
+			retVal.fallback = buildRelalgExpression(ce.elseExpression)
+		}
+
+		retVal
 	}
 
 	def dispatch Expression buildRelalgExpression(FunctionInvocation fi) {
@@ -1010,15 +1049,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch Expression buildRelalgExpression(ExpressionComparison e) {
-		// there should be no join clauses added when we build
-		// a logical expression outside the WHERE clause
-		val dummyJoins = new BasicEList<Operator>
-		val logicalExp = buildRelalgLogicalExpression(e, dummyJoins)
-		if (dummyJoins.size > 0) {
-			unrecoverableError('''Joins found when building a logical expression in generic expression position.''')
-		}
-
-		logicalExp
+	  buildRelalgLogicalExpressionNoJoinAllowed(e)
 	}
 
 	/**

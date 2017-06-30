@@ -13,6 +13,7 @@ import relalg.BinaryArithmeticOperationExpression
 import relalg.BinaryLogicalExpression
 import relalg.BinaryLogicalOperatorType
 import relalg.BinaryOperator
+import relalg.CaseExpression
 import relalg.EmptyListExpression
 import relalg.ExpandOperator
 import relalg.Expression
@@ -199,7 +200,7 @@ class Cypher2RelalgUtil {
 	 *
 	 * @return boolean value indicating if there were an aggregate function. It can be expressed as: "seenAggregate || (e contains aggregate function call)"
 	 */
-	def accumulateGroupingVariables(Expression e, Set<Variable> groupingVariables, boolean seenAggregate) {
+	def boolean accumulateGroupingVariables(Expression e, Set<Variable> groupingVariables, boolean seenAggregate) {
 		var effectivelySeenAggregate = seenAggregate
 		val fifo = new LinkedList<Expression>
 
@@ -257,6 +258,20 @@ class Cypher2RelalgUtil {
 				ArithmeticComparisonExpression: {
 					fifo.add(el.leftOperand)
 					fifo.add(el.rightOperand)
+				}
+				CaseExpression: {
+					// we don't allow aggregation inside a case expression
+					var seenAggregateInCase = false
+					val groupingVariablesInCase = new HashSet<Variable>
+					for (c: el.cases) {
+						seenAggregateInCase = accumulateGroupingVariables(c.when, groupingVariablesInCase, seenAggregateInCase)
+						seenAggregateInCase = accumulateGroupingVariables(c.then, groupingVariablesInCase, seenAggregateInCase)
+					}
+					if (seenAggregateInCase) {
+						unsupported('''We don't support aggregation inside a CASE expression.''')
+					} else {
+						groupingVariables.addAll(groupingVariablesInCase)
+					}
 				}
 				default: {
 					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')

@@ -492,13 +492,15 @@ abstract class Expression extends RelalgModelElement {
 }
 
 abstract class CaseExpression extends Expression {
-
+  contains Case[] cases
+  refers Expression fallback
 }
 
-class SimpleCaseExpression extends Expression {
+class GeneralCaseExpression extends CaseExpression {
+}
+
+class SimpleCaseExpression extends CaseExpression {
   refers Expression test
-  refers Case[] cases
-  refers Expression default_
 }
 
 abstract class ArithmeticExpression extends ComparableExpression {
