@@ -86,7 +86,7 @@ class ExpressionParserTest extends WordSpec {
       val plan = getPlan(
         """MATCH (n)
           |RETURN
-          |CASE n
+          |CASE n.eye
           |WHEN 'blue'
           |THEN 1
           |WHEN 'brown'
