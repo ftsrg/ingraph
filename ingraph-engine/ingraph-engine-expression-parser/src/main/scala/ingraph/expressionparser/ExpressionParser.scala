@@ -123,7 +123,21 @@ object ExpressionParser {
       }
     case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
       tuple => lookup(exp.fullName)
+    case exp: SimpleCaseExpression =>
+      val testExpression = parseValue(exp.getTest, lookup)
+      import collection.JavaConverters._
+      val cases = exp.getCases.asScala.map(c => (parseValue(c.getWhen, lookup), parseValue(c.getThen, lookup)))
+      val fallback = parseValue(exp.getFallback, lookup)
+      def caseFunction(tuple: Tuple): Any = {
+        val actual = testExpression(tuple)
+        for ((w, t) <- cases)
+          if (w(tuple) == actual)
+            return t(tuple)
+        fallback(tuple)
+      }
+      caseFunction
   }
+
 
   import relalg.function.Function._
   def parseAggregate(exp: Expression, lookup: Map[String, Integer]): List[(String, () => StatefulAggregate)] = exp match {
