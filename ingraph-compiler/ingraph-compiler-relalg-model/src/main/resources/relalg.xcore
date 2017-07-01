@@ -494,6 +494,7 @@ abstract class Expression extends RelalgModelElement {
 abstract class CaseExpression extends Expression {
   contains Case[] cases
   refers Expression fallback
+  op String fullName() { "TODO" }
 }
 
 class GeneralCaseExpression extends CaseExpression {
