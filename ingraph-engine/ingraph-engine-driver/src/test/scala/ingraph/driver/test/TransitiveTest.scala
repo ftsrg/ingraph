@@ -36,7 +36,12 @@ class TransitiveTest extends FunSuite {
   case class TestCase(workload: String, number: Int)
 
   val testCases =
-    List(7).map(new TestCase("simple", _))
+    List(
+      2, 3, 4, 5, 6, 7, 8, 9,
+      12, 13, 14, 15, 16,
+      20, 24).map(new TestCase("bi", _)) ++
+    List(1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 20, 21, 22, 23, 24).map(new TestCase("simple", _))
+
 
   testCases.filter(_ != null) //
     .foreach(
@@ -69,6 +74,6 @@ class TransitiveTest extends FunSuite {
     queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames()))
     queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
 
-    actualResults.asScala.toVector.map(println(_))
+    //actualResults.asScala.toVector.map(println(_))
   }
 }

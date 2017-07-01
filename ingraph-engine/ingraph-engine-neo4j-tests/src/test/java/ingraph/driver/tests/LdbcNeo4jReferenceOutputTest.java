@@ -66,7 +66,7 @@ public class LdbcNeo4jReferenceOutputTest {
 	public int queryNumber;
 
 	//public final String size = "50";
-	public final String size = "small";
+	public final String size = "50";
 
 	final String graphMlPath = "../../graphs/snb_" + size + ".graphml";
 	final EmbeddedTestkitDriver driver = new EmbeddedTestkitDriver();
