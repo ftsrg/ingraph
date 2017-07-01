@@ -11,9 +11,9 @@ abstract class LdbcSnbTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-$workload/$workload-$query.cypher"
+  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
 
-  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight("cypher".length) + "bin"
+  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("comment") -> List("Message", "Comment"),

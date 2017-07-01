@@ -23,7 +23,7 @@ class TransitiveTest extends FunSuite {
 
   def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-$workload/$workload-$query.cypher"
 
-  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight("cypher".length) + "bin"
+  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-small.bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("person") -> List("Person")

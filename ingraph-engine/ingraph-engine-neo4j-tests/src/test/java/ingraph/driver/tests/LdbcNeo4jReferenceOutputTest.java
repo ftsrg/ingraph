@@ -1,24 +1,14 @@
 package ingraph.driver.tests;
 
-import static org.neo4j.io.fs.FileUtils.writeToFile;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.xml.stream.XMLStreamException;
-
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
+import neo4j.driver.testkit.EmbeddedTestkitDriver;
+import neo4j.driver.testkit.EmbeddedTestkitSession;
+import neo4j.driver.util.GraphPrettyPrinter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,16 +23,12 @@ import org.neo4j.shell.tools.imp.util.Json;
 import org.neo4j.shell.tools.imp.util.MapNodeCache;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
+import javax.xml.stream.XMLStreamException;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer;
-import neo4j.driver.testkit.EmbeddedTestkitDriver;
-import neo4j.driver.testkit.EmbeddedTestkitSession;
-import neo4j.driver.util.GraphPrettyPrinter;
+import static org.neo4j.io.fs.FileUtils.writeToFile;
 
 @RunWith(Parameterized.class)
 public class LdbcNeo4jReferenceOutputTest {
@@ -79,7 +65,10 @@ public class LdbcNeo4jReferenceOutputTest {
 	@Parameter(1)
 	public int queryNumber;
 
-	final String graphMlPath = "../../graphs/snb_50.graphml";
+	//public final String size = "50";
+	public final String size = "small";
+
+	final String graphMlPath = "../../graphs/snb_" + size + ".graphml";
 	final EmbeddedTestkitDriver driver = new EmbeddedTestkitDriver();
 
 	@Before
@@ -99,8 +88,8 @@ public class LdbcNeo4jReferenceOutputTest {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
 			final String queryPathname   = String.format("../../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
-			final String queryResultBin  = String.format("../../queries/ldbc-snb-%s/%s-%d.bin",    workload, workload, queryNumber);
-			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d.json",   workload, workload, queryNumber);
+			final String queryResultBin  = String.format("../../queries/ldbc-snb-%s/%s-%d-%s.bin",    workload, workload, queryNumber, size);
+			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d-%s.json",   workload, workload, queryNumber, size);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);

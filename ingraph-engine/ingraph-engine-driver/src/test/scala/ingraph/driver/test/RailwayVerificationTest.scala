@@ -25,8 +25,6 @@ class RailwayVerificationTest extends FunSuite {
 
   def queryPath(query: Int): String = s"../../queries/railway-verification/railway-$query.cypher"
 
-  //def queryResultPath(query: Int): String = queryPath(query).dropRight("cypher".length) + "bin"
-
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("segment") -> List("Segment"),
     modelPath("switch") -> List("Switch"),
