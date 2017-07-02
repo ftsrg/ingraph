@@ -497,7 +497,7 @@ abstract class CaseExpression extends Expression {
   op String fullName() { "TODO" }
 }
 
-class GeneralCaseExpression extends CaseExpression {
+class GenericCaseExpression extends CaseExpression {
 }
 
 class SimpleCaseExpression extends CaseExpression {
@@ -570,7 +570,7 @@ class EmptyListExpression extends ListExpression {
 /*
  * Common base to express the subscript operator,
  * i.e. list[0] or list[0..2] (where upper limit is excluded).
- * 
+ *
  * Indexing is 0-based.
  * List should have a runtime type of a list.
  */
