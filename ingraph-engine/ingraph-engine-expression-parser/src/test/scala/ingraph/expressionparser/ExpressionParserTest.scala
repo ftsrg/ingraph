@@ -101,6 +101,18 @@ class ExpressionParserTest extends WordSpec {
       assert(func(Vector(2, "brown")) == 5)
       assert(func(Vector(3, "red")) == 3)
     }
+    "parse exists" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN exists(n.eye)""".stripMargin)
+      val projection = plan.getRootExpression
+        .asInstanceOf[ProductionOperator].getInput
+        .asInstanceOf[ProjectionOperator]
+      val lookup = getSchema(projection.getInput)
+      val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
+      assert(func(Vector(1, "blue")) == true)
+      assert(func(Vector(2, null)) == false)
+    }
 
   }
 }
