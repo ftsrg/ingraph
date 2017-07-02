@@ -15,7 +15,7 @@ abstract class Cypher2Search2Rete2TexTest extends Cypher2SearchAbstractTest {
 	extension ExtraVariablesCalculator extraVariablesCalculator = new ExtraVariablesCalculator
 	extension InternalSchemaCalculator internalSchemaCalculator = new InternalSchemaCalculator
 
-	override protected def RelalgContainer transform(String querySpecification, String query, RelalgContainer containerSearchBased) {
+	protected def RelalgContainer transform(String querySpecification, String query) {
 		val container = Cypher2Relalg.processString(querySpecification, query)
 		val simplifyingTransformationRete = new SimplifyingTransformation(container)
 		val Search2ReteTransformation transformation = new Search2ReteTransformation(container)
@@ -26,8 +26,8 @@ abstract class Cypher2Search2Rete2TexTest extends Cypher2SearchAbstractTest {
 		container.calculateExternalSchema
 		container.calculateExtraVariables
 		container.calculateInternalSchema
-		RelalgUtil.save(containerSearchBased, '''query-models/«query»-rete''')
-		return containerSearchBased
+		RelalgUtil.save(container, '''query-models/«query»-rete''')
+		return container
 	}
 
 }

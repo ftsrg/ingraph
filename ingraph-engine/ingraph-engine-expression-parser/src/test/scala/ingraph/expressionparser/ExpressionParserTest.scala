@@ -97,9 +97,9 @@ class ExpressionParserTest extends WordSpec {
         .asInstanceOf[ProjectionOperator]
       val lookup = getSchema(projection.getInput)
       val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
-      assert(func(Vector("blue")) == 1)
-      assert(func(Vector("brown")) == 5)
-      assert(func(Vector("red")) == 3)
+      assert(func(Vector(1, "blue")) == 1)
+      assert(func(Vector(2, "brown")) == 5)
+      assert(func(Vector(3, "red")) == 3)
     }
 
   }
