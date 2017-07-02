@@ -9,7 +9,7 @@ import relalg.BinaryLogicalExpression
 import relalg.Case
 import relalg.Expression
 import relalg.FunctionExpression
-import relalg.GeneralCaseExpression
+import relalg.GenericCaseExpression
 import relalg.SimpleCaseExpression
 import relalg.UnaryLogicalExpression
 import relalg.Variable
@@ -25,7 +25,7 @@ class ExpressionToVariables {
 	def dispatch List<? extends Variable> getAttributes(UnaryLogicalExpression expression) {
 		getAttributes(expression.operand)
 	}
-	
+
 	def dispatch List<? extends Variable> getAttributes(ArithmeticComparisonExpression expression) {
 		Lists.newArrayList(Iterables.concat(
 			getAttributes(expression.leftOperand),
@@ -47,28 +47,28 @@ class ExpressionToVariables {
 			#[]
 		}
 	}
-	
+
 	def dispatch List<? extends Variable> getAttributes(FunctionExpression expression) {
 		expression.extractFunctionArguments
 	}
-	
+
 	def dispatch List<? extends Variable> getAttributes(SimpleCaseExpression expression) {
 		union(expression.test.getAttributes, expression.cases.map[extractAttributes].flatten, expression.fallback.getAttributes)
 	}
 
-	def dispatch List<? extends Variable> getAttributes(GeneralCaseExpression expression) {
+	def dispatch List<? extends Variable> getAttributes(GenericCaseExpression expression) {
 		union(expression.cases.map[extractAttributes].flatten, expression.fallback.getAttributes)
 	}
-	
+
 	// default branch: no attributes
 	def dispatch List<? extends Variable> getAttributes(Expression expression) {
 		#[]
 	}
 
 	//
-	
+
 	def extractAttributes(Case c) {
-		 union(c.when.getAttributes, c.then.getAttributes) 
+		 union(c.when.getAttributes, c.then.getAttributes)
 	}
 
 }

@@ -95,7 +95,7 @@ import relalg.function.Function
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
- * 
+ *
  * Its main entry point is the {@link #build(Cypher) build} method.
  * As a helper class to manage the whole process of openCypher parsing and compilation,
  * you might want to see the helper methods in the {@link Cypher2Relalg} class.
@@ -113,7 +113,7 @@ class RelalgBuilder {
 
 	/**
 	 * Constructs a new RelalgBuilder object and initialize its state.
-	 * 
+	 *
 	 * For the internals, it creates a new EMF container and a fresh variable builder
 	 * with new variable and label factories.
 	 */
@@ -125,7 +125,7 @@ class RelalgBuilder {
 	/**
 	 * Constructor that allows passing the topLevelContainer and the
 	 * variable builder instance to be used.
-	 * 
+	 *
 	 * Use this to create separate builder for each SingleQuery,
 	 * and usually you might want to pass a clone of your variable builder created using its
 	 * {@link VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
@@ -188,7 +188,7 @@ class RelalgBuilder {
 
 		/**
 		 * Process each subquery.
-		 * 
+		 *
 		 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
 		 *
 		 * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
@@ -236,7 +236,7 @@ class RelalgBuilder {
 
 	/**
 	 * This is the workhorse for building the relational algebra expression for a single subquery.
-	 * 
+	 *
 	 * It should not be called to build more than one single subquery as
 	 * the variables produced for re-used names would collide.
 	 */
@@ -331,7 +331,7 @@ class RelalgBuilder {
 	}
 
 	/**
-	 * Build and return a create operator from the CREATE clause and attach p_input to its input. 
+	 * Build and return a create operator from the CREATE clause and attach p_input to its input.
 	 */
 	protected def buildCreateOperator(Create u0, Operator p_input) {
 		val u1 = createCreateOperator => [
@@ -363,8 +363,8 @@ class RelalgBuilder {
 			}
 		}
 		u1
-	} 
-	
+	}
+
 	/**
 	 * Provide the edges for CREATE operator.
 	 */
@@ -380,7 +380,7 @@ class RelalgBuilder {
 		val u1 = variableBuilder.buildExpressionVariable(u0.edgeVariable.name, u0)
 		u1
 	}
-	
+
 	/**
 	 * Provide the vertices for CREATE operator.
 	 */
@@ -394,9 +394,9 @@ class RelalgBuilder {
 		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
 		u1
 	}
-	
+
 	/**
-	 * Build and return a delete operator from the DELETE clause and attach p_input to its input. 
+	 * Build and return a delete operator from the DELETE clause and attach p_input to its input.
 	 */
 	protected def buildDeleteOperator(Delete element, Operator p_input) {
 		val u1 = createDeleteOperator => [
@@ -410,7 +410,7 @@ class RelalgBuilder {
 		}
 		u1
 	}
-	
+
 	/**
 	 * Provide the vertices for DELETE operator.
 	 */
@@ -942,7 +942,7 @@ class RelalgBuilder {
 		var boolean isSimple = false
 
 		val retVal = if (ce.caseExpression === null) {
-			createGeneralCaseExpression => [
+			createGenericCaseExpression => [
 				expressionContainer = topLevelContainer
 			]
 		} else {
@@ -1228,7 +1228,7 @@ class RelalgBuilder {
 
 	/*
 	 * This will create the relational algebraic representation of a patternElement.
-	 * 
+	 *
 	 * This was factored out to handle PatternElement and RelationshipsPattern in the same code
 	 */
 	def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
@@ -1277,7 +1277,7 @@ class RelalgBuilder {
 	/**
 	 * Parse map-like constraints if given
 	 * and attach to the ElementVariable in certain cases.
-	 * 
+	 *
 	 * FIXME: attach to the VertexVariable if in a MATCH or CREATE context
 	 * otherwise, selection operators should be created, see #67
 	 */
@@ -1289,7 +1289,7 @@ class RelalgBuilder {
 
 			properties.entries.forEach [ e |
 				val key = e.key
-				val value = buildRelalgExpression(e.value) 
+				val value = buildRelalgExpression(e.value)
 				pList.entries.put(key, value)
 			]
 
@@ -1313,7 +1313,7 @@ class RelalgBuilder {
 	protected def convertToDirection(RelationshipPattern pattern) {
 		val isLeftArrow =pattern.incoming
 		val isRightArrow = pattern.outgoing
-		
+
 		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
 			Direction.BOTH
 		else if(isLeftArrow) Direction.IN else Direction.OUT
