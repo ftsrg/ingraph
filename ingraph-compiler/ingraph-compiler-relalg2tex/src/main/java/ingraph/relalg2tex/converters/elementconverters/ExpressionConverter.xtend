@@ -168,14 +168,15 @@ class ExpressionConverter {
 		'''
 			\literal{case}
 			\left(
-				«IF ce instanceof SimpleCaseExpression»\literal{test: }«ce.test.convertExpression», «ENDIF»
+				«IF ce instanceof SimpleCaseExpression»\literal{test:\ }«ce.test.convertExpression», «ENDIF»
 				«ce.cases.map[
 					'''\left \{'''
-					+ '''\literal{when: }'''+it.when.convertExpression+''', '''
-					+ '''\literal{then: }'''+it.then.convertExpression
+					+ it.when.convertExpression
+					+ '''\Rightarrow'''
+					+ it.then.convertExpression
 					+ '''\right \}'''
 				].join(", ")»
-				«IF ce.fallback !== null», \literal{fallback: }«ce.fallback.convertExpression»«ENDIF»
+				«IF ce.fallback !== null», \literal{else:\ }«ce.fallback.convertExpression»«ENDIF»
 			\right)
 		'''
 	}
