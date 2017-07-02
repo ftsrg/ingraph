@@ -8,7 +8,7 @@ import relalg.RelalgContainer
 
 abstract class Search2TasksTransformationTest extends Cypher2SearchAbstractTest {
 
-	override protected def RelalgContainer transform(String querySpecification, String query, RelalgContainer containerSearchBased) {
+	protected def RelalgContainer transform(String querySpecification, String query, RelalgContainer containerSearchBased) {
 		val container = Cypher2Relalg.processString(querySpecification, query)
 		val simplifyingTransformationRete = new SimplifyingTransformation(container)
 		val Search2TasksTransformation transformation = new Search2TasksTransformation(container)

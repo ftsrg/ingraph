@@ -4,6 +4,7 @@ import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.expressions.ExpressionUnwrapper
 import java.util.List
 import relalg.AttributeVariable
+import relalg.CaseExpression
 import relalg.ExpressionVariable
 import relalg.FunctionExpression
 import relalg.GroupingOperator
@@ -64,11 +65,18 @@ class VariableExtractor {
 	 * auxiliary functions
 	 */
 	def List<? extends Variable> getExtraVariablesForProjectionOperator(ProjectionOperator op) {
+		// functions
 		val functionExpressions = op.elements.map[expression].filter(FunctionExpression).filter[!functor.isAggregation]
 		val arguments = functionExpressions.map[extractFunctionArguments].flatten.toList
 
-		val extraVariables = op.elements.filter(ExpressionVariable).map[expression].filter(VariableExpression).map[variable].filter(AttributeVariable).toList
-		uniqueUnion(extraVariables, arguments)
+		val expressions = op.elements.filter(ExpressionVariable).map[expression]
+
+		// expression variables
+		val extraVariables = expressions.filter(VariableExpression).map[variable].filter(AttributeVariable).toList
+		// case expressions
+		val caseAttributes = expressions.filter(CaseExpression).map[getAttributes].flatten.toList
+		
+		uniqueUnion(extraVariables, arguments, caseAttributes)
 	}
 
 	def List<? extends Variable> getExtraVariablesForGroupingOperator(GroupingOperator op) {

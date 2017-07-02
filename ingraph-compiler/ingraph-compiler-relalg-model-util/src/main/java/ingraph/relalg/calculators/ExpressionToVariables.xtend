@@ -6,15 +6,21 @@ import java.util.List
 import relalg.ArithmeticComparisonExpression
 import relalg.AttributeVariable
 import relalg.BinaryLogicalExpression
+import relalg.Case
 import relalg.Expression
 import relalg.FunctionExpression
+import relalg.GeneralCaseExpression
+import relalg.SimpleCaseExpression
 import relalg.UnaryLogicalExpression
 import relalg.Variable
 import relalg.VariableExpression
+import org.eclipse.emf.common.util.UniqueEList.FastCompare
+import ingraph.relalg.collectors.CollectionHelper
 
 class ExpressionToVariables {
 
 	extension FunctionArgumentExtractor fae = new FunctionArgumentExtractor
+	extension CollectionHelper ch = new CollectionHelper
 
 	def dispatch List<? extends Variable> getAttributes(UnaryLogicalExpression expression) {
 		getAttributes(expression.operand)
@@ -46,9 +52,23 @@ class ExpressionToVariables {
 		expression.extractFunctionArguments
 	}
 	
+	def dispatch List<? extends Variable> getAttributes(SimpleCaseExpression expression) {
+		union(expression.test.getAttributes, expression.cases.map[extractAttributes].flatten, expression.fallback.getAttributes)
+	}
+
+	def dispatch List<? extends Variable> getAttributes(GeneralCaseExpression expression) {
+		union(expression.cases.map[extractAttributes].flatten, expression.fallback.getAttributes)
+	}
+	
 	// default branch: no attributes
 	def dispatch List<? extends Variable> getAttributes(Expression expression) {
 		#[]
+	}
+
+	//
+	
+	def extractAttributes(Case c) {
+		 union(c.when.getAttributes, c.then.getAttributes) 
 	}
 
 }
