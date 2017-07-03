@@ -1,0 +1,2 @@
+:ID(Post)|id:LONG|imageFile:STRING|creationDate:STRING|locationIP:STRING|browserUsed:STRING|language:STRING|content:STRING|length:INT
+11|11|x|2010-10-17T00:33:56.258+0000|213.180.31.8|Internet Explorer|en|eleven|1
