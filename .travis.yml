@@ -29,6 +29,7 @@ notifications:
   slack:
     rooms:
       - ftsrg:ll9rntRuEyb9KC9z5cWAQShn
+      - ingraph:6eCcNkZmZXVRr0Z0BLw7qLOv
     on_success: change
     on_failure: always
   email:
