@@ -63,10 +63,8 @@ abstract class LdbcSnbTest extends FunSuite {
   case class TestCase(workload: String, number: Int)
 
   val testCases =
-    List(2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 20, 24).map(new TestCase("bi", _)) ++
-    List(1
-      , 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 20, 21, 22, 23, 24
-    ).map(new TestCase("simple", _))
+    List(2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 24).map(new TestCase("bi", _)) ++
+    List(1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 21, 22, 23, 24).map(new TestCase("simple", _))
 //      List(7).map(new TestCase("simple", _))
 
   // BI
