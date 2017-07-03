@@ -3,8 +3,6 @@ package ingraph.relalg2tex.converters.relalgconverters;
 import ingraph.relalg.util.ContainerExtractor;
 import ingraph.relalg2tex.config.RelalgConverterConfig;
 import ingraph.relalg2tex.converters.elementconverters.SchemaConverter;
-import ingraph.relalg2tex.converters.relalgconverters.AbstractRelalg2TexConverter;
-import java.util.Arrays;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.xbase.lib.Extension;
@@ -19,22 +17,24 @@ import relalg.RelalgContainer;
 import relalg.UnaryOperator;
 import relalg.Variable;
 
+import java.util.Arrays;
+
 @SuppressWarnings("all")
 public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
   @Extension
   private SchemaConverter schemaConverter = new SchemaConverter(this.config.isSchemaIndices());
-  
+
   @Extension
   private ContainerExtractor containerExtractor = new ContainerExtractor();
-  
+
   public Relalg2TexTreeConverter() {
     super();
   }
-  
+
   public Relalg2TexTreeConverter(final RelalgConverterConfig config) {
     super(config);
   }
-  
+
   @Override
   public CharSequence convertBody(final Operator expression) {
     StringConcatenation _builder = new StringConcatenation();
@@ -58,7 +58,7 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     _builder.newLine();
     return _builder;
   }
-  
+
   /**
    * toNode
    */
@@ -210,7 +210,7 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     }
     return _xblockexpression;
   }
-  
+
   /**
    * children
    */
@@ -218,7 +218,7 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     StringConcatenation _builder = new StringConcatenation();
     return _builder;
   }
-  
+
   protected CharSequence _children(final UnaryOperator op) {
     StringConcatenation _builder = new StringConcatenation();
     Operator _input = op.getInput();
@@ -229,7 +229,7 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     _builder.append(_node, "");
     return _builder;
   }
-  
+
   protected CharSequence _children(final BinaryOperator op) {
     StringConcatenation _builder = new StringConcatenation();
     Operator _leftInput = op.getLeftInput();
@@ -242,12 +242,12 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     _builder.newLineIfNotEmpty();
     return _builder;
   }
-  
+
   public String formatCardinality(final Cardinality cardinality) {
     double _value = cardinality.getValue();
     return String.format("%.02f", Double.valueOf(_value));
   }
-  
+
   /**
    * operator
    */
@@ -263,7 +263,7 @@ public class Relalg2TexTreeConverter extends AbstractRelalg2TexConverter {
     _builder.append("$");
     return _builder;
   }
-  
+
   public CharSequence children(final Operator op) {
     if (op instanceof BinaryOperator) {
       return _children((BinaryOperator)op);
