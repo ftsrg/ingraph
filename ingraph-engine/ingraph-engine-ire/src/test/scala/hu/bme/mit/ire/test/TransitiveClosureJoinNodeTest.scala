@@ -32,7 +32,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
   val secondaryTupleWidth = 3
   val outputTupleWidth = 3
   val primaryMask = mask(0)
-  val secondaryMask = mask(2)
+  val secondaryMask = mask(0)
 
   "A TransitiveClosureNode" must {
     "calculate transitive closure" in {
@@ -472,7 +472,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
     "calculate transitive closure with backward edges" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, mask(0), outputTupleWidth, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, mask(2), outputTupleWidth, minHops = 0)))
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2, 100, 1), tuple(3, 101, 2))
@@ -556,7 +556,7 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
     "calculate transitive closure with extra attributes and backward edges" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
 
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, mask(0), outputTupleWidth = 5, minHops = 0)))
+      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth = 2, secondaryTupleWidth = 4, primaryMask, mask(2), outputTupleWidth = 5, minHops = 0)))
 
       transitiveClosure ! Secondary(ChangeSet(
         positive = tupleBag(tuple(2, 100, 1, "abc"), tuple(3, 101, 2, "def"))

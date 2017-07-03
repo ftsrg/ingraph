@@ -30,7 +30,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   val targetLookup = new CounterMultimap[Long, Tuple]
 
   val sourceVertexIndex = primaryMask(0)
-  val targetVertexIndex = secondaryMask(0)
+  val targetVertexIndex = 2 - secondaryMask(0)
 
   val reachableVertices = new mutable.HashMap[Long, mutable.HashMap[Long, mutable.MutableList[PathData]]]
   val reachableFrom = new mutable.HashMap[Long, mutable.HashSet[Long]]
