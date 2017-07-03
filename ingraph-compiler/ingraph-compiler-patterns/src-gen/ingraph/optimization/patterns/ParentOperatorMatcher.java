@@ -175,7 +175,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfoperator(final Object[] parameters) {
@@ -186,7 +186,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator() {
@@ -195,7 +195,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator(final ParentOperatorMatch partialMatch) {
@@ -204,7 +204,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator(final Operator pParentOperator) {
@@ -216,7 +216,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -227,7 +227,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -236,7 +236,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final ParentOperatorMatch partialMatch) {
@@ -245,7 +245,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pOperator) {

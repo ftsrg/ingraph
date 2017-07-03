@@ -1,17 +1,19 @@
 package ingraph.ire
 
 import hu.bme.mit.ire.util.BufferMultimap
-import org.neo4j.driver.v1.Value
 import org.neo4j.driver.v1.types.{Node, Relationship}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.util.Random
 
+trait IngraphElement {
+  def properties: Map[String, AnyRef]
+}
 
 case class IngraphVertex(id: Long,
                          labels: Set[String],
-                         properties: Map[String, AnyRef] = Map()) {
+                         override val properties: Map[String, AnyRef] = Map()) extends IngraphElement {
   val edges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   val reverseEdges: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   override def toString: String = s"Vertex($id, $properties)"
@@ -21,7 +23,7 @@ case class IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
                        label: String,
-                       properties: Map[String, AnyRef] = Map()) {
+                       override val properties: Map[String, AnyRef] = Map()) extends IngraphElement {
   override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
   def inverse(): IngraphEdge = IngraphEdge(id, targetVertex, sourceVertex, label, properties)
 }

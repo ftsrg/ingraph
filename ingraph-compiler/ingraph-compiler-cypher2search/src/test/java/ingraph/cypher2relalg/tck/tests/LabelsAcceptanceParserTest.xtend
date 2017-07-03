@@ -26,7 +26,7 @@ class LabelsAcceptanceParserTest {
         RETURN labels(n)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LabelsAcceptance_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLabelsAcceptance_10")
         RelalgUtil.save(container, "relalg-models/tck/LabelsAcceptance_10")
     }
 

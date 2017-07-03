@@ -27,7 +27,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN a, r, b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_01")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_01")
     }
 
@@ -47,7 +47,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_02")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_02")
     }
 
@@ -67,7 +67,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN n, r
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_03")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_03")
     }
 
@@ -87,7 +87,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_04")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_04")
     }
 
@@ -107,7 +107,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN a, r, b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_05")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_05")
     }
 
@@ -127,7 +127,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_06")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_06")
     }
 
@@ -147,7 +147,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN a, r, b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_07")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_07")
     }
 
@@ -167,7 +167,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_08")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_08")
     }
 
@@ -187,7 +187,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN n, r
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_09")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_09")
     }
 
@@ -207,7 +207,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_10")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_10")
     }
 
@@ -227,7 +227,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_11")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_11")
     }
 
@@ -247,7 +247,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(DISTINCT r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_12")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_12")
     }
 
@@ -267,7 +267,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN a, r, b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_13")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_13")
     }
 
@@ -287,7 +287,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_14")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_14")
     }
 
@@ -308,7 +308,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_15")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_15")
     }
 
@@ -330,7 +330,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN x, r1, y, r2, z
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_16")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_16")
     }
 
@@ -352,7 +352,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_17")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_17")
     }
 
@@ -374,7 +374,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN x, r1, y, r2, z
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_18")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_18")
     }
 
@@ -396,7 +396,7 @@ class MatchingSelfRelationshipsParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/MatchingSelfRelationships_19")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testMatchingSelfRelationships_19")
         RelalgUtil.save(container, "relalg-models/tck/MatchingSelfRelationships_19")
     }
 

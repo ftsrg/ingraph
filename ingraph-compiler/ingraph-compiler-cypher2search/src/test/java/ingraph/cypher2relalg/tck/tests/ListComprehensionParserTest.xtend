@@ -29,7 +29,7 @@ class ListComprehensionParserTest {
         RETURN [x IN collect(p) | head(nodes(x))] AS p
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testListComprehension_01")
         RelalgUtil.save(container, "relalg-models/tck/ListComprehension_01")
     }
 
@@ -52,7 +52,7 @@ class ListComprehensionParserTest {
         RETURN p, c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testListComprehension_02")
         RelalgUtil.save(container, "relalg-models/tck/ListComprehension_02")
     }
 
@@ -75,7 +75,7 @@ class ListComprehensionParserTest {
         RETURN b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/ListComprehension_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testListComprehension_03")
         RelalgUtil.save(container, "relalg-models/tck/ListComprehension_03")
     }
 

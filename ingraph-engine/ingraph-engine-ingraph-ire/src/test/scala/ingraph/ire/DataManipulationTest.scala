@@ -12,22 +12,22 @@ class DataManipulationTest extends FunSuite {
   def initializeIndexer(): Indexer = {
     val indexer = new Indexer()
 
-    val v1 = new IngraphVertex(1L, Set("Train"), Map[String, Value]())
-    val v2 = new IngraphVertex(2L, Set("Segment"), Map[String, Value]())
-    val v3 = new IngraphVertex(3L, Set("Segment"), Map[String, Value]())
+    val v1 = IngraphVertex(1L, Set("Train"), Map[String, Value]())
+    val v2 = IngraphVertex(2L, Set("Segment"), Map[String, Value]())
+    val v3 = IngraphVertex(3L, Set("Segment"), Map[String, Value]())
 
     indexer.addVertex(v1)
     indexer.addVertex(v2)
     indexer.addVertex(v3)
 
-    indexer.addEdge(new IngraphEdge(4L, v1, v2, "ON"  ))
-    indexer.addEdge(new IngraphEdge(5L, v2, v3, "NEXT"))
-    indexer.addEdge(new IngraphEdge(6L, v3, v2, "NEXT"))
+    indexer.addEdge(IngraphEdge(4L, v1, v2, "ON"))
+    indexer.addEdge(IngraphEdge(5L, v2, v3, "NEXT"))
+    indexer.addEdge(IngraphEdge(6L, v3, v2, "NEXT"))
 
     indexer
   }
 
-  test("remove and create edge work") ({
+  test("delete and create edge work") {
     val indexer = initializeIndexer()
 
     val oneOff = """MATCH (t:Train)-[r:ON]->(seg1:Segment)-[:NEXT]->(seg2:Segment)
@@ -43,18 +43,28 @@ class DataManipulationTest extends FunSuite {
       assert(whereIsAdapter.result() == List(Vector(3)))
       new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
     }
-  })
+  }
 
-  test("remove vertex work") ({
+  test("delete vertex works") {
     val indexer = initializeIndexer()
 
-    val oneOff = """MATCH (t:Train) DELETE t""".stripMargin
+    val oneOff = "MATCH (t:Train) DELETE t"
     new IngraphSearchAdapter(oneOff, "remove", indexer).terminate()
 
     val whereIsTrain = "MATCH (t:Train) RETURN t"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "something", indexer)
 
     assert(whereIsAdapter.result() == List())
-  })
+  }
 
+  test("create vertex works") {
+    val indexer = new Indexer()
+
+    val oneOff = "CREATE (t:Train)"
+    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
+
+    assert(whereIsAdapter.result().size == 1)
+  }
 }

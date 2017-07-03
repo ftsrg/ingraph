@@ -194,7 +194,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<SortOperator> rawAccumulateAllValuesOfsortOperator(final Object[] parameters) {
@@ -205,7 +205,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<SortOperator> getAllValuesOfsortOperator() {
@@ -214,7 +214,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<SortOperator> getAllValuesOfsortOperator(final SortAndTopOperatorMatch partialMatch) {
@@ -223,7 +223,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for sortOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<SortOperator> getAllValuesOfsortOperator(final TopOperator pTopOperator, final Operator pParentOperator) {
@@ -236,7 +236,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<TopOperator> rawAccumulateAllValuesOftopOperator(final Object[] parameters) {
@@ -247,7 +247,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<TopOperator> getAllValuesOftopOperator() {
@@ -256,7 +256,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<TopOperator> getAllValuesOftopOperator(final SortAndTopOperatorMatch partialMatch) {
@@ -265,7 +265,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for topOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<TopOperator> getAllValuesOftopOperator(final SortOperator pSortOperator, final Operator pParentOperator) {
@@ -278,7 +278,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -289,7 +289,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -298,7 +298,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SortAndTopOperatorMatch partialMatch) {
@@ -307,7 +307,7 @@ public class SortAndTopOperatorMatcher extends BaseMatcher<SortAndTopOperatorMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SortOperator pSortOperator, final TopOperator pTopOperator) {

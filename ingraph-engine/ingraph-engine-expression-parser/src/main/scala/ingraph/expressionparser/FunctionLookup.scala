@@ -100,7 +100,7 @@ object FunctionLookup {
       case RELATIONSHIPS => (path) => ???
       case NODES => (path) => ???
 
-      case EXISTS => (patternOrProperty) => ???
+      case EXISTS => (patternOrProperty) => patternOrProperty != null
     }
   }
 

@@ -168,7 +168,7 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<AllDifferentOperator> rawAccumulateAllValuesOfallDifferentOperator(final Object[] parameters) {
@@ -179,7 +179,7 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator() {

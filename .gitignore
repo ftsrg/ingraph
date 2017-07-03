@@ -46,3 +46,4 @@ generated/
 hs_err_pid*.log
 *.~*
 *.*~
+*.xtendbin

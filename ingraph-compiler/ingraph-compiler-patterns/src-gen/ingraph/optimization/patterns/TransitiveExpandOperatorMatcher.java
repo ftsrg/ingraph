@@ -195,7 +195,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfinputOperator(final Object[] parameters) {
@@ -206,7 +206,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator() {
@@ -215,7 +215,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator(final TransitiveExpandOperatorMatch partialMatch) {
@@ -224,7 +224,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for inputOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfinputOperator(final ExpandOperator pExpandOperator, final Operator pParentOperator, final EdgeListVariable pEdgeListVariable) {
@@ -238,7 +238,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<ExpandOperator> rawAccumulateAllValuesOfexpandOperator(final Object[] parameters) {
@@ -249,7 +249,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator() {
@@ -258,7 +258,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final TransitiveExpandOperatorMatch partialMatch) {
@@ -267,7 +267,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final Operator pInputOperator, final Operator pParentOperator, final EdgeListVariable pEdgeListVariable) {
@@ -281,7 +281,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -292,7 +292,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -301,7 +301,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final TransitiveExpandOperatorMatch partialMatch) {
@@ -310,7 +310,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pInputOperator, final ExpandOperator pExpandOperator, final EdgeListVariable pEdgeListVariable) {
@@ -324,7 +324,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for edgeListVariable.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   protected Set<EdgeListVariable> rawAccumulateAllValuesOfedgeListVariable(final Object[] parameters) {
@@ -335,7 +335,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for edgeListVariable.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EdgeListVariable> getAllValuesOfedgeListVariable() {
@@ -344,7 +344,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for edgeListVariable.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EdgeListVariable> getAllValuesOfedgeListVariable(final TransitiveExpandOperatorMatch partialMatch) {
@@ -353,7 +353,7 @@ public class TransitiveExpandOperatorMatcher extends BaseMatcher<TransitiveExpan
   
   /**
    * Retrieve the set of values that occur in matches for edgeListVariable.
-   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
+   * @return the Set of all values or empty set if there are no matches
    * 
    */
   public Set<EdgeListVariable> getAllValuesOfedgeListVariable(final Operator pInputOperator, final ExpandOperator pExpandOperator, final Operator pParentOperator) {

@@ -28,7 +28,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(n) / 60 / 60 AS count
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_01")
     }
 
@@ -49,7 +49,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(*) AS columnName
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_02")
     }
 
@@ -70,7 +70,7 @@ class AggregationAcceptanceParserTest {
         RETURN size(collect(a))
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_03")
     }
 
@@ -86,7 +86,7 @@ class AggregationAcceptanceParserTest {
         RETURN {foo: a.name='Andres', kids: collect(child.name)}
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_04")
     }
 
@@ -107,7 +107,7 @@ class AggregationAcceptanceParserTest {
         RETURN a, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_05")
     }
 
@@ -131,7 +131,7 @@ class AggregationAcceptanceParserTest {
         ORDER BY count(*) DESC, n.division ASC
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_06")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_06")
     }
 
@@ -153,7 +153,7 @@ class AggregationAcceptanceParserTest {
         RETURN n.x, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_07")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_07")
     }
 
@@ -175,7 +175,7 @@ class AggregationAcceptanceParserTest {
         RETURN n.y, count(n.x)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_08")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_08")
     }
 
@@ -197,7 +197,7 @@ class AggregationAcceptanceParserTest {
         RETURN n.y, sum(n.x)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_09")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_09")
     }
 
@@ -218,7 +218,7 @@ class AggregationAcceptanceParserTest {
         RETURN b, avg(length(p))
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_10")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_10")
     }
 
@@ -234,7 +234,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(DISTINCT a)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_11")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_11")
     }
 
@@ -254,7 +254,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(DISTINCT a.foo)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_12")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_12")
     }
 
@@ -270,7 +270,7 @@ class AggregationAcceptanceParserTest {
         RETURN collect(DISTINCT x) AS c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_13")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_13")
     }
 
@@ -286,7 +286,7 @@ class AggregationAcceptanceParserTest {
         RETURN collect(DISTINCT x) AS c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_14")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_14")
     }
 
@@ -308,7 +308,7 @@ class AggregationAcceptanceParserTest {
         RETURN DISTINCT a.color, count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_15")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_15")
     }
 
@@ -328,7 +328,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(*) * 10 AS c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_16")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_16")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_16")
     }
 
@@ -349,7 +349,7 @@ class AggregationAcceptanceParserTest {
         ORDER BY x
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_17")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_17")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_17")
     }
 
@@ -369,7 +369,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(n), collect(n)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_18")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_18")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_18")
     }
 
@@ -390,7 +390,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(*)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_19")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_19")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_19")
     }
 
@@ -415,7 +415,7 @@ class AggregationAcceptanceParserTest {
         ORDER BY l
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_20")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_20")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_20")
     }
 
@@ -440,7 +440,7 @@ class AggregationAcceptanceParserTest {
         RETURN a.name AS name, collect(other.name) AS others, len
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_21")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_21")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_21")
     }
 
@@ -462,7 +462,7 @@ class AggregationAcceptanceParserTest {
         {y: count(b)} AS baz
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_22")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_22")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_22")
     }
 
@@ -480,7 +480,7 @@ class AggregationAcceptanceParserTest {
         RETURN sum(i)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_24")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_24")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_24")
     }
 
@@ -500,7 +500,7 @@ class AggregationAcceptanceParserTest {
         RETURN count(r)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_25")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_25")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_25")
     }
 
@@ -516,7 +516,7 @@ class AggregationAcceptanceParserTest {
         RETURN max(i)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_26")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_26")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_26")
     }
 
@@ -532,7 +532,7 @@ class AggregationAcceptanceParserTest {
         RETURN min(i)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/AggregationAcceptance_27")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testAggregationAcceptance_27")
         RelalgUtil.save(container, "relalg-models/tck/AggregationAcceptance_27")
     }
 

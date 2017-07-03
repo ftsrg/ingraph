@@ -18,12 +18,12 @@ before_install:
   - cd opencypher-tests; ./generate-parser-tests.py; cd ..
 # we use the install block to stop the build if any command fails
 install:
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf; fi
+  - if scripts/travis-tex-run-required.sh ; then sudo apt-get install -qq -y texlive-base texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra texlive-xetex latexmk lmodern pgf; fi
   - ./gradlew assemble testClasses --stacktrace
   - ./gradlew regressionTests --continue --quiet
 script:
   # only build and deploy the results if the build is performed on the master branch
-  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then scripts/generate-and-deploy-report.sh; fi
+  - if scripts/travis-tex-run-required.sh ; then scripts/generate-and-deploy-report.sh; fi
   - ./gradlew :ingraph-engine:ingraph-engine-ire:test :ingraph-engine:ingraph-engine-expression-parser:test :ingraph-engine:ingraph-engine-ingraph-ire:test --quiet --continue --stacktrace
 notifications:
   slack:

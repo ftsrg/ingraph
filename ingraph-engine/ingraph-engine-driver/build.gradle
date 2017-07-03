@@ -24,17 +24,3 @@ dependencies {
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
-
-bintray {
-  pkg {
-    repo = 'maven'
-    name = 'ingraph-driver'
-    userOrg = 'ftsrg'
-    licenses = ['EPL-1.0']
-    vcsUrl = 'https://github.com/FTSRG/ingraph.git'
-    version {
-      name = '0.2.0'
-      released = new Date()
-    }
-  }
-}

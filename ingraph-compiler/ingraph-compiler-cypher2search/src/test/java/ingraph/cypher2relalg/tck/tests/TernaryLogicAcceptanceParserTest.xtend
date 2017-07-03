@@ -21,7 +21,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN NOT null AS value
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTernaryLogicAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_01")
     }
 
@@ -35,7 +35,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null IS NULL AS value
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTernaryLogicAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_02")
     }
 
@@ -49,7 +49,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null IS NOT NULL AS value
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTernaryLogicAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_03")
     }
 
@@ -63,7 +63,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null = null AS value
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTernaryLogicAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_04")
     }
 
@@ -77,7 +77,7 @@ class TernaryLogicAcceptanceParserTest {
         RETURN null <> null AS value
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/TernaryLogicAcceptance_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testTernaryLogicAcceptance_05")
         RelalgUtil.save(container, "relalg-models/tck/TernaryLogicAcceptance_05")
     }
 

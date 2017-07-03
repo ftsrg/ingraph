@@ -22,7 +22,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLargeIntegerEquality_01")
         RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_01")
     }
 
@@ -37,7 +37,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLargeIntegerEquality_02")
         RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_02")
     }
 
@@ -53,7 +53,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLargeIntegerEquality_03")
         RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_03")
     }
 
@@ -68,7 +68,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLargeIntegerEquality_04")
         RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_04")
     }
 
@@ -84,7 +84,7 @@ class LargeIntegerEqualityParserTest {
         RETURN p.id
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/LargeIntegerEquality_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testLargeIntegerEquality_05")
         RelalgUtil.save(container, "relalg-models/tck/LargeIntegerEquality_05")
     }
 

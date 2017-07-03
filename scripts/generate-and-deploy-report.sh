@@ -8,7 +8,7 @@ pushd .
 
 ./gradlew report --stacktrace --quiet
 cd opencypher-report
-make
+make texfot
 cd ..
 scripts/deploy.sh
 

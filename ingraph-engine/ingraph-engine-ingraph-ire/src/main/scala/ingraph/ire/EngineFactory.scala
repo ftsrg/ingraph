@@ -39,7 +39,7 @@ object EngineFactory {
 
   def createQueryEngine(plan: Operator, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
-      override val production = system.actorOf(Props(new ProductionNode("")))
+      override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
       val inputs: mutable.HashMap[String, (ReteMessage) => Unit] = mutable.HashMap()
 
@@ -64,7 +64,7 @@ object EngineFactory {
               )
               val aggregationCriteria = op.getAggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
               val projectionVariableLookup: Map[String, Integer] =
-                aggregationCriteria.zipWithIndex.map( a => a._1._1.toString -> a._2.asInstanceOf[Integer] ).toMap ++
+                aggregationCriteria.zipWithIndex.map( a => a._1._1.fullName -> a._2.asInstanceOf[Integer] ).toMap ++
                 aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
               val projectionExpressions = op.getInternalElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
               newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
@@ -110,7 +110,7 @@ object EngineFactory {
             case op: DuplicateEliminationOperator => newLocal(Props(new DuplicateEliminationNode(expr.child)))
             case op: AllDifferentOperator =>
               val schema = getSchema(op.getInput)
-              val indices = op.getEdgeVariables.map(v => schema(v.toString))
+              val indices = op.getEdgeVariables.map(v => schema(v.fullName))
               def allDifferent(r: Tuple): Boolean = {
                 val seen = mutable.HashSet[Any]()
                 for (value <- indices.map(r(_))) {
@@ -126,25 +126,28 @@ object EngineFactory {
               newLocal(Props(new SelectionNode(expr.child, allDifferent)))
             case op: CreateOperator =>
               val lookup = getSchema(op.getInput)
-              val creations: Seq[(datatypes.Tuple) => IngraphEdge] = (for (element <- op.getElements)
+              val creations: Vector[(Tuple) => Any] = for (element <- op.getElements)
                 yield element.asInstanceOf[ExpressionVariable].getExpression match {
                   case n: NavigationDescriptor =>
                     val demeter = n.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName
                     val sourceIndex = lookup(n.getSourceVertexVariable.getName)
                     val targetIndex = lookup(n.getTargetVertexVariable.getName)
-                    Some((t: Tuple) => {
+                    (t: Tuple) => {
                       indexer.addEdge(
                         indexer.newId(),
                         t(sourceIndex).asInstanceOf[Long],
                         t(targetIndex).asInstanceOf[Long],
                         demeter)
-                    })
-                  case _ => None
-                }).flatten
+                    }
+                  case v: VariableExpression =>
+                    val variable = v.getVariable.asInstanceOf[VertexVariable]
+                    (t: Tuple) => indexer.addVertex(IngraphVertex(
+                      indexer.newId(), variable.getVertexLabelSet.getVertexLabels.map(l => l.getName).toSet))
+                }
 
               (m: ReteMessage) => {
                 m match {
-                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r(_)))
+                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r))
                   case _ =>
                 }
                 expr.child(m)
@@ -160,7 +163,7 @@ object EngineFactory {
                 }
               (m: ReteMessage) => {
                 m match {
-                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r(_)))
+                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
                   case _ =>
                 }
                 expr.child(m)

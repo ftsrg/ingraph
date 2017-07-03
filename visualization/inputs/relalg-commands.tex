@@ -13,11 +13,11 @@
 \newcommand{\literal}[1]{\mathsf{#1}}
 \newcommand{\atom}[1]{\mathsf{#1}}
 
+\newcommand{\colonseparator}{:}
+
 \newcommand{\var}[1]{\mathtt{#1}}
-\newcommand{\edgevariable}[2]{\var{#1}
-	\ifstrempty{#2}{}{\colon{\atom{#2}}}}
-\newcommand{\nodevariable}[2]{(\var{#1}
-	\ifstrempty{#2}{}{\colon{\atom{#2}}})}
+\newcommand{\edgevariable}[2]{\var{#1}\ifstrempty{#2}{}{\colonseparator{\atom{#2}}}}
+\newcommand{\vertexvariable}[2]{(\var{#1}\ifstrempty{#2}{}{\colonseparator{\atom{#2}}})}
 
 % see http://tug.ctan.org/info/symbols/comprehensive/symbols-a4.pdf
 
@@ -211,17 +211,18 @@
 
 %%%%%%%%%% nullary operators %%%%%%%%%%
 
-\newcommand{\getvertices}[2]{\getverticesop_{\nodevariable{#1}{#2}}}
-\newcommand{\getedgesdirected}[6]{\getedgesopdirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
-\newcommand{\getedgesundirected}[6]{\getedgesopundirected_{\nodevariable{#1}{#2}}^{\nodevariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
+\newcommand{\getvertices}[2]{\getverticesop_{\vertexvariable{#1}{#2}}}
+\newcommand{\getedgesdirected}[6]{\getedgesopdirected_{\vertexvariable{#1}{#2}}^{\vertexvariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
+\newcommand{\getedgesundirected}[6]{\getedgesopundirected_{\vertexvariable{#1}{#2}}^{\vertexvariable{#3}{#4}} \left[ \edgevariable{#5}{#6} \right]}
 
 \newcommand{\dual}{\var{Dual}}
+\newcommand{\singular}{\var{Singular}}
 
 %%%%%%%%%% unary operators %%%%%%%%%%
 
 % expand operators
 \newcommand{\kleenestar}{\ast}
-\newcommand{\nagivationbody}[3]{\,_{\nodevariable{#1}{}}^{\nodevariable{#2}{#3}}}
+\newcommand{\nagivationbody}[3]{\,_{\vertexvariable{#1}{}}^{\vertexvariable{#2}{#3}}}
 \newcommand{\expandedgevariable}[4]{
 	\left[
 	% #3: minHops, cannot be empty

@@ -22,7 +22,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN (list[0]).prop
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/SemanticErrorAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testSemanticErrorAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/SemanticErrorAcceptance_01")
     }
 
@@ -37,7 +37,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN (list[1]).prop
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/SemanticErrorAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testSemanticErrorAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/SemanticErrorAcceptance_02")
     }
 
@@ -51,7 +51,7 @@ class SemanticErrorAcceptanceParserTest {
         RETURN range(2, 8, 0)
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/SemanticErrorAcceptance_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testSemanticErrorAcceptance_04")
         RelalgUtil.save(container, "relalg-models/tck/SemanticErrorAcceptance_04")
     }
 

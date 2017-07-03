@@ -29,7 +29,7 @@ class PatternComprehensionParserTest {
         ORDER BY liker.time
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_01")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_01")
     }
 
@@ -51,7 +51,7 @@ class PatternComprehensionParserTest {
         RETURN [p = (n)-->() | p] AS ps
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_02")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_02")
     }
 
@@ -74,7 +74,7 @@ class PatternComprehensionParserTest {
         RETURN [p = (n)-->(:B) | p]
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_03")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_03")
     }
 
@@ -95,7 +95,7 @@ class PatternComprehensionParserTest {
         RETURN [p = (a)-[*]->(b) | p] AS paths
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_04")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_04")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_04")
     }
 
@@ -118,7 +118,7 @@ class PatternComprehensionParserTest {
         RETURN ps, c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_05")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_05")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_05")
     }
 
@@ -139,7 +139,7 @@ class PatternComprehensionParserTest {
         RETURN paths, c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_06")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_06")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_06")
     }
 
@@ -160,7 +160,7 @@ class PatternComprehensionParserTest {
         RETURN [p = (n)-[:HAS]->() | p] AS ps
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_07")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_07")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_07")
     }
 
@@ -181,7 +181,7 @@ class PatternComprehensionParserTest {
         RETURN count([p = (n)-[:HAS]->() | p]) AS c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_08")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_08")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_08")
     }
 
@@ -202,7 +202,7 @@ class PatternComprehensionParserTest {
         RETURN n, size([(n)--() | 1]) > 0 AS b
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_09")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_09")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_09")
     }
 
@@ -229,7 +229,7 @@ class PatternComprehensionParserTest {
         RETURN n, [x IN nodes(p) | size([(x)-->(:Y) | 1])] AS list
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_10")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_10")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_10")
     }
 
@@ -252,7 +252,7 @@ class PatternComprehensionParserTest {
         RETURN size([(a)-->() | 1]) AS length
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_11")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_11")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_11")
     }
 
@@ -276,7 +276,7 @@ class PatternComprehensionParserTest {
         RETURN size([(a)-[:T]->() | 1]) AS length
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_12")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_12")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_12")
     }
 
@@ -300,7 +300,7 @@ class PatternComprehensionParserTest {
         RETURN size([(a)-[:T|OTHER]->() | 1]) AS length
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_13")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_13")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_13")
     }
 
@@ -321,7 +321,7 @@ class PatternComprehensionParserTest {
         RETURN [(n)-[:T]->(b) | b.prop] AS list
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_14")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_14")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_14")
     }
 
@@ -342,7 +342,7 @@ class PatternComprehensionParserTest {
         RETURN [(n)-[r:T]->() | r.prop] AS list
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/PatternComprehension_15")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testPatternComprehension_15")
         RelalgUtil.save(container, "relalg-models/tck/PatternComprehension_15")
     }
 

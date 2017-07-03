@@ -128,7 +128,7 @@ public enum Function {
   }
 
   @Override
-	public String toString() {
+  public String toString() {
     return prettyName;
   }
 

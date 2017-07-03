@@ -1,16 +1,18 @@
 package ingraph.expressionparser
 
 import org.scalatest.WordSpec
-
 import ingraph.relalg.util.SchemaToMap
 import relalg._
 import ingraph.cypher2relalg.Cypher2Relalg
 import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
 
 class ExpressionParserTest extends WordSpec {
-  def getSelectionOperator(query: String): SelectionOperator = {
+  def getPlan(query: String): RelalgContainer = {
     val reteCalc = new Search2ReteTransformationAndSchemaCalculator
-    val relalg = reteCalc.apply(Cypher2Relalg.processString(query))
+    reteCalc.apply(Cypher2Relalg.processString(query, "test"))
+  }
+  def getSelectionOperator(query: String): SelectionOperator = {
+    val relalg = getPlan(query)
     relalg.getRootExpression
       .asInstanceOf[ProductionOperator].getInput
       .asInstanceOf[ProjectionOperator].getInput
@@ -80,5 +82,37 @@ class ExpressionParserTest extends WordSpec {
       val func = ExpressionParser.parse(op.getCondition, lookup)
       assert(func(Vector(24)))
     }
+    "parse Case structures" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN
+          |CASE n.eye
+          |WHEN 'blue'
+          |THEN 1
+          |WHEN 'brown'
+          |THEN 2 + 3
+          |ELSE 3 END AS result""".stripMargin)
+      val projection = plan.getRootExpression
+        .asInstanceOf[ProductionOperator].getInput
+        .asInstanceOf[ProjectionOperator]
+      val lookup = getSchema(projection.getInput)
+      val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
+      assert(func(Vector(1, "blue")) == 1)
+      assert(func(Vector(2, "brown")) == 5)
+      assert(func(Vector(3, "red")) == 3)
+    }
+    "parse exists" in {
+      val plan = getPlan(
+        """MATCH (n)
+          |RETURN exists(n.eye)""".stripMargin)
+      val projection = plan.getRootExpression
+        .asInstanceOf[ProductionOperator].getInput
+        .asInstanceOf[ProjectionOperator]
+      val lookup = getSchema(projection.getInput)
+      val func = ExpressionParser.parseValue(projection.getElements.get(0).getExpression, lookup)
+      assert(func(Vector(1, "blue")) == true)
+      assert(func(Vector(2, null)) == false)
+    }
+
   }
 }

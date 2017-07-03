@@ -69,15 +69,28 @@ class QueryProcessor {
 			\end{align*}
 		«ENDIF»
 
-		\subsubsection*«"Relational algebra tree for search-based evaluation".toHeader(name)»
+		\subsubsection*«"Relational algebra tree (raw)".toHeader(name)»
 
-		«val searchTree = container.visualizeTree»
+		«val searchTree = container.visualizeRawTree»
 		«IF searchTree === null»
 			Cannot visualize tree.
 		«ELSE»
 			\begin{center}
 			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
 			«searchTree»
+			\end{adjustbox}
+			\end{center}
+		«ENDIF»
+
+		\subsubsection*«"Relational algebra tree (simplified)".toHeader(name)»
+
+		«val simplifiedSearchTree = container.visualizeSimplifiedTree»
+		«IF simplifiedSearchTree === null»
+			Cannot visualize tree.
+		«ELSE»
+			\begin{center}
+			\begin{adjustbox}{max width=\textwidth, max height=\textheight}
+			«simplifiedSearchTree»
 			\end{adjustbox}
 			\end{center}
 		«ENDIF»
@@ -107,14 +120,26 @@ class QueryProcessor {
 		try {
 			val expressionContainer = EcoreUtil.copy(container)
 			expressionContainer.calculateExternalSchema
-			expressionConverter.convert(expressionContainer).toString
+			expressionConverter.convert(expressionContainer)
 		} catch (Exception e) {
 			info(ExceptionUtils.getStackTrace(e))
 			null
 		}
 	}
 
-	def visualizeTree(RelalgContainer container) {
+	def visualizeRawTree(RelalgContainer container) {
+		try {
+			val searchContainer = EcoreUtil.copy(container)
+			val externalSchemaCalculator = new ExternalSchemaCalculator
+			externalSchemaCalculator.calculateExternalSchema(searchContainer)
+			treeSerializer.convert(searchContainer)
+		} catch (Exception e) {
+			info(ExceptionUtils.getStackTrace(e))
+			null
+		}
+	}
+
+	def visualizeSimplifiedTree(RelalgContainer container) {
 		try {
 			val searchContainer = EcoreUtil.copy(container)
 			val calculator = new SearchPlanCalculator

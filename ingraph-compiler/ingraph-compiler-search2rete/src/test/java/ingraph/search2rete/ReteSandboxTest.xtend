@@ -8,24 +8,4 @@ class ReteSandboxTest extends Cypher2Search2Rete2TexTest {
 		return "sandbox"
 	}
 
-	@Test
-	def void q1() {
-		process('simple-5', '''
-			MATCH
-			  (tag:Tag)<-[:hasTag]-(message:Message)<-[:replyOf*]-(comment:Comment)
-			RETURN message.content, comment.content, tag.name
-			ORDER BY message.content, comment.content, tag.name
-		''')
-	}
-
-	@Test
-	def void q2() {
-		process('simple-6', '''
-			MATCH
-			  (comment:Comment)-[:replyOf*]->(message:Message)-[:hasTag]->(tag:Tag)
-			RETURN message.content, comment.content, tag.name
-			ORDER BY message.content, comment.content, tag.name
-		''')
-	}
-	
 }

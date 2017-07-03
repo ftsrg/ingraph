@@ -28,7 +28,7 @@ class WhereAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/WhereAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testWhereAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/WhereAcceptance_01")
     }
 

@@ -29,7 +29,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartingPointAcceptance_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartingPointAcceptance_01")
         RelalgUtil.save(container, "relalg-models/tck/StartingPointAcceptance_01")
     }
 
@@ -52,7 +52,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartingPointAcceptance_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartingPointAcceptance_02")
         RelalgUtil.save(container, "relalg-models/tck/StartingPointAcceptance_02")
     }
 
@@ -74,7 +74,7 @@ class StartingPointAcceptanceParserTest {
         RETURN n
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/StartingPointAcceptance_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testStartingPointAcceptance_03")
         RelalgUtil.save(container, "relalg-models/tck/StartingPointAcceptance_03")
     }
 

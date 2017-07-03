@@ -30,7 +30,7 @@ class OptionalMatchParserTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testOptionalMatch_01")
         RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_01")
     }
 
@@ -52,7 +52,7 @@ class OptionalMatchParserTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_02")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testOptionalMatch_02")
         RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_02")
     }
 
@@ -75,7 +75,7 @@ class OptionalMatchParserTest {
         RETURN count(*) AS matches, s IS NULL AS optMatch
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/OptionalMatch_03")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testOptionalMatch_03")
         RelalgUtil.save(container, "relalg-models/tck/OptionalMatch_03")
     }
 

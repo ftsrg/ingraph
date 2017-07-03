@@ -34,7 +34,7 @@ class VarLengthAcceptance2ParserTest {
         RETURN count(p) AS c
         ''')
         CypherUtil.save(cypher, "cypher-asts/tck/VarLengthAcceptance2_01")
-        val container = Cypher2Relalg.processCypher(cypher)
+        val container = Cypher2Relalg.processCypher(cypher, "testVarLengthAcceptance2_01")
         RelalgUtil.save(container, "relalg-models/tck/VarLengthAcceptance2_01")
     }
 

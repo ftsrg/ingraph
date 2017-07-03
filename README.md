@@ -6,7 +6,15 @@
 
 For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
-## Projects
+## User's guide
+
+To run the tests, issue the following command:
+
+```
+./gradlew :ingraph-engine:ingraph-engine-ingraph-ire:test
+```
+
+## Contributor's guide
 
 ingraph is defined as a single Gradle project, so it can be built in a single step. However, the subprojects are split to two categories:
 
@@ -17,6 +25,8 @@ ingraph is defined as a single Gradle project, so it can be built in a single st
 ### Developing the compiler
 
 #### Prerequisites
+
+We recommend Eclipse for developing the compiler.
 
 Start with [Eclipse Oxygen](http://www.eclipse.org/downloads/packages/release/Oxygen/) and select **Eclipse IDE for Java and DSL Developers** distribution. It is recommended to increase the memory available for Eclipse: edit the `eclipse.ini` file and set a larger value, e.g. `-Xmx2G`.
 
@@ -65,7 +75,7 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 #### Using VIATRA
 
 1. Go to **Window** | **Preferences** | **VIATRA** | **Query Explorer** and make sure that the **Dynamic EMF mode** is _turned on_ (it is turned off by default).
-1. Use the **Query Explorer** view and do not load the model by clicking the green play button, instead click to the downward pointing triangle and click **Load Resource**.
+1. Use the **Query Explorer** view and do not load the model by clicking the green play button (it will take minutes), instead click to the downward pointing triangle and click **Load Resource**.
 1. Open the `vql` query specification.
 1. Click the **green play button** to load the query.
 
@@ -73,14 +83,16 @@ To open the `relalg` models with the **Sample Reflective Ecore Model Editor**.
 
 #### Prerequisites
 
+* We recommend to use IntelliJ for developing the engine.
 * Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
 
 *Note.* Currently, there is no VIATRA plug-in for IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
 
 #### Importing the projects
 
-* Import the projects using **New** | **Project from Existing Sources...**.
-  * Tick **Auto import**
+* Import the projects using **New** | **Project from Existing Sources...** (or simply click **Import Project** on the welcome screen).
+  * Select the `ingraph` directory.
+  * Tick **Auto import**.
   * Untick **Create separate module per source set**.
 * In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
