@@ -1,5 +1,3 @@
-plugins { id 'org.xtext.xtend' version '1.0.15' }
-
 dependencies {
   compile project(':ingraph-compiler:ingraph-compiler-common')
   compile project(':ingraph-compiler:ingraph-compiler-patterns')

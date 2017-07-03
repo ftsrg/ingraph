@@ -1,5 +1,3 @@
-plugins { id 'org.xtext.xtend' version '1.0.15' }
-
 dependencies {
   compile project(':ingraph-compiler:ingraph-compiler-transformations')
   testCompile project(':ingraph-compiler:ingraph-compiler-cypher2search')
