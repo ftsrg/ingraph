@@ -11,9 +11,9 @@ abstract class LdbcSnbTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-$workload/$workload-$query.cypher"
+  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
 
-  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight("cypher".length) + "bin"
+  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("comment") -> List("Message", "Comment"),
@@ -63,8 +63,11 @@ abstract class LdbcSnbTest extends FunSuite {
   case class TestCase(workload: String, number: Int)
 
   val testCases =
-    List(2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 15, 20, 24).map(new TestCase("bi", _)) ++
-    List(1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 20, 21, 22, 23, 24).map(new TestCase("simple", _))
+    List(2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 20, 24).map(new TestCase("bi", _)) ++
+    List(1
+      , 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 20, 21, 22, 23, 24
+    ).map(new TestCase("simple", _))
+//      List(7).map(new TestCase("simple", _))
 
   // BI
   // 1 // CASE
