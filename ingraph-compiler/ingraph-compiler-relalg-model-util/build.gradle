@@ -1,3 +1,14 @@
+sourceSets {
+  main {
+    scala {
+      srcDirs = ['src/main/scala', 'src/main/java']
+    }
+    java {
+      srcDirs = []
+    }
+  }
+}
+
 dependencies {
   compile project(':ingraph-compiler:ingraph-compiler-common')
   compile project(':ingraph-compiler:ingraph-compiler-relalg-model')
