@@ -1,4 +1,4 @@
-package ingraph.relalg.util.visitors
+package ingraph.relalg.util
 
 import java.util.Collections
 
