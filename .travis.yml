@@ -1,6 +1,6 @@
 dist: trusty
 sudo: required
-language: java
+anguage: java
 jdk:
   - oraclejdk8
 env:
@@ -24,7 +24,7 @@ install:
 script:
   # only build and deploy the results if the build is performed on the master branch
   - if scripts/travis-tex-run-required.sh ; then scripts/generate-and-deploy-report.sh; fi
-  - ./gradlew :ingraph-engine:ingraph-engine-ire:test :ingraph-engine:ingraph-engine-expression-parser:test :ingraph-engine:ingraph-engine-ingraph-ire:test --quiet --continue --stacktrace
+  - ./gradlew :ingraph-engine:ingraph-engine-ire:test :ingraph-engine:ingraph-engine-expression-parser:test :ingraph-engine:ingraph-engine-ingraph-ire:test :ingraph-engine:ingraph-engine-driver:test --quiet --continue --stacktrace
 notifications:
   slack:
     rooms:
