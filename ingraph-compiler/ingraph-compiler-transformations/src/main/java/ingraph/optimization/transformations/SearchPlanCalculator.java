@@ -6,8 +6,8 @@ import relalg.RelalgContainer;
 
 @SuppressWarnings("all")
 public class SearchPlanCalculator {
-  private final ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator();
-  
+  private final ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator(true);
+
   public RelalgContainer apply(final RelalgContainer searchPlan) {
     final SimplifyingTransformation simplifyingTransformation = new SimplifyingTransformation(searchPlan);
     final RelalgContainer simplifiedPlan = simplifyingTransformation.simplify();

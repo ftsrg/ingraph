@@ -4,7 +4,6 @@ import java.util
 
 import ingraph.relalg.collectors.CollectionHelper
 import ingraph.relalg.util.visitors.PostOrderTreeVisitor
-import org.eclipse.xtext.xbase.lib.Procedures
 import relalg._
 
 /**
