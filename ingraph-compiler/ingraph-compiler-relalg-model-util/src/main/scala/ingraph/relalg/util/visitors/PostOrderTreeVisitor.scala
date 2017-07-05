@@ -21,4 +21,17 @@ class PostOrderTreeVisitor {
     visitor.apply(op)
   }
 
+  def traverseScala(op: Operator, visitor: Operator => Unit) {
+    op match {
+      case u: UnaryOperator => traverseScala(u.getInput, visitor)
+      case b: BinaryOperator => {
+        traverseScala(b.getLeftInput, visitor)
+        traverseScala(b.getRightInput, visitor)
+      }
+      case _ => ;
+    }
+
+    visitor.apply(op)
+  }
+
 }
