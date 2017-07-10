@@ -260,11 +260,11 @@ class RelalgBuilder {
 
 			if (mapIt.optional) {
 				val lojo = if (relalgMatchDescriptor.condition === null) {
+					createLeftOuterJoinOperator
+				} else {
 					createThetaLeftOuterJoinOperator => [
 						condition = relalgMatchDescriptor.condition
 					]
-				} else {
-					createLeftOuterJoinOperator
 				}
 				lojo => [
 					rightInput = relalgMatchDescriptor.op
