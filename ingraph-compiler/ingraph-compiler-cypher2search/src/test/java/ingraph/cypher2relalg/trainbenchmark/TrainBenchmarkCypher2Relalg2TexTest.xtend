@@ -15,7 +15,7 @@ class TrainBenchmarkCypher2Relalg2TexTest {
 	
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
-		val expression = Cypher2Relalg.processCypher(cypher)
+		val expression = Cypher2Relalg.processCypher(cypher, "trainBenchmark" + query)
 		RelalgUtil.save(expression, "relalg-models/trainbenchmark/" + query)
 		drawer.convert(expression, "trainbenchmark/" + query + "-search")
 	}

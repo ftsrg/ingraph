@@ -96,7 +96,7 @@ import relalg.function.Function
 /**
  * This is the main class of the openCypher to relational algebra compiler.
  *
- * Its main entry point is the {@link #build(Cypher) build} method.
+ * Its main entry point is the {@link #build(Cypher, String) build} method.
  * As a helper class to manage the whole process of openCypher parsing and compilation,
  * you might want to see the helper methods in the {@link Cypher2Relalg} class.
  */
@@ -148,11 +148,6 @@ class RelalgBuilder {
 		]
 
 		topLevelContainer
-	}
-
-	@Deprecated
-	def build(Cypher cypher) {
-	  build(cypher, null)
 	}
 
 	def dispatch Operator buildRelalg(RegularQuery q) {

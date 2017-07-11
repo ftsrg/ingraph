@@ -14,7 +14,7 @@ class TrainBenchmarkCypher2RelalgTest {
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)
 		CypherUtil.save(cypher, "cypher-asts/trainbenchmark/" + query)
-		val container = Cypher2Relalg.processCypher(cypher)
+		val container = Cypher2Relalg.processCypher(cypher, "trainBenchmark" + query)
 		container.calculateExternalSchema
 	}
 
