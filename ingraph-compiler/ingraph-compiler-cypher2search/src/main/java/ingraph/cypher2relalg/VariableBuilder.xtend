@@ -202,20 +202,6 @@ class VariableBuilder {
 	  || EUtil.hasInContainerHierarchy(eo, #[typeof(Where), typeof(With)], typeof(Cypher))
 	}
 
-	@Deprecated
-	def dispatch Variable buildRelalgVariableExtended(VariableRef varRef) {
-		buildRelalgVariableInternal(varRef, true)
-	}
-
-	/**
-	 * 
-	 */
-	@Deprecated
-	def dispatch Variable buildRelalgVariableExtended(ExpressionNodeLabelsAndPropertyLookup e) {
-		val v = buildRelalgVariableExtended(e.left)
-		buildPropertyLookupHelper(v, e)
-	}
-
 	/**
 	 * Resolves a variable by its name.
 	 *
@@ -379,7 +365,7 @@ class VariableBuilder {
 	 */
 	def dispatch buildVariableExpression(VariableRef v, boolean useExpressionVariables) {
 		createVariableExpression => [
-			variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
+			variable = if (useExpressionVariables) { buildRelalgVariableInternal(v, true) } else { buildRelalgVariable(v) }
 			expressionContainer = topLevelContainer
 		]
 	}
@@ -387,12 +373,21 @@ class VariableBuilder {
 	/**
 	 * Builds or resolves the appropriate variable and then packs it into a VariableExpression.
 	 *
-	 * This builder method ensures that the new eVariableEpression instance
+	 * This builder method ensures that the new VariableEpression instance
 	 * is registered to the container registered with this builder.
 	 */
-	def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup v, boolean useExpressionVariables) {
+	def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup e, boolean useExpressionVariables) {
 		createVariableExpression => [
-			variable = if (useExpressionVariables) { buildRelalgVariableExtended(v) } else { buildRelalgVariable(v) }
+			variable = if (useExpressionVariables) {
+				val e_left = e.left
+				if (e_left instanceof VariableRef) {
+					val v = buildRelalgVariableInternal(e_left, true)
+					buildPropertyLookupHelper(v, e)
+				} else {
+					unrecoverableError('''Unexpected type found as base type for property lookup. Expected: variable reference. Found: «e_left.class.name»''')
+					null
+				}
+			} else { buildRelalgVariable(e) }
 			expressionContainer = topLevelContainer
 		]
 	}
