@@ -2,7 +2,7 @@
 layout: default
 ---
 
-# Project proposal
+# ingraph – project proposal
 
 The aim of the [ingraph project](https://github.com/FTSRG/ingraph) is to evaluate [openCypher](http://www.opencypher.org/) graph queries incrementally. Our long-term goal is to provide a horizontally scalable graph query engine, which is able to perform complex graph queries on graphs with 100M+ elements.
 
