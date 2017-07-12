@@ -119,15 +119,15 @@ object GenericMath extends Ordering[Any] {
       b match {
         case b: Float  => a / b
         case b: Double => a / b
-        case b: Int    => a / b
-        case b: Long   => a / b
+        case b: Int    => a.toDouble / b
+        case b: Long   => a.toDouble / b
       }
     case a: Long =>
       b match {
         case b: Float  => a / b
         case b: Double => a / b
-        case b: Int    => a / b
-        case b: Long   => a / b
+        case b: Int    => a / b.toDouble
+        case b: Long   => a / b.toDouble
       }
   }
 
@@ -161,6 +161,13 @@ object GenericMath extends Ordering[Any] {
         case b: Int    => Math.pow(a, b)
         case b: Long   => Math.pow(a, b)
       }
+  }
+
+  def sqrt(a: Any): Any = a match {
+    case a: Float  => Math.sqrt(a)
+    case a: Double => Math.sqrt(a)
+    case a: Int    => Math.sqrt(a)
+    case a: Long   => Math.sqrt(a)
   }
 
   def mod(a: Any, b: Any): Any = a match {

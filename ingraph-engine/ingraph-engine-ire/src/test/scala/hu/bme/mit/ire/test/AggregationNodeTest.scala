@@ -81,6 +81,8 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       (actual, expected) match {
         case (actual: Double, expected: Double) => actual should be(expected +- 0.01)
         case (actual: Float, expected: Float) => actual should be(expected +- 0.01f)
+        case (actual: Float, expected: Double) => actual.toDouble should be(expected +- 0.01d)
+        case (actual: Double, expected: Float) => actual should be(expected.toDouble +- 0.01d)
         case _ => actual should be(expected)
       }
     }
@@ -118,6 +120,36 @@ class AggregationNodeTest(_system: ActorSystem) extends TestKit(_system) with Im
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.1f/2), negative = Some(1))
       counter ! ChangeSet(positive = tupleBag(ragnar))
       assertNextChangeSetWithTolerance(key = 1, positive = Some(2.9/3), negative = Some(2.1f/2))
+    }
+  }
+
+  "StandardDeviation" should {
+    "stddev with complex keys" in {
+      val t1: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 11)
+      val t2: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 6)
+      val t3: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 7.2)
+      val t4: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 8)
+      val t5: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 13.1)
+      val t6: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", 111.222)
+      val t7: Tuple = tuple("Asgard", "Odin", "Gungnir", "male", -188.99)
+
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val stddev = system.actorOf(Props(new AggregationNode(echoActor ! _, functionMask(3),
+        () => Vector(new StatefulStandardDeviation(4)), functionMask(0, 1)))) // sex, sum for height
+      stddev ! ChangeSet(positive = tupleBag(t1))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(0))
+      stddev ! ChangeSet(positive = tupleBag(t2))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(2.5f), negative = Some(0))
+      stddev ! ChangeSet(positive = tupleBag(t3))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(2.131d), negative = Some(2.5f))
+      stddev ! ChangeSet(positive = tupleBag(t4))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(1.845d), negative = Some(2.131d))
+      stddev ! ChangeSet(positive = tupleBag(t5))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(2.6d), negative = Some(1.845d))
+      stddev ! ChangeSet(positive = tupleBag(t6))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(38.147d), negative = Some(2.6d))
+      stddev ! ChangeSet(positive = tupleBag(t7))
+      assertNextChangeSetWithTolerance(key = 1, positive = Some(83.136d), negative = Some(38.147d))
     }
   }
 
