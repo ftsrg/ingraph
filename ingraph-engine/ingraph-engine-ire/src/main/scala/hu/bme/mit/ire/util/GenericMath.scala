@@ -119,15 +119,15 @@ object GenericMath extends Ordering[Any] {
       b match {
         case b: Float  => a / b
         case b: Double => a / b
-        case b: Int    => a.toDouble / b
-        case b: Long   => a.toDouble / b
+        case b: Int    => a / b
+        case b: Long   => a / b
       }
     case a: Long =>
       b match {
         case b: Float  => a / b
         case b: Double => a / b
-        case b: Int    => a / b.toDouble
-        case b: Long   => a / b.toDouble
+        case b: Int    => a / b
+        case b: Long   => a / b
       }
   }
 

@@ -12,8 +12,8 @@ class StatefulStandardDeviation(val sumKey: Int) extends StatefulAggregate {
   override def value(): Any = try {
     GenericMath.sqrt(
       GenericMath.subtract(
-        GenericMath.divide(squaredSummer.value(), counter.value()),
-        GenericMath.power(GenericMath.divide(summer.value(), counter.value()), 2)
+        GenericMath.divide(squaredSummer.value.asInstanceOf[Number].doubleValue, counter.value),
+        GenericMath.power(GenericMath.divide(summer.value.asInstanceOf[Number].doubleValue, counter.value), 2)
       )
     )
   } catch {
