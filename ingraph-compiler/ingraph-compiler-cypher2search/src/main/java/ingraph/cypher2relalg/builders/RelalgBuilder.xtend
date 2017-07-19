@@ -1,5 +1,8 @@
-package ingraph.cypher2relalg
+package ingraph.cypher2relalg.builders
 
+import ingraph.cypher2relalg.CompilerEnvironment
+import ingraph.cypher2relalg.Cypher2Relalg
+import ingraph.cypher2relalg.Cypher2RelalgConfig
 import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
 import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
@@ -131,7 +134,7 @@ class RelalgBuilder {
 	 *
 	 * Use this to create separate builder for each SingleQuery,
 	 * and usually you might want to pass a clone of your variable builder created using its
-	 * {@link VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
+	 * {@link ingraph.cypher2relalg.VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
 	 * call.
 	 */
 	protected new(CompilerEnvironment ce) {

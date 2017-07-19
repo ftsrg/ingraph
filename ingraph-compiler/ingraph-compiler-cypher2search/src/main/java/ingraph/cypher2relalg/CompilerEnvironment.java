@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg;
 
+import ingraph.cypher2relalg.builders.VariableBuilder;
 import ingraph.logger.IngraphLogger;
 import relalg.RelalgContainer;
 
@@ -19,7 +20,7 @@ public final class CompilerEnvironment {
 	/**
 	 * Default constructor populating the respective fields.
 	 */
-	CompilerEnvironment(VariableBuilder vb, IngraphLogger l, RelalgContainer tlc) {
+	public CompilerEnvironment(VariableBuilder vb, IngraphLogger l, RelalgContainer tlc) {
 		this.vb = vb;
 		this.l = l;
 		this.tlc = tlc;

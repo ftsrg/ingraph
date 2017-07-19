@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg
 
+import ingraph.cypher2relalg.builders.RelalgBuilder
 import ingraph.cypherparser.CypherParser
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import relalg.RelalgContainer

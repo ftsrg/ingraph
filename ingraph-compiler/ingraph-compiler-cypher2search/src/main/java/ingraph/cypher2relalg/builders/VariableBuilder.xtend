@@ -1,4 +1,4 @@
-package ingraph.cypher2relalg
+package ingraph.cypher2relalg.builders
 
 import ingraph.cypher2relalg.factories.EdgeLabelFactory
 import ingraph.cypher2relalg.factories.EdgeListVariableFactory
