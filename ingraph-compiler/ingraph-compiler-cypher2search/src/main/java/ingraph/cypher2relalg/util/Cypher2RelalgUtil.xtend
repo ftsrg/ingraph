@@ -1,5 +1,6 @@
 package ingraph.cypher2relalg.util
 
+import ingraph.cypher2relalg.CompilerEnvironment
 import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
 import ingraph.logger.IngraphLogger
 import java.util.HashSet
@@ -30,8 +31,6 @@ import relalg.Literal
 import relalg.LogicalExpression
 import relalg.NullaryOperator
 import relalg.Operator
-import relalg.RelalgContainer
-import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
 import relalg.UnaryOperator
 import relalg.UnionOperator
@@ -40,26 +39,19 @@ import relalg.VariableExpression
 
 class Cypher2RelalgUtil {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension IngraphLogger logger
-
-	new(IngraphLogger logger) {
-		this.logger=logger
-	}
-
-	def Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
-		Iterator<Operator> i) {
+	def static Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
+		Iterator<Operator> i, CompilerEnvironment ce) {
 		var Operator retVal = null
 
 		// build a left deep tree of Joins from the match clauses
 		if (i != null && i.hasNext) {
 			for (retVal = i.next; i.hasNext;) {
 				val nextAE = switch (binaryOperatorType) {
-					case typeof(JoinOperator): createJoinOperator
-					case typeof(UnionOperator): createUnionOperator
-					case typeof(LeftOuterJoinOperator): createLeftOuterJoinOperator
+					case typeof(JoinOperator): ce.mf.createJoinOperator
+					case typeof(UnionOperator): ce.mf.createUnionOperator
+					case typeof(LeftOuterJoinOperator): ce.mf.createLeftOuterJoinOperator
 					default: {
-						unsupported('''Got unexpected BinaryOperator type «binaryOperatorType.name» to build left-deep-tree''')
+						ce.l.unsupported('''Got unexpected BinaryOperator type «binaryOperatorType.name» to build left-deep-tree''')
 						null
 					}
 				}
@@ -72,16 +64,16 @@ class Cypher2RelalgUtil {
 		return retVal
 	}
 
-	def LogicalExpression buildLeftDeepTree(BinaryLogicalOperatorType binaryLogicalOperator,
-		Iterator<? extends LogicalExpression> i, RelalgContainer outerContainer) {
+	def static LogicalExpression buildLeftDeepTree(BinaryLogicalOperatorType binaryLogicalOperator,
+		Iterator<? extends LogicalExpression> i, CompilerEnvironment ce) {
 		var LogicalExpression retVal = null
 
 		// build a left deep tree of logical expressions with AND/OR
 		if (i != null && i.hasNext) {
 			for (retVal = i.next; i.hasNext;) {
-				val nextAE = createBinaryLogicalExpression => [
+				val nextAE = ce.mf.createBinaryLogicalExpression => [
 					operator = binaryLogicalOperator
-					expressionContainer = outerContainer
+					expressionContainer = ce.tlc
 				]
 				nextAE.rightOperand = i.next
 				nextAE.leftOperand = retVal
@@ -95,7 +87,7 @@ class Cypher2RelalgUtil {
 	/**
 	 * Chain expand operators together and add sourceVertexVariables
 	 */
-	def chainExpandOperators(GetVerticesOperator gvo, List<ExpandOperator> expandList) {
+	def static chainExpandOperators(GetVerticesOperator gvo, List<ExpandOperator> expandList) {
 		var lastVertexVariable = gvo.vertexVariable
 		var Operator lastAlgebraExpression = gvo
 
@@ -117,8 +109,8 @@ class Cypher2RelalgUtil {
 	 * which in turn will be put on the leftInput on the 2nd element of the tail list
 	 * and so on.
 	 */
-	def chainBinaryOperatorsLeft(Operator head, Iterable<? extends BinaryOperator> tail) {
-		chainEncapsulatedBinaryOperatorsLeft(head, tail, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_TREE_ROOT)
+	def static chainBinaryOperatorsLeft(Operator head, Iterable<? extends BinaryOperator> tail, IngraphLogger logger) {
+		chainEncapsulatedBinaryOperatorsLeft(head, tail, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_TREE_ROOT, logger)
 	}
 
 	/**
@@ -130,7 +122,7 @@ class Cypher2RelalgUtil {
 	 * 
 	 * @param mode determines the matching mode. For possibilities, see EncapsulatedBinaryOperatorChainMode 
 	 */
-	def chainEncapsulatedBinaryOperatorsLeft(Operator head, Iterable<? extends Operator> tail, EncapsulatedBinaryOperatorChainMode mode) {
+	def static chainEncapsulatedBinaryOperatorsLeft(Operator head, Iterable<? extends Operator> tail, EncapsulatedBinaryOperatorChainMode mode, IngraphLogger logger) {
 		var lastAlgebraExpression = head
 
 		for (Operator op : tail) {
@@ -139,15 +131,15 @@ class Cypher2RelalgUtil {
 				  if (op instanceof BinaryOperator) {
 				    op
 				  } else {
-				    unrecoverableError('''Chain mode «mode» requested on a tree having a root other than «typeof(BinaryOperator)».''')
+				    logger.unrecoverableError('''Chain mode «mode» requested on a tree having a root other than «typeof(BinaryOperator)».''')
 				    null
 				  }
 				}
-				case CHAIN_AT_FIRST_BINARY_OPERATOR: findBinaryOperator(op, false)
-				case CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC: findBinaryOperator(op, true)
+				case CHAIN_AT_FIRST_BINARY_OPERATOR: findBinaryOperator(op, false, logger)
+				case CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC: findBinaryOperator(op, true, logger)
 			}
 			if (binaryOp.leftInput !== null) {
-			  unrecoverableError('''During chaining, found «binaryOp.class» instance having its leftInput !== null.''')
+			  logger.unrecoverableError('''During chaining, found «binaryOp.class» instance having its leftInput !== null.''')
 			}
 			binaryOp.leftInput = lastAlgebraExpression
 			lastAlgebraExpression = op
@@ -171,18 +163,18 @@ class Cypher2RelalgUtil {
 	 * 
 	 * @param travelToLeft specify if we want to travel through BinaryOperator instances w/ populated leftInput  
 	 */
-	protected def BinaryOperator findBinaryOperator(Operator op, boolean travelToLeft) {
+	protected def static BinaryOperator findBinaryOperator(Operator op, boolean travelToLeft, IngraphLogger logger) {
 		switch (op) {
 			BinaryOperator: {
 			  if (travelToLeft && op.leftInput !== null) {
-			    findBinaryOperator(op.leftInput, travelToLeft)
+			    findBinaryOperator(op.leftInput, travelToLeft, logger)
 			  } else {
 			    op
 			  }
 			}
-			UnaryOperator: findBinaryOperator(op.input, travelToLeft)
+			UnaryOperator: findBinaryOperator(op.input, travelToLeft, logger)
 			default: {
-				unrecoverableError('''Found «op.class», expected a tree leading to a BinaryOperator through zero or more UnaryOperator's and in case of travelToLeft==true populated BinaryOperator.leftInput references.''')
+				logger.unrecoverableError('''Found «op.class», expected a tree leading to a BinaryOperator through zero or more UnaryOperator's and in case of travelToLeft==true populated BinaryOperator.leftInput references.''')
 				null
 			}
 		}
@@ -200,7 +192,7 @@ class Cypher2RelalgUtil {
 	 *
 	 * @return boolean value indicating if there were an aggregate function. It can be expressed as: "seenAggregate || (e contains aggregate function call)"
 	 */
-	def boolean accumulateGroupingVariables(Expression e, Set<Variable> groupingVariables, boolean seenAggregate) {
+	def static boolean accumulateGroupingVariables(Expression e, Set<Variable> groupingVariables, boolean seenAggregate, IngraphLogger logger) {
 		var effectivelySeenAggregate = seenAggregate
 		val fifo = new LinkedList<Expression>
 
@@ -217,7 +209,7 @@ class Cypher2RelalgUtil {
 							groupingVariables.add(myVar)
 						}
 						default: {
-							unsupported('''Unexpected, yet unsupported variable type found while enumerating grouping variables, got «myVar.class.name»''')
+							logger.unsupported('''Unexpected, yet unsupported variable type found while enumerating grouping variables, got «myVar.class.name»''')
 						}
 					}
 				}
@@ -264,17 +256,17 @@ class Cypher2RelalgUtil {
 					var seenAggregateInCase = false
 					val groupingVariablesInCase = new HashSet<Variable>
 					for (c: el.cases) {
-						seenAggregateInCase = accumulateGroupingVariables(c.when, groupingVariablesInCase, seenAggregateInCase)
-						seenAggregateInCase = accumulateGroupingVariables(c.then, groupingVariablesInCase, seenAggregateInCase)
+						seenAggregateInCase = accumulateGroupingVariables(c.when, groupingVariablesInCase, seenAggregateInCase, logger)
+						seenAggregateInCase = accumulateGroupingVariables(c.then, groupingVariablesInCase, seenAggregateInCase, logger)
 					}
 					if (seenAggregateInCase) {
-						unsupported('''We don't support aggregation inside a CASE expression.''')
+						logger.unsupported('''We don't support aggregation inside a CASE expression.''')
 					} else {
 						groupingVariables.addAll(groupingVariablesInCase)
 					}
 				}
 				default: {
-					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
+					logger.unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
 				}
 			}
 		}
@@ -289,7 +281,7 @@ class Cypher2RelalgUtil {
 	 *
 	 * @return set of edge variables found in the relalg tree
 	 */
-	def Set<AbstractEdgeVariable> extractEdgeVariables(Operator op) {
+	def static Set<AbstractEdgeVariable> extractEdgeVariables(Operator op, IngraphLogger logger) {
 		val fifo = new LinkedList<Operator>
 		val edgeVariables = new HashSet<AbstractEdgeVariable>
 
@@ -314,7 +306,7 @@ class Cypher2RelalgUtil {
 				NullaryOperator: {
 				}
 				default: {
-					unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
+					logger.unsupported('''Unexpected, yet unsupported expression type found while enumerating grouping variables, got «el.class.name»''')
 				}
 			}
 		}

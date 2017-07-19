@@ -2,6 +2,7 @@ package ingraph.cypher2relalg
 
 import ingraph.cypher2relalg.structures.EncapsulatedBinaryOperatorChainMode
 import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
+import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.GrammarUtil
 import ingraph.cypher2relalg.util.StringUtil
@@ -161,7 +162,7 @@ class RelalgBuilder {
 			]
 		]
 
-		val result = chainBinaryOperatorsLeft(queryListHead, queryListTail)
+		val result = Cypher2RelalgUtil.chainBinaryOperatorsLeft(queryListHead, queryListTail, ce.l)
 
 		if (!Validator.checkIfUnionQueryColumnNamesMatch(result, ce.l)) {
 			ce.l.unrecoverableError('''All sub queries of a UNION query must have the same column aliases.''')
@@ -222,10 +223,11 @@ class RelalgBuilder {
 		 *
 		 * The first qubquery will receive a dual object source there.
 		 */
-		chainEncapsulatedBinaryOperatorsLeft(
+		Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(
 			  ce.mf.createDualObjectSourceOperator
 			, ops
 			, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
+			, ce.l
 		)
 	}
 
@@ -286,7 +288,7 @@ class RelalgBuilder {
 					rightInput = ce.mf.createDualObjectSourceOperator
 				]
 			} else {
-				chainEncapsulatedBinaryOperatorsLeft(null, singleQuery_MatchList, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_BINARY_OPERATOR)
+				Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(null, singleQuery_MatchList, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_BINARY_OPERATOR, ce.l)
 			}
 
 		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
@@ -477,8 +479,8 @@ class RelalgBuilder {
 		var seenAggregate = false
 		val groupingVariables = new HashSet<Variable>
 		for (el: _elements) {
-			seenAggregate = cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
-				seenAggregate)
+			seenAggregate = Cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
+				seenAggregate, ce.l)
 		}
 
 		val projection = if (seenAggregate) {
@@ -618,14 +620,14 @@ class RelalgBuilder {
 		for (pattern: m.pattern.patterns) {
 			val op = buildRelalg(pattern)
 
-			edgeVariablesOfMatchClause.addAll(extractEdgeVariables(op))
+			edgeVariablesOfMatchClause.addAll(Cypher2RelalgUtil.extractEdgeVariables(op, ce.l))
 
 			pattern_PatternPartList.add(op)
 		}
 
 		// they are natural joined together
 		val allDifferentOperator = ce.mf.createAllDifferentOperator => [
-			input = buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator)
+			input = Cypher2RelalgUtil.buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator, ce)
 			edgeVariables.addAll(edgeVariablesOfMatchClause)
 		]
 
@@ -646,7 +648,7 @@ class RelalgBuilder {
 					h.add(allDifferentOperator)
 					h.addAll(joinOperationsOfWhereClause)
 
-					buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator)
+					Cypher2RelalgUtil.buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator, ce)
 				}
 		} else {
 			result.op =  allDifferentOperator
@@ -789,7 +791,7 @@ class RelalgBuilder {
 
 		joins.add(buildRelalg(e))
 
-		buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator, topLevelContainer)
+		Cypher2RelalgUtil.buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator, ce)
 	}
 
 	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e, EList<Operator> joins) {
@@ -1236,7 +1238,7 @@ class RelalgBuilder {
 		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
 		val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
 
-		chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
+		Cypher2RelalgUtil.chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
 	}
 
 	def dispatch Operator buildRelalg(PatternElementChain ec) {
