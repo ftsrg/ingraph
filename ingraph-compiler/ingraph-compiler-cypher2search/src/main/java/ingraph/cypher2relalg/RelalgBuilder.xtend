@@ -102,14 +102,12 @@ import relalg.function.Function
  */
 class RelalgBuilder {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension IngraphLogger logger = new IngraphLogger(RelalgBuilder.name)
 	extension Cypher2RelalgUtil cypher2RelalgUtil = new Cypher2RelalgUtil(logger)
+	val CompilerEnvironment ce;
 
 	// this will be returned and will hold the result of the compilation
 	// never rename this to container as that name will collide with the Expression.container field name
 	val RelalgContainer topLevelContainer
-	val VariableBuilder variableBuilder
 
 	/**
 	 * Constructs a new RelalgBuilder object and initialize its state.
@@ -118,8 +116,12 @@ class RelalgBuilder {
 	 * with new variable and label factories.
 	 */
 	new() {
-		this.topLevelContainer = createRelalgContainer
-		this.variableBuilder = new VariableBuilder(this.topLevelContainer, logger)
+		val factory = RelalgFactory.eINSTANCE
+		this.topLevelContainer = factory.createRelalgContainer
+		val logger = new IngraphLogger(RelalgBuilder.name)
+		val variableBuilder = new VariableBuilder(this.topLevelContainer, logger)
+
+		ce = new CompilerEnvironment(variableBuilder, logger, factory, topLevelContainer)
 	}
 
 	/**
@@ -131,9 +133,9 @@ class RelalgBuilder {
 	 * {@link VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
 	 * call.
 	 */
-	protected new(RelalgContainer topLevelContainer, VariableBuilder variableBuilder) {
-		this.topLevelContainer = topLevelContainer
-		this.variableBuilder = variableBuilder
+	protected new(CompilerEnvironment ce) {
+		this.ce = ce
+		this.topLevelContainer = ce.tlc
 	}
 
 	def build(Cypher cypher, String queryName) {
