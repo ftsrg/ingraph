@@ -189,7 +189,7 @@ class RelalgBuilder {
 		 * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
 		 */
 		var from = 0
-		var variableBuilderChain = variableBuilder
+		var variableBuilderChain = ce.vb
 		for (var i = 0; i < clauses.length; i++) {
 			val current = clauses.get(i)
 			val next = if (i + 1 < clauses.length) {
@@ -209,7 +209,7 @@ class RelalgBuilder {
 				 * top-level container not to break the containment hierarchy and separate variable namespaces.
 				 */
 				variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
-				val builder = new RelalgBuilder(topLevelContainer, variableBuilderChain)
+				val builder = new RelalgBuilder(new CompilerEnvironment(ce, variableBuilderChain))
 				ops.add(
 					builder._buildRelalgSubQuery(clauses.subList(fromX, toX))
 				)
@@ -299,7 +299,7 @@ class RelalgBuilder {
 		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
 			val u0 = singleQuery_unwindClauseList
 			ce.mf.createUnwindOperator => [
-				element = variableBuilder.buildExpressionVariable(u0.variable.name, buildRelalgExpression(u0.expression))
+				element = ce.vb.buildExpressionVariable(u0.variable.name, buildRelalgExpression(u0.expression))
 				input = afterReturn
 			]
 		} else {
@@ -337,19 +337,19 @@ class RelalgBuilder {
 			if (u2 === null) {
 				ce.l.unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
 			}
-			val t0 = variableBuilder.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
+			val t0 = ce.vb.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
 			val u4 = buildCreateNodePattern(u2.nodepattern)
 			if (!t0) {
 				u1.elements.add(u4)
 			}
 			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
 			for (element: u2.chain) {
-				val t1 = variableBuilder.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
+				val t1 = ce.vb.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
 				val u5 = buildCreateNodePattern(element.nodePattern)
 				if (!t1) {
 					u1.elements.add(u5)
 				}
-				val t2 = variableBuilder.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
+				val t2 = ce.vb.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
 				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
 				if (!t2) {
 					u1.elements.add(u6)
@@ -365,14 +365,14 @@ class RelalgBuilder {
 	 */
 	protected def ExpressionVariable buildCreateRelationshipPattern (RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target) {
 		val u0 = ce.mf.createNavigationDescriptor => [
-			edgeVariable = variableBuilder.buildEdgeVariable(relationshippattern.detail)
+			edgeVariable = ce.vb.buildEdgeVariable(relationshippattern.detail)
 			buildRelalgProperties(relationshippattern.detail.properties, edgeVariable)
 			sourceVertexVariable = source
 			targetVertexVariable = target
 			direction = convertToDirection(relationshippattern)
 			expressionContainer = topLevelContainer
 		]
-		val u1 = variableBuilder.buildExpressionVariable(u0.edgeVariable.name, u0)
+		val u1 = ce.vb.buildExpressionVariable(u0.edgeVariable.name, u0)
 		u1
 	}
 
@@ -381,12 +381,12 @@ class RelalgBuilder {
 	 */
 	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
 		val u0 = ce.mf.createVariableExpression => [
-			val vertexVariable = variableBuilder.buildVertexVariable(nodepattern)
+			val vertexVariable = ce.vb.buildVertexVariable(nodepattern)
 			buildRelalgProperties(nodepattern.properties, vertexVariable)
 			variable = vertexVariable
 			expressionContainer = topLevelContainer
 		]
-		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
+		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
 		u1
 	}
 
@@ -411,10 +411,10 @@ class RelalgBuilder {
 	 */
 	protected def ExpressionVariable buildDeleteVariableRef(VariableRef variableref) {
 		val u0 = ce.mf.createVariableExpression => [
-			variable = variableBuilder.buildRelalgVariable(variableref)
+			variable = ce.vb.buildRelalgVariable(variableref)
 			expressionContainer = topLevelContainer
 		]
-		val u1 = variableBuilder.buildExpressionVariable(u0.variable.name, u0)
+		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
 		u1
 	}
 
@@ -431,27 +431,27 @@ class RelalgBuilder {
 
 		if ("*".equals(returnBody.returnItems.get(0).all)) {
 			// add the non-dontCare vertex variables to the return list sorted by variable name
-			val vEl = variableBuilder.vertexVariableFactoryElements
+			val vEl = ce.vb.vertexVariableFactoryElements
 			vEl.keySet.sort.forEach [ key |
 				val variable = vEl.get(key)
 				if (!variable.dontCare) {
 					_elements.add(
-						variableBuilder.buildExpressionVariable(
+						ce.vb.buildExpressionVariable(
 							null
-						,	variableBuilder.buildVariableExpression(variable)
+						,	ce.vb.buildVariableExpression(variable)
 						)
 					)
 				}
 			]
 			// add the non-dontCare edge variables to the return list sorted by variable name
-			val eEl = variableBuilder.edgeVariableFactoryElements
+			val eEl = ce.vb.edgeVariableFactoryElements
 			eEl.keySet.sort.forEach [ key |
 				val variable = eEl.get(key)
 				if (!variable.dontCare) {
 					_elements.add(
-						variableBuilder.buildExpressionVariable(
+						ce.vb.buildExpressionVariable(
 							null
-						,	variableBuilder.buildVariableExpression(variable)
+						,	ce.vb.buildVariableExpression(variable)
 						)
 					)
 				}
@@ -462,7 +462,7 @@ class RelalgBuilder {
 		}
 		for (returnItem: returnBody.returnItems.get(0).items) {
 			_elements.add(
-				variableBuilder.buildExpressionVariable(
+				ce.vb.buildExpressionVariable(
 					returnItem.alias?.name
 				,	buildRelalgExpression(returnItem.expression)
 				)
@@ -526,8 +526,8 @@ class RelalgBuilder {
 
 					val sortExpression = switch expression {
 						// for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
-						ExpressionNodeLabelsAndPropertyLookup: variableBuilder.buildVariableExpression(expression, true)
-						VariableRef: variableBuilder.buildVariableExpression(expression, true)
+						ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
+						VariableRef: ce.vb.buildVariableExpression(expression, true)
 						default: buildRelalgExpression(expression)
 					}
 					ce.mf.createSortEntry => [
@@ -703,7 +703,7 @@ class RelalgBuilder {
 	def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
 		ce.mf.createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-			operand = variableBuilder.buildRelalgVariable(e.left)
+			operand = ce.vb.buildRelalgVariable(e.left)
 			expressionContainer = topLevelContainer
 		]
 	}
@@ -711,7 +711,7 @@ class RelalgBuilder {
 	def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
 		ce.mf.createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NULL
-			operand = variableBuilder.buildRelalgVariable(e.left)
+			operand = ce.vb.buildRelalgVariable(e.left)
 			expressionContainer = topLevelContainer
 		]
 	}
@@ -760,7 +760,7 @@ class RelalgBuilder {
 
 		relationshipVariableExpressions.add(ce.mf.createUnaryGraphObjectLogicalExpression => [
 			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-			operand = variableBuilder.buildVertexVariable(e.nodePattern)
+			operand = ce.vb.buildVertexVariable(e.nodePattern)
 			expressionContainer = topLevelContainer
 		])
 
@@ -770,7 +770,7 @@ class RelalgBuilder {
 				val mapIt = it
 				ce.mf.createUnaryGraphObjectLogicalExpression => [
 					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-					operand = variableBuilder.buildEdgeVariable(mapIt.relationshipPattern.detail)
+					operand = ce.vb.buildEdgeVariable(mapIt.relationshipPattern.detail)
 					expressionContainer = topLevelContainer
 				]
 			]
@@ -781,7 +781,7 @@ class RelalgBuilder {
 				val mapIt = it
 				ce.mf.createUnaryGraphObjectLogicalExpression => [
 					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-					operand = variableBuilder.buildVertexVariable(mapIt.nodePattern)
+					operand = ce.vb.buildVertexVariable(mapIt.nodePattern)
 					expressionContainer = topLevelContainer
 				]
 			]
@@ -877,7 +877,7 @@ class RelalgBuilder {
 
 	def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
 		ce.mf.createVariableComparableExpression => [
-			variable = variableBuilder.buildRelalgVariable(e)
+			variable = ce.vb.buildRelalgVariable(e)
 			expressionContainer = topLevelContainer
 		]
 	}
@@ -895,7 +895,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
-		val x = variableBuilder.buildRelalgVariable(e)
+		val x = ce.vb.buildRelalgVariable(e)
 		// as AttributeVariable
 		if (x instanceof AttributeVariable) {
 			ce.mf.createVariableComparableExpression => [
@@ -919,7 +919,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch Expression buildRelalgExpression(VariableRef e) {
-		variableBuilder.buildVariableExpression(e, false)
+		ce.vb.buildVariableExpression(e, false)
 	}
 
 	def dispatch Expression buildRelalgExpression(StringConstant e) {
@@ -930,13 +930,13 @@ class RelalgBuilder {
 		if (!(e.expression instanceof CaseExpression)) {
 			ce.l.unrecoverableError("Outer CaseExpressions should contain a CaseExpression")
 		}
-		val ce = e.expression as CaseExpression
+		val caseExpr = e.expression as CaseExpression
 
 		// do we process a simple case expression,
 		// i.e. when there is a single value we search for
 		var boolean isSimple = false
 
-		val retVal = if (ce.caseExpression === null) {
+		val retVal = if (caseExpr.caseExpression === null) {
 			ce.mf.createGenericCaseExpression => [
 				expressionContainer = topLevelContainer
 			]
@@ -944,12 +944,12 @@ class RelalgBuilder {
 		  isSimple = true
 			ce.mf.createSimpleCaseExpression => [
 				expressionContainer = topLevelContainer
-				test = buildRelalgComparableElement(ce.caseExpression)
+				test = buildRelalgComparableElement(caseExpr.caseExpression)
 			]
 		}
 
 		// WHEN when THEN then
-		for (ca: ce.caseAlternatives) {
+		for (ca: caseExpr.caseAlternatives) {
 		  val case_ = ce.mf.createCase => [
 		    then = buildRelalgExpression(ca.then)
 		  ]
@@ -962,8 +962,8 @@ class RelalgBuilder {
 		}
 
 		// ELSE elseExpression
-		if (ce.elseExpression !== null) {
-			retVal.fallback = buildRelalgExpression(ce.elseExpression)
+		if (caseExpr.elseExpression !== null) {
+			retVal.fallback = buildRelalgExpression(caseExpr.elseExpression)
 		}
 
 		retVal
@@ -987,7 +987,7 @@ class RelalgBuilder {
 	}
 
 	def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-		variableBuilder.buildVariableExpression(e, false)
+		ce.vb.buildVariableExpression(e, false)
 	}
 
 	def dispatch Expression buildRelalgExpression(IndexExpression ie) {
@@ -1114,14 +1114,14 @@ class RelalgBuilder {
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionNodeLabelsAndPropertyLookup e) {
 		ce.mf.createVariableArithmeticExpression => [
-			variable = variableBuilder.buildRelalgVariable(e)
+			variable = ce.vb.buildRelalgVariable(e)
 			expressionContainer = topLevelContainer
 		]
 	}
 
 	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(VariableRef e) {
 		val ae = ce.mf.createVariableArithmeticExpression => [
-			variable = variableBuilder.buildRelalgVariable(e)
+			variable = ce.vb.buildRelalgVariable(e)
 			expressionContainer = topLevelContainer
 		]
 
@@ -1228,7 +1228,7 @@ class RelalgBuilder {
 	 */
 	def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
 		val patternElement_GetVerticesOperator = ce.mf.createGetVerticesOperator => [
-			vertexVariable = variableBuilder.buildVertexVariable(n)
+			vertexVariable = ce.vb.buildVertexVariable(n)
 			// parse map-like constraints if given
 			buildRelalgProperties(n.properties, vertexVariable)
 		]
@@ -1240,11 +1240,11 @@ class RelalgBuilder {
 	}
 
 	def dispatch Operator buildRelalg(PatternElementChain ec) {
-		val patternElementChain_VertexVariable = variableBuilder.buildVertexVariable(ec.nodePattern) => [
+		val patternElementChain_VertexVariable = ce.vb.buildVertexVariable(ec.nodePattern) => [
 			// parse map-like constraints if given
 			buildRelalgProperties(ec.nodePattern.properties, it)
 		]
-		val patternElementChain_EdgeVariable = variableBuilder.buildEdgeVariable(ec.relationshipPattern.detail) => [
+		val patternElementChain_EdgeVariable = ce.vb.buildEdgeVariable(ec.relationshipPattern.detail) => [
 			// parse map-like constraints if given
 			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it)
 		]
