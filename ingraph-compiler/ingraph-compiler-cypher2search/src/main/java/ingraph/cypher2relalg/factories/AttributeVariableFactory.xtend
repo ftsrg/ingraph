@@ -1,8 +1,7 @@
 package ingraph.cypher2relalg.factories
 
-import ingraph.cypher2relalg.factories.VariableFactory
-import relalg.RelalgContainer
 import relalg.AttributeVariable
+import relalg.RelalgContainer
 
 class AttributeVariableFactory extends VariableFactory<AttributeVariable> {
 
@@ -11,7 +10,7 @@ class AttributeVariableFactory extends VariableFactory<AttributeVariable> {
 	}
 
 	override createSpecificNamedElement() {
-		createAttributeVariable
+		modelFactory.createAttributeVariable
 	}
 
 }

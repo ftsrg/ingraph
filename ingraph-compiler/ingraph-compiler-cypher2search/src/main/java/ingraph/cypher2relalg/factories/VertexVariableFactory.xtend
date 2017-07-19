@@ -11,8 +11,8 @@ class VertexVariableFactory extends VariableFactory<VertexVariable> {
 	}
 
 	override createSpecificNamedElement() {
-		createVertexVariable => [
-			vertexLabelSet = createVertexLabelSet
+		modelFactory.createVertexVariable => [
+			vertexLabelSet = modelFactory.createVertexLabelSet
 		]
 	}
 

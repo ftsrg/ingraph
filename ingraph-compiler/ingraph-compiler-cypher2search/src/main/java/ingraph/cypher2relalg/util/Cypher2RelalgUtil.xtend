@@ -31,6 +31,7 @@ import relalg.Literal
 import relalg.LogicalExpression
 import relalg.NullaryOperator
 import relalg.Operator
+import relalg.RelalgFactory
 import relalg.UnaryArithmeticOperationExpression
 import relalg.UnaryOperator
 import relalg.UnionOperator
@@ -38,6 +39,9 @@ import relalg.Variable
 import relalg.VariableExpression
 
 class Cypher2RelalgUtil {
+
+	/** The model factory for the relational graph algebra representation */
+	val static modelFactory = RelalgFactory.eINSTANCE
 
 	def static Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
 		Iterator<Operator> i, CompilerEnvironment ce) {
@@ -47,9 +51,9 @@ class Cypher2RelalgUtil {
 		if (i != null && i.hasNext) {
 			for (retVal = i.next; i.hasNext;) {
 				val nextAE = switch (binaryOperatorType) {
-					case typeof(JoinOperator): ce.mf.createJoinOperator
-					case typeof(UnionOperator): ce.mf.createUnionOperator
-					case typeof(LeftOuterJoinOperator): ce.mf.createLeftOuterJoinOperator
+					case typeof(JoinOperator): modelFactory.createJoinOperator
+					case typeof(UnionOperator): modelFactory.createUnionOperator
+					case typeof(LeftOuterJoinOperator): modelFactory.createLeftOuterJoinOperator
 					default: {
 						ce.l.unsupported('''Got unexpected BinaryOperator type «binaryOperatorType.name» to build left-deep-tree''')
 						null
@@ -71,7 +75,7 @@ class Cypher2RelalgUtil {
 		// build a left deep tree of logical expressions with AND/OR
 		if (i != null && i.hasNext) {
 			for (retVal = i.next; i.hasNext;) {
-				val nextAE = ce.mf.createBinaryLogicalExpression => [
+				val nextAE = modelFactory.createBinaryLogicalExpression => [
 					operator = binaryLogicalOperator
 					expressionContainer = ce.tlc
 				]

@@ -10,7 +10,7 @@ class PathVariableFactory extends VariableFactory<PathVariable> {
 	}
 
 	override createSpecificNamedElement() {
-		createPathVariable => [
+		modelFactory.createPathVariable => [
 		]
 	}
 }

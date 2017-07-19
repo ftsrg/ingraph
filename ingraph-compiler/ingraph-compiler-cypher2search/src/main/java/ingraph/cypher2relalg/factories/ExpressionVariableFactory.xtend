@@ -11,7 +11,7 @@ class ExpressionVariableFactory extends VariableFactory<ExpressionVariable> {
 	}
 
 	override createSpecificNamedElement() {
-		createExpressionVariable
+		modelFactory.createExpressionVariable
 	}
 
 	def createElement(String name, Expression expression) {

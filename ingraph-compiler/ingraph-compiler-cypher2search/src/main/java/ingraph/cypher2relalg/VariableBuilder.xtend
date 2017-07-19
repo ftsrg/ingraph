@@ -18,6 +18,7 @@ import java.util.List
 import java.util.Map
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
@@ -40,15 +41,6 @@ import relalg.RelalgFactory
 import relalg.Variable
 import relalg.VertexLabel
 import relalg.VertexVariable
-import org.eclipse.emf.ecore.EObject
-import org.slizaa.neo4j.opencypher.openCypher.Match
-import org.slizaa.neo4j.opencypher.openCypher.With
-import org.slizaa.neo4j.opencypher.openCypher.Return
-import org.slizaa.neo4j.opencypher.openCypher.Create
-import org.slizaa.neo4j.opencypher.openCypher.Unwind
-import org.slizaa.neo4j.opencypher.openCypher.Delete
-import org.slizaa.neo4j.opencypher.openCypher.Cypher
-import org.slizaa.neo4j.opencypher.openCypher.Order
 
 /**
  * This is the variable builder component of
@@ -56,10 +48,12 @@ import org.slizaa.neo4j.opencypher.openCypher.Order
  */
 class VariableBuilder {
 
-	extension RelalgFactory factory = RelalgFactory.eINSTANCE
-	extension IngraphLogger logger = new IngraphLogger(VariableBuilder.name)
+	/** The model factory for the relational graph algebra representation */
+	val modelFactory = RelalgFactory.eINSTANCE
+	val IngraphLogger logger // = new IngraphLogger(VariableBuilder.name)
 	extension ElementVariableExtractor elementVariableExtractor = new ElementVariableExtractor
 
+	@Accessors(PUBLIC_GETTER)
 	val RelalgContainer topLevelContainer
 
 	extension ElementVariableUtil elementVariableUtil
@@ -158,7 +152,7 @@ class VariableBuilder {
 			if (ev instanceof ExpressionVariable) {
 				val innerVariable = extractElementVariable(ev)
 				if (innerVariable === null) {
-					unrecoverableError('''Can't find neither VertexVariable nor EdgeVariable wrapped into the ExpressionVariable, so can't build attribute variable.''')
+					logger.unrecoverableError('''Can't find neither VertexVariable nor EdgeVariable wrapped into the ExpressionVariable, so can't build attribute variable.''')
 				}
 			}
 
@@ -170,13 +164,13 @@ class VariableBuilder {
 					ev.createAttribute(attributeName)
 				}
 				default: {
-					unrecoverableError('''Unsupported type received: «ev.class.name»''')
+					logger.unrecoverableError('''Unsupported type received: «ev.class.name»''')
 					null
 				}
 			}
 
 		} else {
-			unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
+			logger.unrecoverableError('''PropertyLookup count «e.propertyLookups.length» not supported.''')
 			null
 		}
 	}
@@ -213,7 +207,7 @@ class VariableBuilder {
 	protected def Variable buildRelalgVariableInternal(VariableRef varRef, boolean useExpressionVariables) {
 		val v = findVariable(varRef.variableRef.name, useExpressionVariables)
 		if (v === null) {
-			unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
+			logger.unrecoverableError('''Variable name not found: «varRef.variableRef.name»''')
 			null
 		} else {
 			v
@@ -231,11 +225,11 @@ class VariableBuilder {
 					Integer.valueOf(r?.range.lower)
 				}
 				maxHops = if (r?.range.upper === null) {
-					createMaxHops() => [
+					modelFactory.createMaxHops() => [
 						maxHopsType = MaxHopsType.UNLIMITED
 					]
 				} else {
-					createMaxHops() => [
+					modelFactory.createMaxHops() => [
 						maxHopsType = MaxHopsType.LIMITED
 						hops = Integer.valueOf(r?.range.upper)
 					]
@@ -335,7 +329,7 @@ class VariableBuilder {
 			}
 
 			edgeVariable.edgeLabelSet.status = if (edgeVariable.edgeLabelSet.edgeLabels.empty) {
-					warning('''Contradicting labelset constraints found for edge variable «edgeVariable.name»''')
+					logger.warning('''Contradicting labelset constraints found for edge variable «edgeVariable.name»''')
 					LabelSetStatus.CONTRADICTING
 				} else {
 					LabelSetStatus.NON_EMPTY
@@ -351,7 +345,7 @@ class VariableBuilder {
 	 * is registered to the container registered with this builder.
 	 */
 	def buildVariableExpression(Variable v) {
-		createVariableExpression => [
+		modelFactory.createVariableExpression => [
 			variable = v
 			expressionContainer = topLevelContainer
 		]
@@ -364,7 +358,7 @@ class VariableBuilder {
 	 * is registered to the container registered with this builder.
 	 */
 	def dispatch buildVariableExpression(VariableRef v, boolean useExpressionVariables) {
-		createVariableExpression => [
+		modelFactory.createVariableExpression => [
 			variable = if (useExpressionVariables) { buildRelalgVariableInternal(v, true) } else { buildRelalgVariable(v) }
 			expressionContainer = topLevelContainer
 		]
@@ -377,14 +371,14 @@ class VariableBuilder {
 	 * is registered to the container registered with this builder.
 	 */
 	def dispatch buildVariableExpression(ExpressionNodeLabelsAndPropertyLookup e, boolean useExpressionVariables) {
-		createVariableExpression => [
+		modelFactory.createVariableExpression => [
 			variable = if (useExpressionVariables) {
 				val e_left = e.left
 				if (e_left instanceof VariableRef) {
 					val v = buildRelalgVariableInternal(e_left, true)
 					buildPropertyLookupHelper(v, e)
 				} else {
-					unrecoverableError('''Unexpected type found as base type for property lookup. Expected: variable reference. Found: «e_left.class.name»''')
+					logger.unrecoverableError('''Unexpected type found as base type for property lookup. Expected: variable reference. Found: «e_left.class.name»''')
 					null
 				}
 			} else { buildRelalgVariable(e) }

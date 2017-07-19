@@ -10,6 +10,6 @@ class EdgeLabelFactory extends NamedElementFactory<EdgeLabel> {
 	}
 
 	override createSpecificNamedElement() {
-		createEdgeLabel
+		modelFactory.createEdgeLabel
 	}
 }

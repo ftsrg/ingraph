@@ -2,16 +2,13 @@ package ingraph.cypher2relalg;
 
 import ingraph.logger.IngraphLogger;
 import relalg.RelalgContainer;
-import relalg.RelalgFactory;
 
 /**
  * Represent the environment of the compiler.
  * 
- * Environment includes the model factory, variable builder, logger.  
+ * Environment includes the variable builder, logger and the EMF top-level container.
  */
 public final class CompilerEnvironment {
-	/** The model factory for the relational graph algebra representation */
-	public RelalgFactory mf;
 	/** Variable builder that wraps variable factories and utility methods */
 	public VariableBuilder vb;
 	/** The logger to be used */
@@ -22,20 +19,28 @@ public final class CompilerEnvironment {
 	/**
 	 * Default constructor populating the respective fields.
 	 */
-	CompilerEnvironment(VariableBuilder vb, IngraphLogger l, RelalgFactory mf, RelalgContainer tlc) {
-		this.mf = mf;
+	CompilerEnvironment(VariableBuilder vb, IngraphLogger l, RelalgContainer tlc) {
 		this.vb = vb;
 		this.l = l;
 		this.tlc = tlc;
+
+		checkEnvironment();
 	}
 
 	/**
 	 * Copy constructor overriding the variable builder with the supplied instance.
 	 */
 	public CompilerEnvironment(CompilerEnvironment original, VariableBuilder vb) {
-		this.mf = original.mf;
 		this.vb = vb;
 		this.l = original.l;
 		this.tlc = original.tlc;
+
+		checkEnvironment();
+	}
+
+	protected void checkEnvironment() {
+		if (this.tlc != this.vb.getTopLevelContainer()) {
+			l.unrecoverableError("Top-level containers should match.");
+		}
 	}
 }

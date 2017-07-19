@@ -1,7 +1,7 @@
 package ingraph.cypher2relalg.factories
 
-import relalg.VertexLabel
 import relalg.RelalgContainer
+import relalg.VertexLabel
 
 class VertexLabelFactory extends NamedElementFactory<VertexLabel> {
 
@@ -10,6 +10,6 @@ class VertexLabelFactory extends NamedElementFactory<VertexLabel> {
 	}
 
 	override createSpecificNamedElement() {
-		createVertexLabel
+		modelFactory.createVertexLabel
 	}
 }

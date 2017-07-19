@@ -8,7 +8,7 @@ import relalg.RelalgContainer
 
 abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 
-	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE
+	protected final RelalgFactory modelFactory = RelalgFactory.eINSTANCE
 	protected final RelalgContainer container
 
 	new(RelalgContainer container) {

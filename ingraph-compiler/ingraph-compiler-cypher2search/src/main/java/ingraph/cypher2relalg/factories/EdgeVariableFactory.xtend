@@ -11,8 +11,8 @@ class EdgeVariableFactory extends VariableFactory<EdgeVariable> {
 	}
 
 	override createSpecificNamedElement() {
-		createEdgeVariable => [
-			edgeLabelSet = createEdgeLabelSet
+		modelFactory.createEdgeVariable => [
+			edgeLabelSet = modelFactory.createEdgeLabelSet
 		]
 	}
 
