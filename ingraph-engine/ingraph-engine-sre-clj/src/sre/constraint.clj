@@ -17,8 +17,8 @@
           Element [sugar]
           Element [spice]
           Element [everything-nice]
-          Mix [sugar spice everything-nice]
-  "
+          Mix [sugar spice everything-nice]"
+
   (defn- iter-implications [implications]
     (let [[constraint vars & rest] implications]
       (if (some? constraint)

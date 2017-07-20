@@ -1,11 +1,13 @@
 (ns sre.op
-  (:require [clojure.algo.generic.functor :refer :all]))
+  (:require [clojure.algo.generic.functor :refer :all]
+            [clojure.set :refer :all]
+            [sre.constraint]))
 
 (defmacro defop [name vars & rest]
   "Let's you define a bloody operation.
 
   Usage:
-    (defop MyOp [& vars] :requires consraint-argument-pairs* :satisfies constraint-argument-pairs*)
+    (defop MyOp [& vars] :requires constraint-argument-pairs* :satisfies constraint-argument-pairs*)
 
   Examples:
     (defop ExtendOut [source edge target]
@@ -16,19 +18,30 @@
       :requires Sugar [sugar] Spice [spice] Nice [everything]
       :satisfies PowerPuffGirls [sugar spice everything])
   "
+  (defn- expand-implications [constr-defs]
+    (apply union (->> constr-defs
+                      (map (fn [[f s]]
+                             (apply sre.constraint/bind (deref (resolve f)) s)))
+                      (map (comp
+                             (partial fmap #(vector (:name %1) (:vars %1)))
+                             sre.constraint/implies*)))))
+
   (defn- create-map [pairs]
-    (reduce (fn [a [k v]] (if-not (nil? (a `#'~k))
-                            (update-in a [`#'~k] (fn [x] (into [] (cons `[~@(map keyword v)] x))))
-                            (assoc a `#'~k `[[~@(map keyword v)]]))) {} pairs))
+    (reduce (fn [[lkp vars] [k v]] [(if-not (nil? (lkp k))
+                            (update-in lkp [k] (fn [x] (into [] (cons `[~@(map keyword v)] x))))
+                            (assoc lkp k `[[~@(map keyword v)]])) (union vars `#{~@(map keyword v)})]) [{} #{}] pairs))
 
   (defn- extract-conditions [args]
-    (let [[[req-kw & reqs] [sat-kw & sats]] (split-with (fn [x] (not= `~x :satisfies)) args)]
-      [(create-map (partition 2 reqs)) (create-map (partition 2 sats))]))
+    (let [[[req-kw & reqs] [sat-kw & sats]] (split-with (fn [x] (not= `~x :satisfies)) args)
+          expanded-reqs (expand-implications (partition 2 reqs))
+          expanded-sats (expand-implications (partition 2 sats))]
+      [(create-map (into () expanded-reqs)) (create-map (into () (difference expanded-sats expanded-reqs)))]))
 
   `(def ~name
-     (merge ~(let [[req sat] (extract-conditions rest)]
-               {:requires req
-                :satisfies sat})
+     (merge ~(let [[[req-map req-vars] [sat-map sat-vars]] (extract-conditions rest)]
+               {:requires req-map
+                :satisfies sat-map
+                :cardinality (count (difference sat-vars req-vars))})
             {:name #'~name
              :vars [~@(map keyword vars)] })))
 

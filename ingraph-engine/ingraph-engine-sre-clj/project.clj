@@ -8,9 +8,5 @@
                  [org.clojure/algo.generic "0.1.2"]]
   :profiles {
              :dev {
-                   :dependencies [
-                                  [org.clojure/test.check "0.9.0"]]
-                   :plugins [
-                             [com.jakemccrary/lein-test-refresh "0.20.0"]]}})
-
-
+                   :dependencies [[org.clojure/test.check "0.9.0"]]
+                   :plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]]}})

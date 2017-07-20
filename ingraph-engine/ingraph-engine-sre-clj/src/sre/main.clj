@@ -1,10 +1,8 @@
 (ns sre.main
   "Contains the main configuration of constraints, operations and others
-  available in the engine
-  "
+  available in the engine"
   (:require [sre.constraint :refer [defconstraint]]
             [sre.op :refer [defop]]))
-
 
 (defconstraint Element [element])
 (defconstraint Edge [edge] :implies Element [edge])
@@ -16,7 +14,8 @@
                Vertex [source]
                Edge [edge]
                Vertex [target])
-(defconstraint Equals [left right])
+(defconstraint Assert1 [x expr] :implies Element [x])
+(defconstraint Assert2 [x y expr] :implies Element [x] Element [y])
 
 (defop GetVertices [vertex]
        :satisfies Vertex [vertex])
@@ -38,8 +37,9 @@
 (defop ExtendInByType [source edge target type]
        :requires Vertex [target]
        :satisfies DirectedEdge [target edge source] HasType [edge type])
-(defop CheckEquals [left right]
-       :requires Element [left] Element [right]
-       :satisfies Equals [left right])
-
-
+(defop EvalAssert1 [x expr]
+       :requires Element [x]
+       :satisfies Assert1 [x expr])
+(defop EvalAssert2 [x y expr]
+       :requires Element [x] Element [y]
+       :satisfies Assert2 [x expr])
