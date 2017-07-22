@@ -20,14 +20,26 @@ class IngraphLogger {
 
 	List<LogRecord> records = new ArrayList<LogRecord>
 
+	/**
+	 * Constructs a new IngraphLogger. Use the loggerName passed in to obtain
+	 * the java.util.logging.Logger to be used.
+	 * 
+	 * This constructor also ensures that messages are output the the console.
+	 */
 	new(String loggerName) {
 		this.name = loggerName
 		this.logger = Logger.getLogger(name)
 
 		/*
-		 *  FIXME: for multiple runs in a single JVM, we should not to add more than 1 ConsoleHandler
+		 *  For multiple runs in a single JVM, we should not add more than 1 ConsoleHandler
 		 */
-		if (this.logger.handlers.size == 0) {
+		var seenConsoleHandler = false;
+		for (h: this.logger.handlers) {
+			if (h instanceof ConsoleHandler) {
+				seenConsoleHandler = true
+			}
+		}
+		if (!seenConsoleHandler) {
 			this.logger.addHandler(new ConsoleHandler)
 		}
 	}
