@@ -110,7 +110,11 @@ class IngraphLogger {
 		logger.log(level, e.toString)
 	}
 
-	def isDebugMode() {
+	/**
+	 * FIXME this is a dirty hack to explicitly use debug mode settings from the compiler's environment..
+	 */
+	@Deprecated
+	private def isDebugMode() {
 		"1".equals(System.getenv("DEBUG")) || //
 		"1".equals(System.getenv("DEBUG_INGRAPH")) || //
 		"1".equals(System.getenv("DEBUG_INGRAPH_CYPHER2SEARCH"))
