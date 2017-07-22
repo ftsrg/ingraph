@@ -19,7 +19,7 @@ import relalg.function.Function
 package class ArithmeticExpressionBuilder {
 	
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	def static dispatch ArithmeticExpression buildArithmeticExpression(ExpressionPlusMinus e, CompilerEnvironment ce) {
 		modelFactory.createBinaryArithmeticOperationExpression => [

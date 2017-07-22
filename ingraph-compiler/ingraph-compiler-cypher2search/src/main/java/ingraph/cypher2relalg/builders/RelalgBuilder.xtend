@@ -57,7 +57,7 @@ import relalg.Variable
 class RelalgBuilder {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	/**
 	 * Constructs a new RelalgBuilder object and initialize its state.

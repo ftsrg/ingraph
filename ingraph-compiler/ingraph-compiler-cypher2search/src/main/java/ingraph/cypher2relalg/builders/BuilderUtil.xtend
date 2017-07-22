@@ -14,7 +14,7 @@ import relalg.function.Function
 package class BuilderUtil {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	def static void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi, CompilerEnvironment ce) {
 		fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)

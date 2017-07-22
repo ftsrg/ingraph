@@ -30,7 +30,7 @@ import relalg.function.Function
 package class LogicalExpressionBuilder {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	/**
 	 * This is a wrapper around the buildRelalgLogicalExpression to be used

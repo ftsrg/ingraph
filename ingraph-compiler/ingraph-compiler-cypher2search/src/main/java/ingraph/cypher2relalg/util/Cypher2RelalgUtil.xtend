@@ -41,7 +41,7 @@ import relalg.VariableExpression
 class Cypher2RelalgUtil {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	def static Operator buildLeftDeepTree(Class<? extends BinaryOperator> binaryOperatorType,
 		Iterator<Operator> i, CompilerEnvironment ce) {

@@ -19,7 +19,7 @@ import relalg.VertexVariable
 package class CudBuilder {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	/**
 	 * Build and return a create operator from the CREATE clause and attach p_input to its input.

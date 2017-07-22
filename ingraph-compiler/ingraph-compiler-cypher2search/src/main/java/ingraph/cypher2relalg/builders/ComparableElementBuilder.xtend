@@ -17,7 +17,7 @@ import relalg.RelalgFactory
 package class ComparableElementBuilder {
 
 	/** The model factory for the relational graph algebra representation */
-	val static modelFactory = RelalgFactory.eINSTANCE
+	val protected static modelFactory = RelalgFactory.eINSTANCE
 
 	def static dispatch ComparableExpression buildComparableElement(Parameter e, CompilerEnvironment ce) {
 		modelFactory.createParameterComparableExpression => [
