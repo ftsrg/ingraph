@@ -18,8 +18,7 @@ class Cypher2Relalg {
 	}
 
 	def static RelalgContainer processCypher(Cypher cypher, String queryName) {
-		val builder = new RelalgBuilder()
-		return builder.build(cypher, queryName)
+		return RelalgBuilder.build(cypher, queryName)
 	}
 
 }

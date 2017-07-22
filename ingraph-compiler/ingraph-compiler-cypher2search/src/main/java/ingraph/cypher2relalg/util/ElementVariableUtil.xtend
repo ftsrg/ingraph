@@ -3,10 +3,10 @@ package ingraph.cypher2relalg.util
 import ingraph.cypher2relalg.factories.AttributeVariableFactory
 import java.util.HashMap
 import relalg.ElementVariable
-import relalg.RelalgFactory
-import relalg.RelalgContainer
-import relalg.Variable
 import relalg.ExpressionVariable
+import relalg.RelalgContainer
+import relalg.RelalgFactory
+import relalg.Variable
 
 class ElementVariableUtil {
 	protected extension RelalgFactory factory = RelalgFactory.eINSTANCE

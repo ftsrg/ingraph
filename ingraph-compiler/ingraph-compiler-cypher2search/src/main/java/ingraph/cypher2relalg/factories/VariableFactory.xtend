@@ -1,9 +1,9 @@
 package ingraph.cypher2relalg.factories
 
-import relalg.Variable
-import relalg.RelalgContainer
 import java.util.HashMap
 import org.eclipse.emf.ecore.EObject
+import relalg.RelalgContainer
+import relalg.Variable
 
 abstract class VariableFactory<TVariable extends Variable> extends NamedElementFactory<TVariable> {
 

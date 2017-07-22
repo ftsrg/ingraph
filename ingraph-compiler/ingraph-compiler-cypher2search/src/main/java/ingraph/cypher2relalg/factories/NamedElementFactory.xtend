@@ -3,8 +3,8 @@ package ingraph.cypher2relalg.factories
 import java.util.HashMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import relalg.NamedElement
-import relalg.RelalgFactory
 import relalg.RelalgContainer
+import relalg.RelalgFactory
 
 abstract class NamedElementFactory<TNamedElement extends NamedElement> {
 

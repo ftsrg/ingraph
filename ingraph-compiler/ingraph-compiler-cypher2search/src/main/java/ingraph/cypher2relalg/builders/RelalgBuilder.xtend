@@ -8,12 +8,8 @@ import ingraph.cypher2relalg.structures.RelalgMatchDescriptor
 import ingraph.cypher2relalg.util.Cypher2RelalgUtil
 import ingraph.cypher2relalg.util.ExpressionNameInferencer
 import ingraph.cypher2relalg.util.GrammarUtil
-import ingraph.cypher2relalg.util.StringUtil
 import ingraph.cypher2relalg.util.Validator
 import ingraph.emf.util.PrettyPrinter
-import ingraph.logger.IngraphLogger
-import java.math.BigInteger
-import java.util.Arrays
 import java.util.HashSet
 import java.util.List
 import java.util.Set
@@ -21,40 +17,18 @@ import org.eclipse.emf.common.util.BasicEList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.slizaa.neo4j.opencypher.openCypher.AllShortestPaths
-import org.slizaa.neo4j.opencypher.openCypher.CaseExpression
 import org.slizaa.neo4j.opencypher.openCypher.Clause
-import org.slizaa.neo4j.opencypher.openCypher.ContainsExpression
-import org.slizaa.neo4j.opencypher.openCypher.Count
 import org.slizaa.neo4j.opencypher.openCypher.Create
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.Delete
-import org.slizaa.neo4j.opencypher.openCypher.EndsWithExpression
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionAnd
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionComparison
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionList
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionMulDiv
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionOr
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionPlusMinus
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionPower
-import org.slizaa.neo4j.opencypher.openCypher.ExpressionXor
-import org.slizaa.neo4j.opencypher.openCypher.FunctionInvocation
-import org.slizaa.neo4j.opencypher.openCypher.InCollectionExpression
-import org.slizaa.neo4j.opencypher.openCypher.IndexExpression
-import org.slizaa.neo4j.opencypher.openCypher.IsNotNullExpression
-import org.slizaa.neo4j.opencypher.openCypher.IsNullExpression
 import org.slizaa.neo4j.opencypher.openCypher.MapLiteral
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
-import org.slizaa.neo4j.opencypher.openCypher.NullConstant
-import org.slizaa.neo4j.opencypher.openCypher.NumberConstant
-import org.slizaa.neo4j.opencypher.openCypher.Parameter
-import org.slizaa.neo4j.opencypher.openCypher.ParenthesizedExpression
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
 import org.slizaa.neo4j.opencypher.openCypher.Properties
-import org.slizaa.neo4j.opencypher.openCypher.RegExpMatchingExpression
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipPattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
@@ -62,39 +36,23 @@ import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnBody
 import org.slizaa.neo4j.opencypher.openCypher.ShortestPath
 import org.slizaa.neo4j.opencypher.openCypher.SingleQuery
-import org.slizaa.neo4j.opencypher.openCypher.StartsWithExpression
-import org.slizaa.neo4j.opencypher.openCypher.StringConstant
 import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.AbstractEdgeVariable
-import relalg.ArithmeticComparisonOperatorType
-import relalg.ArithmeticExpression
-import relalg.AttributeVariable
-import relalg.BinaryArithmeticOperatorType
-import relalg.BinaryLogicalOperatorType
-import relalg.ComparableExpression
 import relalg.Direction
 import relalg.ElementVariable
 import relalg.ExpandOperator
-import relalg.Expression
 import relalg.ExpressionVariable
-import relalg.FunctionExpression
-import relalg.IndexAccessExpression
 import relalg.JoinOperator
 import relalg.LeftOuterJoinOperator
-import relalg.LogicalExpression
 import relalg.Operator
 import relalg.OrderDirection
-import relalg.RelalgContainer
 import relalg.RelalgFactory
-import relalg.UnaryGraphObjectLogicalOperatorType
-import relalg.UnaryLogicalOperatorType
 import relalg.UnaryOperator
 import relalg.Variable
 import relalg.VariableExpression
 import relalg.VertexVariable
-import relalg.function.Function
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -106,64 +64,45 @@ import relalg.function.Function
 class RelalgBuilder {
 
 	/** The model factory for the relational graph algebra representation */
-	val modelFactory = RelalgFactory.eINSTANCE
-	val CompilerEnvironment ce;
-
-	// this will be returned and will hold the result of the compilation
-	// never rename this to container as that name will collide with the Expression.container field name
-	// FIXME: this has duplicate roles now: 1: holds the result of the compilation; 2: holds the EMF top-level container reference
-	val RelalgContainer topLevelContainer
+	val static modelFactory = RelalgFactory.eINSTANCE
 
 	/**
 	 * Constructs a new RelalgBuilder object and initialize its state.
 	 *
 	 * For the internals, it creates a new EMF container and a fresh variable builder
 	 * with new variable and label factories.
-	 */
 	new() {
-		this.topLevelContainer = modelFactory.createRelalgContainer
-		val logger = new IngraphLogger(RelalgBuilder.name)
-		val variableBuilder = new VariableBuilder(this.topLevelContainer, logger)
+		new RuntimeException("Use RelalgBuilder.buildRelalg(Cypher cypher, String queryName) instead, passing RelalgBuilder.name as queryName.")
+	}
+	*/
 
-		ce = new CompilerEnvironment(variableBuilder, logger, topLevelContainer)
+	def static build(Cypher cypher, String queryName) {
+		val ce = CompilerEnvironment.newInstance(RelalgBuilder.name)
+		build(cypher, queryName, ce)
 	}
 
-	/**
-	 * Constructor that allows passing the topLevelContainer and the
-	 * variable builder instance to be used.
-	 *
-	 * Use this to create separate builder for each SingleQuery,
-	 * and usually you might want to pass a clone of your variable builder created using its
-	 * {@link ingraph.cypher2relalg.VariableBuilder#cloneBuilderWithNewVariableFactories cloneBuilderWithNewVariableFactories}
-	 * call.
-	 */
-	protected new(CompilerEnvironment ce) {
-		this.ce = ce
-		this.topLevelContainer = ce.tlc
-	}
-
-	def build(Cypher cypher, String queryName) {
+	def static build(Cypher cypher, String queryName, CompilerEnvironment ce) {
 		EcoreUtil.resolveAll(cypher)
 
 		if (Cypher2RelalgConfig.isDebugMode) {
 			println(PrettyPrinter.format(cypher))
 		}
 		val statement = cypher.statement
-		topLevelContainer.rootExpression = modelFactory.createProductionOperator => [
-			input = buildRelalg(statement)
+		ce.tlc.rootExpression = modelFactory.createProductionOperator => [
+			input = buildRelalg(statement, ce)
 		]
 
-		topLevelContainer
+		ce.tlc
 	}
 
-	def dispatch Operator buildRelalg(RegularQuery q) {
-		val queryListHead = buildRelalg(q.singleQuery)
+	def static dispatch Operator buildRelalg(RegularQuery q, CompilerEnvironment ce) {
+		val queryListHead = buildRelalg(q.singleQuery, ce)
 		// use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
 		val queryListTail = q.union?.map [
 			val mapIt = it
 			modelFactory.createUnionOperator => [
 				bag = mapIt.all
-				rightInput = buildRelalg(mapIt.singleQuery)
+				rightInput = buildRelalg(mapIt.singleQuery, ce)
 			]
 		]
 
@@ -180,7 +119,7 @@ class RelalgBuilder {
 	 * Builds the relational algebra expression for a single query by spawning a new builder
 	 * with the same top-level container, but with own factories for variables.
 	 */
-	def dispatch Operator buildRelalg(SingleQuery q) {
+	def static dispatch Operator buildRelalg(SingleQuery q, CompilerEnvironment ce) {
 		val clauses = q.clauses
 		val EList<Operator> ops = new BasicEList<Operator>()
 
@@ -215,9 +154,9 @@ class RelalgBuilder {
 				 * top-level container not to break the containment hierarchy and separate variable namespaces.
 				 */
 				variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
-				val builder = new RelalgBuilder(new CompilerEnvironment(ce, variableBuilderChain))
+				val subQueryCompilerEnvironment = ce.cloneInstanceOverriding(variableBuilderChain)
 				ops.add(
-					builder._buildRelalgSubQuery(clauses.subList(fromX, toX))
+					RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
 				)
 				from = i + 1
 			}
@@ -242,7 +181,7 @@ class RelalgBuilder {
 	 * It should not be called to build more than one single subquery as
 	 * the variables produced for re-used names would collide.
 	 */
-	def protected Operator _buildRelalgSubQuery(List<Clause> clauses) {
+	def static protected Operator _buildRelalgSubQuery(List<Clause> clauses, CompilerEnvironment ce) {
 		// do some checks on the MATCH clauses
 		Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), ce.l)
 		// do some checks on the clause sequence of this subquery
@@ -258,7 +197,7 @@ class RelalgBuilder {
 		// use of lazy map OK as passed to chainEncapsulatedBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
 		val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
 			val mapIt = it
-			val relalgMatchDescriptor = buildRelalgMatch(mapIt)
+			val relalgMatchDescriptor = buildRelalgMatch(mapIt, ce)
 
 			if (mapIt.optional) {
 				val lojo = if (relalgMatchDescriptor.condition === null) {
@@ -298,7 +237,7 @@ class RelalgBuilder {
 
 		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
 		val afterReturn = if (singleQuery_returnOrWithClause !== null) {
-				buildRelalgReturn(singleQuery_returnOrWithClause, content)
+				buildRelalgReturn(singleQuery_returnOrWithClause, content, ce)
 			} else {
 				content
 			}
@@ -306,7 +245,7 @@ class RelalgBuilder {
 		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
 			val u0 = singleQuery_unwindClauseList
 			modelFactory.createUnwindOperator => [
-				element = ce.vb.buildExpressionVariable(u0.variable.name, buildRelalgExpression(u0.expression))
+				element = ce.vb.buildExpressionVariable(u0.variable.name, ExpressionBuilder.buildExpression(u0.expression, ce))
 				input = afterReturn
 			]
 		} else {
@@ -318,8 +257,8 @@ class RelalgBuilder {
 
 			for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
 				op = switch cudClause {
-					Create: buildCreateOperator(cudClause, op)
-					Delete: buildDeleteOperator(cudClause, op)
+					Create: buildCreateOperator(cudClause, op, ce)
+					Delete: buildDeleteOperator(cudClause, op, ce)
 					default: {
 						ce.l.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
 						null
@@ -335,7 +274,7 @@ class RelalgBuilder {
 	/**
 	 * Build and return a create operator from the CREATE clause and attach p_input to its input.
 	 */
-	protected def buildCreateOperator(Create u0, Operator p_input) {
+	protected def static buildCreateOperator(Create u0, Operator p_input, CompilerEnvironment ce) {
 		val u1 = modelFactory.createCreateOperator => [
 			input = p_input
 		]
@@ -345,19 +284,19 @@ class RelalgBuilder {
 				ce.l.unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
 			}
 			val t0 = ce.vb.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
-			val u4 = buildCreateNodePattern(u2.nodepattern)
+			val u4 = buildCreateNodePattern(u2.nodepattern, ce)
 			if (!t0) {
 				u1.elements.add(u4)
 			}
 			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
 			for (element: u2.chain) {
 				val t1 = ce.vb.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
-				val u5 = buildCreateNodePattern(element.nodePattern)
+				val u5 = buildCreateNodePattern(element.nodePattern, ce)
 				if (!t1) {
 					u1.elements.add(u5)
 				}
 				val t2 = ce.vb.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
-				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable)
+				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable, ce)
 				if (!t2) {
 					u1.elements.add(u6)
 				}
@@ -370,14 +309,14 @@ class RelalgBuilder {
 	/**
 	 * Provide the edges for CREATE operator.
 	 */
-	protected def ExpressionVariable buildCreateRelationshipPattern (RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target) {
+	protected def static ExpressionVariable buildCreateRelationshipPattern(RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target, CompilerEnvironment ce) {
 		val u0 = modelFactory.createNavigationDescriptor => [
 			edgeVariable = ce.vb.buildEdgeVariable(relationshippattern.detail)
-			buildRelalgProperties(relationshippattern.detail.properties, edgeVariable)
+			buildRelalgProperties(relationshippattern.detail.properties, edgeVariable, ce)
 			sourceVertexVariable = source
 			targetVertexVariable = target
 			direction = convertToDirection(relationshippattern)
-			expressionContainer = topLevelContainer
+			expressionContainer = ce.tlc
 		]
 		val u1 = ce.vb.buildExpressionVariable(u0.edgeVariable.name, u0)
 		u1
@@ -386,12 +325,12 @@ class RelalgBuilder {
 	/**
 	 * Provide the vertices for CREATE operator.
 	 */
-	protected def ExpressionVariable buildCreateNodePattern(NodePattern nodepattern) {
+	protected def static ExpressionVariable buildCreateNodePattern(NodePattern nodepattern, CompilerEnvironment ce) {
 		val u0 = modelFactory.createVariableExpression => [
 			val vertexVariable = ce.vb.buildVertexVariable(nodepattern)
-			buildRelalgProperties(nodepattern.properties, vertexVariable)
+			buildRelalgProperties(nodepattern.properties, vertexVariable, ce)
 			variable = vertexVariable
-			expressionContainer = topLevelContainer
+			expressionContainer = ce.tlc
 		]
 		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
 		u1
@@ -400,14 +339,14 @@ class RelalgBuilder {
 	/**
 	 * Build and return a delete operator from the DELETE clause and attach p_input to its input.
 	 */
-	protected def buildDeleteOperator(Delete element, Operator p_input) {
+	protected def static buildDeleteOperator(Delete element, Operator p_input, CompilerEnvironment ce) {
 		val u1 = modelFactory.createDeleteOperator => [
 			detach = element.detach
 		]
 		u1.input = p_input
 		for (element2: element.expressions) {
 		  val u2 = element2 as VariableRef
-		  val u4 = buildDeleteVariableRef(u2)
+		  val u4 = buildDeleteVariableRef(u2, ce)
 		  u1.elements.add(u4)
 		}
 		u1
@@ -416,10 +355,10 @@ class RelalgBuilder {
 	/**
 	 * Provide the vertices for DELETE operator.
 	 */
-	protected def ExpressionVariable buildDeleteVariableRef(VariableRef variableref) {
+	protected def static ExpressionVariable buildDeleteVariableRef(VariableRef variableref, CompilerEnvironment ce) {
 		val u0 = modelFactory.createVariableExpression => [
 			variable = ce.vb.buildRelalgVariable(variableref)
-			expressionContainer = topLevelContainer
+			expressionContainer = ce.tlc
 		]
 		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
 		u1
@@ -429,7 +368,7 @@ class RelalgBuilder {
 	 * Process the common part of a RETURN and a WITH clause,
 	 * i.e. the distinct flag and the ReturnBody.
 	 */
-	def UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content) {
+	def static UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content, CompilerEnvironment ce) {
 		// FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
 		// but it should be w/o .get(0)
 
@@ -471,7 +410,7 @@ class RelalgBuilder {
 			_elements.add(
 				ce.vb.buildExpressionVariable(
 					returnItem.alias?.name
-				,	buildRelalgExpression(returnItem.expression)
+				,	ExpressionBuilder.buildExpression(returnItem.expression, ce)
 				)
 			)
 		}
@@ -496,7 +435,7 @@ class RelalgBuilder {
 				  val mapIt = it
 				  modelFactory.createVariableExpression => [
 				    variable = mapIt
-				    expressionContainer = topLevelContainer
+				    expressionContainer = ce.tlc
 				  ]
 				].sortBy [
 					ExpressionNameInferencer.inferName(it, ce.l) + '##' + it.class.name
@@ -535,7 +474,7 @@ class RelalgBuilder {
 						// for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
 						ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
 						VariableRef: ce.vb.buildVariableExpression(expression, true)
-						default: buildRelalgExpression(expression)
+						default: ExpressionBuilder.buildExpression(expression, ce)
 					}
 					modelFactory.createSortEntry => [
 						direction = sortDirection
@@ -556,8 +495,8 @@ class RelalgBuilder {
 		val limit = returnBody.limit
 		val op3 = if (skip !== null || limit !== null) {
 				modelFactory.createTopOperator => [
-					skip = skip?.skip?.expressionToSkipLimitConstant
-					limit = limit?.limit?.expressionToSkipLimitConstant
+					skip = ExpressionBuilder.expressionToSkipLimitConstant(skip?.skip, ce)
+					limit = ExpressionBuilder.expressionToSkipLimitConstant(limit?.limit, ce)
 					input = op2
 				]
 			} else {
@@ -567,12 +506,12 @@ class RelalgBuilder {
 		op3
 	}
 
-	def dispatch UnaryOperator buildRelalgReturn(Return r, Operator content) {
-		buildRelalgReturnBody(r.distinct, r.body, content)
+	def static dispatch UnaryOperator buildRelalgReturn(Return r, Operator content, CompilerEnvironment ce) {
+		buildRelalgReturnBody(r.distinct, r.body, content, ce)
 	}
 
-	def dispatch UnaryOperator buildRelalgReturn(With w, Operator content) {
-		val rb = buildRelalgReturnBody(w.distint, w.returnBody, content)
+	def static dispatch UnaryOperator buildRelalgReturn(With w, Operator content, CompilerEnvironment ce) {
+		val rb = buildRelalgReturnBody(w.distint, w.returnBody, content, ce)
 		if (w.where === null) {
 			rb
 		} else {
@@ -582,7 +521,7 @@ class RelalgBuilder {
 
 			val selectionOperator = modelFactory.createSelectionOperator => [
 				input = rb
-				condition = buildRelalgLogicalExpression(w.where.expression, joinOperationsOfWhereClause)
+				condition = LogicalExpressionBuilder.buildLogicalExpression(w.where.expression, joinOperationsOfWhereClause, ce)
 			]
 
 			if (joinOperationsOfWhereClause.length !== 0) {
@@ -590,14 +529,6 @@ class RelalgBuilder {
 			}
 
 			selectionOperator
-		}
-	}
-
-	def expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression) {
-		switch expression {
-			NumberConstant: buildRelalgNumberLiteral(expression)
-			Parameter: buildRelalgParameter(expression)
-			default: ce.l.unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
 		}
 	}
 
@@ -610,20 +541,20 @@ class RelalgBuilder {
 	 * - natural join of comma-separated patternParts in the MATCH clause
 	 *
 	 * Also a filter boolean condition is built from the where clause.
-	 * In case no WHERE condition applies, contiion is null meaning no filtering,
+	 * In case no WHERE condition applies, condition is null meaning no filtering,
 	 * i.e. pass through all records.
 	 *
 	 * @returns a RelalgMatchDescriptor,
 	 *          whose op attribute is the compiled form of the MATCH without the WHERE,
 	 *          and condition attribute holds the filter condition.
 	 */
-	def buildRelalgMatch(Match m) {
+	def static buildRelalgMatch(Match m, CompilerEnvironment ce) {
 	  val result = new RelalgMatchDescriptor
 		val Set<AbstractEdgeVariable> edgeVariablesOfMatchClause = new HashSet<AbstractEdgeVariable>()
 		// handle comma-separated patternParts in the MATCH clause
 		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
 		for (pattern: m.pattern.patterns) {
-			val op = buildRelalg(pattern)
+			val op = buildRelalg(pattern, ce)
 
 			edgeVariablesOfMatchClause.addAll(Cypher2RelalgUtil.extractEdgeVariables(op, ce.l))
 
@@ -640,7 +571,7 @@ class RelalgBuilder {
 			// left outer joins extracted from the patterns in the where clause
 			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
 
-			result.condition = buildRelalgLogicalExpression(m.where.expression, joinOperationsOfWhereClause)
+			result.condition = LogicalExpressionBuilder.buildLogicalExpression(m.where.expression, joinOperationsOfWhereClause, ce)
 
 			result.op = if (joinOperationsOfWhereClause.empty) {
 					allDifferentOperator
@@ -662,551 +593,7 @@ class RelalgBuilder {
 		result
 	}
 
-	/**
-	 * This is a wrapper around the buildRelalgLogicalExpression to be used
-	 * in contexts where no join clauses should be generated.
-	 *
-	 * We use this outside of WHERE clauses.
-	 */
-	def buildRelalgLogicalExpressionNoJoinAllowed(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
-		// there should be no join clauses added when we build
-		// a logical expression outside the WHERE clause
-		val dummyJoins = new BasicEList<Operator>
-		val logicalExp = buildRelalgLogicalExpression(e, dummyJoins)
-		if (dummyJoins.size > 0) {
-			ce.l.unrecoverableError('''Joins found when building a logical expression in generic expression position.''')
-		}
-
-		logicalExp
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionAnd e, EList<Operator> joins) {
-		modelFactory.createBinaryLogicalExpression => [
-			operator = BinaryLogicalOperatorType.AND
-			leftOperand = buildRelalgLogicalExpression(e.left, joins)
-			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionOr e, EList<Operator> joins) {
-		modelFactory.createBinaryLogicalExpression => [
-			operator = BinaryLogicalOperatorType.OR
-			leftOperand = buildRelalgLogicalExpression(e.left, joins)
-			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionXor e, EList<Operator> joins) {
-		modelFactory.createBinaryLogicalExpression => [
-			operator = BinaryLogicalOperatorType.XOR
-			leftOperand = buildRelalgLogicalExpression(e.left, joins)
-			rightOperand = buildRelalgLogicalExpression(e.right, joins)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(IsNotNullExpression e, EList<Operator> joins) {
-		modelFactory.createUnaryGraphObjectLogicalExpression => [
-			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-			operand = ce.vb.buildRelalgVariable(e.left)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(IsNullExpression e, EList<Operator> joins) {
-		modelFactory.createUnaryGraphObjectLogicalExpression => [
-			operator = UnaryGraphObjectLogicalOperatorType.IS_NULL
-			operand = ce.vb.buildRelalgVariable(e.left)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(
-		RegExpMatchingExpression e,
-		EList<Operator> joins
-	) {
-		val fe = modelFactory.createFunctionLogicalExpression => [
-			expressionContainer = topLevelContainer
-		]
-
-		fe.functor = Function.REGEX_LIKE
-
-		fe.arguments.add(buildRelalgExpression(e.left))
-		fe.arguments.add(buildRelalgExpression(e.right))
-
-		fe
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(
-		org.slizaa.neo4j.opencypher.openCypher.Expression e,
-		EList<Operator> joins
-	) {
-		switch e.operator.toLowerCase {
-			case "not":
-				modelFactory.createUnaryLogicalExpression => [
-					operator = UnaryLogicalOperatorType.NOT
-					operand = buildRelalgLogicalExpression(e.left, joins)
-					expressionContainer = topLevelContainer
-				]
-			default: {
-				ce.l.unsupported("TODO: " + e.operator)
-				null
-			}
-		}
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ParenthesizedExpression e, EList<Operator> joins) {
-		buildRelalgLogicalExpression(e.expression, joins)
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(RelationshipsPattern e, EList<Operator> joins) {
-		// We add all the variables in the pattern as a NOT NULL expression
-		val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
-
-		relationshipVariableExpressions.add(modelFactory.createUnaryGraphObjectLogicalExpression => [
-			operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-			operand = ce.vb.buildVertexVariable(e.nodePattern)
-			expressionContainer = topLevelContainer
-		])
-
-		relationshipVariableExpressions.addAll(
-			// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-			e.chain.map [
-				val mapIt = it
-				modelFactory.createUnaryGraphObjectLogicalExpression => [
-					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-					operand = ce.vb.buildEdgeVariable(mapIt.relationshipPattern.detail)
-					expressionContainer = topLevelContainer
-				]
-			]
-		)
-		relationshipVariableExpressions.addAll(
-			// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-			e.chain.map [
-				val mapIt = it
-				modelFactory.createUnaryGraphObjectLogicalExpression => [
-					operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-					operand = ce.vb.buildVertexVariable(mapIt.nodePattern)
-					expressionContainer = topLevelContainer
-				]
-			]
-		)
-
-		joins.add(buildRelalg(e))
-
-		Cypher2RelalgUtil.buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator, ce)
-	}
-
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ExpressionComparison e, EList<Operator> joins) {
-		// FIXME: add type check to ensure that the operands are comparable
-		modelFactory.createArithmeticComparisonExpression => [
-			operator = switch e.operator {
-				case "=": ArithmeticComparisonOperatorType.EQUAL_TO
-				case "<>": ArithmeticComparisonOperatorType.NOT_EQUAL_TO
-				case "<": ArithmeticComparisonOperatorType.LESS_THAN
-				case "<=": ArithmeticComparisonOperatorType.LESS_THAN_OR_EQUAL
-				case ">": ArithmeticComparisonOperatorType.GREATER_THAN
-				case ">=": ArithmeticComparisonOperatorType.GREATER_THAN_OR_EQUAL
-			}
-			leftOperand = buildRelalgComparableElement(e.left)
-			rightOperand = buildRelalgComparableElement(e.right)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	/**
-	 * Processes STARTS WITH create a function invocation: STARTS_WITH(string, prefixString)
-	 */
-	def dispatch LogicalExpression buildRelalgLogicalExpression(StartsWithExpression e, EList<Operator> joins) {
-		modelFactory.createFunctionLogicalExpression => [
-			functor = Function.STARTS_WITH
-			arguments.add(buildRelalgExpression(e.left))
-			arguments.add(buildRelalgExpression(e.right))
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	/**
-	 * Processes ENDS WITH create a function invocation: ENDS_WITH(string, postfixString)
-	 */
-	def dispatch LogicalExpression buildRelalgLogicalExpression(EndsWithExpression e, EList<Operator> joins) {
-		modelFactory.createFunctionLogicalExpression => [
-			functor = Function.ENDS_WITH
-			arguments.add(buildRelalgExpression(e.left))
-			arguments.add(buildRelalgExpression(e.right))
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	/**
-	 * Processes CONTAINS by creating a function invocation: CONTAINS(string, middleString)
-	 */
-	def dispatch LogicalExpression buildRelalgLogicalExpression(ContainsExpression e, EList<Operator> joins) {
-		modelFactory.createFunctionLogicalExpression => [
-			functor = Function.CONTAINS
-			arguments.add(buildRelalgExpression(e.left))
-			arguments.add(buildRelalgExpression(e.right))
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	/**
-	 * Processes IN by creating a function invocation: IN_COLLECTION(ANY, LIST expression)
-	 */
-	def dispatch LogicalExpression buildRelalgLogicalExpression(InCollectionExpression e, EList<Operator> joins) {
-		modelFactory.createFunctionLogicalExpression => [
-			functor = Function.IN_COLLECTION
-			arguments.add(buildRelalgExpression(e.left))
-			arguments.add(buildRelalgExpression(e.right))
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(Parameter e) {
-		modelFactory.createParameterComparableExpression => [
-			parameter = modelFactory.createParameter => [
-				name = e.parameter
-				expressionContainer = topLevelContainer
-			]
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(NumberConstant e) {
-		buildRelalgNumberLiteral(e)
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(StringConstant e) {
-		buildRelalgStringLiteral(e)
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(VariableRef e) {
-		modelFactory.createVariableComparableExpression => [
-			variable = ce.vb.buildRelalgVariable(e)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionPlusMinus e) {
-		buildRelalgArithmeticExpression(e)
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionMulDiv e) {
-		buildRelalgArithmeticExpression(e)
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionPower e) {
-		buildRelalgArithmeticExpression(e)
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(ExpressionNodeLabelsAndPropertyLookup e) {
-		val x = ce.vb.buildRelalgVariable(e)
-		// as AttributeVariable
-		if (x instanceof AttributeVariable) {
-			modelFactory.createVariableComparableExpression => [
-				variable = x
-				expressionContainer = topLevelContainer
-			]
-		} else {
-			ce.l.unsupported('''Unsupported type received: «x.class.name»''')
-			null
-		}
-	}
-
-	def dispatch ComparableExpression buildRelalgComparableElement(FunctionInvocation fi) {
-		val fe = modelFactory.createFunctionComparableExpression => [
-			expressionContainer = topLevelContainer
-		]
-
-		populateFunctionExpression(fe, fi)
-
-		fe
-	}
-
-	def dispatch Expression buildRelalgExpression(VariableRef e) {
-		ce.vb.buildVariableExpression(e, false)
-	}
-
-	def dispatch Expression buildRelalgExpression(StringConstant e) {
-		buildRelalgStringLiteral(e)
-	}
-
-	def dispatch Expression buildRelalgExpression(CaseExpression e) {
-		if (!(e.expression instanceof CaseExpression)) {
-			ce.l.unrecoverableError("Outer CaseExpressions should contain a CaseExpression")
-		}
-		val caseExpr = e.expression as CaseExpression
-
-		// do we process a simple case expression,
-		// i.e. when there is a single value we search for
-		var boolean isSimple = false
-
-		val retVal = if (caseExpr.caseExpression === null) {
-			modelFactory.createGenericCaseExpression => [
-				expressionContainer = topLevelContainer
-			]
-		} else {
-		  isSimple = true
-			modelFactory.createSimpleCaseExpression => [
-				expressionContainer = topLevelContainer
-				test = buildRelalgComparableElement(caseExpr.caseExpression)
-			]
-		}
-
-		// WHEN when THEN then
-		for (ca: caseExpr.caseAlternatives) {
-		  val case_ = modelFactory.createCase => [
-		    then = buildRelalgExpression(ca.then)
-		  ]
-		  if (isSimple) {
-		    case_.when = buildRelalgComparableElement(ca.when)
-		  } else {
-		    case_.when = buildRelalgLogicalExpressionNoJoinAllowed(ca.when)
-		  }
-		  retVal.cases.add(case_)
-		}
-
-		// ELSE elseExpression
-		if (caseExpr.elseExpression !== null) {
-			retVal.fallback = buildRelalgExpression(caseExpr.elseExpression)
-		}
-
-		retVal
-	}
-
-	def dispatch Expression buildRelalgExpression(FunctionInvocation fi) {
-		val fe = modelFactory.createFunctionExpression => [
-			expressionContainer = topLevelContainer
-		]
-
-		populateFunctionExpression(fe, fi)
-
-		fe
-	}
-
-	def dispatch Expression buildRelalgExpression(Count fi) {
-		modelFactory.createFunctionExpression => [
-			functor = Function.COUNT_ALL
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch Expression buildRelalgExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-		ce.vb.buildVariableExpression(e, false)
-	}
-
-	def dispatch Expression buildRelalgExpression(IndexExpression ie) {
-		var IndexAccessExpression retVal
-		if (ie.expression === null) {
-			ce.l.unrecoverableError('''Index lookup expression found having null as subscript.''')
-		}
-		if (ie.expression instanceof NumberConstant) {
-			if (ie.upper === null) {
-				retVal = modelFactory.createIndexSimpleAccessExpression => [
-					idx = buildRelalgNumber(ie.expression as NumberConstant)
-				]
-			} else {
-				if (ie.upper instanceof NumberConstant) {
-					retVal = modelFactory.createIndexRangeAccessExpression => [
-						lower = buildRelalgNumber(ie.expression as NumberConstant)
-						upper = buildRelalgNumber(ie.upper as NumberConstant)
-					]
-				} else {
-					ce.l.unrecoverableError('''Index lookup expression should have numeric subscript but found «ie.upper.class.name».''')
-				}
-			}
-		} else {
-			ce.l.unrecoverableError('''Index lookup expression should have numeric subscript but found «ie.expression.class.name».''')
-		}
-		retVal => [
-			list = buildRelalgExpression(ie.left)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch Expression buildRelalgExpression(ExpressionList el) {
-		val emptyList = modelFactory.createEmptyListExpression => [
-			head = null
-			tail = null
-			expressionContainer = topLevelContainer
-		]
-		// the tail of the first expression will be the list that was built
-		val first = modelFactory.createListExpression => [
-			tail = emptyList
-		]
-		var recent = first
-
-		for (e : el.expressions) {
-			recent.tail = modelFactory.createListExpression => [
-				head = buildRelalgExpression(e)
-				tail = emptyList
-				expressionContainer = topLevelContainer
-			]
-			recent = recent.tail
-		}
-
-		first.tail
-	}
-
-	def dispatch Expression buildRelalgExpression(ExpressionComparison e) {
-	  buildRelalgLogicalExpressionNoJoinAllowed(e)
-	}
-
-	/**
-	 * Catch-all to pass on calls to more-specific methods
-	 */
-	def dispatch Expression buildRelalgExpression(org.slizaa.neo4j.opencypher.openCypher.Expression e) {
-		switch (e) {
-			NumberConstant,
-			ExpressionPlusMinus,
-			ExpressionMulDiv,
-			ExpressionPower:
-				buildRelalgArithmeticExpression(e)
-			NullConstant:
-				modelFactory.createNullLiteral => [
-					expressionContainer = topLevelContainer
-				]
-			default:
-				throw new IllegalArgumentException('''Unhandled parameter types: «Arrays.<Object>asList(e)»''')
-		}
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPlusMinus e) {
-		modelFactory.createBinaryArithmeticOperationExpression => [
-			operator = switch e.operator {
-				case "+": BinaryArithmeticOperatorType.PLUS
-				case "-": BinaryArithmeticOperatorType.MINUS
-			}
-			leftOperand = buildRelalgArithmeticExpression(e.left)
-			rightOperand = buildRelalgArithmeticExpression(e.right)
-			expressionContainer = topLevelContainer
-		]
-
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ParenthesizedExpression e) {
-		buildRelalgArithmeticExpression(e.expression)
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionMulDiv e) {
-		modelFactory.createBinaryArithmeticOperationExpression => [
-			operator = switch e.operator {
-				case "*": BinaryArithmeticOperatorType.MULTIPLICATION
-				case "/": BinaryArithmeticOperatorType.DIVISION
-				case "%": BinaryArithmeticOperatorType.MOD
-			}
-			leftOperand = buildRelalgArithmeticExpression(e.left)
-			rightOperand = buildRelalgArithmeticExpression(e.right)
-			expressionContainer = topLevelContainer
-		]
-
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionPower e) {
-		modelFactory.createBinaryArithmeticOperationExpression => [
-			operator = switch e.operator {
-				case "^": BinaryArithmeticOperatorType.POWER
-			}
-			leftOperand = buildRelalgArithmeticExpression(e.left)
-			rightOperand = buildRelalgArithmeticExpression(e.right)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(NumberConstant e) {
-		buildRelalgNumberLiteral(e)
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(ExpressionNodeLabelsAndPropertyLookup e) {
-		modelFactory.createVariableArithmeticExpression => [
-			variable = ce.vb.buildRelalgVariable(e)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(VariableRef e) {
-		val ae = modelFactory.createVariableArithmeticExpression => [
-			variable = ce.vb.buildRelalgVariable(e)
-			expressionContainer = topLevelContainer
-		]
-
-		if (ae.variable instanceof ElementVariable) {
-			ce.l.unsupported('''Unsupported variable of type «ae.class.name» found in an arithmetic expression.''')
-		}
-
-		ae
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(FunctionInvocation fi) {
-		val fe = modelFactory.createFunctionArithmeticExpression => [
-			expressionContainer = topLevelContainer
-		]
-
-		populateFunctionExpression(fe, fi)
-		if (!fe.functor.mightBeNumericValued) {
-			ce.l.warning('''Expected numeric valued function, found «fe.functor» with output type «fe.functor.outputType»''')
-		}
-
-		fe
-	}
-
-	def dispatch ArithmeticExpression buildRelalgArithmeticExpression(Count fi) {
-		modelFactory.createFunctionArithmeticExpression => [
-			functor = Function.COUNT_ALL
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def buildRelalgNumber(NumberConstant e) {
-		var int n
-		try {
-			n = Integer.parseInt(e.value)
-		} catch (NumberFormatException ex1) {
-			ce.l.unrecoverableError('''Unable to parse «e.value» as integer.''')
-		}
-		n
-	}
-
-	def buildRelalgNumberLiteral(NumberConstant e) {
-		try {
-			val n = Long.parseLong(e.value)
-			modelFactory.createIntegerLiteral => [
-				value = n
-				expressionContainer = topLevelContainer
-			]
-		} catch (NumberFormatException ex1) {
-			try {
-				val n = new BigInteger(e.value)
-				modelFactory.createBigIntegerLiteral => [
-					value = n
-					expressionContainer = topLevelContainer
-				]
-			} catch (NumberFormatException ex2) {
-				modelFactory.createDoubleLiteral => [
-					value = Double.parseDouble(e.value)
-					expressionContainer = topLevelContainer
-				]
-			}
-		}
-	}
-
-	def buildRelalgStringLiteral(StringConstant e) {
-		modelFactory.createStringLiteral => [
-			value = StringUtil.unescapeCypherString(e.value, ce.l)
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def buildRelalgParameter(Parameter expression) {
-		modelFactory.createParameter => [
-			name = expression.parameter
-			expressionContainer = topLevelContainer
-		]
-	}
-
-	def dispatch Operator buildRelalg(PatternPart p) {
+	def static dispatch Operator buildRelalg(PatternPart p, CompilerEnvironment ce) {
 		// TODO: handle variable assignment
 		if (p.part instanceof ShortestPath) {
 		}
@@ -1217,15 +604,15 @@ class RelalgBuilder {
 		}
 
 		// pass through variable assignment body to buildRelalg(PatternElement e)
-		buildRelalg(p.part)
+		buildRelalg(p.part, ce)
 	}
 
-	def dispatch Operator buildRelalg(PatternElement e) {
-		buildRelalgFromPattern(e.nodepattern, e.chain)
+	def static dispatch Operator buildRelalg(PatternElement e, CompilerEnvironment ce) {
+		buildRelalgFromPattern(e.nodepattern, e.chain, ce)
 	}
 
-	def dispatch Operator buildRelalg(RelationshipsPattern e) {
-		buildRelalgFromPattern(e.nodePattern, e.chain)
+	def static dispatch Operator buildRelalg(RelationshipsPattern e, CompilerEnvironment ce) {
+		buildRelalgFromPattern(e.nodePattern, e.chain, ce)
 	}
 
 	/*
@@ -1233,27 +620,27 @@ class RelalgBuilder {
 	 *
 	 * This was factored out to handle PatternElement and RelationshipsPattern in the same code
 	 */
-	def Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain) {
+	def static Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain, CompilerEnvironment ce) {
 		val patternElement_GetVerticesOperator = modelFactory.createGetVerticesOperator => [
 			vertexVariable = ce.vb.buildVertexVariable(n)
 			// parse map-like constraints if given
-			buildRelalgProperties(n.properties, vertexVariable)
+			buildRelalgProperties(n.properties, vertexVariable, ce)
 		]
 
 		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
-		val patternElement_ExpandList = chain.map[buildRelalg(it) as ExpandOperator]
+		val patternElement_ExpandList = chain.map[buildRelalg(it, ce) as ExpandOperator]
 
 		Cypher2RelalgUtil.chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
 	}
 
-	def dispatch Operator buildRelalg(PatternElementChain ec) {
+	def static dispatch Operator buildRelalg(PatternElementChain ec, CompilerEnvironment ce) {
 		val patternElementChain_VertexVariable = ce.vb.buildVertexVariable(ec.nodePattern) => [
 			// parse map-like constraints if given
-			buildRelalgProperties(ec.nodePattern.properties, it)
+			buildRelalgProperties(ec.nodePattern.properties, it, ce)
 		]
 		val patternElementChain_EdgeVariable = ce.vb.buildEdgeVariable(ec.relationshipPattern.detail) => [
 			// parse map-like constraints if given
-			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it)
+			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it, ce)
 		]
 
 
@@ -1267,13 +654,7 @@ class RelalgBuilder {
 
 	}
 
-	def void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi) {
-		fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
-		// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-		fe.arguments.addAll(fi.parameter.map[buildRelalgExpression(it)])
-	}
-
-//  def dispatch buildRelalg(Cypher rule) {
+//  def static dispatch buildRelalg(Cypher rule, CompilerEnvironment ce) {
 //    println(String::format("received unsupported cypher element: %s", rule.class.name))
 //  }
 	/**
@@ -1283,15 +664,15 @@ class RelalgBuilder {
 	 * FIXME: attach to the VertexVariable if in a MATCH or CREATE context
 	 * otherwise, selection operators should be created, see #67
 	 */
-	def dispatch buildRelalgProperties(MapLiteral properties, ElementVariable ev) {
+	def static dispatch buildRelalgProperties(MapLiteral properties, ElementVariable ev, CompilerEnvironment ce) {
 		if (properties !== null) {
 			val pList = modelFactory.createPropertyList => [
-				expressionContainer = topLevelContainer
+				expressionContainer = ce.tlc
 			]
 
 			properties.entries.forEach [ e |
 				val key = e.key
-				val value = buildRelalgExpression(e.value)
+				val value = ExpressionBuilder.buildExpression(e.value, ce)
 				pList.entries.put(key, value)
 			]
 
@@ -1299,11 +680,11 @@ class RelalgBuilder {
 		}
 	}
 
-	def dispatch buildRelalgProperties(Properties properties, ElementVariable ev) {
+	def static dispatch buildRelalgProperties(Properties properties, ElementVariable ev, CompilerEnvironment ce) {
 		ce.l.unsupported('''Parsing Properties type is unsupported.''')
 	}
 
-	def dispatch buildRelalgProperties(Void p, ElementVariable ev) {}
+	def static dispatch buildRelalgProperties(Void p, ElementVariable ev, CompilerEnvironment ce) {}
 
 	/**
 	 * Given a RelationshipPattern instance, it's direction information
@@ -1312,8 +693,8 @@ class RelalgBuilder {
 	 * @param pattern the relationship pattern
 	 * @return the appropriate direction descriptor
 	 */
-	protected def convertToDirection(RelationshipPattern pattern) {
-		val isLeftArrow =pattern.incoming
+	protected def static convertToDirection(RelationshipPattern pattern) {
+		val isLeftArrow = pattern.incoming
 		val isRightArrow = pattern.outgoing
 
 		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
