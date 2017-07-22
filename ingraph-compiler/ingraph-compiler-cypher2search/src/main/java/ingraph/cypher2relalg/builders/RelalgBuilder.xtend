@@ -22,15 +22,12 @@ import org.slizaa.neo4j.opencypher.openCypher.Create
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.Delete
 import org.slizaa.neo4j.opencypher.openCypher.ExpressionNodeLabelsAndPropertyLookup
-import org.slizaa.neo4j.opencypher.openCypher.MapLiteral
 import org.slizaa.neo4j.opencypher.openCypher.Match
 import org.slizaa.neo4j.opencypher.openCypher.NodePattern
 import org.slizaa.neo4j.opencypher.openCypher.PatternElement
 import org.slizaa.neo4j.opencypher.openCypher.PatternElementChain
 import org.slizaa.neo4j.opencypher.openCypher.PatternPart
-import org.slizaa.neo4j.opencypher.openCypher.Properties
 import org.slizaa.neo4j.opencypher.openCypher.RegularQuery
-import org.slizaa.neo4j.opencypher.openCypher.RelationshipPattern
 import org.slizaa.neo4j.opencypher.openCypher.RelationshipsPattern
 import org.slizaa.neo4j.opencypher.openCypher.Return
 import org.slizaa.neo4j.opencypher.openCypher.ReturnBody
@@ -40,8 +37,6 @@ import org.slizaa.neo4j.opencypher.openCypher.Unwind
 import org.slizaa.neo4j.opencypher.openCypher.VariableRef
 import org.slizaa.neo4j.opencypher.openCypher.With
 import relalg.AbstractEdgeVariable
-import relalg.Direction
-import relalg.ElementVariable
 import relalg.ExpandOperator
 import relalg.ExpressionVariable
 import relalg.JoinOperator
@@ -51,8 +46,6 @@ import relalg.OrderDirection
 import relalg.RelalgFactory
 import relalg.UnaryOperator
 import relalg.Variable
-import relalg.VariableExpression
-import relalg.VertexVariable
 
 /**
  * This is the main class of the openCypher to relational algebra compiler.
@@ -257,8 +250,8 @@ class RelalgBuilder {
 
 			for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
 				op = switch cudClause {
-					Create: buildCreateOperator(cudClause, op, ce)
-					Delete: buildDeleteOperator(cudClause, op, ce)
+					Create: CudBuilder.buildCreateOperator(cudClause, op, ce)
+					Delete: CudBuilder.buildDeleteOperator(cudClause, op, ce)
 					default: {
 						ce.l.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
 						null
@@ -269,99 +262,6 @@ class RelalgBuilder {
 			op
 		}
 		afterCud
-	}
-
-	/**
-	 * Build and return a create operator from the CREATE clause and attach p_input to its input.
-	 */
-	protected def static buildCreateOperator(Create u0, Operator p_input, CompilerEnvironment ce) {
-		val u1 = modelFactory.createCreateOperator => [
-			input = p_input
-		]
-		for (_u2: u0.pattern.patterns) {
-			val u2 = _u2 as PatternElement
-			if (u2 === null) {
-				ce.l.unrecoverableError('''PatternElement expected at create, but received «_u2.class.name»''')
-			}
-			val t0 = ce.vb.vertexVariableFactoryElements.containsKey(u2.nodepattern.variable?.name)
-			val u4 = buildCreateNodePattern(u2.nodepattern, ce)
-			if (!t0) {
-				u1.elements.add(u4)
-			}
-			var lastVertexVariable = (u4.expression as VariableExpression).variable as VertexVariable
-			for (element: u2.chain) {
-				val t1 = ce.vb.vertexVariableFactoryElements.containsKey(element.nodePattern.variable?.name)
-				val u5 = buildCreateNodePattern(element.nodePattern, ce)
-				if (!t1) {
-					u1.elements.add(u5)
-				}
-				val t2 = ce.vb.edgeVariableFactoryElements.containsKey(element.relationshipPattern.detail?.variable?.name)
-				val u6 = buildCreateRelationshipPattern(element.relationshipPattern, lastVertexVariable, (u5.expression as VariableExpression).variable as VertexVariable, ce)
-				if (!t2) {
-					u1.elements.add(u6)
-				}
-				lastVertexVariable = (u5.expression as VariableExpression).variable as VertexVariable
-			}
-		}
-		u1
-	}
-
-	/**
-	 * Provide the edges for CREATE operator.
-	 */
-	protected def static ExpressionVariable buildCreateRelationshipPattern(RelationshipPattern relationshippattern, VertexVariable source, VertexVariable target, CompilerEnvironment ce) {
-		val u0 = modelFactory.createNavigationDescriptor => [
-			edgeVariable = ce.vb.buildEdgeVariable(relationshippattern.detail)
-			buildRelalgProperties(relationshippattern.detail.properties, edgeVariable, ce)
-			sourceVertexVariable = source
-			targetVertexVariable = target
-			direction = convertToDirection(relationshippattern)
-			expressionContainer = ce.tlc
-		]
-		val u1 = ce.vb.buildExpressionVariable(u0.edgeVariable.name, u0)
-		u1
-	}
-
-	/**
-	 * Provide the vertices for CREATE operator.
-	 */
-	protected def static ExpressionVariable buildCreateNodePattern(NodePattern nodepattern, CompilerEnvironment ce) {
-		val u0 = modelFactory.createVariableExpression => [
-			val vertexVariable = ce.vb.buildVertexVariable(nodepattern)
-			buildRelalgProperties(nodepattern.properties, vertexVariable, ce)
-			variable = vertexVariable
-			expressionContainer = ce.tlc
-		]
-		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
-		u1
-	}
-
-	/**
-	 * Build and return a delete operator from the DELETE clause and attach p_input to its input.
-	 */
-	protected def static buildDeleteOperator(Delete element, Operator p_input, CompilerEnvironment ce) {
-		val u1 = modelFactory.createDeleteOperator => [
-			detach = element.detach
-		]
-		u1.input = p_input
-		for (element2: element.expressions) {
-		  val u2 = element2 as VariableRef
-		  val u4 = buildDeleteVariableRef(u2, ce)
-		  u1.elements.add(u4)
-		}
-		u1
-	}
-
-	/**
-	 * Provide the vertices for DELETE operator.
-	 */
-	protected def static ExpressionVariable buildDeleteVariableRef(VariableRef variableref, CompilerEnvironment ce) {
-		val u0 = modelFactory.createVariableExpression => [
-			variable = ce.vb.buildRelalgVariable(variableref)
-			expressionContainer = ce.tlc
-		]
-		val u1 = ce.vb.buildExpressionVariable(u0.variable.name, u0)
-		u1
 	}
 
 	/**
@@ -624,7 +524,7 @@ class RelalgBuilder {
 		val patternElement_GetVerticesOperator = modelFactory.createGetVerticesOperator => [
 			vertexVariable = ce.vb.buildVertexVariable(n)
 			// parse map-like constraints if given
-			buildRelalgProperties(n.properties, vertexVariable, ce)
+			BuilderUtil.attachProperties(n.properties, vertexVariable, ce)
 		]
 
 		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
@@ -636,11 +536,11 @@ class RelalgBuilder {
 	def static dispatch Operator buildRelalg(PatternElementChain ec, CompilerEnvironment ce) {
 		val patternElementChain_VertexVariable = ce.vb.buildVertexVariable(ec.nodePattern) => [
 			// parse map-like constraints if given
-			buildRelalgProperties(ec.nodePattern.properties, it, ce)
+			BuilderUtil.attachProperties(ec.nodePattern.properties, it, ce)
 		]
 		val patternElementChain_EdgeVariable = ce.vb.buildEdgeVariable(ec.relationshipPattern.detail) => [
 			// parse map-like constraints if given
-			buildRelalgProperties(ec.relationshipPattern.detail?.properties, it, ce)
+			BuilderUtil.attachProperties(ec.relationshipPattern.detail?.properties, it, ce)
 		]
 
 
@@ -648,7 +548,7 @@ class RelalgBuilder {
 
 		modelFactory.createExpandOperator() => [
 			edgeVariable = patternElementChain_EdgeVariable;
-			direction = convertToDirection(ec.relationshipPattern)
+			direction = BuilderUtil.convertToDirection(ec.relationshipPattern)
 			targetVertexVariable = patternElementChain_VertexVariable;
 		]
 
@@ -657,48 +557,4 @@ class RelalgBuilder {
 //  def static dispatch buildRelalg(Cypher rule, CompilerEnvironment ce) {
 //    println(String::format("received unsupported cypher element: %s", rule.class.name))
 //  }
-	/**
-	 * Parse map-like constraints if given
-	 * and attach to the ElementVariable in certain cases.
-	 *
-	 * FIXME: attach to the VertexVariable if in a MATCH or CREATE context
-	 * otherwise, selection operators should be created, see #67
-	 */
-	def static dispatch buildRelalgProperties(MapLiteral properties, ElementVariable ev, CompilerEnvironment ce) {
-		if (properties !== null) {
-			val pList = modelFactory.createPropertyList => [
-				expressionContainer = ce.tlc
-			]
-
-			properties.entries.forEach [ e |
-				val key = e.key
-				val value = ExpressionBuilder.buildExpression(e.value, ce)
-				pList.entries.put(key, value)
-			]
-
-			ev.properties = pList
-		}
-	}
-
-	def static dispatch buildRelalgProperties(Properties properties, ElementVariable ev, CompilerEnvironment ce) {
-		ce.l.unsupported('''Parsing Properties type is unsupported.''')
-	}
-
-	def static dispatch buildRelalgProperties(Void p, ElementVariable ev, CompilerEnvironment ce) {}
-
-	/**
-	 * Given a RelationshipPattern instance, it's direction information
-	 * is mapped to the relalg model's Direction type.
-	 *
-	 * @param pattern the relationship pattern
-	 * @return the appropriate direction descriptor
-	 */
-	protected def static convertToDirection(RelationshipPattern pattern) {
-		val isLeftArrow = pattern.incoming
-		val isRightArrow = pattern.outgoing
-
-		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
-			Direction.BOTH
-		else if(isLeftArrow) Direction.IN else Direction.OUT
-	}
 }
