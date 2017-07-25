@@ -2,6 +2,12 @@
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]))
 
+(defn- iter-implications [implications]
+  (let [[constraint vars & rest] implications]
+    (if (some? constraint)
+      `(~@(iter-implications rest) [#'~constraint ~@(map keyword vars)])
+      `())))
+
 (defmacro defconstraint
   "
   Let's you define a motherfuckin' constraint like a boss.
@@ -19,12 +25,6 @@
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
   [name vars & rest]
-  (defn- iter-implications [implications]
-    (let [[constraint vars & rest] implications]
-      (if (some? constraint)
-        `(~@(iter-implications rest) [#'~constraint ~@(map keyword vars)])
-        `())))
-
   `(def ~name {:name    #'~name
                :vars    [~@(map keyword vars)]
                :arity   ~(count vars)
