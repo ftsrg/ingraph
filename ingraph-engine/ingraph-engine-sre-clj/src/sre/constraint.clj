@@ -10,7 +10,7 @@
 
 (defmacro defconstraint
   "
-  Let's you define a motherfuckin' constraint like a boss.
+  Let's you define a constraint like a boss.
 
   Usage:
     (defconstraint MyConstraint [& vars] :implies* constraint-argument-pairs*)
