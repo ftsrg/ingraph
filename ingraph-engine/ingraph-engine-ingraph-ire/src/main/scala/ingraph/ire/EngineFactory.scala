@@ -93,7 +93,7 @@ object EngineFactory {
                 expr.child,
                 op.getInternalSchema.length,
                 sortKeys,
-                op.getEntries.map(_.getDirection == OrderDirection.ASCENDING) // WHAT THE FUCK
+                op.getEntries.map(_.getDirection == OrderDirection.ASCENDING)
               )))
 
             case op: TopOperator =>
