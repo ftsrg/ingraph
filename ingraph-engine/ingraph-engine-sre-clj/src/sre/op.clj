@@ -3,7 +3,7 @@
             [clojure.set :refer :all]
             [sre.constraint]))
 
-(defmacro defop [name vars & rest]
+(defmacro defop
   "Let's you define a bloody operation.
 
   Usage:
@@ -18,6 +18,7 @@
       :requires Sugar [sugar] Spice [spice] Nice [everything]
       :satisfies PowerPuffGirls [sugar spice everything])
   "
+  [name vars & rest]
   (defn- expand-implications [constr-defs]
     (apply union (->> constr-defs
                       (map (fn [[f s]]
@@ -45,8 +46,9 @@
             {:name #'~name
              :vars [~@(map keyword vars)] })))
 
-(defn bind [op & args]
+(defn bind
   "Binds operation parameters to the given arguments"
+  [op & args]
   (let [lkp (zipmap (:vars op) args)
         replacer (partial fmap (fn [values]
                                  (fmap (fn [params] (fmap #(lkp %1) params))

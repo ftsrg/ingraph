@@ -59,10 +59,11 @@
 (defn expand-implications [constr-defs]
   (apply union (map sre.constraint/implies* constr-defs)))
 
-(defn compare-constraint-descriptors [[a-k a-v] [b-k b-v]]
+(defn compare-constraint-descriptors
   "Compares two constraint descriptors by count ASC > arity DESC > type ASC > everything else
   Last two needed for differentiating to prevent deduping in sorted sets. The resulting
   order gives a fairly good satisfaction sequence"
+  [[a-k a-v] [b-k b-v]]
   (let [count-cmp (compare (:n a-v) (:n b-v))]
     (if (= count-cmp 0)
       (let [arity-cmp (compare (:arity a-v) (:arity b-v))]
@@ -87,7 +88,7 @@
                         :cond condition)
              (op (nth condition 0)))))
 
-(defn bind-op [op var-lkp constr-lkp condition-types]
+(defn bind-op
   "Selects all applicable operation bindings for the given constraints and condition criteria. The
   condition criteria should be passed as a vector in `condition-types` containing either :free, :bound or both.
   Specifying :free matches post-conditions so the result will contain non-past operations, while binding
@@ -95,21 +96,22 @@
   present operations. You can use bind-op incrementally, ie. (bind-op MyOp var-lkp constr-lkp [:free]),
   then use the resulting descriptor to (bind-op MyOp modified-var-lkp modified-constr-lkp [:bound])
   later."
+  [op var-lkp constr-lkp condition-types]
   (let [conditions (map #(case %1 :free [:satisfies :free]
                                   :bound [:requires :bound]) condition-types)]
     ; this check is not required, it serves as an optimization
     ; for exiting as early as possible in this highly likely situation
     (if-not (reduce #(and %1 (subset?
-                              (keys (op (nth %2 0)))
-                              (into #{} (keys (constr-lkp (nth %2 1)))))) conditions)
+                               (keys (op (nth %2 0)))
+                               (into #{} (keys (constr-lkp (nth %2 1)))))) conditions)
       ()
       (let [constr-counts (map conditions)
             sorted-constr (apply union (map #(build-match-list op
                                                                (update-in constr-lkp [(nth %1 1)] (fn [m] (fmap count m)))
                                                                %1) conditions))]
-        (loop [open (list {:var-lkp     var-lkp
-                           :constr-lkp  constr-lkp
-                           :match-list  (into () sorted-constr)})
+        (loop [open (list {:var-lkp    var-lkp
+                           :constr-lkp constr-lkp
+                           :match-list (into () sorted-constr)})
                result ()]
           (let [[first-open & rest-open] open]
             (if-not (some? first-open)

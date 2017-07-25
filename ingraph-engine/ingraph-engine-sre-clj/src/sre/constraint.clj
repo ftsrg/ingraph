@@ -2,7 +2,7 @@
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]))
 
-(defmacro defconstraint [name vars & rest]
+(defmacro defconstraint
   "
   Let's you define a motherfuckin' constraint like a boss.
 
@@ -18,7 +18,7 @@
           Element [spice]
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
-
+  [name vars & rest]
   (defn- iter-implications [implications]
     (let [[constraint vars & rest] implications]
       (if (some? constraint)
@@ -33,8 +33,9 @@
                                 nil `()
                                 :implies (iter-implications implications#)))}}))
 
-(defn bind [constraint & args]
+(defn bind
   "Binds constraint parameters to the given arguments"
+  [constraint & args]
   (let [lkp (zipmap (:vars constraint) args)]
     (-> constraint
         (update-in [:vars] (partial fmap #(lkp %1)))
@@ -42,12 +43,14 @@
                                               (let [args (map #(lkp %1) params)]
                                                 (into [] (cons constraint args)))))))))
 
-(defn implies [constraint]
+(defn implies
   "Returns a set of direct implications"
+  [constraint]
   (into #{} (map (fn [[constraint & args]] (apply bind (cons @constraint args))) (:implies constraint))))
 
-(defn implies* [constraint]
+(defn implies*
   "Returns closure of implications"
+  [constraint]
   (loop [unresolved #{constraint} result #{}]
     (if (empty? unresolved)
       result
