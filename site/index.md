@@ -44,7 +44,7 @@ Candidates for primary use cases of incremental openCypher queries are:
 * Model validation ([IncQuery-D paper](pub/models2014-incqueryd.pdf), [Train Benchmark paper](https://inf.mit.bme.hu/research/publications/train-benchmark-cross-technology-performance-evaluation-continuous-model-valid))
 * Static analysis of source code repositories (thesis work [#1](pub/stein-daniel-msc.pdf), [#2](pub/lucz-soma-bsc.pdf))
 * Fraud detection ([Neo4j white paper](https://neo4j.com/use-cases/fraud-detection/))
-* Model simulation and analysis of runtime models
+* Model simulation and analysis of runtime models ([SDL paper](pub/sdl2017-opencypher-mde.pdf))
 
 Incremental openCypher queries can also be beneficial for:
 
@@ -60,6 +60,7 @@ Incremental openCypher queries can also be beneficial for:
 ## Papers
 
 * J. Marton, G. Szárnyas, D. Varró: [Formalising openCypher Graph Queries in Relational Algebra](https://arxiv.org/abs/1705.02844) (ADBIS 2017)
+* J. Marton, G. Szárnyas, M. Búr: [Model-driven engineering of an openCypher engine: using graph queries to compile graph queries](pub/sdl2017-opencypher-mde.pdf) (SDL 2017)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Varró: [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Validation](http://link.springer.com/article/10.1007/s10270-016-0571-8) (Software and Systems Modeling Journal, 2017)
 * G. Szárnyas, B. Izsó, I. Ráth, D. Harmath, G. Bergmann, D. Varró: [IncQuery-D: A Distributed Incremental Model Query Framework in the Cloud](pub/models2014-incqueryd.pdf) (MODELS 2014)
 * G. Szárnyas, J. Maginecz, D. Varró: [Evaluation of Optimization Strategies for Incremental Graph Queries](https://pp.bme.hu/eecs/article/view/9769) (Periodica Polytechnica 2017)
