@@ -2,7 +2,7 @@
   "Contains the main configuration of constraints, operations and others
   available in the engine"
   (:require [sre.constraint :refer [defconstraint]]
-            [sre.op :refer [defop]]))
+            [sre.op :refer [defop defweight]]))
 
 (defconstraint Element [element])
 (defconstraint Edge [edge] :implies Element [edge])
@@ -37,9 +37,9 @@
 (defop ExtendInByType [source edge target type]
        :requires Vertex [target]
        :satisfies DirectedEdge [target edge source] HasType [edge type])
-(defop EvalAssert1 [x expr]
+(defop Eval1 [x expr]
        :requires Element [x]
        :satisfies Assert1 [x expr])
-(defop EvalAssert2 [x y expr]
+(defop Eval2 [x y expr]
        :requires Element [x] Element [y]
        :satisfies Assert2 [x expr])
