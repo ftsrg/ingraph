@@ -2,7 +2,10 @@
   "Contains the main configuration of constraints, operations and others
   available in the engine"
   (:require [sre.constraint :refer [defconstraint]]
-            [sre.op :refer [defop defweight]]))
+            [sre.op :refer [defop defweight]]
+            [sre.config :refer :all]))
+
+(defconfig Main)
 
 (defconstraint Element [element])
 (defconstraint Edge [edge] :implies Element [edge])

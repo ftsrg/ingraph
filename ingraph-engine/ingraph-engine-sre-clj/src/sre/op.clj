@@ -13,11 +13,11 @@
 
 (defn- create-map [pairs]
   (reduce (fn [lkp [k v]] (if-not (nil? (lkp k))
-                                   (update-in lkp [k] (fn [x] (into [] (cons `[~@(map keyword v)] x))))
-                                   (assoc lkp k `[[~@(map keyword v)]]))) {} pairs))
+                            (update-in lkp [k] (fn [x] (into [] (cons `[~@(map keyword v)] x))))
+                            (assoc lkp k `[[~@(map keyword v)]]))) {} pairs))
 
 (defn- reqs-sats [args]
-  (let [[[req-kw & reqs] [sat-kw & sats] ] (split-with (fn [x] (not= `~x :satisfies)) args)]
+  (let [[[req-kw & reqs] [sat-kw & sats]] (split-with (fn [x] (not= `~x :satisfies)) args)]
     [reqs sats]))
 
 (defn- compile-args [args]
@@ -44,12 +44,15 @@
   "
   [name vars & rest]
 
-  `(def ~name
-     (merge ~(let [[req-map sat-map] (compile-args rest)]
-               {:requires req-map
-                :satisfies sat-map})
-            {:name #'~name
-             :vars [~@(map keyword vars)]})))
+  `(do
+     (def ~name
+       (merge ~(let [[req-map sat-map] (compile-args rest)]
+                 {:requires  req-map
+                  :satisfies sat-map})
+              {:name #'~name
+               :vars [~@(map keyword vars)]}))
+     ~(if (contains? (ns-interns *ns*) 'ops)
+        `(def ~'ops (conj ~'ops ~name)))))
 
 (defn bind
   "Binds operation parameters to the given arguments"

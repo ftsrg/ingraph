@@ -2,8 +2,8 @@
   (:require [clojure.test :refer :all]
             [clojure.set :refer :all]
             [sre.compiler :refer :all]
-            [sre.constraint :refer [defconstraint bind implies*]]
-            [sre.op :refer [defop]]
+            [sre.config-1 :as c1]
+            [sre.constraint :refer [bind implies*]]
             [sre.op :as op]))
 
 (deftest test-compare-constraint-descriptors
@@ -93,22 +93,6 @@
                                         stump)]
             (is (empty? branches))))))))
 
-(defconstraint TestConstraint02 [a])
-
-(defconstraint TestConstraint03 [a b] :implies TestConstraint02 [a])
-
-
-(defop TestOp01 [a b c]
-       :requires TestConstraint03 [a b]
-       :satisfies TestConstraint03 [b c])
-
-(defop TestOp02 [a b]
-       :requires TestConstraint02 [a] TestConstraint02 [b]
-       :satisfies TestConstraint03 [a b])
-
-(defop TestOp03 [a b]
-       :satisfies TestConstraint03 [a b])
-
 (deftest test-bind-op1
   (testing "Binding"
     (testing "a non-required, non-satisfiable operation"
@@ -116,86 +100,86 @@
         (is
           (empty?
             (bind-op
-              TestOp01
+              c1/TestOp01
               {}
-              {:bound {#'TestConstraint03 #{[1 2]}}
+              {:bound {#'c1/TestConstraint02 #{[1 2]}}
                :free  {}}
               [:free]))))
       (testing "should result in an empty binding list in the present"
         (is
           (empty?
             (bind-op
-              TestOp01
+              c1/TestOp01
               {}
-              {:bound {#'TestConstraint03 #{[1 2]}}
+              {:bound {#'c1/TestConstraint02 #{[1 2]}}
                :free  {}}
               [:free :bound])))))
     (testing "a required but non-satisfiable operation"
       (testing "should result in a binding list in the future"
         (let [result (bind-op
-                       TestOp01
+                       c1/TestOp01
                        {}
                        {:bound {}
-                        :free  {#'TestConstraint03 #{[1 2]} #'TestConstraint02 #{[1]}}}
+                        :free  {#'c1/TestConstraint02 #{[1 2]} #'c1/TestConstraint01 #{[1]}}}
                        [:free])]
           (is (= 1 (count result)))
           (is (= (first result)
                  (map->BindingBranchNode {:var-lkp {:b 1, :c 2}
-                                          :op      TestOp01
+                                          :op      c1/TestOp01
                                           :todo    nil
-                                          :done    (list [:free #'sre.compiler-test/TestConstraint03 [1 2]]
-                                                         [:free #'sre.compiler-test/TestConstraint02 [1]])})))))
+                                          :done    (list [:free #'c1/TestConstraint02 [1 2]]
+                                                         [:free #'c1/TestConstraint01 [1]])})))))
       (testing "should result in an empty binding list in the present"
-        (let [result (bind-op TestOp01
+        (let [result (bind-op c1/TestOp01
                               {}
                               {:bound {}
-                               :free  {#'TestConstraint03 #{[1 2]}
-                                       #'TestConstraint02 #{[1]}}}
+                               :free  {#'c1/TestConstraint02 #{[1 2]}
+                                       #'c1/TestConstraint01 #{[1]}}}
                               [:free :bound])]
           (is (empty? result))))
       (testing "should result in an empty binding list incrementally"
         (let [constr-lkp {:bound {}
-                          :free  {#'TestConstraint03 #{[1 1]} #'TestConstraint02 #{[1]}}}
-              step-1 (bind-op TestOp01
+                          :free  {#'c1/TestConstraint02 #{[1 1]} #'c1/TestConstraint01 #{[1]}}}
+              step-1 (bind-op c1/TestOp01
                               {}
                               constr-lkp
                               [:free])]
           (is (= 1 (count step-1)))
-          (let [step-2 (bind-op TestOp01
+          (let [step-2 (bind-op c1/TestOp01
                                 (:var-lkp (first step-1))
                                 constr-lkp
                                 [:bound])]
             (is (empty? step-2))))))
     (testing "a required and satisfiable operation"
       (testing "should not be bound inconsistently"
-        (let [result (bind-op TestOp03
+        (let [result (bind-op c1/TestOp03
                               {}
-                              {:bound {#'TestConstraint02 #{[1]}} ; implied by the one below, should be free
-                               :free  {#'TestConstraint03 #{[1 2]}}}
+                              {:bound {#'c1/TestConstraint01 #{[1]}} ; implied by the one below, should be free
+                               :free  {#'c1/TestConstraint02 #{[1 2]}}}
                               [:free])]
           (is (empty? result))))
       (testing "should be bound every possible way"
         (testing "case #1: only one way"
-          (let [result (bind-op TestOp01
+          (let [result (bind-op c1/TestOp01
                                 {}
-                                {:bound {#'TestConstraint02 #{[1]}
-                                         #'TestConstraint03 #{[1 2]}}
-                                 :free  {#'TestConstraint02 #{[2]}
-                                         #'TestConstraint03 #{[2 3]}}}
+                                {:bound {#'c1/TestConstraint01 #{[1]}
+                                         #'c1/TestConstraint02 #{[1 2]}}
+                                 :free  {#'c1/TestConstraint01 #{[2]}
+                                         #'c1/TestConstraint02 #{[2 3]}}}
                                 [:free :bound])]
             (is (= 1 (count result)))
             (is (= (:var-lkp (first result)) {:a 1 :b 2 :c 3}))))
         (testing "case #2: one way incrementally"
-          (let [constr-lkp {:bound {#'TestConstraint02 #{[1]}
-                                    #'TestConstraint03 #{[1 2]}}
-                            :free  {#'TestConstraint02 #{[2]}
-                                    #'TestConstraint03 #{[2 3]}}}
-                step-1 (bind-op TestOp01
+          (let [constr-lkp {:bound {#'c1/TestConstraint01 #{[1]}
+                                    #'c1/TestConstraint02 #{[1 2]}}
+                            :free  {#'c1/TestConstraint01 #{[2]}
+                                    #'c1/TestConstraint02 #{[2 3]}}}
+                step-1 (bind-op c1/TestOp01
                                 {}
                                 constr-lkp
                                 [:free])]
             (is (= 1 (count step-1)))
-            (let [step-2 (bind-op TestOp01
+            (let [step-2 (bind-op c1/TestOp01
                                   (:var-lkp (first step-1))
                                   constr-lkp
                                   [:bound])]
@@ -209,4 +193,6 @@
 ;                      compare-search-plan-cell-by-cost
 ;                      (->SearchPlanCell {:c 0 :p 1} ()))}])))
 
-(deftest test-search-plan )
+;(deftest test-search-plan
+;  (testing "empty constraint set requires absolutely no operations"
+;    (let [ops ()])))

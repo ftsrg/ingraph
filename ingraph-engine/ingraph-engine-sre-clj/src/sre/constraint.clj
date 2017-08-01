@@ -9,8 +9,7 @@
       `())))
 
 (defmacro defconstraint
-  "
-  Let's you define a constraint like a boss.
+  "Let's you define a constraint like a boss.
 
   Usage:
     (defconstraint MyConstraint [& vars] :implies* constraint-argument-pairs*)
@@ -25,13 +24,16 @@
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
   [name vars & rest]
-  `(def ~name {:name    #'~name
-               :vars    [~@(map keyword vars)]
-               :arity   ~(count vars)
-               :implies #{~@(let [[implies-kw# & implications#] rest]
-                              (case implies-kw#
-                                nil `()
-                                :implies (iter-implications implications#)))}}))
+  `(do
+     (def ~name {:name    #'~name
+                 :vars    [~@(map keyword vars)]
+                 :arity   ~(count vars)
+                 :implies #{~@(let [[implies-kw# & implications#] rest]
+                                (case implies-kw#
+                                  nil `()
+                                  :implies (iter-implications implications#)))}})
+     ~(if (contains? (ns-interns *ns*) 'constraints)
+       `(def ~'constraints (conj ~'constraints ~name)))))
 
 (defn bind
   "Binds constraint parameters to the given arguments"

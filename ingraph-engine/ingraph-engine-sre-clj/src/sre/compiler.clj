@@ -155,7 +155,7 @@
               ; we have to find out how many constraints are getting bound because that determines the first index.
               ; it should be equal to the length of the done list as everything in there is a single newly bound
               ; constraint
-              (let [column (- (:free-count cell) (count (:todo present-binding)))
+              (let [column (- (:free-count cell) (count (:todo present-binding))) ; 3:9
                     p-next (* (-> cell :cost :p) weight)
                     c-next (+ (-> cell :cost :c) p-next)
                     ; for the row we only need to determine whether it fits into the k best or not
@@ -176,7 +176,7 @@
             cost-binding-pairs)))
 
 (defn compare-search-plan-cell-by-cost [a b]
-  ;; we will always compare candidates with the most costly upon insert so do it descending
+  ; we will always compare candidates with the most costly upon insert so order descending
   (* -1 (compare (:c (:cost a)) (:c (:cost b)))))
 
 (defn calculate-search-plan
@@ -187,10 +187,10 @@
   every operation is a constraint with a so called adornment (specifying for each variable whether it is free or bound).
   "
   [ops constr-lkp ^Integer k]
-  ;; comments starting with x:y mark that the line corresponds to the algorithm
-  ;; listing `x` line `y` from the above mentioned paper.
-  ;; it hopefully gives a good reference what the code does.
-  ;; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
+  ; comments starting with x:y mark that the line corresponds to the algorithm
+  ; listing `x` line `y` from the above mentioned paper.
+  ; it hopefully gives a good reference what the code does.
+  ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
   (let [n (reduce-kv #(+ %1 (count %3)) 0 constr-lkp)]      ; 3:1 set n
     (loop [plans (sorted-map-by < n (sorted-set-by
                                       compare-search-plan-cell-by-cost
@@ -202,7 +202,7 @@
                                                             :non-past-ops (bind-free ops constr-lkp)})))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
-          (right (first (plans 0)))                         ; 3:18 - ready
+          (right (plans 0))                         ; 3:18 - ready. return best k plans
           (let [j (first keys)]
             (let [column (plans j)
                   plans (as-> plans x
@@ -210,37 +210,4 @@
                               (reduce #(search-plan-step %1 %2 k) x column))] ; 3.4
               (recur plans))))
         (left :no-solution)))))
-;
-;(defn dyn-plan-step
-;  "Progresses one step in the main search palnning algorithm"
-;  [constr-lkp non-past-op-bindings]
-;  ())
 
-;(defn plan-iteration [ops bound-constr-lkp free-constr-lkp]
-;  (let [applicable-ops (map #(bind-op %1 bound-constr-lkp free-constr-lkp) ops)]
-;    ()))
-;
-;(defn dyn-plan-step
-;  "Progresses one step in the main search planning algorithm"
-;  [ops bound-constr-lkp free-constr-lkp]
-;  (as-> ops xs
-;        (mapcat (fn [x] (bind-op x bound-constr-lkp free-constr-lkp)) xs)
-;        (map (fn [x] {:op x :cost }))))
-;
-;(defn plan [ops constr-lkp]
-;  "Main search planning algorithm. Binds some sequence of operations from the given `ops`
-;  to satisfy all constraints supplied in `constr-lkp`."
-;  (loop [bound-constr-lkp {}
-;         free-constr-lkp constr-lkp])
-;  )
-
-;(defn plan [ops constr-lkp k]
-;  "Main search planning algorithm. Binds a sequence of operations from the given `ops`
-;  to satisfy all constraints supplied in `constr-lkp`. `k` is an integer within [0, 10) that tunes the algorithm's
-;  trade-off between performance and optimality"
-;  (loop [bound-constr-lkp {}
-;         free-constr-lkp constr-lkp]
-;    (let [bound-ops (map (fn [op] (bind-op op bound-constr-lkp free-constr-lkp)) ops)]
-;
-;      ))
-;  )
