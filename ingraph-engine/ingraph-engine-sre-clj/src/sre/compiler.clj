@@ -4,7 +4,8 @@
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
     [sre.op :as op]
-    [sre.constraint :as constraint]))
+    [sre.constraint :as constraint]
+    [clojure.pprint :refer :all]))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -92,6 +93,8 @@
       ()
       (let [constr-counts (map conditions)
             sorted-constr (apply union (map #(build-match-list op
+                                                               ; this is shady but we only replace the constraints with their counts
+                                                               ; on the respective map
                                                                (update-in constr-lkp [(nth %1 1)] (fn [m] (fmap count m)))
                                                                %1) conditions))]
         (loop [open (list (map->BindingBranchNode {:op      op
@@ -118,66 +121,77 @@
   (-> constr-lkp
       (update-in [:free] #(if (= 1 (count (%1 type)))
                             (dissoc %1 type)
-                            (update-in %1 [type] (partial union constr))))
-      (update-in [:bound] (fn [map] (merge-with #(into [] (concat %1 %2)) {type [first]} map))))
+                            (update-in %1 [type] (fn [s] (disj s constr)))))
+      (update-in [:bound] (fn [map] (merge-with #(into [] (concat %1 %2)) {type [constr]} map))))
   )
 
 (defn- bind-free [ops constr-lkp]
-  (mapcat #(map (fn [a] [%1 a]) (bind-op %1 {} constr-lkp [:free])) ops))
+  (mapcat #(bind-op %1 {} constr-lkp [:free]) ops))
+
+(defn compare-search-plan-cell-by-cost [a b]
+  ; we will always compare candidates with the most costly upon insert so order descending
+  (let [cost-cmp (* -1 (compare (:c (:cost a)) (:c (:cost b))))]
+    ; once again we have to differentatiate between every entry else they will be deduplicated
+    (if (= cost-cmp 0)
+      (not= a b)
+      cost-cmp)))
 
 (defn search-plan-step [plans ^SearchPlanCell cell ^Integer k]
   ; the idea here is that we have operations in non-past-ops that may or may not be applicable at the moment
   ; because we haven't checked them for required constraints. so first figure out the applicable ops
-  (let [cost-binding-pairs (for [present-binding (->> (:non-past-ops cell)
-                                                      ; this can look weird but generally a single non-past op
-                                                      ; can branch into more than one present op because
-                                                      ; required constraints have not been checked
-                                                      (mapcat #(assoc-in (bind-op (:op %1)
-                                                                                  (:var-lkp %1)
-                                                                                  (:constr-lkp cell)
-                                                                                  [:bound])
-                                                                         [:done]
-                                                                         ; replace the things this operation will do if we
-                                                                         ; eventually choose it
-                                                                         ; note that we can do this instead of concating because only
-                                                                         ; free constraints are moved (binding an op
-                                                                         ; for required constraints always results in an empty list)
-                                                                         (:done %1))))
+  (let [cost-binding-pairs (for [non-past-binding (:non-past-ops cell)
+                                 ; remember that for bindings will result in a mapcat (just like in Scala)
+                                 ; sou using this can look weird but generally a single non-past op
+                                 ; can branch into more than one present op because
+                                 ; required constraints have not been checked
+                                 present-binding (bind-op (:op non-past-binding)
+                                                          (:var-lkp non-past-binding)
+                                                          (:constr-lkp cell)
+                                                          [:bound])
+                                 ; replace the things this operation will do if we
+                                 ; eventually choose it
+                                 ; note that we can do this instead of concating because only
+                                 ; free constraints are moved (binding an op
+                                 ; for required constraints always results in an empty list)
+                                 :let [present-binding (assoc-in present-binding [:done] (:done non-past-binding))]
                                  ; the cost-fn requires that the op is properly bound to vars, so we do that here
                                  ; yeah, it smells that we have two different representations for the damn same thing
                                  ; so refactor once you have the fatigue
                                  :let [bound (op/bind-map (:op present-binding) (:var-lkp present-binding))
                                        ; TODO need to find out a way to get stats about the variables
-                                       weight (op/weight (:name bound) bound {})]]
-                             ([weight present-binding bound]))]
+                                       weight (op/weight bound {})]]
+                             [weight present-binding bound])]
     ; go through all applicable ops and try to fit them somewhere in our table.
     (reduce (fn [plans [weight present-binding bound]]
               ; we have to find out how many constraints are getting bound because that determines the first index.
               ; it should be equal to the length of the done list as everything in there is a single newly bound
               ; constraint
-              (let [column (- (:free-count cell) (count (:todo present-binding))) ; 3:9
+              (let [column (- (:free-count cell) (count (:done present-binding))) ; 3:9
                     p-next (* (-> cell :cost :p) weight)
                     c-next (+ (-> cell :cost :c) p-next)
                     ; for the row we only need to determine whether it fits into the k best or not
                     fits? (or
-                            (< (count (plans column)) k)
-                            (< c-next (-> (plans column) first :cost :c)))]
+                            (< (count (get plans column)) k)
+                            (< c-next (-> (get plans column) first :cost :c)))]
                 (if fits?
                   ; if it fits insert
-                  (let [next-constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))]
-                    (map->SearchPlanCell {:cost         {:c c-next :p p-next}
-                                          :ops          (cons bound (:ops cell))
-                                          :constr-lkp   (reduce bind-constr (:constr-lkp cell) (:done present-binding))
-                                          :free-count   column
-                                          :non-past-ops (bind-free (:non-past-ops cell) next-constr-lkp)}))
+                  (let [next-constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))
+                        cell (map->SearchPlanCell {:cost         {:c c-next :p p-next}
+                                                   :ops          (cons bound (:ops cell))
+                                                   :constr-lkp   next-constr-lkp
+                                                   :free-count   column
+                                                   :non-past-ops (filter (fn [x] (every? #(subset? #{(nth %1 2)}
+                                                                                                   (get-in next-constr-lkp
+                                                                                                           [(nth %1 0) (nth %1 1)])
+                                                                                                   )
+                                                                                         (:done x)))
+                                                                         (:non-past-ops cell))})
+                        plans (update-in plans [column] #(conj (if (nil? %1) (sorted-set-by compare-search-plan-cell-by-cost) %1) cell))]
+                    plans)
                   ; else don't modify plans
                   plans)))
             plans
             cost-binding-pairs)))
-
-(defn compare-search-plan-cell-by-cost [a b]
-  ; we will always compare candidates with the most costly upon insert so order descending
-  (* -1 (compare (:c (:cost a)) (:c (:cost b)))))
 
 (defn calculate-search-plan
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
@@ -191,22 +205,22 @@
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (let [n (reduce-kv #(+ %1 (count %3)) 0 constr-lkp)]      ; 3:1 set n
-    (loop [plans (sorted-map-by < n (sorted-set-by
+  (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))] ; 3:1 set n
+    (loop [plans (sorted-map-by > n (sorted-set-by
                                       compare-search-plan-cell-by-cost
                                       (map->SearchPlanCell {:cost         {:c 0 ; 3:2
                                                                            :p 1}
                                                             :ops          ()
                                                             :constr-lkp   constr-lkp
-                                                            :free-count   0
+                                                            :free-count   (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
                                                             :non-past-ops (bind-free ops constr-lkp)})))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
-          (right (plans 0))                         ; 3:18 - ready. return best k plans
+          (right (plans 0))                                 ; 3:18 - ready. return best k plans
           (let [j (first keys)]
-            (let [column (plans j)
+            (let [column (get plans j)
                   plans (as-> plans x
-                              (dissoc j x)
+                              (dissoc x j)
                               (reduce #(search-plan-step %1 %2 k) x column))] ; 3.4
               (recur plans))))
         (left :no-solution)))))

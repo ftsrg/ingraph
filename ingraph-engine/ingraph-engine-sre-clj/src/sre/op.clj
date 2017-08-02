@@ -67,8 +67,8 @@
         (update-in [:satisfies] replacer))))
 
 (defn bind-map
-  "Binds operation parameters to the given arguments given as a map"
-  [op & map]
+  "Binds operation parameters to the given name - value map"
+  [op map]
   (let [lkp map
         replacer (partial fmap (fn [values]
                                  (fmap (fn [params] (fmap #(lkp %1) params))
@@ -78,7 +78,7 @@
         (update-in [:requires] replacer)
         (update-in [:satisfies] replacer))))
 
-(defmulti weight (fn [x] (:name x)))
+(defmulti weight (fn [x & rest] (:name x)))
 
 (defmacro defweight [op params body]
   "Let's you define a weight for an operation"

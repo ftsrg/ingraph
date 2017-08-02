@@ -3,8 +3,12 @@
             [clojure.set :refer :all]
             [sre.compiler :refer :all]
             [sre.config-1 :as c1]
+            [sre.config-2 :as c2]
             [sre.constraint :refer [bind implies*]]
-            [sre.op :as op]))
+            [sre.op :as op]
+            [clojure.pprint :refer :all]
+            [cats.core :refer [mlet]]
+            [cats.monad.either :refer :all]))
 
 (deftest test-compare-constraint-descriptors
   (testing "Compare contraint descriptors"
@@ -186,13 +190,16 @@
               (is (= 1 (count step-2)))
               (is (= (:var-lkp (first step-2)) {:a 1 :b 2 :c 3})))))))))
 
-;(deftest test-search-plan-step
-;  (testing "#1"
-;    (let [ops   (op/bind TestOp01)
-;          plans {3 (sorted-set-by
-;                      compare-search-plan-cell-by-cost
-;                      (->SearchPlanCell {:c 0 :p 1} ()))}])))
 
-;(deftest test-search-plan
-;  (testing "empty constraint set requires absolutely no operations"
-;    (let [ops ()])))
+(deftest test-search-plan
+  (testing "empty constraint set requires absolutely no operations"
+    (let [ops (into () c2/ops)
+          constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
+                            #'c2/Vertex #{[1] [3]}
+                            #'c2/Edge #{[2]}
+                            #'c2/Element #{[1] [2] [3]}}
+                      :bound {}}
+          plan (calculate-search-plan ops constr-lkp 5)]
+      (is (right? plan))
+      (mlet [plan plan]
+            (pprint plan)))))
