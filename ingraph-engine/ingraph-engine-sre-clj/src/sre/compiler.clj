@@ -131,7 +131,7 @@
 (defn compare-search-plan-cell-by-cost [a b]
   ; we will always compare candidates with the most costly upon insert so order descending
   (let [cost-cmp (* -1 (compare (:c (:cost a)) (:c (:cost b))))]
-    ; once again we have to differentatiate between every entry else they will be deduplicated
+    ; once again we have to differentiate between every entry else they will be deduplicated
     (if (= cost-cmp 0)
       (not= a b)
       cost-cmp)))

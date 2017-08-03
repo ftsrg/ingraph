@@ -31,15 +31,15 @@
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])
-(defop ExtendIn [source edge target]
+(defop ExtendIn [target edge source]
        :requires Vertex [target]
-       :satisfies DirectedEdge [target edge source])
+       :satisfies DirectedEdge [source edge target])
 (defop ExtendOutByType [source edge target type]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target] HasType [edge type])
-(defop ExtendInByType [source edge target type]
+(defop ExtendInByType [target edge source type]
        :requires Vertex [target]
-       :satisfies DirectedEdge [target edge source] HasType [edge type])
+       :satisfies DirectedEdge [source edge target] HasType [edge type])
 (defop Eval1 [x expr]
        :requires Element [x]
        :satisfies Assert1 [x expr])

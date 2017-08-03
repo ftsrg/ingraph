@@ -20,9 +20,9 @@
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])
-(defop ExtendIn [source edge target]
+(defop ExtendIn [target edge source]
        :requires Vertex [target]
-       :satisfies DirectedEdge [target edge source])
+       :satisfies DirectedEdge [source edge target])
 
 (defweight GetVertices [op _] 5)
 (defweight GetEdges [op _] 5)
