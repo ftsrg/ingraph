@@ -1,9 +1,9 @@
 (ns sre.main
   "Contains the main configuration of constraints, operations and others
   available in the engine"
-  (:require [sre.constraint :refer [defconstraint]]
-            [sre.op :refer [defop defweight]]
-            [sre.config :refer :all]))
+  (:require [sre.dsl.constraint :refer [defconstraint]]
+            [sre.dsl.op :refer [defop defweight]]
+            [sre.dsl.config :refer :all]))
 
 (defconfig Main)
 

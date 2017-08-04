@@ -1,15 +1,15 @@
-(ns sre.op
+(ns sre.dsl.op
   (:require [clojure.algo.generic.functor :refer :all]
             [clojure.set :refer :all]
-            [sre.constraint]))
+            [sre.dsl.constraint]))
 
 (defn- expand-implications [constr-defs]
   (apply union (->> constr-defs
                     (map (fn [[f s]]
-                           (apply sre.constraint/bind (deref (resolve f)) s)))
+                           (apply sre.dsl.constraint/bind (deref (resolve f)) s)))
                     (map (comp
                            (partial fmap #(vector (:name %1) (:vars %1)))
-                           sre.constraint/implies*)))))
+                           sre.dsl.constraint/implies*)))))
 
 (defn- create-map [pairs]
   (reduce (fn [lkp [k v]] (if-not (nil? (lkp k))

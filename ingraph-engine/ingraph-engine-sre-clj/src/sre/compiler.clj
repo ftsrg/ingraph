@@ -3,8 +3,8 @@
     [cats.monad.either :refer :all]
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
-    [sre.op :as op]
-    [sre.constraint :as constraint]
+    [sre.dsl.op :as op]
+    [sre.dsl.constraint :as constraint]
     [clojure.pprint :refer :all]))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
@@ -43,7 +43,7 @@
               (recur (cons new-branch branches) rest))))))))
 
 (defn expand-implications [constr-defs]
-  (apply union (map sre.constraint/implies* constr-defs)))
+  (apply union (map sre.dsl.constraint/implies* constr-defs)))
 
 (defn compare-constraint-descriptors
   "Compares two constraint descriptors by count ASC > arity DESC > type ASC > everything else

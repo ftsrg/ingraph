@@ -4,8 +4,8 @@
             [sre.compiler :refer :all]
             [sre.config-1 :as c1]
             [sre.config-2 :as c2]
-            [sre.constraint :refer [bind implies*]]
-            [sre.op :as op]
+            [sre.dsl.constraint :refer [bind implies*]]
+            [sre.dsl.op :as op]
             [clojure.pprint :refer :all]
             [cats.core :refer [mlet]]
             [cats.monad.either :refer :all]))

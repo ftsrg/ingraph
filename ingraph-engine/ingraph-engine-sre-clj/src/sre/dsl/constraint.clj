@@ -1,4 +1,4 @@
-(ns sre.constraint
+(ns sre.dsl.constraint
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]))
 

@@ -1,4 +1,4 @@
-(ns sre.config)
+(ns sre.dsl.config)
 
 (defmacro defconfig
   "Creates an engine configuration variable in the current namespace, used
@@ -20,9 +20,9 @@
   Usage:
   ```
   (ns myconfig (:require
-                 [sre.config
-                 [sre.constraint :refer [defconstraint]]
-                 [sre.op :refer [defop defweight]])))
+                 [sre.dsl.config
+                 [sre.dsl.constraint :refer [defconstraint]]
+                 [sre.dsl.op :refer [defop defweight]])))
 
   (defconfig MyConfig)
 
