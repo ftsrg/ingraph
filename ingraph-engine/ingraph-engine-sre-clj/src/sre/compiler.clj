@@ -114,6 +114,8 @@
                   ; continue matching
                   (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))))
 
+(defrecord SearchPlanColumn [ordered-cells cells-by-constr-lkp])
+
 (defrecord SearchPlanCell [cost ops constr-lkp free-count non-past-ops])
 
 (defn- bind-constr [constr-lkp [_ type constr]]
@@ -122,7 +124,7 @@
       (update-in [:free] #(if (= 1 (count (%1 type)))
                             (dissoc %1 type)
                             (update-in %1 [type] (fn [s] (disj s constr)))))
-      (update-in [:bound] (fn [map] (merge-with #(into [] (concat %1 %2)) {type [constr]} map))))
+      (update-in [:bound] (fn [map] (merge-with #(union %1 %2) {type #{constr}} map))))
   )
 
 (defn- bind-free [ops constr-lkp]
@@ -130,11 +132,20 @@
 
 (defn compare-search-plan-cell-by-cost [a b]
   ; we will always compare candidates with the most costly upon insert so order descending
-  (let [cost-cmp (* -1 (compare (:c (:cost a)) (:c (:cost b))))]
-    ; once again we have to differentiate between every entry else they will be deduplicated
-    (if (= cost-cmp 0)
-      (not= a b)
-      cost-cmp)))
+  ; we have to differentiate between every entry else they will be deduplicated
+  (+ 1 (* -2 (compare (:c (:cost a)) (:c (:cost b))))))
+
+(defn create-search-plan-cell [index cost bound cell constr-lkp]
+  (map->SearchPlanCell {:cost         cost
+                        :ops          (cons bound (:ops cell))
+                        :constr-lkp   constr-lkp
+                        :free-count   index
+                        :non-past-ops (filter (fn [x] (every? #(subset? #{(nth %1 2)}
+                                                                        (get-in constr-lkp
+                                                                                [(nth %1 0) (nth %1 1)])
+                                                                        )
+                                                              (:done x)))
+                                              (:non-past-ops cell))}))
 
 (defn search-plan-step [plans ^SearchPlanCell cell ^Integer k]
   ; the idea here is that we have operations in non-past-ops that may or may not be applicable at the moment
@@ -166,28 +177,36 @@
               ; we have to find out how many constraints are getting bound because that determines the first index.
               ; it should be equal to the length of the done list as everything in there is a single newly bound
               ; constraint
-              (let [column (- (:free-count cell) (count (:done present-binding))) ; 3:9
+              (let [index (- (:free-count cell) (count (:done present-binding))) ; 3:9
+                    column (get plans index)
+                    ordered-cells (get column :ordered-cells)
                     p-next (* (-> cell :cost :p) weight)
                     c-next (+ (-> cell :cost :c) p-next)
-                    ; for the row we only need to determine whether it fits into the k best or not
-                    fits? (or
-                            (< (count (get plans column)) k)
-                            (< c-next (-> (get plans column) first :cost :c)))]
+                    ; first determine whether it fits into the k best or not
+                    fits? (or (< (count ordered-cells) k)
+                              (< c-next (-> ordered-cells first :cost :c)))]
                 (if fits?
-                  ; if it fits insert
-                  (let [next-constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))
-                        cell (map->SearchPlanCell {:cost         {:c c-next :p p-next}
-                                                   :ops          (cons bound (:ops cell))
-                                                   :constr-lkp   next-constr-lkp
-                                                   :free-count   column
-                                                   :non-past-ops (filter (fn [x] (every? #(subset? #{(nth %1 2)}
-                                                                                                   (get-in next-constr-lkp
-                                                                                                           [(nth %1 0) (nth %1 1)])
-                                                                                                   )
-                                                                                         (:done x)))
-                                                                         (:non-past-ops cell))})
-                        plans (update-in plans [column] #(conj (if (nil? %1) (sorted-set-by compare-search-plan-cell-by-cost) %1) cell))]
-                    plans)
+                  ; it fits however it still can be a duplicate
+                  (let [cost {:p p-next :c c-next}
+                        constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))
+                        dupe (get-in column [:cells-by-constr-lkp constr-lkp])]
+                    (if (nil? dupe)
+                      ; no dupe
+                      (let [cell (create-search-plan-cell index cost bound cell constr-lkp)
+                            plans (-> plans
+                                      ; yuck. the set might not even exist at this point.
+                                      (update-in [index :ordered-cells] #(conj (if (nil? %1) (sorted-set-by compare-search-plan-cell-by-cost) %1) cell))
+                                      (assoc-in [index :cells-by-constr-lkp constr-lkp] cell))]
+                        plans)
+                      ; uh-oh we have a dupe
+                      (if (< c-next (get-in dupe [:cost :c]))
+                        ; this is better, evict dupe
+                        (let [cell (create-search-plan-cell index cost bound cell constr-lkp)]
+                          (-> plans
+                              (update-in [index :ordered-cells] #(-> %1 (disj dupe) (conj cell)))
+                              (assoc-in [index :cells-by-constr-lkp constr-lkp] cell)))
+                        ; existing is better, so don't modify the plan
+                        plans)))
                   ; else don't modify plans
                   plans)))
             plans
@@ -205,15 +224,15 @@
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))] ; 3:1 set n
-    (loop [plans (sorted-map-by > n (sorted-set-by
-                                      compare-search-plan-cell-by-cost
-                                      (map->SearchPlanCell {:cost         {:c 0 ; 3:2
-                                                                           :p 1}
-                                                            :ops          ()
-                                                            :constr-lkp   constr-lkp
-                                                            :free-count   (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
-                                                            :non-past-ops (bind-free ops constr-lkp)})))]
+  (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
+        cell (map->SearchPlanCell {:cost         {:c 0   ; 3:2
+                                                  :p 1}
+                                   :ops          ()
+                                   :constr-lkp   constr-lkp
+                                   :free-count   (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
+                                   :non-past-ops (bind-free ops constr-lkp)})] ; 3:1 set n
+    (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
+                                                            :cells-by-constr-lkp {constr-lkp cell}}))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
           (right (plans 0))                                 ; 3:18 - ready. return best k plans
@@ -221,7 +240,7 @@
             (let [column (get plans j)
                   plans (as-> plans x
                               (dissoc x j)
-                              (reduce #(search-plan-step %1 %2 k) x column))] ; 3.4
+                              (reduce #(search-plan-step %1 %2 k) x (:ordered-cells column)))] ; 3.4
               (recur plans))))
         (left :no-solution)))))
 

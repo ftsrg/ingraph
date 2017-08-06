@@ -192,12 +192,23 @@
 
 
 (deftest test-search-plan
-  (testing "empty constraint set requires absolutely no operations"
+  ;(testing "empty constraint set requires absolutely no operations"
+  ;  (let [ops (into () c2/ops)
+  ;        constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
+  ;                          #'c2/Vertex #{[1] [3]}
+  ;                          #'c2/Edge #{[2]}
+  ;                          #'c2/Element #{[1] [2] [3]}}
+  ;                    :bound {}}
+  ;        plan (calculate-search-plan ops constr-lkp 5 false)]
+  ;    (is (right? plan))
+  ;    (mlet [plan plan]
+  ;          (pprint plan))))
+  (testing "simple plan"
     (let [ops (into () c2/ops)
           constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
-                            #'c2/Vertex #{[1] [3]}
-                            #'c2/Edge #{[2]}
-                            #'c2/Element #{[1] [2] [3]}}
+                             #'c2/Vertex #{[1] [3]}
+                             #'c2/Edge #{[2]}
+                             #'c2/Element #{[1] [2] [3]}}
                       :bound {}}
           plan (calculate-search-plan ops constr-lkp 5)]
       (is (right? plan))
