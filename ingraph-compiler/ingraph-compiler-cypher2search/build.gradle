@@ -28,3 +28,10 @@ task failingTests(type: Test) {
     includeCategories 'ingraph.cypher2relalg.tck.FailingTests'
   }
 }
+
+test {
+  scanForTestClasses = false
+  useJUnit {
+    includeCategories 'ingraph.cypher2relalg.tck.RegressionTests'
+  }
+}
