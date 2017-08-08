@@ -56,12 +56,12 @@ public abstract class LeftDeepTreeNodesMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("parent".equals(parameterName) ) {
-        this.fParent = (BinaryLogicalExpression) newValue;
-        return true;
+    	this.fParent = (BinaryLogicalExpression) newValue;
+    	return true;
     }
     if ("child".equals(parameterName) ) {
-        this.fChild = (BinaryLogicalExpression) newValue;
-        return true;
+    	this.fChild = (BinaryLogicalExpression) newValue;
+    	return true;
     }
     return false;
   }
@@ -118,18 +118,18 @@ public abstract class LeftDeepTreeNodesMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof LeftDeepTreeNodesMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     LeftDeepTreeNodesMatch other = (LeftDeepTreeNodesMatch) obj;
     if (fParent == null) {if (other.fParent != null) return false;}
@@ -142,10 +142,10 @@ public abstract class LeftDeepTreeNodesMatch extends BasePatternMatch {
   @Override
   public LeftDeepTreeNodesQuerySpecification specification() {
     try {
-        return LeftDeepTreeNodesQuerySpecification.instance();
+    	return LeftDeepTreeNodesQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

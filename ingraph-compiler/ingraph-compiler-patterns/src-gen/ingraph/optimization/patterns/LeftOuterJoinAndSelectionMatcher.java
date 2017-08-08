@@ -86,7 +86,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
     // check if matcher already exists
     LeftOuterJoinAndSelectionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (LeftOuterJoinAndSelectionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (LeftOuterJoinAndSelectionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -231,7 +231,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -242,7 +242,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -251,7 +251,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final LeftOuterJoinAndSelectionMatch partialMatch) {
@@ -260,7 +260,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
@@ -275,7 +275,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator(final Object[] parameters) {
@@ -286,7 +286,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator() {
@@ -295,7 +295,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final LeftOuterJoinAndSelectionMatch partialMatch) {
@@ -304,7 +304,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final Operator pParentOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
@@ -319,7 +319,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftOuterJoinOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<LeftOuterJoinOperator> rawAccumulateAllValuesOfleftOuterJoinOperator(final Object[] parameters) {
@@ -330,7 +330,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftOuterJoinOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator() {
@@ -339,7 +339,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftOuterJoinOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final LeftOuterJoinAndSelectionMatch partialMatch) {
@@ -348,7 +348,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftOuterJoinOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOfleftOuterJoinOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final Operator pLeftInputOperator, final Operator pRightInputOperator) {
@@ -363,7 +363,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfleftInputOperator(final Object[] parameters) {
@@ -374,7 +374,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInputOperator() {
@@ -383,7 +383,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInputOperator(final LeftOuterJoinAndSelectionMatch partialMatch) {
@@ -392,7 +392,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for leftInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfleftInputOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pRightInputOperator) {
@@ -407,7 +407,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for rightInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfrightInputOperator(final Object[] parameters) {
@@ -418,7 +418,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for rightInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInputOperator() {
@@ -427,7 +427,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for rightInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInputOperator(final LeftOuterJoinAndSelectionMatch partialMatch) {
@@ -436,7 +436,7 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   
   /**
    * Retrieve the set of values that occur in matches for rightInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfrightInputOperator(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LeftOuterJoinOperator pLeftOuterJoinOperator, final Operator pLeftInputOperator) {
@@ -452,30 +452,30 @@ public class LeftOuterJoinAndSelectionMatcher extends BaseMatcher<LeftOuterJoinA
   @Override
   protected LeftOuterJoinAndSelectionMatch tupleToMatch(final Tuple t) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (Operator) t.get(POSITION_RIGHTINPUTOPERATOR));
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LeftOuterJoinOperator) t.get(POSITION_LEFTOUTERJOINOPERATOR), (Operator) t.get(POSITION_LEFTINPUTOPERATOR), (Operator) t.get(POSITION_RIGHTINPUTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatch(final Object[] match) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (Operator) match[POSITION_RIGHTINPUTOPERATOR]);
+    	return LeftOuterJoinAndSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (Operator) match[POSITION_RIGHTINPUTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftOuterJoinAndSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (Operator) match[POSITION_RIGHTINPUTOPERATOR]);
+    	return LeftOuterJoinAndSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LeftOuterJoinOperator) match[POSITION_LEFTOUTERJOINOPERATOR], (Operator) match[POSITION_LEFTINPUTOPERATOR], (Operator) match[POSITION_RIGHTINPUTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

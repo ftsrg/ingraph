@@ -60,7 +60,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
     // check if matcher already exists
     AssociativeOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (AssociativeOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (AssociativeOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -205,7 +205,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<JoinOperator> rawAccumulateAllValuesOfop1(final Object[] parameters) {
@@ -216,7 +216,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop1() {
@@ -225,7 +225,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop1(final AssociativeOperatorMatch partialMatch) {
@@ -234,7 +234,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop1(final JoinOperator pOp2, final Operator pA, final Operator pB, final Operator pC) {
@@ -249,7 +249,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<JoinOperator> rawAccumulateAllValuesOfop2(final Object[] parameters) {
@@ -260,7 +260,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop2() {
@@ -269,7 +269,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop2(final AssociativeOperatorMatch partialMatch) {
@@ -278,7 +278,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for op2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<JoinOperator> getAllValuesOfop2(final JoinOperator pOp1, final Operator pA, final Operator pB, final Operator pC) {
@@ -293,7 +293,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for a.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfa(final Object[] parameters) {
@@ -304,7 +304,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for a.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfa() {
@@ -313,7 +313,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for a.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfa(final AssociativeOperatorMatch partialMatch) {
@@ -322,7 +322,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for a.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfa(final JoinOperator pOp1, final JoinOperator pOp2, final Operator pB, final Operator pC) {
@@ -337,7 +337,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for b.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfb(final Object[] parameters) {
@@ -348,7 +348,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for b.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfb() {
@@ -357,7 +357,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for b.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfb(final AssociativeOperatorMatch partialMatch) {
@@ -366,7 +366,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for b.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfb(final JoinOperator pOp1, final JoinOperator pOp2, final Operator pA, final Operator pC) {
@@ -381,7 +381,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for c.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfc(final Object[] parameters) {
@@ -392,7 +392,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for c.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfc() {
@@ -401,7 +401,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for c.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfc(final AssociativeOperatorMatch partialMatch) {
@@ -410,7 +410,7 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   
   /**
    * Retrieve the set of values that occur in matches for c.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfc(final JoinOperator pOp1, final JoinOperator pOp2, final Operator pA, final Operator pB) {
@@ -426,30 +426,30 @@ public class AssociativeOperatorMatcher extends BaseMatcher<AssociativeOperatorM
   @Override
   protected AssociativeOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return AssociativeOperatorMatch.newMatch((JoinOperator) t.get(POSITION_OP1), (JoinOperator) t.get(POSITION_OP2), (Operator) t.get(POSITION_A), (Operator) t.get(POSITION_B), (Operator) t.get(POSITION_C));
+    	return AssociativeOperatorMatch.newMatch((JoinOperator) t.get(POSITION_OP1), (JoinOperator) t.get(POSITION_OP2), (Operator) t.get(POSITION_A), (Operator) t.get(POSITION_B), (Operator) t.get(POSITION_C));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AssociativeOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return AssociativeOperatorMatch.newMatch((JoinOperator) match[POSITION_OP1], (JoinOperator) match[POSITION_OP2], (Operator) match[POSITION_A], (Operator) match[POSITION_B], (Operator) match[POSITION_C]);
+    	return AssociativeOperatorMatch.newMatch((JoinOperator) match[POSITION_OP1], (JoinOperator) match[POSITION_OP2], (Operator) match[POSITION_A], (Operator) match[POSITION_B], (Operator) match[POSITION_C]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AssociativeOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return AssociativeOperatorMatch.newMutableMatch((JoinOperator) match[POSITION_OP1], (JoinOperator) match[POSITION_OP2], (Operator) match[POSITION_A], (Operator) match[POSITION_B], (Operator) match[POSITION_C]);
+    	return AssociativeOperatorMatch.newMutableMatch((JoinOperator) match[POSITION_OP1], (JoinOperator) match[POSITION_OP2], (Operator) match[POSITION_A], (Operator) match[POSITION_B], (Operator) match[POSITION_C]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

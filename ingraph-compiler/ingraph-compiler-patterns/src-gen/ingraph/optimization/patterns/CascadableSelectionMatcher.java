@@ -64,7 +64,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
     // check if matcher already exists
     CascadableSelectionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (CascadableSelectionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (CascadableSelectionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -200,7 +200,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -211,7 +211,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -220,7 +220,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final CascadableSelectionMatch partialMatch) {
@@ -229,7 +229,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
@@ -243,7 +243,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator(final Object[] parameters) {
@@ -254,7 +254,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator() {
@@ -263,7 +263,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final CascadableSelectionMatch partialMatch) {
@@ -272,7 +272,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final Operator pParentOperator, final LogicalExpression pLeftOperand, final LogicalExpression pRightOperand) {
@@ -286,7 +286,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for leftOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<LogicalExpression> rawAccumulateAllValuesOfleftOperand(final Object[] parameters) {
@@ -297,7 +297,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for leftOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfleftOperand() {
@@ -306,7 +306,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for leftOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfleftOperand(final CascadableSelectionMatch partialMatch) {
@@ -315,7 +315,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for leftOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfleftOperand(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pRightOperand) {
@@ -329,7 +329,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for rightOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<LogicalExpression> rawAccumulateAllValuesOfrightOperand(final Object[] parameters) {
@@ -340,7 +340,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for rightOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfrightOperand() {
@@ -349,7 +349,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for rightOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfrightOperand(final CascadableSelectionMatch partialMatch) {
@@ -358,7 +358,7 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   
   /**
    * Retrieve the set of values that occur in matches for rightOperand.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LogicalExpression> getAllValuesOfrightOperand(final Operator pParentOperator, final SelectionOperator pSelectionOperator, final LogicalExpression pLeftOperand) {
@@ -373,30 +373,30 @@ public class CascadableSelectionMatcher extends BaseMatcher<CascadableSelectionM
   @Override
   protected CascadableSelectionMatch tupleToMatch(final Tuple t) {
     try {
-        return CascadableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
+    	return CascadableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR), (LogicalExpression) t.get(POSITION_LEFTOPERAND), (LogicalExpression) t.get(POSITION_RIGHTOPERAND));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected CascadableSelectionMatch arrayToMatch(final Object[] match) {
     try {
-        return CascadableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected CascadableSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return CascadableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
+    	return CascadableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR], (LogicalExpression) match[POSITION_LEFTOPERAND], (LogicalExpression) match[POSITION_RIGHTOPERAND]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

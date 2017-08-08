@@ -64,7 +64,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
     // check if matcher already exists
     JoinOnDualMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (JoinOnDualMatcher)engine.getMatcher(querySpecification());
+    	matcher = (JoinOnDualMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -182,7 +182,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfotherInputOperator(final Object[] parameters) {
@@ -193,7 +193,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator() {
@@ -202,7 +202,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final JoinOnDualMatch partialMatch) {
@@ -211,7 +211,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final EquiJoinLikeOperator pEquiJoinLikeOperator) {
@@ -223,7 +223,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<EquiJoinLikeOperator> rawAccumulateAllValuesOfequiJoinLikeOperator(final Object[] parameters) {
@@ -234,7 +234,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator() {
@@ -243,7 +243,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final JoinOnDualMatch partialMatch) {
@@ -252,7 +252,7 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final Operator pOtherInputOperator) {
@@ -265,30 +265,30 @@ public class JoinOnDualMatcher extends BaseMatcher<JoinOnDualMatch> {
   @Override
   protected JoinOnDualMatch tupleToMatch(final Tuple t) {
     try {
-        return JoinOnDualMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR));
+    	return JoinOnDualMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected JoinOnDualMatch arrayToMatch(final Object[] match) {
     try {
-        return JoinOnDualMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
+    	return JoinOnDualMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected JoinOnDualMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return JoinOnDualMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
+    	return JoinOnDualMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

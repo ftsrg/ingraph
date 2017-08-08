@@ -48,9 +48,9 @@ public final class LeftDeepTreeNodesQuerySpecification extends BaseGeneratedEMFQ
    */
   public static LeftDeepTreeNodesQuerySpecification instance() throws ViatraQueryException {
     try{
-        return LazyHolder.INSTANCE;
+    	return LazyHolder.INSTANCE;
     } catch (ExceptionInInitializerError err) {
-        throw processInitializerError(err);
+    	throw processInitializerError(err);
     }
   }
   
@@ -76,8 +76,8 @@ public final class LeftDeepTreeNodesQuerySpecification extends BaseGeneratedEMFQ
   
   /**
    * Inner class allowing the singleton instance of {@link LeftDeepTreeNodesQuerySpecification} to be created 
-   *     <b>not</b> at the class load time of the outer class, 
-   *     but rather at the first call to {@link LeftDeepTreeNodesQuerySpecification#instance()}.
+   * 	<b>not</b> at the class load time of the outer class, 
+   * 	but rather at the first call to {@link LeftDeepTreeNodesQuerySpecification#instance()}.
    * 
    * <p> This workaround is required e.g. to support recursion.
    * 
@@ -129,30 +129,29 @@ public final class LeftDeepTreeNodesQuerySpecification extends BaseGeneratedEMFQ
       setEvaluationHints(new QueryEvaluationHint(null, (IQueryBackendFactory)null));
       Set<PBody> bodies = Sets.newLinkedHashSet();
       try {
-          {
-              PBody body = new PBody(this);
-              PVariable var_parent = body.getOrCreateVariableByName("parent");
-              PVariable var_child = body.getOrCreateVariableByName("child");
-              new TypeConstraint(body, new FlatTuple(var_parent), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              new TypeConstraint(body, new FlatTuple(var_child), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
-                 new ExportedParameter(body, var_parent, parameter_pParent),
-                 new ExportedParameter(body, var_child, parameter_pChild)
-              ));
-              //   BinaryLogicalExpression.leftOperand(parent, child)
-              new TypeConstraint(body, new FlatTuple(var_parent), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
-              new TypeConstraint(body, new FlatTuple(var_parent, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "leftOperand")));
-              new TypeConstraint(body, new FlatTuple(var__virtual_0_), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "LogicalExpression")));
-              new Equality(body, var__virtual_0_, var_child);
-              //   BinaryLogicalExpression(child)
-              new TypeConstraint(body, new FlatTuple(var_child), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
-              bodies.add(body);
-          }
-          // to silence compiler error
-          if (false) throw new ViatraQueryException("Never", "happens");
+      	{
+      		PBody body = new PBody(this);
+      		PVariable var_parent = body.getOrCreateVariableByName("parent");
+      		PVariable var_child = body.getOrCreateVariableByName("child");
+      		new TypeConstraint(body, new FlatTuple(var_parent), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		new TypeConstraint(body, new FlatTuple(var_child), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		body.setSymbolicParameters(Arrays.<ExportedParameter>asList(
+      		   new ExportedParameter(body, var_parent, parameter_pParent),
+      		   new ExportedParameter(body, var_child, parameter_pChild)
+      		));
+      		//   BinaryLogicalExpression.leftOperand(parent, child)
+      		new TypeConstraint(body, new FlatTuple(var_parent), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		PVariable var__virtual_0_ = body.getOrCreateVariableByName(".virtual{0}");
+      		new TypeConstraint(body, new FlatTuple(var_parent, var__virtual_0_), new EStructuralFeatureInstancesKey(getFeatureLiteral("http://ingraph/relalg", "BinaryLogicalExpression", "leftOperand")));
+      		new Equality(body, var__virtual_0_, var_child);
+      		//   BinaryLogicalExpression(child)
+      		new TypeConstraint(body, new FlatTuple(var_child), new EClassTransitiveInstancesKey((EClass)getClassifierLiteral("http://ingraph/relalg", "BinaryLogicalExpression")));
+      		bodies.add(body);
+      	}
+      	// to silence compiler error
+      	if (false) throw new ViatraQueryException("Never", "happens");
       } catch (ViatraQueryException ex) {
-          throw processDependencyException(ex);
+      	throw processDependencyException(ex);
       }
       return bodies;
     }

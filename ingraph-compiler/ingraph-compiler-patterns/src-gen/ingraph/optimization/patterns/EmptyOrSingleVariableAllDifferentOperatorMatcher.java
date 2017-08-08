@@ -59,7 +59,7 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
     // check if matcher already exists
     EmptyOrSingleVariableAllDifferentOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (EmptyOrSingleVariableAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (EmptyOrSingleVariableAllDifferentOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -168,7 +168,7 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<AllDifferentOperator> rawAccumulateAllValuesOfallDifferentOperator(final Object[] parameters) {
@@ -179,7 +179,7 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator() {
@@ -189,30 +189,30 @@ public class EmptyOrSingleVariableAllDifferentOperatorMatcher extends BaseMatche
   @Override
   protected EmptyOrSingleVariableAllDifferentOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return EmptyOrSingleVariableAllDifferentOperatorMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR));
+    	return EmptyOrSingleVariableAllDifferentOperatorMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected EmptyOrSingleVariableAllDifferentOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return EmptyOrSingleVariableAllDifferentOperatorMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR]);
+    	return EmptyOrSingleVariableAllDifferentOperatorMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected EmptyOrSingleVariableAllDifferentOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return EmptyOrSingleVariableAllDifferentOperatorMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR]);
+    	return EmptyOrSingleVariableAllDifferentOperatorMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

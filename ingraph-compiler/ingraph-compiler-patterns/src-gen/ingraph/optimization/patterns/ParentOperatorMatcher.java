@@ -57,7 +57,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
     // check if matcher already exists
     ParentOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (ParentOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (ParentOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -175,7 +175,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfoperator(final Object[] parameters) {
@@ -186,7 +186,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator() {
@@ -195,7 +195,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator(final ParentOperatorMatch partialMatch) {
@@ -204,7 +204,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for operator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfoperator(final Operator pParentOperator) {
@@ -216,7 +216,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -227,7 +227,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -236,7 +236,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final ParentOperatorMatch partialMatch) {
@@ -245,7 +245,7 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pOperator) {
@@ -258,30 +258,30 @@ public class ParentOperatorMatcher extends BaseMatcher<ParentOperatorMatch> {
   @Override
   protected ParentOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return ParentOperatorMatch.newMatch((Operator) t.get(POSITION_OPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return ParentOperatorMatch.newMatch((Operator) t.get(POSITION_OPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected ParentOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return ParentOperatorMatch.newMatch((Operator) match[POSITION_OPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return ParentOperatorMatch.newMatch((Operator) match[POSITION_OPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected ParentOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return ParentOperatorMatch.newMutableMatch((Operator) match[POSITION_OPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return ParentOperatorMatch.newMutableMatch((Operator) match[POSITION_OPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

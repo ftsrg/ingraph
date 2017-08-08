@@ -61,7 +61,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
     // check if matcher already exists
     FoldableConstantExpressionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (FoldableConstantExpressionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (FoldableConstantExpressionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -188,7 +188,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Expression> rawAccumulateAllValuesOfe(final Object[] parameters) {
@@ -199,7 +199,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Expression> getAllValuesOfe() {
@@ -208,7 +208,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Expression> getAllValuesOfe(final FoldableConstantExpressionMatch partialMatch) {
@@ -217,7 +217,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for e.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Expression> getAllValuesOfe(final Literal pV1, final Literal pV2) {
@@ -230,7 +230,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Literal> rawAccumulateAllValuesOfv1(final Object[] parameters) {
@@ -241,7 +241,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv1() {
@@ -250,7 +250,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv1(final FoldableConstantExpressionMatch partialMatch) {
@@ -259,7 +259,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv1(final Expression pE, final Literal pV2) {
@@ -272,7 +272,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Literal> rawAccumulateAllValuesOfv2(final Object[] parameters) {
@@ -283,7 +283,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv2() {
@@ -292,7 +292,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv2(final FoldableConstantExpressionMatch partialMatch) {
@@ -301,7 +301,7 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   
   /**
    * Retrieve the set of values that occur in matches for v2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Literal> getAllValuesOfv2(final Expression pE, final Literal pV1) {
@@ -315,30 +315,30 @@ public class FoldableConstantExpressionMatcher extends BaseMatcher<FoldableConst
   @Override
   protected FoldableConstantExpressionMatch tupleToMatch(final Tuple t) {
     try {
-        return FoldableConstantExpressionMatch.newMatch((Expression) t.get(POSITION_E), (Literal) t.get(POSITION_V1), (Literal) t.get(POSITION_V2));
+    	return FoldableConstantExpressionMatch.newMatch((Expression) t.get(POSITION_E), (Literal) t.get(POSITION_V1), (Literal) t.get(POSITION_V2));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected FoldableConstantExpressionMatch arrayToMatch(final Object[] match) {
     try {
-        return FoldableConstantExpressionMatch.newMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
+    	return FoldableConstantExpressionMatch.newMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected FoldableConstantExpressionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return FoldableConstantExpressionMatch.newMutableMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
+    	return FoldableConstantExpressionMatch.newMutableMatch((Expression) match[POSITION_E], (Literal) match[POSITION_V1], (Literal) match[POSITION_V2]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

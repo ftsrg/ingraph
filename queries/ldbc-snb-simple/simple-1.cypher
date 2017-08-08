@@ -1,3 +1,3 @@
-MATCH (comment:Comment)-[r:replyOf*]->(message:Message)
+MATCH (comment:Comment)-[:replyOf*]->(message:Message)
 RETURN comment.content, message.content
 ORDER BY comment.content, message.content

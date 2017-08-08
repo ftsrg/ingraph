@@ -56,12 +56,12 @@ public abstract class ParentOperatorMatch extends BasePatternMatch {
   public boolean set(final String parameterName, final Object newValue) {
     if (!isMutable()) throw new java.lang.UnsupportedOperationException();
     if ("operator".equals(parameterName) ) {
-        this.fOperator = (Operator) newValue;
-        return true;
+    	this.fOperator = (Operator) newValue;
+    	return true;
     }
     if ("parentOperator".equals(parameterName) ) {
-        this.fParentOperator = (Operator) newValue;
-        return true;
+    	this.fParentOperator = (Operator) newValue;
+    	return true;
     }
     return false;
   }
@@ -118,18 +118,18 @@ public abstract class ParentOperatorMatch extends BasePatternMatch {
   @Override
   public boolean equals(final Object obj) {
     if (this == obj)
-        return true;
+    	return true;
     if (!(obj instanceof ParentOperatorMatch)) { // this should be infrequent
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof IPatternMatch)) {
-            return false;
-        }
-        IPatternMatch otherSig  = (IPatternMatch) obj;
-        if (!specification().equals(otherSig.specification()))
-            return false;
-        return Arrays.deepEquals(toArray(), otherSig.toArray());
+    	if (obj == null) {
+    		return false;
+    	}
+    	if (!(obj instanceof IPatternMatch)) {
+    		return false;
+    	}
+    	IPatternMatch otherSig  = (IPatternMatch) obj;
+    	if (!specification().equals(otherSig.specification()))
+    		return false;
+    	return Arrays.deepEquals(toArray(), otherSig.toArray());
     }
     ParentOperatorMatch other = (ParentOperatorMatch) obj;
     if (fOperator == null) {if (other.fOperator != null) return false;}
@@ -142,10 +142,10 @@ public abstract class ParentOperatorMatch extends BasePatternMatch {
   @Override
   public ParentOperatorQuerySpecification specification() {
     try {
-        return ParentOperatorQuerySpecification.instance();
+    	return ParentOperatorQuerySpecification.instance();
     } catch (ViatraQueryException ex) {
-         // This cannot happen, as the match object can only be instantiated if the query specification exists
-         throw new IllegalStateException (ex);
+     	// This cannot happen, as the match object can only be instantiated if the query specification exists
+     	throw new IllegalStateException (ex);
     }
   }
   

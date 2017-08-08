@@ -54,7 +54,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
     // check if matcher already exists
     LeftDeepTreeNodesMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (LeftDeepTreeNodesMatcher)engine.getMatcher(querySpecification());
+    	matcher = (LeftDeepTreeNodesMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -172,7 +172,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<BinaryLogicalExpression> rawAccumulateAllValuesOfparent(final Object[] parameters) {
@@ -183,7 +183,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent() {
@@ -192,7 +192,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent(final LeftDeepTreeNodesMatch partialMatch) {
@@ -201,7 +201,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for parent.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfparent(final BinaryLogicalExpression pChild) {
@@ -213,7 +213,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<BinaryLogicalExpression> rawAccumulateAllValuesOfchild(final Object[] parameters) {
@@ -224,7 +224,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild() {
@@ -233,7 +233,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild(final LeftDeepTreeNodesMatch partialMatch) {
@@ -242,7 +242,7 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   
   /**
    * Retrieve the set of values that occur in matches for child.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<BinaryLogicalExpression> getAllValuesOfchild(final BinaryLogicalExpression pParent) {
@@ -255,30 +255,30 @@ public class LeftDeepTreeNodesMatcher extends BaseMatcher<LeftDeepTreeNodesMatch
   @Override
   protected LeftDeepTreeNodesMatch tupleToMatch(final Tuple t) {
     try {
-        return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) t.get(POSITION_PARENT), (BinaryLogicalExpression) t.get(POSITION_CHILD));
+    	return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) t.get(POSITION_PARENT), (BinaryLogicalExpression) t.get(POSITION_CHILD));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftDeepTreeNodesMatch arrayToMatch(final Object[] match) {
     try {
-        return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
+    	return LeftDeepTreeNodesMatch.newMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected LeftDeepTreeNodesMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return LeftDeepTreeNodesMatch.newMutableMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
+    	return LeftDeepTreeNodesMatch.newMutableMatch((BinaryLogicalExpression) match[POSITION_PARENT], (BinaryLogicalExpression) match[POSITION_CHILD]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

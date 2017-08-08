@@ -57,7 +57,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
     // check if matcher already exists
     UnnecessaryJoinMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (UnnecessaryJoinMatcher)engine.getMatcher(querySpecification());
+    	matcher = (UnnecessaryJoinMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -184,7 +184,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfotherInputOperator(final Object[] parameters) {
@@ -195,7 +195,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator() {
@@ -204,7 +204,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -213,7 +213,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for otherInputOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfotherInputOperator(final EquiJoinLikeOperator pEquiJoinLikeOperator, final Operator pParentOperator) {
@@ -226,7 +226,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<EquiJoinLikeOperator> rawAccumulateAllValuesOfequiJoinLikeOperator(final Object[] parameters) {
@@ -237,7 +237,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator() {
@@ -246,7 +246,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -255,7 +255,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for equiJoinLikeOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EquiJoinLikeOperator> getAllValuesOfequiJoinLikeOperator(final Operator pOtherInputOperator, final Operator pParentOperator) {
@@ -268,7 +268,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -279,7 +279,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -288,7 +288,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final UnnecessaryJoinMatch partialMatch) {
@@ -297,7 +297,7 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final Operator pOtherInputOperator, final EquiJoinLikeOperator pEquiJoinLikeOperator) {
@@ -311,30 +311,30 @@ public class UnnecessaryJoinMatcher extends BaseMatcher<UnnecessaryJoinMatch> {
   @Override
   protected UnnecessaryJoinMatch tupleToMatch(final Tuple t) {
     try {
-        return UnnecessaryJoinMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return UnnecessaryJoinMatch.newMatch((Operator) t.get(POSITION_OTHERINPUTOPERATOR), (EquiJoinLikeOperator) t.get(POSITION_EQUIJOINLIKEOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryJoinMatch arrayToMatch(final Object[] match) {
     try {
-        return UnnecessaryJoinMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryJoinMatch.newMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected UnnecessaryJoinMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return UnnecessaryJoinMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return UnnecessaryJoinMatch.newMutableMatch((Operator) match[POSITION_OTHERINPUTOPERATOR], (EquiJoinLikeOperator) match[POSITION_EQUIJOINLIKEOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

@@ -62,7 +62,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
     // check if matcher already exists
     DefaultExpandOperatorMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (DefaultExpandOperatorMatcher)engine.getMatcher(querySpecification());
+    	matcher = (DefaultExpandOperatorMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -180,7 +180,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<ExpandOperator> rawAccumulateAllValuesOfexpandOperator(final Object[] parameters) {
@@ -191,7 +191,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator() {
@@ -200,7 +200,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final DefaultExpandOperatorMatch partialMatch) {
@@ -209,7 +209,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for expandOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<ExpandOperator> getAllValuesOfexpandOperator(final Operator pParentOperator) {
@@ -221,7 +221,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -232,7 +232,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -241,7 +241,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final DefaultExpandOperatorMatch partialMatch) {
@@ -250,7 +250,7 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final ExpandOperator pExpandOperator) {
@@ -263,30 +263,30 @@ public class DefaultExpandOperatorMatcher extends BaseMatcher<DefaultExpandOpera
   @Override
   protected DefaultExpandOperatorMatch tupleToMatch(final Tuple t) {
     try {
-        return DefaultExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
+    	return DefaultExpandOperatorMatch.newMatch((ExpandOperator) t.get(POSITION_EXPANDOPERATOR), (Operator) t.get(POSITION_PARENTOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected DefaultExpandOperatorMatch arrayToMatch(final Object[] match) {
     try {
-        return DefaultExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return DefaultExpandOperatorMatch.newMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected DefaultExpandOperatorMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return DefaultExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
+    	return DefaultExpandOperatorMatch.newMutableMatch((ExpandOperator) match[POSITION_EXPANDOPERATOR], (Operator) match[POSITION_PARENTOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

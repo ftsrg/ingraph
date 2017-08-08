@@ -9,7 +9,7 @@ import org.junit.Test
 
 class TrainBenchmarkCypher2RelalgTest {
 
-	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator
+	extension ExternalSchemaCalculator externalSchemaCalculator = new ExternalSchemaCalculator(false)
 
 	def process(String query) {
 		val cypher = CypherParser.parseFile("trainbenchmark/" + query)

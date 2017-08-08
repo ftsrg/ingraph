@@ -54,7 +54,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
     // check if matcher already exists
     AllDifferentOperatorEdgeVariablesMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (AllDifferentOperatorEdgeVariablesMatcher)engine.getMatcher(querySpecification());
+    	matcher = (AllDifferentOperatorEdgeVariablesMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -172,7 +172,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<AllDifferentOperator> rawAccumulateAllValuesOfallDifferentOperator(final Object[] parameters) {
@@ -183,7 +183,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator() {
@@ -192,7 +192,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final AllDifferentOperatorEdgeVariablesMatch partialMatch) {
@@ -201,7 +201,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for allDifferentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<AllDifferentOperator> getAllValuesOfallDifferentOperator(final EdgeVariable pEdgeVariable) {
@@ -213,7 +213,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for edgeVariable.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<EdgeVariable> rawAccumulateAllValuesOfedgeVariable(final Object[] parameters) {
@@ -224,7 +224,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for edgeVariable.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EdgeVariable> getAllValuesOfedgeVariable() {
@@ -233,7 +233,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for edgeVariable.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EdgeVariable> getAllValuesOfedgeVariable(final AllDifferentOperatorEdgeVariablesMatch partialMatch) {
@@ -242,7 +242,7 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   
   /**
    * Retrieve the set of values that occur in matches for edgeVariable.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<EdgeVariable> getAllValuesOfedgeVariable(final AllDifferentOperator pAllDifferentOperator) {
@@ -255,30 +255,30 @@ public class AllDifferentOperatorEdgeVariablesMatcher extends BaseMatcher<AllDif
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch tupleToMatch(final Tuple t) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (EdgeVariable) t.get(POSITION_EDGEVARIABLE));
+    	return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) t.get(POSITION_ALLDIFFERENTOPERATOR), (EdgeVariable) t.get(POSITION_EDGEVARIABLE));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch arrayToMatch(final Object[] match) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
+    	return AllDifferentOperatorEdgeVariablesMatch.newMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected AllDifferentOperatorEdgeVariablesMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return AllDifferentOperatorEdgeVariablesMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
+    	return AllDifferentOperatorEdgeVariablesMatch.newMutableMatch((AllDifferentOperator) match[POSITION_ALLDIFFERENTOPERATOR], (EdgeVariable) match[POSITION_EDGEVARIABLE]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

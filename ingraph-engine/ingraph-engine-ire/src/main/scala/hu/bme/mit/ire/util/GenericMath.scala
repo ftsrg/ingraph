@@ -163,6 +163,13 @@ object GenericMath extends Ordering[Any] {
       }
   }
 
+  def sqrt(a: Any): Any = a match {
+    case a: Float  => Math.sqrt(a)
+    case a: Double => Math.sqrt(a)
+    case a: Int    => Math.sqrt(a)
+    case a: Long   => Math.sqrt(a)
+  }
+
   def mod(a: Any, b: Any): Any = a match {
     case a: Float =>
       b match {

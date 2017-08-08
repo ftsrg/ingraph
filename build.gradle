@@ -7,56 +7,6 @@ allprojects {
   version = '0.2.0-SNAPSHOT'
 }
 
-subprojects {
-  apply plugin: 'java'
-  apply plugin: 'eclipse'
-  apply plugin: 'com.jfrog.bintray'
-  apply plugin: 'maven-publish'
-
-  jar {
-    from sourceSets.main.allJava
-  }
-
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-
-  repositories {
-    jcenter()
-    maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
-    maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
-    maven { url 'https://szdavid92.github.io/ingraph-deps' }
-  }
-
-  // disable warnings for Scala projects
-  tasks.withType(ScalaCompile) {
-    scalaCompileOptions.additionalParameters = ["-nowarn"]
-  }
-
-  configurations.all { exclude group: 'asm' }
-
-  buildscript {
-    repositories {
-      jcenter()
-    }
-  }
-
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        from components.java
-      }
-    }
-  }
-
-  bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publish = true
-    override = true
-    publications = ['mavenJava']
-  }
-}
-
 ext {
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
@@ -76,4 +26,46 @@ ext {
   viatraVersion = '1.6' + viatraMinorVersion
   xtendVersion = '2.10.0'
   xtextVersion = xtendVersion
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'scala'
+  apply plugin: 'eclipse'
+  apply plugin: 'com.jfrog.bintray'
+  apply plugin: 'maven-publish'
+
+  jar {
+    from sourceSets.main.allJava
+    from sourceSets.main.allScala
+  }
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  repositories {
+    jcenter()
+    maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
+    maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
+    maven { url 'https://szdavid92.github.io/ingraph-deps' }
+  }
+
+  // disable warnings for Scala projects
+  tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-nowarn"]
+  }
+
+  dependencies {
+    compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
+    testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
+  }
+
+  configurations.all { exclude group: 'asm' }
+
+  buildscript {
+    repositories {
+      jcenter()
+    }
+  }
 }

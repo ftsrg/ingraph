@@ -62,7 +62,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
     // check if matcher already exists
     SelMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (SelMatcher)engine.getMatcher(querySpecification());
+    	matcher = (SelMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -180,7 +180,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for lojOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<LeftOuterJoinOperator> rawAccumulateAllValuesOflojOperator(final Object[] parameters) {
@@ -191,7 +191,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for lojOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOflojOperator() {
@@ -200,7 +200,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for lojOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOflojOperator(final SelMatch partialMatch) {
@@ -209,7 +209,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for lojOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<LeftOuterJoinOperator> getAllValuesOflojOperator(final SelectionOperator pSelectionOperator) {
@@ -221,7 +221,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator(final Object[] parameters) {
@@ -232,7 +232,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator() {
@@ -241,7 +241,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final SelMatch partialMatch) {
@@ -250,7 +250,7 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator(final LeftOuterJoinOperator pLojOperator) {
@@ -263,30 +263,30 @@ public class SelMatcher extends BaseMatcher<SelMatch> {
   @Override
   protected SelMatch tupleToMatch(final Tuple t) {
     try {
-        return SelMatch.newMatch((LeftOuterJoinOperator) t.get(POSITION_LOJOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR));
+    	return SelMatch.newMatch((LeftOuterJoinOperator) t.get(POSITION_LOJOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected SelMatch arrayToMatch(final Object[] match) {
     try {
-        return SelMatch.newMatch((LeftOuterJoinOperator) match[POSITION_LOJOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR]);
+    	return SelMatch.newMatch((LeftOuterJoinOperator) match[POSITION_LOJOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected SelMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return SelMatch.newMutableMatch((LeftOuterJoinOperator) match[POSITION_LOJOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR]);
+    	return SelMatch.newMutableMatch((LeftOuterJoinOperator) match[POSITION_LOJOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   

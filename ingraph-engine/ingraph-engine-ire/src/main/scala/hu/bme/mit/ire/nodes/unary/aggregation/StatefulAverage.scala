@@ -6,8 +6,6 @@ import hu.bme.mit.ire.util.GenericMath
 class StatefulAverage(val sumKey: Int) extends StatefulAggregate {
   val summer = new StatefulSum(sumKey)
   val counter = new StatefulCount()
-  var avg: Any = 0
-
 
   override def value(): Any = try {
     GenericMath.divide(summer.value(), counter.value())

@@ -57,7 +57,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
     // check if matcher already exists
     SwappableSelectionMatcher matcher = engine.getExistingMatcher(querySpecification());
     if (matcher == null) {
-        matcher = (SwappableSelectionMatcher)engine.getMatcher(querySpecification());
+    	matcher = (SwappableSelectionMatcher)engine.getMatcher(querySpecification());
     }
     return matcher;
   }
@@ -184,7 +184,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<Operator> rawAccumulateAllValuesOfparentOperator(final Object[] parameters) {
@@ -195,7 +195,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator() {
@@ -204,7 +204,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SwappableSelectionMatch partialMatch) {
@@ -213,7 +213,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for parentOperator.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<Operator> getAllValuesOfparentOperator(final SelectionOperator pSelectionOperator1, final SelectionOperator pSelectionOperator2) {
@@ -226,7 +226,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator1(final Object[] parameters) {
@@ -237,7 +237,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator1() {
@@ -246,7 +246,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator1(final SwappableSelectionMatch partialMatch) {
@@ -255,7 +255,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator1.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator1(final Operator pParentOperator, final SelectionOperator pSelectionOperator2) {
@@ -268,7 +268,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   protected Set<SelectionOperator> rawAccumulateAllValuesOfselectionOperator2(final Object[] parameters) {
@@ -279,7 +279,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator2() {
@@ -288,7 +288,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator2(final SwappableSelectionMatch partialMatch) {
@@ -297,7 +297,7 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   
   /**
    * Retrieve the set of values that occur in matches for selectionOperator2.
-   * @return the Set of all values or empty set if there are no matches
+   * @return the Set of all values, null if no parameter with the given name exists, empty set if there are no matches
    * 
    */
   public Set<SelectionOperator> getAllValuesOfselectionOperator2(final Operator pParentOperator, final SelectionOperator pSelectionOperator1) {
@@ -311,30 +311,30 @@ public class SwappableSelectionMatcher extends BaseMatcher<SwappableSelectionMat
   @Override
   protected SwappableSelectionMatch tupleToMatch(final Tuple t) {
     try {
-        return SwappableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR1), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR2));
+    	return SwappableSelectionMatch.newMatch((Operator) t.get(POSITION_PARENTOPERATOR), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR1), (SelectionOperator) t.get(POSITION_SELECTIONOPERATOR2));
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in tuple not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in tuple not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected SwappableSelectionMatch arrayToMatch(final Object[] match) {
     try {
-        return SwappableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR1], (SelectionOperator) match[POSITION_SELECTIONOPERATOR2]);
+    	return SwappableSelectionMatch.newMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR1], (SelectionOperator) match[POSITION_SELECTIONOPERATOR2]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
   @Override
   protected SwappableSelectionMatch arrayToMatchMutable(final Object[] match) {
     try {
-        return SwappableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR1], (SelectionOperator) match[POSITION_SELECTIONOPERATOR2]);
+    	return SwappableSelectionMatch.newMutableMatch((Operator) match[POSITION_PARENTOPERATOR], (SelectionOperator) match[POSITION_SELECTIONOPERATOR1], (SelectionOperator) match[POSITION_SELECTIONOPERATOR2]);
     } catch(ClassCastException e) {
-        LOGGER.error("Element(s) in array not properly typed!",e);
-        return null;
+    	LOGGER.error("Element(s) in array not properly typed!",e);
+    	return null;
     }
   }
   
