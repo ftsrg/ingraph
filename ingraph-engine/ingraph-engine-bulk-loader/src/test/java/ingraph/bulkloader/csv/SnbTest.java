@@ -19,7 +19,7 @@ import neo4j.driver.util.GraphPrettyPrinter;
 
 public class SnbTest {
 
-	private static final String PREFIX = "../graphs/snb_50/";
+	private static final String PREFIX = TestConstants.GRAPHS_DIR + "snb_50/";
 	private static final String POSTFIX = "_0_0.csv";
 
 	final Map<String, Collection<String>> nodeCsvs = ImmutableMap.<String, Collection<String>>builder() //

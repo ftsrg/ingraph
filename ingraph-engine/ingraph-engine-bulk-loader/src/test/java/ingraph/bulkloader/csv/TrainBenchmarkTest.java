@@ -18,7 +18,7 @@ import neo4j.driver.util.GraphPrettyPrinter;
 
 public class TrainBenchmarkTest {
 
-	private static final String PREFIX = "../graphs/trainbenchmark/railway-repair-1-";
+	private static final String PREFIX = TestConstants.GRAPHS_DIR + "trainbenchmark/railway-repair-1-";
 	private static final String POSTFIX = ".csv";
 
 	final Map<String, Collection<String>> nodeFilenames = ImmutableMap.<String, Collection<String>>builder() //
