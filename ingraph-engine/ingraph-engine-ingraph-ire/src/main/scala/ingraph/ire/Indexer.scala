@@ -111,12 +111,14 @@ class Indexer {
     edgeLookup.remove(id)
   }
 
-  def vertexById(id: Long): IngraphVertex = vertexLookup(id)
-  def edgeById(id: Long): IngraphEdge = edgeLookup(id)
-  def verticesByLabel(label: String): Seq[IngraphVertex] = vertexLabelLookup(label)
-  def edgesByLabel(label: String): Seq[IngraphEdge] = edgeLabelLookup(label)
-  def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup(label).size
-  def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup(label).size
+  def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
+  def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
+  def vertices(): Iterator[IngraphVertex] = vertexLabelLookup.valuesIterator.flatten
+  def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
+  def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
+  def edgesByLabel(label: String): Iterator[IngraphEdge] = edgeLabelLookup.getOrElse(label, Seq()).iterator
+  def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup.get(label).map(_.size).getOrElse(0)
+  def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup.get(label).map(_.size).getOrElse(0)
 
   val rnd = new Random(1)
   def newId(): Long = {

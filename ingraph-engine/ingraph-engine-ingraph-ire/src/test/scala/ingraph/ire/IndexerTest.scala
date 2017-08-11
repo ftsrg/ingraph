@@ -19,7 +19,7 @@ class IndexerTest extends WordSpec {
 
   "IngraphEdge" should {
     "reverse itself" in {
-      val edge: IngraphEdge = indexer.edgesByLabel("eats").head
+      val edge: IngraphEdge = indexer.edgesByLabel("eats").toSeq.head
       val inverse = edge.inverse()
       assert(edge.sourceVertex == inverse.targetVertex)
       assert(inverse.sourceVertex == edge.targetVertex)
@@ -34,12 +34,12 @@ class IndexerTest extends WordSpec {
     }
 
     "return vertices by id" in {
-      assert(indexer.vertexById(3).id == 3)
+      assert(indexer.vertexById(3).map(_.id) == Some(3))
     }
 
     "make create navigable entities" in {
-      assert(indexer.vertexById(2).edges("owns").sourceVertex.id == 2)
-      assert(indexer.vertexById(2).reverseEdges("owns").targetVertex.id == 2)
+      assert(indexer.vertexById(2).map(_.edges("owns").sourceVertex.id) == Some(2))
+      assert(indexer.vertexById(2).map(_.reverseEdges("owns").targetVertex.id) == Some(2))
     }
   }
 }
