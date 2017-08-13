@@ -195,7 +195,11 @@
                       (let [cell (create-search-plan-cell index cost bound cell constr-lkp)
                             plans (-> plans
                                       ; yuck. the set might not even exist at this point.
-                                      (update-in [index :ordered-cells] #(conj (if (nil? %1) (sorted-set-by compare-search-plan-cell-by-cost) %1) cell))
+                                      (update-in [index :ordered-cells]
+                                                 #(conj (if (nil? %1)
+                                                          (sorted-set-by compare-search-plan-cell-by-cost)
+                                                          %1)
+                                                        cell))
                                       (assoc-in [index :cells-by-constr-lkp constr-lkp] cell))]
                         plans)
                       ; uh-oh we have a dupe

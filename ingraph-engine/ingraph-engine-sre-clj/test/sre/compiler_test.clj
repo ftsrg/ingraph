@@ -192,18 +192,16 @@
 
 
 (deftest test-search-plan
-  ;(testing "empty constraint set requires absolutely no operations"
-  ;  (let [ops (into () c2/ops)
-  ;        constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
-  ;                          #'c2/Vertex #{[1] [3]}
-  ;                          #'c2/Edge #{[2]}
-  ;                          #'c2/Element #{[1] [2] [3]}}
-  ;                    :bound {}}
-  ;        plan (calculate-search-plan ops constr-lkp 5 false)]
-  ;    (is (right? plan))
-  ;    (mlet [plan plan]
-  ;          (pprint plan))))
-  (testing "simple plan"
+  (testing "empty plan can be satisfied without an operation"
+    (let [ops (into () c2/ops)
+          constr-lkp {:free {}
+                      :bound {}}
+          plan (calculate-search-plan ops constr-lkp 5)]
+      (is (right? plan))
+      (mlet [plan plan]
+            (is (= 1 (-> plan :ordered-cells count)))
+            (is (= 0 (-> plan :ordered-cells :first :ops count))))))
+  (testing "simple plan can be satisfied with a GetEdges operation"
     (let [ops (into () c2/ops)
           constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
                              #'c2/Vertex #{[1] [3]}
@@ -213,4 +211,5 @@
           plan (calculate-search-plan ops constr-lkp 5)]
       (is (right? plan))
       (mlet [plan plan]
-            (pprint plan)))))
+            (is (= 1 (-> plan :ordered-cells count)))
+            (is (= (-> plan :ordered-cells first :ops first :name) #'c2/GetEdges))))))
