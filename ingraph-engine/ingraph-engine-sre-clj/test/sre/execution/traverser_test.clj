@@ -3,7 +3,8 @@
             [clojure.zip :as z]
             [sre.execution.traverser :refer :all]
             [sre.config-2 :as c2]
-            [clojure.pprint :refer :all]))
+            [clojure.pprint :refer :all])
+  (:import [java.util Vector]))
 
 (defmulti exec-task-mock (fn [task & rest] (:name task)))
 
@@ -74,3 +75,12 @@
       (with-methods [exec-task-mock #'c2/GetEdges [& _] [step-1]
                      exec-task-mock #'c2/ExtendOut [& _] [step-2]]
                     (is (= (-> st z/down z/down z/node) (->SearchTreeNode step-2 nil)))))))
+
+(deftest test-search-executor
+  (testing "() #1"
+    (let [result (execute () {} [] (TestEnvironment.))]
+      (= (.size result) 0)))
+  (testing "() #2"
+    (let [result (execute () {1 "dummy"} [1] (TestEnvironment.))]
+      (= (.size result) 1)
+      (= (aget (.elementAt result 0) 0) "dummy"))))
