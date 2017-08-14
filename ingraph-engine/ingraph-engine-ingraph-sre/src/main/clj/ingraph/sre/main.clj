@@ -1,9 +1,9 @@
-(ns sre.main
-  "Contains the main configuration of constraints, operations and others
-  available in the engine"
-  (:require [sre.dsl.constraint :refer [defconstraint]]
-            [sre.dsl.op :refer [defop defweight]]
-            [sre.dsl.config :refer :all]))
+(ns ingraph.sre.main
+    "Contains the main configuration of constraints, operations and others
+    available in ingraph"
+    (:require [sre.dsl.constraint :refer [defconstraint]]
+      [sre.dsl.op :refer [defop defweight]]
+      [sre.dsl.config :refer :all]))
 
 (defconfig Main)
 
