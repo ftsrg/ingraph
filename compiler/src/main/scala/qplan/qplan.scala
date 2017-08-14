@@ -30,6 +30,8 @@ case class Expand(src: VertexAttribute,
   override def output = child.output ++ Seq(edge, trg)
 }
 
+case class Production(child: QNode) extends UnaryQNode {}
+
 // inspired by org.apache.spark.sql.catalyst.plans.logical.Project
 case class Projection(projectList: Seq[NamedExpression], child: QNode) extends UnaryQNode {
   override def output = projectList.map(_.toAttribute)

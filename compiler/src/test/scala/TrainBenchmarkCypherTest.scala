@@ -1,5 +1,6 @@
 package ingraph.sandbox
 
+import ingraph.compiler.cypher2qplan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
@@ -10,6 +11,8 @@ class TrainBenchmarkCypherTest extends FunSuite {
     TrainBenchmarkCypherTest.testQueryString(
       """MATCH (segment:Segment)
         |WHERE segment.length <= 0
+        |WITH segment
+        |OPTIONAL MATCH (v)
         |RETURN DISTINCT segment, segment.length AS length""".stripMargin)
 
   }
@@ -42,16 +45,25 @@ class TrainBenchmarkCypherTest extends FunSuite {
 object TrainBenchmarkCypherTest {
   val queryPackPath = "trainbenchmark/"
   val printCypher = true
+  val printQPlan = true
 
   def testQueryFile(queryName: String): Unit = {
     val cypher = CypherParser.parseFile(queryPackPath + queryName)
 
     if (printCypher) println(PrettyPrinter.format(cypher))
+
+    val qplan = cypher2qplan.build(cypher, queryName)
+
+    if (printQPlan) println(qplan)
   }
 
-  def testQueryString(queryString: String): Unit = {
+  def testQueryString(queryString: String, queryName: String = "ad-hoc query"): Unit = {
     val cypher = CypherParser.parseString(queryString)
 
     if (printCypher) println(PrettyPrinter.format(cypher))
+
+    val qplan = cypher2qplan.build(cypher, queryName)
+
+    if (printQPlan) println(qplan)
   }
 }
