@@ -1,9 +1,19 @@
+import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.emf.util.PrettyPrinter
 import ingraph.model._
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class MyTest extends FunSuite {
+
+  test("Parse PosLength.cypher") {
+    val cypher = CypherParser.parseString("""MATCH (segment:Segment)
+                                            |WHERE segment.length <= 0
+                                            |RETURN DISTINCT segment, segment.length AS length""".stripMargin)
+
+    println(PrettyPrinter.format(cypher))
+  }
 
 //  test("should work") {
 //    val ingraphDir = "/home/szarnyasg/git/ingraph"

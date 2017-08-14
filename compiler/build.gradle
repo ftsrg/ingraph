@@ -24,6 +24,7 @@ dependencies {
   compile group: 'org.apache.commons', name: 'commons-exec', version: commonsExecVersion
   compile group: 'com.google.guava', name: 'guava', version: '23.0'
   compile group: 'org.slizaa.neo4j.opencypher', name: 'org.slizaa.neo4j.opencypher', version: slizaaVersion
+  compile group: 'org.eclipse.xtext', name: 'org.eclipse.xtext.xbase', version: xtextVersion
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }
