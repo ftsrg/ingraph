@@ -23,6 +23,7 @@ dependencies {
   compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: sparkVersion
   compile group: 'org.apache.commons', name: 'commons-exec', version: commonsExecVersion
   compile group: 'com.google.guava', name: 'guava', version: '23.0'
+  compile group: 'org.slizaa.neo4j.opencypher', name: 'org.slizaa.neo4j.opencypher', version: slizaaVersion
   testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
   testRuntime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
 }
