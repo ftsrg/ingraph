@@ -1,7 +1,8 @@
-package iplan
+package ingraph.compiler.qplan2iplan
 
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import qplan.QNode
+import ingraph.model.iplan.INode
+import ingraph.model.{iplan, qplan}
+import ingraph.model.qplan.QNode
 
 object QPlanToIPlan {
   def transform(plan: QNode): INode = {
@@ -11,7 +12,7 @@ object QPlanToIPlan {
 
       // unary
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => iplan.GetEdges(src, trg, edge, dir)
-      case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), GetEdges(src, trg, edge, dir))
+      case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), iplan.GetEdges(src, trg, edge, dir))
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => iplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       case qplan.Projection(projectList, child) => iplan.Projection(projectList, transform(child))
       case qplan.Selection(condition, child) => iplan.Selection(condition, transform(child))

@@ -1,6 +1,6 @@
-package expr
+package ingraph.model.expr
 
-import expr.datatypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}

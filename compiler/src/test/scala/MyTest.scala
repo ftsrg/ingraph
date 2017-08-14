@@ -1,8 +1,7 @@
-import expr._
-import iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.model._
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
-import qplan.{DuplicateElimination, Projection}
 
 class MyTest extends FunSuite {
 
@@ -41,7 +40,7 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to iplan #0") {
-    val v = VertexAttribute("v")
+    val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
 
     val qp = gv
@@ -50,9 +49,9 @@ class MyTest extends FunSuite {
   }
 
   test("qplan to iplan #1") {
-    val v = VertexAttribute("v")
+    val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
-    val de = DuplicateElimination(gv)
+    val de = qplan.DuplicateElimination(gv)
 
     val qp = de
 
@@ -76,24 +75,24 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to iplan #3") {
-    val v = VertexAttribute("v")
+    val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
-    val de = DuplicateElimination(gv)
+    val de = qplan.DuplicateElimination(gv)
 
     val i = QPlanToIPlan.transform(de)
     println(i)
   }
 
   test("qplan to iplan #4") {
-    val els = EdgeLabelSet(Set("REF"))
+    val els = expr.EdgeLabelSet(Set("REF"))
 
-    val v = VertexAttribute("v")
-    val e = EdgeAttribute("e", els)
-    val w = VertexAttribute("w")
+    val v = expr.VertexAttribute("v")
+    val e = expr.EdgeAttribute("e", els)
+    val w = expr.VertexAttribute("w")
 
     val gv = qplan.GetVertices(v)
-    val exp = qplan.Expand(v, w, e, Out(), gv)
-    val de = DuplicateElimination(exp)
+    val exp = qplan.Expand(v, w, e, expr.Out(), gv)
+    val de = qplan.DuplicateElimination(exp)
 
     val i = QPlanToIPlan.transform(de)
     println(i)
@@ -103,12 +102,12 @@ class MyTest extends FunSuite {
   }
 
   test("qplan to iplan #5") {
-    val vls = VertexLabelSet(Set("Person"), NonEmpty())
+    val vls = expr.VertexLabelSet(Set("Person"), expr.NonEmpty())
 
 
-    val n = VertexAttribute("n", vls)
-    val name = PropertyAttribute("name", n)
-    val age = PropertyAttribute("age", n)
+    val n = expr.VertexAttribute("n", vls)
+    val name = expr.PropertyAttribute("name", n)
+    val age = expr.PropertyAttribute("age", n)
 
     val projectList = Seq(name)
     val condition = GreaterThan(age, Literal(27))

@@ -1,6 +1,6 @@
-package iplan
+package ingraph.model.iplan
 
-import expr._
+import ingraph.model.expr
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
 
@@ -25,17 +25,17 @@ abstract class BinaryINode extends BinaryNode with INode {
 }
 
 // leaf nodes
-case class GetVertices(v: VertexAttribute,
+case class GetVertices(v: expr.VertexAttribute,
                        override val extraAttributes: Seq[Attribute] = Seq()) extends LeafINode {
   override def output: Seq[Attribute] = Seq()
 }
 
-case class GetEdges(src: VertexAttribute,
-                    trg: VertexAttribute,
-                    edge: EdgeAttribute,
-                    dir: Direction,
+case class GetEdges(src: expr.VertexAttribute,
+                    trg: expr.VertexAttribute,
+                    edge: expr.EdgeAttribute,
+                    dir: expr.Direction,
                     override val extraAttributes: Seq[Attribute] = Seq())
-  extends LeafINode with NavigationDescriptor {
+  extends LeafINode with expr.NavigationDescriptor {
   override def output = Seq(src, trg, edge)
 }
 

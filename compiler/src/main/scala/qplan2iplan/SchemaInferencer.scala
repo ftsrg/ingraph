@@ -1,4 +1,7 @@
-package iplan
+package ingraph.compiler.qplan2iplan
+
+import ingraph.model.iplan
+import ingraph.model.iplan.INode
 
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
