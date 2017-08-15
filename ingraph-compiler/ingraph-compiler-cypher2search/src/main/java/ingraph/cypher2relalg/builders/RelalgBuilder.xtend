@@ -174,95 +174,95 @@ class RelalgBuilder {
 	 * It should not be called to build more than one single subquery as
 	 * the variables produced for re-used names would collide.
 	 */
-	def static protected Operator _buildRelalgSubQuery(List<Clause> clauses, CompilerEnvironment ce) {
-		// do some checks on the MATCH clauses
-		Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), ce.l)
-		// do some checks on the clause sequence of this subquery
-		Validator.checkSubQueryClauseSequence(clauses, ce.l)
-
-		/*
-		 * We compile all MATCH clauses and attach to a (left outer) join operator.
-		 * The first one will not be used to chain match clauses together,
-		 * but it will be used to chain subqueries together.
-		 * In case of the first subquery, a dual source will be put there
-		 * when chaining together subqueries.
-		 */
-		// use of lazy map OK as passed to chainEncapsulatedBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
-		val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
-			val mapIt = it
-			val relalgMatchDescriptor = buildRelalgMatch(mapIt, ce)
-
-			if (mapIt.optional) {
-				val lojo = if (relalgMatchDescriptor.condition === null) {
-					modelFactory.createLeftOuterJoinOperator
-				} else {
-					modelFactory.createThetaLeftOuterJoinOperator => [
-						condition = relalgMatchDescriptor.condition
-					]
-				}
-				lojo => [
-					rightInput = relalgMatchDescriptor.op
-				]
-			} else {
-				val join = modelFactory.createJoinOperator => [
-					rightInput = relalgMatchDescriptor.op
-				]
-				if (relalgMatchDescriptor.condition === null) {
-					join
-				} else {
-					modelFactory.createSelectionOperator => [
-						input = join
-						condition = relalgMatchDescriptor.condition
-					]
-				}
-			}
-		]
-
-		// result will have a join node on the leftInput arc having leftInput===null. This will be used to chain subqueries together.
-		val content = if (singleQuery_MatchList.empty) {
-				// if there is no match clause we return a single Join having the dual source on its rightInput
-				modelFactory.createJoinOperator => [
-					rightInput = modelFactory.createDualObjectSourceOperator
-				]
-			} else {
-				Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(null, singleQuery_MatchList, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_BINARY_OPERATOR, ce.l)
-			}
-
-		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
-		val afterReturn = if (singleQuery_returnOrWithClause !== null) {
-				buildRelalgReturn(singleQuery_returnOrWithClause, content, ce)
-			} else {
-				content
-			}
-		val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
-		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
-			val u0 = singleQuery_unwindClauseList
-			modelFactory.createUnwindOperator => [
-				element = ce.vb.buildExpressionVariable(u0.variable.name, ExpressionBuilder.buildExpression(u0.expression, ce))
-				input = afterReturn
-			]
-		} else {
-			afterReturn
-		}
-		// process all CUD operations (currently only CREATE and DELETE clauses are supported
-		val afterCud = {
-			var Operator op = afterUnwind
-
-			for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
-				op = switch cudClause {
-					Create: CudBuilder.buildCreateOperator(cudClause, op, ce)
-					Delete: CudBuilder.buildDeleteOperator(cudClause, op, ce)
-					default: {
-						ce.l.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
-						null
-					}
-				}
-			}
-
-			op
-		}
-		afterCud
-	}
+//	def static protected Operator _buildRelalgSubQuery(List<Clause> clauses, CompilerEnvironment ce) {
+//		// do some checks on the MATCH clauses
+//		Validator.checkSubQueryMatchClauseSequence(clauses.filter(typeof(Match)), ce.l)
+//		// do some checks on the clause sequence of this subquery
+//		Validator.checkSubQueryClauseSequence(clauses, ce.l)
+//
+//		/*
+//		 * We compile all MATCH clauses and attach to a (left outer) join operator.
+//		 * The first one will not be used to chain match clauses together,
+//		 * but it will be used to chain subqueries together.
+//		 * In case of the first subquery, a dual source will be put there
+//		 * when chaining together subqueries.
+//		 */
+//		// use of lazy map OK as passed to chainEncapsulatedBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
+//		val singleQuery_MatchList = clauses.filter(typeof(Match)).map [
+//			val mapIt = it
+//			val relalgMatchDescriptor = buildRelalgMatch(mapIt, ce)
+//
+//			if (mapIt.optional) {
+//				val lojo = if (relalgMatchDescriptor.condition === null) {
+//					modelFactory.createLeftOuterJoinOperator
+//				} else {
+//					modelFactory.createThetaLeftOuterJoinOperator => [
+//						condition = relalgMatchDescriptor.condition
+//					]
+//				}
+//				lojo => [
+//					rightInput = relalgMatchDescriptor.op
+//				]
+//			} else {
+//				val join = modelFactory.createJoinOperator => [
+//					rightInput = relalgMatchDescriptor.op
+//				]
+//				if (relalgMatchDescriptor.condition === null) {
+//					join
+//				} else {
+//					modelFactory.createSelectionOperator => [
+//						input = join
+//						condition = relalgMatchDescriptor.condition
+//					]
+//				}
+//			}
+//		]
+//
+//		// result will have a join node on the leftInput arc having leftInput===null. This will be used to chain subqueries together.
+//		val content = if (singleQuery_MatchList.empty) {
+//				// if there is no match clause we return a single Join having the dual source on its rightInput
+//				modelFactory.createJoinOperator => [
+//					rightInput = modelFactory.createDualObjectSourceOperator
+//				]
+//			} else {
+//				Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(null, singleQuery_MatchList, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_BINARY_OPERATOR, ce.l)
+//			}
+//
+//		val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
+//		val afterReturn = if (singleQuery_returnOrWithClause !== null) {
+//				buildRelalgReturn(singleQuery_returnOrWithClause, content, ce)
+//			} else {
+//				content
+//			}
+//		val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
+//		val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
+//			val u0 = singleQuery_unwindClauseList
+//			modelFactory.createUnwindOperator => [
+//				element = ce.vb.buildExpressionVariable(u0.variable.name, ExpressionBuilder.buildExpression(u0.expression, ce))
+//				input = afterReturn
+//			]
+//		} else {
+//			afterReturn
+//		}
+//		// process all CUD operations (currently only CREATE and DELETE clauses are supported
+//		val afterCud = {
+//			var Operator op = afterUnwind
+//
+//			for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
+//				op = switch cudClause {
+//					Create: CudBuilder.buildCreateOperator(cudClause, op, ce)
+//					Delete: CudBuilder.buildDeleteOperator(cudClause, op, ce)
+//					default: {
+//						ce.l.unsupported('''Currently we only support CREATE and DELETE of the possible CUD operations. Found: «cudClause.class.name».''')
+//						null
+//					}
+//				}
+//			}
+//
+//			op
+//		}
+//		afterCud
+//	}
 
 	/**
 	 * Process the common part of a RETURN and a WITH clause,
@@ -432,66 +432,66 @@ class RelalgBuilder {
 		}
 	}
 
-	/**
-	 * MATCH clause is compiled as follows:
-	 * (the lower elements being the input for the upper ones)
-	 *
-	 * - Left outer join of the patterns extracted from the where clause (is any)
-	 * - AllDifferentOperator on the edges in the patternParts
-	 * - natural join of comma-separated patternParts in the MATCH clause
-	 *
-	 * Also a filter boolean condition is built from the where clause.
-	 * In case no WHERE condition applies, condition is null meaning no filtering,
-	 * i.e. pass through all records.
-	 *
-	 * @returns a RelalgMatchDescriptor,
-	 *          whose op attribute is the compiled form of the MATCH without the WHERE,
-	 *          and condition attribute holds the filter condition.
-	 */
-	def static buildRelalgMatch(Match m, CompilerEnvironment ce) {
-	  val result = new RelalgMatchDescriptor
-		val Set<AbstractEdgeVariable> edgeVariablesOfMatchClause = new HashSet<AbstractEdgeVariable>()
-		// handle comma-separated patternParts in the MATCH clause
-		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
-		for (pattern: m.pattern.patterns) {
-			val op = buildRelalg(pattern, ce)
-
-			edgeVariablesOfMatchClause.addAll(Cypher2RelalgUtil.extractEdgeVariables(op, ce.l))
-
-			pattern_PatternPartList.add(op)
-		}
-
-		// they are natural joined together
-		val allDifferentOperator = modelFactory.createAllDifferentOperator => [
-			input = Cypher2RelalgUtil.buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator, ce)
-			edgeVariables.addAll(edgeVariablesOfMatchClause)
-		]
-
-		if (m.where !== null) {
-			// left outer joins extracted from the patterns in the where clause
-			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
-
-			result.condition = LogicalExpressionBuilder.buildLogicalExpression(m.where.expression, joinOperationsOfWhereClause, ce)
-
-			result.op = if (joinOperationsOfWhereClause.empty) {
-					allDifferentOperator
-				} else {
-					/*
-					 * add allDifferentOperator before the joins derived from the where clause
-					 * and create the tree of left outer joins
-					 */
-					val EList<Operator> h = new BasicEList<Operator>()
-					h.add(allDifferentOperator)
-					h.addAll(joinOperationsOfWhereClause)
-
-					Cypher2RelalgUtil.buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator, ce)
-				}
-		} else {
-			result.op =  allDifferentOperator
-		}
-
-		result
-	}
+//	/**
+//	 * MATCH clause is compiled as follows:
+//	 * (the lower elements being the input for the upper ones)
+//	 *
+//	 * - Left outer join of the patterns extracted from the where clause (is any)
+//	 * - AllDifferentOperator on the edges in the patternParts
+//	 * - natural join of comma-separated patternParts in the MATCH clause
+//	 *
+//	 * Also a filter boolean condition is built from the where clause.
+//	 * In case no WHERE condition applies, condition is null meaning no filtering,
+//	 * i.e. pass through all records.
+//	 *
+//	 * @returns a RelalgMatchDescriptor,
+//	 *          whose op attribute is the compiled form of the MATCH without the WHERE,
+//	 *          and condition attribute holds the filter condition.
+//	 */
+//	def static buildRelalgMatch(Match m, CompilerEnvironment ce) {
+//	  val result = new RelalgMatchDescriptor
+//		val Set<AbstractEdgeVariable> edgeVariablesOfMatchClause = new HashSet<AbstractEdgeVariable>()
+//		// handle comma-separated patternParts in the MATCH clause
+//		val EList<Operator> pattern_PatternPartList = new BasicEList<Operator>()
+//		for (pattern: m.pattern.patterns) {
+//			val op = buildRelalg(pattern, ce)
+//
+//			edgeVariablesOfMatchClause.addAll(Cypher2RelalgUtil.extractEdgeVariables(op, ce.l))
+//
+//			pattern_PatternPartList.add(op)
+//		}
+//
+//		// they are natural joined together
+//		val allDifferentOperator = modelFactory.createAllDifferentOperator => [
+//			input = Cypher2RelalgUtil.buildLeftDeepTree(typeof(JoinOperator), pattern_PatternPartList?.iterator, ce)
+//			edgeVariables.addAll(edgeVariablesOfMatchClause)
+//		]
+//
+//		if (m.where !== null) {
+//			// left outer joins extracted from the patterns in the where clause
+//			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
+//
+//			result.condition = LogicalExpressionBuilder.buildLogicalExpression(m.where.expression, joinOperationsOfWhereClause, ce)
+//
+//			result.op = if (joinOperationsOfWhereClause.empty) {
+//					allDifferentOperator
+//				} else {
+//					/*
+//					 * add allDifferentOperator before the joins derived from the where clause
+//					 * and create the tree of left outer joins
+//					 */
+//					val EList<Operator> h = new BasicEList<Operator>()
+//					h.add(allDifferentOperator)
+//					h.addAll(joinOperationsOfWhereClause)
+//
+//					Cypher2RelalgUtil.buildLeftDeepTree(typeof(LeftOuterJoinOperator), h.iterator, ce)
+//				}
+//		} else {
+//			result.op =  allDifferentOperator
+//		}
+//
+//		result
+//	}
 
 	def static dispatch Operator buildRelalg(PatternPart p, CompilerEnvironment ce) {
 		// TODO: handle variable assignment

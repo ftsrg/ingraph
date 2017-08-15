@@ -4,7 +4,7 @@ import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
 import org.apache.spark.sql.types.{DataType, Metadata}
 
 package object datatypes {
@@ -12,8 +12,22 @@ package object datatypes {
   type EdgeLabel = String
 }
 
-trait ExpressionBase {}
-trait LogicalExpression extends ExpressionBase {}
+trait ExpressionBase extends Expression {}
+
+/**
+  * A stub expression node indicating incomplete compilation,
+  * i.e. something is not implemented but would be needed to compile the particular query.
+  * @param note An optional note
+  */
+case class EStub(note: String = "FIXME") extends LeafExpression with ExpressionBase {
+  override def nullable = ???
+
+  override def eval(input: InternalRow) = ???
+
+  override protected def doGenCode(ctx: CodegenContext, ev: ExprCode) = ???
+
+  override def dataType = ???
+}
 
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends Attribute {

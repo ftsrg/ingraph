@@ -13,13 +13,30 @@ abstract class UnaryQNode extends UnaryNode with QNode {
 abstract class BinaryQNode extends BinaryNode with QNode
 
 /**
+  * A stub leaf node for the qplan indicating incomplete compilation.
+  */
+abstract class AbstractQStub extends LeafQNode{
+  override def output = Seq()
+}
+
+/**
   * A stub leaf node for the qplan indicating incomplete compilation,
   * i.e. something is not implemented but would be needed to compile the particular query.
   * @param note An optional note
   */
-case class QStub(note: String = "FIXME") extends LeafQNode{
-  override def output = Seq()
-}
+case class QStub(note: String = "FIXME") extends AbstractQStub {}
+
+/**
+  * A placeholder leafnode which should never leave the cypher2qplan compiler.
+  *
+  * This compiler sometimes creates incomplete subtrees,
+  * e.g. a Join whose left input will be used for chaining.
+  *
+  * This placeholder will indicate the places where the tree is incomplete.
+  *
+  * \@jmarton is not sure if we need this as its original aim to chain query parts together was solved in a different way.
+  */
+abstract class PlaceHolder() extends AbstractQStub() {}
 
 // leaf operators
 case class GetVertices(v: VertexAttribute) extends LeafQNode {
@@ -31,7 +48,7 @@ case class Dual() extends LeafQNode {
 }
 
 // unary operators
-case class AllDifferent(child: QNode) extends UnaryQNode {}
+case class AllDifferent(child: QNode, edges: Seq[EdgeAttribute]) extends UnaryQNode {}
 
 case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
@@ -73,9 +90,18 @@ abstract class EquiJoinLike extends JoinLike {
   override def output: Seq[Attribute] = left.output ++ right.output.filterNot(commonAttributes.contains(_))
 }
 
-case class Join(left: QNode, right: QNode) extends EquiJoinLike {
+case class Join(left: QNode, right: QNode) extends EquiJoinLike {}
 
-}
+case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
+
+/**
+  * An equi-join like left outer join, i.e. the join condition is composed of two parts AND-ed:
+  *  - equality on the attributes that share a common name, and
+  *  - the predicate given in condition.
+  *
+  * Note: this never filters on its left input!
+  */
+case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: ExpressionBase ) extends EquiJoinLike {}
 
 case class AntiJoin(left: QNode, right: QNode) extends JoinLike {
   override def output: Seq[Attribute] = left.output
