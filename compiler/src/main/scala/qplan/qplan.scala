@@ -12,6 +12,15 @@ abstract class UnaryQNode extends UnaryNode with QNode {
 }
 abstract class BinaryQNode extends BinaryNode with QNode
 
+/**
+  * A stub leaf node for the qplan indicating incomplete compilation,
+  * i.e. something is not implemented but would be needed to compile the particular query.
+  * @param note An optional note
+  */
+case class QStub(note: String = "FIXME") extends LeafQNode{
+  override def output = Seq()
+}
+
 // leaf operators
 case class GetVertices(v: VertexAttribute) extends LeafQNode {
   override def output = Seq(v)

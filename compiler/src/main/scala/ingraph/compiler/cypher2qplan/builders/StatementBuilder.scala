@@ -50,7 +50,7 @@ object StatementBuilder {
         val fromX = from
         val toX = i + 1
 
-        ops += GetVertices(expr.VertexAttribute("FIXME"))
+        ops += QStub("MATCH clause")
         // FIXME: RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
 
         from = i + 1
