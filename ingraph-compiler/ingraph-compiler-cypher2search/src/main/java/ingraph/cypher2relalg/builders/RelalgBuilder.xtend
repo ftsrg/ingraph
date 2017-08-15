@@ -69,104 +69,104 @@ class RelalgBuilder {
 	}
 	*/
 
-	def static build(Cypher cypher, String queryName) {
-		val ce = CompilerEnvironment.newInstance(RelalgBuilder.name)
-		build(cypher, queryName, ce)
-	}
+//	def static build(Cypher cypher, String queryName) {
+//		val ce = CompilerEnvironment.newInstance(RelalgBuilder.name)
+//		build(cypher, queryName, ce)
+//	}
 
-	def static build(Cypher cypher, String queryName, CompilerEnvironment ce) {
-		EcoreUtil.resolveAll(cypher)
+//	def static build(Cypher cypher, String queryName, CompilerEnvironment ce) {
+//		EcoreUtil.resolveAll(cypher)
+//
+//		if (Cypher2RelalgConfig.isDebugMode) {
+//			println(PrettyPrinter.format(cypher))
+//		}
+//		val statement = cypher.statement
+//		ce.tlc.rootExpression = modelFactory.createProductionOperator => [
+//			input = buildRelalg(statement, ce)
+//		]
+//
+//		ce.tlc
+//	}
 
-		if (Cypher2RelalgConfig.isDebugMode) {
-			println(PrettyPrinter.format(cypher))
-		}
-		val statement = cypher.statement
-		ce.tlc.rootExpression = modelFactory.createProductionOperator => [
-			input = buildRelalg(statement, ce)
-		]
-
-		ce.tlc
-	}
-
-	def static dispatch Operator buildRelalg(RegularQuery q, CompilerEnvironment ce) {
-		val queryListHead = buildRelalg(q.singleQuery, ce)
-		// use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
-		val queryListTail = q.union?.map [
-			val mapIt = it
-			modelFactory.createUnionOperator => [
-				bag = mapIt.all
-				rightInput = buildRelalg(mapIt.singleQuery, ce)
-			]
-		]
-
-		val result = Cypher2RelalgUtil.chainBinaryOperatorsLeft(queryListHead, queryListTail, ce.l)
-
-		if (!Validator.checkIfUnionQueryColumnNamesMatch(result, ce.l)) {
-			ce.l.unrecoverableError('''All sub queries of a UNION query must have the same column aliases.''')
-		}
-
-		result
-	}
+//	def static dispatch Operator buildRelalg(RegularQuery q, CompilerEnvironment ce) {
+//		val queryListHead = buildRelalg(q.singleQuery, ce)
+//		// use of lazy map OK as passed to chainBinaryOperatorsLeft and used only once - jmarton, 2017-01-07
+//		val queryListTail = q.union?.map [
+//			val mapIt = it
+//			modelFactory.createUnionOperator => [
+//				bag = mapIt.all
+//				rightInput = buildRelalg(mapIt.singleQuery, ce)
+//			]
+//		]
+//
+//		val result = Cypher2RelalgUtil.chainBinaryOperatorsLeft(queryListHead, queryListTail, ce.l)
+//
+//		if (!Validator.checkIfUnionQueryColumnNamesMatch(result, ce.l)) {
+//			ce.l.unrecoverableError('''All sub queries of a UNION query must have the same column aliases.''')
+//		}
+//
+//		result
+//	}
 
 	/**
 	 * Builds the relational algebra expression for a single query by spawning a new builder
 	 * with the same top-level container, but with own factories for variables.
 	 */
-	def static dispatch Operator buildRelalg(SingleQuery q, CompilerEnvironment ce) {
-		val clauses = q.clauses
-		val EList<Operator> ops = new BasicEList<Operator>()
-
-		// Do some checks on the clauses of the single query
-		Validator.checkSingleQueryClauseSequence(clauses, ce.l)
-
-		/**
-		 * Process each subquery.
-		 *
-		 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
-		 *
-		 * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
-		 */
-		var from = 0
-		var variableBuilderChain = ce.vb
-		for (var i = 0; i < clauses.length; i++) {
-			val current = clauses.get(i)
-			val next = if (i + 1 < clauses.length) {
-					clauses.get(i + 1)
-				}
-			if (GrammarUtil.isCudClause(current) && ! GrammarUtil.isCudClause(next) && ! ( next instanceof Return )
-			 || current instanceof With && ! ( next instanceof Unwind )
-			 || current instanceof Unwind
-			 ||	current instanceof Return
-			 ) {
-				// [fromX, toX) is the range of clauses that form a subquery
-				val fromX = from
-				val toX = i + 1
-				/*
-				 * we create a new instance of the RelalgBuilder to use separate variable factories
-				 * for each subQuery, but we retain the the label factories as well as
-				 * top-level container not to break the containment hierarchy and separate variable namespaces.
-				 */
-				variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
-				val subQueryCompilerEnvironment = ce.cloneInstanceOverriding(variableBuilderChain)
-				ops.add(
-					RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
-				)
-				from = i + 1
-			}
-		}
-
-		/*
-		 * Compiled form of the query is the chain if the subqueries on the first BinaryOperator having unpopulated leftInput.
-		 *
-		 * The first qubquery will receive a dual object source there.
-		 */
-		Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(
-			  modelFactory.createDualObjectSourceOperator
-			, ops
-			, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
-			, ce.l
-		)
-	}
+//	def static dispatch Operator buildRelalg(SingleQuery q, CompilerEnvironment ce) {
+//		val clauses = q.clauses
+//		val EList<Operator> ops = new BasicEList<Operator>()
+//
+//		// Do some checks on the clauses of the single query
+//		Validator.checkSingleQueryClauseSequence(clauses, ce.l)
+//
+//		/**
+//		 * Process each subquery.
+//		 *
+//		 * A subquery has the form (MATCH*)((CREATE|DELETE)+ RETURN?|(WITH UNWIND?)|UNWIND|RETURN)
+//		 *
+//		 * Note: GrammarUtil.isCudClause is currently limited to CREATE and DELETE clauses.
+//		 */
+//		var from = 0
+//		var variableBuilderChain = ce.vb
+//		for (var i = 0; i < clauses.length; i++) {
+//			val current = clauses.get(i)
+//			val next = if (i + 1 < clauses.length) {
+//					clauses.get(i + 1)
+//				}
+//			if (GrammarUtil.isCudClause(current) && ! GrammarUtil.isCudClause(next) && ! ( next instanceof Return )
+//			 || current instanceof With && ! ( next instanceof Unwind )
+//			 || current instanceof Unwind
+//			 ||	current instanceof Return
+//			 ) {
+//				// [fromX, toX) is the range of clauses that form a subquery
+//				val fromX = from
+//				val toX = i + 1
+//				/*
+//				 * we create a new instance of the RelalgBuilder to use separate variable factories
+//				 * for each subQuery, but we retain the the label factories as well as
+//				 * top-level container not to break the containment hierarchy and separate variable namespaces.
+//				 */
+//				variableBuilderChain = variableBuilderChain.cloneBuilderWithNewVariableFactories
+//				val subQueryCompilerEnvironment = ce.cloneInstanceOverriding(variableBuilderChain)
+//				ops.add(
+//					RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
+//				)
+//				from = i + 1
+//			}
+//		}
+//
+//		/*
+//		 * Compiled form of the query is the chain if the subqueries on the first BinaryOperator having unpopulated leftInput.
+//		 *
+//		 * The first qubquery will receive a dual object source there.
+//		 */
+//		Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(
+//			  modelFactory.createDualObjectSourceOperator
+//			, ops
+//			, EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
+//			, ce.l
+//		)
+//	}
 
 	/**
 	 * This is the workhorse for building the relational algebra expression for a single subquery.

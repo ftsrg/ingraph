@@ -9,7 +9,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object StatementBuilder {
-  def build(statement: oc.Statement): QNode = {
+  def dispatchBuildStatement(statement: oc.Statement): QNode = {
     statement match {
       case s: oc.SingleQuery => buildStatement(s)
       case s: oc.RegularQuery => buildStatement(s)
@@ -19,8 +19,8 @@ object StatementBuilder {
   /**
     * Builds the qplan for a single query built from several query parts.
     */
-  def buildStatement(singleQuery: oc.SingleQuery): QNode = {
-    val clauses = singleQuery.getClauses.asScala.toArray
+  def buildStatement(q: oc.SingleQuery): QNode = {
+    val clauses = q.getClauses.asScala.toArray // we are to use indexed access
     val ops = ListBuffer.empty[QNode]
 
     // Do some checks on the clauses of the single query
@@ -50,7 +50,7 @@ object StatementBuilder {
         val fromX = from
         val toX = i + 1
 
-        ops += QStub("MATCH clause")
+        ops += QStub("Query part")
         // FIXME: RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
 
         from = i + 1
@@ -76,7 +76,20 @@ object StatementBuilder {
     result
   }
 
-  def buildStatement(singleQuery: oc.RegularQuery): QNode = {
-    throw new NotImplementedError
+  def buildStatement(q: oc.RegularQuery): QNode = {
+    // the Xtext grammar actually produces a left deep parse tree of a union
+    // so this might be wither a SingleQuery or a RegularQuery, in case of more union's
+    var result = dispatchBuildStatement(q.getSingleQuery)
+
+    for (u <- q.getUnion.asScala) {
+      result = Union(result, dispatchBuildStatement(u.getSingleQuery))
+    }
+
+    // FIXME: validator
+    //		if (!Validator.checkIfUnionQueryColumnNamesMatch(result, ce.l)) {
+    //			ce.l.unrecoverableError('''All sub queries of a UNION query must have the same column aliases.''')
+    //		}
+
+    result
   }
 }

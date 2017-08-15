@@ -6,7 +6,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Cypher
 
 package object cypher2qplan {
   def build(cypher: Cypher, queryName: String): qplan.Production = {
-    val statement = StatementBuilder.build(cypher.getStatement)
+    val statement = StatementBuilder.dispatchBuildStatement(cypher.getStatement)
 
     qplan.Production(statement)
   }

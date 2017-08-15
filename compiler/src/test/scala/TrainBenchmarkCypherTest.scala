@@ -13,7 +13,13 @@ class TrainBenchmarkCypherTest extends FunSuite {
         |WHERE segment.length <= 0
         |WITH segment
         |OPTIONAL MATCH (v)
-        |RETURN DISTINCT segment, segment.length AS length""".stripMargin)
+        |RETURN DISTINCT segment, segment.length AS length
+        |union
+        |match (v)
+        |return null as segment, 1 as length
+        |union
+        |match (v)
+        |return null as segment, 2 as length""".stripMargin)
 
   }
 
