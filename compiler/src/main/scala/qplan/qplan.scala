@@ -26,6 +26,10 @@ case class GetVertices(v: VertexAttribute) extends LeafQNode {
   override def output = Seq(v)
 }
 
+case class Dual() extends LeafQNode {
+  override def output = Seq()
+}
+
 // unary operators
 case class AllDifferent(child: QNode) extends UnaryQNode {}
 
@@ -41,12 +45,10 @@ case class Expand(src: VertexAttribute,
 
 case class Production(child: QNode) extends UnaryQNode {}
 
-// inspired by org.apache.spark.sql.catalyst.plans.logical.Project
 case class Projection(projectList: Seq[NamedExpression], child: QNode) extends UnaryQNode {
   override def output = projectList.map(_.toAttribute)
 }
 
-// inspired by org.apache.spark.sql.catalyst.plans.logical.Filter
 case class Selection(condition: Expression, child: QNode) extends UnaryQNode {}
 
 case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
