@@ -2,14 +2,14 @@ package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.GrammarUtil
 import ingraph.model.expr
-import ingraph.model.qplan._
+import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object StatementBuilder {
-  def dispatchBuildStatement(statement: oc.Statement): QNode = {
+  def dispatchBuildStatement(statement: oc.Statement): qplan.QNode = {
     statement match {
       case s: oc.SingleQuery => buildStatement(s)
       case s: oc.RegularQuery => buildStatement(s)
@@ -19,9 +19,9 @@ object StatementBuilder {
   /**
     * Builds the qplan for a single query built from several query parts.
     */
-  def buildStatement(q: oc.SingleQuery): QNode = {
+  def buildStatement(q: oc.SingleQuery): qplan.QNode = {
     val clauses = q.getClauses.asScala.toArray // we are to use indexed access
-    val ops = ListBuffer.empty[QNode]
+    val ops = ListBuffer.empty[qplan.QNode]
 
     // Do some checks on the clauses of the single query
     //FIXME: Validator.checkSingleQueryClauseSequence(clauses, ce.l)
@@ -50,7 +50,7 @@ object StatementBuilder {
         val fromX = from
         val toX = i + 1
 
-        ops += QStub("Query part")
+        ops += qplan.QStub("Query part")
         // FIXME: RelalgBuilder._buildRelalgSubQuery(clauses.subList(fromX, toX), subQueryCompilerEnvironment)
 
         from = i + 1
@@ -58,9 +58,9 @@ object StatementBuilder {
     }
 
     /*
-     * Compiled form of the query is the chain if the subqueries on the first BinaryOperator having unpopulated leftInput.
+     * Compiled form of the query is the chain of the query parts on the first BinaryOperator having unpopulated leftInput.
      *
-     * The first qubquery will receive a dual object source there.
+     * The first query part will receive a dual object source there.
      */
 //    Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(
 //      modelFactory.createDualObjectSourceOperator
@@ -68,21 +68,21 @@ object StatementBuilder {
 //      ,FIXME: EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
 //      , ce.l
 //    )
-    var result: QNode = Dual()
+    var result: qplan.QNode = qplan.Dual()
     for(o <- ops) {
-      result = Join(result, o)
+      result = qplan.Join(result, o)
     }
 
     result
   }
 
-  def buildStatement(q: oc.RegularQuery): QNode = {
+  def buildStatement(q: oc.RegularQuery): qplan.QNode = {
     // the Xtext grammar actually produces a left deep parse tree of a union
     // so this might be wither a SingleQuery or a RegularQuery, in case of more union's
     var result = dispatchBuildStatement(q.getSingleQuery)
 
     for (u <- q.getUnion.asScala) {
-      result = Union(result, dispatchBuildStatement(u.getSingleQuery))
+      result = qplan.Union(result, dispatchBuildStatement(u.getSingleQuery))
     }
 
     // FIXME: validator
