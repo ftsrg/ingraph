@@ -12,6 +12,9 @@ package object datatypes {
   type EdgeLabel = String
 }
 
+trait ExpressionBase {}
+trait LogicalExpression extends ExpressionBase {}
+
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends Attribute {
   override def exprId: ExprId = throw new UnresolvedException(this, "exprId")
