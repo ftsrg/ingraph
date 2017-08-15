@@ -20,5 +20,4 @@ Some of our operators for the basic (non-incremental) query plan are similar to 
 | `Dual` | `OneRowRelation` |
 | `Projection` | `plans.logical.Project` |
 | `Selection` | `plans.logical.Filter` |
-| `Selection` | `plans.logical.Filter` |
 | `Top` | `plans.logical.GlobalLimit` |
