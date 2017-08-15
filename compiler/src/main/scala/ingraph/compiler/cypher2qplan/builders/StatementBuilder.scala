@@ -65,10 +65,10 @@ object StatementBuilder {
 //    Cypher2RelalgUtil.chainEncapsulatedBinaryOperatorsLeft(
 //      modelFactory.createDualObjectSourceOperator
 //      , ops
-//      , EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
+//      ,FIXME: EncapsulatedBinaryOperatorChainMode.CHAIN_AT_FIRST_UNPOPULATED_BINARY_OPERATOR_ON_LEFTINPUT_ARC
 //      , ce.l
 //    )
-    var result: QNode = GetVertices(expr.VertexAttribute("FIXME: DUAL"))
+    var result: QNode = Dual()
     for(o <- ops) {
       result = Join(result, o)
     }
