@@ -75,7 +75,7 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
  *  2. [edge1:C], so edge1 needs to have label C.
  * These are contradicting as a single edge instance can have at most one label.
  */
-case class EdgeLabelSet(edgeLabels: Set[EdgeLabel]) extends LabelSet
+case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty()) extends LabelSet(status)
 
 // formerly GraphElementVariable
 abstract class ElementAttribute(name: String) extends GraphAttribute(name)

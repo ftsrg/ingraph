@@ -1,0 +1,41 @@
+package ingraph.compiler.cypher2qplan.util
+
+import ingraph.model.{expr, qplan}
+import org.slizaa.neo4j.opencypher.{openCypher => oc}
+
+import scala.collection.JavaConverters._
+
+object BuilderUtil {
+  def parseToVertexLabelSet(ll: oc.NodeLabels): expr.VertexLabelSet = {
+    if (ll != null && ll.getNodeLabels != null && !ll.getNodeLabels.isEmpty) {
+      expr.VertexLabelSet(ll.getNodeLabels.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty())
+    } else {
+      expr.VertexLabelSet()
+    }
+  }
+
+  def parseToEdgeLabelSet(tl: oc.RelationshipTypes): expr.EdgeLabelSet = {
+    if (tl != null && tl.getRelTypeName != null && !tl.getRelTypeName.isEmpty) {
+      expr.EdgeLabelSet(tl.getRelTypeName.asScala.toSet, expr.NonEmpty())
+    } else {
+      expr.EdgeLabelSet()
+    }
+  }
+
+  /**
+    * Given a RelationshipPattern instance, it's direction information
+    * is mapped to the expr model's Direction type.
+    *
+    * @param pattern the relationship pattern
+    * @return the appropriate direction descriptor
+    */
+  def convertToDirection(pattern: oc.RelationshipPattern): expr.Direction = {
+    val isLeftArrow = pattern.isIncoming
+    val isRightArrow = pattern.isOutgoing
+
+    if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
+      expr.Both()
+    else if (isLeftArrow) expr.In() else expr.Out()
+  }
+
+}

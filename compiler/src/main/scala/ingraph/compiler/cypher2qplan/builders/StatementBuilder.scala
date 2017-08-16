@@ -184,7 +184,7 @@ object StatementBuilder {
     // handle comma-separated patternParts in the MATCH clause
     val pattern_PatternPartList = ListBuffer.empty[qplan.QNode]
     for (pattern <- m.getPattern.getPatterns.asScala) {
-      val op = qplan.QStub("pattern") //buildRelalg(pattern, ce)
+      val op = PatternBuilder.buildPattern(pattern)
 
       //FIXME: edgeVariablesOfMatchClause += Cypher2RelalgUtil.extractEdgeVariables(op)
 

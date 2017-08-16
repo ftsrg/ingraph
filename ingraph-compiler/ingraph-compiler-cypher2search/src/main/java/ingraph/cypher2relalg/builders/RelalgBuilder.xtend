@@ -493,66 +493,66 @@ class RelalgBuilder {
 //		result
 //	}
 
-	def static dispatch Operator buildRelalg(PatternPart p, CompilerEnvironment ce) {
-		// TODO: handle variable assignment
-		if (p.part instanceof ShortestPath) {
-		}
-		if (p.part instanceof AllShortestPaths) {
-		}
-		if (p.^var !== null) {
-			ce.l.unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
-		}
-
-		// pass through variable assignment body to buildRelalg(PatternElement e)
-		buildRelalg(p.part, ce)
-	}
-
-	def static dispatch Operator buildRelalg(PatternElement e, CompilerEnvironment ce) {
-		buildRelalgFromPattern(e.nodepattern, e.chain, ce)
-	}
-
-	def static dispatch Operator buildRelalg(RelationshipsPattern e, CompilerEnvironment ce) {
-		buildRelalgFromPattern(e.nodePattern, e.chain, ce)
-	}
-
-	/*
-	 * This will create the relational algebraic representation of a patternElement.
-	 *
-	 * This was factored out to handle PatternElement and RelationshipsPattern in the same code
-	 */
-	def static Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain, CompilerEnvironment ce) {
-		val patternElement_GetVerticesOperator = modelFactory.createGetVerticesOperator => [
-			vertexVariable = ce.vb.buildVertexVariable(n)
-			// parse map-like constraints if given
-			BuilderUtil.attachProperties(n.properties, vertexVariable, ce)
-		]
-
-		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
-		val patternElement_ExpandList = chain.map[buildRelalg(it, ce) as ExpandOperator]
-
-		Cypher2RelalgUtil.chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
-	}
-
-	def static dispatch Operator buildRelalg(PatternElementChain ec, CompilerEnvironment ce) {
-		val patternElementChain_VertexVariable = ce.vb.buildVertexVariable(ec.nodePattern) => [
-			// parse map-like constraints if given
-			BuilderUtil.attachProperties(ec.nodePattern.properties, it, ce)
-		]
-		val patternElementChain_EdgeVariable = ce.vb.buildEdgeVariable(ec.relationshipPattern.detail) => [
-			// parse map-like constraints if given
-			BuilderUtil.attachProperties(ec.relationshipPattern.detail?.properties, it, ce)
-		]
-
-
-
-
-		modelFactory.createExpandOperator() => [
-			edgeVariable = patternElementChain_EdgeVariable;
-			direction = BuilderUtil.convertToDirection(ec.relationshipPattern)
-			targetVertexVariable = patternElementChain_VertexVariable;
-		]
-
-	}
+//	def static dispatch Operator buildRelalg(PatternPart p, CompilerEnvironment ce) {
+//		// TODO: handle variable assignment
+//		if (p.part instanceof ShortestPath) {
+//		}
+//		if (p.part instanceof AllShortestPaths) {
+//		}
+//		if (p.^var !== null) {
+//			ce.l.unsupported('Variable assignment not supported for PatternPart (in MATCH clause)')
+//		}
+//
+//		// pass through variable assignment body to buildRelalg(PatternElement e)
+//		buildRelalg(p.part, ce)
+//	}
+//
+//	def static dispatch Operator buildRelalg(PatternElement e, CompilerEnvironment ce) {
+//		buildRelalgFromPattern(e.nodepattern, e.chain, ce)
+//	}
+//
+//	def static dispatch Operator buildRelalg(RelationshipsPattern e, CompilerEnvironment ce) {
+//		buildRelalgFromPattern(e.nodePattern, e.chain, ce)
+//	}
+//
+//	/*
+//	 * This will create the relational algebraic representation of a patternElement.
+//	 *
+//	 * This was factored out to handle PatternElement and RelationshipsPattern in the same code
+//	 */
+//	def static Operator buildRelalgFromPattern(NodePattern n, EList<PatternElementChain> chain, CompilerEnvironment ce) {
+//		val patternElement_GetVerticesOperator = modelFactory.createGetVerticesOperator => [
+//			vertexVariable = ce.vb.buildVertexVariable(n)
+//			// parse map-like constraints if given
+//			BuilderUtil.attachProperties(n.properties, vertexVariable, ce)
+//		]
+//
+//		// use of lazy map OK as passed to chainExpandOperators and used only once - jmarton, 2017-01-07
+//		val patternElement_ExpandList = chain.map[buildRelalg(it, ce) as ExpandOperator]
+//
+//		Cypher2RelalgUtil.chainExpandOperators(patternElement_GetVerticesOperator, patternElement_ExpandList)
+//	}
+//
+//	def static dispatch Operator buildRelalg(PatternElementChain ec, CompilerEnvironment ce) {
+//		val patternElementChain_VertexVariable = ce.vb.buildVertexVariable(ec.nodePattern) => [
+//			// parse map-like constraints if given
+//			BuilderUtil.attachProperties(ec.nodePattern.properties, it, ce)
+//		]
+//		val patternElementChain_EdgeVariable = ce.vb.buildEdgeVariable(ec.relationshipPattern.detail) => [
+//			// parse map-like constraints if given
+//			BuilderUtil.attachProperties(ec.relationshipPattern.detail?.properties, it, ce)
+//		]
+//
+//
+//
+//
+//		modelFactory.createExpandOperator() => [
+//			edgeVariable = patternElementChain_EdgeVariable;
+//			direction = BuilderUtil.convertToDirection(ec.relationshipPattern)
+//			targetVertexVariable = patternElementChain_VertexVariable;
+//		]
+//
+//	}
 
 //  def static dispatch buildRelalg(Cypher rule, CompilerEnvironment ce) {
 //    println(String::format("received unsupported cypher element: %s", rule.class.name))
