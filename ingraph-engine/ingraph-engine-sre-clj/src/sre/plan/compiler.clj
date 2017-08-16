@@ -5,7 +5,9 @@
     [clojure.algo.generic.functor :refer :all]
     [sre.plan.dsl.op :as op]
     [sre.plan.dsl.constraint :as constraint]
-    [clojure.pprint :refer :all]))
+    [sre.plan.dsl.estimation :as estimation]
+    [clojure.pprint :refer :all])
+  (:import (sre.plan.dsl.estimation Cost Weight)))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -91,8 +93,7 @@
                                (keys (op (nth %2 0)))
                                (into #{} (keys (constr-lkp (nth %2 1)))))) conditions)
       ()
-      (let [constr-counts (map conditions)
-            sorted-constr (apply union (map #(build-match-list op
+      (let [sorted-constr (apply union (map #(build-match-list op
                                                                ; this is shady but we only replace the constraints with their counts
                                                                ; on the respective map
                                                                (update-in constr-lkp [(nth %1 1)] (fn [m] (fmap count m)))
@@ -114,12 +115,9 @@
                   ; continue matching
                   (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))))
 
-(defprotocol Cost
-  (adjust-cost [this ]))
-
 (defrecord SearchPlanColumn [ordered-cells cells-by-constr-lkp])
 
-(defrecord SearchPlanCell [cost ops constr-lkp free-count non-past-ops])
+(defrecord SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ops constr-lkp free-count non-past-ops])
 
 (defn- bind-constr [constr-lkp [_ type constr]]
   ; note that we don't use the first parameter, we expect it to be :free
@@ -136,10 +134,11 @@
 (defn compare-search-plan-cell-by-cost [a b]
   ; we will always compare candidates with the most costly upon insert so order descending
   ; we have to differentiate between every entry else they will be deduplicated
-  (+ 1 (* -2 (compare (:c (:cost a)) (:c (:cost b))))))
+  (+ 1 (* -2 (compare (:cost-calculator a) (:cost-calculator b)))))
 
-(defn create-search-plan-cell [index cost bound cell constr-lkp]
-  (map->SearchPlanCell {:cost         cost
+(defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
+  (map->SearchPlanCell {:cost-calculator         cost-calculator
+                        :weight-calculator        weight-calculator
                         :ops          (cons bound (:ops cell))
                         :constr-lkp   constr-lkp
                         :free-count   index
@@ -150,7 +149,7 @@
                                                               (:done x)))
                                               (:non-past-ops cell))}))
 
-(defn search-plan-step [plans ^SearchPlanCell cell ^Integer k]
+(defn search-plan-step [^Integer k plans ^SearchPlanCell cell]
   ; the idea here is that we have operations in non-past-ops that may or may not be applicable at the moment
   ; because we haven't checked them for required constraints. so first figure out the applicable ops
   (let [cost-binding-pairs (for [non-past-binding (:non-past-ops cell)
@@ -172,30 +171,31 @@
                                  ; yeah, it smells that we have two different representations for the damn same thing
                                  ; so refactor once you have the fatigue
                                  :let [bound (op/bind-map (:op present-binding) (:var-lkp present-binding))
-                                       ; TODO need to find out a way to get stats about the variables
-                                       weight (op/weight bound (:constr-lkp cell))]]
-                             [weight present-binding bound])]
+                                       ; TODO might need to create a lookup var -> constraints :|
+                                       weight-calculator (estimation/update-weight (:weight-calculator cell) bound (:constr-lkp cell))]]
+                             [weight-calculator present-binding bound])]
     ; go through all applicable ops and try to fit them somewhere in our table.
-    (reduce (fn [plans [weight present-binding bound]]
+    (reduce (fn [plans [weight-calculator present-binding bound]]
               ; we have to find out how many constraints are getting bound because that determines the first index.
               ; it should be equal to the length of the done list as everything in there is a single newly bound
               ; constraint
               (let [index (- (:free-count cell) (count (:done present-binding))) ; 3:9
                     column (get plans index)
                     ordered-cells (get column :ordered-cells)
-                    p-next (* (-> cell :cost :p) weight)
-                    c-next (+ (-> cell :cost :c) p-next)
+                    cost-calculator (estimation/update-cost (:cost-calculator cell)
+                                                            (estimation/get-weight weight-calculator))
                     ; first determine whether it fits into the k best or not
                     fits? (or (< (count ordered-cells) k)
-                              (< c-next (-> ordered-cells first :cost :c)))]
+                              (< (compare cost-calculator (-> ordered-cells first :cost-calculator)) 0))]
                 (if fits?
                   ; it fits however it still can be a duplicate
-                  (let [cost {:p p-next :c c-next}
-                        constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))
+                  (let [constr-lkp (reduce bind-constr (:constr-lkp cell) (:done present-binding))
                         dupe (get-in column [:cells-by-constr-lkp constr-lkp])]
                     (if (nil? dupe)
                       ; no dupe
-                      (let [cell (create-search-plan-cell index cost bound cell constr-lkp)
+                      (let [cell (create-search-plan-cell index cost-calculator
+                                                          weight-calculator bound
+                                                          cell constr-lkp)
                             plans (-> plans
                                       ; yuck. the set might not even exist at this point.
                                       (update-in [index :ordered-cells]
@@ -206,9 +206,11 @@
                                       (assoc-in [index :cells-by-constr-lkp constr-lkp] cell))]
                         plans)
                       ; uh-oh we have a dupe
-                      (if (< c-next (get-in dupe [:cost :c]))
+                      (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
                         ; this is better, evict dupe
-                        (let [cell (create-search-plan-cell index cost bound cell constr-lkp)]
+                        (let [cell (create-search-plan-cell index cost-calculator
+                                                            weight-calculator bound
+                                                            cell constr-lkp)]
                           (-> plans
                               (update-in [index :ordered-cells] #(-> %1 (disj dupe) (conj cell)))
                               (assoc-in [index :cells-by-constr-lkp constr-lkp] cell)))
@@ -225,15 +227,26 @@
   although there are notable differences.
   The most prominent difference is that here an operations isn't a bound version of a constraints in the sense that
   every operation is a constraint with a so called adornment (specifying for each variable whether it is free or bound).
+  Another difference is the generalized cost-calculator. While the original article was very specific about how to calculate costs
+  it hinted that the only requirement is that it should be incrementally computable. Thus here the cost calculator should be
+  supplied by the user in 'cost-calc'.
+
+  Parameters:
+    cost-calc - for calculating costs. Should implement java.lang.Comparable and sre.plan.compiler.estimation.Cost
+    weight-calc - for calculating weights. Should implement sre.plan.compiler.estimation.Weight
+    k - greedyness - optimality tuner
+    ops - the list of available operations in the system.
+    constr-lkp - constraint lookup by type
   "
-  [ops constr-lkp ^Integer k]
+  [^Cost cost-calculator ^Weight weight-calculator ^Integer k ops constr-lkp]
   ; comments starting with x:y mark that the line corresponds to the algorithm
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
   (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
-        cell (map->SearchPlanCell {:cost         {:c 0   ; 3:2
-                                                  :p 1}
+        step (partial search-plan-step k)
+        cell (map->SearchPlanCell {:cost-calculator         cost-calculator
+                                   :weight-calculator       weight-calculator
                                    :ops          ()
                                    :constr-lkp   constr-lkp
                                    :free-count   (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
@@ -247,7 +260,7 @@
             (let [column (get plans j)
                   plans (as-> plans x
                               (dissoc x j)
-                              (reduce #(search-plan-step %1 %2 k) x (:ordered-cells column)))] ; 3.4
+                              (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
               (recur plans))))
         (left :no-solution)))))
 

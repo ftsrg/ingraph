@@ -78,9 +78,3 @@
         (update-in [:requires] replacer)
         (update-in [:satisfies] replacer))))
 
-(defmulti weight (fn [x & rest] (:name x)))
-
-(defmacro defweight [op params body]
-  "Let's you define a weight for an operation"
-  `(defmethod weight #'~op ~params ~body))
-

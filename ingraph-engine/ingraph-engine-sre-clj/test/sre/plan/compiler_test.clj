@@ -193,25 +193,29 @@
               (is (= (:var-lkp (first step-2)) {:a 1 :b 2 :c 3})))))))))
 
 
+
 (deftest test-search-plan
-  (testing "empty plan can be satisfied without an operation"
-    (let [ops (into () c2/ops)
-          constr-lkp {:free {}
-                      :bound {}}
-          plan (calculate-search-plan ops constr-lkp 5)]
-      (is (right? plan))
-      (mlet [plan plan]
-            (is (= 1 (-> plan :ordered-cells count)))
-            (is (= 0 (-> plan :ordered-cells :first :ops count))))))
-  (testing "simple plan can be satisfied with a GetEdges operation"
-    (let [ops (into () c2/ops)
-          constr-lkp {:free {#'c2/DirectedEdge #{[1 2 3]}
-                             #'c2/Vertex #{[1] [3]}
-                             #'c2/Edge #{[2]}
-                             #'c2/Element #{[1] [2] [3]}}
-                      :bound {}}
-          plan (calculate-search-plan ops constr-lkp 5)]
-      (is (right? plan))
-      (mlet [plan plan]
-            (is (= 1 (-> plan :ordered-cells count)))
-            (is (= (-> plan :ordered-cells first :ops first :name) #'c2/GetEdges))))))
+  (let [cost-calculator (c2/->CostCalculator 0 1)
+        weight-calculator (c2/->WeightCalculator 0)
+        csp (partial calculate-search-plan cost-calculator weight-calculator 5)]
+    (testing "empty plan can be satisfied without an operation"
+         (let [ops (into () c2/ops)
+               constr-lkp {:free  {}
+                           :bound {}}
+               plan (csp ops constr-lkp)]
+           (is (right? plan))
+           (mlet [plan plan]
+                 (is (= 1 (-> plan :ordered-cells count)))
+                 (is (= 0 (-> plan :ordered-cells :first :ops count))))))
+    (testing "simple plan can be satisfied with a GetEdges operation"
+      (let [ops (into () c2/ops)
+            constr-lkp {:free  {#'c2/DirectedEdge #{[1 2 3]}
+                                #'c2/Vertex       #{[1] [3]}
+                                #'c2/Edge         #{[2]}
+                                #'c2/Element      #{[1] [2] [3]}}
+                        :bound {}}
+            plan (csp ops constr-lkp)]
+        (is (right? plan))
+        (mlet [plan plan]
+              (is (= 1 (-> plan :ordered-cells count)))
+              (is (= (-> plan :ordered-cells first :ops first :name) #'c2/GetEdges)))))))
