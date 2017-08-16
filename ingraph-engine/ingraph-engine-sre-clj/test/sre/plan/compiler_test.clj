@@ -1,14 +1,16 @@
-(ns sre.compiler-test
+(ns sre.plan.compiler-test
   (:require [clojure.test :refer :all]
             [clojure.set :refer :all]
-            [sre.compiler :refer :all]
-            [sre.config-1 :as c1]
-            [sre.config-2 :as c2]
-            [sre.dsl.constraint :refer [bind implies*]]
-            [sre.dsl.op :as op]
+            [sre.plan.compiler :refer :all]
+            [sre.plan.config-1 :as c1]
+            [sre.plan.config-2 :as c2]
+            [sre.plan.dsl.constraint :refer [bind implies*]]
+            [sre.plan.dsl.op :as op]
             [clojure.pprint :refer :all]
             [cats.core :refer [mlet]]
-            [cats.monad.either :refer :all]))
+            [cats.monad.either :refer :all])
+  (:import (java.util Comparator)))
+
 
 (deftest test-compare-constraint-descriptors
   (testing "Compare contraint descriptors"

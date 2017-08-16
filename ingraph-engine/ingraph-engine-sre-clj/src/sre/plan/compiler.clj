@@ -1,10 +1,10 @@
-(ns sre.compiler
+(ns sre.plan.compiler
   (:require
     [cats.monad.either :refer :all]
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
-    [sre.dsl.op :as op]
-    [sre.dsl.constraint :as constraint]
+    [sre.plan.dsl.op :as op]
+    [sre.plan.dsl.constraint :as constraint]
     [clojure.pprint :refer :all]))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
@@ -43,7 +43,7 @@
               (recur (cons new-branch branches) rest))))))))
 
 (defn expand-implications [constr-defs]
-  (apply union (map sre.dsl.constraint/implies* constr-defs)))
+  (apply union (map sre.plan.dsl.constraint/implies* constr-defs)))
 
 (defn compare-constraint-descriptors
   "Compares two constraint descriptors by count ASC > arity DESC > type ASC > everything else
@@ -114,6 +114,9 @@
                   ; continue matching
                   (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))))
 
+(defprotocol Cost
+  (adjust-cost [this ]))
+
 (defrecord SearchPlanColumn [ordered-cells cells-by-constr-lkp])
 
 (defrecord SearchPlanCell [cost ops constr-lkp free-count non-past-ops])
@@ -170,7 +173,7 @@
                                  ; so refactor once you have the fatigue
                                  :let [bound (op/bind-map (:op present-binding) (:var-lkp present-binding))
                                        ; TODO need to find out a way to get stats about the variables
-                                       weight (op/weight bound {})]]
+                                       weight (op/weight bound (:constr-lkp cell))]]
                              [weight present-binding bound])]
     ; go through all applicable ops and try to fit them somewhere in our table.
     (reduce (fn [plans [weight present-binding bound]]

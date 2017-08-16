@@ -1,13 +1,14 @@
-(ns ingraph.sre.main
+(ns ingraph.sre.plan
     "Contains the main configuration of constraints, operations and others
     available in ingraph"
     (:require [sre.dsl.constraint :refer [defconstraint]]
       [sre.dsl.op :refer [defop defweight]]
       [sre.dsl.config :refer :all]))
 
-(defconfig Main)
+(defconfig Ingraph)
 
-(defconstraint Element [element])
+(defconstraint Known [known])
+(defconstraint Element [element] :implies Known [element])
 (defconstraint Edge [edge] :implies Element [edge])
 (defconstraint Vertex [vertex] :implies Element [vertex])
 (defconstraint HasLabels [vertex labels] :implies Vertex [vertex])
@@ -17,17 +18,22 @@
                Vertex [source]
                Edge [edge]
                Vertex [target])
-(defconstraint Assert1 [x expr] :implies Element [x])
-(defconstraint Assert2 [x y expr] :implies Element [x] Element [y])
+(defconstraint Equals [x y] :implies Known [x] Known [y])
 
 (defop GetVertices [vertex]
        :satisfies Vertex [vertex])
 (defop GetVerticesByLabels [vertex labels]
        :satisfies Vertex [vertex] HasLabels [vertex labels])
+(defop CheckLabels [vertex labels]
+       :requires Vertex [vertex]
+       :satisfies HasLabels [vertex labels])
 (defop GetEdges [source edge target]
        :satisfies DirectedEdge [source edge target])
 (defop GetEdgesByType [source edge target type]
        :satisfies DirectedEdge [source edge target] HasType [edge type])
+(defop CheckType [edge type]
+       :requires Edge [edge]
+       :satisfies HasType [type])
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])
@@ -40,9 +46,19 @@
 (defop ExtendInByType [target edge source type]
        :requires Vertex [target]
        :satisfies DirectedEdge [source edge target] HasType [edge type])
-(defop Eval1 [x expr]
-       :requires Element [x]
-       :satisfies Assert1 [x expr])
-(defop Eval2 [x y expr]
-       :requires Element [x] Element [y]
-       :satisfies Assert2 [x expr])
+(defop Join [source edge target]
+       :requires Vertex [source] Vertex [target]
+       :satisfies DirectedEdge [source edge target])
+(defop JoinByType [source edge target type]
+       :requires Vertex [source] Vertex [target]
+       :satisfies DirectedEdge [source edge target] HasType [edge type])
+(defop CheckDirectedEdge [source edge target]
+       :requires Vertex [source] Edge [edge] Vertex [target]
+       :satisfies DirectedEdge [source edge target])
+(defop CheckDirectedEdgeByType [source edge target type]
+       :requires Vertex [source] Edge [edge] Vertex [target]
+       :satisfies DirectedEdge [source edge target] HasType [edge type])
+(defop EvalEquals [x y]
+       :requires Known [x] Known [y]
+       :satisfies Equals [x y])
+

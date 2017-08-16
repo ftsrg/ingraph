@@ -1,10 +1,10 @@
-(ns sre.dsl.constraint-test
+(ns sre.plan.dsl.constraint-test
   (:require [clojure.test :refer :all]
             [clojure.test.check :as tc]
             [clojure.test.check.clojure-test :refer :all]
             [clojure.test.check.generators :as gen]
             [clojure.test.check.properties :as prop]
-            [sre.dsl.constraint :refer :all]
+            [sre.plan.dsl.constraint :refer :all]
             ))
 
 (defconstraint Element [element])

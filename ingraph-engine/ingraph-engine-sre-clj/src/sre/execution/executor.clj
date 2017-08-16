@@ -1,11 +1,8 @@
-(ns sre.execution.traverser
-  (:require [clojure.zip :as z])
+(ns sre.execution.executor
+  (:require [clojure.zip :as z]
+            [sre.execution.dsl :refer :all])
   (:import (clojure.lang LazySeq PersistentHashMap PersistentList))
   (:import (java.util Vector)))
-
-(defprotocol Environment
-  (create-task [this op] "Create environment specific task from an operation")
-  (exec-task [this task var-lkp] "Execute environment specific task"))
 
 (defrecord SearchTreeNode [^PersistentHashMap var-lkp ^PersistentList tasks])
 
@@ -13,7 +10,7 @@
   (z/zipper (fn [^SearchTreeNode node] (some? (:tasks node)))
             (fn [^SearchTreeNode node]
               (let [[first & rest] (:tasks node)
-                    var-lkps (exec-task env first (:var-lkp node))
+                    var-lkps (call-task env first (:var-lkp node))
                     children (map #(->SearchTreeNode %1 rest) var-lkps)]
                 ; very unintuitive, but an empty children list will result in
                 ; a single child having the node `nil`, and this will happen
