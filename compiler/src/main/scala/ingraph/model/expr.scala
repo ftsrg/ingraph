@@ -5,7 +5,7 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
-import org.apache.spark.sql.types.{DataType, Metadata}
+import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
 package object datatypes {
   type VertexLabel = String
@@ -26,7 +26,7 @@ case class EStub(note: String = "FIXME") extends LeafExpression with ExpressionB
 
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode) = ???
 
-  override def dataType = ???
+  override def dataType = StringType //use of Alias(EStub(), "foo") requires this
 }
 
 // formerly GraphElementVariable

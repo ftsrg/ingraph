@@ -175,14 +175,14 @@ package class ExpressionBuilder {
 		}
 	}
 
-	protected def static expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression, CompilerEnvironment ce) {
-		switch expression {
-			case expression === null: null //this is in-line with a null-safe call on expression as it was used before
-			NumberConstant: LiteralBuilder.buildNumberLiteral(expression, ce)
-			Parameter: buildRelalgParameter(expression, ce)
-			default: ce.l.unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
-		}
-	}
+//	protected def static expressionToSkipLimitConstant(org.slizaa.neo4j.opencypher.openCypher.Expression expression, CompilerEnvironment ce) {
+//		switch expression {
+//			case expression === null: null //this is in-line with a null-safe call on expression as it was used before
+//			NumberConstant: LiteralBuilder.buildNumberLiteral(expression, ce)
+//			Parameter: buildRelalgParameter(expression, ce)
+//			default: ce.l.unsupported('''Only NumberConstants are supported as SKIP/LIMIT values, got «expression»''')
+//		}
+//	}
 
 	protected def static buildRelalgParameter(Parameter expression, CompilerEnvironment ce) {
 		modelFactory.createParameter => [

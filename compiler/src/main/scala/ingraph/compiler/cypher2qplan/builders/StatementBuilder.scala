@@ -101,8 +101,8 @@ object StatementBuilder {
      * when chaining together query parts (in buildStatement(oc.SingleQuery) parent call).
      */
     val q_MatchList = clauses
-          .filter( _.isInstanceOf[oc.Match] )
-          .map( m => buildRelalgMatchDescriptor(m.asInstanceOf[oc.Match]) )
+          .filter( c => c.isInstanceOf[oc.Match] )
+          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
 
     /*
      * content will be built starting from what is passed in as chain, i.e. the tree built from query parts so far.
@@ -120,15 +120,17 @@ object StatementBuilder {
         }
       )
 
-    // FIXME: continue to process clauses
-    return content
+    val singleQuery_returnOrWithClause = clauses
+        .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    val afterReturn = if (singleQuery_returnOrWithClause.isEmpty) {
+      content
+    } else {
+      ReturnBuilder.dispatchBuildReturn(singleQuery_returnOrWithClause.head, content)
+    }
 
-//    val singleQuery_returnOrWithClause = clauses.filter([it instanceof With || it instanceof Return]).head
-//    val afterReturn = if (singleQuery_returnOrWithClause !== null) {
-//      buildRelalgReturn(singleQuery_returnOrWithClause, content, ce)
-//    } else {
-//      content
-//    }
+    //FIXME: continue processing clauses
+    return afterReturn
+
 //    val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
 //    val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
 //      val u0 = singleQuery_unwindClauseList
@@ -175,7 +177,7 @@ object StatementBuilder {
     *         whose op attribute is the compiled form of the MATCH without the WHERE,
     *         and condition attribute holds the filter condition.
     */
-  def buildRelalgMatchDescriptor(m: oc.Match): MatchDescriptor = {
+  def buildMatchDescriptor(m: oc.Match): MatchDescriptor = {
     val result = new MatchDescriptor()
 
     result.optional = Some(m.isOptional)

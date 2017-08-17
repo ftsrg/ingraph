@@ -11,7 +11,7 @@ class TrainBenchmarkCypherTest extends FunSuite {
     TrainBenchmarkCypherTest.testQueryString(
       """MATCH (segment:Segment:Vertex)-[e2:Foo|Boo]-(v2:Bar)-[e3:Foo]-(v3:Bar), (a)-[ee]->(b)
         |WHERE segment.length <= 0
-        |WITH segment
+        |WITH *, segment
         |OPTIONAL MATCH (v)
         |WHERE v.foo = segment.length
         |RETURN DISTINCT segment, segment.length AS length""".stripMargin)

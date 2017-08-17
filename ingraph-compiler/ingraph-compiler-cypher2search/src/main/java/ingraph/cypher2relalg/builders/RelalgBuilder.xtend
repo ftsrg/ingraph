@@ -264,173 +264,173 @@ class RelalgBuilder {
 //		afterCud
 //	}
 
-	/**
-	 * Process the common part of a RETURN and a WITH clause,
-	 * i.e. the distinct flag and the ReturnBody.
-	 */
-	def static UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content, CompilerEnvironment ce) {
-		// FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
-		// but it should be w/o .get(0)
+//	/**
+//	 * Process the common part of a RETURN and a WITH clause,
+//	 * i.e. the distinct flag and the ReturnBody.
+//	 */
+//	def static UnaryOperator buildRelalgReturnBody(boolean distinct, ReturnBody returnBody, Operator content, CompilerEnvironment ce) {
+//		// FIXME (in the grammar): returnBody.returnItems.get(0) is the actual return item list
+//		// but it should be w/o .get(0)
+//
+//		// pre-create elements to project to which will be copied to BeamerOperator.elements
+//		val _elements = new BasicEList<ExpressionVariable>
+//
+//		if ("*".equals(returnBody.returnItems.get(0).all)) {
+//			// add the non-dontCare vertex variables to the return list sorted by variable name
+//			val vEl = ce.vb.vertexVariableFactoryElements
+//			vEl.keySet.sort.forEach [ key |
+//				val variable = vEl.get(key)
+//				if (!variable.dontCare) {
+//					_elements.add(
+//						ce.vb.buildExpressionVariable(
+//							null
+//						,	ce.vb.buildVariableExpression(variable)
+//						)
+//					)
+//				}
+//			]
+//			// add the non-dontCare edge variables to the return list sorted by variable name
+//			val eEl = ce.vb.edgeVariableFactoryElements
+//			eEl.keySet.sort.forEach [ key |
+//				val variable = eEl.get(key)
+//				if (!variable.dontCare) {
+//					_elements.add(
+//						ce.vb.buildExpressionVariable(
+//							null
+//						,	ce.vb.buildVariableExpression(variable)
+//						)
+//					)
+//				}
+//			]
+//			if (_elements.empty) {
+//				ce.l.warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
+//			}
+//		}
+//		for (returnItem: returnBody.returnItems.get(0).items) {
+//			_elements.add(
+//				ce.vb.buildExpressionVariable(
+//					returnItem.alias?.name
+//				,	ExpressionBuilder.buildExpression(returnItem.expression, ce)
+//				)
+//			)
+//		}
+//
+//		if (_elements.empty) {
+//			ce.l.unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
+//		}
+//
+//		// let's see if there is a need for grouping
+//		var seenAggregate = false
+//		val groupingVariables = new HashSet<Variable>
+//		for (el: _elements) {
+//			seenAggregate = Cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
+//				seenAggregate, ce.l)
+//		}
+//
+//		val projection = if (seenAggregate) {
+//			modelFactory.createGroupingOperator => [
+//				// order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
+//				// use of lazy map OK as passed to sortBy - jmarton, 2017-04-20
+//				aggregationCriteria.addAll(groupingVariables.map[
+//				  val mapIt = it
+//				  modelFactory.createVariableExpression => [
+//				    variable = mapIt
+//				    expressionContainer = ce.tlc
+//				  ]
+//				].sortBy [
+//					ExpressionNameInferencer.inferName(it, ce.l) + '##' + it.class.name
+//				])
+//			]
+//		} else {
+//			// create plain old ProjectionOperator
+//			modelFactory.createProjectionOperator => [
+//				input = content
+//			]
+//		}
+//		projection => [
+//			input = content
+//			elements.addAll(_elements)
+//		]
+//
+//		// add duplicate-elimination operator if return DISTINCT was specified
+//		val op1 = if (distinct) {
+//				modelFactory.createDuplicateEliminationOperator => [
+//					input = projection
+//				]
+//			} else {
+//				projection
+//			}
+//
+//		val order = returnBody.order
+//		val op2 = if (order !== null) {
+//				// use of lazy map OK as passed to addAll and used only once - jmarton, 2017-01-07
+//				val sortEntries = order.orderBy.map [
+//					val sortDirection = if (sort !== null && sort.startsWith("DESC"))
+//							OrderDirection.DESCENDING
+//						else
+//							OrderDirection.ASCENDING
+//
+//					val sortExpression = switch expression {
+//						// for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
+//						ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
+//						VariableRef: ce.vb.buildVariableExpression(expression, true)
+//						default: ExpressionBuilder.buildExpression(expression, ce)
+//					}
+//					modelFactory.createSortEntry => [
+//						direction = sortDirection
+//						expression = sortExpression
+//					]
+//				]
+//
+//				val sortOperator = modelFactory.createSortOperator => [
+//					entries.addAll(sortEntries)
+//					input = op1
+//				]
+//				sortOperator
+//			} else {
+//				op1
+//			}
+//
+//		val skip = returnBody.skip
+//		val limit = returnBody.limit
+//		val op3 = if (skip !== null || limit !== null) {
+//				modelFactory.createTopOperator => [
+//					skip = ExpressionBuilder.expressionToSkipLimitConstant(skip?.skip, ce)
+//					limit = ExpressionBuilder.expressionToSkipLimitConstant(limit?.limit, ce)
+//					input = op2
+//				]
+//			} else {
+//				op2
+//			}
+//
+//		op3
+//	}
 
-		// pre-create elements to project to which will be copied to BeamerOperator.elements
-		val _elements = new BasicEList<ExpressionVariable>
-
-		if ("*".equals(returnBody.returnItems.get(0).all)) {
-			// add the non-dontCare vertex variables to the return list sorted by variable name
-			val vEl = ce.vb.vertexVariableFactoryElements
-			vEl.keySet.sort.forEach [ key |
-				val variable = vEl.get(key)
-				if (!variable.dontCare) {
-					_elements.add(
-						ce.vb.buildExpressionVariable(
-							null
-						,	ce.vb.buildVariableExpression(variable)
-						)
-					)
-				}
-			]
-			// add the non-dontCare edge variables to the return list sorted by variable name
-			val eEl = ce.vb.edgeVariableFactoryElements
-			eEl.keySet.sort.forEach [ key |
-				val variable = eEl.get(key)
-				if (!variable.dontCare) {
-					_elements.add(
-						ce.vb.buildExpressionVariable(
-							null
-						,	ce.vb.buildVariableExpression(variable)
-						)
-					)
-				}
-			]
-			if (_elements.empty) {
-				ce.l.warning('''RETURN * encountered but no vertexvariable nor edgevariable found in the query''')
-			}
-		}
-		for (returnItem: returnBody.returnItems.get(0).items) {
-			_elements.add(
-				ce.vb.buildExpressionVariable(
-					returnItem.alias?.name
-				,	ExpressionBuilder.buildExpression(returnItem.expression, ce)
-				)
-			)
-		}
-
-		if (_elements.empty) {
-			ce.l.unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
-		}
-
-		// let's see if there is a need for grouping
-		var seenAggregate = false
-		val groupingVariables = new HashSet<Variable>
-		for (el: _elements) {
-			seenAggregate = Cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
-				seenAggregate, ce.l)
-		}
-
-		val projection = if (seenAggregate) {
-			modelFactory.createGroupingOperator => [
-				// order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
-				// use of lazy map OK as passed to sortBy - jmarton, 2017-04-20
-				aggregationCriteria.addAll(groupingVariables.map[
-				  val mapIt = it
-				  modelFactory.createVariableExpression => [
-				    variable = mapIt
-				    expressionContainer = ce.tlc
-				  ]
-				].sortBy [
-					ExpressionNameInferencer.inferName(it, ce.l) + '##' + it.class.name
-				])
-			]
-		} else {
-			// create plain old ProjectionOperator
-			modelFactory.createProjectionOperator => [
-				input = content
-			]
-		}
-		projection => [
-			input = content
-			elements.addAll(_elements)
-		]
-
-		// add duplicate-elimination operator if return DISTINCT was specified
-		val op1 = if (distinct) {
-				modelFactory.createDuplicateEliminationOperator => [
-					input = projection
-				]
-			} else {
-				projection
-			}
-
-		val order = returnBody.order
-		val op2 = if (order !== null) {
-				// use of lazy map OK as passed to addAll and used only once - jmarton, 2017-01-07
-				val sortEntries = order.orderBy.map [
-					val sortDirection = if (sort !== null && sort.startsWith("DESC"))
-							OrderDirection.DESCENDING
-						else
-							OrderDirection.ASCENDING
-
-					val sortExpression = switch expression {
-						// for variable name resolution, ExpressionVariables need to be taken into account and have higher priority
-						ExpressionNodeLabelsAndPropertyLookup: ce.vb.buildVariableExpression(expression, true)
-						VariableRef: ce.vb.buildVariableExpression(expression, true)
-						default: ExpressionBuilder.buildExpression(expression, ce)
-					}
-					modelFactory.createSortEntry => [
-						direction = sortDirection
-						expression = sortExpression
-					]
-				]
-
-				val sortOperator = modelFactory.createSortOperator => [
-					entries.addAll(sortEntries)
-					input = op1
-				]
-				sortOperator
-			} else {
-				op1
-			}
-
-		val skip = returnBody.skip
-		val limit = returnBody.limit
-		val op3 = if (skip !== null || limit !== null) {
-				modelFactory.createTopOperator => [
-					skip = ExpressionBuilder.expressionToSkipLimitConstant(skip?.skip, ce)
-					limit = ExpressionBuilder.expressionToSkipLimitConstant(limit?.limit, ce)
-					input = op2
-				]
-			} else {
-				op2
-			}
-
-		op3
-	}
-
-	def static dispatch UnaryOperator buildRelalgReturn(Return r, Operator content, CompilerEnvironment ce) {
-		buildRelalgReturnBody(r.distinct, r.body, content, ce)
-	}
-
-	def static dispatch UnaryOperator buildRelalgReturn(With w, Operator content, CompilerEnvironment ce) {
-		val rb = buildRelalgReturnBody(w.distint, w.returnBody, content, ce)
-		if (w.where === null) {
-			rb
-		} else {
-			// left outer joins extracted from the patterns in the where clause
-			// should remain empty in WITH WHERE
-			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
-
-			val selectionOperator = modelFactory.createSelectionOperator => [
-				input = rb
-				condition = LogicalExpressionBuilder.buildLogicalExpression(w.where.expression, joinOperationsOfWhereClause, ce)
-			]
-
-			if (joinOperationsOfWhereClause.length !== 0) {
-				ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moveing this expression to MATCH...WHERE.''')
-			}
-
-			selectionOperator
-		}
-	}
+//	def static dispatch UnaryOperator buildRelalgReturn(Return r, Operator content, CompilerEnvironment ce) {
+//		buildRelalgReturnBody(r.distinct, r.body, content, ce)
+//	}
+//
+//	def static dispatch UnaryOperator buildRelalgReturn(With w, Operator content, CompilerEnvironment ce) {
+//		val rb = buildRelalgReturnBody(w.distint, w.returnBody, content, ce)
+//		if (w.where === null) {
+//			rb
+//		} else {
+//			// left outer joins extracted from the patterns in the where clause
+//			// should remain empty in WITH WHERE
+//			val EList<Operator> joinOperationsOfWhereClause = new BasicEList<Operator>()
+//
+//			val selectionOperator = modelFactory.createSelectionOperator => [
+//				input = rb
+//				condition = LogicalExpressionBuilder.buildLogicalExpression(w.where.expression, joinOperationsOfWhereClause, ce)
+//			]
+//
+//			if (joinOperationsOfWhereClause.length !== 0) {
+//				ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moveing this expression to MATCH...WHERE.''')
+//			}
+//
+//			selectionOperator
+//		}
+//	}
 
 //	/**
 //	 * MATCH clause is compiled as follows:
