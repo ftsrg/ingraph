@@ -10,10 +10,10 @@ class TrainBenchmarkCypherTest extends FunSuite {
   test("Random test from cypher string") {
     TrainBenchmarkCypherTest.testQueryString(
       """MATCH (segment:Segment:Vertex)-[e2:Foo|Boo]-(v2:Bar)-[e3:Foo]-(v3:Bar), (a)-[ee]->(b)
-        |WHERE segment.length <= 0
-        |WITH *, segment
+        |WHERE 3 <= 0
+        |WITH *, segment, "foo" as foo
         |OPTIONAL MATCH (v)
-        |WHERE v.foo = segment.length
+        |WHERE "foo" = "foo"
         |RETURN DISTINCT segment, segment.length AS length""".stripMargin)
 
   }

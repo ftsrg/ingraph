@@ -19,65 +19,65 @@ package class ComparableElementBuilder {
 	/** The model factory for the relational graph algebra representation */
 	val protected static modelFactory = RelalgFactory.eINSTANCE
 
-	def static dispatch ComparableExpression buildComparableElement(Parameter e, CompilerEnvironment ce) {
-		modelFactory.createParameterComparableExpression => [
-			parameter = modelFactory.createParameter => [
-				name = e.parameter
-				expressionContainer = ce.tlc
-			]
-			expressionContainer = ce.tlc
-		]
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(NumberConstant e, CompilerEnvironment ce) {
-		LiteralBuilder.buildNumberLiteral(e, ce)
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(StringConstant e, CompilerEnvironment ce) {
-		LiteralBuilder.buildStringLiteral(e, ce)
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(VariableRef e, CompilerEnvironment ce) {
-		modelFactory.createVariableComparableExpression => [
-			variable = ce.vb.buildRelalgVariable(e)
-			expressionContainer = ce.tlc
-		]
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(ExpressionPlusMinus e, CompilerEnvironment ce) {
-		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(ExpressionMulDiv e, CompilerEnvironment ce) {
-		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(ExpressionPower e, CompilerEnvironment ce) {
-		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(ExpressionNodeLabelsAndPropertyLookup e, CompilerEnvironment ce) {
-		val x = ce.vb.buildRelalgVariable(e)
-		// as AttributeVariable
-		if (x instanceof AttributeVariable) {
-			modelFactory.createVariableComparableExpression => [
-				variable = x
-				expressionContainer = ce.tlc
-			]
-		} else {
-			ce.l.unsupported('''Unsupported type received: «x.class.name»''')
-			null
-		}
-	}
-
-	def static dispatch ComparableExpression buildComparableElement(FunctionInvocation fi, CompilerEnvironment ce) {
-		val fe = modelFactory.createFunctionComparableExpression => [
-			expressionContainer = ce.tlc
-		]
-
-		BuilderUtil.populateFunctionExpression(fe, fi, ce)
-
-		fe
-	}
+//	def static dispatch ComparableExpression buildComparableElement(Parameter e, CompilerEnvironment ce) {
+//		modelFactory.createParameterComparableExpression => [
+//			parameter = modelFactory.createParameter => [
+//				name = e.parameter
+//				expressionContainer = ce.tlc
+//			]
+//			expressionContainer = ce.tlc
+//		]
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(NumberConstant e, CompilerEnvironment ce) {
+//		LiteralBuilder.buildNumberLiteral(e, ce)
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(StringConstant e, CompilerEnvironment ce) {
+//		LiteralBuilder.buildStringLiteral(e, ce)
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(VariableRef e, CompilerEnvironment ce) {
+//		modelFactory.createVariableComparableExpression => [
+//			variable = ce.vb.buildRelalgVariable(e)
+//			expressionContainer = ce.tlc
+//		]
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(ExpressionPlusMinus e, CompilerEnvironment ce) {
+//		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(ExpressionMulDiv e, CompilerEnvironment ce) {
+//		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(ExpressionPower e, CompilerEnvironment ce) {
+//		ArithmeticExpressionBuilder.buildArithmeticExpression(e, ce)
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(ExpressionNodeLabelsAndPropertyLookup e, CompilerEnvironment ce) {
+//		val x = ce.vb.buildRelalgVariable(e)
+//		// as AttributeVariable
+//		if (x instanceof AttributeVariable) {
+//			modelFactory.createVariableComparableExpression => [
+//				variable = x
+//				expressionContainer = ce.tlc
+//			]
+//		} else {
+//			ce.l.unsupported('''Unsupported type received: «x.class.name»''')
+//			null
+//		}
+//	}
+//
+//	def static dispatch ComparableExpression buildComparableElement(FunctionInvocation fi, CompilerEnvironment ce) {
+//		val fe = modelFactory.createFunctionComparableExpression => [
+//			expressionContainer = ce.tlc
+//		]
+//
+//		BuilderUtil.populateFunctionExpression(fe, fi, ce)
+//
+//		fe
+//	}
 
 }

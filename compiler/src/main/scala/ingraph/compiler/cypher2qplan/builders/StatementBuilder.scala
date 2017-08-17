@@ -203,7 +203,7 @@ object StatementBuilder {
       // left outer joins extracted from the patterns in the where clause
       val joinOperationsOfWhereClause = ListBuffer.empty[qplan.QNode]
 
-      result.condition = Some(expr.EStub(m.getWhere.getExpression.toString))
+      result.condition = Some(ExpressionBuilder.buildExpression(m.getWhere.getExpression, joinOperationsOfWhereClause))
         //FIXME: LogicalExpressionBuilder.buildLogicalExpression(m.where.expression, joinOperationsOfWhereClause, ce)
 
       result.op = if (joinOperationsOfWhereClause.isEmpty) {
