@@ -1,4 +1,4 @@
-rootProject.name = 'ingraph-engine'
+rootProject.name = 'ingraph'
 
 include ':ingraph-compiler:ingraph-compiler-common'
 include ':ingraph-compiler:ingraph-compiler-cypher2search'
