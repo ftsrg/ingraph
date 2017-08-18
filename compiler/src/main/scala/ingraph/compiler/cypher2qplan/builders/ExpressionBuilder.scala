@@ -3,6 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util
 
 import ingraph.model.{expr, qplan}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
@@ -28,14 +29,14 @@ object ExpressionBuilder {
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       //TODO: case e: oc.Count => buildExpressionAux(e, joins)
       //TODO: case e: oc.ExpressionMulDiv => buildExpressionAux(e, joins)
-      //TODO: case e: oc.ExpressionNodeLabelsAndPropertyLookup => buildExpressionAux(e, joins)
+      case e: oc.ExpressionNodeLabelsAndPropertyLookup => UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
       //TODO: case e: oc.ExpressionPlusMinus => buildExpressionAux(e, joins)
       //TODO: case e: oc.ExpressionPower => buildExpressionAux(e, joins)
       //TODO: case e: oc.FunctionInvocation => buildExpressionAux(e, joins)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
-      //TODO: case e: oc.VariableRef => buildExpressionAux(e, joins)
+      case e: oc.VariableRef => UnresolvedAttribute(e.getVariableRef.getName)
       //TODO: case e: oc.CaseExpression => buildExpressionAux(e, joins)
       //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
