@@ -3,6 +3,8 @@ package ingraph.ire
 import hu.bme.mit.ire.util.BufferMultimap
 import org.neo4j.driver.v1.types.{Node, Relationship}
 
+import java.util.{Iterator => JIterator}
+
 import scala.collection.JavaConversions._
 import scala.collection.mutable
 import scala.util.Random
@@ -114,9 +116,13 @@ class Indexer {
   def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
   def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
   def vertices(): Iterator[IngraphVertex] = vertexLabelLookup.valuesIterator.flatten
+  def verticesJava(): JIterator[IngraphVertex] = vertices()
   def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
+  def verticesByLabelJava(label: String): JIterator[IngraphVertex] = verticesByLabel(label)
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
+  def edgesJava(): JIterator[IngraphEdge] = edges()
   def edgesByLabel(label: String): Iterator[IngraphEdge] = edgeLabelLookup.getOrElse(label, Seq()).iterator
+  def edgesByLabelJava(label: String): JIterator[IngraphEdge] = edgesByLabel(label)
   def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup.get(label).map(_.size).getOrElse(0)
   def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup.get(label).map(_.size).getOrElse(0)
 
