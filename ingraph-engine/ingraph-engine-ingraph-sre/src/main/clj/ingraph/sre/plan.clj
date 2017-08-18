@@ -1,9 +1,9 @@
 (ns ingraph.sre.plan
     "Contains the main configuration of constraints, operations and others
     available in ingraph"
-    (:require [sre.dsl.constraint :refer [defconstraint]]
-      [sre.dsl.op :refer [defop defweight]]
-      [sre.dsl.config :refer :all]))
+    (:require [sre.plan.dsl.constraint :refer [defconstraint]]
+      [sre.plan.dsl.op :refer [defop]]
+      [sre.plan.dsl.config :refer :all]))
 
 (defconfig Ingraph)
 
