@@ -24,10 +24,10 @@ case class IngraphVertex(id: Long,
 case class IngraphEdge(id: Long,
                        sourceVertex: IngraphVertex,
                        targetVertex: IngraphVertex,
-                       label: String,
+                       `type`: String,
                        override val properties: Map[String, Any] = Map()) extends IngraphElement {
-  override def toString: String = s"Edge(${sourceVertex.id} -[$label]-> ${targetVertex.id}, $properties)"
-  def inverse(): IngraphEdge = IngraphEdge(id, targetVertex, sourceVertex, label, properties)
+  override def toString: String = s"Edge(${sourceVertex.id} -[${`type`}]-> ${targetVertex.id}, $properties)"
+  def inverse(): IngraphEdge = IngraphEdge(id, targetVertex, sourceVertex, `type`, properties)
 }
 
 class Indexer {
@@ -35,13 +35,13 @@ class Indexer {
   val vertexLookup = mutable.HashMap[Long, IngraphVertex]()
   val edgeLookup = mutable.HashMap[Long, IngraphEdge]()
   val vertexLabelLookup = new BufferMultimap[String, IngraphVertex]()
-  val edgeLabelLookup = new BufferMultimap[String, IngraphEdge]()
+  val edgeTypeLookup = new BufferMultimap[String, IngraphEdge]()
   val mappers = mutable.Buffer[EntityToTupleMapper]()
 
   def clear(): Unit = {
     vertexLookup.clear()
     vertexLabelLookup.clear()
-    edgeLabelLookup.clear()
+    edgeTypeLookup.clear()
     mappers.clear()
   }
 
@@ -49,7 +49,7 @@ class Indexer {
     for (vertex <- vertexLookup.values) {
       tupleMapper.addVertex(vertex)
     }
-    for (vertexList <- edgeLabelLookup.values;
+    for (vertexList <- edgeTypeLookup.values;
          vertex <- vertexList) {
       tupleMapper.addEdge(vertex)
     }
@@ -95,9 +95,9 @@ class Indexer {
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {
     edgeLookup(edge.id) = edge
-    edge.sourceVertex.edges(edge.label) = edge
-    edge.targetVertex.reverseEdges(edge.label) = edge
-    edgeLabelLookup.addBinding(edge.label, edge)
+    edge.sourceVertex.edges(edge.`type`) = edge
+    edge.targetVertex.reverseEdges(edge.`type`) = edge
+    edgeTypeLookup.addBinding(edge.`type`, edge)
     mappers.foreach(_.addEdge(edge))
     edge
   }
@@ -109,7 +109,7 @@ class Indexer {
   def removeEdgeById(id: Long): Unit = {
     val edge = edgeLookup(id)
     mappers.foreach(_.removeEdge(edge))
-    edgeLabelLookup.removeBinding(edge.label, edge)
+    edgeTypeLookup.removeBinding(edge.`type`, edge)
     edgeLookup.remove(id)
   }
 
@@ -121,10 +121,10 @@ class Indexer {
   def verticesByLabelJava(label: String): JIterator[IngraphVertex] = verticesByLabel(label)
   def edges(): Iterator[IngraphEdge] = edgeLookup.valuesIterator
   def edgesJava(): JIterator[IngraphEdge] = edges()
-  def edgesByLabel(label: String): Iterator[IngraphEdge] = edgeLabelLookup.getOrElse(label, Seq()).iterator
-  def edgesByLabelJava(label: String): JIterator[IngraphEdge] = edgesByLabel(label)
+  def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
+  def edgesByTypeJava(label: String): JIterator[IngraphEdge] = edgesByType(label)
   def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup.get(label).map(_.size).getOrElse(0)
-  def getNumberOfEdgesWithLabel(label: String): Int = edgeLabelLookup.get(label).map(_.size).getOrElse(0)
+  def getNumberOfEdgesWithLabel(label: String): Int = edgeTypeLookup.get(label).map(_.size).getOrElse(0)
 
   val rnd = new Random(1)
   def newId(): Long = {

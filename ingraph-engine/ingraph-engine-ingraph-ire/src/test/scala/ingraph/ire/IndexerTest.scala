@@ -19,7 +19,7 @@ class IndexerTest extends WordSpec {
 
   "IngraphEdge" should {
     "reverse itself" in {
-      val edge: IngraphEdge = indexer.edgesByLabel("eats").toSeq.head
+      val edge: IngraphEdge = indexer.edgesByType("eats").toSeq.head
       val inverse = edge.inverse()
       assert(edge.sourceVertex == inverse.targetVertex)
       assert(inverse.sourceVertex == edge.targetVertex)
@@ -28,9 +28,9 @@ class IndexerTest extends WordSpec {
 
   "Indexer" should {
 
-    "return edges by label" in {
-      assert(indexer.edgesByLabel("hates").map(_.id).toSet == Set(6, 7))
-      assert(indexer.edgesByLabel("eats").map(_.id).toSet == Set(8))
+    "return edges by type" in {
+      assert(indexer.edgesByType("hates").map(_.id).toSet == Set(6, 7))
+      assert(indexer.edgesByType("eats").map(_.id).toSet == Set(8))
     }
 
     "return vertices by id" in {
