@@ -38,7 +38,7 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
   }
 
   def addEdge(edge: IngraphEdge): Unit = {
-    for (operators <- edgeConverters.get(edge.label); operator <- operators) {
+    for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
       val sourceLabels = operator.getSourceVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
       val targetLabels = operator.getTargetVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
@@ -50,7 +50,7 @@ class EntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVerticesOper
   }
 
   def removeEdge(edge: IngraphEdge): Unit = {
-    for (operators <- edgeConverters.get(edge.label); operator <- operators) {
+    for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
       val sourceLabels = operator.getSourceVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
       val targetLabels = operator.getTargetVertexVariable.getVertexLabelSet.getVertexLabels.map(_.getName).toSet
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
