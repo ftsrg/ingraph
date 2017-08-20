@@ -91,9 +91,25 @@
                       ^Iterator iterator (.edgesInJavaIterator vertex)]
                   (iterator-seq iterator)))))
 
-(deftask ExtendOutByType #'plan/ExtendOutByType (???))
+(deftask ExtendOutByType #'plan/ExtendOutByType
+         (let [[v e w t] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                       ^IngraphVertex tgt (.targetVertex edge)]
+                   (assoc var-lkp e edge w tgt))
+                (let [^IngraphVertex vertex (var-lkp v)
+                      ^String type (var-lkp t)
+                      ^Iterator iterator (.edgesOutByTypeJavaIterator vertex type)]
+                  (iterator-seq iterator)))))
 
-(deftask ExtendInByType #'plan/ExtendInByType (???))
+(deftask ExtendInByType #'plan/ExtendInByType
+         (let [[v e w t] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                       ^IngraphVertex src (.sourceVertex edge)]
+                   (assoc var-lkp e edge w src))
+                (let [^IngraphVertex vertex (var-lkp v)
+                      ^String type (var-lkp t)
+                      ^Iterator iterator (.edgesInByTypeJavaIterator vertex type)]
+                  (iterator-seq iterator)))))
 
 (deftask Join #'plan/Join (???))
 

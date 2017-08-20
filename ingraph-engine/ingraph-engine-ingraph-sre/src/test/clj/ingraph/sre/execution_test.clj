@@ -173,4 +173,25 @@
             env (IngraphEnvironment. indexer)
             task (->ExtendIn [2 3 4])]
         (is (= #{{2 person2 3 p0-ch-p2 4 person0}}
-              (into #{} (call task env {2 person2}))))))))
+               (into #{} (call task env {2 person2}))))))))
+
+(deftest test-extend-out-by-type
+  (testing "ExtendOutByType"
+    (testing "should return nothing"
+      (let [env (IngraphEnvironment. indexer)
+            task (->ExtendOutByType [2 3 4 5])]
+        (is (empty? (call task env {2 person2 5 "ate"})))))
+
+    (testing "should return edges"
+      (let [env (IngraphEnvironment. indexer)
+            task (->ExtendOutByType [2 3 4 5])]
+        (is (= #{{2 person0 3 p0-knows-p1 4 person1 5 "knows"}}
+               (into #{} (call task env {2 person0 5 "knows"}))))))))
+
+(deftest test-extend-in-by-type
+  (testing "ExtendInByType"
+    (testing "should return edges"
+      (let [env (IngraphEnvironment. indexer)
+            task (->ExtendInByType [2 3 4 5])]
+        (is (= #{{2 person0 3 p1-knows-p0 4 person1 5 "knows"}}
+               (into #{} (call task env {2 person0 5 "knows"}))))))))
