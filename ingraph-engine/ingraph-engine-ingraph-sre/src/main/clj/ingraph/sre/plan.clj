@@ -33,7 +33,7 @@
        :satisfies DirectedEdge [source edge target] HasType [edge type])
 (defop CheckType [edge type]
        :requires Edge [edge]
-       :satisfies HasType [type])
+       :satisfies HasType [edge type])
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])

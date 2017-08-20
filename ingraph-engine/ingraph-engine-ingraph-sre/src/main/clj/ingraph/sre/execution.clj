@@ -1,9 +1,11 @@
 (ns ingraph.sre.execution
   (:require [sre.execution.dsl :refer :all]
             [ingraph.sre.plan :as plan])
-  (:import [ingraph.ire Indexer]
-           (java.util Iterator)))
+  (:import [ingraph.ire Indexer IngraphVertex IngraphEdge]
+           [java.util Iterator]))
 
+;; This file contains performance-critical code. General good advice: look out for reflection warnings
+;; in the tests, add type hints when they occur.
 (set! *warn-on-reflection* true)
 
 (defn ??? [] (throw (Exception. "Not implemented yet")))
@@ -12,40 +14,82 @@
 
 (deftask GetVertices
          #'plan/GetVertices
-         (map #(assoc var-lkp (-> this :vars first) %)
+         (let [[v] (-> this :vars)]
+           (map #(assoc var-lkp v %)
               (let [^IngraphEnvironment env env
                     ^Indexer indexer (.indexer env)
                     ^Iterator iterator (.verticesJava indexer)]
-                (iterator-seq iterator))))
+                (iterator-seq iterator)))))
 
+; TODO should work with multiple labels, but no indexer support yet [#184]
 (deftask GetVerticesByLabels
          #'plan/GetVerticesByLabels
-         (map #(assoc var-lkp (-> this :vars first) %)
+         (let [[v l] (-> this :vars)]
+           (map #(assoc var-lkp v %)
               (let [^IngraphEnvironment env env
                     ^Indexer indexer (.indexer env)
-                    ^Iterator iterator (.verticesByLabelJava indexer
-                                                             (-> this :vars (nth 1) var-lkp))]
-                (iterator-seq iterator))))
+                    ^String label (var-lkp l)
+                    ^Iterator iterator (.verticesByLabelJava indexer label)]
+                (iterator-seq iterator)))))
 
+; TODO should add support for multiple set of labels
 (deftask CheckLabels
          #'plan/CheckLabels
-         (if (-> this :vars (nth 0) .hasLabel))
-         (map #(assoc var-lkp (-> this :vars first) %)
+         (let [[v l] (-> this :vars)
+               ^IngraphVertex vertex (var-lkp v)
+               ^String label (var-lkp l)]
+           (if (.contains (.labels vertex) label) (list var-lkp) ())))
+
+(deftask GetEdges
+         #'plan/GetEdges
+         (let [[v e w] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                     src (.sourceVertex edge)
+                     tgt (.targetVertex edge)]
+                 (assoc var-lkp v src e edge w tgt))
               (let [^IngraphEnvironment env env
                     ^Indexer indexer (.indexer env)
-                    ^Iterator iterator (.verticesByLabelJava indexer
-                                                             (-> this :vars (nth 1) var-lkp))]
-                (iterator-seq iterator))))
+                    ^Iterator iterator (.edgesJava indexer)]
+                (iterator-seq iterator)))))
 
-(deftask GetEdges #'plan/GetEdges (???))
+(deftask GetEdgesByType #'plan/GetEdgesByType
+         (let [[v e w t] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                     src (.sourceVertex edge)
+                     tgt (.targetVertex edge)]
+                 (assoc var-lkp v src e edge w tgt))
+              (let [^IngraphEnvironment env env
+                    ^Indexer indexer (.indexer env)
+                    ^String type (var-lkp t)
+                    ^Iterator iterator (.edgesByTypeJava indexer type)]
+                (iterator-seq iterator)))))
 
-(deftask GetEdgesByType #'plan/GetEdgesByType (???))
+(deftask CheckType
+         #'plan/CheckType
+         (let [[e t] (-> this :vars)
+               ^IngraphEdge edge (var-lkp e)
+               ^String type (var-lkp t)]
+           (if (= (.type edge) type) (list var-lkp) ())))
 
-(deftask CheckType #'plan/CheckType (???))
+(deftask ExtendOut
+         #'plan/ExtendOut
+         (let [[v e w] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                       ^IngraphVertex tgt (.targetVertex edge)]
+                   (assoc var-lkp e edge w tgt))
+                (let [^IngraphVertex vertex (var-lkp v)
+                      ^Iterator iterator (.edgesOutJavaIterator vertex)]
+                  (iterator-seq iterator)))))
 
-(deftask ExtendOut #'plan/ExtendOut (???))
-
-(deftask ExtendIn #'plan/ExtendIn (???))
+(deftask ExtendIn
+         #'plan/ExtendIn
+         (let [[v e w] (-> this :vars)]
+           (map #(let [^IngraphEdge edge %
+                       ^IngraphVertex src (.sourceVertex edge)]
+                   (assoc var-lkp e edge w src))
+                (let [^IngraphVertex vertex (var-lkp v)
+                      ^Iterator iterator (.edgesInJavaIterator vertex)]
+                  (iterator-seq iterator)))))
 
 (deftask ExtendOutByType #'plan/ExtendOutByType (???))
 
