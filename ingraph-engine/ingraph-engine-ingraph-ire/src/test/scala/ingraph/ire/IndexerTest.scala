@@ -38,8 +38,8 @@ class IndexerTest extends WordSpec {
     }
 
     "make create navigable entities" in {
-      assert(indexer.vertexById(2).map(_.edges("owns").sourceVertex.id) == Some(2))
-      assert(indexer.vertexById(2).map(_.reverseEdges("owns").targetVertex.id) == Some(2))
+      assert(indexer.vertexById(2).map(_.edgesOut("owns").sourceVertex.id) == Some(2))
+      assert(indexer.vertexById(2).map(_.edgesIn("owns").targetVertex.id) == Some(2))
     }
 
     "can query all vertices" in {
