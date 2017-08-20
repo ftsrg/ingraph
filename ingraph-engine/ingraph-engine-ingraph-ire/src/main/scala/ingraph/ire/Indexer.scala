@@ -19,10 +19,10 @@ case class IngraphVertex(id: Long,
   val edgesOut: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
   val edgesIn: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
 
-  def edgesOutByTypeJavaIterator: JIterator[(String, IngraphEdge)] = edgesOut.iterator
+  def edgesOutByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesOut.get(key).iterator
   def edgesOutJavaIterator: JIterator[IngraphEdge] = edgesOut.valuesIterator
 
-  def edgesInByTypeJavaIterator: JIterator[(String, IngraphEdge)] = edgesIn.iterator
+  def edgesInByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesIn.get(key).iterator
   def edgesInJavaIterator: JIterator[IngraphEdge] = edgesIn.valuesIterator
 
   override def toString: String = s"Vertex($id, $properties)"
