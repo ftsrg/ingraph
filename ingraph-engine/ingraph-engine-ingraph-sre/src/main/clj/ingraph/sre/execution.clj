@@ -124,7 +124,7 @@
                 (mapcat #(let [^IngraphEdge edge %
                                ^IngraphVertex src (.sourceVertex edge)]
                         (if (= src source)
-                          (list (assoc var-lkp e edge w src))
+                          (list (assoc var-lkp e edge v src))
                           ()))))))
 
 (deftask JoinByType
@@ -140,7 +140,7 @@
                 (mapcat #(let [^IngraphEdge edge %
                                ^IngraphVertex src (.sourceVertex edge)]
                            (if (= src source)
-                             (list (assoc var-lkp e edge w src))
+                             (list (assoc var-lkp e edge v src))
                              ()))))))
 
 ; I think these two doesn't really make sense
