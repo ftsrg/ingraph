@@ -1,9 +1,9 @@
 package ingraph.ire
 
+import java.util.{Iterator => JIterator}
+
 import hu.bme.mit.ire.util.BufferMultimap
 import org.neo4j.driver.v1.types.{Node, Relationship}
-
-import java.util.{Iterator => JIterator}
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable

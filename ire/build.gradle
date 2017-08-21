@@ -20,7 +20,6 @@ ext {
 }
 
 dependencies {
-  compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
   compile group: 'com.typesafe.akka', name: "akka-actor_$scalaShortVersion", version: akkaVersion
   compile group: 'org.openjdk.jmh', name: 'jmh-core', version: jmhVersion
   compile group: 'org.apache.commons', name: 'commons-math3', version: commonsMathVersion

@@ -9,13 +9,8 @@ jar {
 }
 
 dependencies {
-  compile project(':ingraph-compiler:ingraph-compiler-cypher2search')
-  compile project(':ingraph-compiler:ingraph-compiler-relalg2tex')
-
-  compile project(':ingraph-engine:ingraph-engine-bulk-loader')
-  compile project(':ingraph-engine:ingraph-engine-expression-parser')
-  compile project(':ingraph-engine:ingraph-engine-ire')
-  testCompile project(':ingraph-engine:ingraph-engine-test-tools')
+  compile project(':indexer')
+  compile project(':ire')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 
