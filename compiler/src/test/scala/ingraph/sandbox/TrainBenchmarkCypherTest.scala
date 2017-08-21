@@ -4,6 +4,7 @@ import ingraph.compiler.cypher2qplan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
+import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 class TrainBenchmarkCypherTest extends FunSuite {
 
@@ -47,23 +48,25 @@ object TrainBenchmarkCypherTest {
   val queryPackPath = "trainbenchmark/"
   val printCypher = true
   val printQPlan = true
+  val skipResolve = true
+  val skipBeautify = false
 
   def testQueryFile(queryName: String): Unit = {
     val cypher = CypherParser.parseFile(queryPackPath + queryName)
 
-    if (printCypher) println(PrettyPrinter.format(cypher))
-
-    val qplan = cypher2qplan.build(cypher, queryName)
-
-    if (printQPlan) println(qplan)
+    testQueryCommon(cypher, queryName)
   }
 
   def testQueryString(queryString: String, queryName: String = "ad-hoc query"): Unit = {
     val cypher = CypherParser.parseString(queryString)
 
+    testQueryCommon(cypher, queryName)
+  }
+
+  def testQueryCommon(cypher: oc.Cypher, queryName: String): Unit = {
     if (printCypher) println(PrettyPrinter.format(cypher))
 
-    val qplan = cypher2qplan.build(cypher, queryName)
+    val qplan = cypher2qplan.build_IKnowWhatImDoing(cypher, queryName, skipResolve = skipResolve, skipBeautify = skipBeautify)
 
     if (printQPlan) println(qplan)
   }
