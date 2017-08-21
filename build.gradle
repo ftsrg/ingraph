@@ -1,17 +1,13 @@
-plugins {
-  id 'com.jfrog.bintray' version '1.7.1' apply false
-}
-
 allprojects {
   group = 'ingraph'
-  version = '0.2.0-SNAPSHOT'
+  version = '0.3.0-SNAPSHOT'
 }
 
 ext {
+  commonsExecVersion = '1.3'
   commonsIoVersion = '2.5'
   commonsMathVersion = '3.6.1'
-  emfVersion = '2.10.1'
-  guavaVersion = '15.0' // do not upgrade to 21.0 as VIATRA currently uses the ToStringHelper class (https://google.github.io/guava/releases/20.0/api/docs/com/google/common/base/Objects.ToStringHelper.html)
+  guavaVersion = '22.0'
   jmhVersion = '1.17.5'
   junitVersion = '4.12'
   log4jVersion = '1.2.17'
@@ -20,20 +16,14 @@ ext {
   scalaShortVersion = '2.11'
   scalaTestVersion = '3.0.1'
   scalaVersion = '2.11.8'
+  sparkVersion = '2.2.0'
   slizaaVersion = '1.0.0-SNAPSHOT'
-  viatraMinorVersion = '.0'
-  viatraDseVersion = '0.16' + viatraMinorVersion
-  viatraVersion = '1.6' + viatraMinorVersion
-  xtendVersion = '2.10.0'
-  xtextVersion = xtendVersion
+  xtextVersion = '2.10.0'
 }
 
 subprojects {
   apply plugin: 'java'
   apply plugin: 'scala'
-  apply plugin: 'eclipse'
-  apply plugin: 'com.jfrog.bintray'
-  apply plugin: 'maven-publish'
 
   jar {
     from sourceSets.main.allJava
@@ -45,22 +35,12 @@ subprojects {
 
   repositories {
     jcenter()
-    maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
-    maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
     maven { url 'https://szdavid92.github.io/ingraph-deps' }
   }
 
   // disable warnings for Scala projects
   tasks.withType(ScalaCompile) {
     scalaCompileOptions.additionalParameters = ["-nowarn"]
-  }
-
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        from components.java
-      }
-    }
   }
 
   dependencies {

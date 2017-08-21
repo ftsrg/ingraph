@@ -1,11 +1,11 @@
 package ingraph.emf.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrettyPrinter {
 
@@ -16,7 +16,7 @@ public class PrettyPrinter {
 		System.out.println(string);
 		return string;
 	}
-	
+
     public static String format(final EObject object) {
         final List<String> lines = formatAny(object, ""); //$NON-NLS-1$
         final StringBuilder sb = new StringBuilder();
