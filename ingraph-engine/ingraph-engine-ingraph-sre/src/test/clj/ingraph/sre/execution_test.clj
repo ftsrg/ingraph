@@ -195,3 +195,39 @@
             task (->ExtendInByType [2 3 4 5])]
         (is (= #{{2 person0 3 p1-knows-p0 4 person1 5 "knows"}}
                (into #{} (call task env {2 person0 5 "knows"}))))))))
+
+(deftest test-join
+  (testing "Join"
+    (testing "should return edge pointing from source to target only,
+    because it takes into account direction"
+      (let [env (IngraphEnvironment. indexer)
+            task (->Join [2 3 4])]
+        (is (= #{{2 person0 3 p0-knows-p1 4 person1}}
+               (into #{} (call task env {2 person0 4 person1}))))
+        (is (= #{{2 person1 3 p1-knows-p0 4 person0}}
+               (into #{} (call task env {2 person1 4 person0}))))))))
+
+(deftest test-join-by-type
+  (testing "JoinByType"
+    (testing "should return nothing"
+      (let [env (IngraphEnvironment. indexer)
+            task (->JoinByType [2 3 4 5])]
+        (is (empty? (call task env {2 person2 4 person0 5 "knows"})))))
+    (testing "should return edge pointing from source to target only,
+    because it takes into account direction"
+      (let [env (IngraphEnvironment. indexer)
+            task (->JoinByType [2 3 4 5])]
+        (is (= #{{2 person0 3 p0-knows-p1 4 person1 5 "knows"}}
+               (into #{} (call task env {2 person0 4 person1 5 "knows"}))))
+        (is (= #{{2 person1 3 p1-knows-p0 4 person0 5 "knows"}}
+               (into #{} (call task env {2 person1 4 person0 5 "knows"}))))))))
+
+(deftest test-eval-equals
+  (testing "EvalEquals"
+    (let [c (partial call (->EvalEquals [9 6]) (IngraphEnvironment. indexer))]
+      (testing "should return nothing"
+        (is (empty? (c {9 person0 6 p0-ch-p2})))
+        (is (empty? (c {9 person0 6 person1}))))
+      (testing "should return somethings"
+        (is (some? (c {9 person0 6 person0})))
+        (is (some? (c {9 p0-knows-p1 6 p0-knows-p1})))))))
