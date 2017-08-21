@@ -16,6 +16,7 @@ class IndexerTest extends WordSpec {
   indexer.addEdge(new InternalRelationship(6, 1, 3, "hates"))
   indexer.addEdge(new InternalRelationship(7, 3, 1, "hates"))
   indexer.addEdge(new InternalRelationship(8, 1, 1, "eats"))
+  indexer.addEdge(new InternalRelationship(9, 3, 2, "hates"))
 
   "IngraphEdge" should {
     "reverse itself" in {
@@ -29,21 +30,25 @@ class IndexerTest extends WordSpec {
   "Indexer" should {
 
     "return edges by type" in {
-      assert(indexer.edgesByType("hates").map(_.id).toSet == Set(6, 7))
+      assert(indexer.edgesByType("hates").map(_.id).toSet == Set(6, 7, 9))
       assert(indexer.edgesByType("eats").map(_.id).toSet == Set(8))
     }
 
     "return vertices by id" in {
-      assert(indexer.vertexById(3).map(_.id) == Some(3))
+      val cat = indexer.vertexById(3).get
+      assert(cat.id == 3)
+      assert(cat.edgesOut("hates").map(_.targetVertex.id).toSet == Set(1, 2))
     }
 
     "make create navigable entities" in {
-      assert(indexer.vertexById(2).map(_.edgesOut("owns").sourceVertex.id) == Some(2))
-      assert(indexer.vertexById(2).map(_.edgesIn("owns").targetVertex.id) == Some(2))
+      val maybeVertex = indexer.vertexById(2)
+      assert(maybeVertex.map(_.edgesOut("owns").head.sourceVertex.id).contains(2))
+      assert(maybeVertex.map(_.edgesIn("owns").head.targetVertex.id).contains(2))
     }
 
     "can query all vertices" in {
       assert(indexer.verticesJava().asScala.map(_.id).toSet == Set(1, 2, 3))
     }
+
   }
 }
