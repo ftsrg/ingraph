@@ -1,17 +1,14 @@
 package ingraph.tests
 
-import scala.Vector
-import scala.io.Source
 import org.scalatest.FunSuite
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-import scala.collection.immutable.Range
+
+import scala.io.Source
 
 abstract class LdbcSnbTest extends FunSuite {
 
-  def modelPath(entityName: String) = s"../../graphs/snb_50/${entityName}_0_0.csv"
+  def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(workload: String, query: Int): String = s"../../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
+  def queryPath(workload: String, query: Int): String = s"../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
 
   def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
 
@@ -51,14 +48,6 @@ abstract class LdbcSnbTest extends FunSuite {
     modelPath("person_studyAt_organisation") -> "studyAt",
     modelPath("person_workAt_organisation") -> "workAt"
   )
-
-  val converterConfig = new RelalgConverterConfigBuilder() //
-    .setConsoleOutput(false) //
-    .setStandaloneDocument(true) //
-    .setIncludeCommonVariables(true) //
-    .setSchemaIndices(true) //
-    .build
-  val converter = new Relalg2TexTreeConverter(converterConfig)
 
   case class TestCase(workload: String, number: Int)
 

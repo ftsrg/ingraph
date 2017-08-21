@@ -83,4 +83,4 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
         }
         )
   }
-
+}

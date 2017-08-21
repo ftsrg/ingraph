@@ -1,0 +1,9 @@
+dependencies {
+  compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
+  compile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
+
+  // unlike in other projects, these dependencies are required for the whole compile/runtime scope
+  // and not just the testCompile/testRuntime scopes
+  compile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
+  runtime group: 'org.pegdown', name: 'pegdown', version: pegdownVersion
+}
