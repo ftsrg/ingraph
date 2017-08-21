@@ -16,14 +16,14 @@ trait IngraphElement {
 case class IngraphVertex(id: Long,
                          labels: Set[String],
                          override val properties: Map[String, Any] = Map()) extends IngraphElement {
-  val edgesOut: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
-  val edgesIn: mutable.ListMap[String, IngraphEdge] = mutable.ListMap[String, IngraphEdge]()
+  val edgesOut: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
+  val edgesIn: BufferMultimap[String, IngraphEdge] = new BufferMultimap[String, IngraphEdge]()
 
-  def edgesOutByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesOut.get(key).iterator
-  def edgesOutJavaIterator: JIterator[IngraphEdge] = edgesOut.valuesIterator
+  def edgesOutByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesOut.get(key).iterator.flatten
+  def edgesOutJavaIterator: JIterator[IngraphEdge] = edgesOut.valuesIterator.flatten
 
-  def edgesInByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesIn.get(key).iterator
-  def edgesInJavaIterator: JIterator[IngraphEdge] = edgesIn.valuesIterator
+  def edgesInByTypeJavaIterator(key: String): JIterator[IngraphEdge] = edgesIn.get(key).iterator.flatten
+  def edgesInJavaIterator: JIterator[IngraphEdge] = edgesIn.valuesIterator.flatten
 
   override def toString: String = s"Vertex($id, $properties)"
 }
@@ -102,8 +102,8 @@ class Indexer {
 
   def addEdge(edge: IngraphEdge): IngraphEdge = {
     edgeLookup(edge.id) = edge
-    edge.sourceVertex.edgesOut(edge.`type`) = edge
-    edge.targetVertex.edgesIn(edge.`type`) = edge
+    edge.sourceVertex.edgesOut.addBinding(edge.`type`, edge)
+    edge.targetVertex.edgesIn.addBinding(edge.`type`, edge)
     edgeTypeLookup.addBinding(edge.`type`, edge)
     mappers.foreach(_.addEdge(edge))
     edge
