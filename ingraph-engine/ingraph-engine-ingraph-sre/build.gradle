@@ -1,0 +1,35 @@
+buildscript {
+  repositories {
+    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'http://clojars.org/repo' }
+  }
+  dependencies {
+    classpath 'com.netflix.nebula:nebula-clojure-plugin:4.1.0'
+  }
+}
+
+apply plugin: 'nebula.clojure'
+
+repositories {
+  mavenCentral()
+  maven { url 'http://clojars.org/repo' }
+}
+
+sourceSets {
+  main {
+    clojure { srcDir 'src/main/clj' }
+  }
+  test {
+    clojure { srcDir 'src/test/clj' }
+  }
+}
+
+test {
+  clojureTest
+}
+
+dependencies {
+  compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
+  compile project(':ingraph-engine:ingraph-engine-sre-clj')
+  compile 'org.clojure:clojure:1.8.0'
+}
