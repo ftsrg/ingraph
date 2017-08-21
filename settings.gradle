@@ -1,17 +1,21 @@
 rootProject.name = 'ingraph'
 
+include ':csv-loader'
 include ':compiler'
 include ':indexer'
 include ':ire'
 //include ':ire-adapter'
 include ':ldbc-tests'
-include ':expression-parser'
+
 include ':neo4j-util'
+
+//include ':expression-parser'
+
 //include ':sre'
 //include ':sre-adapter'
+
 //include ':ingraph-engine:ingraph-engine-sre-planning'
 //include ':ingraph-engine:ingraph-engine-sre-clj'
-//include ':ingraph-engine:ingraph-engine-bulk-loader'
 //include ':ingraph-engine:ingraph-engine-debugger-backend'
 //include ':ingraph-engine:ingraph-engine-debugger-frontend'
 //include ':ingraph-engine:ingraph-engine-driver'
