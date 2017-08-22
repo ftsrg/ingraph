@@ -6,7 +6,7 @@ sourceSets.main.scala.srcDir "src/main/java"
 sourceSets.main.java.srcDirs = []
 
 dependencies {
-  compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
+  compile project(':ire-adapter')
   compile project(':ingraph-engine:ingraph-engine-reactive-driver-interfaces')
   testCompile project(':ingraph-engine:ingraph-engine-test-tools')
 
