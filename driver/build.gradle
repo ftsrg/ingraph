@@ -7,10 +7,9 @@ sourceSets.main.java.srcDirs = []
 
 dependencies {
   compile project(':ire-adapter')
-  compile project(':ingraph-engine:ingraph-engine-reactive-driver-interfaces')
-  testCompile project(':ingraph-engine:ingraph-engine-test-tools')
+  compile project(':reactive-driver-interfaces')
+  testCompile project(':ldbc-tests')
 
-  compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
   testCompile group: 'junit', name: 'junit', version: junitVersion
