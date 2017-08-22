@@ -1,7 +1,7 @@
 buildscript {
   repositories {
     maven { url 'https://plugins.gradle.org/m2/' }
-    maven { url 'http://clojars.org/repo' }
+    maven { url 'https://clojars.org/repo' }
   }
   dependencies {
     classpath 'com.netflix.nebula:nebula-clojure-plugin:4.1.0'
@@ -10,11 +10,6 @@ buildscript {
 
 apply plugin: 'nebula.clojure'
 
-repositories {
-  mavenCentral()
-  maven { url 'http://clojars.org/repo' }
-}
-
 sourceSets {
   main {
     clojure { srcDir 'src/main/clj' }
@@ -22,6 +17,11 @@ sourceSets {
   test {
     clojure { srcDir 'src/test/clj' }
   }
+}
+
+clojure {
+  warnOnReflection = true
+  aotCompile = true
 }
 
 test {
