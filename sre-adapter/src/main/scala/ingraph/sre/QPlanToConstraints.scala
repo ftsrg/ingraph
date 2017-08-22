@@ -1,26 +1,26 @@
 package ingraph.sre
 
-import ingraph.model.iplan.INode
+import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import ingraph.model.{iplan, qplan}
 
+// https://github.com/FTSRG/ingraph/blob/master/ingraph-compiler/ingraph-compiler-search2rete/src/main/ingraph_xtend/search2tasks/TaskCompiler.xtend
 object QPlanToConstraints {
-  def transform(plan: QNode): INode = {
+  def transform(plan: QNode): Unit = {
     plan match {
       // leaf
-      case qplan.GetVertices(v) => iplan.GetVertices(v)
+      case qplan.GetVertices(v) => ???
 
       // unary
-      case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => iplan.GetEdges(src, trg, edge, dir)
-      case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), iplan.GetEdges(src, trg, edge, dir))
-      case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => iplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
-      case qplan.Projection(projectList, child) => iplan.Projection(projectList, transform(child))
-      case qplan.Selection(condition, child) => iplan.Selection(condition, transform(child))
-      case qplan.DuplicateElimination(child) => iplan.DuplicateElimination(transform(child))
-      case qplan.AllDifferent(child, edges) => iplan.AllDifferent(transform(child), edges)
+      case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => ???
+      case qplan.Expand(src, trg, edge, dir, child) => ???
+      case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => ???
+      case qplan.Projection(projectList, child) => ???
+      case qplan.Selection(condition, child) => ???
+      case qplan.DuplicateElimination(child) => ???
+      case qplan.AllDifferent(child, edges) => ???
 
       // binary
-      case qplan.Union(l, r) => iplan.Union(transform(l), transform(r))
+      case qplan.Union(l, r) => ???
     }
   }
 }
