@@ -1,4 +1,5 @@
 dependencies {
+  compile project(':compiler')
   compile project(':indexer')
-  compile project(':sre')
+  //compile project(':sre')
 }
