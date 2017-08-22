@@ -8,33 +8,6 @@
       `(~@(iter-implications rest) [#'~constraint ~@(map keyword vars)])
       `())))
 
-(defmacro defconstraint
-  "Let's you define a constraint like a boss.
-
-  Usage:
-    (defconstraint MyConstraint [& vars] :implies* constraint-argument-pairs*)
-
-  Examples:
-    (defconstraint Element [element])
-    (defconstraint Vertex [vertex] :implies Element[vertex])
-    (defconstraint PowerPuffGirls [sugar spice everything-nice]
-        :implies
-          Element [sugar]
-          Element [spice]
-          Element [everything-nice]
-          Mix [sugar spice everything-nice]"
-  [name vars & rest]
-  `(do
-     (def ~name {:name    #'~name
-                 :vars    [~@(map keyword vars)]
-                 :arity   ~(count vars)
-                 :implies #{~@(let [[implies-kw# & implications#] rest]
-                                (case implies-kw#
-                                  nil `()
-                                  :implies (iter-implications implications#)))}})
-     ~(if (contains? (ns-interns *ns*) 'constraints)
-       `(def ~'constraints (conj ~'constraints ~name)))))
-
 (defn bind
   "Binds constraint parameters to the given arguments"
   [constraint & args]
@@ -58,3 +31,38 @@
       result
       (let [[first & rest] (into () unresolved)]
         (recur (union (implies first) (into #{} rest)) (conj result first))))))
+
+
+(defmacro defconstraint
+  "Let's you define a constraint like a boss.
+
+  Usage:
+    (defconstraint MyConstraint [& vars] :implies* constraint-argument-pairs*)
+
+  Examples:
+    (defconstraint Element [element])
+    (defconstraint Vertex [vertex] :implies Element[vertex])
+    (defconstraint PowerPuffGirls [sugar spice everything-nice]
+        :implies
+          Element [sugar]
+          Element [spice]
+          Element [everything-nice]
+          Mix [sugar spice everything-nice]"
+  [name vars & rest]
+  (let [prefix# (str name "Factory-")]
+    `(do
+       (def ~name {:name    #'~name
+                   :vars    [~@(map keyword vars)]
+                   :arity   ~(count vars)
+                   :implies #{~@(let [[implies-kw# & implications#] rest]
+                                  (case implies-kw#
+                                    nil `()
+                                    :implies (iter-implications implications#)))}})
+       (defn ~(symbol (str prefix# "create")) [~@vars] (bind ~name ~@vars))
+       (gen-class :name ~(str *ns* "." name "Factory")
+                  :prefix ~prefix#
+                  :methods [^:static [~'create [~@(repeat (count vars) Integer)] Object]])
+       ~(if (contains? (ns-interns *ns*) 'constraints)
+          `(def ~'constraints (conj ~'constraints ~name))))))
+
+
