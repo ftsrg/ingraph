@@ -29,7 +29,7 @@ test {
 }
 
 dependencies {
-  compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
+  //compile project(':ingraph-engine:ingraph-engine-ingraph-ire')
   compile project(':ingraph-engine:ingraph-engine-sre-clj')
   compile 'org.clojure:clojure:1.8.0'
 }

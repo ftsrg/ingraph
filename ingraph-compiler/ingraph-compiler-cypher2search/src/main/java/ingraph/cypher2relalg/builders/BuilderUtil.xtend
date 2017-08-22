@@ -22,21 +22,21 @@ package class BuilderUtil {
 		fe.arguments.addAll(fi.parameter.map[ExpressionBuilder.buildExpression(it, ce)])
 	}
 
-	/**
-	 * Given a RelationshipPattern instance, it's direction information
-	 * is mapped to the relalg model's Direction type.
-	 *
-	 * @param pattern the relationship pattern
-	 * @return the appropriate direction descriptor
-	 */
-	def static convertToDirection(RelationshipPattern pattern) {
-		val isLeftArrow = pattern.incoming
-		val isRightArrow = pattern.outgoing
-
-		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
-			Direction.BOTH
-		else if(isLeftArrow) Direction.IN else Direction.OUT
-	}
+//	/**
+//	 * Given a RelationshipPattern instance, it's direction information
+//	 * is mapped to the relalg model's Direction type.
+//	 *
+//	 * @param pattern the relationship pattern
+//	 * @return the appropriate direction descriptor
+//	 */
+//	def static convertToDirection(RelationshipPattern pattern) {
+//		val isLeftArrow = pattern.incoming
+//		val isRightArrow = pattern.outgoing
+//
+//		if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
+//			Direction.BOTH
+//		else if(isLeftArrow) Direction.IN else Direction.OUT
+//	}
 
 	/**
 	 * Parse map-like constraints if given

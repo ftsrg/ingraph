@@ -1,0 +1,7 @@
+dependencies {
+  compile project(':neo4j-util')
+
+  compile group: 'com.google.guava', name: 'guava', version: guavaVersion
+  compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+  testCompile group: 'junit', name: 'junit', version: junitVersion
+}
