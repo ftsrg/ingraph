@@ -68,7 +68,7 @@ public class LdbcNeo4jReferenceOutputTest {
 	//public final String size = "50";
 	public final String size = "50";
 
-	final String graphMlPath = "../../graphs/snb_" + size + ".graphml";
+	final String graphMlPath = "../graphs/snb_" + size + ".graphml";
 	final EmbeddedTestkitDriver driver = new EmbeddedTestkitDriver();
 
 	@Before
@@ -87,9 +87,9 @@ public class LdbcNeo4jReferenceOutputTest {
 	public void test() throws IOException {
 		final EmbeddedTestkitSession session = driver.session();
 		try (org.neo4j.driver.v1.Transaction tx = session.beginTransaction()) {
-			final String queryPathname   = String.format("../../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
-			final String queryResultBin  = String.format("../../queries/ldbc-snb-%s/%s-%d-%s.bin",    workload, workload, queryNumber, size);
-			final String queryResultJson = String.format("../../queries/ldbc-snb-%s/%s-%d-%s.json",   workload, workload, queryNumber, size);
+			final String queryPathname   = String.format("../queries/ldbc-snb-%s/%s-%d.cypher", workload, workload, queryNumber);
+			final String queryResultBin  = String.format("../queries/ldbc-snb-%s/%s-%d-%s.bin",    workload, workload, queryNumber, size);
+			final String queryResultJson = String.format("../queries/ldbc-snb-%s/%s-%d-%s.json",   workload, workload, queryNumber, size);
 			final String querySpecification = Files.toString(new File(queryPathname), Charsets.UTF_8);
 
 			final StatementResult statementResult = session.run(querySpecification);

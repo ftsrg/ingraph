@@ -8,6 +8,7 @@ include ':ire'
 include ':ldbc-tests'
 
 include ':neo4j-util'
+include ':neo4j-tests'
 
 //include ':expression-parser'
 
