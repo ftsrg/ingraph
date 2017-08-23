@@ -4,7 +4,8 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import org.antlr.v4.runtime.atn.SemanticContext.{AND, OR}
-import org.apache.spark.sql.catalyst.expressions.{And, Attribute, BinaryExpression, BinaryOperator, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Not, Or, UnaryExpression}
+import org.apache.spark.sql.catalyst.expressions.{And, Attribute, BinaryComparison, BinaryExpression, BinaryOperator, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Not, Or, UnaryExpression}
+import org.apache.spark.unsafe.types.UTF8String
 
 
 object ExpressionParser {
@@ -20,17 +21,22 @@ object ExpressionParser {
       case IsNotNull(exp) =>
         def left: (Tuple) => Any = parseValue(exp, lookup)
         left(_) != null
-      case exp: BinaryOperator =>
+      case exp: BinaryComparison =>
         val left: (Tuple => Any) = parseValue(exp.left, lookup)
         val right: (Tuple => Any) = parseValue(exp.right, lookup)
         exp match {
-          case _: And => (t: Tuple) => left(t).asInstanceOf[Boolean] && right.asInstanceOf[Boolean]
-          case _: Or => (t: Tuple) => left(t).asInstanceOf[Boolean] || right.asInstanceOf[Boolean]
           case _: EqualTo => (t: Tuple) => left(t) == right(t)
           case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
           case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
           case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
           case _: GreaterThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) > 0
+        }
+      case exp: BinaryOperator =>
+        val left: (Tuple => Boolean) = parse(exp.left, lookup)
+        val right: (Tuple => Boolean) = parse(exp.right, lookup)
+        exp match {
+          case _: And => (t: Tuple) => left(t) && right(t)
+          case _: Or => (t: Tuple) => left(t) || right(t)
         }
     }
 
@@ -41,8 +47,11 @@ object ExpressionParser {
     if (lookup.contains(exp.toString()))
       tuple => tuple(lookup(exp.toString()))
     else exp match {
-    case Literal(value, _) => _ =>
-      value
+    case Literal(value, _) =>
+      value match {
+        case s: UTF8String => _ => s.toString
+        case v => _ => v
+      }
     case attr: Attribute =>
       val index = lookup(attr.toString())
       tuple => tuple(index)
