@@ -2,6 +2,7 @@ package ingraph.sandbox
 
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
 import ingraph.model._
+import ingraph.model.iplan.INode
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
@@ -123,10 +124,11 @@ class MyTest extends FunSuite {
     )
 
     val i = QPlanToIPlan.transform(q)
-    println(i)
-
     val s = SchemaInferencer.transform(i)
-    println(s)
+
+    assert(s.internalSchema.size == 1)
+    assert(s.children(0).asInstanceOf[INode].internalSchema.size == 3)
+    assert(s.children(0).children(0).asInstanceOf[INode].internalSchema.size == 3)
   }
 
 
