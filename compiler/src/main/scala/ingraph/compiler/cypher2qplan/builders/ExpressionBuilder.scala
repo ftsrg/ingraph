@@ -28,11 +28,11 @@ object ExpressionBuilder {
       //TODO: case e: oc.RelationshipsPattern => buildExpressionAux(e, joins)
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       //TODO: case e: oc.Count => buildExpressionAux(e, joins)
-      //TODO: case e: oc.ExpressionMulDiv => buildExpressionAux(e, joins)
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
-      //TODO: case e: oc.ExpressionPlusMinus => buildExpressionAux(e, joins)
-      //TODO: case e: oc.ExpressionPower => buildExpressionAux(e, joins)
-      //TODO: case e: oc.FunctionInvocation => buildExpressionAux(e, joins)
+      case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
+      case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
+      case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
+      //TODO: case e: oc.FunctionInvocation => buildExpressionArithmetic(e, joins)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
@@ -169,44 +169,41 @@ object ExpressionBuilder {
 //    expressionContainer = ce.tlc
 //    ]
 //  }
-//
-//  def buildExpressionAux(e: oc.ExpressionPlusMinus): cExpr.Expression = {
-//    modelFactory.createBinaryArithmeticOperationExpression => [
-//    operator = switch e.operator {
-//      case "+": BinaryArithmeticOperatorType.PLUS
-//      case "-": BinaryArithmeticOperatorType.MINUS
-//    }
-//    leftOperand = buildArithmeticExpression(e.left, ce)
-//    rightOperand = buildArithmeticExpression(e.right, ce)
-//    expressionContainer = ce.tlc
-//    ]
-//  }
-//
-//  def buildExpressionAux(e: oc.ExpressionMulDiv): cExpr.Expression = {
-//    modelFactory.createBinaryArithmeticOperationExpression => [
-//    operator = switch e.operator {
-//      case "*": BinaryArithmeticOperatorType.MULTIPLICATION
-//      case "/": BinaryArithmeticOperatorType.DIVISION
-//      case "%": BinaryArithmeticOperatorType.MOD
-//    }
-//    leftOperand = buildArithmeticExpression(e.left, ce)
-//    rightOperand = buildArithmeticExpression(e.right, ce)
-//    expressionContainer = ce.tlc
-//    ]
-//  }
-//
-//  def buildExpressionAux(e: oc.ExpressionPower): cExpr.Expression = {
-//    modelFactory.createBinaryArithmeticOperationExpression => [
-//    operator = switch e.operator {
-//      case "^": BinaryArithmeticOperatorType.POWER
-//    }
-//    leftOperand = buildArithmeticExpression(e.left, ce)
-//    rightOperand = buildArithmeticExpression(e.right, ce)
-//    expressionContainer = ce.tlc
-//    ]
-//  }
-//
-//  def buildExpressionAux(e: oc.ExpressionNodeLabelsAndPropertyLookup): cExpr.Expression = {
+
+  def buildExpressionArithmetic(e: oc.ExpressionPlusMinus, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // process them only once because of the possible joins there
+    val l = buildExpression(e.getLeft, joins)
+    val r = buildExpression(e.getRight, joins)
+
+    e.getOperator match {
+      case "+" => cExpr.Add(l, r)
+      case "-" => cExpr.Subtract(l, r)
+    }
+  }
+
+  def buildExpressionArithmetic(e: oc.ExpressionMulDiv, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // process them only once because of the possible joins there
+    val l = buildExpression(e.getLeft, joins)
+    val r = buildExpression(e.getRight, joins)
+
+    e.getOperator match {
+      case "*" => cExpr.Multiply(l, r)
+      case "/" => cExpr.Divide(l, r)
+      case "%" => cExpr.Pmod(l, r)
+    }
+  }
+
+  def buildExpressionArithmetic(e: oc.ExpressionPower, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // process them only once because of the possible joins there
+    val l = buildExpression(e.getLeft, joins)
+    val r = buildExpression(e.getRight, joins)
+
+    e.getOperator match {
+      case "^" => cExpr.Pow(l, r)
+    }
+  }
+
+  //  def buildExpressionAux(e: oc.ExpressionNodeLabelsAndPropertyLookup): cExpr.Expression = {
 //    val x = ce.vb.buildRelalgVariable(e)
 //    // as AttributeVariable
 //    if (x instanceof AttributeVariable) {
