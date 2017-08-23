@@ -41,11 +41,11 @@ class ExpressionParserTest extends WordSpec {
     }
 
    "parse binary logical expressions" in {
-      val func = parseFilter("""MATCH (n) WHERE (1=1 and n=2) or (n="emfrocks" xor 2=3) RETURN n""")
-      assert(func(Vector(2)))
-      assert(!func(Vector(1)))
-      assert(func(Vector(rocks)))
-      assert(!func(Vector(s"not $rocks")))
+      val func = parseFilter("""MATCH (n) WHERE (1=1 and n.prop=2) or (n.prop="emfrocks" xor 2=3) RETURN n""")
+      assert(func(Vector(0, 2)))
+      assert(!func(Vector(0, 1)))
+      assert(func(Vector(0, rocks)))
+      assert(!func(Vector(0, s"not $rocks")))
     }
 
     "parse unary logical expressions" in {
