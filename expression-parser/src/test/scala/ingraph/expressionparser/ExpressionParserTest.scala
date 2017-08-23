@@ -11,15 +11,13 @@ import ingraph.model.iplan.{Production, Projection, Selection}
 
 class ExpressionParserTest extends WordSpec {
   def getPlan(query: String): INode = {
-    val x = SchemaInferencer.transform(
+    SchemaInferencer.transform(
       QPlanToIPlan.transform(
         cypher2qplan.build(
           CypherParser.parseString(query), "test"
         )
       )
     )
-    println(x)
-    x
   }
 
   def parseFilter(query: String): (Tuple) => Boolean = {

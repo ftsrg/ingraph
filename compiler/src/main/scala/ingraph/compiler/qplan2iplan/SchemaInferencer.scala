@@ -10,13 +10,8 @@ object SchemaInferencer {
     plan match {
       // leaf
       case o: iplan.GetEdges => o.copy(extraAttributes = ea)
-      case o: iplan.GetVertices => {
-        println("Y>" + ea)
-        val x = o.copy(extraAttributes = ea)
-        println("Z>" + x.extraAttributes)
-        x
-      }
-
+      case o: iplan.GetVertices =>
+        o.copy(extraAttributes = ea)
       // unary
       case o: iplan.AllDifferent => o.copy(
         child = transform(o.child, ea),
@@ -57,12 +52,10 @@ object SchemaInferencer {
   }
 
   def extractAttributes(expression: Expression): Seq[Attribute] = {
-    val x = (expression match {
+    (expression match {
       case a: Attribute => Seq(a)
       case _ => Seq()
-    }) ++ expression.children.flatMap(extractAttributes(_))
-    println("X> " + x)
-    x
+    }) ++ expression.children.flatMap(extractAttributes)
   }
 
   def extractAttributes(projectList: Seq[NamedExpression]): Seq[Attribute] = {
@@ -70,7 +63,6 @@ object SchemaInferencer {
   }
 
   def schemaToMapNames(op: INode): Map[String, Int] =  {
-    println(op.internalSchema)
     op.internalSchema.zipWithIndex.map(f => f._1.toString() -> f._2).toMap
   }
 
