@@ -11,6 +11,7 @@ jar {
 dependencies {
   compile project(':indexer')
   compile project(':ire')
+  compile project(':csv-loader')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
 
