@@ -1,5 +1,27 @@
+buildscript {
+  repositories {
+    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'https://clojars.org/repo' }
+  }
+  dependencies {
+    classpath 'com.netflix.nebula:nebula-clojure-plugin:4.1.0'
+  }
+}
+
+apply plugin: 'nebula.clojure'
+
+clojure {
+  warnOnReflection = true
+  aotCompile = true
+}
+
+test {
+  clojureTest
+}
+
 dependencies {
   compile project(':compiler')
   compile project(':indexer')
-  //compile project(':sre')
+  compile project(':sre')
+  compile 'org.clojure:clojure:1.8.0'
 }
