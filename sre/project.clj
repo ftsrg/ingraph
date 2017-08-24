@@ -1,4 +1,4 @@
-(defproject ingraph/ingraph-engine-sre-clj "0.1.0-SNAPSHOT"
+(defproject ingraph/sre "0.1.0-SNAPSHOT"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [
