@@ -62,8 +62,7 @@ object ReturnBuilder {
       _elements += UnresolvedStar(None)
     }
     for (returnItem <- returnItems.getItems.asScala) {
-      //FIXME: ExpressionBuilder.buildExpression(returnItem.expression, ce)
-      val e = expr.EStub()
+      val e = ExpressionBuilder.buildExpressionNoJoinAllowed(returnItem.getExpression)
 
       if (returnItem.getAlias == null)
         _elements += UnresolvedAlias(e)
