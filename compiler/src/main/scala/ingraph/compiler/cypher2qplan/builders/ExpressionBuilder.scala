@@ -3,10 +3,12 @@ package ingraph.compiler.cypher2qplan.builders
 import java.util
 
 import ingraph.model.{expr, qplan}
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
+import ingraph.model.misc.Function
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
+import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object ExpressionBuilder {
@@ -27,12 +29,13 @@ object ExpressionBuilder {
       //TODO: case e: oc.RegExpMatchingExpression => buildExpressionAux(e, joins)
       //TODO: case e: oc.RelationshipsPattern => buildExpressionAux(e, joins)
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
-      //TODO: case e: oc.Count => buildExpressionAux(e, joins)
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
-      //TODO: case e: oc.FunctionInvocation => buildExpressionArithmetic(e, joins)
+      //FIXME#206: this should pass function name unresolved
+      case e: oc.FunctionInvocation => UnresolvedFunction(Function.valueOf(e.getFunctionName.getName.toUpperCase()).getPrettyName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
+      case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
@@ -215,23 +218,6 @@ object ExpressionBuilder {
 //      ce.l.unsupported('''Unsupported type received: «x.class.name»''')
 //      null
 //    }
-//  }
-//
-//  def buildExpressionAux(fi: oc.FunctionInvocation): cExpr.Expression = {
-//    val fe = modelFactory.createFunctionComparableExpression => [
-//    expressionContainer = ce.tlc
-//    ]
-//
-//    BuilderUtil.populateFunctionExpression(fe, fi, ce)
-//
-//    fe
-//  }
-//
-//  def buildExpressionAux(fi: oc.Count): cExpr.Expression = {
-//    modelFactory.createFunctionArithmeticExpression => [
-//    functor = Function.COUNT_ALL
-//    expressionContainer = ce.tlc
-//    ]
 //  }
 //
 //  def buildExpressionAux(e: oc.CaseExpression): cExpr.Expression = {
