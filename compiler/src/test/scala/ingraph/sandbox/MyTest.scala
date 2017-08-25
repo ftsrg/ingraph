@@ -93,7 +93,7 @@ class MyTest extends FunSuite {
     val w = expr.VertexAttribute("w")
 
     val gv = qplan.GetVertices(v)
-    val exp = qplan.Expand(v, w, e, expr.Out(), gv)
+    val exp = qplan.Expand(v, w, e, expr.Out, gv)
     val de = qplan.DuplicateElimination(exp)
 
     val i = QPlanToIPlan.transform(de)
@@ -104,7 +104,7 @@ class MyTest extends FunSuite {
   }
 
   test("qplan to iplan #5") {
-    val vls = expr.VertexLabelSet(Set("Person"), expr.NonEmpty())
+    val vls = expr.VertexLabelSet(Set("Person"), expr.NonEmpty)
 
 
     val n = expr.VertexAttribute("n", vls)
