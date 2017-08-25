@@ -9,7 +9,7 @@ import scala.collection.JavaConverters._
 object BuilderUtil {
   def parseToVertexLabelSet(ll: oc.NodeLabels): expr.VertexLabelSet = {
     if (ll != null && ll.getNodeLabels != null && !ll.getNodeLabels.isEmpty) {
-      expr.VertexLabelSet(ll.getNodeLabels.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty())
+      expr.VertexLabelSet(ll.getNodeLabels.asScala.map( l => l.getLabelName ).toSet, expr.NonEmpty)
     } else {
       expr.VertexLabelSet()
     }
@@ -17,7 +17,7 @@ object BuilderUtil {
 
   def parseToEdgeLabelSet(tl: oc.RelationshipTypes): expr.EdgeLabelSet = {
     if (tl != null && tl.getRelTypeName != null && !tl.getRelTypeName.isEmpty) {
-      expr.EdgeLabelSet(tl.getRelTypeName.asScala.toSet, expr.NonEmpty())
+      expr.EdgeLabelSet(tl.getRelTypeName.asScala.toSet, expr.NonEmpty)
     } else {
       expr.EdgeLabelSet()
     }
@@ -35,8 +35,8 @@ object BuilderUtil {
     val isRightArrow = pattern.isOutgoing
 
     if (isLeftArrow && isRightArrow || !(isLeftArrow || isRightArrow))
-      expr.Both()
-    else if (isLeftArrow) expr.In() else expr.Out()
+      expr.Both
+    else if (isLeftArrow) expr.In else expr.Out
   }
 
   def convertToSkipLimitConstant(expression: oc.Expression): cExpr.Expression = {
