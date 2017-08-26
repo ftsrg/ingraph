@@ -6,18 +6,23 @@
 
 (defconfig Basic)
 
-(defconstraint Element [element])
+(defconstraint Known [known])
+(defconstraint Element [element] :implies Known [element])
 (defconstraint Edge [edge] :implies Element [edge])
 (defconstraint Vertex [vertex] :implies Element [vertex])
 (defconstraint DirectedEdge [source edge target] :implies
                Vertex [source]
                Edge [edge]
                Vertex [target])
+(defconstraint HasType [edge type] :implies Edge [edge] Known [type])
 
 (defop GetVertices [vertex]
        :satisfies Vertex [vertex])
 (defop GetEdges [source edge target]
        :satisfies DirectedEdge [source edge target])
+(defop GetEdgesByType [source edge target type]
+       :requires Known [type]
+       :satisfies DirectedEdge [source edge target] HasType [edge type])
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])
@@ -29,6 +34,7 @@
 
 (defmethod weight #'GetVertices [op] 5)
 (defmethod weight #'GetEdges [op] 5)
+(defmethod weight #'GetEdgesByType [op] 4)
 (defmethod weight #'ExtendOut [op] 2)
 (defmethod weight #'ExtendIn [op] 2)
 

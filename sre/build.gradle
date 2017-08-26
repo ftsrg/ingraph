@@ -24,6 +24,11 @@ sourceSets {
   }
 }
 
+clojure {
+  warnOnReflection = true
+  aotCompile = true
+}
+
 
 test {
   clojureTest

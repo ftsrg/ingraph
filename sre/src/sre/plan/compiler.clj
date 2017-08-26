@@ -4,10 +4,17 @@
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
     [sre.plan.dsl.op :as op]
-    [sre.plan.dsl.constraint :as constraint]
+    [sre.plan.dsl.constraint :refer :all]
     [sre.plan.dsl.estimation :as estimation]
     [clojure.pprint :refer :all])
-  (:import (sre.plan.dsl.estimation Cost Weight)))
+  (:import (sre.plan.dsl.estimation Cost Weight)
+           (clojure.lang IPersistentSet IPersistentMap)
+           (java.util List Collection)
+           (sre.plan.dsl.constraint ConstraintLookup))
+  (:gen-class
+    :name sre.plan.Compiler
+    :methods [^:static [makeConstraintLookupFromTargetsAndBounds [Iterable Iterable] ConstraintLookup]
+              ^:static [calculateSearchPlan [Cost Weight Integer IPersistentSet IPersistentMap] Object]]))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -43,9 +50,6 @@
                       ; merge its variables with already resolved ones for fast lookup
                       (update-in [:var-lkp] #(merge %1 bindings)))]
               (recur (cons new-branch branches) rest))))))))
-
-(defn expand-implications [constr-defs]
-  (apply union (map sre.plan.dsl.constraint/implies* constr-defs)))
 
 (defn compare-constraint-descriptors
   "Compares two constraint descriptors by count ASC > arity DESC > type ASC > everything else
@@ -221,6 +225,18 @@
             plans
             cost-binding-pairs)))
 
+(defn make-constr-lkp-from-targets-and-bounds
+  "Creates a constraint lookup by adding every implication of targets to :free then
+  moving from those every implication of bounds to :bound."
+  ^ConstraintLookup [targets bounds]
+  (let [union-all (partial reduce #(union %1 (implies* %2)) #{})
+        all-bound (union-all bounds)
+        all-free (difference (union-all targets) all-bound)]
+    (->ConstraintLookup (constraint-bindings-to-map all-free) (constraint-bindings-to-map all-bound))))
+
+(defn -makeConstraintLookupFromTargetsAndBounds ^ConstraintLookup [^Iterable targets ^Iterable bounds]
+  (make-constr-lkp-from-targets-and-bounds (seq targets) (seq bounds)))
+
 (defn calculate-search-plan
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
   based on \"An algorithm for generating model-sensitive search plans for pattern matching on EMF models\" paper bt G. Varro et al,
@@ -238,11 +254,15 @@
     ops - the list of available operations in the system.
     constr-lkp - constraint lookup by type
   "
-  [^Cost cost-calculator ^Weight weight-calculator ^Integer k ops constr-lkp]
+  [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
   ; comments starting with x:y mark that the line corresponds to the algorithm
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
+  (println ops)
+  (println "-------")
+  (println constr-lkp)
+  (println "-------")
   (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
         step (partial search-plan-step k)
         cell (map->SearchPlanCell {:cost-calculator         cost-calculator
@@ -253,6 +273,7 @@
                                    :non-past-ops (bind-free ops constr-lkp)})] ; 3:1 set n
     (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
                                                             :cells-by-constr-lkp {constr-lkp cell}}))]
+      ;(println plans)
       (if-let [keys (keys plans)]
         (if (= [0] keys)
           (right (plans 0))                                 ; 3:18 - ready. return best k plans
@@ -263,4 +284,7 @@
                               (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
               (recur plans))))
         (left :no-solution)))))
+
+(defn -calculateSearchPlan [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
+  (calculate-search-plan cost-calculator weight-calculator k ops constr-lkp))
 
