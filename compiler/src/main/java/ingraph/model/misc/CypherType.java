@@ -1,4 +1,4 @@
-package relalg.function;
+package ingraph.model.misc;
 
 public enum CypherType {
   NONE,

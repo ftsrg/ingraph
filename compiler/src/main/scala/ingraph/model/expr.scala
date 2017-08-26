@@ -47,7 +47,7 @@ abstract class GraphAttribute(override val name: String) extends Attribute {
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
 }
 
-abstract class LabelSet(status: LabelSetStatus = Empty())
+abstract class LabelSet(status: LabelSetStatus = Empty)
 
 trait NavigationDescriptor {
   def src: VertexAttribute
@@ -63,7 +63,7 @@ trait NavigationDescriptor {
  * for a single vertex variable, it is always satisfiable, i.e.
  * LabelSet.status should never be LabelSetStatus.CONTRADICTING.
  */
-case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelSetStatus = Empty()) extends LabelSet(status)
+case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
 /*
  * An edge satisfies a label set constraint iff it has any of the labels in the label set.
@@ -75,7 +75,7 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
  *  2. [edge1:C], so edge1 needs to have label C.
  * These are contradicting as a single edge instance can have at most one label.
  */
-case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty()) extends LabelSet(status)
+case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
 // formerly GraphElementVariable
 abstract class ElementAttribute(name: String) extends GraphAttribute(name)
@@ -107,14 +107,14 @@ sealed trait LabelSetStatus
 /*
  * Each edge and vertex satisfies an empty labelset constraint
  */
-case class Empty() extends LabelSetStatus
+case object Empty extends LabelSetStatus
 /*
  * Theoretically, a non-empty labelset constraint is satisfiable,
  * but matching semantics differ for different variables:
  *  1. a vertex must have *all* of the labels
  *  2. an edge must have *one* of the labels
  */
-case class NonEmpty() extends LabelSetStatus
+case object NonEmpty extends LabelSetStatus
 /*
  * A labelset constraint might be non-satisfiable,
  * in case it is a combination of multiple  labelset constraints.
@@ -125,10 +125,10 @@ case class NonEmpty() extends LabelSetStatus
  *  2. [edge1:C], so edge1 needs to have label C.
  * These are contradicting as a single edge instance can have at most one label.
  */
-case class Contradicting() extends LabelSetStatus
+case object Contradicting extends LabelSetStatus
 
 
 sealed trait Direction
-case class Both() extends Direction
-case class In() extends Direction
-case class Out() extends Direction
+case object Both extends Direction
+case object In extends Direction
+case object Out extends Direction

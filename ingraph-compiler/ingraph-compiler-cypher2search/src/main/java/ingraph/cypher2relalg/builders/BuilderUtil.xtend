@@ -16,12 +16,12 @@ package class BuilderUtil {
 	/** The model factory for the relational graph algebra representation */
 	val protected static modelFactory = RelalgFactory.eINSTANCE
 
-	def static void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi, CompilerEnvironment ce) {
-		fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
-		// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-		fe.arguments.addAll(fi.parameter.map[ExpressionBuilder.buildExpression(it, ce)])
-	}
-
+//	def static void populateFunctionExpression(FunctionExpression fe, FunctionInvocation fi, CompilerEnvironment ce) {
+//		fe.functor = Function.valueOf(fi.functionName.name.toUpperCase)
+//		// use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
+//		fe.arguments.addAll(fi.parameter.map[ExpressionBuilder.buildExpression(it, ce)])
+//	}
+//
 //	/**
 //	 * Given a RelationshipPattern instance, it's direction information
 //	 * is mapped to the relalg model's Direction type.
