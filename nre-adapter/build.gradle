@@ -14,7 +14,4 @@ dependencies {
   compile project(':csv-loader')
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion
-
-  testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
-  testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
 }

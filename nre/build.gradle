@@ -1,0 +1,5 @@
+dependencies {
+  compile group: 'com.typesafe.akka', name: "akka-actor_$scalaShortVersion", version: akkaVersion
+  compile group: 'org.apache.commons', name: 'commons-math3', version: commonsMathVersion
+  testCompile group: 'com.typesafe.akka', name: "akka-testkit_$scalaShortVersion", version: akkaVersion
+}
