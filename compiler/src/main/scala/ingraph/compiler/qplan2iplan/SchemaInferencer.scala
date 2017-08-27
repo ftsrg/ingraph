@@ -44,6 +44,7 @@ object SchemaInferencer {
 
       // binary
       case o: iplan.Join => ???
+      // TODO https://github.com/FTSRG/ingraph/blob/master/ingraph-compiler/ingraph-compiler-relalg-model-util/src/main/ingraph_xtend/relalg/calculators/JoinSchemaCalculator.xtend
 
       case o: iplan.Union => o.copy(
         left = transform(o.left, ead),
