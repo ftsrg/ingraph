@@ -1,6 +1,7 @@
 (ns sre.plan.compiler
+  "Cost-based search plan compiler related functions, types etc."
   (:require
-    [cats.monad.either :refer :all]
+    [cats.monad.exception :refer :all]
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
     [sre.plan.dsl.op :as op]
@@ -9,12 +10,9 @@
     [clojure.pprint :refer :all])
   (:import (sre.plan.dsl.estimation Cost Weight)
            (clojure.lang IPersistentSet IPersistentMap)
-           (java.util List Collection)
-           (sre.plan.dsl.constraint ConstraintLookup))
-  (:gen-class
-    :name sre.plan.Compiler
-    :methods [^:static [makeConstraintLookupFromTargetsAndBounds [Iterable Iterable] ConstraintLookup]
-              ^:static [calculateSearchPlan [Cost Weight Integer IPersistentSet IPersistentMap] Object]]))
+           (java.util List Collection)))
+
+(defrecord ConstraintLookup [^IPersistentMap free ^IPersistentMap bound])
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -23,7 +21,7 @@
         var-lkp (:var-lkp stump)
         cond (:cond props)]
     (loop [branches ()
-           [first & rest] (into () ((constr-lkp (nth cond 1)) type))]
+           [first & rest] (into () ((get constr-lkp (nth cond 1)) type))]
       (if-not (some? first)
         ; every valid branch of this condition type has been already created
         branches
@@ -73,7 +71,7 @@
 
 (defn build-match-list [op constr-counts condition]
   (lkp-to-match-list
-    (lkp-map #(hash-map :n (let [constr-count ((constr-counts (nth condition 1)) %2)]
+    (lkp-map #(hash-map :n (let [constr-count ((get constr-counts (nth condition 1)) %2)]
                              (if (nil? constr-count) 0 constr-count))
                         :arity (:arity (deref %2))
                         :params %1
@@ -95,7 +93,7 @@
     ; for exiting as early as possible in this highly likely situation
     (if-not (reduce #(and %1 (subset?
                                (keys (op (nth %2 0)))
-                               (into #{} (keys (constr-lkp (nth %2 1)))))) conditions)
+                               (into #{} (keys (get constr-lkp (nth %2 1)))))) conditions)
       ()
       (let [sorted-constr (apply union (map #(build-match-list op
                                                                ; this is shady but we only replace the constraints with their counts
@@ -119,9 +117,9 @@
                   ; continue matching
                   (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))))
 
-(defrecord SearchPlanColumn [ordered-cells cells-by-constr-lkp])
-
 (defrecord SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ops constr-lkp free-count non-past-ops])
+
+(defrecord SearchPlanColumn [^SearchPlanCell ordered-cells cells-by-constr-lkp])
 
 (defn- bind-constr [constr-lkp [_ type constr]]
   ; note that we don't use the first parameter, we expect it to be :free
@@ -141,17 +139,17 @@
   (+ 1 (* -2 (compare (:cost-calculator a) (:cost-calculator b)))))
 
 (defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
-  (map->SearchPlanCell {:cost-calculator         cost-calculator
-                        :weight-calculator        weight-calculator
-                        :ops          (cons bound (:ops cell))
-                        :constr-lkp   constr-lkp
-                        :free-count   index
-                        :non-past-ops (filter (fn [x] (every? #(subset? #{(nth %1 2)}
-                                                                        (get-in constr-lkp
-                                                                                [(nth %1 0) (nth %1 1)])
-                                                                        )
-                                                              (:done x)))
-                                              (:non-past-ops cell))}))
+  (map->SearchPlanCell {:cost-calculator   cost-calculator
+                        :weight-calculator weight-calculator
+                        :ops               (cons bound (:ops cell))
+                        :constr-lkp        constr-lkp
+                        :free-count        index
+                        :non-past-ops      (filter (fn [x] (every? #(subset? #{(nth %1 2)}
+                                                                             (get-in constr-lkp
+                                                                                     [(nth %1 0) (nth %1 1)])
+                                                                             )
+                                                                   (:done x)))
+                                                   (:non-past-ops cell))}))
 
 (defn search-plan-step [^Integer k plans ^SearchPlanCell cell]
   ; the idea here is that we have operations in non-past-ops that may or may not be applicable at the moment
@@ -225,18 +223,6 @@
             plans
             cost-binding-pairs)))
 
-(defn make-constr-lkp-from-targets-and-bounds
-  "Creates a constraint lookup by adding every implication of targets to :free then
-  moving from those every implication of bounds to :bound."
-  ^ConstraintLookup [targets bounds]
-  (let [union-all (partial reduce #(union %1 (implies* %2)) #{})
-        all-bound (union-all bounds)
-        all-free (difference (union-all targets) all-bound)]
-    (->ConstraintLookup (constraint-bindings-to-map all-free) (constraint-bindings-to-map all-bound))))
-
-(defn -makeConstraintLookupFromTargetsAndBounds ^ConstraintLookup [^Iterable targets ^Iterable bounds]
-  (make-constr-lkp-from-targets-and-bounds (seq targets) (seq bounds)))
-
 (defn calculate-search-plan
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
   based on \"An algorithm for generating model-sensitive search plans for pattern matching on EMF models\" paper bt G. Varro et al,
@@ -259,32 +245,70 @@
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (println ops)
-  (println "-------")
-  (println constr-lkp)
-  (println "-------")
   (let [n (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
         step (partial search-plan-step k)
-        cell (map->SearchPlanCell {:cost-calculator         cost-calculator
-                                   :weight-calculator       weight-calculator
-                                   :ops          ()
-                                   :constr-lkp   constr-lkp
-                                   :free-count   (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
-                                   :non-past-ops (bind-free ops constr-lkp)})] ; 3:1 set n
-    (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
+        cell (map->SearchPlanCell {:cost-calculator   cost-calculator
+                                   :weight-calculator weight-calculator
+                                   :ops               ()
+                                   :constr-lkp        constr-lkp
+                                   :free-count        (reduce-kv #(+ %1 (count %3)) 0 (:free constr-lkp))
+                                   :non-past-ops      (bind-free ops constr-lkp)})] ; 3:1 set n
+    (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells       (sorted-set-by compare-search-plan-cell-by-cost cell)
                                                             :cells-by-constr-lkp {constr-lkp cell}}))]
-      ;(println plans)
       (if-let [keys (keys plans)]
         (if (= [0] keys)
-          (right (plans 0))                                 ; 3:18 - ready. return best k plans
+          (success (-> plans (get 0) :ordered-cells first))   ; 3:18 - ready. return best plan
           (let [j (first keys)]
             (let [column (get plans j)
                   plans (as-> plans x
                               (dissoc x j)
                               (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
               (recur plans))))
-        (left :no-solution)))))
+        (failure (Exception. "no solution"))))))
 
-(defn -calculateSearchPlan [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
-  (calculate-search-plan cost-calculator weight-calculator k ops constr-lkp))
+(defn union-all-implies* [& constrs] (reduce #(union %1 (implies* %2)) #{} constrs))
 
+(defn SearchPlanCompiler-calculate ^SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
+  @(calculate-search-plan cost-calculator weight-calculator k ops constr-lkp))
+
+(gen-class
+  :name sre.plan.compiler.SearchPlanCompiler
+  :prefix "SearchPlanCompiler-"
+  :main false
+  :methods [^:static [calculate
+                      [sre.plan.dsl.estimation.Cost
+                       sre.plan.dsl.estimation.Weight
+                       Integer
+                       clojure.lang.IPersistentSet
+                       sre.plan.compiler.ConstraintLookup]
+                      sre.plan.compiler.SearchPlanCell]])
+
+;; Convienience methods for Java users :)
+
+(defn ConstraintLookupFactory-fromFreeConstrsClosureAndBoundConstrsClosure ^ConstraintLookup [^Iterable free ^Iterable bound]
+  (->ConstraintLookup (constraint-bindings-to-map (seq free))
+                      (constraint-bindings-to-map (seq bound))))
+
+(defn ConstraintLookupFactory-fromFreeConstrsClosure ^ConstraintLookup [^Iterable free]
+  (->ConstraintLookup (constraint-bindings-to-map (seq free)) {}))
+
+(defn ConstraintLookupFactory-fromFreeConstrs ^ConstraintLookup [^Iterable free]
+  (->ConstraintLookup (constraint-bindings-to-map (apply union-all-implies* (seq free))) {}))
+
+(defn ConstraintLookupFactory-fromAllConstrsClosureAndBoundConstrsClosure ^ConstraintLookup [^Iterable all ^Iterable bound]
+  (->ConstraintLookup (difference (into #{} all) (into #{} bound))
+                      (constraint-bindings-to-map (seq bound))))
+
+(defn ConstraintLookupFactory-fromAllConstrsAndBoundConstrs ^ConstraintLookup [^Iterable all ^Iterable bound]
+  (->ConstraintLookup (difference (apply union-all-implies* (seq all)) (apply union-all-implies* (seq bound)))
+                      (constraint-bindings-to-map (seq bound))))
+
+(gen-class
+  :name sre.plan.compiler.ConstraintLookupFactory
+  :prefix "ConstraintLookupFactory-"
+  :main false
+  :methods [^:static [fromFreeConstrsClosureAndBoundConstrsClosure [Iterable Iterable] sre.plan.compiler.ConstraintLookup]
+            ^:static [fromFreeConstrsClosure [Iterable] sre.plan.compiler.ConstraintLookup]
+            ^:static [fromFreeConstrs [Iterable] sre.plan.compiler.ConstraintLookup]
+            ^:static [fromAllConstrsClosureAndBoundConstrsClosure [Iterable Iterable] sre.plan.compiler.ConstraintLookup]
+            ^:static [fromAllConstrsAndBoundConstrs [Iterable Iterable] sre.plan.compiler.ConstraintLookup]])

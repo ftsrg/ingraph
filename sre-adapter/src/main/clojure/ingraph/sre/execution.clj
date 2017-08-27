@@ -32,7 +32,7 @@
            (->> (iterator-seq iterator)
                 (map #(assoc var-lkp v %)))))
 
-; TODO should add support for multiple set of labels
+; TODO should add support for multiple set of labels [#210]
 (deftask CheckLabels
          #'plan/CheckLabels
          (let [[v l] (-> this :vars)

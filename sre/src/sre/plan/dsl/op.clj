@@ -41,18 +41,22 @@
       :satisfies PowerPuffGirls [sugar spice everything])
   "
   [name vars & rest]
-
-  `(do
-     (def ~name
-       (merge ~(let [[req-map sat-map] (compile-args rest)]
-                 {:requires  req-map
-                  :satisfies sat-map})
-              {:name #'~name
-               :vars [~@(map keyword vars)]}))
-     ~(if (contains? (ns-interns *ns*) 'ops)
-        `(def ~'ops (conj ~'ops ~name)))
-
-     (resolve '~name)))
+  (let [factory-name (str *ns* "." name "OperationBinding")
+        factory-prefix (str name "OperationBinding-")]
+    `(let [type# (def ~name
+                   (merge ~(let [[req-map sat-map] (compile-args rest)]
+                             {:requires  req-map
+                              :satisfies sat-map})
+                          {:name #'~name
+                           :vars [~@(map keyword vars)]}))]
+       ~(if (contains? (ns-interns *ns*) 'ops)
+          `(def ~'ops (conj ~'ops ~name)))
+       (defn ~(symbol (str factory-prefix "getName")) [] type#)
+       (gen-class
+         :name ~factory-name
+         :prefix ~factory-prefix
+         :methods [^:static [~'getName [] clojure.lang.Var]])
+       type#)))
 
 (defn bind
   "Binds operation parameters to the given arguments"

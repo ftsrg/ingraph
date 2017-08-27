@@ -8,7 +8,7 @@
             [sre.plan.dsl.op :as op]
             [clojure.pprint :refer :all]
             [cats.core :refer [mlet]]
-            [cats.monad.either :refer :all]))
+            [cats.monad.exception :refer :all]))
 
 (deftest test-compare-constraint-descriptors
   (testing "Compare contraint descriptors"
@@ -190,16 +190,6 @@
               (is (= 1 (count step-2)))
               (is (= (:var-lkp (first step-2)) {:a 1 :b 2 :c 3})))))))))
 
-(deftest test-make-constr-lkp-from-targets-and-bounds
-  (is (= (make-constr-lkp-from-targets-and-bounds
-           [(constraint/->ConstraintBinding #'c2/HasType [1 2])]
-           [(constraint/->ConstraintBinding #'c2/Element [1])])
-         (constraint/map->ConstraintLookup {:free  {#'c2/Known   #{[2]}
-                                         #'c2/Edge    #{[1]}
-                                         #'c2/HasType #{[1 2]}}
-                                 :bound {#'c2/Known   #{[1]}
-                                         #'c2/Element #{[1]}}}))))
-
 (deftest test-search-plan
   (let [cost-calculator (c2/->CostCalculator 0 1)
         weight-calculator (c2/->WeightCalculator 0)
@@ -209,10 +199,7 @@
             constr-lkp {:free  {}
                         :bound {}}
             plan (csp ops constr-lkp)]
-        (is (right? plan))
-        (mlet [plan plan]
-              (is (= 1 (-> plan :ordered-cells count)))
-              (is (= 0 (-> plan :ordered-cells :first :ops count))))))
+        (is (= 0 (-> @plan :ops count)))))
     (testing "simple plan can be satisfied with a GetEdges operation"
       (let [ops (into () c2/ops)
             constr-lkp {:free  {#'c2/DirectedEdge #{[1 2 3]}
@@ -222,22 +209,16 @@
                                 #'c2/Known        #{[1] [2] [3]}}
                         :bound {}}
             plan (csp ops constr-lkp)]
-        (is (right? plan))
-        (mlet [plan plan]
-              (is (= 1 (-> plan :ordered-cells count)))
-              (is (= (-> plan :ordered-cells first :ops first :name) #'c2/GetEdges)))))
+        (is (= (-> @plan :ops first :name) #'c2/GetEdges))))
     (testing "simple plan can be satisfied with a GetEdgesByType operation"
       (let [ops (into () c2/ops)
-
-            constr-lkp {:free  {#'c2/HasType      #{[2 4]}
-                                #'c2/DirectedEdge #{[1 2 3]}
-                                #'c2/Vertex       #{[1] [3]}
-                                #'c2/Edge         #{[2]}
-                                #'c2/Element      #{[1] [2] [3]}
-                                #'c2/Known        #{[1] [2] [3]}}
-                        :bound {#'c2/Known #{[4]}}}
+            constr-lkp (map->ConstraintLookup
+                         {:free  {#'c2/HasType      #{[2 4]}
+                                  #'c2/DirectedEdge #{[1 2 3]}
+                                  #'c2/Vertex       #{[1] [3]}
+                                  #'c2/Edge         #{[2]}
+                                  #'c2/Element      #{[1] [2] [3]}
+                                  #'c2/Known        #{[1] [2] [3]}}
+                          :bound {#'c2/Known #{[4]}}})
             plan (csp ops constr-lkp)]
-        (is (right? plan))
-        (mlet [plan plan]
-              (is (= 1 (-> plan :ordered-cells count)))
-              (is (= (-> plan :ordered-cells first :ops first :name) #'c2/GetEdgesByType)))))))
+        (is (= (-> @plan :ops first :name) #'c2/GetEdgesByType))))))

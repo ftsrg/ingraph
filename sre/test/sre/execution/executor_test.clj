@@ -17,34 +17,35 @@
          ~@body
          ~@(for [[multi disp] (reverse methods)] `(remove-method ~multi ~disp)))))
 
-
 (deftype TestEnvironment []
   Environment
   (create-task [this op] op)
   (call-task [this task var-lkp] (call-task-mock task var-lkp)))
 
-(def simple-plan-1 (list {:requires  {},
-                          :satisfies {#'c2/Vertex       [[3] [1]],
-                                      #'c2/DirectedEdge [[1 2 3]],
-                                      #'c2/Edge         [[2]],
-                                      #'c2/Element      [[3] [1] [2]]},
-                          :name      #'c2/GetEdges,
-                          :vars      [1 2 3]}))
+(def simple-plan-1
+  (list {:requires  {},
+         :satisfies {#'c2/Vertex       [[3] [1]],
+                     #'c2/DirectedEdge [[1 2 3]],
+                     #'c2/Edge         [[2]],
+                     #'c2/Element      [[3] [1] [2]]},
+         :name      #'c2/GetEdges,
+         :vars      [1 2 3]}))
 
-(def still-not-too-complicated-plan-1 (list {:requires  {},
-                                             :satisfies {#'c2/Vertex       [[3] [1]],
-                                                         #'c2/DirectedEdge [[1 2 3]],
-                                                         #'c2/Edge         [[2]],
-                                                         #'c2/Element      [[3] [1] [2]]},
-                                             :name      #'c2/GetEdges,
-                                             :vars      [1 2 3]}
-                                            {:requires {#'c2/Element [[3]], #'c2/Vertex [[3]]},
-                                             :satisfies {#'c2/Element [[4] [5]],
-                                                         #'c2/DirectedEdge [[3 4 5]],
-                                                         #'c2/Vertex [[5]],
-                                                         #'c2/Edge [[4]]},
-                                             :name #'c2/ExtendOut,
-                                             :vars [3 4 5]}))
+(def still-not-too-complicated-plan-1
+  (list {:requires  {},
+         :satisfies {#'c2/Vertex       [[3] [1]],
+                     #'c2/DirectedEdge [[1 2 3]],
+                     #'c2/Edge         [[2]],
+                     #'c2/Element      [[3] [1] [2]]},
+         :name      #'c2/GetEdges,
+         :vars      [1 2 3]}
+        {:requires  {#'c2/Element [[3]], #'c2/Vertex [[3]]},
+         :satisfies {#'c2/Element      [[4] [5]],
+                     #'c2/DirectedEdge [[3 4 5]],
+                     #'c2/Vertex       [[5]],
+                     #'c2/Edge         [[4]]},
+         :name      #'c2/ExtendOut,
+         :vars      [3 4 5]}))
 
 (deftest test-search-tree
   (testing "([GetEdges 1 2 3]) with 2 satisfying branches"

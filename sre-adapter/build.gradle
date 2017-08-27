@@ -24,4 +24,5 @@ dependencies {
   compile project(':indexer')
   compile project(':sre')
   compile 'org.clojure:clojure:1.8.0'
+  testCompile group: 'junit', name: 'junit', version: junitVersion
 }
