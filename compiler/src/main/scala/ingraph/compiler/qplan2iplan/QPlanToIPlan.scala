@@ -9,6 +9,7 @@ object QPlanToIPlan {
     plan match {
       // leaf
       case qplan.GetVertices(v) => iplan.GetVertices(v)
+      case qplan.Dual() => iplan.Dual()
 
       // unary
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => iplan.GetEdges(src, trg, edge, dir)
@@ -22,6 +23,10 @@ object QPlanToIPlan {
 
       // binary
       case qplan.Union(l, r) => iplan.Union(transform(l), transform(r))
+      case qplan.Join(l, r) => iplan.Join(transform(l), transform(r))
+      case qplan.LeftOuterJoin(l, r) => iplan.LeftOuterJoin(transform(l), transform(r))
+      case qplan.ThetaLeftOuterJoin(l, r, condition) => iplan.ThetaLeftOuterJoin(transform(l), transform(r), condition)
+      case qplan.AntiJoin(l, r) => iplan.AntiJoin(transform(l), transform(r))
     }
   }
 }

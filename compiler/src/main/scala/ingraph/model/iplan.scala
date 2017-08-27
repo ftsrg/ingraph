@@ -40,6 +40,11 @@ case class GetEdges(src: expr.VertexAttribute,
   override def output = Seq(src, trg, edge)
 }
 
+case class Dual() extends LeafINode {
+  override def output = Seq()
+  override def extraAttributes: Seq[NamedExpression] = Seq()
+}
+
 // unary nodes
 case class AllDifferent(child: INode,
                         edges: Seq[EdgeAttribute],
@@ -75,8 +80,33 @@ case class Union(left: INode,
   override def internalSchema: Seq[NamedExpression] = left.asInstanceOf[INode].internalSchema
 }
 
+case class AntiJoin(left: INode,
+                right: INode,
+                override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode {
+  override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
+  override def internalSchema: Seq[NamedExpression] =
+    left.internalSchema ++ right.internalSchema
+}
+
 case class Join(left: INode,
                 right: INode,
+                override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode {
+  override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
+  override def internalSchema: Seq[NamedExpression] =
+    left.internalSchema ++ right.internalSchema
+}
+
+case class LeftOuterJoin(left: INode,
+                              right: INode,
+                              override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode {
+  override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
+  override def internalSchema: Seq[NamedExpression] =
+    left.internalSchema ++ right.internalSchema
+}
+
+case class ThetaLeftOuterJoin(left: INode,
+                right: INode,
+                condition: Expression,
                 override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode {
   override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
   override def internalSchema: Seq[NamedExpression] =

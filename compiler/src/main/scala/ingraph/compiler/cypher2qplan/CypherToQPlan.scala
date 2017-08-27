@@ -1,10 +1,11 @@
 package ingraph.compiler
 
+import ingraph.compiler.cypher2qplan.QPlanBeautifier
 import ingraph.compiler.cypher2qplan.builders.StatementBuilder
 import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 
-package object cypher2qplan {
+object CypherToQPlan {
   /**
     * Compile an openCypher query to our QPlan representation.
     *

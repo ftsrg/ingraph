@@ -38,7 +38,7 @@ case class QStub(note: String = "FIXME") extends AbstractQStub {}
   */
 abstract class PlaceHolder() extends AbstractQStub() {}
 
-// leaf operators
+// leaf nodes
 case class GetVertices(v: VertexAttribute) extends LeafQNode {
   override def output = Seq(v)
 }
@@ -47,7 +47,7 @@ case class Dual() extends LeafQNode {
   override def output = Seq()
 }
 
-// unary operators
+// unary nodes
 case class AllDifferent(child: QNode, edges: Seq[EdgeAttribute]) extends UnaryQNode {}
 
 case class DuplicateElimination(child: QNode) extends UnaryQNode {}
@@ -76,7 +76,7 @@ case class Unwind(element: Attribute, child: QNode) extends UnaryQNode {
   override def output = child.output.updated(child.output.indexOf(element), element) // TODO
 }
 
-// binary operators
+// binary nodes
 case class Union(left: QNode, right: QNode) extends BinaryQNode {
   override def output: Seq[Attribute] = left.output
 }
@@ -101,7 +101,7 @@ case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
   *
   * Note: this never filters on its left input!
   */
-case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression ) extends EquiJoinLike {}
+case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {}
 
 case class AntiJoin(left: QNode, right: QNode) extends JoinLike {
   override def output: Seq[Attribute] = left.output
