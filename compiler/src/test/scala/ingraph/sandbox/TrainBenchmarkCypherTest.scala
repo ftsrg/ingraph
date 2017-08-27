@@ -1,6 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.cypher2qplan
+import ingraph.compiler.{CypherToQPlan, cypher2qplan}
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
@@ -66,7 +66,7 @@ object TrainBenchmarkCypherTest {
   def testQueryCommon(cypher: oc.Cypher, queryName: String): Unit = {
     if (printCypher) println(PrettyPrinter.format(cypher))
 
-    val qplan = cypher2qplan.build_IKnowWhatImDoing(cypher, queryName, skipResolve = skipResolve, skipBeautify = skipBeautify)
+    val qplan = CypherToQPlan.build_IKnowWhatImDoing(cypher, queryName, skipResolve = skipResolve, skipBeautify = skipBeautify)
 
     if (printQPlan) println(qplan)
   }
