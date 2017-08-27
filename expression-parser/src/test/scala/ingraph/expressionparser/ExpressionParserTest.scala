@@ -8,20 +8,12 @@ import org.scalatest.WordSpec
 import ingraph.model.qplan.QNode
 import ingraph.model.iplan.INode
 import ingraph.model.iplan.{Production, Projection, Selection}
+import iplan.IPlanParser
 
 class ExpressionParserTest extends WordSpec {
-  def getPlan(query: String): INode = {
-    SchemaInferencer.transform(
-      QPlanToIPlan.transform(
-        cypher2qplan.build(
-          CypherParser.parseString(query), "test"
-        )
-      )
-    )
-  }
 
   def parseFilter(query: String): (Tuple) => Boolean = {
-    val selection = getPlan(query)
+    val selection = IPlanParser.parse(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]

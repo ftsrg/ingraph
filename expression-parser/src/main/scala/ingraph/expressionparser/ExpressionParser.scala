@@ -4,7 +4,8 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import org.antlr.v4.runtime.atn.SemanticContext.{AND, OR}
-import org.apache.spark.sql.catalyst.expressions.{And, Attribute, BinaryComparison, BinaryExpression, BinaryOperator, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Not, Or, UnaryExpression}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+import org.apache.spark.sql.catalyst.expressions.{Add, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryExpression, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Pow, Remainder, Subtract, TernaryExpression, UnaryExpression}
 import org.apache.spark.unsafe.types.UTF8String
 
 
@@ -55,40 +56,35 @@ object ExpressionParser {
     case attr: Attribute =>
       val index = lookup(attr.toString())
       tuple => tuple(index)
-//    case exp: BinaryArithmeticOperationExpression =>
-//      val left = parseValue(exp.getLeftOperand, lookup)
-//      val right = parseValue(exp.getRightOperand, lookup)
-//      import BinaryArithmeticOperatorType._
-//      exp.getOperator match {
-//        case PLUS => tuple => GenericMath.add(left(tuple), right(tuple))
-//        case MINUS => tuple => GenericMath.subtract(left(tuple), right(tuple))
-//        case MULTIPLICATION => tuple => GenericMath.multiply(left(tuple), right(tuple))
-//        case DIVISION => tuple => GenericMath.divide(left(tuple), right(tuple))
-//        case POWER => tuple => GenericMath.power(left(tuple), right(tuple))
-//        case MOD => tuple => GenericMath.mod(left(tuple), right(tuple))
-//      }
-//    case exp: FunctionExpression if exp.getFunctor.getCategory != FunctionCategory.AGGREGATION =>
-//      exp.getArguments.size() match {
-//        case 0 =>
-//          val function = FunctionLookup.fun0(exp.getFunctor)
-//          tuple => function()
-//        case 1 =>
-//          val first: (Tuple) => Any = parseValue(exp.getArguments.get(0), lookup)
-//          val function: (Tuple) => Any = t => FunctionLookup.fun1(exp.getFunctor)(first(t))
-//          tuple => function(tuple)
-//        case 2 =>
-//          val first = parseValue(exp.getArguments.get(0), lookup)
-//          val second = parseValue(exp.getArguments.get(1), lookup)
-//          val function: (Tuple) => Any = t => FunctionLookup.fun2(exp.getFunctor)(first(t), second(t))
-//          tuple => function(tuple)
-//        case 3 =>
-//          val first = parseValue(exp.getArguments.get(0), lookup)
-//          val second = parseValue(exp.getArguments.get(1), lookup)
-//          val third = parseValue(exp.getArguments.get(2), lookup)
-//          val function: (Tuple) => Any =
-//            tuple => FunctionLookup.fun3(exp.getFunctor)(first(tuple), second(tuple), third(tuple))
-//          tuple => function(tuple)
-//      }
+    case op: BinaryArithmetic =>
+      val left = parseValue(op.left, lookup)
+      val right = parseValue(op.right, lookup)
+        op match {
+          case _: Add => tuple => GenericMath.add(left(tuple), right(tuple))
+          case _: Subtract => tuple => GenericMath.subtract(left(tuple), right(tuple))
+          case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
+          case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
+          case _: Remainder => tuple => GenericMath.mod(left(tuple), right(tuple))
+          case _: Pmod => tuple => ???
+        }
+//    case uf: UnresolvedFunction =>
+//        tuple => ()
+//    case exp: UnaryExpression =>
+//      val first: (Tuple) => Any = parseValue(exp.child, lookup)
+//      val function: (Tuple) => Any = t => FunctionLookup.fun1(exp)(first(t))
+//      tuple => function(tuple)
+//    case exp: BinaryExpression =>
+//      val first: (Tuple) => Any = parseValue(exp.left, lookup)
+//      val second: (Tuple) => Any = parseValue(exp.right, lookup)
+//      val function: (Tuple) => Any = t => FunctionLookup.fun2(exp)(first(t), second(t))
+//      tuple => function(tuple)
+//    case exp: TernaryExpression =>
+//      val first: (Tuple) => Any = parseValue(exp.children(0), lookup)
+//      val second: (Tuple) => Any = parseValue(exp.children(1), lookup)
+//      val third: (Tuple) => Any = parseValue(exp.children(2), lookup)
+//      val function: (Tuple) => Any = t => FunctionLookup.fun3(exp)(first(t), second(t), third(t))
+//      tuple => function(tuple)
+
 //    case exp: FunctionExpression if exp.getFunctor.getCategory == FunctionCategory.AGGREGATION =>
 //      tuple => lookup(exp.fullName)
 //    case exp: SimpleCaseExpression =>

@@ -1,6 +1,7 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.util.GenericMath
+import org.apache.spark.sql.catalyst.expressions.{BinaryExpression, Expression, TernaryExpression, UnaryExpression}
 
 import scala.util.Random
 
@@ -8,7 +9,7 @@ import scala.util.Random
 // e.g. substring( original, start [, length] ) is implemented both as a fun2 and a fun3
 object FunctionLookup {
 
-//  def fun0(function: Function): () => Any = {
+//  def fun0(function: Expression): () => Any = {
 //    function match {
 //      case E => () => Math.E
 //      case PI => () => Math.PI
@@ -16,7 +17,7 @@ object FunctionLookup {
 //    }
 //  }
 //
-//  def fun1(function: Function): (Any) => Any = {
+//  def fun1(function: UnaryExpression): (Any) => Any = {
 //    /* don't do this at home */
 //    implicit def anyToDouble(any: Any) = any.asInstanceOf[Double]
 //    implicit def anyToInt(any: Any) = any.asInstanceOf[Long]
@@ -87,7 +88,7 @@ object FunctionLookup {
 //    }
 //  }
 //
-//  def fun2(function: Function): (Any, Any) => Any = {
+//  def fun2(function: BinaryExpression): (Any, Any) => Any = {
 //    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
 //    implicit def anyToString(any: Any) = any.asInstanceOf[String]
 //    function match {
@@ -104,7 +105,7 @@ object FunctionLookup {
 //    }
 //  }
 //
-//  def fun3(function: Function): (Any, Any, Any) => Any = {
+//  def fun3(function: TernaryExpression): (Any, Any, Any) => Any = {
 //    implicit def anyToLong(any: Any) = any.asInstanceOf[Long]
 //    implicit def anyToString(any: Any) = any.asInstanceOf[String]
 //    function match {
