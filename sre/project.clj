@@ -1,4 +1,4 @@
-(defproject ingraph/sre "0.1.0-SNAPSHOT"
+(defproject ingraph/sre "0.4.0-SNAPSHOT"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [
@@ -10,4 +10,5 @@
              :dev {
                    :dependencies [[org.clojure/test.check "0.9.0"]]
                    :plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]
-                             [jonase/eastwood "0.2.4"]]}})
+                             [jonase/eastwood "0.2.4"]]}}
+  :aot :all)

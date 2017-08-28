@@ -1,37 +1,47 @@
 (ns sre.plan.dsl.constraint
   (:require [clojure.set :refer :all]
-            [clojure.algo.generic.functor :refer :all]))
+            [clojure.algo.generic.functor :refer :all])
+  (:import (clojure.lang IPersistentSet Var)))
 
-(defn- iter-implications [implications]
-  (let [[constraint vars & rest] implications]
-    (if (some? constraint)
-      `(~@(iter-implications rest) [#'~constraint ~@(map keyword vars)])
-      `())))
+(defn constraint-bindings-to-map [bindings]
+  (reduce (fn [lkp {type :type bindings :bindings}]
+            (if (lkp type)
+              (update-in lkp [type] #(conj % bindings))
+              (assoc lkp type #{bindings}))) {} bindings))
 
-(defn bind
-  "Binds constraint parameters to the given arguments"
-  [constraint & args]
-  (let [lkp (zipmap (:vars constraint) args)]
-    (-> constraint
-        (update-in [:vars] (partial fmap #(lkp %1)))
-        (update-in [:implies] (partial fmap (fn [[constraint & params]]
-                                              (let [args (map #(lkp %1) params)]
-                                                (into [] (cons constraint args)))))))))
+(defprotocol IConstraintBinding
+  (implies [this] "Returns direct implications")
+  (implies* [this] "Returns closure of implications")
+  (impliesTransitiveClosure [this] "An alias for implies*. Must do the same thing as implies*"))
 
-(defn implies
-  "Returns a set of direct implications"
-  [constraint]
-  (into #{} (map (fn [[constraint & args]] (apply bind (cons @constraint args))) (:implies constraint))))
+(declare -implies -implies*)
 
-(defn implies*
-  "Returns closure of implications"
-  [constraint]
-  (loop [unresolved #{constraint} result #{}]
+(defrecord ConstraintBinding [^Var type bindings]
+  IConstraintBinding
+  (implies [this] (-implies this))
+  (implies* [this] (-implies* this))
+  (impliesTransitiveClosure [this] (implies* this)))
+
+(defn- -implies
+  ^IPersistentSet [^ConstraintBinding {type :type bindings :bindings}]
+  (let [constraint (deref type)
+        lkp (zipmap (:vars constraint) bindings)]
+    (fmap (fn [{bindings :bindings type :type}]
+            (let [args (fmap #(lkp %1) bindings)]
+              (->ConstraintBinding type args)))
+          (:implies constraint))))
+
+(defn- -implies*
+  ^IPersistentSet [^ConstraintBinding c-binding]
+  (loop [unresolved #{c-binding} result #{}]
     (if (empty? unresolved)
       result
       (let [[first & rest] (into () unresolved)]
-        (recur (union (implies first) (into #{} rest)) (conj result first))))))
+        (recur (union (-implies first) (into #{} rest)) (conj result first))))))
 
+(defn- iter-implications
+  ([] `())
+  ([constraint vars & rest] `(~@(apply iter-implications rest) (->ConstraintBinding #'~constraint [~@(map keyword vars)]))))
 
 (defmacro defconstraint
   "Let's you define a constraint like a boss.
@@ -49,20 +59,25 @@
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
   [name vars & rest]
-  (let [prefix# (str name "Factory-")]
-    `(do
-       (def ~name {:name    #'~name
-                   :vars    [~@(map keyword vars)]
-                   :arity   ~(count vars)
-                   :implies #{~@(let [[implies-kw# & implications#] rest]
-                                  (case implies-kw#
-                                    nil `()
-                                    :implies (iter-implications implications#)))}})
-       (defn ~(symbol (str prefix# "create")) [~@vars] (bind ~name ~@vars))
-       (gen-class :name ~(str *ns* "." name "Factory")
-                  :prefix ~prefix#
-                  :methods [^:static [~'create [~@(repeat (count vars) Integer)] Object]])
+  (let [factory-name (str *ns* "." name "ConstraintBinding")
+        factory-prefix (str name "ConstraintBinding-")]
+    `(let [type# (def ~name {:name    #'~name
+                             :vars    [~@(map keyword vars)]
+                             :arity   ~(count vars)
+                             :implies #{~@(let [[implies-kw & implications] rest]
+                                            (case implies-kw
+                                              nil `()
+                                              :implies (apply iter-implications implications)))}})]
+       (defn ~(symbol (str factory-prefix "getName")) [] type#)
+       (defn ~(symbol (str factory-prefix "create")) [~@vars] (->ConstraintBinding type# [~@vars]))
+       (gen-class :name ~factory-name
+                  :prefix ~factory-prefix
+                  :methods [^:static [~'getName [] clojure.lang.Var]
+                            ^:static [~'create [~@(repeat (count vars) Integer)] ConstraintBinding]])
        ~(if (contains? (ns-interns *ns*) 'constraints)
-          `(def ~'constraints (conj ~'constraints ~name))))))
+          `(def ~'constraints (conj ~'constraints ~name)))
+       type#)))
+
+
 
 

@@ -1,4 +1,5 @@
-(ns sre.plan.dsl.config)
+(ns sre.plan.dsl.config
+  (:import (clojure.lang IPersistentSet)))
 
 (defmacro defconfig
   "Creates an engine configuration variable in the current namespace, used
@@ -36,7 +37,15 @@
 
 
   [name]
-  `(do
+  (let [factory-name (str *ns* "." name "Config")
+        factory-prefix (str name "Config-")]
+    `(do
      (def ~'id (str '~name))
      (def ~'ops #{})
-     (def ~'constraints #{})))
+     (def ~'constraints #{})
+     (defn ~(symbol (str factory-prefix "getOperations")) [] ~'ops)
+     (defn ~(symbol (str factory-prefix "getConstraints")) [] ~'constraints)
+     (gen-class :name ~factory-name
+                :prefix ~factory-prefix
+                :methods [^:static [~'getOperations [] IPersistentSet]
+                          ^:static [~'getConstraints [] IPersistentSet]]))))
