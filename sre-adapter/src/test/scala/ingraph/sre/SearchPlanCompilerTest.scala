@@ -9,7 +9,8 @@ import ingraph.sre.plan.{DirectedEdgeConstraintBinding, GetEdgesOperationBinding
 import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
 import org.scalatest.junit.JUnitRunner
-import sre.plan.compiler.{ConstraintLookupFactory, SearchPlanCompiler}
+import sre.plan.compiler.SearchPlanCompiler
+import sre.plan.lookup.ConstraintLookupFactory
 
 @RunWith(classOf[JUnitRunner])
 class SearchPlanCompilerTest extends FreeSpec {

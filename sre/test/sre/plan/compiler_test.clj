@@ -2,9 +2,10 @@
   (:require [clojure.test :refer :all]
             [clojure.set :refer :all]
             [sre.plan.compiler :refer :all]
+            [sre.plan.lookup :refer :all]
             [sre.plan.config-1 :as c1]
             [sre.plan.config-2 :as c2]
-            [sre.plan.dsl.constraint :as constraint]
+            [sre.plan.dsl.constraint :refer :all]
             [sre.plan.dsl.op :as op]
             [clojure.pprint :refer :all]
             [cats.core :refer [mlet]]
@@ -51,7 +52,9 @@
                      :todo    (list ['A {:n 1 :arity 1 :params [1 2] :cond [:requires :bound]}])
                      :done    ()
                      }]
-          (is (empty? (branch-constr {:bound {'B #{[1 2]}}} stump))))))
+          (is (empty? (branch-constr
+                        (constraint-lookup #{} #{(->ConstraintBinding 'B [1 2])})
+                        stump))))))
 
     (testing "with no matching post-condition"
       (testing "should return no branches"
@@ -59,7 +62,9 @@
                      :todo    (list ['A {:n 1 :arity 1 :params [1 2] :cond [:satisfies :free]}])
                      :done    ()
                      }]
-          (is (empty? (branch-constr {:free {'B #{[1 2]}} :bound {}} stump))))))
+          (is (empty? (branch-constr
+                        (constraint-lookup #{(->ConstraintBinding 'B [1 2])})
+                        stump))))))
 
     (testing "with matching pre-condition"
       (testing "and no conflict"
@@ -67,7 +72,10 @@
           (let [stump {:var-lkp {}
                        :todo    (list ['A {:n 1 :arity 1 :params ['a 'b] :cond [:requires :bound]}])
                        :done    ()}
-                branches (branch-constr {:bound {'A #{[1 2]}} :free {'B #{[1 2]}}} stump)]
+                branches (branch-constr
+                           (constraint-lookup #{(->ConstraintBinding 'B [1 2])}
+                                              #{(->ConstraintBinding 'A [1 2])})
+                           stump)]
             (is (= (count branches) 1))
             (is (= (first branches)
                    {:var-lkp {'a 1 'b 2}
@@ -77,8 +85,8 @@
           (let [stump {:var-lkp {}
                        :todo    (list ['A {:n 1 :arity 1 :params ['a 'b] :cond [:satisfies :free]}])
                        :done    ()}
-                branches (branch-constr {:bound {'A #{[2 3]}}
-                                         :free  {'A #{[1 2]}}}
+                branches (branch-constr (constraint-lookup #{(->ConstraintBinding 'A [1 2])}
+                                                           #{(->ConstraintBinding 'A [2 3])})
                                         stump)]
             (is (= (count branches) 1))
             (is (= (first branches)
@@ -91,9 +99,8 @@
           (let [stump {:var-lkp {'a 2}
                        :todo    (list ['A {:n 1 :arity 1 :params ['a 'b] :cond [:requires :bound]}])
                        :done    ()}
-                branches (branch-constr {
-                                         :bound {'A #{[1 2]}}
-                                         :free  {'B #{[1 2]}}}
+                branches (branch-constr (constraint-lookup #{(->ConstraintBinding 'A [1 2])}
+                                                           #{(->ConstraintBinding 'A [1 2])})
                                         stump)]
             (is (empty? branches))))))))
 
@@ -106,8 +113,7 @@
             (bind-op
               c1/TestOp01
               {}
-              {:bound {#'c1/TestConstraint02 #{[1 2]}}
-               :free  {}}
+              (constraint-lookup #{} #{(->ConstraintBinding #'c1/TestConstraint02 [1 2])})
               [:free]))))
       (testing "should result in an empty binding list in the present"
         (is
@@ -115,16 +121,15 @@
             (bind-op
               c1/TestOp01
               {}
-              {:bound {#'c1/TestConstraint02 #{[1 2]}}
-               :free  {}}
+              (constraint-lookup #{} #{(->ConstraintBinding #'c1/TestConstraint02 [1 2])})
               [:free :bound])))))
     (testing "a required but non-satisfiable operation"
       (testing "should result in a binding list in the future"
         (let [result (bind-op
                        c1/TestOp01
                        {}
-                       {:bound {}
-                        :free  {#'c1/TestConstraint02 #{[1 2]} #'c1/TestConstraint01 #{[1]}}}
+                       (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint01 [1])
+                                            (->ConstraintBinding #'c1/TestConstraint02 [1 2])})
                        [:free])]
           (is (= 1 (count result)))
           (is (= (first result)
@@ -136,14 +141,13 @@
       (testing "should result in an empty binding list in the present"
         (let [result (bind-op c1/TestOp01
                               {}
-                              {:bound {}
-                               :free  {#'c1/TestConstraint02 #{[1 2]}
-                                       #'c1/TestConstraint01 #{[1]}}}
+                              (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint01 [1])
+                                                   (->ConstraintBinding #'c1/TestConstraint02 [1 2])})
                               [:free :bound])]
           (is (empty? result))))
       (testing "should result in an empty binding list incrementally"
-        (let [constr-lkp {:bound {}
-                          :free  {#'c1/TestConstraint02 #{[1 1]} #'c1/TestConstraint01 #{[1]}}}
+        (let [constr-lkp (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint01 [1])
+                                              (->ConstraintBinding #'c1/TestConstraint02 [1 2])})
               step-1 (bind-op c1/TestOp01
                               {}
                               constr-lkp
@@ -158,26 +162,26 @@
       (testing "should not be bound inconsistently"
         (let [result (bind-op c1/TestOp03
                               {}
-                              {:bound {#'c1/TestConstraint01 #{[1]}} ; implied by the one below, should be free
-                               :free  {#'c1/TestConstraint02 #{[1 2]}}}
+                              (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint02 [1 2])}
+                                                 #{(->ConstraintBinding #'c1/TestConstraint01 [1])})
                               [:free])]
           (is (empty? result))))
       (testing "should be bound every possible way"
         (testing "case #1: only one way"
           (let [result (bind-op c1/TestOp01
                                 {}
-                                {:bound {#'c1/TestConstraint01 #{[1]}
-                                         #'c1/TestConstraint02 #{[1 2]}}
-                                 :free  {#'c1/TestConstraint01 #{[2]}
-                                         #'c1/TestConstraint02 #{[2 3]}}}
+                                (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint01 [2])
+                                                     (->ConstraintBinding #'c1/TestConstraint02 [2 3])}
+                                                   #{(->ConstraintBinding #'c1/TestConstraint01 [1])
+                                                     (->ConstraintBinding #'c1/TestConstraint02 [1 2])})
                                 [:free :bound])]
             (is (= 1 (count result)))
             (is (= (:var-lkp (first result)) {:a 1 :b 2 :c 3}))))
         (testing "case #2: one way incrementally"
-          (let [constr-lkp {:bound {#'c1/TestConstraint01 #{[1]}
-                                    #'c1/TestConstraint02 #{[1 2]}}
-                            :free  {#'c1/TestConstraint01 #{[2]}
-                                    #'c1/TestConstraint02 #{[2 3]}}}
+          (let [constr-lkp (constraint-lookup #{(->ConstraintBinding #'c1/TestConstraint01 [2])
+                                                (->ConstraintBinding #'c1/TestConstraint02 [2 3])}
+                                              #{(->ConstraintBinding #'c1/TestConstraint01 [1])
+                                                (->ConstraintBinding #'c1/TestConstraint02 [1 2])})
                 step-1 (bind-op c1/TestOp01
                                 {}
                                 constr-lkp
@@ -196,29 +200,20 @@
         csp (partial calculate-search-plan cost-calculator weight-calculator 5)]
     (testing "empty plan can be satisfied without an operation"
       (let [ops (into () c2/ops)
-            constr-lkp {:free  {}
-                        :bound {}}
+            constr-lkp (constraint-lookup)
             plan (csp ops constr-lkp)]
         (is (= 0 (-> @plan :ops count)))))
     (testing "simple plan can be satisfied with a GetEdges operation"
       (let [ops (into () c2/ops)
-            constr-lkp {:free  {#'c2/DirectedEdge #{[1 2 3]}
-                                #'c2/Vertex       #{[1] [3]}
-                                #'c2/Edge         #{[2]}
-                                #'c2/Element      #{[1] [2] [3]}
-                                #'c2/Known        #{[1] [2] [3]}}
-                        :bound {}}
+            constr-lkp (constraint-lookup (implies* (->ConstraintBinding #'c2/DirectedEdge [1 2 3])))
             plan (csp ops constr-lkp)]
         (is (= (-> @plan :ops first :name) #'c2/GetEdges))))
     (testing "simple plan can be satisfied with a GetEdgesByType operation"
       (let [ops (into () c2/ops)
-            constr-lkp (map->ConstraintLookup
-                         {:free  {#'c2/HasType      #{[2 4]}
-                                  #'c2/DirectedEdge #{[1 2 3]}
-                                  #'c2/Vertex       #{[1] [3]}
-                                  #'c2/Edge         #{[2]}
-                                  #'c2/Element      #{[1] [2] [3]}
-                                  #'c2/Known        #{[1] [2] [3]}}
-                          :bound {#'c2/Known #{[4]}}})
+            all (union* (->ConstraintBinding #'c2/DirectedEdge [1 2 3])
+                        (->ConstraintBinding #'c2/HasType [2 4]))
+            bound #{(->ConstraintBinding #'c2/Known [4])}
+            free (difference all bound)
+            constr-lkp (constraint-lookup free bound)
             plan (csp ops constr-lkp)]
         (is (= (-> @plan :ops first :name) #'c2/GetEdgesByType))))))

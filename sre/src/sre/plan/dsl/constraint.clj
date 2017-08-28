@@ -12,15 +12,17 @@
 (defprotocol IConstraintBinding
   (implies [this] "Returns direct implications")
   (implies* [this] "Returns closure of implications")
-  (impliesTransitiveClosure [this] "An alias for implies*. Must do the same thing as implies*"))
+  (impliesTransitively [this] "An alias for implies*"))
 
 (declare -implies -implies*)
+
+(defn union* [& constrs] (reduce #(union %1 (implies* %2)) #{} constrs))
 
 (defrecord ConstraintBinding [^Var type bindings]
   IConstraintBinding
   (implies [this] (-implies this))
   (implies* [this] (-implies* this))
-  (impliesTransitiveClosure [this] (implies* this)))
+  (impliesTransitively [this] (implies* this)))
 
 (defn- -implies
   ^IPersistentSet [^ConstraintBinding {type :type bindings :bindings}]
