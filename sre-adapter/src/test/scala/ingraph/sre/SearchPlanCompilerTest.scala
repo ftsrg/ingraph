@@ -15,15 +15,40 @@ import sre.plan.lookup.ConstraintLookupFactory
 @RunWith(classOf[JUnitRunner])
 class SearchPlanCompilerTest extends FreeSpec {
 
-  // You cannot refer to defrecords directly, because they do not load
-  // the namespace implementations like gen-class generated classes.
+  // You shouldn't create defrecords directly, because they do not load
+  // the namespace's implementation like gen-class generated classes.
   // Better create gen-class factories for every defrecord:
   // https://groups.google.com/forum/#!topic/clojure/3DekTQZfDTk
 
   val costCalculator = Estimation.createCostCalculator(0, 1)
   val weightCalculator = Estimation.createWeightCalculator()
 
-  "Should compile simple plan" in {
+
+  val plan1 = {
+    Collections.singletonList(DirectedEdgeConstraintBinding.create(1, 2, 3))
+  }
+
+  "Should compile plan #1" in {
+    val binding = DirectedEdgeConstraintBinding.create(1, 2, 3)
+    val bindings = Collections.singletonList(binding)
+    val plan = SearchPlanCompiler.calculate(
+      costCalculator,
+      weightCalculator,
+      5,
+      IngraphConfig.getOperations(),
+      ConstraintLookupFactory.fromFreeConstrs(bindings))
+
+    assert(plan.cost_calculator.asInstanceOf[CostCalculator].c == 5)
+    assert(plan
+      .ops.asInstanceOf[Cons]
+      .first().asInstanceOf[IPersistentMap]
+      .valAt(Clojure.read(":name")) == GetEdgesOperationBinding.getName())
+  }
+
+  val plan2 = {
+  }
+
+  "Should compile plan #2" in {
     val binding = DirectedEdgeConstraintBinding.create(1, 2, 3)
     val bindings = Collections.singletonList(binding)
     val plan = SearchPlanCompiler.calculate(

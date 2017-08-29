@@ -35,8 +35,8 @@
 (defmethod weight #'plan/JoinByType [op] 5)
 (defmethod weight #'plan/CheckDirectedEdge [op] 0.5)
 (defmethod weight #'plan/CheckDirectedEdgeByType [op] 0.3)
-(defmethod weight #'plan/EvalEquals [op] 0.1)
-
+(defmethod weight #'plan/EvalGenBinaryAssertion [op] 0.1)
+(defmethod weight #'plan/EvalGenUnaryAssertion [op] 0.1)
 
 (defn Estimation-createCostCalculator [^long c ^long p] (->CostCalculator c p))
 

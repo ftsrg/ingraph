@@ -19,7 +19,8 @@
                Vertex [source]
                Edge [edge]
                Vertex [target])
-(defconstraint Equals [x y] :implies Known [x] Known [y])
+(defconstraint GenUnaryAssertion [x cond] :implies Known [x] Known [y] Known [cond])
+(defconstraint GenBinaryAssertion [x y cond] :implies Known [x] Known [y] Known [cond])
 
 (defop GetVertices [vertex]
        :satisfies Vertex [vertex])
@@ -61,7 +62,10 @@
 (defop CheckDirectedEdgeByType [source edge target type]
        :requires Vertex [source] Edge [edge] Vertex [target] Known [type]
        :satisfies DirectedEdge [source edge target] HasType [edge type])
-(defop EvalEquals [x y]
-       :requires Known [x] Known [y]
-       :satisfies Equals [x y])
+(defop EvalGenUnaryAssertion [x cond]
+       :requires Known [x] Known [cond]
+       :satisfies GenUnaryAssertion [x cond])
+(defop EvalGenBinaryAssertion [x y cond]
+       :requires Known [x] Known [y] Known [cond]
+       :satisfies GenBinaryAssertion [x y cond])
 

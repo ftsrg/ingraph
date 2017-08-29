@@ -168,10 +168,12 @@
              (list var-lkp)
              ())))
 
-(deftask EvalEquals
-         #'plan/EvalEquals
-         (let [[a b] (map var-lkp (-> this :vars))]
-           (if (= a b) (list var-lkp) ())))
+(deftask EvalGenUnaryAssertion
+         #'plan/EvalGenUnaryAssertion
+         (let [[x ucond] (map var-lkp (-> this :vars))]
+           (if (ucond x) (list var-lkp) ())))
 
-
-
+(deftask EvalGenBinaryAssertion
+         #'plan/EvalGenBinaryAssertion
+         (let [[x y bicond] (map var-lkp (-> this :vars))]
+           (if (bicond x y) (list var-lkp) ())))

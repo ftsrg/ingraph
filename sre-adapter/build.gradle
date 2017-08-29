@@ -15,14 +15,41 @@ clojure {
   aotCompile = true
 }
 
+sourceSets {
+  config
+  main {
+    compileClasspath += sourceSets.config.output
+    runtimeClasspath += sourceSets.config.output
+  }
+  test {
+    compileClasspath += sourceSets.config.output
+    runtimeClasspath += sourceSets.config.output
+  }
+}
+
+configurations {
+  configCompile
+  configCompileOnly
+  compile.extendsFrom(configCompile)
+  compileOnly.extendsFrom(configCompileOnly)
+}
+
 test {
-  clojureTest
+  clojureTest {
+    // FIXME this has to be a bug in 'nebula.clojure'
+    classpath += sourceSets.test.compileClasspath
+  }
 }
 
 dependencies {
-  compile project(':compiler')
-  compile project(':indexer')
-  compile project(':sre')
-  compile 'org.clojure:clojure:1.8.0'
+  configCompile project(':compiler')
+  configCompile project(':indexer')
+  configCompile project(':sre')
+
+  // FIXME: this is an workaround for IDEA and should not interfere with the build
+  configCompileOnly project(':sre').sourceSets.main.output.classesDirs
+  compileOnly sourceSets.config.output.classesDirs
+
+  configCompile 'org.clojure:clojure:1.8.0'
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }
