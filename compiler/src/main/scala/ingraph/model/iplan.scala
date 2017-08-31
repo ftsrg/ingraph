@@ -8,22 +8,38 @@ import org.apache.spark.sql.catalyst.plans.logical._
 trait INode extends LogicalPlan {
   def extraAttributes: Seq[NamedExpression]
   def internalSchema: Seq[NamedExpression]
+  def chn: Seq[INode]
 }
 
 abstract class LeafINode extends LeafNode with INode {
   override def internalSchema: Seq[NamedExpression] = output ++ extraAttributes
+
+  override def chn: Seq[INode] = Seq()
 }
 
 abstract class UnaryINode extends UnaryNode with INode {
   override def child: INode
   override def output: Seq[Attribute] = child.output
   override def internalSchema: Seq[NamedExpression] = child.internalSchema
+
+  override def chn: Seq[INode] = Seq(child)
 }
 
 abstract class BinaryINode extends BinaryNode with INode {
   override def left: INode
   override def right: INode
+
+  override def chn: Seq[INode] = Seq(left, right)
 }
+
+//abstract class BinaryNode extends LogicalPlan {
+//  def left: LogicalPlan
+//  def right: LogicalPlan
+//
+//  override final def children: Seq[LogicalPlan] = Seq(left, right)
+//}
+
+
 trait JoinLike extends BinaryINode {
   def common: Seq[NamedExpression] = left.internalSchema.filter(right.internalSchema.contains(_))
 }

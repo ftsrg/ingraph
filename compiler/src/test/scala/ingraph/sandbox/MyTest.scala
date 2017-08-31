@@ -51,20 +51,6 @@ class MyTest extends FunSuite {
     println(ip)
   }
 
-  test("qplan to iplan #1") {
-    val v = expr.VertexAttribute("v")
-    val gv = qplan.GetVertices(v)
-    val de = qplan.DuplicateElimination(gv)
-
-    val qp = de
-
-    val ip = QPlanToIPlan.transform(qp)
-    println(ip)
-
-    val ip2 = SchemaInferencer.transform(ip)
-    println(ip2)
-  }
-
 //  test("qplan to iplan #2") {
 //    val v = VertexAttribute("v")
 //    val gv = qplan.GetVertices(v)
@@ -86,54 +72,7 @@ class MyTest extends FunSuite {
     println(i)
   }
 
-  test("qplan to iplan #4") {
-    val els = expr.EdgeLabelSet(Set("REF"))
-
-    val v = expr.VertexAttribute("v")
-    val e = expr.EdgeAttribute("e", els)
-    val w = expr.VertexAttribute("w")
-
-    val gv = qplan.GetVertices(v)
-    val exp = qplan.Expand(v, w, e, expr.Out, gv)
-    val de = qplan.DuplicateElimination(exp)
-
-    val i = QPlanToIPlan.transform(de)
-    println(i)
-
-    val s = SchemaInferencer.transform(i)
-    println(s)
-  }
-
-  test("qplan to iplan #5") {
-    val vls = expr.VertexLabelSet(Set("Person"), expr.NonEmpty)
-
-
-    val n = expr.VertexAttribute("n", vls)
-    val name = expr.PropertyAttribute("name", n)
-    val age = expr.PropertyAttribute("age", n)
-
-    val projectList = Seq(name)
-    val condition = GreaterThan(age, Literal(27))
-
-    val q = qplan.Projection(
-      projectList,
-      qplan.Selection(
-        condition,
-        qplan.GetVertices(n)
-      )
-    )
-
-    val i = QPlanToIPlan.transform(q)
-    val s = SchemaInferencer.transform(i)
-
-    assert(s.internalSchema.size == 1)
-    assert(s.children(0).asInstanceOf[INode].internalSchema.size == 3)
-    assert(s.children(0).children(0).asInstanceOf[INode].internalSchema.size == 3)
-  }
-
-
-
-  //  test("infer schema") {
+//  test("infer schema") {
 //    val v = VertexAttribute("v")
 //    val e = EdgeAttribute("e")
 //    val w = VertexAttribute("w")
