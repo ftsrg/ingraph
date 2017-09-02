@@ -25,6 +25,7 @@ ext {
 subprojects {
   apply plugin: 'java'
   apply plugin: 'scala'
+  apply plugin: 'maven-publish'
 
   jar {
     from sourceSets.main.allJava
@@ -58,6 +59,14 @@ subprojects {
   buildscript {
     repositories {
       jcenter()
+    }
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        from components.java
+      }
     }
   }
 }
