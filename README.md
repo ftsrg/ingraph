@@ -31,6 +31,7 @@ ingraph is defined as a Gradle project.
   * Select the `ingraph` directory.
   * Tick **Auto import**.
   * Untick **Create separate module per source set**.
+  * Use default Gradle wrapper as your Gradle installation.
 * In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
 
