@@ -12,14 +12,15 @@
 (defconstraint Element [element] :implies Known [element])
 (defconstraint Edge [edge] :implies Element [edge])
 (defconstraint Vertex [vertex] :implies Element [vertex])
-(defconstraint HasLabels [vertex labels] :implies Vertex [vertex] Known [type])
+(defconstraint HasLabels [vertex labels] :implies Vertex [vertex] Known [labels])
 (defconstraint HasType [edge type] :implies Edge [edge] Known [type])
-(defconstraint Property [element key value] :implies Element [element])
+(defconstraint Property [element key value]
+               :implies Element [element] Known [key] Known [value])
 (defconstraint DirectedEdge [source edge target] :implies
                Vertex [source]
                Edge [edge]
                Vertex [target])
-(defconstraint GenUnaryAssertion [x cond] :implies Known [x] Known [y] Known [cond])
+(defconstraint GenUnaryAssertion [x cond] :implies Known [x] Known [cond])
 (defconstraint GenBinaryAssertion [x y cond] :implies Known [x] Known [y] Known [cond])
 
 (defop GetVertices [vertex]
@@ -38,6 +39,9 @@
 (defop CheckType [edge type]
        :requires Edge [edge] Known [type]
        :satisfies HasType [edge type])
+(defop AccessPropertyByKey [element key val]
+       :requires Element [element] Known [key]
+       :satisfies Property [element key val])
 (defop ExtendOut [source edge target]
        :requires Vertex [source]
        :satisfies DirectedEdge [source edge target])

@@ -75,7 +75,7 @@
        (gen-class :name ~factory-name
                   :prefix ~factory-prefix
                   :methods [^:static [~'getName [] clojure.lang.Var]
-                            ^:static [~'create [~@(repeat (count vars) Integer)] ConstraintBinding]])
+                            ^:static [~'create [~@(repeat (count vars) Object)] ConstraintBinding]])
        ~(if (contains? (ns-interns *ns*) 'constraints)
           `(def ~'constraints (conj ~'constraints ~name)))
        type#)))

@@ -72,6 +72,8 @@
                ^String type (var-lkp t)]
            (if (= (.type edge) type) (list var-lkp) ())))
 
+(deftask AccessPropertyByKey #'plan/AccessPropertyByKey (???))
+
 (deftask ExtendOut
          #'plan/ExtendOut
          (let [[v e w] (-> this :vars)
