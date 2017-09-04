@@ -125,9 +125,10 @@
   (mapcat #(bind-op %1 {} constr-lkp [:free]) ops))
 
 (defn compare-search-plan-cell-by-cost [a b]
-  ; we will always compare candidates with the most costly upon insert so order descending
-  ; we have to differentiate between every entry else they will be deduplicated
-  (+ 1 (* -2 (compare (:cost-calculator a) (:cost-calculator b)))))
+  (let [cost-cmp (compare (:cost-calculator a) (:cost-calculator b))]
+    (if (= cost-cmp 0)
+      (not= a b)
+      cost-cmp)))
 
 (defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
   (map->SearchPlanCell {:cost-calculator   cost-calculator
@@ -176,43 +177,51 @@
                     ordered-cells (get column :ordered-cells)
                     cost-calculator (estimation/update-cost (:cost-calculator cell)
                                                             (estimation/get-weight weight-calculator))
-                    ; first determine whether it fits into the k best or not
-                    fits? (or (< (count ordered-cells) k)
-                              (< (compare cost-calculator (-> ordered-cells first :cost-calculator)) 0))]
-                (if fits?
-                  ; it fits however it still can be a duplicate
-                  (let [constr-lkp (reduce bind (:constr-lkp cell) (map (fn [[_ type bindings]]
-                                                                          (->ConstraintBinding type bindings))
-                                                                        (:done present-binding)))
-                        free (lookup constr-lkp :free)
-                        dupe (get-in column [:cells-by-free free])]
-                    (if (nil? dupe)
-                      ; no dupe
-                      (let [cell (create-search-plan-cell index cost-calculator
-                                                          weight-calculator bound
-                                                          cell constr-lkp)
-                            plans (-> plans
-                                      ; yuck. the set might not even exist at this point.
-                                      (update-in [index :ordered-cells]
-                                                 #(conj (if (nil? %1)
-                                                          (sorted-set-by compare-search-plan-cell-by-cost)
-                                                          %1)
-                                                        cell))
-                                      (assoc-in [index :cells-by-free free] cell))]
-                        plans)
-                      ; uh-oh we have a dupe
-                      (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
-                        ; this is better, evict dupe
-                        (let [cell (create-search-plan-cell index cost-calculator
-                                                            weight-calculator bound
-                                                            cell constr-lkp)]
-                          (-> plans
-                              (update-in [index :ordered-cells] #(-> %1 (disj dupe) (conj cell)))
-                              (assoc-in [index :cells-by-free free] cell)))
-                        ; existing is better, so don't modify the plan
-                        plans)))
-                  ; else don't modify plans
-                  plans)))
+                    constr-lkp (reduce bind (:constr-lkp cell) (map (fn [[_ type bindings]]
+                                                                      (->ConstraintBinding type bindings))
+                                                                    (:done present-binding)))
+                    free (lookup constr-lkp :free)
+                    ; determine duplicate (if any)
+                    dupe (get-in column [:cells-by-free free])
+                    ; determine whether it fits into the k best or not (only needed if not a dupe actually)
+                    full? (>= (count ordered-cells) k)]
+                (cond
+                  (some? dupe) (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
+                                 ; this is better, evict dupe
+                                 (let [cell (create-search-plan-cell index cost-calculator
+                                                                     weight-calculator bound
+                                                                     cell constr-lkp)]
+                                   (-> plans
+                                       (update-in [index :ordered-cells] #(-> %1 (disj dupe) (conj cell)))
+                                       (assoc-in [index :cells-by-free free] cell)))
+                                 ; existing is better, so don't modify the plan
+                                 plans)
+                  ; we can fit it in somehow, either by consuming an empty slot, or replacing the worst
+                  (or (not full?)
+                      (< (compare cost-calculator
+                                  (-> ordered-cells first :cost-calculator))
+                         0)) (let [cell (create-search-plan-cell index cost-calculator
+                                                                 weight-calculator bound
+                                                                 cell constr-lkp)]
+                               (if (not full?)
+                                 ; using up an empty slot
+                                 (-> plans
+                                     ; yuck. the set might not even exist at this point.
+                                     (update-in [index :ordered-cells]
+                                                #(conj (if (nil? %1) (sorted-set-by compare-search-plan-cell-by-cost) %1) cell))
+                                     (assoc-in [index :cells-by-free free] cell))
+                                 ; replacing the worst
+                                 (let [evicted (-> ordered-cells first)]
+                                   (-> plans
+                                       ; get rid of it from the cells-by-free map
+                                       (update-in [index :cells-by-free] #(dissoc %1 (-> evicted :constr-lkp (lookup :free))))
+                                       ; get rid of it from the ordered cells set
+                                       (update-in [index :ordered-cells] #(disj %1 evicted))
+                                       ; add new item to ordered cells set
+                                       (update-in [index :ordered-cells] #(conj %1 cell))
+                                       ; add new item to cells-be-free map
+                                       (assoc-in [index :cells-by-free free] cell)))))
+                  :else plans)))
             plans
             cost-binding-pairs)))
 
