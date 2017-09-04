@@ -229,11 +229,11 @@
                (into #{} (call task env {2 person1 4 person0 5 "knows"}))))))))
 
 (deftest test-eval-equals
-  (testing "EvalEquals"
-    (let [c (partial call (->EvalEquals [9 6]) (IngraphEnvironment. indexer))]
+  (testing "GenEvalEquals"
+    (let [c (partial call (->EvalGenBinaryAssertion [9 6 7]) (IngraphEnvironment. indexer))]
       (testing "should return nothing"
-        (is (empty? (c {9 person0 6 p0-ch-p2})))
-        (is (empty? (c {9 person0 6 person1}))))
+        (is (empty? (c {9 person0 6 p0-ch-p2 7 = })))
+        (is (empty? (c {9 person0 6 person1 7 = }))))
       (testing "should return somethings"
-        (is (some? (c {9 person0 6 person0})))
-        (is (some? (c {9 p0-knows-p1 6 p0-knows-p1})))))))
+        (is (some? (c {9 person0 6 person0 7 = })))
+        (is (some? (c {9 p0-knows-p1 6 p0-knows-p1 7 = })))))))

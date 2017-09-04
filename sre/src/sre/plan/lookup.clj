@@ -2,7 +2,8 @@
   (:require
     [clojure.algo.generic.functor :refer :all]
     [clojure.set :refer :all]
-    [sre.plan.dsl.constraint :refer :all])
+    [sre.plan.dsl.constraint :refer :all]
+    [clojure.pprint])
   (:import (clojure.lang IPersistentSet)))
 
 (defprotocol IConstraintLookup
