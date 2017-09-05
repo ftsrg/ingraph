@@ -72,6 +72,7 @@ Incremental openCypher queries can also be beneficial for:
 * [The ingraph project and incremental evaluation of Cypher queries](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim2/slides/ocim2-ingraph.pdf), 2nd openCypher Implementers Meeting
 * [Incremental Graph Queries for Cypher](https://s3.amazonaws.com/artifacts.opencypher.org/website/ocim1/slides/ocim2017-incremental-opencypher.pdf), 1st openCypher Implementers Meeting
 * [Incremental Graph Queries with openCypher](https://fosdem.org/2017/schedule/event/graph_incremental_queries_open_cypher/), FOSDEM 2017, Graph devroom
+* [Social Network Benchmark: Business Intelligence workload](http://wiki.ldbcouncil.org/display/TUC/Tenth+TUC+Meeting%2C+TU+Munich+at+VLDB2017), Linked Data Benchmark Council, 10th TUC meeting
 * [The Train Benchmark: Cross-Technology Performance Evaluation of Continuous Model Queries](http://wiki.ldbcouncil.org/pages/viewpage.action?pageId=59277315), Linked Data Benchmark Council, 9th TUC meeting
 
 # Related projects on GitHub
