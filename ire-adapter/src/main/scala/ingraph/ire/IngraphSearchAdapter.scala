@@ -2,7 +2,7 @@ package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, TransactionFactory}
-import iplan.IPlanParser
+import ingraph.compiler.IPlanParser
 
 class IngraphSearchAdapter(
     override val querySpecification: String,

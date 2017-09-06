@@ -1,8 +1,8 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.compiler.IPlanParser
 import ingraph.model.eplan._
-import iplan.IPlanParser
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {

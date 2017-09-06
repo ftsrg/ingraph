@@ -1,5 +1,5 @@
-package iplan
-import ingraph.compiler.CypherToQPlan
+package ingraph.compiler
+
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
 import ingraph.model.eplan.ENode
