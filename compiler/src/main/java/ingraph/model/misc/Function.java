@@ -120,6 +120,10 @@ public enum Function {
 
   public String getPrettyName() { return prettyName; }
 
+  public Function getByPrettyName(String prettyName) {
+    return Function.valueOf(prettyName.toUpperCase());
+  }
+
   public FunctionCategory getCategory() {
     return this.category;
   }
