@@ -76,6 +76,7 @@ public enum Function {
   EXP           ("e",              FunctionCategory.LOGARITHMIC,   CypherType.FLOAT,       1, l(CypherType.NUMBER)                   ), // e( expression )
   LOG           ("log",            FunctionCategory.LOGARITHMIC,   CypherType.FLOAT,       1, l(CypherType.NUMBER)                   ), // log( expression )
   LOG10         ("log10",          FunctionCategory.LOGARITHMIC,   CypherType.FLOAT,       1, l(CypherType.NUMBER)                   ), // log10( expression )
+  POW           ("pow",            FunctionCategory.LOGARITHMIC,   CypherType.FLOAT,       2, l(CypherType.NUMBER, CypherType.NUMBER)           ), // pow( expression )
   SQRT          ("sqrt",           FunctionCategory.LOGARITHMIC,   CypherType.FLOAT,       1, l(CypherType.NUMBER)                   ), // sqrt( expression )
 
   // numeric functions
@@ -120,7 +121,7 @@ public enum Function {
 
   public String getPrettyName() { return prettyName; }
 
-  public Function getByPrettyName(String prettyName) {
+  public static Function getByPrettyName(String prettyName) {
     return Function.valueOf(prettyName.toUpperCase());
   }
 
