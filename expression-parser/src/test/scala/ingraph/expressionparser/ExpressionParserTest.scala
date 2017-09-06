@@ -1,8 +1,7 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.compiler.qplan2iplan.SchemaInferencer
-import ingraph.model.iplan.{INode, Production, Projection, Selection}
+import ingraph.model.eplan._
 import iplan.IPlanParser
 import org.scalatest.WordSpec
 
@@ -15,10 +14,10 @@ class ExpressionParserTest extends WordSpec {
       .asInstanceOf[Selection]
     val lookup = getSchema(selection.child)
     println(lookup)
-    ExpressionParser.parse(selection.condition, lookup)
+    ExpressionParser.parse(selection.inode.condition, lookup)
   }
 
-  def getSchema(op: INode): Map[String, Int] = SchemaInferencer.schemaToMapNames(op)
+  def getSchema(op: ENode): Map[String, Int] = SchemaToMap.schemaToMapNames(op)
 
   val rocks = "emfrocks"
   "ExpressionParser" should {

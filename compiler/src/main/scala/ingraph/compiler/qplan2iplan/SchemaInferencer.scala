@@ -14,28 +14,36 @@ object SchemaInferencer {
 
     inode match {
       // leaf
-      case o: iplan.GetEdges      => eplan.LeafENode(ea, o)
-      case o: iplan.GetVertices   => eplan.LeafENode(ea, o)
+      case o: iplan.GetEdges    => eplan.GetEdges(ea, o)
+      case o: iplan.GetVertices => eplan.GetVertices(ea, o)
 
       // unary
-      case o: iplan.Projection => UnaryENode(ea, o, transform(o.child, ea ++ extractAttributes(o.projectList)))
-      case o: iplan.Selection  => UnaryENode(ea, o, transform(o.child, ea ++ extractAttributes(o.condition)))
-      case o: iplan.UnaryINode => UnaryENode(ea, o, transform(o.child, ea))
+      case o: iplan.Projection           => eplan.Projection          (ea, o, transform(o.child, ea ++ extractAttributes(o.projectList)))
+      case o: iplan.Selection            => eplan.Selection           (ea, o, transform(o.child, ea ++ extractAttributes(o.condition)))
+      case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
+      case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
+      case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
+      case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
 
       // binary
-      case o: iplan.AntiJoin => JoinLikeENode(ea, o,
+      case o: iplan.AntiJoin => eplan.AntiJoin(
+          ea, o,
           transform(o.left, ea),
           transform(o.right, Seq())
-      )
-      case o: iplan.Join => {
-        val eaLeft = propagate(ea, o.left.output)
-        val eaRight = propagate(ea, o.right.output).filter(!eaLeft.contains(_))
-        JoinLikeENode(ea, o,
-          transform(o.left, eaLeft),
-          transform(o.right, eaRight)
         )
+      case j: iplan.EquiJoinLike => {
+        val eaLeft = propagate(ea, j.left.output)
+        val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
+        val left = transform(j.left, eaLeft)
+        val right = transform(j.right, eaRight)
+
+        j match {
+          case o: iplan.Join => eplan.Join(ea, o, left, right)
+          case o: iplan.LeftOuterJoin => eplan.LeftOuterJoin(ea, o, left, right)
+          case o: iplan.ThetaLeftOuterJoin => eplan.ThetaLeftOuterJoin(ea, o, left, right)
+        }
       }
-      case o: iplan.Union => UnionENode(ea, o,
+      case o: iplan.Union => eplan.Union(ea, o,
         transform(o.left, ea),
         transform(o.right, ea)
       )

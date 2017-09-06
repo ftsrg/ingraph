@@ -3,31 +3,30 @@ package ingraph.model.iplan
 import ingraph.model.expr
 import ingraph.model.expr.EdgeAttribute
 import ingraph.model.treenodes._
-import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
 
 // abstract classes and traits
 trait INode extends LogicalPlan {
   override def children: Seq[INode]
-  override def output: Seq[NamedExpression]
 }
 
 abstract class LeafINode extends GenericLeafNode[INode] with INode {}
 abstract class UnaryINode extends GenericUnaryNode[INode] with INode {
-  override def output: Seq[NamedExpression] = child.output
+  override def output: Seq[Attribute] = child.output
 }
 abstract class BinaryINode extends GenericBinaryNode[INode] with INode {}
 
 trait JoinLike extends BinaryINode {
-  def common: Seq[NamedExpression] = left.output.filter(right.output.contains(_))
+  def common: Seq[Attribute] = left.output.filter(right.output.contains(_))
 }
 trait EquiJoinLike extends JoinLike {
-  override def output: Seq[NamedExpression] = left.output ++ right.output.filter(left.output.contains(_))
+  override def output: Seq[Attribute] = left.output ++ right.output.filter(left.output.contains(_))
 }
 
 // leaf nodes
 case class GetVertices(v: expr.VertexAttribute) extends LeafINode {
-  override def output: Seq[NamedExpression] = Seq(v)
+  override def output: Seq[Attribute] = Seq(v)
 }
 
 case class GetEdges(src: expr.VertexAttribute,
@@ -52,7 +51,7 @@ case class Production(child: INode) extends UnaryINode {}
 
 case class Projection(projectList: Seq[NamedExpression],
                       child: INode) extends UnaryINode {
-  //override def output: Seq[Attribute] = projectList // TODO
+  override def output = projectList.map(_.toAttribute)
 }
 
 case class Selection(condition: Expression,
@@ -66,11 +65,11 @@ case class SortAndTop(skipExpr: Expression,
 // binary nodes
 case class Union(left: INode,
                  right: INode) extends BinaryINode {
-  override def output: Seq[NamedExpression] = left.output
+  override def output: Seq[Attribute] = left.output
 }
 
 case class AntiJoin(left: INode, right: INode) extends BinaryINode with JoinLike {
-  override def output: Seq[NamedExpression] = left.output
+  override def output: Seq[Attribute] = left.output
 }
 
 case class Join(left: INode, right: INode) extends BinaryINode with EquiJoinLike {}
