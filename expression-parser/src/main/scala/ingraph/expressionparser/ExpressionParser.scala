@@ -3,6 +3,7 @@ package ingraph.expressionparser
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
+import ingraph.model.expr.FunctionInvocation
 import org.antlr.v4.runtime.atn.SemanticContext.{AND, OR}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction}
 import org.apache.spark.sql.catalyst.expressions.{Add, Alias, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryExpression, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Pow, Remainder, Subtract, TernaryExpression, UnaryExpression}
@@ -75,14 +76,13 @@ object ExpressionParser {
           case _: Remainder => tuple => ???
           case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
         }
-    case uf: UnresolvedFunction =>
-      val function = ingraph.model.misc.Function.getByPrettyName(uf.prettyName)
-      val children: Seq[Tuple => Any] = uf.children.map(parseValue(_, lookup))
+    case invoc: FunctionInvocation =>
+      val children: Seq[Tuple => Any] = invoc.children.map(parseValue(_, lookup))
       children.length match {
-        case 0 => tuple => FunctionLookup.fun0(function)()
-        case 1 => tuple => FunctionLookup.fun1(function)(children.head(tuple))
-        case 2 => tuple => FunctionLookup.fun2(function)(children(0)(tuple), children(1)(tuple))
-        case 3 => tuple => FunctionLookup.fun3(function)(children(0)(tuple), children(1)(tuple), children(2)(tuple))
+        case 0 => tuple => FunctionLookup.fun0(invoc.functor)()
+        case 1 => tuple => FunctionLookup.fun1(invoc.functor)(children.head(tuple))
+        case 2 => tuple => FunctionLookup.fun2(invoc.functor)(children(0)(tuple), children(1)(tuple))
+        case 3 => tuple => FunctionLookup.fun3(invoc.functor)(children(0)(tuple), children(1)(tuple), children(2)(tuple))
       }
 //    case exp: UnaryExpression =>
 //      val first: (Tuple) => Any = parseValue(exp.child, lookup)
