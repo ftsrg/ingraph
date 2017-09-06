@@ -1,8 +1,0 @@
-dependencies {
-  compile project(':ingraph-compiler:ingraph-compiler-patterns')
-  compile project(':ingraph-compiler:ingraph-compiler-relalg-model-util')
-
-  compile group: 'org.eclipse.xtend', name: 'org.eclipse.xtend.lib', version: xtendVersion
-  compile group: 'org.eclipse.viatra', name: 'viatra-transformation-runtime', version: viatraVersion
-  compile group: 'org.eclipse.viatra', name: 'viatra-dse-runtime', version: viatraDseVersion
-}
