@@ -17,8 +17,6 @@ class LdbcSnbEngineTest extends LdbcSnbTest {
     val indexer = new Indexer()
     val adapter = new IngraphIncrementalAdapter(querySpecification, queryName, indexer)
 
-    converter.convert(adapter.plan, s"ldbc-snb-bi/bi-$queryNumber")
-
     val tran = adapter.newTransaction()
     val csvPreference = new CsvPreference.Builder('"', '|', "\n").build()
     adapter.readCsv(nodeFilenames, relationshipFilenames, tran, csvPreference)

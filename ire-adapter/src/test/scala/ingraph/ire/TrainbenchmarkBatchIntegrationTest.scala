@@ -6,7 +6,7 @@ import scala.io.Source
 
 class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
-  def queryPath(query: String): String = s"../../queries/trainbenchmark/$query.cypher"
+  def queryPath(query: String): String = s"../../queries/trainbenchmark-simple/$query.cypher"
 
   case class TestCase(name: String, size: Int, expectedResultSize: Int)
 
@@ -27,7 +27,7 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
   ).foreach(
     t => test(s"${t.name}-size-${t.size}") {
       val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
-      TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize
+      assert(TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize)
     }
   )
 

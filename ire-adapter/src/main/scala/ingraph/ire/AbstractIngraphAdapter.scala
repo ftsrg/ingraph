@@ -1,18 +1,13 @@
 package ingraph.ire
 
-import org.supercsv.prefs.CsvPreference
-import hu.bme.mit.ire.Transaction
-import hu.bme.mit.ire.TransactionFactory
+import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
-import ingraph.cypher2relalg.Cypher2Relalg
-import ingraph.relalg.expressions.ExpressionUnwrapper
-import ingraph.search2rete.Search2ReteTransformationAndSchemaCalculator
-import relalg.AttributeVariable
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.listeners.ChangeListener
+import org.supercsv.prefs.CsvPreference
+import ingraph.compiler.qplan2iplan
+import ingraph.model.iplan.INode
 
 import scala.collection.JavaConverters._
-import relalg.RelalgContainer
+
 
 abstract class AbstractIngraphAdapter {
 
@@ -20,8 +15,8 @@ abstract class AbstractIngraphAdapter {
   val queryName: String
   val indexer: Indexer = new Indexer()
 
-  val plan: RelalgContainer
-  val tupleMapper: EntityToTupleMapper
+  val plan: INode
+  val tupleMapper: Neo4jEntityToTupleMapper
   val engine: AnnotatedRelationalEngine
   def readCsvJava(nodeFilenames: java.util.Map[String, java.util.List[String]],
                   relationshipFilenames: java.util.Map[String, String],
@@ -53,12 +48,8 @@ abstract class AbstractIngraphAdapter {
     }
   }
 
-  def resultNames() : Vector[String] = {
-    import ingraph.expressionparser.Conversions._
-    plan.getRootExpression.getExternalSchema.map {
-      case a: AttributeVariable => s"${ExpressionUnwrapper.extractBaseVariable(a).getName}.${a.getName}"
-      case e => e.getName
-    }
+  def resultNames() : Seq[String] = {
+    plan.internalSchema.map(_.toString())
   }
 
 }
