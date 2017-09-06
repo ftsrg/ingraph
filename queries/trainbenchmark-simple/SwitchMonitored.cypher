@@ -1,3 +1,3 @@
 MATCH (sw:Switch)
 WHERE NOT ((sw)-[:monitoredBy]->(:Sensor))
-RETURN DISTINCT sw.id
+RETURN DISTINCT sw
