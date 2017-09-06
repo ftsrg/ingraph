@@ -14,7 +14,7 @@ trait ENode extends LogicalPlan {
   def inode: INode
   def internalSchema: Seq[NamedExpression]
   override def children: Seq[ENode]
-  override def output: Seq[Attribute] = ???
+  override def output: Seq[Attribute] = inode.output
 }
 
 abstract class LeafENode extends GenericLeafNode[ENode] with ENode {}
