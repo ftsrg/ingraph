@@ -90,12 +90,15 @@ class SchemaInferencerTest extends FunSuite {
     val ip = QPlanToIPlan.transform(qp)
     val ep = SchemaInferencer.transform(ip)
 
+    assert(ep.internalSchema.size == 2)
     assert(ep.children(0).internalSchema.size == 2)
   }
 
   test("infer schema for PosLength from Cypher") {
     val ep = IPlanParser.parse("MATCH (segment:Segment) WHERE segment.length <= 0 RETURN DISTINCT segment, segment.length AS length")
+    assert(ep.internalSchema.size == 2)
     assert(ep.children(0).internalSchema.size == 2)
+    assert(ep.children(0).children(0).internalSchema.size == 2)
   }
 
 }

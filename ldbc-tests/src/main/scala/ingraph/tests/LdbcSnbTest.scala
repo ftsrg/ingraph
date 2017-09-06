@@ -1,9 +1,11 @@
 package ingraph.tests
 
 import org.scalatest.FunSuite
+import org.scalatest.Ignore
 
 import scala.io.Source
 
+@Ignore
 abstract class LdbcSnbTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"

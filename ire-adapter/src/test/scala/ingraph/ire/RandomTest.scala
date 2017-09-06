@@ -8,19 +8,19 @@ import scala.io.Source
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
-  test("Optional match returns Vector(null) on empty input") {
+  ignore("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query, "opt")
     assert(adapter.engine.getResults() == List(Vector(null)))
   }
 
-  test("Constant returns work") {
+  ignore("Constant returns work") {
     val query = "RETURN 1 + 1"
     val adapter = new IngraphIncrementalAdapter(query, "opt")
     assert(adapter.engine.getResults() == List(Vector(2 )))
   }
 
-  test("Vertices can be removed from indexer") {
+  ignore("Vertices can be removed from indexer") {
     val indexer = new Indexer()
     val query = "MATCH (n:Person) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)
@@ -34,8 +34,7 @@ class RandomTest extends FunSuite {
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
   }
 
-  test("Edges can be removed from indexer") {
-
+  ignore("Edges can be removed from indexer") {
     val indexer = new Indexer()
     val query = "MATCH (n:Person) -[:Knows]-> (m:Person) RETURN m"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)

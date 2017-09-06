@@ -2,6 +2,7 @@ package ingraph.ire
 
 import java.io.FileInputStream
 import java.util.Collections
+import org.scalatest.Ignore
 
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
@@ -11,6 +12,7 @@ import org.objenesis.strategy.StdInstantiatorStrategy
 import org.supercsv.prefs.CsvPreference
 import ingraph.tests.LdbcSnbTest
 
+@Ignore
 class LdbcSnbEngineTest extends LdbcSnbTest {
 
   override def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String) {

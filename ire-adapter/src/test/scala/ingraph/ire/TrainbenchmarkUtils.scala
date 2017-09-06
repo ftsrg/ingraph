@@ -6,8 +6,8 @@ import hu.bme.mit.ire.datatypes.Tuple
 import scala.io.Source
 
 object TrainbenchmarkUtils {
-  def modelPath(size: Int, entityName: String) = s"../../graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
-  def queryPath(query: String): String = s"../../queries/trainbenchmark/$query.cypher"
+  def modelPath(size: Int, entityName: String) = s"graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
+  def queryPath(query: String): String = s"queries/trainbenchmark/$query.cypher"
   def nodeFilenames(size: Int): Map[String, List[String]] = Map(
     modelPath(size, "Region") -> List("Region"),
     modelPath(size, "Route") -> List("Route"),
