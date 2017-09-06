@@ -1,52 +1,54 @@
 package ingraph.sandbox
 
-import ingraph.compiler.qplan2iplan.SchemaInferencer
+import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.model.eplan.Join
 import ingraph.model.expr._
+import ingraph.model.qplan
 import ingraph.model.iplan
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class SchemaInferencerTest extends FunSuite {
 
-//  test("infer schema #1") {
-//    val v = VertexAttribute("v")
-//    val gv = qplan.GetVertices(v)
-//    val de = qplan.DuplicateElimination(gv)
-//
-//    val qp = de
-//    val ip = QPlanToIPlan.transform(qp)
-//    val ips = SchemaInferencer.transform(ip)
-//
-//    assert(ips.internalSchema.size == 1)
-//    assert(ips.chn(0).internalSchema.size == 1)
-//  }
-//
-//  test("infer schema #2") {
-//    val vls = VertexLabelSet(Set("Person"), NonEmpty)
-//
-//
-//    val n = VertexAttribute("n", vls)
-//    val name = PropertyAttribute("name", n)
-//    val age = PropertyAttribute("age", n)
-//
-//    val projectList = Seq(name)
-//    val condition = GreaterThan(age, Literal(27))
-//
-//    val qp = qplan.Projection(
-//      projectList,
-//      qplan.Selection(
-//        condition,
-//        qplan.GetVertices(n)
-//      )
-//    )
-//
-//    val ip = QPlanToIPlan.transform(qp)
-//    val ips = SchemaInferencer.transform(ip)
-//
-//    assert(ips.internalSchema.size == 1)
-//    assert(ips.chn(0).internalSchema.size == 3)
-//    assert(ips.chn(0).chn(0).internalSchema.size == 3)
-//  }
+  test("infer schema #1") {
+    val v = VertexAttribute("v")
+    val gv = qplan.GetVertices(v)
+    val de = qplan.DuplicateElimination(gv)
+
+    val qp = de
+    val ip = QPlanToIPlan.transform(qp)
+    val ep = SchemaInferencer.transform(ip)
+
+    assert(ep.internalSchema.size == 1)
+    assert(ep.children(0).internalSchema.size == 1)
+  }
+
+  test("infer schema #2") {
+    val vls = VertexLabelSet(Set("Person"), NonEmpty)
+
+
+    val n = VertexAttribute("n", vls)
+    val name = PropertyAttribute("name", n)
+    val age = PropertyAttribute("age", n)
+
+    val projectList = Seq(name)
+    val condition = GreaterThan(age, Literal(27))
+
+    val qp = qplan.Projection(
+      projectList,
+      qplan.Selection(
+        condition,
+        qplan.GetVertices(n)
+      )
+    )
+
+    val ip = QPlanToIPlan.transform(qp)
+    val ep = SchemaInferencer.transform(ip)
+
+    assert(ep.internalSchema.size == 1)
+    assert(ep.children(0).internalSchema.size == 3)
+    assert(ep.children(0).children(0).internalSchema.size == 3)
+  }
 
   test("infer schema #3") {
     val vls = VertexLabelSet(Set("Person"), NonEmpty)
@@ -66,11 +68,10 @@ class SchemaInferencerTest extends FunSuite {
 
     val inferred = SchemaInferencer.transform(join, Seq(name, age))
 
+    assert(inferred.asInstanceOf[Join].leftMask == Seq(0))
+    assert(inferred.asInstanceOf[Join].rightMask == Seq(0))
     assert(inferred.children(0).internalSchema.size == 2)
     assert(inferred.children(1).internalSchema.size == 4)
   }
-
-//  val projectList = Seq(name)
-//  val condition = GreaterThan(age, Literal(27))
 
 }

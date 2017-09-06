@@ -1,87 +1,53 @@
 package ingraph.compiler.qplan2iplan
 
+import ingraph.model.eplan._
 import ingraph.model.expr.PropertyAttribute
 import ingraph.model.iplan
+import ingraph.model.eplan
 import ingraph.model.iplan.INode
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
 object SchemaInferencer {
-  def transform(plan: INode, ea: Seq[NamedExpression] = Seq()): INode = {
-    val ead = ea.distinct
 
-    plan match {
+  def transform(inode: INode, extraAttributes: Seq[NamedExpression] = Seq()): ENode = {
+    val ea = extraAttributes.distinct
+
+    inode match {
       // leaf
-      case o: iplan.GetEdges => o.copy(extraAttributes = ead)
-      case o: iplan.GetVertices => o.copy(extraAttributes = ead)
+      case o: iplan.GetEdges    => eplan.GetEdges(ea, o)
+      case o: iplan.GetVertices => eplan.GetVertices(ea, o)
 
       // unary
-      case o: iplan.AllDifferent => o.copy(
-        child = transform(o.child, ead),
-        extraAttributes = ead
-      )
-      case o: iplan.DuplicateElimination => o.copy(
-        child = transform(o.child, ead),
-        extraAttributes = ead
-      )
-      case o: iplan.Production => o.copy(
-        child = transform(o.child, ead),
-        extraAttributes = ead
-      )
-      case o: iplan.Projection => o.copy(
-        child = transform(o.child, ead ++ extractAttributes(o.projectList)),
-        extraAttributes = ead
-      )
-      case o: iplan.Selection => {
-        o.copy(
-          child = transform(o.child, ead ++ extractAttributes(o.condition)),
-          extraAttributes = ead
-        )
-      }
-      case o: iplan.SortAndTop => o.copy(
-        child = transform(o.child, ead),
-        extraAttributes = ead
-      )
+      case o: iplan.Projection           => eplan.Projection          (ea, o, transform(o.child, ea ++ extractAttributes(o.projectList)))
+      case o: iplan.Selection            => eplan.Selection           (ea, o, transform(o.child, ea ++ extractAttributes(o.condition)))
+      case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
+      case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
+      case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
+      case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
 
       // binary
-      case o: iplan.AntiJoin => o.copy(
-          left = transform(o.left, ead),
-          right = transform(o.right, Seq()),
-          extraAttributes = ead
-      )
-
-      case o: iplan.Join => {
-        val eaLeft = propagate(ead, o.left.output)
-        val eaRight = propagate(ead, o.right.output).filter(!eaLeft.contains(_))
-
-        o.copy(
-          left = transform(o.left, eaLeft),
-          right = transform(o.right, eaRight),
-          extraAttributes = ead
+      case o: iplan.AntiJoin => eplan.AntiJoin(
+          ea, o,
+          transform(o.left, ea),
+          transform(o.right, Seq())
         )
-      }
-      // TODO https://github.com/FTSRG/ingraph/blob/master/ingraph-compiler/ingraph-compiler-relalg-model-util/src/main/ingraph_xtend/relalg/calculators/JoinSchemaCalculator.xtend
+      case j: iplan.EquiJoinLike => {
+        val eaLeft = propagate(ea, j.left.output)
+        val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
+        val left = transform(j.left, eaLeft)
+        val right = transform(j.right, eaRight)
 
-      case o: iplan.Union => o.copy(
-        left = transform(o.left, ead),
-        right = transform(o.right, ead),
-        extraAttributes = ead
+        j match {
+          case o: iplan.Join => eplan.Join(ea, o, left, right)
+          case o: iplan.LeftOuterJoin => eplan.LeftOuterJoin(ea, o, left, right)
+          case o: iplan.ThetaLeftOuterJoin => eplan.ThetaLeftOuterJoin(ea, o, left, right)
+        }
+      }
+      case o: iplan.Union => eplan.Union(ea, o,
+        transform(o.left, ea),
+        transform(o.right, ea)
       )
     }
-  }
-
-  def extractAttributes(expression: Expression): Seq[Attribute] = {
-    (expression match {
-      case a: Attribute => Seq(a)
-      case _ => Seq()
-    }) ++ expression.children.flatMap(extractAttributes(_))
-  }
-
-  def extractAttributes(projectList: Seq[NamedExpression]): Seq[Attribute] = {
-    projectList.flatMap(extractAttributes(_))
-  }
-
-  def schemaToMapNames(op: INode): Map[String, Int] = {
-    op.internalSchema.zipWithIndex.map(f => f._1.toString() -> f._2).toMap
   }
 
   /**
@@ -93,6 +59,17 @@ object SchemaInferencer {
       .filter(a => inputSchema.contains(a.elementAttribute))
 
     // !inputSchema.contains(a) // do we need this?
+  }
+
+  def extractAttributes(expression: Expression): Seq[Attribute] = {
+    (expression match {
+      case a: Attribute => Seq(a)
+      case _ => Seq()
+    }) ++ expression.children.flatMap(extractAttributes(_))
+  }
+
+  def extractAttributes(projectList: Seq[NamedExpression]): Seq[Attribute] = {
+    projectList.flatMap(extractAttributes(_))
   }
 
 }

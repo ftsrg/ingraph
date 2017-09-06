@@ -1,7 +1,6 @@
 package ingraph.model.qplan
 
 import ingraph.model.expr._
-import ingraph.model.iplan.INode
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
@@ -9,9 +8,7 @@ import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 /**
   * QNodes for building a qplan tree
   */
-trait QNode extends LogicalPlan {
-  override def children: Seq[QNode]
-}
+trait QNode extends LogicalPlan {}
 abstract class LeafQNode extends GenericLeafNode[QNode] with QNode
 abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
   override def output: Seq[Attribute] = child.output
