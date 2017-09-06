@@ -4,8 +4,8 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import org.antlr.v4.runtime.atn.SemanticContext.{AND, OR}
-import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
-import org.apache.spark.sql.catalyst.expressions.{Add, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryExpression, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Pow, Remainder, Subtract, TernaryExpression, UnaryExpression}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction}
+import org.apache.spark.sql.catalyst.expressions.{Add, Alias, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryExpression, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Pow, Remainder, Subtract, TernaryExpression, UnaryExpression}
 import org.apache.spark.unsafe.types.UTF8String
 
 
@@ -53,6 +53,14 @@ object ExpressionParser {
         case s: UTF8String => _ => s.toString
         case v => _ => v
       }
+    case a: UnresolvedAlias =>
+      val name = a.child.toString()
+      val index = lookup(name)
+      tuple => tuple(index)
+    case a: Alias =>
+      val name = a.child.toString()
+      val index = lookup(name)
+      tuple => tuple(index)
     case attr: Attribute =>
       val index = lookup(attr.toString())
       tuple => tuple(index)
@@ -64,11 +72,18 @@ object ExpressionParser {
           case _: Subtract => tuple => GenericMath.subtract(left(tuple), right(tuple))
           case _: Multiply => tuple => GenericMath.multiply(left(tuple), right(tuple))
           case _: Divide => tuple => GenericMath.divide(left(tuple), right(tuple))
-          case _: Remainder => tuple => GenericMath.mod(left(tuple), right(tuple))
-          case _: Pmod => tuple => ???
+          case _: Remainder => tuple => ???
+          case _: Pmod => tuple =>  GenericMath.mod(left(tuple), right(tuple))
         }
-//    case uf: UnresolvedFunction =>
-//        tuple => ()
+    case uf: UnresolvedFunction =>
+      val function = ingraph.model.misc.Function.getByPrettyName(uf.prettyName)
+      val children: Seq[Tuple => Any] = uf.children.map(parseValue(_, lookup))
+      children.length match {
+        case 0 => tuple => FunctionLookup.fun0(function)()
+        case 1 => tuple => FunctionLookup.fun1(function)(children.head(tuple))
+        case 2 => tuple => FunctionLookup.fun2(function)(children(0)(tuple), children(1)(tuple))
+        case 3 => tuple => FunctionLookup.fun3(function)(children(0)(tuple), children(1)(tuple), children(2)(tuple))
+      }
 //    case exp: UnaryExpression =>
 //      val first: (Tuple) => Any = parseValue(exp.child, lookup)
 //      val function: (Tuple) => Any = t => FunctionLookup.fun1(exp)(first(t))

@@ -42,10 +42,10 @@ class ExpressionParserTest extends WordSpec {
       assert(func(Vector(0, 1)))
     }
 
-    "parse arithmetic operations" ignore {
+    "parse arithmetic operations" in {
       val func = parseFilter("""MATCH (n) WHERE n.x=2^2*1+2-4%5 RETURN n.x""")
-      assert(func(Vector(2)))
-      assert(!func(Vector(1)))
+      assert(func(Vector(2, 2)))
+      assert(!func(Vector(1, 1)))
     }
 
     "parse complicated routesensor expression" ignore {
@@ -54,12 +54,12 @@ class ExpressionParserTest extends WordSpec {
       assert(!func(Vector(1, 1, 1)))
     }
 
-    "parse functions" ignore {
+    "parse functions" in {
       val func = parseFilter("""MATCH (n) WHERE cos(toFloat(n.x)) > sin(pi()) RETURN n.x""")
       assert(func(Vector(0, 0)))
     }
 
-    "parse string functions" ignore {
+    "parse string functions" in {
       val func = parseFilter(
         """MATCH (n) WHERE substring(toString(1324), 2)=left("244", 2) RETURN n.id""")
       assert(func(Vector(24, 1)))

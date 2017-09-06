@@ -202,7 +202,7 @@ object ExpressionBuilder {
     val r = buildExpression(e.getRight, joins)
 
     e.getOperator match {
-      case "^" => cExpr.Pow(l, r)
+      case "^" => UnresolvedFunction(Function.POW.getPrettyName, Seq[cExpr.Expression](l, r), isDistinct = false)
     }
   }
 
