@@ -18,7 +18,7 @@ object SchemaInferencer {
       case o: iplan.GetVertices => eplan.GetVertices(ea, o)
 
       // unary
-      case o: iplan.Projection           => eplan.Projection          (ea, o, transform(o.child, ea ++ extractAttributes(o.projectList)))
+      case o: iplan.Projection           => eplan.Projection          (ea, o, transform(o.child, ea ++ extractAttributes(o.projectList).filter(a => !o.child.output.contains(a) && !ea.contains(a))))
       case o: iplan.Selection            => eplan.Selection           (ea, o, transform(o.child, ea ++ extractAttributes(o.condition)))
       case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
       case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
