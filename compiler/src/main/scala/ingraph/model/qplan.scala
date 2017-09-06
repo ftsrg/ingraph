@@ -1,21 +1,27 @@
 package ingraph.model.qplan
 
 import ingraph.model.expr._
+import ingraph.model.iplan.INode
+import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
-import org.apache.spark.sql.catalyst.plans.logical.{BinaryNode, LeafNode, LogicalPlan, UnaryNode}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
-trait QNode extends LogicalPlan
-abstract class LeafQNode extends LeafNode with QNode {
+/**
+  * QNodes for building a qplan tree
+  */
+trait QNode extends LogicalPlan {
+  override def children: Seq[QNode]
 }
-abstract class UnaryQNode extends UnaryNode with QNode {
+abstract class LeafQNode extends GenericLeafNode[QNode] with QNode
+abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
   override def output: Seq[Attribute] = child.output
 }
-abstract class BinaryQNode extends BinaryNode with QNode
+abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
 
 /**
   * A stub leaf node for the qplan indicating incomplete compilation.
   */
-abstract class AbstractQStub extends LeafQNode{
+abstract class AbstractQStub extends LeafQNode {
   override def output = Seq()
 }
 

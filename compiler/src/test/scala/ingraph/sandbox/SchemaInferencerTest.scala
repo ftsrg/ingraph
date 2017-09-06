@@ -66,8 +66,8 @@ class SchemaInferencerTest extends FunSuite {
 
     val inferred = SchemaInferencer.transform(join, Seq(name, age))
 
-    assert(inferred.chn(0).internalSchema.size == 2)
-    assert(inferred.chn(1).internalSchema.size == 4)
+    assert(inferred.children(0).internalSchema.size == 2)
+    assert(inferred.children(1).internalSchema.size == 4)
   }
 
 //  val projectList = Seq(name)

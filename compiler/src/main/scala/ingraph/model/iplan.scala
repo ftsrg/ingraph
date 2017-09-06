@@ -2,46 +2,39 @@ package ingraph.model.iplan
 
 import ingraph.model.expr
 import ingraph.model.expr.EdgeAttribute
+import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
 
+/**
+  * INodes for building an iplan tree
+  */
 trait INode extends LogicalPlan {
   def extraAttributes: Seq[NamedExpression]
   def internalSchema: Seq[NamedExpression]
-  def chn: Seq[INode]
+  override def children: Seq[INode]
 }
 
-abstract class LeafINode extends LeafNode with INode {
+abstract class LeafINode extends GenericLeafNode[INode] with INode {
   override def internalSchema: Seq[NamedExpression] = output ++ extraAttributes
-
-  override def chn: Seq[INode] = Seq()
 }
 
-abstract class UnaryINode extends UnaryNode with INode {
+abstract class UnaryINode extends GenericUnaryNode[INode] with INode {
   override def child: INode
   override def output: Seq[Attribute] = child.output
   override def internalSchema: Seq[NamedExpression] = child.internalSchema
-
-  override def chn: Seq[INode] = Seq(child)
 }
 
-abstract class BinaryINode extends BinaryNode with INode {
+abstract class BinaryINode extends GenericBinaryNode[INode] with INode {
   override def left: INode
   override def right: INode
-
-  override def chn: Seq[INode] = Seq(left, right)
 }
-
-//abstract class BinaryNode extends LogicalPlan {
-//  def left: LogicalPlan
-//  def right: LogicalPlan
-//
-//  override final def children: Seq[LogicalPlan] = Seq(left, right)
-//}
 
 
 trait JoinLike extends BinaryINode {
   def common: Seq[NamedExpression] = left.internalSchema.filter(right.internalSchema.contains(_))
+  def leftMask: Vector[Int]
+  def rightMask: Vector[Int]
 }
 
 
@@ -102,6 +95,8 @@ case class Union(left: INode,
 
 case class AntiJoin(left: INode,
                 right: INode,
+                override val leftMask: Vector[Int] = Vector(),
+                override val rightMask: Vector[Int] = Vector(),
                 override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
   override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
   override def internalSchema: Seq[NamedExpression] =
@@ -110,6 +105,8 @@ case class AntiJoin(left: INode,
 
 case class Join(left: INode,
                 right: INode,
+                override val leftMask: Vector[Int] = Vector(),
+                override val rightMask: Vector[Int] = Vector(),
                 override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
   override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
   override def internalSchema: Seq[NamedExpression] =
@@ -117,17 +114,22 @@ case class Join(left: INode,
 }
 
 case class LeftOuterJoin(left: INode,
-                              right: INode,
-                              override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
+                         right: INode,
+                         override val leftMask: Vector[Int] = Vector(),
+                         override val rightMask: Vector[Int] = Vector(),
+                         override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
   override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
   override def internalSchema: Seq[NamedExpression] =
     left.internalSchema ++ right.internalSchema
 }
 
-case class ThetaLeftOuterJoin(left: INode,
-                right: INode,
-                condition: Expression,
-                override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
+case class ThetaLeftOuterJoin(
+          left: INode,
+          right: INode,
+          condition: Expression,
+          override val leftMask: Vector[Int] = Vector(),
+          override val rightMask: Vector[Int] = Vector(),
+          override val extraAttributes: Seq[NamedExpression] = Seq()) extends BinaryINode with JoinLike {
   override def output: Seq[Attribute] = left.output ++ right.output // minus common attributes
   override def internalSchema: Seq[NamedExpression] =
     left.internalSchema ++ right.internalSchema
