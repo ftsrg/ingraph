@@ -48,7 +48,7 @@ object TrainBenchmarkCypherTest {
   val queryPackPath = "trainbenchmark/"
   val printCypher = true
   val printQPlan = true
-  val skipResolve = true
+  val skipResolve = false
   val skipBeautify = false
 
   def testQueryFile(queryName: String): Unit = {

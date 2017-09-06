@@ -29,6 +29,16 @@ case class EStub(note: String = "FIXME") extends LeafExpression with ExpressionB
   override def dataType = StringType //use of Alias(EStub(), "foo") requires this
 }
 
+case class FunctionInvocation(functor: ingraph.model.misc.Function, children: Seq[Expression], isDistinct: Boolean) extends ExpressionBase {
+  override def nullable = ???
+
+  override def eval(input: InternalRow) = ???
+
+  override protected def doGenCode(ctx: CodegenContext, ev: ExprCode) = ???
+
+  override def dataType = ???
+}
+
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends Attribute {
   override def exprId: ExprId = throw new UnresolvedException(this, "exprId")

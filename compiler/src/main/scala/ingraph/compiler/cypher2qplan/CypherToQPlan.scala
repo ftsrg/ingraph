@@ -1,6 +1,6 @@
 package ingraph.compiler
 
-import ingraph.compiler.cypher2qplan.QPlanBeautifier
+import ingraph.compiler.cypher2qplan.{QPlanBeautifier, QPlanResolver}
 import ingraph.compiler.cypher2qplan.builders.StatementBuilder
 import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
@@ -75,8 +75,7 @@ object CypherToQPlan {
     * @return
     */
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
-    //FIXME: dummy no-op implementation
-    unresolvedQueryPlan
+    QPlanResolver.resolveQPlan(unresolvedQueryPlan)
   }
 
   /**
