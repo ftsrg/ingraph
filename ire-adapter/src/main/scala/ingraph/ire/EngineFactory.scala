@@ -5,15 +5,14 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, TransitiveClosureJoinNode}
+import hu.bme.mit.ire.nodes.binary.JoinNode
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
-import ingraph.compiler.qplan2iplan.SchemaInferencer
 import ingraph.expressionparser.ExpressionParser
+import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
 import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
-import ingraph.model.iplan._
-import ingraph.model.qplan.Dual
+import ingraph.model.eplan._
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
 import scala.collection.mutable
@@ -25,12 +24,12 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 
 object EngineFactory {
 
-  def getSchema(node: INode): Map[String, Int] = SchemaInferencer.schemaToMapNames(node)
+  def getSchema(node: ENode): Map[String, Int] = SchemaToMap.schemaToMapNames(node)
 
-  case class ForwardConnection(parent: INode, child: (ReteMessage) => Unit)
+  case class ForwardConnection(parent: ENode, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: INode, indexer: Indexer): AnnotatedRelationalEngine =
+  def createQueryEngine(plan: ENode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
       override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -44,7 +43,7 @@ object EngineFactory {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: UnaryINode =>
+          case op: UnaryENode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
               //            case op: Grouping =>
@@ -67,22 +66,22 @@ object EngineFactory {
                 // This is the mighty EMF, so there are no default values, obviously
                 def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
 
-                val skip: Long = getInt(op.skipExpr)
-                val limit: Long = getInt(op.limitExpr)
-                val sortKeys = op.order.map(
+                val skip: Long = getInt(op.inode.skipExpr)
+                val limit: Long = getInt(op.inode.limitExpr)
+                val sortKeys = op.inode.order.map(
                   e => ExpressionParser.parseValue(e, variableLookup)).toVector
                 newLocal(Props(new SortAndTopNode(
                   expr.child,
-                  op.order.length,
+                  op.inode.order.length,
                   sortKeys,
                   skip,
                   limit,
-                  op.order.map(_.direction == Ascending).toVector
+                  op.inode.order.map(_.direction == Ascending).toVector
                 )))
 
               case op: Selection =>
                 val variableLookup = getSchema(op.child)
-                newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.condition, variableLookup))))
+                newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.inode.condition, variableLookup))))
 
               case op: Projection =>
                 val lookup = getSchema(op.child)
@@ -91,7 +90,7 @@ object EngineFactory {
               case op: DuplicateElimination => newLocal(Props(new DuplicateEliminationNode(expr.child)))
               case op: AllDifferent =>
                 val schema = getSchema(op.child)
-                val indices = op.edges.map(v => schema(v.name))
+                val indices = op.inode.edges.map(v => schema(v.name))
 
                 def allDifferent(r: Tuple): Boolean = {
                   val seen = mutable.HashSet[Any]()
@@ -154,7 +153,7 @@ object EngineFactory {
             }
         remaining += ForwardConnection(op.child, node)
 
-      case op: BinaryINode =>
+      case op: BinaryENode =>
         val node: ActorRef = op match {
 //          case op: AntiJoin =>
 //            newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
@@ -201,12 +200,12 @@ object EngineFactory {
 
         case op: GetVertices =>
           val nick = op.nodeName
-          val labels = op.v.labels.vertexLabels.toSeq
+          val labels = op.inode.v.labels.vertexLabels.toSeq
           vertexConverters.addBinding(labels, op)
           inputs += (nick -> expr.child)
         case op: GetEdges =>
           val nick = op.nodeName
-          val labels = op.edge.labels.edgeLabels.toSeq
+          val labels = op.inode.edge.labels.edgeLabels.toSeq
           for (label <- labels)
             edgeConverters.addBinding(label, op)
           inputs += (nick -> expr.child)
