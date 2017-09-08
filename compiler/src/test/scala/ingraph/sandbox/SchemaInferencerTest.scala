@@ -1,11 +1,14 @@
 package ingraph.sandbox
 
+import java.io.File
+
 import ingraph.compiler.IPlanParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
 import ingraph.model.eplan._
 import ingraph.model.expr._
 import ingraph.model.qplan
 import ingraph.model.iplan
+import org.apache.commons.io.FileUtils
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
@@ -100,6 +103,13 @@ class SchemaInferencerTest extends FunSuite {
       case Production(_, _, DuplicateElimination(_, _,
         Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
           assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+    }
+  }
+
+  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
+    test(queryFile.getName.dropRight(".cypher".length)) {
+      val query = FileUtils.readFileToString(queryFile)
+      val ep = IPlanParser.parse(query)
     }
   }
 
