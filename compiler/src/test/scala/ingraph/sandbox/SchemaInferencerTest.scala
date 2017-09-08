@@ -2,7 +2,7 @@ package ingraph.sandbox
 
 import ingraph.compiler.IPlanParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
-import ingraph.model.eplan.{Join, Projection}
+import ingraph.model.eplan._
 import ingraph.model.expr._
 import ingraph.model.qplan
 import ingraph.model.iplan
@@ -96,9 +96,11 @@ class SchemaInferencerTest extends FunSuite {
 
   test("infer schema for PosLength from Cypher") {
     val ep = IPlanParser.parse("MATCH (segment:Segment) WHERE segment.length <= 0 RETURN DISTINCT segment, segment.length AS length")
-    assert(ep.internalSchema.size == 2)
-    assert(ep.children(0).internalSchema.size == 2)
-    assert(ep.children(0).children(0).internalSchema.size == 2)
+    ep match {
+      case Production(_, _, DuplicateElimination(_, _,
+        Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
+          assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+    }
   }
 
 }
