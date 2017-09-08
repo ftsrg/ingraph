@@ -97,12 +97,32 @@ class SchemaInferencerTest extends FunSuite {
     assert(ep.children(0).internalSchema.size == 2)
   }
 
+  test("infer schema for PosLength from Cypher without filtering") {
+    val ep = IPlanParser.parse(
+      """MATCH (segment:Segment)
+        |RETURN segment, segment.length AS length
+        |""".stripMargin)
+    ep match {
+      case
+        Production(_, _,
+        Projection(_, _,
+        AllDifferent(_, _, v: GetVertices)
+        )
+        ) =>
+        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+    }
+  }
+
   test("infer schema for PosLength from Cypher") {
-    val ep = IPlanParser.parse("MATCH (segment:Segment) WHERE segment.length <= 0 RETURN DISTINCT segment, segment.length AS length")
+    val ep = IPlanParser.parse(
+      """MATCH (segment:Segment)
+        |WHERE segment.length <= 0
+        |RETURN DISTINCT segment, segment.length AS length
+        |""".stripMargin)
     ep match {
       case Production(_, _, DuplicateElimination(_, _,
-        Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
-          assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+      Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
+        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
     }
   }
 
