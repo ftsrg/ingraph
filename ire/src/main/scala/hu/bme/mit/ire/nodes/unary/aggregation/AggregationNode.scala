@@ -10,7 +10,7 @@ import scala.collection.{immutable, mutable}
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
                       mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate],
-                     projection: Vector[Tuple => Any]) extends UnaryNode with SingleForwarder {
+                     projection: Vector[Tuple => Any]) extends UnaryNode[ChangeSet] with SingleForwarder {
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
   private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
 

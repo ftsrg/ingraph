@@ -7,7 +7,7 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 class UnwindNode(override val next: (ReteMessage) => Unit,
                  val index: Int,
                  override val expectedTerminatorCount: Int = 1
-                   ) extends UnaryNode with SingleForwarder {
+                   ) extends UnaryNode[ChangeSet] with SingleForwarder {
 
   override def onSizeRequest() = 0
 

@@ -13,7 +13,7 @@ class SortNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int,
                    selectionMask: Vector[(Tuple) => Any],
                    ascendingOrder: Vector[Boolean])
-  extends UnaryNode with SingleForwarder {
+  extends UnaryNode[ChangeSet] with SingleForwarder {
 
   //implicit val order = new Ordering[Tuple] {
   val comparator = new Comparator[Tuple] {

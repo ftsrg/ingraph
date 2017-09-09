@@ -9,7 +9,23 @@ import scala.collection.mutable
 
 class ReteMessage() {}
 
-case class ChangeSet(positive: TupleBag = Vector(), negative: TupleBag = Vector()) extends ReteMessage
+trait DataMessage extends ReteMessage {
+  def changeSets: Seq[TupleBag]
+  def createNew(bags: Seq[TupleBag]): DataMessage
+  def nonEmpty(): Boolean = {
+    changeSets.filter(_.nonEmpty).nonEmpty
+  }
+}
+
+case class BatchChangeSet(changeSet: TupleBag) extends DataMessage {
+  override def changeSets: Seq[TupleBag] = Seq(changeSet)
+  override def createNew(bags: Seq[TupleBag]): BatchChangeSet = BatchChangeSet(bags(0))
+}
+
+case class ChangeSet(positive: TupleBag = Vector(), negative: TupleBag = Vector()) extends DataMessage {
+  override def changeSets: Seq[TupleBag] = Seq(positive, negative)
+  override def createNew(bags: Seq[TupleBag]): ChangeSet = ChangeSet(bags(0), bags(1))
+}
 
 case class ExpectMoreTerminators(id: Int, inputs: Iterable[ReteMessage => Unit])
 
