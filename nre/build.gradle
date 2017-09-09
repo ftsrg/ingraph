@@ -1,8 +1,0 @@
-plugins {
-  id 'com.github.maiflai.scalatest' version '0.16'
-}
-
-dependencies {
-  compile project(':ire')
-  testCompile group: 'com.typesafe.akka', name: "akka-testkit_$scalaShortVersion", version: akkaVersion
-}
