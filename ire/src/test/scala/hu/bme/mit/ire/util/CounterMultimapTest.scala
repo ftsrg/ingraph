@@ -1,8 +1,6 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.util
 
-import org.scalatest.Matchers
-import org.scalatest.WordSpecLike
-import hu.bme.mit.ire.util.CounterMultimap
+import org.scalatest.{Matchers, WordSpecLike}
 
 class CounterMultimapTest extends WordSpecLike with Matchers {
 

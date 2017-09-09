@@ -1,13 +1,11 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes.binary
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
-import hu.bme.mit.ire.nodes.binary.LeftOuterJoinNode
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
 import org.scalatest.{Matchers, WordSpecLike, _}
-import akka.actor.actorRef2Scala
 
 class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {

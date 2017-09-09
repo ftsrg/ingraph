@@ -1,21 +1,14 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes.binary
 
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.Matchers
-import org.scalatest.WordSpecLike
-import akka.testkit.ImplicitSender
-import akka.actor.ActorSystem
-import akka.testkit.TestKit
-import scala.concurrent.duration.Duration
-import hu.bme.mit.ire.nodes.binary.TransitiveClosureJoinNode
-import akka.actor.Props
-import akka.testkit.TestActors
-import hu.bme.mit.ire.messages.Secondary
-import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.util.TestUtil._
-import hu.bme.mit.ire.messages.Primary
+import akka.actor.{ActorSystem, Props}
+import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Path
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
+import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+
+import scala.concurrent.duration.Duration
 
 class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {

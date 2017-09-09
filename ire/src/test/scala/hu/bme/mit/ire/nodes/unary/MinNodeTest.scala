@@ -1,12 +1,11 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes.unary
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulMin}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import akka.actor.actorRef2Scala
-import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulMin}
 
 class MinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {

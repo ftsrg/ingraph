@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes
 
 import scala.Vector
 import scala.collection.mutable

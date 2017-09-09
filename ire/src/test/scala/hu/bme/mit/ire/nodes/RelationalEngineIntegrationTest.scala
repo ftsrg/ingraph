@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}

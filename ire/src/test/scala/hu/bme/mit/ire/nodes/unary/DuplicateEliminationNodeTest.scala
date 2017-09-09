@@ -1,12 +1,10 @@
-package hu.bme.mit.ire.test
+package hu.bme.mit.ire.nodes.unary
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import hu.bme.mit.ire.nodes.unary.DuplicateEliminationNode
-import akka.actor.actorRef2Scala
 
 class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -35,7 +33,7 @@ class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system
       expectMsg(ChangeSet(
         positive = tupleBag(tuple(3, 4))
       ))
-      
+
       duplicateElimination ! ChangeSet(
         positive = tupleBag(tuple(5, 6)),
         negative = tupleBag(tuple(1, 2))
@@ -50,10 +48,10 @@ class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system
       )
       expectMsg(ChangeSet(
         positive = tupleBag(tuple(7, 8)),
-        negative = tupleBag(tuple(1, 2))        
+        negative = tupleBag(tuple(1, 2))
       ))
     }
-    
+
     "do simple duplicate elimination 1" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val duplicateElimination = system.actorOf(Props(new DuplicateEliminationNode(echoActor ! _)))
@@ -63,7 +61,7 @@ class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system
 
       duplicateElimination ! ChangeSet(positive = tupleBag(tuple(1)))
       duplicateElimination ! ChangeSet(positive = tupleBag(tuple(1)))
-     
+
       duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
       duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
       duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
