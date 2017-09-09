@@ -3,6 +3,14 @@ package hu.bme.mit.ire.nodes.unary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
+/**
+  * Currently used for selecting elements from a list.
+  *
+  * @param next
+  * @param function
+  * @param index
+  * @param expectedTerminatorCount
+  */
 class MapperNode(override val next: (ReteMessage) => Unit,
                  val function: (Any) => Any, val index: Int,
                  override val expectedTerminatorCount: Int = 1

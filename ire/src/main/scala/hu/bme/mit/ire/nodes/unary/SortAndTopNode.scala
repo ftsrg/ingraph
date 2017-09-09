@@ -1,17 +1,13 @@
 package hu.bme.mit.ire.nodes.unary
 
 import java.util.Comparator
-import java.util.TreeMap
-
-import scala.collection.immutable.VectorBuilder
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.messages.ReteMessage
-import hu.bme.mit.ire.util.GenericMath
-import hu.bme.mit.ire.util.SizeCounter
-import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
+
+import scala.collection.immutable.VectorBuilder
 
 class SortNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int,
@@ -46,7 +42,7 @@ class SortNode(override val next: (ReteMessage) => Unit,
   }
 
   // we can use Scala Tree once we migrate to 2.12
-  val data: java.util.Map[Tuple, Int] = new TreeMap(comparator)
+  val data: java.util.Map[Tuple, Int] = new java.util.TreeMap(comparator)
   //null //mutable.TreeMap[Tuple, Int]().withDefault(t => 0)
 
 //  val maskInverse: Mask = Vector.range(0, tupleLength).filter(i => !selectionMask.contains(i))
