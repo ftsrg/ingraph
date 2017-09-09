@@ -4,7 +4,7 @@ import java.util.Comparator
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.util.{GenericMath, SizeCounter}
 
 import scala.collection.immutable.VectorBuilder
@@ -13,7 +13,7 @@ class SortNode(override val next: (ReteMessage) => Unit,
                    tupleLength: Int,
                    selectionMask: Vector[(Tuple) => Any],
                    ascendingOrder: Vector[Boolean])
-  extends UnaryNode[ChangeSet] with SingleForwarder {
+  extends UnaryNode[IncrementalChangeSet] with SingleForwarder {
 
   //implicit val order = new Ordering[Tuple] {
   val comparator = new Comparator[Tuple] {
@@ -67,7 +67,7 @@ class SortNode(override val next: (ReteMessage) => Unit,
     builder.result()
   }
 
-  override def onChangeSet(changeSet: ChangeSet): Unit = {
+  override def onChangeSet(changeSet: IncrementalChangeSet): Unit = {
     // TODO maybe checking the changed elements against the lowest forwarded element would speed things up
     val prevTop = getTuplesInOrder
     for (tuple <- changeSet.positive) {
@@ -90,7 +90,7 @@ class SortNode(override val next: (ReteMessage) => Unit,
     }
     val topN = getTuplesInOrder
     if (topN != prevTop) {
-      forward(ChangeSet(positive = topN, negative = prevTop))
+      forward(IncrementalChangeSet(positive = topN, negative = prevTop))
     }
   }
 

@@ -2,16 +2,16 @@ package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends UnaryNode[ChangeSet] with SingleForwarder {
+class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends UnaryNode[IncrementalChangeSet] with SingleForwarder {
   override def onSizeRequest(): Long = 0
 
   val tuples = new mutable.HashMap[Tuple, Integer].withDefault(d => 0)
 
-  def onChangeSet(changeSet: ChangeSet): Unit = {
+  def onChangeSet(changeSet: IncrementalChangeSet): Unit = {
     val forwardPositive = new ListBuffer[Tuple]()
     val forwardNegative = new ListBuffer[Tuple]()
 
@@ -35,7 +35,7 @@ class DuplicateEliminationNode(override val next: (ReteMessage) => Unit) extends
       }
     }
 
-    forward(ChangeSet(forwardPositive, forwardNegative))
+    forward(IncrementalChangeSet(forwardPositive, forwardNegative))
   }
 
 }

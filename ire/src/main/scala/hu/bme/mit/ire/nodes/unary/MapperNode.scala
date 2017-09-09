@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.messages.{ChangeSet, DataMessage, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, DataMessage, ReteMessage}
 
 /**
   * Currently used for selecting elements from a list.
@@ -22,7 +22,7 @@ class MapperNode(override val next: (ReteMessage) => Unit,
 //      changeSet.positive.map(),
 //      changeSet.negative.map(t => t.updated(index, function(t(index))))
 //    ))
-    val changeSets = changeSet.changeSets.map(_.map(
+    val changeSets = changeSet.bags.map(_.map(
       t => t.updated(index, function(t(index)))
     ))
     changeSets

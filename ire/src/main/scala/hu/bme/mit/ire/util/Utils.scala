@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.ActorRef
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
 import java.util.Collection
@@ -22,11 +22,11 @@ object Utils {
     * @param cs
     * @return
     */
-  def changeSetPermutations(cs: ChangeSet) = {
+  def changeSetPermutations(cs: IncrementalChangeSet) = {
     val values = for (
       pos <- cs.positive.toVector.permutations;
       neg <- cs.negative.toVector.permutations
-    ) yield ChangeSet(pos, neg)
+    ) yield IncrementalChangeSet(pos, neg)
     values.toSeq
   }
 

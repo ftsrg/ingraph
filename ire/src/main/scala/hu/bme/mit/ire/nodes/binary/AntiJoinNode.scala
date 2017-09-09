@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.binary
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 
 import scala.collection.mutable
@@ -19,7 +19,7 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
   override def onSizeRequest(): Long = SizeCounter.countDeeper(
     primaryIndexer.values) + SizeCounter.count(secondaryTuples, secondaryProjectedTuples)
 
-  def onPrimary(changeSet: ChangeSet): Unit = {
+  def onPrimary(changeSet: IncrementalChangeSet): Unit = {
     val resultPositive = for {
       tuple <- changeSet.positive
       if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
@@ -30,14 +30,14 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
       if !secondaryProjectedTuples.contains(extract(tuple, primaryMask))
     } yield tuple
 
-    forward(ChangeSet(resultPositive, resultNegative))
+    forward(IncrementalChangeSet(resultPositive, resultNegative))
 
     // maintain the content of the slot's indexer
     for (tuple <- changeSet.positive) primaryIndexer.addBinding   (extract(tuple, primaryMask), tuple)
     for (tuple <- changeSet.negative) primaryIndexer.removeBinding(extract(tuple, primaryMask), tuple)
   }
 
-  def onSecondary(changeSet: ChangeSet): Unit = {
+  def onSecondary(changeSet: IncrementalChangeSet): Unit = {
     // positive part
     val deltaSProjected = changeSet.positive.map(tuple => extract(tuple, secondaryMask)).toSet
     val deltaSMinusS = deltaSProjected -- secondaryProjectedTuples
@@ -67,7 +67,7 @@ class AntiJoinNode(override val next: (ReteMessage) => Unit,
       tuple <- secondaryTuples
     } yield extract(tuple, secondaryMask))
 
-    forward(ChangeSet(resultPositive.toVector, resultNegative.toVector))
+    forward(IncrementalChangeSet(resultPositive.toVector, resultNegative.toVector))
   }
 
   def projectSecondaryTuples(tuples: Vector[Tuple]): Vector[Tuple] = {

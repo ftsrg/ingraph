@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes.{Mask, Tuple, _}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage, TerminatorMessage}
 import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 
 abstract class JoinNodeBase extends BinaryNode {
@@ -40,7 +40,7 @@ abstract class JoinNodeBase extends BinaryNode {
     } yield combine(tuple, otherTupleFull, slot)
   }
 
-  def join(delta: ChangeSet, slotIndexer: JoinCache, otherIndexer: JoinCache, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
+  def join(delta: IncrementalChangeSet, slotIndexer: JoinCache, otherIndexer: JoinCache, slotMask: Mask, otherMaskInverse: Mask, slot: Slot): Unit = {
     // join the tuples based on the other slot's indexer
     val joinedPositiveTuples: TupleBag = joinTuples(delta.positive, otherIndexer, slotMask, slot)
     val joinedNegativeTuples: TupleBag = joinTuples(delta.negative, otherIndexer, slotMask, slot)
@@ -51,14 +51,14 @@ abstract class JoinNodeBase extends BinaryNode {
     for (tuple <- delta.negative)
       slotIndexer.removeBinding(extract(tuple, slotMask), tuple)
 
-    forward(ChangeSet(joinedPositiveTuples, joinedNegativeTuples))
+    forward(IncrementalChangeSet(joinedPositiveTuples, joinedNegativeTuples))
   }
 
-  def onPrimary(changeSet: ChangeSet): Unit = {
+  def onPrimary(changeSet: IncrementalChangeSet): Unit = {
     join(changeSet, primaryIndexer, secondaryIndexer, primaryMask, secondaryMaskInverse, Primary)
   }
 
-  def onSecondary(changeSet: ChangeSet): Unit = {
+  def onSecondary(changeSet: IncrementalChangeSet): Unit = {
     join(changeSet, secondaryIndexer, primaryIndexer, secondaryMask, primaryMaskInverse, Secondary)
   }
 

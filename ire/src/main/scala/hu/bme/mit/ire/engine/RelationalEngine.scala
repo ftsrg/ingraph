@@ -6,7 +6,7 @@ import akka.util.Timeout
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.{AddListener, ChangeListener}
-import hu.bme.mit.ire.messages.{ChangeSet, SizeRequest}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, SizeRequest}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
@@ -21,7 +21,7 @@ abstract class RelationalEngine {
   val system = RelationalEngine.system
   val timeout = Duration(5, HOURS)
   val production: ActorRef
-  val inputLookup: Map[String, ChangeSet => Unit]
+  val inputLookup: Map[String, IncrementalChangeSet => Unit]
   val terminator: Terminator
   val actors = new collection.mutable.MutableList[ActorRef]()
 

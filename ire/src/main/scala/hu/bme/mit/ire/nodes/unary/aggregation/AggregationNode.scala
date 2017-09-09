@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.{Mask, Tuple, TupleBag}
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.unary.UnaryNode
 
 import scala.collection.immutable.VectorBuilder
@@ -10,11 +10,11 @@ import scala.collection.{immutable, mutable}
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
                       mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate],
-                     projection: Vector[Tuple => Any]) extends UnaryNode[ChangeSet] with SingleForwarder {
+                     projection: Vector[Tuple => Any]) extends UnaryNode[IncrementalChangeSet] with SingleForwarder {
   private val keyCount = mutable.Map[Tuple, Int]().withDefault(f => 0)
   private val data = mutable.Map[Tuple, Vector[StatefulAggregate]]().withDefault(f => functions())
 
-  override def onChangeSet(changeSet: ChangeSet): Unit = {
+  override def onChangeSet(changeSet: IncrementalChangeSet): Unit = {
     val oldValues = mutable.Map[Tuple, (Tuple, Int)]()
     for ((key, tuples) <- changeSet.positive.groupBy(t => mask.map(m => m(t)))) {
       val aggregators = data.getOrElseUpdate(key, functions())
@@ -46,7 +46,7 @@ class AggregationNode(override val next: (ReteMessage) => Unit,
     }
     val positiveBag: TupleBag = positive.result().map((t: Tuple) => projection.map(_(t)))
     val negativeBag: TupleBag = negative.result().map((t: Tuple) => projection.map(_(t)))
-    forward(ChangeSet(
+    forward(IncrementalChangeSet(
       positive = positiveBag,
         negative = negativeBag))
   }

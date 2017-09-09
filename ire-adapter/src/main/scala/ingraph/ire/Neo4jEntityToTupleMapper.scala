@@ -4,13 +4,13 @@ import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
 import java.util.{Iterator => JIterator}
 
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import ingraph.model.eplan.GetEdges
 import ingraph.model.eplan.GetVertices
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
                                edgeConverters: Map[String, Set[GetEdges]],
-                               inputLookup: Map[String, (ChangeSet) => Unit]) extends IdParser with EntityToTupleMapper {
+                               inputLookup: Map[String, (IncrementalChangeSet) => Unit]) extends IdParser with EntityToTupleMapper {
 
   private val vertexLookup: Map[String, (Set[String], Set[GetVertices])] = for ((labels, operators) <- vertexConverters;
                                                                                         label <- labels)

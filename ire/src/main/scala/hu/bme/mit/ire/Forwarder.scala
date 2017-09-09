@@ -13,18 +13,18 @@ trait ForkingForwarder extends Forwarder {
 
   def forward(cs: DataMessage) = {
     cs match {
-      case cs: ChangeSet => {
+      case cs: IncrementalChangeSet => {
         cs.positive.groupBy(
           node => Math.abs(forwardHashFunction(node)) % children.size).foreach(
-          kv => if (kv._2.nonEmpty) children(kv._1)(ChangeSet(positive = kv._2)))
+          kv => if (kv._2.nonEmpty) children(kv._1)(IncrementalChangeSet(positive = kv._2)))
         cs.negative.groupBy(
           node => Math.abs(forwardHashFunction(node)) % children.size).foreach(
-          kv => if (kv._2.nonEmpty) children(kv._1)(ChangeSet(negative = kv._2)))
+          kv => if (kv._2.nonEmpty) children(kv._1)(IncrementalChangeSet(negative = kv._2)))
       }
       case sl: BatchChangeSet => {
         sl.changeSet.groupBy(
           node => Math.abs(forwardHashFunction(node)) % children.size).foreach(
-          kv => if (kv._2.nonEmpty) children(kv._1)(ChangeSet(positive = kv._2)))
+          kv => if (kv._2.nonEmpty) children(kv._1)(IncrementalChangeSet(positive = kv._2)))
       }
     }
   }

@@ -8,12 +8,13 @@ import hu.bme.mit.ire.messages.{DataMessage, ReteMessage}
 abstract class ProjectionImpl(val mask: Vector[Tuple => Any]) extends UnaryNode[DataMessage] {
   override def onSizeRequest() = 0
 
-  override def onChangeSet(changeSet: DataMessage) = {
-    val changeSets: Seq[Iterable[Tuple]] = changeSet.changeSets.map(_.map(
-      t => mask.map(f => f(t))
-    ))
-
-    forward(changeSet.createNew(changeSets))
+  override def onChangeSet(dm: DataMessage) = {
+    val bags: Seq[Iterable[Tuple]] = dm.bags.map(
+      bag => bag.map(
+        tuple => mask.map(f => f(tuple))
+      )
+    )
+    forward(dm.createNew(bags))
   }
 
 }

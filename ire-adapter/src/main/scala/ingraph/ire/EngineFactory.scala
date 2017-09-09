@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.JoinNode
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
@@ -211,12 +211,12 @@ object EngineFactory {
           inputs += (nick -> expr.child)
         case op: Dual =>
           inputs += ("" -> expr.child)
-          expr.child(ChangeSet(positive=Vector(Vector())))
+          expr.child(IncrementalChangeSet(positive=Vector(Vector())))
 
       }
       }
 
-      override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap
+      override val inputLookup: Map[String, (IncrementalChangeSet) => Unit] = inputs.toMap
       override val terminator: Terminator = Terminator(inputs.values, production)
     }
 }

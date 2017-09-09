@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.nodes.unary.aggregation.{AggregationNode, StatefulMax}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -18,7 +18,7 @@ class MaxNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
 
   "Max" must {
     "do simple max 0" in {
-      val changeSet = ChangeSet(
+      val changeSet = IncrementalChangeSet(
         positive = tupleBag(tuple("a", 1), tuple("a", 2), tuple("a", 1.1), tuple("b", 3))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -26,14 +26,14 @@ class MaxNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSe
         echoActor ! _, functionMask(0), () => Vector(new StatefulMax(1)), functionMask(0, 1))))
 
       max ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple("a", 2), tuple("b", 3))
       ))
 
-      max ! ChangeSet(
+      max ! IncrementalChangeSet(
         negative = tupleBag(tuple("a", 2))
       )
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple("a", 1.1)),
         negative = tupleBag(tuple("a", 2))
       ))

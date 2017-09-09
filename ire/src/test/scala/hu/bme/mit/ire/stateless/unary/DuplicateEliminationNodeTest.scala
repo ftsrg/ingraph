@@ -2,7 +2,7 @@ package hu.bme.mit.ire.stateless.unary
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.{BatchChangeSet, ChangeSet}
+import hu.bme.mit.ire.messages.{BatchChangeSet, IncrementalChangeSet}
 import hu.bme.mit.ire.util.TestUtil.{tuple, tupleBag}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 

@@ -7,7 +7,7 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Mask
 import hu.bme.mit.ire.datatypes.Path
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.messages.ReteMessage
 import hu.bme.mit.ire.util.SizeCounter
 import hu.bme.mit.ire.util.BufferMultimap
@@ -37,20 +37,20 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
   override def onSizeRequest(): Long = SizeCounter.count(reachableVertices.values, reachableFrom.values)
 
-  override def onPrimary(changeSet: ChangeSet): Unit = {
+  override def onPrimary(changeSet: IncrementalChangeSet): Unit = {
     for (t <- changeSet.positive)
       sourceLookup.addBinding(t(sourceVertexIndex).asInstanceOf[Number].longValue, t)
     for (t <- changeSet.negative)
       sourceLookup.removeBinding(t(sourceVertexIndex).asInstanceOf[Number].longValue, t)
 
-    forward(ChangeSet(
+    forward(IncrementalChangeSet(
       positive = changeSet.positive.flatMap(pathsFromSourceVertex),
       negative = changeSet.negative.flatMap(pathsFromSourceVertex)
     ))
   }
 
-  override def onSecondary(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(
+  override def onSecondary(changeSet: IncrementalChangeSet): Unit = {
+    forward(IncrementalChangeSet(
       positive = changeSet.positive.flatMap(newPathsWithEdge),
       negative = changeSet.negative.flatMap(removePathsWithEdge)
     ))

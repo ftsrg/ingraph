@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.TestUtil._
 
@@ -20,16 +20,16 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
   override def onSizeRequest(): Long = 0
 
-  override def onPrimary(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(
+  override def onPrimary(changeSet: IncrementalChangeSet): Unit = {
+    forward(IncrementalChangeSet(
       positive = changeSet.positive.flatMap(calculatePrimaryPositive),
       negative = changeSet.negative.flatMap(calculatePrimaryNegative)
     ))
   }
 
-  override def onSecondary(changeSet: ChangeSet): Unit = {
-    val positiveUpdatesChangeSet = changeSet.positive.map(calculateSecondaryPositive).reduceOption(combineChangeSets).getOrElse(ChangeSet())
-    val negativeUpdatesChangeSet = changeSet.negative.map(calculateSecondaryNegative).reduceOption(combineChangeSets).getOrElse(ChangeSet())
+  override def onSecondary(changeSet: IncrementalChangeSet): Unit = {
+    val positiveUpdatesChangeSet = changeSet.positive.map(calculateSecondaryPositive).reduceOption(combineChangeSets).getOrElse(IncrementalChangeSet())
+    val negativeUpdatesChangeSet = changeSet.negative.map(calculateSecondaryNegative).reduceOption(combineChangeSets).getOrElse(IncrementalChangeSet())
 
     forward(combineChangeSets(positiveUpdatesChangeSet, negativeUpdatesChangeSet))
   }
@@ -61,7 +61,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
     joinTuples(Vector(inputTuple), secondaryIndexer, primaryMask, Primary)
   }
 
-  private def calculateSecondaryPositive(inputTuple: Tuple): ChangeSet = {
+  private def calculateSecondaryPositive(inputTuple: Tuple): IncrementalChangeSet = {
     val joinedPositiveTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
 
     var negativeTuples: Vector[Tuple] = Vector()
@@ -73,10 +73,10 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     secondaryIndexer.addBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = joinedPositiveTuples, negative = negativeTuples)
+    IncrementalChangeSet(positive = joinedPositiveTuples, negative = negativeTuples)
   }
 
-  private def calculateSecondaryNegative(inputTuple: Tuple): ChangeSet = {
+  private def calculateSecondaryNegative(inputTuple: Tuple): IncrementalChangeSet = {
     val joinedNegativeTuples: Iterable[Tuple] = joinTuples(Vector(inputTuple), primaryIndexer, secondaryMask, Secondary)
     var positiveTuples: Vector[Tuple] = Vector()
 
@@ -89,7 +89,7 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
 
     secondaryIndexer.removeBinding(joinAttributesTuple, inputTuple)
 
-    ChangeSet(positive = positiveTuples, negative = joinedNegativeTuples)
+    IncrementalChangeSet(positive = positiveTuples, negative = joinedNegativeTuples)
   }
 
   private def combineNullTuple(inputTuple: Tuple): Tuple = {
@@ -100,8 +100,8 @@ class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
     inputTuple ++ nullPart
   }
 
-  private def combineChangeSets(cs1: ChangeSet, cs2: ChangeSet): ChangeSet = {
-    ChangeSet(positive = cs1.positive ++ cs2.positive, negative = cs1.negative ++ cs2.negative)
+  private def combineChangeSets(cs1: IncrementalChangeSet, cs2: IncrementalChangeSet): IncrementalChangeSet = {
+    IncrementalChangeSet(positive = cs1.positive ++ cs2.positive, negative = cs1.negative ++ cs2.negative)
   }
 
 }

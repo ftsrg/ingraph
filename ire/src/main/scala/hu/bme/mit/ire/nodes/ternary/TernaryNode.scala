@@ -5,7 +5,7 @@ import hu.bme.mit.ire.Forwarder
 import akka.actor.Stash
 import hu.bme.mit.ire.TerminatorHandler
 import hu.bme.mit.ire.messages.Pause
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.messages.ReteMessage
 import hu.bme.mit.ire.messages.Primary
 import hu.bme.mit.ire.messages.Resume
@@ -20,12 +20,12 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
   var secondaryPause: Option[Pause] = None
   var ternaryPause: Option[Pause] = None
 
-  def onPrimary(changeSet: ChangeSet)
+  def onPrimary(changeSet: IncrementalChangeSet)
 
-  def onSecondary(changeSet: ChangeSet)
+  def onSecondary(changeSet: IncrementalChangeSet)
 
-  def onTernary(changeSet: ChangeSet)
-  
+  def onTernary(changeSet: IncrementalChangeSet)
+
   override def receive: Actor.Receive = {
     case Primary(reteMessage: ReteMessage) => {
       primaryPause match {
@@ -48,12 +48,12 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
         }
         case None => reteMessage match {
           case pause: Pause => primaryPause = Some(pause)
-          case cs: ChangeSet => onPrimary(cs); // printForwarding(cs)
+          case cs: IncrementalChangeSet => onPrimary(cs); // printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
       }
     }
-    
+
     case Secondary(reteMessage: ReteMessage) => {
       secondaryPause match {
         case Some(pause) => {
@@ -75,13 +75,13 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
         }
         case None => reteMessage match {
           case pause: Pause => secondaryPause = Some(pause)
-          case cs: ChangeSet => onSecondary(cs); //printForwarding(cs)
+          case cs: IncrementalChangeSet => onSecondary(cs); //printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
 
       }
     }
-    
+
     case Ternary(reteMessage: ReteMessage) => {
       ternaryPause match {
         case Some(pause) => {
@@ -103,15 +103,15 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
         }
         case None => reteMessage match {
           case pause: Pause => ternaryPause = Some(pause)
-          case cs: ChangeSet => onTernary(cs); //printForwarding(cs)
+          case cs: IncrementalChangeSet => onTernary(cs); //printForwarding(cs)
           case t: TerminatorMessage => handleTerminator(t)
         }
 
       }
     }
-    
+
     case _: SizeRequest => sender() ! onSizeRequest()
-    
+
     case other: ReteMessage =>
       throw new UnsupportedOperationException(
         s"$name received raw message, needs to be wrapped as Primary or Secondary")
