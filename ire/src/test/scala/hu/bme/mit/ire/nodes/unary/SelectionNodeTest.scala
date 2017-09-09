@@ -32,32 +32,4 @@ class SelectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Impl
       expectMsg(ChangeSet(positive = tupleBag(tuple(0, "something"))))
     }
   }
-  "EqualityChecker" must {
-    "check equality properly" in {
-      val changeSet = ChangeSet(
-        positive = tupleBag(tuple(0, 2, 1), tuple(0, 0, 0), tuple(0, 2, 0))
-      )
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      val equalityChecker = system.actorOf(Props(new EqualityNode(echoActor ! _, 0, mask(1, 2))))
-
-      equalityChecker ! changeSet
-      expectMsg(ChangeSet(
-        positive = tupleBag(tuple(0, 0, 0))
-      ))
-    }
-  }
-  "InequalityChecker" must {
-    "check inequality properly" in {
-      val changeSet = ChangeSet(
-        positive = tupleBag(tuple(0, 2, 1), tuple(0, 3, 0), tuple(0, 0, 0))
-      )
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      val inequalityChecker = system.actorOf(Props(new InequalityNode(echoActor ! _, 0, mask(1, 2))))
-
-      inequalityChecker ! changeSet
-      expectMsg(ChangeSet(
-        positive = tupleBag(tuple(0, 2, 1))
-      ))
-    }
-  }
 }
