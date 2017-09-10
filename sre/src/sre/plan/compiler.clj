@@ -92,7 +92,7 @@
     ; this check is not required, it serves as an optimization
     ; for exiting as early as possible in this highly likely situation
     (if-not (reduce #(and %1 (subset?
-                               (keys (op (nth %2 0)))
+                               (keys (get op (nth %2 0)))
                                (into #{} (keys (lookup-by-type constr-lkp (nth %2 1)))))) conditions)
       ()
       (let [sorted-constr (apply union (map #(build-match-list op

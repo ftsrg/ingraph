@@ -3,8 +3,7 @@
     available in ingraph"
     (:require [sre.plan.dsl.constraint :refer [defconstraint]]
       [sre.plan.dsl.op :refer [defop]]
-      [sre.plan.dsl.config :refer :all])
-    (:gen-class :name ingraph.sre.Plan :main false))
+      [sre.plan.dsl.config :refer :all]))
 
 (defconfig Ingraph)
 

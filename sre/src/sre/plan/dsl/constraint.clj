@@ -63,18 +63,18 @@
   [name vars & rest]
   (let [factory-name (str *ns* "." name "ConstraintBinding")
         factory-prefix (str name "ConstraintBinding-")]
-    `(let [type# (def ~name {:name    #'~name
+    `(let [type# (def ~name {:type    #'~name
                              :vars    [~@(map keyword vars)]
                              :arity   ~(count vars)
                              :implies #{~@(let [[implies-kw & implications] rest]
                                             (case implies-kw
                                               nil `()
                                               :implies (apply iter-implications implications)))}})]
-       (defn ~(symbol (str factory-prefix "getName")) [] type#)
+       (defn ~(symbol (str factory-prefix "getType")) [] type#)
        (defn ~(symbol (str factory-prefix "create")) [~@vars] (->ConstraintBinding type# [~@vars]))
        (gen-class :name ~factory-name
                   :prefix ~factory-prefix
-                  :methods [^:static [~'getName [] clojure.lang.Var]
+                  :methods [^:static [~'getType [] clojure.lang.Var]
                             ^:static [~'create [~@(repeat (count vars) Object)] ConstraintBinding]])
        ~(if (contains? (ns-interns *ns*) 'constraints)
           `(def ~'constraints (conj ~'constraints ~name)))

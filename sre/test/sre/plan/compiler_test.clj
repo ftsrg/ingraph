@@ -207,7 +207,7 @@
       (let [ops (into () c2/ops)
             constr-lkp (constraint-lookup (implies* (->ConstraintBinding #'c2/DirectedEdge [1 2 3])))
             plan (csp ops constr-lkp)]
-        (is (= (-> @plan :ops first :name) #'c2/GetEdges))))
+        (is (= (-> @plan :ops first :type) #'c2/GetEdges))))
     (testing "simple plan can be satisfied with a GetEdgesByType operation"
       (let [ops (into () c2/ops)
             all (union* (->ConstraintBinding #'c2/DirectedEdge [1 2 3])
@@ -216,4 +216,4 @@
             free (difference all bound)
             constr-lkp (constraint-lookup free bound)
             plan (csp ops constr-lkp)]
-        (is (= (-> @plan :ops first :name) #'c2/GetEdgesByType))))))
+        (is (= (-> @plan :ops first :type) #'c2/GetEdgesByType))))))

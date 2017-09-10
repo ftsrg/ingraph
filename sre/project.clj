@@ -10,5 +10,6 @@
              :dev {
                    :dependencies [[org.clojure/test.check "0.9.0"]]
                    :plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]
-                             [jonase/eastwood "0.2.4"]]}}
+                             [jonase/eastwood "0.2.4"]
+                             [org.clojure/tools.trace "0.7.9"]]}}
   :aot :all)

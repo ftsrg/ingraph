@@ -30,7 +30,7 @@
        :requires Vertex [target]
        :satisfies DirectedEdge [source edge target])
 
-(defmulti weight (fn [op] (:name op)))
+(defmulti weight (fn [op] (:type op)))
 
 (defmethod weight #'GetVertices [op] 5)
 (defmethod weight #'GetEdges [op] 5)

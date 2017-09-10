@@ -2,7 +2,7 @@
   (:require [sre.plan.dsl.estimation :refer :all]
             [ingraph.sre.plan :refer :all]))
 
-(defmulti weight (fn [op & rest] (:name op)))
+(defmulti weight (fn [op & rest] (:type op)))
 
 (defrecord CostCalculator [^long c ^long p]
            Cost
