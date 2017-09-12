@@ -6,10 +6,10 @@ set -e
 
 pushd .
 
-./gradlew report --stacktrace --quiet
-cd opencypher-report
-make texfot
-cd ..
+#./gradlew report --stacktrace --quiet
+#cd opencypher-report
+#make texfot
+#cd ..
 scripts/deploy.sh
 
 popd

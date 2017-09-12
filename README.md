@@ -32,27 +32,7 @@ ingraph is defined as a Gradle project.
   * Tick **Auto import**.
   * Untick **Create separate module per source set**.
   * Use default Gradle wrapper as your Gradle installation.
-* In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
-
-### Running the tests
-
-Run the tests in `LdbcSnbBiDriverTest`. They will fail, so click the `LdbcSnbBiDriverTest` caption next to the "green play button", choose **Edit configuration...** and set the **Working directory** to `[...]/ingraph/ingraph-engine/ingraph-engine-driver`.
-
-## Debug mode
-
-You can define environment variables to enable debug mode, for all ingraph projects or only for specific modules:
-
-* `DEBUG=1` or `DEBUG_INGRAPH=1` enables debug mode for all modules
-* `DEBUG_<MODULENAME>=1` (e.g. `DEBUG_INGRAPH_CYPHER2SEARCH=1`) enables debug mode for that particular module
-
-Currently, these modules have support for debugging:
-
-* `ingraph-cypher2search`
-
-## Pages
-
-* [Troubleshooting](troubleshooting.md)
 
 ## Third-party dependencies
 
