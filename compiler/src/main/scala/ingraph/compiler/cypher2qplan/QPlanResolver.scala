@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan
 import ingraph.model.{expr, qplan}
 import ingraph.model.misc
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
-import org.apache.spark.sql.catalyst.expressions.Expression
+import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
@@ -21,6 +21,12 @@ object QPlanResolver {
     */
   val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.Projection(projectList, child) => {
+      println(projectList)
+      val p = qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+      println(p.projectList)
+      p
+    }
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {

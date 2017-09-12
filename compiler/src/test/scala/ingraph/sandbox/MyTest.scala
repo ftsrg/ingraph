@@ -1,9 +1,12 @@
 package ingraph.sandbox
 
+import ingraph.compiler.IPlanParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
 import ingraph.model._
+import ingraph.model.expr.NamedVertexAttribute
 import ingraph.model.iplan.INode
-import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
+import ingraph.model.qplan.{GetVertices, Projection, Selection}
+import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class MyTest extends FunSuite {
@@ -48,7 +51,8 @@ class MyTest extends FunSuite {
 
     val qp = gv
     val ip = QPlanToIPlan.transform(qp)
-    println(ip)
+
+    // TODO assert
   }
 
 //  test("qplan to iplan #2") {
@@ -117,5 +121,10 @@ class MyTest extends FunSuite {
 //    }
 //
 //  }
+
+  test("resolving should work") {
+    val plan = IPlanParser.parse("MATCH (v) RETURN v.a")
+    println(plan)
+  }
 
 }
