@@ -81,3 +81,14 @@ case class ThetaLeftOuterJoin(
           right: INode,
           condition: Expression) extends BinaryINode with EquiJoinLike {
 }
+
+// DML operators
+abstract class CudOperator(child: INode) extends UnaryINode {}
+
+case class Create(attributes: Seq[Attribute], child: INode) extends CudOperator(child) {}
+
+case class Delete(attributes: Seq[Attribute], detach: Boolean, child: INode) extends CudOperator(child) {}
+
+//case class Merge()
+
+//case class Set()

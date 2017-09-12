@@ -126,11 +126,4 @@ class SchemaInferencerTest extends FunSuite {
     }
   }
 
-  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
-    test(queryFile.getName.dropRight(".cypher".length)) {
-      val query = FileUtils.readFileToString(queryFile)
-      val ep = IPlanParser.parse(query)
-    }
-  }
-
 }
