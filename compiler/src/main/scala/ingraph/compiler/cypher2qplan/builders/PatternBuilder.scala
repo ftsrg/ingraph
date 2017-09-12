@@ -62,7 +62,15 @@ object PatternBuilder {
 
     for(el <- chain) {
       val v = expr.VertexAttribute(el.getNodePattern.getVariable.getName, BuilderUtil.parseToVertexLabelSet(el.getNodePattern.getNodeLabels))
-      val e = expr.EdgeAttribute(el.getRelationshipPattern.getDetail.getVariable.getName, BuilderUtil.parseToEdgeLabelSet(el.getRelationshipPattern.getDetail.getTypes))
+
+      val ev = el.getRelationshipPattern.getDetail.getVariable
+      val en = if (ev == null) {
+        "tea"
+      } else {
+        ev.getName
+      }
+
+      val e = expr.EdgeAttribute(en, BuilderUtil.parseToEdgeLabelSet(el.getRelationshipPattern.getDetail.getTypes))
       lastNode = qplan.Expand(src = lastAttr,
         trg = v,
         edge = e,
