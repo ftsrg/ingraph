@@ -19,6 +19,23 @@ class TrainBenchmarkCypherTest extends FunSuite {
 
   }
 
+  test("Random double edge variable in the same MATCH") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH
+        |  (a)-[e]->(b),
+        |  (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
+  test("Random double edge variable in separate MATCHes") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH (a)-[e]->(b)
+        |MATCH (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
 //  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
 //    test(queryFile.getName.dropRight(".cypher".length)) {
 //      val query = FileUtils.readFileToString(queryFile)
