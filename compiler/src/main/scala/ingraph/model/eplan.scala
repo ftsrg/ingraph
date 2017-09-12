@@ -123,6 +123,6 @@ object SchemaToMap {
   }
 
   def schemaToMapNames(n: ENode): Map[String, Int] = {
-    n.internalSchema.zipWithIndex.map(f => f._1.toString() -> f._2).toMap
+    n.internalSchema.zipWithIndex.map(f => f._1.name -> f._2).toMap
   }
 }
