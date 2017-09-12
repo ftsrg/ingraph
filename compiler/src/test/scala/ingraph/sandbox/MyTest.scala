@@ -43,7 +43,7 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to iplan #0") {
-    val v = expr.VertexAttribute("v")
+    val v = expr.NamedVertexAttribute("v")
     val gv = qplan.GetVertices(v)
 
     val qp = gv
@@ -64,7 +64,7 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to iplan #3") {
-    val v = expr.VertexAttribute("v")
+    val v = expr.NamedVertexAttribute("v")
     val gv = qplan.GetVertices(v)
     val de = qplan.DuplicateElimination(gv)
 
