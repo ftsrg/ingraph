@@ -13,7 +13,6 @@ class ExpressionParserTest extends WordSpec {
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
     val lookup = getSchema(selection.child)
-    println(lookup)
     ExpressionParser.parse(selection.inode.condition, lookup)
   }
 

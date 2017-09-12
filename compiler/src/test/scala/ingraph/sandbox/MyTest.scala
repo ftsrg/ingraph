@@ -123,8 +123,11 @@ class MyTest extends FunSuite {
 //  }
 
   test("resolving should work") {
-    val plan = IPlanParser.parse("MATCH (v) RETURN v.a")
-    println(plan)
+    IPlanParser.parse("MATCH (v) RETURN v.a")
+  }
+
+  test("handling untyped and unnamed edges should work") {
+    IPlanParser.parse("MATCH (v)--(w) RETURN v.a")
   }
 
 }

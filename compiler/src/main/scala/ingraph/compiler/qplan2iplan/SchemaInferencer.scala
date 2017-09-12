@@ -19,9 +19,7 @@ object SchemaInferencer {
 
       // unary
       case o: iplan.Projection =>
-        println(o.projectList)
         val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
-        println(newExtra)
         eplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
       case o: iplan.Selection =>
         val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))

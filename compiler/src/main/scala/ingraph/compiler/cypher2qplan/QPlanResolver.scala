@@ -22,9 +22,7 @@ object QPlanResolver {
   val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Projection(projectList, child) => {
-      println(projectList)
       val p = qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
-      println(p.projectList)
       p
     }
   }
