@@ -1,24 +1,28 @@
 package ingraph.ire
 
+import java.io.File
+
+import org.apache.commons.io.FileUtils
+import org.apache.hadoop.io.IOUtils
 import org.scalatest.FunSuite
 
 import scala.io.Source
 
 class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
-  def queryPath(query: String): String = s"queries/trainbenchmark-simple/$query.cypher"
+  def queryFile(query: String): File = new File(s"queries/trainbenchmark-simple/$query.cypher")
 
   case class TestCase(name: String, size: Int, expectedResultSize: Int)
 
   Vector(
-    TestCase("PosLength", 1, 95)
+    TestCase("PosLength", 1, 95),
 //    TestCase("RouteSensor", 1, 18),
 //    TestCase("SemaphoreNeighbor", 1, 3),
 //    TestCase("SwitchMonitored", 1, 0),
 //    TestCase("SwitchSet", 1, 5),
 //    TestCase("ConnectedSegments", 1, 8),
 //    //
-//    TestCase("PosLength", 2, 208),
+    TestCase("PosLength", 2, 208)
 //    TestCase("RouteSensor", 2, 33),
 //    TestCase("SemaphoreNeighbor", 2, 6),
 //    TestCase("SwitchMonitored", 2, 2),
@@ -26,8 +30,8 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 //    TestCase("ConnectedSegments", 2, 16)
   ).foreach(
     t => test(s"${t.name}-size-${t.size}") {
-//      val query = Source.fromFile(queryPath(t.name)).getLines().mkString(" ")
-//      assert(TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize)
+      val query = FileUtils.readFileToString(queryFile(t.name))
+      assert(TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize)
     }
   )
 
