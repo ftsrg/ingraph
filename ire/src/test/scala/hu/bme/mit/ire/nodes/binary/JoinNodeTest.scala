@@ -119,26 +119,26 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(positive = tupleBag(tuple(2, 4, 5), tuple(3, 4, 5)))): _*)
     }
 
-//    "do parallel joins" in {
-//      val primaryMask = mask(0)
-//      val secondaryMask = mask(0)
-//      val echoActor = system.actorOf(TestActors.echoActorProps)
-//      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
-//      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
-//      val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
-//      val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, 2, 2, primaryMask, secondaryMask,
-//        hashFunction = (n: Tuple) => n(0).hashCode())))
-//      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 2))))
-//      forkingJoiner ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
-//
-//      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(0, 2))))
-//      forkingJoiner ! Primary(ChangeSet(positive = tupleBag(tuple(1, 2))))
-//
-//      joinerB ! Secondary(ChangeSet(positive = tupleBag(tuple(1, 3))))
-//      expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2, 3, 3))))
-//      joinerA ! Secondary(ChangeSet(positive = tupleBag(tuple(0, 3))))
-//      expectMsg(ChangeSet(positive = tupleBag(tuple(0, 2, 2, 3))))
-//    }
+    "do parallel joins" in {
+      val primaryMask = mask(0)
+      val secondaryMask = mask(0)
+      val echoActor = system.actorOf(TestActors.echoActorProps)
+      val joinerA = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val joinerB = system.actorOf(Props(new JoinNode(echoActor ! _, 3, 2, primaryMask, secondaryMask)))
+      val forward: Vector[(ReteMessage) => Unit] = Vector(joinerA ! Primary(_), joinerB ! Primary(_))
+      val forkingJoiner = system.actorOf(Props(new ParallelJoinNode(forward, 2, 2, primaryMask, secondaryMask,
+        hashFunction = (n: Tuple) => n(0).hashCode())))
+      forkingJoiner ! Secondary(IncrementalChangeSet(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Secondary(IncrementalChangeSet(positive = tupleBag(tuple(1, 3))))
+
+      forkingJoiner ! Primary(IncrementalChangeSet(positive = tupleBag(tuple(0, 2))))
+      forkingJoiner ! Primary(IncrementalChangeSet(positive = tupleBag(tuple(1, 2))))
+
+      joinerB ! Secondary(IncrementalChangeSet(positive = tupleBag(tuple(1, 3))))
+      expectMsg(IncrementalChangeSet(positive = tupleBag(tuple(1, 2, 3, 3))))
+      joinerA ! Secondary(IncrementalChangeSet(positive = tupleBag(tuple(0, 3))))
+      expectMsg(IncrementalChangeSet(positive = tupleBag(tuple(0, 2, 2, 3))))
+    }
 
     "have bag behavior" in {
       val primaryTupleWidth = 2
