@@ -10,8 +10,6 @@ import scala.io.Source
 
 class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
-  def queryFile(query: String): File = new File(s"queries/trainbenchmark-simple/$query.cypher")
-
   case class TestCase(name: String, size: Int, expectedResultSize: Int)
 
   Vector(
@@ -30,14 +28,14 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 //    TestCase("ConnectedSegments", 2, 16)
   ).foreach(
     t => test(s"${t.name}-size-${t.size}") {
-      val query = FileUtils.readFileToString(queryFile(t.name))
-      assert(TrainbenchmarkUtils.readModelAndGetResults(t.name, query, t.size).size == t.expectedResultSize)
+      val querySpec = TrainbenchmarkUtils.readQueryFromReources(t.name)
+      assert(TrainbenchmarkUtils.readModelAndGetResults(querySpec, t.size).size == t.expectedResultSize)
     }
   )
 
   ignore("SortAndTopNode") {
     val query = "MATCH (n: Segment) RETURN n ORDER BY n DESC SKIP 5 LIMIT 10"
-    val results = TrainbenchmarkUtils.readModelAndGetResults("SortAndTopTest", query, 1)
+    val results = TrainbenchmarkUtils.readModelAndGetResults(query, 1)
     val expected = ((1400 to 1410).toSet - 1405).toList.sorted.reverse.map(n => Vector(n.toLong))
     assert(results == expected)
   }

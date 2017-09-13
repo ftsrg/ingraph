@@ -32,6 +32,8 @@ subprojects {
     from sourceSets.main.allScala
   }
 
+  sourceSets.test.resources.srcDirs = ["$rootDir/queries", "$rootDir/graphs"]
+
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
 
