@@ -45,11 +45,6 @@ subprojects {
     maven { url 'https://szdavid92.github.io/ingraph-deps' }
   }
 
-  // disable warnings for Scala projects
-  tasks.withType(ScalaCompile) {
-    scalaCompileOptions.additionalParameters = ["-nowarn"]
-  }
-
   dependencies {
     compile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
     testCompile group: 'org.scalatest', name: "scalatest_$scalaShortVersion", version: scalaTestVersion
