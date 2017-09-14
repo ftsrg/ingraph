@@ -2,7 +2,7 @@
 
 * [Specification](http://wiki.ldbcouncil.org/display/TUC/Business+Intelligence+Workload)
 
-## Paths and legacy Cypher features used by the queries
+## Features used by the queries
 
 | query                 | [01](bi-1.cypher) | [02](bi-2.cypher) | [03](bi-3.cypher) | [04](bi-4.cypher) | [05](bi-5.cypher) | [06](bi-6.cypher) | [07](bi-7.cypher) | [08](bi-8.cypher) | [09](bi-9.cypher) | [10](bi-10.cypher) |
 | --------------------- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
