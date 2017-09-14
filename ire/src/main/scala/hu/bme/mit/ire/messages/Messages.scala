@@ -15,7 +15,7 @@ trait DataMessage extends ReteMessage {
   def nonEmpty(): Boolean = bags.filter(_.nonEmpty).nonEmpty
 }
 
-case class BatchChangeSet(changeSet: TupleBag) extends DataMessage {
+case class BatchChangeSet(changeSet: TupleBag = Vector()) extends DataMessage {
   override def bags: Seq[TupleBag] = Seq(changeSet)
   override def createNew(bags: Seq[TupleBag]): BatchChangeSet = BatchChangeSet(bags(0))
 }

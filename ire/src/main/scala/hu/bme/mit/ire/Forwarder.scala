@@ -40,6 +40,13 @@ trait SingleForwarder extends Forwarder {
   def forward(terminator: TerminatorMessage) = next(terminator)
 }
 
+trait SingleEmptyForwarder extends Forwarder {
+  val next: ReteMessage => Unit
+
+  def forward(cs: DataMessage) = next(cs)
+  def forward(terminator: TerminatorMessage) = next(terminator)
+}
+
 trait Forwarder {
   val name: String
 
