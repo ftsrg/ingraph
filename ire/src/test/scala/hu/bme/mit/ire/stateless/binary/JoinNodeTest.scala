@@ -21,15 +21,9 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
 
   "Join" must {
     "join the values" in {
-      val primaryChangeSet = BatchChangeSet(
-        tupleBag(
-          tuple(15, 16, 17, 18),
-          tuple(4, 5, 6, 7)
-        )
-      )
-      val secondaryChangeSet = BatchChangeSet(
-        tupleBag(tuple(0, 15, 16, 13))
-      )
+      val primaryChangeSet = BatchChangeSet(tupleBag(tuple(15, 16, 17, 18), tuple(4, 5, 6, 7)))
+      val secondaryChangeSet = BatchChangeSet(tupleBag(tuple(0, 15, 16, 13)))
+
       val primaryTupleWidth = 4
       val secondaryTupleWidth = 4
       val primaryMask = mask(0, 1)
@@ -38,13 +32,9 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(primaryChangeSet)
-      expectMsg(BatchChangeSet(
-        tupleBag()
-      ))
+      expectMsg(BatchChangeSet(tupleBag()))
       joiner ! Secondary(secondaryChangeSet)
-      expectMsg(BatchChangeSet(
-        tupleBag(tuple(15, 16, 17, 18, 0, 13))
-      ))
+      expectMsg(BatchChangeSet(tupleBag(tuple(15, 16, 17, 18, 0, 13))))
     }
 
     "do join 1" in {
@@ -55,25 +45,11 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(BatchChangeSet(
-        tupleBag(
-          tuple(5, 6, 7),
-          tuple(10, 11, 7)
-        )
-      ))
+      joiner ! Primary(BatchChangeSet(tupleBag(tuple(5, 6, 7), tuple(10, 11, 7))))
       expectMsg(BatchChangeSet())
 
-      joiner ! Secondary(BatchChangeSet(
-        tupleBag(
-          tuple(7, 8)
-        )
-      ))
-      expectMsg(BatchChangeSet(
-        tupleBag(
-          tuple(5, 6, 7, 8),
-          tuple(10, 11, 7, 8)
-        )
-      ))
+      joiner ! Secondary(BatchChangeSet(tupleBag(tuple(7, 8))))
+      expectMsg(BatchChangeSet(tupleBag(tuple(5, 6, 7, 8), tuple(10, 11, 7, 8))))
     }
 
     "do join 2" in {
@@ -84,20 +60,11 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(BatchChangeSet(
-        tupleBag(
-          tuple(1, 5),
-          tuple(2, 6)
-        )
-      ))
+      joiner ! Primary(BatchChangeSet(tupleBag(tuple(1, 5), tuple(2, 6))))
       expectMsg(BatchChangeSet())
 
-      joiner ! Secondary(BatchChangeSet(
-        tupleBag(tuple(5, 10))
-      ))
-      expectMsg(BatchChangeSet(
-        tupleBag(tuple(1, 5, 10))
-      ))
+      joiner ! Secondary(BatchChangeSet(tupleBag(tuple(5, 10))))
+      expectMsg(BatchChangeSet(tupleBag(tuple(1, 5, 10))))
     }
 
     "have bag behavior" in {
@@ -108,27 +75,11 @@ class JoinNodeTest(_system: ActorSystem) extends TestKit(_system) with ImplicitS
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new JoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(BatchChangeSet(
-        tupleBag(
-          tuple(2, 4),
-          tuple(2, 4),
-          tuple(3, 4)
-        )
-      ))
+      joiner ! Primary(BatchChangeSet(tupleBag(tuple(2, 4), tuple(2, 4), tuple(3, 4))))
       expectMsg(BatchChangeSet())
 
-      joiner ! Secondary(BatchChangeSet(
-        tupleBag(
-          tuple(4, 5)
-        )
-      ))
-      expectMsg(BatchChangeSet(
-        tupleBag(
-          tuple(2, 4, 5),
-          tuple(2, 4, 5),
-          tuple(3, 4, 5)
-        )
-      ))
+      joiner ! Secondary(BatchChangeSet(tupleBag(tuple(4, 5))))
+      expectMsg(BatchChangeSet(tupleBag(tuple(2, 4, 5), tuple(2, 4, 5), tuple(3, 4, 5))))
     }
   }
 }
