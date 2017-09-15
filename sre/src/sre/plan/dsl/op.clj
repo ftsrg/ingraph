@@ -17,7 +17,7 @@
         (constraint/constraint-bindings-to-map x)))
 
 (defn- reqs-sats [args]
-  (let [[[req-kw & reqs] [sat-kw & sats]] (split-with (fn [x] (not= `~x :satisfies)) args)]
+  (let [[reqs [-> & sats]] (split-with (fn [x] (not= x '->)) args)]
     [reqs sats]))
 
 (defn- compile-args [args]
@@ -60,16 +60,14 @@
   "Creates an operation.
 
   Usage:
-    (op MyOp [& vars] :requires constraint-argument-pairs* :satisfies constraint-argument-pairs*)
+    (op MyOp [& vars] constraint-argument-pairs* -> constraint-argument-pairs*)
 
   Examples:
     (op ExtendOut [source edge target]
-      :requires (Vertex [source])
-      :satisfies DirectedEdge [source edge target])
+      Vertex [source] -> DirectedEdge [source edge target])
 
     (op CreatePowerPuffGirls [sugar spice everything
-      :requires Sugar [sugar] Spice [spice] Nice [everything]
-      :satisfies PowerPuffGirls [sugar spice everything])
+      Sugar [sugar] Spice [spice] Nice [everything] -> PowerPuffGirls [sugar spice everything])
   "
   [type vars & rest]
   `(map->Op (merge ~(let [[req-map sat-map] (compile-args rest)]
