@@ -15,7 +15,7 @@ import org.scalatest.FunSuite
 class SchemaInferencerTest extends FunSuite {
 
   test("infer schema #1") {
-    val v = NamedVertexAttribute("v")
+    val v = VertexAttribute("v")
     val gv = qplan.GetVertices(v)
     val de = qplan.DuplicateElimination(gv)
 
@@ -30,7 +30,7 @@ class SchemaInferencerTest extends FunSuite {
   test("infer schema #2") {
     val vls = VertexLabelSet(Set("Person"), NonEmpty)
 
-    val n = NamedVertexAttribute("n", vls)
+    val n = VertexAttribute("n", vls)
     val name = PropertyAttribute("name", n)
     val age = PropertyAttribute("age", n)
 
@@ -57,13 +57,13 @@ class SchemaInferencerTest extends FunSuite {
     val vls = VertexLabelSet(Set("Person"), NonEmpty)
     val el = EdgeLabelSet(Set("KNOWS"), NonEmpty)
 
-    val p1 = NamedVertexAttribute("p1", vls)
+    val p1 = VertexAttribute("p1", vls)
     val name = PropertyAttribute("name", p1)
 
-    val p2 = NamedVertexAttribute("n", vls)
+    val p2 = VertexAttribute("n", vls)
     val age = PropertyAttribute("age", p2)
 
-    val e = NamedEdgeAttribute("e", el)
+    val e = EdgeAttribute("e", el)
 
     val gv = iplan.GetVertices(p1)
     val ge = iplan.GetEdges(p1, p2, e, Out)
@@ -80,7 +80,7 @@ class SchemaInferencerTest extends FunSuite {
   test("infer schema for PosLength") {
     val vls = VertexLabelSet(Set("Segment"), NonEmpty)
 
-    val segment = NamedVertexAttribute("segment", vls)
+    val segment = VertexAttribute("segment", vls)
     val length = PropertyAttribute("length", segment)
 
     val projectList = Seq(segment, length)
