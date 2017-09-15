@@ -10,8 +10,8 @@ object SearchPlanFixtures {
   val ne = Clojure.read("not=")
   val eq = Clojure.read("=")
 
-  def v(o: AnyRef) = Variable.createVar(o)
-  def c(o: AnyRef) = Variable.createConst(o)
+  def v(o: Any) = Variable.createVar(o)
+  def c(o: Any) = Variable.createConst(o)
 
   object p1 {
     import ingraph.sre.{SearchPlanFixtures => f}

@@ -2,7 +2,8 @@
   (:require [sre.execution.dsl :refer :all]
             [ingraph.sre.plan :as plan])
   (:import [ingraph.ire Indexer IngraphVertex IngraphEdge]
-           [java.util Iterator]))
+           [java.util Iterator]
+           (clojure.lang PersistentHashMap)))
 
 ;; This file contains performance-critical code. General good advice: look out for reflection warnings
 ;; in the tests, add type hints when they occur.
@@ -15,7 +16,8 @@
 (deftask GetVertices
          #'plan/GetVertices
          (let [[v] (-> this :vars)
-               ^IngraphEnvironment env env
+               ^IngraphEnvironment env (:env state)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^Indexer indexer (.indexer env)
                ^Iterator iterator (.verticesJava indexer)]
            (->> (iterator-seq iterator)
@@ -25,7 +27,8 @@
 (deftask GetVerticesByLabels
          #'plan/GetVerticesByLabels
          (let [[v l] (-> this :vars)
-               ^IngraphEnvironment env env
+               ^IngraphEnvironment env (:env state)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^Indexer indexer (.indexer env)
                ^String label (var-lkp l)
                ^Iterator iterator (.verticesByLabelJava indexer label)]
@@ -36,6 +39,7 @@
 (deftask CheckLabels
          #'plan/CheckLabels
          (let [[v l] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^String label (var-lkp l)]
            (if (.contains (.labels vertex) label) (list var-lkp) ())))
@@ -43,7 +47,8 @@
 (deftask GetEdges
          #'plan/GetEdges
          (let [[v e w] (-> this :vars)
-               ^IngraphEnvironment env env
+               ^IngraphEnvironment env (:env state)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^Indexer indexer (.indexer env)
                ^Iterator iterator (.edgesJava indexer)]
            (->> (iterator-seq iterator)
@@ -55,7 +60,8 @@
 (deftask GetEdgesByType
          #'plan/GetEdgesByType
          (let [[v e w t] (-> this :vars)
-               ^IngraphEnvironment env env
+               ^IngraphEnvironment env (:env state)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^Indexer indexer (.indexer env)
                ^String type (var-lkp t)
                ^Iterator iterator (.edgesByTypeJava indexer type)]
@@ -68,6 +74,7 @@
 (deftask CheckType
          #'plan/CheckType
          (let [[e t] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphEdge edge (var-lkp e)
                ^String type (var-lkp t)]
            (if (= (.type edge) type) (list var-lkp) ())))
@@ -77,6 +84,7 @@
 (deftask ExtendOut
          #'plan/ExtendOut
          (let [[v e w] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^Iterator iterator (.edgesOutJavaIterator vertex)]
            (->> (iterator-seq iterator)
@@ -87,6 +95,7 @@
 (deftask ExtendIn
          #'plan/ExtendIn
          (let [[v e w] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^Iterator iterator (.edgesInJavaIterator vertex)]
            (->> (iterator-seq iterator)
@@ -96,6 +105,7 @@
 
 (deftask ExtendOutByType #'plan/ExtendOutByType
          (let [[v e w t] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^String type (var-lkp t)
                ^Iterator iterator (.edgesOutByTypeJavaIterator vertex type)]
@@ -106,6 +116,7 @@
 
 (deftask ExtendInByType #'plan/ExtendInByType
          (let [[v e w t] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^String type (var-lkp t)
                ^Iterator iterator (.edgesInByTypeJavaIterator vertex type)]
@@ -117,6 +128,7 @@
 (deftask Join
          #'plan/Join
          (let [[v e w] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
                ^IngraphVertex target (var-lkp w)
                ; No indexer support so will fall back to filtering :(
@@ -125,13 +137,14 @@
                 ; filter for matches and map to lookup in one function
                 (mapcat #(let [^IngraphEdge edge %
                                ^IngraphVertex src (.sourceVertex edge)]
-                        (if (= src source)
-                          (list (assoc var-lkp e edge v src))
-                          ()))))))
+                           (if (= src source)
+                             (list (assoc var-lkp e edge v src))
+                             ()))))))
 
 (deftask JoinByType
          #'plan/JoinByType
          (let [[v e w t] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
                ^IngraphVertex target (var-lkp w)
                ^String type (var-lkp t)
@@ -149,6 +162,7 @@
 (deftask CheckDirectedEdge
          #'plan/CheckDirectedEdge
          (let [[v e w] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
                ^IngraphVertex target (var-lkp w)
                ^IngraphEdge edge (var-lkp e)]
@@ -160,6 +174,7 @@
 (deftask CheckDirectedEdgeByType
          #'plan/CheckDirectedEdgeByType
          (let [[v e w t] (-> this :vars)
+               ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
                ^IngraphVertex target (var-lkp w)
                ^IngraphEdge edge (var-lkp e)
@@ -172,10 +187,12 @@
 
 (deftask EvalGenUnaryAssertion
          #'plan/EvalGenUnaryAssertion
-         (let [[x ucond] (map var-lkp (-> this :vars))]
+         (let [^PersistentHashMap var-lkp (:var-lkp state)
+               [x ucond] (map var-lkp (-> this :vars))]
            (if (ucond x) (list var-lkp) ())))
 
 (deftask EvalGenBinaryAssertion
          #'plan/EvalGenBinaryAssertion
-         (let [[x y bicond] (map var-lkp (-> this :vars))]
+         (let [^PersistentHashMap var-lkp (:var-lkp state)
+               [x y bicond] (map var-lkp (-> this :vars))]
            (if (bicond x y) (list var-lkp) ())))
