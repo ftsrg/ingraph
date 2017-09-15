@@ -1,11 +1,14 @@
 (ns sre.execution.dsl)
 
-(defprotocol Task
-  (call [this env var-lkp] "Execute the task"))
+(defprotocol ISearch
+  (search [this state] "Given a SearchTreeState, executes the underlying search in
+  the environment and returns a sequence of the SearchTreeStates holding the result
+  of the search."))
+
+(defrecord SearchTreeState [var-lkp env])
 
 (defprotocol Environment
-  (create-task [this op] "Create environment specific task from an operation")
-  (call-task [this task var-lkp] "Execute environment specific task"))
+  (create-task [this op] "Create environment specific task from an operation"))
 
 ;; Beware! Very opinionated and specialized macros below. Whether you use them or not is up to you.
 ;; Clearly composability and extendability is traded for conciseness, please don't hate.
@@ -28,16 +31,13 @@
        ~fields
        ~@opts+specs
        Environment
-       (create-task [~'this ~'op] (~'dispatch-create-task ~'op ~'this))
-       (call-task [~'this ~'task ~'var-lkp] (call ~'task ~'this ~'var-lkp)))
-     ; used for type hint in deftask
-     (def ~'env ~name)))
+       (create-task [~'this ~'op] (~'dispatch-create-task ~'op ~'this)))))
 
 (defmacro deftask
   "Generates a Task implementation and a method for creating it from an op. 'body' is the body of the
   'call' method with parameters named as in the interface."
   [task op & body]
   `(do
-     (defrecord ~task [~'vars] Task (call [~'this ^{:tag ~(deref (resolve 'env))} ~'env ~'var-lkp] ~@body))
+     (defrecord ~task [~'vars] ISearch (search [~'this ~'state] ~@body))
      (defmethod ~'dispatch-create-task ~op [~'op ~'env]
        (new ~task (:vars ~'op)))))

@@ -72,45 +72,47 @@
 ;; between the elements (do not add new stuff below this point), and that the elements
 ;; themselves hold state about others too. So nasty.
 
+
+
 (deftest test-get-vertices
   (testing "GetVertices"
     (testing "should return nothing"
       (let [indexer (Indexer.)
             env (IngraphEnvironment. indexer)
             task (->GetVertices [7])]
-        (is (empty? (call task env {})))))
+        (is (empty? (search task (->SearchTreeState {} env))))))
 
     (testing "should return vertices"
       (let [env (IngraphEnvironment. indexer)
             task (->GetVertices [7])]
         (is (= #{{7 person0} {7 person1} {7 person2}}
-               (into #{} (call task env {}))))))))
+               (into #{} (search task (->SearchTreeState {} env)))))))))
 
 (deftest test-get-vertices-by-labels
   (testing "GetVerticesByLabels"
     (testing "should return nothing"
       (let [env (IngraphEnvironment. indexer)
             task (->GetVerticesByLabels [7 3])]
-        (is (empty? (call task env {3 "movie"})))))
+        (is (empty? (search task (->SearchTreeState {3 "movie"} env))))))
 
     (testing "should return vertices"
       (let [env (IngraphEnvironment. indexer)
             task (->GetVerticesByLabels [7 3])]
         (is (= #{{3 "person" 7 person0} {3 "person" 7 person1} {3 "person" 7 person2}}
-               (into #{} (call task env {3 "person"}))))))))
+               (into #{} (search task (->SearchTreeState {3 "person"} env)))))))))
 
 (deftest check-labels
   (testing "CheckLabels"
     (testing "should return nothing"
       (let [env (IngraphEnvironment. indexer)
             task (->CheckLabels [7 3])]
-        (is (empty? (call task env {3 "movie" 7 person0})))))
+        (is (empty? (search task (->SearchTreeState {3 "movie" 7 person0} env))))))
 
     (testing "should return vertex"
       (let [env (IngraphEnvironment. indexer)
             task (->CheckLabels [7 3])]
         (is (= #{{3 "person" 7 person0}}
-               (into #{} (call task env {3 "person" 7 person0}))))))))
+               (into #{} (search task (->SearchTreeState {3 "person" 7 person0} env)))))))))
 
 (deftest test-get-edges
   (testing "GetEdges"
@@ -118,7 +120,7 @@
       (let [indexer (Indexer.)
             env (IngraphEnvironment. indexer)
             task (->GetEdges [0 1 2])]
-        (is (empty? (call task env {})))))
+        (is (empty? (search task (->SearchTreeState {} env))))))
 
     (testing "should return edges"
       (let [env (IngraphEnvironment. indexer)
@@ -126,7 +128,7 @@
         (is (= #{{0 person0 1 p0-knows-p1 2 person1}
                  {0 person1 1 p1-knows-p0 2 person0}
                  {0 person0 1 p0-ch-p2 2 person2}}
-               (into #{} (call task env {}))))))))
+               (into #{} (search task (->SearchTreeState {} env)))))))))
 
 (deftest test-get-edges-by-type
   (testing "GetEdgesByType"
@@ -134,28 +136,28 @@
       (let [indexer (Indexer.)
             env (IngraphEnvironment. indexer)
             task (->GetEdgesByType [4 5 6 7])]
-        (is (empty? (call task env {})))))
+        (is (empty? (search task (->SearchTreeState {} env))))))
 
     (testing "should return edges"
       (let [env (IngraphEnvironment. indexer)
             task (->GetEdgesByType [4 5 6 7])]
         (is (= #{{4 person0 5 p0-knows-p1 6 person1 7 "knows"}
                  {4 person1 5 p1-knows-p0 6 person0 7 "knows"}}
-               (into #{} (call task env {7 "knows"}))))))))
+               (into #{} (search task (->SearchTreeState {7 "knows"} env)))))))))
 
 (deftest check-type
   (testing "CheckType"
     (testing "should return nothing"
       (let [env (IngraphEnvironment. indexer)
             task (->CheckType [3 1])]
-        (is (empty? (call task env {1 "watched" 3 p1-knows-p0})))))
+        (is (empty? (search task (->SearchTreeState {1 "watched" 3 p1-knows-p0} env))))))
 
     (testing "should return edge"
       (let [^Indexer indexer (Indexer.)
             env (IngraphEnvironment. indexer)
             task (->CheckType [3 1])]
         (is (= #{{1 "knows" 3 p1-knows-p0}}
-               (into #{} (call task env {1 "knows" 3 p1-knows-p0}))))))))
+               (into #{} (search task (->SearchTreeState {1 "knows" 3 p1-knows-p0} env)))))))))
 
 (deftest test-extend-out
   (testing "ExtendOut"
@@ -163,14 +165,14 @@
       (let [indexer (Indexer.)
             env (IngraphEnvironment. indexer)
             task (->ExtendOut [2 3 4])]
-        (is (empty? (call task env {2 person2})))))
+        (is (empty? (search task (->SearchTreeState {2 person2} env))))))
 
     (testing "should return edges"
       (let [env (IngraphEnvironment. indexer)
             task (->ExtendOut [2 3 4])]
         (is (= #{{2 person0 3 p0-knows-p1 4 person1}
                  {2 person0 3 p0-ch-p2 4 person2}}
-               (into #{} (call task env {2 person0}))))))))
+               (into #{} (search task (->SearchTreeState {2 person0} env)))))))))
 
 (deftest test-extend-in
   (testing "ExtendIn"
@@ -179,20 +181,20 @@
             env (IngraphEnvironment. indexer)
             task (->ExtendIn [2 3 4])]
         (is (= #{{2 person2 3 p0-ch-p2 4 person0}}
-               (into #{} (call task env {2 person2}))))))))
+               (into #{} (search task (->SearchTreeState {2 person2} env)))))))))
 
 (deftest test-extend-out-by-type
   (testing "ExtendOutByType"
     (testing "should return nothing"
       (let [env (IngraphEnvironment. indexer)
             task (->ExtendOutByType [2 3 4 5])]
-        (is (empty? (call task env {2 person2 5 "ate"})))))
+        (is (empty? (search task (->SearchTreeState {2 person2 5 "ate"} env))))))
 
     (testing "should return edges"
       (let [env (IngraphEnvironment. indexer)
             task (->ExtendOutByType [2 3 4 5])]
         (is (= #{{2 person0 3 p0-knows-p1 4 person1 5 "knows"}}
-               (into #{} (call task env {2 person0 5 "knows"}))))))))
+               (into #{} (search task (->SearchTreeState {2 person0 5 "knows"} env)))))))))
 
 (deftest test-extend-in-by-type
   (testing "ExtendInByType"
@@ -200,7 +202,7 @@
       (let [env (IngraphEnvironment. indexer)
             task (->ExtendInByType [2 3 4 5])]
         (is (= #{{2 person0 3 p1-knows-p0 4 person1 5 "knows"}}
-               (into #{} (call task env {2 person0 5 "knows"}))))))))
+               (into #{} (search task (->SearchTreeState {2 person0 5 "knows"} env)))))))))
 
 (deftest test-join
   (testing "Join"
@@ -209,31 +211,31 @@
       (let [env (IngraphEnvironment. indexer)
             task (->Join [2 3 4])]
         (is (= #{{2 person0 3 p0-knows-p1 4 person1}}
-               (into #{} (call task env {2 person0 4 person1}))))
+               (into #{} (search task (->SearchTreeState {2 person0 4 person1} env)))))
         (is (= #{{2 person1 3 p1-knows-p0 4 person0}}
-               (into #{} (call task env {2 person1 4 person0}))))))))
+               (into #{} (search task (->SearchTreeState {2 person1 4 person0} env)))))))))
 
 (deftest test-join-by-type
   (testing "JoinByType"
     (testing "should return nothing"
       (let [env (IngraphEnvironment. indexer)
             task (->JoinByType [2 3 4 5])]
-        (is (empty? (call task env {2 person2 4 person0 5 "knows"})))))
+        (is (empty? (search task (->SearchTreeState {2 person2 4 person0 5 "knows"} env))))))
     (testing "should return edge pointing from source to target only,
     because it takes into account direction"
       (let [env (IngraphEnvironment. indexer)
             task (->JoinByType [2 3 4 5])]
         (is (= #{{2 person0 3 p0-knows-p1 4 person1 5 "knows"}}
-               (into #{} (call task env {2 person0 4 person1 5 "knows"}))))
+               (into #{} (search task (->SearchTreeState {2 person0 4 person1 5 "knows"} env)))))
         (is (= #{{2 person1 3 p1-knows-p0 4 person0 5 "knows"}}
-               (into #{} (call task env {2 person1 4 person0 5 "knows"}))))))))
+               (into #{} (search task (->SearchTreeState {2 person1 4 person0 5 "knows"} env)))))))))
 
 (deftest test-eval-equals
   (testing "GenEvalEquals"
-    (let [c (partial call (->EvalGenBinaryAssertion [9 6 7]) (IngraphEnvironment. indexer))]
+    (let [c (partial search (->EvalGenBinaryAssertion [9 6 7]))]
       (testing "should return nothing"
-        (is (empty? (c {9 person0 6 p0-ch-p2 7 = })))
-        (is (empty? (c {9 person0 6 person1 7 = }))))
+        (is (empty? (c (->SearchTreeState {9 person0 6 p0-ch-p2 7 = } (IngraphEnvironment. indexer)))))
+        (is (empty? (c (->SearchTreeState {9 person0 6 person1 7 = } (IngraphEnvironment. indexer))))))
       (testing "should return somethings"
-        (is (some? (c {9 person0 6 person0 7 = })))
-        (is (some? (c {9 p0-knows-p1 6 p0-knows-p1 7 = })))))))
+        (is (some? (c (->SearchTreeState {9 person0 6 person0 7 = } (IngraphEnvironment. indexer)))))
+        (is (some? (c (->SearchTreeState {9 p0-knows-p1 6 p0-knows-p1 7 = } (IngraphEnvironment. indexer)))))))))

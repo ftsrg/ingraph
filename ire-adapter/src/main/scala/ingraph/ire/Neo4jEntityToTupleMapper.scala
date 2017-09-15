@@ -1,4 +1,4 @@
-package hu.bme.mit.ire
+package ingraph.ire
 
 import hu.bme.mit.ire.datatypes.Tuple
 import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
