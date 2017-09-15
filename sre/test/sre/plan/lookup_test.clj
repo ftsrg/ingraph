@@ -25,4 +25,19 @@
         (is (= (get (lookup-by-var lkp :free) 1) #{(->ConstraintBinding #'TestConstraint01 [1])}))
         (is (= (get (lookup-by-var lkp :bound) 1) #{(->ConstraintBinding #'TestConstraint02 [1 2])}))
         (is (= (get (lookup-by-var lkp :bound) 2) #{(->ConstraintBinding #'TestConstraint01 [2])
-                                                    (->ConstraintBinding #'TestConstraint02 [1 2])}))))))
+                                                    (->ConstraintBinding #'TestConstraint02 [1 2])})))
+      (let [mod (bind* lkp (->ConstraintBinding #'TestConstraint02 [1 2]))]
+        (is (= (lookup mod :free) #{}))
+        (is (= (lookup mod :bound) #{(->ConstraintBinding #'TestConstraint01 [2])
+                                     (->ConstraintBinding #'TestConstraint01 [1])
+                                     (->ConstraintBinding #'TestConstraint02 [1 2])}))))
+    (testing "Can add/move constraints"
+      (let [mod (with lkp :bound (->ConstraintBinding #'TestConstraint01 [3]))]
+        (is (= (lookup mod :bound) #{(->ConstraintBinding #'TestConstraint01 [2])
+                                     (->ConstraintBinding #'TestConstraint01 [3])}))
+        (is (= (lookup mod :free) (lookup lkp :free))))
+      (let [mod (with lkp :free (->ConstraintBinding #'TestConstraint01 [2]))]
+        (is (= (lookup mod :bound) #{}))
+        (is (= (lookup mod :free) (conj
+                                    (lookup lkp :free)
+                                    (->ConstraintBinding #'TestConstraint01 [2]))))))))
