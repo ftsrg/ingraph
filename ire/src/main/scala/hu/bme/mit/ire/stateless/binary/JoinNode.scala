@@ -9,7 +9,7 @@ class JoinNode(val next: (ReteMessage) => Unit,
                val secondaryTupleWidth: Int,
                primaryMask: Mask,
                secondaryMask: Mask
-              ) extends AbstractJoinNode(primaryMask, secondaryMask) with SingleEmptyForwarder {
+              ) extends AbstractJoinNode(primaryMask, secondaryMask) with SingleForwarder {
 
   val secondaryMaskInverse: Mask = Vector.range(0, secondaryTupleWidth) filter (i => !secondaryMask.contains(i))
 
@@ -27,6 +27,6 @@ class JoinNode(val next: (ReteMessage) => Unit,
   }
 
   def onUpdate(): Unit = {
-    forward(BatchChangeSet(joinTuples()))
+    forwardAny(BatchChangeSet(joinTuples()))
   }
 }

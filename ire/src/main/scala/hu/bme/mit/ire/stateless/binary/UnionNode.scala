@@ -23,9 +23,9 @@ class UnionNode(override val next: (ReteMessage) => Unit,
 
   def onUpdate() {
     if (bag)
-      forward(BatchChangeSet(primaryChangeSet.changeSet ++ secondaryChangeSet.changeSet))
+      forwardAny(BatchChangeSet(primaryChangeSet.changeSet ++ secondaryChangeSet.changeSet))
     else
-      forward(BatchChangeSet((primaryChangeSet.changeSet ++ secondaryChangeSet.changeSet).toSeq.distinct))
+      forwardAny(BatchChangeSet((primaryChangeSet.changeSet ++ secondaryChangeSet.changeSet).toSeq.distinct))
   }
 
 }

@@ -37,13 +37,7 @@ trait SingleForwarder extends Forwarder {
   val next: ReteMessage => Unit
 
   def forward(cs: DataMessage) = if (cs.nonEmpty()) next(cs)
-  def forward(terminator: TerminatorMessage) = next(terminator)
-}
-
-trait SingleEmptyForwarder extends Forwarder {
-  val next: ReteMessage => Unit
-
-  def forward(cs: DataMessage) = next(cs)
+  def forwardAny(cs: DataMessage) = next(cs)
   def forward(terminator: TerminatorMessage) = next(terminator)
 }
 
