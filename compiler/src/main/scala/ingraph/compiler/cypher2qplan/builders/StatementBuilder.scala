@@ -5,7 +5,7 @@ import ingraph.compiler.cypher2qplan.util.GrammarUtil
 import ingraph.model.qplan.QNode
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
-import org.slizaa.neo4j.opencypher.openCypher.{Clause, Unwind}
+import org.slizaa.neo4j.opencypher.openCypher.{Create, Delete, Merge, Remove, Set, Unwind}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -103,7 +103,10 @@ object StatementBuilder {
      * In case of the first query part, a dual source will be put there
      * when chaining together query parts (in buildStatement(oc.SingleQuery) parent call).
      */
-    val q_MatchList = clauses.flatMap{ case m: oc.Match => Some(m) case _ => None }.map(buildMatchDescriptor(_))
+    val q_MatchList = clauses.flatMap{
+      case m: oc.Match => Some(buildMatchDescriptor(m))
+      case _ => None
+    }
 //          .filter( c => c.isInstanceOf[oc.Match] )
 //          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
 
@@ -150,7 +153,7 @@ object StatementBuilder {
 //    )
 
     // there might be multiple
-    val afterUnwind = singleQuery_unwindClauseList.foldLeft(afterReturn)(
+    val afterUnwind: QNode = singleQuery_unwindClauseList.foldLeft(afterReturn)(
       (prev, unwind) => {
         val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
         val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
@@ -158,19 +161,20 @@ object StatementBuilder {
       }
     )
 
-    return afterUnwind
-//    val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
-//    val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
-//      val u0 = singleQuery_unwindClauseList
-//      modelFactory.createUnwindOperator => [
-//      element = ce.vb.buildExpressionVariable(u0.variable.name, ExpressionBuilder.buildExpression(u0.expression, ce))
-//      input = afterReturn
-//      ]
-//    } else {
-//      afterReturn
-//    }
-//    // process all CUD operations (currently only CREATE and DELETE clauses are supported
-//    val afterCud = {
+    // process CUD operations
+    val afterCud = clauses.foldLeft(afterUnwind)(
+      (prev, clause) => clause match {
+        case c: Create => ??? // CudBuilder.buildCreateOperator(c, prev)
+        case d: Delete => CudBuilder.buildDeleteOperator(d, prev)
+        case m: Merge => ???
+        case r: Remove => ???
+        case s: Set => ???
+        case _ => prev
+      }
+    )
+
+
+    //    val afterCud = {
 //      var Operator op = afterUnwind
 //
 //      for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
@@ -186,7 +190,7 @@ object StatementBuilder {
 //
 //      op
 //    }
-//    afterCud
+    return afterCud
   }
 
   /**

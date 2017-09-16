@@ -118,8 +118,8 @@ case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(
 
 case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
 
-case class Merge(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+case class Merge(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
 
-//case class Set(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+//case class Set(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
 
 //case class Remove() // SET works for properties
