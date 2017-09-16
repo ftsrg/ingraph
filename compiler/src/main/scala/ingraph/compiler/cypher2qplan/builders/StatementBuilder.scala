@@ -164,11 +164,11 @@ object StatementBuilder {
     // process CUD operations
     val afterCud = clauses.foldLeft(afterUnwind)(
       (prev, clause) => clause match {
-        case c: Create => ??? // CudBuilder.buildCreateOperator(c, prev)
+        case c: Create => CudBuilder.buildCreateOperator(c, prev)
         case d: Delete => CudBuilder.buildDeleteOperator(d, prev)
-        case m: Merge => ???
-        case r: Remove => ???
-        case s: Set => ???
+//        case m: Merge => ???
+//        case r: Remove => ???
+//        case s: Set => ???
         case _ => prev
       }
     )

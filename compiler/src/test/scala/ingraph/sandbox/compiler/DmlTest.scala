@@ -48,7 +48,7 @@ class DmlTest extends FunSuite {
   }
 
   test("should compile vanilla CREATE") {
-    val cypher = CypherParser.parseString("CREATE (:Person)")
+    val cypher = CypherParser.parseString("CREATE (p:Person)")
     val plan = CypherToQPlan.compileToQPlan(cypher)
     println(plan)
   }
