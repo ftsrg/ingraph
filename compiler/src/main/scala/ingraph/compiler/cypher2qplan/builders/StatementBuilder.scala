@@ -2,9 +2,10 @@ package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.structures.MatchDescriptor
 import ingraph.compiler.cypher2qplan.util.GrammarUtil
+import ingraph.model.qplan.QNode
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
-import org.slizaa.neo4j.opencypher.openCypher.Clause
+import org.slizaa.neo4j.opencypher.openCypher.{Clause, Unwind}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -111,7 +112,7 @@ object StatementBuilder {
      *
      * This is achieved by starting from a Join(chain, Dual)
      */
-    val content = q_MatchList.foldLeft[qplan.QNode](
+    val content = q_MatchList.foldLeft(
       chain //qplan.Join(chain, qplan.Dual())
       )(
         (b, a) => a match {
@@ -137,16 +138,25 @@ object StatementBuilder {
     //return afterReturn
 
     // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
-    val singleQuery_unwindClauseList = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
+    val singleQuery_unwindClauseList: Seq[Unwind] = clauses.flatMap{ case u: Unwind => Some(u) case _ => None }
     // TODO handle multiple UNWINDs
-    val afterUnwind = if (!singleQuery_unwindClauseList.isEmpty) {
-      val unwind = singleQuery_unwindClauseList(0)
-      val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
-      val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
-      qplan.Unwind(UnresolvedAlias(expr), variable, afterReturn)
-    } else {
-      afterReturn
-    }
+
+//    val content = q_MatchList.foldLeft[qplan.QNode](
+//      chain //qplan.Join(chain, qplan.Dual())
+//    )(
+//      (b, a) => a match {
+//        case md if  md.isOptional &&  md.hasCondition => qplan.ThetaLeftOuterJoin(b, md.op.get, md.condition.get)
+//      }
+//    )
+
+    // there might be multiple
+    val afterUnwind = singleQuery_unwindClauseList.foldLeft(afterReturn)(
+      (prev, unwind) => {
+        val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
+        val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
+        qplan.Unwind(UnresolvedAlias(expr), variable, prev)
+      }
+    )
 
     return afterUnwind
 //    val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head

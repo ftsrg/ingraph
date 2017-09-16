@@ -18,6 +18,17 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
+  test("should compile MATCH and multiple UNWINDs") {
+    val cypher = CypherParser.parseString(
+      """MATCH (n)
+        |UNWIND n.favColors AS favColor
+        |UNWIND n.favMovies AS favMovie
+        |RETURN n, favColor, favMovie
+        |""".stripMargin)
+    val plan = CypherToQPlan.compileToQPlan(cypher)
+    println(plan)
+  }
+
   test("should compile vanilla CREATE") {
     val cypher = CypherParser.parseString("CREATE (:Person)")
     val plan = CypherToQPlan.compileToQPlan(cypher)
