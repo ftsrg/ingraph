@@ -16,7 +16,7 @@ ext {
   pegdownVersion = '1.6.0'
   scalaShortVersion = '2.11'
   scalaTestVersion = '3.0.1'
-  scalaVersion = '2.11.8'
+  scalaVersion = '2.11.11'
   sparkVersion = '2.2.0'
   slizaaVersion = '1.0.0-SNAPSHOT'
   xtextVersion = '2.10.0'
