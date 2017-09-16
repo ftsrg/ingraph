@@ -74,6 +74,14 @@ case class Selection(extraAttributes: Seq[NamedExpression],
                      child: ENode
                     ) extends UnaryENode {}
 
+case class Unwind(extraAttributes: Seq[NamedExpression],
+                     inode: iplan.Unwind,
+                     child: ENode
+                    ) extends UnaryENode {
+  override def internalSchema: Seq[NamedExpression] = Seq()
+  // TODO fix this similarly to qplan and iplan
+}
+
 case class SortAndTop(extraAttributes: Seq[NamedExpression],
                       inode: iplan.SortAndTop,
                       child: ENode

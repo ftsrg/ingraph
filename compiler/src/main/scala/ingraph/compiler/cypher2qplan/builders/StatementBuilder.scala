@@ -3,6 +3,8 @@ package ingraph.compiler.cypher2qplan.builders
 import ingraph.compiler.cypher2qplan.structures.MatchDescriptor
 import ingraph.compiler.cypher2qplan.util.GrammarUtil
 import ingraph.model.{expr, qplan}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
+import org.slizaa.neo4j.opencypher.openCypher.Clause
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -100,9 +102,9 @@ object StatementBuilder {
      * In case of the first query part, a dual source will be put there
      * when chaining together query parts (in buildStatement(oc.SingleQuery) parent call).
      */
-    val q_MatchList = clauses
-          .filter( c => c.isInstanceOf[oc.Match] )
-          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
+    val q_MatchList = clauses.flatMap{ case m: oc.Match => Some(m) case _ => None }.map(buildMatchDescriptor(_))
+//          .filter( c => c.isInstanceOf[oc.Match] )
+//          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
 
     /*
      * content will be built starting from what is passed in as chain, i.e. the tree built from query parts so far.
@@ -120,8 +122,11 @@ object StatementBuilder {
         }
       )
 
-    val singleQuery_returnOrWithClause = clauses
-        .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    val singleQuery_returnOrWithClause = clauses.flatMap{
+      case w: oc.With => Some(w)
+      case r: oc.Return => Some(r)
+      case _ => None
+    }
     val afterReturn = if (singleQuery_returnOrWithClause.isEmpty) {
       content
     } else {
@@ -129,8 +134,21 @@ object StatementBuilder {
     }
 
     //FIXME: continue processing clauses
-    return afterReturn
+    //return afterReturn
 
+    // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    val singleQuery_unwindClauseList = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
+    // TODO handle multiple UNWINDs
+    val afterUnwind = if (!singleQuery_unwindClauseList.isEmpty) {
+      val unwind = singleQuery_unwindClauseList(0)
+      val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
+      val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
+      qplan.Unwind(UnresolvedAlias(expr), variable, afterReturn)
+    } else {
+      afterReturn
+    }
+
+    return afterUnwind
 //    val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
 //    val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
 //      val u0 = singleQuery_unwindClauseList
@@ -195,8 +213,8 @@ object StatementBuilder {
 
     // they are natural joined together
     val allDifferentOperator = qplan.AllDifferent(
-      pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) ),
-      edgeAttributesOfMatchClause.toSeq
+      edgeAttributesOfMatchClause.toSeq,
+      pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) )
     )
 
     if (m.getWhere != null) {

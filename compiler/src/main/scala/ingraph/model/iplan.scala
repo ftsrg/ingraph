@@ -42,8 +42,8 @@ case class Dual() extends LeafINode {
 }
 
 // unary nodes
-case class AllDifferent(child: INode,
-                        edges: Seq[EdgeAttribute]) extends UnaryINode {}
+case class AllDifferent(edges: Seq[EdgeAttribute],
+                        child: INode) extends UnaryINode {}
 
 case class DuplicateElimination(child: INode) extends UnaryINode {}
 
@@ -56,6 +56,11 @@ case class Projection(projectList: Seq[NamedExpression],
 
 case class Selection(condition: Expression,
                      child: INode) extends UnaryINode {}
+
+case class Unwind(collection: Expression, element: Attribute, child: INode) extends UnaryINode {
+  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+  // TODO indexOf might be unable to find the attribute
+}
 
 case class SortAndTop(skipExpr: Expression,
                       limitExpr: Expression,

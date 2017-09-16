@@ -51,7 +51,7 @@ case class Dual() extends LeafQNode {
 }
 
 // unary nodes
-case class AllDifferent(child: QNode, edges: Seq[EdgeAttribute]) extends UnaryQNode {}
+case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {}
 
 case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
@@ -75,8 +75,9 @@ case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
 
 case class Top(skipExpr: Expression, limitExpr: Expression, child: QNode) extends UnaryQNode {}
 
-case class Unwind(element: Attribute, child: QNode) extends UnaryQNode {
-  override def output = child.output.updated(child.output.indexOf(element), element) // TODO
+case class Unwind(collection: Expression, element: Attribute, child: QNode) extends UnaryQNode {
+  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+  // TODO indexOf might be unable to find the attribute
 }
 
 // binary nodes

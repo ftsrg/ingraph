@@ -19,7 +19,8 @@ object QPlanToIPlan {
       case qplan.Projection(projectList, child) => iplan.Projection(projectList, transform(child))
       case qplan.Selection(condition, child) => iplan.Selection(condition, transform(child))
       case qplan.DuplicateElimination(child) => iplan.DuplicateElimination(transform(child))
-      case qplan.AllDifferent(child, edges) => iplan.AllDifferent(transform(child), edges)
+      case qplan.AllDifferent(edges, child) => iplan.AllDifferent(edges, transform(child))
+      case qplan.Unwind(collection, element, child) => iplan.Unwind(collection, element, transform(child))
 
       // binary
       case qplan.Union(l, r) => iplan.Union(transform(l), transform(r))
