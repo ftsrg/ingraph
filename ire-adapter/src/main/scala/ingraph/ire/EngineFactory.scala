@@ -13,6 +13,7 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
 import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
 import ingraph.model.eplan._
+import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
 import scala.collection.mutable
@@ -105,52 +106,55 @@ object EngineFactory {
                 }
 
                 newLocal(Props(new SelectionNode(expr.child, allDifferent)))
-              //            case op: Create =>
-              //              val lookup = getSchema(op.child)
-              //              val creations: Vector[(Tuple) => Any] = for (element <- op.getElements)
-              //                yield element.asInstanceOf[ExpressionVariable].getExpression match {
-              //                  case n: NavigationDescriptor =>
-              //                    val demeter = n.getEdgeVariable.getEdgeLabelSet.getEdgeLabels.get(0).getName
-              //                    val sourceIndex = lookup(n.getSourceVertexVariable.getName)
-              //                    val targetIndex = lookup(n.getTargetVertexVariable.getName)
-              //                    (t: Tuple) => {
-              //                      indexer.addEdge(
-              //                        indexer.newId(),
-              //                        t(sourceIndex).asInstanceOf[Long],
-              //                        t(targetIndex).asInstanceOf[Long],
-              //                        demeter)
-              //                    }
-              //                  case v: VariableExpression =>
-              //                    val variable = v.getVariable.asInstanceOf[VertexVariable]
-              //                    (t: Tuple) => indexer.addVertex(IngraphVertex(
-              //                      indexer.newId(), variable.getVertexLabelSet.getVertexLabels.map(l => l.getName).toSet))
-              //                }
-              //
-              //              (m: ReteMessage) => {
-              //                m match {
-              //                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r))
-              //                  case _ =>
-              //                }
-              //                expr.child(m)
-              //              }
-              //            case op: Delete =>
-              //              val lookup = getSchema(op.child)
-              //              val removals: Seq[(Tuple) => Unit] = for (element <- op.getElements)
-              //                yield element.getExpression.asInstanceOf[VariableExpression].getVariable match {
-              //                  case e: EdgeVariable =>
-              //                    (t: Tuple) => indexer.removeEdgeById(t(lookup(e.getName)).asInstanceOf[Long])
-              //                  case v: VertexVariable =>
-              //                    (t: Tuple) => indexer.removeVertexById(t(lookup(v.getName)).asInstanceOf[Long])
-              //                }
-              //              (m: ReteMessage) => {
-              //                m match {
-              //                  case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
-              //                  case _ =>
-              //                }
-              //                expr.child(m)
-              //              }
-              //            }
-            }
+            case op: Create =>
+              val lookup = getSchema(op.child)
+              val creations: Seq[(Tuple) => IngraphElement] = for (element <- op.inode.attributes)
+              //yield element asInstanceOf[ExpressionVariable].getExpression match {
+                yield element match {
+                  case n: NavigationDescriptor =>
+                    // you got to love the Law of Demeter
+                    val demeter = n.edge.labels.edgeLabels.iterator.next()
+                    val sourceIndex = lookup(n.src.name)
+                    val targetIndex = lookup(n.trg.name)
+                    (t: Tuple) => {
+                      indexer.addEdge(
+                        indexer.newId(),
+                        t(sourceIndex).asInstanceOf[Long],
+                        t(targetIndex).asInstanceOf[Long],
+                        demeter)
+                    }
+                  case v: Expression =>
+                    val variable = v.toAttribute.asInstanceOf[VertexAttribute]
+                    (t: Tuple) =>
+                      indexer.addVertex(IngraphVertex(
+                        indexer.newId(), variable.labels.vertexLabels))
+                }
+
+              (m: ReteMessage) => {
+                m match {
+                  case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r))
+                  case _ =>
+                }
+                expr.child(m)
+              }
+              case op: Delete =>
+                val lookup = getSchema(op.child)
+                val removals: Seq[(Tuple) => Unit] = for (element <- op.inode.attributes)
+                  // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
+                  yield element match {
+                    case e: EdgeAttribute  =>
+                      (t: Tuple) => indexer.removeEdgeById(t(lookup(e.name)).asInstanceOf[Long])
+                    case v: VertexAttribute =>
+                      (t: Tuple) => indexer.removeVertexById(t(lookup(v.name)).asInstanceOf[Long])
+                  }
+                (m: ReteMessage) => {
+                  m match {
+                    case cs: ChangeSet => removals.foreach(r => cs.positive.foreach(r))
+                    case _ =>
+                  }
+                  expr.child(m)
+                }
+              }
         remaining += ForwardConnection(op.child, node)
 
       case op: BinaryENode =>

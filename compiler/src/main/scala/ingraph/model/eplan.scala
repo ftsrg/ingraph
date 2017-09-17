@@ -121,6 +121,19 @@ case class ThetaLeftOuterJoin(
           left: ENode,
           right: ENode) extends BinaryENode with EquiJoinLike {}
 
+case class Create(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Create,
+                  child: ENode) extends UnaryENode {}
+
+case class Delete(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Delete,
+                  child: ENode) extends UnaryENode {}
+
+case class Merge(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Merge,
+                  child: ENode) extends UnaryENode {}
+
+
 object SchemaToMap {
   def schemaToIndices(node: JoinLike, side: ENode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)

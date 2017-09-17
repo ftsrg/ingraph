@@ -35,6 +35,9 @@ object SchemaInferencer {
       case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
       case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
       case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
+      case o: iplan.Create               => eplan.Create              (ea, o, transform(o.child, ea))
+      case o: iplan.Delete               => eplan.Delete              (ea, o, transform(o.child, ea))
+      case o: iplan.Merge                => eplan.Merge               (ea, o, transform(o.child, ea))
 
       // binary
       case o: iplan.AntiJoin => eplan.AntiJoin(

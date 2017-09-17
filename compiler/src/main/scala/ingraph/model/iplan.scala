@@ -94,6 +94,6 @@ case class Create(attributes: Seq[Attribute], child: INode) extends CudOperator(
 
 case class Delete(attributes: Seq[Attribute], detach: Boolean, child: INode) extends CudOperator(child) {}
 
-//case class Merge()
+case class Merge(attributes: Seq[Attribute], child: INode) extends CudOperator(child) {}
 
 //case class Set()
