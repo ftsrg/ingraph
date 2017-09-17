@@ -25,6 +25,8 @@ object QPlanToIPlan {
       case qplan.Create(attributes, child) => iplan.Create(attributes, transform(child))
       case qplan.Delete(attributes, detach, child) => iplan.Delete(attributes, detach, transform(child))
       case qplan.Merge(attributes, child) => iplan.Merge(attributes, transform(child))
+      case qplan.Remove(vertexLabelUpdates, child) => iplan.Remove(vertexLabelUpdates, transform(child))
+      case qplan.SetNode(vertexLabelUpdates, child) => iplan.SetNode(vertexLabelUpdates, transform(child))
 
       // binary
       case qplan.Union(l, r) => iplan.Union(transform(l), transform(r))

@@ -1,7 +1,7 @@
 package ingraph.model.iplan
 
 import ingraph.model.expr
-import ingraph.model.expr.EdgeAttribute
+import ingraph.model.expr.{EdgeAttribute, VertexLabelUpdate}
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -96,4 +96,6 @@ case class Delete(attributes: Seq[Attribute], detach: Boolean, child: INode) ext
 
 case class Merge(attributes: Seq[Attribute], child: INode) extends CudOperator(child) {}
 
-//case class Set()
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: INode) extends CudOperator(child) {}
+
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: INode) extends CudOperator(child) {}

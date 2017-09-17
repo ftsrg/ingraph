@@ -166,7 +166,10 @@ object EngineFactory {
 
       case op: BinaryENode =>
         val node: ActorRef = op match {
-          case op: JoinLike => {
+          case op: Union =>
+            ???
+
+          case op: JoinLike =>
             val child = expr.child
             val leftTupleWidth = op.left.internalSchema.length
             val rightTupleWidth = op.right.internalSchema.length
@@ -199,7 +202,6 @@ object EngineFactory {
             //              minHops,
             //              maxHops
             //            )))
-            }
           }
           remaining += ForwardConnection(op.left, node.primary)
           remaining += ForwardConnection(op.right, node.secondary)
@@ -218,7 +220,7 @@ object EngineFactory {
           case op: Dual =>
             inputs += ("" -> expr.child)
             expr.child(ChangeSet(positive=Vector(Vector())))
-  
+
         }
       }
 

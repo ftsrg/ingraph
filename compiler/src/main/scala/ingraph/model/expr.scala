@@ -137,6 +137,7 @@ case object NonEmpty extends LabelSetStatus
  */
 case object Contradicting extends LabelSetStatus
 
+case class VertexLabelUpdate(vertex: VertexAttribute, vertexLabels: Set[VertexLabel])
 
 sealed trait Direction
 case object Both extends Direction

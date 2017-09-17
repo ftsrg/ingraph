@@ -134,6 +134,14 @@ case class Merge(extraAttributes: Seq[NamedExpression],
                   inode: iplan.Merge,
                   child: ENode) extends UnaryENode {}
 
+case class SetNode(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.SetNode,
+                  child: ENode) extends UnaryENode {}
+
+case class Remove(extraAttributes: Seq[NamedExpression],
+                 inode: iplan.Remove,
+                 child: ENode) extends UnaryENode {}
+
 
 object SchemaToMap {
   def schemaToIndices(node: JoinLike, side: ENode): Seq[Int] = {

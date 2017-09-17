@@ -112,14 +112,14 @@ case class AntiJoin(left: QNode, right: QNode) extends JoinLike {
 }
 
 // DML operators
-abstract class CudOperator(child: QNode) extends UnaryQNode {}
+abstract class CudOperator(child: QNode) extends UnaryQNode
 
-case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
+case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
 
-case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child)
 
-case class Merge(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
+case class Merge(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
 
-//case class Set(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
 
-//case class Remove() // SET works for properties
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)

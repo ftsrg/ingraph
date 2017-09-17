@@ -5,7 +5,6 @@ import ingraph.compiler.cypher2qplan.util.GrammarUtil
 import ingraph.model.qplan.QNode
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
-import org.slizaa.neo4j.opencypher.openCypher.{Create, Delete, Merge, Remove, Set, Unwind}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -141,7 +140,7 @@ object StatementBuilder {
     //return afterReturn
 
     // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
-    val singleQuery_unwindClauseList: Seq[Unwind] = clauses.flatMap{ case u: Unwind => Some(u) case _ => None }
+    val singleQuery_unwindClauseList: Seq[oc.Unwind] = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
     // TODO handle multiple UNWINDs
 
 //    val content = q_MatchList.foldLeft[qplan.QNode](
@@ -164,11 +163,11 @@ object StatementBuilder {
     // process CUD operations
     val afterCud = clauses.foldLeft(afterUnwind)(
       (prev, clause) => clause match {
-        case c: Create => CudBuilder.buildCreateOperator(c, prev)
-        case d: Delete => CudBuilder.buildDeleteOperator(d, prev)
-//        case m: Merge => ???
-//        case r: Remove => ???
-//        case s: Set => ???
+        case c: oc.Create => CudBuilder.buildCreateOperator(c, prev)
+        case c: oc.Delete => CudBuilder.buildDeleteOperator(c, prev)
+        case c: oc.Merge  => CudBuilder.buildMergeOperator (c, prev)
+        case c: oc.Remove => CudBuilder.buildRemoveOperator(c, prev)
+        case c: oc.Set    => CudBuilder.buildSetOperator   (c, prev)
         case _ => prev
       }
     )

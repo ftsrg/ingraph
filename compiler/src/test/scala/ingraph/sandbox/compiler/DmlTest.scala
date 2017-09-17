@@ -65,5 +65,16 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
+  test("should compile REMOVE that targets labels") {
+    val cypher = CypherParser.parseString("MATCH (n) REMOVE n:Actor:Director")
+    val plan = CypherToQPlan.compileToQPlan(cypher)
+    println(plan)
+  }
+
+  test("should compile SET that targets labels") {
+    val cypher = CypherParser.parseString("MATCH (n) SET n:Actor:Director")
+    val plan = CypherToQPlan.compileToQPlan(cypher)
+    println(plan)
+  }
 
 }

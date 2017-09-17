@@ -1,11 +1,12 @@
 package ingraph.compiler.cypher2qplan.builders
 
-import ingraph.model.expr.ElementAttribute
+import ingraph.model.expr.labeltypes.VertexLabel
+import ingraph.model.expr.{VertexAttribute, VertexLabelUpdate}
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Attribute
-import org.slizaa.neo4j.opencypher.openCypher.{Create, Delete, NodePattern, PatternElement, VariableRef}
+import org.slizaa.neo4j.opencypher.openCypher.{NodeLabel, RemoveItem, SetItem}
+import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -18,9 +19,9 @@ object CudBuilder {
   /**
     * Build and return a create operator from the CREATE clause and attach p_input to its input.
     */
-  def buildCreateOperator(u0: Create, child: qplan.QNode): QNode = {
+  def buildCreateOperator(u0: oc.Create, child: qplan.QNode): QNode = {
     val attributes = u0.getPattern.getPatterns.asScala.flatMap {
-      case pe: PatternElement => Some(pe)
+      case pe: oc.PatternElement => Some(pe)
       case _ => None
     }.flatMap( pe => {
       val firstVertex: Attribute = AttributeBuilder.buildAttribute(pe.getNodepattern.getVariable)
@@ -60,7 +61,7 @@ object CudBuilder {
     * Provide the vertices for CREATE operator.
     */
   // TODO properties
-  def buildCreateNodePattern(nodepattern: NodePattern) {
+  def buildCreateNodePattern(nodepattern: oc.NodePattern) {
 //    val u0 = modelFactory.createVariableExpression => [
 //      val vertexVariable = ce.vb.buildVertexVariable(nodepattern)
 //      BuilderUtil.attachProperties(nodepattern.properties, vertexVariable, ce)
@@ -135,12 +136,55 @@ object CudBuilder {
   /**
     * Build and return a delete operator from the DELETE clause and attach child to its input.
     */
-  def buildDeleteOperator(element: Delete, child: qplan.QNode): QNode = {
+  def buildDeleteOperator(element: oc.Delete, child: qplan.QNode): QNode = {
     val attributes = element.getExpressions.asScala.flatMap {
-      case v: VariableRef => Some(AttributeBuilder.buildAttribute(v))
+      case v: oc.VariableRef => Some(AttributeBuilder.buildAttribute(v))
       case _ => None
     }
     qplan.Delete(attributes, element.isDetach, child)
+  }
+
+  /**
+    * Build and return a merge operator from the MERGE clause and attach child to its input.
+    */
+  def buildMergeOperator(element: oc.Merge, child: qplan.QNode): QNode = {
+    qplan.Merge(null, child)
+  }
+
+  /**
+    * Build and return a remove operator from the SET clause and attach child to its input.
+    */
+  def buildSetOperator(element: oc.Set, child: qplan.QNode): QNode = {
+    val vertexLabelUpdates = element.getSetItems.asScala.map(
+      r => r match {
+        //case pe: oc.PropertyExpression => ???
+        case r: SetItem => {
+          val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
+          // ClassCastException
+          val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet
+          VertexLabelUpdate(vertex, labels)
+        }
+      }
+    ).toSet
+    qplan.SetNode(vertexLabelUpdates, child)
+  }
+
+  /**
+    * Build and return a remove operator from the REMOVE clause and attach child to its input.
+    */
+  def buildRemoveOperator(element: oc.Remove, child: qplan.QNode): QNode = {
+    val vertexLabelUpdates = element.getRemoveItems.asScala.map(
+      r => r match {
+        //case pe: oc.PropertyExpression => ???
+        case r: RemoveItem => {
+          val vertex = AttributeBuilder.buildAttribute(r.getVariable).asInstanceOf[VertexAttribute] // here come the
+          // ClassCastException
+          val labels: Set[VertexLabel] = r.getNodeLabels.getNodeLabels.asScala.map(_.getLabelName).toSet
+          VertexLabelUpdate(vertex, labels)
+        }
+      }
+    ).toSet
+    qplan.Remove(vertexLabelUpdates, child)
   }
 
 }
