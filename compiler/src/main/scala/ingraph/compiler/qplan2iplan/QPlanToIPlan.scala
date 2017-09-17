@@ -11,7 +11,7 @@ object QPlanToIPlan {
       case qplan.GetVertices(v) => iplan.GetVertices(v)
       case qplan.Dual() => iplan.Dual()
 
-      // unary
+      // unary read
       case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => iplan.GetEdges(src, trg, edge, dir)
       case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), iplan.GetEdges(src, trg, edge, dir))
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => iplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
@@ -21,6 +21,10 @@ object QPlanToIPlan {
       case qplan.DuplicateElimination(child) => iplan.DuplicateElimination(transform(child))
       case qplan.AllDifferent(edges, child) => iplan.AllDifferent(edges, transform(child))
       case qplan.Unwind(collection, element, child) => iplan.Unwind(collection, element, transform(child))
+      // unary DML
+      case qplan.Create(attributes, child) => iplan.Create(attributes, transform(child))
+      case qplan.Delete(attributes, detach, child) => iplan.Delete(attributes, detach, transform(child))
+      case qplan.Merge(attributes, child) => iplan.Merge(attributes, transform(child))
 
       // binary
       case qplan.Union(l, r) => iplan.Union(transform(l), transform(r))

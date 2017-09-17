@@ -41,8 +41,9 @@ case class GetEdges(extraAttributes: Seq[NamedExpression], inode: iplan.GetEdges
   override def internalSchema: Seq[NamedExpression] = inode.output ++ extraAttributes
 }
 
-case class Dual(extraAttributes: Seq[NamedExpression], inode: iplan.Dual) extends LeafENode {
+case class Dual(inode: iplan.Dual) extends LeafENode {
   override def internalSchema = Seq()
+  override def extraAttributes: Seq[NamedExpression] = Seq()
 }
 
 

@@ -5,7 +5,7 @@ import hu.bme.mit.ire.util.BufferMultimap
 package object datatypes {
   type Tuple = IndexedSeq[Any]
   type TupleBag = Iterable[Tuple]
-  type Mask = Vector[Int]
+  type Mask = Seq[Int]
   type JoinCache = BufferMultimap[Tuple, Tuple]
 
   type Path = Vector[Long]

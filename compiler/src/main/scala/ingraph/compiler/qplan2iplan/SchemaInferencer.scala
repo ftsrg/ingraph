@@ -16,6 +16,11 @@ object SchemaInferencer {
       // leaf
       case o: iplan.GetEdges    => eplan.GetEdges(ea, o)
       case o: iplan.GetVertices => eplan.GetVertices(ea, o)
+      case o: iplan.Dual        =>
+        if (ea.nonEmpty) {
+          throw new IllegalStateException(s"Dual node cannot hold extra attributes (${ea})")
+        }
+        eplan.Dual(o)
 
       // unary
       case o: iplan.Projection =>

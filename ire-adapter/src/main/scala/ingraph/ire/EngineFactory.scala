@@ -5,13 +5,13 @@ import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode}
 import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
-import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
 import ingraph.model.eplan._
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
@@ -139,6 +139,13 @@ object EngineFactory {
               }
               case op: Delete =>
                 val lookup = getSchema(op.child)
+                if (op.inode.detach) {
+                  // detach delete not supported yet
+                  // and we should throw an exception in case the user tries to delete a nodes with existing
+                  // relationships
+                  // "To delete this node, you must first delete its relationships."
+                  ???
+                }
                 val removals: Seq[(Tuple) => Unit] = for (element <- op.inode.attributes)
                   // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
                   yield element match {
@@ -159,65 +166,60 @@ object EngineFactory {
 
       case op: BinaryENode =>
         val node: ActorRef = op match {
-//          case op: AntiJoin =>
-//            newLocal(Props(new AntiJoinNode(expr.child, emfToInt(op.getLeftMask), emfToInt(op.getRightMask))))
-          case op: Join =>
+          case op: JoinLike => {
+            val child = expr.child
+            val leftTupleWidth = op.left.internalSchema.length
+            val rightTupleWidth = op.right.internalSchema.length
+            val leftMask = op.leftMask
+            val rightMask: Seq[Int] = op.rightMask
 
-            newLocal(Props(new JoinNode(
-                expr.child,
-                op.left.internalSchema.length,
-                op.right.internalSchema.length,
-                Vector(0), // TODO
-                Vector(0)
-            )))
-//          case op: LeftOuterJoin =>
-//            val leftMask = emfToInt(op.getLeftMask)
-//            val rightMask = emfToInt(op.getRightMask)
-//            newLocal(Props(new LeftOuterJoinNode(
-//              expr.child,
-//              op.getLeftInput.getInternalSchema.length,
-//              op.getRightInput.getInternalSchema.length,
-//              leftMask,
-//              rightMask
-//            )))
-//          case op: TransitiveClosureJoin =>
-//            val leftMask = emfToInt(op.getLeftMask)
-//            val rightMask = emfToInt(op.getRightMask)
-//            val minHops = op.getEdgeListVariable.getMinHops
-//            val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
-//              case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
-//              case MaxHopsType.UNLIMITED => Long.MaxValue
-//            }
-//            newLocal(Props(new TransitiveClosureJoinNode(
-//              expr.child,
-//              op.getLeftInput.getInternalSchema.length,
-//              op.getRightInput.getInternalSchema.length,
-//              leftMask,
-//              rightMask,
-//              op.getInternalSchema.length,
-//              minHops,
-//              maxHops
-//            )))
+            op match {
+              case op: AntiJoin =>
+                newLocal(Props(new AntiJoinNode(child, leftMask, rightMask)))
+              case op: Join =>
+                newLocal(Props(new JoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+              case op: LeftOuterJoin =>
+                newLocal(Props(new LeftOuterJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
+            }
+            //          case op: TransitiveClosureJoin =>
+            //            val leftMask = emfToInt(op.getLeftMask)
+            //            val rightMask = emfToInt(op.getRightMask)
+            //            val minHops = op.getEdgeListVariable.getMinHops
+            //            val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
+            //              case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
+            //              case MaxHopsType.UNLIMITED => Long.MaxValue
+            //            }
+            //            newLocal(Props(new TransitiveClosureJoinNode(
+            //              expr.child,
+            //              op.getLeftInput.getInternalSchema.length,
+            //              op.getRightInput.getInternalSchema.length,
+            //              leftMask,
+            //              rightMask,
+            //              op.getInternalSchema.length,
+            //              minHops,
+            //              maxHops
+            //            )))
+            }
+          }
+          remaining += ForwardConnection(op.left, node.primary)
+          remaining += ForwardConnection(op.right, node.secondary)
+
+          case op: GetVertices =>
+            val nick = op.nodeName
+            val labels = op.inode.v.labels.vertexLabels.toSeq
+            vertexConverters.addBinding(labels, op)
+            inputs += (nick -> expr.child)
+          case op: GetEdges =>
+            val nick = op.nodeName
+            val labels = op.inode.edge.labels.edgeLabels.toSeq
+            for (label <- labels)
+              edgeConverters.addBinding(label, op)
+            inputs += (nick -> expr.child)
+          case op: Dual =>
+            inputs += ("" -> expr.child)
+            expr.child(ChangeSet(positive=Vector(Vector())))
+  
         }
-        remaining += ForwardConnection(op.left, node.primary)
-        remaining += ForwardConnection(op.right, node.secondary)
-
-        case op: GetVertices =>
-          val nick = op.nodeName
-          val labels = op.inode.v.labels.vertexLabels.toSeq
-          vertexConverters.addBinding(labels, op)
-          inputs += (nick -> expr.child)
-        case op: GetEdges =>
-          val nick = op.nodeName
-          val labels = op.inode.edge.labels.edgeLabels.toSeq
-          for (label <- labels)
-            edgeConverters.addBinding(label, op)
-          inputs += (nick -> expr.child)
-        case op: Dual =>
-          inputs += ("" -> expr.child)
-          expr.child(ChangeSet(positive=Vector(Vector())))
-
-      }
       }
 
       override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap

@@ -1,13 +1,13 @@
 package ingraph.model.expr
 
-import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
-package object datatypes {
+package object labeltypes {
   type VertexLabel = String
   type EdgeLabel = String
 }
