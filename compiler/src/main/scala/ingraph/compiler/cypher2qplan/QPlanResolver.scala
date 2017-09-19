@@ -22,13 +22,21 @@ object QPlanResolver {
   val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
+    case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {
     case UnresolvedFunction(functionIdentifier, children, isDistinct) => expr.FunctionInvocation(misc.Function.getByPrettyName(functionIdentifier.identifier), children, isDistinct)
   }
 
-  protected def resolveAttributes(attributes: Seq[cExpr.Attribute], child: qplan.QNode) = {
+  /**
+    * Resolve attribute references according to the output schema of the child QNode
+    * @param attributes
+    * @param child
+    * @return
+    */
+  protected def resolveAttributes(attributes: Seq[cExpr.Attribute], child: qplan.QNode): Seq[cExpr.Attribute] = {
+    //val transformedAttributes = filterForAttributesOfChildOutput(attributes, child)
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
@@ -36,5 +44,16 @@ object QPlanResolver {
     }
 
     transformedAttributes
+  }
+
+  /**
+    * Filters the attributes passed in for being included in the child.output schema
+    * @param attributes
+    * @param child
+    * @param invert iff true, match is inverted, i.e. only those are returned which were not found
+    * @return
+    */
+  protected def filterForAttributesOfChildOutput(attributes: Seq[cExpr.Attribute], child: qplan.QNode, invert: Boolean = false): Seq[cExpr.Attribute] = {
+    attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
 }
