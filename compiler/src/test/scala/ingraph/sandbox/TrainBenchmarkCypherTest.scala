@@ -70,7 +70,7 @@ class TrainBenchmarkCypherTest extends FunSuite {
 }
 
 object TrainBenchmarkCypherTest {
-  val queryPackPath = "trainbenchmark-simple/"
+  val queryPackPath = "trainbenchmark/"
   val printCypher = true
   val printQPlan = true
   val skipResolve = false

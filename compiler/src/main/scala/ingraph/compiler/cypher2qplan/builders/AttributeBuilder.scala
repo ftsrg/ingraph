@@ -10,8 +10,14 @@ import java.util.concurrent.atomic.AtomicLong
 
 object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
-    // FIXME: handle missing names, and introduce VariableBuilder-alike
-    expr.NamedVertexAttribute(n.getVariable.getName, BuilderUtil.parseToVertexLabelSet(n.getNodeLabels))
+    val nv = n.getVariable
+    val nls = BuilderUtil.parseToVertexLabelSet(n.getNodeLabels)
+
+    if (nv == null) {
+      expr.AnonymousVertexAttribute(generateUniqueName, nls)
+    } else {
+      expr.NamedVertexAttribute(nv.getName, nls)
+    }
   }
 
   def buildAttribute(el: oc.RelationshipPattern): expr.EdgeAttribute = {
