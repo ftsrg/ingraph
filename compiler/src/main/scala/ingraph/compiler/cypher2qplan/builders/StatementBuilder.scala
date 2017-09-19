@@ -72,7 +72,8 @@ object StatementBuilder {
     var result = dispatchBuildStatement(q.getSingleQuery)
 
     for (u <- q.getUnion.asScala) {
-      result = qplan.Union(result, dispatchBuildStatement(u.getSingleQuery))
+      // the semantics of "UNION ALL" is to create a bag union
+      result = qplan.Union(u.isAll, result, dispatchBuildStatement(u.getSingleQuery))
     }
 
     // FIXME: validator

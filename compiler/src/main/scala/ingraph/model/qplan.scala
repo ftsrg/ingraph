@@ -81,7 +81,7 @@ case class Unwind(collection: Expression, element: Attribute, child: QNode) exte
 }
 
 // binary nodes
-case class Union(left: QNode, right: QNode) extends BinaryQNode {
+case class Union(bag: Boolean, left: QNode, right: QNode) extends BinaryQNode {
   override def output: Seq[Attribute] = left.output
 }
 

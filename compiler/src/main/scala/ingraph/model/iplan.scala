@@ -68,7 +68,8 @@ case class SortAndTop(skipExpr: Expression,
                       child: INode) extends UnaryINode {}
 
 // binary nodes
-case class Union(left: INode,
+case class Union(bag: Boolean,
+                 left: INode,
                  right: INode) extends BinaryINode {
   override def output: Seq[Attribute] = left.output
 }
