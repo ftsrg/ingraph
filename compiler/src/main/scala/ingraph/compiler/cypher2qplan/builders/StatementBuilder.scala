@@ -141,17 +141,12 @@ object StatementBuilder {
 
     // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
     val singleQuery_unwindClauseList: Seq[oc.Unwind] = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
-    // TODO handle multiple UNWINDs
 
-//    val content = q_MatchList.foldLeft[qplan.QNode](
-//      chain //qplan.Join(chain, qplan.Dual())
-//    )(
-//      (b, a) => a match {
-//        case md if  md.isOptional &&  md.hasCondition => qplan.ThetaLeftOuterJoin(b, md.op.get, md.condition.get)
-//      }
-//    )
-
-    // there might be multiple
+    // each query part has 0 or 1 UNWIND clause.
+    // use of foldLeft below is purely to substitute the corresponding if expression
+    if (singleQuery_unwindClauseList.length > 1) {
+      throw new RuntimeException("Multiple unwind clauses found in a query part, though it shold be handled when splitting query to query parts.")
+    }
     val afterUnwind: QNode = singleQuery_unwindClauseList.foldLeft(afterReturn)(
       (prev, unwind) => {
         val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
