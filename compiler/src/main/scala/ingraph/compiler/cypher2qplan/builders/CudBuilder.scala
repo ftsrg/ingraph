@@ -9,7 +9,6 @@ import org.slizaa.neo4j.opencypher.openCypher.{NodeLabel, RemoveItem, SetItem}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
 
 /**
   * This is the builder for Create/Update/Delete clauses of the openCypher to relational algebra compiler.
@@ -25,10 +24,11 @@ object CudBuilder {
       case _ => None
     }.flatMap( pe => {
       val firstVertex: Attribute = AttributeBuilder.buildAttribute(pe.getNodepattern.getVariable)
-      val edgesAndVertices: mutable.Buffer[Attribute] = pe.getChain.asScala.flatMap(pec => Seq(
+      val edgesAndVertices = pe.getChain.asScala.toSeq.flatMap(pec => Seq(
         AttributeBuilder.buildAttribute(pec.getNodePattern),
         AttributeBuilder.buildAttribute(pec.getRelationshipPattern)
       ))
+      //FIXME: resolver should remove edges and vertices from create, if they are MATCH'ed in the descendant tree
       Seq(firstVertex) ++ edgesAndVertices
     })
 
