@@ -24,7 +24,7 @@ class UnionNodeTest(_system: ActorSystem) extends TestKit(_system) with Implicit
         positive = tupleBag(tuple(1, 2), tuple(1, 4))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val union = system.actorOf(Props(new UnionNode(echoActor ! _, bag = false)))
+      val union = system.actorOf(Props(new UnionNode(echoActor ! _, all = false)))
 
       union ! Primary(prim)
       expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2), tuple(1, 3))))
@@ -40,7 +40,7 @@ class UnionNodeTest(_system: ActorSystem) extends TestKit(_system) with Implicit
         positive = tupleBag(tuple(1, 2), tuple(1, 4))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
-      val union = system.actorOf(Props(new UnionNode(echoActor ! _, bag = true)))
+      val union = system.actorOf(Props(new UnionNode(echoActor ! _, all = true)))
 
       union ! Primary(prim)
       expectMsg(ChangeSet(positive = tupleBag(tuple(1, 2), tuple(1, 3))))

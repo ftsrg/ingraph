@@ -49,8 +49,8 @@ object EngineFactory {
         expr.parent match {
           case op: LeafENode =>
             op match {
-              case op: GetVertices => instantiateGetVertices(op, expr)
-              case op: GetEdges => instantiateGetEdges(op, expr)
+              case op: GetVertices => getVertices(op, expr)
+              case op: GetEdges => getEdges(op, expr)
               case op: Dual => inputs += ("" -> expr.child)
               expr.child(ChangeSet(positive=Vector(Vector())))
             }
@@ -59,13 +59,16 @@ object EngineFactory {
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
               //case op: Grouping => instantiateGrouping(op, expr)
-              case op: SortAndTop => instantiateSortAndTop(op, expr)
-              case op: Selection => instantiateSelection(op, expr)
-              case op: Projection => instantiateProjection(op, expr)
+              case op: SortAndTop => sortAndTop(op, expr)
+              case op: Selection => selection(op, expr)
+              case op: Projection => projection(op, expr)
               case op: DuplicateElimination => newLocal(Props(new DuplicateEliminationNode(expr.child)))
-              case op: AllDifferent => instantiateAllDifferent(op, expr)
-              case op: Create => instantiateCreate(op, indexer, expr)
-              case op: Delete => instantiateDelete(op, indexer, expr)
+              case op: AllDifferent => allDifferent(op, expr)
+              case op: Create => create(op, indexer, expr)
+              case op: Delete => delete(op, indexer, expr)
+              case op: Merge => merge(op, indexer, expr)
+              case op: Remove => remove(op, indexer, expr)
+              case op: SetNode => set(op, indexer, expr)
             }
             remaining += ForwardConnection(op.child, node)
 
@@ -83,15 +86,15 @@ object EngineFactory {
                   case op: AntiJoin => newLocal(Props(new AntiJoinNode(child, leftMask, rightMask)))
                   case op: Join => newLocal(Props(new JoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
                   case op: LeftOuterJoin => newLocal(Props(new LeftOuterJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask, rightMask)))
-    //                case op: TransitiveClosureJoin =>
-    //                  val minHops = op.getEdgeListVariable.getMinHops
-    //                  val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
-    //                    case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
-    //                    case MaxHopsType.UNLIMITED => Long.MaxValue
-    //                  }
-    //            newLocal(Props(new TransitiveClosureJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask,
-    //               rightMask, op.internalSchema.length, mixHops, maxHops)))
-    //                  )))
+//              case op: TransitiveClosureJoin =>
+//                val minHops = op.getEdgeListVariable.getMinHops
+//                val maxHops = op.getEdgeListVariable.getMaxHops.getMaxHopsType match {
+//                  case MaxHopsType.LIMITED => op.getEdgeListVariable.getMaxHops.getHops
+//                  case MaxHopsType.UNLIMITED => Long.MaxValue
+//                }
+//              newLocal(Props(new TransitiveClosureJoinNode(child, leftTupleWidth, rightTupleWidth, leftMask,
+//                rightMask, op.internalSchema.length, mixHops, maxHops)))
+//                )))
                 }
               }
               remaining += ForwardConnection(op.left, node.primary)
@@ -100,13 +103,13 @@ object EngineFactory {
       }
 
     // leaf nodes
-    private def instantiateGetVertices(op: GetVertices, expr: ForwardConnection) = {
+    private def getVertices(op: GetVertices, expr: ForwardConnection) = {
       val labels = op.inode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
       inputs += (op.nodeName -> expr.child)
     }
 
-    private def instantiateGetEdges(op: GetEdges, expr: ForwardConnection) = {
+    private def getEdges(op: GetEdges, expr: ForwardConnection) = {
       val labels = op.inode.edge.labels.edgeLabels.toSeq
       for (label <- labels)
         edgeConverters.addBinding(label, op)
@@ -132,18 +135,18 @@ object EngineFactory {
 //        newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
 //    }
 
-    private def instantiateSelection(op: Selection, expr: ForwardConnection) = {
+    private def selection(op: Selection, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
       newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.inode.condition, variableLookup))))
     }
 
-    private def instantiateProjection(op: Projection, expr: ForwardConnection) = {
+    private def projection(op: Projection, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
       val expressions = op.internalSchema.map(e => ExpressionParser.parseValue(e, lookup)).toVector
       newLocal(Props(new ProjectionNode(expr.child, expressions)))
     }
 
-    private def instantiateSortAndTop(op: SortAndTop, expr: ForwardConnection) = {
+    private def sortAndTop(op: SortAndTop, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
 
       // This is the mighty EMF, so there are no default values, obviously
@@ -163,7 +166,7 @@ object EngineFactory {
       )))
     }
 
-    private def instantiateAllDifferent(op: AllDifferent, expr: ForwardConnection) = {
+    private def allDifferent(op: AllDifferent, expr: ForwardConnection) = {
       val schema = getSchema(op.child)
       val indices = op.inode.edges.map(v => schema(v.name))
 
@@ -182,7 +185,7 @@ object EngineFactory {
       newLocal(Props(new SelectionNode(expr.child, allDifferent)))
     }
 
-    private def instantiateCreate(op: Create, indexer: Indexer, expr: ForwardConnection) = {
+    private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
       val creations: Seq[(Tuple) => IngraphElement] = for (element <- op.inode.attributes)
       //yield element asInstanceOf[ExpressionVariable].getExpression match {
@@ -215,7 +218,7 @@ object EngineFactory {
       }
     }
 
-    private def instantiateDelete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
+    private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
       if (op.inode.detach) {
         // detach delete not supported yet
@@ -239,6 +242,18 @@ object EngineFactory {
         }
         expr.child(m)
       }
+    }
+
+    private def merge(op: Merge, indexer: Indexer, expr: ForwardConnection) = {
+      ???
+    }
+
+    private def remove(op: Remove, indexer: Indexer, expr: ForwardConnection) = {
+      ???
+    }
+
+    private def set(op: SetNode, indexer: Indexer, expr: ForwardConnection) = {
+      ???
     }
   }
 }
