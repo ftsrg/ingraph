@@ -6,21 +6,23 @@ import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
+import java.util.concurrent.atomic.AtomicLong
+
 object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
     // FIXME: handle missing names, and introduce VariableBuilder-alike
-    expr.VertexAttribute(n.getVariable.getName, BuilderUtil.parseToVertexLabelSet(n.getNodeLabels))
+    expr.NamedVertexAttribute(n.getVariable.getName, BuilderUtil.parseToVertexLabelSet(n.getNodeLabels))
   }
 
   def buildAttribute(el: oc.RelationshipPattern): expr.EdgeAttribute = {
     val ev = el.getDetail.getVariable
-    val en = if (ev == null) {
-      "tea"
-    } else {
-      ev.getName
-    }
+    val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
 
-    expr.EdgeAttribute(en, BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes))
+    if (ev == null) {
+      expr.AnonymousEdgeAttribute(generateUniqueName, els)
+    } else {
+      expr.NamedEdgeAttribute(ev.getName, els)
+    }
   }
 
   def buildAttribute(e: oc.ExpressionNodeLabelsAndPropertyLookup): UnresolvedAttribute = {
@@ -35,6 +37,12 @@ object AttributeBuilder {
     buildAttribute(vr.getVariableRef)
   }
 
+  // always use .getAndIncrement on this object
+  private val generatedNameCounterNext = new AtomicLong
+
+  def generateUniqueName: String = {
+    s"_e${generatedNameCounterNext.getAndIncrement}"
+  }
 
   //  protected def AttributeVariable buildPropertyLookupHelper(Variable ev, ExpressionNodeLabelsAndPropertyLookup e) {
 //    if (e.propertyLookups.length == 1) {
