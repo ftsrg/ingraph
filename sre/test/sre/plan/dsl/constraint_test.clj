@@ -7,12 +7,12 @@
             [sre.plan.dsl.constraint :refer :all]))
 
 (defconstraint Element [element])
-(defconstraint Edge [edge] :implies Element [edge])
-(defconstraint Vertex [vertex] :implies Element [vertex])
-(defconstraint DirectedEdge [source edge target] :implies
-               Vertex [source]
-               Edge [edge]
-               Vertex [target])
+(defconstraint Edge [edge] < Element [edge])
+(defconstraint Vertex [vertex] < Element [vertex])
+(defconstraint DirectedEdge [source edge target]
+               < Vertex [source]
+                 Edge [edge]
+                 Vertex [target])
 
 (defspec directed-edge-implies-work
          100

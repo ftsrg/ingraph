@@ -12,14 +12,14 @@
   It doesn't return the whole ConstraintBinding only the :bindings part of it!
   (It is trivial to create one as you know the type already")
   (lookup-by-var [this cond] "Gets free/bound constraints by var")
-  (with [this cond constraint] "Add constraint to the free/bound,
-  removing from the opposite if exists there")
+  (with [this cond constraint] "Add constraint to the free/bound, removing from the opposite if exists there")
   (with* [this cond constraint] "Add constraint and all implications to the free/bound,
   removing from the opposite if exists there")
   (withTransitively [this cond constraint] "Alias for with*")
   (bind [this constraint] "If the constraint is free move it to bound, else don't do a thing")
   (bind* [this constraint])
-  (bindTransitively [this constraint]))
+  (bindTransitively [this constraint])
+  (vars [this] "Gets all variables"))
 
 (defn- create-by-type [bindings]
   (reduce (fn [lkp {type :type bindings :bindings}]
@@ -92,7 +92,8 @@
   (withTransitively [this cond constraint] (with* this cond constraint))
   (bind [this constraint] (-bind this constraint))
   (bind* [this constraint] (reduce #(bind %1 %2) this (implies* constraint)))
-  (bindTransitively [this constraint] (bind* this constraint)))
+  (bindTransitively [this constraint] (bind* this constraint))
+  (vars [this] (union (-> this :free :by-var keys) (-> this :bound :by-var keys))))
 
 (defn constraint-lookup
   "Factory function to create a ConstraintLookup from free and bound constraints.

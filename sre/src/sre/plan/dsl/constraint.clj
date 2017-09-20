@@ -3,6 +3,8 @@
             [clojure.algo.generic.functor :refer :all])
   (:import (clojure.lang IPersistentSet Var)))
 
+(defrecord Variable [name])
+
 (defn constraint-bindings-to-map [bindings]
   (reduce (fn [lkp {type :type bindings :bindings}]
             (if (lkp type)
@@ -53,10 +55,9 @@
 
   Examples:
     (defconstraint Element [element])
-    (defconstraint Vertex [vertex] :implies Element[vertex])
+    (defconstraint Vertex [vertex] < Element [vertex])
     (defconstraint PowerPuffGirls [sugar spice everything-nice]
-        :implies
-          Element [sugar]
+        < Element [sugar]
           Element [spice]
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
@@ -69,7 +70,7 @@
                              :implies #{~@(let [[implies-kw & implications] rest]
                                             (case implies-kw
                                               nil `()
-                                              :implies (apply iter-implications implications)))}})]
+                                              '< (apply iter-implications implications)))}})]
        (defn ~(symbol (str factory-prefix "getType")) [] type#)
        (defn ~(symbol (str factory-prefix "create")) [~@vars] (->ConstraintBinding type# [~@vars]))
        (gen-class :name ~factory-name
