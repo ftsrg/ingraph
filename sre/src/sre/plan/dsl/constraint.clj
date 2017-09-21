@@ -1,7 +1,8 @@
 (ns sre.plan.dsl.constraint
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]
-            [clojure.pprint :as pprint])
+            [clojure.pprint :as pprint]
+            [clojure.walk :as walk])
   (:import (clojure.lang IPersistentSet Symbol)
            (java.io Writer)))
 
@@ -71,18 +72,15 @@
 
 (defn union* [& constrs] (reduce #(union %1 (implies* %2)) #{} constrs))
 
-(defn- iter-implications
-  ([] `())
-  ([type vars & rest] `(~@(apply iter-implications rest) (->ConstraintBinding ~type [~@(map keyword vars)]))))
-
-(defmacro constraint [name vars & rest]
-  `(map->Constraint {:name    '~(symbol (str *ns* "/" name))
-                     :vars    [~@(map keyword vars)]
-                     :arity   ~(count vars)
-                     :implies #{~@(let [[implies-kw & implications] rest]
-                                    (case implies-kw
-                                      nil `()
-                                      '< (apply iter-implications implications)))}}))
+(defn constraint
+  ([name vars implications] (map->Constraint {:name name
+                                              :vars vars
+                                              :arity (count vars)
+                                              :implies (->> implications
+                                                            (partition 2)
+                                                            (map (fn [[type vars]] (->ConstraintBinding type vars)))
+                                                            (into #{}))}))
+  ([vars implications] (constraint (gensym "anon_constraint__") vars implications)))
 
 (defmacro defconstraint
   "Let's you define a constraint like a boss.
@@ -99,9 +97,13 @@
           Element [everything-nice]
           Mix [sugar spice everything-nice]"
   [name vars & rest]
-  (let [factory-name (str *ns* "." name "ConstraintBinding")
+  (let [[< & implications] rest
+        var-map (zipmap vars (map keyword vars))
+        factory-name (str *ns* "." name "ConstraintBinding")
         factory-prefix (str name "ConstraintBinding-")]
-    `(let [type# (def ~name (constraint ~name ~vars ~@rest))]
+    `(let [type# (def ~name (constraint '~(symbol (str *ns*) (str name))
+                                        ~(walk/postwalk-replace var-map vars)
+                                        [~@(walk/postwalk-replace var-map implications)]))]
        (defn ~(symbol (str factory-prefix "getType")) ^Constraint [] ~name)
        (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (->ConstraintBinding ~name [~@vars]))
        (gen-class :name ~factory-name
