@@ -13,8 +13,7 @@
 
 (defenv IngraphEnvironment [^Indexer indexer])
 
-(deftask GetVertices
-         #'plan/GetVertices
+(deftask GetVertices plan/GetVertices
          (let [[v] (-> this :vars)
                ^IngraphEnvironment env (:env state)
                ^PersistentHashMap var-lkp (:var-lkp state)
@@ -24,8 +23,7 @@
                 (map #(assoc var-lkp v %)))))
 
 ; TODO should work with multiple labels, but no indexer support yet [#184]
-(deftask GetVerticesByLabels
-         #'plan/GetVerticesByLabels
+(deftask GetVerticesByLabels plan/GetVerticesByLabels
          (let [[v l] (-> this :vars)
                ^IngraphEnvironment env (:env state)
                ^PersistentHashMap var-lkp (:var-lkp state)
@@ -36,16 +34,14 @@
                 (map #(assoc var-lkp v %)))))
 
 ; TODO should add support for multiple set of labels [#210]
-(deftask CheckLabels
-         #'plan/CheckLabels
+(deftask CheckLabels plan/CheckLabels
          (let [[v l] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
                ^String label (var-lkp l)]
            (if (.contains (.labels vertex) label) (list var-lkp) ())))
 
-(deftask GetEdges
-         #'plan/GetEdges
+(deftask GetEdges plan/GetEdges
          (let [[v e w] (-> this :vars)
                ^IngraphEnvironment env (:env state)
                ^PersistentHashMap var-lkp (:var-lkp state)
@@ -57,8 +53,7 @@
                             tgt (.targetVertex edge)]
                         (assoc var-lkp v src e edge w tgt))))))
 
-(deftask GetEdgesByType
-         #'plan/GetEdgesByType
+(deftask GetEdgesByType plan/GetEdgesByType
          (let [[v e w t] (-> this :vars)
                ^IngraphEnvironment env (:env state)
                ^PersistentHashMap var-lkp (:var-lkp state)
@@ -71,18 +66,16 @@
                             tgt (.targetVertex edge)]
                         (assoc var-lkp v src e edge w tgt))))))
 
-(deftask CheckType
-         #'plan/CheckType
+(deftask CheckType plan/CheckType
          (let [[e t] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphEdge edge (var-lkp e)
                ^String type (var-lkp t)]
            (if (= (.type edge) type) (list var-lkp) ())))
 
-(deftask AccessPropertyByKey #'plan/AccessPropertyByKey (???))
+(deftask AccessPropertyByKey plan/AccessPropertyByKey (???))
 
-(deftask ExtendOut
-         #'plan/ExtendOut
+(deftask ExtendOut plan/ExtendOut
          (let [[v e w] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
@@ -92,8 +85,7 @@
                             ^IngraphVertex tgt (.targetVertex edge)]
                         (assoc var-lkp e edge w tgt))))))
 
-(deftask ExtendIn
-         #'plan/ExtendIn
+(deftask ExtendIn plan/ExtendIn
          (let [[v e w] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
@@ -103,7 +95,7 @@
                             ^IngraphVertex src (.sourceVertex edge)]
                         (assoc var-lkp e edge w src))))))
 
-(deftask ExtendOutByType #'plan/ExtendOutByType
+(deftask ExtendOutByType plan/ExtendOutByType
          (let [[v e w t] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
@@ -114,7 +106,7 @@
                             ^IngraphVertex tgt (.targetVertex edge)]
                         (assoc var-lkp e edge w tgt))))))
 
-(deftask ExtendInByType #'plan/ExtendInByType
+(deftask ExtendInByType plan/ExtendInByType
          (let [[v e w t] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex vertex (var-lkp v)
@@ -125,8 +117,7 @@
                             ^IngraphVertex src (.sourceVertex edge)]
                         (assoc var-lkp e edge w src))))))
 
-(deftask Join
-         #'plan/Join
+(deftask Join plan/Join
          (let [[v e w] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
@@ -141,8 +132,7 @@
                              (list (assoc var-lkp e edge v src))
                              ()))))))
 
-(deftask JoinByType
-         #'plan/JoinByType
+(deftask JoinByType plan/JoinByType
          (let [[v e w t] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
@@ -159,8 +149,7 @@
                              ()))))))
 
 ; I think these two doesn't really make sense
-(deftask CheckDirectedEdge
-         #'plan/CheckDirectedEdge
+(deftask CheckDirectedEdge plan/CheckDirectedEdge
          (let [[v e w] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
@@ -171,8 +160,7 @@
              (list var-lkp)
              ())))
 
-(deftask CheckDirectedEdgeByType
-         #'plan/CheckDirectedEdgeByType
+(deftask CheckDirectedEdgeByType plan/CheckDirectedEdgeByType
          (let [[v e w t] (-> this :vars)
                ^PersistentHashMap var-lkp (:var-lkp state)
                ^IngraphVertex source (var-lkp v)
@@ -185,14 +173,12 @@
              (list var-lkp)
              ())))
 
-(deftask EvalGenUnaryAssertion
-         #'plan/EvalGenUnaryAssertion
+(deftask EvalGenUnaryAssertion plan/EvalGenUnaryAssertion
          (let [^PersistentHashMap var-lkp (:var-lkp state)
                [x ucond] (map var-lkp (-> this :vars))]
            (if (ucond x) (list var-lkp) ())))
 
-(deftask EvalGenBinaryAssertion
-         #'plan/EvalGenBinaryAssertion
+(deftask EvalGenBinaryAssertion plan/EvalGenBinaryAssertion
          (let [^PersistentHashMap var-lkp (:var-lkp state)
                [x y bicond] (map var-lkp (-> this :vars))]
            (if (bicond x y) (list var-lkp) ())))

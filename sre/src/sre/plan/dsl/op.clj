@@ -3,12 +3,13 @@
             [clojure.set :refer :all]
             [sre.plan.dsl.constraint :as constraint]
             [clojure.pprint :as pprint])
-  (:import (clojure.lang Var)))
+  (:import (clojure.lang Symbol)
+           (java.io Writer)))
 
 (defn- expand-implications [constr-defs]
-  (apply union (map (fn [[constr-sym vars]]
+  (apply union (map (fn [[constr vars]]
                       (constraint/implies*
-                        (constraint/->ConstraintBinding (resolve constr-sym) vars)))
+                        (constraint/->ConstraintBinding (deref (resolve constr)) vars)))
                     constr-defs)))
 
 (defn- create-map [pairs]
@@ -29,16 +30,30 @@
 
 (defrecord Op [requires satisfies name vars])
 
+(defn pprint-op [op]
+  (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (:name op))))
+
+(defmethod pprint/simple-dispatch Op [op] (pprint-op op))
+
 (defprotocol IOpBinding
   (optype [this] "Returns the type of this IOpBinding")
   (requires [this] "Returns required constraints")
   (satisfies [this] "Returns satisfied constraints. This is a superset of the required constraints."))
 
-(defrecord OpBinding [^Var type bindings requires satisfies]
+(defrecord OpBinding [^Op type bindings requires satisfies]
   IOpBinding
   (optype [this] type)
   (requires [this] requires)
   (satisfies [this] satisfies))
+
+(defn pprint-op-binding [op-b]
+  (pprint/pprint-logical-block
+    :prefix "<" :suffix ">"
+    (pprint/write-out (:type op-b))
+    (.write ^Writer *out* "::")
+    (pprint/write-out (:bindings op-b))))
+
+(defmethod pprint/simple-dispatch OpBinding [op-b] (pprint-op-binding op-b))
 
 (defn bind-map
   "Binds operation parameters to the given name - value map"
@@ -46,9 +61,9 @@
   (let [replace (partial fmap (fn [values]
                                 (fmap (fn [params] (fmap #(lkp %1) params))
                                       values)))]
-    (map->OpBinding {:type (:type op)
-                     :bindings (fmap #(lkp %1) (:vars op))
-                     :requires (replace (:requires op))
+    (map->OpBinding {:type      op
+                     :bindings  (fmap #(lkp %1) (:vars op))
+                     :requires  (replace (:requires op))
                      :satisfies (replace (:satisfies op))})))
 
 (defn bind
@@ -71,10 +86,10 @@
   "
   [type vars & rest]
   `(map->Op (merge ~(let [[req-map sat-map] (compile-args rest)]
-                     {:requires  req-map
-                      :satisfies sat-map})
-                  {:type #'~type
-                   :vars [~@(map keyword vars)]})))
+                      {:requires  req-map
+                       :satisfies sat-map})
+                   {:name '~(symbol (str *ns* "/" type))
+                    :vars [~@(map keyword vars)]})))
 
 (defmacro defop
   "Let's you define an operation. Additionally to being a shorthand for
@@ -82,7 +97,7 @@
   getting the type etc., and adds the op to the configuration (if there is one).
 
   Usage:
-    (defop MyOp [& vars] :requires constraint-argument-pairs* :satisfies constraint-argument-pairs*)
+    (defop MyOp [& vars] constraint-argument-pairs* -> constraint-argument-pairs*)
 
   "
   [name vars & rest]
@@ -93,22 +108,11 @@
        ~(if (contains? (ns-interns *ns*) 'ops)
           `(def ~'ops (conj ~'ops ~name)))
        ; create factory
-       (defn ~(symbol (str factory-prefix "getType")) [] type#)
-       (defn ~(symbol (str factory-prefix "create")) [~@vars] (bind @type# ~@vars))
+       (defn ~(symbol (str factory-prefix "getType")) ^Op [] ~name)
+       (defn ~(symbol (str factory-prefix "create")) ^OpBinding [~@vars] (bind ~name ~@vars))
        (gen-class
          :name ~factory-name
          :prefix ~factory-prefix
-         :methods [^:static [~'getType [] clojure.lang.Var]
+         :methods [^:static [~'getType [] sre.plan.dsl.op.Op]
                    ^:static [~'create [~@(repeat (count vars) Object)] sre.plan.dsl.op.OpBinding]])
        type#)))
-
-
-
-
-(defn pprint-op-binding [op]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">"
-                               (pprint/write-out (:type op))
-                               (.write ^java.io.Writer *out* " ")
-                               (pprint/write-out (:vars op))))
-
-(defmethod pprint/simple-dispatch OpBinding [op] (pprint-op-binding op))

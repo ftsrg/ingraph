@@ -7,7 +7,6 @@
             [clojure.pprint :refer :all])
   (:import [java.util Vector]))
 
-
 (deftype TestEnvironment []
   Environment
   (create-task [this op] op))
@@ -65,5 +64,3 @@
             union-step (->UnionStep [primitive-step (->NotExistsStep primitive-step-2)])]
         (is (= (into #{} (search union-step state)) #{(->SearchTreeState {:a 1} (:env state))
                                                       (->SearchTreeState {:a 2} (:env state))}))))))
-
-

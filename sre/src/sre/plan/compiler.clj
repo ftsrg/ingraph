@@ -5,9 +5,9 @@
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
     [sre.plan.dsl.op :as op]
-    [sre.plan.dsl.constraint :refer :all]
+    [sre.plan.dsl.constraint :as constraint]
     [sre.plan.dsl.estimation :as estimation]
-    [sre.plan.lookup :refer :all]
+    [sre.plan.lookup :as lookup]
     [clojure.pprint :refer :all])
   (:import (sre.plan.dsl.estimation Cost Weight)
            (clojure.lang IPersistentSet IPersistentMap)
@@ -21,7 +21,7 @@
         var-lkp (:var-lkp stump)
         cond (:cond props)]
     (loop [branches ()
-           [first & rest] (into () (get (lookup-by-type constr-lkp (nth cond 1)) type))]
+           [first & rest] (into () (get (lookup/lookup-by-type constr-lkp (nth cond 1)) type))]
       (if-not (some? first)
         ; every valid branch of this condition type has been already created
         branches
@@ -73,7 +73,7 @@
   (lkp-to-match-list
     (map-by-type #(hash-map :n (let [constr-count (constr-counts %2)]
                                  (if (nil? constr-count) 0 constr-count))
-                            :arity (:arity (deref %2))
+                            :arity (:arity %2)
                             :params %1
                             :cond condition)
                  (get op (nth condition 0)))))
@@ -93,12 +93,12 @@
     ; for exiting as early as possible in this highly likely situation
     (if-not (reduce #(and %1 (subset?
                                (keys (get op (nth %2 0)))
-                               (into #{} (keys (lookup-by-type constr-lkp (nth %2 1)))))) conditions)
+                               (into #{} (keys (lookup/lookup-by-type constr-lkp (nth %2 1)))))) conditions)
       ()
       (let [sorted-constr (apply union (map #(build-match-list op
                                                                ; this is shady but we only replace the constraints with their counts
                                                                ; on the respective map
-                                                               (fmap count (lookup-by-type constr-lkp (nth %1 1)))
+                                                               (fmap count (lookup/lookup-by-type constr-lkp (nth %1 1)))
                                                                %1) conditions))]
         (loop [open (list (map->BindingBranchNode {:op      op
                                                    :var-lkp var-lkp
@@ -137,8 +137,8 @@
                         :constr-lkp        constr-lkp
                         :free-count        index
                         :non-past-ops      (filter (fn [x] (every? #(subset? #{(nth %1 2)}
-                                                                             (get (lookup-by-type constr-lkp
-                                                                                                  (nth %1 0))
+                                                                             (get (lookup/lookup-by-type constr-lkp
+                                                                                                         (nth %1 0))
                                                                                   (nth %1 1)))
                                                                    (:done x)))
                                                    (:non-past-ops cell))}))
@@ -177,10 +177,10 @@
                     ordered-cells (get column :ordered-cells)
                     cost-calculator (estimation/update-cost (:cost-calculator cell)
                                                             (estimation/get-weight weight-calculator))
-                    constr-lkp (reduce bind (:constr-lkp cell) (map (fn [[_ type bindings]]
-                                                                      (->ConstraintBinding type bindings))
-                                                                    (:done present-binding)))
-                    free (lookup constr-lkp :free)
+                    constr-lkp (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
+                                                                             (constraint/->ConstraintBinding type bindings))
+                                                                           (:done present-binding)))
+                    free (lookup/lookup constr-lkp :free)
                     ; determine duplicate (if any)
                     dupe (get-in column [:cells-by-free free])
                     ; determine whether it fits into the k best or not (only needed if not a dupe actually)
@@ -214,7 +214,7 @@
                                  (let [evicted (-> ordered-cells first)]
                                    (-> plans
                                        ; get rid of it from the cells-by-free map
-                                       (update-in [index :cells-by-free] #(dissoc %1 (-> evicted :constr-lkp (lookup :free))))
+                                       (update-in [index :cells-by-free] #(dissoc %1 (-> evicted :constr-lkp (lookup/lookup :free))))
                                        ; get rid of it from the ordered cells set
                                        (update-in [index :ordered-cells] #(disj %1 evicted))
                                        ; add new item to ordered cells set
@@ -247,7 +247,7 @@
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (let [n (count (lookup constr-lkp :free))
+  (let [n (count (lookup/lookup constr-lkp :free))
         step (partial search-plan-step k)
         cell (map->SearchPlanCell {:cost-calculator   cost-calculator
                                    :weight-calculator weight-calculator
@@ -256,7 +256,7 @@
                                    :free-count        n
                                    :non-past-ops      (bind-free ops constr-lkp)})] ; 3:1 set n
     (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
-                                                            :cells-by-free {(lookup constr-lkp :free) cell}}))]
+                                                            :cells-by-free {(lookup/lookup constr-lkp :free) cell}}))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
           (success (-> plans (get 0) :ordered-cells first)) ; 3:18 - ready. return best plan

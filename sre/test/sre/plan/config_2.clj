@@ -27,11 +27,11 @@
 
 (defmulti weight (fn [op] (:type op)))
 
-(defmethod weight #'GetVertices [op] 5)
-(defmethod weight #'GetEdges [op] 5)
-(defmethod weight #'GetEdgesByType [op] 4)
-(defmethod weight #'ExtendOut [op] 2)
-(defmethod weight #'ExtendIn [op] 2)
+(defmethod weight GetVertices [op] 5)
+(defmethod weight GetEdges [op] 5)
+(defmethod weight GetEdgesByType [op] 4)
+(defmethod weight ExtendOut [op] 2)
+(defmethod weight ExtendIn [op] 2)
 
 (defrecord CostCalculator [c p]
   Cost
