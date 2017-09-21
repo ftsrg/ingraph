@@ -36,7 +36,6 @@ object QPlanResolver {
     * @return
     */
   protected def resolveAttributes(attributes: Seq[cExpr.Attribute], child: qplan.QNode): Seq[cExpr.Attribute] = {
-    //val transformedAttributes = filterForAttributesOfChildOutput(attributes, child)
     val transformedAttributes = attributes.flatMap( a => child.output.find( co => co.name == a.name ) )
 
     if (attributes.length != transformedAttributes.length) {
