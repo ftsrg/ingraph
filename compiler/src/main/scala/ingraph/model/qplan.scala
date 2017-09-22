@@ -15,6 +15,7 @@ abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
 }
 abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
 
+
 /**
   * A stub leaf node for the qplan indicating incomplete compilation.
   */
