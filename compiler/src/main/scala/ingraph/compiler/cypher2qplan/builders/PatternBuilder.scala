@@ -9,12 +9,14 @@ import scala.collection.JavaConverters._
 object PatternBuilder {
   def buildPattern(pattern: oc.PatternPart): qplan.QNode = {
     pattern match {
-      case p: oc.RelationshipsPattern => buildPatternHelper(p.getNodePattern, p.getChain.asScala)
       case p: oc.PatternElement => buildPatternHelper(p.getNodepattern, p.getChain.asScala)
       case p: oc.PatternElementChain => qplan.QStub()
       // general PatternPart instance
       case p => qplan.QStub()
     }
+  }
+  def buildPattern(pattern: oc.RelationshipsPattern): qplan.QNode = {
+    buildPatternHelper(pattern.getNodePattern, pattern.getChain.asScala)
   }
 
 
