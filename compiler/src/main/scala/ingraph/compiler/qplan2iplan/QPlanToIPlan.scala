@@ -30,7 +30,7 @@ object QPlanToIPlan {
       case qplan.Production(child) => transform(child) // throw away production nodes for now
       case qplan.Projection(projectList, child) => logical.Project(projectList, transform(child))
       case qplan.Selection(condition, child) => logical.Filter(condition, transform(child))
-      //case qplan.DuplicateElimination(child) => logical.Deduplicate(transform(child))
+      case qplan.DuplicateElimination(child) => logical.Distinct(transform(child))
       case qplan.AllDifferent(edges, child) => transform(child) // TODO
 //      case qplan.Unwind(collection, element, child) => iplan.Unwind(collection, element, transform(child))
       // unary CUD
@@ -41,7 +41,8 @@ object QPlanToIPlan {
 //      case qplan.SetNode(vertexLabelUpdates, child) => iplan.SetNode(vertexLabelUpdates, transform(child))
 
       // binary
-      case qplan.Union(bag, l, r)                    => logical.Union(transform(l), transform(r)) // TODO bag union
+      case qplan.Union(true, l, r)                   => logical.Union(transform(l), transform(r))
+      case qplan.Union(false, l, r)                  => logical.Distinct(logical.Union(transform(l), transform(r)))
       case qplan.Join(l, r)                          => logical.Join(transform(l), transform(r), plans.Inner, null)
       case qplan.LeftOuterJoin(l, r)                 => logical.Join(transform(l), transform(r), plans.LeftOuter, null)
       case qplan.ThetaLeftOuterJoin(l, r, condition) => logical.Join(transform(l), transform(r), plans.LeftOuter, null)

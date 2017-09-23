@@ -3,7 +3,7 @@ package ingraph.compiler.cypher2qplan
 import ingraph.compiler.qplan2iplan.SchemaInferencer.extractAttributes
 import ingraph.model.expr.{ElementAttribute, PropertyAttribute}
 import ingraph.model.{expr, misc, qplan}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedFunction}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -72,7 +72,7 @@ object QPlanResolver {
     }
   }
 
-  def gatherUnresolvedAliases(qNode: qplan.QNode): Seq[UnresolvedAlias] = {
+  def gatherUnresolvedAliases(qNode: qplan.QNode): Seq[NamedExpression] = {
     qNode.flatMap {
       case qplan.Projection(projectList, _) => projectList.flatMap(extractPropertyAttributesFromExpression(_))
       case qplan.Selection(condition, _) => extractPropertyAttributesFromExpression(condition)
@@ -81,8 +81,9 @@ object QPlanResolver {
     }
   }
 
-  def extractPropertyAttributesFromExpression(expression: Expression): Seq[UnresolvedAlias] = {
+  def extractPropertyAttributesFromExpression(expression: Expression): Seq[NamedExpression] = {
     (expression match {
+      case a: UnresolvedAttribute => Seq(a)
       case a: UnresolvedAlias => Seq(a)
       case _ => Seq()
     }) ++ expression.children.flatMap(extractPropertyAttributesFromExpression(_))

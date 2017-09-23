@@ -1,8 +1,11 @@
 package ingraph.sandbox
 
-import ingraph.compiler.CypherToQPlan
+import java.io.File
+
+import ingraph.compiler.{CypherToQPlan, IPlanParser}
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
+import org.apache.commons.io.FileUtils
 import org.scalatest.FunSuite
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
@@ -36,13 +39,12 @@ class TrainBenchmarkCypherTest extends FunSuite {
 
   }
 
-//  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
-//    test(queryFile.getName.dropRight(".cypher".length)) {
-//      val query = FileUtils.readFileToString(queryFile)
-//      val ep = IPlanParser.parse(query)
-//    }
-//  }
-
+  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
+    test(queryFile.getName.dropRight(".cypher".length)) {
+      val query = FileUtils.readFileToString(queryFile)
+      val ep = IPlanParser.parse(query)
+    }
+  }
 
   test("PosLength.cypher") {
     TrainBenchmarkCypherTest.testQueryFile("PosLength")
