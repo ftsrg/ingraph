@@ -3,7 +3,6 @@ package ingraph.ire
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import org.supercsv.prefs.CsvPreference
-import ingraph.model.eplan.ENode
 
 import scala.collection.JavaConverters._
 

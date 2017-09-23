@@ -1,10 +1,9 @@
 package ingraph.compiler.cypher2qplan
 
-import ingraph.compiler.qplan2iplan.SchemaInferencer.extractAttributes
-import ingraph.model.expr.{ElementAttribute, PropertyAttribute}
+import ingraph.model.expr.ElementAttribute
 import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 

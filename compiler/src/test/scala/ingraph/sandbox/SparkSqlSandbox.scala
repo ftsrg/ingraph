@@ -4,17 +4,14 @@ import java.net.URI
 
 import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.{CypherParser, QPlanResolver}
-import ingraph.compiler.qplan2iplan.QPlanToIPlan
-import ingraph.model._
-import ingraph.model.qplan.Selection
-import org.apache.spark.sql.catalyst.analysis.{Analyzer, EliminateSubqueryAliases, FunctionRegistry, SimpleAnalyzer, _}
+import ingraph.compiler.qplan2iplan.QPlanToSqlPlan
+import org.apache.spark.sql.catalyst.analysis.{Analyzer, FunctionRegistry, _}
 import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, InMemoryCatalog, SessionCatalog}
-import org.apache.spark.sql.catalyst.expressions.{Alias, Attribute, AttributeMap, AttributeReference, AttributeSet, CreateArray, CreateNamedStruct, CreateStruct, Expression, ExtractValue, Generator, Murmur3Hash, NamedExpression, OuterReference, SortOrder, SubqueryExpression}
+import org.apache.spark.sql.catalyst.expressions.{AttributeReference, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical._
-import org.apache.spark.sql.catalyst.rules.Rule
-import org.apache.spark.sql.execution.SparkSqlParser
+import org.apache.spark.sql.execution._
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.types.{DataType, IntegerType, StringType}
+import org.apache.spark.sql.types.StringType
 import org.scalatest.FunSuite
 
 
@@ -63,13 +60,15 @@ class SparkSqlSandbox extends FunSuite {
     }
     val analyzer = new Analyzer(catalog, conf)
 
-    val iplan = QPlanToIPlan.transform(qplan)
+    val iplan = QPlanToSqlPlan.transform(qplan)
 //    val analyzer = makeAnalyzer(conf)
     val resolvedPlan = analyzer.execute(iplan)
+
 
     println(qplan)
     println(iplan)
     println(resolvedPlan)
+
   }
 
 }

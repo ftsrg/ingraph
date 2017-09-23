@@ -1,12 +1,11 @@
 package ingraph.compiler.qplan2iplan
 
-import ingraph.model.qplan.QNode
-import ingraph.model.{iplan, qplan}
+import ingraph.model.qplan
 import org.apache.spark.sql.catalyst.{TableIdentifier, analysis, plans}
 import org.apache.spark.sql.catalyst.plans.logical
 
-object QPlanToIPlan {
-  def transform(plan: QNode): logical.LogicalPlan = {
+object QPlanToSqlPlan {
+  def transform(plan: qplan.QNode): logical.LogicalPlan = {
     plan match {
       // leaf
       case qplan.GetVertices(v) => analysis.UnresolvedRelation(TableIdentifier(v.name))

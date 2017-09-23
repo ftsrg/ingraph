@@ -1,9 +1,7 @@
 package ingraph.sandbox
 
-import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.compiler.qplan2iplan.QPlanToSqlPlan
 import ingraph.model._
-import ingraph.model.iplan.INode
-import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class MyTest extends FunSuite {
@@ -47,7 +45,7 @@ class MyTest extends FunSuite {
     val gv = qplan.GetVertices(v)
 
     val qp = gv
-    val ip = QPlanToIPlan.transform(qp)
+    val ip = QPlanToSqlPlan.transform(qp)
     println(ip)
   }
 
@@ -68,7 +66,7 @@ class MyTest extends FunSuite {
     val gv = qplan.GetVertices(v)
     val de = qplan.DuplicateElimination(gv)
 
-    val i = QPlanToIPlan.transform(de)
+    val i = QPlanToSqlPlan.transform(de)
     println(i)
   }
 
