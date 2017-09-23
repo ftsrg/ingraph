@@ -1,8 +1,10 @@
 package ingraph.compiler.cypher2qplan
 
+import ingraph.compiler.qplan2iplan.SchemaInferencer.extractAttributes
+import ingraph.model.expr.{ElementAttribute, PropertyAttribute}
 import ingraph.model.{expr, misc, qplan}
-import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
-import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedFunction}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
@@ -11,13 +13,6 @@ object QPlanResolver {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
     val beautiful = unresolvedQueryPlan.transform(qplanResolver)
-
-    val elements = unresolvedQueryPlan.flatMap {
-      case qplan.GetVertices(v) => Some(v)
-      case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
-      case _ => None
-    }
-    println(elements)
 
     beautiful.asInstanceOf[qplan.QNode]
   }
@@ -68,4 +63,30 @@ object QPlanResolver {
   protected def filterForAttributesOfChildOutput(attributes: Seq[cExpr.Attribute], child: qplan.QNode, invert: Boolean = false): Seq[cExpr.Attribute] = {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
   }
+
+  def gatherElementAttributes(qNode: qplan.QNode): Seq[ElementAttribute] = {
+    qNode.flatMap {
+      case qplan.GetVertices(v) => Seq(v)
+      case qplan.Expand(src, trg, edge, _, _) => Seq(trg, edge)
+      case _ => None
+    }
+  }
+
+  def gatherUnresolvedAliases(qNode: qplan.QNode): Seq[UnresolvedAlias] = {
+    qNode.flatMap {
+      case qplan.Projection(projectList, _) => projectList.flatMap(extractPropertyAttributesFromExpression(_))
+      case qplan.Selection(condition, _) => extractPropertyAttributesFromExpression(condition)
+      case qplan.Sort(condition, _) => ???
+      case _ => Seq()
+    }
+  }
+
+  def extractPropertyAttributesFromExpression(expression: Expression): Seq[UnresolvedAlias] = {
+    (expression match {
+      case a: UnresolvedAlias => Seq(a)
+      case _ => Seq()
+    }) ++ expression.children.flatMap(extractPropertyAttributesFromExpression(_))
+  }
+
 }
+

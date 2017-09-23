@@ -35,11 +35,12 @@ object SchemaInferencer {
                   ea ++ extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
                 )
               )
+      // TODO
+      case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
       // the rest is just the same, isn't it?
       case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
       case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
       case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
-      case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
       // unary DMLs
       case o: iplan.Create               => eplan.Create              (ea, o, transform(o.child, ea))
       case o: iplan.Delete               => eplan.Delete              (ea, o, transform(o.child, ea))

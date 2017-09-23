@@ -6,12 +6,13 @@ import ingraph.model.eplan.ENode
 
 object IPlanParser {
   def parse(query: String): ENode = {
-    SchemaInferencer.transform(
-      QPlanToIPlan.transform(
-        CypherToQPlan.build(
-          CypherParser.parseString(query), "test"
-        )
-      )
-    )
+//    SchemaInferencer.transform(
+//      QPlanToIPlan.transform(
+//        CypherToQPlan.build(
+//          CypherParser.parseString(query), "test"
+//        )
+//      )
+//    )
+    null
   }
 }
