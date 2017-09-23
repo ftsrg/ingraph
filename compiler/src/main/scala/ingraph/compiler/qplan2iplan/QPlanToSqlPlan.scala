@@ -1,10 +1,58 @@
 package ingraph.compiler.qplan2iplan
 
+import java.net.URI
+
+import ingraph.compiler.cypher2qplan.QPlanResolver
 import ingraph.model.qplan
+import org.apache.spark.sql.catalyst.analysis.{Analyzer, FunctionRegistry, UnresolvedAlias, UnresolvedAttribute}
+import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, InMemoryCatalog, SessionCatalog}
+import org.apache.spark.sql.catalyst.expressions.{AttributeReference, NamedExpression}
 import org.apache.spark.sql.catalyst.{TableIdentifier, analysis, plans}
 import org.apache.spark.sql.catalyst.plans.logical
+import org.apache.spark.sql.catalyst.plans.logical.{LocalRelation, LogicalPlan}
+import org.apache.spark.sql.execution.SparkSqlParser
+import org.apache.spark.sql.internal.SQLConf
+import org.apache.spark.sql.types.StringType
 
 object QPlanToSqlPlan {
+
+  def getPropertyAttributeName(eaName: String, nameParts: Seq[String]): Option[String] = {
+    if (nameParts.length > 1 && nameParts(0) == eaName) {
+      Some(nameParts(1))
+    } else {
+      None
+    }
+  }
+
+  def transformAndResolve(plan: qplan.QNode): LogicalPlan = {
+    val conf = new SQLConf().copy(SQLConf.CASE_SENSITIVE -> true)
+
+    val elementAttributes = QPlanResolver.gatherElementAttributes(plan).distinct
+    val unresolvedAliases: Seq[NamedExpression] = QPlanResolver.gatherUnresolvedAliases(plan)
+
+    val catalog = new SessionCatalog(new InMemoryCatalog, FunctionRegistry.builtin, conf)
+    catalog.createDatabase(CatalogDatabase("default", "", new URI("loc"), Map.empty), ignoreIfExists = false)
+
+    println(elementAttributes.map(_.name))
+    for (ea <- elementAttributes) {
+      val attributes: Seq[String] = unresolvedAliases.flatMap {
+        case UnresolvedAttribute(nameParts) => getPropertyAttributeName(ea.name, nameParts)
+        case UnresolvedAlias(UnresolvedAttribute(nameParts), _) => getPropertyAttributeName(ea.name, nameParts)
+        case _ => None
+      }.distinct
+      val output: Seq[AttributeReference] = attributes.map(s => AttributeReference(s, StringType)())
+
+      println(output)
+      catalog.createTempView(ea.name, LocalRelation(output), overrideIfExists = true)
+    }
+
+    val analyzer = new Analyzer(catalog, conf)
+
+    val unresolvedSqlPlan = transform(plan)
+    val resolvedSqlPlan = analyzer.execute(unresolvedSqlPlan)
+    return resolvedSqlPlan
+  }
+
   def transform(plan: qplan.QNode): logical.LogicalPlan = {
     plan match {
       // leaf
