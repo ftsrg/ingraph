@@ -268,6 +268,8 @@
               (recur plans))))
         (failure (Exception. "no solution"))))))
 
+
+
 (defn SearchPlanCompiler-calculate ^SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
   @(calculate-search-plan cost-calculator weight-calculator k ops constr-lkp))
 

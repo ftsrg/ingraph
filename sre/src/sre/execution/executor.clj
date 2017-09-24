@@ -1,6 +1,6 @@
 (ns sre.execution.executor
-  (:require [clojure.zip :as z])
-  (:require [sre.plan.task :refer :all])
+  (:require [clojure.zip :as z]
+            [sre.plan.task :refer :all])
   (:import (clojure.lang LazySeq PersistentHashMap PersistentList)
            (java.util Vector)
            (sre.plan.task SearchTreeState)))
