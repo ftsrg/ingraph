@@ -2,17 +2,15 @@
   (:require [clojure.test :refer :all]
             [clojure.zip :as z]
             [sre.execution.executor :refer :all]
-            [sre.execution.dsl :refer :all]
+            [sre.plan.task :refer :all]
             [sre.plan.config-2 :as c2]
             [clojure.pprint :refer :all])
   (:import [java.util Vector]))
 
-(deftype TestEnvironment []
-  Environment
-  (create-task [this op] op))
+(defrecord TestEnvironment [])
 
 (deftest test-execution
-  (let [env (TestEnvironment.)
+  (let [env (->TestEnvironment)
         primitive-step (reify ISearch
                          (search [this state] (vector
                                                 (->SearchTreeState {:a 1} (:env state))

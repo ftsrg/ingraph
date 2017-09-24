@@ -2,7 +2,7 @@
   (:require
     [clojure.algo.generic.functor :refer :all]
     [clojure.set :refer :all]
-    [sre.plan.dsl.constraint :refer [implies* union*]]
+    [sre.plan.constraint :refer [implies* union*]]
     [clojure.pprint])
   (:import (clojure.lang IPersistentSet)))
 

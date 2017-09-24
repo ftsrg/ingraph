@@ -4,12 +4,12 @@
     [cats.monad.exception :refer :all]
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
-    [sre.plan.dsl.op :as op]
-    [sre.plan.dsl.constraint :as constraint]
-    [sre.plan.dsl.estimation :as estimation]
+    [sre.plan.op :as op]
+    [sre.plan.constraint :as constraint]
+    [sre.plan.estimation :as estimation]
     [sre.plan.lookup :as lookup]
     [clojure.pprint :refer :all])
-  (:import (sre.plan.dsl.estimation Cost Weight)
+  (:import (sre.plan.estimation Cost Weight)
            (clojure.lang IPersistentSet IPersistentMap)
            (java.util List Collection)
            (sre.plan.lookup ConstraintLookup)))
@@ -164,19 +164,19 @@
                                  ; the cost-fn requires that the op is properly bound to vars, so we do that here
                                  ; yeah, it smells that we have two different representations for the damn same thing
                                  ; so refactor once you have the fatigue
-                                 :let [bound (op/bind-map (:op present-binding) (:var-lkp present-binding))
-                                       weight-calculator (estimation/update-weight (:weight-calculator cell) bound (:constr-lkp cell))]]
-                             [weight-calculator present-binding bound])]
+                                 :let [op-binding (op/bind-map (:op present-binding) (:var-lkp present-binding))
+                                       weight (estimation/get-weight (:weight-calculator cell) op-binding (:constr-lkp cell))]]
+                             [weight present-binding op-binding])]
     ; go through all applicable ops and try to fit them somewhere in our table.
-    (reduce (fn [plans [weight-calculator present-binding bound]]
+    (reduce (fn [plans [weight present-binding op-binding]]
               ; we have to find out how many constraints are getting bound because that determines the first index.
               ; it should be equal to the length of the done list as everything in there is a single newly bound
               ; constraint
               (let [index (- (:free-count cell) (count (:done present-binding))) ; 3:9
                     column (get plans index)
                     ordered-cells (get column :ordered-cells)
-                    cost-calculator (estimation/update-cost (:cost-calculator cell)
-                                                            (estimation/get-weight weight-calculator))
+                    cost-calculator (estimation/update-cost (:cost-calculator cell) weight)
+                    weight-calculator (:weight-calculator cell)
                     constr-lkp (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
                                                                              (constraint/->ConstraintBinding type bindings))
                                                                            (:done present-binding)))
@@ -189,7 +189,7 @@
                   (some? dupe) (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
                                  ; this is better, evict dupe
                                  (let [cell (create-search-plan-cell index cost-calculator
-                                                                     weight-calculator bound
+                                                                     weight-calculator op-binding
                                                                      cell constr-lkp)]
                                    (-> plans
                                        (update-in [index :ordered-cells] #(-> %1 (disj dupe) (conj cell)))
@@ -201,7 +201,7 @@
                       (< (compare cost-calculator
                                   (-> ordered-cells first :cost-calculator))
                          0)) (let [cell (create-search-plan-cell index cost-calculator
-                                                                 weight-calculator bound
+                                                                 weight-calculator op-binding
                                                                  cell constr-lkp)]
                                (if (not full?)
                                  ; using up an empty slot
@@ -276,8 +276,8 @@
   :prefix "SearchPlanCompiler-"
   :main false
   :methods [^:static [calculate
-                      [sre.plan.dsl.estimation.Cost
-                       sre.plan.dsl.estimation.Weight
+                      [sre.plan.estimation.Cost
+                       sre.plan.estimation.Weight
                        Integer
                        clojure.lang.IPersistentSet
                        sre.plan.lookup.ConstraintLookup]

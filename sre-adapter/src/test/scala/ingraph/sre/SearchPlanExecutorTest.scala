@@ -1,7 +1,7 @@
 package ingraph.sre
 
 import ingraph.sre.SearchPlanFixtures._
-import ingraph.sre.plan._
+import ingraph.sre.config._
 import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
 import org.scalatest.junit.JUnitRunner

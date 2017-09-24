@@ -1,4 +1,4 @@
-(ns sre.plan.dsl.constraint
+(ns sre.plan.constraint
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]
             [clojure.pprint :as pprint]
@@ -105,13 +105,13 @@
                                         ~(walk/postwalk-replace var-map vars)
                                         [~@(walk/postwalk-replace var-map implications)]))]
        (defn ~(symbol (str factory-prefix "getType")) ^Constraint [] ~name)
-       (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (->ConstraintBinding ~name [~@vars]))
+       (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (bind ~name ~@vars))
        (gen-class :name ~factory-name
                   :prefix ~factory-prefix
-                  :methods [^:static [~'getType [] sre.plan.dsl.constraint.Constraint]
-                            ^:static [~'create [~@(repeat (count vars) Object)] sre.plan.dsl.constraint.ConstraintBinding]])
-       ~(if (contains? (ns-interns *ns*) 'constraints)
-          `(def ~'constraints (conj ~'constraints ~name)))
+                  :methods [^:static [~'getType [] sre.plan.constraint.Constraint]
+                            ^:static [~'create [~@(repeat (count vars) Object)] sre.plan.constraint.ConstraintBinding]])
+       ~(if (contains? (ns-interns *ns*) '-constraints)
+          `(def ~'-constraints (conj ~'-constraints ~name)))
        type#)))
 
 

@@ -1,9 +1,9 @@
 (ns sre.execution.executor
-  (:require [clojure.zip :as z]
-            [sre.execution.dsl :refer :all])
-  (:import (clojure.lang LazySeq PersistentHashMap PersistentList))
-  (:import (java.util Vector)
-           (sre.execution.dsl SearchTreeState)))
+  (:require [clojure.zip :as z])
+  (:require [sre.plan.task :refer :all])
+  (:import (clojure.lang LazySeq PersistentHashMap PersistentList)
+           (java.util Vector)
+           (sre.plan.task SearchTreeState)))
 
 (defrecord SearchTreeZipperNode [^SearchTreeState state ^PersistentList left])
 

@@ -2,7 +2,7 @@
   (:require [clojure.test :refer :all]
             [clojure.pprint :refer :all]
             [sre.plan.config-1 :refer :all]
-            [sre.plan.dsl.constraint :as c]
+            [sre.plan.constraint :as c]
             [sre.plan.lookup :refer :all]))
 
 (deftest test-lookup

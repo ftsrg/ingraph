@@ -1,7 +1,7 @@
 (ns sre.plan.config-1
-    (:require [sre.plan.dsl.config :refer [defconfig]]
-              [sre.plan.dsl.constraint :refer [defconstraint]]
-              [sre.plan.dsl.op :refer [defop]]))
+    (:require [sre.plan.config :refer [defconfig]]
+              [sre.plan.constraint :refer [defconstraint]]
+              [sre.plan.op :refer [defop]]))
 
 (defconfig Config1)
 

@@ -1,8 +1,9 @@
 (ns sre.plan.config-2
-  (:require [sre.plan.dsl.config :refer [defconfig]]
-            [sre.plan.dsl.constraint :refer [defconstraint]]
-            [sre.plan.dsl.op :refer [defop]]
-            [sre.plan.dsl.estimation :refer :all]))
+  (:refer-clojure :exclude [name])
+  (:require [sre.plan.config :refer :all]
+            [sre.plan.constraint :refer [defconstraint]]
+            [sre.plan.op :refer [defop]]
+            [sre.plan.estimation :refer :all]))
 
 (defconfig Basic)
 
@@ -12,8 +13,8 @@
 (defconstraint Vertex [vertex] < Element [vertex])
 (defconstraint DirectedEdge [source edge target]
                < Vertex [source]
-                 Edge [edge]
-                 Vertex [target])
+               Edge [edge]
+               Vertex [target])
 (defconstraint HasType [edge type] < Edge [edge] Known [type])
 
 (defop GetVertices [vertex] -> Vertex [vertex])
@@ -25,27 +26,26 @@
 (defop ExtendIn [target edge source]
        Vertex [target] -> DirectedEdge [source edge target])
 
-(defmulti weight (fn [op] (:type op)))
-
-(defmethod weight GetVertices [op] 5)
-(defmethod weight GetEdges [op] 5)
-(defmethod weight GetEdgesByType [op] 4)
-(defmethod weight ExtendOut [op] 2)
-(defmethod weight ExtendIn [op] 2)
+(defweight GetVertices [op] 5)
+(defweight GetEdges [op] 5)
+(defweight GetEdgesByType [op] 4)
+(defweight ExtendOut [op] 2)
+(defweight ExtendIn [op] 2)
 
 (defrecord CostCalculator [c p]
   Cost
   (update-cost [this weight]
     (as-> this this
-      (update-in this [:p] #(* % weight))
-      (update-in this [:c] #(+ % (:p this)))))
+          (update-in this [:p] #(* % weight))
+          (update-in this [:c] #(+ % (:p this)))))
   Comparable
   (compareTo [this other] (compare c (:c other))))
 
-(defrecord WeightCalculator [w]
-  Weight
-  (update-weight [this bound-op constraint-lookup]
-    (assoc-in this [:w] (weight bound-op)))
-  (get-weight [this] w))
+(def cost-calculator (->CostCalculator 0 1))
+
+(def weight-calculator
+  (reify Weight
+    (get-weight [this op-binding constraint-lookup]
+      ((weight Basic) op-binding))))
 
 

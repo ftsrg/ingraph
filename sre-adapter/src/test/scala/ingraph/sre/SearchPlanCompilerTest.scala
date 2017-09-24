@@ -3,10 +3,10 @@ package ingraph.sre
 import java.util.Collections
 
 import clojure.java.api.Clojure
-import clojure.lang.{Cons, IPersistentMap}
+import clojure.lang.{Cons, IPersistentMap, IPersistentSet}
 import com.google.common.collect.Lists
 import ingraph.sre.estimation.{CostCalculator, Estimation}
-import ingraph.sre.plan._
+import ingraph.sre.config._
 import ingraph.sre.util.Variable
 import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
@@ -22,8 +22,8 @@ class SearchPlanCompilerTest extends FreeSpec {
   // Better create gen-class factories for every defrecord:
   // https://groups.google.com/forum/#!topic/clojure/3DekTQZfDTk
 
-  private val costCalculator = Estimation.createCostCalculator(0, 1)
-  private val weightCalculator = Estimation.createWeightCalculator()
+  private val costCalculator = Estimation.costCalculator()
+  private val weightCalculator = Estimation.weightCalculator()
 
   "Should compile plan #1" in {
     val constraints = Collections.singletonList(DirectedEdgeConstraintBinding.create(1, 2, 3))
@@ -32,7 +32,7 @@ class SearchPlanCompilerTest extends FreeSpec {
       costCalculator,
       weightCalculator,
       5,
-      IngraphConfig.getOperations,
+      IngraphConfig.getInstance().operations().asInstanceOf[IPersistentSet],
       ConstraintLookupFactory.fromFreeConstrs(constraints))
 
     assert(plan.cost_calculator.asInstanceOf[CostCalculator].c == 5)
@@ -54,7 +54,7 @@ class SearchPlanCompilerTest extends FreeSpec {
       costCalculator,
       weightCalculator,
       5,
-      IngraphConfig.getOperations,
+      IngraphConfig.getInstance().operations().asInstanceOf[IPersistentSet],
       ConstraintLookupFactory.fromAllConstrsAndBoundConstrs(constraints, bound))
   }
 }

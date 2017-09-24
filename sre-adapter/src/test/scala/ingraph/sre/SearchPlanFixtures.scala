@@ -2,7 +2,7 @@ package ingraph.sre
 
 import clojure.java.api.Clojure
 import com.google.common.collect.Lists
-import ingraph.sre.plan._
+import ingraph.sre.config._
 import ingraph.sre.util.Variable
 
 object SearchPlanFixtures {

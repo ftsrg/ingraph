@@ -3,10 +3,11 @@
             [clojure.set :refer :all]
             [sre.plan.compiler :refer :all]
             [sre.plan.lookup :as lookup]
+            [sre.plan.config :as config]
             [sre.plan.config-1 :as c1]
             [sre.plan.config-2 :as c2]
-            [sre.plan.dsl.constraint :as c]
-            [sre.plan.dsl.op :as op]
+            [sre.plan.constraint :as c]
+            [sre.plan.op :as op]
             [clojure.pprint :refer :all]
             [cats.core :refer [mlet]]
             [cats.monad.exception :refer :all]))
@@ -113,7 +114,7 @@
             (bind-op
               c1/TestOp01
               {}
-              (lookup/constraint-lookup #{} #{(c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+              (lookup/constraint-lookup #{} #{(c/bind c1/TestConstraint02 1 2)})
               [:free]))))
       (testing "should result in an empty binding list in the present"
         (is
@@ -121,15 +122,15 @@
             (bind-op
               c1/TestOp01
               {}
-              (lookup/constraint-lookup #{} #{(c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+              (lookup/constraint-lookup #{} #{(c/bind c1/TestConstraint02 1 2)})
               [:free :bound])))))
     (testing "a required but non-satisfiable operation"
       (testing "should result in a binding list in the future"
         (let [result (bind-op
                        c1/TestOp01
                        {}
-                       (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint01 [1])
-                                                   (c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+                       (lookup/constraint-lookup #{(c/bind c1/TestConstraint01 1)
+                                                   (c/bind c1/TestConstraint02 1 2)})
                        [:free])]
           (is (= 1 (count result)))
           (is (= (map->BindingBranchNode {:var-lkp {:b 1, :c 2}
@@ -141,13 +142,13 @@
       (testing "should result in an empty binding list in the present"
         (let [result (bind-op c1/TestOp01
                               {}
-                              (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint01 [1])
-                                                          (c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+                              (lookup/constraint-lookup #{(c/bind c1/TestConstraint01 1)
+                                                          (c/bind c1/TestConstraint02 1 2)})
                               [:free :bound])]
           (is (empty? result))))
       (testing "should result in an empty binding list incrementally"
-        (let [constr-lkp (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint01 [1])
-                                                     (c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+        (let [constr-lkp (lookup/constraint-lookup #{(c/bind c1/TestConstraint01 1)
+                                                     (c/bind c1/TestConstraint02 1 2)})
               step-1 (bind-op c1/TestOp01
                               {}
                               constr-lkp
@@ -162,26 +163,26 @@
       (testing "should not be bound inconsistently"
         (let [result (bind-op c1/TestOp03
                               {}
-                              (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint02 [1 2])}
-                                                        #{(c/->ConstraintBinding c1/TestConstraint01 [1])})
+                              (lookup/constraint-lookup #{(c/bind c1/TestConstraint02 1 2)}
+                                                        #{(c/bind c1/TestConstraint01 1)})
                               [:free])]
           (is (empty? result))))
       (testing "should be bound every possible way"
         (testing "case #1: only one way"
           (let [result (bind-op c1/TestOp01
                                 {}
-                                (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint01 [2])
-                                                            (c/->ConstraintBinding c1/TestConstraint02 [2 3])}
-                                                          #{(c/->ConstraintBinding c1/TestConstraint01 [1])
-                                                            (c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+                                (lookup/constraint-lookup #{(c/bind c1/TestConstraint01 2)
+                                                            (c/bind c1/TestConstraint02 2 3)}
+                                                          #{(c/bind c1/TestConstraint01 1)
+                                                            (c/bind c1/TestConstraint02 1 2)})
                                 [:free :bound])]
             (is (= 1 (count result)))
             (is (= (:var-lkp (first result)) {:a 1 :b 2 :c 3}))))
         (testing "case #2: one way incrementally"
-          (let [constr-lkp (lookup/constraint-lookup #{(c/->ConstraintBinding c1/TestConstraint01 [2])
-                                                       (c/->ConstraintBinding c1/TestConstraint02 [2 3])}
-                                                     #{(c/->ConstraintBinding c1/TestConstraint01 [1])
-                                                       (c/->ConstraintBinding c1/TestConstraint02 [1 2])})
+          (let [constr-lkp (lookup/constraint-lookup #{(c/bind c1/TestConstraint01 2)
+                                                       (c/bind c1/TestConstraint02 2 3)}
+                                                     #{(c/bind c1/TestConstraint01 1)
+                                                       (c/bind c1/TestConstraint02 1 2)})
                 step-1 (bind-op c1/TestOp01
                                 {}
                                 constr-lkp
@@ -195,24 +196,24 @@
               (is (= (:var-lkp (first step-2)) {:a 1 :b 2 :c 3})))))))))
 
 (deftest test-search-plan
-  (let [cost-calculator (c2/->CostCalculator 0 1)
-        weight-calculator (c2/->WeightCalculator 0)
+  (let [cost-calculator c2/cost-calculator
+        weight-calculator c2/weight-calculator
         csp (partial calculate-search-plan cost-calculator weight-calculator 5)]
     (testing "empty plan can be satisfied without an operation"
-      (let [ops (into () c2/ops)
+      (let [ops (into () (config/operations c2/Basic))
             constr-lkp (lookup/constraint-lookup)
             plan (csp ops constr-lkp)]
         (is (= 0 (-> @plan :ops count)))))
     (testing "simple plan can be satisfied with a GetEdges operation"
-      (let [ops (into () c2/ops)
-            constr-lkp (lookup/constraint-lookup (c/implies* (c/->ConstraintBinding c2/DirectedEdge [1 2 3])))
+      (let [ops (into () (config/operations c2/Basic))
+            constr-lkp (lookup/constraint-lookup (c/implies* (c/bind c2/DirectedEdge 1 2 3)))
             plan (csp ops constr-lkp)]
         (is (= (-> @plan :ops first :type) c2/GetEdges))))
     (testing "simple plan can be satisfied with a GetEdgesByType operation"
-      (let [ops (into () c2/ops)
-            all (c/union* (c/->ConstraintBinding c2/DirectedEdge [1 2 3])
-                          (c/->ConstraintBinding c2/HasType [2 4]))
-            bound #{(c/->ConstraintBinding c2/Known [4])}
+      (let [ops (into () (config/operations c2/Basic))
+            all (c/union* (c/bind c2/DirectedEdge 1 2 3)
+                          (c/bind c2/HasType 2 4))
+            bound #{(c/bind c2/Known 4)}
             free (difference all bound)
             constr-lkp (lookup/constraint-lookup free bound)
             plan (csp ops constr-lkp)]
