@@ -4,15 +4,19 @@
     [cats.monad.exception :refer :all]
     [clojure.set :refer :all]
     [clojure.algo.generic.functor :refer :all]
-    [sre.plan.op :as op]
+    [sre.core :refer :all]
+    [sre.plan.config :as config]
     [sre.plan.constraint :as constraint]
     [sre.plan.estimation :as estimation]
     [sre.plan.lookup :as lookup]
+    [sre.plan.op :as op]
     [clojure.pprint :refer :all])
   (:import (sre.plan.estimation Cost Weight)
            (clojure.lang IPersistentSet IPersistentMap)
            (java.util List Collection)
-           (sre.plan.lookup ConstraintLookup)))
+           (sre.plan.lookup ConstraintLookup)
+           (sre.plan.config IConfig)
+           (java.io BufferedReader StringReader)))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -119,7 +123,7 @@
 
 (defrecord SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ops constr-lkp free-count non-past-ops])
 
-(defrecord SearchPlanColumn [^SearchPlanCell ordered-cells cells-by-free])
+(defrecord SearchPlanColumn [ordered-cells cells-by-free])
 
 (defn- bind-free [ops constr-lkp]
   (mapcat #(bind-op %1 {} constr-lkp [:free]) ops))
@@ -143,7 +147,7 @@
                                                                    (:done x)))
                                                    (:non-past-ops cell))}))
 
-(defn search-plan-step [^Integer k plans ^SearchPlanCell cell]
+(defn step [^Integer k ^IConfig config plans ^SearchPlanCell cell]
   ; the idea here is that we have operations in non-past-ops that may or may not be applicable at the moment
   ; because we haven't checked them for required constraints. so first figure out the applicable ops
   (let [cost-binding-pairs (for [non-past-binding (:non-past-ops cell)
@@ -164,8 +168,8 @@
                                  ; the cost-fn requires that the op is properly bound to vars, so we do that here
                                  ; yeah, it smells that we have two different representations for the damn same thing
                                  ; so refactor once you have the fatigue
-                                 :let [op-binding (op/bind-map (:op present-binding) (:var-lkp present-binding))
-                                       weight (estimation/get-weight (:weight-calculator cell) op-binding (:constr-lkp cell))]]
+                                 :let [op-binding (bind-map (:op present-binding) (:var-lkp present-binding))
+                                       weight (estimation/get-weight (:weight-calculator cell) config op-binding (:constr-lkp cell))]]
                              [weight present-binding op-binding])]
     ; go through all applicable ops and try to fit them somewhere in our table.
     (reduce (fn [plans [weight present-binding op-binding]]
@@ -225,37 +229,36 @@
             plans
             cost-binding-pairs)))
 
-(defn calculate-search-plan
+(defn run
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
   based on \"An algorithm for generating model-sensitive search plans for pattern matching on EMF models\" paper bt G. Varro et al,
   although there are notable differences.
-  The most prominent difference is that here an operations isn't a bound version of a constraints in the sense that
-  every operation is a constraint with a so called adornment (specifying for each variable whether it is free or bound).
+  The most prominent difference is that here operations and constraints are separate things. The algorithm tries to find a sequence
+  of operations that satisfy the given constraints.
   Another difference is the generalized cost-calculator. While the original article was very specific about how to calculate costs
   it hinted that the only requirement is that it should be incrementally computable. Thus here the cost calculator should be
-  supplied by the user in 'cost-calc'.
-
-  Parameters:
-    cost-calc - for calculating costs. Should implement java.lang.Comparable and sre.plan.compiler.estimation.Cost
-    weight-calc - for calculating weights. Should implement sre.plan.compiler.estimation.Weight
-    k - greedyness - optimality tuner
-    ops - the list of available operations in the system.
-    constr-lkp - constraint lookup by type
-  "
-  [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
+  supplied can be supplied by the invoker."
+  [^ConstraintLookup constr-lkp ^IConfig config {^Cost cost-calculator     :cost-calculator
+                                                 ^Weight weight-calculator :weight-calculator
+                                                 ^Integer k                :k
+                                                 :or                       {cost-calculator   estimation/default-cost-calculator
+                                                                            weight-calculator estimation/default-weight-calculator
+                                                                            k                 10}}]
   ; comments starting with x:y mark that the line corresponds to the algorithm
   ; listing `x` line `y` from the above mentioned paper.
   ; it hopefully gives a good reference what the code does.
   ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
-  (let [n (count (lookup/lookup constr-lkp :free))
-        step (partial search-plan-step k)
+  (let [ops (config/operations config)
+        n (count (lookup/lookup constr-lkp :free))
+        step (partial step k config)
         cell (map->SearchPlanCell {:cost-calculator   cost-calculator
                                    :weight-calculator weight-calculator
                                    :ops               ()
                                    :constr-lkp        constr-lkp
                                    :free-count        n
                                    :non-past-ops      (bind-free ops constr-lkp)})] ; 3:1 set n
-    (loop [plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
+    (loop [i 0
+           plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
                                                             :cells-by-free {(lookup/lookup constr-lkp :free) cell}}))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
@@ -265,22 +268,14 @@
                   plans (as-> plans x
                               (dissoc x j)
                               (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
-              (recur plans))))
-        (failure (Exception. "no solution"))))))
-
-
-
-(defn SearchPlanCompiler-calculate ^SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ^Integer k ^IPersistentSet ops ^ConstraintLookup constr-lkp]
-  @(calculate-search-plan cost-calculator weight-calculator k ops constr-lkp))
-
-(gen-class
-  :name sre.plan.compiler.SearchPlanCompiler
-  :prefix "SearchPlanCompiler-"
-  :main false
-  :methods [^:static [calculate
-                      [sre.plan.estimation.Cost
-                       sre.plan.estimation.Weight
-                       Integer
-                       clojure.lang.IPersistentSet
-                       sre.plan.lookup.ConstraintLookup]
-                      sre.plan.compiler.SearchPlanCell]])
+              (recur (inc i) plans))))
+        (let [reader (fn [str] (BufferedReader. (StringReader. str)))
+              free (with-out-str (pprint (lookup/lookup constr-lkp :free)))
+              bound (with-out-str (pprint (lookup/lookup constr-lkp :bound)))]
+          (failure (Exception. (str "no solution. Gave up after " i " steps"
+                                    "\nsatisfying\n"
+                                    (apply str (interpose "\n"
+                                                          (for [line (line-seq (reader free))] (str "  " line))))
+                                    "\nfrom\n"
+                                    (apply str (interpose "\n"
+                                                          (for [line (line-seq (reader bound))] (str "  " line))))))))))))

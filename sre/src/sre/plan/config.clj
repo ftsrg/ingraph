@@ -9,50 +9,55 @@
   just add (:refer-clojure :exclude [name]) to the ns declaration."
   (:refer-clojure :exclude [name])
   (:require [clojure.set :refer :all]
+            [clojure.pprint :refer :all]
+            [sre.core :refer :all]
             [sre.plan.op :refer :all])
   (:import (clojure.lang IPersistentSet MultiFn)
-           (sre.plan.op OpBinding Op)))
+           (sre.plan.op Op)))
 
 (defprotocol IConfig
   "Configuration used to store constraints, operations, etc."
   (name [this] "Returns the name of this config ")
   (constraints [this] "Constraints provided by this config")
   (operations [this] "Operations provided by this config")
-  (weight [this] "Operation weight estimator provided by this config")
+  (weights [this] "Operation weight estimator provided by this config")
   (tasks [this] "Tasks provided by this config"))
 
-(def ^:private dispatch-op (fn ^Op [^OpBinding op-binding & rest] (optype op-binding)))
+(def ^:private dispatch-op (fn ^Op [op & rest] op))
 
-(def ^:private hierarchy (make-hierarchy))
+(def ^:private h (make-hierarchy))
 
-(defrecord Config [^String name ^IPersistentSet ops ^IPersistentSet constraints ^MultiFn weight ^MultiFn tasks]
+(defrecord Config [^String name ^IPersistentSet constraints ^IPersistentSet ops ^MultiFn weights ^MultiFn tasks]
   IConfig
   (name [this] name)
   (constraints [this] constraints)
   (operations [this] ops)
-  (weight [this] weight))
+  (weights [this] weights)
+  (tasks [this] tasks))
 
 (defn config
   "Creates a config. Optionally you can specify an underlying config upon which
   this one will be layered. Constraints and operations will be united, name will be overshadowed
   weight and task methods will be coalesced in a way that first the upper config will be checked then
   if not found dispatch will fall through to the underlying multimethod."
-  ([name ops constrs weight-methods task-methods underlying]
-   (let [weight-dispatch (MultiFn. (str name "-weight") dispatch-op :default #'hierarchy)
-         tasks-dispatch (MultiFn. (str name "-tasks") dispatch-op :default #'hierarchy)
-         ops (if underlying (union ops (operations underlying)) ops)
-         constraints (if underlying (union constrs (constraints underlying)))]
+  ([name constrs ops weight-methods task-methods underlying]
+   (let [weight-dispatch (MultiFn. (str name "-weight") dispatch-op :default #'h)
+         tasks-dispatch (MultiFn. (str name "-tasks") dispatch-op :default #'h)
+         constrs (union constrs (if underlying (constraints underlying)))
+         ops (union ops (if underlying (operations underlying)))
+         weight-methods (merge (if underlying (-> underlying weights methods)) weight-methods)
+         task-methods (merge (if underlying (-> underlying tasks methods)) task-methods)]
      ; sidefx below!
      (doseq [[dispatch-val mfn] weight-methods]
        (.addMethod weight-dispatch dispatch-val mfn))
-     (if underlying
-       (.addMethod weight-dispatch :default (fn [& args] (apply (weight underlying) args))))
      (doseq [[dispatch-val mfn] task-methods]
        (.addMethod tasks-dispatch dispatch-val mfn))
-     (if underlying
-       (.addMethod tasks-dispatch :default (fn [& args] (apply (tasks underlying) args))))
-     (->Config name ops constraints weight-dispatch tasks-dispatch)))
-  ([name ops constraints weight tasks] (config name ops constraints weight tasks nil)))
+     (->Config name constraints ops weight-dispatch tasks-dispatch)))
+  ([name ops constraints weights tasks] (config name
+                                                (into #{} constraints)
+                                                (into #{} ops)
+                                                weights tasks nil)))
+
 
 (defmacro defconfig
   "Creates an engine configuration variable in the current namespace, used
@@ -92,14 +97,14 @@
        (def ^:private ~'-name (str '~name))
        (def ^:private ~'-ops #{})
        (def ^:private ~'-constraints #{})
-       (defmulti ^:private ~'-weight ~dispatch-op)
+       (defmulti ^:private ~'-weights ~dispatch-op)
        (defmulti ^:private ~'-tasks ~dispatch-op)
 
        (def ~name (reify IConfig
                     (name [~'this] ~'-name)
                     (constraints [~'this] ~'-constraints)
                     (operations [~'this] ~'-ops)
-                    (weight [~'this] ~'-weight)
+                    (weights [~'this] ~'-weights)
                     (tasks [~'this] ~'-tasks)))
 
        (defn ~(symbol (str factory-prefix "getInstance")) [] ~name)

@@ -2,7 +2,8 @@
   (:require [clojure.set :refer :all]
             [clojure.algo.generic.functor :refer :all]
             [clojure.pprint :as pprint]
-            [clojure.walk :as walk])
+            [clojure.walk :as walk]
+            [sre.core :refer :all])
   (:import (clojure.lang IPersistentSet Symbol)
            (java.io Writer)))
 
@@ -11,7 +12,8 @@
 (defrecord Constraint [name vars arity implies])
 
 (defn pprint-constr [type]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (:name type))))
+  (pprint/pprint-logical-block :prefix "<" :suffix ">"
+                               (pprint/write-out (:name type))))
 
 (defmethod pprint/simple-dispatch Constraint [type] (pprint-constr type))
 
@@ -34,24 +36,13 @@
   (implies* [this] (-implies* this))
   (impliesTransitively [this] (implies* this)))
 
-(defn pprint-constraint-binding [c-b]
-  (pprint/pprint-logical-block
-    :prefix "<" :suffix ">"
-    (pprint/write-out (:type c-b))
-    (.write ^Writer *out* "::")
-    (pprint/write-out (:bindings c-b))))
-
-(defmethod pprint/simple-dispatch ConstraintBinding [c-b] (pprint-constraint-binding c-b))
-
-(defn bind-map
-  "Binds constraint parameters to the given name - value map"
-  [constr lkp]
-  (map->ConstraintBinding {:type constr :bindings (fmap #(lkp %1) (:vars constr))}))
-
-(defn bind
-  "Binds constraint parameters to the given arguments"
-  [op & args]
-  (bind-map op (zipmap (:vars op) args)))
+(extend-type Constraint
+  IBind
+  (bind [this args]
+    (bind-map this (zipmap (:vars this) args)))
+  (bind-map [this var-map]
+    (map->ConstraintBinding {:type     this
+                             :bindings (fmap #(var-map %1) (:vars this))})))
 
 (defn- -implies
   ^IPersistentSet [^ConstraintBinding {type :type bindings :bindings}]
@@ -70,17 +61,26 @@
       (let [[first & rest] (into () unresolved)]
         (recur (union (-implies first) (into #{} rest)) (conj result first))))))
 
+(defn pprint-constraint-binding [c-b]
+  (pprint/pprint-logical-block
+    :prefix "<" :suffix ">"
+    (pprint/write-out (:type c-b))
+    (.write ^Writer *out* "::")
+    (pprint/write-out (:bindings c-b))))
+
+(defmethod pprint/simple-dispatch ConstraintBinding [c-b] (pprint-constraint-binding c-b))
+
 (defn union* [& constrs] (reduce #(union %1 (implies* %2)) #{} constrs))
 
 (defn constraint
-  ([name vars implications] (map->Constraint {:name name
-                                              :vars vars
-                                              :arity (count vars)
+  ([name vars implications] (map->Constraint {:name    name
+                                              :vars    vars
+                                              :arity   (count vars)
                                               :implies (->> implications
                                                             (partition 2)
                                                             (map (fn [[type vars]] (->ConstraintBinding type vars)))
                                                             (into #{}))}))
-  ([vars implications] (constraint (gensym "anon_constraint__") vars implications)))
+  ([vars implications] (constraint (str (gensym "anon_constraint__")) vars implications)))
 
 (defmacro defconstraint
   "Let's you define a constraint like a boss.
@@ -105,7 +105,7 @@
                                         ~(walk/postwalk-replace var-map vars)
                                         [~@(walk/postwalk-replace var-map implications)]))]
        (defn ~(symbol (str factory-prefix "getType")) ^Constraint [] ~name)
-       (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (bind ~name ~@vars))
+       (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (bind ~name ~vars))
        (gen-class :name ~factory-name
                   :prefix ~factory-prefix
                   :methods [^:static [~'getType [] sre.plan.constraint.Constraint]

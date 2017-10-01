@@ -3,6 +3,7 @@
   (:require [sre.plan.config :refer :all]
             [sre.plan.constraint :refer [defconstraint]]
             [sre.plan.op :refer [defop]]
+            [sre.plan.task :refer :all]
             [sre.plan.estimation :refer :all]))
 
 (defconfig Basic)
@@ -26,26 +27,27 @@
 (defop ExtendIn [target edge source]
        Vertex [target] -> DirectedEdge [source edge target])
 
-(defweight GetVertices [op] 5)
-(defweight GetEdges [op] 5)
-(defweight GetEdgesByType [op] 4)
-(defweight ExtendOut [op] 2)
-(defweight ExtendIn [op] 2)
+(defweight GetVertices [op & rest] 5)
+(defweight GetEdges [op & rest] 5)
+(defweight GetEdgesByType [op & rest] 4)
+(defweight ExtendOut [op & rest] 2)
+(defweight ExtendIn [op & rest] 2)
 
-(defrecord CostCalculator [c p]
-  Cost
-  (update-cost [this weight]
-    (as-> this this
-          (update-in this [:p] #(* % weight))
-          (update-in this [:c] #(+ % (:p this)))))
-  Comparable
-  (compareTo [this other] (compare c (:c other))))
+(deftask GetVertices (let [[v] bindings]
+                       [(variables v 1)
+                        (variables v 2)
+                        (variables v 3)]))
 
-(def cost-calculator (->CostCalculator 0 1))
+(deftask GetEdges (let [[v e w t] bindings]
+                    [(variables v 1 e "1->2" w 2)]))
 
-(def weight-calculator
-  (reify Weight
-    (get-weight [this op-binding constraint-lookup]
-      ((weight Basic) op-binding))))
+(deftask ExtendOut
+         (let [[v e w] bindings]
+           (if (= (variables v) 1)
+             [(variables e "1->2" w 2)])))
+
+(def cost-calculator default-cost-calculator)
+
+(def weight-calculator default-weight-calculator)
 
 

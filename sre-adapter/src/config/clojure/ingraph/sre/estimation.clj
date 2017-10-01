@@ -3,21 +3,9 @@
             [sre.plan.estimation :refer :all]
             [ingraph.sre.config :refer :all]))
 
-(defrecord CostCalculator [^long c ^long p]
-           Cost
-           (update-cost [this weight]
-                        (as-> this this
-                              (update-in this [:p] #(* %1 weight))
-                              (update-in this [:c] #(+ %1 (:p this)))))
-           Comparable
-           (compareTo [this other] (compare (:c this) (:c other))))
+(def cost-calculator default-cost-calculator)
 
-(def cost-calculator (->CostCalculator 0 1))
-
-(def weight-calculator
-  (reify Weight
-    (get-weight [this op-binding constraint-lookup]
-      ((config/weight Ingraph) op-binding))))
+(def weight-calculator default-weight-calculator)
 
 (defn Estimation-costCalculator [] cost-calculator)
 
