@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.stateless.unary
+package hu.bme.mit.nre.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.messages.{BatchChangeSet, ReteMessage}

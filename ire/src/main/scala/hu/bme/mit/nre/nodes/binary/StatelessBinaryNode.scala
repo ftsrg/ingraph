@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.stateless.binary
+package hu.bme.mit.nre.nodes.binary
 
 import akka.actor.{Actor, Stash}
 import hu.bme.mit.ire._

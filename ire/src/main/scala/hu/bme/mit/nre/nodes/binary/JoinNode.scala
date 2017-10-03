@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.stateless.binary
+package hu.bme.mit.nre.nodes.binary
 
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.{Mask, Tuple, TupleBag}
