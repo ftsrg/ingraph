@@ -36,12 +36,16 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
 
   override def onPrimary(changeSet: BatchChangeSet): Unit = {
     this.sourceLookup = changeSet
-    forward(BatchChangeSet(transitiveClosure()))
+    val result = BatchChangeSet(transitiveClosure())
+    println(result)
+    forward(result)
   }
 
   override def onSecondary(changeSet: BatchChangeSet): Unit = {
     this.targetLookup = changeSet
-    forward(BatchChangeSet(transitiveClosure()))
+    val result = BatchChangeSet(transitiveClosure())
+    println(result)
+    forward(result)
   }
 
   def transitiveClosure(): TupleBag = {
@@ -49,6 +53,8 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
       val sourceIndex = t(sourceVertexIndex).asInstanceOf[Number].longValue
       val visitedPaths = new mutable.HashMap[Path, Long]
       depthSearch(sourceIndex, sourceIndex, Path(), visitedPaths)
+      println(s"MinHop: $minHops")
+      visitedPaths.foreach { case (k, _) => println(k.length) }
       visitedPaths
         .filter { case (k, _) => k.length >= minHops }
         .map { case (k, v) => tuple(sourceIndex, k, v) }
@@ -57,7 +63,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   }
 
   def depthSearch(from: Long, to: Long, path: Path, visitedPaths: mutable.HashMap[Path, Long]): Unit = {
-    if (path.length <= (maxHops + 1) && !visitedPaths.contains(path)) {
+    if (path.length <= maxHops && !visitedPaths.contains(path)) {
       visitedPaths += (path -> to)
       targetLookup.changeSet
         .filter(t => t(sourceVertexIndex) == to)
