@@ -21,7 +21,7 @@ abstract class JoinNodeBase extends BinaryNode {
   override def onSizeRequest(): Long = SizeCounter.countDeeper(primaryIndexer.values, secondaryIndexer.values)
 
   def extract(tuple: Tuple, mask: Mask): Tuple = {
-    mask.map(i => tuple(i))
+    mask.map(i => tuple(i)).toVector
   }
 
   def combine(tuple: Tuple, otherTuple: Tuple, slot: Slot): Tuple = {
@@ -34,7 +34,7 @@ abstract class JoinNodeBase extends BinaryNode {
   def joinTuples(tuples: Iterable[Tuple], otherIndexer: JoinCache, slotMask: Mask, slot: Slot): TupleBag = {
     for {
       tuple <- tuples
-      joinAttributes = slotMask.map(i => tuple(i))
+      joinAttributes = slotMask.map(i => tuple(i)).toVector
       if otherIndexer.contains(joinAttributes)
       otherTupleFull <- otherIndexer(joinAttributes)
     } yield combine(tuple, otherTupleFull, slot)

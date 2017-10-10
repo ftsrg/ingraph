@@ -41,8 +41,9 @@ case class GetEdges(extraAttributes: Seq[NamedExpression], inode: iplan.GetEdges
   override def internalSchema: Seq[NamedExpression] = inode.output ++ extraAttributes
 }
 
-case class Dual(extraAttributes: Seq[NamedExpression], inode: iplan.Dual) extends LeafENode {
+case class Dual(inode: iplan.Dual) extends LeafENode {
   override def internalSchema = Seq()
+  override def extraAttributes: Seq[NamedExpression] = Seq()
 }
 
 
@@ -73,6 +74,14 @@ case class Selection(extraAttributes: Seq[NamedExpression],
                      inode: iplan.Selection,
                      child: ENode
                     ) extends UnaryENode {}
+
+case class Unwind(extraAttributes: Seq[NamedExpression],
+                     inode: iplan.Unwind,
+                     child: ENode
+                    ) extends UnaryENode {
+  override def internalSchema: Seq[NamedExpression] = Seq()
+  // TODO fix this similarly to qplan and iplan
+}
 
 case class SortAndTop(extraAttributes: Seq[NamedExpression],
                       inode: iplan.SortAndTop,
@@ -112,6 +121,27 @@ case class ThetaLeftOuterJoin(
           inode: iplan.ThetaLeftOuterJoin,
           left: ENode,
           right: ENode) extends BinaryENode with EquiJoinLike {}
+
+case class Create(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Create,
+                  child: ENode) extends UnaryENode {}
+
+case class Delete(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Delete,
+                  child: ENode) extends UnaryENode {}
+
+case class Merge(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.Merge,
+                  child: ENode) extends UnaryENode {}
+
+case class SetNode(extraAttributes: Seq[NamedExpression],
+                  inode: iplan.SetNode,
+                  child: ENode) extends UnaryENode {}
+
+case class Remove(extraAttributes: Seq[NamedExpression],
+                 inode: iplan.Remove,
+                 child: ENode) extends UnaryENode {}
+
 
 object SchemaToMap {
   def schemaToIndices(node: JoinLike, side: ENode): Seq[Int] = {

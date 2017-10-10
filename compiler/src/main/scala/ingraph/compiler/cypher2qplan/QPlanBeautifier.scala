@@ -1,8 +1,10 @@
 package ingraph.compiler.cypher2qplan
 
 import ingraph.model.qplan
-import ingraph.model.qplan.QNode
+import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.apache.spark.sql.types.BooleanType
 
 object QPlanBeautifier {
   def beautifyResolvedQPlan(resolvedQueryPlan: qplan.QNode): qplan.QNode = {
@@ -29,5 +31,14 @@ object QPlanBeautifier {
     */
   val commonBeautifier: PartialFunction[LogicalPlan, LogicalPlan] = {
     case qplan.Join(qplan.Dual(), o2) => o2
+    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
   }
+
+  val expressionResolver: PartialFunction[Expression, Expression] = {
+    case cExpr.And(cExpr.Literal(true, BooleanType), r) => r
+    case cExpr.And(l, cExpr.Literal(true, BooleanType)) => l
+    case cExpr.Or(cExpr.Literal(false, BooleanType), r) => r
+    case cExpr.Or(l, cExpr.Literal(false, BooleanType)) => l
+  }
+
 }

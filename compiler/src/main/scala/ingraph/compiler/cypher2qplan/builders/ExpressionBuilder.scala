@@ -27,7 +27,7 @@ object ExpressionBuilder {
       case e: oc.IsNullExpression => cExpr.IsNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
       //TODO: case e: oc.RegExpMatchingExpression => buildExpressionAux(e, joins)
-      //TODO: case e: oc.RelationshipsPattern => buildExpressionAux(e, joins)
+      case e: oc.RelationshipsPattern => buildExpressionPattern(e, joins)
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
       case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
@@ -88,44 +88,21 @@ object ExpressionBuilder {
 //
 //    fe
 //  }
-//
-//  def buildExpressionAux(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    // We add all the variables in the pattern as a NOT NULL expression
-//    val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
-//
-//    relationshipVariableExpressions.add(modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildVertexVariable(e.nodePattern)
-//    expressionContainer = ce.tlc
-//    ])
-//
-//    relationshipVariableExpressions.addAll(
-//      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-//      e.chain.map [
-//    val mapIt = it
-//    modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildEdgeVariable(mapIt.relationshipPattern.detail)
-//    expressionContainer = ce.tlc
-//    ]
-//    ]
-//    )
-//    relationshipVariableExpressions.addAll(
-//      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-//      e.chain.map [
-//    val mapIt = it
-//    modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildVertexVariable(mapIt.nodePattern)
-//    expressionContainer = ce.tlc
-//    ]
-//    ]
-//    )
-//
-//    joins.add(RelalgBuilder.buildRelalg(e))
-//
-//    Cypher2RelalgUtil.buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator)
-//  }
+
+  def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    // We add all the variables in the pattern as a NOT NULL expression
+    val relationshipVariableExpressions = ListBuffer.empty[cExpr.Expression]
+
+    relationshipVariableExpressions += cExpr.IsNotNull(AttributeBuilder.buildAttribute(e.getNodePattern.getVariable))
+
+    relationshipVariableExpressions.appendAll(e.getChain.asScala.map( ce => cExpr.IsNotNull(AttributeBuilder.buildAttribute(ce.getRelationshipPattern )) ))
+
+    relationshipVariableExpressions.appendAll(e.getChain.asScala.map( ce => cExpr.IsNotNull(AttributeBuilder.buildAttribute(ce.getNodePattern )) ))
+
+    joins += PatternBuilder.buildPattern(e)
+
+    relationshipVariableExpressions.foldLeft[cExpr.Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
+  }
 
   def buildExpressionComparision(e: oc.ExpressionComparison, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     //FIXME: this was invoked as LogicalExpressionBuilder.buildLogicalExpressionNoJoinAllowed(e, ce)

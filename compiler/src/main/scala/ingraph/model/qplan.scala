@@ -15,6 +15,7 @@ abstract class UnaryQNode extends GenericUnaryNode[QNode] with QNode {
 }
 abstract class BinaryQNode extends GenericBinaryNode[QNode] with QNode
 
+
 /**
   * A stub leaf node for the qplan indicating incomplete compilation.
   */
@@ -51,7 +52,7 @@ case class Dual() extends LeafQNode {
 }
 
 // unary nodes
-case class AllDifferent(child: QNode, edges: Seq[EdgeAttribute]) extends UnaryQNode {}
+case class AllDifferent(edges: Seq[EdgeAttribute], child: QNode) extends UnaryQNode {}
 
 case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
@@ -75,12 +76,13 @@ case class Sort(order: Seq[SortOrder], child: QNode) extends UnaryQNode {}
 
 case class Top(skipExpr: Expression, limitExpr: Expression, child: QNode) extends UnaryQNode {}
 
-case class Unwind(element: Attribute, child: QNode) extends UnaryQNode {
-  override def output = child.output.updated(child.output.indexOf(element), element) // TODO
+case class Unwind(collection: Expression, element: Attribute, child: QNode) extends UnaryQNode {
+  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+  // TODO indexOf might be unable to find the attribute
 }
 
 // binary nodes
-case class Union(left: QNode, right: QNode) extends BinaryQNode {
+case class Union(all: Boolean, left: QNode, right: QNode) extends BinaryQNode {
   override def output: Seq[Attribute] = left.output
 }
 
@@ -111,14 +113,14 @@ case class AntiJoin(left: QNode, right: QNode) extends JoinLike {
 }
 
 // DML operators
-abstract class CudOperator(child: QNode) extends UnaryQNode {}
+abstract class CudOperator(child: QNode) extends UnaryQNode
 
-case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(child) {}
+case class Create(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
 
-case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+case class Delete(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child)
 
-case class Merge(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+case class Merge(attributes: Seq[Attribute], child: QNode) extends CudOperator(child)
 
-//case class Set(attributes: Seq[Attribute], detach: Boolean, child: QNode) extends CudOperator(child) {}
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
 
-//case class Remove() // SET works for properties
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: QNode) extends CudOperator(child)
