@@ -17,34 +17,34 @@
   (testing "Compare contraint descriptors"
     (testing "should return positive for greater count"
       (is (pos?
-            (compare-constraint-descriptors
-              ['A {:n 3}]
-              ['B {:n 1}])))
+           (compare-constraint-descriptors
+            ['A {:n 3}]
+            ['B {:n 1}])))
 
       (is (pos?
-            (compare-constraint-descriptors
-              ['A {:n 3 :arity 1}]
-              ['B {:n 1 :arity 3}]))))
+           (compare-constraint-descriptors
+            ['A {:n 3 :arity 1}]
+            ['B {:n 1 :arity 3}]))))
 
     (testing "should return positive for equal count and lesser arity"
       (is (pos?
-            (compare-constraint-descriptors
-              ['A {:n 1 :arity 3}]
-              ['B {:n 1 :arity 5}]))))
+           (compare-constraint-descriptors
+            ['A {:n 1 :arity 3}]
+            ['B {:n 1 :arity 5}]))))
 
     (testing "should differentiate on type"
       (is (not=
-            (compare-constraint-descriptors
-              ['A {:n 1 :arity 1}]
-              ['B {:n 1 :arity 1}])
-            0)))
+           (compare-constraint-descriptors
+            ['A {:n 1 :arity 1}]
+            ['B {:n 1 :arity 1}])
+           0)))
 
     (testing "should differentiate on condition type"
       (is (not=
-            (compare-constraint-descriptors
-              ['A {:n 1 :arity 1 :cond :pre}]
-              ['A {:n 1 :arity 1 :cond :post}])
-            0)))))
+           (compare-constraint-descriptors
+            ['A {:n 1 :arity 1 :cond :pre}]
+            ['A {:n 1 :arity 1 :cond :post}])
+           0)))))
 
 (deftest test-branch-constr
   (testing "Branching"

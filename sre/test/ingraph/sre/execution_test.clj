@@ -242,3 +242,10 @@
       (testing "should return somethings"
         (is (some? (c {9 person0 6 person0 7 =})))
         (is (some? (c {9 p0-knows-p1 6 p0-knows-p1 7 =})))))))
+
+(deftest test-eval-bind-constant
+  (testing "BindConstant"
+    (let [env (IngraphEnvironment. indexer)
+          c (fn [x] (search (task-for BindConstant) [5 5] x env))]
+      (testing "should bind variable to constant value"
+        (is (= '({5 5}) (c {})))))))
