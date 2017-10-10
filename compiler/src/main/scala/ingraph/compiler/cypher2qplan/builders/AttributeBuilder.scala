@@ -12,22 +12,24 @@ object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
     val nv = n.getVariable
     val nls = BuilderUtil.parseToVertexLabelSet(n.getNodeLabels)
+    val props = LiteralBuilder.buildProperties(n.getProperties)
 
     if (nv == null) {
-      expr.AnonymousVertexAttribute(generateUniqueName, nls)
+      expr.AnonymousVertexAttribute(generateUniqueName, nls, props)
     } else {
-      expr.NamedVertexAttribute(nv.getName, nls)
+      expr.NamedVertexAttribute(nv.getName, nls, props)
     }
   }
 
   def buildAttribute(el: oc.RelationshipPattern): expr.EdgeAttribute = {
     val ev = el.getDetail.getVariable
     val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
+    val props = LiteralBuilder.buildProperties(el.getDetail.getProperties)
 
     if (ev == null) {
-      expr.AnonymousEdgeAttribute(generateUniqueName, els)
+      expr.AnonymousEdgeAttribute(generateUniqueName, els, props)
     } else {
-      expr.NamedEdgeAttribute(ev.getName, els)
+      expr.NamedEdgeAttribute(ev.getName, els, props)
     }
   }
 
