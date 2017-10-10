@@ -15,7 +15,7 @@
            (fn [^ZipperNode node]
              (let [[first & rest] (:left node)
                    heads (search (:type first) (:bindings first)
-                                  (:variables node) (:ctx node))
+                                 (:variables node) (:ctx node))
                    children (map #(->ZipperNode %1 (:ctx node) rest) heads)]
                (if-not (empty? children) children)))        ; convert empty list to nil or else strange things happen :(
            (fn [^ZipperNode _ ^LazySeq c] c)))

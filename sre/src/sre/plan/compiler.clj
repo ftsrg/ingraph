@@ -137,7 +137,7 @@
 (defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
   (map->SearchPlanCell {:cost-calculator   cost-calculator
                         :weight-calculator weight-calculator
-                        :ops               (cons bound (:ops cell))
+                        :ops               (conj (:ops cell) bound)
                         :constr-lkp        constr-lkp
                         :free-count        index
                         :non-past-ops      (filter (fn [x] (every? #(subset? #{(nth %1 2)}
@@ -253,7 +253,7 @@
         step (partial step k config)
         cell (map->SearchPlanCell {:cost-calculator   cost-calculator
                                    :weight-calculator weight-calculator
-                                   :ops               ()
+                                   :ops               []
                                    :constr-lkp        constr-lkp
                                    :free-count        n
                                    :non-past-ops      (bind-free ops constr-lkp)})] ; 3:1 set n

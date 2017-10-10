@@ -8,7 +8,8 @@
     [sre.plan.config :refer :all]
     [sre.plan.estimation :refer :all]
     [sre.plan.task :refer :all])
-  (:import (ingraph.ire Indexer IngraphVertex IngraphEdge)
+  (:import (scala.runtime AbstractFunction0)
+           (ingraph.ire Indexer IngraphVertex IngraphEdge IngraphElement)
            (java.util Iterator)
            (clojure.lang IPersistentMap)))
 
@@ -36,6 +37,7 @@
                Vertex [target])
 (defconstraint GenUnaryAssertion [x cond] < Known [x] Known [cond])
 (defconstraint GenBinaryAssertion [x y cond] < Known [x] Known [y] Known [cond])
+(defconstraint Constant [x value] < Known [x])
 
 (defop GetVertices [vertex] -> Vertex [vertex])
 (defweight GetVertices [op & rest] 5)
@@ -121,9 +123,13 @@
   AccessPropertyByKey [element key val]
   Element [element] Known [key] -> Property [element key val])
 (defweight
-  AccessPropertyByKey [op] 1)
+  AccessPropertyByKey [op & rest] 1)
 (deftask
-  AccessPropertyByKey (???))
+  AccessPropertyByKey (let [[e k v]                 bindings
+                            ^IngraphElement element (variables e)
+                            ^String key             (variables k)
+                            value                   (-> element (.properties) (.get key) (.getOrElse (proxy [AbstractFunction0] [] (apply [] nil))))]
+                        (list (assoc variables v value))))
 
 (defop
   ExtendOut [source edge target]
@@ -283,3 +289,10 @@
   (let [[x y bicond] (map variables bindings)]
     (if (bicond x y) (list variables) ())))
 
+(defop
+  BindConstant [x y]
+  -> Constant [x y])
+(defweight
+  BindConstant [op & rest] 1)
+(deftask
+  BindConstant (let [[x y] bindings] (list (assoc variables x y))))
