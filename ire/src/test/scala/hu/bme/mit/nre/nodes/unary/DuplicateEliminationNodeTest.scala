@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.stateless.unary
+package hu.bme.mit.nre.nodes.unary
 
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}

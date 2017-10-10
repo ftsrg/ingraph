@@ -1,4 +1,4 @@
-package hu.bme.mit.ire.stateless.binary
+package hu.bme.mit.nre.nodes.binary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}

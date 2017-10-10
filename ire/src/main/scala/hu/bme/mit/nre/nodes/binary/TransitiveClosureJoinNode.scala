@@ -50,7 +50,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
       val visitedPaths = new mutable.HashMap[Path, Long]
       depthSearch(sourceIndex, sourceIndex, Path(), visitedPaths)
       visitedPaths
-        .filter { case (k, _) => (k.length + 1) >= minHops }
+        .filter { case (k, _) => k.length >= minHops }
         .map { case (k, v) => tuple(sourceIndex, k, v) }
         .toVector
     })
