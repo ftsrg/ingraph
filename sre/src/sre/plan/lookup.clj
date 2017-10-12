@@ -2,7 +2,7 @@
   (:require
     [clojure.algo.generic.functor :refer :all]
     [clojure.set :refer :all]
-    [sre.plan.dsl.constraint :refer :all]
+    [sre.plan.constraint :refer [implies* union*]]
     [clojure.pprint])
   (:import (clojure.lang IPersistentSet)))
 
@@ -12,7 +12,14 @@
   It doesn't return the whole ConstraintBinding only the :bindings part of it!
   (It is trivial to create one as you know the type already")
   (lookup-by-var [this cond] "Gets free/bound constraints by var")
-  (bind [this constraint] "If the constraint is free move it to bound, else don't do a thing"))
+  (with [this cond constraint] "Add constraint to the free/bound, removing from the opposite if exists there")
+  (with* [this cond constraint] "Add constraint and all implications to the free/bound,
+  removing from the opposite if exists there")
+  (withTransitively [this cond constraint] "Alias for with*")
+  (bind [this constraint] "If the constraint is free move it to bound, else don't do a thing")
+  (bind* [this constraint])
+  (bindTransitively [this constraint])
+  (vars [this] "Gets all variables"))
 
 (defn- create-by-type [bindings]
   (reduce (fn [lkp {type :type bindings :bindings}]
@@ -33,27 +40,43 @@
           {}
           bindings))
 
+(defn- -remove [constr-lkp cond {type :type bindings :bindings :as constraint}]
+  (-> constr-lkp
+      (update-in [cond :by-type] #(if (= 1 (count (%1 type)))
+                                    ; as an optimization don't leave empty keys hanging in the map
+                                    (dissoc %1 type)
+                                    (update-in %1 [type] (fn [s] (disj s bindings)))))
+      (update-in [cond :by-var] (fn [by-var] (reduce #(if (= 1 (count (%1 %2)))
+                                                        ; as an optimization don't leave empty keys hanging in the map
+                                                        (dissoc %1 %2)
+                                                        (update-in %1 [%2] (fn [s] (disj s constraint))))
+                                                     by-var
+                                                     bindings)))
+      (update-in [cond :constraints] #(disj % constraint))))
+
+(defn- -add [constr-lkp cond {type :type bindings :bindings :as constraint}]
+  (-> constr-lkp
+      (update-in [cond :by-type] #(merge-with union {type #{bindings}} %))
+      (update-in [cond :by-var] (fn [by-var] (reduce #(merge-with union {%2 #{constraint}} %1)
+                                                     by-var
+                                                     bindings)))
+      (update-in [cond :constraints] #(conj % constraint))))
+
+(defn- -with [constr-lkp cond constraint]
+  (let [add-to cond
+        rem-from (case cond :free :bound :free)]
+    (-> constr-lkp
+        (as-> constr-lkp (if (-> constr-lkp (lookup rem-from) (get constraint))
+                           (-remove constr-lkp rem-from constraint)
+                           constr-lkp))
+        (-add add-to constraint))))
+
 (defn- -bind [constr-lkp constraint]
   (if-not ((lookup constr-lkp :free) constraint)
     constr-lkp
-    (let [{type :type bindings :bindings} constraint]
-      (-> constr-lkp
-          (update-in [:free :by-type] #(if (= 1 (count (%1 type)))
-                                         ; as an optimization don't leave empty keys hanging in the map
-                                         (dissoc %1 type)
-                                         (update-in %1 [type] (fn [s] (disj s bindings)))))
-          (update-in [:free :by-var] (fn [by-var] (reduce #(if (= 1 (count (%1 %2)))
-                                                             ; as an optimization don't leave empty keys hanging in the map
-                                                             (dissoc %1 %2)
-                                                             (update-in %1 [%2] (fn [s] (disj s constraint))))
-                                                          by-var
-                                                          bindings)))
-          (update-in [:free :constraints] #(disj % constraint))
-          (update-in [:bound :by-type] #(merge-with union {type #{bindings}} %))
-          (update-in [:bound :by-var] (fn [by-var] (reduce #(merge-with union {%2 #{constraint}} %1)
-                                                           by-var
-                                                           bindings)))
-          (update-in [:bound :constraints] #(conj % constraint))))))
+    (-> constr-lkp
+        (-remove :free constraint)
+        (-add :bound constraint))))
 
 ;; I don't want to hassle with implementing ILookup because
 ;; that would override how get (and probably update) works, and that would make
@@ -64,7 +87,13 @@
   (lookup [this cond] (-> this cond :constraints))
   (lookup-by-type [this cond] (-> this cond :by-type))
   (lookup-by-var [this cond] (-> this cond :by-var))
-  (bind [this constraint] (-bind this constraint)))
+  (with [this cond constraint] (-with this cond constraint))
+  (with* [this cond constraint] (reduce #(with %1 cond %2) this (implies* constraint)))
+  (withTransitively [this cond constraint] (with* this cond constraint))
+  (bind [this constraint] (-bind this constraint))
+  (bind* [this constraint] (reduce #(bind %1 %2) this (implies* constraint)))
+  (bindTransitively [this constraint] (bind* this constraint))
+  (vars [this] (union (-> this :free :by-var keys) (-> this :bound :by-var keys))))
 
 (defn constraint-lookup
   "Factory function to create a ConstraintLookup from free and bound constraints.

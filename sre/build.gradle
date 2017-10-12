@@ -38,6 +38,7 @@ dependencies {
   compile 'org.clojure:algo.generic:0.1.2'
   compile 'net.mikera:core.matrix:0.60.3'
   compile 'funcool:cats:2.1.0'
+  testCompile 'org.clojure:tools.trace:0.7.9'
   testCompile 'org.clojure:test.check:0.9.0'
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }

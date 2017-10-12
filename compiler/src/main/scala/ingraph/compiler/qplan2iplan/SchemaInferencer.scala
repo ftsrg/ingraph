@@ -16,6 +16,11 @@ object SchemaInferencer {
       // leaf
       case o: iplan.GetEdges    => eplan.GetEdges(ea, o)
       case o: iplan.GetVertices => eplan.GetVertices(ea, o)
+      case o: iplan.Dual        =>
+        if (ea.nonEmpty) {
+          throw new IllegalStateException(s"Dual node cannot hold extra attributes (${ea})")
+        }
+        eplan.Dual(o)
 
       // unary
       case o: iplan.Projection =>
@@ -35,6 +40,12 @@ object SchemaInferencer {
       case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
       case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
       case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
+      // unary DMLs
+      case o: iplan.Create               => eplan.Create              (ea, o, transform(o.child, ea))
+      case o: iplan.Delete               => eplan.Delete              (ea, o, transform(o.child, ea))
+      case o: iplan.Merge                => eplan.Merge               (ea, o, transform(o.child, ea))
+      case o: iplan.Remove               => eplan.Remove              (ea, o, transform(o.child, ea))
+      case o: iplan.SetNode              => eplan.SetNode             (ea, o, transform(o.child, ea))
 
       // binary
       case o: iplan.AntiJoin => eplan.AntiJoin(

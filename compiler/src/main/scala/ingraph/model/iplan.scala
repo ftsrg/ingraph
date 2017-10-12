@@ -1,7 +1,7 @@
 package ingraph.model.iplan
 
 import ingraph.model.expr
-import ingraph.model.expr.EdgeAttribute
+import ingraph.model.expr.{EdgeAttribute, VertexLabelUpdate}
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -42,8 +42,8 @@ case class Dual() extends LeafINode {
 }
 
 // unary nodes
-case class AllDifferent(child: INode,
-                        edges: Seq[EdgeAttribute]) extends UnaryINode {}
+case class AllDifferent(edges: Seq[EdgeAttribute],
+                        child: INode) extends UnaryINode {}
 
 case class DuplicateElimination(child: INode) extends UnaryINode {}
 
@@ -57,13 +57,19 @@ case class Projection(projectList: Seq[NamedExpression],
 case class Selection(condition: Expression,
                      child: INode) extends UnaryINode {}
 
+case class Unwind(collection: Expression, element: Attribute, child: INode) extends UnaryINode {
+  override def output = Seq() // child.output.updated(child.output.indexOf(element), element)
+  // TODO indexOf might be unable to find the attribute
+}
+
 case class SortAndTop(skipExpr: Expression,
                       limitExpr: Expression,
                       order: Seq[SortOrder],
                       child: INode) extends UnaryINode {}
 
 // binary nodes
-case class Union(left: INode,
+case class Union(bag: Boolean,
+                 left: INode,
                  right: INode) extends BinaryINode {
   override def output: Seq[Attribute] = left.output
 }
@@ -89,6 +95,8 @@ case class Create(attributes: Seq[Attribute], child: INode) extends CudOperator(
 
 case class Delete(attributes: Seq[Attribute], detach: Boolean, child: INode) extends CudOperator(child) {}
 
-//case class Merge()
+case class Merge(attributes: Seq[Attribute], child: INode) extends CudOperator(child) {}
 
-//case class Set()
+case class SetNode(vertexLabelUpdates: Set[VertexLabelUpdate], child: INode) extends CudOperator(child) {}
+
+case class Remove(vertexLabelUpdates: Set[VertexLabelUpdate], child: INode) extends CudOperator(child) {}

@@ -7,8 +7,9 @@ import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 
+// all == true means bag union, all == false means distinct union
 class UnionNode(override val next: (ReteMessage) => Unit,
-                val bag: Boolean) extends BinaryNode with SingleForwarder {
+                val all: Boolean) extends BinaryNode with SingleForwarder {
 
   val result = mutable.ListBuffer[Tuple]()
 
@@ -23,7 +24,7 @@ class UnionNode(override val next: (ReteMessage) => Unit,
   }
 
   def onUpdate(changeSet: IncrementalChangeSet) {
-    if (bag) { // bag semantics
+    if (all) { // bag semantics
       forward(changeSet)
     } else { // set semantics
       val positive = changeSet.positive

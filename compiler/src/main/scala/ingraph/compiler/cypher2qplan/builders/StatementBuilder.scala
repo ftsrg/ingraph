@@ -2,7 +2,9 @@ package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.structures.MatchDescriptor
 import ingraph.compiler.cypher2qplan.util.GrammarUtil
+import ingraph.model.qplan.QNode
 import ingraph.model.{expr, qplan}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -70,7 +72,7 @@ object StatementBuilder {
     var result = dispatchBuildStatement(q.getSingleQuery)
 
     for (u <- q.getUnion.asScala) {
-      result = qplan.Union(result, dispatchBuildStatement(u.getSingleQuery))
+      result = qplan.Union(u.isAll, result, dispatchBuildStatement(u.getSingleQuery))
     }
 
     // FIXME: validator
@@ -100,16 +102,19 @@ object StatementBuilder {
      * In case of the first query part, a dual source will be put there
      * when chaining together query parts (in buildStatement(oc.SingleQuery) parent call).
      */
-    val q_MatchList = clauses
-          .filter( c => c.isInstanceOf[oc.Match] )
-          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
+    val q_MatchList = clauses.flatMap{
+      case m: oc.Match => Some(buildMatchDescriptor(m))
+      case _ => None
+    }
+//          .filter( c => c.isInstanceOf[oc.Match] )
+//          .map( m => buildMatchDescriptor(m.asInstanceOf[oc.Match]) )
 
     /*
      * content will be built starting from what is passed in as chain, i.e. the tree built from query parts so far.
      *
      * This is achieved by starting from a Join(chain, Dual)
      */
-    val content = q_MatchList.foldLeft[qplan.QNode](
+    val content = q_MatchList.foldLeft(
       chain //qplan.Join(chain, qplan.Dual())
       )(
         (b, a) => a match {
@@ -120,8 +125,11 @@ object StatementBuilder {
         }
       )
 
-    val singleQuery_returnOrWithClause = clauses
-        .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    val singleQuery_returnOrWithClause = clauses.flatMap{
+      case w: oc.With => Some(w)
+      case r: oc.Return => Some(r)
+      case _ => None
+    }
     val afterReturn = if (singleQuery_returnOrWithClause.isEmpty) {
       content
     } else {
@@ -129,20 +137,38 @@ object StatementBuilder {
     }
 
     //FIXME: continue processing clauses
-    return afterReturn
+    //return afterReturn
 
-//    val singleQuery_unwindClauseList = clauses.filter(typeof(Unwind)).head
-//    val afterUnwind = if ( singleQuery_unwindClauseList !== null)	{
-//      val u0 = singleQuery_unwindClauseList
-//      modelFactory.createUnwindOperator => [
-//      element = ce.vb.buildExpressionVariable(u0.variable.name, ExpressionBuilder.buildExpression(u0.expression, ce))
-//      input = afterReturn
-//      ]
-//    } else {
-//      afterReturn
-//    }
-//    // process all CUD operations (currently only CREATE and DELETE clauses are supported
-//    val afterCud = {
+    // .filter( c => c.isInstanceOf[oc.With] || c.isInstanceOf[oc.Return] )
+    val singleQuery_unwindClauseList: Seq[oc.Unwind] = clauses.flatMap{ case u: oc.Unwind => Some(u) case _ => None }
+
+    // each query part has 0 or 1 UNWIND clause.
+    // use of foldLeft below is purely to substitute the corresponding if expression
+    if (singleQuery_unwindClauseList.length > 1) {
+      throw new RuntimeException("Multiple unwind clauses found in a query part, though it shold be handled when splitting query to query parts.")
+    }
+    val afterUnwind: QNode = singleQuery_unwindClauseList.foldLeft(afterReturn)(
+      (prev, unwind) => {
+        val expr = ExpressionBuilder.buildExpressionNoJoinAllowed(unwind.getExpression)
+        val variable = AttributeBuilder.buildAttribute(unwind.getVariable)
+        qplan.Unwind(UnresolvedAlias(expr), variable, prev)
+      }
+    )
+
+    // process CUD operations
+    val afterCud = clauses.foldLeft(afterUnwind)(
+      (prev, clause) => clause match {
+        case c: oc.Create => CudBuilder.buildCreateOperator(c, prev)
+        case c: oc.Delete => CudBuilder.buildDeleteOperator(c, prev)
+        case c: oc.Merge  => CudBuilder.buildMergeOperator (c, prev)
+        case c: oc.Remove => CudBuilder.buildRemoveOperator(c, prev)
+        case c: oc.Set    => CudBuilder.buildSetOperator   (c, prev)
+        case _ => prev
+      }
+    )
+
+
+    //    val afterCud = {
 //      var Operator op = afterUnwind
 //
 //      for (cudClause: clauses.filter([GrammarUtil.isCudClause(it)])) {
@@ -158,7 +184,7 @@ object StatementBuilder {
 //
 //      op
 //    }
-//    afterCud
+    return afterCud
   }
 
   /**
@@ -195,8 +221,8 @@ object StatementBuilder {
 
     // they are natural joined together
     val allDifferentOperator = qplan.AllDifferent(
-      pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) ),
-      edgeAttributesOfMatchClause.toSeq
+      edgeAttributesOfMatchClause.toSeq,
+      pattern_PatternPartList.foldLeft[qplan.QNode]( qplan.Dual() )( (b, a) => qplan.Join(b, a) )
     )
 
     if (m.getWhere != null) {
