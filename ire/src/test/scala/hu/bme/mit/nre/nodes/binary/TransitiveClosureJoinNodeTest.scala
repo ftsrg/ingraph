@@ -179,85 +179,40 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       )): _*)
     }
 
-    "discard paths with same edge twice" in {
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth)))
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(1), tuple(2), tuple(3))
-      ))
-      expectNoMsg()
-
-      transitiveClosure ! Secondary(BatchChangeSet(
-        tupleBag(
-          tuple(1, 100, 2),
-          tuple(2, 101, 3),
-          tuple(2, 103, 4),
-          tuple(3, 102, 1)
-        )
-      ))
-
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(
-          tuple(1, Path(100), 2),
-          tuple(2, Path(101), 3),
-          tuple(2, Path(103), 3),
-          tuple(3, Path(102), 1),
-          tuple(1, Path(100, 101), 3),
-          tuple(2, Path(101, 102), 1),
-          tuple(1, Path(100, 101, 102), 1),
-          tuple(2, Path(101, 102, 100), 2),
-          tuple(3, Path(101, 102, 100), 3),
-          tuple(2, Path(101, 102, 100, 103), 4)
-        )
-      )): _*)
-    }
-
-    "handle complex test case 1" in {
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth, minHops = 2, maxHops = 3)))
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(1), tuple(2), tuple(3))
-      ))
-      expectNoMsg(timeout)
-
-      transitiveClosure ! Secondary(BatchChangeSet(tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(1, Path(100, 101), 3))
-      )): _*)
-
-      transitiveClosure ! Secondary(BatchChangeSet(tupleBag(tuple(3, 102, 1))))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1), tuple(1, Path(100, 101, 102), 1), tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 101), 3))
-      )): _*)
-
-      transitiveClosure ! Secondary(BatchChangeSet(tupleBag(tuple(2, 103, 4))))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(1, Path(100, 103), 4), tuple(3, Path(102, 100, 103), 4))
-      )): _*)
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(3))
-      ))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(3, Path(102, 100), 2), tuple(3, Path(102, 100, 103), 4), tuple(3, Path(102, 100, 101), 3))
-      )): _*)
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(2))
-      ))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(2, Path(101, 102, 100), 2), tuple(2, Path(101, 102), 1))
-      )): _*)
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(1))
-      ))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(1, Path(100, 101, 102), 1), tuple(1, Path(100, 103), 4), tuple(1, Path(100, 101), 3))
-      )): _*)
-    }
+//    "discard paths with same edge twice" in {
+//      val echoActor = system.actorOf(TestActors.echoActorProps)
+//      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth)))
+//
+//      transitiveClosure ! Primary(BatchChangeSet(
+//        tupleBag(tuple(1), tuple(2), tuple(3))
+//      ))
+//      expectNoMsg()
+//
+//      transitiveClosure ! Secondary(BatchChangeSet(
+//        tupleBag(
+//          tuple(1, 100, 2),
+//          tuple(2, 101, 3),
+//          tuple(2, 103, 4),
+//          tuple(3, 102, 1)
+//        )
+//      ))
+//
+//      val expectedResult = Set(
+//          tuple(1, Path(105), 2)
+////        tuple(1, Path(100), 2),
+////        tuple(2, Path(101), 3),
+////        tuple(2, Path(103), 3),
+////        tuple(3, Path(102), 1),
+////        tuple(1, Path(100, 101), 3),
+////        tuple(2, Path(101, 102), 1),
+////        tuple(1, Path(100, 101, 102), 1),
+////        tuple(2, Path(101, 102, 100), 2),
+////        tuple(3, Path(101, 102, 100), 3),
+////        tuple(2, Path(101, 102, 100, 103), 4)
+//      )
+//      val message: BatchChangeSet = receiveOne()
+//
+//    }
 
     "include paths going through same vertex more times" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -400,33 +355,6 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       )): _*)
     }
 
-    "calculate negative updates" in {
-      val echoActor = system.actorOf(TestActors.echoActorProps)
-      val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth)))
-
-      transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(1), tuple(2))
-      ))
-      expectNoMsg(timeout)
-
-      transitiveClosure ! Secondary(BatchChangeSet(
-        tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
-      ))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(1, Path(100), 2), tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
-      )): _*)
-
-      transitiveClosure ! Secondary(BatchChangeSet(tupleBag(tuple(2, 101, 3))))
-      expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        tupleBag(tuple(1, Path(100, 101), 3), tuple(2, Path(101), 3))
-      )): _*)
-
-      transitiveClosure ! Secondary(BatchChangeSet(tupleBag(tuple(1, 100, 2))))
-      expectMsg(BatchChangeSet(
-        tupleBag(tuple(1, Path(100), 2))
-      ))
-    }
-
     "handle multiple target paths from same target vertex" in {
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val transitiveClosure = system.actorOf(Props(new TransitiveClosureJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask, outputTupleWidth)))
@@ -534,10 +462,9 @@ class TransitiveClosureJoinNodeTest(_system: ActorSystem) extends TestKit(_syste
       expectNoMsg(timeout)
 
       transitiveClosure ! Primary(BatchChangeSet(
-        tupleBag(tuple(1, 1001))
+        tupleBag(tuple(1, 1001), tuple(1, 1002))
       ))
       expectMsgAnyOf(Utils.changeSetPermutations(BatchChangeSet(
-        //PK  PA    //PATH //SK //SA
         tupleBag(tuple(1, 1001, Path(), 1, 1001), tuple(1, 1001, Path(100), 2, "abc"), tuple(1, 1001, Path(100, 101), 3, "def"))
       )): _*)
 

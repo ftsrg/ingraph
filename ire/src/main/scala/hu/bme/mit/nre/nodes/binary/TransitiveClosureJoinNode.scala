@@ -6,7 +6,7 @@ import hu.bme.mit.ire.messages.{BatchChangeSet, IncrementalChangeSet, ReteMessag
 import hu.bme.mit.ire.util.TestUtil.tuple
 import hu.bme.mit.ire.util.{BufferMultimap, CounterMultimap, SizeCounter}
 
-import scala.collection.immutable.VectorBuilder
+import scala.collection.immutable.{HashMap, VectorBuilder}
 import scala.collection.mutable
 
 
@@ -37,65 +37,46 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   override def onPrimary(changeSet: BatchChangeSet): Unit = {
     this.sourceLookup = changeSet
     val result = BatchChangeSet(transitiveClosure())
-    println(result)
     forward(result)
   }
 
   override def onSecondary(changeSet: BatchChangeSet): Unit = {
     this.targetLookup = changeSet
     val result = BatchChangeSet(transitiveClosure())
-    println(result)
     forward(result)
   }
 
   def transitiveClosure(): TupleBag = {
-    sourceLookup.changeSet.flatMap(t => {
+
+    val result = sourceLookup.changeSet.flatMap(t => {
       val sourceIndex = t(sourceVertexIndex).asInstanceOf[Number].longValue
-      val visitedPaths = new mutable.HashMap[Path, Long]
-      depthSearch(sourceIndex, sourceIndex, Path(), visitedPaths)
-      println(s"MinHop: $minHops")
-      visitedPaths.foreach { case (k, _) => println(k.length) }
-      visitedPaths
+      depthSearch(-1, sourceIndex, Path())
         .filter { case (k, _) => k.length >= minHops }
         .map { case (k, v) => tuple(sourceIndex, k, v) }
-        .toVector
     })
+    println(result.size)
+    println(result.mkString("\n"))
+    result
   }
 
-  def depthSearch(from: Long, to: Long, path: Path, visitedPaths: mutable.HashMap[Path, Long]): Unit = {
-    if (path.length <= maxHops && !visitedPaths.contains(path)) {
-      visitedPaths += (path -> to)
-      targetLookup.changeSet
-        .filter(t => t(sourceVertexIndex) == to)
-        .foreach(t => {
-          val edge = t(1).asInstanceOf[Number].longValue
-          val target = t(2).asInstanceOf[Number].longValue
-          depthSearch(to, target, path :+ edge, visitedPaths)
-        })
+  def depthSearch(via: Long, currentVertex: Long, leadingPath: Path): Map[Path, Long] = {
+    if (leadingPath.length < maxHops && !leadingPath.contains(via)) {
+      val currentPath = if (via >= 0) leadingPath :+ via else leadingPath
+      val reachables: Map[Path, Long] =
+        targetLookup.changeSet
+          .filter { t => t(sourceVertexIndex) == currentVertex }
+          .flatMap { t =>
+            depthSearch(
+              t(1).asInstanceOf[Number].longValue,
+              t(2).asInstanceOf[Number].longValue,
+              currentPath
+            )
+          }
+          .toMap
+      reachables + (currentPath -> currentVertex)
+    } else {
+      Map()
     }
   }
-
-  //  def transitiveClosure(): TupleBag = {
-  //    val result = sourceLookup.changeSet.toVector.flatMap(t => {
-  //      val sourceIndex = t(sourceVertexIndex).asInstanceOf[Number].longValue
-  //      val visitedPaths = new mutable.HashSet[Path]
-  //      depthSearch(sourceIndex, sourceIndex, Path(), visitedPaths)
-  //    })
-  //    result
-  //  }
-  //
-  //  def depthSearch(from: Long, to: Long, path: Path, visitedPaths: mutable.Set[Path]): TupleBag = {
-  //    if (!visitedPaths.contains(path)) {
-  //      visitedPaths.add(path)
-  //      targetLookup.changeSet
-  //        .filter(t => t(sourceVertexIndex) == to)
-  //        .flatMap(t => {
-  //          val edge = t(1).asInstanceOf[Number].longValue
-  //          val target = t(2).asInstanceOf[Number].longValue
-  //          depthSearch(to, target, path :+ edge, visitedPaths)
-  //        })
-  //    } else {
-  //      IndexedSeq[Tuple](IndexedSeq(from, path, to))
-  //    }
 
 }
