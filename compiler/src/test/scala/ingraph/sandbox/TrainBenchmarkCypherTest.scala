@@ -1,6 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.{CypherToQPlan, cypher2qplan}
+import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
@@ -18,6 +18,31 @@ class TrainBenchmarkCypherTest extends FunSuite {
         |RETURN DISTINCT segment, segment.length AS length, 2*5 as ten""".stripMargin)
 
   }
+
+  test("Random double edge variable in the same MATCH") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH
+        |  (a)-[e]->(b),
+        |  (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
+  test("Random double edge variable in separate MATCHes") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH (a)-[e]->(b)
+        |MATCH (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
+//  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
+//    test(queryFile.getName.dropRight(".cypher".length)) {
+//      val query = FileUtils.readFileToString(queryFile)
+//      val ep = IPlanParser.parse(query)
+//    }
+//  }
+
 
   test("PosLength.cypher") {
     TrainBenchmarkCypherTest.testQueryFile("PosLength")
@@ -45,7 +70,7 @@ class TrainBenchmarkCypherTest extends FunSuite {
 }
 
 object TrainBenchmarkCypherTest {
-  val queryPackPath = "trainbenchmark/"
+  val queryPackPath = "trainbenchmark-simple/"
   val printCypher = true
   val printQPlan = true
   val skipResolve = false
