@@ -20,7 +20,7 @@ class LeftOuterJoinNode(val next: (ReteMessage) => Unit,
     tuple <- primaryChangeSet.changeSet
     joinAttributes = primaryMask map (tuple(_))
     otherTupleFull <-
-      if (secondaryIndexer.contains(joinAttributes)) secondaryIndexer(joinAttributes) else Seq(secondaryNullTuple)
+      if (secondaryIndexer.contains(joinAttributes.toIndexedSeq)) secondaryIndexer(joinAttributes.toIndexedSeq) else Seq(secondaryNullTuple)
   } yield combine(tuple, otherTupleFull)
 
   def onUpdate(): Unit = {

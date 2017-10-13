@@ -13,7 +13,7 @@ abstract class AbstractJoinNode(val primaryMask: Mask,
   override def onSizeRequest(): Long = 0
 
   def extract(tuple: Tuple, mask: Mask): Tuple = {
-    mask.map(i => tuple(i))
+    mask.map(i => tuple(i)).toIndexedSeq
   }
 
   def onPrimary(cs: BatchChangeSet): Unit = {

@@ -21,8 +21,8 @@ class JoinNode(val next: (ReteMessage) => Unit,
     for {
       tuple <- primaryChangeSet.changeSet
       joinAttributes = primaryMask.map(i => tuple(i))
-      if secondaryIndexer.contains(joinAttributes)
-      otherTupleFull <- secondaryIndexer(joinAttributes)
+      if secondaryIndexer.contains(joinAttributes.toIndexedSeq)
+      otherTupleFull <- secondaryIndexer(joinAttributes.toIndexedSeq)
     } yield combine(tuple, otherTupleFull)
   }
 

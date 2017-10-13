@@ -31,7 +31,7 @@ class TransitiveClosureJoinNode(override val next: (ReteMessage) => Unit,
   def onSizeRequest = 0
 
   def extract(tuple: Tuple, mask: Mask): Tuple = {
-    mask.map(i => tuple(i))
+    mask.map(i => tuple(i)).toIndexedSeq
   }
 
   override def onPrimary(changeSet: BatchChangeSet): Unit = {
