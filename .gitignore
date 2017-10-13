@@ -41,7 +41,7 @@ gen/
 xtend-gen
 generated/
 
-/out/
+out/
 .tmpBin/
 hs_err_pid*.log
 *.~*
