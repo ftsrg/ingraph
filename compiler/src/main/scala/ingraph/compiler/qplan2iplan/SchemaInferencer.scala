@@ -71,7 +71,10 @@ object SchemaInferencer {
     */
   def propagate(extraAttributes: Seq[NamedExpression], inputSchema: Seq[NamedExpression]): Seq[NamedExpression] = {
     extraAttributes
-      .flatMap {case a: PropertyAttribute => Some(a)}
+      .flatMap {
+        case a: PropertyAttribute => Some(a)
+        case _ => None
+      }
       .filter(a => inputSchema.contains(a.elementAttribute))
 
     // !inputSchema.contains(a) // do we need this?
