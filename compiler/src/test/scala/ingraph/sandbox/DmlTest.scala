@@ -53,6 +53,24 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
+  test("should compile CREATE with property map, string literals only") {
+    val cypher = CypherParser.parseString("CREATE (n)-[:KNOWS {since: 'Yesterday'} ]->(:Person {name: 'A'} )")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
+  test("should compile CREATE with property map, number literals only") {
+    val cypher = CypherParser.parseString("CREATE (n)-[:KNOWS {strength: 7} ]->(:Person {age: 25, weight: 70} )")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
+  test("should compile CREATE with property map with a mix of literals and expressions") {
+    val cypher = CypherParser.parseString("CREATE (n)-[:KNOWS {since: 'Yesterday'} ]->(:Person {name: 'A', age: 3+5} )")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
   test("should compile CREATE after MATCH") {
     val cypher = CypherParser.parseString("MATCH (n) CREATE (n)-[:KNOWS]->(:Person)")
     val plan = CypherToQPlan.build(cypher)

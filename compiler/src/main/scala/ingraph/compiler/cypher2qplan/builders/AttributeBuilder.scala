@@ -5,6 +5,7 @@ import ingraph.model.expr
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
+
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.model.expr.EdgeLabelSet
