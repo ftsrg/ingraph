@@ -101,9 +101,9 @@ class SchemaInferencerTest extends FunSuite {
     ep match {
       case
         Production(_, _,
-        Projection(_, _,
-        AllDifferent(_, _, v: GetVertices)
-        )
+          Projection(_, _,
+            AllDifferent(_, _, v: GetVertices)
+          )
         ) =>
         assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
     }

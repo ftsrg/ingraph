@@ -1,12 +1,6 @@
 package ingraph.ire
 
-import java.io.File
-
-import org.apache.commons.io.FileUtils
-import org.apache.hadoop.io.IOUtils
 import org.scalatest.FunSuite
-
-import scala.io.Source
 
 class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
