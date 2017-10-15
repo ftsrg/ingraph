@@ -41,9 +41,6 @@ object EngineFactory {
 
       remaining += ForwardConnection(plan, production)
 
-      override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap
-      override val terminator: Terminator = Terminator(inputs.values, production)
-
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
@@ -255,6 +252,10 @@ object EngineFactory {
     private def set(op: SetNode, indexer: Indexer, expr: ForwardConnection) = {
       ???
     }
+
+    override val inputLookup: Map[String, (ChangeSet) => Unit] = inputs.toMap
+
+    override val terminator: Terminator = Terminator(inputs.values, production)
   }
 }
 
