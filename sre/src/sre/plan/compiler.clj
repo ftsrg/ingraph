@@ -244,10 +244,10 @@
                                                  :or                       {cost-calculator   estimation/default-cost-calculator
                                                                             weight-calculator estimation/default-weight-calculator
                                                                             k                 10}}]
-  ; comments starting with x:y mark that the line corresponds to the algorithm
-  ; listing `x` line `y` from the above mentioned paper.
-  ; it hopefully gives a good reference what the code does.
-  ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
+                                        ; comments starting with x:y mark that the line corresponds to the algorithm
+                                        ; listing `x` line `y` from the above mentioned paper.
+                                        ; it hopefully gives a good reference what the code does.
+                                        ; e.g. 3:1 -> Algorithm 3 (The procedure calculateSearchPlan(...), line 1
   (let [ops (config/operations config)
         n (count (lookup/lookup constr-lkp :free))
         step (partial step k config)
@@ -266,8 +266,8 @@
           (let [j (first keys)]
             (let [column (get plans j)
                   plans (as-> plans x
-                              (dissoc x j)
-                              (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
+                          (dissoc x j)
+                          (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
               (recur (inc i) plans))))
         (let [reader (fn [str] (BufferedReader. (StringReader. str)))
               free (with-out-str (pprint (lookup/lookup constr-lkp :free)))

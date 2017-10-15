@@ -10,18 +10,16 @@
            (scala Tuple2)))
 (def poslength-pattern (pattern/make-pattern [:segment :length] []
                                              [(bind Vertex [:segment])
-                                              (bind HasLabels [:segment :_segment])
-                                              (bind Constant [:_segment "Segment"])
-                                              (bind Property [:segment :_length_key :length])
-                                              (bind Constant [:_length_key "length"])
-                                              (bind GenBinaryAssertion [:length :_0 :_<=])
-                                              (bind Constant [:_0 0])
-                                              (bind Constant [:_<= <=])]))
+                                              (bind HasLabels [:segment :-segment-label])
+                                              (bind Constant [:-segment-label "Segment"])
+                                              (bind Property [:segment :-length-key :length])
+                                              (bind Constant [:-length-key "length"])
+                                              (bind GenBinaryAssertion [:length :-0 :-<=])
+                                              (bind Constant [:-0 0])
+                                              (bind Constant [:-<= <=])]))
 
 
 (def poslength-query (pattern/compile poslength-pattern Ingraph {:k 5}))
-
-(((nth poslength-query 3) (nth poslength-query 1)))
 
 (def indexer (doto (Indexer.)
                (.addVertex (IngraphVertex. 0
