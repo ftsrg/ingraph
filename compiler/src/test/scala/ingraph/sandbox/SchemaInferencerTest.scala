@@ -125,7 +125,7 @@ class SchemaInferencerTest extends FunSuite {
     }
   }
 
-  test("infer schema for RouteSensor from Cypher without filtering") {
+  test("infer schema for RouteSensor from Cypher") {
     val ep = IPlanParser.parse(
       """MATCH (route:Route)
         |  -[:follows]->(swP:SwitchPosition)
@@ -133,6 +133,26 @@ class SchemaInferencerTest extends FunSuite {
         |  -[:monitoredBy]->(sensor:Sensor)
         |WHERE NOT (route)-[:requires]->(sensor)
         |RETURN route, sensor, swP, sw
+        |""".stripMargin)
+    println(ep)
+  }
+
+  test("infer schema for RouteSensorPositive from Cypher") {
+    val ep = IPlanParser.parse(
+      """MATCH (route:Route)
+        |  -[:follows]->(swP:SwitchPosition)
+        |  -[:target]->(sw:Switch)
+        |  -[:monitoredBy]->(sensor:Sensor)
+        |RETURN route, sensor, swP, sw
+        |""".stripMargin)
+    println(ep)
+  }
+
+  test("infer schema for SwitchMonitored from Cypher") {
+    val ep = IPlanParser.parse(
+      """MATCH (sw:Switch)
+        |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
+        |RETURN sw
         |""".stripMargin)
     println(ep)
   }

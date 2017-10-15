@@ -8,7 +8,8 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 
   Vector(
     TestCase("PosLength", 1, 95),
-    TestCase("RouteSensor", 1, 18),
+//    TestCase("RouteSensor", 1, 18),
+    TestCase("RouteSensorPositive", 1, 18),
 //    TestCase("SemaphoreNeighbor", 1, 3),
 //    TestCase("SwitchMonitored", 1, 0),
 //    TestCase("SwitchSet", 1, 5),

@@ -3,4 +3,4 @@ MATCH
     -[f:follows]->(swP:SwitchPosition)
     -[t:target]->(sw:Switch)
     -[m:monitoredBy]->(sensor:Sensor)
-RETURN DISTINCT route, sensor, swP, sw
+RETURN route, sensor, swP, sw
