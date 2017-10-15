@@ -1,10 +1,11 @@
 package ingraph.compiler.cypher2qplan
 
-import ingraph.model.{expr, misc, qplan}
+import ingraph.model.{expr, qplan}
+import ingraph.model.misc
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
 import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 object QPlanResolver {
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
@@ -29,7 +30,11 @@ object QPlanResolver {
     */
   val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Unary
-    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+//    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+    case qplan.Projection(projectList, child) => {
+      val p = qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+      p
+    }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
     case qplan.Unwind(collection, element, child) => qplan.Top(collection.transform(expressionResolver), element.transform(expressionResolver), child)

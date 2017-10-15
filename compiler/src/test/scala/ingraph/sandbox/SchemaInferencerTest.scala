@@ -1,14 +1,10 @@
 package ingraph.sandbox
 
-import java.io.File
-
 import ingraph.compiler.IPlanParser
 import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
 import ingraph.model.eplan._
 import ingraph.model.expr._
-import ingraph.model.qplan
-import ingraph.model.iplan
-import org.apache.commons.io.FileUtils
+import ingraph.model.{iplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 

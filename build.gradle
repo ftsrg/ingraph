@@ -32,6 +32,8 @@ subprojects {
     from sourceSets.main.allScala
   }
 
+  sourceSets.test.resources.srcDirs = ["$rootDir/queries", "$rootDir/graphs"]
+
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
 
@@ -41,11 +43,6 @@ subprojects {
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
     maven { url 'https://clojars.org/repo' }
     maven { url 'https://szdavid92.github.io/ingraph-deps' }
-  }
-
-  // disable warnings for Scala projects
-  tasks.withType(ScalaCompile) {
-    scalaCompileOptions.additionalParameters = ["-nowarn"]
   }
 
   dependencies {

@@ -14,7 +14,7 @@ object SchemaInferencer {
 
     inode match {
       // leaf
-      case o: iplan.GetEdges    => eplan.GetEdges(ea, o)
+      case o: iplan.GetEdges => eplan.GetEdges(ea, o)
       case o: iplan.GetVertices => eplan.GetVertices(ea, o)
       case o: iplan.Dual        =>
         if (ea.nonEmpty) {
@@ -24,17 +24,11 @@ object SchemaInferencer {
 
       // unary
       case o: iplan.Projection =>
-              eplan.Projection(ea, o,
-                transform(o.child,
-                  ea ++ extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
-                )
-              )
+        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        eplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
       case o: iplan.Selection =>
-              eplan.Selection(ea, o,
-                transform(o.child,
-                  ea ++ extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
-                )
-              )
+        val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        eplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
       // the rest is just the same, isn't it?
       case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
       case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
