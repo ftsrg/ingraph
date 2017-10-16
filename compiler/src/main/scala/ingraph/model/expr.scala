@@ -1,15 +1,21 @@
 package ingraph.model.expr
 
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.types.{TPropertyMap}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
+import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
+// FIXME: merge into types
 package object labeltypes {
   type VertexLabel = String
   type EdgeLabel = String
+}
+package object types {
+  type TPropertyMap = Map[String, cExpr.Expression]
 }
 
 trait ExpressionBase extends Expression {}
@@ -88,17 +94,17 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
 case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
 // formerly GraphElementVariable
-abstract class ElementAttribute(name: String) extends GraphAttribute(name)
+abstract class ElementAttribute(name: String, properties: TPropertyMap) extends GraphAttribute(name)
 
-abstract class VertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet()) extends ElementAttribute(name)
-abstract class EdgeAttribute(override val name: String, val labels: EdgeLabelSet) extends ElementAttribute(name)
+abstract class VertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), val properties: TPropertyMap = Map()) extends ElementAttribute(name, properties)
+abstract class EdgeAttribute(override val name: String, val labels: EdgeLabelSet, val properties: TPropertyMap = Map()) extends ElementAttribute(name, properties)
 
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner
-case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet()) extends VertexAttribute(name, labels)
-case class AnonymousEdgeAttribute(override val name: String, override val labels: EdgeLabelSet) extends EdgeAttribute(name, labels)
-case class NamedVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet()) extends VertexAttribute(name, labels)
-case class NamedEdgeAttribute(override val name: String, override val labels: EdgeLabelSet) extends EdgeAttribute(name, labels)
+case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
+case class AnonymousEdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map()) extends EdgeAttribute(name, labels, properties)
+case class NamedVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
+case class NamedEdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map()) extends EdgeAttribute(name, labels, properties)
 
 
 // formerly AttributeVariable
