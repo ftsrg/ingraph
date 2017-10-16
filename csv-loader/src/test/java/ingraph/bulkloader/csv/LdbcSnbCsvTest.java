@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import ingraph.bulkloader.csv.loader.MassCsvLoader;
 import neo4j.driver.util.GraphPrettyPrinter;
 
-public class SnbTest {
+public class LdbcSnbCsvTest {
 
 	private static final String PREFIX = TestConstants.GRAPHS_DIR + "snb_50/";
 	private static final String POSTFIX = "_0_0.csv";

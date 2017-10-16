@@ -8,7 +8,7 @@ sourceSets.main.java.srcDirs = []
 dependencies {
   compile project(':ire-adapter')
   compile project(':reactive-driver-interfaces')
-  testCompile project(':ldbc-tests')
+  testCompile project(':tests')
 
   testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
