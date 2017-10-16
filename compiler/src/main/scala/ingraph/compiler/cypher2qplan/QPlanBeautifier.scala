@@ -1,5 +1,6 @@
 package ingraph.compiler.cypher2qplan
 
+import ingraph.compiler.cypher2qplan.builders.AttributeBuilder
 import ingraph.model.expr.ElementAttribute
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
@@ -82,14 +83,12 @@ object QPlanBeautifier {
 
     var check2 = true
     // check if filter is a chain of Expand operators on top of a single GetVertices, and attributes are properly chained
-    val attributesOfFilter = ListBuffer.empty[cExpr.Expression]
-    var currOp = filter
-    var chainElem: expr.ElementAttribute = null
-    while (currOp != null && check2) {
-      currOp match {
-        case qplan.GetVertices(v) if chainElem == null || v == chainElem => attributesOfFilter.append(v); currOp = null; chainElem = null
-        case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => attributesOfFilter.append(trg, edge); currOp = child; chainElem = src
-        case _ => check2 = false
+    val attributesOfFilter = try {
+      AttributeBuilder.extractAttributesFromExpandChain(filter)
+    } catch {
+      case _: RuntimeException => {
+        check2 = false
+        ListBuffer.empty[cExpr.Expression]
       }
     }
     if (!check2) return false

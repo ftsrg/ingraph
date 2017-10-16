@@ -60,10 +60,17 @@ object AttributeBuilder {
     s"_e${generatedNameCounterNext.getAndIncrement}"
   }
 
+  /**
+    * Extract vertex and edge attributes from the pattern.
+    *
+    * Check if filter is a chain of Expand operators on top of a single GetVertices, and attributes are properly chained
+    * and if not, RuntimeException is thrown.
+    *
+    * @param pattern
+    * @return
+    */
   def extractAttributesFromExpandChain(pattern: qplan.QNode): ListBuffer[Expression] = {
     val relationshipVariableExpressions = ListBuffer.empty[Expression]
-    // extract vertex and edge attributes from the pattern
-    // pattern should contain only an Expand chain terminated by a GetVertices
     var currOp = pattern
     var chainElem: ElementAttribute = null
     while (currOp != null) {
