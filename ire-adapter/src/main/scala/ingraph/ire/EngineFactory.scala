@@ -10,9 +10,8 @@ import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
-import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
+import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode, _}
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
-import ingraph.model.eplan._
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 

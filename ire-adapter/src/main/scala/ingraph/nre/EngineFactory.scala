@@ -81,7 +81,7 @@ object EngineFactory {
                 val child = expr.child
                 val leftTupleWidth = op.left.internalSchema.length
                 val rightTupleWidth = op.right.internalSchema.length
-                val leftMask: IndexedSeq = op.leftMask
+                val leftMask: Seq[Int] = op.leftMask
                 val rightMask: Seq[Int] = op.rightMask
 
                 op match {
