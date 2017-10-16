@@ -4,7 +4,8 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction, TransactionFactory}
 import ingraph.compiler.IPlanParser
-import ingraph.ire.{AbstractIngraphAdapter, EngineFactory, Indexer, LongIdParser}
+import ingraph.ire.{AbstractIngraphAdapter, AnnotatedRelationalEngine, Indexer, LongIdParser}
+import ingraph.model.eplan.ENode
 
 class IngraphNaiveAdapter(
     override val querySpecification: String,
@@ -13,8 +14,8 @@ class IngraphNaiveAdapter(
   ) extends AbstractIngraphAdapter {
 
 
-  override val plan = IPlanParser.parse(querySpecification)
-  override val engine = EngineFactory.createQueryEngine(plan, indexer)
+  val plan: ENode = IPlanParser.parse(querySpecification)
+  override val engine: AnnotatedRelationalEngine = EngineFactory.createQueryEngine(plan, indexer)
 
   val transactionFactory = new TransactionFactory(16)
   transactionFactory.subscribe(engine.inputLookup)

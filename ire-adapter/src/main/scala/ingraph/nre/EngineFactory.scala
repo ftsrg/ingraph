@@ -11,18 +11,13 @@ import hu.bme.mit.ire.util.Utils.conversions._
 import hu.bme.mit.nre.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, UnionNode}
 import hu.bme.mit.nre.nodes.unary._
 import ingraph.expressionparser.ExpressionParser
-import ingraph.ire.{Indexer, IngraphElement, IngraphVertex}
+import ingraph.ire.{AnnotatedRelationalEngine, Indexer, IngraphElement, IngraphVertex}
 import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode, _}
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
 import scala.collection.mutable
-
-abstract class AnnotatedRelationalEngine extends RelationalEngine {
-  val vertexConverters: BufferMultimap[Seq[String], GetVertices]
-  val edgeConverters: BufferMultimap[String, GetEdges]
-}
 
 object EngineFactory {
 
@@ -43,8 +38,8 @@ object EngineFactory {
 
       remaining += ForwardConnection(plan, production)
 
-      override val inputLookup: Map[String, (BatchChangeSet) => Unit] = inputs.toMap
-      override val terminator: Terminator = Terminator(inputs.values, production)
+      val inputLookup: Map[String, (IncrementalChangeSet) => Unit] = inputs.toMap
+      val terminator: Terminator = Terminator(inputs.values, production)
 
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
