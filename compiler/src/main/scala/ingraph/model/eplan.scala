@@ -1,11 +1,12 @@
 package ingraph.model.eplan
 
-import ingraph.model.expr
-import ingraph.model.expr.EdgeAttribute
+import javax.print.DocFlavor.BYTE_ARRAY
+
+import ingraph.compiler.qplan2iplan.SchemaInferencer
 import ingraph.model.iplan
 import ingraph.model.iplan._
 import ingraph.model.treenodes.{GenericBinaryNode, GenericLeafNode, GenericUnaryNode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 
 // abstract classes and traits
@@ -67,7 +68,9 @@ case class Projection(extraAttributes: Seq[NamedExpression],
                       inode: iplan.Projection,
                       child: ENode
                      ) extends UnaryENode {
-  override def internalSchema: Seq[NamedExpression] = inode.projectList
+  ///// !!!!!!!
+  override def internalSchema: Seq[NamedExpression] = inode.projectList.flatMap(SchemaInferencer.extractAttributes(_))
+  //override def internalSchema: Seq[NamedExpression] = inode.projectList
 }
 
 case class Selection(extraAttributes: Seq[NamedExpression],
@@ -150,6 +153,6 @@ object SchemaToMap {
   }
 
   def schemaToMapNames(n: ENode): Map[String, Int] = {
-    n.internalSchema.zipWithIndex.map(f => f._1.toString() -> f._2).toMap
+    n.internalSchema.zipWithIndex.map(f => f._1.name -> f._2).toMap
   }
 }

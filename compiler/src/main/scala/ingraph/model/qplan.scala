@@ -108,7 +108,7 @@ case class LeftOuterJoin(left: QNode, right: QNode) extends EquiJoinLike {}
   */
 case class ThetaLeftOuterJoin(left: QNode, right: QNode, condition: Expression) extends EquiJoinLike {}
 
-case class AntiJoin(left: QNode, right: QNode) extends JoinLike {
+case class AntiJoin(left: QNode, right: QNode) extends EquiJoinLike {
   override def output: Seq[Attribute] = left.output
 }
 

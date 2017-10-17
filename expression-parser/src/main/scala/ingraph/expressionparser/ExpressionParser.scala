@@ -61,7 +61,7 @@ object ExpressionParser {
       val index = lookup(name)
       tuple => tuple(index)
     case attr: Attribute =>
-      val index = lookup(attr.toString())
+      val index = lookup(attr.name)
       tuple => tuple(index)
     case op: BinaryArithmetic =>
       val left = parseValue(op.left, lookup)

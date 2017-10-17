@@ -4,7 +4,6 @@ import org.scalatest.{FunSuite, Ignore}
 
 import scala.io.Source
 
-@Ignore
 abstract class TrainBenchmarkTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/trainbenchmark/railway-repair-2-${entityName}.csv"

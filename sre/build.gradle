@@ -34,6 +34,7 @@ test {
 }
 
 dependencies {
+  compile project(':indexer')
   compile 'org.clojure:clojure:1.8.0'
   compile 'org.clojure:algo.generic:0.1.2'
   compile 'net.mikera:core.matrix:0.60.3'
