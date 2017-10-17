@@ -8,16 +8,16 @@ import org.scalatest.FunSuite
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
-  ignore("Optional match returns Vector(null) on empty input") {
+  test("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
     val adapter = new IngraphNaiveAdapter(query, "opt")
-    assert(adapter.engine.getResults() == List(Vector(null)))
+    assert(1 == 0)
   }
 
   ignore("Constant returns work") {
     val query = "RETURN 1 + 1"
     val adapter = new IngraphNaiveAdapter(query, "opt")
-    assert(adapter.engine.getResults() == List(Vector(2 )))
+    assert(adapter.engine.getResults() == List(Vector(2)))
   }
 
   ignore("Vertices can be removed from indexer") {

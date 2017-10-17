@@ -3,8 +3,7 @@ package ingraph.nre
 import akka.actor.{ActorRef, Props}
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.messages.{BatchChangeSet, IncrementalChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, ProjectionNode, SelectionNode}
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
