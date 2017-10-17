@@ -17,11 +17,6 @@ import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
 import scala.collection.mutable
 
-abstract class AnnotatedRelationalEngine extends RelationalEngine {
-  val vertexConverters: BufferMultimap[Seq[String], GetVertices]
-  val edgeConverters: BufferMultimap[String, GetEdges]
-}
-
 object EngineFactory {
 
   def getSchema(node: ENode): Map[String, Int] = SchemaToMap.schemaToMapNames(node)
