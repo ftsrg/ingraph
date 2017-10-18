@@ -9,8 +9,7 @@ import ingraph.model.eplan.GetEdges
 import ingraph.model.eplan.GetVertices
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
-                               edgeConverters: Map[String, Set[GetEdges]],
-                               inputLookup: Map[String, (ChangeSet) => Unit]) extends IdParser with EntityToTupleMapper {
+                               edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
 
   private val vertexLookup: Map[String, (Set[String], Set[GetVertices])] = for ((labels, operators) <- vertexConverters;
                                                                                         label <- labels)
@@ -57,7 +56,7 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
         if (labels.subsetOf(vertex.labels)) {
           for (operator <- operators) {
             val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
-            transaction.add(operator.nodeName, tuple)
+            transaction.add(operator.inode.v.name, tuple)
           }
         }
       })
