@@ -49,7 +49,7 @@ object SchemaInferencer {
         )
       case j: iplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
-        val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
+        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.name).contains(x.name))
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
