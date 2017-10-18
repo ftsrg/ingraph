@@ -146,9 +146,32 @@ class SchemaInferencerTest extends FunSuite {
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
     println(ep)
+    println(ep.children(0).children(0).children(0).children(0).internalSchema)
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
+    val ep = IPlanParser.parse(
+      """MATCH (sw:Switch)
+        |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
+        |RETURN sw
+        |""".stripMargin)
+    println(ep)
+  }
+
+  test("infer schema for simple path") {
+    val ep = IPlanParser.parse(
+      """MATCH (a:A)-[:R1]->(b:B)-[:R2]->(c:C)
+        |RETURN a, b, c
+        |""".stripMargin)
+//    println(ep.inode)
+//    println(ep.children(0).internalSchema)
+//    println(ep.children(0).children(0).internalSchema)
+//    println(ep.children(0).children(0).children(0).internalSchema)
+//    println(ep.children(0).children(0).children(0).children(0).internalSchema)
+//    println(ep.children(0).children(0).children(0).children(1).internalSchema)
+  }
+
+  test("infer schema for SwitchMonitoreds") {
     val ep = IPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)

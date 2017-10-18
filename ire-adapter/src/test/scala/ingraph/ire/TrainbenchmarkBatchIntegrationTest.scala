@@ -15,13 +15,14 @@ class TrainbenchmarkBatchIntegrationTest extends FunSuite {
 //    TestCase("SwitchSet", 1, 5),
 //    TestCase("ConnectedSegments", 1, 8),
 //    //
-    TestCase("PosLength", 2, 208)
+    TestCase("PosLength", 2, 208),
 //    TestCase("RouteSensor", 2, 33),
 //    TestCase("SemaphoreNeighbor", 2, 6),
 //    TestCase("SwitchMonitored", 2, 2),
 //    TestCase("SwitchSet", 2, 8),
-//    TestCase("ConnectedSegments", 2, 16)
-  ).foreach(
+//    TestCase("ConnectedSegments", 2, 16),
+    null
+  ).filter(_ != null).foreach(
     t => test(s"${t.name}-size-${t.size}") {
       val querySpec = TrainbenchmarkUtils.readQueryFromReources(t.name)
       assert(TrainbenchmarkUtils.readModelAndGetResults(querySpec, t.size).size == t.expectedResultSize)

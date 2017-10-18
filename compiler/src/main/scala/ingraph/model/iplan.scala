@@ -51,7 +51,7 @@ case class Production(child: INode) extends UnaryINode {}
 
 case class Projection(projectList: Seq[NamedExpression],
                       child: INode) extends UnaryINode {
-  override def output = projectList.map(_.toAttribute)
+  override def output = List() // TODO projectList.map()
 }
 
 case class Selection(condition: Expression,
