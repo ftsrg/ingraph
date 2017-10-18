@@ -1,14 +1,17 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.model.expr
+import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import java.util.concurrent.atomic.AtomicLong
 
-import ingraph.model.expr.EdgeLabelSet
+import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
+import org.apache.spark.sql.catalyst.expressions.Expression
+
+import scala.collection.mutable.ListBuffer
 
 object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
@@ -26,14 +29,16 @@ object AttributeBuilder {
     if (el.getDetail() != null) {
       val ev = el.getDetail.getVariable
       val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
+      val props = LiteralBuilder.buildProperties(el.getDetail.getProperties)
 
-      if (ev != null) {
-        expr.NamedEdgeAttribute(ev.getName, els)
+      if (ev == null) {
+        expr.AnonymousEdgeAttribute(generateUniqueName, els, props)
       } else {
-        expr.AnonymousEdgeAttribute(generateUniqueName, els)
+        expr.NamedEdgeAttribute(ev.getName, els, props)
       }
+    } else {
+      expr.AnonymousEdgeAttribute(generateUniqueName, EdgeLabelSet())
     }
-    expr.AnonymousEdgeAttribute(generateUniqueName, EdgeLabelSet())
   }
 
   def buildAttribute(e: oc.ExpressionNodeLabelsAndPropertyLookup): UnresolvedAttribute = {
@@ -54,6 +59,31 @@ object AttributeBuilder {
   def generateUniqueName: String = {
     s"_e${generatedNameCounterNext.getAndIncrement}"
   }
+
+  /**
+    * Extract vertex and edge attributes from the pattern.
+    *
+    * Check if filter is a chain of Expand operators on top of a single GetVertices, and attributes are properly chained
+    * and if not, RuntimeException is thrown.
+    *
+    * @param pattern
+    * @return
+    */
+  def extractAttributesFromExpandChain(pattern: qplan.QNode): ListBuffer[Expression] = {
+    val relationshipVariableExpressions = ListBuffer.empty[Expression]
+    var currOp = pattern
+    var chainElem: ElementAttribute = null
+    while (currOp != null) {
+      currOp match {
+        case qplan.GetVertices(v) if chainElem == null || v == chainElem => relationshipVariableExpressions.append(v); currOp = null; chainElem = null
+        case qplan.Expand(src, trg, edge, _, child) if chainElem == null || trg == chainElem => relationshipVariableExpressions.append(trg, edge); currOp = child; chainElem = src
+        case _ => throw new RuntimeException("We should never see this condition: Expand and Getvertices not properly chained or other node type encountered.")
+      }
+    }
+
+    relationshipVariableExpressions
+  }
+
 
   //  protected def AttributeVariable buildPropertyLookupHelper(Variable ev, ExpressionNodeLabelsAndPropertyLookup e) {
 //    if (e.propertyLookups.length == 1) {

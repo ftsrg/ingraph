@@ -3,7 +3,7 @@
   (:require [sre.plan.config :refer :all]
             [sre.plan.constraint :refer [defconstraint]]
             [sre.plan.op :refer [defop]]
-            [sre.plan.task :refer :all]
+            [sre.plan.task :refer [deftask]]
             [sre.plan.estimation :refer :all]))
 
 (defconfig Basic)
@@ -49,5 +49,3 @@
 (def cost-calculator default-cost-calculator)
 
 (def weight-calculator default-weight-calculator)
-
-

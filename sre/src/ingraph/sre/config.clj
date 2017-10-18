@@ -3,12 +3,13 @@
   available in ingraph"
   (:refer-clojure :exclude [name])
   (:require
-    [sre.plan.constraint :refer [defconstraint]]
-    [sre.plan.op :refer [defop]]
-    [sre.plan.config :refer :all]
-    [sre.plan.estimation :refer :all]
-    [sre.plan.task :refer :all])
-  (:import (ingraph.ire Indexer IngraphVertex IngraphEdge)
+   [sre.plan.constraint :refer [defconstraint]]
+   [sre.plan.op :refer [defop]]
+   [sre.plan.config :refer :all]
+   [sre.plan.estimation :refer :all]
+   [sre.plan.task :refer [deftask]])
+  (:import (scala.runtime AbstractFunction0)
+           (ingraph.ire Indexer IngraphVertex IngraphEdge IngraphElement)
            (java.util Iterator)
            (clojure.lang IPersistentMap)))
 
@@ -29,24 +30,25 @@
 (defconstraint HasLabels [vertex labels] < Vertex [vertex] Known [labels])
 (defconstraint HasType [edge type] < Edge [edge] Known [type])
 (defconstraint Property [element key value]
-               < Element [element] Known [key] Known [value])
+  < Element [element] Known [key] Known [value])
 (defconstraint DirectedEdge [source edge target] <
-               Vertex [source]
-               Edge [edge]
-               Vertex [target])
+  Vertex [source]
+  Edge [edge]
+  Vertex [target])
 (defconstraint GenUnaryAssertion [x cond] < Known [x] Known [cond])
 (defconstraint GenBinaryAssertion [x y cond] < Known [x] Known [y] Known [cond])
+(defconstraint Constant [x value] < Known [x])
 
 (defop GetVertices [vertex] -> Vertex [vertex])
 (defweight GetVertices [op & rest] 5)
 (deftask GetVertices
-         (let [[v] bindings
-               ^Indexer indexer (:indexer ^IPersistentMap ctx)
-               iterator (.verticesJava indexer)]
-           (->> (iterator-seq iterator)
-                (map #(assoc variables v %)))))
+  (let [[v] bindings
+        ^Indexer indexer (:indexer ^IPersistentMap ctx)
+        iterator (.verticesJava indexer)]
+    (->> (iterator-seq iterator)
+         (map #(assoc variables v %)))))
 
-; TODO should work with multiple labels, but no indexer support yet [#184]
+;; TODO should work with multiple labels, but no indexer support yet [#184]
 (defop
   GetVerticesByLabels [vertex labels]
   Known [labels] -> Vertex [vertex] HasLabels [vertex labels])
@@ -121,9 +123,13 @@
   AccessPropertyByKey [element key val]
   Element [element] Known [key] -> Property [element key val])
 (defweight
-  AccessPropertyByKey [op] 1)
+  AccessPropertyByKey [op & rest] 1)
 (deftask
-  AccessPropertyByKey (???))
+  AccessPropertyByKey (let [[e k v]                 bindings
+                            ^IngraphElement element (variables e)
+                            ^String key             (variables k)
+                            value                   (-> element (.properties) (.get key) (.getOrElse (proxy [AbstractFunction0] [] (apply [] nil))))]
+                        (list (assoc variables v value))))
 
 (defop
   ExtendOut [source edge target]
@@ -197,10 +203,10 @@
   (let [[v e w] bindings
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
-        ;TODO No indexer support so we'll fall back to filtering :(
+        ;; TODO No indexer support so we'll fall back to filtering :(
         ^Iterator iterator (.edgesInJavaIterator target)]
     (->> (iterator-seq iterator)
-         ; filter for matches and map to lookup in one function
+         ;; filter for matches and map to lookup in one function
          (mapcat #(let [^IngraphEdge edge %
                         ^IngraphVertex src (.sourceVertex edge)]
                     (if (= src source)
@@ -218,31 +224,31 @@
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
         ^String type (variables t)
-        ; No indexer support so will fall back to filtering :(
+        ;; No indexer support so will fall back to filtering :(
         ^Iterator iterator (.edgesInByTypeJavaIterator target type)]
     (->> (iterator-seq iterator)
-         ; filter for matches and map to lookup in one function
+         ;; filter for matches and map to lookup in one function
          (mapcat #(let [^IngraphEdge edge %
                         ^IngraphVertex src (.sourceVertex edge)]
                     (if (= src source)
                       (list (assoc variables e edge v src))
                       ()))))))
 
-; Does this make any sense at all?
+;; Does this make any sense at all?
 (defop
   CheckDirectedEdge [source edge target]
   Vertex [source] Edge [edge] Vertex [target] -> DirectedEdge [source edge target])
 (defweight
   CheckDirectedEdge [op & rest] 0.5)
 (deftask CheckDirectedEdge
-         (let [[v e w] bindings
-               ^IngraphVertex source (variables v)
-               ^IngraphVertex target (variables w)
-               ^IngraphEdge edge (variables e)]
-           (if (and (= (.sourceVertex edge) source)
-                    (= (.targetVertex edge) target))
-             (list variables)
-             ())))
+  (let [[v e w] bindings
+        ^IngraphVertex source (variables v)
+        ^IngraphVertex target (variables w)
+        ^IngraphEdge edge (variables e)]
+    (if (and (= (.sourceVertex edge) source)
+             (= (.targetVertex edge) target))
+      (list variables)
+      ())))
 
 (defop
   CheckDirectedEdgeByType [source edge target type]
@@ -283,3 +289,10 @@
   (let [[x y bicond] (map variables bindings)]
     (if (bicond x y) (list variables) ())))
 
+(defop
+  BindConstant [x y]
+  -> Constant [x y])
+(defweight
+  BindConstant [op & rest] 1)
+(deftask
+  BindConstant (let [[x y] bindings] (list (assoc variables x y))))

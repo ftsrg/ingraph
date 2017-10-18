@@ -20,6 +20,9 @@
   a corresponding Op that satisfies the constraint."
   (compile [this compiler config]))
 
+(defprotocol IQuery
+  (run [this bindings variables ctx]))
+
 (extend-type Constraint IPattern (compile [this config compiler-opts] [this nil nil nil]))
 
 (defprotocol IPatternBinding (hoist [this ctx]))
@@ -52,7 +55,7 @@
             ;; run the search planner
             plan @(compiler/run constr-lkp config compiler-opts)
             weight (-> plan :cost-calculator estimation/to-weight)
-            task-bindings (map #(->Binding ((config/tasks config) (:type op)) (:bindings :op)) (:ops plan))
+            task-bindings (map #(->Binding ((config/tasks config) (:type %)) (:bindings %)) (:ops plan))
             task (exec/->ConjStep task-bindings outer-vars inner-vars)]
         [constraint op {op (constantly weight)} {op (constantly task)}])
       (catch Throwable t
@@ -62,4 +65,8 @@
   ([name vars reqs pattern-bindings] (->Pattern name vars
                                                 (reduce #(apply conj %1 (:bindings %2)) #{} pattern-bindings)
                                                 reqs pattern-bindings))
-  ([vars reqs pattern-bindings] (make-pattern (str (gensym ("anon_pattern__"))) vars reqs pattern-bindings)))
+  ([vars reqs pattern-bindings] (make-pattern (str (gensym "anon_pattern__")) vars reqs pattern-bindings)))
+
+(defn run [query bindings ctx]
+  (task/search (let [task (((nth query 3) (nth query 1)))]
+                 task) bindings {} ctx))

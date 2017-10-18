@@ -2,9 +2,11 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
+import ingraph.model.expr.ElementAttribute
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
@@ -90,18 +92,11 @@ object ExpressionBuilder {
 //  }
 
   def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-    // We add all the variables in the pattern as a NOT NULL expression
-    val relationshipVariableExpressions = ListBuffer.empty[cExpr.Expression]
+    val currentPattern = PatternBuilder.buildPattern(e)
+    joins += currentPattern
 
-    relationshipVariableExpressions += cExpr.IsNotNull(AttributeBuilder.buildAttribute(e.getNodePattern.getVariable))
-
-    relationshipVariableExpressions.appendAll(e.getChain.asScala.map( ce => cExpr.IsNotNull(AttributeBuilder.buildAttribute(ce.getRelationshipPattern )) ))
-
-    relationshipVariableExpressions.appendAll(e.getChain.asScala.map( ce => cExpr.IsNotNull(AttributeBuilder.buildAttribute(ce.getNodePattern )) ))
-
-    joins += PatternBuilder.buildPattern(e)
-
-    relationshipVariableExpressions.foldLeft[cExpr.Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
+    // We extract all the attributes in the pattern (which must be an Expand chain) as a NOT NULL expression
+    AttributeBuilder.extractAttributesFromExpandChain(currentPattern).map( e => cExpr.IsNotNull(e) ).foldLeft[Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
   }
 
   def buildExpressionComparision(e: oc.ExpressionComparison, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
