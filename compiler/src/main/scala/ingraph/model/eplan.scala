@@ -149,7 +149,7 @@ case class Remove(extraAttributes: Seq[NamedExpression],
 object SchemaToMap {
   def schemaToIndices(node: JoinLike, side: ENode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)
-    node.internalCommon.flatMap(attr => sideIndices.get(attr.toString)) // TODO throw exception if there is no match
+    node.internalCommon.map(attr => sideIndices(attr.name))
   }
 
   def schemaToMapNames(n: ENode): Map[String, Int] = {
