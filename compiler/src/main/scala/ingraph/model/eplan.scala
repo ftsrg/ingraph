@@ -30,7 +30,8 @@ trait JoinLike extends BinaryENode {
   lazy val rightMask = SchemaToMap.schemaToIndices(this, right)
 }
 trait EquiJoinLike extends JoinLike {
-  override def internalSchema: Seq[NamedExpression] = left.internalSchema ++ right.internalSchema.filter(!left.output.contains(_))
+  override def internalSchema: Seq[NamedExpression] =
+    left.internalSchema ++ right.internalSchema.filter(x => !left.internalSchema.map(_.name).contains(x.name))
 }
 
 // leaf nodes

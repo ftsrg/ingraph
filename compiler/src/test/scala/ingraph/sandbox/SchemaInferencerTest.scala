@@ -146,7 +146,9 @@ class SchemaInferencerTest extends FunSuite {
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
     println(ep)
-    println(ep.children(0).children(0).children(0).children(0).internalSchema)
+    assert(ep.children(0).children(0).children(0).internalSchema.size == 7)
+    assert(ep.children(0).children(0).children(0).children(0).internalSchema.size == 5)
+    assert(ep.children(0).children(0).children(0).children(1).internalSchema.size == 3)
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
