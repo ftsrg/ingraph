@@ -7,10 +7,7 @@ import scala.io.Source
 
 object TrainbenchmarkUtils {
   def modelPath(size: Int, entityName: String): String = s"graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
-
-  def readQueryFromReources(query: String): String = {
-    Source.fromFile(s"queries/trainbenchmark-simple/$query.cypher").getLines().mkString("\n")gi
-  }
+  def readQueryFromReources(query: String): String = Source.fromFile(s"queries/trainbenchmark-simple/$query.cypher").getLines().mkString("\n")
 
   def nodeFilenames(size: Int): Map[String, List[String]] = Map(
     modelPath(size, "Region") -> List("Region"),
