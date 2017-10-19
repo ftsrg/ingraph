@@ -98,14 +98,14 @@ object EngineFactory {
       private def getVertices(op: GetVertices, expr: ForwardConnection) = {
         val labels = op.inode.v.labels.vertexLabels.toSeq
         vertexConverters.addBinding(labels, op)
-        inputs += (op.nodeName -> expr.child)
+        inputs += (op.inode.v.name -> expr.child)
       }
 
       private def getEdges(op: GetEdges, expr: ForwardConnection) = {
         val labels = op.inode.edge.labels.edgeLabels.toSeq
         for (label <- labels)
           edgeConverters.addBinding(label, op)
-        inputs += (op.nodeName -> expr.child)
+        inputs += (op.inode.edge.name -> expr.child)
       }
 
       // unary nodes
