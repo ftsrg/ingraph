@@ -7,12 +7,12 @@ import scala.io.Source
 
 object TrainbenchmarkUtils {
   def modelPath(size: Int, entityName: String): String = {
-    getClass.getResource(s"/trainbenchmark/railway-repair-$size-$entityName.csv").getPath
+    trainbenchmark/railway-repair-$size-$entityName.csv").getPath
   }
 
   def readQueryFromReources(query: String): String = {
-    val stream = getClass.getResourceAsStream(s"/trainbenchmark-simple/$query.cypher")
-    Source.fromInputStream(stream).getLines().mkString("\n")
+    //val stream = getClass.getResourceAsStream(s"trainbenchmark-simple/$query.cypher")
+    Source.fromFile(s"trainbenchmark-simple/$query.cypher").getLines().mkString("\n")
   }
 
   def nodeFilenames(size: Int): Map[String, List[String]] = Map(
