@@ -11,7 +11,7 @@ object TrainbenchmarkUtils {
   }
 
   def readQueryFromReources(query: String): String = {
-    val stream = getClass.getResourceAsStream(s"trainbenchmark-simple/$query.cypher")
+    val stream = getClass.getResourceAsStream(s"/trainbenchmark-simple/$query.cypher")
     Source.fromInputStream(stream).getLines().mkString("\n")
   }
 
