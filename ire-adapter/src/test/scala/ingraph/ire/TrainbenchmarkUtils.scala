@@ -6,13 +6,10 @@ import hu.bme.mit.ire.datatypes.Tuple
 import scala.io.Source
 
 object TrainbenchmarkUtils {
-  def modelPath(size: Int, entityName: String): String = {
-    getClass.getResource(s"/trainbenchmark/railway-repair-$size-$entityName.csv").getPath
-  }
+  def modelPath(size: Int, entityName: String): String = s"graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
 
   def readQueryFromReources(query: String): String = {
-    val stream = getClass.getResourceAsStream(s"/trainbenchmark-simple/$query.cypher")
-    Source.fromInputStream(stream).getLines().mkString("\n")
+    Source.fromFile(s"queries/trainbenchmark-simple/$query.cypher").getLines().mkString("\n")gi
   }
 
   def nodeFilenames(size: Int): Map[String, List[String]] = Map(
