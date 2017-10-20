@@ -135,6 +135,13 @@ class SchemaInferencerTest extends FunSuite {
         |RETURN route, sensor, swP, sw
         |""".stripMargin)
     println(ep)
+    val antijoin = ep.children(0).children(0).asInstanceOf[AntiJoin]
+    println(antijoin.leftMask)
+    println(antijoin.rightMask)
+
+    println(antijoin.internalCommon)
+    println(antijoin.left.internalSchema)
+    println(antijoin.right.internalSchema)
   }
 
   test("infer schema for RouteSensorPositive from Cypher") {

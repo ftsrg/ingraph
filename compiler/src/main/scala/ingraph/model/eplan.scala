@@ -25,7 +25,7 @@ abstract class UnaryENode extends GenericUnaryNode[ENode] with ENode {
 abstract class BinaryENode extends GenericBinaryNode[ENode] with ENode {}
 
 trait JoinLike extends BinaryENode {
-  def internalCommon: Seq[NamedExpression] = left.internalSchema.filter(right.internalSchema.contains(_))
+  def internalCommon: Seq[NamedExpression] = left.internalSchema.filter(x => right.internalSchema.map(_.name).contains(x.name))
   lazy val leftMask  = SchemaToMap.schemaToIndices(this, left)
   lazy val rightMask = SchemaToMap.schemaToIndices(this, right)
 }
