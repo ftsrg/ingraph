@@ -62,7 +62,7 @@ class SchemaInferencerTest extends FunSuite {
     val e = NamedEdgeAttribute("e", el)
 
     val gv = iplan.GetVertices(p1)
-    val ge = iplan.GetEdges(p1, p2, e, Out)
+    val ge = iplan.GetEdges(p1, p2, e, false)
     val join = iplan.Join(gv, ge)
 
     val ep = SchemaInferencer.transform(join, Seq(name, age))

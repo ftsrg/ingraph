@@ -7,6 +7,7 @@ import java.util.{Iterator => JIterator}
 import hu.bme.mit.ire.messages.ChangeSet
 import ingraph.model.eplan.GetEdges
 import ingraph.model.eplan.GetVertices
+import ingraph.model.expr.{Both, In, Out}
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
                                edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {

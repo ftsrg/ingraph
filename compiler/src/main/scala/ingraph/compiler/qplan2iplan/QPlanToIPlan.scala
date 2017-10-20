@@ -1,10 +1,23 @@
 package ingraph.compiler.qplan2iplan
 
-import ingraph.model.iplan.INode
+import ingraph.model.expr._
+import ingraph.model.iplan.{GetEdges, INode}
 import ingraph.model.{iplan, qplan}
 import ingraph.model.qplan.QNode
 
 object QPlanToIPlan {
+  def expandToEdges(
+      src: VertexAttribute,
+      trg: VertexAttribute,
+      edge: EdgeAttribute,
+      dir: Direction): iplan.GetEdges = {
+    dir match {
+      case Out => iplan.GetEdges(src, trg, edge, directed = true)
+      case In => iplan.GetEdges(trg, src, edge, directed = true)
+      case Both => iplan.GetEdges(src, trg, edge, directed = false)
+    }
+  }
+
   def transform(plan: QNode): INode = {
     plan match {
       // leaf
@@ -12,8 +25,8 @@ object QPlanToIPlan {
       case qplan.Dual() => iplan.Dual()
 
       // unary read
-      case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => iplan.GetEdges(src, trg, edge, dir)
-      case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), iplan.GetEdges(src, trg, edge, dir))
+      case qplan.Expand(src, trg, edge, dir, qplan.GetVertices(v)) => expandToEdges(src, trg, edge, dir)
+      case qplan.Expand(src, trg, edge, dir, child) => iplan.Join(transform(child), expandToEdges(src, trg, edge, dir))
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => iplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       case qplan.Production(child) => iplan.Production(transform(child))
       case qplan.Projection(projectList, child) => iplan.Projection(projectList, transform(child))

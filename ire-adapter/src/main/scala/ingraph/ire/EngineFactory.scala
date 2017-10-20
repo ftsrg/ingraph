@@ -13,6 +13,8 @@ import ingraph.expressionparser.ExpressionParser
 import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
 import ingraph.model.eplan._
+import ingraph.model.iplan
+
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
@@ -108,8 +110,14 @@ object EngineFactory {
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
       val labels = op.inode.edge.labels.edgeLabels.toSeq
-      for (label <- labels)
+      for (label <- labels) {
         edgeConverters.addBinding(label, op)
+        if (!op.inode.directed) {
+          val reverse = GetEdges(op.extraAttributes,
+            iplan.GetEdges(op.inode.trg, op.inode.src, op.inode.edge, op.inode.directed))
+          edgeConverters.addBinding(label, reverse)
+        }
+      }
       inputs += (op.inode.edge.name -> expr.child)
     }
 

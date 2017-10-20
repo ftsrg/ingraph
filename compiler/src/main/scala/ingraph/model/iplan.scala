@@ -32,8 +32,8 @@ case class GetVertices(v: expr.VertexAttribute) extends LeafINode {
 case class GetEdges(src: expr.VertexAttribute,
                     trg: expr.VertexAttribute,
                     edge: expr.EdgeAttribute,
-                    dir: expr.Direction)
-  extends LeafINode with expr.NavigationDescriptor {
+                    directed: Boolean)
+  extends LeafINode {
   override def output = Seq(src, edge, trg)
 }
 
