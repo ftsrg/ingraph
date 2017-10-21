@@ -197,7 +197,7 @@
   Join [source edge target]
   Vertex [source] Vertex [target] -> DirectedEdge [source edge target])
 (defweight
-  Join [op & rest] 0.5)
+  Join [op & rest] 5)
 (deftask
   Join
   (let [[v e w] bindings
@@ -214,7 +214,7 @@
   JoinByType [source edge target type]
   Vertex [source] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  JoinByType [op & rest] 0.1)
+  JoinByType [op & rest] 2)
 (deftask
   JoinByType
   (let [[v e w t] bindings
