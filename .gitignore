@@ -19,7 +19,7 @@ catalog-v*.xml
 .Rhistory
 .RData
 .Rproj.user
-
+.#*
 
 ### Gradle ###
 .gradle
