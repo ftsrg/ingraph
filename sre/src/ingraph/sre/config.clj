@@ -224,10 +224,8 @@
         ^String type (variables t)
         ^Iterator iterator (.edgesBySourceAndTargetAndTypeJava indexer source target type)]
     (->> (iterator-seq iterator)
-         ;; filter for matches and map to lookup in one function
-         (->> (iterator-seq iterator)
-              (map #(let [^IngraphEdge edge %]
-                      (assoc variables e edge)))))))
+         (map #(let [^IngraphEdge edge %]
+                 (assoc variables e edge))))))
 
 ;; Does this make any sense at all?
 (defop
