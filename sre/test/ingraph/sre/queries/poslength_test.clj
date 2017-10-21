@@ -1,13 +1,16 @@
 (ns ingraph.sre.queries.poslength-test
-  (:require [clojure.test :refer :all]
-            [sre.plan.pattern :as pattern]
-            [sre.plan.constraint :as c]
+  (:require [clojure
+             [pprint :as pprint]
+             [test :refer :all]]
+            [ingraph.sre.ingraph-proto-1 :refer :all]
+            [ingraph.sre.queries
+             [utils :as utils]]
             [sre.core :refer :all]
-            [ingraph.sre.config :refer :all])
-  (:import (ingraph.ire Indexer IngraphVertex IngraphEdge)
-           (ingraph.sre.config IngraphEnvironment)
-           (scala.collection.immutable HashSet HashMap)
-           (scala Tuple2)))
+            [sre.plan.pattern :as pattern])
+  (:import [ingraph.ire Indexer IngraphVertex]
+           [scala.collection.immutable HashMap HashSet]
+           scala.Tuple2))
+
 (def poslength-pattern (pattern/make-pattern [:segment :length] []
                                              [(bind Vertex [:segment])
                                               (bind HasLabels [:segment :-segment-label])
@@ -18,8 +21,9 @@
                                               (bind Constant [:-0 0])
                                               (bind Constant [:-<= <=])]))
 
-
 (def poslength-query (pattern/compile poslength-pattern Ingraph {:k 5}))
+
+(comment (pprint/pprint (utils/get-tasks poslength-query)))
 
 (def indexer (doto (Indexer.)
                (.addVertex (IngraphVertex. 0
