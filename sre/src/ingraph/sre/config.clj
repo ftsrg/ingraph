@@ -40,7 +40,7 @@
 (defconstraint Constant [x value] < Known [x])
 
 (defop GetVertices [vertex] -> Vertex [vertex])
-(defweight GetVertices [op & rest] 5)
+(defweight GetVertices [op & rest] 1000)
 (deftask GetVertices
   (let [[v] bindings
         ^Indexer indexer (:indexer ^IPersistentMap ctx)
@@ -53,7 +53,7 @@
   GetVerticesByLabels [vertex labels]
   Known [labels] -> Vertex [vertex] HasLabels [vertex labels])
 (defweight
-  GetVerticesByLabels [op & rest] 3)
+  GetVerticesByLabels [op & rest] 100)
 (deftask
   GetVerticesByLabels
   (let [[v l] bindings
@@ -78,7 +78,7 @@
 (defop
   GetEdges [source edge target] -> DirectedEdge [source edge target])
 (defweight
-  GetEdges [op & rest] 5)
+  GetEdges [op & rest] 1000)
 (deftask
   GetEdges
   (let [[v e w] bindings
@@ -94,7 +94,7 @@
   GetEdgesByType [source edge target type]
   Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  GetEdgesByType [op & rest] 3)
+  GetEdgesByType [op & rest] 100)
 (deftask
   GetEdgesByType
   (let [[v e w t] bindings
@@ -135,7 +135,7 @@
   ExtendOut [source edge target]
   Vertex [source] -> DirectedEdge [source edge target])
 (defweight
-  ExtendOut [op & rest] 3)
+  ExtendOut [op & rest] 10)
 (deftask
   ExtendOut
   (let [[v e w] bindings
@@ -150,7 +150,7 @@
   ExtendIn [target edge source]
   Vertex [target] -> DirectedEdge [source edge target])
 (defweight
-  ExtendIn [op & rest] 3)
+  ExtendIn [op & rest] 10)
 (deftask
   ExtendIn
   (let [[v e w] bindings
@@ -165,7 +165,7 @@
   ExtendOutByType [source edge target type]
   Vertex [source] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  ExtendOutByType [op & rest] 2)
+  ExtendOutByType [op & rest] 5)
 (deftask
   ExtendOutByType
   (let [[v e w t] bindings
@@ -181,7 +181,7 @@
   ExtendInByType [target edge source type]
   Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  ExtendInByType [op & rest] 3)
+  ExtendInByType [op & rest] 5)
 (deftask
   ExtendInByType
   (let [[v e w t] bindings
@@ -197,7 +197,7 @@
   Join [source edge target]
   Vertex [source] Vertex [target] -> DirectedEdge [source edge target])
 (defweight
-  Join [op & rest] 10)
+  Join [op & rest] 0.5)
 (deftask
   Join
   (let [[v e w] bindings
@@ -217,7 +217,7 @@
   JoinByType [source edge target type]
   Vertex [source] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  JoinByType [op & rest] 5)
+  JoinByType [op & rest] 0.1)
 (deftask
   JoinByType
   (let [[v e w t] bindings
@@ -254,7 +254,7 @@
   CheckDirectedEdgeByType [source edge target type]
   Vertex [source] Edge [edge] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  CheckDirectedEdgeByType [op & rest] 0.3)
+  CheckDirectedEdgeByType [op & rest] 0.1)
 (deftask
   CheckDirectedEdgeByType
   (let [[v e w t] bindings
