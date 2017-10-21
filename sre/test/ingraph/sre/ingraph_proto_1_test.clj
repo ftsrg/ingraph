@@ -1,15 +1,17 @@
-(ns ingraph.sre.execution-test
-  (:require [sre.plan.config :as config]
-            [sre.plan.op :as op]
-            [sre.plan.task :refer :all]
+(ns ingraph.sre.ingraph-proto-1-test
+  (:require [clojure
+             [pprint :refer :all]
+             [test :refer :all]]
+            [ingraph.sre.ingraph-proto-1 :refer :all]
             [sre.core :refer :all]
-            [ingraph.sre.config :refer :all]
-            [clojure.test :refer :all]
-            [clojure.pprint :refer :all])
-  (:import (ingraph.ire Indexer IngraphVertex IngraphEdge)
-           (ingraph.sre.config IngraphEnvironment)
-           (scala.collection.immutable HashSet HashMap)
-           (scala Tuple2)))
+            [sre.plan
+             [config :as config]
+             [op :as op]
+             [task :refer [ISearch search]]])
+  (:import [ingraph.ire Indexer IngraphEdge IngraphVertex]
+           ingraph.sre.ingraph_proto_1.IngraphEnvironment
+           [scala.collection.immutable HashMap HashSet]
+           scala.Tuple2))
 
 (set! *warn-on-reflection* true)
 

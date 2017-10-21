@@ -1,4 +1,4 @@
-(ns ingraph.sre.config
+(ns ingraph.sre.ingraph-proto-1
   "Contains the main configuration of constraints, operations and others
   available in ingraph"
   (:refer-clojure :exclude [name])
