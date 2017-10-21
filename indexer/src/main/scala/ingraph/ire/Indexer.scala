@@ -91,7 +91,7 @@ class Indexer {
     val vertex = vertexLookup(id)
     val edges = vertex.edgesOut.valuesIterator.flatten ++ vertex.edgesIn.valuesIterator.flatten
     if (!detach && edges.nonEmpty)
-      throw new Exception("Won't remove connected vertex without DETACH")
+      throw new IllegalArgumentException("Won't remove connected vertex without DETACH")
     else if (detach)
       for { edge <- edges } removeEdgeById(edge.id)
     vertex.labels.foreach(label => vertexLabelLookup.removeBinding(label, vertex))
