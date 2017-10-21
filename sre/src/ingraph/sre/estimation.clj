@@ -1,7 +1,8 @@
 (ns ingraph.sre.estimation
-  (:require [sre.plan.config :as config]
-            [sre.plan.estimation :refer :all]
-            [ingraph.sre.config :refer :all]))
+  (:require [ingraph.sre.ingraph-proto-1 :refer :all]
+            [sre.plan
+             [config :as config]
+             [estimation :refer :all]]))
 
 (def cost-calculator default-cost-calculator)
 
