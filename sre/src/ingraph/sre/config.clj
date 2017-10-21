@@ -201,17 +201,14 @@
 (deftask
   Join
   (let [[v e w] bindings
+        ^Indexer indexer (:indexer ^IPersistentMap ctx)
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
-        ;; TODO No indexer support so we'll fall back to filtering :(
-        ^Iterator iterator (.edgesInJavaIterator target)]
+        ^Iterator iterator (.edgesBySourceAndTargetJava indexer source target)]
     (->> (iterator-seq iterator)
-         ;; filter for matches and map to lookup in one function
-         (mapcat #(let [^IngraphEdge edge %
-                        ^IngraphVertex src (.sourceVertex edge)]
-                    (if (= src source)
-                      (list (assoc variables e edge v src))
-                      ()))))))
+         (map #(let [^IngraphEdge edge %]
+                 (assoc variables e edge))))))
+
 
 (defop
   JoinByType [source edge target type]
@@ -221,18 +218,16 @@
 (deftask
   JoinByType
   (let [[v e w t] bindings
+        ^Indexer indexer (:indexer ^IPersistentMap ctx)
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
         ^String type (variables t)
-        ;; No indexer support so will fall back to filtering :(
-        ^Iterator iterator (.edgesInByTypeJavaIterator target type)]
+        ^Iterator iterator (.edgesBySourceAndTargetAndTypeJava indexer source target type)]
     (->> (iterator-seq iterator)
          ;; filter for matches and map to lookup in one function
-         (mapcat #(let [^IngraphEdge edge %
-                        ^IngraphVertex src (.sourceVertex edge)]
-                    (if (= src source)
-                      (list (assoc variables e edge v src))
-                      ()))))))
+         (->> (iterator-seq iterator)
+              (map #(let [^IngraphEdge edge %]
+                      (assoc variables e edge)))))))
 
 ;; Does this make any sense at all?
 (defop
