@@ -46,7 +46,7 @@ public class TrainBenchmarkCsvTest {
 		List<Node> nodes = mcl.getNodes();
 		List<Relationship> relationships = mcl.getRelationships();
 
-		assertEquals(471, nodes.size());
+		assertEquals(741, nodes.size());
 		assertEquals(1429, relationships.size());
 	}
 
