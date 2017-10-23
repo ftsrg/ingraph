@@ -36,7 +36,7 @@
   (compile [this config compiler-opts]
     (try
       (let [constraint (c/constraint name outer-vars reqs)
-            op (op/op name outer-vars reqs #{(bind constraint outer-vars)})
+            op (op/op name outer-vars reqs #{(bind constraint outer-vars)} {})
             compiled-stuff (reduce (fn [a x] (map #(if (some? (second %)) (conj (first %) (second %)) (first %)) (zip a x)))
                                    [#{} [] [] {} {}]
                                    (for [{t :type b :bindings} pattern-bindings
