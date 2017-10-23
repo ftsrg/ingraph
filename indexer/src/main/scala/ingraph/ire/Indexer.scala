@@ -144,7 +144,7 @@ class Indexer {
     edgeSrcTgtTypeLookup.getOrElse(((source.id, target.id), `type`), Seq()).iterator
   def vertexById(id: Long): Option[IngraphVertex] = vertexLookup.get(id)
   def edgeById(id: Long): Option[IngraphEdge] = edgeLookup.get(id)
-  def vertices(): Iterator[IngraphVertex] = vertexLabelLookup.valuesIterator.flatten
+  def vertices(): Iterator[IngraphVertex] = vertexLookup.valuesIterator
   def verticesJava(): JIterator[IngraphVertex] = vertices()
   def verticesByLabel(label: String): Iterator[IngraphVertex] = vertexLabelLookup.getOrElse(label, Seq()).iterator
   def verticesByLabelJava(label: String): JIterator[IngraphVertex] = verticesByLabel(label)
