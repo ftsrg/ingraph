@@ -28,7 +28,7 @@
 (def indexer (doto (Indexer.)
                (.addVertex (IngraphVertex. 0
                                            (-> (HashSet.) (.$plus "Segment"))
-                                           (-> (HashMap.) (.$plus (Tuple2. "length" -1)))))
+                                           (-> (HashMap.) (.$nplus (Tuple2. "length" -1)))))
                (.addVertex (IngraphVertex. 1
                                            (-> (HashSet.) (.$plus "Segment"))
                                            (-> (HashMap.) (.$plus (Tuple2. "length" 9)))))))
