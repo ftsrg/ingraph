@@ -1,4 +1,4 @@
-(ns ingraph.sre.ingraph-proto-1
+(ns ingraph.sre.ingraph-proto-2
   "Contains the main configuration of constraints, operations and others
   available in ingraph"
   (:refer-clojure :exclude [name])
@@ -65,9 +65,10 @@
 
 (defop
   CheckLabels [vertex labels]
-  Vertex [vertex] Known [labels] -> HasLabels [vertex labels])
+  Vertex [vertex] Known [labels] -> HasLabels [vertex labels]
+  :opts {:immediate true})
 (defweight
-  CheckLabels :fast-forward)
+  CheckLabels [op & rest] 0.5)
 (deftask
   CheckLabels
   (let [[v l] bindings
@@ -109,9 +110,10 @@
 
 (defop
   CheckType [edge type]
-  Edge [edge] Known [type] -> HasType [edge type])
+  Edge [edge] Known [type] -> HasType [edge type]
+  :opts {:immediate true})
 (defweight
-  CheckType :fast-forward)
+  CheckType [op & rest] 0.5)
 (deftask
   CheckType
   (let [[e t] bindings
@@ -121,9 +123,10 @@
 
 (defop
   AccessPropertyByKey [element key val]
-  Element [element] Known [key] -> Property [element key val])
+  Element [element] Known [key] -> Property [element key val]
+  :opts {:immediate true})
 (defweight
-  AccessPropertyByKey :fast-forward)
+  AccessPropertyByKey [op & rest] 1)
 (deftask
   AccessPropertyByKey (let [[e k v]                 bindings
                             ^IngraphElement element (variables e)
@@ -230,9 +233,10 @@
 ;; Does this make any sense at all?
 (defop
   CheckDirectedEdge [source edge target]
-  Vertex [source] Edge [edge] Vertex [target] -> DirectedEdge [source edge target])
+  Vertex [source] Edge [edge] Vertex [target] -> DirectedEdge [source edge target]
+  :opts {:immediate true})
 (defweight
-  CheckDirectedEdge :fast-forward)
+  CheckDirectedEdge [op & rest] 0.5)
 (deftask CheckDirectedEdge
   (let [[v e w] bindings
         ^IngraphVertex source (variables v)
@@ -245,9 +249,10 @@
 
 (defop
   CheckDirectedEdgeByType [source edge target type]
-  Vertex [source] Edge [edge] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
+  Vertex [source] Edge [edge] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type]
+  :opts {:immediate true})
 (defweight
-  CheckDirectedEdgeByType :fast-forward)
+  CheckDirectedEdgeByType [op & rest] 0.1)
 (deftask
   CheckDirectedEdgeByType
   (let [[v e w t] bindings
@@ -263,9 +268,10 @@
 
 (defop
   EvalGenUnaryAssertion [x cond]
-  Known [x] Known [cond] -> GenUnaryAssertion [x cond])
+  Known [x] Known [cond] -> GenUnaryAssertion [x cond]
+  :opts {:immediate true})
 (defweight
-  EvalGenUnaryAssertion :fast-forward)
+  EvalGenUnaryAssertion [op & rest] 0.1)
 (deftask
   EvalGenUnaryAssertion
   (let [[x ucond] (map variables bindings)]
@@ -274,9 +280,10 @@
 
 (defop
   EvalGenBinaryAssertion [x y cond]
-  Known [x] Known [y] Known [cond] -> GenBinaryAssertion [x y cond])
+  Known [x] Known [y] Known [cond] -> GenBinaryAssertion [x y cond]
+  :opts {:immediate true})
 (defweight
-  EvalGenBinaryAssertion :fast-forward)
+  EvalGenBinaryAssertion [op & rest] 0.1)
 (deftask
   EvalGenBinaryAssertion
   (let [[x y bicond] (map variables bindings)]
@@ -284,8 +291,9 @@
 
 (defop
   BindConstant [x y]
-  -> Constant [x y])
+  -> Constant [x y]
+  :opts {:immediate true})
 (defweight
-  BindConstant :fast-forward)
+  BindConstant [op & rest] 1)
 (deftask
   BindConstant (let [[x y] bindings] (list (assoc variables x y))))

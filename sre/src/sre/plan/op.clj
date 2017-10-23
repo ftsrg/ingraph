@@ -10,7 +10,7 @@
            (java.io Writer)
            (sre.core Binding)))
 
-(defrecord Op [requires satisfies name vars])
+(defrecord Op [requires satisfies name vars fast-forward])
 
 (defn pprint-op [op]
   (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (:name op))))
@@ -33,11 +33,16 @@
                     constr-defs)))
 
 (defn op
-  ([name vars reqs sats] (map->Op {:name      name
-                                   :vars      vars
-                                   :requires  (constraint/constraint-bindings-to-map (into () reqs))
-                                   :satisfies (constraint/constraint-bindings-to-map (into () sats))}))
-  ([vars reqs sats] (op (str (gensym "anon_op__")) vars reqs sats)))
+  ([name vars reqs sats opts] (map->Op (merge
+                                        {:immediate false}
+                                        opts
+                                        {:name      name
+                                         :vars      vars
+                                         :requires  (constraint/constraint-bindings-to-map (into () reqs))
+                                         :satisfies (constraint/constraint-bindings-to-map (into () sats))})))
+  ([vars reqs sats opts] (op (str (gensym "anon_op__")) vars reqs sats opts))
+  ([vars reqs sats] (op vars reqs sats {})))
+
 
 (defn- reqs-sats [args]
   (let [[reqs [-> & sats]] (split-with (fn [x] (not= x '->)) args)]
@@ -57,26 +62,28 @@
   (defop CreatePowerPuffGirls [sugar spice everything]
                            Sugar [sugar] Spice [spice] Nice [everything] -> PowerPuffGirls [sugar spice everything])
   "
-  [name vars & rest]
+  [name vars & reqs+sats+opts]
   (let [var-map (zipmap vars (map keyword vars))
         factory-name (str *ns* "." name "OperationBinding")
         factory-prefix (str name "OperationBinding-")
-        [reqs sats] (reqs-sats (map #(walk/postwalk-replace var-map %) rest))
+        [reqs+sats [_ opts]] (split-with #(not= % :opts) reqs+sats+opts)
+        [reqs sats] (reqs-sats (map #(walk/postwalk-replace var-map %) reqs+sats))
         req-set (expand-implications (partition 2 reqs))
         sat-set (difference (expand-implications (partition 2 sats)) req-set)]
     `(let [type# (def ~name (op '~(symbol (str *ns*) (str name))
                                 ~(walk/postwalk-replace var-map vars)
                                 ~req-set
-                                ~sat-set))]
-       ; add to configuration if exists
+                                ~sat-set
+                                ~opts))]
+                                        ; add to configuration if exists
        ~(if (contains? (ns-interns *ns*) '-ops)
           `(def ~'-ops (conj ~'-ops ~name)))
-       ; create factory
+                                        ; create factory
        (defn ~(symbol (str factory-prefix "getType")) ^Op [] ~name)
        (defn ~(symbol (str factory-prefix "create")) ^Binding [~@vars] (bind ~name ~vars))
        (gen-class
-         :name ~factory-name
-         :prefix ~factory-prefix
-         :methods [^:static [~'getType [] sre.plan.op.Op]
-                   ^:static [~'create [~@(repeat (count vars) Object)] sre.core.Binding]])
+        :name ~factory-name
+        :prefix ~factory-prefix
+        :methods [^:static [~'getType [] sre.plan.op.Op]
+                  ^:static [~'create [~@(repeat (count vars) Object)] sre.core.Binding]])
        type#)))

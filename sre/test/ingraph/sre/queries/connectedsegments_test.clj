@@ -1,16 +1,14 @@
 (ns ingraph.sre.queries.connectedsegments-test
-  (:require [clojure
-             [pprint :as pprint]
-             [test :refer :all]]
-            [ingraph.sre.queries
-             [connectedsegments-pattern :refer :all]
-             [utils :as utils]]
-            [ingraph.sre.ingraph-proto-1 :as ingraph]
-            [sre.plan.pattern :as pattern])
+  (:require [clojure.test :refer :all]
+            [ingraph.sre.ingraph-proto-1 :refer :all]
+            [sre.core :refer :all]
+            [sre.plan.pattern :as pattern]
+            [ingraph.sre.queries.connectedsegments-pattern :as cs]
+            [clojure.pprint :as pprint])
   (:import [ingraph.ire Indexer IngraphEdge IngraphVertex]
            [scala.collection.immutable HashMap HashSet]))
 
-(def connected-segments-query (pattern/compile p-1 ingraph/Ingraph {:k 1}))
+(def connected-segments-query (pattern/compile cs/p Ingraph {:k 5}))
 
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
@@ -52,9 +50,6 @@
                (.addEdge monitored-by-4)
                (.addEdge monitored-by-5)
                (.addEdge monitored-by-6)))
-
-
-(comment (pprint/pprint (utils/get-tasks connected-segments-query)))
 
 (deftest test-connected-segments
   (testing "ConnectedSegments query should return 1 row"
