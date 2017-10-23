@@ -1,7 +1,8 @@
 package ingraph.compiler.cypher2qplan.builders
 
+import ingraph.compiler.cypher2qplan.util.BuilderUtil
 import ingraph.model.expr.labeltypes.VertexLabel
-import ingraph.model.expr.{VertexAttribute, VertexLabelUpdate}
+import ingraph.model.expr._
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
 import org.apache.spark.sql.catalyst.expressions.Attribute
@@ -9,6 +10,7 @@ import org.slizaa.neo4j.opencypher.openCypher.{NodeLabel, RemoveItem, SetItem}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This is the builder for Create/Update/Delete clauses of the openCypher to relational algebra compiler.
@@ -20,16 +22,25 @@ object CudBuilder {
     */
   def buildCreateOperator(u0: oc.Create, child: qplan.QNode): QNode = {
     val attributes = u0.getPattern.getPatterns.asScala.flatMap {
+      // Iterate through the comma-separated patterns of the create clause
       case pe: oc.PatternElement => Some(pe)
       case _ => None
     }.flatMap( pe => {
-      val firstVertex: Attribute = AttributeBuilder.buildAttribute(pe.getNodepattern.getVariable)
-      val edgesAndVertices = pe.getChain.asScala.toSeq.flatMap(pec => Seq(
-        AttributeBuilder.buildAttribute(pec.getNodePattern),
-        AttributeBuilder.buildAttribute(pec.getRelationshipPattern)
-      ))
-      //FIXME: resolver should remove edges and vertices from create, if they are MATCH'ed in the descendant tree
-      Seq(firstVertex) ++ edgesAndVertices
+      val edgesAndVertices: ArrayBuffer[ElementAttribute] = ArrayBuffer.empty
+
+      var chainVertex: VertexAttribute = AttributeBuilder.buildAttribute(pe.getNodepattern)
+      edgesAndVertices.append(chainVertex)
+
+      pe.getChain.asScala.toSeq.foreach(pec => {
+        val nextVertex: VertexAttribute = AttributeBuilder.buildAttribute(pec.getNodePattern)
+        val edgeAttribute: EdgeAttribute = AttributeBuilder.buildAttribute(pec.getRelationshipPattern)
+        val direction: Direction = BuilderUtil.convertToDirection(pec.getRelationshipPattern)
+        // put vertex before the edge itself
+        edgesAndVertices.append(nextVertex, RichEdgeAttribute(chainVertex, nextVertex, edgeAttribute, direction))
+        chainVertex = nextVertex
+      })
+
+      edgesAndVertices
     })
 
     return qplan.Create(attributes, child)
