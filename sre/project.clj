@@ -6,6 +6,7 @@
                  [net.mikera/core.matrix "0.60.3"]
                  [funcool/cats "2.1.0"]
                  [ingraph/indexer "0.4.0-SNAPSHOT"]
+                 [ingraph/csv-loader "0.4.0-SNAPSHOT"]
                  [com.taoensso/tufte "1.1.2"]]
   :repositories [["acceleo" "https://repo.eclipse.org/content/groups/acceleo"]
                  ["viatra2" "https://repo.eclipse.org/content/groups/viatra2"]
@@ -13,7 +14,8 @@
   :profiles {
              :dev {
                    :dependencies [[org.clojure/test.check "0.9.0"]
-                                  [pjstadig/humane-test-output "0.8.3"]]
+                                  [pjstadig/humane-test-output "0.8.3"]
+                                  [com.esotericsoftware/kryo "4.0.0"]]
                    :plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]
                              [jonase/eastwood "0.2.4"]
                              [refactor-nrepl "2.4.0-SNAPSHOT"]
