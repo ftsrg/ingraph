@@ -99,6 +99,17 @@ abstract class ElementAttribute(name: String, properties: TPropertyMap) extends 
 abstract class VertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), val properties: TPropertyMap = Map()) extends ElementAttribute(name, properties)
 abstract class EdgeAttribute(override val name: String, val labels: EdgeLabelSet, val properties: TPropertyMap = Map()) extends ElementAttribute(name, properties)
 
+/*
+ * Represents an edge along with its vertices and direction.
+ *
+ * Actually, this encapsulates an edge and its source and target vertices.
+ * As a descendant of ElementATtribute, it gives access to the name and properties of the encapsulated EdgeAttribute.
+ */
+case class RichEdgeAttribute(src: VertexAttribute,
+                             trg: VertexAttribute,
+                             edge: EdgeAttribute,
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties) with NavigationDescriptor
+
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner
 case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
