@@ -14,7 +14,8 @@
 
 (def connected-segments-query (pattern/compile cs/p Ingraph {:k 5}))
 
-(pprint/pprint (:subtasks (utils/get-tasks connected-segments-query)))
+(comment
+  "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks connected-segments-query))))
 
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
@@ -58,22 +59,22 @@
                (.addEdge monitored-by-6)))
 
 (tufte/add-basic-println-handler! {})
-(tufte/profile {}
-               (dotimes [_ 1]
-                 (tufte/p :smoke-count (count (into [] (pattern/run connected-segments-query
-                                                         [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                                                         {:indexer indexer}))))))
 
-(def trainbenchmark (tb-loader/load))
-(tufte/profile {}
-               (dotimes [_ 1]
-                 (tufte/p :tb-inject-1-count (count (into [] (pattern/run connected-segments-query
-                                                               [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                                                               {:indexer trainbenchmark}))))))
-
-(deftest test-connected-segments
+(deftest test-connected-segments-smoke
   (testing "ConnectedSegments query should return 1 row"
-    (is (= (count (into [] (pattern/run connected-segments-query
-                             [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                             {:indexer indexer})))
-           1))))
+    (tufte/profile
+     {}
+     (is (= (count (into [] (tufte/p :cs-smoke (pattern/run connected-segments-query
+                                                 [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                                 {:indexer indexer}))))
+            1)))))
+
+(def tb-inject-1 (tb-loader/load 'inject-1))
+
+(deftest test-connected-segments-tb-inject-1
+  (testing "ConnectedSegments query should return expected results for TrainBenchmark inject-1"
+    (tufte/profile
+     {}
+     (let [inject-1 (tb-loader/load 'inject-1)
+           results (tufte/p :cs-tb-inject-1 (into [] (pattern/run connected-segments-query [:segment :length] {:indexer inject-1})))]
+       (is (= (count results) 4))))))

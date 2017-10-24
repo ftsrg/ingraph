@@ -25,7 +25,7 @@
                (if-not (empty? children) children)))        ; convert empty list to nil or else strange things happen :(
            (fn [^ZipperNode _ ^LazySeq c] c)))
 
-(def dft (partial iterate z/next))
+(def dft (partial iterate #(tufte/p :next (z/next %))))
 
 (def take-until-end (take-while (complement z/end?)))
 
