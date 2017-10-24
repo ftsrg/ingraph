@@ -16,6 +16,9 @@
   (pattern/run pl [:segment :length] ctx))
 
 
-(def trainbenchmark (tb-loader/load))
-(tufte/profile {} (dotimes [_ 100]
-                    (tufte/p :poslength-1 (run-search {:indexer trainbenchmark}))))
+(def inject-1 (tb-loader/load 'inject-1))
+
+(defn run-profile [ctx]
+  (tufte/profile {} (dotimes [_ 100]
+                      (tufte/p :poslength-1 (run-search {:indexer ctx})))))
+(comment (run-profile inject-1))
