@@ -1,15 +1,20 @@
 (ns ingraph.sre.queries.connectedsegments-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure
+             [pprint :as pprint]
+             [test :refer :all]]
             [ingraph.sre.ingraph-proto-1 :refer :all]
-            [sre.core :refer :all]
+            [ingraph.sre.queries
+             [connectedsegments-pattern :as cs]
+             [utils :as utils]]
+            [ingraph.sre.queries.utils.tb-loader :as tb-loader]
             [sre.plan.pattern :as pattern]
-            [ingraph.sre.queries.connectedsegments-pattern :as cs]
-            [clojure.pprint :as pprint])
+            [taoensso.tufte :as tufte])
   (:import [ingraph.ire Indexer IngraphEdge IngraphVertex]
            [scala.collection.immutable HashMap HashSet]))
 
 (def connected-segments-query (pattern/compile cs/p Ingraph {:k 5}))
 
+(pprint/pprint (:subtasks (utils/get-tasks connected-segments-query)))
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-3 (IngraphVertex. 3 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
@@ -50,6 +55,20 @@
                (.addEdge monitored-by-4)
                (.addEdge monitored-by-5)
                (.addEdge monitored-by-6)))
+
+(tufte/add-basic-println-handler! {})
+(tufte/profile {}
+               (dotimes [_ 1]
+                 (tufte/p :smoke-count (count (into [] (pattern/run connected-segments-query
+                                                         [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                                         {:indexer indexer}))))))
+
+(def trainbenchmark (tb-loader/load))
+(tufte/profile {}
+               (dotimes [_ 1]
+                 (tufte/p :tb-inject-1-count (count (into [] (pattern/run connected-segments-query
+                                                               [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                                               {:indexer trainbenchmark}))))))
 
 (deftest test-connected-segments
   (testing "ConnectedSegments query should return 1 row"

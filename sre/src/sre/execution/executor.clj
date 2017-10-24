@@ -1,11 +1,16 @@
 (ns sre.execution.executor
-  (:require [clojure.algo.generic.functor :refer :all]
-            [clojure.set :refer :all]
-            [clojure.zip :as z]
+  (:require [clojure
+             [set :refer :all]
+             [zip :as z]]
+            [clojure.algo.generic.functor :refer :all]
             [sre.core :refer :all]
-            [sre.plan.task :refer [ISearch search]])
-  (:import (clojure.lang LazySeq PersistentHashMap PersistentList)
-           (java.util Vector)))
+            [sre.plan.task :refer [ISearch search]]
+            [taoensso.tufte :refer [defnp]]
+            [taoensso.tufte :as tufte]
+            [clojure.pprint :as pprint])
+  (:import [clojure.lang LazySeq PersistentList]))
+
+(set! *warn-on-reflection* true)
 
 (defrecord ZipperNode [variables ctx ^PersistentList left])
 
@@ -36,7 +41,18 @@
 (defn rebind-variables [variables bindings key-map]
   (-> variables (select-keys bindings) (remap-keys key-map)))
 
-;(defn [outer var-keys] merge-vars (map (merge outer #(remap-keys % (map-invert var-keys)))))
+
+(defnp ^:private conj-step-search [this bindings variables ctx subtasks outer-vars inner-vars]
+  (let [key-map (zipmap bindings outer-vars)
+        variables (tufte/p :bind-vars (rebind-variables variables bindings key-map))
+        find-matches (fn [x] (eduction take-until-end
+                                       filter-leaf
+                                       filter-complete
+                                       map-variables
+                                       (map #(tufte/p :rebind-vars (rebind-variables % outer-vars (map-invert key-map))))
+                                       (dft x)))]
+    (find-matches (search-tree-zipper (->ZipperNode variables ctx subtasks)))))
+
 
 ;; Step comprising multiple substeps of pattern matches carried out in a sequence, each of whom must
 ;; be satisfied to form a complete match. Returns the sequence of complete matches.
@@ -45,16 +61,8 @@
   (bind [this vals] (->Binding this vals))
   (bind-map [this val-map] (->Binding this (fmap #(val-map %1) (:outer-vars this))))
   ISearch
-  (search [this bindings variables ctx]
-    (let [key-map (zipmap bindings outer-vars)
-          variables (rebind-variables variables bindings key-map)
-          find-matches (fn [x] (eduction take-until-end
-                                  filter-leaf
-                                  filter-complete
-                                  map-variables
-                                  (map #(rebind-variables % outer-vars (map-invert key-map)))
-                                  (dft x)))]
-      (find-matches (search-tree-zipper (->ZipperNode variables ctx subtasks))))))
+  (search [this bindings variables ctx] (conj-step-search this bindings variables ctx subtasks outer-vars inner-vars)))
+
 
 ;; Wraps another step and returns the input as a singleton sequence fast on first match, else fails.
 (defrecord ExistsStep [inner-search]
