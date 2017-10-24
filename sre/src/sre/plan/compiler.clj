@@ -124,7 +124,7 @@
   (let [cost-cmp (compare (:cost-calculator a) (:cost-calculator b))]
     (if (= cost-cmp 0)
       (not= a b)
-      cost-cmp)))
+      (- cost-cmp))))
 
 (defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
   (map->SearchPlanCell {:cost-calculator      cost-calculator
