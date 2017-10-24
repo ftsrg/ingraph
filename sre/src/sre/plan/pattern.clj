@@ -67,6 +67,7 @@
                                                 reqs pattern-bindings))
   ([vars reqs pattern-bindings] (make-pattern (str (gensym "anon_pattern__")) vars reqs pattern-bindings)))
 
+(defn get-tasks [pattern] (((nth pattern 3) (nth pattern 1))))
+
 (defn run [query bindings ctx]
-  (task/search (let [task (((nth query 3) (nth query 1)))]
-                 task) bindings {} ctx))
+  (task/search (get-tasks query) bindings {} ctx))
