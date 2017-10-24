@@ -12,7 +12,7 @@
 
 (defn pprint-task [type]
   (pprint/pprint-logical-block :prefix "<" :suffix ">"
-                               (pprint/write-out (name type))))
+                               (pprint/write-out (-> type name resolve meta :name))))
 
 (defmethod pprint/simple-dispatch sre.plan.task.IPrettyTask [type] (pprint-task type))
 
