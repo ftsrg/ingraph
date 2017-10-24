@@ -1,4 +1,4 @@
-(ns ingraph.sre.config
+(ns ingraph.sre.ingraph-proto-2
   "Contains the main configuration of constraints, operations and others
   available in ingraph"
   (:refer-clojure :exclude [name])
@@ -40,7 +40,7 @@
 (defconstraint Constant [x value] < Known [x])
 
 (defop GetVertices [vertex] -> Vertex [vertex])
-(defweight GetVertices [op & rest] 5)
+(defweight GetVertices [op & rest] 1000)
 (deftask GetVertices
   (let [[v] bindings
         ^Indexer indexer (:indexer ^IPersistentMap ctx)
@@ -53,7 +53,7 @@
   GetVerticesByLabels [vertex labels]
   Known [labels] -> Vertex [vertex] HasLabels [vertex labels])
 (defweight
-  GetVerticesByLabels [op & rest] 3)
+  GetVerticesByLabels [op & rest] 100)
 (deftask
   GetVerticesByLabels
   (let [[v l] bindings
@@ -65,7 +65,8 @@
 
 (defop
   CheckLabels [vertex labels]
-  Vertex [vertex] Known [labels] -> HasLabels [vertex labels])
+  Vertex [vertex] Known [labels] -> HasLabels [vertex labels]
+  :opts {:immediate true})
 (defweight
   CheckLabels [op & rest] 0.5)
 (deftask
@@ -78,7 +79,7 @@
 (defop
   GetEdges [source edge target] -> DirectedEdge [source edge target])
 (defweight
-  GetEdges [op & rest] 5)
+  GetEdges [op & rest] 1000)
 (deftask
   GetEdges
   (let [[v e w] bindings
@@ -94,7 +95,7 @@
   GetEdgesByType [source edge target type]
   Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  GetEdgesByType [op & rest] 3)
+  GetEdgesByType [op & rest] 100)
 (deftask
   GetEdgesByType
   (let [[v e w t] bindings
@@ -109,7 +110,8 @@
 
 (defop
   CheckType [edge type]
-  Edge [edge] Known [type] -> HasType [edge type])
+  Edge [edge] Known [type] -> HasType [edge type]
+  :opts {:immediate true})
 (defweight
   CheckType [op & rest] 0.5)
 (deftask
@@ -121,7 +123,8 @@
 
 (defop
   AccessPropertyByKey [element key val]
-  Element [element] Known [key] -> Property [element key val])
+  Element [element] Known [key] -> Property [element key val]
+  :opts {:immediate true})
 (defweight
   AccessPropertyByKey [op & rest] 1)
 (deftask
@@ -135,7 +138,7 @@
   ExtendOut [source edge target]
   Vertex [source] -> DirectedEdge [source edge target])
 (defweight
-  ExtendOut [op & rest] 3)
+  ExtendOut [op & rest] 10)
 (deftask
   ExtendOut
   (let [[v e w] bindings
@@ -150,7 +153,7 @@
   ExtendIn [target edge source]
   Vertex [target] -> DirectedEdge [source edge target])
 (defweight
-  ExtendIn [op & rest] 3)
+  ExtendIn [op & rest] 10)
 (deftask
   ExtendIn
   (let [[v e w] bindings
@@ -165,7 +168,7 @@
   ExtendOutByType [source edge target type]
   Vertex [source] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  ExtendOutByType [op & rest] 2)
+  ExtendOutByType [op & rest] 5)
 (deftask
   ExtendOutByType
   (let [[v e w t] bindings
@@ -181,7 +184,7 @@
   ExtendInByType [target edge source type]
   Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  ExtendInByType [op & rest] 3)
+  ExtendInByType [op & rest] 5)
 (deftask
   ExtendInByType
   (let [[v e w t] bindings
@@ -197,47 +200,41 @@
   Join [source edge target]
   Vertex [source] Vertex [target] -> DirectedEdge [source edge target])
 (defweight
-  Join [op & rest] 10)
+  Join [op & rest] 5)
 (deftask
   Join
   (let [[v e w] bindings
+        ^Indexer indexer (:indexer ^IPersistentMap ctx)
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
-        ;; TODO No indexer support so we'll fall back to filtering :(
-        ^Iterator iterator (.edgesInJavaIterator target)]
+        ^Iterator iterator (.edgesBySourceAndTargetJava indexer source target)]
     (->> (iterator-seq iterator)
-         ;; filter for matches and map to lookup in one function
-         (mapcat #(let [^IngraphEdge edge %
-                        ^IngraphVertex src (.sourceVertex edge)]
-                    (if (= src source)
-                      (list (assoc variables e edge v src))
-                      ()))))))
+         (map #(let [^IngraphEdge edge %]
+                 (assoc variables e edge))))))
+
 
 (defop
   JoinByType [source edge target type]
   Vertex [source] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defweight
-  JoinByType [op & rest] 5)
+  JoinByType [op & rest] 2)
 (deftask
   JoinByType
   (let [[v e w t] bindings
+        ^Indexer indexer (:indexer ^IPersistentMap ctx)
         ^IngraphVertex source (variables v)
         ^IngraphVertex target (variables w)
         ^String type (variables t)
-        ;; No indexer support so will fall back to filtering :(
-        ^Iterator iterator (.edgesInByTypeJavaIterator target type)]
+        ^Iterator iterator (.edgesBySourceAndTargetAndTypeJava indexer source target type)]
     (->> (iterator-seq iterator)
-         ;; filter for matches and map to lookup in one function
-         (mapcat #(let [^IngraphEdge edge %
-                        ^IngraphVertex src (.sourceVertex edge)]
-                    (if (= src source)
-                      (list (assoc variables e edge v src))
-                      ()))))))
+         (map #(let [^IngraphEdge edge %]
+                 (assoc variables e edge))))))
 
 ;; Does this make any sense at all?
 (defop
   CheckDirectedEdge [source edge target]
-  Vertex [source] Edge [edge] Vertex [target] -> DirectedEdge [source edge target])
+  Vertex [source] Edge [edge] Vertex [target] -> DirectedEdge [source edge target]
+  :opts {:immediate true})
 (defweight
   CheckDirectedEdge [op & rest] 0.5)
 (deftask CheckDirectedEdge
@@ -252,9 +249,10 @@
 
 (defop
   CheckDirectedEdgeByType [source edge target type]
-  Vertex [source] Edge [edge] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type])
+  Vertex [source] Edge [edge] Vertex [target] Known [type] -> DirectedEdge [source edge target] HasType [edge type]
+  :opts {:immediate true})
 (defweight
-  CheckDirectedEdgeByType [op & rest] 0.3)
+  CheckDirectedEdgeByType [op & rest] 0.1)
 (deftask
   CheckDirectedEdgeByType
   (let [[v e w t] bindings
@@ -270,7 +268,8 @@
 
 (defop
   EvalGenUnaryAssertion [x cond]
-  Known [x] Known [cond] -> GenUnaryAssertion [x cond])
+  Known [x] Known [cond] -> GenUnaryAssertion [x cond]
+  :opts {:immediate true})
 (defweight
   EvalGenUnaryAssertion [op & rest] 0.1)
 (deftask
@@ -281,7 +280,8 @@
 
 (defop
   EvalGenBinaryAssertion [x y cond]
-  Known [x] Known [y] Known [cond] -> GenBinaryAssertion [x y cond])
+  Known [x] Known [y] Known [cond] -> GenBinaryAssertion [x y cond]
+  :opts {:immediate true})
 (defweight
   EvalGenBinaryAssertion [op & rest] 0.1)
 (deftask
@@ -291,7 +291,8 @@
 
 (defop
   BindConstant [x y]
-  -> Constant [x y])
+  -> Constant [x y]
+  :opts {:immediate true})
 (defweight
   BindConstant [op & rest] 1)
 (deftask

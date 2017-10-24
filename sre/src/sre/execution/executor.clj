@@ -3,7 +3,7 @@
             [clojure.set :refer :all]
             [clojure.zip :as z]
             [sre.core :refer :all]
-            [sre.plan.task :refer :all])
+            [sre.plan.task :refer [ISearch search]])
   (:import (clojure.lang LazySeq PersistentHashMap PersistentList)
            (java.util Vector)))
 

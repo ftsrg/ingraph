@@ -2,7 +2,6 @@ package ingraph.bulkloader.csv;
 
 import com.google.common.collect.ImmutableMap;
 import ingraph.bulkloader.csv.loader.MassCsvLoader;
-import neo4j.driver.util.GraphPrettyPrinter;
 import org.junit.Test;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
@@ -14,9 +13,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 public class TrainBenchmarkCsvTest {
 
-	private static final String PREFIX = TestConstants.GRAPHS_DIR + "trainbenchmark/railway-repair-1-";
+	private static final String PREFIX = TestConstants.GRAPHS_DIR + "trainbenchmark/railway-inject-1-";
 	private static final String POSTFIX = ".csv";
 
 	final Map<String, Collection<String>> nodeFilenames = ImmutableMap.<String, Collection<String>>builder() //
@@ -45,13 +46,8 @@ public class TrainBenchmarkCsvTest {
 		List<Node> nodes = mcl.getNodes();
 		List<Relationship> relationships = mcl.getRelationships();
 
-		for (int i = 0; i < Math.min(10, nodes.size()); i++) {
-			System.out.println(GraphPrettyPrinter.toString(nodes.get(i)));
-		}
-
-		for (int i = 0; i < Math.min(10, relationships.size()); i++) {
-			System.out.println(GraphPrettyPrinter.toString(relationships.get(i)));
-		}
+		assertEquals(741, nodes.size());
+		assertEquals(1429, relationships.size());
 	}
 
 }

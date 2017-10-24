@@ -3,7 +3,7 @@
             [clojure.zip :as z]
             [sre.execution.executor :refer :all]
             [sre.core :refer :all]
-            [sre.plan.task :refer :all]
+            [sre.plan.task :refer [ISearch search]]
             [sre.plan.config-2 :as c2]
             [clojure.pprint :refer :all])
   (:import [java.util Vector]))
