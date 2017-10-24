@@ -13,7 +13,7 @@
 (defrecord Op [requires satisfies name vars fast-forward])
 
 (defn pprint-op [op]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (:name op))))
+  (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (-> op :name resolve meta :name))))
 
 (defmethod pprint/simple-dispatch Op [op] (pprint-op op))
 
