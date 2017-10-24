@@ -13,7 +13,7 @@
 
 (defn pprint-constr [type]
   (pprint/pprint-logical-block :prefix "<" :suffix ">"
-                               (pprint/write-out (:name type))))
+                               (pprint/write-out (-> type :name resolve meta :name))))
 
 (defmethod pprint/simple-dispatch Constraint [type] (pprint-constr type))
 
@@ -113,7 +113,3 @@
        ~(if (contains? (ns-interns *ns*) '-constraints)
           `(def ~'-constraints (conj ~'-constraints ~name)))
        type#)))
-
-
-
-

@@ -1,6 +1,18 @@
 (ns sre.plan.estimation
   (:require [sre.plan.config :as config]))
 
+(comment
+  ;; https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+  (def some-guy-told-me-to-use-this-as-epsilon-pls-dont-kill-me 1.19e-7)
+
+  (defmacro halfway-sane-positive-float-compare [a b]
+    `(let [d# (Math/abs (- ~a ~b))
+           m# (if (> ~a ~b) ~a ~b)]
+       (cond
+         (<= d# (* m# some-guy-told-me-to-use-this-as-epsilon-pls-dont-kill-me)) 0
+         (= ~a m#) 1
+         :else -1))))
+
 (defprotocol Cost
   "Costs are assigned to search plans."
   (update-cost
@@ -14,17 +26,17 @@
     [this config op-binding constraint-lkp]
     "Should return a weight that can be passed to update-cost"))
 
-(defrecord CostCalculator [^long c ^long p]
+(defrecord CostCalculator [c p]
   Cost
   (update-cost [this weight]
-    (as-> this this
-          (update-in this [:p] #(* %1 weight))
-          (update-in this [:c] #(+ %1 (:p this)))))
+    (as-> this t
+      (update-in t [:p] #(* %1 weight))
+      (update-in t [:c] #(+ %1 (:p t)))))
   (to-weight [this] c)
   Comparable
   (compareTo [this other] (compare (:c this) (:c other))))
 
-(def default-cost-calculator (->CostCalculator 0 1))
+(def default-cost-calculator (->CostCalculator 0.0 1.0))
 
 (def default-weight-calculator
   (reify Weight
