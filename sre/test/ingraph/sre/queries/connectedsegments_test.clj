@@ -15,6 +15,7 @@
 (def connected-segments-query (pattern/compile cs/p Ingraph {:k 5}))
 
 (pprint/pprint (:subtasks (utils/get-tasks connected-segments-query)))
+
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-3 (IngraphVertex. 3 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
