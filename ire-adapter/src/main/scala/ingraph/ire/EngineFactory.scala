@@ -233,12 +233,11 @@ object EngineFactory {
         ???
       }
       val removals: Seq[(Tuple) => Unit] = for (element <- op.inode.attributes)
-      // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
         yield element match {
           case e: EdgeAttribute =>
             (t: Tuple) => indexer.removeEdgeById(t(lookup(e.name)).asInstanceOf[Long])
           case v: VertexAttribute =>
-            (t: Tuple) => indexer.removeVertexById(t(lookup(v.name)).asInstanceOf[Long])
+            (t: Tuple) => indexer.removeVertexById(t(lookup(v.name)).asInstanceOf[Long], detach = true)
         }
       (m: ReteMessage) => {
         m match {
