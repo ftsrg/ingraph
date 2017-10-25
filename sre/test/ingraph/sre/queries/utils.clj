@@ -6,4 +6,6 @@
 
 (defn compile-pattern [def-sym k]
   (let [def @(resolve def-sym)]
-    (tufte/profile {} (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k})))))
+    (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k}))))
+
+(defn short-name [symbol] (-> symbol resolve meta :name))
