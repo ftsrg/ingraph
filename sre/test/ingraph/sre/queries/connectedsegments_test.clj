@@ -2,7 +2,6 @@
   (:require [clojure
              [pprint :as pprint]
              [test :refer :all]]
-            [ingraph.sre.ingraph-proto-1 :refer :all]
             [ingraph.sre.queries
              [connectedsegments-pattern :as cs]
              [utils :as utils]]
@@ -12,10 +11,11 @@
   (:import [ingraph.ire Indexer IngraphEdge IngraphVertex]
            [scala.collection.immutable HashMap HashSet]))
 
-(def connected-segments-query (pattern/compile cs/p Ingraph {:k 5}))
+(tufte/add-basic-println-handler! {})
 
-(comment
-  "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks connected-segments-query))))
+(defn compile-pattern [def-sym k]
+  (let [def @(resolve def-sym)]
+    (tufte/profile {} (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k})))))
 
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
@@ -58,16 +58,27 @@
                (.addEdge monitored-by-5)
                (.addEdge monitored-by-6)))
 
-(tufte/add-basic-println-handler! {})
+(def cs-proto-1 (compile-pattern 'cs/p-1 5))
+
+(comment
+  "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-1))))
+
+
+(def cs-proto-2 (compile-pattern 'cs/p-2 5))
+
+(comment
+  "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-2))))
 
 (deftest test-connected-segments-smoke
   (testing "ConnectedSegments query should return 1 row"
-    (tufte/profile
-     {}
-     (is (= (count (into [] (tufte/p :cs-smoke (pattern/run connected-segments-query
-                                                 [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                                                 {:indexer indexer}))))
-            1)))))
+    (for [proto ['cs-proto-1 'cs-proto-2]]
+      (tufte/profile
+       {}
+       (is (= (count (into [] (tufte/p (keyword (str 'cs-smoke '- proto))
+                                       (pattern/run (-> proto resolve deref)
+                                         [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                         {:indexer indexer}))))
+              1))))))
 
 (def tb-inject-1 (tb-loader/load 'inject-1))
 
@@ -75,6 +86,6 @@
   (testing "ConnectedSegments query should return expected results for TrainBenchmark inject-1"
     (tufte/profile
      {}
-     (let [inject-1 (tb-loader/load 'inject-1)
-           results (tufte/p :cs-tb-inject-1 (into [] (pattern/run connected-segments-query [:segment :length] {:indexer inject-1})))]
-       (is (= (count results) 4))))))
+     (dotimes [_ 100](let [inject-1 (tb-loader/load 'inject-1)
+                           results (tufte/p :cs-tb-inject-1 (into [] (pattern/run cs-proto-2 [:segment :length] {:indexer inject-1})))]
+                       (is (= (count results) 4)))))))
