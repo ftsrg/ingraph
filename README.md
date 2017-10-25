@@ -19,11 +19,10 @@ To run the tests, issue the following command:
 ingraph is defined as a Gradle project.
 
 ### Prerequisites
+* We recommend using IntelliJ for developing the engine, as most of it is in Scala. Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala) for IntelliJ.
+* For SRE and other Clojure projects we recommend Emacs with [CIDER](https://cider.readthedocs.io/en/latest/). If you want to develop Clojure in IntelliJ, check out [Cursive](https://cursive-ide.com/) 
 
-* We recommend to use IntelliJ for developing the engine.
-* Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
-
-*Note.* Currently, there is no VIATRA plug-in for IntelliJ. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
+*Note.* Currently, there is no VIATRA plug-in for IntelliJ or Emacs. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
 
 ### Importing the projects
 
