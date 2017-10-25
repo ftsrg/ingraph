@@ -146,7 +146,8 @@
                         :constr-lkp           constr-lkp
                         :free-count           index
                         :non-past-op-bindings (filter (partial satisfiable? constr-lkp) (:non-past-op-bindings cell))
-                        :non-past-op-bindings! (filter (partial satisfiable? constr-lkp) (:non-past-op-bindings! cell))}))
+                        :<non-past-op-bindings< (filter (partial satisfiable? constr-lkp) (:<non-past-op-bindings< cell))
+                        :>non-past-op-bindings> (filter (partial satisfiable? constr-lkp) (:>non-past-op-bindings> cell))}))
 
 (defnp insert-cell [cell k plans [weight present-binding op-binding]]
   ;; we have to find out how many constraints are getting bound because that determines the first index.
@@ -229,7 +230,7 @@
   (maybe/from-maybe
    ;; try and bind an immediate step. look how cool it is that I can use bind-present here!
    ;; It is because for is actually lazy
-   (m/mlet [binding (maybe/seq->maybe (bind-present config cell (:non-past-op-bindings! cell)))]
+   (m/mlet [binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
            (m/return (insert-cell cell k plans binding)))
    ;; no immediate step, default to normal action (from-maybe option default) is similar to Scala option.getOrElse(default))
    ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
@@ -261,14 +262,15 @@
   (let [ops                      (config/operations config)
         n                        (count (lookup/lookup constr-lkp :free))
         step                     (partial step k config)
-        {i-ops true n-ops false} (->> ops (group-by :immediate))
+        {immediate :immediate regular :regular deferred :deferred} (->> ops (group-by :disposition))
         cell                     (map->SearchPlanCell {:cost-calculator        cost-calculator
                                                        :weight-calculator      weight-calculator
                                                        :ops                    []
                                                        :constr-lkp             constr-lkp
                                                        :free-count             n
-                                                       :non-past-op-bindings           (bind-postcond n-ops constr-lkp)
-                                                       :non-past-op-bindings! (bind-postcond i-ops constr-lkp)})] ; 3:1 set n
+                                                       :non-past-op-bindings   (bind-postcond regular constr-lkp)
+                                                       :<non-past-op-bindings< (bind-postcond immediate constr-lkp)
+                                                       :>non-past-op-bindings> (bind-postcond deferred constr-lkp)})] ; 3:1 set n
     (loop [i     0
            plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
                                                             :cells-by-free {(lookup/lookup constr-lkp :free) cell}}))]

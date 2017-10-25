@@ -42,9 +42,10 @@
   (-> variables (select-keys bindings) (remap-keys key-map)))
 
 
-(defnp ^:private conj-step-search [this bindings variables ctx subtasks outer-vars inner-vars]
-  (let [key-map (zipmap bindings outer-vars)
-        variables (tufte/p :bind-vars (rebind-variables variables bindings key-map))
+(defnp ^:private conj-step-search [this bindings variables ctx]
+  (let [{subtasks :subtasks outer-vars :outer-vars inner-vars :inner-vars} this
+        key-map (zipmap bindings outer-vars)
+        variables (rebind-variables variables bindings key-map)
         find-matches (fn [x] (eduction take-until-end
                                        filter-leaf
                                        filter-complete
@@ -61,7 +62,7 @@
   (bind [this vals] (->Binding this vals))
   (bind-map [this val-map] (->Binding this (fmap #(val-map %1) (:outer-vars this))))
   ISearch
-  (search [this bindings variables ctx] (conj-step-search this bindings variables ctx subtasks outer-vars inner-vars)))
+  (search [this bindings variables ctx] (conj-step-search this bindings variables ctx)))
 
 
 ;; Wraps another step and returns the input as a singleton sequence fast on first match, else fails.

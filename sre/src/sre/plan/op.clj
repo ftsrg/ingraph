@@ -34,7 +34,7 @@
 
 (defn op
   ([name vars reqs sats opts] (map->Op (merge
-                                        {:immediate false}
+                                        {:disposition :regular}
                                         opts
                                         {:name      name
                                          :vars      vars
