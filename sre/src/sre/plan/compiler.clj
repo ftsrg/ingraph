@@ -1,6 +1,9 @@
 (ns sre.plan.compiler
   "Cost-based search plan compiler related functions, types etc."
-  (:require [cats.monad.exception :refer :all]
+  (:require [cats.core :as m]
+            [cats.monad
+             [exception :as exc]
+             [maybe :as maybe]]
             [clojure
              [pprint :refer :all]
              [set :refer :all]]
@@ -11,8 +14,9 @@
              [constraint :as constraint]
              [estimation :as estimation]
              [lookup :as lookup]]
-            [taoensso.tufte :as profiler :refer [defnp fnp]])
+            [taoensso.tufte :as profiler :refer [defnp]])
   (:import [java.io BufferedReader StringReader]
+           sre.plan.compiler.BindingBranchNode
            sre.plan.config.IConfig
            [sre.plan.estimation Cost Weight]
            sre.plan.lookup.ConstraintLookup))
@@ -111,7 +115,13 @@
               ;; continue matching
               (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))
 
-(defrecord SearchPlanCell [^Cost cost-calculator ^Weight weight-calculator ops constr-lkp free-count non-past-op-bindings])
+(defrecord SearchPlanCell [^Cost cost-calculator
+                           ^Weight weight-calculator
+                           ops
+                           ^ConstraintLookup constr-lkp
+                           free-count
+                           non-past-op-bindings
+                           non-past-op-bindings-immediate])
 
 (defrecord SearchPlanColumn [ordered-cells cells-by-free])
 
@@ -124,98 +134,110 @@
       (not= a b)
       cost-cmp)))
 
+(defn- satisfiable? [constr-lkp non-past-op-binding]
+  (every? #(subset? #{(nth % 2)}
+                    (get (lookup/lookup-by-type constr-lkp (nth % 0))
+                         (nth % 1)))
+          (:done non-past-op-binding)))
+
 (defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
   (map->SearchPlanCell {:cost-calculator      cost-calculator
                         :weight-calculator    weight-calculator
                         :ops                  (conj (:ops cell) bound)
                         :constr-lkp           constr-lkp
                         :free-count           index
-                        :non-past-op-bindings (filter (fn [x] (every? #(subset? #{(nth % 2)}
-                                                                                (get (lookup/lookup-by-type constr-lkp (nth % 0))
-                                                                                     (nth % 1)))
-                                                                      (:done x)))
-                                                      (:non-past-op-bindings cell))}))
+                        :non-past-op-bindings (filter (partial satisfiable? constr-lkp) (:non-past-op-bindings cell))
+                        :non-past-op-bindings! (filter (partial satisfiable? constr-lkp) (:non-past-op-bindings! cell))}))
 
-(defn step [^Integer k ^IConfig config plans ^SearchPlanCell cell]
-  ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
-  ;; because we haven't checked them for required constraints. so first figure out the applicable ops
-  (let [cost-binding-pairs (for [non-past-binding (:non-past-op-bindings cell)
-                                 ;; remember that for bindings will result in a mapcat (just like in Scala)
-                                 ;; sou using this can look weird but generally a single non-past op
-                                 ;; can branch into more than one present op because
-                                 ;; required constraints have not been checked
-                                 present-binding  (bind-op (:op non-past-binding)
-                                                           (:var-lkp non-past-binding)
-                                                           (:constr-lkp cell)
-                                                           [:bound])
-                                 ;; replace the things this operation will do if we
-                                 ;; eventually choose it
-                                 ;; note that we can do this instead of concating because only
-                                 ;; free constraints are moved (binding an op
-                                 ;; for required constraints always results in an empty list)
-                                 :let             [present-binding (assoc-in present-binding [:done] (:done non-past-binding))]
-                                 ;; the cost-fn requires that the op is properly bound to vars, so we do that here
-                                 ;; yeah, it smells that we have two different representations for the damn same thing
-                                 ;; so refactor once you have the fatigue
-                                 :let             [op-binding (bind-map (:op present-binding) (:var-lkp present-binding))
-                                                   weight (estimation/get-weight (:weight-calculator cell) config op-binding (:constr-lkp cell))]]
-                             [weight present-binding op-binding])]
-    ;; go through all applicable ops and try to fit them somewhere in our table.
-    (reduce (fnp insert-cell [plans [weight present-binding op-binding]]
-                 ;; we have to find out how many constraints are getting bound because that determines the first index.
-                 ;; it should be equal to the length of the done list as everything in there is a single newly bound
-                 ;; constraint
-                 (let [index             (- (:free-count cell) (count (:done present-binding))) ; 3:9
-                       column            (get plans index)
-                       ordered-cells     (get column :ordered-cells)
-                       cost-calculator   (estimation/update-cost (:cost-calculator cell) weight)
-                       weight-calculator (:weight-calculator cell)
-                       constr-lkp        (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
-                                                                                       (constraint/->ConstraintBinding type bindings))
-                                                                                     (:done present-binding)))
-                       free              (lookup/lookup constr-lkp :free)
-                       ;; determine duplicate (if any)
-                       dupe              (get-in column [:cells-by-free free])
-                       ;; determine whether it fits into the k best or not (only needed if not a dupe actually)
-                       full?             (>= (count ordered-cells) k)]
-                   (cond
-                     (some? dupe) (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
-                                    ;; this is better, evict dupe
-                                    (let [cell (create-search-plan-cell index cost-calculator
-                                                                        weight-calculator op-binding
-                                                                        cell constr-lkp)]
-                                      (-> plans
-                                          (update-in [index :ordered-cells] #(-> % (disj dupe) (conj cell)))
-                                          (assoc-in [index :cells-by-free free] cell)))
-                                    ;; existing is better, so don't modify the plan
-                                    plans)
-                     ;; we can fit it in somehow, either by consuming an empty slot, or replacing the worst
-                     (or (not full?)
-                         (< (compare cost-calculator (-> ordered-cells first :cost-calculator)) 0))
+(defnp insert-cell [cell k plans [weight present-binding op-binding]]
+  ;; we have to find out how many constraints are getting bound because that determines the first index.
+  ;; it should be equal to the length of the done list as everything in there is a single newly bound
+  ;; constraint
+  (let [index             (- (:free-count cell) (count (:done present-binding))) ; 3:9
+        column            (get plans index)
+        ordered-cells     (get column :ordered-cells)
+        cost-calculator   (estimation/update-cost (:cost-calculator cell) weight)
+        weight-calculator (:weight-calculator cell)
+        constr-lkp        (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
+                                                                        (constraint/->ConstraintBinding type bindings))
+                                                                      (:done present-binding)))
+        free              (lookup/lookup constr-lkp :free)
+        ;; determine duplicate (if any)
+        dupe              (get-in column [:cells-by-free free])
+        ;; determine whether it fits into the k best or not (only needed if not a dupe actually)
+        full?             (>= (count ordered-cells) k)]
+    (cond
+      (some? dupe) (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
+                     ;; this is better, evict dupe
                      (let [cell (create-search-plan-cell index cost-calculator
                                                          weight-calculator op-binding
                                                          cell constr-lkp)]
-                       (if (not full?)
-                         ;; using up an empty slot
-                         (-> plans
-                             ;; yuck. the set might not even exist at this point.
-                             (update-in [index :ordered-cells]
-                                        #(conj (or % (sorted-set-by compare-search-plan-cell-by-cost)) cell))
-                             (assoc-in [index :cells-by-free free] cell))
-                         ;; replacing the worst
-                         (let [evicted (-> ordered-cells first)]
-                           (-> plans
-                               ;; get rid of it from the cells-by-free map
-                               (update-in [index :cells-by-free] #(dissoc %1 (-> evicted :constr-lkp (lookup/lookup :free))))
-                               ;; get rid of it from the ordered cells set
-                               (update-in [index :ordered-cells] #(disj %1 evicted))
-                               ;; add new item to ordered cells set
-                               (update-in [index :ordered-cells] #(conj %1 cell))
-                               ;; add new item to cells-be-free map
-                               (assoc-in [index :cells-by-free free] cell)))))
-                     :else        plans)))
-            plans
-            cost-binding-pairs)))
+                       (-> plans
+                           (update-in [index :ordered-cells] #(-> % (disj dupe) (conj cell)))
+                           (assoc-in [index :cells-by-free free] cell)))
+                     ;; existing is better, so don't modify the plan
+                     plans)
+      ;; we can fit it in somehow, either by consuming an empty slot, or replacing the worst
+      (or (not full?)
+          (< (compare cost-calculator (-> ordered-cells first :cost-calculator)) 0))
+      (let [cell (create-search-plan-cell index cost-calculator
+                                          weight-calculator op-binding
+                                          cell constr-lkp)]
+        (if (not full?)
+          ;; using up an empty slot
+          (-> plans
+              ;; yuck. the set might not even exist at this point.
+              (update-in [index :ordered-cells]
+                         #(conj (or % (sorted-set-by compare-search-plan-cell-by-cost)) cell))
+              (assoc-in [index :cells-by-free free] cell))
+          ;; replacing the worst
+          (let [evicted (-> ordered-cells first)]
+            (-> plans
+                ;; get rid of it from the cells-by-free map
+                (update-in [index :cells-by-free] #(dissoc %1 (-> evicted :constr-lkp (lookup/lookup :free))))
+                ;; get rid of it from the ordered cells set
+                (update-in [index :ordered-cells] #(disj %1 evicted))
+                ;; add new item to ordered cells set
+                (update-in [index :ordered-cells] #(conj %1 cell))
+                ;; add new item to cells-be-free map
+                (assoc-in [index :cells-by-free free] cell)))))
+      :else        plans)))
+
+(defn bind-present [config cell non-past-op-bindings]
+  (for [non-past-binding non-past-op-bindings
+        ;; remember that for bindings will result in a mapcat (just like in Scala)
+        ;; so using this can look weird but generally a single non-past op
+        ;; can branch into more than one present op because
+        ;; required constraints have not been checked
+        present-binding  (bind-op (:op non-past-binding)
+                                  (:var-lkp non-past-binding)
+                                  (:constr-lkp cell)
+                                  [:bound])
+        ;; replace the things this operation will do if we
+        ;; eventually choose it
+        ;; note that we can do this instead of concating because only
+        ;; free constraints are moved (binding an op
+        ;; for required constraints always results in an empty list)
+        :let             [present-binding (assoc-in present-binding [:done] (:done non-past-binding))]
+        ;; the cost-fn requires that the op is properly bound to vars, so we do that here
+        ;; yeah, it smells that we have two different representations for the damn same thing
+        ;; so refactor once you have the fatigue
+        :let             [op-binding (bind-map (:op present-binding) (:var-lkp present-binding))
+                          weight (estimation/get-weight (:weight-calculator cell) config op-binding (:constr-lkp cell))]]
+    [weight present-binding op-binding]))
+
+(defn step [^Integer k ^IConfig config plans ^SearchPlanCell cell]
+  (maybe/from-maybe
+   ;; try and bind an immediate step. look how cool it is that I can use bind-present here!
+   ;; It is because for is actually lazy
+   (m/mlet [binding (maybe/seq->maybe (bind-present config cell (:non-past-op-bindings! cell)))]
+           (m/return (insert-cell cell k plans binding)))
+   ;; no immediate step, default to normal action (from-maybe option default) is similar to Scala option.getOrElse(default))
+   ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
+   ;; because we haven't checked them for required constraints. so first figure out the applicable ops
+   (let [bindings (bind-present config cell (:non-past-op-bindings cell))]
+     ;; go through all applicable ops and try to fit them somewhere in our table.
+     (reduce (partial insert-cell cell k) plans bindings))))
 
 (defnp run
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
@@ -247,13 +269,13 @@
                                                        :constr-lkp             constr-lkp
                                                        :free-count             n
                                                        :non-past-op-bindings           (bind-postcond n-ops constr-lkp)
-                                                       :non-past-op-bindings-immediate (bind-postcond i-ops constr-lkp)})] ; 3:1 set n
+                                                       :non-past-op-bindings! (bind-postcond i-ops constr-lkp)})] ; 3:1 set n
     (loop [i     0
            plans (sorted-map-by > n (map->SearchPlanColumn {:ordered-cells (sorted-set-by compare-search-plan-cell-by-cost cell)
                                                             :cells-by-free {(lookup/lookup constr-lkp :free) cell}}))]
       (if-let [keys (keys plans)]
         (if (= [0] keys)
-          (success (-> plans (get 0) :ordered-cells first)) ; 3:18 - ready. return best plan
+          (exc/success (-> plans (get 0) :ordered-cells first)) ; 3:18 - ready. return best plan
           (let [j (first keys)]
             (let [column (get plans j)
                   plans  (as-> plans x
@@ -263,10 +285,10 @@
         (let [reader (fn [str] (BufferedReader. (StringReader. str)))
               free   (with-out-str (pprint (lookup/lookup constr-lkp :free)))
               bound  (with-out-str (pprint (lookup/lookup constr-lkp :bound)))]
-          (failure (Exception. (str "no solution. Gave up after " i " steps"
-                                    "\nsatisfying\n"
-                                    (apply str (interpose "\n"
-                                                          (for [line (line-seq (reader free))] (str "  " line))))
-                                    "\nfrom\n"
-                                    (apply str (interpose "\n"
-                                                          (for [line (line-seq (reader bound))] (str "  " line))))))))))))
+          (exc/failure (Exception. (str "no solution. Gave up after " i " steps"
+                                        "\nsatisfying\n"
+                                        (apply str (interpose "\n"
+                                                              (for [line (line-seq (reader free))] (str "  " line))))
+                                        "\nfrom\n"
+                                        (apply str (interpose "\n"
+                                                              (for [line (line-seq (reader bound))] (str "  " line))))))))))))
