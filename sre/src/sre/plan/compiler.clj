@@ -16,7 +16,6 @@
              [lookup :as lookup]]
             [taoensso.tufte :as profiler :refer [defnp]])
   (:import [java.io BufferedReader StringReader]
-           sre.plan.compiler.BindingBranchNode
            sre.plan.config.IConfig
            [sre.plan.estimation Cost Weight]
            sre.plan.lookup.ConstraintLookup))
