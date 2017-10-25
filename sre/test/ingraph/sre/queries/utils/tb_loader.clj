@@ -1,4 +1,5 @@
 (ns ingraph.sre.queries.utils.tb-loader
+  (:refer-clojure :exclude [load])
   (:require [clojure.java.io :as io])
   (:import ingraph.bulkloader.csv.loader.MassCsvLoader
            ingraph.ire.Indexer))
