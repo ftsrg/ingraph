@@ -43,7 +43,7 @@ object QPlanResolver {
   }
 
   val expressionResolver: PartialFunction[Expression, Expression] = {
-    case UnresolvedFunction(functionIdentifier, children, isDistinct) => expr.FunctionInvocation(misc.Function.getByPrettyName(functionIdentifier.identifier), children, isDistinct)
+    case UnresolvedFunction(functionIdentifier, children, isDistinct) => expr.FunctionInvocation(misc.Function.fromCypherName(functionIdentifier.identifier, children.length, isDistinct), children, isDistinct)
   }
 
   /**
