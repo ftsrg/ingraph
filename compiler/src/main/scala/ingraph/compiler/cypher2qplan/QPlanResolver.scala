@@ -2,10 +2,13 @@ package ingraph.compiler.cypher2qplan
 
 import ingraph.model.{expr, qplan}
 import ingraph.model.misc
-import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+import ingraph.model.qplan.QNode
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedFunction, UnresolvedStar}
 import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+
+import scala.collection.mutable.ListBuffer
 
 object QPlanResolver {
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
@@ -31,9 +34,9 @@ object QPlanResolver {
   val qplanResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Unary
 //    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
-    case qplan.Projection(projectList, child) => {
-      val p = qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
-      p
+    case qplan.UnresolvedProjection(projectList, child) => {
+      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression])
+      projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
@@ -72,5 +75,59 @@ object QPlanResolver {
     */
   protected def filterForAttributesOfChildOutput(attributes: Seq[cExpr.Attribute], child: qplan.QNode, invert: Boolean = false): Seq[cExpr.Attribute] = {
     attributes.flatMap( a => if ( invert.^(child.output.exists( co => co.name == a.name )) ) Some(a) else None )
+  }
+
+
+  /**
+    * Creates either a Projection or a Grouping instance based on the expressions found in projectList.
+    *
+    * Grouping is returned iff we find at least one expression in projectList having a call to an aggregate function at its top-level.
+    *
+    *
+    * @param child
+    * @param projectList
+    * @return
+    */
+  protected def projectionResolveHelper(projectList: Seq[NamedExpression], child: QNode): qplan.UnaryQNode with qplan.ProjectionDescriptor = {
+    /**
+      * Returns true iff e is an expression having a call to an aggregation function at its top-level.
+      * @param e
+      * @return
+      */
+    def isAggregatingFunctionInvocation(e: cExpr.Expression): Boolean = {
+      e match {
+        case expr.FunctionInvocation(f, _, _) => f.isAggregation
+        case _ => false
+      }
+    }
+
+    // look for aggregation functions in top-level position of return items
+    // those having no aggregation function in top-level position will form the aggregation criteria if at least one aggregation is seen
+    val aggregationCriteriaCandidate: ListBuffer[Expression] = ListBuffer.empty
+
+    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || (a match {
+      case cExpr.Alias(e, _) => if (isAggregatingFunctionInvocation(e)) {
+        true
+      } else {
+        aggregationCriteriaCandidate += e
+        false
+      }
+      case UnresolvedAlias(e, _) => if (isAggregatingFunctionInvocation(e)) {
+        true
+      } else {
+        aggregationCriteriaCandidate += e
+        false
+      }
+      // we expect to have all return items be either Alias or UnresolvedAlias
+      // FIXME: UnresolvedStar is also allowed until it is resolved
+      case UnresolvedStar(_) => false
+      case x => throw new RuntimeException(s"Unexpected type found in return item position: ${x.getClass}")
+    }))
+
+    if (seenAggregate) {
+      qplan.Grouping(aggregationCriteriaCandidate, projectList, child)
+    } else {
+      qplan.Projection(projectList, child)
+    }
   }
 }
