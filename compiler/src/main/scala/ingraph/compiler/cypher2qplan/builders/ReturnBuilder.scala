@@ -35,10 +35,10 @@ object ReturnBuilder {
 //      ]
 //
 //      if (joinOperationsOfWhereClause.length !== 0) {
-//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moveing this expression to MATCH...WHERE.''')
+//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moving this expression to MATCH...WHERE.''')
 //      }
 
-      qplan.Selection(expr.EStub("WITH EHERE"), rb)
+      qplan.Selection(expr.EStub("WITH WHERE"), rb)
     }
   }
 
