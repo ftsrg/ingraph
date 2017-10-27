@@ -76,16 +76,16 @@ trait ProjectionDescriptor {
 
 case class Production(child: QNode) extends UnaryQNode {}
 
-/*
- * The Projection operator is the renaissance man of the Rete network.
- *
- * It can:
- * - Project variables to a schema, i.e. only keeping a certain set of variables.
- * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
- * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
- *   (i.e. the inferencer algorithm has to propagate these variables to the LeafQNode instances)
- * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
-*/
+/**
+  * The Projection operator is the renaissance man of the Rete network.
+  *
+  * It can:
+  * - Project variables to a schema, i.e. only keeping a certain set of variables.
+  * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
+  * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
+  *   (i.e. the inferencer algorithm has to propagate these variables to the LeafQNode instances)
+  * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
+  */
 abstract class AbstractProjection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
   override def output = projectOutput
 }
@@ -96,11 +96,11 @@ abstract class AbstractProjection(projectList: TProjectList, child: QNode) exten
 case class UnresolvedProjection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
 case class Projection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
 
-/*
- * The Grouping operator adds grouping functionality to the basic ProjectionDescriptor.
- *
- * If Projection operator was the renaissance man, this is Baroque of the relational graph algebra model.
- */
+/**
+  * The Grouping operator adds grouping functionality to the basic ProjectionDescriptor.
+  *
+  * If Projection operator was the renaissance man, this is Baroque of the relational graph algebra model.
+  */
 case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
   override def output = projectOutput
 }
