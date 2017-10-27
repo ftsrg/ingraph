@@ -1,9 +1,14 @@
 package ingraph.model.qplan
 
 import ingraph.model.expr._
+import ingraph.model.qplan.types.TProjectList
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+
+package object types {
+  type TProjectList = Seq[NamedExpression]
+}
 
 /**
   * QNodes for building a qplan tree
@@ -64,10 +69,25 @@ case class Expand(src: VertexAttribute,
   override def output = child.output ++ Seq(edge, trg)
 }
 
+trait ProjectionDescriptor {
+  def projectList: TProjectList
+  protected def projectOutput: Seq[Attribute] = projectList.map(_.toAttribute)
+}
+
 case class Production(child: QNode) extends UnaryQNode {}
 
-case class Projection(projectList: Seq[NamedExpression], child: QNode) extends UnaryQNode {
-  override def output = projectList.map(_.toAttribute)
+/*
+ * The Projection operator is the renaissance man of the Rete network.
+ *
+ * It can:
+ * - Project variables to a schema, i.e. only keeping a certain set of variables.
+ * - Extract attributes from a vertex/edge, e.g. it can project to n.name, r.weight, etc. (other operators, such as the SelectionOperator are also capable of this feat)
+ * - Evaluate metafunctions, such as labels(n), relationship(r), keys(e), properties(e), by relying on input from the NullaryOperators
+ *   (i.e. the inferencer algorithm has to propagate these variables to the LeafQNode instances)
+ * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
+*/
+case class Projection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
+  override def output = projectOutput
 }
 
 case class Selection(condition: Expression, child: QNode) extends UnaryQNode {}
