@@ -86,7 +86,22 @@ case class Production(child: QNode) extends UnaryQNode {}
  *   (i.e. the inferencer algorithm has to propagate these variables to the LeafQNode instances)
  * - Evaluate other functions, e.g. sin(x), substring(s, from, to), toBoolean(s), etc.
 */
-case class Projection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
+abstract class AbstractProjection(projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
+  override def output = projectOutput
+}
+
+/**
+  * An UnresolvedProjection will either be resolved to a Projection or to a Grouping based on its projectList.
+  */
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
+case class Projection(override val projectList: TProjectList, override val child: QNode) extends AbstractProjection(projectList, child)
+
+/*
+ * The Grouping operator adds grouping functionality to the basic ProjectionDescriptor.
+ *
+ * If Projection operator was the renaissance man, this is Baroque of the relational graph algebra model.
+ */
+case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: QNode) extends UnaryQNode with ProjectionDescriptor {
   override def output = projectOutput
 }
 

@@ -18,7 +18,7 @@ class TrainBenchmarkCompilationTest extends FunSuite {
         |WITH *, segment, "foo" as foo
         |OPTIONAL MATCH (v)
         |WHERE foo = "foo"
-        |RETURN DISTINCT segment, segment.length AS length, 2*5 as ten""".stripMargin)
+        |RETURN DISTINCT segment, segment.length AS length, 2*5 as ten, sum(foo.size)""".stripMargin)
 
   }
 
