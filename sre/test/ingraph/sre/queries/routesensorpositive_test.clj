@@ -34,10 +34,8 @@
 
 (deftest test-routesensorpositive-tb-inject-1
   (testing "RouteSensorPositive query should return expected results for TrainBenchmark inject-1"
-    (tufte/profile
-     {}
-     (doseq [proto [`rsp-proto-1 `rsp-proto-2]]
-       (let [inject-1 (tb-loader/load 'inject-1)
-             results (tufte/p (keyword (str 'tb-inject-1 '- (utils/short-name proto)))
-                              (into [] (pattern/run (-> proto resolve deref) [:route :follows :sw-p :target :sw :monitored-by :sensor] {:indexer inject-1})))]
-         (is (= 112 (count results))))))))
+    (doseq [proto [`rsp-proto-1 `rsp-proto-2]]
+      (let [inject-1 (tb-loader/load 'inject-1)
+            results (tufte/profile {} (tufte/p (keyword (str 'tb-inject-1 '- (utils/short-name proto)))
+                                               (into [] (pattern/run (-> proto resolve deref) [:route :follows :sw-p :target :sw :monitored-by :sensor] {:indexer inject-1}))))]
+        (is (= 112 (count results)))))))

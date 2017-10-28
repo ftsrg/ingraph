@@ -18,12 +18,12 @@
   (let [def @(resolve def-sym)]
     (tufte/profile {} (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k})))))
 
-(def rs-proto-1 (utils/compile-pattern 'rs/p-1 5))
+(def rs-proto-1 (tufte/profile {} (utils/compile-pattern 'rs/p-1 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks rs-proto-1)))
 
-(def rs-proto-2 (utils/compile-pattern 'rs/p-2 5))
+(def rs-proto-2 (tufte/profile {} (utils/compile-pattern 'rs/p-2 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks rs-proto-2)))
@@ -32,10 +32,8 @@
 
 (deftest test-routesensorpositive-tb-inject-1
   (testing "RouteSensorPositive query should return expected results for TrainBenchmark inject-1"
-    (tufte/profile
-     {}
-     (doseq [proto [`rs-proto-1 `rs-proto-2]]
-       (let [inject-1 (tb-loader/load 'inject-1)
-             results (tufte/p (keyword (str 'tb-inject-1 '- (utils/short-name proto)))
-                              (into [] (pattern/run (-> proto resolve deref) [:route :follows :sw-p :target :sw :monitored-by :sensor] {:indexer inject-1})))]
-         (is (= 7 (count results))))))))
+    (doseq [proto [`rs-proto-1 `rs-proto-2]]
+      (let [inject-1 (tb-loader/load 'inject-1)
+            results (tufte/profile {} (tufte/p (keyword (str 'tb-inject-1 '- (utils/short-name proto)))
+                                               (into [] (pattern/run (-> proto resolve deref) [:route :follows :sw-p :target :sw :monitored-by :sensor] {:indexer inject-1}))))]
+        (is (= 7 (count results)))))))
