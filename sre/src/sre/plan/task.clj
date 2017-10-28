@@ -1,6 +1,8 @@
 (ns sre.plan.task
   (:refer-clojure :exclude [name])
-  (:require [clojure.pprint :as pprint]))
+  (:require
+   [sre.core :refer :all]
+   [clojure.pprint :as pprint]))
 
 (defprotocol ISearch
   (search [this bindings variables ctx] "Given the variable bindings, the variable lookup and
@@ -10,11 +12,7 @@
 
 (defprotocol IPrettyTask (name [this]))
 
-(defn pprint-task [type]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">"
-                               (pprint/write-out (-> type name resolve meta :name))))
-
-(defmethod pprint/simple-dispatch sre.plan.task.IPrettyTask [type] (pprint-task type))
+(defmethod pprint/simple-dispatch sre.plan.task.IPrettyTask [type] (-> type name pprint-short-name))
 
 (defmacro deftask
   "Generates an ISearch implementation for an Op. 'body' is the body of the

@@ -1,4 +1,4 @@
-(ns ingraph.sre.queries.routesensorpositive-pattern
+(ns ingraph.sre.queries.routesensor-pattern
   (:require [ingraph.sre
              [ingraph-proto-1 :as proto-1]
              [ingraph-proto-2 :as proto-2]]
@@ -7,7 +7,8 @@
 
 (def p-1
   {:config proto-1/Ingraph
-   :pattern (pattern/pattern [:route :follows :sw-p :target :sw :monitored-by :sensor] []
+   :pattern (pattern/pattern "main"
+                             [:route :follows :sw-p :target :sw :monitored-by :sensor] []
                              [(bind proto-1/DirectedEdge [:route :follows :sw-p])
                               (bind proto-1/DirectedEdge [:sw-p :target :sw])
                               (bind proto-1/DirectedEdge [:sw :monitored-by :sensor])
@@ -24,10 +25,19 @@
                               (bind proto-1/Constant [:-target-type "target"])
                               (bind proto-1/Constant [:-switch-label "Switch"])
                               (bind proto-1/Constant [:-monitored-by-type "monitoredBy"])
-                              (bind proto-1/Constant [:-sensor-label "Sensor"])])})
+                              (bind proto-1/Constant [:-sensor-label "Sensor"])
+                              (bind (pattern/not (pattern/pattern [:route :sensor]
+                                                                  [(bind proto-1/Vertex [:route])
+                                                                   (bind proto-1/Vertex [:sensor])]
+                                                                  [(bind proto-1/DirectedEdge [:route :-requires :sensor])
+                                                                   (bind proto-1/HasType [:-requires :-requires-type])
+                                                                   (bind proto-1/Constant [:-requires-type "requires"])]))
+                                    [:route :sensor])])})
+
 (def p-2
   {:config proto-2/Ingraph
-   :pattern (pattern/pattern [:route :follows :sw-p :target :sw :monitored-by :sensor] []
+   :pattern (pattern/pattern "main"
+                             [:route :follows :sw-p :target :sw :monitored-by :sensor] []
                              [(bind proto-2/DirectedEdge [:route :follows :sw-p])
                               (bind proto-2/DirectedEdge [:sw-p :target :sw])
                               (bind proto-2/DirectedEdge [:sw :monitored-by :sensor])
@@ -44,4 +54,11 @@
                               (bind proto-2/Constant [:-target-type "target"])
                               (bind proto-2/Constant [:-switch-label "Switch"])
                               (bind proto-2/Constant [:-monitored-by-type "monitoredBy"])
-                              (bind proto-2/Constant [:-sensor-label "Sensor"])])})
+                              (bind proto-2/Constant [:-sensor-label "Sensor"])
+                              (bind (pattern/not (pattern/pattern [:route :sensor]
+                                                                  [(bind proto-2/Vertex [:route])
+                                                                   (bind proto-2/Vertex [:sensor])]
+                                                                  [(bind proto-2/DirectedEdge [:route :-requires :sensor])
+                                                                   (bind proto-2/HasType [:-requires :-requires-type])
+                                                                   (bind proto-2/Constant [:-requires-type "requires"])]))
+                                    [:route :sensor])])})
