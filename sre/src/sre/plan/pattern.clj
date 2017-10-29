@@ -111,7 +111,7 @@
         req-vars (extract-vars (:reqs pattern))
         outer-vars (-> pattern :outer-vars (as-> v (filter req-vars v) (into [] v)))
         constraint (c/constraint name outer-vars (:reqs pattern))
-        op (op/op name outer-vars (:reqs pattern) #{(bind constraint outer-vars)} {})]
+        op (op/op name outer-vars (:reqs pattern) #{(bind constraint outer-vars)} {:disposition :deferred})]
     (map->Not{:name name
               :pattern pattern
               :outer-vars outer-vars
