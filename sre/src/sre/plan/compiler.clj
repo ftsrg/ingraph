@@ -230,14 +230,19 @@
   (maybe/from-maybe
    ;; try and bind an immediate step. look how cool it is that I can use bind-present here!
    ;; It is because for is actually lazy
-   (m/mlet [binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
-           (m/return (insert-cell cell k plans binding)))
+   (m/mlet [immediate-binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
+           (m/return (insert-cell cell k plans immediate-binding)))
    ;; no immediate step, default to normal action (from-maybe option default) is similar to Scala option.getOrElse(default))
    ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
    ;; because we haven't checked them for required constraints. so first figure out the applicable ops
-   (let [bindings (bind-present config cell (:non-past-op-bindings cell))]
-     ;; go through all applicable ops and try to fit them somewhere in our table.
-     (reduce (partial insert-cell cell k) plans bindings))))
+   (let [regular-bindings (bind-present config cell (:non-past-op-bindings cell))]
+     (if (seq regular-bindings) ; this is the idiomatic way in Clojure to check for a non-empty sequence (http://clojuredocs.org/clojure.core/empty_q)
+       ;; insert regular steps
+       (reduce (partial insert-cell cell k) plans regular-bindings)
+       ;; if no regular steps are available, try inserting a deferred step
+       (maybe/from-maybe (m/mlet [deferred-binding (maybe/seq->maybe (bind-present config cell (:>non-past-op-bindings> cell)))]
+                                 (m/return (insert-cell cell k plans deferred-binding)))
+                         plans)))))
 
 (defnp run
   "Algorithm that calculates the search plan (list of operations) for the set of constraints given in constr-lkp. Implementation
@@ -280,8 +285,8 @@
           (let [j (first keys)]
             (let [column (get plans j)
                   plans  (as-> plans x
-                           (dissoc x j)
-                           (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
+                               (dissoc x j)
+                               (reduce #(step %1 %2) x (:ordered-cells column)))] ; 3.4
               (recur (inc i) plans))))
         (let [reader (fn [str] (BufferedReader. (StringReader. str)))
               free   (with-out-str (pprint (lookup/lookup constr-lkp :free)))
