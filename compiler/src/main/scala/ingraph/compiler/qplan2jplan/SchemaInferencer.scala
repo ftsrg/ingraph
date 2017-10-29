@@ -1,65 +1,65 @@
-package ingraph.compiler.qplan2iplan
+package ingraph.compiler.qplan2jplan
 
-import ingraph.model.eplan._
+import ingraph.model.fplan._
 import ingraph.model.expr.PropertyAttribute
-import ingraph.model.iplan
-import ingraph.model.eplan
-import ingraph.model.iplan.INode
+import ingraph.model.jplan
+import ingraph.model.fplan
+import ingraph.model.jplan.JNode
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
 object SchemaInferencer {
 
-  def transform(inode: INode, extraAttributes: Seq[NamedExpression] = Seq()): ENode = {
+  def transform(inode: JNode, extraAttributes: Seq[NamedExpression] = Seq()): FNode = {
     val ea = extraAttributes.distinct
 
     inode match {
       // leaf
-      case o: iplan.GetEdges => eplan.GetEdges(ea, o)
-      case o: iplan.GetVertices => eplan.GetVertices(ea, o)
-      case o: iplan.Dual        =>
+      case o: jplan.GetEdges => fplan.GetEdges(ea, o)
+      case o: jplan.GetVertices => fplan.GetVertices(ea, o)
+      case o: jplan.Dual        =>
         if (ea.nonEmpty) {
           throw new IllegalStateException(s"Dual node cannot hold extra attributes (${ea})")
         }
-        eplan.Dual(o)
+        fplan.Dual(o)
 
       // unary
-      case o: iplan.Projection =>
+      case o: jplan.Projection =>
         val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
-        eplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
-      case o: iplan.Selection =>
+        fplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
+      case o: jplan.Selection =>
         val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
-        eplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
+        fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
       // the rest is just the same, isn't it?
-      case o: iplan.AllDifferent         => eplan.AllDifferent        (ea, o, transform(o.child, ea))
-      case o: iplan.DuplicateElimination => eplan.DuplicateElimination(ea, o, transform(o.child, ea))
-      case o: iplan.Production           => eplan.Production          (ea, o, transform(o.child, ea))
-      case o: iplan.SortAndTop           => eplan.SortAndTop          (ea, o, transform(o.child, ea))
+      case o: jplan.AllDifferent         => fplan.AllDifferent        (ea, o, transform(o.child, ea))
+      case o: jplan.DuplicateElimination => fplan.DuplicateElimination(ea, o, transform(o.child, ea))
+      case o: jplan.Production           => fplan.Production          (ea, o, transform(o.child, ea))
+      case o: jplan.SortAndTop           => fplan.SortAndTop          (ea, o, transform(o.child, ea))
       // unary DMLs
-      case o: iplan.Create               => eplan.Create              (ea, o, transform(o.child, ea))
-      case o: iplan.Delete               => eplan.Delete              (ea, o, transform(o.child, ea))
-      case o: iplan.Merge                => eplan.Merge               (ea, o, transform(o.child, ea))
-      case o: iplan.Remove               => eplan.Remove              (ea, o, transform(o.child, ea))
-      case o: iplan.SetNode              => eplan.SetNode             (ea, o, transform(o.child, ea))
+      case o: jplan.Create               => fplan.Create              (ea, o, transform(o.child, ea))
+      case o: jplan.Delete               => fplan.Delete              (ea, o, transform(o.child, ea))
+      case o: jplan.Merge                => fplan.Merge               (ea, o, transform(o.child, ea))
+      case o: jplan.Remove               => fplan.Remove              (ea, o, transform(o.child, ea))
+      case o: jplan.SetNode              => fplan.SetNode             (ea, o, transform(o.child, ea))
 
       // binary
-      case o: iplan.AntiJoin => eplan.AntiJoin(
+      case o: jplan.AntiJoin => fplan.AntiJoin(
           ea, o,
           transform(o.left, ea),
           transform(o.right, Seq())
         )
-      case j: iplan.EquiJoinLike => {
+      case j: jplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
         val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
         j match {
-          case o: iplan.Join => eplan.Join(ea, o, left, right)
-          case o: iplan.LeftOuterJoin => eplan.LeftOuterJoin(ea, o, left, right)
-          case o: iplan.ThetaLeftOuterJoin => eplan.ThetaLeftOuterJoin(ea, o, left, right)
+          case o: jplan.Join => fplan.Join(ea, o, left, right)
+          case o: jplan.LeftOuterJoin => fplan.LeftOuterJoin(ea, o, left, right)
+          case o: jplan.ThetaLeftOuterJoin => fplan.ThetaLeftOuterJoin(ea, o, left, right)
         }
       }
-      case o: iplan.Union => eplan.Union(ea, o,
+      case o: jplan.Union => fplan.Union(ea, o,
         transform(o.left, ea),
         transform(o.right, ea)
       )

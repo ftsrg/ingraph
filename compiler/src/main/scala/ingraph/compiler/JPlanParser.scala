@@ -1,13 +1,13 @@
 package ingraph.compiler
 
 import ingraph.compiler.cypher2qplan.CypherParser
-import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
-import ingraph.model.eplan.ENode
+import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
+import ingraph.model.fplan.FNode
 
-object IPlanParser {
-  def parse(query: String): ENode = {
+object JPlanParser {
+  def parse(query: String): FNode = {
     SchemaInferencer.transform(
-      QPlanToIPlan.transform(
+      QPlanToJPlan.transform(
         CypherToQPlan.build(
           CypherParser.parseString(query), "test"
         )
