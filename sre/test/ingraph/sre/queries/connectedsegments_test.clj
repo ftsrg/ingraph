@@ -58,13 +58,13 @@
                (.addEdge monitored-by-5)
                (.addEdge monitored-by-6)))
 
-(def cs-proto-1 (utils/compile-pattern 'cs/p-1 5))
+(def cs-proto-1 (tufte/profile {} (utils/compile-pattern 'cs/p-1 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-1))))
 
 
-(def cs-proto-2 (utils/compile-pattern 'cs/p-2 5))
+(def cs-proto-2 (tufte/profile {} (utils/compile-pattern 'cs/p-2 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-2))))
@@ -72,25 +72,21 @@
 (deftest test-connected-segments-smoke
   (testing "ConnectedSegments query should return 1 row"
     (doseq [proto [`cs-proto-1 `cs-proto-2]]
-      (tufte/profile
-       {}
-       (is (= (count (into [] (tufte/p (keyword (str 'smoke '/ (utils/short-name proto)))
-                                       (pattern/run (-> proto resolve deref)
-                                         [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                                         {:indexer indexer}))))
-              1))))))
+      (is (= (count (tufte/profile {} (tufte/p (keyword (str 'smoke '/ (utils/short-name proto)))
+                                               (into [] (pattern/run (-> proto resolve deref)
+                                                          [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                                          {:indexer indexer})))))
+             1)))))
 
 (def tb-inject-1 (tb-loader/load 'inject-1))
 
 (deftest test-connected-segments-tb-inject-1
   (testing "ConnectedSegments query should return expected results for TrainBenchmark inject-1"
     (doseq [proto [`cs-proto-1 `cs-proto-2]]
-      (tufte/profile
-       {}
-       (let [inject-1 (tb-loader/load 'inject-1)
-             results (tufte/p (keyword (str 'tb-inject-1 '/ (utils/short-name proto)))
-                              (into [] (pattern/run
-                                         (-> proto resolve deref)
-                                         [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
-                                         {:indexer inject-1})))]
-         (is (= (count results) 4)))))))
+      (let [inject-1 (tb-loader/load 'inject-1)
+            results  (tufte/profile {} (tufte/p (keyword (str 'tb-inject-1 '/ (utils/short-name proto)))
+                                                (into [] (pattern/run
+                                                           (-> proto resolve deref)
+                                                           [:sensor :segment1 :segment2 :segment3 :segment4 :segment5 :segment6]
+                                                           {:indexer inject-1}))))]
+        (is (= (count results) 4))))))

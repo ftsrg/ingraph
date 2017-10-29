@@ -5,8 +5,7 @@
             [clojure.algo.generic.functor :refer :all]
             [sre.core :refer :all]
             [sre.plan.task :refer [ISearch search]]
-            [taoensso.tufte :refer [defnp]]
-            [taoensso.tufte :as tufte]
+            [taoensso.tufte :refer [defnp p]]
             [clojure.pprint :as pprint])
   (:import [clojure.lang LazySeq PersistentList]))
 
@@ -25,7 +24,7 @@
                (if-not (empty? children) children)))        ; convert empty list to nil or else strange things happen :(
            (fn [^ZipperNode _ ^LazySeq c] c)))
 
-(def dft (partial iterate #(tufte/p :next (z/next %))))
+(def dft (partial iterate #(p :next (z/next %))))
 
 (def take-until-end (take-while (complement z/end?)))
 
@@ -50,7 +49,7 @@
                                        filter-leaf
                                        filter-complete
                                        map-variables
-                                       (map #(tufte/p :rebind-vars (rebind-variables % outer-vars (map-invert key-map))))
+                                       (map #(p :rebind-vars (rebind-variables % outer-vars (map-invert key-map))))
                                        (dft x)))]
     (find-matches (search-tree-zipper (->ZipperNode variables ctx subtasks)))))
 

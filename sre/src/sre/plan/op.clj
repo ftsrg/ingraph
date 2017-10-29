@@ -5,26 +5,24 @@
             [clojure.pprint :as pprint]
             [clojure.walk :as walk]
             [sre.plan.constraint :as constraint]
-            [sre.core :refer :all])
+            [sre.core :refer :all]
+            [clojure.string :as str])
   (:import (clojure.lang Symbol)
            (java.io Writer)
            (sre.core Binding)))
 
-(defrecord Op [requires satisfies name vars fast-forward])
+(defrecord Op [requires satisfies name vars disposition])
 
-(defn pprint-op [op]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">" (pprint/write-out (-> op :name resolve meta :name))))
-
-(defmethod pprint/simple-dispatch Op [op] (pprint-op op))
+(defmethod pprint/simple-dispatch Op [op] (pprint-short-name (:name op)))
 
 (extend-type Op
   IBind
   (bind-map [this var-map]
     (let [replace (partial fmap (fn [v] (fmap (fn [p] (fmap #(var-map %1) p)) v)))]
       (map->Binding {:type      this
-                       :bindings  (fmap #(var-map %1) (:vars this))
-                       :requires  (replace (:requires this))
-                       :satisfies (replace (:satisfies this))})))
+                     :bindings  (fmap #(var-map %1) (:vars this))
+                     :requires  (replace (:requires this))
+                     :satisfies (replace (:satisfies this))})))
   (bind [this args] (bind-map this (zipmap (:vars this) args))))
 
 (defn- expand-implications [constr-defs]
@@ -33,13 +31,14 @@
                     constr-defs)))
 
 (defn op
-  ([name vars reqs sats opts] (map->Op (merge
-                                        {:disposition :regular}
-                                        opts
-                                        {:name      name
-                                         :vars      vars
-                                         :requires  (constraint/constraint-bindings-to-map (into () reqs))
-                                         :satisfies (constraint/constraint-bindings-to-map (into () sats))})))
+  ([name vars reqs sats opts]
+   (map->Op (merge
+             {:disposition :regular}
+             opts
+             {:name      name
+              :vars      vars
+              :requires  (constraint/constraint-bindings-to-map (into () reqs))
+              :satisfies (constraint/constraint-bindings-to-map (into () sats))})))
   ([vars reqs sats opts] (op (str (gensym "anon_op__")) vars reqs sats opts))
   ([vars reqs sats] (op vars reqs sats {})))
 

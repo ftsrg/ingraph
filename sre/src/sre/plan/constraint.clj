@@ -1,21 +1,20 @@
 (ns sre.plan.constraint
-  (:require [clojure.set :refer :all]
+  (:require [clojure
+             [pprint :as pprint]
+             [set :refer :all]
+             [string :as str]
+             [walk :as walk]]
             [clojure.algo.generic.functor :refer :all]
-            [clojure.pprint :as pprint]
-            [clojure.walk :as walk]
-            [sre.core :refer :all])
-  (:import (clojure.lang IPersistentSet Symbol)
-           (java.io Writer)))
+            [sre.core :refer :all]
+            [clojure.string :as str])
+  (:import clojure.lang.IPersistentSet
+           java.io.Writer))
 
 (defrecord Variable [name])
 
 (defrecord Constraint [name vars arity implies])
 
-(defn pprint-constr [type]
-  (pprint/pprint-logical-block :prefix "<" :suffix ">"
-                               (pprint/write-out (-> type :name resolve meta :name))))
-
-(defmethod pprint/simple-dispatch Constraint [type] (pprint-constr type))
+(defmethod pprint/simple-dispatch Constraint [type] (-> type :name pprint-short-name))
 
 (defn constraint-bindings-to-map [bindings]
   (reduce (fn [lkp {type :type bindings :bindings}]
@@ -62,24 +61,25 @@
         (recur (union (-implies first) (into #{} rest)) (conj result first))))))
 
 (defn pprint-constraint-binding [c-b]
-  (pprint/pprint-logical-block
-    :prefix "<" :suffix ">"
-    (pprint/write-out (:type c-b))
-    (.write ^Writer *out* "::")
-    (pprint/write-out (:bindings c-b))))
+  (pprint/pprint-logical-block :prefix "<" :suffix ">"
+                               (pprint/write-out (:type c-b))
+                               (.write ^Writer *out* "::")
+                               (pprint/write-out (:bindings c-b))))
 
 (defmethod pprint/simple-dispatch ConstraintBinding [c-b] (pprint-constraint-binding c-b))
 
 (defn union* [& constrs] (reduce #(union %1 (implies* %2)) #{} constrs))
 
+(defn to-bindings [implications]
+  (->> implications
+       (partition 2)
+       (map (fn [[type vars]] (->ConstraintBinding type vars)))))
+
 (defn constraint
   ([name vars implications] (map->Constraint {:name    name
                                               :vars    vars
                                               :arity   (count vars)
-                                              :implies (->> implications
-                                                            (partition 2)
-                                                            (map (fn [[type vars]] (->ConstraintBinding type vars)))
-                                                            (into #{}))}))
+                                              :implies (into #{} implications)}))
   ([vars implications] (constraint (str (gensym "anon_constraint__")) vars implications)))
 
 (defmacro defconstraint
@@ -103,7 +103,7 @@
         factory-prefix (str name "ConstraintBinding-")]
     `(let [type# (def ~name (constraint '~(symbol (str *ns*) (str name))
                                         ~(walk/postwalk-replace var-map vars)
-                                        [~@(walk/postwalk-replace var-map implications)]))]
+                                        (to-bindings [~@(walk/postwalk-replace var-map implications)])))]
        (defn ~(symbol (str factory-prefix "getType")) ^Constraint [] ~name)
        (defn ~(symbol (str factory-prefix "create")) ^ConstraintBinding [~@vars] (bind ~name ~vars))
        (gen-class :name ~factory-name
