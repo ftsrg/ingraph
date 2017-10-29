@@ -1,8 +1,7 @@
 (ns sre.plan.task
   (:refer-clojure :exclude [name])
-  (:require
-   [sre.core :refer :all]
-   [clojure.pprint :as pprint]))
+  (:require [clojure.pprint :as pprint]
+            [sre.core :refer :all]))
 
 (defprotocol ISearch
   (search [this bindings variables ctx] "Given the variable bindings, the variable lookup and
