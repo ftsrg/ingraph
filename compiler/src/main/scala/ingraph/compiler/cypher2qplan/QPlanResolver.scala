@@ -21,7 +21,7 @@ object QPlanResolver {
       case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
       case _ => None
     }
-    println(elements)
+    //println(elements)
 
     beautiful.asInstanceOf[qplan.QNode]
   }
