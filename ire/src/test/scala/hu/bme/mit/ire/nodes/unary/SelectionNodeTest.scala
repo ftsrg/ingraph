@@ -4,7 +4,7 @@ package hu.bme.mit.ire.nodes.unary
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -19,7 +19,7 @@ class SelectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Impl
 
   "Selection" must {
     "check the condition properly" in {
-      val changeSet = ChangeSet(
+      val changeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(0, "something"), tuple(0, "something else"))
       )
       val echoActor = system.actorOf(TestActors.echoActorProps)
@@ -29,7 +29,7 @@ class SelectionNodeTest(_system: ActorSystem) extends TestKit(_system) with Impl
       val checker = system.actorOf(Props(new SelectionNode(echoActor ! _, condition)))
 
       checker ! changeSet
-      expectMsg(ChangeSet(positive = tupleBag(tuple(0, "something"))))
+      expectMsg(IncrementalChangeSet(positive = tupleBag(tuple(0, "something"))))
     }
   }
 }

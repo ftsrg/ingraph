@@ -2,15 +2,15 @@ package ingraph.ire
 
 import java.io.FileInputStream
 import java.util.Collections
-import org.scalatest.Ignore
 
+import org.scalatest.Ignore
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryo.io.Input
 import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
+import ingraph.tests.LdbcSnbTest
 import org.neo4j.driver.v1.Record
 import org.objenesis.strategy.StdInstantiatorStrategy
 import org.supercsv.prefs.CsvPreference
-import ingraph.tests.LdbcSnbTest
 
 @Ignore
 class LdbcSnbEngineTest extends LdbcSnbTest {

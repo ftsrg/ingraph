@@ -121,5 +121,7 @@
 
 (defn get-tasks [pattern] (((nth pattern 3) (nth pattern 1))))
 
+(defn get-tasks [pattern] (((nth pattern 3) (nth pattern 1))))
+
 (defn run [query bindings ctx]
   (task/search (get-tasks query) bindings {} ctx))

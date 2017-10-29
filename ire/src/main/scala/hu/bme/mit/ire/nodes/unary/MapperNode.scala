@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, DataMessage, ReteMessage}
 
 /**
   * Currently used for selecting elements from a list.
@@ -14,13 +14,13 @@ import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 class MapperNode(override val next: (ReteMessage) => Unit,
                  val function: (Any) => Any, val index: Int,
                  override val expectedTerminatorCount: Int = 1
-                ) extends UnaryNode with SingleForwarder {
+                ) extends UnaryNode[DataMessage] with SingleForwarder {
   override def onSizeRequest() = 0
 
-  def onChangeSet(changeSet: ChangeSet): Unit = {
-    forward(ChangeSet(
-      changeSet.positive.map(t => t.updated(index, function(t(index)))),
-      changeSet.negative.map(t => t.updated(index, function(t(index))))
+  def onChangeSet(changeSet: DataMessage): Unit = {
+    val changeSets = changeSet.bags.map(_.map(
+      t => t.updated(index, function(t(index)))
     ))
+    forward(changeSet.createNew(changeSets))
   }
 }

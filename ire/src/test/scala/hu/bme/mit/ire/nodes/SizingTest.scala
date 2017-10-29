@@ -13,7 +13,7 @@ import hu.bme.mit.ire.Terminator
 import hu.bme.mit.ire.TransactionFactory
 import hu.bme.mit.ire.datatypes.JoinCache
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.messages.Primary
 import hu.bme.mit.ire.messages.Secondary
 import hu.bme.mit.ire.nodes.binary.JoinNode
@@ -30,8 +30,8 @@ class SizingTest extends WordSpec with TimeLimits {
   import hu.bme.mit.ire.util.Utils.conversions._
   class TestQuery1 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
+    override val inputLookup: Map[String, (IncrementalChangeSet) => Unit] = Map(
+      "testval" -> ((cs: IncrementalChangeSet) => { joiner ! Primary(cs); joiner ! Secondary(cs) })
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
     val forwarder = newLocal(Props(new SelectionNode(production, a => true)))

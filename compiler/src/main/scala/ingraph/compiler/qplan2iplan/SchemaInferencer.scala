@@ -49,7 +49,7 @@ object SchemaInferencer {
         )
       case j: iplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
-        val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
+        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.name).contains(x.name))
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
@@ -71,7 +71,10 @@ object SchemaInferencer {
     */
   def propagate(extraAttributes: Seq[NamedExpression], inputSchema: Seq[NamedExpression]): Seq[NamedExpression] = {
     extraAttributes
-      .flatMap {case a: PropertyAttribute => Some(a)}
+      .flatMap {
+        case a: PropertyAttribute => Some(a)
+        case _ => None
+      }
       .filter(a => inputSchema.contains(a.elementAttribute))
 
     // !inputSchema.contains(a) // do we need this?

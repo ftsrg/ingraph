@@ -5,6 +5,7 @@ import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
+
 import java.util.concurrent.atomic.AtomicLong
 
 import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
@@ -16,12 +17,11 @@ object AttributeBuilder {
   def buildAttribute(n: oc.NodePattern): expr.VertexAttribute = {
     val nv = n.getVariable
     val nls = BuilderUtil.parseToVertexLabelSet(n.getNodeLabels)
-    val props = LiteralBuilder.buildProperties(n.getProperties)
 
     if (nv == null) {
-      expr.AnonymousVertexAttribute(generateUniqueName, nls, props)
+      expr.AnonymousVertexAttribute(generateUniqueName, nls)
     } else {
-      expr.NamedVertexAttribute(nv.getName, nls, props)
+      expr.NamedVertexAttribute(nv.getName, nls)
     }
   }
 

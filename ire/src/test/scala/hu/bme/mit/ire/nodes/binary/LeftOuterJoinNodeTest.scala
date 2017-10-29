@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.binary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, Primary, Secondary}
 import hu.bme.mit.ire.util.TestUtil._
 import hu.bme.mit.ire.util.Utils
 import org.scalatest.{Matchers, WordSpecLike, _}
@@ -18,19 +18,19 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
 
   "LeftOuterJoin" must {
     "left outer join the values" in {
-      val primaryChangeSet = ChangeSet(
+      val primaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
-      val secondaryChangeSet = ChangeSet(
+      val secondaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(
           tuple(0, 15, 16, 13),
           tuple(1, 15, 16, 14)
         )
       )
-      val secondSecondaryChangeSet = ChangeSet(
+      val secondSecondaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(20, 4, 5, 33))
       )
 
@@ -42,7 +42,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(primaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
@@ -50,7 +50,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       ))
 
       joiner ! Secondary(secondaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18, 0, 13),
           tuple(15, 16, 17, 18, 1, 14)
@@ -61,7 +61,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       ))
 
       joiner ! Secondary(secondSecondaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(
           tuple(4, 5, 6, 7, 20, 33)
         ),
@@ -72,16 +72,16 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
     }
 
     "does not produce update in case of pairless secondary update" in {
-      val primaryChangeSet = ChangeSet(
+      val primaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
-      val secondaryChangeSet = ChangeSet(
+      val secondaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(0, 18, 19, 13))
       )
-      val secondaryNegativeChangeSet = ChangeSet(
+      val secondaryNegativeChangeSet = IncrementalChangeSet(
         negative = tupleBag(tuple(0, 18, 19, 13))
       )
 
@@ -93,7 +93,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(primaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
@@ -115,22 +115,22 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(
+      joiner ! Primary(IncrementalChangeSet(
         positive = tupleBag(
           tuple(5, 6, 7),
           tuple(10, 11, 7)
         )))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(5, 6, 7, null),
           tuple(10, 11, 7, null)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(IncrementalChangeSet(
         positive = tupleBag(tuple(7, 8))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(5, 6, 7, 8),
           tuple(10, 11, 7, 8)
@@ -143,16 +143,16 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
     }
 
     "primary negative updates" in {
-      val primaryChangeSet = ChangeSet(
+      val primaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
         )
       )
-      val secondaryChangeSet = ChangeSet(
+      val secondaryChangeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(0, 15, 16, 13))
       )
-      val primaryNegativeChangeSet = ChangeSet(
+      val primaryNegativeChangeSet = IncrementalChangeSet(
         negative = tupleBag(
           tuple(15, 16, 17, 18),
           tuple(4, 5, 6, 7)
@@ -167,7 +167,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
       joiner ! Primary(primaryChangeSet)
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18, null, null),
           tuple(4, 5, 6, 7, null, null)
@@ -175,7 +175,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       )): _*)
 
       joiner ! Secondary(secondaryChangeSet)
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(
           tuple(15, 16, 17, 18, 0, 13)
         ),
@@ -185,7 +185,7 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       ))
 
       joiner ! Primary(primaryNegativeChangeSet)
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         negative = tupleBag(
           tuple(4, 5, 6, 7, null, null),
           tuple(15, 16, 17, 18, 0, 13)
@@ -201,20 +201,20 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val joiner = system.actorOf(Props(new LeftOuterJoinNode(echoActor ! _, primaryTupleWidth, secondaryTupleWidth, primaryMask, secondaryMask)))
 
-      joiner ! Primary(ChangeSet(
+      joiner ! Primary(IncrementalChangeSet(
         positive = tupleBag(tuple(2, 4), tuple(3, 4))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(IncrementalChangeSet(
         positive = tupleBag(tuple(4, 5), tuple(4, 6))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(2, 4, 5),
           tuple(2, 4, 6),
@@ -227,20 +227,20 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(IncrementalChangeSet(
         negative = tupleBag(tuple(4, 5))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         negative = tupleBag(
           tuple(2, 4, 5),
           tuple(3, 4, 5)
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(IncrementalChangeSet(
         negative = tupleBag(tuple(4, 6))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(2, 4, null),
           tuple(3, 4, null)
@@ -251,10 +251,10 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
         )
       )): _*)
 
-      joiner ! Secondary(ChangeSet(
+      joiner ! Secondary(IncrementalChangeSet(
         positive = tupleBag(tuple(4, 7))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         positive = tupleBag(
           tuple(2, 4, 7),
           tuple(3, 4, 7)
@@ -265,10 +265,10 @@ class LeftOuterJoinNodeTest(_system: ActorSystem)  extends TestKit(_system) with
         )
       )): _*)
 
-      joiner ! Primary(ChangeSet(
+      joiner ! Primary(IncrementalChangeSet(
         negative = tupleBag(tuple(2, 4), tuple(3, 4))
       ))
-      expectMsgAnyOf(Utils.changeSetPermutations(ChangeSet(
+      expectMsgAnyOf(Utils.changeSetPermutations(IncrementalChangeSet(
         negative = tupleBag(
           tuple(2, 4, 7),
           tuple(3, 4, 7)

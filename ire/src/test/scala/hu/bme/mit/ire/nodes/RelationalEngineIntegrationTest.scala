@@ -5,7 +5,7 @@ import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.TransactionFactory
 import hu.bme.mit.ire._
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest._
@@ -26,8 +26,8 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   class TestQuery1 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery")))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => forwarder ! cs)
+    override val inputLookup: Map[String, (IncrementalChangeSet) => Unit] = Map(
+      "testval" -> ((cs: IncrementalChangeSet) => forwarder ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _), production)
     val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
@@ -35,9 +35,9 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
 
   class TestQuery2 extends RelationalEngine {
     override val production: ActorRef = system.actorOf(Props(new ProductionNode("TestQuery", 2)))
-    override val inputLookup: Map[String, (ChangeSet) => Unit] = Map(
-      "testval" -> ((cs: ChangeSet) => forwarder ! cs),
-      "testval2" -> ((cs: ChangeSet) => forwarder2 ! cs)
+    override val inputLookup: Map[String, (IncrementalChangeSet) => Unit] = Map(
+      "testval" -> ((cs: IncrementalChangeSet) => forwarder ! cs),
+      "testval2" -> ((cs: IncrementalChangeSet) => forwarder2 ! cs)
     )
     override val terminator: Terminator = Terminator(Vector(forwarder ! _, forwarder2 ! _), production)
     val forwarder = system.actorOf(Props(new SelectionNode(production ! _, a => true)))
@@ -112,16 +112,16 @@ class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_sys
       query.getResults()
       query.addListener(new ChangeListener {
         override def listener(positive: Iterable[Tuple], negative: Iterable[Tuple]): Unit = {
-          echoActor ! ChangeSet(positive, negative)
+          echoActor ! IncrementalChangeSet(positive, negative)
         }
       })
-      expectMsg(ChangeSet(positive = Vector(tuple(5, 5))))
+      expectMsg(IncrementalChangeSet(positive = Vector(tuple(5, 5))))
       val tran1 = input.newBatchTransaction()
       tran1.remove("testval", tuple(5, 5))
       tran1.add("testval", tuple(6, 6))
       tran1.close()
       query.getResults()
-      expectMsg(ChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
+      expectMsg(IncrementalChangeSet(positive = Vector(tuple(6, 6)), negative = Vector(tuple(5, 5))))
     })
   }
 }

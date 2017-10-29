@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.ternary
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
 import hu.bme.mit.ire.datatypes.Path
-import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary, Ternary}
+import hu.bme.mit.ire.messages.{IncrementalChangeSet, Primary, Secondary, Ternary}
 import hu.bme.mit.ire.util.TestUtil.{tuple, tupleBag}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -25,27 +25,27 @@ class ShortestPathNodeTest (_system: ActorSystem) extends TestKit(_system) with 
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val shortestPathNode = system.actorOf(Props(new ShortestPathNode(echoActor ! _, src, trg, edge)))
 
-      shortestPathNode ! Ternary(ChangeSet(
+      shortestPathNode ! Ternary(IncrementalChangeSet(
         positive = tupleBag(tuple(1, 100, 2), tuple(2, 101, 3))
       ))
       expectNoMsg
 
-      shortestPathNode ! Primary(ChangeSet(
+      shortestPathNode ! Primary(IncrementalChangeSet(
         positive = tupleBag(tuple(1))
       ))
       expectNoMsg
 
-      shortestPathNode ! Secondary(ChangeSet(
+      shortestPathNode ! Secondary(IncrementalChangeSet(
         positive = tupleBag(tuple(2), tuple(3))
       ))
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(1, 2, Path(100)), tuple(1, 3, Path(100, 101)))
       ))
 
-      shortestPathNode ! Ternary(ChangeSet(
+      shortestPathNode ! Ternary(IncrementalChangeSet(
         positive = tupleBag(tuple(1, 102, 3))
       ))
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(1, 3, Path(102))),
         negative = tupleBag(tuple(1, 3, Path(100, 101)))
       ))

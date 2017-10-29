@@ -27,7 +27,7 @@ class ProductionNode(queryName: String, val expectedTerminatorCount: Int = 1) ex
   }
 
   override def receive: Actor.Receive = {
-    case ChangeSet(p, n) =>
+    case IncrementalChangeSet(p, n) =>
       p.foreach {
         t =>
           results += t

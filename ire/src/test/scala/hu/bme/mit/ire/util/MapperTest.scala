@@ -2,7 +2,7 @@ package hu.bme.mit.ire.util
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.nodes.unary.MapperNode
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
@@ -18,7 +18,7 @@ class MapperTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSen
 
   "MapperNode" must {
     "map values" in {
-      val changeSet = ChangeSet(
+      val changeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(0, "something")),
         negative = tupleBag(tuple(0, "something else"))
       )
@@ -29,7 +29,7 @@ class MapperTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSen
       val checker = system.actorOf(Props(new MapperNode(echoActor ! _, function, 1)))
 
       checker ! changeSet
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(0, "something".length)),
         negative = tupleBag(tuple(0, "something else".length))
       ))

@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -17,7 +17,7 @@ class ListSelectorNodeTest(_system: ActorSystem) extends TestKit(_system) with I
 
   "ListSelector" must {
     "do select items in lists 0" in {
-      val changeSet = ChangeSet(
+      val changeSet = IncrementalChangeSet(
         positive = tupleBag(tuple(List("a","b","c")))
       )
 
@@ -28,7 +28,7 @@ class ListSelectorNodeTest(_system: ActorSystem) extends TestKit(_system) with I
       val listSelector = system.actorOf(Props(new MapperNode(echoActor ! _, function, 0)))
 
       listSelector ! changeSet
-      expectMsg(ChangeSet(positive = tupleBag(tuple("b"))))
+      expectMsg(IncrementalChangeSet(positive = tupleBag(tuple("b"))))
     }
   }
 }

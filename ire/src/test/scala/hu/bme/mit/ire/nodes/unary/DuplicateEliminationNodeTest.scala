@@ -2,7 +2,7 @@ package hu.bme.mit.ire.nodes.unary
 
 import akka.actor.{ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.messages.ChangeSet
+import hu.bme.mit.ire.messages.IncrementalChangeSet
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
@@ -20,33 +20,33 @@ class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val duplicateElimination = system.actorOf(Props(new DuplicateEliminationNode(echoActor ! _)))
 
-      duplicateElimination ! ChangeSet(
+      duplicateElimination ! IncrementalChangeSet(
         positive = tupleBag(tuple(1, 2))
       )
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(1, 2))
       ))
 
-      duplicateElimination ! ChangeSet(
+      duplicateElimination ! IncrementalChangeSet(
         positive = tupleBag(tuple(1, 2), tuple(3, 4))
       )
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(3, 4))
       ))
 
-      duplicateElimination ! ChangeSet(
+      duplicateElimination ! IncrementalChangeSet(
         positive = tupleBag(tuple(5, 6)),
         negative = tupleBag(tuple(1, 2))
       )
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(5, 6))
       ))
 
-      duplicateElimination ! ChangeSet(
+      duplicateElimination ! IncrementalChangeSet(
         positive = tupleBag(tuple(7, 8)),
         negative = tupleBag(tuple(1, 2))
       )
-      expectMsg(ChangeSet(
+      expectMsg(IncrementalChangeSet(
         positive = tupleBag(tuple(7, 8)),
         negative = tupleBag(tuple(1, 2))
       ))
@@ -56,16 +56,16 @@ class DuplicateEliminationNodeTest(_system: ActorSystem) extends TestKit(_system
       val echoActor = system.actorOf(TestActors.echoActorProps)
       val duplicateElimination = system.actorOf(Props(new DuplicateEliminationNode(echoActor ! _)))
 
-      duplicateElimination ! ChangeSet(positive = tupleBag(tuple(1)))
-      expectMsg(ChangeSet(positive = tupleBag(tuple(1))))
+      duplicateElimination ! IncrementalChangeSet(positive = tupleBag(tuple(1)))
+      expectMsg(IncrementalChangeSet(positive = tupleBag(tuple(1))))
 
-      duplicateElimination ! ChangeSet(positive = tupleBag(tuple(1)))
-      duplicateElimination ! ChangeSet(positive = tupleBag(tuple(1)))
+      duplicateElimination ! IncrementalChangeSet(positive = tupleBag(tuple(1)))
+      duplicateElimination ! IncrementalChangeSet(positive = tupleBag(tuple(1)))
 
-      duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
-      duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
-      duplicateElimination ! ChangeSet(negative = tupleBag(tuple(1)))
-      expectMsg(ChangeSet(negative = tupleBag(tuple(1))))
+      duplicateElimination ! IncrementalChangeSet(negative = tupleBag(tuple(1)))
+      duplicateElimination ! IncrementalChangeSet(negative = tupleBag(tuple(1)))
+      duplicateElimination ! IncrementalChangeSet(negative = tupleBag(tuple(1)))
+      expectMsg(IncrementalChangeSet(negative = tupleBag(tuple(1))))
     }
 
   }
