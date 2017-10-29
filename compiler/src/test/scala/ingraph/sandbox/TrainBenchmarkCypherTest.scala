@@ -39,7 +39,7 @@ class TrainBenchmarkCypherTest extends FunSuite {
 //  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
 //    test(queryFile.getName.dropRight(".cypher".length)) {
 //      val query = FileUtils.readFileToString(queryFile)
-//      val ep = IPlanParser.parse(query)
+//      val ep = JPlanParser.parse(query)
 //    }
 //  }
 

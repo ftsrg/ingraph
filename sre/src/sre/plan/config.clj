@@ -47,16 +47,16 @@
          ops (union ops (if underlying (operations underlying)))
          weight-methods (merge (if underlying (-> underlying weights methods)) weight-methods)
          task-methods (merge (if underlying (-> underlying tasks methods)) task-methods)]
-     ; sidefx below!
+     ;; sidefx below!
      (doseq [[dispatch-val mfn] weight-methods]
        (.addMethod weight-dispatch dispatch-val mfn))
      (doseq [[dispatch-val mfn] task-methods]
        (.addMethod tasks-dispatch dispatch-val mfn))
      (->Config name constraints ops weight-dispatch tasks-dispatch)))
-  ([name ops constraints weights tasks] (config name
-                                                (into #{} constraints)
-                                                (into #{} ops)
-                                                weights tasks nil)))
+  ([name constrs ops weight-methods task-methods] (config name
+                                                          (into #{} constrs)
+                                                          (into #{} ops)
+                                                          weight-methods task-methods nil)))
 
 
 (defmacro defconfig

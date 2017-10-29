@@ -3,7 +3,7 @@ package ingraph.ire
 import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction, TransactionFactory}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
-import ingraph.compiler.IPlanParser
+import ingraph.compiler.JPlanParser
 
 class IngraphIncrementalAdapter(
     override val querySpecification: String,
@@ -12,7 +12,7 @@ class IngraphIncrementalAdapter(
   ) extends AbstractIngraphAdapter {
 
 
-  override val plan = IPlanParser.parse(querySpecification)
+  override val plan = JPlanParser.parse(querySpecification)
   override val engine = EngineFactory.createQueryEngine(plan, indexer)
 
   val transactionFactory = new TransactionFactory(16)

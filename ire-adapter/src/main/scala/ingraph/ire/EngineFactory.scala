@@ -10,9 +10,9 @@ import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
-import ingraph.model.eplan.{ENode, SchemaToMap, UnaryENode}
+import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode}
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
-import ingraph.model.eplan._
+import ingraph.model.fplan._
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
@@ -25,12 +25,12 @@ abstract class AnnotatedRelationalEngine extends RelationalEngine {
 
 object EngineFactory {
 
-  def getSchema(node: ENode): Map[String, Int] = SchemaToMap.schemaToMapNames(node)
+  def getSchema(node: FNode): Map[String, Int] = SchemaToMap.schemaToMapNames(node)
 
-  case class ForwardConnection(parent: ENode, child: (ReteMessage) => Unit)
+  case class ForwardConnection(parent: FNode, child: (ReteMessage) => Unit)
   case class EdgeTransformer(nick: String, source:String, target: String)
 
-  def createQueryEngine(plan: ENode, indexer: Indexer): AnnotatedRelationalEngine =
+  def createQueryEngine(plan: FNode, indexer: Indexer): AnnotatedRelationalEngine =
     new AnnotatedRelationalEngine {
       override val production: ActorRef = system.actorOf(Props(new ProductionNode("")))
       val remaining: mutable.ArrayBuffer[ForwardConnection] = mutable.ArrayBuffer()
@@ -44,7 +44,7 @@ object EngineFactory {
       while (remaining.nonEmpty) {
         val expr = remaining.remove(0)
         expr.parent match {
-          case op: LeafENode =>
+          case op: LeafFNode =>
             op match {
               case op: GetVertices => getVertices(op, expr)
               case op: GetEdges => getEdges(op, expr)
@@ -52,7 +52,7 @@ object EngineFactory {
               expr.child(ChangeSet(positive=Vector(Vector())))
             }
 
-          case op: UnaryENode =>
+          case op: UnaryFNode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
               //case op: Grouping => instantiateGrouping(op, expr)
@@ -69,9 +69,9 @@ object EngineFactory {
             }
             remaining += ForwardConnection(op.child, node)
 
-          case op: BinaryENode =>
+          case op: BinaryFNode =>
             val node: ActorRef = op match {
-              case op: Union => newLocal(Props(new UnionNode(expr.child, op.inode.bag)))
+              case op: Union => newLocal(Props(new UnionNode(expr.child, op.jnode.bag)))
               case op: JoinLike =>
                 val child = expr.child
                 val leftTupleWidth = op.left.internalSchema.length
@@ -101,13 +101,13 @@ object EngineFactory {
 
     // leaf nodes
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
-      val labels = op.inode.v.labels.vertexLabels.toSeq
+      val labels = op.jnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
       inputs += (op.nodeName -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
-      val labels = op.inode.edge.labels.edgeLabels.toSeq
+      val labels = op.jnode.edge.labels.edgeLabels.toSeq
       for (label <- labels)
         edgeConverters.addBinding(label, op)
       inputs += (op.nodeName -> expr.child)
@@ -134,7 +134,7 @@ object EngineFactory {
 
     private def selection(op: Selection, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
-      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.inode.condition, variableLookup))))
+      newLocal(Props(new SelectionNode(expr.child, ExpressionParser.parse(op.jnode.condition, variableLookup))))
     }
 
     private def projection(op: Projection, expr: ForwardConnection) = {
@@ -149,23 +149,23 @@ object EngineFactory {
       // This is the mighty EMF, so there are no default values, obviously
       def getInt(e: Expression) = ExpressionParser.parseValue(e, variableLookup)(Vector()).asInstanceOf[Long]
 
-      val skip: Long = getInt(op.inode.skipExpr)
-      val limit: Long = getInt(op.inode.limitExpr)
-      val sortKeys = op.inode.order.map(
+      val skip: Long = getInt(op.jnode.skipExpr)
+      val limit: Long = getInt(op.jnode.limitExpr)
+      val sortKeys = op.jnode.order.map(
         e => ExpressionParser.parseValue(e, variableLookup)).toVector
       newLocal(Props(new SortAndTopNode(
         expr.child,
-        op.inode.order.length,
+        op.jnode.order.length,
         sortKeys,
         skip,
         limit,
-        op.inode.order.map(_.direction == Ascending).toVector
+        op.jnode.order.map(_.direction == Ascending).toVector
       )))
     }
 
     private def allDifferent(op: AllDifferent, expr: ForwardConnection) = {
       val schema = getSchema(op.child)
-      val indices = op.inode.edges.map(v => schema(v.name))
+      val indices = op.jnode.edges.map(v => schema(v.name))
 
       def allDifferent(r: Tuple): Boolean = {
         val seen = mutable.HashSet[Any]()
@@ -184,7 +184,7 @@ object EngineFactory {
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
-      val creations: Seq[(Tuple) => IngraphElement] = for (element <- op.inode.attributes)
+      val creations: Seq[(Tuple) => IngraphElement] = for (element <- op.jnode.attributes)
       //yield element asInstanceOf[ExpressionVariable].getExpression match {
         yield element match {
           case n: NavigationDescriptor =>
@@ -217,14 +217,14 @@ object EngineFactory {
 
     private def delete(op: Delete, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
-      if (op.inode.detach) {
+      if (op.jnode.detach) {
         // detach delete not supported yet
         // and we should throw an exception in case the user tries to delete a nodes with existing
         // relationships
         // "To delete this node, you must first delete its relationships."
         ???
       }
-      val removals: Seq[(Tuple) => Unit] = for (element <- op.inode.attributes)
+      val removals: Seq[(Tuple) => Unit] = for (element <- op.jnode.attributes)
       // .getExpression.asInstanceOf[VariableExpression].getVariable TODO check
         yield element match {
           case e: EdgeAttribute =>

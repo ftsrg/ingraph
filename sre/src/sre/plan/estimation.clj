@@ -18,7 +18,7 @@
   (update-cost
     [this weight]
     "Updates the cost in this calculator. Should return an instance that can be safely shared, ie. immutable.")
-  (to-weight [this] "Converts cost to a weight."))
+  (to-weight [this] "Costs should be composable. This op converts cost to a weight."))
 
 (defprotocol Weight
   "Weights are assigned to operations."
@@ -32,7 +32,7 @@
     (as-> this t
       (update-in t [:p] #(* %1 weight))
       (update-in t [:c] #(+ %1 (:p t)))))
-  (to-weight [this] c)
+  (to-weight [this] p)
   Comparable
   (compareTo [this other] (compare (:c this) (:c other))))
 
