@@ -1,10 +1,6 @@
 (ns sre.plan.lookup
-  (:require
-    [clojure.algo.generic.functor :refer :all]
-    [clojure.set :refer :all]
-    [sre.plan.constraint :refer [implies* union*]]
-    [clojure.pprint])
-  (:import (clojure.lang IPersistentSet)))
+  (:require [clojure.set :refer :all]
+            [sre.plan.constraint :refer [implies* union*]]))
 
 (defprotocol IConstraintLookup
   (lookup [this cond] "Gets free/bound constraints. `cond` should be :free or :bound.")

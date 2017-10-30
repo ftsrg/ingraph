@@ -2,11 +2,11 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/algo.generic "0.1.2"]
                  [net.mikera/core.matrix "0.60.3"]
                  [funcool/cats "2.1.0"]
                  [ingraph/indexer "0.4.0-SNAPSHOT"]
-                 [com.taoensso/tufte "1.1.2"]]
+                 [com.taoensso/tufte "1.1.2"]
+                 [org.clojure/core.async "0.3.443"]]
   :repositories [["acceleo" "https://repo.eclipse.org/content/groups/acceleo"]
                  ["viatra2" "https://repo.eclipse.org/content/groups/viatra2"]
                  ["ingraph-deps" "https://szdavid92.github.io/ingraph-deps"]]

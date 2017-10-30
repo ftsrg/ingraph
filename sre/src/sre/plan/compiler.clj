@@ -1,13 +1,12 @@
 (ns sre.plan.compiler
   "Cost-based search plan compiler related functions, types etc."
-  (:require [cats.core :as m]
+  (:require [cats.core :refer [fmap return mlet]]
             [cats.monad
              [exception :as exc]
              [maybe :as maybe]]
             [clojure
              [pprint :refer :all]
              [set :refer :all]]
-            [clojure.algo.generic.functor :refer :all]
             [sre.core :refer :all]
             [sre.plan
              [config :as config]
@@ -19,6 +18,8 @@
            sre.plan.config.IConfig
            [sre.plan.estimation Cost Weight]
            sre.plan.lookup.ConstraintLookup))
+
+(require '[cats.builtin])
 
 (defrecord BindingBranchNode [op var-lkp todo done])
 
@@ -230,8 +231,8 @@
   (maybe/from-maybe
    ;; try and bind an immediate step. look how cool it is that I can use bind-present here!
    ;; It is because for is actually lazy
-   (m/mlet [immediate-binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
-           (m/return (insert-cell cell k plans immediate-binding)))
+   (mlet [immediate-binding (maybe/seq->maybe (bind-present config cell (:<non-past-op-bindings< cell)))]
+           (return (insert-cell cell k plans immediate-binding)))
    ;; no immediate step, default to normal action (from-maybe option default) is similar to Scala option.getOrElse(default))
    ;; the idea here is that we have operations in non-past-op-bindings that may or may not be applicable at the moment
    ;; because we haven't checked them for required constraints. so first figure out the applicable ops
@@ -240,8 +241,8 @@
        ;; insert regular steps
        (reduce (partial insert-cell cell k) plans regular-bindings)
        ;; if no regular steps are available, try inserting a deferred step
-       (maybe/from-maybe (m/mlet [deferred-binding (maybe/seq->maybe (bind-present config cell (:>non-past-op-bindings> cell)))]
-                                 (m/return (insert-cell cell k plans deferred-binding)))
+       (maybe/from-maybe (mlet [deferred-binding (maybe/seq->maybe (bind-present config cell (:>non-past-op-bindings> cell)))]
+                                 (return (insert-cell cell k plans deferred-binding)))
                          plans)))))
 
 (defnp run
