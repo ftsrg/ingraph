@@ -1,6 +1,6 @@
 (ns sre.plan.pattern
   (:refer-clojure :exclude [compile not name])
-  (:require [clojure.algo.generic.functor :refer [fmap]]
+  (:require [cats.core :refer [fmap]]
             [clojure.set :refer :all]
             [sre.core :refer :all]
             [sre.execution.executor :as exec]
@@ -11,8 +11,7 @@
              [estimation :as estimation]
              [lookup :as lkp]
              [op :as op]
-             [task :as task]]
-            [clojure.pprint :as pprint])
+             [task :as task]])
   (:import sre.plan.constraint.Constraint))
 
 (defprotocol IPattern
@@ -101,7 +100,7 @@
     (try
       (let [[inner-constr inner-op inner-weight inner-task] (compile pattern config compiler-opts)
             ;; TODO find good weight
-            weight 0.5
+            weight 1
             task (exec/->NotExistsStep ((inner-task inner-op)))]
         [constraint op {op (constantly weight)} {op (constantly task)}]))))
 

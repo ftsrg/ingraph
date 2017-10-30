@@ -1,13 +1,14 @@
 (ns sre.execution.executor
-  (:require [clojure
+  (:require [cats.core :refer [fmap]]
+            [clojure
              [set :refer :all]
              [zip :as z]]
-            [clojure.algo.generic.functor :refer :all]
             [sre.core :refer :all]
             [sre.plan.task :refer [ISearch search]]
-            [taoensso.tufte :refer [defnp p]]
-            [clojure.pprint :as pprint])
+            [taoensso.tufte :refer [defnp p]])
   (:import [clojure.lang LazySeq PersistentList]))
+
+(require '[cats.builtin])
 
 (set! *warn-on-reflection* true)
 

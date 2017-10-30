@@ -1,14 +1,14 @@
 (ns sre.plan.constraint
-  (:require [clojure
+  (:require [cats.core :refer [fmap]]
+            [clojure
              [pprint :as pprint]
              [set :refer :all]
-             [string :as str]
              [walk :as walk]]
-            [clojure.algo.generic.functor :refer :all]
-            [sre.core :refer :all]
-            [clojure.string :as str])
+            [sre.core :refer :all])
   (:import clojure.lang.IPersistentSet
            java.io.Writer))
+
+(require '[cats.builtin])
 
 (defrecord Variable [name])
 

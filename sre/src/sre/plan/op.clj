@@ -1,15 +1,15 @@
 (ns sre.plan.op
   (:refer-clojure :exclude [type])
-  (:require [clojure.algo.generic.functor :refer :all]
-            [clojure.set :refer :all]
-            [clojure.pprint :as pprint]
-            [clojure.walk :as walk]
-            [sre.plan.constraint :as constraint]
+  (:require [cats.core :refer [fmap]]
+            [clojure
+             [pprint :as pprint]
+             [set :refer :all]
+             [walk :as walk]]
             [sre.core :refer :all]
-            [clojure.string :as str])
-  (:import (clojure.lang Symbol)
-           (java.io Writer)
-           (sre.core Binding)))
+            [sre.plan.constraint :as constraint])
+  (:import sre.core.Binding))
+
+(require '[cats.builtin])
 
 (defrecord Op [requires satisfies name vars disposition])
 
@@ -18,7 +18,7 @@
 (extend-type Op
   IBind
   (bind-map [this var-map]
-    (let [replace (partial fmap (fn [v] (fmap (fn [p] (fmap #(var-map %1) p)) v)))]
+    (let [replace (partial fmap (fn [v] (println v)(fmap (fn [p] (println "p" p)(fmap #(do (println %) (var-map %)) p)) v)))]
       (map->Binding {:type      this
                      :bindings  (fmap #(var-map %1) (:vars this))
                      :requires  (replace (:requires this))
