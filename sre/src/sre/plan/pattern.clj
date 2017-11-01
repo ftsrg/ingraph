@@ -8,11 +8,10 @@
              [compiler :as compiler]
              [config :as config]
              [constraint :as c]
-             [estimation :as estimation]
+             [estimation :refer [->CostCalculator]]
              [lookup :as lkp]
              [op :as op]
-             [task :as task]]
-            [clojure.pprint :as pprint])
+             [task :as task]])
   (:import sre.plan.constraint.Constraint))
 
 (defprotocol IPattern
@@ -66,10 +65,10 @@
             config (apply config/config (concat [name] config-updates [config]))
             ;; run the search planner
             plan @(compiler/run constr-lkp config compiler-opts)
-            weight (-> plan :cost-calculator estimation/to-weight)
+            cost (-> plan :cost-calculator)
             task-bindings (map #(->Binding ((config/tasks config) (:type %)) (:bindings %)) (:ops plan))
             task (exec/->ConjStep task-bindings outer-vars inner-vars)]
-        [constraint op {op (constantly weight)} {op (constantly task)}])
+        [constraint op {op (constantly cost)} {op (constantly task)}])
       (catch Throwable t
         (throw (Exception. (str "Cannot compile pattern `" name "'") t))))))
 
@@ -99,11 +98,11 @@
   (constraint [this] (:constraint this))
   (compile [this config compiler-opts]
     (try
-      (let [[inner-constr inner-op inner-weight inner-task] (compile pattern config compiler-opts)
-            ;; TODO find good weight
-            weight 0.5
+      (let [[inner-constr inner-op inner-cost inner-task] (compile pattern config compiler-opts)
+            ;; TODO find good cost
+            cost (->CostCalculator 1000.0 0.5)
             task (exec/->NotExistsStep ((inner-task inner-op)))]
-        [constraint op {op (constantly weight)} {op (constantly task)}]))))
+        [constraint op {op (constantly cost)} {op (constantly task)}]))))
 
 (defn not [pattern]
   (let [name (str (gensym "not__") "__" (:name pattern))

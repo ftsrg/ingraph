@@ -1,7 +1,7 @@
 (ns sre.plan.config
   "Search planning configuration determines the available
   platform-dependent constraints, operations, tasks and
-  weight estimators.
+  cost estimators.
 
   Note: To avoid warnings about replacing clojure.core/name
   its best to require this file qualified or under an alias,
@@ -20,43 +20,43 @@
   (name [this] "Returns the name of this config ")
   (constraints [this] "Constraints provided by this config")
   (operations [this] "Operations provided by this config")
-  (weights [this] "Operation weight estimator provided by this config")
+  (costs [this] "Operation cost estimator provided by this config")
   (tasks [this] "Tasks provided by this config"))
 
 (def ^:private dispatch-op (fn ^Op [op & rest] op))
 
 (def ^:private h (make-hierarchy))
 
-(defrecord Config [^String name ^IPersistentSet constraints ^IPersistentSet ops ^MultiFn weights ^MultiFn tasks]
+(defrecord Config [^String name ^IPersistentSet constraints ^IPersistentSet ops ^MultiFn costs ^MultiFn tasks]
   IConfig
   (name [this] name)
   (constraints [this] constraints)
   (operations [this] ops)
-  (weights [this] weights)
+  (costs [this] costs)
   (tasks [this] tasks))
 
 (defn config
   "Creates a config. Optionally you can specify an underlying config upon which
   this one will be layered. Constraints and operations will be united, name will be overshadowed
-  weight and task methods will be coalesced in a way that first the upper config will be checked then
+  cost and task methods will be coalesced in a way that first the upper config will be checked then
   if not found dispatch will fall through to the underlying multimethod."
-  ([name constrs ops weight-methods task-methods underlying]
-   (let [weight-dispatch (MultiFn. (str name "-weight") dispatch-op :default #'h)
+  ([name constrs ops cost-methods task-methods underlying]
+   (let [cost-dispatch (MultiFn. (str name "-cost") dispatch-op :default #'h)
          tasks-dispatch (MultiFn. (str name "-tasks") dispatch-op :default #'h)
          constrs (union constrs (if underlying (constraints underlying)))
          ops (union ops (if underlying (operations underlying)))
-         weight-methods (merge (if underlying (-> underlying weights methods)) weight-methods)
+         cost-methods (merge (if underlying (-> underlying costs methods)) cost-methods)
          task-methods (merge (if underlying (-> underlying tasks methods)) task-methods)]
      ;; sidefx below!
-     (doseq [[dispatch-val mfn] weight-methods]
-       (.addMethod weight-dispatch dispatch-val mfn))
+     (doseq [[dispatch-val mfn] cost-methods]
+       (.addMethod cost-dispatch dispatch-val mfn))
      (doseq [[dispatch-val mfn] task-methods]
        (.addMethod tasks-dispatch dispatch-val mfn))
-     (->Config name constraints ops weight-dispatch tasks-dispatch)))
-  ([name constrs ops weight-methods task-methods] (config name
+     (->Config name constraints ops cost-dispatch tasks-dispatch)))
+  ([name constrs ops cost-methods task-methods] (config name
                                                           (into #{} constrs)
                                                           (into #{} ops)
-                                                          weight-methods task-methods nil)))
+                                                          cost-methods task-methods nil)))
 
 
 (defmacro defconfig
@@ -97,14 +97,14 @@
        (def ^:private ~'-name (str '~name))
        (def ^:private ~'-ops #{})
        (def ^:private ~'-constraints #{})
-       (defmulti ^:private ~'-weights ~dispatch-op)
+       (defmulti ^:private ~'-costs ~dispatch-op)
        (defmulti ^:private ~'-tasks ~dispatch-op)
 
        (def ~name (reify IConfig
                     (name [~'this] ~'-name)
                     (constraints [~'this] ~'-constraints)
                     (operations [~'this] ~'-ops)
-                    (weights [~'this] ~'-weights)
+                    (costs [~'this] ~'-costs)
                     (tasks [~'this] ~'-tasks)))
 
        (defn ~(symbol (str factory-prefix "getInstance")) [] ~name)
