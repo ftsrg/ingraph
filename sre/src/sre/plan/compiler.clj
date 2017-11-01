@@ -17,7 +17,7 @@
             [taoensso.tufte :as profiler :refer [defnp]])
   (:import [java.io BufferedReader StringReader]
            sre.plan.config.IConfig
-           [sre.plan.estimation Cost Weight]
+           [sre.plan.estimation Cost]
            sre.plan.lookup.ConstraintLookup))
 
 (defrecord BindingBranchNode [op var-lkp todo done])
@@ -115,7 +115,6 @@
               (recur (concat (branch-constr constr-lkp first-open) rest-open) result))))))))
 
 (defrecord SearchPlanCell [^Cost cost-calculator
-                           ^Weight weight-calculator
                            ops
                            ^ConstraintLookup constr-lkp
                            free-count
@@ -139,9 +138,8 @@
                          (nth % 1)))
           (:done non-past-op-binding)))
 
-(defn create-search-plan-cell [index cost-calculator weight-calculator bound cell constr-lkp]
+(defn create-search-plan-cell [index cost-calculator bound cell constr-lkp]
   (map->SearchPlanCell {:cost-calculator      cost-calculator
-                        :weight-calculator    weight-calculator
                         :ops                  (conj (:ops cell) bound)
                         :constr-lkp           constr-lkp
                         :free-count           index
@@ -149,15 +147,14 @@
                         :<non-past-op-bindings< (filter (partial satisfiable? constr-lkp) (:<non-past-op-bindings< cell))
                         :>non-past-op-bindings> (filter (partial satisfiable? constr-lkp) (:>non-past-op-bindings> cell))}))
 
-(defnp insert-cell [cell k plans [weight present-binding op-binding]]
+(defnp insert-cell [cell k plans [op-cost present-binding op-binding]]
   ;; we have to find out how many constraints are getting bound because that determines the first index.
   ;; it should be equal to the length of the done list as everything in there is a single newly bound
   ;; constraint
   (let [index             (- (:free-count cell) (count (:done present-binding))) ; 3:9
         column            (get plans index)
         ordered-cells     (get column :ordered-cells)
-        cost-calculator   (estimation/update-cost (:cost-calculator cell) weight)
-        weight-calculator (:weight-calculator cell)
+        cost-calculator   (estimation/update-cost (:cost-calculator cell) op-cost)
         constr-lkp        (reduce lookup/bind (:constr-lkp cell) (map (fn [[_ type bindings]]
                                                                         (constraint/->ConstraintBinding type bindings))
                                                                       (:done present-binding)))
@@ -170,7 +167,7 @@
       (some? dupe) (if (< (compare cost-calculator (:cost-calculator dupe)) 0)
                      ;; this is better, evict dupe
                      (let [cell (create-search-plan-cell index cost-calculator
-                                                         weight-calculator op-binding
+                                                         op-binding
                                                          cell constr-lkp)]
                        (-> plans
                            (update-in [index :ordered-cells] #(-> % (disj dupe) (conj cell)))
@@ -181,7 +178,7 @@
       (or (not full?)
           (< (compare cost-calculator (-> ordered-cells first :cost-calculator)) 0))
       (let [cell (create-search-plan-cell index cost-calculator
-                                          weight-calculator op-binding
+                                          op-binding
                                           cell constr-lkp)]
         (if (not full?)
           ;; using up an empty slot
@@ -223,8 +220,8 @@
         ;; yeah, it smells that we have two different representations for the damn same thing
         ;; so refactor once you have the fatigue
         :let             [op-binding (bind-map (:op present-binding) (:var-lkp present-binding))
-                          weight (estimation/get-weight (:weight-calculator cell) config op-binding (:constr-lkp cell))]]
-    [weight present-binding op-binding]))
+                          op-cost ((config/costs config) (:type op-binding) (:bindings op-binding) (:constr-lkp cell))]]
+    [op-cost present-binding op-binding]))
 
 (defn step [^Integer k ^IConfig config plans ^SearchPlanCell cell]
   (maybe/from-maybe
@@ -255,10 +252,8 @@
   supplied can be supplied by the invoker."
   [^ConstraintLookup constr-lkp
    ^IConfig config {^Cost cost-calculator     :cost-calculator
-                    ^Weight weight-calculator :weight-calculator
                     ^Integer k                :k
                     :or                       {cost-calculator   estimation/default-cost-calculator
-                                               weight-calculator estimation/default-weight-calculator
                                                k                 10}}]
   ;; comments starting with x:y mark that the line corresponds to the algorithm
   ;; listing `x` line `y` from the above mentioned paper.
@@ -269,7 +264,6 @@
         step                     (partial step k config)
         {immediate :immediate regular :regular deferred :deferred} (->> ops (group-by :disposition))
         cell                     (map->SearchPlanCell {:cost-calculator        cost-calculator
-                                                       :weight-calculator      weight-calculator
                                                        :ops                    []
                                                        :constr-lkp             constr-lkp
                                                        :free-count             n
