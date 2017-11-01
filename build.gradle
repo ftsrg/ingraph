@@ -42,7 +42,8 @@ subprojects {
     maven { url 'https://repo.eclipse.org/content/groups/acceleo' }
     maven { url 'https://repo.eclipse.org/content/groups/viatra2' }
     maven { url 'https://clojars.org/repo' }
-    maven { url 'https://szdavid92.github.io/ingraph-deps' }
+//    maven { url 'https://szdavid92.github.io/ingraph-deps' }
+    maven { url 'http://docs.inf.mit.bme.hu/ingraph-deps' }
   }
 
   dependencies {
