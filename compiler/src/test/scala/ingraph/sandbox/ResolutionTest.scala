@@ -3,7 +3,7 @@ package ingraph.sandbox
 import java.net.URI
 import java.util.concurrent.atomic.AtomicLong
 
-import org.apache.spark.sql.catalyst.{InternalRow, SQLBuilder}
+import org.apache.spark.sql.catalyst.{InternalRow}
 import org.apache.spark.sql.catalyst.analysis.{Analyzer, FunctionRegistry}
 import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, InMemoryCatalog, SessionCatalog}
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
