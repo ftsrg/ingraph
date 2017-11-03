@@ -1,0 +1,264 @@
+{
+  "version": "1.0",
+  "abstractionLevel": {
+    "abstractionNodes": [{
+      "types": ["route"],
+      "attributes": ["id", "active"]
+    }, {
+      "types": ["region"],
+      "attributes": ["id"]
+    }, {
+      "types": ["segment"],
+      "attributes": ["id", "length"]
+    }, {
+      "types": ["sensor"],
+      "attributes": ["id"]
+    }, {
+      "types": ["semaphore"],
+      "attributes": ["id", "signal"]
+    }, {
+      "types": ["switch"],
+      "attributes": ["id", "currentPosition"]
+    }, {
+      "types": ["switchposition"],
+      "attributes": ["id", "position"]
+    }, {
+      "types": ["trackelement"],
+      "attributes": ["id"]
+    }],
+    "abstractionEdges": [{
+      "types": ["entry"],
+      "attributes": [],
+      "sourceType": ["route"],
+      "destinationType": ["semaphore"],
+      "directed": true
+    }, {
+      "types": ["exit"],
+      "attributes": [],
+      "sourceType": ["route"],
+      "destinationType": ["semaphore"],
+      "directed": true
+    }, {
+      "types": ["requires"],
+      "attributes": [],
+      "sourceType": ["route"],
+      "destinationType": ["sensor"],
+      "directed": true
+    }, {
+      "types": ["sensors"],
+      "attributes": [],
+      "sourceType": ["region"],
+      "destinationType": ["sensor"],
+      "directed": true
+    }, {
+      "types": ["connectsTo"],
+      "attributes": [],
+      "sourceType": ["trackelement"],
+      "destinationType": ["trackelement"],
+      "directed": true
+    }, {
+      "types": ["monitoredBy"],
+      "attributes": [],
+      "sourceType": ["trackelement"],
+      "destinationType": ["sensor"],
+      "directed": true
+    }, {
+      "types": ["follows"],
+      "attributes": [],
+      "sourceType": ["route"],
+      "destinationType": ["switchposition"],
+      "directed": true
+    }, {
+      "types": ["target"],
+      "attributes": [],
+      "sourceType": ["switchposition"],
+      "destinationType": ["switch"],
+      "directed": true
+    }, {
+      "types": ["elements"],
+      "attributes": [],
+      "sourceType": ["ragion"],
+      "destinationType": ["trackelement"],
+      "directed": true
+    }]
+  },
+  "implementationLevel": {
+    "graphMetadata": {
+      "storageLayout": "IGNORETIME",
+      "backendSystem" : "RELATIONAL"
+    },
+    "implementationNodes": [{
+      "types": ["route"],
+      "tableName": "Route",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "active",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "active"
+      }, {
+        "columnName": "entry",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "entry"
+      }, {
+        "columnName": "exit",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "exit"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["region"],
+      "tableName": "Region",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [],
+      "restrictions": []
+    }, {
+      "types": ["segment"],
+      "tableName": "Segment",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "length",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "length"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["sensor"],
+      "tableName": "Sensor",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "region",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "region"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["semaphore"],
+      "tableName": "Semaphore",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "segment",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "segment"
+      }, {
+        "columnName": "signal",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "signal"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["switch"],
+      "tableName": "Switch",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "currentPosition",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "currentPosition"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["switchposition"],
+      "tableName": "SwitchPosition",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "route",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "route"
+      }, {
+        "columnName": "target",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "target"
+      }, {
+        "columnName": "position",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "position"
+      }],
+      "restrictions": []
+    }, {
+      "types": ["trackelement"],
+      "tableName": "TrackElement",
+      "id": [{
+        "columnName": "id",
+        "datatype": "INTEGER",
+        "concatenationPosition": 1
+      }],
+      "attributes": [{
+        "columnName": "region",
+        "dataType": "INTEGER",
+        "abstractionLevelName": "region"
+      }],
+      "restrictions": []
+    }],
+    "implementationEdges": [{
+      "types": ["connectsTo"],
+      "paths": [{
+        "traversalHops": [{
+          "sourceTableName": "TrackElement",
+          "sourceTableColumn": "id",
+          "joinTableSourceColumn": "TrackElement1_id",
+          "joinTableName": "connectsTo",
+          "joinTableDestinationColumn": "TrackElement2_id",
+          "destinationTableName": "TrackElement",
+          "destinationTableColumn": "id",
+          "attributes": []
+        }]
+      }]
+    }, {
+      "types": ["monitoredBy"],
+      "paths": [{
+        "traversalHops": [{
+          "sourceTableName": "TrackElement",
+          "sourceTableColumn": "id",
+          "joinTableSourceColumn": "TrackElement_id",
+          "joinTableName": "monitoredBy",
+          "joinTableDestinationColumn": "Sensor_id",
+          "destinationTableName": "Sensor",
+          "destinationTableColumn": "id",
+          "attributes": []
+        }]
+      }]
+    }, {
+      "types": ["requires"],
+      "paths": [{
+        "traversalHops": [{
+          "sourceTableName": "Route",
+          "sourceTableColumn": "id",
+          "joinTableSourceColumn": "Route_id",
+          "joinTableName": "requires",
+          "joinTableDestinationColumn": "Sensor_id",
+          "destinationTableName": "Sensor",
+          "destinationTableColumn": "id",
+          "attributes": []
+        }]
+      }]
+    }
+    ]
+  }
+}
