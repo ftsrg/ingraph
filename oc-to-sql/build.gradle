@@ -5,4 +5,5 @@ plugins {
 dependencies {
   compile project(':compiler')
   compile group: 'org.cytosm', name: 'common', version: '1.0-SNAPSHOT'
+  compile group: 'org.cytosm', name: 'cypher2sql', version: '1.0-SNAPSHOT'
 }
