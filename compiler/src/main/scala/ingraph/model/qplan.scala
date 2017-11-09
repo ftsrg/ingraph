@@ -63,7 +63,7 @@ case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
 case class Expand(src: VertexAttribute,
                   trg: VertexAttribute,
-                  edge: EdgeAttribute,
+                  edge: AbstractEdgeAttribute,
                   dir: Direction,
                   child: QNode) extends UnaryQNode with NavigationDescriptor {
   override def output = child.output ++ Seq(edge, trg)

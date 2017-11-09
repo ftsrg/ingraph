@@ -1,6 +1,6 @@
 package ingraph.compiler.cypher2qplan.builders
 
-import ingraph.compiler.cypher2qplan.util.BuilderUtil
+import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -19,25 +19,25 @@ object AttributeBuilder {
     val props = LiteralBuilder.buildProperties(n.getProperties)
 
     if (nv == null) {
-      expr.AnonymousVertexAttribute(generateUniqueName, nls, props)
+      expr.VertexAttribute(generateUniqueName, nls, props, isAnonymous = true)
     } else {
-      expr.NamedVertexAttribute(nv.getName, nls, props)
+      expr.VertexAttribute(nv.getName, nls, props, isAnonymous = false)
     }
   }
 
-  def buildAttribute(el: oc.RelationshipPattern): expr.EdgeAttribute = {
-    if (el.getDetail() != null) {
+  def buildAttribute(el: oc.RelationshipPattern): expr.AbstractEdgeAttribute = {
+    if (el.getDetail != null) {
       val ev = el.getDetail.getVariable
+      val (name, isAnon) = if (ev == null) (generateUniqueName, true) else (ev.getName, false)
       val els = BuilderUtil.parseToEdgeLabelSet(el.getDetail.getTypes)
       val props = LiteralBuilder.buildProperties(el.getDetail.getProperties)
 
-      if (ev == null) {
-        expr.AnonymousEdgeAttribute(generateUniqueName, els, props)
-      } else {
-        expr.NamedEdgeAttribute(ev.getName, els, props)
+      el.getDetail.getRange match {
+        case r: oc.RangeLiteral => expr.EdgeListAttribute(name, els, props, isAnonymous = isAnon, StringUtil.toOptionInt(r.getLower), StringUtil.toOptionInt(r.getUpper))
+        case _ => expr.EdgeAttribute(name, els, props, isAnonymous = isAnon)
       }
     } else {
-      expr.AnonymousEdgeAttribute(generateUniqueName, EdgeLabelSet())
+      expr.EdgeAttribute(generateUniqueName, EdgeLabelSet(), isAnonymous = true)
     }
   }
 

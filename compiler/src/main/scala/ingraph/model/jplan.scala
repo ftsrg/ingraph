@@ -37,6 +37,14 @@ case class GetEdges(src: expr.VertexAttribute,
   override def output = Seq(src, trg, edge)
 }
 
+case class GetEdgeLists(src: expr.VertexAttribute,
+                    trg: expr.VertexAttribute,
+                    edge: expr.EdgeListAttribute,
+                    dir: expr.Direction)
+  extends LeafJNode with expr.NavigationDescriptor {
+  override def output = Seq(src, trg, edge)
+}
+
 case class Dual() extends LeafJNode {
   override def output = Seq()
 }

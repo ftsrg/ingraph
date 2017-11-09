@@ -3,7 +3,7 @@ package ingraph.sandbox
 import ingraph.compiler.JPlanParser
 import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
 import ingraph.model._
-import ingraph.model.expr.NamedVertexAttribute
+import ingraph.model.expr.VertexAttribute
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.{GetVertices, Projection, Selection}
 import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, GreaterThan, Literal}
@@ -46,7 +46,7 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to jplan #0") {
-    val v = expr.NamedVertexAttribute("v")
+    val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
 
     val qp = gv
@@ -68,7 +68,7 @@ class MyTest extends FunSuite {
 //  }
 
   test("qplan to jplan #3") {
-    val v = expr.NamedVertexAttribute("v")
+    val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
     val de = qplan.DuplicateElimination(gv)
 
