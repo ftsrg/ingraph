@@ -1,9 +1,12 @@
 package ingraph.sandbox
 
-import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
+import ingraph.compiler.JPlanParser
+import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
 import ingraph.model._
-import ingraph.model.iplan.INode
-import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
+import ingraph.model.expr.VertexAttribute
+import ingraph.model.jplan.JNode
+import ingraph.model.qplan.{GetVertices, Projection, Selection}
+import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class MyTest extends FunSuite {
@@ -42,16 +45,17 @@ class MyTest extends FunSuite {
 //    println(t2)
 //  }
 
-  test("qplan to iplan #0") {
+  test("qplan to jplan #0") {
     val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
 
     val qp = gv
-    val ip = QPlanToIPlan.transform(qp)
-    println(ip)
+    val ip = QPlanToJPlan.transform(qp)
+
+    // TODO assert
   }
 
-//  test("qplan to iplan #2") {
+//  test("qplan to jplan #2") {
 //    val v = VertexAttribute("v")
 //    val gv = qplan.GetVertices(v)
 //
@@ -59,16 +63,16 @@ class MyTest extends FunSuite {
 //    val top = qplan.Top(sort)
 //
 //    val qp = top
-//    val ip = QPlanToIPlan.transform(qp)
+//    val ip = QPlanToJPlan.transform(qp)
 //    println(ip)
 //  }
 
-  test("qplan to iplan #3") {
+  test("qplan to jplan #3") {
     val v = expr.VertexAttribute("v")
     val gv = qplan.GetVertices(v)
     val de = qplan.DuplicateElimination(gv)
 
-    val i = QPlanToIPlan.transform(de)
+    val i = QPlanToJPlan.transform(de)
     println(i)
   }
 
@@ -117,5 +121,13 @@ class MyTest extends FunSuite {
 //    }
 //
 //  }
+
+  test("resolving should work") {
+    JPlanParser.parse("MATCH (v) RETURN v.a")
+  }
+
+  test("handling untyped and unnamed edges should work") {
+    JPlanParser.parse("MATCH (v)--(w) RETURN v.a")
+  }
 
 }

@@ -5,8 +5,8 @@ import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
 import java.util.{Iterator => JIterator}
 
 import hu.bme.mit.ire.messages.ChangeSet
-import ingraph.model.eplan.GetEdges
-import ingraph.model.eplan.GetVertices
+import ingraph.model.fplan.GetEdges
+import ingraph.model.fplan.GetVertices
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
                                edgeConverters: Map[String, Set[GetEdges]],
@@ -20,30 +20,32 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
 
   var transaction: Transaction = _
 
-  def elementToNode(element: IngraphVertex, required: Seq[String]): Tuple =
+  def elementToNode(element: IngraphVertex, required: Seq[String]): Tuple = {
+    val nodeNameLength = required.head.length
     Vector(idParser(element.id)) ++
-      required.tail.map(key => element.properties.getOrElse(key, 0)) //TODO
+      required.tail.map(key => element.properties(key.drop(nodeNameLength + 1))) //TODO
+  }
 
   def addEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.inode.src.labels.vertexLabels
-      val targetLabels = operator.inode.trg.labels.vertexLabels
+      val sourceLabels = operator.jnode.src.labels.vertexLabels
+      val targetLabels = operator.jnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.add(operator.inode.edge.name, tuple)
+        transaction.add(operator.jnode.edge.name, tuple)
       }
     }
   }
 
   def removeEdge(edge: IngraphEdge): Unit = {
     for (operators <- edgeConverters.get(edge.`type`); operator <- operators) {
-      val sourceLabels = operator.inode.src.labels.vertexLabels
-      val targetLabels = operator.inode.trg.labels.vertexLabels
+      val sourceLabels = operator.jnode.src.labels.vertexLabels
+      val targetLabels = operator.jnode.trg.labels.vertexLabels
       if (sourceLabels.subsetOf(edge.sourceVertex.labels) &&
         targetLabels.subsetOf(edge.targetVertex.labels)) {
         val tuple = edgeToTupleType(edge, operator)
-        transaction.remove(operator.inode.edge.name, tuple)
+        transaction.remove(operator.jnode.edge.name, tuple)
       }
     }
   }
@@ -78,9 +80,9 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
     Vector(idParser(edge.sourceVertex.id), idParser(edge.id), idParser(edge.targetVertex.id)) ++
       operator.internalSchema.drop(3)
         .map {
-          case a if a.nodeName == operator.inode.src.name => edge.sourceVertex.properties(a.name)
-          case a if a.nodeName == operator.inode.trg.name => edge.targetVertex.properties(a.name)
-          case a if a.nodeName == operator.inode.edge.name => edge.properties(a.name)
+          case a if a.nodeName == operator.jnode.src.name => edge.sourceVertex.properties(a.name)
+          case a if a.nodeName == operator.jnode.trg.name => edge.targetVertex.properties(a.name)
+          case a if a.nodeName == operator.jnode.edge.name => edge.properties(a.name)
         }
   }
 }

@@ -1,14 +1,10 @@
 package ingraph.sandbox
 
-import java.io.File
-
-import ingraph.compiler.IPlanParser
-import ingraph.compiler.qplan2iplan.{QPlanToIPlan, SchemaInferencer}
-import ingraph.model.eplan._
+import ingraph.compiler.JPlanParser
+import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
+import ingraph.model.fplan._
 import ingraph.model.expr._
-import ingraph.model.qplan
-import ingraph.model.iplan
-import org.apache.commons.io.FileUtils
+import ingraph.model.{jplan, qplan}
 import org.apache.spark.sql.catalyst.expressions.{GreaterThan, Literal}
 import org.scalatest.FunSuite
 
@@ -20,7 +16,7 @@ class SchemaInferencerTest extends FunSuite {
     val de = qplan.DuplicateElimination(gv)
 
     val qp = de
-    val ip = QPlanToIPlan.transform(qp)
+    val ip = QPlanToJPlan.transform(qp)
     val ep = SchemaInferencer.transform(ip)
 
     assert(ep.internalSchema.size == 1)
@@ -45,7 +41,7 @@ class SchemaInferencerTest extends FunSuite {
       )
     )
 
-    val ip = QPlanToIPlan.transform(qp)
+    val ip = QPlanToJPlan.transform(qp)
     val ep = SchemaInferencer.transform(ip)
 
     assert(ep.internalSchema.size == 1)
@@ -65,9 +61,9 @@ class SchemaInferencerTest extends FunSuite {
 
     val e = EdgeAttribute("e", el)
 
-    val gv = iplan.GetVertices(p1)
-    val ge = iplan.GetEdges(p1, p2, e, Out)
-    val join = iplan.Join(gv, ge)
+    val gv = jplan.GetVertices(p1)
+    val ge = jplan.GetEdges(p1, p2, e, Out)
+    val join = jplan.Join(gv, ge)
 
     val ep = SchemaInferencer.transform(join, Seq(name, age))
 
@@ -90,26 +86,39 @@ class SchemaInferencerTest extends FunSuite {
       qplan.GetVertices(segment)
     )
 
-    val ip = QPlanToIPlan.transform(qp)
+    val ip = QPlanToJPlan.transform(qp)
     val ep = SchemaInferencer.transform(ip)
 
     assert(ep.internalSchema.size == 2)
     assert(ep.children(0).internalSchema.size == 2)
   }
 
-  test("infer schema for PosLength from Cypher") {
-    val ep = IPlanParser.parse("MATCH (segment:Segment) WHERE segment.length <= 0 RETURN DISTINCT segment, segment.length AS length")
+  test("infer schema for PosLength from Cypher without filtering") {
+    val ep = JPlanParser.parse(
+      """MATCH (segment:Segment)
+        |RETURN segment, segment.length AS length
+        |""".stripMargin)
     ep match {
-      case Production(_, _, DuplicateElimination(_, _,
-        Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
-          assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
+      case
+        Production(_, _,
+          Projection(_, _,
+            AllDifferent(_, _, v: GetVertices)
+          )
+        ) =>
+        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
     }
   }
 
-  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
-    test(queryFile.getName.dropRight(".cypher".length)) {
-      val query = FileUtils.readFileToString(queryFile)
-      val ep = IPlanParser.parse(query)
+  test("infer schema for PosLength from Cypher") {
+    val ep = JPlanParser.parse(
+      """MATCH (segment:Segment)
+        |WHERE segment.length <= 0
+        |RETURN DISTINCT segment, segment.length AS length
+        |""".stripMargin)
+    ep match {
+      case Production(_, _, DuplicateElimination(_, _,
+      Projection(_, _, Selection(_, _, AllDifferent(_, _, v: GetVertices))))) =>
+        assert(v.internalSchema.map(_.name) == Seq("segment", "segment.length"))
     }
   }
 

@@ -6,8 +6,15 @@ import hu.bme.mit.ire.datatypes.Tuple
 import scala.io.Source
 
 object TrainbenchmarkUtils {
-  def modelPath(size: Int, entityName: String) = s"graphs/trainbenchmark/railway-repair-$size-$entityName.csv"
-  def queryPath(query: String): String = s"queries/trainbenchmark/$query.cypher"
+  def modelPath(size: Int, entityName: String): String = {
+    getClass.getResource(s"/trainbenchmark/railway-repair-$size-$entityName.csv").getPath
+  }
+
+  def readQueryFromReources(query: String): String = {
+    val stream = getClass.getResourceAsStream(s"/trainbenchmark-simple/$query.cypher")
+    Source.fromInputStream(stream).getLines().mkString("\n")
+  }
+
   def nodeFilenames(size: Int): Map[String, List[String]] = Map(
     modelPath(size, "Region") -> List("Region"),
     modelPath(size, "Route") -> List("Route"),
@@ -28,8 +35,8 @@ object TrainbenchmarkUtils {
     modelPath(size, "target") -> "target"
   )
 
-  def readModelAndGetResults(queryName: String, querySpecification: String, size: Int): Iterable[Tuple] = {
-    val adapter = new IngraphIncrementalAdapter(querySpecification, queryName)
+  def readModelAndGetResults(querySpec: String, size: Int): Iterable[Tuple] = {
+    val adapter = new IngraphIncrementalAdapter(querySpec, "")
     val tf = new TransactionFactory(16)
     tf.subscribe(adapter.engine.inputLookup)
     val tran = tf.newBatchTransaction()

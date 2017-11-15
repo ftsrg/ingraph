@@ -2,8 +2,7 @@ package ingraph.compiler.cypher2qplan.util
 
 
 import org.eclipse.emf.ecore.EObject
-import org.slizaa.neo4j.opencypher.openCypher.Create
-import org.slizaa.neo4j.opencypher.openCypher.Delete
+import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 /**
  * Utility object to use for the slizaa openCypher Xtext grammar.
@@ -16,8 +15,11 @@ object GrammarUtil {
 	 */
 	def isCudClause(o: EObject): Boolean = {
 		o match {
-			case x: Create => true
-			case x: Delete => true
+			case _: oc.Create => true
+			case _: oc.Delete => true
+			case _: oc.Merge  => true
+			case _: oc.Remove => true
+			case _: oc.Set    => true
 			case _ => false
 		}
 	}

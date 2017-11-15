@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
-  compile group: 'org.apache.spark', name: 'spark-catalyst_2.11', version: sparkVersion
-  compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: sparkVersion
+  compile group: 'org.apache.spark', name: "spark-catalyst_$scalaShortVersion", version: sparkVersion
+  compile group: 'org.apache.spark', name: "spark-sql_$scalaShortVersion", version: sparkVersion
 
   compile group: 'org.apache.commons', name: 'commons-exec', version: commonsExecVersion
   compile group: 'com.google.guava', name: 'guava', version: guavaVersion

@@ -1,23 +1,22 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.compiler.IPlanParser
-import ingraph.model.eplan._
+import ingraph.compiler.JPlanParser
+import ingraph.model.fplan._
 import org.scalatest.WordSpec
 
 class ExpressionParserTest extends WordSpec {
 
   def parseFilter(query: String): (Tuple) => Boolean = {
-    val selection = IPlanParser.parse(query)
+    val selection = JPlanParser.parse(query)
       .asInstanceOf[Production].child
       .asInstanceOf[Projection].child
       .asInstanceOf[Selection]
     val lookup = getSchema(selection.child)
-    println(lookup)
-    ExpressionParser.parse(selection.inode.condition, lookup)
+    ExpressionParser.parse(selection.jnode.condition, lookup)
   }
 
-  def getSchema(op: ENode): Map[String, Int] = SchemaToMap.schemaToMapNames(op)
+  def getSchema(op: FNode): Map[String, Int] = SchemaToMap.schemaToMapNames(op)
 
   val rocks = "emfrocks"
   "ExpressionParser" should {

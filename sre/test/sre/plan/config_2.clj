@@ -1,56 +1,49 @@
 (ns sre.plan.config-2
-  (:require [sre.plan.dsl.config :refer [defconfig]]
-            [sre.plan.dsl.constraint :refer [defconstraint]]
-            [sre.plan.dsl.op :refer [defop]]
-            [sre.plan.dsl.estimation :refer :all]))
+  (:refer-clojure :exclude [name])
+  (:require [sre.plan.config :refer :all]
+            [sre.plan.constraint :refer [defconstraint]]
+            [sre.plan.op :refer [defop]]
+            [sre.plan.task :refer [deftask]]
+            [sre.plan.estimation :refer :all]))
 
 (defconfig Basic)
 
 (defconstraint Known [known])
-(defconstraint Element [element] :implies Known [element])
-(defconstraint Edge [edge] :implies Element [edge])
-(defconstraint Vertex [vertex] :implies Element [vertex])
-(defconstraint DirectedEdge [source edge target] :implies
-               Vertex [source]
+(defconstraint Element [element] < Known [element])
+(defconstraint Edge [edge] < Element [edge])
+(defconstraint Vertex [vertex] < Element [vertex])
+(defconstraint DirectedEdge [source edge target]
+               < Vertex [source]
                Edge [edge]
                Vertex [target])
-(defconstraint HasType [edge type] :implies Edge [edge] Known [type])
+(defconstraint HasType [edge type] < Edge [edge] Known [type])
 
-(defop GetVertices [vertex]
-       :satisfies Vertex [vertex])
-(defop GetEdges [source edge target]
-       :satisfies DirectedEdge [source edge target])
+(defop GetVertices [vertex] -> Vertex [vertex])
+(defop GetEdges [source edge target] -> DirectedEdge [source edge target])
 (defop GetEdgesByType [source edge target type]
-       :requires Known [type]
-       :satisfies DirectedEdge [source edge target] HasType [edge type])
+       Known [type] -> DirectedEdge [source edge target] HasType [edge type])
 (defop ExtendOut [source edge target]
-       :requires Vertex [source]
-       :satisfies DirectedEdge [source edge target])
+       Vertex [source] -> DirectedEdge [source edge target])
 (defop ExtendIn [target edge source]
-       :requires Vertex [target]
-       :satisfies DirectedEdge [source edge target])
+       Vertex [target] -> DirectedEdge [source edge target])
 
-(defmulti weight (fn [op] (:name op)))
+(defweight GetVertices [op & rest] 5)
+(defweight GetEdges [op & rest] 5)
+(defweight GetEdgesByType [op & rest] 4)
+(defweight ExtendOut [op & rest] 2)
+(defweight ExtendIn [op & rest] 2)
 
-(defmethod weight #'GetVertices [op] 5)
-(defmethod weight #'GetEdges [op] 5)
-(defmethod weight #'GetEdgesByType [op] 4)
-(defmethod weight #'ExtendOut [op] 2)
-(defmethod weight #'ExtendIn [op] 2)
+(deftask GetVertices (let [[v] bindings]
+                       [(variables v 1)
+                        (variables v 2)
+                        (variables v 3)]))
 
-(defrecord CostCalculator [c p]
-  Cost
-  (update-cost [this weight]
-    (as-> this this
-      (update-in this [:p] #(* %1 weight))
-      (update-in this [:c] #(+ %1 (:p this)))))
-  Comparable
-  (compareTo [this other] (compare (:c this) (:c other))))
+(deftask GetEdges (let [[v e w t] bindings]
+                    [(variables v 1 e "1->2" w 2)]))
 
-(defrecord WeightCalculator [w]
-  Weight
-  (update-weight [this bound-op constraint-lookup]
-    (assoc-in this [:w] (weight bound-op)))
-  (get-weight [this] (:w this)))
+(deftask ExtendOut
+         (let [[v e w] bindings]
+           (if (= (variables v) 1)
+             [(variables e "1->2" w 2)])))
 
-
+(def cost-calculator default-cost-calculator)

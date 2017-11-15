@@ -8,7 +8,7 @@ dependencies {
   compile project(':csv-loader')
   compile project(':compiler')
   compile project(':expression-parser')
-  compile project(':ldbc-tests')
+  compile project(':tests')
 
 
   compile group: 'org.neo4j.driver', name: 'neo4j-java-driver', version: neo4jDriverVersion

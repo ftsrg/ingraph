@@ -2,9 +2,11 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
-import ingraph.model.{expr, qplan}
+import ingraph.model.expr.ElementAttribute
 import ingraph.model.misc.Function
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedFunction}
+import ingraph.model.{expr, qplan}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction
+import org.apache.spark.sql.catalyst.expressions.Expression
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
@@ -27,19 +29,19 @@ object ExpressionBuilder {
       case e: oc.IsNullExpression => cExpr.IsNull(expr.EStub()) //FIXME: ce.vb.buildRelalgVariable(e.left)
       case e: oc.ParenthesizedExpression => buildExpression(e.getExpression, joins)
       //TODO: case e: oc.RegExpMatchingExpression => buildExpressionAux(e, joins)
-      //TODO: case e: oc.RelationshipsPattern => buildExpressionAux(e, joins)
+      case e: oc.RelationshipsPattern => buildExpressionPattern(e, joins)
       //FIXME: case e: oc.StartsWithExpression => cExpr.StartsWith(buildExpression(e.getLeft), buildExpression(e.getRight))
-      case e: oc.ExpressionNodeLabelsAndPropertyLookup => UnresolvedAttribute(Seq(e.getLeft.asInstanceOf[oc.VariableRef].getVariableRef.getName, e.getPropertyLookups.get(0).getPropertyKeyName))
+      case e: oc.ExpressionNodeLabelsAndPropertyLookup => AttributeBuilder.buildAttribute(e)
       case e: oc.ExpressionPlusMinus => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionMulDiv => buildExpressionArithmetic(e, joins)
       case e: oc.ExpressionPower => buildExpressionArithmetic(e, joins)
       //FIXME#206: this should pass function name unresolved
-      case e: oc.FunctionInvocation => UnresolvedFunction(Function.valueOf(e.getFunctionName.getName.toUpperCase()).getPrettyName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
+      case e: oc.FunctionInvocation => UnresolvedFunction(e.getFunctionName.getName, e.getParameter.asScala.map( e => buildExpression(e, joins) ), e.isDistinct)
       case _: oc.Count => UnresolvedFunction(Function.COUNT_ALL.getPrettyName, Seq[cExpr.Expression](), false)
       case e: oc.NumberConstant => LiteralBuilder.buildNumberLiteral(e)
       //TODO: case e: oc.Parameter => buildExpressionAux(e, joins)
       case e: oc.StringConstant => LiteralBuilder.buildStringLiteral(e)
-      case e: oc.VariableRef => UnresolvedAttribute(e.getVariableRef.getName)
+      case e: oc.VariableRef => AttributeBuilder.buildAttribute(e)
       //TODO: case e: oc.CaseExpression => buildExpressionAux(e, joins)
       //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
@@ -88,44 +90,14 @@ object ExpressionBuilder {
 //
 //    fe
 //  }
-//
-//  def buildExpressionAux(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
-//    // We add all the variables in the pattern as a NOT NULL expression
-//    val EList<LogicalExpression> relationshipVariableExpressions = new BasicEList<LogicalExpression>()
-//
-//    relationshipVariableExpressions.add(modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildVertexVariable(e.nodePattern)
-//    expressionContainer = ce.tlc
-//    ])
-//
-//    relationshipVariableExpressions.addAll(
-//      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-//      e.chain.map [
-//    val mapIt = it
-//    modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildEdgeVariable(mapIt.relationshipPattern.detail)
-//    expressionContainer = ce.tlc
-//    ]
-//    ]
-//    )
-//    relationshipVariableExpressions.addAll(
-//      // use of lazy map OK as wrapped into addAll - jmarton, 2017-01-07
-//      e.chain.map [
-//    val mapIt = it
-//    modelFactory.createUnaryGraphObjectLogicalExpression => [
-//    operator = UnaryGraphObjectLogicalOperatorType.IS_NOT_NULL
-//    operand = ce.vb.buildVertexVariable(mapIt.nodePattern)
-//    expressionContainer = ce.tlc
-//    ]
-//    ]
-//    )
-//
-//    joins.add(RelalgBuilder.buildRelalg(e))
-//
-//    Cypher2RelalgUtil.buildLeftDeepTree(BinaryLogicalOperatorType.AND, relationshipVariableExpressions.iterator)
-//  }
+
+  def buildExpressionPattern(e: oc.RelationshipsPattern, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
+    val currentPattern = PatternBuilder.buildPattern(e)
+    joins += currentPattern
+
+    // We extract all the attributes in the pattern (which must be an Expand chain) as a NOT NULL expression
+    AttributeBuilder.extractAttributesFromExpandChain(currentPattern).map( e => cExpr.IsNotNull(e) ).foldLeft[Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
+  }
 
   def buildExpressionComparision(e: oc.ExpressionComparison, joins: ListBuffer[qplan.QNode]): cExpr.Expression = {
     //FIXME: this was invoked as LogicalExpressionBuilder.buildLogicalExpressionNoJoinAllowed(e, ce)

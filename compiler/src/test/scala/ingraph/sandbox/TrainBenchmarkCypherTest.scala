@@ -1,6 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.{CypherToQPlan, cypher2qplan}
+import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.CypherParser
 import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
@@ -10,14 +10,35 @@ class TrainBenchmarkCypherTest extends FunSuite {
 
   test("Random test from cypher string") {
     TrainBenchmarkCypherTest.testQueryString(
-      """MATCH (segment:Segment:Vertex)-[e2:Foo|Boo]-(v2:Bar)-[e3:Foo]-(v3:Bar), (a)-[ee]->(b)
-        |WHERE segment.length < sin(0 + 2*0 % 6)
-        |WITH *, segment, "foo" as foo
-        |OPTIONAL MATCH (v)
-        |WHERE foo = "foo"
-        |RETURN DISTINCT segment, segment.length AS length, 2*5 as ten""".stripMargin)
+      """MATCH (segment:Segment)-[e2:Foo|Boo*2..5]-(v2:Bar)-[:Foo2]-()-[:Foo3*1..1]-()
+        |RETURN *, segment, "foo" as foo""".stripMargin)
 
   }
+
+  test("Random double edge variable in the same MATCH") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH
+        |  (a)-[e]->(b),
+        |  (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
+  test("Random double edge variable in separate MATCHes") {
+    TrainBenchmarkCypherTest.testQueryString(
+      """MATCH (a)-[e]->(b)
+        |MATCH (a)-[e]->(b)
+        |RETURN a, e, b""".stripMargin)
+
+  }
+
+//  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
+//    test(queryFile.getName.dropRight(".cypher".length)) {
+//      val query = FileUtils.readFileToString(queryFile)
+//      val ep = JPlanParser.parse(query)
+//    }
+//  }
+
 
   test("PosLength.cypher") {
     TrainBenchmarkCypherTest.testQueryFile("PosLength")
