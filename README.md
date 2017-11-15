@@ -26,7 +26,7 @@ ingraph is defined as a Gradle project.
 * Import the projects using **New** | **Project from Existing Sources...** (or simply click **Import Project** on the welcome screen).
   * Select the `ingraph` directory.
   * Tick **Auto import**.
-  * Untick **Create separate module per source set**.
+  * ~~Untick **Create separate module per source set**.~~ Until this [IntelliJ issue](https://youtrack.jetbrains.com/issue/SCL-12718) is resolved, tick **Create separate module per source set**.
   * Pick **Use default gradle wrapper** as your Gradle installation.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
 
