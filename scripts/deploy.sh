@@ -8,9 +8,9 @@ mkdir out
 
 # run our compile script, discussed above
 cp -r site/* out/ || true
-cp -r ingraph-compiler/ingraph-compiler-cypher2search/build/reports/tests/ out/
-cp opencypher-report/opencypher-report.pdf out/pub/
-cp -r opencypher-report/appendix out/pub/
+#cp -r ingraph-compiler/ingraph-compiler-cypher2search/build/reports/tests/ out/
+#cp opencypher-report/opencypher-report.pdf out/pub/
+#cp -r opencypher-report/appendix out/pub/
 
 # go to the out directory and create a *new* Git repo
 cd out
