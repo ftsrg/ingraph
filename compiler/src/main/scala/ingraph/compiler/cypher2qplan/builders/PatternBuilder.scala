@@ -9,12 +9,14 @@ import scala.collection.JavaConverters._
 object PatternBuilder {
   def buildPattern(pattern: oc.PatternPart): qplan.QNode = {
     pattern match {
-      case p: oc.RelationshipsPattern => buildPatternHelper(p.getNodePattern, p.getChain.asScala)
       case p: oc.PatternElement => buildPatternHelper(p.getNodepattern, p.getChain.asScala)
       case p: oc.PatternElementChain => qplan.QStub()
       // general PatternPart instance
       case p => qplan.QStub()
     }
+  }
+  def buildPattern(pattern: oc.RelationshipsPattern): qplan.QNode = {
+    buildPatternHelper(pattern.getNodePattern, pattern.getChain.asScala)
   }
 
 
@@ -56,13 +58,13 @@ object PatternBuilder {
    * This was factored out to handle PatternElement and RelationshipsPattern in the same code
    */
   def buildPatternHelper(n: oc.NodePattern, chain: Seq[oc.PatternElementChain]): qplan.QNode = {
-    // FIXME: handle missing names, and introduce VariableBuilder-alike
-    var lastAttr = expr.VertexAttribute(n.getVariable.getName, BuilderUtil.parseToVertexLabelSet(n.getNodeLabels))
+
+    var lastAttr = AttributeBuilder.buildAttribute(n)
     var lastNode: qplan.QNode = qplan.GetVertices(lastAttr)
 
     for(el <- chain) {
-      val v = expr.VertexAttribute(el.getNodePattern.getVariable.getName, BuilderUtil.parseToVertexLabelSet(el.getNodePattern.getNodeLabels))
-      val e = expr.EdgeAttribute(el.getRelationshipPattern.getDetail.getVariable.getName, BuilderUtil.parseToEdgeLabelSet(el.getRelationshipPattern.getDetail.getTypes))
+      val v = AttributeBuilder.buildAttribute(el.getNodePattern)
+      val e = AttributeBuilder.buildAttribute(el.getRelationshipPattern)
       lastNode = qplan.Expand(src = lastAttr,
         trg = v,
         edge = e,

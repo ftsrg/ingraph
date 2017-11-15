@@ -121,8 +121,48 @@ public enum Function {
 
   public String getPrettyName() { return prettyName; }
 
+  @Deprecated()
   public static Function getByPrettyName(String prettyName) {
     return Function.valueOf(prettyName.toUpperCase());
+  }
+
+	/**
+	 * Resolves a function name to a Function enum instance.
+	 * @param name the openCypher name of the function to resolve
+	 * @return the Function enum instance
+	 */
+	public static Function fromCypherName(String name) {
+		Function functor = null;
+		// exceptions handled here
+		if (COUNT_ALL.getPrettyName().equalsIgnoreCase(name)) {
+			functor = COUNT_ALL;
+		} else {
+			// fall back to the convention as enum elements are named after functions' openCypher name
+			functor = Function.valueOf(name.toUpperCase());
+		}
+		return functor;
+	}
+
+	/**
+	 * Resolves a function name to a Function enum instance and does some basic
+	 * consistency checks between the functor, its arity and whther distinct is allowed.
+	 * @param name the openCypher name of the function to resolve
+	 * @param arity the arity used in the actual call
+	 * @param isDistinct is the DISTINCT modifier used in the actual call?
+	 * @return the Function enum instance
+	 */
+	public static Function fromCypherName(String name, int arity, boolean isDistinct) {
+    Function functor = fromCypherName(name);
+
+    if (isDistinct && ! functor.isAggregation()) {
+      throw new RuntimeException("DISTINCT modifier not allowed in non-aggregating function call "+functor.getPrettyName()+"/"+arity);
+    }
+
+    if (arity < functor.getMinimumArity()) {
+    	throw new RuntimeException("Call to function "+functor.getPrettyName()+"/"+arity+" inconsistent with required minimum arity of "+functor.getMinimumArity());
+		}
+
+    return functor;
   }
 
   public FunctionCategory getCategory() {

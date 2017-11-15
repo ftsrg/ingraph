@@ -17,7 +17,7 @@ object CypherToQPlan {
     * @param queryName A name to identify the processed query.
     * @return The QPlan representation of the query.
     */
-  def build(cypher: Cypher, queryName: String): qplan.QNode = {
+  def build(cypher: Cypher, queryName: String = "Unnamed query"): qplan.QNode = {
     build_IKnowWhatImDoing(cypher, queryName, skipResolve = false, skipBeautify = false)
   }
 

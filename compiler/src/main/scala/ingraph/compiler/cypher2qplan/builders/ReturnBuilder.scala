@@ -35,10 +35,10 @@ object ReturnBuilder {
 //      ]
 //
 //      if (joinOperationsOfWhereClause.length !== 0) {
-//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moveing this expression to MATCH...WHERE.''')
+//        ce.l.unsupported('''Pattern expression found in WITH ... WHERE, which is unsupported. Consider moving this expression to MATCH...WHERE.''')
 //      }
 
-      qplan.Selection(expr.EStub("WITH EHERE"), rb)
+      qplan.Selection(expr.EStub("WITH WHERE"), rb)
     }
   }
 
@@ -72,33 +72,8 @@ object ReturnBuilder {
 
     //TODO: check after resolving: if (_elements.empty) unrecoverableError('''RETURN items processed and resulted in no columns values to return''')
 
-    //FIXME: let's see if there is a need for grouping
-    var seenAggregate = false
-//    val groupingVariables = new HashSet<Variable>
-//    for (el: _elements) {
-//      seenAggregate = Cypher2RelalgUtil.accumulateGroupingVariables(el.expression, groupingVariables,
-//        seenAggregate, ce.l)
-//    }
-
-    val projection = if (seenAggregate) {
-      qplan.QStub("Aggregation")
-//      modelFactory.createGroupingOperator => [
-//      // order of the entries is determined by the inferred name, upon tie, the class name stabilizes the order
-//      // use of lazy map OK as passed to sortBy - jmarton, 2017-04-20
-//      aggregationCriteria.addAll(groupingVariables.map[
-//      val mapIt = it
-//      modelFactory.createVariableExpression => [
-//      variable = mapIt
-//      expressionContainer = ce.tlc
-//      ]
-//      ].sortBy [
-//        ExpressionNameInferencer.inferName(it, ce.l) + '##' + it.class.name
-//      ])
-//      ]
-    } else {
-      // create plain old ProjectionOperator
-      qplan.Projection(_elements, content)
-    }
+    // We create an unresolved projection which is to be resolved to either Projection or Grouping
+    val projection = qplan.UnresolvedProjection(_elements, content)
 
     // add duplicate-elimination operator if return DISTINCT was specified
     val op1 = if (distinct) {

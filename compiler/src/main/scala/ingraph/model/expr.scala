@@ -1,15 +1,21 @@
 package ingraph.model.expr
 
-import ingraph.model.expr.datatypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
+import ingraph.model.expr.types.{TPropertyMap}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
+import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
-package object datatypes {
+// FIXME: merge into types
+package object labeltypes {
   type VertexLabel = String
   type EdgeLabel = String
+}
+package object types {
+  type TPropertyMap = Map[String, cExpr.Expression]
 }
 
 trait ExpressionBase extends Expression {}
@@ -62,7 +68,7 @@ abstract class LabelSet(status: LabelSetStatus = Empty)
 trait NavigationDescriptor {
   def src: VertexAttribute
   def trg: VertexAttribute
-  def edge: EdgeAttribute
+  def edge: AbstractEdgeAttribute
   def dir: Direction
 }
 
@@ -88,10 +94,30 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
 case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
 // formerly GraphElementVariable
-abstract class ElementAttribute(name: String) extends GraphAttribute(name)
+abstract class ElementAttribute(name: String, properties: TPropertyMap, isAnonymous: Boolean) extends GraphAttribute(name)
 
-case class VertexAttribute(override val name: String, labels: VertexLabelSet = VertexLabelSet()) extends ElementAttribute(name)
-case class EdgeAttribute(override val name: String, labels: EdgeLabelSet) extends ElementAttribute(name)
+abstract class AbstractVertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
+abstract class AbstractEdgeAttribute(override val name: String, val labels: EdgeLabelSet, val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
+
+/*
+ * Represents an edge along with its vertices and direction.
+ *
+ * Actually, this encapsulates an edge and its source and target vertices.
+ * As a descendant of ElementATtribute, it gives access to the name and properties of the encapsulated EdgeAttribute.
+ */
+case class RichEdgeAttribute(src: VertexAttribute,
+                             trg: VertexAttribute,
+                             edge: EdgeAttribute,
+                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous) with NavigationDescriptor
+
+// also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
+// but they can be identified in a type-safe manner
+//case class AnonymousVertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map()) extends VertexAttribute(name, labels, properties)
+//case class AnonymousEdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map()) extends EdgeAttribute(name, labels, properties)
+case class VertexAttribute(override val name: String, override val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false) extends AbstractVertexAttribute(name, labels, properties, isAnonymous)
+case class EdgeAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous)
+case class EdgeListAttribute(override val name: String, override val labels: EdgeLabelSet, override val properties: TPropertyMap = Map(), override val isAnonymous: Boolean = false, minHops: Option[Int], maxHops: Option[Int]) extends AbstractEdgeAttribute(name, labels, properties, isAnonymous)
+
 
 // formerly AttributeVariable
 case class PropertyAttribute(override val name: String, elementAttribute: ElementAttribute) extends GraphAttribute(name)
@@ -137,6 +163,7 @@ case object NonEmpty extends LabelSetStatus
  */
 case object Contradicting extends LabelSetStatus
 
+case class VertexLabelUpdate(vertex: VertexAttribute, vertexLabels: Set[VertexLabel])
 
 sealed trait Direction
 case object Both extends Direction

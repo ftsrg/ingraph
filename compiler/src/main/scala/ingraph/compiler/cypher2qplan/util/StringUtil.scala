@@ -96,4 +96,17 @@ object StringUtil {
     //FIXME: proper warning should be emitted
     println("WARNING: " + str)
   }
+
+
+  /**
+    * Converts a string to Option[Int].
+    * @param s
+    * @return None iff s was null or s.isEmpty, eése returns an Option[Int] encapsulating the numerical value of s
+    */
+  def toOptionInt(s: String): Option[Int] = {
+    if (s==null || s.isEmpty)
+      None
+    else
+      Option(s.toInt)
+  }
 }
