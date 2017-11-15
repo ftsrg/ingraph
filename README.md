@@ -2,8 +2,6 @@
 
 [![Build Status](https://travis-ci.org/FTSRG/ingraph.svg?branch=master)](https://travis-ci.org/FTSRG/ingraph)
 
-[[report on openCypher TCK results]](http://docs.inf.mit.bme.hu/ingraph/pub/opencypher-report.pdf) | [[regression tests]](http://docs.inf.mit.bme.hu/ingraph/tests/regressionTests/)
-
 For a summary on the project, visit the [ingraph web page](http://docs.inf.mit.bme.hu/ingraph/).
 
 ## User's guide
@@ -19,10 +17,9 @@ To run the tests, issue the following command:
 ingraph is defined as a Gradle project.
 
 ### Prerequisites
-* We recommend using IntelliJ for developing the engine, as most of it is in Scala. Install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala) for IntelliJ.
-* For SRE and other Clojure projects we recommend Emacs with [CIDER](https://cider.readthedocs.io/en/latest/). If you want to develop Clojure in IntelliJ, check out [Cursive](https://cursive-ide.com/) 
 
-*Note.* Currently, there is no VIATRA plug-in for IntelliJ or Emacs. You are able to use the previously defined patterns, but cannot define new patterns or edit existing ones.
+* We recommend using IntelliJ for developing ingraph. Make sure you install the [Scala plug-in](https://plugins.jetbrains.com/idea/plugin/1347-scala).
+* For SRE and other Clojure projects we recommend Emacs with [CIDER](https://cider.readthedocs.io/en/latest/). If you want to develop Clojure in IntelliJ, check out [Cursive](https://cursive-ide.com/).
 
 ### Importing the projects
 
@@ -30,28 +27,8 @@ ingraph is defined as a Gradle project.
   * Select the `ingraph` directory.
   * Tick **Auto import**.
   * Untick **Create separate module per source set**.
-  * Use default Gradle wrapper as your Gradle installation.
-* In the Gradle view, click **Execute Gradle Task** and type `assemble` to the **Command line** field. This will generate source files from the Xcore model.
+  * Pick **Use default gradle wrapper** as your Gradle installation.
 * After importing, add the Scala SDK (version 2.11) to the module. (If you did not use Scala before, download it from the dialog box provided by IntelliJ).
-
-### Running the tests
-
-Run the tests in `LdbcSnbBiDriverTest`. They will fail, so click the `LdbcSnbBiDriverTest` caption next to the "green play button", choose **Edit configuration...** and set the **Working directory** to `[...]/ingraph/ingraph-engine/ingraph-engine-driver`.
-
-## Debug mode
-
-You can define environment variables to enable debug mode, for all ingraph projects or only for specific modules:
-
-* `DEBUG=1` or `DEBUG_INGRAPH=1` enables debug mode for all modules
-* `DEBUG_<MODULENAME>=1` (e.g. `DEBUG_INGRAPH_CYPHER2SEARCH=1`) enables debug mode for that particular module
-
-Currently, these modules have support for debugging:
-
-* `ingraph-cypher2search`
-
-## Pages
-
-* [Troubleshooting](troubleshooting.md)
 
 ## Third-party dependencies
 
