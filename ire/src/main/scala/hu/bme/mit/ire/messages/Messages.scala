@@ -1,11 +1,9 @@
 package hu.bme.mit.ire.messages
 
 import akka.actor.ActorRef
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.datatypes.TupleBag
+import hu.bme.mit.ire.datatypes.{Tuple, TupleBag}
 
 import scala.concurrent.Promise
-import scala.collection.mutable
 
 class ReteMessage() {}
 

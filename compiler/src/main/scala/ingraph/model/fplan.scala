@@ -1,7 +1,5 @@
 package ingraph.model.fplan
 
-import javax.print.DocFlavor.BYTE_ARRAY
-
 import ingraph.compiler.qplan2jplan.SchemaInferencer
 import ingraph.model.jplan
 import ingraph.model.jplan._
@@ -25,12 +23,13 @@ abstract class UnaryFNode extends GenericUnaryNode[FNode] with FNode {
 abstract class BinaryFNode extends GenericBinaryNode[FNode] with FNode {}
 
 trait JoinLike extends BinaryFNode {
-  def internalCommon: Seq[NamedExpression] = left.internalSchema.filter(right.internalSchema.contains(_))
+  def internalCommon: Seq[NamedExpression] = left.internalSchema.filter(x => right.internalSchema.map(_.name).contains(x.name))
   lazy val leftMask  = SchemaToMap.schemaToIndices(this, left)
   lazy val rightMask = SchemaToMap.schemaToIndices(this, right)
 }
 trait EquiJoinLike extends JoinLike {
-  override def internalSchema: Seq[NamedExpression] = left.internalSchema ++ right.internalSchema.filter(left.output.contains(_))
+  override def internalSchema: Seq[NamedExpression] =
+    left.internalSchema ++ right.internalSchema.filter(x => !left.internalSchema.map(_.name).contains(x.name))
 }
 
 // leaf nodes
@@ -149,7 +148,7 @@ case class Remove(extraAttributes: Seq[NamedExpression],
 object SchemaToMap {
   def schemaToIndices(node: JoinLike, side: FNode): Seq[Int] = {
     val sideIndices = schemaToMapNames(side)
-    node.internalCommon.flatMap(attr => sideIndices.get(attr.toString)) // TODO throw exception if there is no match
+    node.internalCommon.map(attr => sideIndices(attr.name))
   }
 
   def schemaToMapNames(n: FNode): Map[String, Int] = {

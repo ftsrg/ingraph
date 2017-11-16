@@ -1,14 +1,11 @@
 package ingraph.compiler.cypher2qplan.builders
 
-import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
-import ingraph.model.{expr, qplan}
+import ingraph.compiler.cypher2qplan.util.StringUtil
 import ingraph.model.expr.{types => eTypes}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedStar}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
 
 object LiteralBuilder {
   def buildNumber(e: oc.NumberConstant): Int = {

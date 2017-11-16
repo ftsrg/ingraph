@@ -1,29 +1,18 @@
 package hu.bme.mit.ire.nodes
 
-import scala.Vector
-import scala.collection.mutable
-
+import akka.actor.{ActorRef, Props, actorRef2Scala}
+import hu.bme.mit.ire.{Terminator, TransactionFactory}
+import hu.bme.mit.ire.datatypes.{JoinCache, Tuple}
+import hu.bme.mit.ire.engine.RelationalEngine
+import hu.bme.mit.ire.messages.{ChangeSet, Primary, Secondary}
+import hu.bme.mit.ire.nodes.binary.JoinNode
+import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
+import hu.bme.mit.ire.util.SizeCounter
+import hu.bme.mit.ire.util.TestUtil.{mask, tuple}
 import org.scalatest.WordSpec
 import org.scalatest.concurrent.TimeLimits
 
-import akka.actor.ActorRef
-import akka.actor.Props
-import akka.actor.actorRef2Scala
-import hu.bme.mit.ire.Terminator
-import hu.bme.mit.ire.TransactionFactory
-import hu.bme.mit.ire.datatypes.JoinCache
-import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.messages.Primary
-import hu.bme.mit.ire.messages.Secondary
-import hu.bme.mit.ire.nodes.binary.JoinNode
-import hu.bme.mit.ire.nodes.unary.ProductionNode
-import hu.bme.mit.ire.nodes.unary.SelectionNode
-import hu.bme.mit.ire.util.BufferMultimap
-import hu.bme.mit.ire.util.SizeCounter
-import hu.bme.mit.ire.util.TestUtil.mask
-import hu.bme.mit.ire.util.TestUtil.tuple
-import hu.bme.mit.ire.engine.RelationalEngine
+import scala.collection.mutable
 
 class SizingTest extends WordSpec with TimeLimits {
 

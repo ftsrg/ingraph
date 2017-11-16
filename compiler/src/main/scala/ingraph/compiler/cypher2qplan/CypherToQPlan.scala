@@ -1,7 +1,7 @@
 package ingraph.compiler
 
-import ingraph.compiler.cypher2qplan.{QPlanBeautifier, QPlanResolver}
 import ingraph.compiler.cypher2qplan.builders.StatementBuilder
+import ingraph.compiler.cypher2qplan.{QPlanBeautifier, QPlanResolver}
 import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 

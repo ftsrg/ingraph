@@ -1,8 +1,14 @@
 package ingraph.bulkloader.csv.parser;
 
-import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
-import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_ID;
-import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
+import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
+import ingraph.bulkloader.csv.columnname.ColumnNameParser;
+import ingraph.bulkloader.csv.columnname.ColumnType;
+import ingraph.bulkloader.csv.entityprocessor.EntityRowParser;
+import org.neo4j.driver.v1.types.Entity;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapReader;
+import org.supercsv.io.ICsvMapReader;
+import org.supercsv.prefs.CsvPreference;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,16 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.neo4j.driver.v1.types.Entity;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvMapReader;
-import org.supercsv.io.ICsvMapReader;
-import org.supercsv.prefs.CsvPreference;
-
-import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
-import ingraph.bulkloader.csv.columnname.ColumnNameParser;
-import ingraph.bulkloader.csv.columnname.ColumnType;
-import ingraph.bulkloader.csv.entityprocessor.EntityRowParser;
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_ID;
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
 
 public class CsvParser {
 

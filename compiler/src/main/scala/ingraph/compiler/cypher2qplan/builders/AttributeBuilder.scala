@@ -1,14 +1,14 @@
 package ingraph.compiler.cypher2qplan.builders
 
-import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
-import ingraph.model.{expr, qplan}
-import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
-import org.apache.spark.sql.catalyst.{expressions => cExpr}
-import org.slizaa.neo4j.opencypher.{openCypher => oc}
 import java.util.concurrent.atomic.AtomicLong
 
+import ingraph.compiler.cypher2qplan.util.{BuilderUtil, StringUtil}
 import ingraph.model.expr.{EdgeLabelSet, ElementAttribute}
+import ingraph.model.{expr, qplan}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAttribute
 import org.apache.spark.sql.catalyst.expressions.Expression
+import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.mutable.ListBuffer
 

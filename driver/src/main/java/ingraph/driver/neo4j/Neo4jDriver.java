@@ -1,12 +1,11 @@
 package ingraph.driver.neo4j;
 
+import ingraph.driver.CypherDriver;
 import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.AuthToken;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
-
-import ingraph.driver.CypherDriver;
 
 public class Neo4jDriver extends CypherDriver {
 

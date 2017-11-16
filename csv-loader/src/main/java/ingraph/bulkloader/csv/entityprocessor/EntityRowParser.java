@@ -1,12 +1,11 @@
 package ingraph.bulkloader.csv.entityprocessor;
 
-import java.util.Map;
-import java.util.Optional;
-
-import org.neo4j.driver.v1.types.Entity;
-
 import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
 import ingraph.bulkloader.csv.data.IdSpaces;
+import org.neo4j.driver.v1.types.Entity;
+
+import java.util.Map;
+import java.util.Optional;
 
 public abstract class EntityRowParser<TEntity extends Entity> {
 

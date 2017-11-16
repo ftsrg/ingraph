@@ -34,7 +34,7 @@ case class GetEdges(src: expr.VertexAttribute,
                     edge: expr.EdgeAttribute,
                     dir: expr.Direction)
   extends LeafJNode with expr.NavigationDescriptor {
-  override def output = Seq(src, trg, edge)
+  override def output = Seq(src, edge, trg)
 }
 
 case class GetEdgeLists(src: expr.VertexAttribute,
@@ -42,7 +42,7 @@ case class GetEdgeLists(src: expr.VertexAttribute,
                     edge: expr.EdgeListAttribute,
                     dir: expr.Direction)
   extends LeafJNode with expr.NavigationDescriptor {
-  override def output = Seq(src, trg, edge)
+  override def output = Seq(src, edge, trg)
 }
 
 case class Dual() extends LeafJNode {
@@ -59,7 +59,8 @@ case class Production(child: JNode) extends UnaryJNode {}
 
 case class Projection(projectList: Seq[NamedExpression],
                       child: JNode) extends UnaryJNode {
-  override def output = projectList.map(_.toAttribute)
+  //override def output = projectList.map(_.toAttribute) // TODO
+  override def output = List() // TODO
 }
 
 case class Selection(condition: Expression,

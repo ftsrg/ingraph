@@ -22,10 +22,9 @@
   <!ENTITY var "<non-terminal ref='Variable'/>">
 ]>
 <grammar language="Cypher"
-  xmlns="http://opencypher.org/grammar"
-  xmlns:rr="http://opencypher.org/railroad"
-  xmlns:oc="http://opencypher.org/opencypher"
-  xmlns:scope="http://opencypher.org/scope">
+         xmlns="http://opencypher.org/grammar"
+         xmlns:rr="http://opencypher.org/railroad"
+         xmlns:scope="http://opencypher.org/scope">
 
   <production name="Cypher">
     &WS;

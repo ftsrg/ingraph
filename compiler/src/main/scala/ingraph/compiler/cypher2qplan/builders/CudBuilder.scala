@@ -1,12 +1,11 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.model.expr.labeltypes.VertexLabel
 import ingraph.model.expr._
+import ingraph.model.expr.labeltypes.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
-import org.apache.spark.sql.catalyst.expressions.Attribute
-import org.slizaa.neo4j.opencypher.openCypher.{NodeLabel, RemoveItem, SetItem}
+import org.slizaa.neo4j.opencypher.openCypher.{RemoveItem, SetItem}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._

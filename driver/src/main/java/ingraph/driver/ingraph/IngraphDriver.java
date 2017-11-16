@@ -1,9 +1,8 @@
 package ingraph.driver.ingraph;
 
+import ingraph.driver.CypherDriver;
 import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.Session;
-
-import ingraph.driver.CypherDriver;
 
 /**
  * Current limitations include:

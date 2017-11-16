@@ -1,8 +1,8 @@
 package ingraph.compiler.qplan2jplan
 
 import ingraph.model.jplan.JNode
-import ingraph.model.{expr, jplan, qplan}
 import ingraph.model.qplan.QNode
+import ingraph.model.{expr, jplan, qplan}
 
 object QPlanToJPlan {
   def transform(plan: QNode): JNode = {

@@ -4,7 +4,6 @@ import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
 import ingraph.ire.IngraphIncrementalAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
-import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.TypeSystem;
 
 import java.util.Collections;

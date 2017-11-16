@@ -1,19 +1,15 @@
 package ingraph.sandbox
 
 import java.net.URI
-import java.util.concurrent.atomic.AtomicLong
 
-import org.apache.spark.sql.catalyst.{InternalRow}
 import org.apache.spark.sql.catalyst.analysis.{Analyzer, FunctionRegistry}
 import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, InMemoryCatalog, SessionCatalog}
 import org.apache.spark.sql.catalyst.expressions.AttributeReference
 import org.apache.spark.sql.catalyst.plans.logical.LocalRelation
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.types.{IntegerType, StringType}
+import org.apache.spark.sql.types.IntegerType
 import org.scalatest.FunSuite
-
-import scala.collection.mutable
 
 class ResolutionTest extends FunSuite {
 

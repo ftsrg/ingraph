@@ -1,23 +1,5 @@
 package ingraph.driver.test
 
-import java.io.FileInputStream
-import java.util
-import java.util.Collections
-
-import org.neo4j.driver.v1.Record
-import org.objenesis.strategy.StdInstantiatorStrategy
-import org.supercsv.prefs.CsvPreference
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.driver.data.IngraphDeltaHandler
-import ingraph.driver.ingraph.IngraphDriver
-import ingraph.relalg2tex.converters.relalgconverters.Relalg2TexTreeConverter
-import ingraph.relalg2tex.config.RelalgConverterConfigBuilder
-import org.scalatest.FunSuite
-import scala.io.Source
-
 
 //class RailwayVerificationTest extends FunSuite {
 //

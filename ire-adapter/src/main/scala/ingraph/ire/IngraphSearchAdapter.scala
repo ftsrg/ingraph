@@ -18,8 +18,8 @@ class IngraphSearchAdapter(
 
   override val tupleMapper = new Neo4jEntityToTupleMapper(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
-    engine.inputLookup) with LongIdParser
+    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap) with LongIdParser
+
   tupleMapper.transaction = transactionFactory.newBatchTransaction()
   indexer.fill(tupleMapper)
 

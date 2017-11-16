@@ -1,16 +1,15 @@
 package ingraph.bulkloader.csv.entityprocessor;
 
-import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
-import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
-
-import java.util.Map;
-
+import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
+import ingraph.bulkloader.csv.data.IdSpaces;
 import org.neo4j.driver.internal.InternalRelationship;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Relationship;
 
-import ingraph.bulkloader.csv.columnname.ColumnDescriptor;
-import ingraph.bulkloader.csv.data.IdSpaces;
+import java.util.Map;
+
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_END_ID;
+import static ingraph.bulkloader.csv.columnname.ColumnConstants.INTERNAL_START_ID;
 
 public class RelationshipRowParser extends EntityRowParser<Relationship> {
 

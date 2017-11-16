@@ -2,18 +2,14 @@ package hu.bme.mit.ire.nodes
 
 import akka.actor.{ActorRef, ActorSystem, Props, actorRef2Scala}
 import akka.testkit.{ImplicitSender, TestActors, TestKit}
-import hu.bme.mit.ire.TransactionFactory
-import hu.bme.mit.ire._
+import hu.bme.mit.ire.{TransactionFactory, _}
 import hu.bme.mit.ire.datatypes.Tuple
+import hu.bme.mit.ire.engine.RelationalEngine
+import hu.bme.mit.ire.listeners.ChangeListener
 import hu.bme.mit.ire.messages.ChangeSet
 import hu.bme.mit.ire.nodes.unary.{ProductionNode, SelectionNode}
 import hu.bme.mit.ire.util.TestUtil._
 import org.scalatest._
-import org.scalatest.concurrent.TimeLimits
-
-import scala.Vector
-import hu.bme.mit.ire.engine.RelationalEngine
-import hu.bme.mit.ire.listeners.ChangeListener
 
 class RelationalEngineIntegrationTest(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
   with FlatSpecLike with Matchers with BeforeAndAfterAll {

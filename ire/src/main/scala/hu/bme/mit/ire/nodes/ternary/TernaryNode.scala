@@ -1,18 +1,8 @@
 package hu.bme.mit.ire.nodes.ternary
 
-import akka.actor.Actor
-import hu.bme.mit.ire.Forwarder
-import akka.actor.Stash
-import hu.bme.mit.ire.TerminatorHandler
-import hu.bme.mit.ire.messages.Pause
-import hu.bme.mit.ire.messages.ChangeSet
-import hu.bme.mit.ire.messages.ReteMessage
-import hu.bme.mit.ire.messages.Primary
-import hu.bme.mit.ire.messages.Resume
-import hu.bme.mit.ire.messages.TerminatorMessage
-import hu.bme.mit.ire.messages.Secondary
-import hu.bme.mit.ire.messages.SizeRequest
-import hu.bme.mit.ire.messages.Ternary
+import akka.actor.{Actor, Stash}
+import hu.bme.mit.ire.{Forwarder, TerminatorHandler}
+import hu.bme.mit.ire.messages._
 
 abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor with Forwarder with Stash with TerminatorHandler {
   val name = self.path.name
@@ -25,7 +15,7 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
   def onSecondary(changeSet: ChangeSet)
 
   def onTernary(changeSet: ChangeSet)
-  
+
   override def receive: Actor.Receive = {
     case Primary(reteMessage: ReteMessage) => {
       primaryPause match {
@@ -53,7 +43,7 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
         }
       }
     }
-    
+
     case Secondary(reteMessage: ReteMessage) => {
       secondaryPause match {
         case Some(pause) => {
@@ -81,7 +71,7 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
 
       }
     }
-    
+
     case Ternary(reteMessage: ReteMessage) => {
       ternaryPause match {
         case Some(pause) => {
@@ -109,9 +99,9 @@ abstract class TernaryNode(val expectedTerminatorCount: Int = 3) extends Actor w
 
       }
     }
-    
+
     case _: SizeRequest => sender() ! onSizeRequest()
-    
+
     case other: ReteMessage =>
       throw new UnsupportedOperationException(
         s"$name received raw message, needs to be wrapped as Primary or Secondary")

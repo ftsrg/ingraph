@@ -6,7 +6,7 @@ import org.scalatest.FunSuite
 
 class TrainBenchmarkDmlTest extends FunSuite {
 
-  test("ConnectedSegment Inject") {
+  ignore("ConnectedSegment Inject") {
     parse(
       """MATCH
         |  (sensor {id: $sensor}),
@@ -20,7 +20,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("ConnectedSegment Repair") {
+  ignore("ConnectedSegment Repair") {
     parse(
       """MATCH (segment2 {id: $segment2})
         |DETACH DELETE segment2
@@ -28,7 +28,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("PosLength Inject") {
+  ignore("PosLength Inject") {
     parse(
       """MATCH (segment {id: $segment})
         |SET segment.length = 0
@@ -36,7 +36,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("PosLength Repair") {
+  ignore("PosLength Repair") {
     parse(
       """MATCH (segment {id: $segment})
         |SET segment.length = -segment.length + 1
@@ -44,7 +44,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("RouteSensor Inject") {
+  ignore("RouteSensor Inject") {
     parse(
       """MATCH (route {id: $route})-[g:requires]->(sensor {id: $sensor})
         |DELETE g
@@ -52,7 +52,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("RouteSensor Repair") {
+  ignore("RouteSensor Repair") {
     parse(
       """MATCH (route {id: $route}), (sensor {id: $sensor})
         |CREATE (route)-[:requires]->(sensor)
@@ -60,7 +60,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SemaphoreNeighbor Inject") {
+  ignore("SemaphoreNeighbor Inject") {
     parse(
       """MATCH (route {id: $route})-[e:entry]->(semaphore {id: $semaphore})
         |DELETE e
@@ -68,7 +68,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SemaphoreNeighbor Repair") {
+  ignore("SemaphoreNeighbor Repair") {
     parse(
       """MATCH (route2 {id: $route2}), (semaphore {id: $semaphore})
         |CREATE (route2)-[:entry]->(semaphore)
@@ -76,7 +76,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SwitchMonitored Inject") {
+  ignore("SwitchMonitored Inject") {
     parse(
       """MATCH (sw {id: $sw})-[m:monitoredBy]->(:Sensor)
         |DELETE m
@@ -84,7 +84,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SwitchMonitored Repair") {
+  ignore("SwitchMonitored Repair") {
     parse(
       """MATCH (sw {id: $sw})
         |CREATE (sw)-[:monitoredBy]->(:Sensor)
@@ -92,7 +92,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SwitchSet Inject") {
+  ignore("SwitchSet Inject") {
     parse(
       """
         |MATCH (sw {id: $sw})
@@ -101,7 +101,7 @@ class TrainBenchmarkDmlTest extends FunSuite {
     )
   }
 
-  test("SwitchSet Repair") {
+  ignore("SwitchSet Repair") {
     parse(
       """
         |MATCH (sw {id: $sw}), (swP {id: $swP})

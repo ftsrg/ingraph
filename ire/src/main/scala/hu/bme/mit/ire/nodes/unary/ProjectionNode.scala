@@ -1,7 +1,7 @@
 package hu.bme.mit.ire.nodes.unary
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.{Mask, Tuple}
+import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 
 abstract class ProjectionImpl(val mask: Vector[Tuple => Any]) extends UnaryNode {

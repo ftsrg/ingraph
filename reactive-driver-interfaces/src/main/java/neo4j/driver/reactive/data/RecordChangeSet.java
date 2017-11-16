@@ -1,8 +1,7 @@
 package neo4j.driver.reactive.data;
 
-import org.neo4j.driver.v1.Record;
-
 import com.google.common.collect.Multiset;
+import org.neo4j.driver.v1.Record;
 
 public class RecordChangeSet extends ChangeSet<Record> {
 

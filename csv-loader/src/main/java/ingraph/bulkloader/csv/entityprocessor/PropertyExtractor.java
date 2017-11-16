@@ -1,13 +1,12 @@
 package ingraph.bulkloader.csv.entityprocessor;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import ingraph.bulkloader.csv.columnname.ColumnConstants;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.Values;
 
-import ingraph.bulkloader.csv.columnname.ColumnConstants;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class PropertyExtractor {
 

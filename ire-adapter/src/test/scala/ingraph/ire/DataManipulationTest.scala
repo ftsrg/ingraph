@@ -1,10 +1,6 @@
 package ingraph.ire
 
-import org.neo4j.driver.internal.InternalRelationship
-import org.neo4j.driver.internal.InternalNode
 import org.neo4j.driver.v1.Value
-
-import scala.collection.JavaConverters._
 import org.scalatest.FunSuite
 
 class DataManipulationTest extends FunSuite {

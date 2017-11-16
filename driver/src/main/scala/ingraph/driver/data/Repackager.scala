@@ -1,12 +1,5 @@
 package ingraph.driver.data
 
-import hu.bme.mit.ire.datatypes.Tuple
-import org.neo4j.driver.internal.InternalRecord
-import org.neo4j.driver.v1.{Record, Value, Values}
-
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Vector
-
 class Repackager(val keys : Vector[String]) {
 
   val keysJava = keys.asJava

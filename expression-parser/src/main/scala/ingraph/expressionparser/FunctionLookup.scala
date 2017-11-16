@@ -1,9 +1,9 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.util.GenericMath
-import org.apache.spark.sql.catalyst.expressions.{BinaryExpression, Expression, TernaryExpression, UnaryExpression}
 import ingraph.model.misc.Function
 import ingraph.model.misc.Function._
+
 import scala.util.Random
 
 // if a function has optional arguments, we implement it for each possible number of arguments,

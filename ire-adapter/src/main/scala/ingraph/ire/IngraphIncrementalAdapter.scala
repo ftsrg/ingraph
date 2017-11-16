@@ -1,8 +1,8 @@
 package ingraph.ire
 
-import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction, TransactionFactory}
 import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.listeners.ChangeListener
+import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction, TransactionFactory}
 import ingraph.compiler.JPlanParser
 
 class IngraphIncrementalAdapter(
@@ -20,8 +20,7 @@ class IngraphIncrementalAdapter(
 
   override val tupleMapper = new Neo4jEntityToTupleMapper(
     engine.vertexConverters.map(kv => kv._1.toSet -> kv._2.toSet).toMap,
-    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap,
-    engine.inputLookup) with LongIdParser
+    engine.edgeConverters.map(kv => kv._1 -> kv._2.toSet).toMap) with LongIdParser
 
   tupleMapper.transaction = transactionFactory.newBatchTransaction()
   indexer.subscribe(tupleMapper)

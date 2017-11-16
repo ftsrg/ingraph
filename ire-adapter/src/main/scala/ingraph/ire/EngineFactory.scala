@@ -10,10 +10,9 @@ import hu.bme.mit.ire.nodes.unary._
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
-import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode}
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
-import ingraph.model.fplan._
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
+import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode, _}
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
 
 import scala.collection.mutable
@@ -103,14 +102,14 @@ object EngineFactory {
     private def getVertices(op: GetVertices, expr: ForwardConnection) = {
       val labels = op.jnode.v.labels.vertexLabels.toSeq
       vertexConverters.addBinding(labels, op)
-      inputs += (op.nodeName -> expr.child)
+      inputs += (op.jnode.v.name -> expr.child)
     }
 
     private def getEdges(op: GetEdges, expr: ForwardConnection) = {
       val labels = op.jnode.edge.labels.edgeLabels.toSeq
       for (label <- labels)
         edgeConverters.addBinding(label, op)
-      inputs += (op.nodeName -> expr.child)
+      inputs += (op.jnode.edge.name -> expr.child)
     }
 
     // unary nodes
@@ -189,7 +188,7 @@ object EngineFactory {
         yield element match {
           case n: NavigationDescriptor =>
             // you got to love the Law of Demeter
-            val demeter = n.edge.labels.edgeLabels.iterator.next()
+            val demeter = n.edge.labels.edgeLabels.head
             val sourceIndex = lookup(n.src.name)
             val targetIndex = lookup(n.trg.name)
             (t: Tuple) => {

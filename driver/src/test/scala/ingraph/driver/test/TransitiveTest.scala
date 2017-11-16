@@ -1,21 +1,6 @@
 package ingraph.driver.test
 
-import java.io.FileInputStream
 import java.util
-import java.util.Collections
-
-import org.neo4j.driver.v1.Record
-import org.objenesis.strategy.StdInstantiatorStrategy
-import org.supercsv.prefs.CsvPreference
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.driver.data.IngraphDeltaHandler
-import ingraph.driver.ingraph.IngraphDriver
-import ingraph.tests.LdbcSnbTest
-import org.scalatest.FunSuite
-import scala.io.Source
 
 class TransitiveTest extends FunSuite {
 
@@ -75,8 +60,6 @@ class TransitiveTest extends FunSuite {
     }
 
     println("Hello")
-
-    import scala.collection.JavaConverters._
 
     queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames()))
     queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)

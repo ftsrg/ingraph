@@ -4,7 +4,6 @@ import org.neo4j.driver.internal.{InternalNode, InternalRelationship}
 import org.neo4j.driver.v1.Value
 import org.scalatest.FunSuite
 
-import scala.io.Source
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {

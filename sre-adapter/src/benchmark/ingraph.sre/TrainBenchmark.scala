@@ -1,7 +1,5 @@
 package ingraph.sre
 
-import ingraph.sre.plan.{PropertyConstraintBinding, VertexConstraintBinding}
-
 object PosLength {
 
   val segment = Variable.createVar("segment")

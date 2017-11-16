@@ -1,6 +1,6 @@
 package ingraph.compiler.cypher2qplan.structures
 
-import ingraph.model.{expr, qplan}
+import ingraph.model.qplan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
 /**

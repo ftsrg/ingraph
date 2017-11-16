@@ -1,13 +1,5 @@
 dependencies {
   compile project(':neo4j-util')
 
-  compile group: 'neo4j-drivers', name: 'neo4j-embedded-testkit-driver', version: '0.0.4-SNAPSHOT'
-  compile("org.neo4j.shell:import-tools:$neo4jVersion") {
-    exclude group: 'com.esotericsoftware'
-  }
-
-  testCompile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
-  testCompile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'
-
   testCompile group: 'junit', name: 'junit', version: junitVersion
 }

@@ -3,7 +3,7 @@ package hu.bme.mit.ire.nodes.binary
 import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
+import hu.bme.mit.ire.util.SizeCounter
 
 import scala.collection.mutable
 

@@ -1,6 +1,6 @@
 package ingraph.compiler.cypher2qplan.util
 
-import ingraph.model.{expr, qplan}
+import ingraph.model.expr
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 

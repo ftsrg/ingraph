@@ -4,10 +4,7 @@ import hu.bme.mit.ire.SingleForwarder
 import hu.bme.mit.ire.datatypes.Slot._
 import hu.bme.mit.ire.datatypes._
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
-import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.TestUtil._
-
-import scala.collection.mutable
 
 class LeftOuterJoinNode(override val next: (ReteMessage) => Unit,
                         override val primaryTupleWidth: Int,

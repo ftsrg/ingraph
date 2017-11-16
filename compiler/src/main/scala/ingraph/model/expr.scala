@@ -1,12 +1,11 @@
 package ingraph.model.expr
 
 import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
-import ingraph.model.expr.types.{TPropertyMap}
-import org.apache.spark.sql.catalyst.InternalRow
+import ingraph.model.expr.types.TPropertyMap
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
-import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
 import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
+import org.apache.spark.sql.catalyst.{InternalRow, expressions => cExpr}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
 // FIXME: merge into types

@@ -1,12 +1,8 @@
 package ingraph.sandbox
 
 import ingraph.compiler.JPlanParser
-import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
+import ingraph.compiler.qplan2jplan.QPlanToJPlan
 import ingraph.model._
-import ingraph.model.expr.VertexAttribute
-import ingraph.model.jplan.JNode
-import ingraph.model.qplan.{GetVertices, Projection, Selection}
-import org.apache.spark.sql.catalyst.expressions.{And, EqualTo, GreaterThan, Literal}
 import org.scalatest.FunSuite
 
 class MyTest extends FunSuite {

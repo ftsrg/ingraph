@@ -1,16 +1,13 @@
 package hu.bme.mit.ire
 
-import hu.bme.mit.ire.datatypes.Tuple
-import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
 import java.util.{Iterator => JIterator}
 
-import hu.bme.mit.ire.messages.ChangeSet
-import ingraph.model.fplan.GetEdges
-import ingraph.model.fplan.GetVertices
+import hu.bme.mit.ire.datatypes.Tuple
+import ingraph.ire.{EntityToTupleMapper, IdParser, IngraphEdge, IngraphVertex}
+import ingraph.model.fplan.{GetEdges, GetVertices}
 
 class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertices]],
-                               edgeConverters: Map[String, Set[GetEdges]],
-                               inputLookup: Map[String, (ChangeSet) => Unit]) extends IdParser with EntityToTupleMapper {
+                               edgeConverters: Map[String, Set[GetEdges]]) extends IdParser with EntityToTupleMapper {
 
   private val vertexLookup: Map[String, (Set[String], Set[GetVertices])] = for ((labels, operators) <- vertexConverters;
                                                                                         label <- labels)
@@ -57,7 +54,7 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
         if (labels.subsetOf(vertex.labels)) {
           for (operator <- operators) {
             val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
-            transaction.add(operator.nodeName, tuple)
+            transaction.add(operator.jnode.v.name, tuple)
           }
         }
       })
@@ -70,7 +67,7 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
         if (labels.subsetOf(vertex.labels)) {
           for (operator <- operators) {
             val tuple = elementToNode(vertex, operator.internalSchema.map(_.name))
-            transaction.remove(operator.nodeName, tuple)
+            transaction.remove(operator.jnode.v.name, tuple)
           }
         }
       })

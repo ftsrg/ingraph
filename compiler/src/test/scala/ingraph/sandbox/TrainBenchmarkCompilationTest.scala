@@ -6,17 +6,17 @@ import ingraph.emf.util.PrettyPrinter
 import org.scalatest.FunSuite
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
-class TrainBenchmarkCypherTest extends FunSuite {
+class TrainBenchmarkCompilationTest extends FunSuite {
 
   test("Random test from cypher string") {
-    TrainBenchmarkCypherTest.testQueryString(
+    TrainBenchmarkCompilationTest.testQueryString(
       """MATCH (segment:Segment)-[e2:Foo|Boo*2..5]-(v2:Bar)-[:Foo2]-()-[:Foo3*1..1]-()
         |RETURN *, segment, "foo" as foo""".stripMargin)
 
   }
 
   test("Random double edge variable in the same MATCH") {
-    TrainBenchmarkCypherTest.testQueryString(
+    TrainBenchmarkCompilationTest.testQueryString(
       """MATCH
         |  (a)-[e]->(b),
         |  (a)-[e]->(b)
@@ -25,47 +25,39 @@ class TrainBenchmarkCypherTest extends FunSuite {
   }
 
   test("Random double edge variable in separate MATCHes") {
-    TrainBenchmarkCypherTest.testQueryString(
+    TrainBenchmarkCompilationTest.testQueryString(
       """MATCH (a)-[e]->(b)
         |MATCH (a)-[e]->(b)
         |RETURN a, e, b""".stripMargin)
 
   }
 
-//  for (queryFile <- new File("queries/trainbenchmark-simple").listFiles()) {
-//    test(queryFile.getName.dropRight(".cypher".length)) {
-//      val query = FileUtils.readFileToString(queryFile)
-//      val ep = JPlanParser.parse(query)
-//    }
-//  }
-
-
   test("PosLength.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("PosLength")
+    TrainBenchmarkCompilationTest.testQueryFile("PosLength")
   }
 
   test("ConnectedSegments.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("ConnectedSegments")
+    TrainBenchmarkCompilationTest.testQueryFile("ConnectedSegments")
   }
 
   test("RouteSensor.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("RouteSensor")
+    TrainBenchmarkCompilationTest.testQueryFile("RouteSensor")
   }
 
   test("SwitchMonitored.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("SwitchMonitored")
+    TrainBenchmarkCompilationTest.testQueryFile("SwitchMonitored")
   }
 
   test("SwitchSet.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("SwitchSet")
+    TrainBenchmarkCompilationTest.testQueryFile("SwitchSet")
   }
 
   test("SemaphoreNeighbor.cypher") {
-    TrainBenchmarkCypherTest.testQueryFile("SemaphoreNeighbor")
+    TrainBenchmarkCompilationTest.testQueryFile("SemaphoreNeighbor")
   }
 }
 
-object TrainBenchmarkCypherTest {
+object TrainBenchmarkCompilationTest {
   val queryPackPath = "trainbenchmark/"
   val printCypher = true
   val printQPlan = true
