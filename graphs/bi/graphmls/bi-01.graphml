@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="browserUsed" for="node" attr.name="browserUsed" attr.type="string"/>
+<key id="length" for="node" attr.name="length" attr.type="int"/>
+<key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
+<key id="language" for="node" attr.name="language" attr.type="string"/>
+<key id="id" for="node" attr.name="id" attr.type="long"/>
+<key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
+<key id="content" for="node" attr.name="content" attr.type="string"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">1</data><data key="creationDate">20100214153210447</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Chrome</data><data key="content">I also love Mozart</data><data key="length">18</data></node>
+<node id="n1" labels=":Comment:Message"><data key="labels">:Comment:Message</data><data key="id">2</data><data key="creationDate">20100215153210447</data><data key="locationIP">2.3.4.5</data><data key="browserUsed">Firefox</data><data key="content">Beethoven is the absolute best. I could listen to it all day long.</data><data key="length">66</data></node>
+<node id="n2" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">1</data><data key="creationDate">20110817060540595</data><data key="locationIP">1.2.3.4</data><data key="browserUsed">Firefox</data><data key="language">en</data><data key="content">My favourite is Eine Kleine Nachtmusik</data><data key="length">38</data></node>
+</graph>
+</graphml>
