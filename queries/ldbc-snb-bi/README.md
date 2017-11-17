@@ -1,6 +1,6 @@
 # LDBC Social Network Benchmark – Business Intelligence workload
 
-* [Specification](http://wiki.ldbcouncil.org/display/TUC/Business+Intelligence+Workload)
+* [Specification](https://ldbc.github.io/ldbc_snb_docs/)
 
 ## Features used by the queries
 

@@ -1,29 +1,40 @@
-// Posting summary
+// Q1. Posting summary
+/*
+  :param { date: 201009142200 }
+*/
 MATCH (message:Message)
-WHERE message.creationDate <= '2011-01-01T00:00:00.000+0000'
-UNWIND labels(message) AS label
+WHERE message.creationDate <= $date
+WITH toFloat(count(message)) AS totalMessageCount // this should be a subquery once Cypher supports it
+MATCH (message:Message)
+WHERE message.creationDate <= $date
+  AND message.content IS NOT NULL
 WITH
+  totalMessageCount,
   message,
-  toInt(substring(message.creationDate, 0, 4)) AS year,
-  length(message.content) AS length,
-  label
+  message.creationDate/10000000000000 AS year,
+  message.length AS length
 WITH
-  message,
+  totalMessageCount,
   year,
-  CASE 
-    WHEN length < 40 THEN 'short'
-    WHEN length < 80 THEN 'one liner'
-    WHEN length < 160 THEN 'tweet'
-    ELSE 'long'
+  (message:Comment) AS isComment,
+  CASE
+    WHEN length <  40 THEN 0
+    WHEN length <  80 THEN 1
+    WHEN length < 160 THEN 2
+    ELSE                   3
   END AS lengthCategory,
-  label
-WHERE label <> 'Message'
+  count(message) AS messageCount,
+  floor(avg(length)) AS averageMessageLength,
+  sum(message.length) AS sumMessageLength
 RETURN
   year,
-  label AS messageType,
+  isComment,
   lengthCategory,
-  count(message) AS messageCount,
-  avg(message.length) AS averageMessageLength,
-  sum(message.length) AS sumMessageLength
-ORDER BY year DESC, messageType ASC, lengthCategory ASC
-LIMIT 100
+  messageCount,
+  averageMessageLength,
+  sumMessageLength,
+  messageCount / totalMessageCount AS percentageOfMessages
+ORDER BY
+  year DESC,
+  isComment ASC,
+  lengthCategory ASC
