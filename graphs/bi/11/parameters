@@ -1,0 +1,4 @@
+:param {
+    country: 'India',
+    blacklist: ['one', 'has', 'David']
+}
