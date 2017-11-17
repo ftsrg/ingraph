@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+<key id="birthday" for="node" attr.name="birthday" attr.type="long"/>
+<key id="lastName" for="node" attr.name="lastName" attr.type="string"/>
+<key id="gender" for="node" attr.name="gender" attr.type="string"/>
+<key id="browserUsed" for="node" attr.name="browserUsed" attr.type="string"/>
+<key id="length" for="node" attr.name="length" attr.type="int"/>
+<key id="language" for="node" attr.name="language" attr.type="string"/>
+<key id="creationDate" for="node" attr.name="creationDate" attr.type="long"/>
+<key id="content" for="node" attr.name="content" attr.type="string"/>
+<key id="url" for="node" attr.name="url" attr.type="string"/>
+<key id="firstName" for="node" attr.name="firstName" attr.type="string"/>
+<key id="name" for="node" attr.name="name" attr.type="string"/>
+<key id="locationIP" for="node" attr.name="locationIP" attr.type="string"/>
+<key id="id" for="node" attr.name="id" attr.type="long"/>
+<graph id="G" edgedefault="directed">
+<node id="n0" labels=":Person"><data key="labels">:Person</data><data key="id">0</data><data key="firstName">Mahinda</data><data key="lastName">Perera</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data></node>
+<node id="n1" labels=":Person"><data key="labels">:Person</data><data key="id">1</data><data key="firstName">Carmen</data><data key="lastName">Lepland</data><data key="gender">female</data><data key="birthday">19840218</data><data key="creationDate">20100128063958781</data><data key="locationIP">195.20.151.175</data><data key="browserUsed">Internet Explorer</data></node>
+<node id="n2" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">0</data><data key="creationDate">20110817060540595</data><data key="locationIP">49.246.218.237</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, t newer electronic publishing technoAbout George Frideric Handel,  concertos. Handel was born in 1685,About Kurt Vonne</data><data key="length">140</data></node>
+<node id="n3" labels=":Tag"><data key="labels">:Tag</data><data key="id">0</data><data key="name">Hamid_Karzai</data><data key="url">http://dbpedia.org/resource/Hamid_Karzai</data></node>
+<edge id="e0" source="n0" target="n3" label="hasInterest"><data key="label">hasInterest</data></edge>
+<edge id="e1" source="n0" target="n1" label="knows"><data key="label">knows</data></edge>
+<edge id="e2" source="n2" target="n1" label="hasCreator"><data key="label">hasCreator</data></edge>
+<edge id="e3" source="n2" target="n3" label="hasTag"><data key="label">hasTag</data></edge>
+</graph>
+</graphml>
