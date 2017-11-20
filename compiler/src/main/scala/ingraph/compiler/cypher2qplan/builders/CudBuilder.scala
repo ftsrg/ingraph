@@ -2,7 +2,7 @@ package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
 import ingraph.model.expr._
-import ingraph.model.expr.labeltypes.VertexLabel
+import ingraph.model.expr.types.VertexLabel
 import ingraph.model.qplan
 import ingraph.model.qplan.QNode
 import org.slizaa.neo4j.opencypher.openCypher.{RemoveItem, SetItem}

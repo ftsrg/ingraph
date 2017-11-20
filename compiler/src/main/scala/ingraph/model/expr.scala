@@ -1,21 +1,23 @@
 package ingraph.model.expr
 
-import ingraph.model.expr.labeltypes.{EdgeLabel, VertexLabel}
-import ingraph.model.expr.types.TPropertyMap
+import ingraph.model.expr.types.{EdgeLabel, TProjectList, TPropertyMap, VertexLabel}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression}
 import org.apache.spark.sql.catalyst.{InternalRow, expressions => cExpr}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
-// FIXME: merge into types
-package object labeltypes {
+package object types {
+  type TPropertyMap = Map[String, cExpr.Expression]
+  type TProjectList = Seq[NamedExpression]
   type VertexLabel = String
   type EdgeLabel = String
 }
-package object types {
-  type TPropertyMap = Map[String, cExpr.Expression]
+trait ProjectionDescriptor {
+  def projectList: TProjectList
+  protected def projectOutput: Seq[Attribute] = projectList.map(_.toAttribute)
 }
+
 
 trait ExpressionBase extends Expression {}
 

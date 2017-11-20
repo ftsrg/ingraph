@@ -1,6 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.JPlanParser
+import ingraph.compiler.FPlanParser
 import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
 import ingraph.model.expr._
 import ingraph.model.fplan._
@@ -94,7 +94,7 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for PosLength from Cypher without filtering") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (segment:Segment)
         |RETURN segment, segment.length AS length
         |""".stripMargin)
@@ -110,7 +110,7 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for PosLength from Cypher with filtering") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (segment:Segment)
         |WHERE segment.length <= 0
         |RETURN segment, segment.length AS length
@@ -126,7 +126,7 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for RouteSensor from Cypher") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (route:Route)
         |  -[:follows]->(swP:SwitchPosition)
         |  -[:target]->(sw:Switch)
@@ -142,7 +142,7 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for RouteSensorPositive from Cypher") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (route:Route)
         |  -[:follows]->(swP:SwitchPosition)
         |  -[:target]->(sw:Switch)
@@ -156,16 +156,15 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for SwitchMonitored from Cypher") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
         |RETURN sw
         |""".stripMargin)
-    println(ep)
   }
 
   test("infer schema for simple path") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (a:A)-[:R1]->(b:B)-[:R2]->(c:C)
         |RETURN a, b, c
         |""".stripMargin)
@@ -178,16 +177,15 @@ class SchemaInferencerTest extends FunSuite {
   }
 
   test("infer schema for SwitchMonitored") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH (sw:Switch)
         |WHERE NOT (sw)-[:monitoredBy]->(:Sensor)
         |RETURN sw
         |""".stripMargin)
-    println(ep)
   }
 
   test("infer schema for ConnectedSegments") {
-    val ep = JPlanParser.parse(
+    val ep = FPlanParser.parse(
       """MATCH
         |  (sensor:Sensor)<-[mb1:monitoredBy]-(segment1:Segment),
         |  (segment1:Segment)-[ct1:connectsTo]->
