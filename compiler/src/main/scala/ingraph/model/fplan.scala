@@ -41,6 +41,10 @@ case class GetEdges(extraAttributes: Seq[NamedExpression], jnode: jplan.GetEdges
   override def internalSchema: Seq[NamedExpression] = jnode.output ++ extraAttributes
 }
 
+case class GetEdgeLists(extraAttributes: Seq[NamedExpression], jnode: jplan.GetEdgeLists) extends LeafFNode {
+  override def internalSchema: Seq[NamedExpression] = jnode.output ++ extraAttributes
+}
+
 case class Dual(jnode: jplan.Dual) extends LeafFNode {
   override def internalSchema = Seq()
   override def extraAttributes: Seq[NamedExpression] = Seq()

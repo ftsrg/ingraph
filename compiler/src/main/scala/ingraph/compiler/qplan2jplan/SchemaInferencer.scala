@@ -13,9 +13,10 @@ object SchemaInferencer {
 
     inode match {
       // leaf
-      case o: jplan.GetEdges    => fplan.GetEdges(ea, o)
-      case o: jplan.GetVertices => fplan.GetVertices(ea, o)
-      case o: jplan.Dual        =>
+      case o: jplan.GetEdges     => fplan.GetEdges(ea, o)
+      case o: jplan.GetEdgeLists => fplan.GetEdgeLists(ea, o)
+      case o: jplan.GetVertices  => fplan.GetVertices(ea, o)
+      case o: jplan.Dual         =>
         if (ea.nonEmpty) {
           throw new IllegalStateException(s"Dual node cannot hold extra attributes (${ea})")
         }
