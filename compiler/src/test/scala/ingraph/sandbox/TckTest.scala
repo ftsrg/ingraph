@@ -55,6 +55,22 @@ class TckTest extends FunSuite {
     )
   }
 
+  test("Filtering for vertices in MATCH") {
+    val stages = compile(
+      """MATCH (n {name: 'John'})
+        |RETURN n
+      """.stripMargin
+    )
+  }
+
+  test("Filtering for edges in MATCH") {
+    val stages = compile(
+      """MATCH (n)-[:REL {prop: 'value'}]->(m)
+        |RETURN n, m
+      """.stripMargin
+    )
+  }
+
   test("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
     val stages = compile(
       """MATCH (n), (m)
