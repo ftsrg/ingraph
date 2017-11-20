@@ -23,7 +23,7 @@ public class LdbcSnbCsvTest {
 	final Map<String, Collection<String>> nodeCsvs = ImmutableMap.<String, Collection<String>>builder() //
 			.put("comment", Arrays.asList("Message", "Comment")) //
 			.put("forum", Arrays.asList("Forum")) //
-			.put("organisation", Arrays.asList("Company", "University")) //
+			.put("organisation", Arrays.asList("Organisation")) //
 			.put("person", Arrays.asList("Person")) //
 			.put("place", Arrays.asList("Place")) //
 			.put("post", Arrays.asList("Message", "Post")) //
