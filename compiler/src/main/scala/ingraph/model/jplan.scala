@@ -1,7 +1,8 @@
 package ingraph.model.jplan
 
 import ingraph.model.expr
-import ingraph.model.expr.{EdgeAttribute, VertexLabelUpdate}
+import ingraph.model.expr.types.TProjectList
+import ingraph.model.expr.{EdgeAttribute, ProjectionDescriptor, VertexLabelUpdate}
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -57,10 +58,15 @@ case class DuplicateElimination(child: JNode) extends UnaryJNode {}
 
 case class Production(child: JNode) extends UnaryJNode {}
 
-case class Projection(projectList: Seq[NamedExpression],
-                      child: JNode) extends UnaryJNode {
-  //override def output = projectList.map(_.toAttribute) // TODO
-  override def output = List() // TODO
+abstract class AbstractProjection(projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
+  override def output = projectOutput
+}
+
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
+case class Projection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
+
+case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
+  override def output = projectOutput
 }
 
 case class Selection(condition: Expression,

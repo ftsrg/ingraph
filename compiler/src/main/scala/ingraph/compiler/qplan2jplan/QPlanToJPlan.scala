@@ -23,6 +23,7 @@ object QPlanToJPlan {
       case qplan.Top(skipExpr, limitExpr, qplan.Sort(order, child)) => jplan.SortAndTop(skipExpr, limitExpr, order, transform(child))
       case qplan.Production(child) => jplan.Production(transform(child))
       case qplan.Projection(projectList, child) => jplan.Projection(projectList, transform(child))
+      case qplan.Grouping(aggregationCriteria, projectList, child) => jplan.Grouping(aggregationCriteria, projectList, transform(child))
       case qplan.Selection(condition, child) => jplan.Selection(condition, transform(child))
       case qplan.DuplicateElimination(child) => jplan.DuplicateElimination(transform(child))
       case qplan.AllDifferent(edges, child) => jplan.AllDifferent(edges, transform(child))

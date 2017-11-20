@@ -1,6 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.JPlanParser
+import ingraph.compiler.FPlanParser
 import ingraph.compiler.qplan2jplan.QPlanToJPlan
 import ingraph.model._
 import org.scalatest.FunSuite
@@ -119,11 +119,11 @@ class MyTest extends FunSuite {
 //  }
 
   test("resolving should work") {
-    JPlanParser.parse("MATCH (v) RETURN v.a")
+    FPlanParser.parse("MATCH (v) RETURN v.a")
   }
 
   test("handling untyped and unnamed edges should work") {
-    JPlanParser.parse("MATCH (v)--(w) RETURN v.a")
+    FPlanParser.parse("MATCH (v)--(w) RETURN v.a")
   }
 
 }
