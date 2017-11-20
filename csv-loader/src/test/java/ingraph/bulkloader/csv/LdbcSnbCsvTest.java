@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class LdbcSnbCsvTest {
 
-	private static final String PREFIX = TestConstants.GRAPHS_DIR + "snb_50/";
+	private static final String PREFIX = TestConstants.GRAPHS_DIR + "/bi/01/";
 	private static final String POSTFIX = "_0_0.csv";
 
 	final Map<String, Collection<String>> nodeCsvs = ImmutableMap.<String, Collection<String>>builder() //
