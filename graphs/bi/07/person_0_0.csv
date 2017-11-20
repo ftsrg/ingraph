@@ -1,0 +1,4 @@
+id:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:LONG|locationIP:STRING|browserUsed:STRING
+1|Marcel|X|male|19891203|20100214153210447|1.2.3.4|Firefox
+2|Hans|Y|male|19901203|20110214153210447|2.3.4.5|Chrome
+3|Jens|Z|male|19911203|20120214153210447|3.4.5.6|Edge
