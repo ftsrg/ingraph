@@ -4,19 +4,18 @@ import org.scalatest.{FunSuite, Ignore}
 
 import scala.io.Source
 
-@Ignore
 abstract class LdbcSnbTest extends FunSuite {
 
   def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
 
-  def queryPath(workload: String, query: Int): String = s"../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
+  def queryPath(workload: String, query: Int): String = s"queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
 
   def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
 
   val nodeFilenames: Map[String, List[String]] = Map(
     modelPath("comment") -> List("Message", "Comment"),
     modelPath("forum") -> List("Forum"),
-    modelPath("organisation") -> List("Company", "University"),
+    modelPath("organisation") -> List("Organisation"),
     modelPath("person") -> List("Person"),
     modelPath("place") -> List("Place"),
     modelPath("post") -> List("Message", "Post"),
@@ -25,61 +24,48 @@ abstract class LdbcSnbTest extends FunSuite {
   )
 
   val relationshipFilenames: Map[String, String] = Map(
-    modelPath("comment_hasCreator_person") -> "hasCreator",
-    modelPath("comment_isLocatedIn_place") -> "isLocatedIn",
-    modelPath("comment_replyOf_comment") -> "replyOf",
-    modelPath("comment_replyOf_post") -> "replyOf",
-    modelPath("forum_containerOf_post") -> "containerOf",
-    modelPath("forum_hasMember_person") -> "hasMember",
-    modelPath("forum_hasModerator_person") -> "hasModerator",
-    modelPath("forum_hasTag_tag") -> "hasTag",
-    modelPath("person_hasInterest_tag") -> "hasInterest",
-    modelPath("person_isLocatedIn_place") -> "isLocatedIn",
-    modelPath("person_knows_person") -> "knows",
-    modelPath("person_likes_comment") -> "likes",
-    modelPath("person_likes_post") -> "likes",
-    modelPath("place_isPartOf_place") -> "isPartOf",
-    modelPath("post_hasCreator_person") -> "hasCreator",
-    modelPath("comment_hasTag_tag") -> "hasTag",
-    modelPath("post_hasTag_tag") -> "hasTag",
-    modelPath("post_isLocatedIn_place") -> "isLocatedIn",
-    modelPath("tagclass_isSubclassOf_tagclass") -> "isSubclassOf",
-    modelPath("tag_hasType_tagclass") -> "hasType",
-    modelPath("organisation_isLocatedIn_place") -> "isLocatedIn",
-    modelPath("person_studyAt_organisation") -> "studyAt",
-    modelPath("person_workAt_organisation") -> "workAt"
+    modelPath("comment_hasCreator_person") -> "HAS_CREATOR",
+    modelPath("comment_isLocatedIn_place") -> "IS_LOCATED_IN",
+    modelPath("comment_replyOf_comment") -> "REPLY_OF",
+    modelPath("comment_replyOf_post") -> "REPLY_OF",
+    modelPath("forum_containerOf_post") -> "CONTAINER_OF",
+    modelPath("forum_hasMember_person") -> "HAS_MEMBER",
+    modelPath("forum_hasModerator_person") -> "HAS_MODERATOR",
+    modelPath("forum_hasTag_tag") -> "HAS_TAG",
+    modelPath("person_hasInterest_tag") -> "HAS_INTEREST",
+    modelPath("person_isLocatedIn_place") -> "IS_LOCATED_IN",
+    modelPath("person_knows_person") -> "KNOWS",
+    modelPath("person_likes_comment") -> "LIKES",
+    modelPath("person_likes_post") -> "LIKES",
+    modelPath("place_isPartOf_place") -> "IS_PART_OF",
+    modelPath("post_hasCreator_person") -> "HAS_CREATOR",
+    modelPath("comment_hasTag_tag") -> "HAS_TAG",
+    modelPath("post_hasTag_tag") -> "HAS_TAG",
+    modelPath("post_isLocatedIn_place") -> "IS_LOCATED_IN",
+    modelPath("tagclass_isSubclassOf_tagclass") -> "IS_SUBCLASS_OF",
+    modelPath("tag_hasType_tagclass") -> "HAS_TYPE",
+    modelPath("organisation_isLocatedIn_place") -> "IS_LOCATED_IN",
+    modelPath("person_studyAt_organisation") -> "STUDY_OF",
+    modelPath("person_workAt_organisation") -> "WORK_AT"
   )
 
   case class TestCase(workload: String, number: Int)
 
   val testCases =
-    List(2, 3, 4, 5, 6, 7, 9, 12, 13, 14, 15, 24).map(new TestCase("bi", _)) ++
-    List(1, 2, 3, 4, 8, 9, 10, 11, 12, 13, 14, 16, 19, 21, 22, 23, 24).map(new TestCase("simple", _))
-//      List(7).map(new TestCase("simple", _))
-
-  // BI
-  // 1 // CASE
-  // 8 // PATH
-  // 10 // CASE
-  // 11 // requires list comprehensions
-  // 16 // PATH
-  // 17 // no Cypher implementation yet
-  // 18 // no Cypher implementation yet
-  // 19 // antijoin
-  // 21 // no Cypher implementation yet
-  // 22 // no Cypher implementation yet
-  // 23 // no Cypher implementation yet
-  // 25 // no cypher implementation yet
+    Map(new TestCase("bi", 17) -> Map("$country" -> "'Austria'"))
 
   testCases.filter(_ != null) //
     .foreach(
     t =>
-      test(s"${t.workload}-${t.number}-size-1") {
+      test(s"${t._1.workload}-${t._1.number}-size-1") {
+      val parameters = t._2
 
-      val queryName = s"ldbc-snb-${t.workload}-${t.number}"
-      val querySpecification = Source.fromFile(queryPath(t.workload, t.number)).getLines().mkString("\n")
+      val queryName = s"ldbc-snb-${t._1.workload}-${t._1.number}"
 
-      runQuery(t.workload, t.number, queryName, querySpecification)
+      val baseQuerySpecification = Source.fromFile(queryPath(t._1.workload, t._1.number)).getLines().mkString("\n")
+      val querySpecification = parameters.foldLeft(baseQuerySpecification)((a, b) => a.replaceAllLiterally(b._1, b._2))
+
+      runQuery(t._1.workload, t._1.number, queryName, querySpecification)
     })
 
   def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String)
