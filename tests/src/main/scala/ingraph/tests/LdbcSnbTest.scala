@@ -6,9 +6,9 @@ import scala.io.Source
 
 abstract class LdbcSnbTest extends FunSuite {
 
-  def modelPath(entityName: String) = s"../graphs/snb_50/${entityName}_0_0.csv"
+  def modelPath(entityName: String) = s"../graphs/bi/01/${entityName}_0_0.csv"
 
-  def queryPath(workload: String, query: Int): String = s"queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
+  def queryPath(workload: String, query: Int): String = s"../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
 
   def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
 
@@ -78,7 +78,7 @@ abstract class LdbcSnbTest extends FunSuite {
       val querySpecification = parameters.foldLeft(baseQuerySpecification)((a, b) => a.replaceAllLiterally(b._1, b._2))
       println(querySpecification)
 
-      runQuery(t._1.workload, t._1.number, queryName, querySpecification)
+      //runQuery(t._1.workload, t._1.number, queryName, querySpecification)
     })
 
   def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String)

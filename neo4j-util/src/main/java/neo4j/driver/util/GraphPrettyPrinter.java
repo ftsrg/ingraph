@@ -109,11 +109,13 @@ public class GraphPrettyPrinter {
 	}
 
 	private static String format(Object value) {
+		if (value == null) {
+			return "null";
+		}
 		if (value instanceof String) {
 			return "\"" + value + "\"";
-		} else {
-			return value.toString();
 		}
+		return value.toString();
 	}
 
 }
