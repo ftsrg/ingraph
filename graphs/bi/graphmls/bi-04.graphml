@@ -24,14 +24,14 @@
 <node id="n6" labels=":TagClass"><data key="labels">:TagClass</data><data key="id">0</data><data key="name">Person</data><data key="url">http://dbpedia.org/ontology/Person</data></node>
 <node id="n7" labels=":Tag"><data key="labels">:Tag</data><data key="id">0</data><data key="name">Wolfgang_Amadeus_Mozart</data><data key="url">http://dbpedia.org/resource/Wolfgang_Amadeus_Mozart</data></node>
 <node id="n8" labels=":Tag"><data key="labels">:Tag</data><data key="id">1</data><data key="name">Ludwig_van_Beethoven</data><data key="url">http://dbpedia.org/resource/Ludwig_van_Beethoven</data></node>
-<edge id="e0" source="n0" target="n4" label="containerOf"><data key="label">containerOf</data></edge>
-<edge id="e1" source="n0" target="n5" label="containerOf"><data key="label">containerOf</data></edge>
-<edge id="e2" source="n0" target="n1" label="hasModerator"><data key="label">hasModerator</data></edge>
-<edge id="e3" source="n1" target="n3" label="isLocatedIn"><data key="label">isLocatedIn</data></edge>
-<edge id="e4" source="n3" target="n2" label="isPartOf"><data key="label">isPartOf</data></edge>
-<edge id="e5" source="n4" target="n7" label="hasTag"><data key="label">hasTag</data></edge>
-<edge id="e6" source="n5" target="n8" label="hasTag"><data key="label">hasTag</data></edge>
-<edge id="e7" source="n7" target="n6" label="hasType"><data key="label">hasType</data></edge>
-<edge id="e8" source="n8" target="n6" label="hasType"><data key="label">hasType</data></edge>
+<edge id="e0" source="n0" target="n4" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
+<edge id="e1" source="n0" target="n5" label="CONTAINER_OF"><data key="label">CONTAINER_OF</data></edge>
+<edge id="e2" source="n0" target="n1" label="HAS_MODERATOR"><data key="label">HAS_MODERATOR</data></edge>
+<edge id="e3" source="n1" target="n3" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e4" source="n3" target="n2" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
+<edge id="e5" source="n4" target="n7" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e6" source="n5" target="n8" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e7" source="n7" target="n6" label="HAS_TYPE"><data key="label">HAS_TYPE</data></edge>
+<edge id="e8" source="n8" target="n6" label="HAS_TYPE"><data key="label">HAS_TYPE</data></edge>
 </graph>
 </graphml>

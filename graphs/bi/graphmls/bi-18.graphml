@@ -17,9 +17,9 @@
 <node id="n2" labels=":Person"><data key="labels">:Person</data><data key="id">0</data><data key="firstName">Mahinda</data><data key="lastName">Perera</data><data key="gender">male</data><data key="birthday">19891203</data><data key="creationDate">20100214153210447</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data></node>
 <node id="n3" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">0</data><data key="creationDate">20110817060540595</data><data key="locationIP">49.246.218.237</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, t newer electronic publishing technoAbout George Frideric Handel,  concertos. Handel was born in 1685,About Kurt Vonne</data><data key="length">140</data></node>
 <node id="n4" labels=":Message:Post"><data key="labels">:Message:Post</data><data key="id">1</data><data key="creationDate">20100214203021451</data><data key="locationIP">119.235.7.103</data><data key="browserUsed">Firefox</data><data key="language">uz</data><data key="content">About Rupert Murdoch, alised US citizen iAbout Napoleon, tinuation of the waAbout Ferdinand II of Aragon, (1</data><data key="length">108</data></node>
-<edge id="e0" source="n0" target="n2" label="hasCreator"><data key="label">hasCreator</data></edge>
-<edge id="e1" source="n0" target="n1" label="replyOf"><data key="label">replyOf</data></edge>
-<edge id="e2" source="n0" target="n3" label="replyOf"><data key="label">replyOf</data></edge>
-<edge id="e3" source="n1" target="n4" label="replyOf"><data key="label">replyOf</data></edge>
+<edge id="e0" source="n0" target="n2" label="HAS_CREATOR"><data key="label">HAS_CREATOR</data></edge>
+<edge id="e1" source="n0" target="n1" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
+<edge id="e2" source="n0" target="n3" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
+<edge id="e3" source="n1" target="n4" label="REPLY_OF"><data key="label">REPLY_OF</data></edge>
 </graph>
 </graphml>

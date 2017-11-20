@@ -18,12 +18,12 @@
 <node id="n5" labels=":Tag"><data key="labels">:Tag</data><data key="id">0</data><data key="name">Hamid_Karzai</data><data key="url">http://dbpedia.org/resource/Hamid_Karzai</data></node>
 <node id="n6" labels=":Tag"><data key="labels">:Tag</data><data key="id">1</data><data key="name">Rumi</data><data key="url">http://dbpedia.org/resource/Rumi</data></node>
 <node id="n7" labels=":Tag"><data key="labels">:Tag</data><data key="id">2</data><data key="name">Mahmud_of_Ghazni</data><data key="url">http://dbpedia.org/resource/Mahmud_of_Ghazni</data></node>
-<edge id="e0" source="n1" target="n0" label="isPartOf"><data key="label">isPartOf</data></edge>
-<edge id="e1" source="n2" target="n5" label="hasTag"><data key="label">hasTag</data></edge>
-<edge id="e2" source="n3" target="n5" label="hasTag"><data key="label">hasTag</data></edge>
-<edge id="e3" source="n4" target="n6" label="hasTag"><data key="label">hasTag</data></edge>
-<edge id="e4" source="n2" target="n1" label="isLocatedIn"><data key="label">isLocatedIn</data></edge>
-<edge id="e5" source="n3" target="n1" label="isLocatedIn"><data key="label">isLocatedIn</data></edge>
-<edge id="e6" source="n4" target="n1" label="isLocatedIn"><data key="label">isLocatedIn</data></edge>
+<edge id="e0" source="n1" target="n0" label="IS_PART_OF"><data key="label">IS_PART_OF</data></edge>
+<edge id="e1" source="n2" target="n5" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e2" source="n3" target="n5" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e3" source="n4" target="n6" label="HAS_TAG"><data key="label">HAS_TAG</data></edge>
+<edge id="e4" source="n2" target="n1" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e5" source="n3" target="n1" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
+<edge id="e6" source="n4" target="n1" label="IS_LOCATED_IN"><data key="label">IS_LOCATED_IN</data></edge>
 </graph>
 </graphml>
