@@ -1,1 +1,1 @@
-id:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:STRING|creationDate:LONG|locationIP:STRING|browserUsed:STRING
+id:ID(Person)|firstName:STRING|lastName:STRING|gender:STRING|birthday:LONG|creationDate:LONG|locationIP:STRING|browserUsed:STRING
