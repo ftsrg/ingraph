@@ -14,7 +14,7 @@ public class Neo4jTest {
 
 	@Test
 	public void test() throws KernelException {
-		int queryNumber = 17;
+		String queryNumber = "17";
 
 		GraphDatabaseSettings.BoltConnector bolt = GraphDatabaseSettings.boltConnector( "0" );
 
@@ -30,18 +30,20 @@ public class Neo4jTest {
 
 		final String graphFilename = String.format("bi-" + queryNumber + ".graphml");
 		try (final Transaction t = gds.beginTx()) {
-			gds.execute(String.format( //
+			String loadQuery = String.format( //
 				"CALL apoc.import.graphml('%s', {batchSize: 10000, readLabels: true})", //
-				"src/test/resources/" + graphFilename //
-			));
+				"../graphs/bi/graphmls/" + graphFilename //
+			);
+			System.out.println(loadQuery);
+			gds.execute(loadQuery);
 		}
 
 		final String queryBase = "\n" +
 			"MATCH (country:Country {name: $country})\n" +
-			"MATCH (a:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)\n" +
-			"MATCH (b:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)\n" +
-			"MATCH (c:Person)-[:isLocatedIn]->(:City)-[:isPartOf]->(country)\n" +
-			"MATCH (a)-[:knows]-(b), (b)-[:knows]-(c), (c)-[:knows]-(a)\n" +
+			"MATCH (a:Person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->(country)\n" +
+			"MATCH (b:Person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->(country)\n" +
+			"MATCH (c:Person)-[:IS_LOCATED_IN]->(:City)-[:IS_PART_OF]->(country)\n" +
+			"MATCH (a)-[:KNOWS]-(b), (b)-[:KNOWS]-(c), (c)-[:KNOWS]-(a)\n" +
 			"WHERE a.id < b.id\n" +
 			"  AND b.id < c.id\n" +
 			"RETURN count(*)";
