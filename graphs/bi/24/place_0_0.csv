@@ -1,0 +1,4 @@
+id:ID(Place)|name:STRING|url:STRING|:LABEL
+0|Asia|http://dbpedia.org/resource/Asia|Continent
+1|India|http://dbpedia.org/resource/India|Country
+
