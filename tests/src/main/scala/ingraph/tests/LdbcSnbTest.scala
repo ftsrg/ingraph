@@ -51,11 +51,23 @@ abstract class LdbcSnbTest extends FunSuite {
 
   case class TestCase(workload: String, number: Int)
 
-  val testCases =
-    Map(new TestCase("bi", 17) -> Map("$country" -> "'Austria'"))
+  val testCases: Map[TestCase, Map[String, String]] =
+    Map(
+      new TestCase("bi", 7) -> Map("$tag" -> "'Franz_Liszt'"),
+      new TestCase("bi", 8) -> Map("$tag" -> "'Sammy_Sosa'"),
+      new TestCase("bi", 14) -> Map("$begin" -> "20101001040000000", "$end" -> "20101101040000000"),
+      new TestCase("bi", 16) -> Map(
+        "personId" -> "6597069777419",
+        "country" -> "'Pakistan'",
+        "tagClass" -> "'MusicalArtist'",
+        "minPathDistance" -> "3",
+        "maxPathDistance" -> "5"
+      ),
+      new TestCase("bi", 17) -> Map("$country" -> "'Austria'"),
+      new TestCase("bi", 20) -> Map("$tagClasses" -> "['Writer', 'Single', 'Country']")
+    )
 
-  testCases.filter(_ != null) //
-    .foreach(
+  testCases.foreach(
     t =>
       test(s"${t._1.workload}-${t._1.number}-size-1") {
       val parameters = t._2
@@ -64,6 +76,7 @@ abstract class LdbcSnbTest extends FunSuite {
 
       val baseQuerySpecification = Source.fromFile(queryPath(t._1.workload, t._1.number)).getLines().mkString("\n")
       val querySpecification = parameters.foldLeft(baseQuerySpecification)((a, b) => a.replaceAllLiterally(b._1, b._2))
+      println(querySpecification)
 
       runQuery(t._1.workload, t._1.number, queryName, querySpecification)
     })
