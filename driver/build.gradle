@@ -6,6 +6,7 @@ sourceSets.main.scala.srcDir "src/main/java"
 sourceSets.main.java.srcDirs = []
 
 dependencies {
+  compile project(':ire')
   compile project(':ire-adapter')
   compile project(':reactive-driver-interfaces')
   testCompile project(':tests')

@@ -4,6 +4,13 @@ import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
 import ingraph.ire.IngraphIncrementalAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.v1.Statement;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.TransactionWork;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.TypeSystem;
 
 import java.util.Collections;

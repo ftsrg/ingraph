@@ -32,29 +32,29 @@ public class LdbcSnbCsvTest {
 			.build();
 
 	final Map<String, String> relationshipCsvs = ImmutableMap.<String, String>builder() //
-			.put("comment_hasCreator_person", "hasCreator") //
-			.put("comment_isLocatedIn_place", "isLocatedIn") //
-			.put("comment_replyOf_comment", "replyOf") //
-			.put("comment_replyOf_post", "replyOf") //
-			.put("forum_containerOf_post", "containerOf") //
-			.put("forum_hasMember_person", "hasMember") //
-			.put("forum_hasModerator_person", "hasModerator") //
-			.put("forum_hasTag_tag", "hasTag") //
-			.put("person_hasInterest_tag", "hasInterest") //
-			.put("person_isLocatedIn_place", "isLocatedIn") //
-			.put("person_knows_person", "knows") //
-			.put("person_likes_comment", "likes") //
-			.put("person_likes_post", "likes") //
-			.put("place_isPartOf_place", "isPartOf") //
-			.put("post_hasCreator_person", "hasCreator") //
-			.put("comment_hasTag_tag", "hasTag") //
-			.put("post_hasTag_tag", "hasTag") //
-			.put("post_isLocatedIn_place", "isLocatedIn") //
-			.put("tagclass_isSubclassOf_tagclass", "isSubclassOf") //
-			.put("tag_hasType_tagclass", "hasType") //
-			.put("organisation_isLocatedIn_place", "isLocatedIn") //
-			.put("person_studyAt_organisation", "studyAt") //
-			.put("person_workAt_organisation", "workAt") //
+			.put("comment_hasCreator_person", "HAS_CREATOR") //
+			.put("comment_isLocatedIn_place", "IS_LOCATED_IN") //
+			.put("comment_replyOf_comment", "REPLY_OF") //
+			.put("comment_replyOf_post", "REPLY_OF") //
+			.put("forum_containerOf_post", "CONTAINER_OF") //
+			.put("forum_hasMember_person", "HAS_MEMBER") //
+			.put("forum_hasModerator_person", "HAS_MODERATOR") //
+			.put("forum_hasTag_tag", "HAS_TAG") //
+			.put("person_hasInterest_tag", "HAS_INTEREST") //
+			.put("person_isLocatedIn_place", "IS_LOCATED_IN") //
+			.put("person_knows_person", "KNOWS") //
+			.put("person_likes_comment", "LIKES") //
+			.put("person_likes_post", "LIKES") //
+			.put("place_isPartOf_place", "IS_PART_OF") //
+			.put("post_hasCreator_person", "HAS_CREATOR") //
+			.put("comment_hasTag_tag", "HAS_TAG") //
+			.put("post_hasTag_tag", "HAS_TAG") //
+			.put("post_isLocatedIn_place", "IS_LOCATED_IN") //
+			.put("tagclass_isSubclassOf_tagclass", "IS_SUBCLASS_OF") //
+			.put("tag_hasType_tagclass", "HAS_TYPE") //
+			.put("organisation_isLocatedIn_place", "IS_LOCATED_IN") //
+			.put("person_studyAt_organisation", "STUDY_OF") //
+			.put("person_workAt_organisation", "WORK_AT") //
 			.build();
 
 	final Map<String, Collection<String>> nodeFilenames = addPreAndPostFix(nodeCsvs);

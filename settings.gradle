@@ -2,7 +2,7 @@ rootProject.name = 'ingraph'
 
 include ':csv-loader'
 include ':compiler'
-//include ':driver'
+include ':driver'
 include ':expression-parser'
 include ':indexer'
 include ':ire'
