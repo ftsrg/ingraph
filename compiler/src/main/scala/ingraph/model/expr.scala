@@ -70,7 +70,7 @@ trait NavigationDescriptor {
   def src: VertexAttribute
   def trg: VertexAttribute
   def edge: AbstractEdgeAttribute
-  def dir: Direction
+  def direction: Direction
 }
 
 /*
@@ -109,7 +109,7 @@ abstract class AbstractEdgeAttribute(override val name: String, val labels: Edge
 case class RichEdgeAttribute(src: VertexAttribute,
                              trg: VertexAttribute,
                              edge: EdgeAttribute,
-                             dir: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous) with NavigationDescriptor
+                             direction: Direction) extends ElementAttribute(edge.name, edge.properties, edge.isAnonymous) with NavigationDescriptor
 
 // also Anonymous*Attribute has names, though generated unique names like _eN to facilitate reading of text representation
 // but they can be identified in a type-safe manner

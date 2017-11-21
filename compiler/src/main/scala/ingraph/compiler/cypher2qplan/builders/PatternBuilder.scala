@@ -68,7 +68,7 @@ object PatternBuilder {
       lastNode = qplan.Expand(src = lastAttr,
         trg = v,
         edge = e,
-        dir = BuilderUtil.convertToDirection(el.getRelationshipPattern),
+        direction = BuilderUtil.convertToDirection(el.getRelationshipPattern),
         child = lastNode)
       lastAttr = v
     }

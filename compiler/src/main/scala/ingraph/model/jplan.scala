@@ -33,16 +33,16 @@ case class GetVertices(v: expr.VertexAttribute) extends LeafJNode {
 case class GetEdges(src: expr.VertexAttribute,
                     trg: expr.VertexAttribute,
                     edge: expr.EdgeAttribute,
-                    dir: expr.Direction)
-  extends LeafJNode with expr.NavigationDescriptor {
+                    directed: Boolean)
+  extends LeafJNode {
   override def output = Seq(src, edge, trg)
 }
 
 case class GetEdgeLists(src: expr.VertexAttribute,
                     trg: expr.VertexAttribute,
                     edge: expr.EdgeListAttribute,
-                    dir: expr.Direction)
-  extends LeafJNode with expr.NavigationDescriptor {
+                    directed: Boolean)
+  extends LeafJNode {
   override def output = Seq(src, edge, trg)
 }
 
