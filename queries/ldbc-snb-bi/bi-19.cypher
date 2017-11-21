@@ -1,15 +1,36 @@
-// Stranger's interaction
+// Q19. Stranger's interaction
+/*
+  :param {
+    date: 19890101,
+    tagClass1: 'MusicalArtist',
+    tagClass2: 'OfficeHolder'
+  }
+*/
+MATCH (person:Person)
+WHERE person.birthday > $date
 MATCH
-  (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(forum1:Forum),
-  (:TagClass)<-[:hasType]-(:Tag)<-[:hasTag]-(forum2:Forum),
-  (forum1)-[:hasMember]->(person:Person)<-[:hasMember]-(forum2),
+// The tags may be attached to the same Forum
+// or they may not be attached to different Forums.
+// --> may be use two MATCH clauses?
+  (:TagClass {name: $tagClass1})<-[:hasType]-(:Tag)<-[:hasTag]-(forum1:Forum),
+  (:TagClass {name: $tagClass2})<-[:hasType]-(:Tag)<-[:hasTag]-(forum2:Forum),
   (forum1)-[:hasMember]->(stranger:Person)<-[:hasMember]-(forum2)
 WHERE NOT (person)-[:knows]-(stranger)
-  AND person.birthday > '1950-01-01T00:00:00.000+0000'
 WITH person, stranger
-MATCH (person)<-[:hasCreator]-(:Message)-[:replyOf]-(comment1:Comment)-[:hasCreator]->(stranger),
-  (stranger)<-[:hasCreator]-(:Message)<-[:replyOf]-(comment2:Comment)-[:hasCreator]->(person)
-WITH person, count(stranger) AS strangersCount, count(comment1) AS comment1Count, count(comment2) AS comment2Count
-RETURN person.id, strangersCount, comment1Count + comment2Count AS interactionCount
-ORDER BY interactionCount DESC, person.id ASC
+OPTIONAL MATCH
+    (person)<-[:hasCreator]-(comment1:Comment)-[:replyOf]->(:Message)-[:hasCreator]->(stranger)
+OPTIONAL MATCH
+  (stranger)<-[:hasCreator]-(comment2:Comment)-[:replyOf]->(:Message)-[:hasCreator]->(person)
+WITH
+  person,
+  count(stranger) AS strangersCount,
+  count(comment1) AS comment1Count,
+  count(comment2) AS comment2Count
+RETURN
+  person.id,
+  strangersCount,
+  comment1Count + comment2Count AS interactionCount
+ORDER BY
+  interactionCount DESC,
+  person.id ASC
 LIMIT 100

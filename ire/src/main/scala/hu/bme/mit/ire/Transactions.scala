@@ -51,7 +51,7 @@ class TransactionFactory(val messageSize: Int = 16) {
       negativeChangeSets.clear()
     }
 
-    def add(pred: String, node: Tuple) = {
+    def add(pred: String, node: Tuple): Unit = {
       if (subscribers.contains(pred)) {
         if (!positiveChangeSets.contains(pred))
           positiveChangeSets(pred) = Vector.empty[Tuple]
@@ -59,7 +59,7 @@ class TransactionFactory(val messageSize: Int = 16) {
       }
     }
 
-    def remove(pred: String, node: Tuple) = {
+    def remove(pred: String, node: Tuple): Unit = {
       // DO NOT usedIDs.remove(subj), there are enough long values to go around, that having to deal with transient IDs
       // is not worth it
       if (subscribers.contains(pred)) {

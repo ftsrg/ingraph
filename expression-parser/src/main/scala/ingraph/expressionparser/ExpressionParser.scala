@@ -1,12 +1,10 @@
 package ingraph.expressionparser
 
 import hu.bme.mit.ire.datatypes.Tuple
-import hu.bme.mit.ire.nodes.unary.aggregation._
 import hu.bme.mit.ire.util.GenericMath
 import ingraph.model.expr.FunctionInvocation
-import org.antlr.v4.runtime.atn.SemanticContext.{AND, OR}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction}
-import org.apache.spark.sql.catalyst.expressions.{Add, Alias, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryExpression, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Pow, Remainder, Subtract, TernaryExpression, UnaryExpression}
+import org.apache.spark.sql.catalyst.analysis.UnresolvedAlias
+import org.apache.spark.sql.catalyst.expressions.{Add, Alias, And, Attribute, BinaryArithmetic, BinaryComparison, BinaryOperator, Divide, EqualTo, Expression, GreaterThan, GreaterThanOrEqual, IsNotNull, IsNull, LessThan, LessThanOrEqual, Literal, Multiply, Not, Or, Pmod, Remainder, Subtract}
 import org.apache.spark.unsafe.types.UTF8String
 
 

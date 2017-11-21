@@ -1,14 +1,10 @@
 package ingraph.model.qplan
 
 import ingraph.model.expr._
-import ingraph.model.qplan.types.TProjectList
+import ingraph.model.expr.types.TProjectList
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-
-package object types {
-  type TProjectList = Seq[NamedExpression]
-}
 
 /**
   * QNodes for building a qplan tree
@@ -63,15 +59,10 @@ case class DuplicateElimination(child: QNode) extends UnaryQNode {}
 
 case class Expand(src: VertexAttribute,
                   trg: VertexAttribute,
-                  edge: EdgeAttribute,
+                  edge: AbstractEdgeAttribute,
                   dir: Direction,
                   child: QNode) extends UnaryQNode with NavigationDescriptor {
   override def output = child.output ++ Seq(edge, trg)
-}
-
-trait ProjectionDescriptor {
-  def projectList: TProjectList
-  protected def projectOutput: Seq[Attribute] = projectList.map(_.toAttribute)
 }
 
 case class Production(child: QNode) extends UnaryQNode {}

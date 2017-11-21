@@ -1,10 +1,8 @@
 package hu.bme.mit.ire.nodes.binary
 
 import hu.bme.mit.ire._
-import hu.bme.mit.ire.datatypes.Slot._
-import hu.bme.mit.ire.datatypes.{Mask, Tuple, _}
+import hu.bme.mit.ire.datatypes.{Mask, Tuple}
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage, TerminatorMessage}
-import hu.bme.mit.ire.util.{BufferMultimap, SizeCounter}
 
 class JoinNode(override val next: (ReteMessage) => Unit,
                override val primaryTupleWidth: Int,

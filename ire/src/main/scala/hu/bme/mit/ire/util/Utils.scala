@@ -1,5 +1,6 @@
 package hu.bme.mit.ire.util
 
+import java.util.Collection
 import java.util.concurrent.atomic.AtomicInteger
 
 import akka.actor.ActorRef
@@ -7,7 +8,6 @@ import hu.bme.mit.ire.datatypes.Tuple
 import hu.bme.mit.ire.messages.{ChangeSet, Primary, ReteMessage, Secondary}
 
 import scala.collection.mutable
-import java.util.Collection
 
 object Utils {
   def nop(id: String, b: Any) = {}

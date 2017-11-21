@@ -1,7 +1,7 @@
 package ingraph.compiler
 
-import ingraph.compiler.cypher2qplan.{QPlanBeautifier, QPlanResolver}
 import ingraph.compiler.cypher2qplan.builders.StatementBuilder
+import ingraph.compiler.cypher2qplan.{QPlanBeautifier, QPlanExpander, QPlanResolver}
 import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.openCypher.Cypher
 
@@ -9,10 +9,11 @@ object CypherToQPlan {
   /**
     * Compile an openCypher query to our QPlan representation.
     *
-    * Compilation has 3 stages:
-    *  1. create a canonical, unresolved query plan
-    *  2. resolve attribute references
-    *  3. beautify the plan by e.g. removing operations that are structurally idempotent, e.g. natural join with Dual
+    * Compilation has 4 stages:
+    *  1. create a canonical, unresolved raw query plan
+    *  2. expand the raw query plan to a full query plan (this can't be skipped)
+    *  3. resolve attribute references
+    *  4. beautify the plan by e.g. removing operations that are structurally idempotent, e.g. natural join with Dual
     * @param cypher The parsed openCypher query. Use CypherParser.parseXXX to create this representation.
     * @param queryName A name to identify the processed query.
     * @return The QPlan representation of the query.
@@ -25,10 +26,11 @@ object CypherToQPlan {
     * Compile an openCypher query to our QPlan representation.
     * This version is for experimenting, testing and debugging purposes only.
     *
-    * Compilation has 3 stages:
-    *  1. create a canonical, unresolved query plan
-    *  2. resolve attribute references
-    *  3. beautify the plan by e.g. removing operations that are structurally idempotent, e.g. natural join with Dual
+    * Compilation has 4 stages:
+    *  1. create a canonical, unresolved raw query plan
+    *  2. expand the raw query plan to a full query plan (this can't be skipped)
+    *  3. resolve attribute references
+    *  4. beautify the plan by e.g. removing operations that are structurally idempotent, e.g. natural join with Dual
     * @param cypher The parsed openCypher query. Use CypherParser.parseXXX to create this representation.
     * @param queryName A name to identify the processed query.
     * @param skipResolve Whether to skip resolving the attribute references or not. For debugging and expreimenting only! Change value at your own risk!
@@ -39,22 +41,24 @@ object CypherToQPlan {
     // compilation
     val stage1 = compileToQPlan(cypher)
 
+    val stage2 = expandQPlan(stage1)
+
     // resolve if requested
-    val stage2 = if (skipResolve) {
-      stage1
+    val stage3 = if (skipResolve) {
+      stage2
     } else {
-      resolveQPlan(stage1)
+      resolveQPlan(stage2)
     }
 
     // beautify if requested
-    val stage3 = if (skipBeautify) {
-      stage2
+    val stage4 = if (skipBeautify) {
+      stage3
     } else {
       // use different beautifiers for resolved and unresolved QPlans
-      if (skipResolve) beautifyUnresolvedQPlan(stage2) else beautifyResolvedQPlan(stage2)
+      if (skipResolve) beautifyUnresolvedQPlan(stage3) else beautifyResolvedQPlan(stage3)
     }
 
-    stage3
+    stage4
   }
 
   /**
@@ -65,6 +69,17 @@ object CypherToQPlan {
     val statement = StatementBuilder.dispatchBuildStatement(cypher.getStatement)
 
     qplan.Production(statement)
+  }
+
+  /**
+    * Given an unresolved QPlan, resolve its attribute-references.
+    *
+    * FIXME: Currently this is unimplemented, the QPlan is returned unchanged.
+    * @param rawQueryPlan
+    * @return
+    */
+  def expandQPlan(rawQueryPlan: qplan.QNode): qplan.QNode = {
+    QPlanExpander.expandQPlan(rawQueryPlan)
   }
 
   /**

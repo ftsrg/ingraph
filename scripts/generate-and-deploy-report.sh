@@ -6,10 +6,11 @@ set -e
 
 pushd .
 
-./gradlew report --stacktrace --quiet
-cd opencypher-report
-make texfot
-cd ..
+# Note: tech report build is outdated, so we are commenting this for now, but keep gh-pages deploy in place
+#./gradlew report --stacktrace --quiet
+#cd opencypher-report
+#make texfot
+#cd ..
 scripts/deploy.sh
 
 popd

@@ -1,7 +1,6 @@
 package hu.bme.mit.ire.util
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 class BufferMultimap[K, V] extends mutable.HashMap[K, mutable.Buffer[V]] {
 

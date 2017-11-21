@@ -1,12 +1,12 @@
 package hu.bme.mit.ire.nodes.unary.aggregation
 
 import hu.bme.mit.ire.SingleForwarder
-import hu.bme.mit.ire.datatypes.{Mask, Tuple, TupleBag}
+import hu.bme.mit.ire.datatypes.{Tuple, TupleBag}
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.unary.UnaryNode
 
 import scala.collection.immutable.VectorBuilder
-import scala.collection.{immutable, mutable}
+import scala.collection.mutable
 
 class AggregationNode(override val next: (ReteMessage) => Unit,
                       mask: Vector[Tuple => Any], functions: () => Vector[StatefulAggregate],

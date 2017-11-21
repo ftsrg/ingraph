@@ -83,13 +83,13 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
-  test("should compile REMOVE that targets labels") {
+  ignore("should compile REMOVE that targets labels") {
     val cypher = CypherParser.parseString("MATCH (n) REMOVE n:Actor:Director")
     val plan = CypherToQPlan.build(cypher)
     println(plan)
   }
 
-  test("should compile SET that targets labels") {
+  ignore("should compile SET that targets labels") {
     val cypher = CypherParser.parseString("MATCH (n) SET n:Actor:Director")
     val plan = CypherToQPlan.build(cypher)
     println(plan)

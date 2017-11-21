@@ -23,15 +23,9 @@ abstract class TrainBenchmarkTest extends FunSuite {
     modelPath("SwitchPosition") -> List("SwitchPosition")
   )
 
-  val relationshipFilenames: Map[String, String] = Map(
-    modelPath("connectsTo") -> "connectsTo",
-    modelPath("entry") -> "entry",
-    modelPath("exit") -> "exit",
-    modelPath("follows") -> "follows",
-    modelPath("monitoredBy") -> "monitoredBy",
-    modelPath("requires") -> "requires",
-    modelPath("target") -> "target"
-  )
+  val relationshipFilenames: Map[String, String] =
+    List("connectsTo", "entry", "exit", "follows", "monitoredBy", "requires", "target").
+    map(x => x -> x).toMap
 
   case class TestCase(name: String)
 

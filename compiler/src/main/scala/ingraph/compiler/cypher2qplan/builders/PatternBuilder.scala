@@ -1,7 +1,7 @@
 package ingraph.compiler.cypher2qplan.builders
 
 import ingraph.compiler.cypher2qplan.util.BuilderUtil
-import ingraph.model.{expr, qplan}
+import ingraph.model.qplan
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._

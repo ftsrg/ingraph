@@ -1,7 +1,6 @@
 package ingraph.tests
 
-import org.scalatest.FunSuite
-import org.scalatest.Ignore
+import org.scalatest.{FunSuite, Ignore}
 
 import scala.io.Source
 

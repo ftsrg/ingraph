@@ -1,9 +1,8 @@
 package ingraph.driver;
 
-import org.neo4j.driver.v1.AuthToken;
-
 import ingraph.driver.ingraph.IngraphDriver;
 import ingraph.driver.neo4j.Neo4jDriver;
+import org.neo4j.driver.v1.AuthToken;
 
 public class CypherDriverFactory {
 

@@ -3,12 +3,10 @@ import java.nio.charset.Charset
 
 import com.google.common.io.Files
 import org.apache.commons.exec.{CommandLine, DefaultExecutor}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedRelation}
-import org.apache.spark.sql.catalyst.expressions.Attribute
+import org.apache.spark.sql.catalyst.analysis.UnresolvedRelation
 import org.apache.spark.sql.catalyst.plans.logical._
 import org.apache.spark.sql.execution.SparkSqlParser
 import org.apache.spark.sql.internal.SQLConf
-import org.apache.spark.sql.sources.EqualTo
 
 object TexConverter {
 

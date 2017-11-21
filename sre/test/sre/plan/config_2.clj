@@ -47,5 +47,3 @@
              [(variables e "1->2" w 2)])))
 
 (def cost-calculator default-cost-calculator)
-
-(def weight-calculator default-weight-calculator)

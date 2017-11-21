@@ -1,9 +1,8 @@
 package ingraph.ire
 
 import org.neo4j.driver.internal.{InternalNode, InternalRelationship}
-import org.neo4j.driver.internal.value.InternalValue
-import org.neo4j.driver.v1.{Value, Values}
-import org.scalatest.{FlatSpec, WordSpec}
+import org.neo4j.driver.v1.Values
+import org.scalatest.WordSpec
 
 import scala.collection.JavaConverters._
 class IndexerTest extends WordSpec {

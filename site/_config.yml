@@ -2,3 +2,6 @@ title: ingraph
 baseurl: /ingraph
 markdown: kramdown
 
+plugins:
+  - jekyll-redirect-from
+

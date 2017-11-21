@@ -2,7 +2,6 @@ package ingraph.compiler.cypher2qplan.builders
 
 import java.util
 
-import ingraph.model.expr.ElementAttribute
 import ingraph.model.misc.Function
 import ingraph.model.{expr, qplan}
 import org.apache.spark.sql.catalyst.analysis.UnresolvedFunction

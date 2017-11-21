@@ -1,12 +1,12 @@
 package ingraph.compiler.cypher2qplan
 
-import ingraph.model.{expr, qplan}
-import ingraph.model.misc
-import ingraph.model.qplan.QNode
+import ingraph.model.expr.ProjectionDescriptor
+import ingraph.model.qplan.{QNode, UnaryQNode}
+import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedFunction, UnresolvedStar}
 import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
-import org.apache.spark.sql.catalyst.{expressions => cExpr}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
+import org.apache.spark.sql.catalyst.{expressions => cExpr}
 
 import scala.collection.mutable.ListBuffer
 
@@ -21,7 +21,6 @@ object QPlanResolver {
       case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
       case _ => None
     }
-    //println(elements)
 
     beautiful.asInstanceOf[qplan.QNode]
   }
@@ -88,7 +87,7 @@ object QPlanResolver {
     * @param projectList
     * @return
     */
-  protected def projectionResolveHelper(projectList: Seq[NamedExpression], child: QNode): qplan.UnaryQNode with qplan.ProjectionDescriptor = {
+  protected def projectionResolveHelper(projectList: Seq[NamedExpression], child: QNode): UnaryQNode with ProjectionDescriptor = {
     /**
       * Returns true iff e is an expression having a call to an aggregation function at its top-level.
       * @param e

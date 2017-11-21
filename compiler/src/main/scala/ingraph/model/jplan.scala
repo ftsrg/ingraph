@@ -1,7 +1,8 @@
 package ingraph.model.jplan
 
 import ingraph.model.expr
-import ingraph.model.expr.{EdgeAttribute, VertexLabelUpdate}
+import ingraph.model.expr.types.TProjectList
+import ingraph.model.expr.{EdgeAttribute, ProjectionDescriptor, VertexLabelUpdate}
 import ingraph.model.treenodes._
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression, SortOrder}
 import org.apache.spark.sql.catalyst.plans.logical._
@@ -34,7 +35,15 @@ case class GetEdges(src: expr.VertexAttribute,
                     edge: expr.EdgeAttribute,
                     dir: expr.Direction)
   extends LeafJNode with expr.NavigationDescriptor {
-  override def output = Seq(src, trg, edge)
+  override def output = Seq(src, edge, trg)
+}
+
+case class GetEdgeLists(src: expr.VertexAttribute,
+                    trg: expr.VertexAttribute,
+                    edge: expr.EdgeListAttribute,
+                    dir: expr.Direction)
+  extends LeafJNode with expr.NavigationDescriptor {
+  override def output = Seq(src, edge, trg)
 }
 
 case class Dual() extends LeafJNode {
@@ -49,9 +58,15 @@ case class DuplicateElimination(child: JNode) extends UnaryJNode {}
 
 case class Production(child: JNode) extends UnaryJNode {}
 
-case class Projection(projectList: Seq[NamedExpression],
-                      child: JNode) extends UnaryJNode {
-  override def output = projectList.map(_.toAttribute)
+abstract class AbstractProjection(projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
+  override def output = projectOutput
+}
+
+case class UnresolvedProjection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
+case class Projection(override val projectList: TProjectList, override val child: JNode) extends AbstractProjection(projectList, child)
+
+case class Grouping(aggregationCriteria: Seq[Expression], projectList: TProjectList, child: JNode) extends UnaryJNode with ProjectionDescriptor {
+  override def output = projectOutput
 }
 
 case class Selection(condition: Expression,

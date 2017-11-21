@@ -22,7 +22,8 @@ install:
   - ./gradlew assemble testClasses --stacktrace
 script:
   # only build and deploy the results if the build is performed on the master branch
-#  - if scripts/travis-tex-run-required.sh ; then scripts/generate-and-deploy-report.sh; fi
+  # Note: actual tex generation is commented out in generate-and-deploy-report.sh
+  - if scripts/travis-tex-run-required.sh ; then scripts/generate-and-deploy-report.sh; fi
   - ./gradlew test --continue --stacktrace
 notifications:
   slack:

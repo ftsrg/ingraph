@@ -64,16 +64,14 @@ object QPlanBeautifier {
     */
   protected def checkForAntijoin(topLevelExpression: cExpr.Expression, filter: qplan.QNode): Boolean = {
     var check1 = true
-    // traverse topLevelExpression to see if it is composed solely of AND's of IsNotNull({NAmed,Anonymous}{Edge,Vertex}Attribute) constraints
+    // traverse topLevelExpression to see if it is composed solely of AND's of IsNotNull({Edge,Vertex}Attribute) constraints
     val exprQueue = mutable.Queue.apply(topLevelExpression)
     val attributesOfCondition = ListBuffer.empty[cExpr.Expression]
     while (check1 && exprQueue.nonEmpty) {
       exprQueue.dequeue() match {
         case cExpr.And(c1, c2) => exprQueue.enqueue(c1, c2)
-        case cExpr.IsNotNull(expr.AnonymousEdgeAttribute(n, l, p)) => attributesOfCondition.append(expr.AnonymousEdgeAttribute(n, l, p))
-        case cExpr.IsNotNull(expr.NamedEdgeAttribute(n, l, p)) => attributesOfCondition.append(expr.NamedEdgeAttribute(n, l, p))
-        case cExpr.IsNotNull(expr.AnonymousVertexAttribute(n, l, p)) => attributesOfCondition.append(expr.AnonymousVertexAttribute(n, l, p))
-        case cExpr.IsNotNull(expr.NamedVertexAttribute(n, l, p)) => attributesOfCondition.append(expr.NamedVertexAttribute(n, l, p))
+        case cExpr.IsNotNull(expr.EdgeAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.EdgeAttribute(n, l, p, ia))
+        case cExpr.IsNotNull(expr.VertexAttribute(n, l, p, ia)) => attributesOfCondition.append(expr.VertexAttribute(n, l, p, ia))
         case cExpr.IsNotNull(UnresolvedAttribute(nameParts)) => attributesOfCondition.append(UnresolvedAttribute(nameParts))
         case _ => check1 = false
       }

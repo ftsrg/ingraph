@@ -1,9 +1,8 @@
 package ingraph.compiler.qplan2jplan
 
-import ingraph.model.fplan._
 import ingraph.model.expr.PropertyAttribute
-import ingraph.model.jplan
-import ingraph.model.fplan
+import ingraph.model.fplan._
+import ingraph.model.{fplan, jplan}
 import ingraph.model.jplan.JNode
 import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedExpression}
 
@@ -14,7 +13,7 @@ object SchemaInferencer {
 
     inode match {
       // leaf
-      case o: jplan.GetEdges => fplan.GetEdges(ea, o)
+      case o: jplan.GetEdges    => fplan.GetEdges(ea, o)
       case o: jplan.GetVertices => fplan.GetVertices(ea, o)
       case o: jplan.Dual        =>
         if (ea.nonEmpty) {
@@ -49,7 +48,7 @@ object SchemaInferencer {
         )
       case j: jplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
-        val eaRight = propagate(ea, j.right.output).filter(!eaLeft.contains(_))
+        val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.name).contains(x.name))
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
@@ -71,7 +70,10 @@ object SchemaInferencer {
     */
   def propagate(extraAttributes: Seq[NamedExpression], inputSchema: Seq[NamedExpression]): Seq[NamedExpression] = {
     extraAttributes
-      .flatMap {case a: PropertyAttribute => Some(a)}
+      .flatMap {
+        case a: PropertyAttribute => Some(a)
+        case _ => None
+      }
       .filter(a => inputSchema.contains(a.elementAttribute))
 
     // !inputSchema.contains(a) // do we need this?

@@ -1,8 +1,8 @@
 package neo4j.driver.reactive.data;
 
-import java.util.stream.Collectors;
-
 import com.google.common.collect.Multiset;
+
+import java.util.stream.Collectors;
 
 public class ChangeSet<T> {
 

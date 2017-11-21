@@ -4,17 +4,6 @@ import java.io.FileInputStream
 import java.util
 import java.util.Collections
 
-import org.neo4j.driver.v1.Record
-import org.objenesis.strategy.StdInstantiatorStrategy
-import org.supercsv.prefs.CsvPreference
-import com.esotericsoftware.kryo.Kryo
-import com.esotericsoftware.kryo.io.Input
-
-import de.javakaffee.kryoserializers.UnmodifiableCollectionsSerializer
-import ingraph.driver.data.IngraphDeltaHandler
-import ingraph.driver.ingraph.IngraphDriver
-import ingraph.tests.LdbcSnbTest
-
 class LdbcSnbDriverTest extends LdbcSnbTest {
 
   override def runQuery(workload: String, queryNumber: Int, queryName: String, querySpecification: String) {
@@ -36,8 +25,6 @@ class LdbcSnbDriverTest extends LdbcSnbTest {
     kryo.addDefaultSerializer(
         Collections.unmodifiableCollection( Collections.EMPTY_LIST ).getClass,
         classOf[UnmodifiableCollectionsSerializer])
-
-    import scala.collection.JavaConverters._
 
     queryHandler.registerDeltaHandler(new AssertionHandler(queryHandler.adapter.resultNames()))
     queryHandler.readCsv(nodeFilenames.mapValues(_.asJava).asJava, relationshipFilenames.asJava, csvPreference)
