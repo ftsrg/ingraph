@@ -64,6 +64,17 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result().size == 1)
   }
 
+  ignore("create a single edges works") {
+    val indexer = new Indexer()
+
+    val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)"
+    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
+
+    assert(whereIsAdapter.result().size == 1)
+  }
+
   ignore("create two edges works") {
     val indexer = new Indexer()
 
