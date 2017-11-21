@@ -53,6 +53,18 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
+  test("should compile CREATE with a single edges") {
+    val cypher = CypherParser.parseString("CREATE (n:Person)-[:LIVES]->(c:City)")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
+  test("should compile CREATE with two edges") {
+    val cypher = CypherParser.parseString("CREATE (n:Person)-[:LIVES]->(c:City)-[:IS_LOCATED_IN]->(ctr:Country)")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
   test("should compile CREATE with property map, string literals only") {
     val cypher = CypherParser.parseString("CREATE (n)-[:KNOWS {since: 'Yesterday'} ]->(:Person {name: 'A'} )")
     val plan = CypherToQPlan.build(cypher)
