@@ -2,83 +2,83 @@
   "version": "1.0",
   "abstractionLevel": {
     "abstractionNodes": [{
-      "types": ["route"],
+      "types": ["Route"],
       "attributes": ["id", "active"]
     }, {
-      "types": ["region"],
+      "types": ["Region"],
       "attributes": ["id"]
     }, {
-      "types": ["segment"],
+      "types": ["Segment"],
       "attributes": ["id", "length"]
     }, {
-      "types": ["sensor"],
+      "types": ["Sensor"],
       "attributes": ["id"]
     }, {
-      "types": ["semaphore"],
+      "types": ["Semaphore"],
       "attributes": ["id", "signal"]
     }, {
-      "types": ["switch"],
+      "types": ["Switch"],
       "attributes": ["id", "currentPosition"]
     }, {
-      "types": ["switchposition"],
+      "types": ["SwitchPosition"],
       "attributes": ["id", "position"]
     }, {
-      "types": ["trackelement"],
+      "types": ["TrackElement"],
       "attributes": ["id"]
     }],
     "abstractionEdges": [{
       "types": ["entry"],
       "attributes": [],
-      "sourceType": ["route"],
-      "destinationType": ["semaphore"],
+      "sourceType": ["Route"],
+      "destinationType": ["Semaphore"],
       "directed": true
     }, {
       "types": ["exit"],
       "attributes": [],
-      "sourceType": ["route"],
-      "destinationType": ["semaphore"],
+      "sourceType": ["Route"],
+      "destinationType": ["Semaphore"],
       "directed": true
     }, {
       "types": ["requires"],
       "attributes": [],
-      "sourceType": ["route"],
-      "destinationType": ["sensor"],
+      "sourceType": ["Route"],
+      "destinationType": ["Sensor"],
       "directed": true
     }, {
       "types": ["sensors"],
       "attributes": [],
-      "sourceType": ["region"],
-      "destinationType": ["sensor"],
+      "sourceType": ["Region"],
+      "destinationType": ["Sensor"],
       "directed": true
     }, {
       "types": ["connectsTo"],
       "attributes": [],
-      "sourceType": ["trackelement"],
-      "destinationType": ["trackelement"],
+      "sourceType": ["TrackElement"],
+      "destinationType": ["TrackElement"],
       "directed": true
     }, {
       "types": ["monitoredBy"],
       "attributes": [],
-      "sourceType": ["trackelement"],
-      "destinationType": ["sensor"],
+      "sourceType": ["TrackElement"],
+      "destinationType": ["Sensor"],
       "directed": true
     }, {
       "types": ["follows"],
       "attributes": [],
-      "sourceType": ["route"],
-      "destinationType": ["switchposition"],
+      "sourceType": ["Route"],
+      "destinationType": ["SwitchPosition"],
       "directed": true
     }, {
       "types": ["target"],
       "attributes": [],
-      "sourceType": ["switchposition"],
-      "destinationType": ["switch"],
+      "sourceType": ["SwitchPosition"],
+      "destinationType": ["Switch"],
       "directed": true
     }, {
       "types": ["elements"],
       "attributes": [],
-      "sourceType": ["ragion"],
-      "destinationType": ["trackelement"],
+      "sourceType": ["Region"],
+      "destinationType": ["TrackElement"],
       "directed": true
     }]
   },
@@ -88,7 +88,7 @@
       "backendSystem" : "RELATIONAL"
     },
     "implementationNodes": [{
-      "types": ["route"],
+      "types": ["Route"],
       "tableName": "Route",
       "id": [{
         "columnName": "id",
@@ -110,7 +110,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["region"],
+      "types": ["Region"],
       "tableName": "Region",
       "id": [{
         "columnName": "id",
@@ -120,7 +120,7 @@
       "attributes": [],
       "restrictions": []
     }, {
-      "types": ["segment"],
+      "types": ["Segment"],
       "tableName": "Segment",
       "id": [{
         "columnName": "id",
@@ -134,7 +134,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["sensor"],
+      "types": ["Sensor"],
       "tableName": "Sensor",
       "id": [{
         "columnName": "id",
@@ -148,7 +148,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["semaphore"],
+      "types": ["Semaphore"],
       "tableName": "Semaphore",
       "id": [{
         "columnName": "id",
@@ -166,7 +166,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["switch"],
+      "types": ["Switch"],
       "tableName": "Switch",
       "id": [{
         "columnName": "id",
@@ -180,7 +180,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["switchposition"],
+      "types": ["SwitchPosition"],
       "tableName": "SwitchPosition",
       "id": [{
         "columnName": "id",
@@ -202,7 +202,7 @@
       }],
       "restrictions": []
     }, {
-      "types": ["trackelement"],
+      "types": ["TrackElement"],
       "tableName": "TrackElement",
       "id": [{
         "columnName": "id",
