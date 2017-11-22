@@ -14,7 +14,7 @@ import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
 import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
 import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode, _}
 import ingraph.model.jplan
-import org.apache.spark.sql.catalyst.expressions.{Ascending, Expression}
+import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
 
 import scala.collection.mutable
 
@@ -188,33 +188,47 @@ object EngineFactory {
       newLocal(Props(new SelectionNode(expr.child, allDifferent)))
     }
 
+    private def vertexCreator(v: VertexAttribute, lookup: Map[String, Int]): (Tuple) => IngraphVertex = {
+      val props: Tuple => Map[String, Any] = (t: Tuple) =>
+        v.properties.map { case (name, expr) =>
+          name -> ExpressionParser.parseValue(expr, lookup)(t)}
+      (t: Tuple) =>
+        indexer.addVertex(IngraphVertex(
+          indexer.newId(), v.labels.vertexLabels, props(t)))
+    }
+
+    private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]): (Tuple) => Long = {
+      lookup.get(v.name) match {
+        case Some(index: Int) => (t: Tuple) => t(index).asInstanceOf[Long]
+        case None => (t: Tuple) => vertexCreator(v, lookup)(t).id
+      }
+    }
+
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
-      val creations: Seq[(Tuple) => IngraphElement] = for (element <- op.jnode.attributes)
-      //yield element asInstanceOf[ExpressionVariable].getExpression match {
+      val creatorDefs: Seq[Attribute] = op.jnode.attributes
+      val alreadyCreated = new mutable.HashMap[Attribute, Int]()
+      val creatorFunctions: Seq[(Tuple) => IngraphElement] = for (element <- creatorDefs)
         yield element match {
           case n: NavigationDescriptor =>
-            // you got to love the Law of Demeter
+            // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
-            val sourceIndex = lookup(n.src.name)
-            val targetIndex = lookup(n.trg.name)
+            val sourceIndex = createOrLookup(n.src, lookup)
+            val targetIndex = createOrLookup(n.trg, lookup)
             (t: Tuple) => {
               indexer.addEdge(
                 indexer.newId(),
-                t(sourceIndex).asInstanceOf[Long],
-                t(targetIndex).asInstanceOf[Long],
+                sourceIndex(t),
+                targetIndex(t),
                 demeter)
             }
-          case v: Expression =>
-            val variable = v.toAttribute.asInstanceOf[VertexAttribute]
-            (t: Tuple) =>
-              indexer.addVertex(IngraphVertex(
-                indexer.newId(), variable.labels.vertexLabels))
+          case variable: VertexAttribute =>
+            (t: Tuple) => vertexCreator(variable, lookup)(t)
         }
 
       (m: ReteMessage) => {
         m match {
-          case cs: ChangeSet => creations.foreach(r => cs.positive.foreach(r))
+          case cs: ChangeSet => creatorFunctions.foreach(r => cs.positive.foreach(r))
           case _ =>
         }
         expr.child(m)

@@ -8,9 +8,9 @@ class DataManipulationTest extends FunSuite {
   def initializeIndexer(): Indexer = {
     val indexer = new Indexer()
 
-    val v1 = IngraphVertex(1L, Set("Train"), Map[String, Value]())
-    val v2 = IngraphVertex(2L, Set("Segment"), Map[String, Value]())
-    val v3 = IngraphVertex(3L, Set("Segment"), Map[String, Value]())
+    val v1 = IngraphVertex(1L, Set("Train"), Map[String, Any]("power" -> "poweeeer"))
+    val v2 = IngraphVertex(2L, Set("Segment"), Map[String, Any]())
+    val v3 = IngraphVertex(3L, Set("Segment"), Map[String, Any]())
 
     indexer.addVertex(v1)
     indexer.addVertex(v2)
@@ -53,26 +53,38 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result() == List())
   }
 
-  test("create vertex works") {
-    val indexer = new Indexer()
+  test("create constant vertex works") {
+    val indexer = initializeIndexer()
 
-    val oneOff = "CREATE (t:Train)"
+    val oneOff = "CREATE (e: Engine {power: 'poweeeer'})"// CREATE (e:Engine {power: t.power + '^2'})"
     new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
-    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
 
-    assert(whereIsAdapter.result().size == 1)
+    assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, "poweeeer")))
   }
 
-  ignore("create a single edges works") {
+  test("create matched vertex works") {
+    val indexer = initializeIndexer()
+
+    val oneOff = "MATCH (t: Train) WHERE t.power = t.power CREATE (e: Engine {power: t.power})"
+    new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
+    val whereIsTrain = "MATCH (e: Engine) RETURN e, e.power"// WHERE e.power != 1 RETURN e, e.power"
+    val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
+
+    assert(whereIsAdapter.result() == Seq(Vector(-4964420948893066024L, "poweeeer")))
+  }
+
+
+
+  test("create constant single edges works") {
     val indexer = new Indexer()
 
     val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)"
     new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
-    val whereIsTrain = "MATCH (t:Train) RETURN t"
+    val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN t, seg1"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
-
-    assert(whereIsAdapter.result().size == 1)
+    assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
   }
 
   ignore("create two edges works") {
