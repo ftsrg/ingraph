@@ -1,9 +1,9 @@
 package ingraph.sandbox
 
-import ingraph.compiler.{CypherToQPlan, FPlanParser}
+import ingraph.compiler.CypherToQPlan
 import ingraph.compiler.cypher2qplan.{CypherParser, QPlanResolver}
 import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
-import ingraph.model.fplan.FNode
+import ingraph.model.fplan.{FNode, LeafFNode}
 import ingraph.model.jplan.JNode
 import ingraph.model.qplan.QNode
 import org.scalatest.FunSuite
@@ -15,16 +15,16 @@ class TckTest extends FunSuite {
   case class CompilationStages(
     unresolvedQPlan: QNode,
     resolvedQPlan: QNode,
-    jPlan: JNode,
-    fPlan: FNode
+    jplan: JNode,
+    fplan: FNode
   )
 
   def compile(query: String): CompilationStages = {
     val cypher = CypherParser.parseString(query)
     val unresolvedQPlan = CypherToQPlan.build(cypher)
     val resolvedQPlan = QPlanResolver.resolveQPlan(unresolvedQPlan)
-    val jPlan = QPlanToJPlan.transform(resolvedQPlan)
-    val fPlan = SchemaInferencer.transform(jPlan)
+    val jplan = QPlanToJPlan.transform(resolvedQPlan)
+    val fplan = SchemaInferencer.transform(jplan)
 
     if (log) {
       println("=============================================================================")
@@ -38,13 +38,13 @@ class TckTest extends FunSuite {
       println(resolvedQPlan)
       println("-----------------------------------------------------------------------------")
       println("JPlan:")
-      println(jPlan)
+      println(jplan)
       println("-----------------------------------------------------------------------------")
       println("FPlan:")
-//      println(fPlan)
+//      println(fplan)
     }
 
-    return CompilationStages(unresolvedQPlan, resolvedQPlan, jPlan, fPlan)
+    return CompilationStages(unresolvedQPlan, resolvedQPlan, jplan, fplan)
   }
 
   test("CREATE") {
@@ -59,20 +59,27 @@ class TckTest extends FunSuite {
     )
   }
 
+  def getLeafNodes(plan: FNode): Seq[FNode] = {
+    if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
+    return plan.children.flatMap(x => getLeafNodes(x))
+  }
+
   test("Filtering for vertices in MATCH") {
     val stages = compile(
       """MATCH (n {name: 'John'})
         |RETURN n
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
-  test("Filtering for edges in MATCH") {
+  ignore("Filtering for edges in MATCH") {
     val stages = compile(
       """MATCH (n)-[:REL {prop: 'value'}]->(m)
         |RETURN n, m
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
   test("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
@@ -90,6 +97,7 @@ class TckTest extends FunSuite {
         |RETURN a
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
   test("TCK test: Filter based on rel prop name") {
@@ -99,6 +107,7 @@ class TckTest extends FunSuite {
         |RETURN a
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
   test("TCK test: Get neighbours") {
@@ -107,6 +116,7 @@ class TckTest extends FunSuite {
         |RETURN n1, n2
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
   test("TCK test: Get two related nodes") {
@@ -115,6 +125,7 @@ class TckTest extends FunSuite {
         |RETURN x
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
   test("TCK test: Get related to related to") {
@@ -123,6 +134,7 @@ class TckTest extends FunSuite {
         |RETURN b
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
   test("TCK test: Handle comparison between node properties") {
@@ -132,6 +144,7 @@ class TckTest extends FunSuite {
         |RETURN n, x
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
   }
 
   test("TCK test: Handle OR in the WHERE clause") {
@@ -141,6 +154,7 @@ class TckTest extends FunSuite {
         |RETURN n
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
   }
 
   test("TCK test: Return relationships by collecting them as a list") {
@@ -149,6 +163,7 @@ class TckTest extends FunSuite {
         |RETURN r
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
 //  test("TCK test: ") {
