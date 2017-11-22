@@ -30,10 +30,18 @@ object QPlanExpander {
   val qplanExpander: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Nullary
     case qplan.GetVertices(VertexAttribute(name, labels, properties, isAnonymous)) if properties.nonEmpty => {
-      val condition: Expression = properties.map( (p) => cExpr.EqualTo(UnresolvedAttribute(Seq(name, p._1)), p._2) )
-                                            .foldLeft[Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
+      val condition: Expression = propertyMapToCondition(properties, name)
       qplan.Selection(condition, qplan.GetVertices(VertexAttribute(name, labels, properties, isAnonymous)))
+    }
+    case qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child) if edge.properties.nonEmpty || trgVertexAttribute.properties.nonEmpty => {
+      val selectionOnEdge = qplan.Selection(propertyMapToCondition(edge.properties, edge.name), qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child))
+      val selectionOnTargetVertex = qplan.Selection(propertyMapToCondition(trgVertexAttribute.properties, trgVertexAttribute.name), selectionOnEdge)
+      selectionOnTargetVertex
     }
   }
 
+  def propertyMapToCondition(properties: expr.types.TPropertyMap, baseName: String): Expression = {
+    properties.map( (p) => cExpr.EqualTo(UnresolvedAttribute(Seq(baseName, p._1)), p._2) )
+              .foldLeft[Expression]( cExpr.Literal(true) )( (b, a) => cExpr.And(b, a) )
+  }
 }
