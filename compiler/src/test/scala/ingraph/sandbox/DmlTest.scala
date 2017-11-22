@@ -53,6 +53,18 @@ class DmlTest extends FunSuite {
     println(plan)
   }
 
+  test("should compile vanilla CREATE with attributes") {
+    val cypher = CypherParser.parseString("CREATE (p:Person {name: 'Batman'})")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
+  test("should compile vanilla CREATE with attributes 2") {
+    val cypher = CypherParser.parseString("CREATE (t:Train {a: 1})")
+    val plan = CypherToQPlan.build(cypher)
+    println(plan)
+  }
+
   test("should compile CREATE with a single edges") {
     val cypher = CypherParser.parseString("CREATE (n:Person)-[:LIVES]->(c:City)")
     val plan = CypherToQPlan.build(cypher)

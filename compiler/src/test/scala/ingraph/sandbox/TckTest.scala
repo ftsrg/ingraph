@@ -47,6 +47,10 @@ class TckTest extends FunSuite {
     return CompilationStages(unresolvedQPlan, resolvedQPlan, jPlan, fPlan)
   }
 
+  test("CREATE") {
+    val stages = compile("""CREATE (t:Train {a: 1})""")
+  }
+
   test("Hello World") {
     val stages = compile(
       """MATCH (n)

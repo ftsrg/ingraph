@@ -7,19 +7,19 @@ import org.scalatest.FunSuite
 import scala.collection.JavaConverters._
 
 class RandomTest extends FunSuite {
-  ignore("Optional match returns Vector(null) on empty input") {
+  test("Optional match returns Vector(null) on empty input") {
     val query = "OPTIONAL MATCH (n) RETURN n"
-    val adapter = new IngraphIncrementalAdapter(query, "opt")
+    val adapter = new IngraphIncrementalAdapter(query)
     assert(adapter.engine.getResults() == List(Vector(null)))
   }
 
   ignore("Constant returns work") {
     val query = "RETURN 1 + 1"
-    val adapter = new IngraphIncrementalAdapter(query, "opt")
+    val adapter = new IngraphIncrementalAdapter(query)
     assert(adapter.engine.getResults() == List(Vector(2 )))
   }
 
-  ignore("Vertices can be removed from indexer") {
+  test("Vertices can be removed from indexer") {
     val indexer = new Indexer()
     val query = "MATCH (n:Person) RETURN n"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)
@@ -33,17 +33,17 @@ class RandomTest extends FunSuite {
     assert(adapter.result().toSet == Set(Vector(2), Vector(1)))
   }
 
-  ignore("Edges can be removed from indexer") {
+  test("Edges can be removed from indexer") {
     val indexer = new Indexer()
-    val query = "MATCH (n:Person) -[:Knows]-> (m:Person) RETURN m"
+    val query = "MATCH (n:Person)-[:KNOWS]->(m:Person) RETURN m"
     val adapter = new IngraphIncrementalAdapter(query, "remove", indexer)
     indexer.addVertex(new InternalNode(1L, List("Person").asJava, Map[String, Value]().asJava))
     indexer.addVertex(new InternalNode(2L, List("Person").asJava, Map[String, Value]().asJava))
-    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
+    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "KNOWS"))
     assert(adapter.result().toSet == Set(Vector(2)))
     indexer.removeEdgeById(3L)
     assert(adapter.result().toSet == Set())
-    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "Knows"))
+    indexer.addEdge(new InternalRelationship(3L, 1L, 2L, "KNOWS"))
     assert(adapter.result().toSet == Set(Vector(2)))
   }
 

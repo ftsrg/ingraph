@@ -7,7 +7,7 @@ import ingraph.compiler.FPlanParser
 
 class IngraphIncrementalAdapter(
     override val querySpecification: String,
-    override val queryName: String,
+    override val queryName: String = "anonymous",
     override val indexer: Indexer = new Indexer()
   ) extends AbstractIngraphAdapter {
 
