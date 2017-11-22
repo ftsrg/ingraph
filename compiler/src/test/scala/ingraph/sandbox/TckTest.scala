@@ -73,7 +73,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
-  ignore("Filtering for edges in MATCH") {
+  test("Filtering for edges in MATCH") {
     val stages = compile(
       """MATCH (n)-[:REL {prop: 'value'}]->(m)
         |RETURN n, m
