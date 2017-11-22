@@ -38,6 +38,8 @@ object ExpressionParser {
           case _: And => (t: Tuple) => left(t) && right(t)
           case _: Or => (t: Tuple) => left(t) || right(t)
         }
+      case l: Literal =>
+        (t: Tuple) => l.value.asInstanceOf[Boolean]
     }
 
   private def parseAttribute(variable: Attribute, tuple: Tuple, lookup: Map[String, Integer]): Any =

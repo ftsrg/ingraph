@@ -45,6 +45,7 @@ object ExpressionBuilder {
       //TODO: case e: oc.ExpressionList => buildExpressionAux(e, joins)
       //TODO: case e: oc.IndexExpression => buildExpressionAux(e, joins)
       case e: oc.NullConstant => cExpr.Literal(null)
+      case e: oc.BoolConstant => LiteralBuilder.buildBoolLiteral(e)
 
       case e => throw new RuntimeException("TODO: " + s"Unhandled parameter types: ${util.Arrays.asList[Object](e)}")
     }

@@ -47,4 +47,12 @@ class RandomTest extends FunSuite {
     assert(adapter.result().toSet == Set(Vector(2)))
   }
 
+  test("Boolean literals work") {
+    val indexer = new Indexer()
+    indexer.addVertex(IngraphVertex(5L, Set("P")))
+    val query = "MATCH (n:P) WHERE true RETURN n"
+    val adapter = new IngraphIncrementalAdapter(query, "", indexer)
+    assert(adapter.result().toSet == Set(Vector(5)))
+  }
+
 }

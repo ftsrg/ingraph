@@ -3,6 +3,7 @@ package ingraph.compiler.cypher2qplan.builders
 import ingraph.compiler.cypher2qplan.util.StringUtil
 import ingraph.model.expr.{types => eTypes}
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
+import org.slizaa.neo4j.opencypher.openCypher.BoolConstant
 import org.slizaa.neo4j.opencypher.{openCypher => oc}
 
 import scala.collection.JavaConverters._
@@ -44,6 +45,8 @@ object LiteralBuilder {
   def buildStringLiteral(e: oc.StringConstant): cExpr.Literal = {
     cExpr.Literal(StringUtil.unescapeCypherString(e.getValue))
   }
+
+  def buildBoolLiteral(e: BoolConstant): cExpr.Literal = cExpr.Literal(e.getValue.toLowerCase.toBoolean)
 
   def buildProperties(p: oc.Properties): eTypes.TPropertyMap = {
     p match {
