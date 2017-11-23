@@ -11,7 +11,7 @@ import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
 import ingraph.model.expr.types.{EdgeLabel, VertexLabel}
-import ingraph.model.expr.{EdgeAttribute, NavigationDescriptor, VertexAttribute}
+import ingraph.model.expr._
 import ingraph.model.fplan.{FNode, SchemaToMap, UnaryFNode, _}
 import ingraph.model.jplan
 import org.apache.spark.sql.catalyst.expressions.{Ascending, Attribute, Expression}
@@ -188,13 +188,17 @@ object EngineFactory {
       newLocal(Props(new SelectionNode(expr.child, allDifferent)))
     }
 
+    private def propsParser(lookup: Map[String, Int], v: ElementAttribute): Tuple => Map[String, Any] = {
+      val parsed = v.properties.map { case (name, expr) =>
+        name -> ExpressionParser.parseValue(expr, lookup)
+      }
+      (t: Tuple) => parsed.mapValues(_(t))
+    }
+
     private def vertexCreator(v: VertexAttribute, lookup: Map[String, Int]): (Tuple) => IngraphVertex = {
-      val props: Tuple => Map[String, Any] = (t: Tuple) =>
-        v.properties.map { case (name, expr) =>
-          name -> ExpressionParser.parseValue(expr, lookup)(t)}
+      val props = propsParser(lookup, v)
       (t: Tuple) =>
-        indexer.addVertex(IngraphVertex(
-          indexer.newId(), v.labels.vertexLabels, props(t)))
+        indexer.addVertex(IngraphVertex(indexer.newId(), v.labels.vertexLabels, props(t)))
     }
 
     type AlreadyCreated = mutable.HashMap[Attribute, Long]
@@ -218,17 +222,20 @@ object EngineFactory {
       val creatorDefs: Seq[Attribute] = op.jnode.attributes
       val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
-          case n: NavigationDescriptor =>
+          case n: RichEdgeAttribute =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
             val sourceIndex = createOrLookup(n.src, lookup)
             val targetIndex = createOrLookup(n.trg, lookup)
+            val props = propsParser(lookup, n)
             (t: Tuple, m: AlreadyCreated) => {
               indexer.addEdge(
                 indexer.newId(),
                 sourceIndex(t, m),
                 targetIndex(t, m),
-                demeter)
+                demeter,
+                props(t)
+              )
             }
           case variable: VertexAttribute =>
             val create = vertexCreator(variable, lookup)

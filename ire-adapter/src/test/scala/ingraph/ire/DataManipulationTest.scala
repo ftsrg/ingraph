@@ -76,13 +76,12 @@ class DataManipulationTest extends FunSuite {
   }
 
 
-
-  test("create constant single edges works") {
+  ignore("create constant single edges works") {
     val indexer = new Indexer()
 
-    val oneOff = "CREATE (t:Train)-[r:ON]->(seg1:Segment)"
+    val oneOff = "CREATE (t:Train)-[r:ON {track: 'bomb'}]->(seg1:Segment)"
     new IngraphSearchAdapter(oneOff, "create", indexer).terminate()
-    val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN t, seg1"
+    val whereIsTrain = "MATCH (t:Train)-[r:ON]->(seg1:Segment) RETURN r, r.track"
     val whereIsAdapter = new IngraphIncrementalAdapter(whereIsTrain, "", indexer)
     assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
   }

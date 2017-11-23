@@ -95,10 +95,10 @@ case class VertexLabelSet(vertexLabels: Set[VertexLabel] = Set(), status: LabelS
 case class EdgeLabelSet(edgeLabels: Set[EdgeLabel] = Set(), status: LabelSetStatus = Empty) extends LabelSet(status)
 
 // formerly GraphElementVariable
-abstract class ElementAttribute(name: String, properties: TPropertyMap, isAnonymous: Boolean) extends GraphAttribute(name)
+abstract class ElementAttribute(name: String, val properties: TPropertyMap, isAnonymous: Boolean) extends GraphAttribute(name)
 
-abstract class AbstractVertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
-abstract class AbstractEdgeAttribute(override val name: String, val labels: EdgeLabelSet, val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
+abstract class AbstractVertexAttribute(override val name: String, val labels: VertexLabelSet = VertexLabelSet(), override val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
+abstract class AbstractEdgeAttribute(override val name: String, val labels: EdgeLabelSet, override val properties: TPropertyMap = Map(), val isAnonymous: Boolean) extends ElementAttribute(name, properties, isAnonymous)
 
 /*
  * Represents an edge along with its vertices and direction.
