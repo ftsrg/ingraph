@@ -7,6 +7,7 @@ import hu.bme.mit.ire.engine.RelationalEngine
 import hu.bme.mit.ire.messages.{ChangeSet, ReteMessage}
 import hu.bme.mit.ire.nodes.binary.{AntiJoinNode, JoinNode, LeftOuterJoinNode, UnionNode}
 import hu.bme.mit.ire.nodes.unary._
+import hu.bme.mit.ire.nodes.unary.aggregation.AggregationNode
 import hu.bme.mit.ire.util.BufferMultimap
 import hu.bme.mit.ire.util.Utils.conversions._
 import ingraph.expressionparser.ExpressionParser
@@ -55,7 +56,7 @@ object EngineFactory {
           case op: UnaryFNode =>
             val node: (ReteMessage) => Unit = op match {
               case op: Production => production
-              //case op: Grouping => instantiateGrouping(op, expr)
+              case op: Grouping => instantiateGrouping(op, expr)
               case op: SortAndTop => sortAndTop(op, expr)
               case op: Selection => selection(op, expr)
               case op: Projection => projection(op, expr)
@@ -121,22 +122,21 @@ object EngineFactory {
 
     // unary nodes
 
-//    private def instantiateGrouping(op: Grouping, expr: ForwardConnection): Unit = {
-//      case op: Grouping =>
-//        val variableLookup = getSchema(op.child)
-//        val aggregates = op.getElements.flatMap(
-//          e => ExpressionParser.parseAggregate(e.getExpression, variableLookup)
-//        )
-//        val functions = () => aggregates.map(
-//          _._2() // GOOD LUCK UNDERSTANDING THIS
-//        )
-//        val aggregationCriteria = op.getAggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
-//        val projectionVariableLookup: Map[String, Integer] =
-//          aggregationCriteria.zipWithIndex.map( a => a._1._1.fullName -> a._2.asInstanceOf[Integer] ).toMap ++
-//          aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.getAggregationCriteria.size()).asInstanceOf[Integer])
-//        val projectionExpressions = op.getInternalElements.map( e => ExpressionParser.parseValue(e.getExpression, projectionVariableLookup))
-//        newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
-//    }
+    private def instantiateGrouping(op: Grouping, expr: ForwardConnection) = {
+      val variableLookup = getSchema(op.child)
+      val aggregates = op.jnode.projectList.flatMap(
+        e => ExpressionParser.parseAggregate(e, variableLookup)
+      )
+      val functions = () => aggregates.map(
+        _._2() // GOOD LUCK UNDERSTANDING THIS
+      )
+      val aggregationCriteria = op.jnode.aggregationCriteria.map(e => (e, ExpressionParser.parseValue(e, variableLookup)))
+      val projectionVariableLookup: Map[String, Int] =
+        aggregationCriteria.zipWithIndex.map( a => a._1._1.fullName -> a._2.asInstanceOf[Integer] ).toMap ++
+        aggregates.zipWithIndex.map( az => az._1._1 -> (az._2 + op.jnode.aggregationCriteria.size()))
+      val projectionExpressions = op.internalSchema.map( e => ExpressionParser.parseValue(e, projectionVariableLookup))
+      newLocal(Props(new AggregationNode(expr.child, aggregationCriteria.map(_._2), functions, projectionExpressions)))
+    }
 
     private def selection(op: Selection, expr: ForwardConnection) = {
       val variableLookup = getSchema(op.child)
