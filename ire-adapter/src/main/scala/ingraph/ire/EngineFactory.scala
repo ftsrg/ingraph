@@ -197,38 +197,54 @@ object EngineFactory {
           indexer.newId(), v.labels.vertexLabels, props(t)))
     }
 
-    private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]): (Tuple) => Long = {
+    type AlreadyCreated = mutable.HashMap[Attribute, Long]
+    private def createOrLookup(v: VertexAttribute, lookup: Map[String, Int]
+                              ): (Tuple,AlreadyCreated) => Long = {
+      val creator: (Tuple) => IngraphVertex = vertexCreator(v, lookup)
       lookup.get(v.name) match {
-        case Some(index: Int) => (t: Tuple) => t(index).asInstanceOf[Long]
-        case None => (t: Tuple) => vertexCreator(v, lookup)(t).id
+        case Some(index: Int) => (t: Tuple, m) => t(index).asInstanceOf[Long]
+        case None => (t: Tuple, m: AlreadyCreated) => m.get(v) match {
+          case Some(index: Long) => index
+          case None =>
+            val id = creator(t).id
+            m(v) = id
+            id
+        }
       }
     }
 
     private def create(op: Create, indexer: Indexer, expr: ForwardConnection) = {
       val lookup = getSchema(op.child)
       val creatorDefs: Seq[Attribute] = op.jnode.attributes
-      val alreadyCreated = new mutable.HashMap[Attribute, Int]()
-      val creatorFunctions: Seq[(Tuple) => IngraphElement] = for (element <- creatorDefs)
+      val creatorFunctions: Seq[(Tuple, AlreadyCreated) => Any] = for (element <- creatorDefs)
         yield element match {
           case n: NavigationDescriptor =>
             // you've got to love the Law of Demeter
             val demeter = n.edge.labels.edgeLabels.head
             val sourceIndex = createOrLookup(n.src, lookup)
             val targetIndex = createOrLookup(n.trg, lookup)
-            (t: Tuple) => {
+            (t: Tuple, m: AlreadyCreated) => {
               indexer.addEdge(
                 indexer.newId(),
-                sourceIndex(t),
-                targetIndex(t),
+                sourceIndex(t, m),
+                targetIndex(t, m),
                 demeter)
             }
           case variable: VertexAttribute =>
-            (t: Tuple) => vertexCreator(variable, lookup)(t)
+            val create = vertexCreator(variable, lookup)
+            (t: Tuple, m: AlreadyCreated) =>
+              if (!m.contains(variable))
+                create(t)
         }
 
       (m: ReteMessage) => {
         m match {
-          case cs: ChangeSet => creatorFunctions.foreach(r => cs.positive.foreach(r))
+          case cs: ChangeSet => cs.positive.foreach(
+            tuple => creatorFunctions.foldLeft(new mutable.HashMap[Attribute, Long]()) { case (map, function) =>
+                function(tuple, map)
+                map
+            })
+
           case _ =>
         }
         expr.child(m)
