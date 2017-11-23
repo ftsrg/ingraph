@@ -8,10 +8,14 @@ import org.apache.spark.sql.catalyst.expressions.{Attribute, Expression, NamedEx
 
 object SchemaInferencer {
 
-  def transform(inode: JNode, extraAttributes: Seq[NamedExpression] = Seq()): FNode = {
+  def transform(jnode: JNode): FNode = {
+    transform(jnode, Seq())
+  }
+
+  private def transform(jnode: JNode, extraAttributes: Seq[NamedExpression]): FNode = {
     val ea = extraAttributes.distinct
 
-    inode match {
+    jnode match {
       // leaf
       case o: jplan.GetEdges     => fplan.GetEdges(ea, o)
       case o: jplan.GetEdgeLists => fplan.GetEdgeLists(ea, o)
@@ -26,6 +30,9 @@ object SchemaInferencer {
       case o: jplan.Projection =>
         val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
         fplan.Projection(ea, o, transform(o.child, ea ++ newExtra))
+      case o: jplan.Grouping =>
+        val newExtra = extractAttributes(o.projectList).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
+        fplan.Grouping(ea, o, transform(o.child, ea ++ newExtra))
       case o: jplan.Selection =>
         val newExtra = extractAttributes(o.condition).filter(a => !o.child.output.map(_.name).contains(a.name) && !ea.contains(a.name))
         fplan.Selection(ea, o, transform(o.child, ea ++ newExtra))
@@ -50,6 +57,7 @@ object SchemaInferencer {
       case j: jplan.EquiJoinLike => {
         val eaLeft = propagate(ea, j.left.output)
         val eaRight = propagate(ea, j.right.output).filter(x => !eaLeft.map(_.name).contains(x.name))
+
         val left = transform(j.left, eaLeft)
         val right = transform(j.right, eaRight)
 
@@ -75,7 +83,7 @@ object SchemaInferencer {
         case a: PropertyAttribute => Some(a)
         case _ => None
       }
-      .filter(a => inputSchema.contains(a.elementAttribute))
+      .filter(a => inputSchema.map(_.name).contains(a.elementAttribute.name))
 
     // !inputSchema.contains(a) // do we need this?
   }

@@ -1,55 +1,6 @@
 package ingraph.sandbox
 
-import ingraph.compiler.CypherToQPlan
-import ingraph.compiler.cypher2qplan.{CypherParser, QPlanResolver}
-import ingraph.compiler.qplan2jplan.{QPlanToJPlan, SchemaInferencer}
-import ingraph.model.fplan.{FNode, LeafFNode}
-import ingraph.model.jplan.JNode
-import ingraph.model.qplan.QNode
-import org.scalatest.FunSuite
-
-class TckTest extends FunSuite {
-
-  val log = true
-
-  case class CompilationStages(
-    unresolvedQPlan: QNode,
-    resolvedQPlan: QNode,
-    jplan: JNode,
-    fplan: FNode
-  )
-
-  def compile(query: String): CompilationStages = {
-    val cypher = CypherParser.parseString(query)
-    val unresolvedQPlan = CypherToQPlan.build(cypher)
-    val resolvedQPlan = QPlanResolver.resolveQPlan(unresolvedQPlan)
-    val jplan = QPlanToJPlan.transform(resolvedQPlan)
-    val fplan = SchemaInferencer.transform(jplan)
-
-    if (log) {
-      println("=============================================================================")
-      println("Query:")
-      println(query)
-      println("-----------------------------------------------------------------------------")
-      println("Unresolved QPlan:")
-      println(unresolvedQPlan)
-      println("-----------------------------------------------------------------------------")
-      println("Resolved QPlan:")
-      println(resolvedQPlan)
-      println("-----------------------------------------------------------------------------")
-      println("JPlan:")
-      println(jplan)
-      println("-----------------------------------------------------------------------------")
-      println("FPlan:")
-//      println(fplan)
-    }
-
-    return CompilationStages(unresolvedQPlan, resolvedQPlan, jplan, fplan)
-  }
-
-  test("CREATE") {
-    val stages = compile("""CREATE (t:Train {a: 1})""")
-  }
+class TckCompilerTest extends CompilerTest {
 
   test("Hello World") {
     val stages = compile(
@@ -57,11 +8,7 @@ class TckTest extends FunSuite {
         |RETURN n
       """.stripMargin
     )
-  }
-
-  def getLeafNodes(plan: FNode): Seq[FNode] = {
-    if (plan.isInstanceOf[LeafFNode]) return plan :: Nil
-    return plan.children.flatMap(x => getLeafNodes(x))
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
   test("Filtering for vertices in MATCH") {
@@ -82,14 +29,18 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
-  test("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
+  ignore("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
     val stages = compile(
       """MATCH (n), (m)
         |RETURN n.value AS n, m.value AS m
       """.stripMargin
     )
+    assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
+    assert(getLeafNodes(stages.fplan)(1).extraAttributes.length == 1)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L97
   test("TCK test: Filter out based on node prop name") {
     val stages = compile(
       """MATCH ()-[rel:X]-(a)
@@ -100,6 +51,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L131
   test("TCK test: Filter based on rel prop name") {
     val stages = compile(
       """MATCH (node)-[r:KNOWS]->(a)
@@ -110,6 +62,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 1)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L167
   test("TCK test: Get neighbours") {
     val stages = compile(
       """MATCH (n1)-[rel:KNOWS]->(n2)
@@ -119,6 +72,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L183
   test("TCK test: Get two related nodes") {
     val stages = compile(
       """MATCH ()-[rel:KNOWS]->(x)
@@ -128,6 +82,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L202
   test("TCK test: Get related to related to") {
     val stages = compile(
       """MATCH (n)-->(a)-->(b)
@@ -137,6 +92,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 0)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L218
   test("TCK test: Handle comparison between node properties") {
     val stages = compile(
       """MATCH (n)-[rel]->(x)
@@ -147,6 +103,7 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
   }
 
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L323
   test("TCK test: Handle OR in the WHERE clause") {
     val stages = compile(
       """MATCH (n)
@@ -157,7 +114,8 @@ class TckTest extends FunSuite {
     assert(getLeafNodes(stages.fplan)(0).extraAttributes.length == 2)
   }
 
-  test("TCK test: Return relationships by collecting them as a list") {
+  // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L456
+  test("TCK test: Return relationships by collecting them as a list - undirected") {
     val stages = compile(
       """MATCH (a:Start)-[r:REL*2..2]-(b)
         |RETURN r

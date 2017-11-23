@@ -76,6 +76,14 @@ case class Projection(extraAttributes: Seq[NamedExpression],
   //override def internalSchema: Seq[NamedExpression] = inode.projectList
 }
 
+case class Grouping(extraAttributes: Seq[NamedExpression],
+                      jnode: jplan.Grouping,
+                      child: FNode
+                     ) extends UnaryFNode {
+  ///// what's worse than bad code? bad code DUPLICATED. sorry, will work on removing this
+  override def internalSchema: Seq[NamedExpression] = jnode.projectList.flatMap(SchemaInferencer.extractAttributes(_))
+}
+
 case class Selection(extraAttributes: Seq[NamedExpression],
                      jnode: jplan.Selection,
                      child: FNode

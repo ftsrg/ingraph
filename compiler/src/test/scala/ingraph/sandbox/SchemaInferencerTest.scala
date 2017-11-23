@@ -49,28 +49,37 @@ class SchemaInferencerTest extends FunSuite {
     assert(ep.children(0).children(0).internalSchema.size == 3)
   }
 
-  test("infer schema #3") {
+  test("infer schema for joins") {
     val vls = VertexLabelSet(Set("Person"), NonEmpty)
     val el = EdgeLabelSet(Set("KNOWS"), NonEmpty)
 
     val p1 = VertexAttribute("p1", vls)
     val name = PropertyAttribute("name", p1)
+    val projectList = Seq(name)
 
-    val p2 = VertexAttribute("n", vls)
+    val p2 = VertexAttribute("p2", vls)
     val age = PropertyAttribute("age", p2)
+    val condition = GreaterThan(age, Literal(27))
 
     val e = EdgeAttribute("e", el)
 
-    val gv = jplan.GetVertices(p1)
-    val ge = jplan.GetEdges(p1, p2, e, false)
-    val join = jplan.Join(gv, ge)
+    val qp = jplan.Projection(
+      projectList,
+      jplan.Selection(
+        condition,
+        jplan.Join(
+          jplan.GetVertices(p1),
+          jplan.GetEdges(p1, p2, e, false)
+        )
+      )
+    )
+    val ep = SchemaInferencer.transform(qp)
+    val join = ep.children(0).children(0).asInstanceOf[Join]
 
-    val ep = SchemaInferencer.transform(join, Seq(name, age))
-
-    assert(ep.asInstanceOf[Join].leftMask == Seq(0))
-    assert(ep.asInstanceOf[Join].rightMask == Seq(0))
-    assert(ep.children(0).internalSchema.size == 2)
-    assert(ep.children(1).internalSchema.size == 4)
+    assert(join.leftMask == Seq(0))
+    assert(join.rightMask == Seq(0))
+    assert(join.children(0).internalSchema.size == 2)
+    assert(join.children(1).internalSchema.size == 4)
   }
 
   test("infer schema for PosLength") {
@@ -200,10 +209,19 @@ class SchemaInferencerTest extends FunSuite {
         |  (segment6:Segment)-[mb6:monitoredBy]->(sensor:Sensor)
         |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
         |""".stripMargin)
-    println(ep)
-    println(ep.children(0).children(0).children(0).internalSchema)
-    println(ep.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
-    println(ep.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
+//    println(ep)
+//    println(ep.children(0).children(0).children(0).internalSchema)
+//    println(ep.children(0).children(0).children(0).asInstanceOf[Join].leftMask)
+//    println(ep.children(0).children(0).children(0).asInstanceOf[Join].rightMask)
+  }
+
+  test("infer schema for Cartesian product") {
+    val ep = FPlanParser.parse(
+      """MATCH (n), (m)
+        |RETURN n.value, m.value
+      """.stripMargin
+    )
+//    println(ep)
   }
 
 }
