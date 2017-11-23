@@ -44,6 +44,7 @@ object QPlanBeautifier {
       // FIXME: projection should be introduced by the compiler, and also match it here
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(base, filter)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
     case qplan.Selection(cExpr.Not(e), qplan.LeftOuterJoin(filter, base)) if checkForAntijoin(e, filter) => qplan.AntiJoin(base, filter)
+    case qplan.Selection(cExpr.Literal(true, BooleanType), child) => child
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
   }
 
