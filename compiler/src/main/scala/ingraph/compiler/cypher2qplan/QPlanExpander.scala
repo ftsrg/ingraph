@@ -23,15 +23,13 @@ object QPlanExpander {
   }
 
   /**
-    * These are the resolver rules that applies to all unresolved QPlans.
-    *
-    * There are some nodes that do not need resolution: GetVertices, DuplicateElimination, Expand, Join, Union, etc.
+    * These are the expand rules to cpmplement compiler's brewity.
     */
   val qplanExpander: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Nullary
-    case qplan.GetVertices(VertexAttribute(name, labels, properties, isAnonymous)) if properties.nonEmpty => {
-      val condition: Expression = propertyMapToCondition(properties, name)
-      qplan.Selection(condition, qplan.GetVertices(VertexAttribute(name, labels, properties, isAnonymous)))
+    case qplan.GetVertices(vertexAttribute) if vertexAttribute.properties.nonEmpty => {
+      val condition: Expression = propertyMapToCondition(vertexAttribute.properties, vertexAttribute.name)
+      qplan.Selection(condition, qplan.GetVertices(vertexAttribute))
     }
     case qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child) if edge.properties.nonEmpty || trgVertexAttribute.properties.nonEmpty => {
       val selectionOnEdge = qplan.Selection(propertyMapToCondition(edge.properties, edge.name), qplan.Expand(srcVertexAttribute, trgVertexAttribute, edge, dir, child))
