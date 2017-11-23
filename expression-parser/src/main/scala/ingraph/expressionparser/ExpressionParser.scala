@@ -25,7 +25,7 @@ object ExpressionParser {
         val left: (Tuple => Any) = parseValue(exp.left, lookup)
         val right: (Tuple => Any) = parseValue(exp.right, lookup)
         exp match {
-          case _: EqualTo => (t: Tuple) => GenericMath.compare(left(t), right(t)) == 0
+          case _: EqualTo => (t: Tuple) => left(t) == right(t)
           case _: LessThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) <= 0
           case _: LessThanOrEqual => (t: Tuple) => GenericMath.compare(left(t), right(t)) < 0
           case _: GreaterThan => (t: Tuple) => GenericMath.compare(left(t), right(t)) >= 0
