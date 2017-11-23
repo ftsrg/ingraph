@@ -1,6 +1,5 @@
 package ingraph.ire
 
-import org.neo4j.driver.v1.Value
 import org.scalatest.FunSuite
 
 class DataManipulationTest extends FunSuite {
