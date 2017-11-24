@@ -1,0 +1,5 @@
+:param {
+    date: 1,
+    tagClass1: 'Person',
+    tagClass2: 'OfficeHolder'
+}
