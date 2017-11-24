@@ -121,29 +121,29 @@ object ExpressionParser {
 //
 //
 
-  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): List[(String, () => StatefulAggregate)] = exp match {
-    case exp: FunctionExpression if exp.getFunctor.getCategory ==  FunctionCategory.AGGREGATION =>
-      if (exp.getFunctor != COLLECT) {
-        val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
-        val index = lookup(variable.fullName)
-        List((exp.fullName, exp.getFunctor match {
-          case AVG => () => new StatefulAverage(index)
-          case COUNT => () => new NullAwareStatefulCount(index)
-          case COUNT_ALL => () => new StatefulCount()
-          case MAX => () => new StatefulMax(index)
-          case MIN => () => new StatefulMin(index)
-          case SUM => () => new StatefulSum(index)
-        }))
-      } else {
-        val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
-        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.fullName)).map(_.toInt)
-        List((exp.fullName, () => new StatefulCollect(indices)))
-      }
-    case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
-    case exp: Literal => List()
-    case exp: VariableExpression => List()
-    case exp: BinaryArithmeticOperationExpression =>
-      parseAggregate(exp.getLeftOperand, lookup) ++ parseAggregate(exp.getRightOperand, lookup)
-  }
+//  def parseAggregate(exp: Expression, lookup: Map[String, Integer]): List[(String, () => StatefulAggregate)] = exp match {
+//    case exp: FunctionExpression if exp.getFunctor.getCategory ==  FunctionCategory.AGGREGATION =>
+//      if (exp.getFunctor != COLLECT) {
+//        val variable = exp.getArguments.get(0).asInstanceOf[VariableExpression].getVariable
+//        val index = lookup(variable.fullName)
+//        List((exp.fullName, exp.getFunctor match {
+//          case AVG => () => new StatefulAverage(index)
+//          case COUNT => () => new NullAwareStatefulCount(index)
+//          case COUNT_ALL => () => new StatefulCount()
+//          case MAX => () => new StatefulMax(index)
+//          case MIN => () => new StatefulMin(index)
+//          case SUM => () => new StatefulSum(index)
+//        }))
+//      } else {
+//        val list = parseListExpression(exp.getArguments.get(0).asInstanceOf[ListExpression])
+//        val indices = list.map(e => lookup(e.asInstanceOf[VariableExpression].getVariable.fullName)).map(_.toInt)
+//        List((exp.fullName, () => new StatefulCollect(indices)))
+//      }
+//    case exp: FunctionExpression => parseAggregate(exp.getArguments.get(0), lookup)
+//    case exp: Literal => List()
+//    case exp: VariableExpression => List()
+//    case exp: BinaryArithmeticOperationExpression =>
+//      parseAggregate(exp.getLeftOperand, lookup) ++ parseAggregate(exp.getRightOperand, lookup)
+//  }
 
 }

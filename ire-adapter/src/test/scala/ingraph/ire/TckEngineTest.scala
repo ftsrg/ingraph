@@ -44,7 +44,7 @@ class TckEngineTest extends FunSuite {
 //  }
 
   // https://github.com/opencypher/openCypher/blob/5a2b8cc8037225b4158e231e807a678f90d5aa1d/tck/features/MatchAcceptance.feature#L52
-  test("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
+  ignore("TCK test: Use multiple MATCH clauses to do a Cartesian product") {
     val results = run(
       """CREATE ({value: 1}),
         |  ({value: 2}),

@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class BiEngineTest extends FunSuite {
 
-  test("test 1") {
+  ignore("test 1") {
     val indexer = new Indexer()
 
     val readQuery =
