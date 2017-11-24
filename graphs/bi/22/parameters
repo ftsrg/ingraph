@@ -1,0 +1,4 @@
+:param {
+    country1: 'India',
+    country2: 'USA'
+}
