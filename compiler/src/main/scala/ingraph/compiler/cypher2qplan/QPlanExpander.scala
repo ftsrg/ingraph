@@ -18,12 +18,11 @@ object QPlanExpander {
     // expanding GetVertices involves creating other GetVertices, so transformUp is to avoid infinite recursion
     val full = rawQueryPlan.transformUp(qplanExpander)
 
-
     full.asInstanceOf[qplan.QNode]
   }
 
   /**
-    * These are the expand rules to cpmplement compiler's brewity.
+    * These are the expand rules to complement compiler's brewity.
     */
   val qplanExpander: PartialFunction[LogicalPlan, LogicalPlan] = {
     // Nullary
