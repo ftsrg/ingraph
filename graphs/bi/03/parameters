@@ -1,4 +1,4 @@
-:param {
-    year: 2011,
-    month: 6
+{
+    "year": 2011,
+    "month": 6
 }

@@ -1,5 +1,5 @@
-:param {
-    tagClass1: 'OfficeHolder',
-    tagClass2: 'Person',
-    threshold: 1
+{
+    "tagClass1": "OfficeHolder",
+    "tagClass2": "Person",
+    "threshold": 1
 }

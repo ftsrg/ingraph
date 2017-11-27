@@ -1,4 +1,4 @@
-:param {
-    date: 20110817060540594,
-    likeThreshold: 1
+{
+    "date": 20110817060540594,
+    "likeThreshold": 1
 }

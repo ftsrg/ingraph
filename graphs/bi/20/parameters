@@ -1,1 +1,1 @@
-:param { tagClasses: ['Person'] }
+{ "tagClasses": ["Person"] }

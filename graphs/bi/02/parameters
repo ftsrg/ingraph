@@ -1,6 +1,6 @@
-:param {
-    date1: 20081231230000000,
-    date2: 20161107230000000,
-    country1: 'India',
-    country2: 'China'
+{
+    "date1": 20081231230000000,
+    "date2": 20161107230000000,
+    "country1": "India",
+    "country2": "China"
 }

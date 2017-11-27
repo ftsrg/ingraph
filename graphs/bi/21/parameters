@@ -1,4 +1,4 @@
-:param {
-    country: 'India',
-    endDate: 20100128063958900
+{
+    "country": "India",
+    "endDate": 20100128063958900
 }

@@ -1,4 +1,4 @@
-:param {
-    tagClass: 'Person',
-    country: 'Austria'
+{
+    "tagClass": "Person",
+    "country": "Austria"
 }
