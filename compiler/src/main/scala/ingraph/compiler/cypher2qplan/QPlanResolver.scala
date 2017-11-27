@@ -14,16 +14,36 @@ object QPlanResolver {
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
-    val beautiful = unresolvedQueryPlan.transform(qplanResolver)
+    val resolvedNames = unresolvedQueryPlan.transformUp(qplanNameResolver).asInstanceOf[qplan.QNode]
+    val resolved = resolvedNames.transform(qplanResolver).asInstanceOf[qplan.QNode]
 
-    val elements = unresolvedQueryPlan.flatMap {
-      case qplan.GetVertices(v) => Some(v)
-      case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
-      case _ => None
-    }
+//    val elements = unresolvedQueryPlan.flatMap {
+//      case qplan.GetVertices(v) => Some(v)
+//      case qplan.Expand(src, trg, edge, _, _) => Some(edge, trg)
+//      case _ => None
+//    }
 
-    beautiful.asInstanceOf[qplan.QNode]
+    resolved
   }
+
+  /**
+    * These are the name resolver rules that applies to all unresolved QPlans.
+    */
+  val qplanNameResolver: PartialFunction[LogicalPlan, LogicalPlan] = {
+    // Unary
+    //    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
+    case qplan.UnresolvedProjection(projectList, child) => {
+      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression])
+      projectionResolveHelper(resolvedProjectList, child)
+    }
+    case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
+    case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
+    case qplan.Unwind(collection, element, child) => qplan.Top(collection.transform(expressionResolver), element.transform(expressionResolver), child)
+    // DML
+    case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
+    case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
+  }
+
 
   /**
     * These are the resolver rules that applies to all unresolved QPlans.
