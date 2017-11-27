@@ -1,0 +1,6 @@
+:param {
+  person1Id: 0,
+  person2Id: 2,
+  startDate: 20000601040000000,
+  endDate: 20190701040000000
+}
