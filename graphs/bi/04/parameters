@@ -1,0 +1,4 @@
+:param {
+    tagClass: 'Person',
+    country: 'Austria'
+}

@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+
+function reindex(filename) {
+    let file = fs.readFileSync(filename, {encoding: 'UTF-8'})
+    let lines = file.split('\n').filter(l => l)
+
+    let result = lines[0] + '\n'
+    for (let i = 1; i < lines.length; i++) {
+        let reindexed = (i-1) + "|" + lines[i].split('|').splice(1).join('|')
+        result += reindexed + "\n"
+    }
+    fs.writeFileSync(filename, result)
+}
+
+process.argv.splice(2).forEach((val) => reindex(val));
