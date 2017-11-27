@@ -85,6 +85,18 @@ class DataManipulationTest extends FunSuite {
     assert(whereIsAdapter.result() == Seq(Vector(6137546356583794141L, -594798593157429144L)))
   }
 
+  test("create matched single edges") {
+    val indexer = initializeIndexer()
+
+    val create = "MATCH (seg:Segment) CREATE (seg)-[m:MonitoredBy]->(s:Sensor)"
+    new IngraphSearchAdapter(create, "create", indexer).terminate()
+    val query = "MATCH (seg:Segment)-[m:MonitoredBy]->(s:Sensor) RETURN seg, m, s"
+    val whereIsAdapter = new IngraphIncrementalAdapter(query, "", indexer)
+    assert(whereIsAdapter.result() == Seq(
+      Vector(2, -594798593157429144L, 112842269129291794L),
+      Vector(3, 7564655870752979346L, 3831662765844904176L)))
+  }
+
   test("create two edges works") {
     val indexer = new Indexer()
 
