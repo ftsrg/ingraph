@@ -117,10 +117,10 @@ object QPlanResolver {
   }
 
   // always use .getAndIncrement on this object
-  private val generatedNameCounterNext = new AtomicLong
+  private val generatedNameCounterMap = mutable.Map[String, AtomicLong]()
 
   def generateUniqueName(baseName: String): String = {
-    s"${baseName}#${generatedNameCounterNext.getAndIncrement}"
+    s"${baseName}#${generatedNameCounterMap.getOrElseUpdate(baseName, new AtomicLong).getAndIncrement}"
   }
 
 
