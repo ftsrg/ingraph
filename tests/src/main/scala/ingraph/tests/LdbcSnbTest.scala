@@ -63,7 +63,18 @@ abstract class LdbcSnbTest extends FunSuite {
   case class TestCase(workload: String, n: Int) {
     val number = f"$n%02d"
     import scala.collection.JavaConverters._
-    val parameters = gson.fromJson(readToString(parameterPath(number)), classOf[java.util.Map[String, String]]).asScala
+    val parameters = gson
+      .fromJson(readToString(parameterPath(number)), classOf[java.util.Map[String, Object]])
+      .asScala
+      .map { case (k, v) => (k, convert(v)) }
+  }
+
+  def convert(v: Any): String = {
+    v match {
+      case d: Double => f"$d%.0f"
+      case s: String => "'" + s.toString + "'"
+      case _ => v.toString
+    }
   }
 
   def readToString(path: String): String = Source.fromFile(s"$path").getLines().mkString("\n")
@@ -80,7 +91,7 @@ abstract class LdbcSnbTest extends FunSuite {
         val baseQuerySpecification = readToString(queryPath(t.workload, t.n))
         println(parameters)
         val querySpecification = parameters.foldLeft(baseQuerySpecification)((a, b) =>
-          a.replaceAllLiterally(b._1.toString, b._2.toString))
+          a.replaceAllLiterally("$" + b._1.toString, b._2.toString))
         println(querySpecification)
 
         runQuery(t.workload, t.number, queryName, querySpecification)
