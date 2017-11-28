@@ -14,6 +14,8 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object QPlanResolver {
+  type TNameResolverScope = mutable.Map[String, String]
+
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
     // e.g. pfunc1 orElse pfunc2
@@ -52,6 +54,11 @@ object QPlanResolver {
       }
     }
 
+    // this will hold those names that are in scope, so no new resolution should be invented
+    var nameResolverScope = mutable.Map[String, String]()
+    // scoped name resolver shorthand
+    def r[T <: Expression](v: T): T = resolveNamesForExpr(nameResolverScope, v).asInstanceOf[v.type]
+
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
       val newQNode: qplan.QNode = qPlanPolishNotation.pop match {
@@ -72,11 +79,11 @@ object QPlanResolver {
           val newOp: qplan.UnaryQNode = u match {
             case qplan.AllDifferent(e, _) => qplan.AllDifferent(e, child)
             case qplan.DuplicateElimination(_) => qplan.DuplicateElimination(child)
-            case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(src, trg, edge, dir, child)
+            case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(r(src), r(trg), r(edge), dir, child)
             case qplan.Production(_) => qplan.Production(child)
             case qplan.UnresolvedProjection(projectList, _) => qplan.UnresolvedProjection(projectList, child)
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
-            case qplan.Selection(condition, _) => qplan.Selection(condition, child)
+            case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
             case qplan.Sort(order, _) => qplan.Sort(order, child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
             case qplan.Unwind(collection, element, _) => qplan.Unwind(collection, element, child)
@@ -90,7 +97,7 @@ object QPlanResolver {
         }
         case l: qplan.LeafQNode => {
           val newOp: qplan.LeafQNode = l match {
-            case qplan.GetVertices(v) => qplan.GetVertices(resolveNamesForExpr(v).asInstanceOf[v.type])
+            case qplan.GetVertices(v) => qplan.GetVertices(r(v))
             case x => x
           }
           newOp
@@ -105,16 +112,23 @@ object QPlanResolver {
       throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
   }
 
-  private def resolveNamesForExpr(e: Expression): Expression = e match {
+  private def resolveNamesForExpr(nameResolverScope: TNameResolverScope, e: Expression): Expression = {
+    e.transform(expressionNameResolver(nameResolverScope))
+  }
+
+  def expressionNameResolver(nameResolverScope: TNameResolverScope): PartialFunction[Expression, Expression] = {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, Some(generateUniqueName(name)))
-        case x => x // FIXME: add other rules here
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
+        case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute.transform(expressionNameResolver(nameResolverScope)).asInstanceOf[expr.ElementAttribute], Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(s"${elementAttribute.name}\$${name}"))))
       }
-    // fallback: no-op resolution. FIXME: recurse
+    // fallback: no-op resolution.
     case x => x
   }
+
 
   // always use .getAndIncrement on this object
   private val generatedNameCounterMap = mutable.Map[String, AtomicLong]()
