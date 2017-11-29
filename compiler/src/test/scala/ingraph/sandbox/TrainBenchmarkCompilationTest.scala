@@ -11,8 +11,10 @@ class TrainBenchmarkCompilationTest extends FunSuite {
   test("Random test from cypher string") {
     TrainBenchmarkCompilationTest.testQueryString(
       """MATCH (n {name: 'John', foo: 'FooVal'})-[:BAR {bar: 'BarVal'}]->()
-        |OPTIONAL MATCH (m)-->(n:Professor)
-        |OPTIONAL MATCH (m)-->(s:Shop)
+        |where n.height > 178
+        |OPTIONAL MATCH (n)-->(m:Professor)
+        |OPTIONAL MATCH (n)-->(s:Shop)
+        |where n.age > 35
         |RETURN n""".stripMargin)
 
   }

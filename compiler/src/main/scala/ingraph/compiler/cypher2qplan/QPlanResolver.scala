@@ -2,10 +2,10 @@ package ingraph.compiler.cypher2qplan
 
 import java.util.concurrent.atomic.AtomicLong
 
-import ingraph.model.expr.ProjectionDescriptor
+import ingraph.model.expr.{ProjectionDescriptor, ResolvableName}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
-import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedFunction, UnresolvedStar}
+import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
 import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.catalyst.{expressions => cExpr}
@@ -14,7 +14,8 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object QPlanResolver {
-  type TNameResolverScope = mutable.Map[String, String]
+  // structure to hold the name resolution cache
+  type TNameResolverScope = mutable.Map[String, (String, expr.ResolvableName)]
 
   def resolveQPlan(unresolvedQueryPlan: qplan.QNode): qplan.QNode = {
     // should there be other rule sets (partial functions), combine them using orElse,
@@ -55,9 +56,9 @@ object QPlanResolver {
     }
 
     // this will hold those names that are in scope, so no new resolution should be invented
-    var nameResolverScope = mutable.Map[String, String]()
+    var nameResolverScope = mutable.Map[String, (String, expr.ResolvableName)]()
     // scoped name resolver shorthand
-    def r[T <: Expression](v: T): T = v.transform(expressionNameResolver(snrGen(nameResolverScope))).asInstanceOf[T]
+    def r[T <: Expression](v: T): T = v.transform(expressionNameResolver(snrGen(nameResolverScope), nameResolverScope)).asInstanceOf[T]
 
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
@@ -112,24 +113,62 @@ object QPlanResolver {
       throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
   }
 
-  def expressionNameResolver(snr: String => Option[String]): PartialFunction[Expression, Expression] = {
+  def expressionNameResolver(snr: (String, expr.ResolvableName) => Option[String], nameResolverScope: TNameResolverScope): PartialFunction[Expression, Expression] = {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name))
-        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name))
-        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name))
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name, rn))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name, rn))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name, rn))
         case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
           // see "scoped name resolver shorthand" above
-          elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
-          snr(s"${elementAttribute.name}\$${name}"))
+          elementAttribute.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.ElementAttribute],
+          snr(s"${elementAttribute.name}$$${name}", rn))
       }
+    case UnresolvedAttribute(nameParts) => {
+      if (nameParts.length >= 1 && nameParts.length <= 2) {
+        val elementName = nameParts(0) // should be OK as .length >= 1
+        val scopeCacheEntry = nameResolverScope.get(elementName)
+        val elementAttribute = if (scopeCacheEntry.isDefined) {
+          val rn = Some(scopeCacheEntry.get._1)
+          // copy the type with basic stuff only
+          scopeCacheEntry.get._2 match {
+            case expr.VertexAttribute(name, _, _, isAnonymous, _) => expr.VertexAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
+            case expr.EdgeAttribute(name, _, _, isAnonymous, _) => expr.EdgeAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
+            case expr.EdgeListAttribute(name, _, _, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, isAnonymous = isAnonymous, resolvedName = rn, minHops = minHops, maxHops = maxHops)
+          }
+        } else {
+          throw new RuntimeException(s"Unresolvable name ${elementName}.")
+        }
+
+        if (nameParts.length == 1) {
+          elementAttribute
+        } else { // nameParts.length == 2
+          val propertyName = nameParts(1) // should be OK as .length == 2
+          expr.PropertyAttribute(propertyName, elementAttribute, snr(s"${elementAttribute.name}$$${propertyName}",
+            expr.PropertyAttribute(propertyName, elementAttribute)) // this is a dirty hack to tell the resolver that we are about to resolve a PropertyAttribute instance
+          )
+        }
+      } else {
+        throw new RuntimeException(s"Unexpected number of name parts, namely ${nameParts.length} for ${nameParts}")
+      }
+    }
     // fallback: no-op resolution.
     case x => x
   }
 
   // function generator for name resolution shorthand: "scoped name resolution"
-  def snrGen(nameResolverScope: TNameResolverScope): String => Option[String] = (baseName: String) => Some(nameResolverScope.getOrElseUpdate(baseName, generateUniqueName(baseName)))
+  def snrGen(nameResolverScope: TNameResolverScope): (String, expr.ResolvableName) => Option[String] = (baseName, target) => {
+    nameResolverScope.get(baseName) match {
+      case Some(x) => if (x._2.getClass != target.getClass)
+        throw new RuntimeException(s"Name collision across types: ${baseName}. In the cache, it is ${x._2.getClass}, but now it was passed as ${target.getClass}")
+      case None => {
+        nameResolverScope.put(baseName, (generateUniqueName(baseName), target))
+      }
+    }
+    // reaching this point means we have baseName in the name reolver scope
+    Some(nameResolverScope(baseName)._1)
+  }
 
 
   // always use .getAndIncrement on this object
