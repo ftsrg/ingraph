@@ -57,7 +57,7 @@ object QPlanResolver {
     // this will hold those names that are in scope, so no new resolution should be invented
     var nameResolverScope = mutable.Map[String, String]()
     // scoped name resolver shorthand
-    def r[T <: Expression](v: T): T = resolveNamesForExpr(nameResolverScope, v).asInstanceOf[v.type]
+    def r[T <: Expression](v: T): T = v.transform(expressionNameResolver(snrGen(nameResolverScope))).asInstanceOf[T]
 
     // re-assemble the tree resolving names
     while (qPlanPolishNotation.nonEmpty) {
@@ -112,22 +112,24 @@ object QPlanResolver {
       throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
   }
 
-  private def resolveNamesForExpr(nameResolverScope: TNameResolverScope, e: Expression): Expression = {
-    e.transform(expressionNameResolver(nameResolverScope))
-  }
-
-  def expressionNameResolver(nameResolverScope: TNameResolverScope): PartialFunction[Expression, Expression] = {
+  def expressionNameResolver(snr: String => Option[String]): PartialFunction[Expression, Expression] = {
     case rn: expr.ResolvableName =>
       if (rn.resolvedName.isDefined) rn // do not resolve already resolved stuff again
       else rn match {
-        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
-        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
-        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(name))))
-        case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute.transform(expressionNameResolver(nameResolverScope)).asInstanceOf[expr.ElementAttribute], Some(nameResolverScope.getOrElseUpdate(name, generateUniqueName(s"${elementAttribute.name}\$${name}"))))
+        case expr.VertexAttribute (name, labels, properties, isAnonymous, _) => expr.VertexAttribute(name, labels, properties, isAnonymous, snr(name))
+        case expr.EdgeAttribute(name, labels, properties, isAnonymous, _) => expr.EdgeAttribute(name, labels, properties, isAnonymous, snr(name))
+        case expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, labels, properties, isAnonymous, minHops, maxHops, snr(name))
+        case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name,
+          // see "scoped name resolver shorthand" above
+          elementAttribute.transform(expressionNameResolver(snr)).asInstanceOf[expr.ElementAttribute],
+          snr(s"${elementAttribute.name}\$${name}"))
       }
     // fallback: no-op resolution.
     case x => x
   }
+
+  // function generator for name resolution shorthand: "scoped name resolution"
+  def snrGen(nameResolverScope: TNameResolverScope): String => Option[String] = (baseName: String) => Some(nameResolverScope.getOrElseUpdate(baseName, generateUniqueName(baseName)))
 
 
   // always use .getAndIncrement on this object
