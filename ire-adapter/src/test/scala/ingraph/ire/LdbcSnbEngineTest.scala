@@ -1,9 +1,9 @@
 package ingraph.ire
 
-import ingraph.tests.LdbcSnbTest
+import ingraph.tests.LdbcSnbBiTest
 import org.supercsv.prefs.CsvPreference
 
-class LdbcSnbEngineTest extends LdbcSnbTest {
+class LdbcSnbEngineTest extends LdbcSnbBiTest {
 
   // TODO: Rework this class to be compatible with the new LdbcSnbTest
 //  override def runQuery(workload: String, queryNumber: String, queryName: String, querySpecification: String, parameters: Map[String, Object]): Unit = {

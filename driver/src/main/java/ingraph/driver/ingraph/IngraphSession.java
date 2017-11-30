@@ -1,18 +1,17 @@
 package ingraph.driver.ingraph;
 
+import ingraph.bulkloader.csv.loader.MassCsvLoader;
 import ingraph.driver.data.IngraphQueryHandler;
 import ingraph.ire.Indexer;
 import ingraph.ire.IngraphIncrementalAdapter;
 import neo4j.driver.reactive.data.RecordChangeSet;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.Statement;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
-import org.neo4j.driver.v1.TransactionWork;
-import org.neo4j.driver.v1.Value;
+import org.neo4j.driver.v1.*;
+import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.v1.types.Relationship;
 import org.neo4j.driver.v1.types.TypeSystem;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -96,6 +95,12 @@ public class IngraphSession implements Session {
 
 	public IngraphQueryHandler registerQuery(String queryName, String querySpecification) {
 		return registerQuery(queryName, querySpecification, Collections.emptyMap());
+	}
+
+	public void readCsv(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames) throws IOException {
+		MassCsvLoader loader = new MassCsvLoader(nodeFilenames, relationshipFilenames);
+		for (Node n : loader.getNodes()) indexer.addVertex(n);
+		for (Relationship r : loader.getRelationships()) indexer.addEdge(r);
 	}
 
 	public RecordChangeSet getDeltas(String queryName) {

@@ -29,7 +29,9 @@ object Neo4jTestRunner {
 class Neo4jTestRunner(tc:LdbcSnbTestCase) extends TestRunner(tc) {
   import Neo4jTestRunner._
 
-  override def getResults() = {
+  override def getResults = {
+    import scala.collection.JavaConverters._
+
     val bolt = GraphDatabaseSettings
       .boltConnector("0")
 
@@ -49,7 +51,7 @@ class Neo4jTestRunner(tc:LdbcSnbTestCase) extends TestRunner(tc) {
       gds
         .execute(tc.querySpecification, JavaConversions.mapAsJavaMap(tc.parameters))
         .toStream
-        .map(map => JavaConversions.mapAsScalaMap(map).toMap)
+        .map(map => map.asScala.toMap)
         .toList
     } finally {
       println(tc.querySpecification)
