@@ -2,6 +2,7 @@ package ingraph.tests.runner
 
 import ingraph.driver.CypherDriverFactory
 import ingraph.tests.LdbcSnbTestCase
+import org.supercsv.prefs.CsvPreference
 
 import scala.collection.JavaConverters._
 
@@ -46,27 +47,28 @@ object IngraphTestRunner {
 
 class IngraphTestRunner(tc: LdbcSnbTestCase) extends TestRunner(tc) {
 
-  val tcNodeCsvs = IngraphTestRunner.nodeCSVs.mapValues(s"../graphs/bi/${tc.id}/${_}.csv")
-  val tcRelationshipCsvs = IngraphTestRunner.relationshipCSVs.mapValues(s"../graphs/bi/${tc.id}/${_}.csv")
+  val tcNodeCsvs = IngraphTestRunner.nodeCSVs.map {
+    case (k, v) => s"../graphs/bi/${tc.id}/${k}_0_0.csv" -> v
+  }
+  val tcRelationshipCsvs = IngraphTestRunner.relationshipCSVs.map {
+    case (k, v) => s"../graphs/bi/${tc.id}/${k}_0_0.csv" -> v
+  }
 
   override def getResults: Seq[Map[String, AnyRef]] = {
+    val driver = CypherDriverFactory.createIngraphDriver
     try {
-      val driver = CypherDriverFactory.createIngraphDriver
-      try {
-        val session = driver.session
-        session.readCsv(
-          IngraphTestRunner.nodeCSVs.mapValues(_.asJavaCollection).asJava,
-          IngraphTestRunner.relationshipCSVs.asJava
-        )
-        val transaction = session.beginTransaction
-        transaction
-          .run("MATCH (n) RETURN n LIMIT 5")
-          .asScala
-          .map { rec => rec.asMap().asScala.toMap }
-          .toList
-      } finally if (driver != null) {
-        driver.close()
-      }
+      val session = driver.session
+      val csvPreference = new CsvPreference.Builder('"', '|', "\n").build
+      val queryHandler = session.registerQuery(s"${tc.workload}-${tc.id}", tc.querySpecification)
+      queryHandler.readCsv(
+        tcNodeCsvs.mapValues(_.toList.asJava).asJava,
+        tcRelationshipCsvs.asJava,
+        csvPreference
+      )
+      val result = queryHandler.adapter.result()
+      List(Map("A" -> "B"))
+    } finally if (driver != null) {
+      driver.close()
     }
   }
 }

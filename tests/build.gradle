@@ -1,6 +1,6 @@
 dependencies {
   compile project(':driver')
-  compile project(':neo4j-util')
+  compile project(':neo4j-tests')
 
   compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
   compile group: 'de.javakaffee', name: 'kryo-serializers', version: '0.41'

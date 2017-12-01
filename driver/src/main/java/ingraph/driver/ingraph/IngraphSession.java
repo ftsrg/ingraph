@@ -9,6 +9,7 @@ import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Relationship;
 import org.neo4j.driver.v1.types.TypeSystem;
+import org.supercsv.prefs.CsvPreference;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -97,8 +98,8 @@ public class IngraphSession implements Session {
 		return registerQuery(queryName, querySpecification, Collections.emptyMap());
 	}
 
-	public void readCsv(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames) throws IOException {
-		MassCsvLoader loader = new MassCsvLoader(nodeFilenames, relationshipFilenames);
+	public void readCsv(Map<String, Collection<String>> nodeFilenames, Map<String, String> relationshipFilenames, CsvPreference csvPreference) throws IOException {
+		MassCsvLoader loader = new MassCsvLoader(nodeFilenames, relationshipFilenames, csvPreference);
 		for (Node n : loader.getNodes()) indexer.addVertex(n);
 		for (Relationship r : loader.getRelationships()) indexer.addEdge(r);
 	}

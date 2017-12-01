@@ -54,7 +54,6 @@ class Neo4jTestRunner(tc:LdbcSnbTestCase) extends TestRunner(tc) {
         .map(map => map.asScala.toMap)
         .toList
     } finally {
-      println(tc.querySpecification)
       trans.close()
       gds.shutdown()
     }
