@@ -30,7 +30,7 @@ class SchemaInferencerTest extends FunSuite {
     val name = PropertyAttribute("name", n)
     val age = PropertyAttribute("age", n)
 
-    val projectList = Seq(name)
+    val projectList = Seq(ReturnItem(name))
     val condition = GreaterThan(age, Literal(27))
 
     val qp = qplan.Projection(
@@ -79,7 +79,7 @@ class SchemaInferencerTest extends FunSuite {
     val segment = VertexAttribute("segment", vls)
     val length = PropertyAttribute("length", segment)
 
-    val projectList = Seq(segment, length)
+    val projectList = Seq(ReturnItem(segment), ReturnItem(length))
 
     val qp = qplan.Projection(
       projectList,

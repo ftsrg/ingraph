@@ -15,7 +15,7 @@ class TrainBenchmarkCompilationTest extends FunSuite {
         |OPTIONAL MATCH (n)-->(m:Professor)
         |OPTIONAL MATCH (n)-->(s:Shop)
         |where n.age > 35
-        |RETURN n""".stripMargin)
+        |RETURN n, n.age as blah""".stripMargin)
 
   }
 

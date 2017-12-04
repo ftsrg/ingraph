@@ -188,7 +188,7 @@ object QPlanResolver {
     // Unary
 //    case qplan.Projection(projectList, child) => qplan.Projection(projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression]), child)
     case qplan.UnresolvedProjection(projectList, child) => {
-      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[NamedExpression])
+      val resolvedProjectList = projectList.map(_.transform(expressionResolver).asInstanceOf[expr.ReturnItem])
       projectionResolveHelper(resolvedProjectList, child)
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
@@ -241,7 +241,7 @@ object QPlanResolver {
     * @param projectList
     * @return
     */
-  protected def projectionResolveHelper(projectList: Seq[NamedExpression], child: QNode): UnaryQNode with ProjectionDescriptor = {
+  protected def projectionResolveHelper(projectList: expr.types.TProjectList, child: QNode): UnaryQNode with ProjectionDescriptor = {
     /**
       * Returns true iff e is an expression having a call to an aggregation function at its top-level.
       * @param e
@@ -258,22 +258,16 @@ object QPlanResolver {
     // those having no aggregation function in top-level position will form the aggregation criteria if at least one aggregation is seen
     val aggregationCriteriaCandidate: ListBuffer[Expression] = ListBuffer.empty
 
-    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || (a match {
-      case cExpr.Alias(e, _) => if (isAggregatingFunctionInvocation(e)) {
-        true
-      } else {
-        aggregationCriteriaCandidate += e
-        false
-      }
-      case UnresolvedAlias(e, _) => if (isAggregatingFunctionInvocation(e)) {
-        true
-      } else {
-        aggregationCriteriaCandidate += e
-        false
-      }
-      // we expect to have all return items be either Alias or UnresolvedAlias
+    val seenAggregate = projectList.foldLeft[Boolean](false)((b, a) => b || (a.child match {
       // FIXME: UnresolvedStar is also allowed until it is resolved
       case UnresolvedStar(_) => false
+      case e: cExpr.Expression => if (isAggregatingFunctionInvocation(e)) {
+        true
+      } else {
+        aggregationCriteriaCandidate += e
+        false
+      }
+      // This should never be reached, as projectList is expr.types.TProjectList
       case x => throw new RuntimeException(s"Unexpected type found in return item position: ${x.getClass}")
     }))
 

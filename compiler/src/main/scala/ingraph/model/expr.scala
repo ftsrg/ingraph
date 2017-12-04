@@ -3,13 +3,13 @@ package ingraph.model.expr
 import ingraph.model.expr.types._
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAttribute, UnresolvedException}
 import org.apache.spark.sql.catalyst.expressions.codegen.{CodegenContext, ExprCode}
-import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression}
+import org.apache.spark.sql.catalyst.expressions.{Attribute, ExprId, Expression, LeafExpression, NamedExpression, UnaryExpression}
 import org.apache.spark.sql.catalyst.{InternalRow, expressions => cExpr}
 import org.apache.spark.sql.types.{DataType, Metadata, StringType}
 
 package object types {
   type TPropertyMap = Map[String, cExpr.Expression]
-  type TProjectList = Seq[NamedExpression]
+  type TProjectList = Seq[ReturnItem]
   type TResolvedName = Option[String]
   type VertexLabel = String
   type EdgeLabel = String
@@ -55,22 +55,45 @@ case class FunctionInvocation(functor: ingraph.model.misc.Function, children: Se
   override def dataType = ???
 }
 
-// formerly GraphElementVariable
-abstract class GraphAttribute(override val name: String) extends Attribute {
+//TODO: extract isAnonymous to a trait
+
+case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends UnaryExpression with ResolvableName {
+  def isAnonymous: Boolean = alias.isEmpty
+
+  override def nullable: Boolean = ???
+  override def dataType: DataType = child.dataType
+  override def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
+
+  def toAttribute: Attribute = this.child match {
+    case a: Attribute => a
+    case e => ExpressionAttribute(e)
+  }
+}
+
+abstract class AttributeBase extends Attribute {
   override def exprId: ExprId = throw new UnresolvedException(this, "exprId")
   override def dataType: DataType = throw new UnresolvedException(this, "dataType")
   override def nullable: Boolean = throw new UnresolvedException(this, "nullable")
   override def qualifier: Option[String] = throw new UnresolvedException(this, "qualifier")
   override lazy val resolved = false
 
-  override def newInstance(): GraphAttribute = this
-  override def withNullability(newNullability: Boolean): GraphAttribute = this
-  override def withQualifier(newQualifier: Option[String]): GraphAttribute = this
+  override def newInstance(): AttributeBase = this
+  override def withNullability(newNullability: Boolean): AttributeBase = this
+  override def withQualifier(newQualifier: Option[String]): AttributeBase = this
   override def withName(newName: String): UnresolvedAttribute = UnresolvedAttribute.quoted(newName)
   override def withMetadata(newMetadata: Metadata): Attribute = this
 
   override def eval(input: InternalRow): Any = ???
   override protected def doGenCode(ctx: CodegenContext, ev: ExprCode): ExprCode = ???
+}
+
+// just wraps an expression into "? :> Attribute"
+case class ExpressionAttribute(expr: Expression) extends AttributeBase {
+  override def name: String = ???
+}
+
+// formerly GraphElementVariable
+abstract class GraphAttribute(override val name: String) extends AttributeBase {
 }
 
 abstract class LabelSet(status: LabelSetStatus = Empty)
