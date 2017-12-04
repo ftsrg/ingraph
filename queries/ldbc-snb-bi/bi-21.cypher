@@ -1,10 +1,3 @@
-// Q21. Zombies in a country
-/*
-  :param {
-    country: 'Spain',
-    endDate: 20130101050000000
-  }
-*/
 MATCH (country:Country {name: $country})
 WITH
   country,
@@ -26,15 +19,21 @@ WITH
 WITH
   country,
   person,
+  messageCount,
   (endDateYear  - personCreationYear ) * 12 +
-  (endDateMonth - personCreationMonth) AS months,
-  messageCount
-WHERE messageCount / months < 1
+  (endDateMonth - personCreationMonth) AS months
+WITH
+  country,
+  person,
+  messageCount,
+  CASE WHEN months = 0 THEN 0 ELSE messageCount / months END AS creationScore
+WHERE creationScore < 1
 WITH
   country,
   collect(person) AS zombies
 MATCH
-  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-
+  (country)<-[:IS_PART_OF]-(:City)<-[:IS_LOCATED_IN]-(person:Person)
+OPTIONAL MATCH
   (person:Person)<-[:HAS_CREATOR]-(message:Message)<-[:LIKES]-(fan:Person)
 WHERE fan.creationDate < $endDate
 WITH
@@ -49,7 +48,7 @@ RETURN
   person.id,
   zombieLikeCount,
   totalLikeCount,
-  zombieLikeCount / totalLikeCount AS zombieScore
+  CASE WHEN totalLikeCount = 0 THEN 0 ELSE zombieLikeCount / totalLikeCount END AS zombieScore
 ORDER BY
   zombieScore DESC,
   person.ID ASC
