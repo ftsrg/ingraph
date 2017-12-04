@@ -10,22 +10,30 @@ class LdbcSnbBiTest extends FunSuite {
   testCases.foreach {
     tc =>
       test(s"${tc.workload}-${tc.number}-size-1") {
-//        println(
-//          s"""Query:
-//             |${tc.querySpecification}
-//             |========================="""
-//            .stripMargin
-//        )
-        println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
-        val neo4jRunner = new Neo4jTestRunner(tc)
-        val ingraphRunner = new IngraphTestRunner(tc)
+        try {
+          println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
 
-        val neo4jResults = neo4jRunner.getResults
-        println(neo4jResults.mkString("Neo4j Results: (\n\t", "\n\t", "\n)"))
+          val neo4jRunner = new Neo4jTestRunner(tc)
+          val neo4jResults = neo4jRunner.getResults
+          println(neo4jResults.mkString("Neo4j Results: (\n\t", "\n\t", "\n)"))
 
-        val ingraphResults = ingraphRunner.getResults
-        println(ingraphResults.mkString("ingraph Results: (\n\t", "\n\t", "\n)"))
-        //assert(neo4jResult.equals(ingraphResults))
+          //val ingraphRunner = new IngraphTestRunner(tc)
+          //val ingraphResults = ingraphRunner.getResults
+          //println(ingraphResults.mkString("ingraph Results: (\n\t", "\n\t", "\n)"))
+
+          //assert(neo4jResult.equals(ingraphResults))
+        } catch {
+          case e: Exception => {
+            e.printStackTrace()
+            System.err.println(
+              s"""Query:
+                 |${tc.querySpecification}
+                 |========================="""
+                .stripMargin
+            )
+            fail(e)
+          }
+        }
       }
   }
 
