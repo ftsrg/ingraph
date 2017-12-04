@@ -1,6 +1,6 @@
 package ingraph.ire
 
-import >hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction}
+import hu.bme.mit.ire.{Neo4jEntityToTupleMapper, Transaction}
 import ingraph.bulkloader.csv.loader.MassCsvLoader
 import ingraph.model.fplan.FNode
 import org.supercsv.prefs.CsvPreference
