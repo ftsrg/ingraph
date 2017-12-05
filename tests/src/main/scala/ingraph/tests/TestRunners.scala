@@ -67,8 +67,7 @@ object TestRunners {
 //      )
 //      queryHandler
 //        .adapter
-//        .result()
-//        .map { rec => rec }
+//        .result().
 //        .toList
 //    } finally if (driver != null) {
 //      driver.close()
