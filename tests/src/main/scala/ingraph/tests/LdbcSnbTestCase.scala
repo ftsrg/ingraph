@@ -4,47 +4,79 @@ import java.util
 
 import com.google.gson.Gson
 
-import scala.io.Source
+import scala.collection.JavaConverters._
 
-object LdbcSnbTestCase {
+object LdbcSnbTestCase  {
   private val gson = new Gson()
-
-  def modelPath(entityName: String)(implicit number: Int) = s"../graphs/bi/$number/${entityName}_0_0.csv"
-
-  def queryPath(workload: String, query: Int): String = s"../queries/ldbc-snb-${workload}/${workload}-${query}.cypher"
-
-  def queryResultPath(workload: String, query: Int): String = queryPath(workload, query).dropRight(".cypher".length) + "-50.bin"
-
-  def parameterPath(number: String) = s"../graphs/bi/$number/parameters"
-
-  def readToString(path: String): String = Source.fromFile(s"$path").getLines().mkString("\n")
-
-  def convert(v: Any): String = {
-    v match {
-      case d: Double => f"$d%.0f"
-      case s: String => "'" + s.toString + "'"
-      case seq: util.ArrayList[Any] => "[" + seq.toArray.map(convert).mkString(",") + "]"
-      case _ => v.toString
-    }
-  }
 }
 
-case class LdbcSnbTestCase(workload: String, number: Int) {
+class LdbcSnbTestCase(workload: String, number: Int) extends TestCase with CSVData with GraphMLData {
+  override def name: String = f"$workload-$number%02d"
 
-  import LdbcSnbTestCase._
+  override def query: String = {
+    def convert(v: Any): String = {
+      v match {
+        case d: Double => f"$d%.0f"
+        case s: String => "'" + s.toString + "'"
+        case seq: util.ArrayList[Any] => "[" + seq.toArray.map(convert).mkString(",") + "]"
+        case _ => v.toString
+      }
+    }
 
-  import scala.collection.JavaConverters._
+    val baseQuerySpecification: String = readToString(s"../queries/ldbc-snb-${workload}/${name}.cypher")
+    val parameters: Map[String, String] = LdbcSnbTestCase.gson
+      .fromJson(readToString(f"../graphs/ldbc-snb-bi/$number%02d/parameters"), classOf[java.util.Map[String, Object]])
+      .asScala
+      .toMap
+      .map { case (k, v) => (k, convert(v)) }
+    parameters.foldLeft(baseQuerySpecification)((a, b) =>
+      a.replaceAllLiterally("$" + b._1.toString, b._2.toString))
+  }
 
-  val id = f"$number%02d"
+  override def nodeCSVPaths: Map[String, List[String]] = {
+    Map(
+      "comment" -> List("Message", "Comment"),
+      "forum" -> List("Forum"),
+      "organisation" -> List("Organisation"),
+      "person" -> List("Person"),
+      "place" -> List("Place"),
+      "post" -> List("Message", "Post"),
+      "tagclass" -> List("TagClass"),
+      "tag" -> List("Tag")
+    ) map {
+      case (file, labels) => f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv" -> labels
+    }
+  }
 
-  val parameters: Map[String, String] = gson
-    .fromJson(readToString(parameterPath(id)), classOf[java.util.Map[String, Object]])
-    .asScala
-    .toMap
-    .map { case (k, v) => (k, convert(v)) }
+  override def relationshipCSVPaths: Map[String, String] = {
+    Map(
+      "comment_hasCreator_person" -> "HAS_CREATOR",
+      "comment_isLocatedIn_place" -> "IS_LOCATED_IN",
+      "comment_replyOf_comment" -> "REPLY_OF",
+      "comment_replyOf_post" -> "REPLY_OF",
+      "forum_containerOf_post" -> "CONTAINER_OF",
+      "forum_hasMember_person" -> "HAS_MEMBER",
+      "forum_hasModerator_person" -> "HAS_MODERATOR",
+      "forum_hasTag_tag" -> "HAS_TAG",
+      "person_hasInterest_tag" -> "HAS_INTEREST",
+      "person_isLocatedIn_place" -> "IS_LOCATED_IN",
+      "person_knows_person" -> "KNOWS",
+      "person_likes_comment" -> "LIKES",
+      "person_likes_post" -> "LIKES",
+      "place_isPartOf_place" -> "IS_PART_OF",
+      "post_hasCreator_person" -> "HAS_CREATOR",
+      "comment_hasTag_tag" -> "HAS_TAG",
+      "post_hasTag_tag" -> "HAS_TAG",
+      "post_isLocatedIn_place" -> "IS_LOCATED_IN",
+      "tagclass_isSubclassOf_tagclass" -> "IS_SUBCLASS_OF",
+      "tag_hasType_tagclass" -> "HAS_TYPE",
+      "organisation_isLocatedIn_place" -> "IS_LOCATED_IN",
+      "person_studyAt_organisation" -> "STUDY_OF",
+      "person_workAt_organisation" -> "WORK_AT"
+    ) map {
+      case (file, labels) => f"../graphs/ldbc-snb-${workload}/${number}%02d/${file}_0_0.csv" -> labels
+    }
+  }
 
-  val baseQuerySpecification: String = readToString(queryPath(workload, number))
-
-  val querySpecification: String = parameters.foldLeft(baseQuerySpecification)((a, b) =>
-    a.replaceAllLiterally("$" + b._1.toString, b._2.toString))
+  override def graphMLPath: String = f"../graphs/ldbc-snb-${workload}/graphmls/${workload}-${number}%02d.graphml"
 }

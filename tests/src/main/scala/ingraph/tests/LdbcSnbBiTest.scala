@@ -1,6 +1,5 @@
 package ingraph.tests
 
-import ingraph.tests.runner.{IngraphTestRunner, Neo4jTestRunner}
 import org.scalatest.FunSuite
 
 class LdbcSnbBiTest extends FunSuite {
@@ -9,25 +8,25 @@ class LdbcSnbBiTest extends FunSuite {
 
   testCases.foreach {
     tc =>
-      test(s"${tc.workload}-${tc.number}-size-1") {
+      test(tc.name) {
         try {
-          println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
+          //println(tc.parameters.mkString("Parameters: (\n\t", "\n\t", "\n)"))
 
-          val neo4jRunner = new Neo4jTestRunner(tc)
-          val neo4jResults = neo4jRunner.getResults
+          val neo4jResults = TestRunners.neo4jTestRunner(tc)
           println(neo4jResults.mkString("Neo4j Results: (\n\t", "\n\t", "\n)"))
 
-          //val ingraphRunner = new IngraphTestRunner(tc)
-          //val ingraphResults = ingraphRunner.getResults
+          assert(neo4jResults.nonEmpty)
+
+          //val ingraphResults = TestRunners.ingraphTestRunner(tc)
           //println(ingraphResults.mkString("ingraph Results: (\n\t", "\n\t", "\n)"))
 
-          //assert(neo4jResult.equals(ingraphResults))
+          //assert(neo4jResults.equals(ingraphResults))
         } catch {
           case e: Exception => {
             e.printStackTrace()
             System.err.println(
               s"""Query:
-                 |${tc.querySpecification}
+                 |${tc.query}
                  |========================="""
                 .stripMargin
             )
