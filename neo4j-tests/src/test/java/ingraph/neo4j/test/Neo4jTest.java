@@ -32,7 +32,7 @@ public class Neo4jTest {
 		try (final Transaction t = gds.beginTx()) {
 			String loadQuery = String.format( //
 				"CALL apoc.import.graphml('%s', {batchSize: 10000, readLabels: true})", //
-				"../graphs/bi/graphmls/" + graphFilename //
+				"../graphs/ldbc-snb-bi/graphmls/" + graphFilename //
 			);
 			System.out.println(loadQuery);
 			gds.execute(loadQuery);
