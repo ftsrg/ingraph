@@ -13,10 +13,6 @@
 
 (tufte/add-basic-println-handler! {})
 
-(defn compile-pattern [def-sym k]
-  (let [def @(resolve def-sym)]
-    (tufte/profile {} (tufte/p (-> def-sym str keyword) (pattern/compile (:pattern def) (:config def) {:k k})))))
-
 (def segment-1 (IngraphVertex. 1 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-2 (IngraphVertex. 2 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
 (def segment-3 (IngraphVertex. 3 (-> (HashSet.) (.$plus "Segment")) (HashMap.)))
@@ -58,13 +54,13 @@
                (.addEdge monitored-by-5)
                (.addEdge monitored-by-6)))
 
-(def cs-proto-1 (tufte/profile {} (utils/compile-pattern 'cs/p-1 5)))
+(def cs-proto-1 (tufte/profile {} (utils/compile-pattern 'cs/p-1 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-1))))
 
 
-(def cs-proto-2 (tufte/profile {} (utils/compile-pattern 'cs/p-2 5)))
+(def cs-proto-2 (tufte/profile {} (utils/compile-pattern 'cs/p-2 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (:subtasks (utils/get-tasks cs-proto-2))))

@@ -47,6 +47,8 @@ class Indexer {
   val edgeSrcTgtLookup = new BufferMultimap[(Long, Long), IngraphEdge]()
   val edgeSrcTgtTypeLookup = new BufferMultimap[((Long, Long), String), IngraphEdge]
 
+  var labelsSeen: Long = 0
+
   def clear(): Unit = {
     mappers.clear()
     vertexLookup.clear()
@@ -80,8 +82,11 @@ class Indexer {
   }
 
   def addVertex(vertex: IngraphVertex): IngraphVertex = {
-    for (label <- vertex.labels)
+    for (label <- vertex.labels) {
       vertexLabelLookup.addBinding(label, vertex)
+      labelsSeen += 1
+    }
+
     vertexLookup(vertex.id) = vertex
     mappers.foreach(_.addVertex(vertex))
     vertex
@@ -152,8 +157,13 @@ class Indexer {
   def edgesJava(): JIterator[IngraphEdge] = edges()
   def edgesByType(label: String): Iterator[IngraphEdge] = edgeTypeLookup.getOrElse(label, Seq()).iterator
   def edgesByTypeJava(label: String): JIterator[IngraphEdge] = edgesByType(label)
+  def getNumberOfVertices(): Int = vertexLookup.size
+  def getNumberOfEdges(): Int = edgeLookup.size
+  def getNumberOfLabels(): Int = vertexLabelLookup.keySet.size
+  def getNumberOfTypes(): Int = edgeTypeLookup.keySet.size
+  def getAverageNumberOfLabelsPerVertices(): Float = labelsSeen / vertexLookup.size
   def getNumberOfVerticesWithLabel(label: String): Int =  vertexLabelLookup.get(label).map(_.size).getOrElse(0)
-  def getNumberOfEdgesWithLabel(label: String): Int = edgeTypeLookup.get(label).map(_.size).getOrElse(0)
+  def getNumberOfEdgesWithType(`type`: String): Int = edgeTypeLookup.get(`type`).map(_.size).getOrElse(0)
 
   val rnd = new Random(1)
   def newId(): Long = {

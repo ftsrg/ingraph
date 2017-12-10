@@ -15,13 +15,14 @@
 (tufte/add-basic-println-handler! {})
 
 (defn short-name [symbol] (-> symbol resolve meta :name))
+(utils/compile-pattern 'pl/p-1 [] 5)
 
-(def pl-proto-1 (tufte/profile {} (utils/compile-pattern 'pl/p-1 5)))
+(def pl-proto-1 (tufte/profile {} (utils/compile-pattern 'pl/p-1 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks pl-proto-1)))
 
-(def pl-proto-2 (tufte/profile {} (utils/compile-pattern 'pl/p-2 5)))
+(def pl-proto-2 (tufte/profile {} (utils/compile-pattern 'pl/p-2 [] 5)))
 
 (comment
   "eval this to get the tasks -->" (pprint/pprint (utils/get-tasks pl-proto-2)))

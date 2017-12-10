@@ -19,8 +19,6 @@
 
 (defn ??? [] (throw (Exception. "Not implemented yet")))
 
-(defrecord IngraphEnvironment [^Indexer indexer])
-
 (defconfig Ingraph)
 
 (defconstraint Known [known])
