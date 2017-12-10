@@ -99,6 +99,7 @@ class Indexer {
       throw new IllegalArgumentException("Won't remove connected vertex without DETACH")
     else if (detach)
       for { edge <- edges } removeEdgeById(edge.id)
+    labelsSeen -= vertex.labels.size
     vertex.labels.foreach(label => vertexLabelLookup.removeBinding(label, vertex))
     vertexLookup.remove(id)
     mappers.foreach(_.removeVertex(vertex))
