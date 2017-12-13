@@ -2,7 +2,7 @@ package ingraph.compiler.cypher2qplan
 
 import java.util.concurrent.atomic.AtomicLong
 
-import ingraph.model.expr.{ProjectionDescriptor, ResolvableName}
+import ingraph.model.expr.{ProjectionDescriptor, ResolvableName, ReturnItem}
 import ingraph.model.qplan.{QNode, UnaryQNode}
 import ingraph.model.{expr, misc, qplan}
 import org.apache.spark.sql.catalyst.analysis.{UnresolvedAlias, UnresolvedAttribute, UnresolvedFunction, UnresolvedStar}
@@ -82,7 +82,11 @@ object QPlanResolver {
             case qplan.DuplicateElimination(_) => qplan.DuplicateElimination(child)
             case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(r(src), r(trg), r(edge), dir, child)
             case qplan.Production(_) => qplan.Production(child)
-            case qplan.UnresolvedProjection(projectList, _) => qplan.UnresolvedProjection(projectList, child)
+            case qplan.UnresolvedProjection(projectList, _) => {
+              val resolvedProjectList = projectList.map( ri => ReturnItem(r(ri.child), ri.alias, ri.resolvedName))
+              //FIXME: do a 2nd run where resolving names override those in scope
+              qplan.UnresolvedProjection(resolvedProjectList, child)
+            }
             // case {Projection, Grouping} skipped because it is introduced in a later resolution stage
             case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
             case qplan.Sort(order, _) => qplan.Sort(order, child)
@@ -166,7 +170,7 @@ object QPlanResolver {
         nameResolverScope.put(baseName, (generateUniqueName(baseName), target))
       }
     }
-    // reaching this point means we have baseName in the name reolver scope
+    // reaching this point means we have baseName in the name resolver scope
     Some(nameResolverScope(baseName)._1)
   }
 
