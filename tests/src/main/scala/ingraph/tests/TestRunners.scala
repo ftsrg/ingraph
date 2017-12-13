@@ -65,10 +65,7 @@ object TestRunners {
 //        tc.relationshipCSVPaths.asJava,
 //        csvPreference
 //      )
-//      queryHandler
-//        .adapter
-//        .result().
-//        .toList
+//      queryHandler.adapter
 //    } finally if (driver != null) {
 //      driver.close()
 //    }
