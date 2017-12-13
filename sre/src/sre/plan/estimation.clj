@@ -27,13 +27,19 @@
   [op args & body]
   (if (contains? (ns-interns *ns*) '-costs)
     `(defmethod ~'-costs ~op ~args
-       (let [res# (do ~@body)] (->SimpleCostCalculator res# res#)))))
+       (let [res# (do ~@body)] {:c res# :p res#}))))
+
+(defmacro defweight2
+  "Adds a weight estimator for the operation in the current config."
+  [op args & body]
+  (if (contains? (ns-interns *ns*) '-costs)
+    `(defmethod ~'-costs ~op ~args ~@body)))
 
 
 (defrecord SimpleCostCalculator [c p]
   Cost
   (calculate [this config op-binding constr-lkp]
-    ((core/costs config) (:type op-binding) (:bindings op-binding) constr-lkp))
+    (map->SimpleCostCalculator ((core/costs config) (:type op-binding) (:bindings op-binding) constr-lkp)))
   (append [this subcost]
     (-> this
       (update-in [:p] #(* %1 (:p subcost)))
@@ -45,10 +51,10 @@
 ;; from the underlying platform. It should not do side effects, like just like runtime-ctx.
 ;; IRL we use the same indexer for both purposes, but might make sense splitting up later.
 
-(defrecord VarStatsCostCalculator [c p estimation-ctx est-var-cardinality]
+(defrecord VarStatsCostCalculator [c p estimation-ctx var-stats]
   Cost
   (calculate [this config op-binding constr-lkp]
-    ((core/costs config) (:type op-binding) (:bindings op-binding) estimation-ctx est-var-cardinality constr-lkp))
+    ((core/costs config) (:type op-binding) (:bindings op-binding) estimation-ctx var-stats constr-lkp))
   (append [this subcost]
     (-> this
         (update-in [:p] #(* % (:p subcost)))
