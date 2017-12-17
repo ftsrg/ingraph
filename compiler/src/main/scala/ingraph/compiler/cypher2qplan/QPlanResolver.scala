@@ -237,7 +237,7 @@ object QPlanResolver {
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
-    case qplan.Unwind(collection, element, child) => qplan.Top(collection.transform(expressionResolver), element.transform(expressionResolver), child)
+    case qplan.Unwind(collection, element, child) => qplan.Unwind(collection.transform(expressionResolver), element.transform(expressionResolver).asInstanceOf[cExpr.Attribute], child)
     // DML
     case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
     case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
