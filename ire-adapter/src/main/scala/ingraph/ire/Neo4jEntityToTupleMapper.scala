@@ -18,9 +18,8 @@ class Neo4jEntityToTupleMapper(vertexConverters: Map[Set[String], Set[GetVertice
   var transaction: Transaction = _
 
   def elementToNode(element: IngraphVertex, required: Seq[String]): Tuple = {
-    val nodeNameLength = required.head.length
     Vector(idParser(element.id)) ++
-      required.tail.map(key => element.properties(key.drop(nodeNameLength + 1))) //TODO
+      required.tail.map(key => element.properties(key))
   }
 
   def addEdge(edge: IngraphEdge): Unit = {
