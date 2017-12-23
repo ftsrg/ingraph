@@ -27,7 +27,7 @@ object QPlanToJPlan {
       case qplan.Selection(condition, child) => jplan.Selection(condition, transform(child))
       case qplan.DuplicateElimination(child) => jplan.DuplicateElimination(transform(child))
       case qplan.AllDifferent(edges, child) => jplan.AllDifferent(edges, transform(child))
-      case qplan.Unwind(collection, element, child) => jplan.Unwind(collection, element, transform(child))
+      case qplan.Unwind(unwindItem, child) => jplan.Unwind(unwindItem, transform(child))
       // unary CUD
       case qplan.Create(attributes, child) => jplan.Create(attributes, transform(child))
       case qplan.Delete(attributes, detach, child) => jplan.Delete(attributes, detach, transform(child))

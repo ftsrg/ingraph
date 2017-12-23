@@ -56,8 +56,9 @@ case class FunctionInvocation(functor: ingraph.model.misc.Function, children: Se
 }
 
 //TODO: extract isAnonymous to a trait
+case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends AbstractReturnItem(child, alias, resolvedName)
 
-case class ReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends UnaryExpression with ResolvableName {
+abstract class AbstractReturnItem(child: Expression, alias: Option[String] = None, override val resolvedName: TResolvedName = None) extends UnaryExpression with ResolvableName {
   def isAnonymous: Boolean = alias.isEmpty
 
   override def nullable: Boolean = ???
@@ -91,6 +92,10 @@ abstract class AttributeBase extends Attribute {
 case class ExpressionAttribute(expr: Expression) extends AttributeBase {
   override def name: String = ???
 }
+
+// this is the attribute built by unwinding a list
+case class UnwindAttribute(list: Expression, override val name: String, override val resolvedName: TResolvedName = None) extends AttributeBase with ResolvableName
+
 
 // formerly GraphElementVariable
 abstract class GraphAttribute(override val name: String) extends AttributeBase {

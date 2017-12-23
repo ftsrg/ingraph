@@ -89,6 +89,8 @@ object QPlanResolver {
             case qplan.AllDifferent(e, _) => qplan.AllDifferent(e, child)
             case qplan.DuplicateElimination(_) => qplan.DuplicateElimination(child)
             case qplan.Expand(src, trg, edge, dir, _) => qplan.Expand(r(src), r(trg), r(edge), dir, child)
+            // resolve names in listexpression, then resolve the unwindattribute itself
+            case qplan.Unwind(ua, _) => qplan.Unwind(r(expr.UnwindAttribute(r(ua.list), ua.name, ua.resolvedName)), child)
             case qplan.Production(_) => qplan.Production(child)
             case qplan.UnresolvedProjection(projectList, _) => {
               // initialize new namespace applicable after the projection operator
@@ -105,6 +107,7 @@ object QPlanResolver {
                       rc match {
                         case ea: expr.ElementAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
+                        case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
                         case _ => throw new RuntimeException(s"Unexpected type found in return item position: ${rc.getClass}")
                       }
 
@@ -124,7 +127,6 @@ object QPlanResolver {
             case qplan.Selection(condition, _) => qplan.Selection(r(condition), child)
             case qplan.Sort(order, _) => qplan.Sort(order, child)
             case qplan.Top(skipExpr, limitExpr, _) => qplan.Top(skipExpr, limitExpr, child)
-            case qplan.Unwind(collection, element, _) => qplan.Unwind(collection, element, child)
             case qplan.Create(attributes, _) => qplan.Create(attributes, child)
             case qplan.Delete(attributes, detach, _) => qplan.Delete(attributes, detach, child)
             case qplan.Merge(attributes, _) => qplan.Merge(attributes, child)
@@ -161,6 +163,7 @@ object QPlanResolver {
           // see "scoped name resolver shorthand" above
           elementAttribute.transform(expressionNameResolver(snr, nameResolverScope)).asInstanceOf[expr.ElementAttribute],
           snr(s"${elementAttribute.name}$$${name}", rn))
+        case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr(name, rn))
       }
     case UnresolvedAttribute(nameParts) => {
       if (nameParts.length >= 1 && nameParts.length <= 2) {
@@ -175,6 +178,7 @@ object QPlanResolver {
             case expr.EdgeListAttribute(name, _, _, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, isAnonymous = isAnonymous, resolvedName = rn, minHops = minHops, maxHops = maxHops)
             // handle PropertyAttribute chained from previous query part under some alias
             case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute, resolvedName = rn)
+            case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, resolvedName = rn)
           }
         } else {
           throw new RuntimeException(s"Unresolvable name ${elementName}.")
@@ -237,7 +241,7 @@ object QPlanResolver {
     }
     case qplan.Selection(condition, child) => qplan.Selection(condition.transform(expressionResolver), child)
     case qplan.Top(skipExpr, limitExpr, child) => qplan.Top(skipExpr.transform(expressionResolver), limitExpr.transform(expressionResolver), child)
-    case qplan.Unwind(collection, element, child) => qplan.Unwind(collection.transform(expressionResolver), element.transform(expressionResolver).asInstanceOf[cExpr.Attribute], child)
+    case qplan.Unwind(expr.UnwindAttribute(collection, alias, resolvedName), child) => qplan.Unwind(expr.UnwindAttribute(collection.transform(expressionResolver), alias, resolvedName), child)
     // DML
     case qplan.Delete(attributes, detach, child) => qplan.Delete(resolveAttributes(attributes, child), detach, child)
     case qplan.Create(attributes, child) => qplan.Create(filterForAttributesOfChildOutput(attributes, child, invert=true), child)
