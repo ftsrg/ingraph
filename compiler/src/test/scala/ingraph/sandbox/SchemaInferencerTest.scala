@@ -93,7 +93,7 @@ class SchemaInferencerTest extends FunSuite {
     assert(ep.children(0).internalSchema.size == 2)
   }
 
-  test("infer schema for PosLength from Cypher without filtering") {
+  ignore("infer schema for PosLength from Cypher without filtering") {
     val ep = FPlanParser.parse(
       """MATCH (segment:Segment)
         |RETURN segment, segment.length AS length
@@ -109,7 +109,7 @@ class SchemaInferencerTest extends FunSuite {
     }
   }
 
-  test("infer schema for PosLength from Cypher with filtering") {
+  ignore("infer schema for PosLength from Cypher with filtering") {
     val ep = FPlanParser.parse(
       """MATCH (segment:Segment)
         |WHERE segment.length <= 0
