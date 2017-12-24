@@ -98,8 +98,7 @@ case class UnwindAttribute(list: Expression, override val name: String, override
 
 
 // formerly GraphElementVariable
-abstract class GraphAttribute(override val name: String) extends AttributeBase {
-}
+abstract class GraphAttribute(override val name: String) extends AttributeBase
 
 abstract class LabelSet(status: LabelSetStatus = Empty)
 

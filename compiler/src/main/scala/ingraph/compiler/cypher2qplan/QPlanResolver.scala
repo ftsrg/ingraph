@@ -58,7 +58,7 @@ object QPlanResolver {
          * This also means that name resolution builds on the operand order of joins, so before name resolution, joins are non-commutative
          */
         case b: qplan.BinaryQNode => qNodeStack.push(b.left, b.right)
-        case l: qplan.LeafQNode => null
+        case l: qplan.LeafQNode => {}
         case x => throw new RuntimeException(s"Unexpected type found in the QPlan tree: ${x.getClass}")
       }
     }
