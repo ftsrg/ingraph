@@ -165,23 +165,24 @@ object QPlanResolver {
           snr(s"${elementAttribute.name}$$${name}", rn))
         case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, snr(name, rn))
       }
-    case UnresolvedAttribute(nameParts) => {
-      if (nameParts.length >= 1 && nameParts.length <= 2) {
+    case UnresolvedAttribute(nameParts) => nameParts.length match {
+      case 1 | 2 => {
         val elementName = nameParts(0) // should be OK as .length >= 1
         val scopeCacheEntry = nameResolverScope.get(elementName)
-        val elementAttribute = if (scopeCacheEntry.isDefined) {
-          val rn = Some(scopeCacheEntry.get._1)
-          // copy the type with basic stuff only
-          scopeCacheEntry.get._2 match {
-            case expr.VertexAttribute(name, _, _, isAnonymous, _) => expr.VertexAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
-            case expr.EdgeAttribute(name, _, _, isAnonymous, _) => expr.EdgeAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
-            case expr.EdgeListAttribute(name, _, _, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, isAnonymous = isAnonymous, resolvedName = rn, minHops = minHops, maxHops = maxHops)
-            // handle PropertyAttribute chained from previous query part under some alias
-            case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute, resolvedName = rn)
-            case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, resolvedName = rn)
+        val elementAttribute = scopeCacheEntry match { //if (scopeCacheEntry.isDefined) {
+          case Some((rnString, entry)) => {
+            val rn = Some(rnString)
+            // copy the type with basic stuff only
+            entry match {
+              case expr.VertexAttribute(name, _, _, isAnonymous, _) => expr.VertexAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
+              case expr.EdgeAttribute(name, _, _, isAnonymous, _) => expr.EdgeAttribute(name, isAnonymous = isAnonymous, resolvedName = rn)
+              case expr.EdgeListAttribute(name, _, _, isAnonymous, minHops, maxHops, _) => expr.EdgeListAttribute(name, isAnonymous = isAnonymous, resolvedName = rn, minHops = minHops, maxHops = maxHops)
+              // handle PropertyAttribute chained from previous query part under some alias
+              case expr.PropertyAttribute(name, elementAttribute, _) => expr.PropertyAttribute(name, elementAttribute, resolvedName = rn)
+              case expr.UnwindAttribute(list, name, _) => expr.UnwindAttribute(list, name, resolvedName = rn)
+            }
           }
-        } else {
-          throw new RuntimeException(s"Unresolvable name ${elementName}.")
+          case _ => throw new RuntimeException(s"Unresolvable name ${elementName}.")
         }
 
         if (nameParts.length == 1) {
@@ -197,9 +198,8 @@ object QPlanResolver {
             case _ => throw new RuntimeException(s"Unexpected type found in basis position of property dereferencing: ${elementAttribute.getClass}")
           }
         }
-      } else {
-        throw new RuntimeException(s"Unexpected number of name parts, namely ${nameParts.length} for ${nameParts}")
       }
+      case _ => throw new RuntimeException(s"Unexpected number of name parts, namely ${nameParts.length} for ${nameParts}")
     }
     // fallback: no-op resolution.
     case x => x
@@ -207,15 +207,19 @@ object QPlanResolver {
 
   // function generator for name resolution shorthand: "scoped name resolution"
   def snrGen(nameResolverScope: TNameResolverScope): (String, cExpr.Expression) => Option[String] = (baseName, target) => {
-    nameResolverScope.get(baseName) match {
-      case Some(x) => if (x._2.getClass != target.getClass)
-        throw new RuntimeException(s"Name collision across types: ${baseName}. In the cache, it is ${x._2.getClass}, but now it was passed as ${target.getClass}")
+    val resolvedName: String = nameResolverScope.get(baseName) match {
+      case Some((rn, entry)) => if (entry.getClass != target.getClass) {
+        throw new RuntimeException(s"Name collision across types: ${baseName}. In the cache, it is ${entry.getClass}, but now it was passed as ${target.getClass}")
+      } else {
+        rn
+      }
       case None => {
-        nameResolverScope.put(baseName, (generateUniqueName(baseName), target))
+        val rn = generateUniqueName(baseName)
+        nameResolverScope.put(baseName, (rn, target))
+        rn
       }
     }
-    // reaching this point means we have baseName in the name resolver scope
-    Some(nameResolverScope(baseName)._1)
+    Some(resolvedName)
   }
 
 
