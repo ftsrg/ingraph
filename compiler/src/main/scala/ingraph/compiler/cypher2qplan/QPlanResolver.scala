@@ -58,11 +58,21 @@ object QPlanResolver {
          * This also means that name resolution builds on the operand order of joins, so before name resolution, joins are non-commutative
          */
         case b: qplan.BinaryQNode => qNodeStack.push(b.left, b.right)
-        case l: qplan.LeafQNode => {}
+        case _: qplan.LeafQNode => {}
         case x => throw new RuntimeException(s"Unexpected type found in the QPlan tree: ${x.getClass}")
       }
     }
 
+    reAssembleTreeResolvingNames(qPlanPolishNotation, operandStack)
+
+    // return the re-constructed tree
+    operandStack.length match {
+      case 1 => operandStack.pop
+      case _ => throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
+    }
+  }
+
+  protected def reAssembleTreeResolvingNames(qPlanPolishNotation: mutable.Stack[qplan.QNode], operandStack: mutable.Stack[qplan.QNode]) = {
     // this will hold those names that are in scope, so no new resolution should be invented
     var nameResolverScope = mutable.Map[String, (String, cExpr.Expression)]()
     // scoped name resolver shorthand
@@ -79,7 +89,7 @@ object QPlanResolver {
             case qplan.Join(_, _) => qplan.Join(leftChild, rightChild)
             case qplan.LeftOuterJoin(_, _) => qplan.LeftOuterJoin(leftChild, rightChild)
             case qplan.ThetaLeftOuterJoin(_, _, condition) => qplan.ThetaLeftOuterJoin(leftChild, rightChild, condition)
-              // case AntiJoin skipped because it is introduced later in the beautification step
+            // case AntiJoin skipped because it is introduced later in the beautification step
           }
           newOp
         }
@@ -100,17 +110,15 @@ object QPlanResolver {
               for (ri <- projectList) {
                 val resolvedChild = r(ri.child)
                 val resolvedName: Option[String] = resolvedChild match {
-                  case rc: expr.ResolvableName => {
-                    if (ri.alias.isDefined) {
-                      nextSnr(ri.alias.get, rc)
-                    } else {
+                  case rc: expr.ResolvableName => ri.alias match {
+                    case Some(alias) => nextSnr(alias, rc)
+                    case _ => {
                       rc match {
                         case ea: expr.ElementAttribute => nextQueryPartNameResolverScope.put(ea.name, (rc.resolvedName.get, rc))
                         case pa: expr.PropertyAttribute => nextQueryPartNameResolverScope.put(s"${pa.elementAttribute.name}$$${pa.name}", (rc.resolvedName.get, rc))
                         case ua: expr.UnwindAttribute => nextQueryPartNameResolverScope.put(ua.name, (rc.resolvedName.get, rc))
                         case _ => throw new RuntimeException(s"Unexpected type found in return item position: ${rc.getClass}")
                       }
-
                       rc.resolvedName
                     }
                   }
@@ -145,11 +153,6 @@ object QPlanResolver {
       }
       operandStack.push(newQNode)
     }
-
-    if (operandStack.length == 1)
-      operandStack.pop
-    else
-      throw new RuntimeException(s"A single item expected in the stack after re-assembling the QNode tree at name resolution. Instead, it has ${operandStack.length} entries.")
   }
 
   def expressionNameResolver(snr: (String, cExpr.Expression) => Option[String], nameResolverScope: TNameResolverScope): PartialFunction[Expression, Expression] = {
