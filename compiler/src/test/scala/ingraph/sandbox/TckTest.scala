@@ -13,17 +13,15 @@ class TckTest extends FunSuite {
   val log = true
 
   case class CompilationStages(
-    unresolvedQPlan: QNode,
-    resolvedQPlan: QNode,
+    qPlan: QNode,
     jPlan: JNode,
     fPlan: FNode
   )
 
   def compile(query: String): CompilationStages = {
     val cypher = CypherParser.parseString(query)
-    val unresolvedQPlan = CypherToQPlan.build(cypher)
-    val resolvedQPlan = QPlanResolver.resolveQPlan(unresolvedQPlan)
-    val jPlan = QPlanToJPlan.transform(resolvedQPlan)
+    val qPlan = CypherToQPlan.build(cypher)
+    val jPlan = QPlanToJPlan.transform(qPlan)
     val fPlan = SchemaInferencer.transform(jPlan)
 
     if (log) {
@@ -31,11 +29,8 @@ class TckTest extends FunSuite {
       println("Query:")
       println(query)
       println("-----------------------------------------------------------------------------")
-      println("Unresolved QPlan:")
-      println(unresolvedQPlan)
-      println("-----------------------------------------------------------------------------")
-      println("Resolved QPlan:")
-      println(resolvedQPlan)
+      println("QPlan:")
+      println(qPlan)
       println("-----------------------------------------------------------------------------")
       println("JPlan:")
       println(jPlan)
@@ -44,7 +39,7 @@ class TckTest extends FunSuite {
 //      println(fPlan)
     }
 
-    return CompilationStages(unresolvedQPlan, resolvedQPlan, jPlan, fPlan)
+    return CompilationStages(qPlan, jPlan, fPlan)
   }
 
   test("Hello World") {
